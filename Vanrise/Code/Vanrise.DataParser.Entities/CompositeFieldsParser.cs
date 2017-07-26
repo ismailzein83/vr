@@ -15,5 +15,7 @@ namespace Vanrise.DataParser.Entities
     public interface ICompositeFieldsParserContext
     {
         ParsedRecord Record { get; }
+        string FileName { get; }
+
     }
 }

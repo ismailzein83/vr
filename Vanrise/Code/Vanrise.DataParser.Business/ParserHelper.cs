@@ -10,7 +10,7 @@ namespace Vanrise.DataParser.Business
 {
     public class ParserHelper
     {
-        public static void ExecuteParser(Stream stream, Guid parserTypeId, Action<ParsedBatch> onBatchParsed)
+        public static void ExecuteParser(Stream stream, string fileName, Guid parserTypeId, Action<ParsedBatch> onParsedBatch)
         {
             ParserType parserType = new ParserTypeManager().GetParserType(parserTypeId);
             Action<ParsedRecord> onRecordParsed = (parsedRecord) =>
@@ -21,16 +21,29 @@ namespace Vanrise.DataParser.Business
             {
                 Input = new StreamDataParserInput
                 {
-                    Stream = stream
+                    Stream = stream,
+                    FileName = fileName
                 }
             };
+
             parserType.Settings.ExtendedSettings.Execute(context);
+
             foreach (var parsedRecords in context.ParsedRecords)
             {
-                onBatchParsed(new ParsedBatch
+                Vanrise.GenericData.Business.DataRecordTypeManager dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+                Type dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(parsedRecords.Key);
+
+                List<dynamic> records = new List<dynamic>();
+                foreach (Vanrise.DataParser.Entities.FldDictParsedRecord item in parsedRecords.Value)
                 {
-                    RecordType = parsedRecords.Key,
-                    Records = parsedRecords.Value
+                    dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
+                    record.FillDataRecordTypeFromDictionary(item.FieldValues);
+                    records.Add(record);
+                }
+                onParsedBatch(new ParsedBatch
+                {
+                    Records = records,
+                    RecordType = parsedRecords.Key
                 });
             }
         }

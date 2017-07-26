@@ -15,7 +15,7 @@ namespace Vanrise.DataParser.Entities
     public class StreamDataParserInput : IDataParserInput
     {
         public Stream Stream { get; set; }
-
+        public string FileName { get; set; }
         public byte[] Data
         {
             get;

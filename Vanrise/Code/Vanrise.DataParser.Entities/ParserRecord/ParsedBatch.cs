@@ -8,7 +8,7 @@ namespace Vanrise.DataParser.Entities
 {
     public class ParsedBatch
     {
-        public List<FldDictParsedRecord> Records { get; set; }
+        public List<dynamic> Records { get; set; }
         public string RecordType { get; set; }
 
     }

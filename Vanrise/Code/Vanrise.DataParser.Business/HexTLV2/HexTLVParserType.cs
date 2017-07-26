@@ -22,7 +22,7 @@ namespace Vanrise.DataParser.Business
             StreamDataParserInput streamDataParserInput = context.Input.CastWithValidate<StreamDataParserInput>("context.Input");
             streamDataParserInput.Stream.ThrowIfNull("streamDataParserInput.Stream");
             this.RecordParser.ThrowIfNull("this.RecordParser");
-            var recordParserContext = new HexTLVRecordParserContext(streamDataParserInput.Stream, context, this.RecordParserTemplates);
+            var recordParserContext = new HexTLVRecordParserContext(streamDataParserInput.Stream, streamDataParserInput.FileName, context, this.RecordParserTemplates);
             this.RecordParser.Execute(recordParserContext);
         }
 
@@ -31,16 +31,18 @@ namespace Vanrise.DataParser.Business
         private class HexTLVRecordParserContext : IHexTLVRecordParserContext
         {
             Stream _recordStream;
+            string _fileName;
             IParserTypeExecuteContext _parserTypeContext;
             Dictionary<Guid, HexTLVRecordParser> _recordParserTemplates;
 
-            public HexTLVRecordParserContext(Stream recordStream, IParserTypeExecuteContext parserTypeContext, Dictionary<Guid, HexTLVRecordParser> recordParserTemplates)
+            public HexTLVRecordParserContext(Stream recordStream, string fileName, IParserTypeExecuteContext parserTypeContext, Dictionary<Guid, HexTLVRecordParser> recordParserTemplates)
             {
                 recordStream.ThrowIfNull("recordData");
                 parserTypeContext.ThrowIfNull("parserTypeContext");
                 _recordStream = recordStream;
                 _parserTypeContext = parserTypeContext;
                 _recordParserTemplates = recordParserTemplates;
+                _fileName = fileName;
             }
 
             public Stream RecordStream
@@ -68,6 +70,12 @@ namespace Vanrise.DataParser.Business
             {
                 return _parserTypeContext.CreateRecord(recordType, tempFieldNames);
             }
+
+            public string FileName
+            {
+                get { return _fileName; }
+            }
+
         }
 
         #endregion

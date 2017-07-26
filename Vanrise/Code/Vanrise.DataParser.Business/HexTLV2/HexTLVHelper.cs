@@ -177,6 +177,7 @@ namespace Vanrise.DataParser.Business
                 parentContext.ThrowIfNull("parentContext");
                 _recordStream = recordStream;
                 _parentContext = parentContext;
+                FileName = parentContext.FileName;
             }
 
             public Stream RecordStream
@@ -199,6 +200,12 @@ namespace Vanrise.DataParser.Business
             public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
             {
                 return _parentContext.CreateRecord(recordType, tempFieldNames);
+            }
+
+            public string FileName
+            {
+                get;
+                set;
             }
         }
 

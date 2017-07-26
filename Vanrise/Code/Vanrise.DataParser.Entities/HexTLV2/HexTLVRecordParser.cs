@@ -21,6 +21,7 @@ namespace Vanrise.DataParser.Entities
 
     public interface IHexTLVRecordParserContext
     {
+        string FileName { get; }
         Stream RecordStream { get; }
 
         ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames);

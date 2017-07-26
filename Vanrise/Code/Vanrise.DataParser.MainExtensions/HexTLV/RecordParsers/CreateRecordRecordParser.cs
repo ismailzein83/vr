@@ -32,7 +32,8 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
                 {
                     compositeFieldsParser.Execute(new CompositeFieldsParserContext
                     {
-                        Record = parsedRecord
+                        Record = parsedRecord,
+                        FileName = context.FileName
                     });
                 }
             }
@@ -50,6 +51,13 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
     public class CompositeFieldsParserContext : ICompositeFieldsParserContext
     {
         public ParsedRecord Record
+        {
+            get;
+            set;
+        }
+
+
+        public string FileName
         {
             get;
             set;
