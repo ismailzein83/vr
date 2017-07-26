@@ -202,7 +202,8 @@ namespace Vanrise.Security.Business
                     Name = userObject.Name,
                     EnabledTill = userObject.EnabledTill,
                     Description = userObject.Description,
-                    TenantId = userObject.TenantId
+                    TenantId = userObject.TenantId,
+                    ExtendedSettings = userObject.ExtendedSettings
                 };
                 insertActionSucc = dataManager.AddUser(addedUser, encryptedPassword, out userId);
                 
@@ -295,7 +296,8 @@ namespace Vanrise.Security.Business
                     Name = userObject.Name,
                     EnabledTill = userObject.EnabledTill,
                     Description = userObject.Description,
-                    TenantId = userObject.TenantId
+                    TenantId = userObject.TenantId,
+                    ExtendedSettings = userObject.ExtendedSettings
                 };
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
                 updateActionSucc = dataManager.UpdateUser(updatedUser);

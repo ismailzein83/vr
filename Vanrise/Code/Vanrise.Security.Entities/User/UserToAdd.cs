@@ -21,5 +21,8 @@ namespace Vanrise.Security.Entities
         public List<int> GroupIds { get; set; }
 
         public string Password { get; set;  }
+
+        public Dictionary<string, Object> ExtendedSettings { get; set; }
+
     }
 }
