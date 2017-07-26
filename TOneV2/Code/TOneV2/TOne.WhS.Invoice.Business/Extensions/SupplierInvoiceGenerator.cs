@@ -18,8 +18,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
     {
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            List<string> listMeasures = new List<string> { "CostNet", "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
-            List<string> listDimensions = new List<string> { "Supplier", "SupplierZone", "SupplierCurrency", "SupplierRate", "SupplierRateType" };
+            List<string> listMeasures = new List<string> { "CostNetNotNULL", "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
+            List<string> listDimensions = new List<string> { "Supplier", "SupplierZone", "CostCurrency", "CostRate", "CostRateType" };
             string dimentionName = null;
             int currencyId = -1;
             IEnumerable<VRTaxItemDetail> taxItemDetails = null;
@@ -214,7 +214,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                     MeasureValue saleNet_OrigCurr = GetMeasureValue(analyticRecord, "CostNet_OrigCurr");
                     MeasureValue saleDuration = GetMeasureValue(analyticRecord, "CostDuration");
-                    MeasureValue saleNet = GetMeasureValue(analyticRecord, "CostNet");
+                    MeasureValue saleNet = GetMeasureValue(analyticRecord, "CostNetNotNULL");
                     MeasureValue calls = GetMeasureValue(analyticRecord, "NumberOfCalls");
                     MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
                     MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");

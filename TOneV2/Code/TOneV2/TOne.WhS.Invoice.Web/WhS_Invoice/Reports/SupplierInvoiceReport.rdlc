@@ -9,7 +9,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Customer</Value>
+                <Value>Supplier</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -1170,8 +1170,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>2.41819in</Top>
-        <Left>0.9304in</Left>
+        <Top>2.4286in</Top>
+        <Left>0.93416in</Left>
         <Height>0.1875in</Height>
         <Width>3.375in</Width>
         <ZIndex>18</ZIndex>
@@ -1966,7 +1966,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SaleAmount.Value,2)</Value>
+                              <Value>=FormatNumber(Fields!CostAmount.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -2282,8 +2282,8 @@
       </Textbox>
       <Rectangle Name="Rectangle1">
         <ReportItems>
-          <Subreport Name="CustomerInvoiceItemsReportName">
-            <ReportName>CustomerInvoiceItemsReport</ReportName>
+          <Subreport Name="SupplierInvoiceItemsReportName">
+            <ReportName>SupplierInvoiceItemsReport</ReportName>
             <Parameters>
               <Parameter Name="Title">
                 <Value>=Parameters!Title.Value</Value>
@@ -2578,12 +2578,12 @@
           <DataField>TotalNumberOfCalls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
+        <Field Name="CostAmount">
+          <DataField>CostAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleAmount">
-          <DataField>OriginalSaleAmount</DataField>
+        <Field Name="OriginalCostAmount">
+          <DataField>OriginalCostAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="Duration">
@@ -2594,20 +2594,20 @@
           <DataField>PartnerType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrencyId">
-          <DataField>SaleCurrencyId</DataField>
+        <Field Name="SupplierCurrencyId">
+          <DataField>SupplierCurrencyId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrency">
-          <DataField>SaleCurrency</DataField>
+        <Field Name="SupplierCurrency">
+          <DataField>SupplierCurrency</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrencyId">
-          <DataField>OriginalSaleCurrencyId</DataField>
+        <Field Name="OriginalSupplierCurrencyId">
+          <DataField>OriginalSupplierCurrencyId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrency">
-          <DataField>OriginalSaleCurrency</DataField>
+        <Field Name="OriginalSupplierCurrency">
+          <DataField>OriginalSupplierCurrency</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="TotalAmount">
@@ -2617,9 +2617,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>CustomerInvoiceDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetCustomerInvoiceDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.CustomerInvoiceDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>SupplierInvoiceDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetSupplierInvoiceDetailsRDLCSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.SupplierInvoiceDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
     <DataSet Name="BankDetails">

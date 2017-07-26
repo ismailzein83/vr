@@ -468,8 +468,18 @@ namespace TOne.WhS.Invoice.Business
             else
             {
                 var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(invoiceAccount.CarrierProfileId.Value, true, true);
-                if (carrierAccounts == null || !carrierAccounts.All(x => CheckActivationStatus(vrAccountStatus, x)))
-                    return false;
+                switch (vrAccountStatus)
+                {
+                    case VRAccountStatus.Active:
+                        if (carrierAccounts == null || !carrierAccounts.Any(x => CheckActivationStatus(vrAccountStatus, x)))
+                            return false;
+                        return true;
+                    case VRAccountStatus.InActive:
+                        if (carrierAccounts == null || !carrierAccounts.All(x => CheckActivationStatus(vrAccountStatus, x)))
+                            return false;
+                        return true;
+                       
+                }
             }
             return true;
         }

@@ -76,7 +76,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!Customer.Value</Value>
+                <Value>=Parameters!Carrier.Value</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -2041,7 +2041,7 @@
                               <Value>=Fields!SaleAmount.Value</Value>
                             </Parameter>
                             <Parameter Name="Customer">
-                              <Value>=Parameters!Customer.Value</Value>
+                              <Value>=Parameters!Carrier.Value</Value>
                             </Parameter>
                             <Parameter Name="DueDate">
                               <Value>=Parameters!InvoiceDueDate.Value</Value>
@@ -2368,7 +2368,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="Customer">
+    <ReportParameter Name="Carrier">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

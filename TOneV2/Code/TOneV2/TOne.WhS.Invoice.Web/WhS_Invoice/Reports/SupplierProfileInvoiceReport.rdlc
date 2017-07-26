@@ -1154,7 +1154,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!CustomerIdDescription.Value</Value>
+                              <Value>=Fields!SupplierIdDescription.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1259,7 +1259,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SaleAmount.Value,2)</Value>
+                              <Value>=FormatNumber(Fields!CostAmount.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -1543,10 +1543,10 @@
                     <Rectangle Name="Rectangle1">
                       <ReportItems>
                         <Subreport Name="Subreport1">
-                          <ReportName>ProfileInvoiceItemsReport</ReportName>
+                          <ReportName>SupplierProfileInvoiceItemsReport</ReportName>
                           <Parameters>
-                            <Parameter Name="CustomerId">
-                              <Value>=Fields!CustomerId.Value</Value>
+                            <Parameter Name="SupplierId">
+                              <Value>=Fields!SupplierId.Value</Value>
                             </Parameter>
                             <Parameter Name="FromDate">
                               <Value>=Parameters!FromDate.Value</Value>
@@ -2195,7 +2195,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Customer:</Value>
+                <Value>Supplier:</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -2406,64 +2406,68 @@
         <CommandText>/* Local Query */</CommandText>
       </Query>
       <Fields>
-        <Field Name="CustomerId">
-          <DataField>CustomerId</DataField>
+        <Field Name="SupplierId">
+          <DataField>SupplierId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="CustomerIdDescription">
-          <DataField>CustomerIdDescription</DataField>
+        <Field Name="SupplierIdDescription">
+          <DataField>SupplierIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleZoneId">
-          <DataField>SaleZoneId</DataField>
+        <Field Name="SupplierZoneId">
+          <DataField>SupplierZoneId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleZoneIdDescription">
-          <DataField>SaleZoneIdDescription</DataField>
+        <Field Name="SupplierZoneIdDescription">
+          <DataField>SupplierZoneIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrencyId">
-          <DataField>OriginalSaleCurrencyId</DataField>
+        <Field Name="OriginalSupplierCurrencyId">
+          <DataField>OriginalSupplierCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleCurrencyIdDescription">
-          <DataField>OriginalSaleCurrencyIdDescription</DataField>
+        <Field Name="OriginalSupplierCurrencyIdDescription">
+          <DataField>OriginalSupplierCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrencyId">
-          <DataField>SaleCurrencyId</DataField>
+        <Field Name="SupplierCurrencyId">
+          <DataField>SupplierCurrencyId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
-        <Field Name="SaleCurrencyIdDescription">
-          <DataField>SaleCurrencyIdDescription</DataField>
+        <Field Name="SupplierCurrencyIdDescription">
+          <DataField>SupplierCurrencyIdDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="SaleRateTypeId">
-          <DataField>SaleRateTypeId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="SupplierRateTypeId">
+          <DataField>SupplierRateTypeId</DataField>
+          <rd:TypeName>System.Nullable`1[[System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]</rd:TypeName>
         </Field>
-        <Field Name="SaleRateTypeIdDescription">
-          <DataField>SaleRateTypeIdDescription</DataField>
+        <Field Name="SupplierRateTypeIdDescription">
+          <DataField>SupplierRateTypeIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SupplierRate">
+          <DataField>SupplierRate</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SupplierRateDescription">
+          <DataField>SupplierRateDescription</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="NumberOfCalls">
           <DataField>NumberOfCalls</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="SaleAmount">
-          <DataField>SaleAmount</DataField>
+        <Field Name="CostAmount">
+          <DataField>CostAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="OriginalSaleAmount">
-          <DataField>OriginalSaleAmount</DataField>
+        <Field Name="OriginalCostAmount">
+          <DataField>OriginalCostAmount</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="Duration">
           <DataField>Duration</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="SaleRate">
-          <DataField>SaleRate</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
         <Field Name="FromDate">
@@ -2477,9 +2481,9 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
-        <rd:TableName>RDLCCustomerInvoiceItemDetails</rd:TableName>
-        <rd:ObjectDataSourceSelectMethod>GetRDLCCustomerInvoiceItemDetailsSchema</rd:ObjectDataSourceSelectMethod>
-        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCCustomerInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:TableName>RDLCSupplierInvoiceItemDetails</rd:TableName>
+        <rd:ObjectDataSourceSelectMethod>GetRDLCSupplierInvoiceItemDetailsSchema</rd:ObjectDataSourceSelectMethod>
+        <rd:ObjectDataSourceType>TOne.WhS.Invoice.Entities.RDLCSupplierInvoiceItemDetails, TOne.WhS.Invoice.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

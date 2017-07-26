@@ -13,7 +13,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 {
     public enum RDLCParameter
     {
-        Customer = 0,
+        Carrier = 0,
         Currency = 1,
         Address = 2,
         Phone = 3,
@@ -78,7 +78,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
                         }
 
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Customer, carrierName, true);
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Carrier, carrierName, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
                         if (carrierProfile != null)
                         {
