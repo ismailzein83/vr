@@ -80,7 +80,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var priceListCode in convertedPriceList.PriceListCodes)
             {
-                ThrowIfPriceListCodeIsInvalid(priceListCode);
+
 
                 if (IsEffectiveDateLessThanMinDate(minimumDate, priceListCode.EffectiveDate))
                     minimumDate = priceListCode.EffectiveDate.Value;
@@ -101,7 +101,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var priceListService in convertedPriceList.PriceListServices)
             {
-                ThrowIfPriceListServiceIsInvalid(priceListService);
+
                 if (IsEffectiveDateLessThanMinDate(minimumDate, priceListService.EffectiveDate))
                     minimumDate = priceListService.EffectiveDate.Value;
 
@@ -116,7 +116,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var priceListRate in convertedPriceList.PriceListRates)
             {
-                ThrowIfPriceListRateIsInvalid(priceListRate);
 
                 if (IsEffectiveDateLessThanMinDate(minimumDate, priceListRate.EffectiveDate))
                     minimumDate = priceListRate.EffectiveDate.Value;
@@ -140,7 +139,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 foreach (PriceListRate priceListRate in item.Value)
                 {
-                    ThrowIfPriceListRateIsInvalid(priceListRate);
+
                     if (IsEffectiveDateLessThanMinDate(minimumDate, priceListRate.EffectiveDate))
                         minimumDate = priceListRate.EffectiveDate.Value;
 
@@ -221,39 +220,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             return effectiveDate != null && (minimumDate == DateTime.MinValue || effectiveDate < minimumDate);
         }
 
-        private void ThrowIfPriceListCodeIsInvalid(PriceListCode plCode)
-        {
-            if (plCode.ZoneName == null)
-                throw new Vanrise.Entities.VRBusinessException("The zone name of a pricelist code was not found");
-            if (plCode.Code == null)
-                throw new Vanrise.Entities.VRBusinessException("The code of a pricelist code was not found");
-            if (!plCode.EffectiveDate.HasValue)
-                throw new Vanrise.Entities.VRBusinessException("The effective date of a pricelist code was not found");
-            if (plCode.EffectiveDate.Value == default(DateTime))
-                throw new Vanrise.Entities.VRBusinessException("The effective date of a pricelist code is invalid");
-        }
-
-        private void ThrowIfPriceListRateIsInvalid(PriceListRate plRate)
-        {
-            if (plRate.ZoneName == null)
-                throw new Vanrise.Entities.VRBusinessException("The zone name of a pricelist rate was not found");
-            if (plRate.Rate == null)
-                throw new Vanrise.Entities.VRBusinessException("The rate of a pricelist rate was not found");
-            if (!plRate.EffectiveDate.HasValue)
-                throw new Vanrise.Entities.VRBusinessException("The effective date of a pricelist rate was not found");
-            if (plRate.EffectiveDate.Value == default(DateTime))
-                throw new Vanrise.Entities.VRBusinessException("The effective date of a pricelist rate is invalid");
-        }
-
-        private void ThrowIfPriceListServiceIsInvalid(PriceListZoneService plService)
-        {
-            if (plService.ZoneName == null)
-                throw new Vanrise.Entities.VRBusinessException("The zone name of a pricelist service was not found");
-            if (!plService.EffectiveDate.HasValue)
-                throw new Vanrise.Entities.VRBusinessException("The effective date of a pricelist service was not found");
-            if (plService.EffectiveDate.Value == default(DateTime))
-                throw new Vanrise.Entities.VRBusinessException("The effective date of a pricelist service is invalid");
-        }
+       
 
         #endregion
     }
