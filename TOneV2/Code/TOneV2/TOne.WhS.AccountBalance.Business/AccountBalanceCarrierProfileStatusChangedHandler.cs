@@ -39,6 +39,19 @@ namespace TOne.WhS.AccountBalance.Business
             {
                 foreach (var financialAccount in financialAccounts)
                 {
+                    if (vrAccountStatus == VRAccountStatus.InActive && (!financialAccount.EED.HasValue || financialAccount.EED.Value > DateTime.Now))
+                    {
+                        var lastTransactionDate = new BillingTransactionManager().GetLastTransactionDate(financialAccount.Settings.AccountTypeId, financialAccount.FinancialAccountId.ToString());
+                        if (lastTransactionDate.HasValue)
+                        {
+                            financialAccount.EED = lastTransactionDate.Value;
+                        }
+                        if (!lastTransactionDate.HasValue || financialAccount.EED < financialAccount.BED)
+                        {
+                            financialAccount.EED = financialAccount.BED;
+                        }
+                        financialAccountManager.UpdateFinancialAccount(financialAccount);
+                    }
                     liveBalanceManager.TryUpdateLiveBalanceStatus(financialAccount.FinancialAccountId.ToString(), financialAccount.Settings.AccountTypeId, vrAccountStatus, false);
                 }
             }

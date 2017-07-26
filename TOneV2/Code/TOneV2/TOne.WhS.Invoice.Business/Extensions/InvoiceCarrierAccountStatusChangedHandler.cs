@@ -36,6 +36,19 @@ namespace TOne.WhS.Invoice.Business
             {
                 foreach (var invoiceAccount in invoiceAccounts)
                 {
+                    if (vrAccountStatus == VRAccountStatus.InActive && (!invoiceAccount.EED.HasValue || invoiceAccount.EED.Value > DateTime.Now))
+                    {
+                        var lastInvoiceToDate = new Vanrise.Invoice.Business.InvoiceManager().GetLastInvoiceToDate(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString());
+                        if (lastInvoiceToDate.HasValue)
+                        {
+                            invoiceAccount.EED = lastInvoiceToDate.Value;
+                        }
+                        else
+                        {
+                            invoiceAccount.EED = invoiceAccount.BED;
+                        }
+                        carrierInvoiceAccountManager.UpdateInvoiceAccount(invoiceAccount);
+                    }
                     invoiceAccountManager.TryUpdateInvoiceAccountStatus(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString(), vrAccountStatus, false);
                 }
             }
