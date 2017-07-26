@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -13,6 +10,18 @@ namespace Vanrise.Common.Business
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<VRTimePeriodConfig>(VRTimePeriodConfig.EXTENSION_TYPE);
+        }
+
+        public DateTimeRange GetTimePeriod(VRTimePeriod timePeriod, DateTime effectiveDate)
+        {
+            VRTimePeriodContext context = new VRTimePeriodContext() { EffectiveDate = effectiveDate };
+            timePeriod.GetTimePeriod(context);
+            return new DateTimeRange() { From = context.FromTime, To = context.ToTime };
+        }
+
+        public DateTimeRange GetTimePeriod(VRTimePeriod timePeriod)
+        {
+            return GetTimePeriod(timePeriod, DateTime.Now);
         }
     }
 }

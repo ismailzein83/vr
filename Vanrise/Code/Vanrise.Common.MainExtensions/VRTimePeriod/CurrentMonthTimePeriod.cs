@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.MainExtensions
@@ -16,8 +12,8 @@ namespace Vanrise.Common.MainExtensions
 
         public override void GetTimePeriod(IVRTimePeriodContext context)
         {
-            context.FromTime = new DateTime(DateTime.Now.Year,DateTime.Now.Month,1);
-            context.ToTime = DateTime.Now;
+            context.FromTime = new DateTime(context.EffectiveDate.Year, context.EffectiveDate.Month, 1);
+            context.ToTime = context.EffectiveDate;
         }
     }
 }

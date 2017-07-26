@@ -67,6 +67,8 @@
     <Compile Include="VRObjectTypes\ProductInfoObjectType.cs" />
     <Compile Include="VRObjectTypes\TextObjectType.cs" />
     <Compile Include="VRObjectTypes\TextValuePropertyEvaluator.cs" />
+    <Compile Include="VRTimePeriod\LastDaysPeriod.cs" />
+    <Compile Include="VRTimePeriod\LastTimePeriod.cs" />
     <Compile Include="VRTimePeriod\CurrentMonthTimePeriod.cs" />
     <Compile Include="VRTimePeriod\TodayTimePeriod.cs" />
   </ItemGroup>
