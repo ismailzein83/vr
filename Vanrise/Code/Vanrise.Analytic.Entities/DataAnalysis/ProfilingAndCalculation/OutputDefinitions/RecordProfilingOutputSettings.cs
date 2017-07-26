@@ -10,10 +10,7 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
     public class RecordProfilingOutputSettings : DAProfCalcOutputSettings
     {
         internal static Guid S_ItemDefinitionTypeId = new Guid("39E04643-3C5C-4D11-9D3C-41611C34F7B3");
-        public override Guid ItemDefinitionTypeId
-        {
-            get { return S_ItemDefinitionTypeId; }
-        }
+        public override Guid ItemDefinitionTypeId { get { return S_ItemDefinitionTypeId; } }
 
         public RecordFilterGroup RecordFilter { get; set; }
 
@@ -33,7 +30,6 @@ namespace Vanrise.Analytic.Entities.DataAnalysis.ProfilingAndCalculation.OutputD
             fields.AddRange(this.GroupingFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, Type = itm.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.GroupingField }));
             fields.AddRange(this.AggregationFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, Type = itm.RecordAggregate.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.AggregationField }));
             fields.AddRange(this.CalculationFields.Select(itm => new DAProfCalcOutputField { Name = itm.FieldName, Title = itm.FieldTitle, Type = itm.FieldType, DAProfCalcOutputFieldType = DAProfCalcOutputFieldType.CalculationField }));
-
             return fields;
         }
     }
