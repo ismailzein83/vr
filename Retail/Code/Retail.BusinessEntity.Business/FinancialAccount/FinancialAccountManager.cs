@@ -483,10 +483,42 @@ namespace Retail.BusinessEntity.Business
         {
             Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
             VRAccountStatus vrAccountStatus = VRAccountStatus.InActive;
-            if(s_accountManager.IsAccountActive(accountBEDefinitionId, accountId))
-                vrAccountStatus = VRAccountStatus.Active;
+
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             var financialAccountId = GetFinancialAccountId(accountId, financialAccount.SequenceNumber);
+
+            if (s_accountManager.IsAccountActive(accountBEDefinitionId, accountId))
+            {
+                vrAccountStatus = VRAccountStatus.Active;
+
+                if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
+                {
+                    var lastInvoiceDate = new Vanrise.Invoice.Business.InvoiceManager().GetLastInvoiceToDate(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId);
+                    if (lastInvoiceDate.HasValue)
+                    {
+                        financialAccount.EED = lastInvoiceDate.Value;
+                    }
+                    else
+                    {
+                        financialAccount.EED = financialAccount.BED;
+                    }
+                }
+            }
+            else
+            {
+
+                if (!financialAccount.EED.HasValue || financialAccount.EED.Value > DateTime.Now)
+                {
+                    UpdateFinancialAccount(new FinancialAccountToEdit
+                    {
+                        AccountBEDefinitionId = accountBEDefinitionId,
+                        AccountId = accountId,
+                        FinancialAccount = financialAccount
+                    });
+                }
+            }
+
+            
             var result = false;
             if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
             {
