@@ -1,5 +1,4 @@
-﻿
-'use strict';
+﻿'use strict';
                 
 app.directive('vrAnalyticRecordprofilingoutputsettingsEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
