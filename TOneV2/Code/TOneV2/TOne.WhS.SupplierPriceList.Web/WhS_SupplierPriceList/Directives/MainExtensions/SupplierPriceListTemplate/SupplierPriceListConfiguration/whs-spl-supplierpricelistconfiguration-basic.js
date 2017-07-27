@@ -145,12 +145,10 @@
 						($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == WhS_SupPL_CodeLayoutEnum.Delimitedcode.value);
 
                 	if (isCodeLayoutSelected === false) {
-                		isCodeLayoutSelected = true;
-                		if (isDelimitedCodeLayout)
-                			$scope.scopeModel.showDelimiter = true;
+                	    isCodeLayoutSelected = true;
+                	    $scope.scopeModel.showDelimiter = isDelimitedCodeLayout;
                 		return;
                 	}
-
                 	if (isDelimitedCodeLayout) {
                         $scope.scopeModel.delimiterValue = ',';
                         $scope.scopeModel.showDelimiter = true;
@@ -159,7 +157,7 @@
                         $scope.scopeModel.hasCodeRange = false;
                         $scope.scopeModel.delimiterValue = undefined;
                         $scope.scopeModel.showDelimiter = false;
-                    }
+                	}
                 };
                 $scope.scopeModel.onRateListMappingReady = function (api) {
                     rateListAPI = api;
@@ -213,7 +211,6 @@
                     $scope.scopeModel.servicesSelected.length = 0;
 
                     var promises = [];
-
                     if (payload != undefined) {
                         context = payload.context;
                         configDetails = payload.configDetails;
@@ -313,6 +310,7 @@
                                 context: getContext(),
                                 fieldMappings: [{ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "CodeGroup", FieldTitle: "Code Group", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
                                 listName: "CodeList",
+                                listTitle:"Codes",
                                 showDateFormat: true
                             };
                             if (configDetails != undefined && configDetails.CodeListMapping) {
