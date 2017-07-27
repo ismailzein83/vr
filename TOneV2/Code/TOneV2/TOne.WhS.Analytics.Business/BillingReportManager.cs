@@ -337,8 +337,9 @@ namespace TOne.WhS.Analytics.Business
 
                 TimeSpan span = (toDate.HasValue) ? ((DateTime)toDate).Subtract(fromDate) : DateTime.Now.Subtract(fromDate);
                 int numberOfMonths = (int)(Math.Round(span.TotalDays / 30));
-                if (toDate.HasValue && toDate.Value.Day < 12)
+                if (toDate.HasValue && (toDate.Value.Month - fromDate.Month) == numberOfMonths )
                     numberOfMonths++;
+
                 int headerIndex = 2;
                 int irow = 1;
 
