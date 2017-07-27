@@ -160,7 +160,7 @@
                         ctrl.filterFieldsMappings.length = 0;
                         ctrl.lastRowIndex = undefined;
                         ctrl.firstRowIndex = undefined;
-                        $scope.scopeModel.labelName = payload.listName + " Date Time Format";
+                        $scope.scopeModel.labelName = (payload.listTitle!=undefined)?payload.listTitle + " Date Time Format":undefined;
                         $scope.showDateFormat = payload.showDateFormat;
                         $scope.scopeModel.dateTimeFormat = (payload.listMappingData!=undefined)?payload.listMappingData.DateTimeFormat:undefined;
                         if (listMappingData != undefined) {
