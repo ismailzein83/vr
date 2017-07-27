@@ -28,18 +28,29 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
             var supplierTransformationSelectorAPI;
             var supplierTransformationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            $scope.onCustomerDataTransformationDefinitionReady = function (api) {
-                customerTransformationSelectorAPI = api;
-                customerTransformationReadyPromiseDeferred.resolve();
-            };
-
-            $scope.onSupplierDataTransformationDefinitionReady = function (api) {
-                supplierTransformationSelectorAPI = api;
-                supplierTransformationReadyPromiseDeferred.resolve();
-            };
+            var qualityAnalyticTableSelectorAPI;
+            var qualityAnalyticTableReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                defineAPI();
+                $scope.onCustomerDataTransformationDefinitionReady = function (api) {
+                    customerTransformationSelectorAPI = api;
+                    customerTransformationReadyPromiseDeferred.resolve();
+                };
+
+                $scope.onSupplierDataTransformationDefinitionReady = function (api) {
+                    supplierTransformationSelectorAPI = api;
+                    supplierTransformationReadyPromiseDeferred.resolve();
+                };
+
+                $scope.onQualityAnalyticTableReady = function (api) {
+                    qualityAnalyticTableSelectorAPI = api;
+                    qualityAnalyticTableReadyPromiseDeferred.resolve();
+                };
+
+                UtilsService.waitMultiplePromises([qualityAnalyticTableReadyPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+               
             }
 
             function defineAPI() {
@@ -73,6 +84,18 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
 
                     promises.push(supplierTransformationLoadPromiseDeferred.promise);
 
+
+                    function loadQualityAnalyticTableSelector() {
+                        var qualityAnalyticTablePayload;
+                        if (payload != undefined && payload.data != undefined && payload.data.TechnicalQualityConfiguration != undefined) {
+                            qualityAnalyticTablePayload = {
+                                selectedIds: payload.data.TechnicalQualityConfiguration.QualityAnalyticTableId
+                            }
+                        }
+                        return qualityAnalyticTableSelectorAPI.load(qualityAnalyticTablePayload);
+                    }
+                    promises.push(loadQualityAnalyticTableSelector());
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -81,7 +104,10 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                         $type: "TOne.WhS.Routing.Entities.RouteTechnicalSettingData, TOne.WhS.Routing.Entities",
                         RouteRuleDataTransformation: {
                             CustomerTransformationId: customerTransformationSelectorAPI.getSelectedIds(),
-                            SupplierTransformationId: supplierTransformationSelectorAPI.getSelectedIds()
+                            SupplierTransformationId: supplierTransformationSelectorAPI.getSelectedIds(),
+                        },
+                        TechnicalQualityConfiguration: {
+                            QualityAnalyticTableId: qualityAnalyticTableSelectorAPI.getSelectedIds(),
                         }
                     };
                 };
