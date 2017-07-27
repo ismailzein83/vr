@@ -11,5 +11,6 @@ namespace Vanrise.ExcelConversion.Entities
     {
         public const string EXTENSION_TYPE = "VR_ExcelConversion_FieldMapping";
         public string Editor { get; set; }
+        public bool hideCell { get; set; }
     }
 }

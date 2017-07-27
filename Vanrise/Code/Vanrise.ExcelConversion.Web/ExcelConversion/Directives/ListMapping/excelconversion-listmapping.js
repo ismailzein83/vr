@@ -132,6 +132,7 @@
                 };
                 if (payloadEntity != undefined) {
                     payload.fieldMapping = payloadEntity.FieldMapping;
+                    payload.hideCell = true;
                     dataItem.FieldName = payloadEntity.FieldName;
                     dataItem.selectedDataTypes = UtilsService.getItemByVal(ctrl.dataTypes, payloadEntity.FieldType.ConfigId, "value.ConfigId");
                 }

@@ -118,8 +118,18 @@
                             selectorAPI.clearDataSource();
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
-                                    $scope.templateConfigs.push(response[i]);
+                                    if (payload.hideCell) {
+                                        if (!response[i].hideCell) {
+                                            $scope.templateConfigs.push(response[i]);
+                                        }
+
+                                    }
+                                    else {
+                                        $scope.templateConfigs.push(response[i]);
+                                    }
+                                    
                                 }
+                                
                                 if (fieldMapping !=undefined)
                                     $scope.selectedTemplateConfig = UtilsService.getItemByVal($scope.templateConfigs, fieldMapping.ConfigId, 'ExtensionConfigurationId');
                                 else
