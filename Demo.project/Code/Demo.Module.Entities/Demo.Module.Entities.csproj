@@ -52,12 +52,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Building\Building.cs" />
+    <Compile Include="Building\BuildingDetails.cs" />
+    <Compile Include="Building\BuildingInfo.cs" />
+    <Compile Include="Building\BuildingQuery.cs" />
     <Compile Include="City.cs" />
     <Compile Include="CityDetails.cs" />
     <Compile Include="CityFilter.cs" />
     <Compile Include="CityInfo.cs" />
     <Compile Include="CityQ.cs" />
+    <Compile Include="Student\PaymentConfig.cs" />
+    <Compile Include="Payment\Cash.cs" />
+    <Compile Include="Payment\Card.cs" />
+    <Compile Include="Payment\PaymentMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Room\Room.cs" />
+    <Compile Include="Room\RoomDetails.cs" />
+    <Compile Include="Room\RoomInfoFilter.cs" />
+    <Compile Include="Room\RoomInfo.cs" />
+    <Compile Include="Room\RoomQuery.cs" />
+    <Compile Include="Student\Student.cs" />
+    <Compile Include="Student\StudentDetails.cs" />
+    <Compile Include="Student\StudentQuery.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserDetails.cs" />
     <Compile Include="UserQ.cs" />

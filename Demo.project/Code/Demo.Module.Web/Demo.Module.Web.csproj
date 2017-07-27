@@ -128,20 +128,51 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
+    <Content Include="Demo_Module\Directives\Building\demo-module-building-grid.js" />
+    <Content Include="Demo_Module\Directives\Building\demo-module-building-selector.js" />
+    <Content Include="Demo_Module\Directives\Building\Templates\BuildingGridTemplate.html" />
     <Content Include="Demo_Module\Directives\City\Templates\CityGridTemplate.html" />
     <Content Include="Demo_Module\Directives\City\Templates\demo-module-city-grid.js" />
     <Content Include="Demo_Module\Directives\City\Templates\demo-module-city-selector.js" />
+    <Content Include="Demo_Module\Directives\Room\demo-module-room-grid.js" />
+    <Content Include="Demo_Module\Directives\Room\demo-module-room-selector.js" />
+    <Content Include="Demo_Module\Directives\Room\Templates\RoomGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Student\MainExtensions\demo-module-payment.js" />
+    <Content Include="Demo_Module\Directives\Student\MainExtensions\Payment\demo-module-card-payment.js" />
+    <Content Include="Demo_Module\Directives\Student\MainExtensions\Payment\Template\CardPaymentTemplate.html" />
+    <Content Include="Demo_Module\Directives\Student\MainExtensions\Payment\Template\CashPaymentTemplate.html" />
+    <Content Include="Demo_Module\Directives\Student\MainExtensions\Payment\demo-module-cash-payment.js" />
+    <Content Include="Demo_Module\Directives\Student\Templates\StudentGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Student\demo-module-student-grid.js" />
     <Content Include="Demo_Module\Directives\User\templates\demo-module-user-grid.js" />
     <Content Include="Demo_Module\Directives\User\templates\UserGridTemplate.html" />
+    <Content Include="Demo_Module\Services\APIServices\BuildingAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CityAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\PaymentConfigsAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\RoomAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\StudentAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\UserAPIService.js" />
     <Content Include="Demo_Module\Services\CityService.js" />
+    <Content Include="Demo_Module\Services\RoomService.js" />
+    <Content Include="Demo_Module\Services\StudentService.js" />
     <Content Include="Demo_Module\Services\UserService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
+    <Content Include="Demo_Module\Views\BuildingEditor.html" />
+    <Content Include="Demo_Module\Views\BuildingEditorController.js" />
+    <Content Include="Demo_Module\Views\BuildingManagement.html" />
+    <Content Include="Demo_Module\Views\BuildingManagementController.js" />
     <Content Include="Demo_Module\Views\CityManagement.html" />
     <Content Include="Demo_Module\Views\CityManagementController.js" />
     <Content Include="Demo_Module\Views\CityEditor.html" />
     <Content Include="Demo_Module\Views\CityEditorController.js" />
+    <Content Include="Demo_Module\Views\RoomEditor.html" />
+    <Content Include="Demo_Module\Views\RoomEditorController.js" />
+    <Content Include="Demo_Module\Views\RoomManagement.html" />
+    <Content Include="Demo_Module\Views\RoomManagementController.js" />
+    <Content Include="Demo_Module\Views\StudentEditor.html" />
+    <Content Include="Demo_Module\Views\StudentEditorController.js" />
+    <Content Include="Demo_Module\Views\StudentManagement.html" />
+    <Content Include="Demo_Module\Views\StudentManagementController.js" />
     <Content Include="Demo_Module\Views\UserEditor.html" />
     <Content Include="Demo_Module\Views\UserEditorController.js" />
     <Content Include="Demo_Module\Views\UserManagement.html" />
@@ -149,8 +180,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BuildingController.cs" />
     <Compile Include="Controllers\CityController.cs" />
+    <Compile Include="Controllers\PymentConfigsController.cs" />
+    <Compile Include="Controllers\RoomController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Content Include="Demo_Module\Services\BuildingService.js" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
