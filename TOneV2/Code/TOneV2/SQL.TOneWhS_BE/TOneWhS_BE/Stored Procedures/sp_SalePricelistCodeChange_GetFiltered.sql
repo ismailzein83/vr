@@ -5,12 +5,9 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SalePricelistCodeChange_GetFiltered]
 AS
 BEGIN
 
-if(@CountryIDs!=null)
-begin
 DECLARE @CountryIDsTable TABLE (CountryID int)
 INSERT INTO @CountryIDsTable (CountryID)
 select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@CountryIDs)
-end
 
 SELECT [PricelistID]
       ,[Code]

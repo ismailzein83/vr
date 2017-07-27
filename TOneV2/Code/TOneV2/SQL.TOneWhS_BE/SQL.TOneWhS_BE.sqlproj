@@ -485,5 +485,7 @@
     <Build Include="TOneWhS_BE\Tables\SalePriceListSnapShot.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistSnapShot.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetCodeIds.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ExistSaleCodeForCodeGroup.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_checkIfCodeGroupHasRelatedCodes.sql" />
   </ItemGroup>
 </Project>
