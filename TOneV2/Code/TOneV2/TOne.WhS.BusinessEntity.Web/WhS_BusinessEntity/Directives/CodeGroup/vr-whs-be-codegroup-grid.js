@@ -82,12 +82,12 @@ function (UtilsService, VRNotificationService, WhS_BE_CodeGroupAPIService, WhS_B
             $scope.gridMenuActions = function (dataItem) {
 
                 var menuItems = [] ;
-                    menuItems[menuItems.length] = {
-                        name: "Edit",
-                        clicked: editCodeGroupe,
-                        haspermission: hasUpdateCodeGroupPermission
+                menuItems[menuItems.length] = {
+                    name: "Edit",
+                    clicked: editCodeGroupe,
+                    haspermission: hasUpdateCodeGroupPermission
 
-                    }
+                };
 
                 return menuItems; 
             };
