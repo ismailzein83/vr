@@ -88,7 +88,7 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                   
+
                     var parts;
                     var filterItems;
 
@@ -103,7 +103,7 @@
                     promises.push(loadGrid);
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = getData;
 

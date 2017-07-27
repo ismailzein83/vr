@@ -318,10 +318,9 @@
                     currentContext.getFirstRowIndex = function () {
                         return ctrl.firstRowIndex;
                     };
-                    currentContext.getFilterFieldsMappings = function()
-                    {
+                    currentContext.getFilterFieldsMappings = function () {
                         return ctrl.filterFieldsMappings;
-                    }
+                    };
 
                     return currentContext;
                 }
