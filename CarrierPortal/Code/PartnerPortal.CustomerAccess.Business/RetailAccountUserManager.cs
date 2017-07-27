@@ -25,7 +25,7 @@ namespace PartnerPortal.CustomerAccess.Business
             object userExtendedSettings;
             UserManager userManager = new UserManager();
 
-            User user = new User()
+            UserToAdd user = new UserToAdd()
             {
                 Description = retailAccount.Description,
                 Email = retailAccount.Email,
@@ -46,8 +46,18 @@ namespace PartnerPortal.CustomerAccess.Business
                 {
                     if (((RetailAccountSettings)userExtendedSettings).AccountId == retailAccount.AccountId)
                     {
-                        user.UserId = existedUser.UserId;
-                        Vanrise.Entities.UpdateOperationOutput<Vanrise.Security.Entities.UserDetail> updateOperationOutput = userManager.UpdateUser(user);
+                        UserToUpdate userToUpdate = new UserToUpdate()
+                        {
+                            Description = retailAccount.Description,
+                            Email = retailAccount.Email,
+                            EnabledTill = retailAccount.EnabledTill,
+                            Name = retailAccount.Name,
+                            TenantId = retailAccount.TenantId,
+                            ExtendedSettings = new Dictionary<string, object>(),
+                            UserId = existedUser.UserId
+                        };
+                        userToUpdate.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId });
+                        Vanrise.Entities.UpdateOperationOutput<Vanrise.Security.Entities.UserDetail> updateOperationOutput = userManager.UpdateUser(userToUpdate);
                         if (updateOperationOutput.Result == Vanrise.Entities.UpdateOperationResult.Succeeded)
                         {
                             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
