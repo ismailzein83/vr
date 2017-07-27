@@ -20,12 +20,13 @@ namespace PartnerPortal.CustomerAccess.Business
             var accountId = manager.GetRetailAccountId(userId);
            
             Dictionary<Guid, AnalyticTileField> fieldsDic = new Dictionary<Guid, AnalyticTileField>();
+            VRTimePeriodManager vrTimeManager = new VRTimePeriodManager();
+
             foreach(var query in analyticDefinitionSettings.Queries)
             {
-                VRTimePeriodContext context = new VRTimePeriodContext();
-                query.TimePeriod.GetTimePeriod(context);
+                DateTimeRange range = vrTimeManager.GetTimePeriod(query.TimePeriod);
                 List<string> measures = query.Measures.Select(x => x.MeasureName).ToList();
-                var analyticData = GetFilteredRecords(query.VRConnectionId, query.TableId, measures, query.UserDimensionName, accountId, context.FromTime, context.ToTime);
+                var analyticData = GetFilteredRecords(query.VRConnectionId, query.TableId, measures, query.UserDimensionName, accountId, range.From, range.To);
                 AddAnalyticTileFields(analyticData.Data, fieldsDic, query.Measures);
             }
             AnalyticTileInfo analyticTileInfo = new AnalyticTileInfo
