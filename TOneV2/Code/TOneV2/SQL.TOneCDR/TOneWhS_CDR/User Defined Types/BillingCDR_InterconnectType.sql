@@ -5,6 +5,7 @@
     [AlertDateTime]               DATETIME        NULL,
     [ConnectDateTime]             DATETIME        NULL,
     [DisconnectDateTime]          DATETIME        NULL,
+    [PDDInSeconds]                DECIMAL (20, 4) NULL,
     [DurationInSeconds]           DECIMAL (20, 4) NULL,
     [CustomerID]                  INT             NULL,
     [SellingNumberPlanID]         INT             NULL,
@@ -27,8 +28,11 @@
     [IsRerouted]                  BIT             NULL,
     [ReleaseCode]                 VARCHAR (50)    NULL,
     [ReleaseSource]               VARCHAR (10)    NULL,
+    [IsDelivered]                 BIT             NULL,
     [PortIN]                      VARCHAR (42)    NULL,
     [PortOUT]                     VARCHAR (42)    NULL,
     [CountryId]                   INT             NULL,
     [QueueItemId]                 BIGINT          NULL);
+
+
 

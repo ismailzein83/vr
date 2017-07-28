@@ -4,6 +4,7 @@
     [AlertDateTime]               DATETIME        NULL,
     [ConnectDateTime]             DATETIME        NULL,
     [DisconnectDateTime]          DATETIME        NULL,
+    [PDDInSeconds]                DECIMAL (20, 4) NULL,
     [DurationInSeconds]           DECIMAL (20, 4) NULL,
     [CustomerID]                  INT             NULL,
     [SaleZoneID]                  BIGINT          NULL,
@@ -22,6 +23,7 @@
     [SupplierZoneID]              BIGINT          NULL,
     [ReleaseCode]                 VARCHAR (50)    NULL,
     [ReleaseSource]               VARCHAR (10)    NULL,
+    [IsDelivered]                 BIT             NULL,
     [SellingNumberPlanID]         INT             NULL,
     [MasterPlanZoneID]            BIGINT          NULL,
     [MasterPlanCode]              VARCHAR (20)    NULL,
@@ -32,6 +34,8 @@
     [CountryId]                   INT             NULL,
     [QueueItemId]                 BIGINT          NULL
 );
+
+
 
 
 GO

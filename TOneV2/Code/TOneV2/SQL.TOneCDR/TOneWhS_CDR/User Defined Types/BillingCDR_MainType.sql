@@ -6,6 +6,7 @@
     [ConnectDateTime]              DATETIME        NULL,
     [DisconnectDateTime]           DATETIME        NULL,
     [DurationInSeconds]            DECIMAL (20, 4) NULL,
+    [PDDInSeconds]                 DECIMAL (20, 4) NULL,
     [CustomerID]                   INT             NULL,
     [SellingNumberPlanID]          INT             NULL,
     [SaleZoneID]                   BIGINT          NULL,
@@ -39,6 +40,7 @@
     [CostDurationInSeconds]        DECIMAL (20, 4) NULL,
     [ReleaseCode]                  VARCHAR (50)    NULL,
     [ReleaseSource]                VARCHAR (10)    NULL,
+    [IsDelivered]                  BIT             NULL,
     [PortIN]                       VARCHAR (42)    NULL,
     [PortOUT]                      VARCHAR (42)    NULL,
     [CostRateTypeRuleId]           INT             NULL,
@@ -87,6 +89,8 @@
     [OrigSaleCurrencyId]           INT             NULL,
     [OrigCostCurrencyId]           INT             NULL,
     [QueueItemId]                  BIGINT          NULL);
+
+
 
 
 
