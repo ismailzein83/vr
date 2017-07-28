@@ -1,9 +1,9 @@
 ﻿using PartnerPortal.CustomerAccess.Entities;
 using System;
 using System.Collections.Generic;
+using Vanrise.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
-using Vanrise.Entities;
 
 namespace PartnerPortal.CustomerAccess.Business
 {
@@ -34,7 +34,6 @@ namespace PartnerPortal.CustomerAccess.Business
                 TenantId = retailAccount.TenantId,
                 ExtendedSettings = new Dictionary<string, object>()
             };
-
             string retailAccountSettingsFullName = typeof(RetailAccountSettings).FullName;
             user.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId });
 
