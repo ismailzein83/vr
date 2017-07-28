@@ -97,7 +97,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return file != null && notificationManager.SendSalePriceList(userId, customerPriceList, file);
         }
-
+        // DoPriceListsExistForOwner
+        public bool CheckExistingPriceList(int ownerId, SalePriceListOwnerType ownerType)
+        {
+            Dictionary<int, SalePriceList> allSalePriceLists = GetCachedSalePriceLists();
+            return allSalePriceLists.Values.Any(itm => itm.OwnerId == ownerId && itm.OwnerType == ownerType);
+        }
         public VRMailEvaluatedTemplate EvaluateEmail(long pricelistId, SalePriceListType salePriceListType)
         {
             SalePriceListManager priceListManager = new SalePriceListManager();
