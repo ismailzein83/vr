@@ -25,7 +25,8 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", function (Mult
             tab.onremove = iAttrs.onremove != undefined ? $scope.$parent.$eval(iAttrs.onremove) : undefined;         
             tab.header = iAttrs.header != undefined ? $scope.$parent.$eval(iAttrs.header): iAttrs.header;
             tab.data = iAttrs.data != undefined ? $scope.$parent.$eval(iAttrs.data) : iAttrs.header;
-            tab.showTab = iAttrs.showTab != undefined ? $scope.$parent.$eval(iAttrs.showTab) : undefined;
+            if (tab.showTab==undefined)
+                tab.showTab = iAttrs.showtab != undefined ? $scope.$parent.$eval(iAttrs.showtab) : undefined;
             var dontLoad = iAttrs.dontload != undefined ? $scope.$parent.$eval(iAttrs.dontload) : false;
             if (!dontLoad)
                 tab.isLoaded = true;
