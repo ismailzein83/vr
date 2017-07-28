@@ -273,6 +273,7 @@
     <Compile Include="VRObject\VRObjectTypeDefinitionQuery.cs" />
     <Compile Include="VRObject\VRObjectVariable.cs" />
     <Compile Include="VRRdlcReportParameter.cs" />
+    <Compile Include="Zip\ZipFileInfo.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
