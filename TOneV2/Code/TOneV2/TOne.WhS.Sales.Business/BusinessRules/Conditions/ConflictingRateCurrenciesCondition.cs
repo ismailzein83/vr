@@ -20,70 +20,60 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
-            var ratePlanContext = context.GetExtension<IRatePlanContext>();
-            if (ratePlanContext.OwnerType == BusinessEntity.Entities.SalePriceListOwnerType.SellingProduct)
+            IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
+
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
-            if (ratePlanContext.CurrencyId == ratePlanContext.SystemCurrencyId)
+            CountryData countryData = context.Target as CountryData;
+
+            Dictionary<long, RateToChange> newRatesByZoneId;
+            Dictionary<long, RateToClose> closedRatesByZoneId;
+            DateTime? minRateActionDate;
+
+            if (!DoRateActionsExist(countryData.ZoneDataByZoneId, out newRatesByZoneId, out closedRatesByZoneId, out minRateActionDate))
                 return true;
 
-            var countryData = context.Target as CountryData;
+            string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryData.CountryId);
 
-            if (countryData.ZoneDataByZoneId == null || countryData.ZoneDataByZoneId.Count == 0)
-                return true;
-
-            IEnumerable<ExistingZone> countryZones = ratePlanContext.EffectiveAndFutureExistingZonesByCountry.GetRecord(countryData.CountryId);
-            if (countryZones == null || countryZones.Count() == 0)
-                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("No zones were found for country '{0}'", countryData.CountryId));
-
-            string countryName = new CountryManager().GetCountryName(countryData.CountryId);
-
-            var newNormalRatesByZoneId = new Dictionary<long, RateToChange>();
-            var closedNormalRatesByZoneId = new Dictionary<long, RateToClose>();
-
-            if (!AreAllActionsDefinedOnSameDate(countryData.ZoneDataByZoneId.Values, newNormalRatesByZoneId, closedNormalRatesByZoneId))
+            if (closedRatesByZoneId.Count > 0 && ratePlanContext.CurrencyId != ratePlanContext.SystemCurrencyId)
             {
-                context.Message = string.Format("The new and closed rates of country '{0}' must be defined on the same date", countryName);
+                context.Message = string.Format("The currency of the process doesn't match the currecny of the system");
                 return false;
             }
 
-            int countryZonesCount = countryZones.Count();
+            IEnumerable<ExistingZone> existingZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryData.CountryId);
+            IEnumerable<ExistingZone> effectiveOrFutureZones = GetEffectiveOrFutureZones(existingZones, countryName, countryData.CountryBED);
 
-            if (newNormalRatesByZoneId.Count != countryZonesCount && closedNormalRatesByZoneId.Count != countryZonesCount)
+            foreach (ExistingZone countryZone in effectiveOrFutureZones)
             {
-                var saleRateManager = new SaleRateManager();
-                int sellingProductId = new CarrierAccountManager().GetSellingProductId(ratePlanContext.OwnerId);
+                RateToChange newRate = newRatesByZoneId.GetRecord(countryZone.ZoneId);
+                RateToClose closedRate = closedRatesByZoneId.GetRecord(countryZone.ZoneId);
 
-                foreach (ExistingZone countryZone in countryZones)
+                DateTime? zoneRateActionDate = null;
+
+                if (newRate != null)
                 {
-                    RateToChange newNormalRate = newNormalRatesByZoneId.GetRecord(countryZone.ZoneId);
-                    RateToClose closedNormalRate = closedNormalRatesByZoneId.GetRecord(countryZone.ZoneId);
-
-                    if (newNormalRate != null)
+                    if (newRate.BED == minRateActionDate.Value)
                         continue;
+                    zoneRateActionDate = newRate.BED;
+                }
+                else if (closedRate != null)
+                {
+                    if (closedRate.CloseEffectiveDate == minRateActionDate.Value)
+                        continue;
+                    zoneRateActionDate = closedRate.CloseEffectiveDate;
+                }
 
-                    int zoneRateCurrencyId;
+                DateTime? xDate = Max(countryZone.BED, countryData.CountryBED, minRateActionDate.Value);
+                DateTime? yDate = Min(countryZone.EED, countryData.CountryEED, zoneRateActionDate);
 
-                    if (closedNormalRate != null)
-                    {
-                        SaleEntityZoneRate spZoneRate = ratePlanContext.ActionRateLocator.GetSellingProductZoneRate(sellingProductId, countryZone.ZoneId);
-                        if (spZoneRate == null || spZoneRate.Rate == null)
-                            throw new DataIntegrityValidationException(string.Format("No rate was found for zone '{0}' of selling product '{1}' on '{2}'", countryZone.ZoneId, sellingProductId, UtilitiesManager.GetDateTimeAsString(closedNormalRate.CloseEffectiveDate)));
-                        zoneRateCurrencyId = saleRateManager.GetCurrencyId(spZoneRate.Rate);
-                    }
-                    else
-                    {
-                        SaleEntityZoneRate effectiveZoneRate = ratePlanContext.RateLocator.GetCustomerZoneRate(ratePlanContext.OwnerId, sellingProductId, countryZone.ZoneId);
-                        if (effectiveZoneRate == null || effectiveZoneRate.Rate == null)
-                            throw new DataIntegrityValidationException(string.Format("Neither a customer nor a selling product rate was found for zone '{0}' on '{1}'", countryZone.ZoneId, UtilitiesManager.GetDateTimeAsString(ratePlanContext.EffectiveDate)));
-                        zoneRateCurrencyId = saleRateManager.GetCurrencyId(effectiveZoneRate.Rate);
-                    }
+                IEnumerable<ExistingRate> effectiveOrFutureRates = GetEffectiveOrFutureRates(countryZone.ExistingRates, countryData.CountryBED);
 
-                    if (zoneRateCurrencyId != ratePlanContext.CurrencyId)
-                    {
-                        context.Message = string.Format("The normal rates of the zones of country '{0}' must all have the same currency", countryName);
-                        return false;
-                    }
+                if (AreZoneRatesInConflict(effectiveOrFutureRates, xDate.Value, yDate, ratePlanContext))
+                {
+                    context.Message = string.Format("All rates of zones for country '{0}' must have same currency", countryName);
+                    return false;
                 }
             }
 
@@ -96,35 +86,171 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         #region Private Methods
 
-        private bool AreAllActionsDefinedOnSameDate(IEnumerable<DataByZone> dataByZone, Dictionary<long, RateToChange> newNormalRatesByZoneId, Dictionary<long, RateToClose> closedNormalRatesByZoneId)
+        private bool DoRateActionsExist(Dictionary<long, DataByZone> dataByZoneId, out Dictionary<long, RateToChange> newRatesByZoneId, out Dictionary<long, RateToClose> closedRatesByZoneId, out DateTime? minRateActionDate)
         {
-            DateTime? actionDate = null;
+            if (dataByZoneId == null || dataByZoneId.Count == 0)
+            {
+                newRatesByZoneId = null;
+                closedRatesByZoneId = null;
+                minRateActionDate = null;
+                return false;
+            }
 
-            foreach (DataByZone zoneData in dataByZone)
+            newRatesByZoneId = new Dictionary<long, RateToChange>();
+            closedRatesByZoneId = new Dictionary<long, RateToClose>();
+            minRateActionDate = null;
+
+            foreach (DataByZone zoneData in dataByZoneId.Values)
             {
                 if (zoneData.NormalRateToChange != null)
                 {
-                    if (!actionDate.HasValue)
-                        actionDate = zoneData.NormalRateToChange.BED;
-                    else if (zoneData.NormalRateToChange.BED != actionDate.Value)
-                        return false;
-
-                    if (!newNormalRatesByZoneId.ContainsKey(zoneData.ZoneId))
-                        newNormalRatesByZoneId.Add(zoneData.ZoneId, zoneData.NormalRateToChange);
+                    if (!minRateActionDate.HasValue || zoneData.NormalRateToChange.BED < minRateActionDate.Value)
+                        minRateActionDate = zoneData.NormalRateToChange.BED;
+                    newRatesByZoneId.Add(zoneData.ZoneId, zoneData.NormalRateToChange);
                 }
                 else if (zoneData.NormalRateToClose != null)
                 {
-                    if (!actionDate.HasValue)
-                        actionDate = zoneData.NormalRateToClose.CloseEffectiveDate;
-                    else if (zoneData.NormalRateToClose.CloseEffectiveDate != actionDate.Value)
-                        return false;
-
-                    if (!closedNormalRatesByZoneId.ContainsKey(zoneData.ZoneId))
-                        closedNormalRatesByZoneId.Add(zoneData.ZoneId, zoneData.NormalRateToClose);
+                    if (!minRateActionDate.HasValue || zoneData.NormalRateToClose.CloseEffectiveDate < minRateActionDate.Value)
+                        minRateActionDate = zoneData.NormalRateToClose.CloseEffectiveDate;
+                    closedRatesByZoneId.Add(zoneData.ZoneId, zoneData.NormalRateToClose);
                 }
             }
 
-            return true;
+            return minRateActionDate.HasValue;
+        }
+
+        private IEnumerable<ExistingZone> GetEffectiveOrFutureZones(IEnumerable<ExistingZone> existingZones, string countryName, DateTime countryBED)
+        {
+            if (existingZones == null || existingZones.Count() == 0)
+                throw new VRBusinessException(string.Format("The existing zones of country '{0}' were not found", countryName));
+
+            IEnumerable<ExistingZone> effectiveOrFutureZones = existingZones.FindAllRecords(x => x.IsEffectiveOrFuture(countryBED));
+
+            if (effectiveOrFutureZones.Count() == 0)
+                throw new VRBusinessException(string.Format("No effective or future zones of country '{0}' were found after the country's BED '{1}'", countryName, UtilitiesManager.GetDateTimeAsString(countryBED)));
+
+            return effectiveOrFutureZones;
+        }
+
+        private IEnumerable<ExistingRate> GetEffectiveOrFutureRates(IEnumerable<ExistingRate> existingRates, DateTime countryBED)
+        {
+            if (existingRates == null || existingRates.Count() == 0)
+                return null;
+            return existingRates.FindAllRecords(x => x.IsEffectiveOrFuture(countryBED));
+        }
+
+        private bool AreZoneRatesInConflict(IEnumerable<ExistingRate> existingRates, DateTime xDate, DateTime? yDate, IRatePlanContext ratePlanContext)
+        {
+            if (existingRates == null || existingRates.Count() == 0)
+            {
+                if (AreProcessAndSystemCurrenciesInConflict(ratePlanContext))
+                    return true;
+            }
+            else
+            {
+                var saleRateManager = new SaleRateManager();
+                DateTime? previousRateEED = null;
+
+                int existingRatesCount = existingRates.Count();
+
+                for (int i = 0; i < existingRatesCount; i++)
+                {
+                    ExistingRate existingRate = existingRates.ElementAt(i);
+
+                    if (i == 0)
+                    {
+                        if (existingRate.BED > xDate && AreProcessAndSystemCurrenciesInConflict(ratePlanContext))
+                            return true;
+                    }
+                    else if (existingRate.BED > previousRateEED.Value && AreProcessAndSystemCurrenciesInConflict(ratePlanContext))
+                        return true;
+
+                    int existingRateCurrencyId = saleRateManager.GetCurrencyId(existingRate.RateEntity);
+
+                    if (existingRateCurrencyId != ratePlanContext.CurrencyId)
+                        return true;
+
+                    if (!existingRate.EED.HasValue || (yDate.HasValue && existingRate.EED.Value >= yDate.Value))
+                        break;
+
+                    if (i == existingRatesCount - 1)
+                    {
+                        if (AreProcessAndSystemCurrenciesInConflict(ratePlanContext))
+                            return false;
+                    }
+
+                    previousRateEED = existingRate.EED;
+                }
+            }
+
+            return false;
+        }
+
+        private bool AreProcessAndSystemCurrenciesInConflict(IRatePlanContext ratePlanContext)
+        {
+            return ratePlanContext.CurrencyId != ratePlanContext.SystemCurrencyId;
+        }
+
+        private DateTime? Max(params DateTime?[] dates)
+        {
+            if (dates == null || dates.Count() == 0)
+                return default(DateTime);
+            else
+            {
+                int datesCount = dates.Count();
+                DateTime? firstDate = dates.ElementAt(0);
+
+                if (datesCount == 1)
+                    return firstDate;
+                else
+                {
+                    DateTime? maxDate = firstDate;
+
+                    for (int i = 1; i < dates.Count(); i++)
+                    {
+                        DateTime? date = dates.ElementAt(i);
+
+                        if (!date.HasValue)
+                            continue;
+
+                        if (!maxDate.HasValue || date.Value > maxDate.Value)
+                            maxDate = date;
+                    }
+
+                    return maxDate;
+                }
+            }
+        }
+
+        private DateTime? Min(params DateTime?[] dates)
+        {
+            if (dates == null || dates.Count() == 0)
+                return default(DateTime);
+            else
+            {
+                int datesCount = dates.Count();
+                DateTime? firstDate = dates.ElementAt(0);
+
+                if (datesCount == 1)
+                    return firstDate;
+                else
+                {
+                    DateTime? maxDate = firstDate;
+
+                    for (int i = 1; i < dates.Count(); i++)
+                    {
+                        DateTime? date = dates.ElementAt(i);
+
+                        if (!date.HasValue)
+                            continue;
+
+                        if (!maxDate.HasValue || date.Value < maxDate.Value)
+                            maxDate = date;
+                    }
+
+                    return maxDate;
+                }
+            }
         }
 
         #endregion

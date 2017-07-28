@@ -12,7 +12,11 @@ namespace TOne.WhS.Sales.Entities
 
         public DateTime CountryBED { get; set; }
 
+        public DateTime? CountryEED { get; set; }
+
         public Dictionary<long, DataByZone> ZoneDataByZoneId { get; set; }
+
+        #region IRuleTarget Implementation
 
         public object Key
         {
@@ -23,5 +27,7 @@ namespace TOne.WhS.Sales.Entities
         {
             get { return "CountryData"; }
         }
+
+        #endregion
     }
 }
