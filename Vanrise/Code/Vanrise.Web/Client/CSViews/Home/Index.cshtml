@@ -145,17 +145,19 @@
                                 <li class="title-groupe" role="presentation">
                                     <label class="title-label"> {{::item.Name}}</label>
                                 </li>
-                                <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-repeat="c in item.Childs" ng-class="c.isSelected?'selected-node':''">
-                                    <a ng-href="{{::c.Location}}" ng-class="c.isSelected?'selected-url':''">{{::c.Name}}</a>
-                                </li>
-                                <li ng-if="c.Childs != undefined" class="innerlist" ng-repeat="c in item.Childs">
-                                    <div class="div-link hand-cursor" ng-class="menusubItemsCurrent.Id == c.Id ? 'selected-url down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub(c)">{{::c.Name}}</div>
-                                    <ul class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
-                                        <li ng-repeat="a in c.Childs" class="innerlist">
-                                            <a class="menulink" ng-class="a.isSelected?'selected-url bold-item':''" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{::a.Location}}">{{::a.Name}}</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                                <span ng-repeat="c in item.Childs">
+                                    <li ng-if="c.Childs == undefined" role="presentation" class="innerlist" ng-class="c.isSelected?'selected-node':''">
+                                        <a ng-href="{{::c.Location}}" ng-class="c.isSelected?'selected-url':''">{{::c.Name}}</a>
+                                    </li>
+                                    <li ng-if="c.Childs != undefined" class="innerlist">
+                                        <div class="div-link hand-cursor" ng-class="menusubItemsCurrent.Id == c.Id ? 'selected-url down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub(c)">{{::c.Name}}</div>
+                                        <ul class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
+                                            <li ng-repeat="a in c.Childs" class="innerlist">
+                                                <a class="menulink" ng-class="a.isSelected?'selected-url bold-item':''" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </span>
                             </ul>
                         </div>
                         <div class="clock collapsed-clock" style="z-index:-1">

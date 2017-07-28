@@ -983,56 +983,56 @@ loader .outer-loader {
     border: 0px;
 }
 
-    #custom .ui-grid-header {
-        border-bottom: 0px solid #D4D4D4;
-    }
+#custom .ui-grid-header {
+    border-bottom: 0px solid #D4D4D4;
+}
 
-    #custom .ui-grid-header-cell {
-        border: 0px;
-    }
+#custom .ui-grid-header-cell {
+    border: 0px;
+}
 
-    #custom .ui-grid-header-canvas {
-        background-color: #fff;
-        border-bottom: 0px solid #798992;
-    }
+#custom .ui-grid-header-canvas {
+    background-color: #fff;
+    border-bottom: 0px solid #798992;
+}
 
-    #custom .ui-grid-header-cell {
-        font-size: 12px;
-        color: #534B4B;
-        border: medium none;
-    }
+#custom .ui-grid-header-cell {
+    font-size: 12px;
+    color: #534B4B;
+    border: medium none;
+}
 
-    #custom .ui-grid-cell {
-        border-bottom: 1px solid #D4D4D4;
-        border-right: 0px solid #D4D4D4;
-        font-size: 12px;
-        margin-top: 0px;
-        color: #616f77;
-    }
+#custom .ui-grid-cell {
+    border-bottom: 1px solid #D4D4D4;
+    border-right: 0px solid #D4D4D4;
+    font-size: 12px;
+    margin-top: 0px;
+    color: #616f77;
+}
 
-    #custom .ui-grid-row:nth-child(odd) .ui-grid-cell {
-        background-color: #fff;
-    }
+#custom .ui-grid-row:nth-child(odd) .ui-grid-cell {
+    background-color: #fff;
+}
 
-    #custom .ui-grid-row:nth-child(even) .ui-grid-cell {
-        background-color: #fff;
-    }
+#custom .ui-grid-row:nth-child(even) .ui-grid-cell {
+    background-color: #fff;
+}
 
-    #custom .ui-grid-cell-contents {
-        box-sizing: border-box;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        height: 100%;
-    }
+#custom .ui-grid-cell-contents {
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 100%;
+}
 
-    #custom .ui-grid-header-canvas {
-        min-height: 26.983px;
-    }
+#custom .ui-grid-header-canvas {
+    min-height: 26.983px;
+}
 
-    #custom .ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
-        border-right: 0px solid #fff;
-    }
+#custom .ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
+    border-right: 0px solid #fff;
+}
 
 .header-custom {
     cursor: pointer !important;
@@ -1040,9 +1040,9 @@ loader .outer-loader {
     min-height: 27px;
 }
 
-    .header-custom:hover {
-        background-color: rgba(232, 232, 232, 0.94);
-    }
+.header-custom:hover {
+    background-color: rgba(232, 232, 232, 0.94);
+}
 
 .progress-custom {
     height: 3px;
@@ -1118,10 +1118,10 @@ loader .outer-loader {
     border-bottom: 1px solid #CCC;
 }
 
-    .dll-menu:hover {
-        background-color: #f0f0f0 !important;
-        color: #666 !important;
-    }
+.dll-menu:hover {
+    background-color: #f0f0f0 !important;
+    color: #666 !important;
+}
 
 .dll-parent-menu {
     background-color: #dddddd !important;
@@ -1129,38 +1129,37 @@ loader .outer-loader {
     border-bottom: 1px solid #CCC;
 }
 
-    .dll-parent-menu div:hover {
-        background-color: #f0f0f0 !important;
-        color: #666 !important;
-    }
+.dll-parent-menu div:hover {
+    background-color: #f0f0f0 !important;
+    color: #666 !important;
+}
 
-    .dll-parent-menu div:before {
-        content: "";
-        border-color: transparent #111;
-        border-style: solid;
-        border-width: 0.35em 0 0.35em 0.45em;
-        display: inline-block;
-        height: 0;
-        width: 0px;
-        left: -5px;
-        top: -1px;
-        position: relative;
-    }
+.dll-parent-menu div:before {
+    content: "";
+    border-color: transparent #111;
+    border-style: solid;
+    border-width: 0.35em 0 0.35em 0.45em;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+}
 
-    .dll-parent-menu div.down:before {
-        content: "";
-        border-right: 0.35em solid transparent;
-        border-top: 0.45em solid;
-        border-bottom: 0px solid transparent;
-        border-left: 0.35em solid transparent;
-        display: inline-block;
-        height: 0;
-        width: 0px;
-        left: -5px;
-        top: -1px;
-        position: relative;
-    }
-
+.dll-parent-menu div.down:before {
+    content: "";
+    border-right: 0.35em solid transparent;
+    border-top: 0.45em solid;
+    border-bottom: 0px solid transparent;
+    border-left: 0.35em solid transparent;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+}
 .panel-heading-vr {
     border-radius: 0px !important;
     padding: 8px 5px !important;
@@ -1171,15 +1170,15 @@ loader .outer-loader {
     background-color: #ddd !important;
 }
 
-    .active-menu a:visited {
-        background-color: #E3DEDE !important;
-        color: #666 !important;
-    }
+.active-menu a:visited {
+    background-color: #E3DEDE !important;
+    color: #666 !important;
+}
 
-    .active-menu a:active {
-        background-color: #E3DEDE !important;
-        color: #666 !important;
-    }
+.active-menu a:active {
+    background-color: #E3DEDE !important;
+    color: #666 !important;
+}
 
 .active-menu-parent {
     background-color: #f0f0f0 !important;
@@ -1282,9 +1281,19 @@ loader .outer-loader {
     background-color:#f0f0f0 !important;
     color: #666 !important;
 }*/
-.dropdown-menu-custom-serf li > a:hover {
+.dropdown-menu-custom-serf span > li > a{
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    white-space: nowrap;
+    color: #333333;
+}
+.dropdown-menu-custom-serf span > li > a:hover {
     background-color: #f0f0f0 !important;
     color: #666 !important;
+    text-decoration: none;
 }
 
 .inner-list-item {
@@ -1316,57 +1325,57 @@ loader .outer-loader {
     border-bottom: 1px solid #CCC !important;
 }
 
-    .innerlist a {
-        background-color: #E3DEDE !important;
-    }
+.innerlist a {
+    background-color: #E3DEDE !important;
+}
 
-    .innerlist div {
-        background-color: #E3DEDE !important;
-    }
+.innerlist div {
+    background-color: #E3DEDE !important;
+}
 
-        .innerlist div:hover {
-            background-color: #f0f0f0 !important;
-        }
+.innerlist div:hover {
+background-color: #f0f0f0 !important;
+}
 
-    .innerlist a:before {
-        content: "";
-        border-style: solid;
-        display: inline-block;
-        height: 0px;
-        width: 0px;
-        left: -5px;
-        top: -3px;
-        position: relative;
-        border-width: 0.2em;
-        border-color: #111;
-    }
+.innerlist a:before {
+    content: "";
+    border-style: solid;
+    display: inline-block;
+    height: 0px;
+    width: 0px;
+    left: -5px;
+    top: -3px;
+    position: relative;
+    border-width: 0.2em;
+    border-color: #111;
+}
 
-    .innerlist div:before {
-        content: "";
-        border-color: transparent #111;
-        border-style: solid;
-        border-width: 0.35em 0 0.35em 0.45em;
-        display: inline-block;
-        height: 0;
-        width: 0px;
-        left: -5px;
-        top: -1px;
-        position: relative;
-    }
+.innerlist div:before {
+    content: "";
+    border-color: transparent #111;
+    border-style: solid;
+    border-width: 0.35em 0 0.35em 0.45em;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+}
 
-    .innerlist div.down:before {
-        content: "";
-        border-right: 0.35em solid transparent;
-        border-top: 0.45em solid;
-        border-bottom: 0px solid transparent;
-        border-left: 0.35em solid transparent;
-        display: inline-block;
-        height: 0;
-        width: 0px;
-        left: -5px;
-        top: -1px;
-        position: relative;
-    }
+.innerlist div.down:before {
+    content: "";
+    border-right: 0.35em solid transparent;
+    border-top: 0.45em solid;
+    border-bottom: 0px solid transparent;
+    border-left: 0.35em solid transparent;
+    display: inline-block;
+    height: 0;
+    width: 0px;
+    left: -5px;
+    top: -1px;
+    position: relative;
+}
 
 .dropdown-menu .div-link {
     display: block;
