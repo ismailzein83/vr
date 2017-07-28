@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesCostcolumns", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService",
-function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
+app.directive("vrWhsSalesCostcolumns", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService","VRDragdropService",
+function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService,VRDragdropService) {
 
     return {
         restrict: "E",
@@ -25,23 +25,38 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
         function initializeController()
         {
             ctrl.templates = [];
-            ctrl.selectedTemplate;
-            ctrl.disableAddButton = true;
-            ctrl.dataItems = [];
-
-            ctrl.onSelectorReady = function (api) {
-                defineAPI();
-            };
-            ctrl.onTemplateSelected = function (selectedItem) {
-                ctrl.disableAddButton = false;
-            };
-            ctrl.addDataItem = function () {
-                ctrl.dataItems.push(getDataItem(undefined, true));
-            };
+            ctrl.dataItems = [];               
+         
             ctrl.removeDataItem = function (dataItem) {
                 var index = UtilsService.getItemIndexByVal(ctrl.dataItems, dataItem.id, "id");
                 ctrl.dataItems.splice(index, 1);
             };
+
+            ctrl.dragdropGroupCorrelation = VRDragdropService.createCorrelationGroup();
+            ctrl.dragdropSetting = {
+                groupCorrelation: ctrl.dragdropGroupCorrelation,
+                canReceive: true,
+                onItemReceived: function (item, dataSource) {    
+                    var dataItem = {};
+                    dataItem.configId = item.ExtensionConfigurationId;
+                    dataItem.title = item.Title;
+                    dataItem.directive = item.Editor;
+                    dataItem.directivePayload = undefined;
+
+                    dataItem.loadDeferred = UtilsService.createPromiseDeferred();
+                    dataItem.loadDeferred.promise.finally(function () { dataItem.isLoadingDirective = false; });
+
+                    dataItem.onDirectiveReady = function (api) {
+                        dataItem.directiveAPI = api;
+                        dataItem.isLoadingDirective = true;
+                        VRUIUtilsService.callDirectiveLoad(api, dataItem.directivePayload, dataItem.loadDeferred);
+                    };
+
+                    return dataItem;
+                },
+                enableSorting: true
+            };
+            defineAPI();
         }
 
         function defineAPI()
@@ -115,7 +130,7 @@ function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
                 ctrl.onReady(api);
         }
 
-        function getDataItem(costCalculationMethod, showLoader)
+        function getDataItem(costCalculationMethod,item, showLoader)
         {
             var dataItem = {};
 

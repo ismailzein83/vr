@@ -1,20 +1,14 @@
 ﻿<vr-row removeline>
     <vr-columns width="fullrow">
         <vr-row>
-            <vr-columns width="1/4row">
-                <vr-select on-ready="ctrl.onSelectorReady"
-                           label="Cost Calculation Method"
-                           entityname="Cost Calculation Method"
-                           datasource="ctrl.templates"
-                           selectedvalues="ctrl.selectedTemplate"
-                           onselectitem="ctrl.onTemplateSelected"
-                           datavaluefield="ExtensionConfigurationId"
-                           datatextfield="Title"
-                           hideremoveicon>
-                </vr-select>
-            </vr-columns>
-            <vr-columns width="1/4row" withemptyline>
-                <vr-button type="Add" data-onclick="ctrl.addDataItem" vr-disabled="ctrl.disableAddButton" standalone></vr-button>
+            <vr-columns width="fullrow">
+                <vr-toolbox label="Cost Calculation Method"
+                            datasource="ctrl.templates"
+                            selectedvalues="ctrl.selectedTemplate"
+                            datavaluefield="ExtensionConfigurationId"
+                            datatextfield="Title"
+                            groupname="{{ctrl.dragdropGroupCorrelation.getGroupName()}}" >
+                </vr-toolbox>
             </vr-columns>
         </vr-row>
         <vr-row>
@@ -23,6 +17,7 @@
                              idfield="id"
                              ondeleterow="ctrl.removeDataItem"
                              enabledraggablerow="true"
+                             dragdropsetting="ctrl.dragdropSetting"
                              norowhighlightonclick="'true'"
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Name'" field="'title'" widthfactor="2" disablesorting></vr-datagridcolumn>
