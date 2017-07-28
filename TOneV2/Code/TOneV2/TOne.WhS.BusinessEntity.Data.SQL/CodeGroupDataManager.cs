@@ -27,7 +27,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public bool CheckIfCodeGroupHasRelatedCodes(int codeGroupId)
         {
-            if (ExecuteScalarSP("TOneWhS_BE.sp_checkIfCodeGroupHasRelatedCodes", codeGroupId).Equals(0))
+            if (ExecuteScalarSP("TOneWhS_BE.sp_CheckIfCodeGroupHasRelatedCodes", codeGroupId).Equals(0))
                 return true;
             else
                 return false;
