@@ -27,13 +27,14 @@ namespace PartnerPortal.CustomerAccess.Business
 
             UserToAdd user = new UserToAdd()
             {
-                Description = retailAccount.Description,
                 Email = retailAccount.Email,
-                EnabledTill = retailAccount.EnabledTill,
                 Name = retailAccount.Name,
+                Description = retailAccount.Description,
+                EnabledTill = retailAccount.EnabledTill,
                 TenantId = retailAccount.TenantId,
                 ExtendedSettings = new Dictionary<string, object>()
             };
+
             string retailAccountSettingsFullName = typeof(RetailAccountSettings).FullName;
             user.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId });
 
@@ -48,13 +49,14 @@ namespace PartnerPortal.CustomerAccess.Business
                     {
                         UserToUpdate userToUpdate = new UserToUpdate()
                         {
-                            Description = retailAccount.Description,
+                            UserId = existedUser.UserId,
                             Email = retailAccount.Email,
-                            EnabledTill = retailAccount.EnabledTill,
                             Name = retailAccount.Name,
+                            Description = retailAccount.Description,
+                            EnabledTill = retailAccount.EnabledTill,
                             TenantId = retailAccount.TenantId,
-                            ExtendedSettings = new Dictionary<string, object>(),
-                            UserId = existedUser.UserId
+                            ExtendedSettings = new Dictionary<string, object>()
+
                         };
                         userToUpdate.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId });
                         Vanrise.Entities.UpdateOperationOutput<Vanrise.Security.Entities.UserDetail> updateOperationOutput = userManager.UpdateUser(userToUpdate);
