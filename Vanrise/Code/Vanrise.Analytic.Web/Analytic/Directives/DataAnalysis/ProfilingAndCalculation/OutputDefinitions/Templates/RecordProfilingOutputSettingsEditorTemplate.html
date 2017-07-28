@@ -15,7 +15,7 @@
             <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
         </vr-row>
     </vr-section>
-    <vr-section title="Time Filter" collapsible>
+    <vr-section title="Time Filter" ng-show="false" collapsible>
         <vr-analytic-timerangefilter-selective on-ready="scopeModel.onTimeRangeFilterSelectiveReady" isrequired="false"></vr-analytic-timerangefilter-selective>
     </vr-section>
 </vr-tab>

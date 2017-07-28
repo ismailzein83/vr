@@ -585,6 +585,20 @@ namespace Vanrise.Common
 
             return dateTimeRanges.OrderBy(itm => itm.From);
         }
+
+        public static decimal? CalculatePDDInSeconds(DateTime attemptDateTime, DateTime? alertDateTime, DateTime? connectDateTime, DateTime? disconnectDateTime, decimal durationInSeconds)
+        {
+            if (alertDateTime.HasValue && alertDateTime.Value != default(DateTime))
+                return (decimal)alertDateTime.Value.Subtract(attemptDateTime).TotalSeconds;
+
+            if (connectDateTime.HasValue && connectDateTime.Value != default(DateTime))
+                return (decimal)connectDateTime.Value.Subtract(attemptDateTime).TotalSeconds;
+
+            if (disconnectDateTime.HasValue && disconnectDateTime.Value != default(DateTime))
+                return (decimal)disconnectDateTime.Value.Subtract(attemptDateTime).TotalSeconds - durationInSeconds;
+
+            return null;
+        }
     }
 
     public interface IPropValueReader

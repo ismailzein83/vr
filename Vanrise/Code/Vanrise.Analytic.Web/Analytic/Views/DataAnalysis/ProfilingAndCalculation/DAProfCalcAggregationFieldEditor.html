@@ -1,9 +1,7 @@
-﻿
-<div vr-modalcontent ng-controller="VR_Analytic_DAProfCalcAggregationFieldController" width="'40%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="VR_Analytic_DAProfCalcAggregationFieldController" width="'40%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formDAProfCalcAggregationFieldEditor">
             <vr-tabs>
-
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/2row">
@@ -23,11 +21,10 @@
                             <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
                         </vr-row>
                     </vr-section>
-                    <vr-section title="Time Filter" collapsible>
+                    <vr-section title="Time Filter" ng-show="false" collapsible>
                         <vr-analytic-timerangefilter-selective on-ready="scopeModel.onTimeRangeFilterSelectiveReady" isrequired="false"></vr-analytic-timerangefilter-selective>
                     </vr-section>
                 </vr-tab>
-
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

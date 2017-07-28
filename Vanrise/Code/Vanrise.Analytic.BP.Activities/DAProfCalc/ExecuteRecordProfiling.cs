@@ -103,12 +103,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
                             foreach (dynamic cdr in recordBatch.Records)
                             {
-                                if (dataAnalysisInfo.Value.DARecordFilterGroup != null)
-                                {
-                                    DataRecordFilterGenericFieldMatchContext filterContext = new DataRecordFilterGenericFieldMatchContext(cdr, daDataRecordTypeId);
-                                    if (!recordFilterManager.IsFilterGroupMatch(dataAnalysisInfo.Value.DARecordFilterGroup, filterContext))
-                                        continue;
-                                }
+                                DataRecordFilterGenericFieldMatchContext filterContext = new DataRecordFilterGenericFieldMatchContext(cdr, daDataRecordTypeId);
+                                if (dataAnalysisInfo.Value.DARecordFilterGroup != null && !recordFilterManager.IsFilterGroupMatch(dataAnalysisInfo.Value.DARecordFilterGroup, filterContext))
+                                    continue;
 
                                 Dictionary<string, dynamic> groupingValues;
                                 string groupingKey = BuildGroupingKey(settings, cdr, dataAnalysisInfo.Value.GroupingFieldNames, out groupingValues);
@@ -132,6 +129,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                                     for (var index = 0; index < settings.AggregationFields.Count; index++)
                                     {
                                         var aggregationField = settings.AggregationFields[index];
+                                        if (aggregationField.RecordFilter != null && !recordFilterManager.IsFilterGroupMatch(aggregationField.RecordFilter, filterContext))
+                                            continue;
+
                                         aggregationField.RecordAggregate.Evaluate(new DARecordAggregateEvaluationContext(daDataRecordTypeId, cdr, profilingDGItem.AggregateStates[index]));
                                     }
                                 }

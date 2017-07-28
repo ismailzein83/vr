@@ -1,10 +1,10 @@
-﻿
-
-<vr-columns width="1/2row">
+﻿<vr-columns width="1/2row">
     <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onDataRecordTypeFieldsSelectorReady"
-                                                  onselectionchanged="scopeModel.onDataRecordTypeFieldsSelectionChanged"
-                                                  isrequired="false"
-                                                  label="Field"
-                                                  hideremoveicon>
+                                                  label="Field" isrequired="true" hideremoveicon>
+    </vr-genericdata-datarecordtypefields-selector>
+</vr-columns>
+<vr-columns width="1/2row">
+    <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.onCurrencyDataRecordTypeFieldsSelectorReady"
+                                                  label="Currency SQL Column Name" isrequired="false">
     </vr-genericdata-datarecordtypefields-selector>
 </vr-columns>
