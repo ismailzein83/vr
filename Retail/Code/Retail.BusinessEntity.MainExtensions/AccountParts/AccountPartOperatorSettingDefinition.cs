@@ -12,6 +12,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
     {
         public override Guid ConfigId { get { return new Guid("F21A72DC-48BF-43F4-A2A7-97E72F75B391"); } }
 
+        public bool InvisibleMobileOperator { get; set; }  
+
         public override List<GenericFieldDefinition> GetFieldDefinitions()
         {
             return new List<GenericFieldDefinition>()

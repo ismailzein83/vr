@@ -16,6 +16,13 @@ namespace Retail.BusinessEntity.Web
         ProductDefinitionManager manager = new ProductDefinitionManager();
 
         [HttpGet]
+        [Route("GetProductDefinition")]
+        public ProductDefinition GetProductDefinition(Guid productDefinitionId)
+        {
+            return manager.GetProductDefinition(productDefinitionId);
+        }
+
+        [HttpGet]
         [Route("GetProductDefinitionsInfo")]
         public IEnumerable<ProductDefinitionInfo> GetProductDefinitionsInfo(string serializedFilter = null)
         {

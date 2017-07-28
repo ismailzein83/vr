@@ -1,6 +1,6 @@
-﻿<vr-tab header="'Setting'">
+﻿<vr-tab header="'Setting'" showtab="scopeModel.showMobileOperator">
     <vr-row removeline>
-        <vr-columns width="1/2row">
+        <vr-columns width="1/2row" ng-show="scopeModel.showMobileOperator">
             <vr-switch value="scopeModel.isMobileOperator" label="Mobile Operator"></vr-switch>
         </vr-columns>
     </vr-row>

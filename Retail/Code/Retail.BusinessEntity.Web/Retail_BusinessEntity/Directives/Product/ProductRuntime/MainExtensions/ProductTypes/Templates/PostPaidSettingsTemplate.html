@@ -1,7 +1,5 @@
-﻿
-
-<vr-columns width="1/2row">
-    <vr-textbox value="scopeModel.creditLimit" label="Credit Limit" type="number" minvalue="0" isrequired></vr-textbox>
+﻿<vr-columns width="1/2row" ng-show="scopeModel.showCreditLimit">
+    <vr-textbox value="scopeModel.creditLimit" label="Credit Limit" type="number" minvalue="0" isrequired="scopeModel.showCreditLimit"></vr-textbox>
 </vr-columns>
 
 

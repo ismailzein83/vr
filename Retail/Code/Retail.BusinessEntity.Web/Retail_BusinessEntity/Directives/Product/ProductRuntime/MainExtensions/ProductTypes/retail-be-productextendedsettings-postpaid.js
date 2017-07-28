@@ -40,12 +40,19 @@
 
                 api.load = function (payload) {
 
-                    var currencyId;
+                    var productDefinition;
+                    var extendedSettings;
 
-                    if (payload != undefined && payload.extendedSettings != undefined) {
-                        $scope.scopeModel.creditLimit = payload.extendedSettings.CreditLimit;
-                        currencyId = payload.extendedSettings.CurrencyId;
+                    if (payload != undefined) {
+                        productDefinition = payload.productDefinition;
+                        extendedSettings = payload.extendedSettings;
                     }
+
+                    if (productDefinition != undefined && productDefinition.Settings != undefined && productDefinition.Settings.ExtendedSettings != undefined) {
+                        $scope.scopeModel.showCreditLimit = !productDefinition.Settings.ExtendedSettings.InvisibleCreditLimit;
+                    }
+
+                    $scope.scopeModel.creditLimit = extendedSettings != undefined ? extendedSettings.CreditLimit : undefined;
                 };
 
                 api.getData = function () {

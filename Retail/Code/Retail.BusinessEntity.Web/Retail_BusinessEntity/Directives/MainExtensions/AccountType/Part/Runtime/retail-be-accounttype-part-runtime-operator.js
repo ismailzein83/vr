@@ -31,10 +31,16 @@ app.directive('retailBeAccounttypePartRuntimeOperator', ["UtilsService", "VRUIUt
 
                 api.load = function (payload) {
 
+                    var partDefinition;
                     var partSettings;
 
                     if (payload != undefined) {
+                        partDefinition = payload.partDefinition;
                         partSettings = payload.partSettings;
+                    }
+
+                    if (partDefinition != undefined && partDefinition.Settings != undefined) {
+                        $scope.scopeModel.showMobileOperator = !partDefinition.Settings.InvisibleMobileOperator;;
                     }
 
                     $scope.scopeModel.isMobileOperator = partSettings != undefined ? partSettings.IsMobileOperator : undefined;

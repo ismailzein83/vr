@@ -13,6 +13,6 @@ namespace Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid
 
         public override string RuntimeEditor { get { return "retail-be-productextendedsettings-postpaid"; } }
 
-        public bool OptionalCreditLimit { get; set; }
+        public bool InvisibleCreditLimit { get; set; } 
     }
 }

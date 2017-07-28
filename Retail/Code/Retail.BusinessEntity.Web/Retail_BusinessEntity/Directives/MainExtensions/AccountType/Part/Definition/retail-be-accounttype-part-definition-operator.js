@@ -29,11 +29,19 @@ app.directive('retailBeAccounttypePartDefinitionOperator', [function () {
 
             api.load = function (payload) {
 
+                var partDefinitionSettings;
+
+                if (payload != undefined) {
+                    partDefinitionSettings = payload.partDefinitionSettings;
+                }
+
+                $scope.scopeModel.invisibleMobileOperator = partDefinitionSettings != undefined ? partDefinitionSettings.InvisibleMobileOperator : undefined;
             };
 
             api.getData = function () {
                 return {
-                    $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartOperatorSettingDefinition, Retail.BusinessEntity.MainExtensions'
+                    $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartOperatorSettingDefinition, Retail.BusinessEntity.MainExtensions',
+                    InvisibleMobileOperator: $scope.scopeModel.invisibleMobileOperator
                 };
             };
 

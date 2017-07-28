@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 app.directive('retailBeProductfamilyGrid', ['VRCommon_ObjectTrackingService', 'VRNotificationService', 'VRUIUtilsService', 'Retail_BE_ProductFamilyAPIService', 'Retail_BE_ProductFamilyService', 'Retail_BE_ProductService', 'Retail_BE_ProductAPIService', 'UtilsService',
-    function (VRCommon_ObjectTrackingService,VRNotificationService, VRUIUtilsService, Retail_BE_ProductFamilyAPIService, Retail_BE_ProductFamilyService, Retail_BE_ProductService, Retail_BE_ProductAPIService, UtilsService) {
+    function (VRCommon_ObjectTrackingService, VRNotificationService, VRUIUtilsService, Retail_BE_ProductFamilyAPIService, Retail_BE_ProductFamilyService, Retail_BE_ProductService, Retail_BE_ProductAPIService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -27,7 +27,7 @@ app.directive('retailBeProductfamilyGrid', ['VRCommon_ObjectTrackingService', 'V
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.productFamily = [];
-               // $scope.scopeModel.menuActions = [];
+                //$scope.scopeModel.menuActions = [];
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
@@ -65,12 +65,13 @@ app.directive('retailBeProductfamilyGrid', ['VRCommon_ObjectTrackingService', 'V
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-           
+
             function buildDrillDownTabs() {
                 var drillDownTabs = [];
 
                 drillDownTabs.push(buildProductTab());
                 drillDownTabs.push(buildHistoryTab());
+
                 function buildProductTab() {
                     var productsTab = {};
 
@@ -79,10 +80,12 @@ app.directive('retailBeProductfamilyGrid', ['VRCommon_ObjectTrackingService', 'V
 
                     productsTab.loadDirective = function (productGridAPI, productFamily) {
                         productFamily.productGridAPI = productGridAPI;
-                        
+
                         var productGridPayload = {
-                            productFamilyId: productFamily.Entity != undefined ? productFamily.Entity.ProductFamilyId : undefined
+                            productFamilyId: productFamily.Entity != undefined ? productFamily.Entity.ProductFamilyId : undefined,
+                            productDefinitionId: productFamily.Entity.Settings != undefined ? productFamily.Entity.Settings.ProductDefinitionId : undefined
                         };
+
                         return productFamily.productGridAPI.load(productGridPayload);
                     };
 
@@ -93,7 +96,7 @@ app.directive('retailBeProductfamilyGrid', ['VRCommon_ObjectTrackingService', 'V
                                 productFamily.productGridAPI.onProductAdded(addedProduct);
                             };
 
-                            Retail_BE_ProductService.addProduct(onProductAdded, productFamily.Entity.ProductFamilyId);
+                            Retail_BE_ProductService.addProduct(onProductAdded, productFamily.Entity.ProductFamilyId, productFamily.Entity.Settings.ProductDefinitionId);
                         },
                         haspermission: function () {
                             return Retail_BE_ProductAPIService.HasAddProductPermission();
@@ -108,17 +111,18 @@ app.directive('retailBeProductfamilyGrid', ['VRCommon_ObjectTrackingService', 'V
                     historyTab.directive = 'vr-common-objecttracking-grid';
 
                     historyTab.loadDirective = function (directiveAPI, productFamilyItem) {
-                        
+
                         productFamilyItem.objectTrackingGridAPI = directiveAPI;
                         var query = {
                             ObjectId: productFamilyItem.Entity.ProductFamilyId,
-                            EntityUniqueName:Retail_BE_ProductFamilyService.getEntityUniqueName(productFamilyItem.AccountBEDefinitionId),
+                            EntityUniqueName: Retail_BE_ProductFamilyService.getEntityUniqueName(productFamilyItem.AccountBEDefinitionId),
                         };
 
                         return productFamilyItem.objectTrackingGridAPI.load(query);
                     };
                     return historyTab;
                 }
+
                 return drillDownTabs;
             }
 
@@ -141,6 +145,5 @@ app.directive('retailBeProductfamilyGrid', ['VRCommon_ObjectTrackingService', 'V
 
                 Retail_BE_ProductFamilyService.editProductFamily(productFamilyItem.Entity.ProductFamilyId, onProductFamilyUpdated);
             }
-          
         }
     }]);

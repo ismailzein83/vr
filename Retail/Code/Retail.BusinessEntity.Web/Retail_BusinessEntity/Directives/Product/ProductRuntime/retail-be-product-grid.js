@@ -19,9 +19,11 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
 
         function ProductGridCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var gridDrillDownTabsObj;
+
             var productFamilyId;
-         
+            var productDefinitionId;
+            var gridDrillDownTabsObj;
+
             var gridAPI;
 
             function initializeController() {
@@ -51,19 +53,20 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
 
                 defineMenuActions();
             }
-
             function defineAPI() {
                 var api = {};
-                
+
                 api.load = function (payload) {
 
                     if (payload != undefined) {
                         productFamilyId = payload.productFamilyId;
+                        productDefinitionId = payload.productDefinitionId;
                     }
 
                     function buildGridQuery(payload) {
                         var query = {
-                            ProductFamilyId: productFamilyId,
+                            ProductFamilyId: productFamilyId,                        
+                            productDefinitionId: payload.productDefinitionId
                         };
 
                         return query;
@@ -85,9 +88,6 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
                     ctrl.onReady(api);
             }
 
-            
-           
-
             function defineMenuActions() {
                 $scope.scopeModel.menuActions = function (dataItem) {
                     var menuActions = [];
@@ -105,7 +105,7 @@ app.directive('retailBeProductGrid', ['VRNotificationService', 'Retail_BE_Produc
                     gridAPI.itemUpdated(updatedProduct);
                 };
 
-                Retail_BE_ProductService.editProduct(productItem.Entity.ProductId, onProductUpdated, productFamilyId);
+                Retail_BE_ProductService.editProduct(onProductUpdated, productItem.Entity.ProductId, productFamilyId, productDefinitionId);
             }
         }
     }]);

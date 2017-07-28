@@ -2,17 +2,15 @@
 
     "use strict";
 
-    ProductEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_BE_ProductAPIService'];
+    ProductEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'Retail_BE_ProductAPIService', 'Retail_BE_ProductDefinitionAPIService'];
 
-    function ProductEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_BE_ProductAPIService) {
+    function ProductEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_BE_ProductAPIService, Retail_BE_ProductDefinitionAPIService) {
 
         var isEditMode;
 
-        var productId;
-        var productEntity;
-        var productEditorRuntime;
-        var productFamilyId;
-        var productFamilyInfo;
+        var productId, productEntity, productEditorRuntime;
+        var productFamilyId, productFamilyInfo;
+        var productDefinitionId, productDefinitionEntity;
 
         var currencySelectorAPI;
         var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -37,9 +35,11 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+
             if (parameters != undefined) {
                 productId = parameters.productId;
                 productFamilyId = parameters.productFamilyId;
+                productDefinitionId = parameters.productDefinitionId;
             }
 
             isEditMode = (productId != undefined);
@@ -50,7 +50,6 @@
             $scope.scopeModel.isProductFamilySelectorDisabled = false;
             $scope.scopeModel.showRecurringChargeRulesTab = false;
             //$scope.scopeModel.showPackagesTab = false;
-
 
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
@@ -96,9 +95,12 @@
                         $scope.scopeModel.isProductExtendedSettingsDirectiveLoading = true;
 
                         var productExtendedSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
+                        
                         productExtendedSettingsDirectiveReadyDeferred.promise.then(function () {
-                            var productExtendedSettingsDirectivePayload;
+
+                            var productExtendedSettingsDirectivePayload = {
+                                productDefinition: productDefinitionEntity
+                            };
                             VRUIUtilsService.callDirectiveLoad(productExtendedSettingsDirectiveAPI, productExtendedSettingsDirectivePayload, productExtendedSettingsDirectiveLoadDeferred);
                         });
 
@@ -168,22 +170,28 @@
         function load() {
             $scope.scopeModel.isLoading = true;
 
+            var promises = [];
+            promises.push(getProductDefinition());
+
             if (isEditMode) {
-                getProduct().then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            productEntity = undefined;
-                        });
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.scopeModel.isLoading = false;
+                promises.push(getProduct());
+            }
+
+            UtilsService.waitMultiplePromises(promises).then(function () {
+                loadAllControls().finally(function () {
+                    productEntity = undefined;
                 });
-            }
-            else {
-                loadAllControls();
-            }
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
+        function getProductDefinition() {
+            return Retail_BE_ProductDefinitionAPIService.GetProductDefinition(productDefinitionId).then(function (response) {
+                productDefinitionEntity = response;
+            });
+        }
         function getProduct() {
             return Retail_BE_ProductAPIService.GetProductEditorRuntime(productId).then(function (response) {
                 productEditorRuntime = response;
@@ -231,7 +239,7 @@
             return currencySelectorLoadDeferred.promise;
         }
         function loadProductFamilySelector() {
-            if (productEntity != undefined || productFamilyId != undefined)
+            if (isEditMode || productFamilyId != undefined)
                 productFamilySelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
             var productFamilySelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -258,7 +266,7 @@
             return productFamilySelectorLoadDeferred.promise;
         }
         function loadProductExtendedSettingsDirectiveWrapper() {
-            if (!isEditMode)
+            if (!isEditMode && productFamilyId == undefined)
                 return;
 
             $scope.scopeModel.isProductExtendedSettingsDirectiveLoading = true;
@@ -267,7 +275,7 @@
 
             UtilsService.waitMultiplePromises([productExtendedSettingsDirectiveReadyDeferred.promise, productFamilySelectionChangedDeferred.promise]).then(function () {
 
-                var productExtendedSettingsDirectivePayload = {};
+                var productExtendedSettingsDirectivePayload = { productDefinition: productDefinitionEntity };
                 if (productEntity != undefined && productEntity.Settings != undefined && productEntity.Settings.ExtendedSettings) {
                     productExtendedSettingsDirectivePayload.extendedSettings = productEntity.Settings.ExtendedSettings;
                 }

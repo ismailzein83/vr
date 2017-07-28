@@ -23,6 +23,7 @@ app.directive('retailBeProductdefinitionExtendedsettingsPostpaid', ['UtilsServic
 
             function initializeController() {
                 $scope.scopeModel = {};
+
                 defineAPI();
             }
             function defineAPI() {
@@ -30,14 +31,14 @@ app.directive('retailBeProductdefinitionExtendedsettingsPostpaid', ['UtilsServic
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.extendedSettings != undefined) {
-                        $scope.scopeModel.optionalCreditLimit = payload.extendedSettings.OptionalCreditLimit;
+                        $scope.scopeModel.invisibleCreditLimit = payload.extendedSettings.InvisibleCreditLimit;
                     }
                 };
 
                 api.getData = function () {
                     return {
                         $type: 'Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid.PostPaidDefinitionSettings, Retail.BusinessEntity.MainExtensions',
-                        OptionalCreditLimit: $scope.scopeModel.optionalCreditLimit
+                        InvisibleCreditLimit: $scope.scopeModel.invisibleCreditLimit
                     };
                 };
 

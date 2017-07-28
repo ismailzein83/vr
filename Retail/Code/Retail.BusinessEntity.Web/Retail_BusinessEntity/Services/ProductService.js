@@ -6,10 +6,12 @@
 
     function ProductService(VRModalService, VRCommon_ObjectTrackingService) {
         var drillDownDefinitions = [];
-        function addProduct(onProductAdded, productFamilyId) {
+
+        function addProduct(onProductAdded, productFamilyId, productDefinitionId) {
 
             var parameters = {
-                productFamilyId: productFamilyId
+                productFamilyId: productFamilyId,
+                productDefinitionId: productDefinitionId
             };
 
             var settings = {};
@@ -20,11 +22,12 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Product/ProductEditor.html', parameters, settings);
         };
-        function editProduct(productId, onProductUpdated, productFamilyId) {
+        function editProduct(onProductUpdated, productId, productFamilyId, productDefinitionId) {
 
             var parameters = {
                 productId: productId,
-                productFamilyId: productFamilyId
+                productFamilyId: productFamilyId,
+                productDefinitionId: productDefinitionId
             };
 
             var settings = {};
@@ -130,6 +133,8 @@
 
             return drillDownDefinitions;
         }
+
+
         return {
             addProduct: addProduct,
             editProduct: editProduct,

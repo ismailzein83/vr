@@ -31,12 +31,12 @@
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateProductFamily'), product);
         }
 
-
         function GetProductFamiliesInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetProductFamiliesInfo"), {
                 serializedFilter: serializedFilter
             });
         }
+
 
         return ({
             GetFilteredProductFamilies: GetFilteredProductFamilies,
