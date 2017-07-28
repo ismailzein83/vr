@@ -16,7 +16,8 @@ app.directive('vrNotificationAlertlevelSelector', ['VR_Notification_AlertLevelAP
                 hideremoveicon: '@',
                 normalColNum: '@',
                 customvalidate: '=',
-                isloading: '='
+                isloading: '=',
+                lookandfeeltype: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -92,17 +93,21 @@ app.directive('vrNotificationAlertlevelSelector', ['VR_Notification_AlertLevelAP
 
             var multipleselection = "";
             var label = "Alert Level";
-
+            var lookandfeeltype = '';
             if (attrs.ismultipleselection != undefined) {
                 label = "Alert Levels";
                 multipleselection = "ismultipleselection";
+            }
+            if (attrs.lookandfeeltype != undefined) {
+                lookandfeeltype = 'lookandfeeltype="' + attrs.lookandfeeltype + '"';
+                
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
                      '<span vr-loader="ctrl.isloading">' +
-                       '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="VRAlertLevelId" isrequired="ctrl.isrequired" label="' + label +
+                       '<vr-select ' + multipleselection + ' ' + lookandfeeltype + '  datatextfield="Name" datavaluefield="VRAlertLevelId" isrequired="ctrl.isrequired" label="' + label +
                            '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                            '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
                        '</vr-select>' +
