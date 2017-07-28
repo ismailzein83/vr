@@ -1,6 +1,12 @@
-﻿using ICSharpCode.SharpZipLib.Zip;
+﻿using ICSharpCode.SharpZipLib.Checksums;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
+using Vanrise.Entities;
 
 namespace Vanrise.Common
 {
@@ -32,23 +38,55 @@ namespace Vanrise.Common
             }
             return unzippedBytes;
         }
-        public MemoryStream Zip(byte[] bufferBytes, string fileName)
+        public byte[] Zip(ZipFileInfo fileInfo)
         {
             MemoryStream memStream = new MemoryStream();
             using (ZipOutputStream s = new ZipOutputStream(memStream))
             {
                 s.SetLevel(9); // highest level of compression
-                ZipEntry entry = new ZipEntry(fileName)
+                ZipEntry entry = new ZipEntry(CleanFileName(fileInfo.FileName))
                 {
                     DateTime = DateTime.Today
                 };
 
                 s.PutNextEntry(entry);
-                s.Write(bufferBytes, 0, bufferBytes.Length);
+                s.Write(fileInfo.Content, 0, fileInfo.Content.Length);
+            }
+            return memStream.GetBuffer();
+        }
+        public MemoryStream ZipFiles(IEnumerable<ZipFileInfo> attachements)
+        {
+            MemoryStream memStream = new MemoryStream();
+            ZipOutputStream s = new ZipOutputStream(memStream);
+            {
+                s.SetLevel(9);
+                foreach (var attach in attachements)
+                {
+                    if (attach != null)
+                    {
+                        var buffer = attach.Content;
+
+                        ZipEntry entry = new ZipEntry(CleanFileName(attach.FileName))
+                        {
+                            DateTime = DateTime.Today
+                        };
+                        s.PutNextEntry(entry);
+                        s.Write(buffer, 0, buffer.Length);
+                    }
+                }
+                s.Finish();
             }
             return memStream;
         }
+        #endregion
+        #region private Methods
 
+        private string CleanFileName(string fileName)
+        {
+            string rgPattern = @"[\\\/:\*\?""'<>|]";
+            Regex regex = new Regex(rgPattern);
+            return regex.Replace(fileName, "");
+        }
         #endregion
     }
 }

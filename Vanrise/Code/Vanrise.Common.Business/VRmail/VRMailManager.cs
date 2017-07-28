@@ -103,15 +103,14 @@ namespace Vanrise.Common.Business
             client.Send(mailMessage);
         }
 
-        public void SendMail(string to, string cc, string bcc, string subject, string body, List<VRMailAttachement> attachements)
+        public void SendMail(string to, string cc, string bcc, string subject, string body, List<VRMailAttachement> attachements, bool compressAttachement = false)
         {
             if (String.IsNullOrWhiteSpace(to))
                 throw new NullReferenceException("to");
             ConfigManager configManager = new ConfigManager();
             EmailSettingData emailSettingData = configManager.GetSystemEmail();
 
-            MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
+            MailMessage mailMessage = new MailMessage { From = new MailAddress(emailSettingData.SenderEmail) };
             string[] toAddresses = to.Split(';', ',', ':');
             foreach (var toAddress in toAddresses)
             {
@@ -140,26 +139,42 @@ namespace Vanrise.Common.Business
             mailMessage.Body = body;
             mailMessage.IsBodyHtml = true;
 
-            if (attachements != null)
-            {
-                foreach (var vrAttachment in attachements)
-                {
-                    MemoryStream memStr = new MemoryStream(vrAttachment.Content);
-                    var attachment = new Attachment(memStr, vrAttachment.Name);
-                    //attachment.ContentType = new ContentType("application/vnd.ms-excel");
-                    //attachment.TransferEncoding = TransferEncoding.Base64;
-                    //attachment.NameEncoding = Encoding.UTF8;
-                    //attachment.Name = "SalePriceList.xls";
-
-                    mailMessage.Attachments.Add(attachment);
-                }
-            }
-
             SmtpClient client = GetSMTPClient(emailSettingData);
-
+            SetAttachement(mailMessage, attachements, compressAttachement);
             client.Send(mailMessage);
         }
 
+        private void SetAttachement(MailMessage mailMessage, List<VRMailAttachement> attachements, bool compressAttachement)
+        {
+            if (attachements != null)
+            {
+                if (compressAttachement)
+                {
+                    ZipUtility zipUtility = new ZipUtility();
+                    MemoryStream zipStream = zipUtility.ZipFiles(attachements.Select(ConvertAttachementToFileInfo));
+                    mailMessage.Attachments.Add(new System.Net.Mail.Attachment(zipStream, "Pricelist.zip", "application/zip"));
+                    zipStream.Seek(0, System.IO.SeekOrigin.Begin);
+                }
+                else
+                {
+                    foreach (var vrAttachment in attachements)
+                    {
+                        MemoryStream memStr = new MemoryStream(vrAttachment.Content);
+                        var attachment = new Attachment(memStr, vrAttachment.Name);
+                        mailMessage.Attachments.Add(attachment);
+                    }
+                }
+            }
+        }
+
+        private ZipFileInfo ConvertAttachementToFileInfo(VRMailAttachement mailAttachement)
+        {
+            return new ZipFileInfo
+            {
+                Content = mailAttachement.Content,
+                FileName = mailAttachement.Name
+            };
+        }
         private VRMailMessageTemplate GetMailMessageTemplate(Guid mailMessageTemplateId)
         {
             VRMailMessageTemplate mailMessageTemplate = new VRMailMessageTemplateManager().GetMailMessageTemplate(mailMessageTemplateId);

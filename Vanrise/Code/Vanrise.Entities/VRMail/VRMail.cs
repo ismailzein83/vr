@@ -14,5 +14,6 @@ namespace Vanrise.Entities
         public string Subject { get; set; }
         public string Body { get; set; }
         public List<int> AttachementFileIds { get; set; }
+        public bool CompressFile { get; set; }
     }
 }

@@ -28,7 +28,8 @@ namespace Vanrise.Common.Web.Controllers
             var vrFileManager = new VRFileManager();
             var vrMailAttachements = emailSetting.AttachementFileIds.Select(fileId => vrFileManager.GetFile(fileId))
                 .Select(ConvertToAttachement);
-            vrMailManager.SendMail(emailSetting.To, emailSetting.CC, emailSetting.BCC, emailSetting.Subject, emailSetting.Body, vrMailAttachements.ToList());
+            vrMailManager.SendMail(emailSetting.To, emailSetting.CC, emailSetting.BCC, emailSetting.Subject, emailSetting.Body
+                , vrMailAttachements.ToList(), emailSetting.CompressFile);
         }
         [HttpGet]
         [Route("GetFileName")]
