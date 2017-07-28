@@ -48,7 +48,8 @@
                 hint: '@',
                 haspermission: '=',
                 hasviewpermission: '=',
-                limitcharactercount: '='
+                limitcharactercount: '=',
+                lookandfeeltype: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var divDropdown = angular.element($element[0].querySelector('.dropdown'));
@@ -330,6 +331,10 @@
                     return utilsService.getItemIndexByVal(controller.selectedvalues, getObjectValue(item), controller.datavaluefield);
                 }
 
+                function isSelected(item) {
+                    if (controller.selectedvalues != undefined)
+                       return item[controller.datavaluefield] == controller.selectedvalues[controller.datavaluefield];
+                }
                 function onViewHandler(obj) {
                     hideAllOtherDropDown();
                     var onViewHandler = $scope.$parent.$eval($attrs.onviewclicked);
@@ -424,7 +429,8 @@
                     onAddhandler: onAddhandler,
                     includeOnAddHandler: includeOnAddHandler,
                     onViewHandler: onViewHandler,
-                    includeOnViewHandler: includeOnViewHandler
+                    includeOnViewHandler: includeOnViewHandler,
+                    isSelected: isSelected
                 });
 
                 var afterShowDropdown = function (id) {
@@ -731,8 +737,8 @@
                         ulDropdown.addClass('menu-to-top');
                     }
                 }
-
-                onLoad();
+                if (attrs.lookandfeeltype == undefined)
+                   onLoad();
                 return {
                     pre: function ($scope, iElem, iAttrs) {
                         $scope.$on("$destroy", function () {
@@ -763,7 +769,7 @@
 
                         };
 
-                        function selectItem(e, item) {
+                        function selectItem(e, item, removeselection) {
                             if (!ctrl.isMultiple()) {
 
                                 if (ctrl.onselectitem && typeof (ctrl.onselectitem) == 'function') {
@@ -773,7 +779,12 @@
                                 if (ctrl.ondeselectitem && typeof (ctrl.ondeselectitem) == 'function') {
                                     ctrl.ondeselectitem(ctrl.selectedvalues);
                                 }
-                                ctrl.selectedvalues = item;
+                                if (removeselection != undefined && removeselection == true && ctrl.selectedvalues != undefined && item[ctrl.datavaluefield] == ctrl.selectedvalues[ctrl.datavaluefield]) {
+                                    ctrl.selectedvalues = undefined;
+                                    return;
+                                }
+
+                                ctrl.selectedvalues = item;                               
 
                             }
                             else {
@@ -808,7 +819,7 @@
                             }
                         }
 
-                        ctrl.selectValue = function (e, item) {
+                        ctrl.selectValue = function (e, item,removeselection) {
                             if (ctrl.getObjectDisabled(item) == true || ctrl.readOnly)
                                 return;
                             var onBeforeSelectionChanged = $scope.$parent.$eval(iAttrs.onbeforeselectionchanged);
@@ -829,7 +840,7 @@
                                 }
                             }
                             else
-                                selectItem(e, item);
+                                selectItem(e, item, removeselection);
                         };
 
 
@@ -872,8 +883,11 @@
                     }
                 }
             },
-            templateUrl: function () {
-                return selectService.dTemplate;
+            templateUrl: function (element, attrs) {
+                var temp = selectService.dTemplate;
+                if (attrs.lookandfeeltype != undefined && attrs.lookandfeeltype=="toolbox")
+                    temp = selectService.toolboxSelectTemplate;
+                return temp;
             }
         };
 

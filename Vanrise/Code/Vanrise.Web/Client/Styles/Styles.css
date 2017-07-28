@@ -3438,3 +3438,64 @@ vr-toolbox[large] .item{
 }
 
 /* end vr-drag-drop zone*/
+
+/*start of vr-inline-select*/
+.inline-vr-select{
+    display:flex;
+    height:26px;
+    position: relative;
+}
+.inline-item{
+    border: 1px solid #ccc;
+    margin: 3px 2px;
+    transition: all .2s ease-in-out;    
+    background-color:#4f7ac8;
+
+}
+
+.inline-item a{
+    outline:0;
+    color:#666;
+    height: 100%;
+    display: inline-block;
+    width:100px;
+    padding:2px;
+    white-space: normal;
+    font-weight:600;
+    font-size:13px;    
+    position: relative;
+    top: -4px;
+    color:#fff;
+}
+.inline-item a:hover, .inline-item a:active, .inline-item a:focus {   
+    cursor: pointer !important;
+    text-decoration:none;
+}
+.inline-item a:hover, .inline-item a:active, .inline-item a:focus {   
+    cursor: pointer !important;
+    text-decoration:none;
+
+}
+.inline-item.selected-value{
+    background-color: #20407d ;
+    color:#fff;
+    transform: scale(1.01);
+    border: 1px solid #666;
+}
+
+
+.inline-item.selected-value .select-mark{
+    color: #fff;
+    position:absolute;
+    height: 12px;
+    width: 12px;
+    top: 4px;
+    right: 0px;
+    font-size: 10px;
+}
+
+.inline-item.selected-value a{
+    color:#fff;
+}
+
+/*end of vr-inline-select*/

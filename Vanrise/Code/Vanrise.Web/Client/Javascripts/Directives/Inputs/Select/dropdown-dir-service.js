@@ -80,6 +80,7 @@
 
         return ({
             dTemplate: "/Client/Javascripts/Directives/Inputs/Select/vr-select.html",
+            toolboxSelectTemplate: "/Client/Javascripts/Directives/Inputs/Select/vr-toolbox-select.html",
             getSelectText: getSelectText,
             isMenu: isMenu,
             isMultiple: isMultiple,
