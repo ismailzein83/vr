@@ -391,6 +391,8 @@
                     if (carrierAccountEntity.CustomerSettings) {
                         //$scope.scopeModel.isAToZ = carrierAccountEntity.CustomerSettings.IsAToZ;
                         $scope.scopeModel.customerInvoiceTimeZone = carrierAccountEntity.CustomerSettings.InvoiceTimeZone;
+                        $scope.scopeModel.compressPriceListFile = carrierAccountEntity.CustomerSettings.CompressPriceListFile;
+
                     }
                 }
             }
@@ -734,6 +736,7 @@
                     RoutingStatus: customerRoutingStatusSelectorAPI != undefined ? customerRoutingStatusSelectorAPI.getSelectedIds() : undefined,
                     IsAToZ: $scope.scopeModel.isAToZ,
                     InvoiceTimeZone: $scope.scopeModel.customerInvoiceTimeZone,
+                    CompressPriceListFile: $scope.scopeModel.compressPriceListFile,
                     PriceListExtensionFormat: priceListExtensionFormatSelectorAPI != undefined ? priceListExtensionFormatSelectorAPI.getSelectedIds() : undefined,
                     PriceListType: priceLisTypeSelectorAPI != undefined ? priceLisTypeSelectorAPI.getSelectedIds() : undefined
                 }

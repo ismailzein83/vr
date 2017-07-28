@@ -40,18 +40,22 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleCodeManager.GetSaleCodesByCodeId(saleCodesSnapshot.SnapShotDetail.CodeIds);
         }
 
-        public string GetOwnerName(int priceListId)
+        public SalePriceListOption GetOwnerOptions(int priceListId)
         {
-            string ownerName = string.Empty;
             SalePriceListManager salePriceListManager = new SalePriceListManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var priceList = salePriceListManager.GetPriceList(priceListId);
             if (priceList != null)
             {
                 var ownerId = priceList.OwnerId;
-                ownerName = carrierAccountManager.GetCarrierAccountName(ownerId);
+                var carrierAccount = carrierAccountManager.GetCarrierAccount(ownerId);
+                return new SalePriceListOption
+                {
+                    OwnerName = carrierAccountManager.GetCarrierAccountName(ownerId),
+                    CompressPriceListFile = carrierAccount.CustomerSettings.CompressPriceListFile
+                };
             }
-            return ownerName;
+            return null;
         }
 
         public void BulkInsertSalePriceListSaleCodeSnapshot(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots)

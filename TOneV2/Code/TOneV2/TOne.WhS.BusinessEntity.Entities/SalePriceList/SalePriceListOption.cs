@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SalePriceListInput
+    public class SalePriceListOption
     {
-        public int PriceListTypeId { get; set; }
-        public int PriceListId { get; set; }
+        public string OwnerName { get; set; }
+        public bool CompressPriceListFile { get; set; }
     }
 }

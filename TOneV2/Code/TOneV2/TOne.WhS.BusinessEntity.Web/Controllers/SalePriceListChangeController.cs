@@ -36,11 +36,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredSalePriceListRPChanges(input));
         }
         [HttpGet]
-        [Route("GetOwnerName")]
-        public string GetOwnerName(int priceListId)
+        [Route("GetOwnerOptions")]
+        public SalePriceListOption GetOwnerOptions(int priceListId)
         {
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
-            return manager.GetOwnerName(priceListId);
+            return manager.GetOwnerOptions(priceListId);
         }
         [HttpGet]
         [Route("GetOwnerPriceListType")]
@@ -69,15 +69,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GenerateAndEvaluateSalePriceListEmail")]
-        public SalePriceListEvaluatedEmail GenerateAndEvaluateSalePriceListEmail(long salepriceListId, SalePriceListType salePriceListType)
+        public SalePriceListEvaluatedEmail GenerateAndEvaluateSalePriceListEmail(SalePriceListInput salePriceListInput)
         {
             SalePriceListManager salePriceListManager = new SalePriceListManager();
-            VRFile file = salePriceListManager.GenerateSalePriceListFile(salepriceListId, salePriceListType);
+            VRFile file = salePriceListManager.GenerateSalePriceListFile(salePriceListInput.PriceListId, (SalePriceListType)salePriceListInput.PriceListTypeId);
             VRFileManager fileManager = new VRFileManager();
             long fileId = fileManager.AddFile(file);
-            var evaluatedObject = salePriceListManager.EvaluateEmail(salepriceListId, salePriceListType);
+            var evaluatedObject = salePriceListManager.EvaluateEmail(salePriceListInput.PriceListId, (SalePriceListType)salePriceListInput.PriceListTypeId);
             return new SalePriceListEvaluatedEmail
             {
                 FileId = fileId,

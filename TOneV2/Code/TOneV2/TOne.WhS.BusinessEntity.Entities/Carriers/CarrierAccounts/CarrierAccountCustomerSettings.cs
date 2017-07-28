@@ -15,5 +15,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public bool InvoiceTimeZone { get; set; }
         public PriceListExtensionFormat? PriceListExtensionFormat { get; set; }
         public SalePriceListType? PriceListType { get; set; }
+        public bool CompressPriceListFile { get; set; }
     }
 }

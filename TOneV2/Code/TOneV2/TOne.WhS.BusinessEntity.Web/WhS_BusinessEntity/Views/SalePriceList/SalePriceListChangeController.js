@@ -26,6 +26,7 @@
         loadAllControls();
 
         function defineScope() {
+            $scope.scopeModel = {};
             $scope.onCodeChangeGridReady = function (api) {
                 codeChangeGridApi = api;
                 codeChangeGridApi.loadGrid(filter);
@@ -84,8 +85,7 @@
 
             $scope.SendPriceListByEmail = function () {
                 $scope.isLoadingFilter = true;
-
-                whSBeSalePriceListChangeApiService.GenerateAndEvaluateSalePriceListEmail(priceListId, priceLisTypeSelectorAPI.getSelectedIds()).then(function (emailResponse) {
+                whSBeSalePriceListChangeApiService.GenerateAndEvaluateSalePriceListEmail(BuildSalePriceListInput()).then(function (emailResponse) {
                     WhS_BE_SalePriceListChangeService.sendEmail(emailResponse, onSalePriceListEmailSent);
                 }).catch(function (error) {
                     vrNotificationService.notifyException(error, $scope);
@@ -98,10 +98,16 @@
                 $scope.modalContext.closeModal();
             };
         }
+        function BuildSalePriceListInput() {
+            return {
+                PriceListTypeId: priceLisTypeSelectorAPI.getSelectedIds(),
+                PriceListId: priceListId
+            };
+        }
         function onSalePriceListEmailSent(evaluatedEmail) {
             $scope.isLoadingFilter = true;
             var promises = [];
-
+            evaluatedEmail.CompressFile = $scope.scopeModel.compressPriceListFile;
             var sendEmailPromise = VRCommon_VRMailAPIService.SendEmail(evaluatedEmail);
             promises.push(sendEmailPromise);
 
@@ -184,11 +190,12 @@
         function setTitle() {
             $scope.title = 'Sale Pricelist for ' + ownerName;
         }
-        function GetOwner() {
-            return whSBeSalePriceListChangeApiService.GetOwnerName(priceListId)
-                .then(function (name) {
-                    ownerName = name;
-                });
+        function GetOwnerOptions() {
+            return whSBeSalePriceListChangeApiService.GetOwnerOptions(priceListId)
+                 .then(function (zipOption) {
+                     $scope.scopeModel.compressPriceListFile = zipOption.CompressPriceListFile;
+                     ownerName = zipOption.OwnerName;
+                 });
         }
         function GetOwnerPriceListType() {
             return whSBeSalePriceListChangeApiService.GetOwnerPriceListType(priceListId)
@@ -199,7 +206,7 @@
 
         function loadAllControls() {
             $scope.isLoadingFilter = true;
-            return utilsService.waitMultipleAsyncOperations([loadCountryRateSelector, GetOwner, GetOwnerPriceListType])
+            return utilsService.waitMultipleAsyncOperations([loadCountryRateSelector, GetOwnerOptions, GetOwnerPriceListType])
                 .then(function () {
                     setTitle();
                 })

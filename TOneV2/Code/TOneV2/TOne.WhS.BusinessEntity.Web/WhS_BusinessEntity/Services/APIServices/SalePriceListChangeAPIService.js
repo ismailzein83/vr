@@ -15,19 +15,20 @@
         function GetFilteredSalePriceListRPChanges(input) {
             return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetFilteredSalePriceListRPChanges"), input);
         }
-        function GetOwnerName(priceListId) {
-            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetOwnerName"), {
+        function GetOwnerOptions(priceListId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetOwnerOptions"), {
                 priceListId: priceListId
             });
         }
+
         function DownloadSalePriceList(pricelistId, priceListType) {
             return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "DownloadSalePriceList"), { salepriceListId: pricelistId, salePriceListType: priceListType }, {
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
             });
         }
-        function GenerateAndEvaluateSalePriceListEmail(pricelistId, priceListType) {
-            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GenerateAndEvaluateSalePriceListEmail"), { salepriceListId: pricelistId, salePriceListType: priceListType });
+        function GenerateAndEvaluateSalePriceListEmail(pricelisInput) {
+            return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GenerateAndEvaluateSalePriceListEmail"), pricelisInput);
         }
         function GetOwnerPriceListType(priceListId) {
             return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetOwnerPriceListType"), {
@@ -43,7 +44,7 @@
             GetFilteredSalePriceListCodeChanges: GetFilteredSalePriceListCodeChanges,
             GetFilteredSalePriceListRateChanges: GetFilteredSalePriceListRateChanges,
             GetFilteredSalePriceListRPChanges: GetFilteredSalePriceListRPChanges,
-            GetOwnerName: GetOwnerName,
+            GetOwnerOptions: GetOwnerOptions,
             DownloadSalePriceList: DownloadSalePriceList,
             GenerateAndEvaluateSalePriceListEmail: GenerateAndEvaluateSalePriceListEmail,
             GetOwnerPriceListType: GetOwnerPriceListType,
