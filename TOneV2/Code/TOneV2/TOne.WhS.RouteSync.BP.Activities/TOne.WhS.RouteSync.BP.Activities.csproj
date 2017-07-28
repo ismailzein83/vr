@@ -51,6 +51,10 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
@@ -66,13 +70,26 @@
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplySwitchRouteSyncRoutesToDB.cs" />
     <Compile Include="ConvertSwitchRouteSyncRoutes.cs" />
+    <Compile Include="LogFailedSwitchRouteSync.cs" />
     <Compile Include="FinalizeSwitchRouteSync.cs" />
+    <Compile Include="AnalyseSwitchSyncOutputDict.cs" />
+    <Compile Include="UpdateAndGetSwitchSyncOutputDict.cs" />
     <Compile Include="GetRouteReadRanges.cs" />
     <Compile Include="GetRouteSyncDefinition.cs" />
+    <Compile Include="GetParentSwitchSyncOutputDict.cs" />
+    <Compile Include="AddItemToSwitchSyncOutputDict.cs" />
     <Compile Include="GetSwitches.cs" />
     <Compile Include="InitializeSwitchRouteSync.cs" />
     <Compile Include="LoadSwitchesInProcess.cs" />

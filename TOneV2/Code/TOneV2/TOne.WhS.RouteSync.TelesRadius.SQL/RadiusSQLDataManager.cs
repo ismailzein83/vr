@@ -66,7 +66,7 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
             get { return _connectionString; }
             set { _connectionString = value; }
         }
-        public void PrepareTables()
+        public void PrepareTables(ISwitchRouteSynchronizerInitializeContext context)
         {
             StringBuilder query = new StringBuilder();
             query.AppendLine(query_CreateTempTables);
@@ -74,7 +74,7 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
             ExecuteNonQueryText(query.ToString(), null);
         }
 
-        public Object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
+        public object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
         {
             Object dbApplyStream = InitialiazeStreamForDBApply();
             foreach (ConvertedRoute route in radiusRoutes)
@@ -82,9 +82,9 @@ namespace TOne.WhS.RouteSync.TelesRadius.SQL
             return FinishDBApplyStream(dbApplyStream);
         }
 
-        public void ApplySwitchRouteSyncRoutes(object preparedItemsForApply)
+        public void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            ApplyRadiusRoutesForDB(preparedItemsForApply);
+            ApplyRadiusRoutesForDB(context.PreparedItemsForApply);
         }
 
         public void SwapTables(ISwapTableContext context)

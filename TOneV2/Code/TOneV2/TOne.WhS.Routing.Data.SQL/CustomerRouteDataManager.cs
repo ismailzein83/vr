@@ -249,7 +249,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 ,[IsBlocked]
                                                                 ,[ExecutedRuleId]
                                                                 ,[RouteOptions]
-                                                  FROM [dbo].[CustomerRoute] with(nolock) JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId=sz.ID JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID=ca.ID
+                                                  FROM [dbo].[CustomerRoute] as cr with(nolock) JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId=sz.ID JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID=ca.ID
                                                     #FILTER#";
 
         #endregion

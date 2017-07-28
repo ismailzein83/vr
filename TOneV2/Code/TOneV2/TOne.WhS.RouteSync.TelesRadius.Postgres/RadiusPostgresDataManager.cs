@@ -15,7 +15,7 @@ namespace TOne.WhS.RouteSync.TelesRadius.Postgres
             get { throw new NotImplementedException(); }
         }
 
-        public void PrepareTables()
+        public void PrepareTables(ISwitchRouteSynchronizerInitializeContext context)
         {
             throw new NotImplementedException();
         }
@@ -60,14 +60,12 @@ namespace TOne.WhS.RouteSync.TelesRadius.Postgres
             throw new NotImplementedException();
         }
 
-
         public object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
         {
             throw new NotImplementedException();
         }
 
-
-        public void ApplySwitchRouteSyncRoutes(object preparedItemsForApply)
+        public void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
             throw new NotImplementedException();
         }

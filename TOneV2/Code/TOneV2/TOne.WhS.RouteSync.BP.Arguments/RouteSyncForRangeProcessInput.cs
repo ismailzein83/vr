@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,5 +25,9 @@ namespace TOne.WhS.RouteSync.BP.Arguments
         public Dictionary<string, SwitchRouteSyncInitializationData> SwitchesInitializationData { get; set; }
 
         public Guid? SwitchesInitializationDataId { get; set; }
+
+        public int ParentWFRuntimeProcessId { get; set; }
+
+        public ConcurrentDictionary<string, SwitchSyncOutput> ParentSwitchSyncOutputDict { get; set; }
     }
 }

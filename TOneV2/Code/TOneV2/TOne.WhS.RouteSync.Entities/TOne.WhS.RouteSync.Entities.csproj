@@ -78,6 +78,7 @@
     <Compile Include="Switch\SwitchInfo.cs" />
     <Compile Include="Switch\SwitchRouteSynchronizer.cs" />
     <Compile Include="Switch\SwitchRouteSynchronizerConfig.cs" />
+    <Compile Include="Switch\SwitchSyncOutput.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

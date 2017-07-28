@@ -17,9 +17,10 @@ namespace TOne.WhS.RouteSync.Entities
 
         public abstract Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context);
 
+        public abstract void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
+
         public abstract void Finalize(ISwitchRouteSynchronizerFinalizeContext context);
 
-        public abstract void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
         public virtual bool TryBlockCustomer(ITryBlockCustomerContext context)
         {
             return false;
@@ -42,6 +43,16 @@ namespace TOne.WhS.RouteSync.Entities
         RouteRangeType? RouteRangeType { get; }
 
         SwitchRouteSyncInitializationData InitializationData { set; }
+
+        string SwitchName { get; }
+
+        string SwitchId { get; }
+
+        SwitchSyncOutput SwitchSyncOutput { set; }
+
+        //Action<LogEntryType, string, object[]> WriteTrackingMessage { get; }
+
+        Action<Exception> WriteBusinessHandledException { get; }
     }
 
     public interface ISwitchRouteSynchronizerConvertRoutesContext
@@ -65,11 +76,19 @@ namespace TOne.WhS.RouteSync.Entities
 
         SwitchRouteSyncInitializationData InitializationData { get; }
 
-        void WriteTrackingMessage(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args);
+        Action<LogEntryType, string, object[]> WriteTrackingMessage { get; }
 
         string SwitchName { get; }
 
         int IndexesCommandTimeoutInSeconds { get; }
+
+        string SwitchId { get; }
+
+        SwitchSyncOutput PreviousSwitchSyncOutput { get; }
+
+        SwitchSyncOutput SwitchSyncOutput { set; }
+
+        Action<Exception> WriteBusinessHandledException { get; }
     }
 
     public interface ISwitchRouteSynchronizerPrepareDataForApplyContext
@@ -86,6 +105,18 @@ namespace TOne.WhS.RouteSync.Entities
     public interface ISwitchRouteSynchronizerApplyRoutesContext
     {
         Object PreparedItemsForApply { get; }
+
+        //Action<LogEntryType, string, object[]> WriteTrackingMessage { get; }
+
+        string SwitchName { get; }
+
+        string SwitchId { get; }
+
+        SwitchSyncOutput PreviousSwitchSyncOutput { get; }
+
+        SwitchSyncOutput SwitchSyncOutput { set; }
+
+        Action<Exception> WriteBusinessHandledException { get; }
     }
     public interface ITryBlockCustomerContext
     {

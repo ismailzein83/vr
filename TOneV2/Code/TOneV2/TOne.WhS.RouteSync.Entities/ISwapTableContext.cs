@@ -10,6 +10,14 @@ namespace TOne.WhS.RouteSync.Entities
         Action<LogEntryType, string, object[]> WriteTrackingMessage { get; }
 
         int IndexesCommandTimeoutInSeconds { get; }
+
+        string SwitchId { get; }
+
+        SwitchSyncOutput PreviousSwitchSyncOutput { get; }
+
+        SwitchSyncOutput SwitchSyncOutput { set; }
+
+        Action<Exception> WriteBusinessHandledException { get; }
     }
 
     public class SwapTableContext : ISwapTableContext
@@ -19,5 +27,13 @@ namespace TOne.WhS.RouteSync.Entities
         public Action<LogEntryType, string, object[]> WriteTrackingMessage { get; set; }
 
         public int IndexesCommandTimeoutInSeconds { get; set; }
+
+        public string SwitchId { get; set; }
+
+        public SwitchSyncOutput SwitchSyncOutput { get; set; }
+
+        public SwitchSyncOutput PreviousSwitchSyncOutput { get; set; }
+
+        public Action<Exception> WriteBusinessHandledException { get; set; }
     }
 }

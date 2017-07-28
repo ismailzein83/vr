@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Radius;
 using Vanrise.Data.SQL;
+using System.Linq;
+using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 {
@@ -23,9 +27,9 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         Dictionary<int, MVTSRadiusSQLDataManager> _mvtsRadiusSQLDataManagers;
         public Guid ConfigId { get { return new Guid("366AB5D3-5083-420D-B5CE-5313DA025106"); } }
 
-        public void ApplyRadiusRoutesForDB(object preparedRadiusRoutes)
+        public void ApplyRadiusRoutesForDB(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            RadiusRouteBulkInsertInfo radiusRouteBulkInsertInfo = preparedRadiusRoutes as RadiusRouteBulkInsertInfo;
+            RadiusRouteBulkInsertInfo radiusRouteBulkInsertInfo = context.PreparedItemsForApply as RadiusRouteBulkInsertInfo;
 
             PrepareDataManagers();
             Dictionary<MVTSRadiusSQLDataManager, BulkInsertStreams> dataManagersStreams = new Dictionary<MVTSRadiusSQLDataManager, BulkInsertStreams>();
@@ -40,12 +44,14 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
                     RoutePercentageStream = routePercentageStreamInfo
                 });
             }
-
+            SwitchSyncOutput switchSyncOutput;
             ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManager, dataManagerIndex) =>
             {
                 BulkInsertStreams streams = dataManagersStreams[mvtsRadiusSQLDataManager];
                 mvtsRadiusSQLDataManager.ApplyRadiusRoutesForDB(streams.RouteStream, streams.RoutePercentageStream);
-            });
+            }, context.SwitchName, context.SwitchId, context.PreviousSwitchSyncOutput, context.WriteBusinessHandledException, false, null, out switchSyncOutput);
+
+            context.SwitchSyncOutput = switchSyncOutput;
         }
 
         private class BulkInsertStreams
@@ -126,15 +132,17 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
             get { return _redundantConnectionStrings; }
             set { _redundantConnectionStrings = value; }
         }
-        public void PrepareTables()
+        public void PrepareTables(ISwitchRouteSynchronizerInitializeContext context)
         {
+            SwitchSyncOutput switchSyncOutput;
             ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManager, dataManagerIndex) =>
             {
                 mvtsRadiusSQLDataManager.PrepareTables();
-            });
+            }, context.SwitchName, context.SwitchId, null, context.WriteBusinessHandledException, true, "initializing", out switchSyncOutput);
+            context.SwitchSyncOutput = switchSyncOutput;
         }
 
-        public Object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
+        public object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
         {
             Object dbApplyStream = InitialiazeStreamForDBApply();
             foreach (ConvertedRoute route in radiusRoutes)
@@ -142,13 +150,14 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
             return FinishDBApplyStream(dbApplyStream);
         }
 
-        public void ApplySwitchRouteSyncRoutes(object preparedItemsForApply)
+        public void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            ApplyRadiusRoutesForDB(preparedItemsForApply);
+            ApplyRadiusRoutesForDB(context);
         }
 
         public void SwapTables(ISwapTableContext context)
         {
+            SwitchSyncOutput switchSyncOutput;
             ExecMVTSRadiusSQLDataManagerAction((mvtsRadiusSQLDataManager, dataManagerIndex) =>
             {
                 string[] args = new string[] { (dataManagerIndex + 1).ToString(), context.SwitchName };
@@ -156,19 +165,57 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finalizing Database {0} for Switch '{1}'...", args);
                 mvtsRadiusSQLDataManager.SwapTables(context.IndexesCommandTimeoutInSeconds);
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Database {0} for Switch '{1}' is finalized", args);
-            });
+            }, context.SwitchName, context.SwitchId, context.PreviousSwitchSyncOutput, context.WriteBusinessHandledException, true, "finalizing", out switchSyncOutput);
+            context.SwitchSyncOutput = switchSyncOutput;
         }
 
         #endregion
 
-        private void ExecMVTSRadiusSQLDataManagerAction(Action<MVTSRadiusSQLDataManager, int> action)
+        private void ExecMVTSRadiusSQLDataManagerAction(Action<MVTSRadiusSQLDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
+            Action<Exception> writeBusinessHandledException, bool isBusinessException, string businessExceptionMessage, out SwitchSyncOutput switchSyncOutput)
         {
             PrepareDataManagers();
+            HashSet<int> failedNodeIndexes = null;
+            if (previousSwitchSyncOutput != null && previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList != null)
+            {
+                failedNodeIndexes = previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList.Select(itm => (itm as MVTSRadiusSWSyncOutput).ItemIndex).ToHashSet();
+                if (failedNodeIndexes != null && failedNodeIndexes.Count == _mvtsRadiusSQLDataManagers.Count)
+                {
+                    switchSyncOutput = new SwitchSyncOutput()
+                    {
+                        SwitchId = switchId,
+                        SwitchSyncResult = SwitchSyncResult.Failed
+                    };
+                    return;
+                }
+            }
+
+            ConcurrentDictionary<int, SwitchRouteSynchroniserOutput> exceptions = new ConcurrentDictionary<int, SwitchRouteSynchroniserOutput>();
 
             Parallel.For(0, _mvtsRadiusSQLDataManagers.Count, (i) =>
             {
-                action(_mvtsRadiusSQLDataManagers[i], i);
+                if (failedNodeIndexes == null || !failedNodeIndexes.Contains(i))
+                {
+                    try
+                    {
+                        action(_mvtsRadiusSQLDataManagers[i], i);
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorBusinessMessage = Utilities.GetExceptionBusinessMessage(ex);
+                        string exceptionDetail = ex.ToString();
+                        exceptions.TryAdd(i, new MVTSRadiusSWSyncOutput() { ItemIndex = i, ErrorBusinessMessage = errorBusinessMessage, ExceptionDetail = exceptionDetail });
+                        Exception exception = isBusinessException ? new VRBusinessException(string.Format("Error occured while {0} Database {1} for Switch '{2}'", businessExceptionMessage, i + 1, switchName), ex) : ex;
+                        writeBusinessHandledException(exception);
+                    }
+                }
             });
+            switchSyncOutput = exceptions.Count > 0 ? new SwitchSyncOutput()
+            {
+                SwitchId = switchId,
+                SwitchRouteSynchroniserOutputList = exceptions.Values.ToList(),
+                SwitchSyncResult = exceptions.Count == _mvtsRadiusSQLDataManagers.Count ? SwitchSyncResult.Failed : SwitchSyncResult.PartialFailed
+            } : null;
         }
 
         private void PrepareDataManagers()
@@ -214,6 +261,8 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 
     public class MVTSRadiusSQLDataManager : BaseSQLDataManager
     {
+        public string ConnectionString { get { return GetConnectionString(); } }
+
         RadiusConnectionString _radiusConnectionString;
         public MVTSRadiusSQLDataManager(RadiusConnectionString radiusConnectionString)
         {

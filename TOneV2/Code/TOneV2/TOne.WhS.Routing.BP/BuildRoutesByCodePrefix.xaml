@@ -6,6 +6,7 @@
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scc="clr-namespace:System.Collections.Concurrent;assembly=mscorlib"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
@@ -20,6 +21,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(twrba:BuildRoutesByCodePrefixInput)" />
+    <x:Property Name="Output" Type="OutArgument(twrba:BuildRoutesByCodePrefixOutput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1</sap2010:WorkflowViewState.IdRef>
@@ -34,6 +36,7 @@
       <x:String>TOne.WhS.Routing.Entities</x:String>
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>System.Collections.Concurrent</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -83,7 +86,20 @@
       <Variable x:TypeArguments="twre:CustomerZoneDetailByZone" Name="CustomerZoneDetails" />
       <Variable x:TypeArguments="scg:List(twrba1:SwitchInProcess)" Name="SwitchesInProcess" />
       <Variable x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)" Name="ActiveRoutingCustomerInfos" />
+      <Variable x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)" Name="parentSwitchSyncOutputDict" />
     </Sequence.Variables>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="twrba:BuildRoutesByCodePrefixOutput">
+          <mca:CSharpReference x:TypeArguments="twrba:BuildRoutesByCodePrefixOutput">Output</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="twrba:BuildRoutesByCodePrefixOutput">
+          <mca:CSharpValue x:TypeArguments="twrba:BuildRoutesByCodePrefixOutput">new BuildRoutesByCodePrefixOutput()</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
     <Parallel DisplayName="Parallel_PrepareCodes" sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Sequence DisplayName="Sequence_SaleCodes" sap2010:WorkflowViewState.IdRef="Sequence_2">
         <twrba2:GetActiveCustomerInfos sap2010:WorkflowViewState.IdRef="GetActiveCustomerInfos_1">
@@ -202,28 +218,42 @@
         </InArgument>
       </If.Condition>
       <If.Then>
-        <twrba1:LoadSwitchesInProcess sap2010:WorkflowViewState.IdRef="LoadSwitchesInProcess_1">
-          <twrba1:LoadSwitchesInProcess.SwitchIds>
-            <InArgument x:TypeArguments="scg:List(x:String)">
-              <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.Switches</mca:CSharpValue>
-            </InArgument>
-          </twrba1:LoadSwitchesInProcess.SwitchIds>
-          <twrba1:LoadSwitchesInProcess.SwitchesInProcess>
-            <OutArgument x:TypeArguments="scg:List(twrba1:SwitchInProcess)">
-              <mca:CSharpReference x:TypeArguments="scg:List(twrba1:SwitchInProcess)">SwitchesInProcess</mca:CSharpReference>
-            </OutArgument>
-          </twrba1:LoadSwitchesInProcess.SwitchesInProcess>
-          <twrba1:LoadSwitchesInProcess.SwitchesInitializationData>
-            <InArgument x:TypeArguments="scg:Dictionary(x:String, twre1:SwitchRouteSyncInitializationData)">
-              <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, twre1:SwitchRouteSyncInitializationData)">Input.SwitchesInitializationData</mca:CSharpValue>
-            </InArgument>
-          </twrba1:LoadSwitchesInProcess.SwitchesInitializationData>
-          <twrba1:LoadSwitchesInProcess.SwitchesInitializationDataId>
-            <InArgument x:TypeArguments="s:Nullable(s:Guid)">
-              <mca:CSharpValue x:TypeArguments="s:Nullable(s:Guid)">null</mca:CSharpValue>
-            </InArgument>
-          </twrba1:LoadSwitchesInProcess.SwitchesInitializationDataId>
-        </twrba1:LoadSwitchesInProcess>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <twrba1:LoadSwitchesInProcess sap2010:WorkflowViewState.IdRef="LoadSwitchesInProcess_1">
+            <twrba1:LoadSwitchesInProcess.SwitchIds>
+              <InArgument x:TypeArguments="scg:List(x:String)">
+                <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.Switches</mca:CSharpValue>
+              </InArgument>
+            </twrba1:LoadSwitchesInProcess.SwitchIds>
+            <twrba1:LoadSwitchesInProcess.SwitchesInProcess>
+              <OutArgument x:TypeArguments="scg:List(twrba1:SwitchInProcess)">
+                <mca:CSharpReference x:TypeArguments="scg:List(twrba1:SwitchInProcess)">SwitchesInProcess</mca:CSharpReference>
+              </OutArgument>
+            </twrba1:LoadSwitchesInProcess.SwitchesInProcess>
+            <twrba1:LoadSwitchesInProcess.SwitchesInitializationData>
+              <InArgument x:TypeArguments="scg:Dictionary(x:String, twre1:SwitchRouteSyncInitializationData)">
+                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, twre1:SwitchRouteSyncInitializationData)">Input.SwitchesInitializationData</mca:CSharpValue>
+              </InArgument>
+            </twrba1:LoadSwitchesInProcess.SwitchesInitializationData>
+            <twrba1:LoadSwitchesInProcess.SwitchesInitializationDataId>
+              <InArgument x:TypeArguments="s:Nullable(s:Guid)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(s:Guid)">null</mca:CSharpValue>
+              </InArgument>
+            </twrba1:LoadSwitchesInProcess.SwitchesInitializationDataId>
+          </twrba1:LoadSwitchesInProcess>
+          <twrba1:GetParentSwitchSyncOutputDict sap2010:WorkflowViewState.IdRef="GetParentSwitchSyncOutputDict_1">
+            <twrba1:GetParentSwitchSyncOutputDict.ParentProcessId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.ParentWFRuntimeProcessId</mca:CSharpValue>
+              </InArgument>
+            </twrba1:GetParentSwitchSyncOutputDict.ParentProcessId>
+            <twrba1:GetParentSwitchSyncOutputDict.ParentSwitchSyncOutputDict>
+              <OutArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
+                <mca:CSharpReference x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">parentSwitchSyncOutputDict</mca:CSharpReference>
+              </OutArgument>
+            </twrba1:GetParentSwitchSyncOutputDict.ParentSwitchSyncOutputDict>
+          </twrba1:GetParentSwitchSyncOutputDict>
+        </Sequence>
       </If.Then>
     </If>
     <Parallel DisplayName="Parallel_BuildCodeMatch" sap2010:WorkflowViewState.IdRef="Parallel_2">
@@ -444,6 +474,11 @@
         </If.Condition>
         <If.Then>
           <twrbs:BuildRouteSyncByRange RouteRangeInfo="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildRouteSyncByRange_2">
+            <twrbs:BuildRouteSyncByRange.ParentSwitchSyncOutputDict>
+              <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
+                <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">parentSwitchSyncOutputDict</mca:CSharpValue>
+              </InArgument>
+            </twrbs:BuildRouteSyncByRange.ParentSwitchSyncOutputDict>
             <twrbs:BuildRouteSyncByRange.ReadRoutesStatus>
               <InArgument x:TypeArguments="vb:AsyncActivityStatus">
                 <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildCustomerRoutesStatus</mca:CSharpValue>
@@ -454,6 +489,11 @@
                 <mca:CSharpValue x:TypeArguments="twre1:RouteRangeType">RouteSync.Entities.RouteRangeType.Random</mca:CSharpValue>
               </InArgument>
             </twrbs:BuildRouteSyncByRange.RouteRangeType>
+            <twrbs:BuildRouteSyncByRange.SwitchSyncOutputDict>
+              <OutArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">
+                <mca:CSharpReference x:TypeArguments="scc:ConcurrentDictionary(x:String, twre1:SwitchSyncOutput)">Output.SwitchSyncOutputDict</mca:CSharpReference>
+              </OutArgument>
+            </twrbs:BuildRouteSyncByRange.SwitchSyncOutputDict>
             <twrbs:BuildRouteSyncByRange.SwitchesInProcess>
               <InArgument x:TypeArguments="scg:List(twrba1:SwitchInProcess)">
                 <mca:CSharpValue x:TypeArguments="scg:List(twrba1:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
@@ -463,10 +503,11 @@
         </If.Then>
       </If>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbFdOA9MDDgIBAVcFxQEQAwGwBsYBBeQBCgMBhgblAQXRAxACAQJYB4cBEgMBjweIAQfEARIDAbEGyQELyQFeAwGHBs0BCeIBKAMBjwbtAQ3tAYUBAgEW9wEN9wGPAQIBA/sBB58CIQMB/wSgAgfOAiQDAdMDzwIH6QIuAwHzAuoCB/oCKAMBuQL7Age2AwwCAXe3AwfQAwwCASlZCV8pAwHKB2AJdR8DAakHdgmGASkDAZAHjAEJkgEpAwGFB5MBCbIBIwMBzgazAQnDASkDAbIG2gEP2gGmAQMBqAbVAQ/VAX4DAaAG0AEP0AFlAwGYBt8BD98BWwMBkAaNAg2NAnUDAfMFiAINiAKDAQMB4AX+AQ3+AXgDAc0FkgINkgJ3AwG6BYMCDYMCkAEDAacFlwINlwJ9AwGUBfsBhgH7AYwBAwGTBZwCDZwCcwMBgAWoAg2oAnMDAewEowINowKGAQMB2QTBAg3BAm8DAcYEsgINsgKIAQMBswTLAg3LAnQDAaAErQINrQJqAwGNBMYCDcYCegMB+gO8Ag28AokBAwHnA7cCDbcCWgMB1APhAg3hAnIDAcAD0gIN0gKBAQMBrQPcAg3cAmgDAZoD5gIN5gJ8AwGHA9cCDdcCfAMB9ALyAg3yAnQDAeAC7QIN7QJ0AwHNAvcCDfcCYQMBugL+Ag3+AmICAXiCAwu0AxYDAYsBugMNugNgAgEqvgMLzgMpAgE9XA9ckAEDAcsHbQ9tbAMBwgdoD2h/AwG6B2MPY3oDAbIHcg9yXAMBqgd5D3l9AwGhB4MBD4MBdwMBmQd+D35jAwGRB48BD48BiAEDAYYHmwEPmwFsAwH8BpYBD5YBegMB8walAQ+lAZABAwHqBq8BD68BgAEDAeEGqgEPqgGHAQMB2AagAQ+gAVwDAc8GtgEPtgFjAwHFBrsBD7sBfwMBvAbAAQ/AAX0DAbMGgwMNnQMxAwHZAZ4DDbMDKwMBjAHLAxHLA3gCAWTGAxHGA4MBAgFRwQMRwQN2AgE+kAMTkAN1AwGmAoYDE4YDgQEDAZMClQMTlQNwAwGAApoDE5oDfwMB7QGLAxOLA38DAdoBpgMTpgN3AwHGAaEDE6EDdwMBswGrAxOrA2cDAaABsAMTsANwAwGNAQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbGBRA/sDDgIBAVsFZg4DAZEJZwXVARADAcoH1gEFggIKAwGAB4MCBfkDEAIBAmMLY4cBAwGcCV4LXnIDAZIJaAeXARIDAb0ImAEH1AESAwHLB9kBC9kBXgMBgQfdAQmAAhQDAYsHiwINiwKFAQIBGJUCDZUCjwECAQOZAge9AiEDAesFvgIH7AIkAwGtBO0CB4cDLgMBwwOIAweYAygDAYMDmQMH1AMMAwGtAdUDB/gDDAIBLWkJbykDAYYJcAmFAR8DAd0IhgEJlgEpAwG+CJwBCaIBKQMBsQijAQnCASMDAe4HwwEJ0wEpAwHMB94BC/MBKgMBoQf0AQv/ATIDAYwHqwINqwJ1AwHrBqYCDaYCgwEDAdYGnAINnAJ4AwHBBrACDbACdwMBrAahAg2hApABAwGXBrUCDbUCfQMBggaZAoYBmQKMAQMBgQa6Ag26AnMDAewFxgINxgJzAwHWBcECDcEChgEDAcEF3wIN3wJvAwGsBdACDdACiAEDAZcF6QIN6QJ0AwGCBcsCDcsCagMB7QTkAg3kAnoDAdgE2gIN2gKJAQMBwwTVAg3VAloDAa4E/wIN/wJyAwGYBPACDfACgQEDAYME+gIN+gJoAwHuA4QDDYQDfAMB2QP1Ag31AnwDAcQDkAMNkAN0AwGuA4sDDYsDdAMBmQOVAw2VA2EDAYQDnAMNnANiAwGuAaADC9IDFgMBwwHYAw3YA2ACAS7cAwv2AykCAUNsD2yQAQMBhwl9D31sAwH8CHgPeH8DAfIIcw9zegMB6AiCAQ+CAVwDAd4IiQEPiQF9AwHTCJMBD5MBdwMByQiOAQ+OAWMDAb8InwEPnwGIAQMBsgirAQ+rAWwDAaYIpgEPpgF6AwGbCLUBD7UBkAEDAZAIvwEPvwGAAQMBhQi6AQ+6AYcBAwH6B7ABD7ABXAMB7wfGAQ/GAWMDAeMHywEPywF/AwHYB9ABD9ABfQMBzQfrARHrAagBAwHAB+YBEeYBgAEDAbYH4QER4QFnAwGsB/ABEfABXQMBogf8ARH8AaMBAwGXB/cBEfcBbAMBjQehAw27AzEDAZkCvAMN0QMrAwHEAfMDEfMDeAMBmAHuAxHuA6QBAwGDAekDEekDgwECAW7kAxHkA3YCAVnfAxHfA5sBAgFErgMTrgN1AwHuAqQDE6QDgQEDAdkCswMTswNwAwHEArgDE7gDfwMBrwKpAxOpA38DAZoCxAMTxAN3AwGEAr8DE78DdwMB7wHJAxPJA2cDAdoBzgMTzgNwAwHFAQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="2257,62" />
       <sap2010:ViewStateData Id="GetActiveCustomerInfos_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetSaleCodes_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="GetCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -489,7 +530,15 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2257,316" />
       <sap2010:ViewStateData Id="LoadSwitchesInProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="2257,210" />
+      <sap2010:ViewStateData Id="GetParentSwitchSyncOutputDict_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="2257,358" />
       <sap2010:ViewStateData Id="BuildCodeMatches_1" sap:VirtualizedContainerService.HintSize="200,236" />
       <sap2010:ViewStateData Id="BuildCustomerRoutes_1" sap:VirtualizedContainerService.HintSize="200,236" />
       <sap2010:ViewStateData Id="PrepareCustomerRoutesForApply_1" sap:VirtualizedContainerService.HintSize="200,236" />
@@ -501,14 +550,14 @@
       <sap2010:ViewStateData Id="BuildRouteSyncByRange_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="464,236" />
       <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="2257,282" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2279,1012">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2279,1262">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="2319,1092" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.BuildRoutesByCodePrefix_1" sap:VirtualizedContainerService.HintSize="2319,1342" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

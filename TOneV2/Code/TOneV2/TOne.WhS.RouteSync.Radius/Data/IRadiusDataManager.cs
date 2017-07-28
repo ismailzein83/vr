@@ -11,9 +11,9 @@ namespace TOne.WhS.RouteSync.Radius
     public interface IRadiusDataManager : IBulkApplyDataManager<ConvertedRoute>
     {
         Guid ConfigId { get; }
-        void PrepareTables();
+        void PrepareTables(ISwitchRouteSynchronizerInitializeContext context);
         Object PrepareDataForApply(List<ConvertedRoute> radiusRoutes);
-        void ApplySwitchRouteSyncRoutes(Object preparedItemsForApply);
+        void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
         void SwapTables(ISwapTableContext context);
     }
 }

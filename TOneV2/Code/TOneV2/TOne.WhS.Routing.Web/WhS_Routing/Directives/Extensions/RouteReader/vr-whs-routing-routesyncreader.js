@@ -9,6 +9,7 @@
             restrict: "E",
             scope: {
                 onReady: "=",
+                isrequired: '=',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -48,7 +49,7 @@
                 api.getData = function () {
                     var data = {
                         $type: "TOne.WhS.Routing.Business.Extensions.RouteSyncReader, TOne.WhS.Routing.Business",
-                        RangeType: $scope.scopeModel.selectedRouteRangeType.description
+                        RangeType: $scope.scopeModel.selectedRouteRangeType != undefined ? $scope.scopeModel.selectedRouteRangeType.value : null
                     };
                     return data;
                 };

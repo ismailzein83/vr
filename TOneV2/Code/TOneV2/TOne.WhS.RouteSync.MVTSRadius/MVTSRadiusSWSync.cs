@@ -25,7 +25,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            this.DataManager.PrepareTables();
+            this.DataManager.PrepareTables(context);
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -145,13 +145,22 @@ namespace TOne.WhS.RouteSync.MVTSRadius
 
         public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            this.DataManager.ApplySwitchRouteSyncRoutes(context.PreparedItemsForApply);
+            this.DataManager.ApplySwitchRouteSyncRoutes(context);
         }
 
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
-            SwapTableContext swapTableContext = new SwapTableContext() { WriteTrackingMessage = context.WriteTrackingMessage, SwitchName = context.SwitchName, IndexesCommandTimeoutInSeconds = context.IndexesCommandTimeoutInSeconds };
+            SwapTableContext swapTableContext = new SwapTableContext()
+            {
+                WriteTrackingMessage = context.WriteTrackingMessage,
+                SwitchName = context.SwitchName,
+                IndexesCommandTimeoutInSeconds = context.IndexesCommandTimeoutInSeconds,
+                SwitchId = context.SwitchId,
+                PreviousSwitchSyncOutput = context.PreviousSwitchSyncOutput,
+                WriteBusinessHandledException = context.WriteBusinessHandledException
+            };
             this.DataManager.SwapTables(swapTableContext);
+            context.SwitchSyncOutput = swapTableContext.SwitchSyncOutput;
         }
 
         public class CarrierMapping

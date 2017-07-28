@@ -1,8 +1,11 @@
-﻿using System.Activities;
+﻿using System;
+using System.Activities;
+using System.Collections.Concurrent;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 using TOne.WhS.RouteSync.Entities;
-using System;
 using TOne.WhS.RouteSync.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.BP.Activities
 {
@@ -14,13 +17,15 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         public RouteRangeType? RouteRangeType { get; set; }
 
+        public ConcurrentDictionary<string, SwitchSyncOutput> SwitchSyncOutputDict { get; set; }
+
         public SwitchRouteSyncInitializationData InitializationData { get; set; }
 
     }
 
     public class FinalizeSwitchRouteSyncOutput
     {
-
+        public SwitchSyncOutput SwitchSyncOutput { get; set; }
     }
 
     #endregion
@@ -34,16 +39,43 @@ namespace TOne.WhS.RouteSync.BP.Activities
         public InArgument<RouteRangeType?> RouteRangeType { get; set; }
 
         [RequiredArgument]
+        public InArgument<ConcurrentDictionary<string, SwitchSyncOutput>> SwitchSyncOutputDict { get; set; }
+
+        [RequiredArgument]
         public InArgument<SwitchRouteSyncInitializationData> InitializationData { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<SwitchSyncOutput> SwitchSyncOutput { get; set; }
 
         protected override FinalizeSwitchRouteSyncOutput DoWorkWithResult(FinalizeSwitchRouteSyncInput inputArgument, AsyncActivityHandle handle)
         {
-            ConfigManager configManager = new ConfigManager();
-            int indexesCommandTimeoutInSeconds = configManager.GetRouteSyncProcessIndexesCommandTimeoutInSeconds();
+            SwitchSyncOutput switchSyncOutput = null;
+            SwitchSyncOutput previousSwitchSyncOutput = null;
+            if (inputArgument.SwitchSyncOutputDict != null)
+                previousSwitchSyncOutput = inputArgument.SwitchSyncOutputDict.GetRecord(inputArgument.Switch.SwitchId);
 
-            var switchRouteSynchronizerFinalizeContext = new SwitchRouteSynchronizerFinalizeContext(handle) { RouteRangeType = inputArgument.RouteRangeType, InitializationData = inputArgument.InitializationData, SwitchName = inputArgument.Switch.Name, IndexesCommandTimeoutInSeconds = indexesCommandTimeoutInSeconds };
-            inputArgument.Switch.RouteSynchronizer.Finalize(switchRouteSynchronizerFinalizeContext);
-            return new FinalizeSwitchRouteSyncOutput();
+            if (previousSwitchSyncOutput == null || previousSwitchSyncOutput.SwitchSyncResult != SwitchSyncResult.Failed)
+            {
+                try
+                {
+                    ConfigManager configManager = new ConfigManager();
+                    int indexesCommandTimeoutInSeconds = configManager.GetRouteSyncProcessIndexesCommandTimeoutInSeconds();
+
+                    var switchRouteSynchronizerFinalizeContext = new SwitchRouteSynchronizerFinalizeContext(inputArgument.RouteRangeType, inputArgument.InitializationData, handle.SharedInstanceData.WriteTrackingMessage, inputArgument.Switch.Name, indexesCommandTimeoutInSeconds, inputArgument.Switch.SwitchId, previousSwitchSyncOutput, handle.SharedInstanceData.WriteBusinessHandledException);
+                    inputArgument.Switch.RouteSynchronizer.Finalize(switchRouteSynchronizerFinalizeContext);
+                    switchSyncOutput = switchRouteSynchronizerFinalizeContext.SwitchSyncOutput;
+                }
+                catch (Exception ex)
+                {
+                    string errorBusinessMessage = Utilities.GetExceptionBusinessMessage(ex);
+                    string exceptionDetail = ex.ToString();
+                    SwitchRouteSynchroniserOutput output = new SwitchRouteSynchroniserOutput() { ErrorBusinessMessage = errorBusinessMessage, ExceptionDetail = exceptionDetail };
+                    switchSyncOutput = new SwitchSyncOutput() { SwitchId = inputArgument.Switch.SwitchId, SwitchSyncResult = SwitchSyncResult.Failed, SwitchRouteSynchroniserOutputList = new System.Collections.Generic.List<SwitchRouteSynchroniserOutput>() { output } };
+                    VRBusinessException exception = new VRBusinessException(string.Format("Error occured while finalizing Switch '{0}'", inputArgument.Switch.Name), ex);
+                    handle.SharedInstanceData.WriteBusinessHandledException(exception);
+                }
+            }
+            return new FinalizeSwitchRouteSyncOutput() { SwitchSyncOutput = switchSyncOutput };
         }
 
         protected override FinalizeSwitchRouteSyncInput GetInputArgument(AsyncCodeActivityContext context)
@@ -52,27 +84,33 @@ namespace TOne.WhS.RouteSync.BP.Activities
             {
                 Switch = this.Switch.Get(context),
                 RouteRangeType = this.RouteRangeType.Get(context),
+                SwitchSyncOutputDict = this.SwitchSyncOutputDict.Get(context),
                 InitializationData = this.InitializationData.Get(context)
             };
         }
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, FinalizeSwitchRouteSyncOutput result)
         {
-
+            this.SwitchSyncOutput.Set(context, result.SwitchSyncOutput);
         }
 
         #region Private Classes
 
         private class SwitchRouteSynchronizerFinalizeContext : ISwitchRouteSynchronizerFinalizeContext
         {
-            AsyncActivityHandle _handle;
-
-            public SwitchRouteSynchronizerFinalizeContext(AsyncActivityHandle handle)
+            public SwitchRouteSynchronizerFinalizeContext(RouteRangeType? routeRangeType, SwitchRouteSyncInitializationData initializationData, Action<LogEntryType, string, object[]> writeTrackingMessage,
+                string switchName, int indexesCommandTimeoutInSeconds, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception> writeBusinessHandledException)
             {
-                if (handle == null)
-                    throw new ArgumentNullException("handle");
-                _handle = handle;
+                RouteRangeType = routeRangeType;
+                InitializationData = initializationData;
+                WriteTrackingMessage = writeTrackingMessage;
+                SwitchName = switchName;
+                IndexesCommandTimeoutInSeconds = indexesCommandTimeoutInSeconds;
+                SwitchId = switchId;
+                PreviousSwitchSyncOutput = previousSwitchSyncOutput;
+                WriteBusinessHandledException = writeBusinessHandledException;
             }
+
             public string SwitchName { get; set; }
 
             public RouteRangeType? RouteRangeType { get; set; }
@@ -81,10 +119,15 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
             public int IndexesCommandTimeoutInSeconds { get; set; }
 
-            public void WriteTrackingMessage(Vanrise.Entities.LogEntryType severity, string messageFormat, params object[] args)
-            {
-                _handle.SharedInstanceData.WriteBusinessTrackingMsg(severity, messageFormat, args);
-            }
+            public string SwitchId { get; set; }
+
+            public SwitchSyncOutput SwitchSyncOutput { get; set; }
+
+            public Action<LogEntryType, string, object[]> WriteTrackingMessage { get; set; }
+
+            public SwitchSyncOutput PreviousSwitchSyncOutput { get; set; }
+
+            public Action<Exception> WriteBusinessHandledException { get; set; }
         }
         #endregion
     }

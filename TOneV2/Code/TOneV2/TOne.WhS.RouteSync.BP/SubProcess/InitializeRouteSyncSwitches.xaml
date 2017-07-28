@@ -6,6 +6,7 @@
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scc="clr-namespace:System.Collections.Concurrent;assembly=mscorlib"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:twrba="clr-namespace:TOne.WhS.RouteSync.BP.Activities;assembly=TOne.WhS.RouteSync.BP.Activities"
@@ -15,6 +16,7 @@
     <x:Property Name="Switches" Type="InArgument(scg:List(twre:SwitchInfo))" />
     <x:Property Name="RouteRangeType" Type="InArgument(s:Nullable(twre:RouteRangeType))" />
     <x:Property Name="SwitchesInProcess" Type="InOutArgument(scg:List(twrba:SwitchInProcess))" />
+    <x:Property Name="SwitchSyncOutputDict" Type="OutArgument(scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.RouteSync.BP.SubProcess.InitializeRouteSyncSwitches_1</sap2010:WorkflowViewState.IdRef>
@@ -26,6 +28,7 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>TOne.WhS.RouteSync.Entities</x:String>
+      <x:String>System.Collections.Concurrent</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -53,6 +56,18 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+      <Assign.To>
+        <OutArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">
+          <mca:CSharpReference x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">
+          <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">new ConcurrentDictionary&lt;string,SwitchSyncOutput&gt;()</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
     <ParallelForEach x:TypeArguments="twre:SwitchInfo" DisplayName="ParallelForEach&lt;SwitchInfo&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
       <ParallelForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(twre:SwitchInfo)">
@@ -66,7 +81,7 @@
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
           <Sequence.Variables>
             <Variable x:TypeArguments="twrba:SwitchInProcess" Name="switchInProcess" />
-            <Variable x:TypeArguments="x:String" Name="variable1" />
+            <Variable x:TypeArguments="twre:SwitchSyncOutput" Name="switchSyncOutput" />
           </Sequence.Variables>
           <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
             <Assign.To>
@@ -96,28 +111,117 @@
                 <mca:CSharpValue x:TypeArguments="twre:SwitchInfo">switchInfo</mca:CSharpValue>
               </InArgument>
             </twrba:InitializeSwitchRouteSync.Switch>
+            <twrba:InitializeSwitchRouteSync.SwitchSyncOutput>
+              <OutArgument x:TypeArguments="twre:SwitchSyncOutput">
+                <mca:CSharpReference x:TypeArguments="twre:SwitchSyncOutput">switchSyncOutput</mca:CSharpReference>
+              </OutArgument>
+            </twrba:InitializeSwitchRouteSync.SwitchSyncOutput>
           </twrba:InitializeSwitchRouteSync>
-          <AddToCollection x:TypeArguments="twrba:SwitchInProcess" DisplayName="AddToCollection&lt;SwitchInProcess&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1">
-            <AddToCollection.Item>
-              <InArgument x:TypeArguments="twrba:SwitchInProcess">
-                <mca:CSharpValue x:TypeArguments="twrba:SwitchInProcess">switchInProcess</mca:CSharpValue>
+          <If sap2010:WorkflowViewState.IdRef="If_1">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">switchSyncOutput != null</mca:CSharpValue>
               </InArgument>
-            </AddToCollection.Item>
-            <InArgument x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">
-              <mca:CSharpValue x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
-            </InArgument>
-          </AddToCollection>
+            </If.Condition>
+            <If.Then>
+              <Switch x:TypeArguments="twre:SwitchSyncResult" sap2010:WorkflowViewState.IdRef="Switch`1_1">
+                <Switch.Default>
+                  <AddToCollection x:TypeArguments="twrba:SwitchInProcess" DisplayName="AddToCollection&lt;SwitchInProcess&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_3">
+                    <AddToCollection.Item>
+                      <InArgument x:TypeArguments="twrba:SwitchInProcess">
+                        <mca:CSharpValue x:TypeArguments="twrba:SwitchInProcess">switchInProcess</mca:CSharpValue>
+                      </InArgument>
+                    </AddToCollection.Item>
+                    <InArgument x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">
+                      <mca:CSharpValue x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
+                    </InArgument>
+                  </AddToCollection>
+                </Switch.Default>
+                <Switch.Expression>
+                  <InArgument x:TypeArguments="twre:SwitchSyncResult">
+                    <mca:CSharpValue x:TypeArguments="twre:SwitchSyncResult">switchSyncOutput.SwitchSyncResult</mca:CSharpValue>
+                  </InArgument>
+                </Switch.Expression>
+                <AddToCollection x:TypeArguments="twrba:SwitchInProcess" x:Key="Succeed" DisplayName="AddToCollection&lt;SwitchInProcess&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_1">
+                  <AddToCollection.Item>
+                    <InArgument x:TypeArguments="twrba:SwitchInProcess">
+                      <mca:CSharpValue x:TypeArguments="twrba:SwitchInProcess">switchInProcess</mca:CSharpValue>
+                    </InArgument>
+                  </AddToCollection.Item>
+                  <InArgument x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">
+                    <mca:CSharpValue x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
+                  </InArgument>
+                </AddToCollection>
+                <Sequence x:Key="PartialFailed" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                  <AddToCollection x:TypeArguments="twrba:SwitchInProcess" DisplayName="AddToCollection&lt;SwitchInProcess&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_2">
+                    <AddToCollection.Item>
+                      <InArgument x:TypeArguments="twrba:SwitchInProcess">
+                        <mca:CSharpValue x:TypeArguments="twrba:SwitchInProcess">switchInProcess</mca:CSharpValue>
+                      </InArgument>
+                    </AddToCollection.Item>
+                    <InArgument x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">
+                      <mca:CSharpValue x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
+                    </InArgument>
+                  </AddToCollection>
+                  <AddToCollection x:TypeArguments="scg:KeyValuePair(x:String, twre:SwitchSyncOutput)" DisplayName="AddToCollection&lt;KeyValuePair&lt;String,SwitchSyncOutput&gt;&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_10">
+                    <AddToCollection.Item>
+                      <InArgument x:TypeArguments="scg:KeyValuePair(x:String, twre:SwitchSyncOutput)">
+                        <mca:CSharpValue x:TypeArguments="scg:KeyValuePair(x:String, twre:SwitchSyncOutput)">new KeyValuePair&lt;string,SwitchSyncOutput&gt;(switchInProcess.Switch.SwitchId,switchSyncOutput)</mca:CSharpValue>
+                      </InArgument>
+                    </AddToCollection.Item>
+                    <InArgument x:TypeArguments="scg:ICollection(scg:KeyValuePair(x:String, twre:SwitchSyncOutput))">
+                      <mca:CSharpValue x:TypeArguments="scg:ICollection(scg:KeyValuePair(x:String, twre:SwitchSyncOutput))">SwitchSyncOutputDict</mca:CSharpValue>
+                    </InArgument>
+                  </AddToCollection>
+                </Sequence>
+                <AddToCollection x:TypeArguments="scg:KeyValuePair(x:String, twre:SwitchSyncOutput)" x:Key="Failed" DisplayName="AddToCollection&lt;KeyValuePair&lt;String,SwitchSyncOutput&gt;&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_11">
+                  <AddToCollection.Item>
+                    <InArgument x:TypeArguments="scg:KeyValuePair(x:String, twre:SwitchSyncOutput)">
+                      <mca:CSharpValue x:TypeArguments="scg:KeyValuePair(x:String, twre:SwitchSyncOutput)">new KeyValuePair&lt;string,SwitchSyncOutput&gt;(switchInProcess.Switch.SwitchId,switchSyncOutput)</mca:CSharpValue>
+                    </InArgument>
+                  </AddToCollection.Item>
+                  <InArgument x:TypeArguments="scg:ICollection(scg:KeyValuePair(x:String, twre:SwitchSyncOutput))">
+                    <mca:CSharpValue x:TypeArguments="scg:ICollection(scg:KeyValuePair(x:String, twre:SwitchSyncOutput))">SwitchSyncOutputDict</mca:CSharpValue>
+                  </InArgument>
+                </AddToCollection>
+              </Switch>
+            </If.Then>
+            <If.Else>
+              <AddToCollection x:TypeArguments="twrba:SwitchInProcess" DisplayName="AddToCollection&lt;SwitchInProcess&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_8">
+                <AddToCollection.Item>
+                  <InArgument x:TypeArguments="twrba:SwitchInProcess">
+                    <mca:CSharpValue x:TypeArguments="twrba:SwitchInProcess">switchInProcess</mca:CSharpValue>
+                  </InArgument>
+                </AddToCollection.Item>
+                <InArgument x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">
+                  <mca:CSharpValue x:TypeArguments="scg:ICollection(twrba:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
+                </InArgument>
+              </AddToCollection>
+            </If.Else>
+          </If>
         </Sequence>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxTdWJQcm9jZXNzXEluaXRpYWxpemVSb3V0ZVN5bmNTd2l0Y2hlcy54YW1sDjcDcg4CAQE4BXAXAgECOws7aQIBOEIJbhQCAQNHC1IUAgEpUwtjLQIBE2QLbR0CAQRPEU+0AQIBMUoRSnMCASpWEVaXAQIBImARYGACARtbEVt0AgEUaw9rfAIBDGcRZ2sCAQU=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxTdWJQcm9jZXNzXEluaXRpYWxpemVSb3V0ZVN5bmNTd2l0Y2hlcy54YW1sJjoDzgEOAgEBOwVGDgMBtAFHBcwBFwIBAkMLQ7MBAwG6AT4LPpYBAwG1AUoLSmkDAa8BUQnKARQCAQNWC2EUAwGeAWILdy0CAX14C8kBEAIBBF4RXrQBAwGnAVkRWXMDAZ8BZRFllwEDAZYBbxFvYAMBjgFqEWp0AwGGAXQRdHQCAX57EXtoAgEFfw+7ARgCAR6+AQ/HASECAQ2OARWOAYEBAgEfkQERmgEjAgFsmwERsAEcAgFJsQERugEjAgE4gQETigElAgEnxQETxQGAAQIBFsEBFcEBbwIBDpgBFZgBggECAXWUAReUAXECAW2cAROlASUCAVumAROvASUCAUq4ARW4AaEBAgFBtAEXtAHfAQIBOYgBF4gBhAECATCEARmEAXMCASijARejAYQBAgFknwEZnwFzAgFcrQEXrQGjAQIBU6kBGakB4QECAUs=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="InitializeSwitchRouteSync_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="264,310">
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="753,62" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="701,62" />
+      <sap2010:ViewStateData Id="InitializeSwitchRouteSync_1" sap:VirtualizedContainerService.HintSize="701,22" />
+      <sap2010:ViewStateData Id="AddToCollection`1_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="AddToCollection`1_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="AddToCollection`1_10" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="AddToCollection`1_11" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Switch`1_1" sap:VirtualizedContainerService.HintSize="476,288">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -125,7 +229,9 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="294,460">
+      <sap2010:ViewStateData Id="AddToCollection`1_8" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="701,438" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="723,726">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -133,14 +239,22 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="316,584">
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="753,876">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="775,1102">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.SubProcess.InitializeRouteSyncSwitches_1" sap:VirtualizedContainerService.HintSize="356,664" />
+      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.SubProcess.InitializeRouteSyncSwitches_1" sap:VirtualizedContainerService.HintSize="815,1182" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

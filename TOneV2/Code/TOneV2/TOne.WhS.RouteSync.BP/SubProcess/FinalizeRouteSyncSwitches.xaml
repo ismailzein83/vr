@@ -6,6 +6,7 @@
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scc="clr-namespace:System.Collections.Concurrent;assembly=mscorlib"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:twrba="clr-namespace:TOne.WhS.RouteSync.BP.Activities;assembly=TOne.WhS.RouteSync.BP.Activities"
@@ -16,8 +17,10 @@
   <x:Members>
     <x:Property Name="RouteRangeType" Type="InArgument(s:Nullable(twre:RouteRangeType))" />
     <x:Property Name="SwitchesInProcess" Type="InArgument(scg:List(twrba:SwitchInProcess))" />
+    <x:Property Name="SwitchSyncOutputDict" Type="InArgument(scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.RouteSync.BP.SubProcess.FinalizeRouteSyncSwitches_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -25,28 +28,64 @@
       <x:String>System.Data</x:String>
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
+      <x:String>System.Collections.Concurrent</x:String>
+      <x:String>TOne.WhS.RouteSync.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence>
-    <vbw:WriteTrackingMessage Message="Starting Finalize Switch Route Sync.">
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Finalize Switch Route Sync.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_1</sap2010:WorkflowViewState.IdRef>
     </vbw:WriteTrackingMessage>
-    <ParallelForEach x:TypeArguments="twrba:SwitchInProcess" DisplayName="ParallelForEach&lt;SwitchInProcess&gt;">
+    <If sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">SwitchSyncOutputDict==null</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+          <Assign.To>
+            <OutArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">
+              <mca:CSharpReference x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">
+              <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">new ConcurrentDictionary&lt;string,SwitchSyncOutput&gt;()</mca:CSharpValue>
+            </InArgument>
+          </Assign.Value>
+        </Assign>
+      </If.Then>
+    </If>
+    <ParallelForEach x:TypeArguments="twrba:SwitchInProcess" DisplayName="ParallelForEach&lt;SwitchInProcess&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
       <ParallelForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(twrba:SwitchInProcess)">
           <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twrba:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
@@ -56,44 +95,94 @@
         <ActivityAction.Argument>
           <DelegateInArgument x:TypeArguments="twrba:SwitchInProcess" Name="switchInProcess" />
         </ActivityAction.Argument>
-        <twrba:FinalizeSwitchRouteSync>
-          <twrba:FinalizeSwitchRouteSync.InitializationData>
-            <InArgument x:TypeArguments="twre:SwitchRouteSyncInitializationData">
-              <mca:CSharpValue x:TypeArguments="twre:SwitchRouteSyncInitializationData">switchInProcess.InitializationData</mca:CSharpValue>
-            </InArgument>
-          </twrba:FinalizeSwitchRouteSync.InitializationData>
-          <twrba:FinalizeSwitchRouteSync.RouteRangeType>
-            <InArgument x:TypeArguments="s:Nullable(twre:RouteRangeType)">
-              <mca:CSharpValue x:TypeArguments="s:Nullable(twre:RouteRangeType)">RouteRangeType</mca:CSharpValue>
-            </InArgument>
-          </twrba:FinalizeSwitchRouteSync.RouteRangeType>
-          <twrba:FinalizeSwitchRouteSync.Switch>
-            <InArgument x:TypeArguments="twre:SwitchInfo">
-              <mca:CSharpValue x:TypeArguments="twre:SwitchInfo">switchInProcess.Switch</mca:CSharpValue>
-            </InArgument>
-          </twrba:FinalizeSwitchRouteSync.Switch>
-          <sap2010:WorkflowViewState.IdRef>FinalizeSwitchRouteSync_1</sap2010:WorkflowViewState.IdRef>
-        </twrba:FinalizeSwitchRouteSync>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="twre:SwitchSyncOutput" Name="switchSyncOutput" />
+          </Sequence.Variables>
+          <twrba:FinalizeSwitchRouteSync Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FinalizeSwitchRouteSync_2">
+            <twrba:FinalizeSwitchRouteSync.InitializationData>
+              <InArgument x:TypeArguments="twre:SwitchRouteSyncInitializationData">
+                <mca:CSharpValue x:TypeArguments="twre:SwitchRouteSyncInitializationData">switchInProcess.InitializationData</mca:CSharpValue>
+              </InArgument>
+            </twrba:FinalizeSwitchRouteSync.InitializationData>
+            <twrba:FinalizeSwitchRouteSync.RouteRangeType>
+              <InArgument x:TypeArguments="s:Nullable(twre:RouteRangeType)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(twre:RouteRangeType)">RouteRangeType</mca:CSharpValue>
+              </InArgument>
+            </twrba:FinalizeSwitchRouteSync.RouteRangeType>
+            <twrba:FinalizeSwitchRouteSync.Switch>
+              <InArgument x:TypeArguments="twre:SwitchInfo">
+                <mca:CSharpValue x:TypeArguments="twre:SwitchInfo">switchInProcess.Switch</mca:CSharpValue>
+              </InArgument>
+            </twrba:FinalizeSwitchRouteSync.Switch>
+            <twrba:FinalizeSwitchRouteSync.SwitchSyncOutput>
+              <OutArgument x:TypeArguments="twre:SwitchSyncOutput">
+                <mca:CSharpReference x:TypeArguments="twre:SwitchSyncOutput">switchSyncOutput</mca:CSharpReference>
+              </OutArgument>
+            </twrba:FinalizeSwitchRouteSync.SwitchSyncOutput>
+            <twrba:FinalizeSwitchRouteSync.SwitchSyncOutputDict>
+              <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">
+                <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpValue>
+              </InArgument>
+            </twrba:FinalizeSwitchRouteSync.SwitchSyncOutputDict>
+          </twrba:FinalizeSwitchRouteSync>
+          <If sap2010:WorkflowViewState.IdRef="If_3">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">switchSyncOutput!=null &amp;&amp; switchSyncOutput.SwitchSyncResult!=SwitchSyncResult.Succeed</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <twrba:AddItemToSwitchSyncOutputDict PreviousActivityStatus="{x:Null}" Status="{x:Null}">
+                <twrba:AddItemToSwitchSyncOutputDict.SwitchSyncOutput>
+                  <InArgument x:TypeArguments="twre:SwitchSyncOutput">
+                    <mca:CSharpValue x:TypeArguments="twre:SwitchSyncOutput">switchSyncOutput</mca:CSharpValue>
+                  </InArgument>
+                </twrba:AddItemToSwitchSyncOutputDict.SwitchSyncOutput>
+                <twrba:AddItemToSwitchSyncOutputDict.SwitchSyncOutputDict>
+                  <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">
+                    <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpValue>
+                  </InArgument>
+                </twrba:AddItemToSwitchSyncOutputDict.SwitchSyncOutputDict>
+                <sap2010:WorkflowViewState.IdRef>AddItemToSwitchSyncOutputDict_1</sap2010:WorkflowViewState.IdRef>
+              </twrba:AddItemToSwitchSyncOutputDict>
+            </If.Then>
+          </If>
+        </Sequence>
       </ActivityAction>
-      <sap2010:WorkflowViewState.IdRef>ParallelForEach`1_1</sap2010:WorkflowViewState.IdRef>
     </ParallelForEach>
-    <vbw:WriteTrackingMessage Message="Finished Finalize Switch Route Sync.">
+    <twrba:LogFailedSwitchRouteSync Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LogFailedSwitchRouteSync_1">
+      <twrba:LogFailedSwitchRouteSync.SwitchSyncOutputDict>
+        <InArgument x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">
+          <mca:CSharpValue x:TypeArguments="scc:ConcurrentDictionary(x:String, twre:SwitchSyncOutput)">SwitchSyncOutputDict</mca:CSharpValue>
+        </InArgument>
+      </twrba:LogFailedSwitchRouteSync.SwitchSyncOutputDict>
+    </twrba:LogFailedSwitchRouteSync>
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finished Finalize Switch Route Sync.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
-      <sap2010:WorkflowViewState.IdRef>WriteTrackingMessage_2</sap2010:WorkflowViewState.IdRef>
     </vbw:WriteTrackingMessage>
-    <sap2010:WorkflowViewState.IdRef>Sequence_1</sap2010:WorkflowViewState.IdRef>
-    <sads:DebugSymbol.Symbol>d1lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxTdWJQcm9jZXNzXEZpbmFsaXplUm91dGVTeW5jU3dpdGNoZXMueGFtbA0oA1oOAgEBKQUwIAIBGDEFTxcCAQdQBVcgAgECLAsshQECARopJylNAgEZNAs0eAIBFTsJTCkCAQhTC1OFAQIBBFAnUE0CAQM+Dz6NAQIBEUgPSGoCAQ1DD0NyAgEJ</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxTdWJQcm9jZXNzXEZpbmFsaXplUm91dGVTeW5jU3dpdGNoZXMueGFtbBw7A6kBDgIBATwFQiACAVRDBVcKAgFGWAWZARcCAQ2aAQWgASYCAQihAQWnASACAQI/Cz+FAQIBVjxgPIYBAgFVRgtGZAIBR0oJVRICAUtbC1t4AgFCYgmXARQCAQ6dAQudAY4BAgEJpAELpAGFAQIBBKEBYKEBhgECAQNSD1K3AQIBUE0PTZoBAgFMZguAASsCASOBAQuWARACAQ9pEWmPAQIBPHMRc2wCATZ9EX2UAQIBMG4RbnQCASp4EXh0AgEkhAERhAGtAQIBEIgBD5QBNQIBFpABFZABmAECAR2LARWLAXACARc=</sads:DebugSymbol.Symbol>
   </Sequence>
-  <sap2010:WorkflowViewState.IdRef>TOne.WhS.RouteSync.BP.SubProcess.FinalizeRouteSyncSwitches_1</sap2010:WorkflowViewState.IdRef>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="FinalizeSwitchRouteSync_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="287,210">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="516,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="516,212" />
+      <sap2010:ViewStateData Id="FinalizeSwitchRouteSync_2" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="AddItemToSwitchSyncOutputDict_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,396">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="516,546">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -101,15 +190,16 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="287,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="309,458">
+      <sap2010:ViewStateData Id="LogFailedSwitchRouteSync_1" sap:VirtualizedContainerService.HintSize="516,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="516,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="538,1108">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.SubProcess.FinalizeRouteSyncSwitches_1" sap:VirtualizedContainerService.HintSize="349,538" />
+      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.SubProcess.FinalizeRouteSyncSwitches_1" sap:VirtualizedContainerService.HintSize="578,1188" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

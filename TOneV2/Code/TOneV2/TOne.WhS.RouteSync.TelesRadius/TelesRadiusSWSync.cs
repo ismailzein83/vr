@@ -22,7 +22,7 @@ namespace TOne.WhS.RouteSync.TelesRadius
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            this.DataManager.PrepareTables();
+            this.DataManager.PrepareTables(context);
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -83,7 +83,7 @@ namespace TOne.WhS.RouteSync.TelesRadius
 
         public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            this.DataManager.ApplySwitchRouteSyncRoutes(context.PreparedItemsForApply);
+            this.DataManager.ApplySwitchRouteSyncRoutes(context);
         }
     }
 
