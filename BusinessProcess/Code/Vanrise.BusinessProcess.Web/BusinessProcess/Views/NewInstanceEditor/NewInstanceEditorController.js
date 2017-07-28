@@ -6,45 +6,56 @@
 
     function NewInstanceEditorController($scope, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPDefinitionAPIService, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
+        var bpDefinitionId;
+
         var bpDefinitionDirectiveApi;
         var bpDefinitionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        defineScope();
         loadParameters();
+        defineScope();
         load();
 
+
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+
+            if (parameters != undefined && parameters != null)
+                bpDefinitionId = parameters.BPDefinitionID;
+        }
         function defineScope() {
-
-
             $scope.createProcessInput = {};
-            $scope.close = function () {
-                $scope.modalContext.closeModal()
-            };
+            $scope.BPDefinitionID = bpDefinitionId;
 
             $scope.onBPDefinitionManualDirectiveReady = function (api) {
                 bpDefinitionDirectiveApi = api;
                 bpDefinitionDirectiveReadyPromiseDeferred.resolve();
 
             };
-            $scope.createNewProcess = function () {
 
-                $scope.issaving = true;
+            $scope.createNewProcess = function () {
+                var promises = [];
+
                 var createProcessInputs = buildInstanceObjFromScope();
                 if (createProcessInputs != null) {
                     if (angular.isArray(createProcessInputs)) {
                         angular.forEach(createProcessInputs, function (itm) {
-                            BusinessProcess_BPInstanceAPIService.CreateNewProcess(itm).then().catch(function (error) {
+                            var currentCreateNewProcessPromise = getCreateNewProcessPromise(itm);
+                            promises.push(currentCreateNewProcessPromise);
+
+                            currentCreateNewProcessPromise.then().catch(function (error) {
                                 VRNotificationService.notifyException(error);
                             });
                         });
 
                         if ($scope.onProcessInputsCreated != undefined)
                             $scope.onProcessInputsCreated();
-
                         $scope.modalContext.closeModal();
                     }
                     else {
-                        BusinessProcess_BPInstanceAPIService.CreateNewProcess(createProcessInputs).then(function (response) {
+                        var currentCreateNewProcessPromise = getCreateNewProcessPromise(createProcessInputs);
+                        promises.push(currentCreateNewProcessPromise);
+
+                        currentCreateNewProcessPromise.then(function (response) {
                             if (VRNotificationService.notifyOnItemAdded("Business Instance", response)) {
                                 if ($scope.onProcessInputCreated != undefined)
                                     $scope.onProcessInputCreated(response.ProcessInstanceId);
@@ -56,30 +67,39 @@
                     }
                 }
 
-            };
-        }
-        function loadParameters() {
-            var parameters = VRNavigationService.getParameters($scope);
-            $scope.BPDefinitionID = undefined;
+                function getCreateNewProcessPromise(createProcessInput) {
+                    return BusinessProcess_BPInstanceAPIService.CreateNewProcess(createProcessInput);
+                }
 
-            if (parameters != undefined && parameters != null)
-                $scope.BPDefinitionID = parameters.BPDefinitionID;
+                return UtilsService.waitMultiplePromises(promises);
+            };
+
+            $scope.close = function () {
+                $scope.modalContext.closeModal()
+            };
         }
         function load() {
             $scope.isLoading = true;
+
+            var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+
             getBPDefinition().then(function () {
                 if ($scope.bpDefinitionObj.Configuration.ManualExecEditor) {
                     loadAllControls().finally(function () {
                         $scope.isLoading = false;
+                        loadPromiseDeferred.resolve();
                     });
                 }
-                else
+                else {
+                    loadPromiseDeferred.resolve();
                     $scope.isLoading = false;
-
+                }
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;
             })
+
+            return loadPromiseDeferred.promise;
         }
 
         function getBPDefinition() {
@@ -111,4 +131,5 @@
     }
 
     appControllers.controller('FraudAnalysis_NewInstanceEditorController', NewInstanceEditorController);
+
 })(appControllers);
