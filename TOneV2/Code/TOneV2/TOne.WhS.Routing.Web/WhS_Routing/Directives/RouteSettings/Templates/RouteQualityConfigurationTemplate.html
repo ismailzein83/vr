@@ -1,0 +1,11 @@
+﻿<vr-columns width="fullrow">
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="scopeModel.addQualityConfiguration" standalone></vr-button>
+        <vr-validator validate="scopeModel.isValid()">
+            <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActions" maxheight="300px"
+                         on-ready="scopeModel.onGridReady" enabledraggablerow="true" ondeleterow="    scopeModel.removeQualityConfiguratio" hidegridmenu>
+                <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="10"></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-columns>

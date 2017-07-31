@@ -61,5 +61,13 @@ namespace TOne.WhS.Routing.Web.Controllers
             ConfigManager configManager = new ConfigManager();
             return configManager.GetCustomerRouteBuildNumberOfOptions();
         }
+
+        [HttpGet]
+        [Route("GetQualityConfigurationFields")]
+        public List<AnalyticMeasureInfo> GetQualityConfigurationFields()
+        {
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetQualityConfigurationFields();
+        }
     }
 }

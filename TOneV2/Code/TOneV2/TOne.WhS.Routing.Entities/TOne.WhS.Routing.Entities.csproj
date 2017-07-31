@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnalyticMeasureInfo.cs" />
     <Compile Include="CodeMatches.cs" />
     <Compile Include="CodeMatchesBatch.cs" />
     <Compile Include="CodePrefix.cs" />

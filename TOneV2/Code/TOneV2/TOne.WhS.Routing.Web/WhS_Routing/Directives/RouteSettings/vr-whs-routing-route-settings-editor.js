@@ -39,6 +39,8 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
             var routeOptionRuleConfigurationAPI;
             var routeOptionRuleConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var qualityConfigurationAPI;
+            var qualityConfigurationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -47,21 +49,30 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     customerRouteDatabaseConfigurationAPI = api;
                     customerRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onProductRouteDatabaseConfigurationReady = function (api) {
                     productRouteDatabaseConfigurationAPI = api;
                     productRouteDatabaseConfigurationReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onSubProcessSettingsReady = function (api) {
                     subProcessSettingsAPI = api;
                     subProcessSettingsReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onCustomerRouteSettingsReady = function (api) {
                     customerRouteSettingsAPI = api;
                     customerRouteSettingsReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onRouteOptionRuleConfigurationReady = function (api) {
                     routeOptionRuleConfigurationAPI = api;
                     routeOptionRuleConfigurationReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onQualityConfigurationReady = function (api) {
+                    qualityConfigurationAPI = api;
+                    qualityConfigurationReadyPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -77,6 +88,7 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                     var subProcessSettingsPayload;
                     var customerRouteSettingsPayload;
                     var routeOptionRuleConfiguration;
+                    var qualityConfiguration;
 
                     if (payload != undefined && payload.data != undefined) {
                         customerRoutePayload = payload.data.RouteDatabasesToKeep.CustomerRouteConfiguration;
@@ -84,6 +96,7 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         subProcessSettingsPayload = payload.data.SubProcessSettings;
                         customerRouteSettingsPayload = payload.data.RouteBuildConfiguration;
                         routeOptionRuleConfiguration = payload.data.RouteOptionRuleConfiguration;
+                        qualityConfiguration = payload.data.QualityConfiguration;
                     }
 
 
@@ -127,6 +140,13 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         });
                     promises.push(routeOptionRuleConfigurationLoadPromiseDeferred.promise);
 
+                    //Loading Route Quality Configuration
+                    var qualityConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    qualityConfigurationReadyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(qualityConfigurationAPI, qualityConfiguration, qualityConfigurationLoadPromiseDeferred);
+                        });
+                    promises.push(qualityConfigurationLoadPromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -140,7 +160,10 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         },
                         SubProcessSettings: subProcessSettingsAPI.getData(),
                         RouteBuildConfiguration: customerRouteSettingsAPI.getData(),
-                        RouteOptionRuleConfiguration: routeOptionRuleConfigurationAPI.getData()
+                        RouteOptionRuleConfiguration: routeOptionRuleConfigurationAPI.getData(),
+                        QualityConfiguration: {
+                            RouteRuleQualityConfigurationList: qualityConfigurationAPI.getData()
+                        }
                     };
                 };
 

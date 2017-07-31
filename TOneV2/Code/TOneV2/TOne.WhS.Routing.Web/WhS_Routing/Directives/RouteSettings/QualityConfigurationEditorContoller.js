@@ -1,0 +1,178 @@
+﻿(function (appControllers) {
+
+    "use strict";
+
+    qualityConfigurationEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_Routing_QualityConfigurationAPIService'];
+
+    function qualityConfigurationEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_Routing_QualityConfigurationAPIService) {
+
+        var isEditMode;
+        var setDefault;
+        var qualityConfigurationEntity;
+
+        var timePeriodApi;
+        var timePeriodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        loadParameters();
+        defineScope();
+        load();
+
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != undefined) {
+                qualityConfigurationEntity = parameters.editQualityConfigurationObject.Entity;
+            }
+            isEditMode = (qualityConfigurationEntity != undefined);
+        }
+
+        function defineScope() {
+            $scope.scopeModel = {};
+
+
+            $scope.scopeModel.qualityConfigurationFields = [];
+
+            $scope.scopeModel.saveQualityConfiguration = function () {
+                if (isEditMode) {
+                    return updateQualityConfiguration();
+                }
+                else
+                    return insertQualityConfiguration();
+            };
+
+            $scope.scopeModel.close = function () {
+                $scope.modalContext.closeModal()
+            };
+
+            $scope.scopeModel.onTimeperiodReady = function (api) {
+                timePeriodApi = api;
+                timePeriodReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.qualityConfigurationFieldClicked = function (measure) {
+                if ($scope.scopeModel.expression == undefined)
+                    $scope.scopeModel.expression = measure.Expression;
+                else
+                    $scope.scopeModel.expression += (" " + measure.Expression);
+            };
+
+        }
+
+        function load() {
+            $scope.scopeModel.isLoading = true;
+            loadAllControls()
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTimeperiod, loadQualityConfigurationFields])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+               .finally(function () {
+                   $scope.scopeModel.isLoading = false;
+               });
+
+            function setTitle() {
+                if (isEditMode && qualityConfigurationEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(qualityConfigurationEntity.Name, "Quality Configuration");
+                else
+                    $scope.title = UtilsService.buildTitleForAddEditor("Quality Configuration");
+            }
+
+            function loadTimeperiod() {
+                var loadTimeperiodPromiseDeferred = UtilsService.createPromiseDeferred();
+                timePeriodReadyPromiseDeferred.promise
+                    .then(function () {
+                        var directivePayload;
+                        if (qualityConfigurationEntity != undefined && qualityConfigurationEntity.TimePeriod != undefined) {
+                            directivePayload = {
+                                timePeriod: qualityConfigurationEntity.TimePeriod
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(timePeriodApi, directivePayload, loadTimeperiodPromiseDeferred);
+                    });
+                return loadTimeperiodPromiseDeferred.promise;
+            }
+
+            function loadQualityConfigurationFields() {
+                return WhS_Routing_QualityConfigurationAPIService.GetQualityConfigurationFields()
+                    .then(function (response) {
+                        if (response != undefined) {
+                            for (var i = 0, length = response.length ; i < length ; i++)
+                            {
+                                var responseItem = response[i];
+                                $scope.scopeModel.qualityConfigurationFields.push({
+                                    Name: responseItem.Name,
+                                    Title: responseItem.Title,
+                                    Expression: 'context.GetMeasureValue("' + responseItem.Name + '")'
+                                });
+                            };
+                            $scope.scopeModel.qualityConfigurationFields.push({
+                                Name: '(',
+                                Title: '(',
+                                Expression: '(',
+                            },
+                            {
+                                Name: ')',
+                                Title: ')',
+                                Expression: ')',
+                            },
+                            {
+                                Name: '+',
+                                Title: '+',
+                                Expression: '+',
+                            },
+                            {
+                                Name: '-',
+                                Title: '-',
+                                Expression: '-',
+                            },
+                            {
+                                Name: '*',
+                                Title: '*',
+                                Expression: '*',
+                            },
+                            {
+                                Name: '/',
+                                Title: '/',
+                                Expression: '/',
+                            });
+                        }
+                    });
+
+            }
+
+            function loadStaticData() {
+                if (isEditMode) {
+                    $scope.scopeModel.qualityConfigurationyName = qualityConfigurationEntity.Name;
+                    $scope.scopeModel.expression = qualityConfigurationEntity.Expression;
+                }
+            }
+        }
+
+        function buildQualityConfigurationObjectFromScope() {
+            var obj = {
+                Name: $scope.scopeModel.qualityConfigurationyName,
+                TimePeriod: timePeriodApi.getData(),
+                Expression: $scope.scopeModel.expression,
+            };
+            return obj;
+        }
+
+        function insertQualityConfiguration() {
+            var qualityConfigurationObject = buildQualityConfigurationObjectFromScope();
+            if ($scope.onQualityConfigurationAdded != undefined)
+                $scope.onQualityConfigurationAdded(qualityConfigurationObject);
+            $scope.modalContext.closeModal();
+        }
+
+        function updateQualityConfiguration() {
+            var qualityConfigurationObject = buildQualityConfigurationObjectFromScope();
+            if ($scope.onQualityConfigurationUpdated != undefined)
+                $scope.onQualityConfigurationUpdated(qualityConfigurationObject);
+            $scope.modalContext.closeModal();
+        }
+
+    }
+
+    appControllers.controller('QualityConfigurationEditorController', qualityConfigurationEditorController);
+})(appControllers);

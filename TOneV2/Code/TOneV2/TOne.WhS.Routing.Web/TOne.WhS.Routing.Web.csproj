@@ -215,8 +215,12 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-selector.js" />
     <Content Include="WhS_Routing\Directives\RouteRule\Templates\RouteRuleViewTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRule\vr-whs-be-routerule-view.js" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\QualityConfigurationEditorContoller.js" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\Templates\QualityConfigurationEditor.html" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteQualityConfigurationTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-qualityconfiguration.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration-grid.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration.js" />
     <Content Include="WhS_Routing\Directives\Routing\Templates\RouteStatusSelectorTemplate.html" />
@@ -281,11 +285,13 @@
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch.js" />
     <Content Include="WhS_Routing\ModuleInitialization.js" />
     <Content Include="WhS_Routing\Services\APIServices\CustomerRouteAPIService.js" />
+    <Content Include="WhS_Routing\Services\APIServices\QualityConfigurationAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteOptionRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RPRouteAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RoutingDatabaseAPIService.js" />
+    <Content Include="WhS_Routing\Services\QualityConfigurationService.js" />
     <Content Include="WhS_Routing\Services\RouteOptionRuleService.js" />
     <Content Include="WhS_Routing\Services\MarketPriceService.js" />
     <Content Include="WhS_Routing\Services\RouteRuleService.js" />

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common.Business;
-
+using Vanrise.Analytic.Business;
+using Vanrise.Analytic.Entities;
+using Vanrise.Common;
 namespace TOne.WhS.Routing.Business
 {
     public class ConfigManager
@@ -119,10 +121,37 @@ namespace TOne.WhS.Routing.Business
             return productRouteDatabaseConfiguration;
         }
 
+        public List<AnalyticMeasureInfo> GetQualityConfigurationFields()
+        {
+            int qualityAnalyticTableId = GetQualityAnalyticTableId();
+            AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
+            Dictionary<string, AnalyticMeasure> analyticItemConfigs = analyticItemConfigManager.GetMeasures(qualityAnalyticTableId);
+            List <AnalyticMeasureInfo> analyticMeasureInfos= new List<AnalyticMeasureInfo>();
+            if (analyticItemConfigs != null)
+            {
+                foreach (var analyticItemConfig in analyticItemConfigs)
+                {
+                    analyticMeasureInfos.Add(new AnalyticMeasureInfo { Name = analyticItemConfig.Key, Title = analyticItemConfig.Value.Title });
+                }
+            }
+
+            return analyticMeasureInfos;
+        }
+        public int GetQualityAnalyticTableId()
+        {
+            TechnicalQualityConfiguration technicalQualityConfiguration = GetTechnicalQualityConfiguration();
+            return technicalQualityConfiguration.QualityAnalyticTableId;
+        }
         #endregion
 
         #region private methods
 
+        private TechnicalQualityConfiguration GetTechnicalQualityConfiguration()
+        {
+            RouteTechnicalSettingData routeTechnicalSettingData = GetRouteTechnicalSettingData();
+            routeTechnicalSettingData.TechnicalQualityConfiguration.ThrowIfNull("routeTechnicalSettingData.TechnicalQualityConfiguration");
+            return routeTechnicalSettingData.TechnicalQualityConfiguration;
+        }
         private RouteRuleDataTransformation GetRouteRuleDataTransformation()
         {
             RouteTechnicalSettingData routeTechnicalSettingData = GetRouteTechnicalSettingData();
