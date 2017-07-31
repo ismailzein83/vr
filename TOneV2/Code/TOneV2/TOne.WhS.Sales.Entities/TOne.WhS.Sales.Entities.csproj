@@ -73,6 +73,10 @@
     <Compile Include="CodeComparison\CodeCompareItem.cs" />
     <Compile Include="CodeComparison\CodeCompareItemDetail.cs" />
     <Compile Include="CodeComparison\CodeCompareQuery.cs" />
+    <Compile Include="SupplierTargetMatch\SupplierTargetMatch.cs" />
+    <Compile Include="SupplierTargetMatch\SupplierTargetMatchDetail.cs" />
+    <Compile Include="SupplierTargetMatch\SupplierTargetMatchFilter.cs" />
+    <Compile Include="SupplierTargetMatch\SupplierTargetMatchQuery.cs" />
     <Compile Include="ImportRatePlan\ImportedRowValidationInput.cs" />
     <Compile Include="ImportRatePlan\ImportedRowValidationResult.cs" />
     <Compile Include="ImportRatePlan\InvalidImportedRow.cs" />
