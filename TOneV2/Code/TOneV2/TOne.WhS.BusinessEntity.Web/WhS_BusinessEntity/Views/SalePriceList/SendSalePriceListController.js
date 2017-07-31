@@ -11,7 +11,7 @@
         var salePriceListGridAPI;
         var salePriceListGridReadyDeferred = UtilsService.createPromiseDeferred();
         var salePriceListGridContext;
-
+        var hideSelectedColumn;
         var customerPriceListIds;
 
         loadParameters();
@@ -22,6 +22,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters) {
                 processInstanceId = parameters.processInstanceId;
+                hideSelectedColumn = parameters.HideSelectedColumn;
             }
         }
         function defineScope() {
@@ -120,7 +121,8 @@
                     query: {
                         IncludedSalePriceListIds: customerPriceListIds
                     },
-                    context: salePriceListGridContext
+                    context: salePriceListGridContext,
+                    HideSelectedColumn: hideSelectedColumn
                 };
                 VRUIUtilsService.callDirectiveLoad(salePriceListGridAPI, salePriceListGridPayload, salePriceListGridLoadDeferred);
             });
