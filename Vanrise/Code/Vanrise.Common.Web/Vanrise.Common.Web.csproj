@@ -202,6 +202,7 @@
     <Content Include="Common\Constant\ModuleConfig.js" />
     <Content Include="Common\Constant\ProductInfoPropertyEnum.js" />
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
+    <Content Include="Common\Constant\TimeunitEnum.js" />
     <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditGridTemplate.html" />
     <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditLKUPSelector.html" />
     <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditSearch.html" />
@@ -263,6 +264,7 @@
     <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionGridTemplate.html" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-grid.js" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-selector.js" />
+    <Content Include="Common\Directives\TimeUnit\vr-common-timeunit-selector.js" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisibilityGridTemplate.html" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRModuleVisibilityEditor.html" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisibilitySettingsTemplate.html" />
@@ -305,10 +307,14 @@
     <Content Include="Common\Directives\VRTile\VRTileEditorController.js" />
     <Content Include="Common\Directives\VRTile\vr-common-tiles.js" />
     <Content Include="Common\Directives\VRTile\vr-common-tile-extendedsettings.js" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\LastDaysDirectiveTemplate.html" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\LastTimeDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\TodayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\CurrentMonthDirectiveTemplate.html" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-last-days.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-today.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-currentmonth.js" />
+    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-last-time.js" />
     <Content Include="Common\Directives\VRTimePeriod\vr-common-timeperiod.js" />
     <Content Include="Common\Directives\VRTimeZone\Templates\VRTimeZoneGridTemplate.html" />
     <Content Include="Common\Directives\VRTimeZone\vr-common-timezone-grid.js" />
