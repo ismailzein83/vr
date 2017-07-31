@@ -16,11 +16,12 @@ app.directive('vrCheck', ['SecurityService', 'UtilsService', function (SecurityS
                 ctrl.value = false;
             ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
-            ctrl.toogleCheck = function () {
+            ctrl.toogleCheck = function (e) {
                 if (ctrl.readOnly)
                     return;
                 ctrl.value = !ctrl.value;
                 isUserChange = true;
+                e.stopPropagation();
             };
             $scope.$watch('ctrl.value', function () {
                 if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
@@ -58,7 +59,7 @@ app.directive('vrCheck', ['SecurityService', 'UtilsService', function (SecurityS
                 var label = attrs.label;
                 if (label == undefined)
                     label = '';
-                return '<vr-label ng-if="withLable">{{label}}</vr-label><div><span ng-model="ctrl.value"  ng-click="ctrl.toogleCheck()" class="hand-cursor" style="font-weight: bold; font-size: 15px;" ng-style="ctrl.value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
+                return '<vr-label ng-if="withLable">{{label}}</vr-label><div><span ng-model="ctrl.value"  ng-click="ctrl.toogleCheck($event)" class="hand-cursor" style="font-weight: bold; font-size: 15px;" ng-style="ctrl.value==true? {\'color\':\'#64BD63\'} : {\'color\':\'#d2d2d2\'}" >✔</span>'
                     + '<span ng-if="hint!=undefined" ng-mouseenter="adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="color:#337AB7;top:-1px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{hint}}"></span>'
                     + '</div>';
             }
