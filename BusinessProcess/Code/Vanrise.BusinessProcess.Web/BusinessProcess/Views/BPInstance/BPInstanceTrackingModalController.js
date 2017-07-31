@@ -110,7 +110,8 @@
 
             $scope.openCompletionView = function () {
                 var onCompletionViewClosed = function () { };
-                BusinessProcess_BPDefinitionService.openCompletionView(completionViewURL, bpInstanceID, onCompletionViewClosed);
+                var hideSelectedColumn = false;
+                BusinessProcess_BPDefinitionService.openCompletionView(completionViewURL, bpInstanceID, hideSelectedColumn, onCompletionViewClosed);
             };
         }
         function load() {

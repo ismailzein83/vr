@@ -59,9 +59,10 @@
             return drillDownDefinitions;
         }
 
-        function openCompletionView(completionViewURL, processInstanceId, onCompletionViewClosed) {
+        function openCompletionView(completionViewURL, processInstanceId, hideSelectedColumn, onCompletionViewClosed) {
             var parameters = {
-                processInstanceId: processInstanceId
+                processInstanceId: processInstanceId,
+                HideSelectedColumn: hideSelectedColumn
             };
 
             var settings = {};
