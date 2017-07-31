@@ -36,7 +36,7 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
 
         function initializeController() {
             $scope.salepricelist = [];
-
+            $scope.hideSelectedColumn = true;
             defineMenuActions();
 
             $scope.onGridReady = function (api) {
@@ -54,6 +54,9 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                         if (payload != undefined) {
                             query = payload.query;
                             context = payload.context;
+                            if (payload.HideSelectedColumn != undefined) {
+                                $scope.hideSelectedColumn = payload.HideSelectedColumn;
+                            }
                         }
 
                         return gridAPI.retrieveData(query);
