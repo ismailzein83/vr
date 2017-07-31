@@ -101,7 +101,8 @@ namespace Vanrise.Analytic.Business
                         AnalyticMeasure measure = new AnalyticMeasure
                         {
                             AnalyticMeasureConfigId = itemConfig.AnalyticItemConfigId,
-                            Config = measureConfig
+                            Config = measureConfig,
+                            Title = itemConfig.Title
                         };
                         analyticMeasures.Add(itemConfig.Name, measure);
                     }
