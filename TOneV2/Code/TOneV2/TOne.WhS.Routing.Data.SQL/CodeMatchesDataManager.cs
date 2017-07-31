@@ -15,8 +15,87 @@ namespace TOne.WhS.Routing.Data.SQL
 		private readonly string[] codeMatchColumns = { "CodePrefix", "Code", "Content" };
 		private readonly string[] codeSaleZoneMatchColumns = { "Code", "SellingNumberPlanID", "SaleZoneID","CodeMatch" };
         private readonly string[] codeSupplierZoneMatchColumns = { "Code", "SupplierID", "SupplierZoneID", "CodeMatch" };
-
+         
 		public bool ShouldApplyCodeZoneMatch { get; set; }
+
+        public object InitialiazeStreamForDBApply()
+        {
+            var codeMatchBulkInsert = new CodeMatchBulkInsert()
+            {
+                CodeMatchStream = base.InitializeStreamForBulkInsert()
+            };
+            if (ShouldApplyCodeZoneMatch)
+            {
+                codeMatchBulkInsert.CodeSaleZoneMatchStream = base.InitializeStreamForBulkInsert();
+                codeMatchBulkInsert.CodeSupplierZoneMatchStream = base.InitializeStreamForBulkInsert();
+            }
+            return codeMatchBulkInsert;
+        }
+
+        public void WriteRecordToStream(Entities.CodeMatches record, object dbApplyStream)
+        {
+            var codeMatchBulkInsert = dbApplyStream as CodeMatchBulkInsert;
+
+            codeMatchBulkInsert.CodeMatchStream.WriteRecord("{0}^{1}^{2}", record.CodePrefix, record.Code, Vanrise.Common.Serializer.Serialize(record.SupplierCodeMatches, true));
+
+            if (ShouldApplyCodeZoneMatch)
+            {
+                if (record.SaleCodeMatches != null)
+                {
+                    foreach (SaleCodeMatch saleCodeMatch in record.SaleCodeMatches)
+                        codeMatchBulkInsert.CodeSaleZoneMatchStream.WriteRecord("{0}^{1}^{2}^{3}", record.Code, saleCodeMatch.SellingNumberPlanId, saleCodeMatch.SaleZoneId, saleCodeMatch.SaleCode);
+                }
+                if (record.SupplierCodeMatches != null)
+                {
+                    foreach (SupplierCodeMatchWithRate supplierCodeMatch in record.SupplierCodeMatches)
+                        codeMatchBulkInsert.CodeSupplierZoneMatchStream.WriteRecord("{0}^{1}^{2}^{3}", record.Code, supplierCodeMatch.CodeMatch.SupplierId, supplierCodeMatch.CodeMatch.SupplierZoneId, supplierCodeMatch.CodeMatch.SupplierCode);
+                }
+            }
+        }
+
+        public object FinishDBApplyStream(object dbApplyStream)
+        {
+            var codeMatchBulkInsertInfo = new CodeMatchBulkInsertInfo();
+            var codeMatchBulkInsert = dbApplyStream as CodeMatchBulkInsert;
+
+            codeMatchBulkInsert.CodeMatchStream.Close();
+            codeMatchBulkInsertInfo.CodeMatchesBulkInsertInfo = new StreamBulkInsertInfo()
+            {
+                TableName = "[dbo].[CodeMatch]",
+                Stream = codeMatchBulkInsert.CodeMatchStream,
+                TabLock = true,
+                KeepIdentity = false,
+                FieldSeparator = '^',
+                ColumnNames = codeMatchColumns
+            };
+
+            if (ShouldApplyCodeZoneMatch)
+            {
+                codeMatchBulkInsert.CodeSaleZoneMatchStream.Close();
+                codeMatchBulkInsertInfo.CodeSaleZoneMatchBulkInsertInfo = new StreamBulkInsertInfo()
+                {
+                    TableName = "[dbo].[CodeSaleZoneMatch]",
+                    Stream = codeMatchBulkInsert.CodeSaleZoneMatchStream,
+                    TabLock = true,
+                    KeepIdentity = false,
+                    FieldSeparator = '^',
+                    ColumnNames = codeSaleZoneMatchColumns
+                };
+
+                codeMatchBulkInsert.CodeSupplierZoneMatchStream.Close();
+                codeMatchBulkInsertInfo.CodeSupplierZoneMatchBulkInsertInfo = new StreamBulkInsertInfo()
+                {
+                    TableName = "[dbo].[CodeSupplierZoneMatch]",
+                    Stream = codeMatchBulkInsert.CodeSupplierZoneMatchStream,
+                    TabLock = true,
+                    KeepIdentity = false,
+                    FieldSeparator = '^',
+                    ColumnNames = codeSupplierZoneMatchColumns
+                };
+            }
+
+            return codeMatchBulkInsertInfo;
+        }
 
 		public void ApplyCodeMatchesForDB(object preparedData)
 		{
@@ -34,97 +113,6 @@ namespace TOne.WhS.Routing.Data.SQL
 			});
 		}
 
-		public object FinishDBApplyStream(object dbApplyStream)
-		{
-			var codeMatchBulkInsertInfo = new CodeMatchBulkInsertInfo();
-			var codeMatchBulkInsert = dbApplyStream as CodeMatchBulkInsert;
-
-			codeMatchBulkInsert.CodeMatchStream.Close();
-			codeMatchBulkInsertInfo.CodeMatchesBulkInsertInfo = new StreamBulkInsertInfo()
-			{
-				TableName = "[dbo].[CodeMatch]",
-				Stream = codeMatchBulkInsert.CodeMatchStream,
-				TabLock = true,
-				KeepIdentity = false,
-				FieldSeparator = '^',
-				ColumnNames = codeMatchColumns
-			};
-
-			if (ShouldApplyCodeZoneMatch)
-			{
-				codeMatchBulkInsert.CodeSaleZoneMatchStream.Close();
-				codeMatchBulkInsertInfo.CodeSaleZoneMatchBulkInsertInfo = new StreamBulkInsertInfo()
-				{
-					TableName = "[dbo].[CodeSaleZoneMatch]",
-					Stream = codeMatchBulkInsert.CodeSaleZoneMatchStream,
-					TabLock = true,
-					KeepIdentity = false,
-					FieldSeparator = '^',
-					ColumnNames = codeSaleZoneMatchColumns
-				};
-
-				codeMatchBulkInsert.CodeSupplierZoneMatchStream.Close();
-				codeMatchBulkInsertInfo.CodeSupplierZoneMatchBulkInsertInfo = new StreamBulkInsertInfo()
-				{
-					TableName = "[dbo].[CodeSupplierZoneMatch]",
-					Stream = codeMatchBulkInsert.CodeSupplierZoneMatchStream,
-					TabLock = true,
-					KeepIdentity = false,
-					FieldSeparator = '^',
-					ColumnNames = codeSupplierZoneMatchColumns
-				};
-			}
-
-			return codeMatchBulkInsertInfo;
-		}
-
-		public object InitialiazeStreamForDBApply()
-        {
-			var codeMatchBulkInsert = new CodeMatchBulkInsert()
-			{
-				CodeMatchStream = base.InitializeStreamForBulkInsert()
-			};
-			if (ShouldApplyCodeZoneMatch)
-			{
-				codeMatchBulkInsert.CodeSaleZoneMatchStream = base.InitializeStreamForBulkInsert();
-				codeMatchBulkInsert.CodeSupplierZoneMatchStream = base.InitializeStreamForBulkInsert();
-			}
-			return codeMatchBulkInsert;
-        }
-
-		public void WriteRecordToStream(Entities.CodeMatches record, object dbApplyStream)
-		{
-			var codeMatchBulkInsert = dbApplyStream as CodeMatchBulkInsert;
-
-			codeMatchBulkInsert.CodeMatchStream.WriteRecord("{0}^{1}^{2}", record.CodePrefix, record.Code, Vanrise.Common.Serializer.Serialize(record.SupplierCodeMatches, true));
-
-			if (ShouldApplyCodeZoneMatch)
-			{
-				if (record.SaleCodeMatches != null)
-				{
-					foreach (SaleCodeMatch saleCodeMatch in record.SaleCodeMatches)
-                        codeMatchBulkInsert.CodeSaleZoneMatchStream.WriteRecord("{0}^{1}^{2}^{3}", record.Code, saleCodeMatch.SellingNumberPlanId, saleCodeMatch.SaleZoneId, saleCodeMatch.SaleCode);
-				}
-				if (record.SupplierCodeMatches != null)
-				{
-					foreach (SupplierCodeMatchWithRate supplierCodeMatch in record.SupplierCodeMatches)
-                        codeMatchBulkInsert.CodeSupplierZoneMatchStream.WriteRecord("{0}^{1}^{2}^{3}", record.Code, supplierCodeMatch.CodeMatch.SupplierId, supplierCodeMatch.CodeMatch.SupplierZoneId, supplierCodeMatch.CodeMatch.SupplierCode);
-				}
-			}
-		}
-
-		#region Queries
-
-		const string query_GetCodeMatchesByZone = @"                                                       
-                                          SELECT  cm.Code, 
-                                                  cm.Content, 
-                                                  sz.SaleZoneID
-                                          FROM    [dbo].[CodeMatch] cm with(nolock)
-                                          join    CodeSaleZone sz on sz.code = cm.code 
-                                          where   sz.SaleZoneId between @FromZoneId and @ToZoneId";
-
-		#endregion
-
 		public IEnumerable<RPCodeMatches> GetCodeMatches(long fromZoneId, long toZoneId)
 		{
 			return GetItemsText(query_GetCodeMatchesByZone, RPCodeMatchesMapper, (cmd) =>
@@ -138,7 +126,11 @@ namespace TOne.WhS.Routing.Data.SQL
 				cmd.Parameters.Add(dtPrm);
 			});
 		}
-		RPCodeMatches RPCodeMatchesMapper(IDataReader reader)
+
+
+        #region Mappers
+
+        private RPCodeMatches RPCodeMatchesMapper(IDataReader reader)
 		{
 			return new RPCodeMatches()
 			{
@@ -148,9 +140,11 @@ namespace TOne.WhS.Routing.Data.SQL
 			};
 		}
 
-		#region Private Classes
+        #endregion
 
-		private class CodeMatchBulkInsert
+        #region Private Classes
+
+        private class CodeMatchBulkInsert
 		{
 			public StreamForBulkInsert CodeMatchStream { get; set; }
 			public StreamForBulkInsert CodeSaleZoneMatchStream { get; set; }
@@ -165,5 +159,17 @@ namespace TOne.WhS.Routing.Data.SQL
 		}
 
 		#endregion
+
+        #region Queries
+
+        const string query_GetCodeMatchesByZone = @"                                                       
+                                          SELECT  cm.Code, 
+                                                  cm.Content, 
+                                                  sz.SaleZoneID
+                                          FROM    [dbo].[CodeMatch] cm with(nolock)
+                                          join    CodeSaleZone sz on sz.code = cm.code 
+                                          where   sz.SaleZoneId between @FromZoneId and @ToZoneId";
+
+        #endregion
 	}
 }
