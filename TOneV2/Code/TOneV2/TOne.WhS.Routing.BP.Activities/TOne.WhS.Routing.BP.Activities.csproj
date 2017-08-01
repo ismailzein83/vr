@@ -92,6 +92,8 @@
     <Compile Include="BuildCodeMatches.cs" />
     <Compile Include="BuildCustomerRoutes.cs" />
     <Compile Include="CodePrefixRequest.cs" />
+    <Compile Include="PartialRoute\CheckAffectedRulesImpact.cs" />
+    <Compile Include="PartialRoute\LoadAffectedRules.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="FinalizeRouteProcess.cs" />
     <Compile Include="GetCodePrefixGroupDetails.cs" />
