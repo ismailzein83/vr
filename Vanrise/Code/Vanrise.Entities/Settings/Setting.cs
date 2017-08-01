@@ -25,12 +25,19 @@ namespace Vanrise.Entities
 
     public abstract class SettingData
     {
-        public virtual bool IsValid()
+        public virtual bool IsValid(ISettingDataValidationContext context)
         {
             return true;
         }
     }
-
+    public interface ISettingDataValidationContext
+    {
+       string ErrorMessage { get; set; }
+    }
+    public class SettingDataValidationContext:ISettingDataValidationContext
+    {
+        public string ErrorMessage { get; set; }
+    }
     public class SettingToEdit
     {
         public Guid SettingId { get; set; }

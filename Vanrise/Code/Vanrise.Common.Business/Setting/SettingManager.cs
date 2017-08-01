@@ -92,7 +92,8 @@ namespace Vanrise.Common.Business
             updateOperationOutput.Result = UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            if (settingToEdit.Data.IsValid())
+            SettingDataValidationContext context = new SettingDataValidationContext();
+            if (settingToEdit.Data.IsValid(context))
             {
                 ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
                 bool updateActionSucc = dataManager.UpdateSetting(settingToEdit);
