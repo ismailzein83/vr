@@ -16,9 +16,9 @@ namespace TOne.WhS.Routing.Entities
 
         public QualityConfiguration QualityConfiguration { get; set; }
 
-        public override bool IsValid()
+        public override bool IsValid(ISettingDataValidationContext context)
         {
-            return base.IsValid();
-        }
+            return base.IsValid(context);
+        }    
     }
 }
