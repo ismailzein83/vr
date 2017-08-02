@@ -81,6 +81,7 @@ namespace TOne.WhS.Deal.BP.Activities
                 string isSaleAsString = inputArgument.IsSale ? "Sale" : "Cost";
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, string.Format("Prepare Expected {0} Deal Traffic Records is done", isSaleAsString), null);
             }
+
             return new PrepareExpectedDealTrafficRecordsOutput()
             {
                 ExpectedDealBillingSummaryRecords = expectedDealBillingSummaryByZoneGroupTier.Count > 0 ? BuildExpectedDealBillingSummaryRecordDict(expectedDealBillingSummaryByZoneGroupTier) : null,
