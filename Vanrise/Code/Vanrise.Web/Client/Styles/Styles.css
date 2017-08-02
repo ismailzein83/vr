@@ -2702,6 +2702,15 @@ vr-columns[datalistitem]>div[class^="col"] {
     display: inline-block;
     white-space:normal;
 }
+
+.vr-list-item-clickable>vr-columns>div[class^="col"]>.list-group-item{    
+   cursor: pointer !important;
+   transition: all .2s ease-in-out;
+}
+.vr-list-item-clickable>vr-columns>div[class^="col"]>.list-group-item:hover{    
+    transform: scale(1.02);
+    box-shadow: 0px 5px 0px #999, 0px 5px 5px #999;
+}
 /*start of vr-cellviewer*/
 .vr-cellviewer-watermark {
     cursor: pointer;
