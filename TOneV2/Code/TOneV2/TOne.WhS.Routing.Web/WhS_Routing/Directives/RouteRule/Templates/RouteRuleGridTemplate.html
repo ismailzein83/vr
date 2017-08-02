@@ -6,14 +6,14 @@
              idfield="Entity.RuleId"
              getrowstyle="getRowStyle" enableautoexport="true">
 
-    <vr-datagridcolumn headertext="'Id'" field="'Entity.RuleId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.RuleId'" fixedwidth="'50'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="'200'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Included Codes'" field="'IncludedCodes'" ng-show="showIncludedCodesColumn"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Customers'" field="'Customers'" ng-show="showCustomerColumn"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Sale Zones'" field="'SaleZones'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Rule Type'" field="'RouteRuleSettingsTypeName'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'BED'" field="'Entity.BeginEffectiveTime'" type="'LongDatetime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'EED'" field="'Entity.EndEffectiveTime'" type="'LongDatetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rule Type'" field="'RouteRuleSettingsTypeName'" fixedwidth="'120'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.BeginEffectiveTime'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EndEffectiveTime'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
