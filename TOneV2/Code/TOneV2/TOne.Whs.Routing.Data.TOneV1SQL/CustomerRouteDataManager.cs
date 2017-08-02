@@ -168,12 +168,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             if (Routing_TOne_Testing)
             {
                 customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}^{15}", routeId, customer.SourceId, profile.SourceId, record.Code, saleZone.SourceId,
-                  record.Rate, customerServiceFlag, record.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), isToDAffected, isSpecialRequestAffected, isOverrideAffected, isBlockAffected, hasOptionBlock ? 1 : 0, 0, record.ExecutedRuleId);
+                    record.Rate.HasValue ? record.Rate.Value : -1, customerServiceFlag, record.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), isToDAffected, isSpecialRequestAffected, isOverrideAffected, isBlockAffected, hasOptionBlock ? 1 : 0, 0, record.ExecutedRuleId);
             }
             else
             {
                 customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", routeId, customer.SourceId, profile.SourceId, record.Code, saleZone.SourceId,
-                     record.Rate, customerServiceFlag, record.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), isToDAffected, isSpecialRequestAffected, isOverrideAffected, isBlockAffected, hasOptionBlock ? 1 : 0, 0);
+                     record.Rate.HasValue ? record.Rate.Value : -1, customerServiceFlag, record.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), isToDAffected, isSpecialRequestAffected, isOverrideAffected, isBlockAffected, hasOptionBlock ? 1 : 0, 0);
             }
         }
 
@@ -261,8 +261,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             query.AppendLine("EXEC sp_rename 'RoutePool_Temp','RoutePool';");
             query.AppendLine("EXEC sp_rename 'RouteOptionsPool_Temp','RouteOptionsPool';");
             query.AppendLine("EXEC sp_rename 'RouteBlockConcatinated_Temp','RouteBlockConcatinated';");
-            query.AppendLine("EXEC sp_rename 'PK_ZoneMatch_Temp','PK_ZoneMatch';");
-            
+
+            if (!Routing_TOne_Testing)
+                query.AppendLine("EXEC sp_rename 'PK_ZoneMatch_Temp','PK_ZoneMatch';");
+
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -304,10 +306,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 
         const string query_DropRouteBlockConcatinatedTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'RouteBlockConcatinated' AND TABLE_SCHEMA = 'dbo')
                                                                 drop table dbo.RouteBlockConcatinated;";
-        
+
         const string query_DropZoneMatchTable = @"if exists (select * from INFORMATION_SCHEMA.TABLES where TABLE_NAME = 'ZoneMatch' AND TABLE_SCHEMA = 'dbo')
                                                     drop table dbo.ZoneMatch;";
-        
+
         const string query_CreateZoneRateIndexes = @"  CREATE NONCLUSTERED INDEX [IX_ZoneRates_ServicesFlag] ON [dbo].[ZoneRates_Temp]
                                                         (
                                                             [ServicesFlag] ASC
