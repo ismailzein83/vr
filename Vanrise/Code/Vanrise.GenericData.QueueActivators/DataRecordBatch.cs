@@ -62,7 +62,7 @@ namespace Vanrise.GenericData.QueueActivators
 
         private static DataRecordBatch PrivateCreateBatchFromRecords(List<dynamic> records, string batchDescription, string dateTimeField)
         {
-            if (records == null || records.Count == 0)
+            if (records == null)
                 return null;
 
             HashSet<DateTime> distinctDateTimeValues = new HashSet<DateTime>();
@@ -79,8 +79,18 @@ namespace Vanrise.GenericData.QueueActivators
             if (batchDescription != null)
                 batchDescription = batchDescription.Replace("#RECORDSCOUNT#", batch._recordsCount.ToString());
 
-            batch._batchStart = distinctDateTimeValues.Min();
-            batch._batchEnd = distinctDateTimeValues.Max();
+            DateTime now = DateTime.Now;
+
+            if (distinctDateTimeValues.Count > 0)
+            {
+                batch._batchStart = distinctDateTimeValues.Min();
+                batch._batchEnd = distinctDateTimeValues.Max();
+            }
+            else
+            {
+                batch._batchStart = now;
+                batch._batchEnd = now;
+            }
             batch._batchDescription = batchDescription;
             return batch;
         }

@@ -30,12 +30,15 @@ namespace Vanrise.GenericData.QueueActivators
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
-            DataRecordBatch transformedBatch = DataRecordBatch.CreateBatchFromRecords(batchRecords, queueItemType.BatchDescription, recordTypeId);
-            if (this.OutputStages != null)
+            if (batchRecords != null && batchRecords.Count > 0)
             {
-                foreach (var stageName in this.OutputStages)
+                DataRecordBatch transformedBatch = DataRecordBatch.CreateBatchFromRecords(batchRecords, queueItemType.BatchDescription, recordTypeId);
+                if (this.OutputStages != null)
                 {
-                    context.OutputItems.Add(stageName, transformedBatch);
+                    foreach (var stageName in this.OutputStages)
+                    {
+                        context.OutputItems.Add(stageName, transformedBatch);
+                    }
                 }
             }
         }
