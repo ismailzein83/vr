@@ -60,6 +60,7 @@
     <Compile Include="ICDRSourceConfigDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="IDisputeCDRDataManager.cs" />
+    <Compile Include="IInvalidCDRDataManager.cs" />
     <Compile Include="IMissingCDRDataManager.cs" />
     <Compile Include="IPartialMatchCDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

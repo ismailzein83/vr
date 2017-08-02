@@ -85,6 +85,7 @@
     <Compile Include="DisputeCDRManager.cs" />
     <Compile Include="FileCDRSource.cs" />
     <Compile Include="FileCDRSourceManager.cs" />
+    <Compile Include="InvalidCDRManager.cs" />
     <Compile Include="MissingCDRManager.cs" />
     <Compile Include="PartialMatchCDRManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

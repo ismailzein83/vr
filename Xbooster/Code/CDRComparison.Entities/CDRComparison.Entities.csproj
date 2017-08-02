@@ -63,6 +63,10 @@
     <Compile Include="Enums.cs" />
     <Compile Include="ExcelFileCDRSample.cs" />
     <Compile Include="FileReaderConfigType.cs" />
+    <Compile Include="InvalidCDR\InvalidCDR.cs" />
+    <Compile Include="InvalidCDR\InvalidCDRBatch.cs" />
+    <Compile Include="InvalidCDR\InvalidCDRBigResult.cs" />
+    <Compile Include="InvalidCDR\InvalidCDRQuery.cs" />
     <Compile Include="MissingCDR\MissingCDR.cs" />
     <Compile Include="MissingCDR\MissingCDRBatch.cs" />
     <Compile Include="MissingCDR\MissingCDRBigResult.cs" />

@@ -90,6 +90,8 @@
     <Compile Include="CreateCDRTables.cs" />
     <Compile Include="DeleteCDRTables.cs" />
     <Compile Include="DisputeCDR\ApplyDisputeCDRsToDB.cs" />
+    <Compile Include="InvalidCDR\ApplyInvalidCDRsToDB.cs" />
+    <Compile Include="InvalidCDR\PrepareInvalidCDRsForDBApply.cs" />
     <Compile Include="MissingCDR\ApplyMissingCDRsToDB.cs" />
     <Compile Include="PartialMatchCDR\ApplyPartialMatchCDRsToDB.cs" />
     <Compile Include="CDR\LoadCDRs.cs" />

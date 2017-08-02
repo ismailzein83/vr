@@ -61,6 +61,7 @@
     <Compile Include="CDRDataManager.cs" />
     <Compile Include="CDRSourceConfigDataManager.cs" />
     <Compile Include="DisputeCDRDataManager.cs" />
+    <Compile Include="InvalidCDRDataManager.cs" />
     <Compile Include="MissingCDRDataManager.cs" />
     <Compile Include="PartialMatchCDRDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
