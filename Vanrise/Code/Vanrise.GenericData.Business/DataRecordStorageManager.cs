@@ -69,7 +69,7 @@ namespace Vanrise.GenericData.Business
                     input.Query.FilterGroup = filterGroup;
                 }
 
-                if (input.SortByColumnName.Contains("FieldValues"))
+                if (!string.IsNullOrEmpty(input.SortByColumnName) && input.SortByColumnName.Contains("FieldValues"))
                 {
                     string[] fieldValueproperty = input.SortByColumnName.Split('.');
                     input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldValueproperty[0], fieldValueproperty[1], fieldValueproperty[2]);
@@ -555,10 +555,13 @@ namespace Vanrise.GenericData.Business
                     TotalCount = 0
                 };
 
-
                 IEnumerable<DataRecordDetail> allRecordsDetails = DataRecordDetailMapperList(allRecords);
 
-                IOrderedEnumerable<DataRecordDetail> orderedRecords = allRecordsDetails.VROrderList(input);
+                IOrderedEnumerable<DataRecordDetail> orderedRecords;
+                if (!string.IsNullOrEmpty(input.SortByColumnName))
+                    orderedRecords = allRecordsDetails.VROrderList(input);
+                else
+                    orderedRecords = input.Query.Direction == OrderDirection.Ascending ? allRecordsDetails.OrderBy(itm => itm.RecordTime) : allRecordsDetails.OrderByDescending(itm => itm.RecordTime);
 
                 if (input.Query.SortColumns != null && input.Query.SortColumns.Count > 0)
                     orderedRecords = GetOrderedByFields(input.Query.SortColumns, orderedRecords);

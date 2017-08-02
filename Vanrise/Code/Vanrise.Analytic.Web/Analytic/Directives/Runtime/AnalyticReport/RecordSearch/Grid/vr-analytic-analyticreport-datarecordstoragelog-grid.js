@@ -56,7 +56,10 @@
                     }
                 };
 
-                ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
+                    if (!retrieveDataContext.isDataSorted) {
+                        dataRetrievalInput.SortByColumnName = null;
+                    }
                     return VR_GenericData_DataRecordStorageLogAPIService.GetFilteredDataRecordStorageLogs(dataRetrievalInput).then(function (response) {
                         if (response && response.Data) {
                             for (var z = 0; z < response.Data.length; z++) {
