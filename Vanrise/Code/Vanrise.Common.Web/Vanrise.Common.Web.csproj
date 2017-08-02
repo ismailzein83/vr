@@ -311,7 +311,6 @@
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\LastTimeDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\TodayDirectiveTemplate.html" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\Templates\CurrentMonthDirectiveTemplate.html" />
-    <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-last-days.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-today.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-currentmonth.js" />
     <Content Include="Common\Directives\VRTimePeriod\MainExtensions\vr-common-timeperiod-last-time.js" />

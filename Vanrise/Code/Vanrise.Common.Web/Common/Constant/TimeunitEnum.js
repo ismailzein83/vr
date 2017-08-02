@@ -1,4 +1,5 @@
 ﻿app.constant('VRCommon_TimeunitEnum', {
-    Hour: { value: 0, description: 'Hour' },
-    Minute: { value: 1, description: 'Minute' }
+    Day: { value: 0, description: 'Day' },
+    Hour: { value: 1, description: 'Hour' },
+    Minute: { value: 2, description: 'Minute' }
 });
