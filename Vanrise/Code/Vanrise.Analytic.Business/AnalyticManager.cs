@@ -305,12 +305,21 @@ namespace Vanrise.Analytic.Business
             }
             foreach (var dbRecordEntry in groupedRecordsByDimensionsKey)
             {
-                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecordEntry.Key, dbRecordEntry.Value, requestedDimensionNames, allDimensionNames, measureNames, measureStyleRulesDictionary, measureExternalSourcesResults);
+                bool allMeasuresAreNull = true;
+                AnalyticRecord analyticRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, dbRecordEntry.Key, dbRecordEntry.Value, requestedDimensionNames, allDimensionNames, measureNames, measureStyleRulesDictionary, measureExternalSourcesResults, out allMeasuresAreNull);
                 if (analyticTableQueryContext.Query.TimeGroupingUnit.HasValue)
                 {
                     timeForMissingData.Remove(analyticRecord.Time.Value);
                 }
-                analyticRecords.Add(analyticRecord);
+                if (analyticTableQueryContext.Query.TopRecords.HasValue)
+                {
+                    if (!allMeasuresAreNull)
+                      analyticRecords.Add(analyticRecord);
+                }
+                else
+                {
+                    analyticRecords.Add(analyticRecord);
+                }
             }
             if (timeForMissingData != null)
             {
@@ -322,7 +331,11 @@ namespace Vanrise.Analytic.Business
             }
 
             if (withSummary && summarySQLRecord != null)
-                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, null, summarySQLRecord, null, allDimensionNames, measureNames, null, measureExternalSourcesResults);
+            {
+                bool allSummaryMeasuresAreNull;
+                summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, null, summarySQLRecord, null, allDimensionNames, measureNames, null, measureExternalSourcesResults, out allSummaryMeasuresAreNull);
+            }
+               
             else
                 summaryRecord = null;
             return analyticRecords;
@@ -479,7 +492,7 @@ namespace Vanrise.Analytic.Business
         }
 
         private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, string groupingKey, DBAnalyticRecord dbRecord, List<string> dimensionNames,
-            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, Dictionary<string, AnalyticMeasureExternalSourceProcessedResult> measureExternalSourcesResults)
+            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, Dictionary<string, AnalyticMeasureExternalSourceProcessedResult> measureExternalSourcesResults,out bool allMeasuresAreNull)
         {
             AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dbRecord.Time, MeasureValues = new MeasureValues() };
 
@@ -498,10 +511,12 @@ namespace Vanrise.Analytic.Business
                 }
             }
             var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext, groupingKey, dbRecord, allDimensionNames, measureExternalSourcesResults);
+            allMeasuresAreNull = true;
             foreach (var measureName in measureNames)
             {
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
+              
                 RecordFilterManager filterManager = new RecordFilterManager();
                 string styleCode = null;
                 if (measureStyleRulesDictionary != null)
@@ -521,6 +536,8 @@ namespace Vanrise.Analytic.Business
                     }
 
                 }
+                if (measureValue != null)
+                    allMeasuresAreNull = false;
                 analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleCode = styleCode });
             }
 

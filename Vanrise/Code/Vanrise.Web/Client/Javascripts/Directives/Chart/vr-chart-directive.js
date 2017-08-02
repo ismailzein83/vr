@@ -256,7 +256,17 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
                     useHTML: true,
                     labelFormatter: function () {
                         if (currentChartSettings.showValuesWithLegends)
-                            return '<div style="width:200px"><span style="float:left" title="' + this.name + '">' + (this.name != null && this.name.length > 15 ? this.name.substring(0, 15) + '..' : this.name) + '</span><span style="float:right">' + this.y.toFixed(2) + '</span></div>';
+                        {
+                            var htmlText = '<div style="width:200px"><span style="float:left" title="' + this.name + '">' + (this.name != null && this.name.length > 15 ? this.name.substring(0, 15) + '..' : this.name) + '</span><span style="float:right">';
+                            if(this.y != undefined)
+                                htmlText += this.y.toFixed(2);
+                            else
+                                htmlText += this.y;
+
+                            htmlText += '</span></div>';
+                            return htmlText;
+                        }
+                       
                         else
                             return '<div style="width:10px" title="' + this.name + '">' + (this.name != null && this.name.length > 2 ? this.name.substring(0, 2) : this.name) + '</div>';
                     }
