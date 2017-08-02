@@ -59,12 +59,12 @@ app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService',
                     var timeUnitLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     timeUnitReadyPromiseDeferred.promise
                         .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(timeUnitAPI, {timeUnit:timeUnit}, timeUnitLoadPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(timeUnitAPI, { timeUnit: timeUnit }, timeUnitLoadPromiseDeferred);
                         });
                     promises.push(timeUnitLoadPromiseDeferred.promise);
                     return UtilsService.waitMultiplePromises(promises);
 
-                }
+                };
                     api.getData = function () {
                         return {
                             $type: "Vanrise.Common.MainExtensions.LastTimePeriod, Vanrise.Common.MainExtensions",
