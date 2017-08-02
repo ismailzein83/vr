@@ -49,7 +49,6 @@ namespace TOne.WhS.Routing.Data.SQL
 
         }
 
-
         public void FinalizeCustomerRouteDatabase(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP)
         {
             CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager() { RoutingDatabase = this.RoutingDatabase };
@@ -135,6 +134,8 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_TableTypes);
             query.AppendLine(query_SaleZoneTable);
             query.AppendLine(query_CarrierAccountTable);
+            query.AppendLine(query_CodeSaleZoneMatchTable);
+            query.AppendLine(query_CodeSupplierZoneMatchTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
