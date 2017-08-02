@@ -129,6 +129,7 @@
     <Compile Include="Controllers\CDRSourceController.cs" />
     <Compile Include="Controllers\DisputeCDRController.cs" />
     <Compile Include="Controllers\FileCDRSourceController.cs" />
+    <Compile Include="Controllers\InvalidCDRController.cs" />
     <Compile Include="Controllers\MissingCDRController.cs" />
     <Compile Include="Controllers\PartialMatchCDRController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
