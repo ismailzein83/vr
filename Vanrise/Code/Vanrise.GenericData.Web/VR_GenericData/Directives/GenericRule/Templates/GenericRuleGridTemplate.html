@@ -4,12 +4,12 @@
              on-ready="onGridReady"
              menuactions="gridMenuActions"
              idfield="Entity.RuleId" enableautoexport="true" normalcell>
-    <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.RuleId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" type="'Text'" field="'Entity.Description'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.RuleId'" fixedwidth="'50'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" type="'Text'" field="'Entity.Description'" fixedwidth="'200'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="field in ctrl.criteriaFields" headertext="field.Title" type="'Text'" field="'FieldValueDescriptions[' + field.fieldValueIndex + ']'" columnindex="2 + $index" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Settings'" type="'Text'" field="'SettingsDescription'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'BED'" type="'LongDatetime'" field="'Entity.BeginEffectiveTime'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'EED'" type="'LongDatetime'" field="'Entity.EndEffectiveTime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" type="'LongDatetime'" field="'Entity.BeginEffectiveTime'" fixedwidth="'120'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" type="'LongDatetime'" field="'Entity.EndEffectiveTime'" fixedwidth="'120'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
