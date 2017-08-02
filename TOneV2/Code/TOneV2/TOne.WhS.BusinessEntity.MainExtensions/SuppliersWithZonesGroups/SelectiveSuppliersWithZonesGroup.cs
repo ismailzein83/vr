@@ -20,19 +20,25 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SuppliersWithZonesGroups
 
         public override string GetDescription(ISuppliersWithZonesGroupContext context)
         {
-            var validSuppliersWithZoneIds = context != null ? context.GetSuppliersWithZones(this) : this.SuppliersWithZones;
-            if (validSuppliersWithZoneIds != null)
-            {
-                CarrierAccountManager manager = new CarrierAccountManager();
-                List<int> carrierAccountsIds=new List<int>();
-                foreach (SupplierWithZones validZoneId in validSuppliersWithZoneIds)
-                {
-                    carrierAccountsIds.Add(validZoneId.SupplierId);
-                }
-                return String.Format("{0}:(Supplier With Zones)", manager.GetDescription(carrierAccountsIds,false,true));
-            }
-            else
+            if (SuppliersWithZones == null || SuppliersWithZones.Count == 0)
                 return null;
+
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+            List<string> supplierWithZonesDescriptionList = new List<string>();
+            foreach (SupplierWithZones supplierWithZones in SuppliersWithZones)
+            {
+                string supplierWithZonesDescription = string.Format("{0}: ", carrierAccountManager.GetCarrierAccountName(supplierWithZones.SupplierId));
+
+                if (supplierWithZones.SupplierZoneIds != null && supplierWithZones.SupplierZoneIds.Count > 0)
+                    supplierWithZonesDescription += supplierZoneManager.GetDescription(supplierWithZones.SupplierZoneIds);
+                else
+                    supplierWithZonesDescription += "All Zones";
+
+                supplierWithZonesDescriptionList.Add(supplierWithZonesDescription);
+            }
+            return string.Join<string>("; ", supplierWithZonesDescriptionList);
         }
 
         public override void CleanDeletedZoneIds(ISupplierZoneGroupCleanupContext context)

@@ -38,13 +38,25 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.SupplierZoneGroups
 
         public override string GetDescription(ISupplierZoneGroupContext context)
         {
-            var validSupplierZonesIds = context != null ? context.GetGroupSupplierZoneIds(this) : null;
-            if (validSupplierZonesIds != null)
+            if (SuppliersWithZones == null || SuppliersWithZones.Count == 0)
+                return null;
+
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+            List<string> supplierWithZonesDescriptionList = new List<string>();
+            foreach (SupplierWithZones supplierWithZones in SuppliersWithZones)
             {
-                SupplierZoneManager manager = new SupplierZoneManager();
-                return manager.GetDescription(validSupplierZonesIds);
+                string supplierWithZonesDescription = string.Format("{0}: ", carrierAccountManager.GetCarrierAccountName(supplierWithZones.SupplierId));
+
+                if (supplierWithZones.SupplierZoneIds != null && supplierWithZones.SupplierZoneIds.Count > 0)
+                    supplierWithZonesDescription += supplierZoneManager.GetDescription(supplierWithZones.SupplierZoneIds);
+                else
+                    supplierWithZonesDescription += "All Zones";
+
+                supplierWithZonesDescriptionList.Add(supplierWithZonesDescription);
             }
-            return null;
+            return string.Join<string>("; ", supplierWithZonesDescriptionList);
         }
 
 
