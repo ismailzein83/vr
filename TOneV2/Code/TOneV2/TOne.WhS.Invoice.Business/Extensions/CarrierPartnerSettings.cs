@@ -180,11 +180,25 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
             var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
+            VRAccountStatus status = VRAccountStatus.InActive;
+            if(invoiceAccount.CarrierProfileId.HasValue)
+            {
+                if(new CarrierAccountManager().IsCarrierAccountActive(invoiceAccount.CarrierAccountId.Value))
+                {
+                    status = VRAccountStatus.Active;
+                }
+            }else if(invoiceAccount.CarrierProfileId.HasValue)
+            {
+                var carrierProfileAcivationStatus = new CarrierProfileManager().GetCarrierProfileActivationStatus(invoiceAccount.CarrierProfileId.Value);
+               if(carrierProfileAcivationStatus == CarrierProfileActivationStatus.Active)
+                     status = VRAccountStatus.Active;
+            }
+           
             return new VRInvoiceAccountData
             {
                 BED = invoiceAccount.BED,
                 EED = invoiceAccount.EED,
-                Status = VRAccountStatus.Active
+                Status = status
             };
         }
     }
