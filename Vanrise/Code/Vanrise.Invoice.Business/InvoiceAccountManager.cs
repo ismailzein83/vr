@@ -69,5 +69,11 @@ namespace Vanrise.Invoice.Business
             }
            return true;
         }
+
+        public List<VRInvoiceAccount> GetInvoiceAccountsByPartnerIds(Guid invoiceTypeId, IEnumerable<string> partnerIds)
+        {
+            IInvoiceAccountDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceAccountDataManager>();
+            return dataManager.GetInvoiceAccountsByPartnerIds(invoiceTypeId,partnerIds);
+        }
     }
 }

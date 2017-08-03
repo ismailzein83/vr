@@ -63,7 +63,9 @@
     <Compile Include="BillingPeriod\StartDateCalculationMethod\BillingPeriodAccumulation.cs" />
     <Compile Include="BillingPeriod\WeeklyBillingPeriod.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="FilterCondition\ConditionGroupFilterCondition.cs" />
     <Compile Include="FilterCondition\FilterGroupCondition.cs" />
+    <Compile Include="FilterCondition\AccountActivationCondition.cs" />
     <Compile Include="FilterCondition\IsLockedGridFilterCondition.cs" />
     <Compile Include="FilterCondition\IsPaidFilterCondition.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceEmailActionController.cs" />

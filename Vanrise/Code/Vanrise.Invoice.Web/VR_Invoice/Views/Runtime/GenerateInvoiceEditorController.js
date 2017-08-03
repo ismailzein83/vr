@@ -12,6 +12,10 @@
         var partnerSelectorAPI;
         var partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var accountStatusSelectorAPI;
+        var accountStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+
         var timeZoneSelectorAPI;
         var timeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var selectedTimeZoneSelectorPayloadLoadDeferred;
@@ -36,6 +40,26 @@
         function defineScope() {
             $scope.scopeModel.actions = [];
             $scope.scopeModel.issueDate = new Date();
+            $scope.scopeModel.onAccountStatusSelectorReady = function (api) {
+                accountStatusSelectorAPI = api;
+                accountStatusSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onAccountStatusSelectionChanged = function (value) {
+                if (value != undefined) {
+                    if (partnerSelectorAPI != undefined) {
+                        var setLoader = function (value) {
+                            $scope.isLoadingDirective = value;
+                        };
+                        var partnerSelectorPayload = {
+                            context: getContext(),
+                            extendedSettings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings,
+                            invoiceTypeId: invoiceTypeId,
+                            filter: accountStatusSelectorAPI.getData()
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerSelectorAPI, partnerSelectorPayload, setLoader, partnerSelectorReadyDeferred);
+                    }
+                }
+            };
 
             $scope.scopeModel.onTimeZoneSelectorReady = function (api) {
                 timeZoneSelectorAPI = api;
@@ -182,15 +206,13 @@
             function loadPartnerSelectorDirective() {
                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
                 partnerSelectorReadyDeferred.promise.then(function () {
+                    partnerSelectorReadyDeferred = undefined;
                     var partnerSelectorPayload = {
                         context: getContext(),
                         extendedSettings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings,
                         invoiceTypeId: invoiceTypeId,
-                        filter: {
-                            Status: VR_Invoice_InvoiceAccountStatusEnum.Active.value,
-                            IsEffectiveInFuture:true,
-                            EffectiveDate:undefined
-                        }
+                        filter: accountStatusSelectorAPI.getData()
+
                     };
                     if (invoiceEntity != undefined && invoiceEntity.Invoice != undefined) {
                         partnerSelectorPayload.selectedIds = invoiceEntity.Invoice.PartnerId;
@@ -198,6 +220,19 @@
                     VRUIUtilsService.callDirectiveLoad(partnerSelectorAPI, partnerSelectorPayload, partnerSelectorPayloadLoadDeferred);
                 });
                 return partnerSelectorPayloadLoadDeferred.promise;
+            }
+            function loadAccountStatusSelectorDirective() {
+                var accountStatusSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+                accountStatusSelectorReadyDeferred.promise.then(function () {
+                    var accountStatusSelectorPayload = {
+                        selectFirstItem: true,
+                        dontShowInActive:true
+                    };
+                    if ($scope.scopeModel.isEditMode)
+                        accountStatusSelectorPayload.selectedIds = VR_Invoice_InvoiceAccountStatusEnum.ActiveAndExpired.value;
+                    VRUIUtilsService.callDirectiveLoad(accountStatusSelectorAPI, accountStatusSelectorPayload, accountStatusSelectorPayloadLoadDeferred);
+                });
+                return accountStatusSelectorPayloadLoadDeferred.promise;
             }
             function loadStaticData() {
                 if(invoiceEntity != undefined)
@@ -241,7 +276,7 @@
                 }
             }
             
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadAccountStatusSelectorDirective, loadPartnerSelectorDirective]).then(function () {
                 var promise = loadTimeZoneSelector();
                 if(promise != undefined)
                 {

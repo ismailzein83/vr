@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,5 +44,34 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceAccount_TryUpdateEffectiveDate", invoiceTypeId, partnerId, bed, eed);
             return (affectedRows > -1);
         }
+        public List<VRInvoiceAccount> GetInvoiceAccountsByPartnerIds(Guid invoiceTypeId, IEnumerable<string> partnerIds)
+        {
+            string stringPartnerIds = null;
+            if (partnerIds != null)
+            {
+                stringPartnerIds = String.Join<string>(",", partnerIds);
+            }
+            return GetItemsSP("VR_Invoice.sp_InvoiceAccount_GetByPartnerIds", VRInvoiceAccountMapper,invoiceTypeId, stringPartnerIds);
+        }
+
+        #region Mappers
+        VRInvoiceAccount VRInvoiceAccountMapper(IDataReader reader)
+        {
+            return new VRInvoiceAccount
+            {
+                Status =  GetReaderValue<VRAccountStatus>(reader,"Status"),
+                BED= GetReaderValue<DateTime>(reader,"BED"),
+                EED= GetReaderValue<DateTime?>(reader,"EED"),
+                InvoiceAccountId= GetReaderValue<long>(reader,"ID"),
+                InvoiceTypeId= GetReaderValue<Guid>(reader,"InvoiceTypeId"),
+                IsDeleted= GetReaderValue<bool>(reader,"IsDeleted"),
+                PartnerId = reader["PartnerId"] as string
+            };
+        }
+
+        #endregion
+
+
+        
     }
 }

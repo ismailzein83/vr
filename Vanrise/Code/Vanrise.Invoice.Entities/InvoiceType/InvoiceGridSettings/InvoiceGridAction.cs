@@ -27,10 +27,13 @@ namespace Vanrise.Invoice.Entities
     {
         Invoice Invoice { get; set; }
         InvoiceType InvoiceType { get; set; }
+        VRInvoiceAccount InvoiceAccount { get;}
+
     }
     public class InvoiceGridActionFilterConditionContext : IInvoiceGridActionFilterConditionContext
     {
         public Invoice Invoice { get; set; }
         public InvoiceType InvoiceType { get; set; }
+        public VRInvoiceAccount InvoiceAccount { get; set; }
     }
 }

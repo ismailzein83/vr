@@ -60,11 +60,20 @@
                     var filter;
                     var selectedIds;
                     var selectFirstItem;
+                    var dontShowInActive;
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
-                        ctrl.datasource = UtilsService.getArrayEnum(VR_Invoice_InvoiceAccountStatusEnum);
                         selectFirstItem = payload.selectFirstItem;
+                        dontShowInActive = payload.dontShowInActive;
+                        ctrl.datasource.push(VR_Invoice_InvoiceAccountStatusEnum.Active);
+                        if(dontShowInActive)
+                        {
+                            ctrl.datasource.push(VR_Invoice_InvoiceAccountStatusEnum.ActiveAndExpired);
+                        }else
+                        {
+                            ctrl.datasource.push(VR_Invoice_InvoiceAccountStatusEnum.All);
+                        }
                     }
                     if (selectedIds) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
@@ -87,10 +96,15 @@
                             case VR_Invoice_InvoiceAccountStatusEnum.Active.value:
                                 returnedObj.Status = selectedValue;
                                 returnedObj.IsEffectiveInFuture = true;
-                                returnedObj.EffectiveDate = undefined;
+                                returnedObj.EffectiveDate = new Date();
                                 break;
                             case VR_Invoice_InvoiceAccountStatusEnum.All.value:
                                 returnedObj.Status = undefined;
+                                returnedObj.IsEffectiveInFuture = undefined;
+                                returnedObj.EffectiveDate = undefined;
+                                break;
+                            case VR_Invoice_InvoiceAccountStatusEnum.ActiveAndExpired.value:
+                                returnedObj.Status = VR_Invoice_InvoiceAccountStatusEnum.Active.value;
                                 returnedObj.IsEffectiveInFuture = undefined;
                                 returnedObj.EffectiveDate = undefined;
                                 break;

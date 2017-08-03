@@ -43,9 +43,16 @@ namespace Vanrise.Invoice.Business
                var  bigResult = result as Vanrise.Entities.BigResult<InvoiceDetail>;
                if (!getClientInvoices && bigResult.Data != null)
                 {
-                    foreach (var accountDetail in bigResult.Data)
+
+                    var partnerIds = bigResult.Data.Select(x => x.Entity.PartnerId);
+
+                    var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(input.Query.InvoiceTypeId, partnerIds);
+                    invoiceAccounts.ThrowIfNull("invoiceAccounts");
+                    foreach (var invoice in bigResult.Data)
                     {
-                        InvoiceDetailMapper2(accountDetail, invoiceType);
+                        var invoiceAccount = invoiceAccounts.FindRecord(x => x.PartnerId == invoice.Entity.PartnerId && x.InvoiceTypeId == invoice.Entity.InvoiceTypeId);
+                        invoiceAccount.ThrowIfNull("invoiceAccount");
+                        InvoiceDetailMapper2(invoice, invoiceType, invoiceAccount);
                     }
                 }
                return bigResult;
@@ -106,7 +113,11 @@ namespace Vanrise.Invoice.Business
                     if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, createInvoiceInput.InvoiceId, billingTarnsactions, out insertedInvoiceId))
                     {
                         updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                        var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType);
+                        var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> { invoice.PartnerId });
+                        invoiceAccounts.ThrowIfNull("invoiceAccounts");
+                        var invoiceAccount = invoiceAccounts.FirstOrDefault();
+
+                        var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType, invoiceAccount);
                         updateOperationOutput.UpdatedObject = invoiceDetail;
                         updateOperationOutput.Message = "Invoice Generated Successfully.";
                         updateOperationOutput.ShowExactMessage = true;
@@ -195,7 +206,22 @@ namespace Vanrise.Invoice.Business
                 if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, null, billingTransactions, out insertedInvoiceId))
                 {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType);
+                    long invoiceAccountId;
+                    InvoiceAccountManager invoiceAccountManager = new InvoiceAccountManager();
+                    invoiceAccountManager.TryAddInvoiceAccount(new VRInvoiceAccount
+                    {
+                        InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
+                        Status = invoiceAccountData.Status,
+                        IsDeleted = false,
+                        PartnerId = createInvoiceInput.PartnerId,
+                        BED = invoiceAccountData.BED,
+                        EED = invoiceAccountData.EED
+                    }, out invoiceAccountId);
+
+
+                    var invoiceAccounts = invoiceAccountManager.GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> {invoice.PartnerId} );
+
+                    var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType, invoiceAccounts);
                     insertOperationOutput.InsertedObject = invoiceDetail;
                     insertOperationOutput.Message = "Invoice Generated Successfully.";
                     insertOperationOutput.ShowExactMessage = true;
@@ -208,16 +234,7 @@ namespace Vanrise.Invoice.Business
                         NextPeriodStart = createInvoiceInput.ToDate.AddDays(1)
                     };
                     billingPeriodInfoManager.InsertOrUpdateBillingPeriodInfo(billingPeriodInfo);
-                    long invoiceAccountId;
-                    new InvoiceAccountManager().TryAddInvoiceAccount(new VRInvoiceAccount
-                    {
-                        InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
-                        Status = VRAccountStatus.Active,
-                        IsDeleted = false,
-                        PartnerId = createInvoiceInput.PartnerId,
-                        BED = invoiceAccountData.BED,
-                        EED = invoiceAccountData.EED
-                    }, out invoiceAccountId);
+                   
                 }
                 else
                 {
@@ -262,8 +279,11 @@ namespace Vanrise.Invoice.Business
 
             if (TryUpdateInvoice(invoice))
             {
+                var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> { invoice.PartnerId });
+                invoiceAccounts.ThrowIfNull("invoiceAccounts");
+                var invoiceAccount = invoiceAccounts.FirstOrDefault();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = InvoiceDetailMapper(invoice, invoiceType);
+                updateOperationOutput.UpdatedObject = InvoiceDetailMapper(invoice, invoiceType, invoiceAccount);
             }
             else
             {
@@ -295,7 +315,10 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             var invoice = dataManager.GetInvoice(invoiceId);
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
-            return InvoiceDetailMapper(invoice, invoiceType);
+            var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> { invoice.PartnerId });
+            invoiceAccounts.ThrowIfNull("invoiceAccounts");
+            var invoiceAccount = invoiceAccounts.FirstOrDefault();
+            return InvoiceDetailMapper(invoice, invoiceType, invoiceAccount);
         }
 
         public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId, string partnerId)
@@ -339,7 +362,8 @@ namespace Vanrise.Invoice.Business
             }
             if ((invoiceAccountData.EED.HasValue && billingInterval.ToDate > invoiceAccountData.EED.Value))
             {
-                billingInterval.ToDate = invoiceAccountData.EED.Value;
+                var toDate = invoiceAccountData.EED.Value.AddDays(-1);
+                billingInterval.ToDate = new DateTime(toDate.Year,toDate.Month,toDate.Day,23,59,59);
             }
             return billingInterval;
         }
@@ -452,11 +476,11 @@ namespace Vanrise.Invoice.Business
         #endregion
 
         #region Mappers
-        private static InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice, InvoiceType invoiceType)
+        private static InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice, InvoiceType invoiceType, VRInvoiceAccount invoiceAccount)
         {
 
             var invoiceDetail = InvoiceDetailMapper1(invoice, invoiceType);
-            InvoiceDetailMapper2(invoiceDetail, invoiceType);
+            InvoiceDetailMapper2(invoiceDetail, invoiceType, invoiceAccount);
             return invoiceDetail;
         }
 
@@ -521,7 +545,7 @@ namespace Vanrise.Invoice.Business
             }
 
         }
-        private static InvoiceDetail InvoiceDetailMapper2(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
+        private static InvoiceDetail InvoiceDetailMapper2(InvoiceDetail invoiceDetail, InvoiceType invoiceType, VRInvoiceAccount invoiceAccount)
         {
             DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoiceDetail.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
             RecordFilterManager recordFilterManager = new RecordFilterManager();
@@ -534,7 +558,7 @@ namespace Vanrise.Invoice.Business
                     invoiceDetail.SectionsTitle.Add(section.SectionTitle);
                 }
             }
-            InvoiceGridActionFilterConditionContext invoiceFilterConditionContext = new InvoiceGridActionFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType };
+            InvoiceGridActionFilterConditionContext invoiceFilterConditionContext = new InvoiceGridActionFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType ,InvoiceAccount = invoiceAccount};
             foreach (var action in invoiceType.Settings.InvoiceGridSettings.InvoiceGridActions)
             {
                 if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(invoiceFilterConditionContext))

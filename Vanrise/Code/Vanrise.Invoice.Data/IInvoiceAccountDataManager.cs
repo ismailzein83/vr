@@ -13,5 +13,6 @@ namespace Vanrise.Invoice.Data
         bool InsertInvoiceAccount(VRInvoiceAccount invoiceAccount, out long insertedId);
         bool TryUpdateInvoiceAccountStatus(Guid invoiceTypeId, string partnerId, VRAccountStatus status, bool isDeleted);
         bool TryUpdateInvoiceAccountEffectiveDate(Guid invoiceTypeId, string partnerId, DateTime? bed, DateTime? eed);
+        List<VRInvoiceAccount> GetInvoiceAccountsByPartnerIds(Guid invoiceTypeId, IEnumerable<string> partnerIds);
     }
 }
