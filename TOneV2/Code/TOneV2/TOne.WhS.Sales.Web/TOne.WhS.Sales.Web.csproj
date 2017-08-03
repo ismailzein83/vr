@@ -281,6 +281,8 @@
     <Content Include="WhS_Sales\Views\RatePlanPreviewController.js" />
     <Content Include="WhS_Sales\Views\RatePlanPricingSettings.html" />
     <Content Include="WhS_Sales\Views\RatePlanPricingSettingsController.js" />
+    <Content Include="WhS_Sales\Views\RatePlanSellingzonesWithDefaultRates.html" />
+    <Content Include="WhS_Sales\Views\RatePlanSellingzonesWithDefaultRatesController.js" />
     <Content Include="WhS_Sales\Views\RatePlanSettings.html" />
     <Content Include="WhS_Sales\Views\RatePlanSettingsController.js" />
     <Content Include="WhS_Sales\Views\RPRouteOptionSupplier.html" />
