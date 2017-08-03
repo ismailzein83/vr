@@ -17,7 +17,7 @@ namespace TOne.WhS.RouteSync.Entities
 
         SwitchSyncOutput SwitchSyncOutput { set; }
 
-        Action<Exception> WriteBusinessHandledException { get; }
+        Action<Exception, bool> WriteBusinessHandledException { get; }
     }
 
     public class SwapTableContext : ISwapTableContext
@@ -34,6 +34,6 @@ namespace TOne.WhS.RouteSync.Entities
 
         public SwitchSyncOutput PreviousSwitchSyncOutput { get; set; }
 
-        public Action<Exception> WriteBusinessHandledException { get; set; }
+        public Action<Exception, bool> WriteBusinessHandledException { get; set; }
     }
 }

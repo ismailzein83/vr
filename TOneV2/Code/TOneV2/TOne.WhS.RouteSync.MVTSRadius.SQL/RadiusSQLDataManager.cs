@@ -172,7 +172,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         #endregion
 
         private void ExecMVTSRadiusSQLDataManagerAction(Action<MVTSRadiusSQLDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
-            Action<Exception> writeBusinessHandledException, bool isBusinessException, string businessExceptionMessage, out SwitchSyncOutput switchSyncOutput)
+            Action<Exception, bool> writeBusinessHandledException, bool isBusinessException, string businessExceptionMessage, out SwitchSyncOutput switchSyncOutput)
         {
             PrepareDataManagers();
             HashSet<int> failedNodeIndexes = null;
@@ -206,7 +206,7 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
                         string exceptionDetail = ex.ToString();
                         exceptions.TryAdd(i, new MVTSRadiusSWSyncOutput() { ItemIndex = i, ErrorBusinessMessage = errorBusinessMessage, ExceptionDetail = exceptionDetail });
                         Exception exception = isBusinessException ? new VRBusinessException(string.Format("Error occured while {0} Database {1} for Switch '{2}'", businessExceptionMessage, i + 1, switchName), ex) : ex;
-                        writeBusinessHandledException(exception);
+                        writeBusinessHandledException(exception, false);
                     }
                 }
             });

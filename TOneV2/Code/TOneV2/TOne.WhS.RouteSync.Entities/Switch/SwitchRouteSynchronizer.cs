@@ -50,9 +50,7 @@ namespace TOne.WhS.RouteSync.Entities
 
         SwitchSyncOutput SwitchSyncOutput { set; }
 
-        //Action<LogEntryType, string, object[]> WriteTrackingMessage { get; }
-
-        Action<Exception> WriteBusinessHandledException { get; }
+        Action<Exception, bool> WriteBusinessHandledException { get; }
     }
 
     public interface ISwitchRouteSynchronizerConvertRoutesContext
@@ -88,7 +86,7 @@ namespace TOne.WhS.RouteSync.Entities
 
         SwitchSyncOutput SwitchSyncOutput { set; }
 
-        Action<Exception> WriteBusinessHandledException { get; }
+        Action<Exception, bool> WriteBusinessHandledException { get; }
     }
 
     public interface ISwitchRouteSynchronizerPrepareDataForApplyContext
@@ -116,7 +114,7 @@ namespace TOne.WhS.RouteSync.Entities
 
         SwitchSyncOutput SwitchSyncOutput { set; }
 
-        Action<Exception> WriteBusinessHandledException { get; }
+        Action<Exception, bool> WriteBusinessHandledException { get; }
     }
     public interface ITryBlockCustomerContext
     {

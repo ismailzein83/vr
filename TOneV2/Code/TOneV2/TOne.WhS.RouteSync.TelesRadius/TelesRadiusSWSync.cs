@@ -31,7 +31,7 @@ namespace TOne.WhS.RouteSync.TelesRadius
             List<ConvertedRoute> radiusRoutes = new List<ConvertedRoute>();
             foreach (var route in context.Routes)
             {
-                if (CarrierMappings.TryGetValue(route.CustomerId, out carrierMapping))
+                if (CarrierMappings.TryGetValue(route.CustomerId, out carrierMapping) && carrierMapping.CustomerMapping != null)
                 {
                     foreach (string CustomerMapping in carrierMapping.CustomerMapping)
                     {
@@ -57,7 +57,7 @@ namespace TOne.WhS.RouteSync.TelesRadius
             if (options != null)
                 foreach (RouteOption routeOption in options)
                 {
-                    if (CarrierMappings.TryGetValue(routeOption.SupplierId, out carrierMapping))
+                    if (CarrierMappings.TryGetValue(routeOption.SupplierId, out carrierMapping) && carrierMapping.SupplierMapping != null)
                     {
                         foreach (string supplierMapping in carrierMapping.SupplierMapping)
                         {

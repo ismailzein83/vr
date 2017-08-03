@@ -106,7 +106,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
         private class SwitchRouteSynchronizerApplyRoutesContext : ISwitchRouteSynchronizerApplyRoutesContext
         {
-            public SwitchRouteSynchronizerApplyRoutesContext(Object preparedItemsForApply, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception> writeBusinessHandledException)
+            public SwitchRouteSynchronizerApplyRoutesContext(Object preparedItemsForApply, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception, bool> writeBusinessHandledException)
             {
                 PreparedItemsForApply = preparedItemsForApply;
                 SwitchId = switchId;
@@ -122,7 +122,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
             public SwitchSyncOutput PreviousSwitchSyncOutput { get; set; }
 
-            public Action<Exception> WriteBusinessHandledException { get; set; }
+            public Action<Exception, bool> WriteBusinessHandledException { get; set; }
 
             public string SwitchName { get; set; }
         }

@@ -99,7 +99,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
         private class SwitchRouteSynchronizerFinalizeContext : ISwitchRouteSynchronizerFinalizeContext
         {
             public SwitchRouteSynchronizerFinalizeContext(RouteRangeType? routeRangeType, SwitchRouteSyncInitializationData initializationData, Action<LogEntryType, string, object[]> writeTrackingMessage,
-                string switchName, int indexesCommandTimeoutInSeconds, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception> writeBusinessHandledException)
+                string switchName, int indexesCommandTimeoutInSeconds, string switchId, SwitchSyncOutput previousSwitchSyncOutput, Action<Exception, bool> writeBusinessHandledException)
             {
                 RouteRangeType = routeRangeType;
                 InitializationData = initializationData;
@@ -127,7 +127,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
             public SwitchSyncOutput PreviousSwitchSyncOutput { get; set; }
 
-            public Action<Exception> WriteBusinessHandledException { get; set; }
+            public Action<Exception, bool> WriteBusinessHandledException { get; set; }
         }
         #endregion
     }

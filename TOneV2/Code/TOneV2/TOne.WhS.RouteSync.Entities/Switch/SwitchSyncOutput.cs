@@ -11,10 +11,10 @@ namespace TOne.WhS.RouteSync.Entities
         public string ErrorBusinessMessage { get; set; }
         public string ExceptionDetail { get; set; }
 
-        public virtual void LogMessage(string switchName, Action<Exception> writeHandledExceptionMessages)
+        public virtual void LogMessage(string switchName, Action<Exception, bool> writeHandledExceptionMessages)
         {
             VRBusinessException ex = new VRBusinessException(string.Format("Switch '{0}' is not synchronised", switchName), new Exception(ExceptionDetail));
-            writeHandledExceptionMessages(ex);
+            writeHandledExceptionMessages(ex, true);
         }
 
         public virtual string GetUniqueMessageKey(string switchId) 

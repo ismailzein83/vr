@@ -43,7 +43,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
                     SwitchInfo switchInfo = switchManager.GetSwitches(new List<string>() { switchSyncOutput.SwitchId }).FirstOrDefault();
                     if (switchSyncOutput.SwitchRouteSynchroniserOutputList == null || switchSyncOutput.SwitchRouteSynchroniserOutputList.Count == 0)
                     {
-                        handle.SharedInstanceData.WriteBusinessTrackingMsg(LogEntryType.Warning, "Switch '{0}' is not synchronised", switchInfo.Name);
+                        handle.SharedInstanceData.WriteBusinessTrackingMsg(LogEntryType.Error, "Switch '{0}' is not synchronised", switchInfo.Name);
                     }
                     else
                     {
@@ -52,7 +52,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
                             string msgUniqueKey = switchRouteSynchroniserOutput.GetUniqueMessageKey(switchSyncOutput.SwitchId);
                             if (!loggedMessagesKey.Contains(msgUniqueKey))
                             {
-                                switchRouteSynchroniserOutput.LogMessage(switchInfo.Name, handle.SharedInstanceData.WriteBusinessHandledException);
+                                switchRouteSynchroniserOutput.LogMessage(switchInfo.Name, handle.SharedInstanceData.WriteHandledException);
                                 loggedMessagesKey.Add(msgUniqueKey);
                             }
                         }

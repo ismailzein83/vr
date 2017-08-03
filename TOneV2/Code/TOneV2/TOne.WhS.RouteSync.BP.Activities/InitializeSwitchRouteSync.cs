@@ -65,7 +65,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
             public SwitchSyncOutput SwitchSyncOutput { get; set; }
 
-            public Action<Exception> WriteBusinessHandledException { get; set; }
+            public Action<Exception, bool> WriteBusinessHandledException { get; set; }
 
             public string SwitchName { get; set; }
         }
