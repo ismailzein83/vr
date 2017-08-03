@@ -1,6 +1,6 @@
-﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "CDRAnalysis_PSTN_SwitchAPIService", "CDRAnalysis_PSTN_TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "ValuesAPIService", "VRNotificationService", "NormalizationRuleAPIService"];
+﻿NormalizationRuleManagementController.$inject = ["$scope", "PSTN_BE_Service", "CDRAnalysis_PSTN_SwitchAPIService", "CDRAnalysis_PSTN_TrunkAPIService", "PSTN_BE_PhoneNumberTypeEnum", "PSTN_BE_NormalizationRuleTypeEnum", "UtilsService", "VRNotificationService", "NormalizationRuleAPIService"];
 
-function NormalizationRuleManagementController($scope, PSTN_BE_Service, CDRAnalysis_PSTN_SwitchAPIService, CDRAnalysis_PSTN_TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, ValuesAPIService, VRNotificationService, NormalizationRuleAPIService) {
+function NormalizationRuleManagementController($scope, PSTN_BE_Service, CDRAnalysis_PSTN_SwitchAPIService, CDRAnalysis_PSTN_TrunkAPIService, PSTN_BE_PhoneNumberTypeEnum, PSTN_BE_NormalizationRuleTypeEnum, UtilsService, VRNotificationService, NormalizationRuleAPIService) {
 
     var gridAPI;
 
