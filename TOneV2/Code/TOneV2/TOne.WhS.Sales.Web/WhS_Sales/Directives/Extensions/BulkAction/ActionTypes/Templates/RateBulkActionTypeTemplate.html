@@ -24,5 +24,8 @@
         <vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}">
             <vr-datetimepicker type="date" label="BED" value="scopeModel.beginEffectiveDate" onvaluechanged="scopeModel.onBulkActionChanged"></vr-datetimepicker>
         </vr-columns>
+        <vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}" ng-show="scopeModel.showRateSource">
+            <vr-whs-sales-ratesource-selector ismultipleselection on-ready="scopeModel.onRateSourceSelectorReady"></vr-whs-sales-ratesource-selector>
+        </vr-columns>
     </div>
 </div>

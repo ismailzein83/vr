@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', 'WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_RatePlanAPIService, WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', 'WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService','WhS_BE_SalePriceListOwnerTypeEnum', function (WhS_Sales_RatePlanAPIService, WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService,WhS_BE_SalePriceListOwnerTypeEnum) {
     return {
         restrict: "E",
         scope: {
@@ -27,6 +27,10 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
         var rateCalculationMethodSelectorAPI;
         var rateCalculationMethodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+
+        var rateSourceSelectorAPI;
+        var rateSourceSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var directiveAPI;
         var directiveReadyDeferred;
 
@@ -35,9 +39,16 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
             $scope.scopeModel = {};
             $scope.scopeModel.rateCalculationMethods = [];
 
+            $scope.scopeModel.showRateSource = false;
+
             $scope.scopeModel.onRateCalculationMethodSelectorReady = function (api) {
                 rateCalculationMethodSelectorAPI = api;
                 rateCalculationMethodSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onRateSourceSelectorReady = function (api) {
+                rateSourceSelectorAPI = api;
+                rateSourceSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onDirectiveReady = function (api) {
@@ -55,7 +66,7 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                 WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
             };
 
-            UtilsService.waitMultiplePromises([rateCalculationMethodSelectorReadyDeferred.promise]).then(function () {
+            UtilsService.waitMultiplePromises([rateCalculationMethodSelectorReadyDeferred.promise, rateSourceSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
             });
         }
@@ -79,12 +90,18 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                         rateCalculationMethod = payload.bulkAction.RateCalculationMethod;
                         $scope.scopeModel.beginEffectiveDate = payload.bulkAction.BED;
                     }
+
+                    if (bulkActionContext.ownerType != undefined && bulkActionContext.ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value)
+                        $scope.scopeModel.showRateSource = true;
                 }
 
                 var promises = [];
 
                 var loadRateCalculationMethodExtensionConfigsPromise = loadRateCalculationMethodExtensionConfigs();
                 promises.push(loadRateCalculationMethodExtensionConfigsPromise);
+
+                var loadRateSourcePromise = loadRateSourceSelector();
+                promises.push(loadRateSourcePromise);
 
                 if (rateCalculationMethod != undefined) {
                     directiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -102,6 +119,16 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                                 $scope.scopeModel.selectedRateCalculationMethod = UtilsService.getItemByVal($scope.scopeModel.rateCalculationMethods, rateCalculationMethod.ConfigId, 'ExtensionConfigurationId');
                         }
                     });
+                }
+
+                function loadRateSourceSelector() {
+                    var rateSourceLoadDeferred = UtilsService.createPromiseDeferred();
+                    rateSourceSelectorReadyDeferred.promise.then(function () {
+                        var payload = {};
+                        VRUIUtilsService.callDirectiveLoad(rateSourceSelectorAPI, payload, rateSourceLoadDeferred);
+
+                    });
+                    return rateSourceLoadDeferred.promise;
                 }
                 function loadDirective() {
                     var directiveLoadDeferred = UtilsService.createPromiseDeferred();

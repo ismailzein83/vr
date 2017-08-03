@@ -167,6 +167,7 @@
     <Content Include="WhS_Sales\Constants\CountrySelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\CustomerSelectionTypeEnum.js" />
     <Content Include="WhS_Sales\Constants\MarginRateCalculateMethodType.js" />
+    <Content Include="WhS_Sales\Constants\RateSourceEnum.js" />
     <Content Include="WhS_Sales\Constants\MarginTypesEnum.js" />
     <Content Include="WhS_Sales\Constants\ModuleConfig.js" />
     <Content Include="WhS_Sales\Constants\PeriodTypes.js" />
@@ -176,6 +177,7 @@
     <Content Include="WhS_Sales\Constants\SpecificApplicableZoneEntityTypeEnum.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionTypeSelectiveTemplate.html" />
     <Content Include="WhS_Sales\Directives\BulkAction\Templates\BulkActionZoneFilterSelectiveTemplate.html" />
+    <Content Include="WhS_Sales\Directives\BulkAction\vr-whs-sales-ratesource-selector.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\vr-whs-sales-bulkaction-zonefilter-selective.js" />
     <Content Include="WhS_Sales\Directives\BulkAction\vr-whs-sales-bulkaction-type-selective.js" />
     <Content Include="WhS_Sales\Directives\CodeCompare\Templates\CodeCompareGrid.html" />

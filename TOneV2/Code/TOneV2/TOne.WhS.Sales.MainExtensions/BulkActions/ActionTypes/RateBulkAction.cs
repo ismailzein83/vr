@@ -38,6 +38,9 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public DateTime? BED { get; set; }
 
+
+        public List<RateSource> RateSources { get; set; }
+
         #region Bulk Action Members
 
         public override Guid ConfigId
