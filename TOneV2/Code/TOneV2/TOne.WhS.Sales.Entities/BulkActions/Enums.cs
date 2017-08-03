@@ -20,4 +20,10 @@ namespace TOne.WhS.Sales.Entities
         Negative = 3,
         EqualsCurrentNormalRate = 4
     }
+
+    public enum RateSource
+    {
+        Explicit = 0,
+        Inherited = 1
+    }
 }
