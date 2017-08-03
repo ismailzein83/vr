@@ -393,6 +393,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Send All',
                     class: "glyphicon glyphicon-envelope"
                 };
+            case 'Compare':
+                return {
+                    text: 'Compare',
+                    class: "glyphicon glyphicon-retweet"
+                };
         }
     }
 }]);

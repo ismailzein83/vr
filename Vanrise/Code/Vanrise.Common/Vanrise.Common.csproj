@@ -90,6 +90,7 @@
     <Compile Include="DataRetrieval\ConvertResultToExcelDataContext.cs" />
     <Compile Include="DataRetrieval\RemoteExcelManager.cs" />
     <Compile Include="DataRetrieval\ExcelManager.cs" />
+    <Compile Include="LabelColorManager.cs" />
     <Compile Include="PasswordGenerator.cs" />
     <Compile Include="PathResolver.cs" />
     <Compile Include="ServiceClientFactory.cs" />

@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -71,6 +72,7 @@
     <Compile Include="Country\CountryFilter.cs" />
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
     <Compile Include="EntityFilterEffectiveMode.cs" />
+    <Compile Include="LabelColor.cs" />
     <Compile Include="SalutationTypeEnum.cs" />
     <Compile Include="GenderTypeEnum.cs" />
     <Compile Include="GenericLKUP\GenericLKUPDefinitionConfig.cs" />

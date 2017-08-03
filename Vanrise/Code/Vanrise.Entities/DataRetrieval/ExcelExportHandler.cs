@@ -35,7 +35,13 @@ namespace Vanrise.Entities
 
     public class ExportExcelCell
     {
+        public ExcelCellStyle Style { get; set; }
         public dynamic Value { get; set; }
+    }
+    public class ExcelCellStyle
+    {
+        public bool IsBold { get; set; }
+        public LabelColor? Color { get; set; }
     }
 
     public class ExportExcelHeader

@@ -195,8 +195,7 @@ namespace Vanrise.Common
                     if (colIndex >= excelSheet.Header.Cells.Count)
                         throw new Exception(String.Format("Cell Index '{0}' in row '{1}' is greater than header cell count '{2}'", colIndex, rowIndex, excelSheet.Header.Cells.Count));
                     var headerCell = excelSheet.Header.Cells[colIndex];
-                    if (headerCell.CellType.HasValue)
-                        SetExcelCellFormat(excelCell, headerCell);
+                    SetExcelCellFormat(excelCell, headerCell, cell.Style);
                     excelCell.PutValue(cell.Value);
                     colIndex++;
                 }
@@ -273,8 +272,7 @@ namespace Vanrise.Common
                     if (colIndex >= excelSheet.Header.Cells.Count)
                         throw new Exception(String.Format("Cell Index '{0}' in row '{1}' is greater than header cell count '{2}'", colIndex, rowIndex, excelSheet.Header.Cells.Count));
                     var headerCell = excelSheet.Header.Cells[colIndex];
-                    if (headerCell.CellType.HasValue)
-                        SetExcelCellFormat(excelCell, headerCell);
+                    SetExcelCellFormat(excelCell, headerCell, cell.Style);
                     excelCell.PutValue(cell.Value);
                     colIndex++;
                 }
@@ -294,18 +292,34 @@ namespace Vanrise.Common
                 throw new ArgumentNullException("excelSheet.Rows");
         }
 
-        private void SetExcelCellFormat(Cell excelCell, ExportExcelHeaderCell headerCell)
+        private void SetExcelCellFormat(Cell excelCell, ExportExcelHeaderCell headerCell,ExcelCellStyle style)
         {
             var cellStyle = excelCell.GetDisplayStyle();
-            switch (headerCell.CellType.Value)
+            if (headerCell != null && headerCell.CellType.HasValue)
             {
-                case ExcelCellType.DateTime:
-                    if (!headerCell.DateTimeType.HasValue)
-                        throw new NullReferenceException("headerCell.DateTimeType");
-                    cellStyle.Custom = Utilities.GetDateTimeFormat(headerCell.DateTimeType.Value);
-                    excelCell.SetStyle(cellStyle);
-                    break;
+                switch (headerCell.CellType.Value)
+                {
+                    case ExcelCellType.DateTime:
+                        if (!headerCell.DateTimeType.HasValue)
+                            throw new NullReferenceException("headerCell.DateTimeType");
+                        cellStyle.Custom = Utilities.GetDateTimeFormat(headerCell.DateTimeType.Value);
+                        break;
+                }
             }
+            if (style != null)
+            {
+                cellStyle.Font.IsBold = style.IsBold;
+                if (style.Color.HasValue)
+                {
+                    var color = LabelColorManager.GetLabelParsedColor(style.Color.Value);
+                    cellStyle.BackgroundColor = color;
+                    cellStyle.ForegroundColor = color;
+                    cellStyle.Pattern = BackgroundType.VerticalStripe;
+                    cellStyle.Font.Color = Color.White;
+                }
+            }
+            excelCell.SetStyle(cellStyle);
+
         }
 
         private ExportExcelSheet ConvertResultToDefaultExcelFormat<T>(BigResult<T> result)
