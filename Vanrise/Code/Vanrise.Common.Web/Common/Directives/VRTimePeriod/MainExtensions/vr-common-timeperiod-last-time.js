@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService', 'VRCommon_TimeunitEnum',
-    function (UtilsService, VRUIUtilsService, VRCommon_TimeunitEnum) {
+app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService', 'VRCommon_TimeunitEnum', 'VRCommon_StartingFromEnum',
+    function (UtilsService, VRUIUtilsService, VRCommon_TimeunitEnum, VRCommon_StartingFromEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -32,51 +32,80 @@ app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService',
             this.initializeController = initializeController;
             var timeUnitAPI;
             var timeUnitReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
+            var startingfromAPI;
+            var startingfromReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
             function initializeController() {
+
                 $scope.scopeModel = {};
+
                 $scope.scopeModel.onTimeUnitReady = function (api) {
                     timeUnitAPI = api;
                     timeUnitReadyPromiseDeferred.resolve();
                 };
-                defineAPI();
+
+                $scope.scopeModel.onStartingfromReady = function (api) {
+                    startingfromAPI = api;
+                    startingfromReadyPromiseDeferred.resolve();
+                };
+
+                UtilsService.waitMultiplePromises([timeUnitReadyPromiseDeferred.promise, startingfromReadyPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+
             }
 
             function defineAPI() {
+
                 var api = {};
-                var promises = [];
-                var timeUnit;
+
                 api.load = function (payload) {
+                    var promises = [];
+                    var timeUnit;
+                    var startingfrom;
 
                     if (payload != undefined) {
                         $scope.scopeModel.timeValue = payload.timePeriod.TimeValue;
                         timeUnit = payload.timePeriod.TimeUnit;
-
+                        startingfrom = payload.timePeriod.StartingFrom;
                     }
 
-                    var timeUnitLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    timeUnitReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(timeUnitAPI, { timeUnit: timeUnit }, timeUnitLoadPromiseDeferred);
-                        });
-                    promises.push(timeUnitLoadPromiseDeferred.promise);
+                    function loadTimeUnit() {
+                        var timeunitPayload = {
+                            timeUnit: timeUnit
+                        };
+                        return timeUnitAPI.load(timeunitPayload);
+                    }
+
+                    function loadStartingFrom() {
+
+                        var startingFromPayload = {
+                            startingfrom: startingfrom
+                        };
+                        return startingfromAPI.load(startingFromPayload);
+                    }
+
+                    promises.push(loadTimeUnit());
+                    promises.push(loadStartingFrom());
+
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
-                    api.getData = function () {
-                        return {
-                            $type: "Vanrise.Common.MainExtensions.LastTimePeriod, Vanrise.Common.MainExtensions",
-                            TimeUnit: timeUnitAPI.getSelectedIds(),
-                            TimeValue:$scope.scopeModel.timeValue,
-                        };
+
+                api.getData = function () {
+                    return {
+                        $type: "Vanrise.Common.MainExtensions.LastTimePeriod, Vanrise.Common.MainExtensions",
+                        TimeUnit: timeUnitAPI.getSelectedIds(),
+                        StartingFrom: startingfromAPI.getSelectedIds(),
+                        TimeValue: $scope.scopeModel.timeValue,
                     };
+                };
 
-                    if (ctrl.onReady != null)
-                        ctrl.onReady(api);
-                }
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
+        }
 
-            return directiveDefinitionObject;
-        }]);
+        return directiveDefinitionObject;
+    }]);

@@ -65,13 +65,6 @@
                         timePeriod = payload.timePeriod;
                     }
 
-                    if (timePeriod != undefined) {
-                        var loadDirectivePromise = loadDirective();
-                        promises.push(loadDirectivePromise);
-                    }
-
-                    promises.push(getVRTimePeriodConfigs());
-
                     function getVRTimePeriodConfigs() {
                         return VRCommon_VRTimePeriodAPIService.GetVRTimePeriodConfigs().then(function (response) {
                             if (response != null) {
@@ -98,6 +91,13 @@
 
                         return directiveLoadDeferred.promise;
                     }
+                    if (timePeriod != undefined) {
+                        var loadDirectivePromise = loadDirective();
+                        promises.push(loadDirectivePromise);
+                    }
+
+                    promises.push(getVRTimePeriodConfigs());
+
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -124,7 +124,7 @@
 
             var template =
                   ' <vr-row>'
-                    + ' <vr-columns width="1/2row">'
+                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'

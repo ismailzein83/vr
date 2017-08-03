@@ -201,6 +201,7 @@
     <Content Include="Common\Constant\HourEnum.js" />
     <Content Include="Common\Constant\ModuleConfig.js" />
     <Content Include="Common\Constant\ProductInfoPropertyEnum.js" />
+    <Content Include="Common\Constant\StartingFromEnum.js" />
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
     <Content Include="Common\Constant\TimeunitEnum.js" />
     <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditGridTemplate.html" />
@@ -259,6 +260,7 @@
     <Content Include="Common\Directives\Settings\Templates\OverriddenConfigurationSettings.html" />
     <Content Include="Common\Directives\Settings\vr-common-overriddenconfiguration-settings.js" />
     <Content Include="Common\Directives\Settings\vr-common-settings-selector.js" />
+    <Content Include="Common\Directives\StartingFrom\vr-common-startingfrom-selector.js" />
     <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\Templates\StatusDefinitionBEEditor.html" />
     <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\vr-common-statusdefinitionbe-editor.js" />
     <Content Include="Common\Directives\StatusDefinition\Templates\StatusDefinitionGridTemplate.html" />
