@@ -76,10 +76,10 @@
                 return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             };
             $scope.scopeModel.validateEEDDate = function (date) {
-                if (!$scope.scopeModel.disableEED && $scope.scopeModel.endEffectiveDate != undefined && UtilsService.getDateFromDateTime($scope.scopeModel.endEffectiveDate) < UtilsService.getDateFromDateTime(new Date()))
-                {
-                    return "EED must not be less than today.";
-                }
+                //if (!$scope.scopeModel.disableEED && $scope.scopeModel.endEffectiveDate != undefined && UtilsService.getDateFromDateTime($scope.scopeModel.endEffectiveDate) < UtilsService.getDateFromDateTime(new Date()))
+                //{
+                //    return "EED must not be less than today.";
+                //}
                 return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             };
             $scope.scopeModel.save = function () {

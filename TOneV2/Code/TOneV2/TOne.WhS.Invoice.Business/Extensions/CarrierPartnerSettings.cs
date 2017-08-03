@@ -183,7 +183,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return new VRInvoiceAccountData
             {
                 BED = invoiceAccount.BED,
-                EED = invoiceAccount.EED
+                EED = invoiceAccount.EED,
+                Status = VRAccountStatus.Active
             };
         }
     }

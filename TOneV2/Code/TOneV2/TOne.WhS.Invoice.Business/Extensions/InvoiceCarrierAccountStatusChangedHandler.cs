@@ -41,7 +41,8 @@ namespace TOne.WhS.Invoice.Business
                         var lastInvoiceToDate = new Vanrise.Invoice.Business.InvoiceManager().GetLastInvoiceToDate(invoiceAccount.Settings.InvoiceTypeId, invoiceAccount.InvoiceAccountId.ToString());
                         if (lastInvoiceToDate.HasValue)
                         {
-                            invoiceAccount.EED = lastInvoiceToDate.Value;
+                            var eed = lastInvoiceToDate.Value.AddDays(1);
+                            invoiceAccount.EED = new DateTime(eed.Year, eed.Month, eed.Day, 0, 0, 0);
                         }
                         else
                         {
