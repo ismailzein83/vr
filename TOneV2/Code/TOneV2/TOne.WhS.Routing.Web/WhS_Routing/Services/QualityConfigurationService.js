@@ -14,9 +14,9 @@
             VRModalService.showModal('/Client/Modules/WhS_Routing/Directives/RouteSettings/Templates/QualityConfigurationEditor.html', undefined, modalSettings);
         }
 
-        function editQualityConfiguration(editQualityConfigurationObject, onQualityConfigurationUpdated) {
+        function editQualityConfiguration(qualityConfigurationEntity, onQualityConfigurationUpdated) {
             var modalParameters = {
-                editQualityConfigurationObject: editQualityConfigurationObject
+                qualityConfigurationEntity: qualityConfigurationEntity
             };
 
             var modalSettings = {};

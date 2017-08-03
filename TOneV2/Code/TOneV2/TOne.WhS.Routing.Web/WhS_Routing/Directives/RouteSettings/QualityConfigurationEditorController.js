@@ -7,7 +7,6 @@
     function qualityConfigurationEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_Routing_QualityConfigurationAPIService) {
 
         var isEditMode;
-        var setDefault;
         var qualityConfigurationEntity;
 
         var timePeriodApi;
@@ -20,16 +19,42 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                qualityConfigurationEntity = parameters.editQualityConfigurationObject.Entity;
+               qualityConfigurationEntity = parameters.qualityConfigurationEntity;
             }
             isEditMode = (qualityConfigurationEntity != undefined);
         }
 
         function defineScope() {
+
             $scope.scopeModel = {};
 
-
             $scope.scopeModel.qualityConfigurationFields = [];
+
+            $scope.scopeModel.qualityConfigurationSignsFields = [{
+                Name: '(',
+                Title: '(',
+                Expression: '(',
+            }, {
+                Name: ')',
+                Title: ')',
+                Expression: ')',
+            }, {
+                Name: '+',
+                Title: '+',
+                Expression: '+',
+            }, {
+                Name: '-',
+                Title: '-',
+                Expression: '-',
+            }, {
+                Name: '*',
+                Title: '*',
+                Expression: '*',
+            }, {
+                Name: '/',
+                Title: '/',
+                Expression: '/',
+            }];
 
             $scope.scopeModel.saveQualityConfiguration = function () {
                 if (isEditMode) {
@@ -52,7 +77,7 @@
                 if ($scope.scopeModel.expression == undefined)
                     $scope.scopeModel.expression = measure.Expression;
                 else
-                    $scope.scopeModel.expression += (" " + measure.Expression);
+                    $scope.scopeModel.expression += " " + measure.Expression;
             };
 
         }
@@ -63,19 +88,19 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTimeperiod, loadQualityConfigurationFields])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-               .finally(function () {
-                   $scope.scopeModel.isLoading = false;
-               });
 
             function setTitle() {
                 if (isEditMode && qualityConfigurationEntity != undefined)
                     $scope.title = UtilsService.buildTitleForUpdateEditor(qualityConfigurationEntity.Name, "Quality Configuration");
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor("Quality Configuration");
+            }
+
+            function loadStaticData() {
+                if (isEditMode) {
+                    $scope.scopeModel.qualityConfigurationyName = qualityConfigurationEntity.Name;
+                    $scope.scopeModel.expression = qualityConfigurationEntity.Expression;
+                }
             }
 
             function loadTimeperiod() {
@@ -97,8 +122,7 @@
                 return WhS_Routing_QualityConfigurationAPIService.GetQualityConfigurationFields()
                     .then(function (response) {
                         if (response != undefined) {
-                            for (var i = 0, length = response.length ; i < length ; i++)
-                            {
+                            for (var i = 0, length = response.length ; i < length ; i++) {
                                 var responseItem = response[i];
                                 $scope.scopeModel.qualityConfigurationFields.push({
                                     Name: responseItem.Name,
@@ -106,47 +130,19 @@
                                     Expression: 'context.GetMeasureValue("' + responseItem.Name + '")'
                                 });
                             };
-                            $scope.scopeModel.qualityConfigurationFields.push({
-                                Name: '(',
-                                Title: '(',
-                                Expression: '(',
-                            },
-                            {
-                                Name: ')',
-                                Title: ')',
-                                Expression: ')',
-                            },
-                            {
-                                Name: '+',
-                                Title: '+',
-                                Expression: '+',
-                            },
-                            {
-                                Name: '-',
-                                Title: '-',
-                                Expression: '-',
-                            },
-                            {
-                                Name: '*',
-                                Title: '*',
-                                Expression: '*',
-                            },
-                            {
-                                Name: '/',
-                                Title: '/',
-                                Expression: '/',
-                            });
                         }
                     });
 
             }
 
-            function loadStaticData() {
-                if (isEditMode) {
-                    $scope.scopeModel.qualityConfigurationyName = qualityConfigurationEntity.Name;
-                    $scope.scopeModel.expression = qualityConfigurationEntity.Expression;
-                }
-            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTimeperiod, loadQualityConfigurationFields])
+               .catch(function (error) {
+                   VRNotificationService.notifyExceptionWithClose(error, $scope);
+               })
+               .finally(function () {
+                   $scope.scopeModel.isLoading = false;
+               });
+
         }
 
         function buildQualityConfigurationObjectFromScope() {
@@ -174,5 +170,5 @@
 
     }
 
-    appControllers.controller('QualityConfigurationEditorController', qualityConfigurationEditorController);
+    appControllers.controller('WhS_Routing_QualityConfigurationEditorController', qualityConfigurationEditorController);
 })(appControllers);

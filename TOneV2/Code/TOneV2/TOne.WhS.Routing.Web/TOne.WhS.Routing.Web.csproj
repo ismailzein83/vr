@@ -215,7 +215,7 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-selector.js" />
     <Content Include="WhS_Routing\Directives\RouteRule\Templates\RouteRuleViewTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRule\vr-whs-be-routerule-view.js" />
-    <Content Include="WhS_Routing\Directives\RouteSettings\QualityConfigurationEditorContoller.js" />
+    <Content Include="WhS_Routing\Directives\RouteSettings\QualityConfigurationEditorController.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\QualityConfigurationEditor.html" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationTemplate.html" />

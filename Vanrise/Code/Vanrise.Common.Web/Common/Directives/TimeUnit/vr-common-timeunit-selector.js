@@ -65,6 +65,8 @@ app.directive('vrCommonTimeunitSelector', ['UtilsService', 'VRUIUtilsService', '
                             VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                         }
                     }
+                    var promises = [];
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getSelectedIds = function () {

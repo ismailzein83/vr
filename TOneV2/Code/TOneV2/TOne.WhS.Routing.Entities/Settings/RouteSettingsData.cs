@@ -18,7 +18,30 @@ namespace TOne.WhS.Routing.Entities
 
         public override bool IsValid(ISettingDataValidationContext context)
         {
-            return base.IsValid(context);
+            int nbOfDefaults = 0;
+            foreach (var routeRuleQualityConfiguration in this.QualityConfiguration.RouteRuleQualityConfigurationList)
+            {
+                if (routeRuleQualityConfiguration.IsDefault)
+                {
+                    nbOfDefaults++;
+                    if (nbOfDefaults > 1)
+                    {
+                        context.ErrorMessage = "Only one default route rule quality configuration is permitted.";
+                        return false;
+                    }
+                    if (!routeRuleQualityConfiguration.IsActive)
+                    {
+                        context.ErrorMessage = "Default route rule quality configuration should be active.";
+                        return false;
+                    }
+                }
+            }
+            if (nbOfDefaults == 0)
+            {
+                context.ErrorMessage = "At least one default route rule quality configuration should be added.";
+                return false;
+            }
+            return true;
         }    
     }
 }
