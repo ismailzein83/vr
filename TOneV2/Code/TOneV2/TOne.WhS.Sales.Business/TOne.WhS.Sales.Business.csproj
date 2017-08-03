@@ -177,6 +177,7 @@
     <Compile Include="SellingRules\MarginRule.cs" />
     <Compile Include="SellingRules\SellingRuleSettingsConfig.cs" />
     <Compile Include="SoldCountryManager.cs" />
+    <Compile Include="SupplierTargetMatchManager.cs" />
     <Compile Include="TQI\TQIManager.cs" />
     <Compile Include="TQI\TQIMethodContext.cs" />
     <Compile Include="UtilitiesManager.cs" />
