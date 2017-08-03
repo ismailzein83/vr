@@ -446,6 +446,14 @@
       <Project>{0455b391-9661-41b7-90f5-f6e14fc30b2d}</Project>
       <Name>Mediation.Generic.QueueActivators</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mediation.Huawei.Business\Mediation.Huawei.Business.csproj">
+      <Project>{aea80c12-eeab-42e9-8838-3048e214e1d7}</Project>
+      <Name>Mediation.Huawei.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mediation.Huawei.Entities\Mediation.Huawei.Entities.csproj">
+      <Project>{c7b1f600-c09a-4ba4-99f3-a45fd8ebfda8}</Project>
+      <Name>Mediation.Huawei.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Teles.Business\Mediation.Teles.Business.csproj">
       <Project>{8dde7260-624a-4e06-ab69-de5fa7742a5d}</Project>
       <Name>Mediation.Teles.Business</Name>

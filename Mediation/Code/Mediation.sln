@@ -53,9 +53,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Teles.Business", 
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Mediation.CDR", "Mediation.CDR\Mediation.CDR.sqlproj", "{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Huawei", "Huawei", "{C08783AE-51E1-4309-9AF3-6307F2A8A03B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Huawei.Business", "Mediation.Huawei.Business\Mediation.Huawei.Business.csproj", "{AEA80C12-EEAB-42E9-8838-3048E214E1D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Huawei.Entities", "Mediation.Huawei.Entities\Mediation.Huawei.Entities.csproj", "{C7B1F600-C09A-4BA4-99F3-A45FD8EBFDA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mediation.Huawei.Web", "Mediation.Huawei.Web\Mediation.Huawei.Web.csproj", "{0D919E35-B040-48BC-9D99-636AB9639261}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 19
+		SccNumberOfProjects = 22
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -131,6 +139,18 @@ Global
 		SccProjectTopLevelParentUniqueName18 = Mediation.sln
 		SccProjectName18 = Mediation.CDR
 		SccLocalPath18 = Mediation.CDR
+		SccProjectUniqueName19 = Mediation.Huawei.Business\\Mediation.Huawei.Business.csproj
+		SccProjectTopLevelParentUniqueName19 = Mediation.sln
+		SccProjectName19 = Mediation.Huawei.Business
+		SccLocalPath19 = Mediation.Huawei.Business
+		SccProjectUniqueName20 = Mediation.Huawei.Entities\\Mediation.Huawei.Entities.csproj
+		SccProjectTopLevelParentUniqueName20 = Mediation.sln
+		SccProjectName20 = Mediation.Huawei.Entities
+		SccLocalPath20 = Mediation.Huawei.Entities
+		SccProjectUniqueName21 = Mediation.Huawei.Web\\Mediation.Huawei.Web.csproj
+		SccProjectTopLevelParentUniqueName21 = Mediation.sln
+		SccProjectName21 = Mediation.Huawei.Web
+		SccLocalPath21 = Mediation.Huawei.Web
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +233,18 @@ Global
 		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}.Release|Any CPU.Build.0 = Release|Any CPU
 		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{AEA80C12-EEAB-42E9-8838-3048E214E1D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEA80C12-EEAB-42E9-8838-3048E214E1D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEA80C12-EEAB-42E9-8838-3048E214E1D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEA80C12-EEAB-42E9-8838-3048E214E1D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7B1F600-C09A-4BA4-99F3-A45FD8EBFDA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7B1F600-C09A-4BA4-99F3-A45FD8EBFDA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7B1F600-C09A-4BA4-99F3-A45FD8EBFDA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7B1F600-C09A-4BA4-99F3-A45FD8EBFDA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D919E35-B040-48BC-9D99-636AB9639261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D919E35-B040-48BC-9D99-636AB9639261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D919E35-B040-48BC-9D99-636AB9639261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D919E35-B040-48BC-9D99-636AB9639261}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -238,5 +270,9 @@ Global
 		{2DA0E01F-4B0F-434B-ABC4-6A5F9F5130F2} = {E82A6672-DA4F-41B1-8696-C5CC1D4B1812}
 		{8DDE7260-624A-4E06-AB69-DE5FA7742A5D} = {2DA0E01F-4B0F-434B-ABC4-6A5F9F5130F2}
 		{359B0CDA-41B7-4AC7-932C-A28C08E7DD85} = {F99CA751-F9CC-4859-BF50-04D7F3D0BEA8}
+		{C08783AE-51E1-4309-9AF3-6307F2A8A03B} = {E82A6672-DA4F-41B1-8696-C5CC1D4B1812}
+		{AEA80C12-EEAB-42E9-8838-3048E214E1D7} = {C08783AE-51E1-4309-9AF3-6307F2A8A03B}
+		{C7B1F600-C09A-4BA4-99F3-A45FD8EBFDA8} = {C08783AE-51E1-4309-9AF3-6307F2A8A03B}
+		{0D919E35-B040-48BC-9D99-636AB9639261} = {C08783AE-51E1-4309-9AF3-6307F2A8A03B}
 	EndGlobalSection
 EndGlobal
