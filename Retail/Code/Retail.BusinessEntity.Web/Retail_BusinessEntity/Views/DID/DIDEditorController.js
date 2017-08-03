@@ -2,14 +2,14 @@
 
     "use strict";
 
-    dIDEditorController.$inject = ['$scope', 'Retail_BE_DIDAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    didEditorController.$inject = ['$scope', 'Retail_BE_DIDAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
 
-    function dIDEditorController($scope, Retail_BE_DIDAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function didEditorController($scope, Retail_BE_DIDAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
 
-        var dIDId;
-        var dIDEntity;
+        var didId;
+        var didEntity;
         var description;
         var didNumberType;
 
@@ -27,14 +27,22 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined) {
-                dIDId = parameters.dIDId;
+                didId = parameters.dIDId;
             }
 
-            isEditMode = (dIDId != undefined);
+            isEditMode = (didId != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.onDIDNumberTypeSelectorReady = function (api) {
+                didNumberTypeSelectorAPI = api;
+                didNumberTypeSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                directiveAPI = api;
+                directiveReadyDeferred.resolve();
+            };
 
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
@@ -46,16 +54,6 @@
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
-            };
-
-            $scope.scopeModel.onDIDNumberTypeSelectorReady = function (api) {
-                didNumberTypeSelectorAPI = api;
-                didNumberTypeSelectorReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.onDirectiveReady = function (api) {
-                directiveAPI = api;
-                directiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.hasSaveDIDPermission = function () {
@@ -72,7 +70,7 @@
                 getDID().then(function () {
                     loadAllControls()
                         .finally(function () {
-                            dIDEntity = undefined;
+                            didEntity = undefined;
                         });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -85,8 +83,8 @@
         }
 
         function getDID() {
-            return Retail_BE_DIDAPIService.GetDIDRuntimeEditor(dIDId).then(function (response) {
-                dIDEntity = response.DID;
+            return Retail_BE_DIDAPIService.GetDIDRuntimeEditor(didId).then(function (response) {
+                didEntity = response.DID;
                 description = response.Description;
                 didNumberType = response.DIDNumberType;
             });
@@ -106,21 +104,15 @@
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(description ? description : undefined, 'DID') : UtilsService.buildTitleForAddEditor('DID');
         };
-
-        function loadDIDNumberTypeDirective() {
-            if (dIDEntity == undefined)
+        function loadStaticData() {
+            if (didEntity == undefined)
                 return;
 
-            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            directiveReadyDeferred.promise.then(function () {
-
-                var didNumberTypeDirectivePayload = { didObj: dIDEntity };
-                VRUIUtilsService.callDirectiveLoad(directiveAPI, didNumberTypeDirectivePayload, directiveLoadDeferred);
-            });
-            return directiveLoadDeferred.promise;
-        };
-
+            //$scope.scopeModel.number = didEntity.Number;
+            $scope.scopeModel.isInternational = didEntity.Settings.IsInternational;
+            $scope.scopeModel.numberOfChannels = didEntity.Settings.NumberOfChannels;
+            $scope.scopeModel.soNumber = didEntity.Settings.DIDSo;
+        }
         function loadDIDNumberTypeSelector() {
             var didNumberTypeSelectorDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -133,16 +125,19 @@
             });
             return didNumberTypeSelectorDirectiveLoadDeferred.promise;
         };
-
-        function loadStaticData() {
-            if (dIDEntity == undefined)
+        function loadDIDNumberTypeDirective() {
+            if (didEntity == undefined)
                 return;
 
-            //$scope.scopeModel.number = dIDEntity.Number;
-            $scope.scopeModel.isInternational = dIDEntity.Settings.IsInternational;
-            $scope.scopeModel.numberOfChannels = dIDEntity.Settings.NumberOfChannels;
-            $scope.scopeModel.soNumber = dIDEntity.Settings.DIDSo;
-        }
+            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            directiveReadyDeferred.promise.then(function () {
+
+                var didNumberTypeDirectivePayload = { didObj: didEntity };
+                VRUIUtilsService.callDirectiveLoad(directiveAPI, didNumberTypeDirectivePayload, directiveLoadDeferred);
+            });
+            return directiveLoadDeferred.promise;
+        };
 
         function insertDID() {
             $scope.scopeModel.isLoading = true;
@@ -180,7 +175,7 @@
 
         function buildDIDObjFromScope() {
             var obj = {
-                DIDId: dIDId,
+                DIDId: didId,
                 //Number: $scope.scopeModel.number,
                 Settings: {
                     IsInternational: $scope.scopeModel.isInternational,
@@ -193,6 +188,6 @@
         }
     }
 
-    appControllers.controller('Retail_BE_DIDEditorController', dIDEditorController);
+    appControllers.controller('Retail_BE_DIDEditorController', didEditorController);
 
 })(appControllers);

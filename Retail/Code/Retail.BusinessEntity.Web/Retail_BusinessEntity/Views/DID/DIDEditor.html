@@ -4,10 +4,14 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <retail-be-didnumbertype-selector on-ready="scopeModel.onDIDNumberTypeSelectorReady" selectedvalues="scopeModel.selectedDIDNumberType" hideremoveicon normal-col-num="4" isrequired="true"></retail-be-didnumbertype-selector>
-
-                        <vr-directivewrapper ng-if="scopeModel.selectedDIDNumberType != undefined" directive="scopeModel.selectedDIDNumberType.editor"
-                                             on-ready="scopeModel.onDirectiveReady"></vr-directivewrapper>
+                        <retail-be-didnumbertype-selector on-ready="scopeModel.onDIDNumberTypeSelectorReady"
+                                                          selectedvalues="scopeModel.selectedDIDNumberType"
+                                                          normal-col-num="4" isrequired="true" hideremoveicon>
+                        </retail-be-didnumbertype-selector>
+                        <vr-directivewrapper ng-if="scopeModel.selectedDIDNumberType != undefined" 
+                                             directive="scopeModel.selectedDIDNumberType.editor" 
+                                             on-ready="scopeModel.onDirectiveReady">
+                        </vr-directivewrapper>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/3row">
@@ -19,7 +23,6 @@
                         <vr-columns width="1/3row">
                             <vr-switch value="scopeModel.isInternational" label="International"></vr-switch>
                         </vr-columns>
-
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
