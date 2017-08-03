@@ -20,5 +20,13 @@ namespace TOne.WhS.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GetInvoiceCarriers(filter);
         }
+
+        [HttpPost]
+        [Route("CompareInvoices")]
+        public object CompareInvoices(Vanrise.Entities.DataRetrievalInput<InvoiceComparisonInput> input)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return GetWebResponse(input, manager.CompareInvoices(input));
+        }
     }
 }

@@ -10,9 +10,13 @@
         function GetInvoiceCarriers(filter) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceCarriers"), filter);
         }
+        function CompareInvoices(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "CompareInvoices"), input);
+        }
 
         return ({
             GetInvoiceCarriers: GetInvoiceCarriers,
+            CompareInvoices: CompareInvoices
         });
     }
 

@@ -1,0 +1,120 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox isrequired="true" label="Partner Label" value="scopeModel.partnerLabel"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox isrequired="true" label="Partner Abbreviation Label" value="scopeModel.partnerAbbreviationLabel"></vr-textbox>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select datasource="scopeModel.itemGroupings"
+                   datatextfield="Name"
+                   datavaluefield="ItemGroupingId"
+                   selectedvalues="scopeModel.selectedItemGrouping"
+                   entityname="Grouping Item"
+                   isrequired="true"
+                   label="Grouping Item"
+                   onselectionchanged="scopeModel.onItemGroupingSelectionChanged"
+                   hideremoveicon>
+        </vr-select>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.dimensionsItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="DimensionItemFieldId"
+                   selectedvalues="scopeModel.selectedZoneDimension"
+                   entityname="Dimension"
+                   isrequired="true"
+                   label="Zone Dimension">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.dimensionsItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="DimensionItemFieldId"
+                   selectedvalues="scopeModel.selectedFromDateDimension"
+                   entityname="Dimension"
+                   isrequired="true"
+                   label="From Dimension">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.dimensionsItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="DimensionItemFieldId"
+                   selectedvalues="scopeModel.selectedToDateDimension"
+                   entityname="Dimension"
+                   isrequired="true"
+                   label="To Dimension">
+        </vr-select>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.dimensionsItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="DimensionItemFieldId"
+                   selectedvalues="scopeModel.selectedRateTypeDimension"
+                   entityname="Dimension"
+                   isrequired="true"
+                   label="RateType Dimension">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.dimensionsItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="DimensionItemFieldId"
+                   selectedvalues="scopeModel.selectedCurrencyDimension"
+                   entityname="Dimension"
+                   isrequired="true"
+                   label="Currency Dimension">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.dimensionsItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="DimensionItemFieldId"
+                   selectedvalues="scopeModel.selectedRateDimension"
+                   entityname="Dimension"
+                   isrequired="true"
+                   label="Rate Dimension">
+        </vr-select>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.measuresItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="MeasureItemFieldId"
+                   selectedvalues="scopeModel.selectedNumberOfCallsMeasure"
+                   entityname="Measuer"
+                   isrequired="true"
+                   label="Number Of Calls Measure">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.measuresItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="MeasureItemFieldId"
+                   selectedvalues="scopeModel.selectedAmountMeasure"
+                   entityname="Measuer"
+                   isrequired="true"
+                   label="Amount Measure">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.measuresItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="MeasureItemFieldId"
+                   selectedvalues="scopeModel.selectedDurationMeasure"
+                   entityname="Measuer"
+                   isrequired="true"
+                   label="Duration Measure">
+        </vr-select>
+    </vr-columns>
+</vr-row>

@@ -171,10 +171,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_Invoice\Constants\CarrierTypeEnum.js" />
+    <Content Include="WhS_Invoice\Constants\ComparisonResultEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceAccountCarrierTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceAccountEffectiveStatusEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\Templates\CompareInvoiceActionTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\whs-invoicetype-gridactionsettings-compare.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\Templates\PartnerConditionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-partner.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SupplierInvoice\Templates\SupplierInvoiceSettingsDefinitionTemplate.html" />
@@ -207,8 +210,11 @@
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAccountAPIService.js" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
     <Content Include="WhS_Invoice\Services\InvoiceAccountService.js" />
+    <Content Include="WhS_Invoice\Services\InvoiceService.js" />
     <Content Include="WhS_Invoice\Views\InvoiceAccountEditor.html" />
     <Content Include="WhS_Invoice\Views\InvoiceAccountEditorController.js" />
+    <Content Include="WhS_Invoice\Views\InvoiceCompareTemplate.html" />
+    <Content Include="WhS_Invoice\Views\InvoiceCompareTemplateController.js" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

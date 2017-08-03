@@ -13,11 +13,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public override Guid ConfigId { get { return new Guid("CA8088B9-2887-4B85-B263-49C895088E66"); } }
         public Guid ItemGroupingId { get; set; }
         public Guid ZoneDimensionId { get; set; }
-        public Guid CarrierDimensionId { get; set; }
-        public Guid RateTypeDimensionId { get; set; }
+        public Guid FromDateDimensionId { get; set; }
+        public Guid ToDateDimensionId { get; set; }
         public Guid CurrencyDimensionId { get; set; }
         public Guid RateDimensionId { get; set; }
-       
+        public Guid RateTypeDimensionId { get; set; }
+
+
+
         public Guid NumberOfCallsMeasureId { get; set; }
         public Guid AmountMeasureId { get; set; }
         public Guid DurationMeasureId { get; set; }

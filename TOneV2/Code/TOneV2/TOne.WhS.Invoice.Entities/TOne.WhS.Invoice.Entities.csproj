@@ -44,6 +44,9 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.ExcelConversion.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.ExcelConversion.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
     </Reference>
@@ -65,6 +68,9 @@
     <Compile Include="InvoiceAccount\InvoiceValidationData.cs" />
     <Compile Include="InvoiceCarrier.cs" />
     <Compile Include="InvoiceCarrierFilter.cs" />
+    <Compile Include="InvoiceComparisonInput.cs" />
+    <Compile Include="InvoiceComparisonResult.cs" />
+    <Compile Include="InvoiceComparisonResultDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDLCSupplierInvoiceItemDetails.cs" />
     <Compile Include="RDLCCustomerInvoiceItemDetails.cs" />
