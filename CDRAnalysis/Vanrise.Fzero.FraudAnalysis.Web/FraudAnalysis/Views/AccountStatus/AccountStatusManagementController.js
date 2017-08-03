@@ -28,7 +28,7 @@
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(getQuery());
-            }
+            };
 
             $scope.onUserSelectorReady = function (api) {
                 userSelectorAPI = api;
@@ -44,7 +44,7 @@
             $scope.uploadAccountStatuses = function () {
 
                 Fzero_FraudAnalysis_AccountStatusService.uploadAccountStatuses();
-            }
+            };
             $scope.hasUploadAccountStatusPermission = function () {
                 return Fzero_FraudAnalysis_AccountStatusAPIService.HasUploadAccountStatusPermission();
             };

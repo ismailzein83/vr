@@ -46,7 +46,7 @@ app.directive("vrCdrFraudanalysisFindrelatednumbersManual", ["VRValidationServic
 
             $scope.validateTimeRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            }
+            };
 
             $scope.createProcessInputObjects = [];
 
@@ -69,8 +69,8 @@ app.directive("vrCdrFraudanalysisFindrelatednumbersManual", ["VRValidationServic
             };
            
             api.load = function (payload) {
-               
-            }
+
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

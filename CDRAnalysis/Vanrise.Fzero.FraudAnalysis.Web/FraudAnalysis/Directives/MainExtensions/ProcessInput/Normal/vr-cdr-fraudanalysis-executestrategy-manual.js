@@ -52,11 +52,11 @@ function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationServic
 
             $scope.validateDateRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            }
+            };
 
             $scope.validateHourRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDateHour, $scope.toDateHour);
-            }
+            };
 
             $scope.createProcessInputObjects = [];
 
@@ -108,7 +108,7 @@ function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationServic
                 var promises = [];
                 promises.push(loadPeriodSelector());
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

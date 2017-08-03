@@ -53,27 +53,27 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
         $scope.onReadySwicth = function (api) {
             switchDirectiveApi = api;
             switchReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onReadyTrunkType = function (api) {
             typeDirectiveApi = api;
             typeReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onReadyTrunkDirection = function (api) {
             directionDirectiveApi = api;
             directionReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onReadyLinkSwicth = function (api) {
             linkSwitchDirectiveApi = api;
             linkSwitchReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onReadyLinkTrunk = function (api) {
             linkTrunkDirectiveApi = api;
             linkTrunkReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onSwitchChanged = function () {
 
@@ -84,7 +84,7 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
                 linkSwitchDirectiveApi.load(directivePayload)
             }
 
-        }
+        };
 
         $scope.onSwitchToLinkToChanged = function () {
             $scope.selectedTrunkToLinkTo = undefined;
@@ -97,18 +97,18 @@ function TrunkEditorController($scope, CDRAnalysis_PSTN_TrunkAPIService, TrunkTy
                 directivePayload.excludedId = trunkId;
                 linkTrunkDirectiveApi.load(directivePayload)
             }
-        }
+        };
 
         $scope.saveTrunk = function () {
             if (isEditMode)
                 return updateTrunk();
             else
                 return insertTrunk();
-        }
+        };
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
-        }
+        };
     }
 
     function load() {

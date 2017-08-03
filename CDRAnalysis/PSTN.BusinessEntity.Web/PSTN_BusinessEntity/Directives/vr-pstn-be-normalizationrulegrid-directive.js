@@ -1,4 +1,4 @@
-﻿"use strict"
+﻿"use strict";
 
 app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "NormalizationRuleAPIService", "PSTN_BE_PhoneNumberTypeEnum", "UtilsService", "VRNotificationService", function (PSTN_BE_Service, NormalizationRuleAPIService, PSTN_BE_PhoneNumberTypeEnum, UtilsService, VRNotificationService) {
 
@@ -41,11 +41,11 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
 
                     directiveAPI.retrieveData = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onNormalizationRuleAdded = function (normalizationRuleDetail) {
                         gridAPI.itemAdded(normalizationRuleDetail);
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -69,7 +69,7 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
             
             var onNormalizationRuleUpdated = function (normalizationRuleObj) {
                 gridAPI.itemUpdated(normalizationRuleObj);
-            }
+            };
 
             PSTN_BE_Service.editNormalizationRule(dataItem, onNormalizationRuleUpdated);
         }
@@ -77,7 +77,7 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
         function deleteNormalizationRule(dataItem) {
             var onNormalizationRuleDeleted = function (normalizationRuleObj) {
                 gridAPI.itemDeleted(normalizationRuleObj);
-            }
+            };
 
             PSTN_BE_Service.deleteNormalizationRule(dataItem, onNormalizationRuleDeleted);
         }

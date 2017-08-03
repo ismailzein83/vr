@@ -91,9 +91,9 @@
         function loadLevelTypes()
         {
             var cleanLevel = {
-                value : -1,
-                description : "Clean"
-            }
+                value: -1,
+                description: "Clean"
+            };
             $scope.scopeModel.levels.push(cleanLevel);
             var levels = UtilsService.getArrayEnum(CDRAnalysis_FA_SuspicionLevelEnum);
             for(var i=0;i<levels.length;i++)

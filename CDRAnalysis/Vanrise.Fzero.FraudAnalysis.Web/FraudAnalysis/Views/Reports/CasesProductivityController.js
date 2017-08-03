@@ -29,7 +29,7 @@ function CasesProductivityController($scope, ReportingAPIService, VRUIUtilsServi
 
         $scope.validateTimeRange = function () {
             return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-        }
+        };
 
         $scope.gridMenuActions = [];
 
@@ -45,18 +45,18 @@ function CasesProductivityController($scope, ReportingAPIService, VRUIUtilsServi
 
         $scope.searchClicked = function () {
             return retrieveData();
-        }
+        };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return ReportingAPIService.GetFilteredCasesProductivity(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             });
-        }
+        };
 
         $scope.onGroupDailyChanged = function () {
             return retrieveData();
-        }
+        };
     }
 
     function load() {

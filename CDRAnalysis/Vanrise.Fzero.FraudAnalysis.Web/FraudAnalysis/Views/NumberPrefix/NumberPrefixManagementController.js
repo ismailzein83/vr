@@ -24,36 +24,36 @@
 
             $scope.applyNumberPrefixesClicked = function () {
                 applyNumberPrefixes();
-            }
+            };
 
             $scope.cancelChanges = function () {
                 $scope.nodesUpdated = false;
                 load();
-            }
+            };
 
             $scope.numberPrefixesTreeReady = function (api) {
                 treeAPI = api;
-            }
+            };
 
             $scope.newNumberPrefixClicked = function () {
                 addNewNumberPrefix();
-            }
+            };
 
             $scope.expandNumberPrefixClicked = function () {
                 expandNumberPrefix();
-            }
+            };
 
             $scope.splitNumberPrefixClicked = function () {
                 splitNumberPrefix();
-            }
+            };
 
             $scope.mergeNumberPrefixesClicked = function () {
                 mergeNumberPrefix();
-            }
+            };
 
             $scope.removeNumberPrefixesClicked = function () {
                 removeNumberPrefix();
-            }
+            };
 
         }
 

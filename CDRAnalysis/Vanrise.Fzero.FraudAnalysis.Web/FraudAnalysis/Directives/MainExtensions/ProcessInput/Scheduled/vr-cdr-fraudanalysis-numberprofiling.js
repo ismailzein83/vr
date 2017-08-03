@@ -123,7 +123,7 @@ function (UtilsService, VRUIUtilsService, VRNotificationService, VRCommon_HourEn
                 promises.push(loadPeriodSelector());
                 return UtilsService.waitMultiplePromises(promises);
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

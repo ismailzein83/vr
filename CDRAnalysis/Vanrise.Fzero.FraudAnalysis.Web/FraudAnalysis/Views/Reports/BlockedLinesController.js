@@ -30,7 +30,7 @@ function BlockedLinesController($scope, ReportingAPIService, VRModalService, VRN
 
         $scope.validateTimeRange = function () {
             return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-        }
+        };
 
         $scope.blockedLines = [];
 
@@ -40,18 +40,18 @@ function BlockedLinesController($scope, ReportingAPIService, VRModalService, VRN
 
         $scope.searchClicked = function () {
             return retrieveData();
-        }
+        };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return ReportingAPIService.GetFilteredBlockedLines(dataRetrievalInput)
             .then(function (response) {
                 onResponseReady(response);
             });
-        }
+        };
 
         $scope.onGroupDailyChanged = function () {
             return retrieveData();
-        }
+        };
 
         defineMenuActions();
     }

@@ -56,7 +56,7 @@ app.directive("vrPstnBeAddprefix", [function () {
                 if (payload != undefined) {
                     $scope.numberPrefix = payload.Prefix;
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

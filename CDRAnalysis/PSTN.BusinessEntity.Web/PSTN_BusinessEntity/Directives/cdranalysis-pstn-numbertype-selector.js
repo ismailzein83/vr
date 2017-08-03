@@ -63,14 +63,14 @@ app.directive('cdranalysisPstnNumbertypeSelector', ['PSTN_BE_PhoneNumberTypeEnum
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
                 var api = {};
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
-                }
+                };
                 api.load = function (payload) {
                     var selectedIds;
                     if (payload != undefined) {
@@ -79,7 +79,7 @@ app.directive('cdranalysisPstnNumbertypeSelector', ['PSTN_BE_PhoneNumberTypeEnum
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

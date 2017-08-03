@@ -68,14 +68,14 @@ app.directive('cdranalysisPstnTrunkSelector', ['CDRAnalysis_PSTN_TrunkAPIService
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
                 var api = {};
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('TrunkId', attrs, ctrl);
-                }
+                };
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
                     var filter;
@@ -87,13 +87,13 @@ app.directive('cdranalysisPstnTrunkSelector', ['CDRAnalysis_PSTN_TrunkAPIService
                         excludedId = payload.excludedId;
                     }
                     var serializedFilter = {};
-                    ctrl.filter = undefined
+                    ctrl.filter = undefined;
                     if (filter != undefined) {
                         serializedFilter = UtilsService.serializetoJson(filter);
                     }
 
                     return getTrunksInfo(attrs, ctrl, selectedIds, serializedFilter, excludedId);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

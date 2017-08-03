@@ -27,7 +27,7 @@
 
             $scope.validateIsValidDate = function () {
                 return VRValidationService.validateTimeEqualorGreaterthanToday($scope.validTill);
-            }
+            };
 
             $scope.saveAccountStatus = function () {
                 if (editMode)

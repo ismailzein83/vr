@@ -62,9 +62,9 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
                 disable: false,
                 name: "Add Condition",
                 clicked: function () {
-                  return addCondition();
+                    return addCondition();
                 }
-            },{
+            }, {
                 disable: false,
                 name: "Add Label",
                 clicked: function () {
@@ -72,15 +72,14 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
                 }
             }];
 
-            $scope.scopeModel.removeNode = function ()
-            {
+            $scope.scopeModel.removeNode = function () {
                 VRNotificationService.showConfirmation().then(function (response) {
                     if (response == true) {
                         onItemDeleted($scope.scopeModel.decisionTree, $scope.scopeModel.selectedItem.ID);
                         treeAPI.refreshTree($scope.scopeModel.decisionTree);
-                   }
-               });
-            }
+                    }
+                });
+            };
 
 
             defineAPI();
@@ -105,7 +104,7 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
                     return filters.join(',');
                 }
                 return null;
-            }
+            };
 
             api.load = function (payload) {
                 if (payload) {
@@ -124,9 +123,9 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
                         promiseDeffered.reject(error);
                     });
 
-                })
+                });
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
@@ -154,7 +153,7 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
         function addLabel() {
             var onLabelAdded = function (labelObj) {
                 var node = mapLabelNode(labelObj);
-                onAddedItem($scope.scopeModel.decisionTree, node)
+                onAddedItem($scope.scopeModel.decisionTree, node);
                 treeAPI.createNode(node);
             };
             Fzero_FraudAnalysis_DecisionTreeService.addLabel(onLabelAdded, $scope.scopeModel.selectedItem);
@@ -172,8 +171,7 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
 
             var treeLoadDeferred = UtilsService.createPromiseDeferred();
             treeReadyDeferred.promise.then(function () {
-                if (strategyEntity && strategyEntity.DecisionTree != undefined)
-                {
+                if (strategyEntity && strategyEntity.DecisionTree != undefined) {
                     buildTreeScopeFromObject(strategyEntity.DecisionTree.RootNode, $scope.scopeModel.decisionTree[0].Childs);
                 }
                 treeAPI.refreshTree($scope.scopeModel.decisionTree);
@@ -184,15 +182,14 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
 
             return treeLoadDeferred.promise;
         }
-        function mapLabelNode(labelObj)
-        {
+        function mapLabelNode(labelObj) {
             return {
                 Name: labelObj.SuspicionLevel != undefined ? UtilsService.getItemByVal($scope.scopeModel.suspicionLevels, labelObj.SuspicionLevel, 'value').description : "Clean",
-                Entity:labelObj,
+                Entity: labelObj,
                 ID: counter++,
                 Childs: [],
                 isOpened: true,
-                isLeaf :true
+                isLeaf: true
             };
         }
         function mapConditionNode(conditionObj) {
@@ -206,8 +203,7 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
                 isOpened: true,
             };
         }
-        function getElseNode()
-        {
+        function getElseNode() {
             return {
                 Name: "Else",
                 Entity: {},
@@ -240,8 +236,7 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
             });
         }
 
-        function buildTreeObjectFromScope()
-        {
+        function buildTreeObjectFromScope() {
             var decisionTree = {
                 RootNode: {}
             };
@@ -251,8 +246,7 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
             }
             return decisionTree;
         }
-        function buildTreeObjectRecursively(childs)
-        {
+        function buildTreeObjectRecursively(childs) {
             if (childs == undefined || childs.length == 0)
                 return;
 
@@ -265,34 +259,29 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
                 };
                 for (var i = 0; i < childs.length ; i++) {
                     var item = childs[i];
-                    if (item.isLeaf)
-                    {
-                        return { SuspicionLevel: item.Entity.SuspicionLevel }
+                    if (item.isLeaf) {
+                        return { SuspicionLevel: item.Entity.SuspicionLevel };
                     }
-                    else 
-                    {
-                         if (item.NodeType == CDRAnalysis_FA_DecisionTreeNodeTypeEnum.TrueBranch.value)
-                         {
-                             decisionTree.ConditionNode.Condition = {
-                                 FilterId: item.Entity.FilterId,
-                                 Value: item.Entity.Value,
-                                 Operator: item.Entity.Operator
-                             };
-                             decisionTree.ConditionNode.TrueBranch = buildTreeObjectRecursively(item.Childs);
-                         } else if (item.NodeType == CDRAnalysis_FA_DecisionTreeNodeTypeEnum.FalseBranch.value)
-                         {
-                             decisionTree.ConditionNode.FalseBranch = buildTreeObjectRecursively(item.Childs);
-                         }
+                    else {
+                        if (item.NodeType == CDRAnalysis_FA_DecisionTreeNodeTypeEnum.TrueBranch.value) {
+                            decisionTree.ConditionNode.Condition = {
+                                FilterId: item.Entity.FilterId,
+                                Value: item.Entity.Value,
+                                Operator: item.Entity.Operator
+                            };
+                            decisionTree.ConditionNode.TrueBranch = buildTreeObjectRecursively(item.Childs);
+                        } else if (item.NodeType == CDRAnalysis_FA_DecisionTreeNodeTypeEnum.FalseBranch.value) {
+                            decisionTree.ConditionNode.FalseBranch = buildTreeObjectRecursively(item.Childs);
+                        }
                     }
                 }
                 return decisionTree;
             }
         }
 
-        function buildTreeScopeFromObject(decisionTree,childs) {
+        function buildTreeScopeFromObject(decisionTree, childs) {
 
-            if (decisionTree.ConditionNode !=undefined)
-            {
+            if (decisionTree.ConditionNode != undefined) {
                 var node = mapConditionNode(decisionTree.ConditionNode.Condition);
                 buildTreeScopeFromObject(decisionTree.ConditionNode.TrueBranch, node.Childs);
                 childs.push(node);
@@ -309,11 +298,9 @@ app.directive("cdranalysisFaStrategyCriteriaDecisiontree", ["StrategyAPIService"
             if (menuItems != undefined) {
                 for (var i = 0; i < menuItems.length ; i++) {
                     var item = menuItems[i];
-                    if (item.ID != nodeId)
-                    {
+                    if (item.ID != nodeId) {
                         onItemDeleted(item.Childs, nodeId);
-                    } else if (item.ID == nodeId && !item.isRoot)
-                    {
+                    } else if (item.ID == nodeId && !item.isRoot) {
                         if (item.isLeaf)
                             menuItems.splice(0, 1);
                         else {

@@ -175,7 +175,7 @@ app.directive("vrPstnBeAdjustnumber", ["NormalizationRuleAPIService", "UtilsServ
             actionItem.onActionDirectiveAPIReady = function (api) {
                 actionItem.ActionDirectiveAPI = api;
                 actionItem.ReadyPromiseDeferred.resolve();
-            }
+            };
 
             return actionItem;
         }

@@ -56,11 +56,11 @@ function (UtilsService, VRCommon_HourEnum, VRValidationService, CDRAnalysis_FA_P
 
             $scope.validateDateRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            }
+            };
 
             $scope.validateHourRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDateHour, $scope.toDateHour);
-            }
+            };
 
             $scope.createProcessInputObjects = [];
 
@@ -164,7 +164,7 @@ function (UtilsService, VRCommon_HourEnum, VRValidationService, CDRAnalysis_FA_P
                 var promises = [];
                 promises.push(loadPeriodSelector());
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

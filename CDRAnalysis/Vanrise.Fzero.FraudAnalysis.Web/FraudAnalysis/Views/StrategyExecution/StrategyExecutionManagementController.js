@@ -31,7 +31,7 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
             timeRangeDirectiveReadyDeferred.resolve();
-        }
+        };
 
         $scope.selectedSuspicionOccuranceStatuses = [];
 
@@ -67,7 +67,7 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
 
         $scope.searchClicked = function () {
             return retrieveData();
-        }
+        };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
@@ -75,7 +75,7 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
                 .then(function (response) {
                     onResponseReady(response);
                 });
-        }
+        };
 
         $scope.onPeriodSelectionChanged = function (selectedPeriod) {
             if (selectedPeriod != undefined) {
@@ -89,7 +89,7 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
             if (dataItem.Entity.Status == CDRAnalysis_FA_SuspicionOccuranceStatusEnum.Open.value) return LabelColorsEnum.New.color;
             else if (dataItem.Entity.Status == CDRAnalysis_FA_SuspicionOccuranceStatusEnum.Closed.value) return LabelColorsEnum.Success.color;
             else if (dataItem.Entity.Status == CDRAnalysis_FA_SuspicionOccuranceStatusEnum.Cancelled.value) return LabelColorsEnum.Error.color;
-        }
+        };
 
         defineMenuActions();
     }

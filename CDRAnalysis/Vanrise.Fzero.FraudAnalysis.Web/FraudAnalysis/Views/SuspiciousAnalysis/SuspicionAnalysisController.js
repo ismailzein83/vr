@@ -22,7 +22,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
             timeRangeReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onStrategySelectorReady = function (api) {
             strategySelectorAPI = api;
@@ -45,11 +45,11 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
         $scope.onGridReady = function (api) {
             gridAPI = api;
             return retrieveData();
-        }
+        };
 
         $scope.searchClicked = function () {
             return retrieveData();
-        }
+        };
 
         $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
             return CDRAnalysis_FA_AccountCaseAPIService.GetFilteredAccountSuspicionSummaries(dataRetrievalInput)
@@ -71,18 +71,18 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
                 .catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
-        }
+        };
 
         $scope.summaryClicked = function (dataItem) {
             openSummaryDetails(dataItem.AccountNumber, dataItem.CaseID);
-        }
+        };
 
         $scope.getSuspicionLevelColor = function (dataItem) {
 
             if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.Suspicious.value) return LabelColorsEnum.WarningLevel1.color;
             else if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.HighlySuspicious.value) return LabelColorsEnum.WarningLevel2.color;
             else if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.Fraud.value) return LabelColorsEnum.Error.color;
-        }
+        };
 
         $scope.getCaseStatusColor = function (dataItem) {
 
@@ -90,7 +90,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
             else if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
             else if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
             else if (dataItem.Status == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
-        }
+        };
     }
 
     function retrieveData() {
@@ -152,7 +152,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
 
             modalScope.onAccountCaseUpdated = function (accountSuspicionSummary) {
                 gridAPI.itemUpdated(accountSuspicionSummary);
-            }
+            };
         };
 
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", parameters, modalSettings);

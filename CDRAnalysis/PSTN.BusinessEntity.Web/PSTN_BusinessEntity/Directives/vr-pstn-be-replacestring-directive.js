@@ -57,7 +57,7 @@ app.directive("vrPstnBeReplacestring", [function () {
                     $scope.stringToReplace = payload.StringToReplace;
                     $scope.newString = payload.NewString;
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

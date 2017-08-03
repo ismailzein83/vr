@@ -79,14 +79,14 @@ app.directive('cdranalysisPstnSwitchSelector', ['CDRAnalysis_PSTN_SwitchAPIServi
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
                 var api = {};
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SwitchId', attrs, ctrl);
-                }
+                };
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
                     var filter;
@@ -100,7 +100,7 @@ app.directive('cdranalysisPstnSwitchSelector', ['CDRAnalysis_PSTN_SwitchAPIServi
                         serializedFilter = UtilsService.serializetoJson(filter);
                     }
                     return getSwitchesInfo(attrs, ctrl, selectedIds, serializedFilter);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

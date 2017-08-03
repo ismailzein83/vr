@@ -41,7 +41,7 @@
             $scope.onNormalizationRuleSettingsDirectiveReady = function (api) {
                 normalizationRuleSettingsDirectiveAPI = api;
                 normalizationRuleSettingsReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.switches = [];
             $scope.selectedSwitches = [];
@@ -77,7 +77,7 @@
 
                 tempSelectedTrunks.length = 0;
 
-            }
+            };
 
             $scope.getSwitchRelatedTrunks = function (trunkNameFilter) {
 
@@ -87,7 +87,7 @@
                 };
 
                 return CDRAnalysis_PSTN_TrunkAPIService.GetTrunksBySwitchIds(trunkFilterObj);
-            }
+            };
 
             $scope.validateDirectiveData = function () {
                 if (normalizationRuleSettingsDirectiveAPI == undefined)

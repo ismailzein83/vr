@@ -47,12 +47,12 @@ app.directive("cdranalysisPstnSwitchGrid", ["CDRAnalysis_PSTN_SwitchService", "C
 
                     directiveAPI.retrieveData = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
-                    directiveAPI.onSwitchAdded = function (switchObj){
+                    directiveAPI.onSwitchAdded = function (switchObj) {
                         gridDrillDownTabsObj.setDrillDownExtensionObject(switchObj);
                         gridAPI.itemAdded(switchObj);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -110,7 +110,7 @@ app.directive("cdranalysisPstnSwitchGrid", ["CDRAnalysis_PSTN_SwitchService", "C
         function deleteSwitch(switchObj) {
             var onSwitchDeleted = function (deletedSwitchObj) {
                 gridAPI.itemDeleted(deletedSwitchObj);
-            }
+            };
             CDRAnalysis_PSTN_SwitchService.deleteSwitch(switchObj, onSwitchDeleted);
         }
     }

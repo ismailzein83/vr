@@ -44,7 +44,7 @@ app.directive("cdranalysisPstnTrunkGrid", ["CDRAnalysis_PSTN_TrunkService", "CDR
 
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onTrunkAdded = function (trunkObj) {
                         setTrunkDescriptions(trunkObj);
                         gridAPI.itemAdded(trunkObj);
@@ -58,7 +58,7 @@ app.directive("cdranalysisPstnTrunkGrid", ["CDRAnalysis_PSTN_TrunkService", "CDR
                             if (linkedToTheLinkedToTrunkObj != null)
                                 updateDataItem(linkedToTheLinkedToTrunkObj.TrunkId, null, null);
                         }
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -120,7 +120,7 @@ app.directive("cdranalysisPstnTrunkGrid", ["CDRAnalysis_PSTN_TrunkService", "CDR
 
                 updateDataItem(linkedToSecondTrunkId, null, null);
                 updateDataItem(secondTrunkId, firstTrunkObj.Entity.TrunkId, firstTrunkObj.Entity.Name);
-            }
+            };
 
             CDRAnalysis_PSTN_TrunkService.editTrunk(gridObj.Entity.TrunkId, onTrunkUpdated);
         }               
@@ -129,7 +129,7 @@ app.directive("cdranalysisPstnTrunkGrid", ["CDRAnalysis_PSTN_TrunkService", "CDR
             var onTrunkDeleted = function (deletedTrunkObj, linkedToTrunkId) {
                 gridAPI.itemDeleted(deletedTrunkObj);
                 updateDataItem(linkedToTrunkId, null, null);
-            }
+            };
             CDRAnalysis_PSTN_TrunkService.deleteTrunk(gridObj, onTrunkDeleted);
         }
         

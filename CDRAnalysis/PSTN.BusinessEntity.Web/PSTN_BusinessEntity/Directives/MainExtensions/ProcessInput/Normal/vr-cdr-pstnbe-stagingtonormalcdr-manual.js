@@ -38,7 +38,7 @@ app.directive("vrCdrPstnbeStagingtocdrManual", ["VRValidationService", function 
 
             $scope.validateTimeRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
-            }
+            };
 
             $scope.createProcessInputObjects = [];
 
@@ -65,8 +65,8 @@ app.directive("vrCdrPstnbeStagingtocdrManual", ["VRValidationService", function 
             };
            
             api.load = function (payload) {
-               
-            }
+
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

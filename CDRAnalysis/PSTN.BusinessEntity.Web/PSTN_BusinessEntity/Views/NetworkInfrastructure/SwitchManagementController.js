@@ -20,22 +20,22 @@
         $scope.searchClicked = function () {
             setFilterObject();
             return switchAPI.retrieveData(filter);
-        }
+        };
 
         $scope.addSwitch = function () {
             var onSwitchAdded = function (switchObj) {
-                    switchAPI.onSwitchAdded(switchObj);
-            }
+                switchAPI.onSwitchAdded(switchObj);
+            };
             CDRAnalysis_PSTN_SwitchService.addSwitch(onSwitchAdded);
-        }
+        };
         $scope.onSwitchGridReady = function (api) {
             switchAPI = api;
             switchAPI.retrieveData({});
-        }
+        };
         $scope.onSwicthBrandSelectorReady = function (api) {
             switchBrandSelectorAPI = api;
             switchBrandReadyPromiseDeferred.resolve();
-        }
+        };
 
     }
 

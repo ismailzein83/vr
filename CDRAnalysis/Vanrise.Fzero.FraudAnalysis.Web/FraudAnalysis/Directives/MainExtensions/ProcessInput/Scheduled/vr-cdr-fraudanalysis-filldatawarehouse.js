@@ -54,9 +54,9 @@ app.directive("vrCdrFraudanalysisFilldatawarehouse", [ function () {
             };
 
             api.load = function (payload) {
-              
 
-            }
+
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

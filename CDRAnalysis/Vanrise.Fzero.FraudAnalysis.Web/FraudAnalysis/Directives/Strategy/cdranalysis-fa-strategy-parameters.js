@@ -27,7 +27,7 @@
         function StrategyParameters($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var hourSelectorAPI;
-            var hourSelectorReadyDeferred = UtilsService.createPromiseDeferred()
+            var hourSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var strategyParameters;
             var context;
             var filter;
@@ -91,10 +91,8 @@
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                api.setParameterVisibility = function (visibility, parameters)
-                {
-                    if (parameters != undefined)
-                    {
+                api.setParameterVisibility = function (visibility, parameters) {
+                    if (parameters != undefined) {
                         for (var parameter in parameters) {
                             switch (parameters[parameter]) {
                                 case "Minimum Count of Calls per Hour":
@@ -104,14 +102,14 @@
                                     }
                                     break;
                                 case "Peak Hours":
-                                  if (visibility) {
+                                    if (visibility) {
                                         var hourSelectorPayload = {
                                             selectedIds: selectedIds != undefined ? selectedIds : defaultSelectedIds
                                         };
                                         var setLoaderHourSelector = function (value) { setTimeout(function () { $scope.scopeModel.isLoadingHourlySelector = value; UtilsService.safeApply($scope) }); };
                                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, hourSelectorAPI, hourSelectorPayload, setLoaderHourSelector);
                                         selectedIds = undefined;
-                                   }
+                                    }
                                     $scope.scopeModel.showSelectedPeakHoursParameter = visibility;
                                     if (context != undefined) {
                                         $scope.scopeModel.selectedPeakHoursParameterHint = context.getFilterHint(parameters[parameter]);
@@ -138,7 +136,7 @@
                             }
                         }
                     }
-                }
+                };
 
                 api.getData = getData;
 

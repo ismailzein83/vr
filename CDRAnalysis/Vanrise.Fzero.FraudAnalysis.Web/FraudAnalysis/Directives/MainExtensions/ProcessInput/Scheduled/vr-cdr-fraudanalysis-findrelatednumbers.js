@@ -51,8 +51,8 @@ app.directive("vrCdrFraudanalysisFindrelatednumbers", [function () {
             };
 
             api.load = function (payload) {
-               
-            }
+
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

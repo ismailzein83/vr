@@ -37,7 +37,7 @@
             $scope.disabledNumberPrefix = true;
             $scope.onNumberPrefixValueChange = function (value) {
                 $scope.disabledNumberPrefix = (value == undefined) || UtilsService.getItemIndexByVal(treeNumberPrefixes, value, "Prefix") != -1;
-            }
+            };
            
         }
        

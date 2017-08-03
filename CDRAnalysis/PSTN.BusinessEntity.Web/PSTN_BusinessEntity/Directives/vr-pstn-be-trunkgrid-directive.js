@@ -44,7 +44,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAP
 
                     directiveAPI.retrieveData = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
 
                     directiveAPI.onTrunkAdded = function (trunkObj) {
                         setTrunkDescriptions(trunkObj);
@@ -59,7 +59,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAP
                             if (linkedToTheLinkedToTrunkObj != null)
                                 updateDataItem(linkedToTheLinkedToTrunkObj.TrunkId, null, null);
                         }
-                    }
+                    };
 
                     return directiveAPI;
                 }
@@ -100,7 +100,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAP
 
                 updateDataItem(linkedToSecondTrunkId, null, null);
                 updateDataItem(secondTrunkId, firstTrunkObj.Entity.TrunkId, firstTrunkObj.Entity.Name);
-            }
+            };
 
             PSTN_BE_Service.editTrunk(gridObj, onTrunkUpdated);
         }               
@@ -110,7 +110,7 @@ app.directive("vrPstnBeTrunkgrid", ["PSTN_BE_Service", "CDRAnalysis_PSTN_TrunkAP
             var onTrunkDeleted = function (deletedTrunkObj, linkedToTrunkId) {
                 gridAPI.itemDeleted(deletedTrunkObj);
                 updateDataItem(linkedToTrunkId, null, null);
-            }
+            };
 
             PSTN_BE_Service.deleteTrunk(gridObj, onTrunkDeleted);
         }

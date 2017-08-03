@@ -50,7 +50,7 @@ app.directive("vrPstnBeSetarea", ["NormalizationRuleAPIService", "UtilsService",
             $scope.onDirectiveReady = function (api) {
                 setAreaSettingsDirectiveAPI = api;
                 readyPromiseDeferred.resolve();
-            }
+            };
         }
 
         function defineAPI() {

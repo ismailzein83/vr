@@ -128,8 +128,8 @@
                 };
                 api.getFilterHint = function (parameter) {
                     if (directiveAPI != undefined && directiveAPI.getFilterHint != undefined)
-                         return  directiveAPI.getFilterHint(parameter);
-                }
+                        return directiveAPI.getFilterHint(parameter);
+                };
                 api.getData = getData;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

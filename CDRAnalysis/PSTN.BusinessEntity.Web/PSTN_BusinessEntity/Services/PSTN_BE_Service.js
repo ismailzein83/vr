@@ -29,7 +29,7 @@
 
         var parameters = {
             SwitchId: switchId
-        }
+        };
 
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = UtilsService.buildTitleForAddEditor("Trunk");

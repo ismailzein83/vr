@@ -26,39 +26,39 @@
             $scope.searchClicked = function () {
                 var query = getFilterObj();
                 trunkGridAPI.loadGrid(query);
-            }
+            };
 
             $scope.addTrunk = function () {
 
                 var onTrunkAdded = function (trunkObj) {
                     trunkGridAPI.onTrunkAdded(trunkObj);
-                }
+                };
                 CDRAnalysis_PSTN_TrunkService.addTrunk(onTrunkAdded);
-            }
+            };
 
             // directive functions
             $scope.onTrunkGridReady = function (api) {
                 trunkGridAPI = api;
                 trunkGridAPI.loadGrid({});
-            }
+            };
 
             $scope.onReadySwicth = function (api) {
                 switchDirectiveApi = api;
                 switchReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onReadyTrunkType = function (api) {
                 typeDirectiveApi = api;
                 typeReadyPromiseDeferred.resolve();
-            }
+            };
             $scope.onReadyTrunkDirection = function (api) {
                 directionDirectiveApi = api;
                 directionReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onReadyTrunkLink = function (api) {
                 linkDirectiveApi = api;
                 linkReadyPromiseDeferred.resolve();
-            }
+            };
 
         }
 

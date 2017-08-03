@@ -36,10 +36,10 @@
                 return updateBrand();
             else
                 return insertBrand();
-        }
+        };
         $scope.close = function () {
             $scope.modalContext.closeModal()
-        }
+        };
     }
 
     function load() {

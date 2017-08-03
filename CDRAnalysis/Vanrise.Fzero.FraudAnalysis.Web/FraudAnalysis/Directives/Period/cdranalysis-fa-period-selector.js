@@ -123,7 +123,7 @@
                     + hideremoveicon
                     + ' entityName="' + label + '">'
                 + '</vr-select>'
-            + '</div>'
+            + '</div>';
         }
 
         return directiveDefinitionObject;

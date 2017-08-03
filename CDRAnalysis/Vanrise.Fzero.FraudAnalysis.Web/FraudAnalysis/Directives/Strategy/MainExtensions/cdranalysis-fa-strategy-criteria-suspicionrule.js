@@ -148,13 +148,11 @@ app.directive("cdranalysisFaStrategyCriteriaSuspicionrule", ["StrategyAPIService
                 }
                 return null;
             };
-            $scope.scopeModel.onFilterSelected = function(dataItem)
-            {
-                if (context != undefined)
-                {
+            $scope.scopeModel.onFilterSelected = function (dataItem) {
+                if (context != undefined) {
                     context.setParameterVisibility(dataItem.isSelected, dataItem.parameters);
                 }
-            }
+            };
 
             defineAPI();
         }
@@ -204,8 +202,7 @@ app.directive("cdranalysisFaStrategyCriteriaSuspicionrule", ["StrategyAPIService
                 }
             };
 
-            api.getFilterHint = function(parameter)
-            {
+            api.getFilterHint = function (parameter) {
                 if (parameter != undefined) {
                     var filters = [];
                     for (var i = 0; i < $scope.scopeModel.strategyFilters.length; i++) {
@@ -217,11 +214,10 @@ app.directive("cdranalysisFaStrategyCriteriaSuspicionrule", ["StrategyAPIService
                     return filters.join(',');
                 }
                 return null;
-            }
+            };
 
             api.load = function (payload) {
-                if (payload)
-                {
+                if (payload) {
                     strategyEntity = payload.strategyCriteria;
                     filter = payload.filter;
                     context = payload.context;
@@ -232,20 +228,18 @@ app.directive("cdranalysisFaStrategyCriteriaSuspicionrule", ["StrategyAPIService
                 var promises = [];
                 var promiseDeffered = UtilsService.createPromiseDeferred();
                 promises.push(promiseDeffered.promise);
-                loadFilters(filter).then(function ()
-                {
+                loadFilters(filter).then(function () {
                     UtilsService.waitMultipleAsyncOperations([loadStrategyFilters, loadSuspicionRules]).then(function () {
                         promiseDeffered.resolve();
                     }).catch(function (error) {
                         promiseDeffered.reject(error);
                     });
-                }).catch(function(error){
+                }).catch(function (error) {
                     promiseDeffered.reject(error);
                 });
-             
+
                 function loadSuspicionRules() {
-                    if (strategyEntity)
-                    {
+                    if (strategyEntity) {
                         angular.forEach(strategyEntity.StrategyLevels, function (level) {
                             var strategyLevelItem = {
                                 suspicionLevel: UtilsService.getItemByVal($scope.scopeModel.suspicionLevels, level.SuspicionLevelId, 'value'),
@@ -271,7 +265,7 @@ app.directive("cdranalysisFaStrategyCriteriaSuspicionrule", ["StrategyAPIService
                             $scope.scopeModel.suspicionRules.push(strategyLevelItem);
                         });
                     }
-                    
+
                 }
                 function loadFilters(filter) {
                     return StrategyAPIService.GetFilters(UtilsService.serializetoJson(filter)).then(function (response) {
@@ -296,7 +290,7 @@ app.directive("cdranalysisFaStrategyCriteriaSuspicionrule", ["StrategyAPIService
                     }
                 }
                 return UtilsService.waitMultiplePromises(promises);
-            }
+            };
 
             function getStrategyFilterDataItemWithCommonProperties(filter) {
                 var item = {};

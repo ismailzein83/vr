@@ -43,10 +43,10 @@ function (UtilsService, VRNotificationService, Fzero_FraudAnalysis_AccountStatus
                     directiveAPI.loadGrid = function (query) {
 
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onAccountStatusAdded = function (accountStatusObject) {
                         gridAPI.itemAdded(accountStatusObject);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -88,7 +88,7 @@ function (UtilsService, VRNotificationService, Fzero_FraudAnalysis_AccountStatus
         function deleteAccountStatus(accountStatusObj) {
             var onAccountStatusDeleted = function (accountStatusObj) {
                 gridAPI.itemDeleted(accountStatusObj);
-            }
+            };
 
             Fzero_FraudAnalysis_AccountStatusService.deleteAccountStatus(accountStatusObj, onAccountStatusDeleted);
         }
@@ -103,7 +103,7 @@ function (UtilsService, VRNotificationService, Fzero_FraudAnalysis_AccountStatus
         function editAccountStatus(accountStatusObj) {
             var onAccountStatusUpdated = function (accountStatusObj) {
                 gridAPI.itemUpdated(accountStatusObj);
-            }
+            };
 
             Fzero_FraudAnalysis_AccountStatusService.editAccountStatus(accountStatusObj.Entity.AccountNumber, onAccountStatusUpdated);
         }

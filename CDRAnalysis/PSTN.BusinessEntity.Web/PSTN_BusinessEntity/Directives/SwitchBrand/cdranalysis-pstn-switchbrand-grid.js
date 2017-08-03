@@ -43,10 +43,10 @@ app.directive("cdranalysisPstnSwitchbrandGrid", ["CDRAnalysis_PSTN_SwitchBrandSe
                     var directiveAPI = {};
                     directiveAPI.retrieveData = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
-                    directiveAPI.onSwitchBrandAdded = function (switchBrandObj){
+                    };
+                    directiveAPI.onSwitchBrandAdded = function (switchBrandObj) {
                         gridAPI.itemAdded(switchBrandObj);
-                    }
+                    };
                     return directiveAPI;
                 }
             };
@@ -97,7 +97,7 @@ app.directive("cdranalysisPstnSwitchbrandGrid", ["CDRAnalysis_PSTN_SwitchBrandSe
         function deleteSwitchBrand(switchBrandObj) {
             var onSwitchBrandDeleted = function (deletedSwitchBrandObj) {
                 gridAPI.itemDeleted(deletedSwitchBrandObj);
-            }
+            };
             CDRAnalysis_PSTN_SwitchBrandService.deleteSwitchBrand(switchBrandObj, onSwitchBrandDeleted);
         }
     }

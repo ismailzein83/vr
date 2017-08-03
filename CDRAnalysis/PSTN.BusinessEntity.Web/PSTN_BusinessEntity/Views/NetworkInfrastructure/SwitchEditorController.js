@@ -38,12 +38,12 @@
             $scope.onDataSourceSelectorReady = function (api) {
                 dataSourceDirectiveAPI = api;
                 dataSourceReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onSwicthBrandSelectorReady = function (api) {
                 brandDirectiveAPI = api;
                 brandReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.saveSwitch = function () {
                 $scope.isLoading = true;
@@ -51,11 +51,11 @@
                     return updateSwitch();
                 else
                     return insertSwitch();
-            }
+            };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal()
-            }
+            };
 
             $scope.validateTimeOffset = function (value) {
 
@@ -83,7 +83,7 @@
                 }
 
                 return "Format: DD.HH:MM:SS";
-            }
+            };
 
         }
 

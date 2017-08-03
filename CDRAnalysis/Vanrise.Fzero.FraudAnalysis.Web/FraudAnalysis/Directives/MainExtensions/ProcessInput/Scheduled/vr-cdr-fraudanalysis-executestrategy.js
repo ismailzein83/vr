@@ -87,7 +87,7 @@ app.directive("vrCdrFraudanalysisExecutestrategy", ["UtilsService", "VRUIUtilsSe
                 promises.push(loadPeriodSelector());
                 return UtilsService.waitMultiplePromises(promises);
 
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

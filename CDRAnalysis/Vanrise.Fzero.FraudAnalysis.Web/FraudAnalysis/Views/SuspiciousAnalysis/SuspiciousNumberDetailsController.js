@@ -59,7 +59,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
 
         $scope.validateTimeRangeCDRs = function () {
             return VRValidationService.validateTimeRange($scope.fromDate_CDRs, $scope.toDate_CDRs);
-        }
+        };
 
 
 
@@ -77,7 +77,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
 
         $scope.validateTimeRangeNumberProfiles = function () {
             return VRValidationService.validateTimeRange($scope.fromDate_NumberProfiles, $scope.toDate_NumberProfiles);
-        }
+        };
 
         $scope.aggregateDefinitions = []; // column names
         $scope.detailAggregateValues = [];
@@ -107,19 +107,19 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
         $scope.onGridReady_Occurances = function (api) {
             gridAPI_Occurances = api;
             gridOccurances_ReadyPromiseDeferred.resolve();
-        }
+        };
 
         $scope.onGridReady_CDRs = function (api) {
             gridAPI_CDRs = api;
-        }
+        };
 
         $scope.onGridReady_NumberProfiles = function (api) {
             gridAPI_NumberProfiles = api;
-        }
+        };
 
         $scope.onGridReady_CaseHistory = function (api) {
             gridAPI_CaseHistory = api;
-        }
+        };
 
         $scope.onGridReady_RelatedNumbers = function (api) {
             gridAPI_RelatedNumbers = api;
@@ -131,7 +131,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
                     $scope.relatedNumbers.push(item);
                 });
             }
-        }
+        };
 
         $scope.relatedNumberClicked = function (dataItem) {
             openRelatedNumber(dataItem.RelatedNumber);
@@ -166,7 +166,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-        }
+        };
 
         $scope.dataRetrievalFunction_CDRs = function (dataRetrievalInput, onResponseReady) {
 
@@ -177,7 +177,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-        }
+        };
 
         $scope.dataRetrievalFunction_NumberProfiles = function (dataRetrievalInput, onResponseReady) {
 
@@ -188,7 +188,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-        }
+        };
 
         $scope.dataRetrievalFunction_CaseHistory = function (dataRetrievalInput, onResponseReady) {
 
@@ -209,10 +209,10 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
             .catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-        }
+        };
         
 
-        $scope.updateAccountCase = function () {            
+        $scope.updateAccountCase = function () {
             return CDRAnalysis_FA_AccountCaseAPIService.UpdateAccountCase({
                 AccountNumber: $scope.accountNumber,
                 CaseStatus: $scope.selectedCaseStatus.value,
@@ -244,15 +244,15 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
                 .catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });
-        }
+        };
 
         $scope.close = function () {
             $scope.modalContext.closeModal()
-        }
+        };
         
         $scope.onSelectedTabChanged = function () {
             return onSelectedTabChanged();
-        }
+        };
 
         $scope.onProfileSourceChanged = function () {
 
@@ -264,11 +264,11 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
                 else
                     $scope.showDate = false;
             }
-        }
+        };
 
         $scope.toggleValidTill = function (selectedStatus) {
             $scope.whiteListSelected = (selectedStatus != undefined && selectedStatus.value == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value);
-        }
+        };
 
         $scope.onReasonChanged = function () {
 
@@ -295,14 +295,14 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
                     }
                 }
             }
-        }
+        };
 
         $scope.getSuspicionLevelColor = function (dataItem) {
 
             if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.Suspicious.value) return LabelColorsEnum.WarningLevel1.color;
             else if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.HighlySuspicious.value) return LabelColorsEnum.WarningLevel2.color;
             else if (dataItem.SuspicionLevelID == CDRAnalysis_FA_SuspicionLevelEnum.Fraud.value) return LabelColorsEnum.Error.color;
-        }
+        };
 
         $scope.getCaseStatusColor = function (dataItem) {
 
@@ -310,7 +310,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
             else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.Pending.value) return LabelColorsEnum.Processing.color;
             else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedFraud.value) return LabelColorsEnum.Error.color;
             else if (dataItem.StatusID == CDRAnalysis_FA_CaseStatusEnum.ClosedWhitelist.value) return LabelColorsEnum.Success.color;
-        }
+        };
 
         $scope.searchCDRs = retrieveData_CDRs;
 
@@ -532,7 +532,7 @@ function SuspiciousNumberDetailsController($scope, CDRAPIService, NumberProfileA
             modalScope.title = "Suspicious Number Details";
             modalScope.onAccountCaseUpdated = function (accountSuspicionSummary) {
                 $scope.onAccountCaseUpdated(accountSuspicionSummary);
-            }
+            };
         };
 
         VRModalService.showModal("/Client/Modules/FraudAnalysis/Views/SuspiciousAnalysis/SuspiciousNumberDetails.html", parameters, modalSettings);

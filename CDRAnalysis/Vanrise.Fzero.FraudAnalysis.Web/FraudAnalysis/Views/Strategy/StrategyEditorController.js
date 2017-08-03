@@ -38,11 +38,10 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onStrategyCriteriaReady = function (api)
-            {
+            $scope.scopeModel.onStrategyCriteriaReady = function (api) {
                 strategyCriteriaDirectiveAPI = api;
-                 strategyCriteriaDirectiveReadyDeferred.resolve();
-            }
+                strategyCriteriaDirectiveReadyDeferred.resolve();
+            };
 
             $scope.hasSaveStrategyPermission = function () {
                 if (isEditMode)
@@ -56,11 +55,10 @@
                 periodSelectorReadyDeferred.resolve();
             };
           
-            $scope.scopeModel.onStrategyParametersReady = function(api)
-            {
+            $scope.scopeModel.onStrategyParametersReady = function (api) {
                 strategyParametersDirectiveAPI = api;
                 strategyParametersDirectiveReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onPeriodSelectionChanged = function (selectedPeriod) {
                 if (selectedPeriod != undefined) {

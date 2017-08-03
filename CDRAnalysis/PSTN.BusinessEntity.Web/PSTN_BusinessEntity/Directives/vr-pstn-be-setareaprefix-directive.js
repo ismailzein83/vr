@@ -54,7 +54,7 @@ app.directive("vrPstnBeSetareaprefix", [function () {
                 if (payload != undefined) {
                     $scope.prefixLength = payload.PrefixLength;
                 }
-            }
+            };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

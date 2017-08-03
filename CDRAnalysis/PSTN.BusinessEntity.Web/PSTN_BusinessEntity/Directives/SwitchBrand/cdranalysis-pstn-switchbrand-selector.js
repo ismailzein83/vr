@@ -30,7 +30,7 @@ app.directive('cdranalysisPstnSwitchbrandSelector', ['CDRAnalysis_PSTN_SwitchBra
                             ctrl.selectedvalues = brandObj;
                     };
                     CDRAnalysis_PSTN_SwitchBrandService.addSwitchBrand(onBrandAdded);
-                }
+                };
                 var switchBrandSelector = new SwitchBrandSelector(ctrl, $scope, $attrs);
                 switchBrandSelector.initializeController();
 
@@ -76,14 +76,14 @@ app.directive('cdranalysisPstnSwitchbrandSelector', ['CDRAnalysis_PSTN_SwitchBra
                 $scope.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
-                }
+                };
             }
 
             function defineAPI() {
                 var api = {};
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('BrandId', attrs, ctrl);
-                }
+                };
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
                     var selectedIds;
@@ -91,7 +91,7 @@ app.directive('cdranalysisPstnSwitchbrandSelector', ['CDRAnalysis_PSTN_SwitchBra
                         selectedIds = payload.selectedIds;
                     }
                     return getSwitchesBrandInfo(attrs, ctrl, selectedIds);
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

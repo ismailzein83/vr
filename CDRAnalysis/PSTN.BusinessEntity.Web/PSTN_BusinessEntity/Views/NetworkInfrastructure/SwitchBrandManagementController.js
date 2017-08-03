@@ -18,19 +18,19 @@
             $scope.searchClicked = function () {
                 setFilterObject();
                 return brandGridAPI.retrieveData(filter);
-            }
+            };
 
             $scope.addBrand = function () {
                 var onSwitchBrandAdded = function (onSwitchBrandAdded) {
                     brandGridAPI.onSwitchBrandAdded(onSwitchBrandAdded);
-                }
+                };
                 CDRAnalysis_PSTN_SwitchBrandService.addSwitchBrand(onSwitchBrandAdded);
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 brandGridAPI = api;
                 brandGridAPI.retrieveData({});
-            }
+            };
 
 
         }
