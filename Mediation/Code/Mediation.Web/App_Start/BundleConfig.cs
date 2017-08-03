@@ -18,8 +18,7 @@ namespace Mediation.Web
                 "~/Client/Modules/Queueing", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_GenericData", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Mediation_Generic", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/Mediation_Huawei", "*.js", true);
+                "~/Client/Modules/Mediation_Generic", "*.js", true);
             bundles.Add(modulesJSBundle);
         }
     }
