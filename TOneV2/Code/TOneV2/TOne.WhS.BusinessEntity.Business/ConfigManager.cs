@@ -108,6 +108,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return businessEntitySettingsData.CachingExpirationIntervals;
         }
+
+        public decimal GetDefaultRate()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.DefaultRate;
+        }
         public int GetSaleAreaEffectiveDateDayOffset()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
