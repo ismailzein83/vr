@@ -16,7 +16,7 @@ namespace Vanrise.BusinessProcess
     public class BPSharedInstanceData : PersistenceParticipant
     {
         static BPDefinitionManager s_bpDefinitionManager = new BPDefinitionManager();
-     
+
         BPDefinition _bpDefinition;
         string _generalLogEventType;
         int? _generalLogViewRequiredPermissionSetId;
@@ -69,19 +69,19 @@ namespace Vanrise.BusinessProcess
             WriteTrackingMessages(true, severity, messageFormat, args);
         }
 
-        public void WriteHandledException(Exception ex)
+        public void WriteHandledException(Exception ex, bool isError = false)
         {
-            WriteHandledExceptionMessages(false, ex);
+            WriteHandledExceptionMessages(false, ex, isError);
         }
 
-        public void WriteBusinessHandledException(Exception ex)
+        public void WriteBusinessHandledException(Exception ex, bool isError = false)
         {
-            WriteHandledExceptionMessages(true, ex);
+            WriteHandledExceptionMessages(true, ex, isError);
         }
 
-        void WriteHandledExceptionMessages(bool writeBusinessTracking, Exception ex)
+        void WriteHandledExceptionMessages(bool writeBusinessTracking, Exception ex, bool isError)
         {
-            BPTrackingChannel.Current.WriteException(this.InstanceInfo.ProcessInstanceID, this.InstanceInfo.ParentProcessID, ex, false);
+            BPTrackingChannel.Current.WriteException(this.InstanceInfo.ProcessInstanceID, this.InstanceInfo.ParentProcessID, ex, isError);
             if (writeBusinessTracking)
                 LoggerFactory.GetExceptionLogger().WriteException(_generalLogEventType, this._generalLogViewRequiredPermissionSetId, ex);
         }
