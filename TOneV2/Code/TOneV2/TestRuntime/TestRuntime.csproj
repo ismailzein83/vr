@@ -1020,10 +1020,6 @@
       <Project>{57423020-2661-4a4d-98aa-80d07aed6449}</Project>
       <Name>TOne.WhS.Routing.MainExtensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TOne.WhS.Routing.Notification\TOne.WhS.Routing.Notification.csproj">
-      <Project>{b6d08982-f932-40d4-87c9-5802adbb1cc9}</Project>
-      <Name>TOne.WhS.Routing.Notification</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Sales.BP.Activities\TOne.WhS.Sales.BP.Activities.csproj">
       <Project>{ba3e1017-95e3-4036-b941-d3f60586064e}</Project>
       <Name>TOne.WhS.Sales.BP.Activities</Name>

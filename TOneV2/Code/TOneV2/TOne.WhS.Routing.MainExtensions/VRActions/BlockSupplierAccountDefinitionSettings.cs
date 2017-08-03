@@ -2,7 +2,7 @@
 using Vanrise.GenericData.Notification;
 using Vanrise.Notification.Entities;
 
-namespace TOne.WhS.Routing.Notification
+namespace TOne.WhS.Routing.MainExtensions
 {
     public class BlockSupplierAccountDefinitionSettings : VRActionDefinitionExtendedSettings
     {

@@ -2,9 +2,9 @@
 using Vanrise.GenericData.Notification;
 using Vanrise.Notification.Entities;
 
-namespace TOne.WhS.Routing.Notification
+namespace TOne.WhS.Routing.MainExtensions
 {
-    public class BlockSupplierZoneDefinitionSettings : VRActionDefinitionExtendedSettings
+    public class BlockCustomerAccountDefinitionSettings : VRActionDefinitionExtendedSettings
     {
         public override Guid ConfigId { get { throw new NotImplementedException(); } }
 
@@ -12,9 +12,7 @@ namespace TOne.WhS.Routing.Notification
 
         public Guid DataRecordTypeId { get; set; }
 
-        public string SupplierFieldName { get; set; }
-
-        public string SupplierZoneFieldName { get; set; }
+        public string CustomerFieldName { get; set; }
 
         public override bool IsApplicable(IVRActionDefinitionIsApplicableContext context)
         {
@@ -28,10 +26,7 @@ namespace TOne.WhS.Routing.Notification
             if (dataRecordActionTargetType.AvailableDataRecordFieldNames == null || dataRecordActionTargetType.AvailableDataRecordFieldNames.Count == 0)
                 return false;
 
-            if (!dataRecordActionTargetType.AvailableDataRecordFieldNames.Contains(SupplierFieldName))
-                return false;
-
-            if (!dataRecordActionTargetType.AvailableDataRecordFieldNames.Contains(SupplierZoneFieldName))
+            if (!dataRecordActionTargetType.AvailableDataRecordFieldNames.Contains(CustomerFieldName))
                 return false;
 
             return true;

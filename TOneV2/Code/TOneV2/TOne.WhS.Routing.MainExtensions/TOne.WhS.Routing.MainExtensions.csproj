@@ -41,16 +41,23 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.GenericData.Notification">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Notification.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Notification.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Notification.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VRActions\BlockCustomerAccountDefinitionSettings.cs" />
+    <Compile Include="VRActions\BlockSaleZoneDefinitionSettings.cs" />
+    <Compile Include="VRActions\BlockSupplierAccountDefinitionSettings.cs" />
     <Compile Include="VRActions\BlockSupplierZoneAction.cs" />
     <Compile Include="VRActions\BlockSupplierAccountAction.cs" />
     <Compile Include="VRActions\BlockSaleZoneAction.cs" />
     <Compile Include="VRActions\BlockCustomerAccountAction.cs" />
+    <Compile Include="VRActions\BlockSupplierZoneDefinitionSettings.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
