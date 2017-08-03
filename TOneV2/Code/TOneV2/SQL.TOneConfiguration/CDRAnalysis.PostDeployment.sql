@@ -113,11 +113,33 @@ set nocount on;;with cte_data([ID],[Name],[Url],[DefaultViewId],[ParentId],[Ico
 --------------------------------------------------------------------------------------------------------------
 end
 
+GO--delete useless views from CDRAnalysis product
+delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308',--'My Scheduler Service'
+										'66DE2441-8A96-41E7-94EA-9F8AF38A3515',--'Style Definitions'
+										'DCF8CA21-852C-41B9-9101-6990E545509D',--'Organizational Charts'
+										'52C580DE-C91F-45E2-8E3A-46E0BA9E7EFD',--'Component Types'
+										'8AC4B99E-01A0-41D1-AE54-09E679309086',--'Status Definitions'
+										'604B2CB5-B839-4E51-8D13-3C1C84D05DEE',--'Countries'
+										'A1CE55FE-6CF4-4F15-9BC2-8E1F8DF68561',--'Regions'
+										'25994374-CB99-475B-8047-3CDB7474A083',--'Cities'
+										'9F691B87-4936-4C4C-A757-4B3E12F7E1D9', --'Currencies'
+										'E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9', --'Exchange Rates'
+										'0F111ADC-B7F6-46A4-81BC-72FFDEB305EB', --'Time Zone'
+										'2CF7E0BE-1396-4305-AA27-11070ACFC18F',--'Application Visibilities'
+										'4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712'--'Rate Types'
+										)
+GO
 --[sec].[View]-----------------------------9001 to 10000--------------------------------------------------------
 begin
 set nocount on;;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('7079BD63-BFE2-4519-9B1B-8158A2F3A12A','Event Logs','Event Logs',null,'BAAF681E-AB1C-4A64-9A35-3F3951398881',null,null,null,'{"$type":"Vanrise.Common.Business.MasterLogViewSettings, Vanrise.Common.Business","Items":[{"PermissionName":"VRCommon_System_Log: View General Logs","Directive":"vr-log-entry-search","Title":"General"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-log-search","Title":"Data Source"},{"PermissionName":"VR_Integration_DataProcesses: View Logs","Directive":"vr-integration-importedbatch-search","Title":"Imported Batch"},{"PermissionName":"VRCommon_System_Log: View General Logs","Directive":"bp-instance-log-search","Title":"Business Process"},{"PermissionName":"VRCommon_System_Log: View Action Audit","Directive":"vr-common-actionaudit-search","Title":"Action Audit"}]}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15,null),('949681F0-3701-4D43-85E5-1BB61BCE7F28','Strategy Execution Log','Strategy Execution Log','#/view/FraudAnalysis/Views/StrategyExecution/StrategyExecutionManagement','C49F3A08-1D96-4F56-B0C6-F81EB8AAC9CA','Fzero_FraudAnalysis/StrategyExecution/GetFilteredStrategyExecutions',null,null,null,'C56841B2-E7EF-47A9-AFF5-DED8BCB1E670',2,null),('F09A8CCF-F0EE-4EEF-BB19-24B1ABF902AE','Normalization Rule','Normalization Rule','#/view/PSTN_BusinessEntity/Views/Normalization/NormalizationRuleManagement','50624672-CD25-44FD-8580-0E3AC8E34C71','PSTN_BE/NormalizationRule/GetFilteredNormalizationRules',null,null,null,'C56841B2-E7EF-47A9-AFF5-DED8BCB1E670',31,null),('EB2D5EA0-4AE1-4219-8152-487F13EF2B88','Switch Brands','Switch Brands','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchBrandManagement','8437594D-5472-4F4E-8EF2-D15C32834714','PSTN_BE/SwitchBrand/GetFilteredBrands',null,null,null,'C56841B2-E7EF-47A9-AFF5-DED8BCB1E670',3,null),('DB3B1776-CBCC-4490-92BC-529CD9F3B8BB','Switches','Switches','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/SwitchManagement','8437594D-5472-4F4E-8EF2-D15C32834714','PSTN_BE/Switch/GetFilteredSwitches',null,null,null,'C56841B2-E7EF-47A9-AFF5-DED8BCB1E670',1,null),('BFDB6651-DF90-4C12-85F0-5C3A78299AC8','Trunks','Trunks','#/view/PSTN_BusinessEntity/Views/NetworkInfrastructure/TrunkManagement','8437594D-5472-4F4E-8EF2-D15C32834714','PSTN_BE/Trunk/GetFilteredTrunks',null,null,null,'C56841B2-E7EF-47A9-AFF5-DED8BCB1E670',2,null),('AA1DC522-730C-4F30-A41E-A847389F15EF','Suspicious Numbers','Suspicious Numbers','#/view/FraudAnalysis/Views/SuspiciousAnalysis/SuspicionAnalysis','C49F3A08-1D96-4F56-B0C6-F81EB8AAC9CA','Fzero_FraudAnalysis/AccountCase/GetFilteredAccountSuspicionSummaries',null,null,null,'C56841B2-E7EF-47A9-AFF5-DED8BCB1E670',3,null),('CF2BEAB7-A69F-4834-9818-CEE0E9B39E68','White Numbers','White Numbers','#/view/FraudAnalysis/Views/AccountStatus/AccountStatusManagement','C49F3A08-1D96-4F56-B0C6-F81EB8AAC9CA','Fzero_FraudAnalysis/AccountStatus/GetAccountStatusesData',null,null,null,'C56841B2-E7EF-47A9-AFF5-DED8BCB1E670',4,null),('9D9043EB-18E8-4C52-A69B-EE10954DCFA5','Strategies','Strategies','#/view/FraudAnalysis/Views/Strategy/StrategyManagement','C49F3A08-1D96-4F56-B0C6-F81EB8AAC9CA','Fzero_FraudAnalysis/Strategy/GetFilteredStrategies',null,null,null,'C56841B2-E7EF-47A9-AFF5-DED8BCB1E670',1,null)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank],[IsDeleted] = s.[IsDeleted]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank],[IsDeleted])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank],s.[IsDeleted]);
 ---------------------------------------------------------------------------------------------------------------
 end
+
+DELETE FROM [sec].[BusinessEntityModule] WHERE [ID] IN ('16419FE1-ED56-49BA-B609-284A5E21FC07',--'Traffic'
+														'520558FA-CF2F-440B-9B58-09C23B6A2E9B',--'Billing'
+														'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',--'Business Entities'
+														'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',--'Rules'
+														'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493')--'Lookups'
 
 --[sec].[BusinessEntityModule]------------------------901 to 1000----------------------------------------------
 begin
@@ -244,6 +266,9 @@ set nocount on;;with cte_data([ID],[Name],[Title],[FQTN],[Config])as (select *
 ----------------------------------------------------------------------------------------------------
 end
 
+Delete from [common].[Setting] where [ID] in (	'1CB20F2C-A835-4320-AEC7-E034C5A756E9',--'Bank Details'
+												'1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE',--'System Currency'
+												'81F62AC3-BAE4-4A2F-A60D-A655494625EA' )--'Company Setting'
 --[common].[Setting]---------------------------701 to 800-------------------------------------------
 begin
 set nocount on;
