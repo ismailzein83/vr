@@ -36,6 +36,7 @@ namespace Retail.BusinessEntity.Business
         public IDataRetrievalResult<AccountDetail> GetFilteredAccounts(DataRetrievalInput<AccountQuery> input)
         {
             var recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
+            //var accountTypeManager = new AccountTypeManager();
 
             Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(input.Query.AccountBEDefinitionId);
 
@@ -47,8 +48,14 @@ namespace Retail.BusinessEntity.Business
                 if (input.Query.AccountTypeIds != null && !input.Query.AccountTypeIds.Contains(account.TypeId))
                     return false;
 
-                if (!input.Query.ParentAccountId.HasValue && account.ParentAccountId.HasValue)
-                    return false;
+                //if (input.Query.OnlyRootAccount)
+                //{
+                //    AccountType accountType = accountTypeManager.GetAccountType(account.TypeId);
+                //    accountType.ThrowIfNull("accountType", account.TypeId);
+                //    accountType.Settings.ThrowIfNull("accountType.Settings", account.TypeId);
+                //    if (!accountType.Settings.CanBeRootAccount)
+                //        return false;
+                //}
 
                 if (input.Query.ParentAccountId.HasValue && (!account.ParentAccountId.HasValue || (account.ParentAccountId.HasValue && input.Query.ParentAccountId.Value != account.ParentAccountId.Value)))
                     return false;
@@ -565,7 +572,7 @@ namespace Retail.BusinessEntity.Business
 
             var account = GetAccount(accountBEDefinitionId, accountId);
             account.ThrowIfNull("account", accountId);
-           return  IsAccountActive(account);
+            return IsAccountActive(account);
         }
         public bool IsAccountActive(Account account)
         {
@@ -1232,8 +1239,6 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
     }
-
-    
 
     internal class AccountTreeNode
     {
