@@ -48,7 +48,7 @@ namespace CDRComparison.BP.Activities
             NormalizeNumberSettings cdpnNormalizationSettings;
             NormalizeNumberSettings cgpnNormalizationSettings;
             SetNumberNormalizationSettings(inputArgument.CDRSource.NormalizationRules, out cdpnNormalizationSettings, out cgpnNormalizationSettings);
-            
+
             long totalCount = 0;
 
             Action<IEnumerable<CDR>> onCDRsReceived = (cdrs) =>
@@ -66,8 +66,6 @@ namespace CDRComparison.BP.Activities
 
                     item.DurationInSec = (inputArgument.CDRSource.DurationTimeUnit == CDRSourceTimeUnitEnum.Minutes) ? (cdr.DurationInSec * 60) : cdr.DurationInSec;
                     NormalizeNumbers(item, cdpnNormalizationSettings, cgpnNormalizationSettings);
-
-                    ValidateOriginalAndNormalizedCDPNs(item);
 
                     list.Add(item);
                 }
@@ -109,7 +107,7 @@ namespace CDRComparison.BP.Activities
                 cgpnNormalizationSettings = null;
                 return;
             }
-            
+
             NormalizationRule cdpnNormalizationRule = normalizationRules.FindRecord(itm => itm.FieldToNormalize == "CDPN");
             NormalizationRule cgpnNormalizationRule = normalizationRules.FindRecord(itm => itm.FieldToNormalize == "CGPN");
 
@@ -136,17 +134,6 @@ namespace CDRComparison.BP.Activities
             }
             else
                 cdr.CGPN = cdr.OriginalCGPN;
-        }
-
-        void ValidateOriginalAndNormalizedCDPNs(CDR cdr)
-        {
-            if (String.IsNullOrEmpty(cdr.OriginalCDPN) || String.IsNullOrEmpty(cdr.CDPN))
-            {
-                if (cdr.IsPartnerCDR)
-                    throw new NullReferenceException("Partner CDRs contain null CDPN");
-                else
-                    throw new NullReferenceException("System CDRs contain null CDPN");
-            }
         }
 
         #endregion

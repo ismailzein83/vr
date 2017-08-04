@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace CDRComparison.Entities
 {
-    class InvalidCDRBatch
+    public class InvalidCDRBatch
     {
+        public List<InvalidCDR> InvalidCDRs { get; set; }
     }
 }

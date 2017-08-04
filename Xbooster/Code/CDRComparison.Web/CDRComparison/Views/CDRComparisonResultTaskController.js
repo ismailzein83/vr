@@ -5,13 +5,18 @@
     CDRComparisonResultTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'CDRComparison_CDRComparisonAPIService'];
 
     function CDRComparisonResultTaskController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, CDRComparison_CDRComparisonAPIService) {
+
         var bpTaskId;
         var processInstanceId;
+
         var tableKey;
+
         var systemMissingCDRGridAPI;
         var partnerMissingCDRGridAPI;
         var partialMatchCDRGridAPI;
         var disputeCDRGridAPI;
+        var systemInvalidCDRGridAPI;
+        var partnerInvalidCDRGridAPI;
 
         loadParameters();
 
@@ -28,7 +33,7 @@
 
         function defineScope() {
 
-            $scope.scopeModal = {    };
+            $scope.scopeModal = {};
 
             $scope.scopeModal.onSystemMissingCDRDirectiveReady = function (api) {
                 systemMissingCDRGridAPI = api;
@@ -73,6 +78,30 @@
                     $scope.scopeModal.isLoadingDisputeCDRDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, disputeCDRGridAPI, payload, setLoader);
+            };
+
+            $scope.scopeModal.onSystemInvalidCDRGridReady = function (api) {
+                systemInvalidCDRGridAPI = api;
+                var systemInvalidCDRGridPayload = {
+                    TableKey: tableKey,
+                    IsPartnerCDRs: false
+                };
+                var setLoader = function (value) {
+                    $scope.scopeModal.isLoadingSystemInvalidCDRGrid = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, systemInvalidCDRGridAPI, systemInvalidCDRGridPayload, setLoader);
+            };
+
+            $scope.scopeModal.onPartnerInvalidCDRGridReady = function (api) {
+                partnerInvalidCDRGridAPI = api;
+                var partnerInvalidCDRGridPayload = {
+                    TableKey: tableKey,
+                    IsPartnerCDRs: true
+                };
+                var setLoader = function (value) {
+                    $scope.scopeModal.isLoadingPartnerInvalidCDRGrid = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerInvalidCDRGridAPI, partnerInvalidCDRGridPayload, setLoader);
             };
 
             $scope.scopeModal.continueTask = function () {
@@ -124,14 +153,15 @@
 
         function loadSummaryData() {
             return CDRComparison_CDRComparisonAPIService.GetCDRComparisonSummary(tableKey).then(function (response) {
-                if (response != null)
-                {
+                if (response != null) {
                     $scope.scopeModal.systemCDRsCount = response.SystemCDRsCount;
                     $scope.scopeModal.partnerCDRsCount = response.PartnerCDRsCount;
                     $scope.scopeModal.systemMissingCDRsCount = response.SystemMissingCDRsCount;
                     $scope.scopeModal.partnerMissingCDRsCount = response.PartnerMissingCDRsCount;
                     $scope.scopeModal.partialMatchCDRsCount = response.PartialMatchCDRsCount;
                     $scope.scopeModal.disputeCDRsCount = response.DisputeCDRsCount;
+                    $scope.scopeModal.systemInvalidCDRsCount = response.SystemInvalidCDRsCount;
+                    $scope.scopeModal.partnerInvalidCDRsCount = response.PartnerInvalidCDRsCount;
 
                     $scope.scopeModal.durationOfSystemCDRs = response.DurationOfSystemCDRs;
                     $scope.scopeModal.durationOfPartnerCDRs = response.DurationOfPartnerCDRs;
@@ -142,6 +172,8 @@
                     $scope.scopeModal.totalDurationDifferenceOfPartialMatchCDRs = response.TotalDurationDifferenceOfPartialMatchCDRs;
                     $scope.scopeModal.durationOfSystemDisputeCDRs = response.DurationOfSystemDisputeCDRs;
                     $scope.scopeModal.durationOfPartnerDisputeCDRs = response.DurationOfPartnerDisputeCDRs;
+                    $scope.scopeModal.systemInvalidCDRsDuration = response.SystemInvalidCDRsDuration;
+                    $scope.scopeModal.partnerInvalidCDRsDuration = response.PartnerInvalidCDRsDuration;
                 }
             });
         }

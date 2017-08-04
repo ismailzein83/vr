@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="CDRComparison_CDRComparisonResultTaskController" width="'70%'">
+﻿<div vr-modalcontent ng-controller="CDRComparison_CDRComparisonResultTaskController" width="'85%'">
     <vr-modalbody>
         <vr-form name="formCDRComparison" vr-loader="scopeModal.isLoading">
             <vr-tabs>
@@ -132,6 +132,49 @@
                             </vr-section>
                         </vr-columns>
                     </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section title="Invalid CDRs">
+                                <vr-row>
+                                    <vr-row>
+                                        <vr-columns width="1/3row" dontload="true">
+                                            <vr-label></vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row" dontload="true">
+                                            <vr-label>System</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row" dontload="true">
+                                            <vr-label>Partner</vr-label>
+                                        </vr-columns>
+                                    </vr-row>
+
+                                    <vr-row>
+                                        <vr-columns width="1/3row" dontload="true">
+                                            <vr-label>CDRs</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row" dontload="true">
+                                            <vr-label isvalue>{{scopeModal.systemInvalidCDRsCount}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row" dontload="true">
+                                            <vr-label isvalue>{{scopeModal.partnerInvalidCDRsCount}}</vr-label>
+                                        </vr-columns>
+                                    </vr-row>
+
+                                    <vr-row>
+                                        <vr-columns width="1/3row" dontload="true">
+                                            <vr-label>Duration (SEC)</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row" dontload="true">
+                                            <vr-label isvalue>{{scopeModal.systemInvalidCDRsDuration}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row" dontload="true">
+                                            <vr-label isvalue>{{scopeModal.partnerInvalidCDRsDuration}}</vr-label>
+                                        </vr-columns>
+                                    </vr-row>
+                                </vr-row>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Missing CDRs from System'" dontload="true">
                     <vr-row>
@@ -162,6 +205,22 @@
                         </vr-columns>
                     </vr-row>
 
+                </vr-tab>
+
+                <vr-tab header="'Invalid System CDRs'" dontload="true">
+                    <vr-row>
+                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingSystemInvalidCDRGrid">
+                            <cdrcomparison-invalidcdr-grid on-ready="scopeModal.onSystemInvalidCDRGridReady"></cdrcomparison-invalidcdr-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
+                <vr-tab header="'Invalid Partner CDRs'" dontload="true">
+                    <vr-row>
+                        <vr-columns width="fullrow" vr-loader="scopeModal.isLoadingPartnerInvalidCDRGrid">
+                            <cdrcomparison-invalidcdr-grid on-ready="scopeModal.onPartnerInvalidCDRGridReady"></cdrcomparison-invalidcdr-grid>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
 
             </vr-tabs>

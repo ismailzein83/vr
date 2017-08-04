@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace CDRComparison.Entities
 {
-    class InvalidCDRQuery
+    public class InvalidCDRQuery
     {
+        public string TableKey { get; set; }
+        public bool IsPartnerCDRs { get; set; }
     }
 }

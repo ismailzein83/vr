@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.invalidCDRs"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'CDPN'" field="'CDPN'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'CGPN'" field="'CGPN'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Time'" field="'Time'" type="'LongDatetime'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Duration (SEC)'" field="'DurationInSec'" summaryfield="'DurationInSec'" type="'Number'"></vr-datagridcolumn>
+</vr-datagrid>

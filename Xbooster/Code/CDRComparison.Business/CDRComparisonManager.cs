@@ -30,6 +30,7 @@ namespace CDRComparison.Business
             MissingCDRManager missingCDRManager = new MissingCDRManager();
             PartialMatchCDRManager partialMatchCDRManager = new PartialMatchCDRManager();
             DisputeCDRManager disputeCDRManager = new Business.DisputeCDRManager();
+            var invalidCDRManager = new InvalidCDRManager();
 
             summary.SystemCDRsCount = cdrManager.GetCDRsCount(tableKey, false);
             summary.PartnerCDRsCount = cdrManager.GetCDRsCount(tableKey, true);
@@ -50,6 +51,11 @@ namespace CDRComparison.Business
 
             summary.DurationOfSystemDisputeCDRs = disputeCDRManager.GetDurationOfDisputeCDRs(tableKey, false);
             summary.DurationOfPartnerDisputeCDRs = disputeCDRManager.GetDurationOfDisputeCDRs(tableKey, true);
+
+            summary.SystemInvalidCDRsCount = invalidCDRManager.GetInvalidCDRsCount(tableKey, false);
+            summary.PartnerInvalidCDRsCount = invalidCDRManager.GetInvalidCDRsCount(tableKey, true);
+            summary.SystemInvalidCDRsDuration = invalidCDRManager.GetInvalidCDRsDuration(tableKey, false);
+            summary.PartnerInvalidCDRsDuration = invalidCDRManager.GetInvalidCDRsDuration(tableKey, true);
 
             return summary;
         }

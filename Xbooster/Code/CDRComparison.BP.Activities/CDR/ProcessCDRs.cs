@@ -22,6 +22,7 @@ namespace CDRComparison.BP.Activities
         public BaseQueue<MissingCDRBatch> OutputQueueMissingCDR { get; set; }
         public BaseQueue<PartialMatchCDRBatch> OutputQueuePartialMatchCDR { get; set; }
         public BaseQueue<DisputeCDRBatch> OutputQueueDisputeCDR { get; set; }
+        public BaseQueue<InvalidCDRBatch> OutputQueueInvalidCDR { get; set; }
         public bool CompareCGPN { get; set; }
     }
 
@@ -47,6 +48,8 @@ namespace CDRComparison.BP.Activities
         public InOutArgument<BaseQueue<PartialMatchCDRBatch>> OutputQueuePartialMatchCDR { get; set; }
         [RequiredArgument]
         public InOutArgument<BaseQueue<DisputeCDRBatch>> OutputQueueDisputeCDR { get; set; }
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<InvalidCDRBatch>> OutputQueueInvalidCDR { get; set; }
 
         #endregion
 
@@ -58,6 +61,8 @@ namespace CDRComparison.BP.Activities
                 this.OutputQueuePartialMatchCDR.Set(context, new MemoryQueue<PartialMatchCDRBatch>());
             if (this.OutputQueueDisputeCDR.Get(context) == null)
                 this.OutputQueueDisputeCDR.Set(context, new MemoryQueue<DisputeCDRBatch>());
+            if (this.OutputQueueInvalidCDR.Get(context) == null)
+                this.OutputQueueInvalidCDR.Set(context, new MemoryQueue<InvalidCDRBatch>());
 
             base.OnBeforeExecute(context, handle);
         }
@@ -79,14 +84,11 @@ namespace CDRComparison.BP.Activities
                             var cdrs = cdrBatch.CDRs;
                             foreach (var cdr in cdrs)
                             {
-                                if (currentCDPN == null)
-                                    currentCDPN = cdr.CDPN;
-
                                 if (cdr.CDPN == currentCDPN)
                                     batch.CDRs.Add(cdr);
                                 else
                                 {
-                                    ProcessCDRBach(inputArgument, batch);
+                                    ProcessCDRBatch(inputArgument, batch);
                                     currentCDPN = cdr.CDPN;
                                     batch.CDRs = new List<CDR>();
                                     batch.CDRs.Add(cdr);
@@ -101,7 +103,7 @@ namespace CDRComparison.BP.Activities
 
             if (batch.CDRs.Count() > 0)
             {
-                ProcessCDRBach(inputArgument, batch);
+                ProcessCDRBatch(inputArgument, batch);
             }
 
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finished Processing CDRs.", totalCount);
@@ -118,14 +120,14 @@ namespace CDRComparison.BP.Activities
                 OutputQueueMissingCDR = this.OutputQueueMissingCDR.Get(context),
                 OutputQueuePartialMatchCDR = this.OutputQueuePartialMatchCDR.Get(context),
                 OutputQueueDisputeCDR = this.OutputQueueDisputeCDR.Get(context),
-                CompareCGPN = this.CompareCGPN.Get(context),
-
+                OutputQueueInvalidCDR = this.OutputQueueInvalidCDR.Get(context),
+                CompareCGPN = this.CompareCGPN.Get(context)
             };
         }
 
         #region Private Methods
 
-        void ProcessCDRBach(ProcessCDRsInput inputArgument, CDRBatch cdrBatch)
+        void ProcessCDRBatch(ProcessCDRsInput inputArgument, CDRBatch cdrBatch)
         {
             if (cdrBatch != null)
             {
@@ -137,8 +139,12 @@ namespace CDRComparison.BP.Activities
                 partialMatchCDRBatch.PartialMatchCDRs = new List<PartialMatchCDR>();
                 DisputeCDRBatch disputeCDRBatch = new Entities.DisputeCDRBatch();
                 disputeCDRBatch.DisputeCDRs = new List<DisputeCDR>();
-                var systemCDRs = cdrBatch.CDRs.Where(x => !x.IsPartnerCDR);
-                var partnerCDRs = cdrBatch.CDRs.Where(x => x.IsPartnerCDR).ToList();
+                InvalidCDRBatch invalidCDRBatch = new InvalidCDRBatch() { InvalidCDRs = new List<InvalidCDR>() };
+
+                var systemCDRs = new List<CDR>();
+                var partnerCDRs = new List<CDR>();
+                SetCDRsToProcess(cdrBatch.CDRs, systemCDRs, partnerCDRs, invalidCDRBatch.InvalidCDRs);
+
                 foreach (var cdr in systemCDRs)
                 {
                     var partnerCDR = partnerCDRs.FindAllRecords(x => (inputArgument.CompareCGPN ? x.CGPN == cdr.CGPN : true) && Convert.ToDecimal(Math.Abs((cdr.Time - x.Time).TotalMilliseconds)) <= inputArgument.TimeMarginInMilliseconds);
@@ -219,6 +225,7 @@ namespace CDRComparison.BP.Activities
                 inputArgument.OutputQueueDisputeCDR.Enqueue(disputeCDRBatch);
                 inputArgument.OutputQueuePartialMatchCDR.Enqueue(partialMatchCDRBatch);
                 inputArgument.OutputQueueMissingCDR.Enqueue(missingCDRBatch);
+                inputArgument.OutputQueueInvalidCDR.Enqueue(invalidCDRBatch);
             }
         }
 
@@ -230,6 +237,30 @@ namespace CDRComparison.BP.Activities
                 {
                     cdr.Time = cdr.Time + timeOffset;
                 }
+            }
+        }
+
+        private void SetCDRsToProcess(IEnumerable<CDR> cdrs, List<CDR> systemCDRs, List<CDR> partnerCDRs, List<InvalidCDR> invalidCDRs)
+        {
+            foreach (CDR cdr in cdrs)
+            {
+                if (string.IsNullOrEmpty(cdr.OriginalCDPN) || string.IsNullOrEmpty(cdr.CDPN))
+                {
+                    invalidCDRs.Add(new InvalidCDR()
+                    {
+                        OriginalCDPN = cdr.OriginalCDPN,
+                        OriginalCGPN = cdr.OriginalCGPN,
+                        CDPN = cdr.CDPN,
+                        CGPN = cdr.CGPN,
+                        Time = cdr.Time,
+                        DurationInSec = cdr.DurationInSec,
+                        IsPartnerCDR = cdr.IsPartnerCDR
+                    });
+                }
+                else if (cdr.IsPartnerCDR)
+                    partnerCDRs.Add(cdr);
+                else
+                    systemCDRs.Add(cdr);
             }
         }
 

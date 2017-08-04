@@ -23,5 +23,9 @@ namespace CDRComparison.Entities
         public decimal TotalDurationDifferenceOfPartialMatchCDRs { get; set; }
         public decimal DurationOfSystemDisputeCDRs { get; set; }
         public decimal DurationOfPartnerDisputeCDRs { get; set; }
+        public int SystemInvalidCDRsCount { get; set; }
+        public int PartnerInvalidCDRsCount { get; set; }
+        public decimal SystemInvalidCDRsDuration { get; set; }
+        public decimal PartnerInvalidCDRsDuration { get; set; }
     }
 }
