@@ -96,10 +96,12 @@ namespace TOne.WhS.Deal.Data.SQL
             string query = String.Format("SELECT MAX(timestamp) FROM [TOneWhS_Deal].[DealDetailedProgress] WITH(NOLOCK)");
             return (Byte[])ExecuteScalarText(query, null);
         }
+
         public void DeleteDealDetailedProgresses(bool isSale, DateTime? beginDate, DateTime? endDate)
         {
             ExecuteNonQuerySP("[TOneWhS_Deal].[sp_DealDetailedProgress_DeleteByDate]", beginDate, endDate, isSale);
         }
+
         #endregion
 
         #region Private Methods
