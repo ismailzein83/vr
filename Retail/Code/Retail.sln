@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -163,9 +163,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.EntitiesMigrator.Dat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.EntitiesMigrator.Entities", "Retail.EntitiesMigrator.Entities\Retail.EntitiesMigrator.Entities.csproj", "{DF527972-96BA-4CB7-8770-AC7B96356F2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.BP", "Retail.BusinessEntity.BP\Retail.BusinessEntity.BP.csproj", "{C7915B15-7FC1-4DBD-B0CF-8381B48B2856}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.BusinessEntity.BP.Activities", "Retail.BusinessEntity.BP.Activities\Retail.BusinessEntity.BP.Activities.csproj", "{5ECD4FC8-3080-43E8-AD80-581289F30509}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 65
+		SccNumberOfProjects = 67
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -425,6 +429,14 @@ Global
 		SccProjectTopLevelParentUniqueName64 = Retail.sln
 		SccProjectName64 = Retail.EntitiesMigrator.Entities
 		SccLocalPath64 = Retail.EntitiesMigrator.Entities
+		SccProjectUniqueName65 = Retail.BusinessEntity.BP\\Retail.BusinessEntity.BP.csproj
+		SccProjectTopLevelParentUniqueName65 = Retail.sln
+		SccProjectName65 = Retail.BusinessEntity.BP
+		SccLocalPath65 = Retail.BusinessEntity.BP
+		SccProjectUniqueName66 = Retail.BusinessEntity.BP.Activities\\Retail.BusinessEntity.BP.Activities.csproj
+		SccProjectTopLevelParentUniqueName66 = Retail.sln
+		SccProjectName66 = Retail.BusinessEntity.BP.Activities
+		SccLocalPath66 = Retail.BusinessEntity.BP.Activities
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -695,6 +707,14 @@ Global
 		{DF527972-96BA-4CB7-8770-AC7B96356F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF527972-96BA-4CB7-8770-AC7B96356F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF527972-96BA-4CB7-8770-AC7B96356F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7915B15-7FC1-4DBD-B0CF-8381B48B2856}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7915B15-7FC1-4DBD-B0CF-8381B48B2856}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7915B15-7FC1-4DBD-B0CF-8381B48B2856}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7915B15-7FC1-4DBD-B0CF-8381B48B2856}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ECD4FC8-3080-43E8-AD80-581289F30509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ECD4FC8-3080-43E8-AD80-581289F30509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ECD4FC8-3080-43E8-AD80-581289F30509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ECD4FC8-3080-43E8-AD80-581289F30509}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -775,5 +795,7 @@ Global
 		{BF208A32-3D24-4071-8518-377FAC72FE24} = {5335E72B-803E-4323-895F-4293DB0E9211}
 		{DE76C0D2-BB12-4983-A84A-AEBE2BD0A95D} = {5335E72B-803E-4323-895F-4293DB0E9211}
 		{DF527972-96BA-4CB7-8770-AC7B96356F2D} = {5335E72B-803E-4323-895F-4293DB0E9211}
+		{C7915B15-7FC1-4DBD-B0CF-8381B48B2856} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
+		{5ECD4FC8-3080-43E8-AD80-581289F30509} = {025EE35C-62EB-43DE-B92E-C8633EFEBD16}
 	EndGlobalSection
 EndGlobal
