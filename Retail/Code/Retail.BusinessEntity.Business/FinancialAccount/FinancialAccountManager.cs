@@ -87,6 +87,8 @@ namespace Retail.BusinessEntity.Business
 
                 if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId, accountBEFinancialAccountsSettings))
                 {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToInsert.AccountBEDefinitionId);
+
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                     insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccountToInsert.FinancialAccount);
                 }
@@ -132,6 +134,8 @@ namespace Retail.BusinessEntity.Business
                 {
                     if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
                     {
+                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToEdit.AccountBEDefinitionId);
+
                         updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                         updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
                     }
@@ -320,7 +324,7 @@ namespace Retail.BusinessEntity.Business
         }
         private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccounts(Guid accountDefinitionId)
         {
-            return GetCacheManager().GetOrCreateObject("GetCachedFinancialAccounts", accountDefinitionId,
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccounts", accountDefinitionId,
                 () =>
                 {
                     Dictionary<long, IOrderedEnumerable<FinancialAccountData>> allFinancialAccountsData = new Dictionary<long, IOrderedEnumerable<FinancialAccountData>>();
@@ -358,7 +362,7 @@ namespace Retail.BusinessEntity.Business
         }
         private Dictionary<string, FinancialAccountData> GetCachedFinancialAccountDataByFinancialAccountId(Guid accountDefinitionId)
         {
-            return GetCacheManager().GetOrCreateObject("GetCachedFinancialAccountDataByFinancialAccountId", accountDefinitionId,
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccountDataByFinancialAccountId", accountDefinitionId,
                 () =>
                 {
                     var cachedFinancialAccounts = GetCachedFinancialAccounts(accountDefinitionId);
@@ -379,7 +383,7 @@ namespace Retail.BusinessEntity.Business
 
         private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccountsWithInherited(Guid accountDefinitionId)
         {
-            return GetCacheManager().GetOrCreateObject("GetCachedFinancialAccountsWithInherited", accountDefinitionId,
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccountsWithInherited", accountDefinitionId,
                 () =>
                 {
                     Dictionary<long, List<FinancialAccountData>> allFinancialAccountsData = new Dictionary<long, List<FinancialAccountData>>();
@@ -428,10 +432,7 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        private Vanrise.Caching.BaseCacheManager<Guid> GetCacheManager()
-        {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>();
-        }
+      
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccountData financialAccountData)
         {
             var financialAccountDetail = FinancialAccountDetailMapper(financialAccountData.FinancialAccount);
@@ -563,7 +564,19 @@ namespace Retail.BusinessEntity.Business
                 set;
             }
         }
+        private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
+        {
+            object _updateHandle;
+            DateTime? _accountBECacheLastCheck;
 
+            DateTime? _creditClassCacheLastCheck;
+
+            protected override bool ShouldSetCacheExpired(Guid accountBEDefinitionId)
+            {
+                return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().IsCacheExpired(accountBEDefinitionId, ref _accountBECacheLastCheck)
+                    | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CreditClassManager.CacheManager>().IsCacheExpired(ref _creditClassCacheLastCheck);
+            }
+        }
 
         #endregion
     }

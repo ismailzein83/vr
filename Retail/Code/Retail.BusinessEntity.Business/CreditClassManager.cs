@@ -93,7 +93,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ICreditClassDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICreditClassDataManager>();
             object _updateHandle;
