@@ -361,6 +361,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 return zoneDrafts.length > 0 ? zoneDrafts : null;
             };
 
+            api.clearDataSource = function () {
+                $scope.zoneItems.length = 0;
+            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

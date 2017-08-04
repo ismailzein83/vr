@@ -523,6 +523,8 @@
                             VRNotificationService.showSuccess("Draft deleted");
 
                             countryChanges = undefined;
+                            if (gridAPI != undefined)
+                                gridAPI.clearDataSource();
                             $scope.showCancelButton = false;
                             currencySelectorAPI.selectedCurrency(defaultCustomerCurrencyId);
 
@@ -947,6 +949,8 @@
 
         function resetRatePlan() {
             resetZoneLetters();
+            if (gridAPI != undefined)
+                gridAPI.clearDataSource();
             showRatePlan(false);
             showActionBarButtons(false);
         }
