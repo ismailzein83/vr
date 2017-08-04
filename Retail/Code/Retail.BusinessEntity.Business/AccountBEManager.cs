@@ -335,6 +335,18 @@ namespace Retail.BusinessEntity.Business
                 return false;
             }
         }
+        
+        public int GetCityId(Guid accountBEDefinitionId, long accountId, bool getInherited)
+        {
+            IAccountProfile accountProfile;
+            if(!HasAccountProfile( accountBEDefinitionId,  accountId,  getInherited, out accountProfile))
+                throw new NullReferenceException("accountProfile");
+           
+            if (!accountProfile.CityId.HasValue)
+                throw new NullReferenceException("accountProfile.CityId");
+            return accountProfile.CityId.Value;
+          
+        }
         public bool HasAccountProfile(Guid accountBEDefinitionId, long accountId, bool getInherited, out IAccountProfile accountProfile)
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
