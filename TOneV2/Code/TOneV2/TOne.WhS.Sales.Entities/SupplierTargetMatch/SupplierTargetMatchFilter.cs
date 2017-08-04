@@ -14,5 +14,7 @@ namespace TOne.WhS.Sales.Entities
         public IEnumerable<int> CountryIds { get; set; }
         public Guid PolicyId { get; set; }
         public int NumberOfOptions { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
     }
 }

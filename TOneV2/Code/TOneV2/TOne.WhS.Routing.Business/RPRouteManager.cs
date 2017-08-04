@@ -59,7 +59,7 @@ namespace TOne.WhS.Routing.Business
 			bool includeBlockedSupplierZones = GetIncludeBlockedSupplierZones(latestRoutingDatabase);
 
 			int? customerProfileId = null;
-			if (customerId.HasValue)
+			if (customerId.HasValue) 
 				customerProfileId = GetCarrierProfileId(customerId.Value);
 
 			IEnumerable<RPRoute> rpRoutes = dataManager.GetRPRoutes(rpZones);

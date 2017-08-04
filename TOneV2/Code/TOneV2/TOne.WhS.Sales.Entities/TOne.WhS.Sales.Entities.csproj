@@ -74,6 +74,7 @@
     <Compile Include="CodeComparison\CodeCompareItemDetail.cs" />
     <Compile Include="CodeComparison\CodeCompareQuery.cs" />
     <Compile Include="RateManagement\Zone\ZoneDataByCountryIds.cs" />
+    <Compile Include="SupplierTargetMatch\ITargetMatchCalculationMethodContext.cs" />
     <Compile Include="SupplierTargetMatch\SupplierTargetMatch.cs" />
     <Compile Include="SupplierTargetMatch\SupplierTargetMatchDetail.cs" />
     <Compile Include="SupplierTargetMatch\SupplierTargetMatchFilter.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="SellingRules\SellingRuleQuery.cs" />
     <Compile Include="SellingRules\SellingRuleSettings.cs" />
     <Compile Include="Setting\RatePlanSettingData.cs" />
+    <Compile Include="SupplierTargetMatch\TargetMatchCalculationMethod.cs" />
     <Compile Include="TQI\ITQIMethodContext.cs" />
     <Compile Include="TQI\TQIEvaluatedRateInput.cs" />
     <Compile Include="TQI\TQIEvaluatedRate.cs" />

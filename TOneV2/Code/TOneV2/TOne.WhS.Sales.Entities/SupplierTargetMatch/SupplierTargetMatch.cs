@@ -10,8 +10,8 @@ namespace TOne.WhS.Sales.Entities
     public class SupplierTargetMatch
     {
         public string SaleZone { get; set; }
-        public float Volume { get; set; }
-        public float TargetVolume { get; set; }
+        public decimal Volume { get; set; }
+        public decimal TargetVolume { get; set; }
         public RPRouteDetail RPRouteDetail { get; set; }
         public RPRouteDetail TargetRPRouteDetail { get; set; }
     }
