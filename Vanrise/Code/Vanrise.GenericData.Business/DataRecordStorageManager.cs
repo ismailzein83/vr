@@ -504,6 +504,34 @@ namespace Vanrise.GenericData.Business
                 }
             }
 
+            private Dictionary<string, DataRecordField> _dataRecordFieldDict;
+
+            private Dictionary<string, DataRecordField> DataRecordFieldDict
+            {
+                get
+                {
+                    if (_dataRecordFieldDict == null)
+                    {
+                        _dataRecordFieldDict = RecordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
+                    }
+                    return _dataRecordFieldDict;
+                }
+            }
+
+            private Dictionary<string, DataRecordFieldType> _dataRecordFieldTypeDict;
+
+            private Dictionary<string, DataRecordFieldType> DataRecordFieldTypeDict
+            {
+                get
+                {
+                    if (_dataRecordFieldTypeDict == null)
+                    {
+                        _dataRecordFieldTypeDict = RecordType.Fields.ToDictionary(itm => itm.Name, itm => itm.Type);
+                    }
+                    return _dataRecordFieldTypeDict;
+                }
+            }
+
             public override DataRecordDetail EntityDetailMapper(DataRecord entity)
             {
                 var dataRecordDetail = new DataRecordDetail() { RecordTime = entity.RecordTime, FieldValues = new Dictionary<string, DataRecordFieldValue>() };
@@ -515,8 +543,15 @@ namespace Vanrise.GenericData.Business
                     {
                         fldValueDetail.Value = value;
                         fldValueDetail.Description = fld.Type.GetDescription(value);
+                        dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
                     }
-                    dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
+                    else if (fld.Formula != null)
+                    {
+                        value = fld.Formula.CalculateValue(new DataRecordFieldFormulaCalculateValueContext(DataRecordFieldTypeDict, entity.FieldValues, fld.Type));
+                        fldValueDetail.Value = value;
+                        fldValueDetail.Description = fld.Type.GetDescription(value);
+                        dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
+                    }
                 }
                 return dataRecordDetail;
             }
@@ -534,10 +569,15 @@ namespace Vanrise.GenericData.Business
             }
             public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
             {
+                Vanrise.Entities.DataRetrievalInput<DataRecordQuery> clonedInput = Vanrise.Common.Utilities.CloneObject<Vanrise.Entities.DataRetrievalInput<DataRecordQuery>>(input);
                 List<DataRecord> records = new List<DataRecord>();
+
+                if (clonedInput.Query.Columns != null && clonedInput.Query.Columns.Count > 0)
+                    clonedInput.Query.Columns.RemoveAll(itm => DataRecordFieldDict.GetRecord(itm).Formula != null);
+
                 foreach (Guid dataRecordStorageId in input.Query.DataRecordStorageIds)
                 {
-                    var result = GetDataRecords(input, dataRecordStorageId);
+                    var result = GetDataRecords(clonedInput, dataRecordStorageId);
                     if (result != null)
                     {
                         records.AddRange(result);

@@ -63,6 +63,7 @@
     <Compile Include="BusinessEntity\VRRestAPIBusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\IExtensibleBEManager.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="DataRecordFieldFormulaCalculateValueContext.cs" />
     <Compile Include="DataStorage\CreateTempStorageContext.cs" />
     <Compile Include="DataRecordFieldChoiceManager.cs" />
     <Compile Include="DataRecordFieldFormulaConvertFilterContext.cs" />
