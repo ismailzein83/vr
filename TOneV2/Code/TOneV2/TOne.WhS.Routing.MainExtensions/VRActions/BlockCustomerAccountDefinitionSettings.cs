@@ -6,9 +6,9 @@ namespace TOne.WhS.Routing.MainExtensions
 {
     public class BlockCustomerAccountDefinitionSettings : VRActionDefinitionExtendedSettings
     {
-        public override Guid ConfigId { get { throw new NotImplementedException(); } }
+        public override Guid ConfigId { get { return new Guid("c5b194c2-df49-4f3d-80ab-0c73e4de57fc"); } }
 
-        public override string RuntimeEditor { get { throw new NotImplementedException(); } }
+        public override string RuntimeEditor { get { return "whs-routing-action-blockcustomeraccount"; } }
 
         public Guid DataRecordTypeId { get; set; }
 
