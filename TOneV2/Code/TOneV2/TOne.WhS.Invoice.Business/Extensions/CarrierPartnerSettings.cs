@@ -181,7 +181,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
             var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
             VRAccountStatus status = VRAccountStatus.InActive;
-            if(invoiceAccount.CarrierProfileId.HasValue)
+            if (invoiceAccount.CarrierAccountId.HasValue)
             {
                 if(new CarrierAccountManager().IsCarrierAccountActive(invoiceAccount.CarrierAccountId.Value))
                 {
