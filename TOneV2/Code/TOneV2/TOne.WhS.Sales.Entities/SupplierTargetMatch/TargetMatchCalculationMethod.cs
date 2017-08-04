@@ -11,6 +11,6 @@ namespace TOne.WhS.Sales.Entities
     {
         public abstract Guid ConfigId { get; }
 
-        public abstract void CalculateRate(ITargetMatchCalculationMethodContext context);
+        public abstract void Evaluate(ITargetMatchCalculationMethodContext context);
     }
 }

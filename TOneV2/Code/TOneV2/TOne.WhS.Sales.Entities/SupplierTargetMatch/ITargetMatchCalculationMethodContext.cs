@@ -10,6 +10,10 @@ namespace TOne.WhS.Sales.Entities
     public interface ITargetMatchCalculationMethodContext
     {
         RPRouteDetail RPRouteDetail { get; }
-        float EvaluatedRate { set; }
+
+        RPRouteOptionDetail RPRouteOptionDetail { set; }
+        decimal MarginValue { get; }
+        MarginType MarginType { get; }
+
     }
 }

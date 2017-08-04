@@ -16,6 +16,13 @@ namespace TOne.WhS.Sales.Business
 {
     public class SupplierTargetMatchManager
     {
+
+        public IDataRetrievalResult<SupplierTargetMatchDetail> GetFilteredSupplierTargetMatches(Vanrise.Entities.DataRetrievalInput<SupplierTargetMatchQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new SupplierTargetMatchRequestHandler());
+        }
+
+
         class SupplierTargetMatchRequestHandler : BigDataRequestHandler<SupplierTargetMatchQuery, SupplierTargetMatch, SupplierTargetMatchDetail>
         {
             public override SupplierTargetMatchDetail EntityDetailMapper(SupplierTargetMatch supplierTargetMatch)
@@ -32,14 +39,31 @@ namespace TOne.WhS.Sales.Business
                 List<RPZone> rpZones = GetRPZones(input);
                 var rpRouteDetails = rpRouteManager.GetRPRoutes(input.Query.Filter.RoutingDataBaseId, input.Query.Filter.PolicyId, input.Query.Filter.NumberOfOptions, rpZones);
 
+                List<SupplierTargetMatch> result = new List<SupplierTargetMatch>();
+
                 ZoneAnalyticDetail zoneAnalyticDetails = GetAnalyticZoneDetails(input, rpZones);
 
                 foreach (var rpRouteDetail in rpRouteDetails)
                 {
                     SupplierAnalyticDetail supplierAnalyticDetail;
-                    SupplierTargetMatch targetMatch = new SupplierTargetMatch();
+                    TargetMatchCalculationMethodContext context = new TargetMatchCalculationMethodContext
+                    {
+                        RPRouteDetail = rpRouteDetail,
+                        MarginType = input.Query.Settings.MarginType,
+                        MarginValue = input.Query.Settings.MarginValue
+
+                    };
+                    SupplierTargetMatch targetMatch = new SupplierTargetMatch
+                    {
+                        RPRouteDetail = rpRouteDetail,
+                        TargetRPRouteDetail = Vanrise.Common.Utilities.CloneObject<RPRouteDetail>(rpRouteDetail)
+                    };
+
+                    //targetMatch.TargetRPRouteDetail.RouteOptionsDetails = new List<RPRouteOptionDetail> { input.Query.Settings.CalculationMethod.Evaluate(context) };
+
                     if (zoneAnalyticDetails.TryGetValue(rpRouteDetail.SaleZoneId, out supplierAnalyticDetail))
                     {
+                        List<RPRouteOptionDetail> routeOptionsDetails = new List<RPRouteOptionDetail>();
                         foreach (var supplierOption in rpRouteDetail.RouteOptionsDetails)
                         {
                             SupplierAnalyticInfo supplierAnalyticInfo;
@@ -48,10 +72,13 @@ namespace TOne.WhS.Sales.Business
                                 targetMatch.Volume += supplierAnalyticInfo.Duration;
                             }
                         }
+                        targetMatch.TargetVolume = input.Query.Settings.VolumeMultiplier * targetMatch.Volume;
+                        if (targetMatch.TargetVolume < input.Query.Settings.DefaultVolume)
+                            targetMatch.TargetVolume = input.Query.Settings.DefaultVolume;
                     }
+                    result.Add(targetMatch);
                 }
-
-                return null;
+                return result;
             }
 
             private ZoneAnalyticDetail GetAnalyticZoneDetails(DataRetrievalInput<SupplierTargetMatchQuery> input, List<RPZone> rpZones)
@@ -158,7 +185,20 @@ namespace TOne.WhS.Sales.Business
             set;
         }
 
-        public float EvaluatedRate
+
+        public RPRouteOptionDetail RPRouteOptionDetail
+        {
+            get;
+            set;
+        }
+
+        public decimal MarginValue
+        {
+            get;
+            set;
+        }
+
+        public MarginType MarginType
         {
             get;
             set;

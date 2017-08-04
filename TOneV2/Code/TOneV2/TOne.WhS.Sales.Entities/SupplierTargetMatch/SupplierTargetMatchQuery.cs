@@ -10,6 +10,7 @@ namespace TOne.WhS.Sales.Entities
     {
         //Add ActionParameters Class
         public SupplierTargetMatchFilter Filter { get; set; }
-       
+        public SupplierTargetSettings Settings { get; set; }
+
     }
 }
