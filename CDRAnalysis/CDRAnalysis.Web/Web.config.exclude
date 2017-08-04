@@ -23,39 +23,59 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-    <add name="CDRDBConnectionString" connectionString="Data Source=localhost;Initial Catalog=CDRAnalysis_Configuration;User ID=sa;Password= "/>
-    <add name="DWSDBConnString"      connectionString="Data Source=localhost;Initial Catalog=CDRAnalysisDW;User ID=sa;Password= " />
-    <add name="FraudAnalysis_CDRConnStringTemplateKey" connectionString="Initial Catalog=CDRAnalysis_CDR_{0};Data Source=localhost;User ID=sa;Password= "/>
-
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=CDRAnalysis_Configuration;User ID=sa;Password= "/>
+    <add name="CDRDBConnectionString" connectionString="Data Source=localhost;Initial Catalog=CDRAnalysis_Configuration;User ID=sa;Password= "/>
+    
     <add name="QueueItemDBConnString" connectionString="Server=localhost;Database=CDRAnalysis_Queueing;User ID=sa;Password= "/>
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=CDRAnalysis_Transaction;User ID=sa;Password= "/>
-    <add name="LogDBConnString" connectionString="Server=localhost;Database=CDRAnalysis_Logging;User ID=sa;Password= "/>
-    <add name="MainDBConnString" connectionString=""/>   
+    <add name="LogDBConnString" connectionString="Server=localhost;Database=CDRAnalysis_Logging;User ID=sa;Password= "/>    
     
+    <add name="FraudAnalysis_CDRConnStringTemplateKey" connectionString="Initial Catalog=CDRAnalysis_CDR_{0};Data Source=localhost;User ID=sa;Password= "/>
+    
+    <add name="MainDBConnString" connectionString=""/>
+    
+    <add name="DWSDBConnString"      connectionString="Data Source=localhost;Initial Catalog=CDRAnalysisDW;User ID=sa;Password= " />
     <add name="BIConnectionString" connectionString="Provider=MSOLAP;Data Source = http://192.168.110.185:1214/msmdpump.dll; Initial Catalog = CDRBI2; User Id = vanrise\olap.access; Password = " />
   </connectionStrings>
   <appSettings>
-    <add key="OperatorType" value="1" />    <!--  1 =Mobile ,  2 = PSTN -->
+    <add key="Web_ExtendedModulesNames" value=""/><!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
+    <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT"/>
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t"/>
+    <add key="TempPasswordValidity" value="24:00:00"/>
+    <add key="Security_TokenExpirationInterval" value="1.00:00:00"/>
+
+    <add key="vs:EnableBrowserLink" value="false"/>
     <add key="webpages:Version" value="3.0.0.0" />
     <add key="webpages:Enabled" value="false" />
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
-    <add key="ConfigurationDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="RuntimeConnStringKey" value="TransactionDBConnString"/>
-    <add key="BusinessProcessDBConnStringKey" value="TransactionDBConnString"/>
-    <add key="QueueDBConnStringKey" value="TransactionDBConnString"/>
-    <add key="QueueItemDBConnStringKey" value="QueueDBConnString"/>
-    <add key="BusinessProcessTrackingDBConnStringKey" value="LogDBConnString"/>
-    <add key="SecurityDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="RulesDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="BIDBConnStringKey" value="ConfigurationDBConnString"/>
+
+    <add key="BIDBConnStringKey"                                value="ConfigurationDBConnString"/>
+
+    <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
+    <add key="QueueDBConnStringKey"                             value="TransactionDBConnString"/>
+    <add key="BusinessProcessDBConnStringKey"                   value="TransactionDBConnString"/>
+    <add key="BigDataServiceDBConnStringKey"                    value="TransactionDBConnString"/>
+    <add key="IntegrationConnStringKey"                         value="TransactionDBConnString"/>
+    <add key="VRNotificationTransactionDBConnStringKey"         value="TransactionDBConnString"/>
+
+    <add key="QueueItemDBConnStringKey"                         value="QueueItemDBConnString"/>
+
+    <add key="BusinessProcessTrackingDBConnStringKey"           value="LogDBConnString"/>
+    <add key="LoggingDBConnStringKey"                           value="LogDBConnString"/>
+
+    <add key="SecurityDBConnStringKey"                          value="ConfigurationDBConnString"/>
+    <add key="BusinessProcessConfigDBConnStringKey"             value="ConfigurationDBConnString"/>
+    <add key="IntegrationConfigDBConnStringKey"                 value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>
+    <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
-    <add key="IntegrationConnStringKey" value="TransactionDBConnString"/>
-    <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT"/>
-    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t"/>
-    <add key="BusinessProcessConfigDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="BigDataServiceDBConnStringKey" value="TransactionDBConnString"/>
+
+    <add key="OperatorType" value="1" />
+    <!--  1 =Mobile ,  2 = PSTN -->
+
     <!-- BI CONFIGURATION START-->
     <add key="BICubeName" value="CDR Analysis BI2" />
     <add key="BIDimension_DATE" value="[Dim Time].[Date Instance]"/>
@@ -65,10 +85,6 @@
     <add key="BIDimension_DAYOFMONTH" value="[Dim Time].[Day]"/>
     <add key="BIDimension_HOUR" value="[Dim Time].[Hour]"/>
     <!-- BI CONFIGURATION END-->
-
-    <add key="IntegrationConfigDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="RuntimeConfigDBConnStringKey" value="ConfigurationDBConnString"/>
-    <add key="QueueingConfigDBConnStringKey" value="ConfigurationDBConnString"/>
   </appSettings>
 
   
