@@ -11,7 +11,6 @@ namespace Vanrise.Entities
         public int CityId { get; set; }
 
         public string Name { get; set; }
-
         public int CountryId { get; set; }
         public string SourceId { get; set; }
         public CitySettings Settings { get; set; }
@@ -19,6 +18,7 @@ namespace Vanrise.Entities
 
     public class CitySettings
     {
+        public string Abbreviation { get; set; }
         public int? RegionId { get; set; }
     }
 }

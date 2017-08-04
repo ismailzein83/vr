@@ -150,6 +150,8 @@
                 return;
 
             $scope.name = cityEntity.Name;
+            if (cityEntity.Settings != undefined)
+              $scope.abbreviation = cityEntity.Settings.Abbreviation;
         }
 
 
@@ -198,10 +200,13 @@
             var obj = {
                 CityId: (cityId != null) ? cityId : 0,
                 Name: $scope.name,
+             
                 CountryId: countryDirectiveApi.getSelectedIds(),
-                Settings: regionId != undefined ? { RegionId: regionId } : null
+                Settings:  {
+                    RegionId: regionId,
+                    Abbreviation: $scope.abbreviation,
+                }
             };
-
             return obj;
         }
 

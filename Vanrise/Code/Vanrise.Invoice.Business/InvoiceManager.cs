@@ -175,6 +175,8 @@ namespace Vanrise.Invoice.Business
 
                 var duePeriod = _partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                 var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
+                if(invoiceAccountData.Status == VRAccountStatus.InActive)
+                    throw new InvoiceGeneratorException("Connot generate invoice for inactive account.");
 
                 IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions;
                 GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod,invoiceAccountData, out billingTransactions);
@@ -208,7 +210,7 @@ namespace Vanrise.Invoice.Business
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                     long invoiceAccountId;
                     InvoiceAccountManager invoiceAccountManager = new InvoiceAccountManager();
-                    invoiceAccountManager.TryAddInvoiceAccount(new VRInvoiceAccount
+                    VRInvoiceAccount vrInvoiceAccount = new Entities.VRInvoiceAccount
                     {
                         InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
                         Status = invoiceAccountData.Status,
@@ -216,12 +218,10 @@ namespace Vanrise.Invoice.Business
                         PartnerId = createInvoiceInput.PartnerId,
                         BED = invoiceAccountData.BED,
                         EED = invoiceAccountData.EED
-                    }, out invoiceAccountId);
-
-
-                    var invoiceAccounts = invoiceAccountManager.GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> {invoice.PartnerId} );
-
-                    var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType, invoiceAccounts);
+                    };
+                    invoiceAccountManager.TryAddInvoiceAccount(vrInvoiceAccount, out invoiceAccountId);
+                    vrInvoiceAccount.InvoiceAccountId = invoiceAccountId;
+                    var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType, vrInvoiceAccount);
                     insertOperationOutput.InsertedObject = invoiceDetail;
                     insertOperationOutput.Message = "Invoice Generated Successfully.";
                     insertOperationOutput.ShowExactMessage = true;
