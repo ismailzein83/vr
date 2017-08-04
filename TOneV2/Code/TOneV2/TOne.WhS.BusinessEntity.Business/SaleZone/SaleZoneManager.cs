@@ -502,7 +502,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
-            return GetSaleZone(context.EntityId);
+            return GetSaleZone(Convert.ToInt64(context.EntityId));
         }
 
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
