@@ -145,6 +145,7 @@
     <Compile Include="AccountBalanceNotification\RetailAccountBalanceNotificationTypeSettings.cs" />
     <Compile Include="AccountGenericFields\AccountIdGenericField.cs" />
     <Compile Include="AccountHandlers\BaseAccountEventPayload.cs" />
+    <Compile Include="AccountPackageRecurChargeManager.cs" />
     <Compile Include="AccountPartDefinitionOverriddenConfiguration.cs" />
     <Compile Include="AccountTypeOverriddenConfiguration.cs" />
     <Compile Include="Extensions\AccountBE360DegreeNodeType.cs" />
