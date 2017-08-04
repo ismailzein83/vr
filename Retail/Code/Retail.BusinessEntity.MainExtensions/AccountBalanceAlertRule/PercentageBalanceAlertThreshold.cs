@@ -18,8 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule
         static CurrencyExchangeRateManager s_currencyExRateManager = new CurrencyExchangeRateManager();
         public override decimal GetThreshold(IVRBalanceAlertThresholdContext context)
         {
-            VRAccountBalanceManager vRAccountBalanceManager = new VRAccountBalanceManager();
-            var accountBEDefinitionId = vRAccountBalanceManager.GetAccountBEDefinitionIdByAlertRuleTypeId(context.AlertRuleTypeId);
+            var accountBEDefinitionId = FinancialAccountBalanceManager.GetAccountBEDefinitionIdByAlertRuleTypeId(context.AlertRuleTypeId);
 
             Decimal creditLimit;
              var financialAccountData = s_financialAccountManager.GetFinancialAccountData(accountBEDefinitionId, context.EntityBalanceInfo.EntityId);

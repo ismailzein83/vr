@@ -109,6 +109,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountBalance.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -378,6 +382,8 @@
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountSearchTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\InvToAccBalanceRelationDefinition\retail-invtoaccbalancerelation-definition-accountextendedsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\InvToAccBalanceRelationDefinition\Templates\AccountInvToAccBalanceDefinitionExtendedSettings.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountBalanceFieldSource\retail-accountbalance-accounttype-source-financialaccount.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountBalanceFieldSource\Templates\FinancialAccountSourceSetting.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-assignproductandpackages.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\retail-be-accountsynchronizerhandler-portalaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\AccountSynchronizerInsertHandlers\Templates\AssignProductAndPackagesAccountInsertHandlerTemplate.html" />

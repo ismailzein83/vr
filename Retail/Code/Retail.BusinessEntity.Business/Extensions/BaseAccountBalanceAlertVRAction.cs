@@ -13,10 +13,9 @@ namespace Retail.BusinessEntity.Business
     public abstract class BaseAccountBalanceAlertVRAction : VRAction
     {
         static AccountBEManager s_accountBEManager = new AccountBEManager();
-        static VRAccountBalanceManager s_vRAccountBalanceManager = new VRAccountBalanceManager();
         protected Guid GetAccountBEDefinitionId(VRBalanceAlertEventPayload balanceAlertEventPayload)
         {
-            return s_vRAccountBalanceManager.GetAccountBEDefinitionIdByAlertRuleTypeId(balanceAlertEventPayload.AlertRuleTypeId);
+            return FinancialAccountBalanceManager.GetAccountBEDefinitionIdByAlertRuleTypeId(balanceAlertEventPayload.AlertRuleTypeId);
         }
 
         protected long GetAccountId(VRBalanceAlertEventPayload balanceAlertEventPayload, out Guid accountBEDefinitionId)

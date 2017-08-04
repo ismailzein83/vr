@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountBalance.Business.Extensions;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
+using Vanrise.Notification.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -49,6 +51,28 @@ namespace Retail.BusinessEntity.Business
                 Status = status,
             };
             return accountInfo;
+        }
+
+
+        public static SubscriberAccountBalanceSetting GetSubscriberAccountBalanceSetting(Guid accountTypeId)
+        {
+            Vanrise.AccountBalance.Business.AccountTypeManager balanceAccountTypeManager = new Vanrise.AccountBalance.Business.AccountTypeManager();
+            Vanrise.AccountBalance.Entities.AccountTypeSettings accountTypeSettings = balanceAccountTypeManager.GetAccountTypeSettings(accountTypeId);
+            accountTypeSettings.ThrowIfNull("accountTypeSettings", accountTypeId);
+            return accountTypeSettings.ExtendedSettings.CastWithValidate<SubscriberAccountBalanceSetting>("accountTypeSettings.ExtendedSettings");
+        }
+        public static Guid GetAccountBEDefinitionIdByAccountTypeId(Guid accountTypeId)
+        {
+            var retailAccountBalanceSetting = GetSubscriberAccountBalanceSetting(accountTypeId);
+            return retailAccountBalanceSetting.AccountBEDefinitionId;
+        }
+        public static Guid GetAccountBEDefinitionIdByAlertRuleTypeId(Guid alertRuleTypeId)
+        {
+            VRAlertRuleTypeManager alertRuleTypeManager = new VRAlertRuleTypeManager();
+            AccountBalanceAlertRuleTypeSettings balanceRuleTypeSettings = alertRuleTypeManager.GetVRAlertRuleTypeSettings<AccountBalanceAlertRuleTypeSettings>(alertRuleTypeId);
+            balanceRuleTypeSettings.ThrowIfNull("balanceRuleTypeSettings", alertRuleTypeId);
+
+            return GetAccountBEDefinitionIdByAccountTypeId(balanceRuleTypeSettings.AccountTypeId);
         }
     }
 }

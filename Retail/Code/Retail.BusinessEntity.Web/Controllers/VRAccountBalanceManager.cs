@@ -16,8 +16,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetAccountBEDefinitionIdByAccountTypeId")]
         public Guid GetAccountBEDefinitionIdByAccountTypeId(Guid accountTypeId)
         {
-            VRAccountBalanceManager manager = new VRAccountBalanceManager();
-            return manager.GetAccountBEDefinitionIdByAccountTypeId(accountTypeId);
+            return FinancialAccountBalanceManager.GetAccountBEDefinitionIdByAccountTypeId(accountTypeId);
         }
     }
 }

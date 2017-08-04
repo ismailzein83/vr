@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountBalanceAlertRule\PercentageBalanceAlertThreshold.cs" />
+    <Compile Include="AccountBalanceFieldSource\FinancialAccountFieldSourceSetting.cs" />
     <Compile Include="AccountChargeEvaluators\FixedChargeAccountRecurringChargeEvaluator.cs" />
     <Compile Include="AccountConditions\ConditionGroupAccountCondition.cs" />
     <Compile Include="AccountConditions\FinancialAccountCondition.cs" />
