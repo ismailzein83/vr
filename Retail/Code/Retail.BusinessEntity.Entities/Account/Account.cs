@@ -72,6 +72,7 @@ namespace Retail.BusinessEntity.Entities
         List<string> Faxes { get; }
 
         List<string> PhoneNumbers { get; }
+        int? CityId { get; }
     }
 
     public interface IOperatorSetting
