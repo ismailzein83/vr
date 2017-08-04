@@ -52,11 +52,6 @@ namespace Vanrise.GenericData.Business
             return cachedBEParentChildRelations.FindAllRecords(itm => itm.RelationDefinitionId == beParentChildRelationDefinitionId);
         }
 
-        public bool TryAddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem, out long insertedId)
-        {
-            IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
-            return _dataManager.Insert(beParentChildRelationItem, out insertedId);
-        }
         public InsertOperationOutput<BEParentChildRelationDetail> AddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
             var insertOperationOutput = new InsertOperationOutput<BEParentChildRelationDetail>();
@@ -123,11 +118,18 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
+        public bool TryAddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem, out long insertedId)
+        {
+            IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
+            return _dataManager.Insert(beParentChildRelationItem, out insertedId);
+        }
+
         public IOrderedEnumerable<BEParentChildRelation> GetParents(Guid beParentChildRelationDefinitionId, string childId)
         {
             Dictionary<string, IOrderedEnumerable<BEParentChildRelation>> beParentChildRelationsByChildId = this.GetCachedBEParentChildRelationsByChildId(beParentChildRelationDefinitionId);
             return beParentChildRelationsByChildId.GetRecord(childId);
         }
+
         public BEParentChildRelation GetParent(Guid beParentChildRelationDefinitionId, string childId, DateTime effectiveOn)
         {
             IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = GetParents(beParentChildRelationDefinitionId, childId);
