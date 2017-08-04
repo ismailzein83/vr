@@ -73,7 +73,9 @@
     <Compile Include="CodeComparison\CodeCompareItem.cs" />
     <Compile Include="CodeComparison\CodeCompareItemDetail.cs" />
     <Compile Include="CodeComparison\CodeCompareQuery.cs" />
+    <Compile Include="DraftTaskData.cs" />
     <Compile Include="RateManagement\Zone\ZoneDataByCountryIds.cs" />
+    <Compile Include="SellingZonesWithDefaultRatesTaskData.cs" />
     <Compile Include="SupplierTargetMatch\ITargetMatchCalculationMethodContext.cs" />
     <Compile Include="SupplierTargetMatch\SupplierTargetMatch.cs" />
     <Compile Include="SupplierTargetMatch\SupplierTargetMatchDetail.cs" />
