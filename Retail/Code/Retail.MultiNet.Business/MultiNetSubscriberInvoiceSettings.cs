@@ -10,9 +10,8 @@ using Vanrise.Invoice.Entities;
 
 namespace Retail.MultiNet.Business
 {
-    public class MultiNetSubscriberInvoiceSettings : InvoiceTypeExtendedSettings
+    public class MultiNetSubscriberInvoiceSettings : BaseRetailInvoiceTypeSettings
     {
-        public Guid AccountBEDefinitionId { get; set; }
         public Guid CompanyExtendedInfoPartdefinitionId { get; set; }
         public List<Guid> SalesTaxChargeableEntities { get { return new List<Guid> { new Guid("fc8a8acc-5c10-49f0-95fd-b7e95ed5db80"), new Guid("711039b3-92ee-4cb9-80e5-ac6354452c8e"), new Guid("f062a145-a311-4629-a96d-d770c34c7da6") }; } }
         public List<Guid> WHTaxChargeableEntities { get { return new List<Guid> { new Guid("fc8a8acc-5c10-49f0-95fd-b7e95ed5db80"), new Guid("711039b3-92ee-4cb9-80e5-ac6354452c8e") }; } }

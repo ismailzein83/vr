@@ -21,7 +21,7 @@ namespace Retail.MultiNet.Business
 
 
         public string GPSiteID { get; set; }
-
+        public bool ExcludeTaxes  { get; set; }
         public MultiNetAccountType? AccountType { get; set; }
 
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
@@ -32,6 +32,7 @@ namespace Retail.MultiNet.Business
                 case "NTN": return this.NTN;
                 case "GPSiteID": return this.GPSiteID;
                 case "AccountType": return this.AccountType;
+                case "ExcludeTaxes": return this.ExcludeTaxes;
                 default: return null;
             }
         }

@@ -64,6 +64,12 @@ namespace Retail.MultiNet.Business
                          Choices = GetChoicesFrlomEnum<MultiNetAccountType>()
                         }
                          
+                    },
+                    new GenericFieldDefinition()
+                    {
+                        Name = "ExcludeTaxes",
+                        Title = "Exclude Taxes",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldBooleanType()
                     }                   
                 };
         }

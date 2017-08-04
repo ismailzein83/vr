@@ -6,7 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountBalance.Business;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Common;
+using Vanrise.Notification.Business;
+using Vanrise.AccountBalance.Business.Extensions;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -274,6 +278,107 @@ namespace Retail.BusinessEntity.Business
             return cachedFinancialAccountsData.MapRecords(x=> x.Value.Account.AccountId, y=> financialAccountIds.Contains(y.Key));
         }
 
+        
+        public void ResolveBalanceAccountId(Guid balanceAccountTypeId, string balanceAccountId, out Guid accountBEDefinitionId, out long accountId, out FinancialAccountData financialAccountData)
+        {
+            accountBEDefinitionId = GetAccountBEDefinitionIdByBalanceAccountTypeId(balanceAccountTypeId);
+            financialAccountData = GetFinancialAccountData(accountBEDefinitionId, balanceAccountId);
+            if (financialAccountData != null)
+            {
+                accountId = financialAccountData.Account.AccountId;
+            }
+            else
+            {
+                accountId = balanceAccountId.TryParseWithValidate<long>(long.TryParse);
+            }
+        }
+
+        public void ResolveInvoiceAccountId(Guid invoiceTypeId, string invoiceAccountId, out Guid accountBEDefinitionId, out long accountId, out FinancialAccountData financialAccountData)
+        {
+            accountBEDefinitionId = GetAccountBEDefinitionIdByInvoiceTypeId(invoiceTypeId);
+            financialAccountData = GetFinancialAccountData(accountBEDefinitionId, invoiceAccountId);
+            if (financialAccountData != null)
+            {
+                accountId = financialAccountData.Account.AccountId;
+            }
+            else
+            {
+                accountId = invoiceAccountId.TryParseWithValidate<long>(long.TryParse);
+            }
+        }
+
+        public bool TryGetBalanceAccountCreditLimit(Guid accountTypeId, string balanceAccountId, out Guid accountBEDefinitionId, out long accountId, out FinancialAccountData financialAccountData, out Decimal creditLimit, out int currencyId)
+        {
+            ResolveBalanceAccountId(accountTypeId, balanceAccountId, out accountBEDefinitionId, out accountId, out financialAccountData);
+            if (financialAccountData != null)
+            {
+                if(financialAccountData.CreditLimit.HasValue)
+                {
+                    creditLimit = financialAccountData.CreditLimit.Value;
+                    currencyId = financialAccountData.CreditLimitCurrencyId.Value;
+                    return true;
+                }
+            }
+            else
+            {
+                AccountBEManager accountBEManager = new AccountBEManager();
+                IAccountPayment accountPayment;
+
+                if (!accountBEManager.HasAccountPayment(accountBEDefinitionId, accountId, false, out accountPayment))
+                    throw new NullReferenceException(String.Format("accountPayment. Account '{0}'", accountId));              
+
+                ProductManager productManager = new ProductManager();
+                var product = productManager.GetProduct(accountPayment.ProductId);
+                product.ThrowIfNull("product", accountPayment.ProductId);
+                product.Settings.ThrowIfNull("product.Settings", accountPayment.ProductId);
+
+                IPostpaidProductSettings postpaidProductSettings = product.Settings.ExtendedSettings as IPostpaidProductSettings;
+                if (postpaidProductSettings != null && postpaidProductSettings.CreditLimit.HasValue)
+                {
+                    creditLimit = postpaidProductSettings.CreditLimit.Value;
+                    currencyId = product.Settings.PricingCurrencyId;
+                    return true;
+                }
+            }
+            creditLimit = default(Decimal);
+            currencyId = default(int);
+            return false;
+        }
+
+        public Guid GetAccountBEDefinitionIdByBalanceAccountTypeId(Guid accountTypeId)
+        {
+            var retailAccountBalanceSetting = GetSubscriberAccountBalanceSetting(accountTypeId);
+            return retailAccountBalanceSetting.AccountBEDefinitionId;
+        }
+
+        public SubscriberAccountBalanceSetting GetSubscriberAccountBalanceSetting(Guid accountTypeId)
+        {
+            Vanrise.AccountBalance.Business.AccountTypeManager balanceAccountTypeManager = new Vanrise.AccountBalance.Business.AccountTypeManager();
+            Vanrise.AccountBalance.Entities.AccountTypeSettings accountTypeSettings = balanceAccountTypeManager.GetAccountTypeSettings(accountTypeId);
+            accountTypeSettings.ThrowIfNull("accountTypeSettings", accountTypeId);
+            return accountTypeSettings.ExtendedSettings.CastWithValidate<SubscriberAccountBalanceSetting>("accountTypeSettings.ExtendedSettings");
+        }
+
+        public Guid GetAccountBEDefinitionIdByInvoiceTypeId(Guid invoiceTypeId)
+        {
+            return GetRetailInvoiceSetting(invoiceTypeId).AccountBEDefinitionId;
+        }
+
+        public BaseRetailInvoiceTypeSettings GetRetailInvoiceSetting(Guid invoiceTypeId)
+        {
+            var invoiceTypeManager = new Vanrise.Invoice.Business.InvoiceTypeManager();
+            var invoiceTypeExtendedSettings = invoiceTypeManager.GetInvoiceTypeExtendedSettings(invoiceTypeId);
+            return invoiceTypeExtendedSettings.CastWithValidate<BaseRetailInvoiceTypeSettings>("invoiceTypeExtendedSettings");
+        }
+
+        public Guid GetBalanceAccountTypeIdByAlertRuleTypeId(Guid alertRuleTypeId)
+        {
+            VRAlertRuleTypeManager alertRuleTypeManager = new VRAlertRuleTypeManager();
+            AccountBalanceAlertRuleTypeSettings balanceRuleTypeSettings = alertRuleTypeManager.GetVRAlertRuleTypeSettings<AccountBalanceAlertRuleTypeSettings>(alertRuleTypeId);
+            balanceRuleTypeSettings.ThrowIfNull("balanceRuleTypeSettings", alertRuleTypeId);
+
+            return balanceRuleTypeSettings.AccountTypeId;
+        }
 
         #endregion
 

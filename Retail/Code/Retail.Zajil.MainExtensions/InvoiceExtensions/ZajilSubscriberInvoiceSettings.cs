@@ -10,9 +10,8 @@ using Vanrise.Invoice.Entities;
 
 namespace Retail.Zajil.MainExtensions
 {
-    public class ZajilSubscriberInvoiceSettings : InvoiceTypeExtendedSettings
-    {
-        public Guid AccountBEDefinitionId { get; set; }
+    public class ZajilSubscriberInvoiceSettings : BaseRetailInvoiceTypeSettings
+    {        
         public Guid CompanyExtendedInfoPartdefinitionId { get; set; }
         public Guid InvoiceTransactionTypeId { get { return new Guid("2B3D86AB-1689-49E8-A5FA-F65227A1EC4C"); } }
         public List<Guid> UsageTransactionTypeIds { get { return new List<Guid>() { new Guid("007869D9-6DC2-4F56-88A4-18C8C442E49E") }; } }

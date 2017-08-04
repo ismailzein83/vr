@@ -56,6 +56,7 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     $scope.scopeModel.cNIC = payload.partSettings.CNIC;
                     $scope.scopeModel.nTN = payload.partSettings.NTN;
                     $scope.scopeModel.gPSiteID = payload.partSettings.GPSiteID;
+                    $scope.scopeModel.excludeTaxes = payload.partSettings.ExcludeTaxes;
                 }
 
                 promises.push(loadAccountTypeSelector());
@@ -82,7 +83,8 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     CNIC: $scope.scopeModel.cNIC,
                     NTN: $scope.scopeModel.nTN,
                     GPSiteID: $scope.scopeModel.gPSiteID,
-                    AccountType: accountTypeAPI.getSelectedIds()
+                    AccountType: accountTypeAPI.getSelectedIds(),
+                    ExcludeTaxes: $scope.scopeModel.excludeTaxes
                 }
 
             };

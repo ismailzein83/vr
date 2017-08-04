@@ -113,6 +113,10 @@
     <Reference Include="Vanrise.Invoice.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.InvToAccBalanceRelation.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Business.dll</HintPath>
     </Reference>
@@ -151,6 +155,7 @@
     <Compile Include="Extensions\AccountBE360DegreeNodeType.cs" />
     <Compile Include="Extensions\AccountBERuntimeSelectorFilter.cs" />
     <Compile Include="Extensions\AccountMemoryAnalyticDataManager.cs" />
+    <Compile Include="Extensions\BaseRetailInvoiceTypeSettings.cs" />
     <Compile Include="Extensions\DIDSynchronizer.cs" />
     <Compile Include="Extensions\FinancialAccountBalanceManager.cs" />
     <Compile Include="Extensions\FinancialAccountBalanceSetting.cs" />

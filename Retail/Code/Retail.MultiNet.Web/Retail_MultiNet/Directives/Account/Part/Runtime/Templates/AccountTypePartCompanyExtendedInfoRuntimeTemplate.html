@@ -10,6 +10,9 @@
             <vr-textbox value="scopeModel.gPSiteID" label="GP Site ID"></vr-textbox>
         </vr-columns>
         <vr-columns width="1/2row">
+            <vr-switch value="scopeModel.excludeTaxes" label="Exclude Taxes"></vr-switch>
+        </vr-columns>
+        <vr-columns width="1/2row">
             <retail-multinet-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"></retail-multinet-accounttype-selector>
         </vr-columns>
     </vr-row>

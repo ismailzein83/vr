@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.ProductTypes.PostPaid
 {
-    public class PostPaidSettings : ProductExtendedSettings
+    public class PostPaidSettings : ProductExtendedSettings, IPostpaidProductSettings
     {
         public Decimal? CreditLimit { get; set; }
     }

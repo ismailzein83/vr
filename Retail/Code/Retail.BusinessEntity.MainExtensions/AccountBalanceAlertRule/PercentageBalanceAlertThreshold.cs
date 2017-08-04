@@ -18,39 +18,17 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBalanceAlertRule
         static CurrencyExchangeRateManager s_currencyExRateManager = new CurrencyExchangeRateManager();
         public override decimal GetThreshold(IVRBalanceAlertThresholdContext context)
         {
-            var accountBEDefinitionId = FinancialAccountBalanceManager.GetAccountBEDefinitionIdByAlertRuleTypeId(context.AlertRuleTypeId);
-
+            Guid balanceAccountTypeId = s_financialAccountManager.GetBalanceAccountTypeIdByAlertRuleTypeId(context.AlertRuleTypeId);
+            Guid accountBEDefinitionId;
+            long accountId;
+            FinancialAccountData financialAccountData;
             Decimal creditLimit;
-             var financialAccountData = s_financialAccountManager.GetFinancialAccountData(accountBEDefinitionId, context.EntityBalanceInfo.EntityId);
-            if (financialAccountData != null)
-            {
-                if (!financialAccountData.CreditLimit.HasValue)
-                    throw new NullReferenceException(String.Format("financialAccountData.CreditLimit '{0}'", context.EntityBalanceInfo.EntityId));
-                if (!financialAccountData.CreditLimitCurrencyId.HasValue)
-                    throw new NullReferenceException(String.Format("financialAccountData.CreditLimitCurrencyId '{0}'", context.EntityBalanceInfo.EntityId));
-                creditLimit = s_currencyExRateManager.ConvertValueToCurrency(financialAccountData.CreditLimit.Value, financialAccountData.CreditLimitCurrencyId.Value, context.EntityBalanceInfo.CurrencyId, DateTime.Now);
-            }
-            else
-            {
-                AccountBEManager accountBEManager = new AccountBEManager();
-                AccountPart accountPart;
-
-                if (!accountBEManager.TryGetAccountPart(accountBEDefinitionId, Convert.ToInt64(context.EntityBalanceInfo.EntityId), AccountPartFinancial._ConfigId, false, out accountPart))
-                    throw new NullReferenceException(String.Format("accountPart. Account '{0}'", context.EntityBalanceInfo.EntityId));
-                var accountPartFinancial = accountPart.Settings.CastWithValidate<AccountPartFinancial>("accountPart.Settings", context.EntityBalanceInfo.EntityId);
-
-                ProductManager productManager = new ProductManager();
-                var product = productManager.GetProduct(accountPartFinancial.ProductId);
-                product.ThrowIfNull("product", accountPartFinancial.ProductId);
-                product.Settings.ThrowIfNull("product.Settings", accountPartFinancial.ProductId);
-
-                var postPaidSettings = product.Settings.ExtendedSettings.CastWithValidate<PostPaidSettings>("product.Settings.ExtendedSettings", accountPartFinancial.ProductId);
-                if (!postPaidSettings.CreditLimit.HasValue)
-                    throw new NullReferenceException(String.Format("postPaidSettings.CreditLimit, Product '{0}'", accountPartFinancial.ProductId));
-                creditLimit = s_currencyExRateManager.ConvertValueToCurrency(postPaidSettings.CreditLimit.Value, product.Settings.PricingCurrencyId, context.EntityBalanceInfo.CurrencyId, DateTime.Now);
-            }
-
-
+            int creditLimitCurrencyId;
+            if (!s_financialAccountManager.TryGetBalanceAccountCreditLimit(balanceAccountTypeId, context.EntityBalanceInfo.EntityId, out accountBEDefinitionId, out accountId, out financialAccountData, out creditLimit, out creditLimitCurrencyId))
+                {
+                    throw new Exception(String.Format("Financial Account '{0}' has no credit limit, Balance Account Type Id '{1}', Retail AccountId '{2}'", context.EntityBalanceInfo.EntityId, balanceAccountTypeId, accountId));
+                }
+            creditLimit = s_currencyExRateManager.ConvertValueToCurrency(creditLimit, creditLimitCurrencyId, context.EntityBalanceInfo.CurrencyId, DateTime.Now);
 
             return -(creditLimit * (100 - this.Percentage) / 100);
         }
