@@ -16,6 +16,6 @@ BEGIN
 	
 	IF @@ROWCOUNT = 0
 	BEGIN
-		INSERT INTO AccountStatus (AccountNumber, [Status], ValidTill, Source, Reason, UserId) VALUES (@AccountNumber, @StatusID, @ValidTill , @Source, @Reason, @UserId)
+		INSERT INTO AccountStatus (AccountNumber, [Status], ValidTill, Source, Reason, UserId,LastUpdatedOn) VALUES (@AccountNumber, @StatusID, @ValidTill , @Source, @Reason, @UserId,getdate())
 	END
 END

@@ -15,7 +15,7 @@ AS
 BEGIN
 	IF NOT Exists (SELECT null FROM FraudAnalysis.[AccountStatus] WHERE AccountNumber = @AccountNumber)
 	BEGIN
-		Insert into FraudAnalysis.[AccountStatus](AccountNumber, [Status], ValidTill, Source, Reason, UserId)
-		values(@AccountNumber, @StatusID,  @ValidTill, @Source, @Reason, @UserId)
+		Insert into FraudAnalysis.[AccountStatus](AccountNumber, [Status], ValidTill, Source, Reason, UserId,LastUpdatedOn)
+		values(@AccountNumber, @StatusID,  @ValidTill, @Source, @Reason, @UserId,getdate())
 	END
 END

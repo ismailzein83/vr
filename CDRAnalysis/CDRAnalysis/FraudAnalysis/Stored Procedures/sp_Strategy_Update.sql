@@ -6,10 +6,7 @@ CREATE PROCEDURE [FraudAnalysis].[sp_Strategy_Update]
 	@Name varchar(20),
 	@Description varchar(255),
 	@LastUpdatedOn DateTime,
-	@IsDefault bit,
-	@IsEnabled bit,
-	@PeriodId int,
-	@StrategyContent Nvarchar(max)
+	@Settings Nvarchar(max)
 AS
 BEGIN
 	IF NOT EXISTS(SELECT 1 FROM FraudAnalysis.[Strategy] WHERE ID != @Id AND Name = @Name)
@@ -19,10 +16,7 @@ BEGIN
 		  ,UserId = @UserId
 		  ,LastUpdatedOn = @LastUpdatedOn
 		  ,Name = @Name
-		  ,IsDefault = @IsDefault
-		  ,IsEnabled = @IsEnabled
-		  ,StrategyContent = @StrategyContent
-		  ,PeriodId=@PeriodId
+		  ,Settings = @Settings
 		 WHERE Id = @Id
 	END
 END

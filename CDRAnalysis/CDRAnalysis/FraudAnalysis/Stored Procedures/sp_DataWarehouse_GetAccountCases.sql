@@ -6,7 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	
-		SELECT        ac.ID AS CaseID, FraudAnalysis.CallClass.NetType, stra.IsDefault, stra.PeriodID, exD.SuspicionLevelID, ac.CreatedTime AS CaseGenerationTime, 
+		SELECT        ac.ID AS CaseID, FraudAnalysis.CallClass.NetType, exD.SuspicionLevelID, ac.CreatedTime AS CaseGenerationTime, 
 								 stra.UserID AS StrategyUser, ac.UserID AS CaseUser, stra.ID AS StrategyID, ex.FromDate, ex.ToDate, ac.AccountNumber, ac.Status AS CaseStatus
 		FROM            FraudAnalysis.StrategyExecution AS ex WITH (NOLOCK) INNER JOIN
 								 FraudAnalysis.Strategy AS stra WITH (NOLOCK) ON ex.StrategyID = stra.ID INNER JOIN

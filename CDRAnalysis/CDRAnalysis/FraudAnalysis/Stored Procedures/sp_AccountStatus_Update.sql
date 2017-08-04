@@ -13,6 +13,6 @@ CREATE PROCEDURE [FraudAnalysis].[sp_AccountStatus_Update]
 AS
 BEGIN
 	UPDATE FraudAnalysis.AccountStatus
-	SET  ValidTill = @ValidTill, Source=@Source, Reason=@Reason, UserId=@UserId
+	SET  ValidTill = @ValidTill, Source=@Source, Reason=@Reason, UserId=@UserId ,LastUpdatedOn = getdate()
 	WHERE AccountNumber = @AccountNumber
 END

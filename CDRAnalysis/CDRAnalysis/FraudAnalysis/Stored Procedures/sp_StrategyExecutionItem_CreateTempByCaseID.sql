@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_CreateTempByCaseID]
+CREATE PROCEDURE [FraudAnalysis].[sp_StrategyExecutionItem_CreateTempByCaseID]
 	@TempTableName VARCHAR(200),
 	@CaseID INT
 AS
@@ -20,8 +20,8 @@ BEGIN
 			e.FromDate,
 			e.ToDate,
 			e.ExecutionDate,
-			d.AggregateValues
-		
+			d.AggregateValues,
+		    d.StrategyExecutionID
 		INTO #RESULT
 		
 		FROM FraudAnalysis.StrategyExecutionItem d WITH (NOLOCK)

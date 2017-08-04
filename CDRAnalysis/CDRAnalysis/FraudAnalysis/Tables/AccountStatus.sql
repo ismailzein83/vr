@@ -5,8 +5,11 @@
     [Source]        INT           NOT NULL,
     [Reason]        VARCHAR (MAX) NULL,
     [UserID]        INT           NOT NULL,
+    [LastUpdatedOn] DATETIME      NULL,
     CONSTRAINT [PK_AccountStatus] PRIMARY KEY CLUSTERED ([AccountNumber] ASC)
 );
+
+
 
 
 

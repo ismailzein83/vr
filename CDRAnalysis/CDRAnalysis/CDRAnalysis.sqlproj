@@ -109,7 +109,6 @@
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_GetLastByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCase_CreateTempByAccountNumber.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_AccountCaseHistory_CreateTempByCaseID.sql" />
-    <Build Include="FraudAnalysis\Stored Procedures\sp_Strategy_CreateTempByFiltered.sql" />
     <Build Include="FraudAnalysis\Stored Procedures\sp_NumberProfile_CreateTempByAccountNumber.sql" />
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
     <Build Include="PSTN_BE\Tables\SwitchTrunk.sql" />
