@@ -21,7 +21,8 @@ app.directive('vrCheck', ['SecurityService', 'UtilsService', function (SecurityS
                     return;
                 ctrl.value = !ctrl.value;
                 isUserChange = true;
-                e.stopPropagation();
+                if ($element.parents('.vr-datagrid-celltext').length > 0)
+                    e.stopPropagation();
             };
             $scope.$watch('ctrl.value', function () {
                 if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
