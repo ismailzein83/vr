@@ -29,6 +29,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddBEParentChildRelation'), beParentChildRelationItem);
         }
 
+        function AddBEParentChildrenRelation(beParentChildrenRelation) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddBEParentChildrenRelation'), beParentChildrenRelation);
+        }
+
         function UpdateBEParentChildRelation(beParentChildRelationItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateBEParentChildRelation'), beParentChildRelationItem);
         }
@@ -45,6 +49,7 @@
             GetFilteredBEParentChildRelations: GetFilteredBEParentChildRelations,
             GetBEParentChildRelation: GetBEParentChildRelation,
             AddBEParentChildRelation: AddBEParentChildRelation,
+            AddBEParentChildrenRelation: AddBEParentChildrenRelation,
             UpdateBEParentChildRelation: UpdateBEParentChildRelation,
             HasAddChildRelationPermission: HasAddChildRelationPermission,
             GetLastAssignedEED: GetLastAssignedEED

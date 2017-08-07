@@ -12,7 +12,8 @@
         var beParentChildRelationDefinitionEntity;
         var beParentChildRelationId;
         var beParentChildRelationEntity;
-        var parentId, childId;
+        var parentId;
+        var childIds = [];
 
         var parentBESelectorAPI;
         var parentBESelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -31,7 +32,9 @@
                 beParentChildRelationDefinitionId = parameters.beParentChildRelationDefinitionId;
                 beParentChildRelationId = parameters.beParentChildRelationId;
                 parentId = parameters.parentId;
-                childId = parameters.childId;
+
+                if (parameters.childId != undefined)
+                    childIds.push(parameters.childId);
             }
 
             isEditMode = (beParentChildRelationId != undefined);
@@ -39,7 +42,8 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.isParentBESelectorDisabled = parentId != undefined ? true : false;
-            $scope.scopeModel.isChildBESelectorDisabled = childId != undefined ? true : false;
+            $scope.scopeModel.isChildBESelectorDisabled = childIds.length > 0 ? true : false;
+            $scope.scopeModel.errorMessage = "";
 
             $scope.scopeModel.onParentBESelectorReady = function (api) {
                 parentBESelectorAPI = api;
@@ -51,18 +55,18 @@
             };
 
             $scope.scopeModel.onChildBESelectionChanged = function (selectedItem) {
-                var selectedChildBusinessEntityId = childBESelectorAPI.getSelectedIds();
-                if (!isEditMode && selectedChildBusinessEntityId != undefined) {
-                    $scope.scopeModel.isBeginEffectiveDateLoading = true;
+                //var selectedChildBusinessEntityId = childBESelectorAPI.getSelectedIds();
+                //if (!isEditMode && selectedChildBusinessEntityId != undefined) {
+                //    $scope.scopeModel.isBeginEffectiveDateLoading = true;
 
-                    VR_GenericData_BEParentChildRelationAPIService.GetLastAssignedEED(beParentChildRelationDefinitionId, selectedChildBusinessEntityId).then(function (response) {
-                        $scope.scopeModel.beginEffectiveDate = response;
-                    }).catch(function (error) {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    }).finally(function (error) {
-                        $scope.scopeModel.isBeginEffectiveDateLoading = false;
-                    });
-                }
+                //    VR_GenericData_BEParentChildRelationAPIService.GetLastAssignedEED(beParentChildRelationDefinitionId, selectedChildBusinessEntityId).then(function (response) {
+                //        $scope.scopeModel.beginEffectiveDate = response;
+                //    }).catch(function (error) {
+                //        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                //    }).finally(function (error) {
+                //        $scope.scopeModel.isBeginEffectiveDateLoading = false;
+                //    });
+                //}
             };
 
             $scope.scopeModel.validateEffectiveDate = function () {
@@ -161,7 +165,8 @@
                     businessEntityDefinitionId: beParentChildRelationDefinitionEntity.Settings.ChildBEDefinitionId,
                     beRuntimeSelectorFilter: beParentChildRelationDefinitionEntity.Settings.ChildBERuntimeSelectorFilter
                 };
-                if (childId == undefined) {
+
+                if (childIds.length == 0) {
                     childBESelectorPayload.filter = {
                         Filters: [{
                             $type: beParentChildRelationDefinitionEntity.Settings.ChildFilterFQTN,
@@ -169,9 +174,8 @@
                         }]
                     };
                 } else {
-                    childBESelectorPayload.selectedIds = childId;
+                    childBESelectorPayload.selectedIds = childIds;
                 }
-
                 VRUIUtilsService.callDirectiveLoad(childBESelectorAPI, childBESelectorPayload, childBESelectorLoadDeferred);
             });
 
@@ -181,21 +185,31 @@
         function insertBEParentChildRelation() {
             $scope.scopeModel.isLoading = true;
 
-            return VR_GenericData_BEParentChildRelationAPIService.AddBEParentChildRelation(buildBEParentChildRelationObjFromScope())
-                .then(function (response) {
-                    if (VRNotificationService.notifyOnItemAdded(beParentChildRelationDefinitionEntity.Name, response, "Name")) {
-                        if ($scope.onBEParentChildRelationAdded != undefined)
-                            $scope.onBEParentChildRelationAdded(response.InsertedObject);
-                        $scope.modalContext.closeModal();
-                    }
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                });
+            var beParentChildRelationObjToAdd = buildBEParentChildrenRelationObjFromScope();
+
+            return VR_GenericData_BEParentChildRelationAPIService.AddBEParentChildrenRelation(beParentChildRelationObjToAdd).then(function (response) {
+                if (VRNotificationService.notifyOnItemAdded(beParentChildRelationDefinitionEntity.Name, response, "Name")) {
+                    if ($scope.onBEParentChildRelationAdded != undefined && beParentChildRelationObjToAdd.ChildBEIds.length == 1)
+                        $scope.onBEParentChildRelationAdded(response.InsertedObject);
+                    $scope.modalContext.closeModal();
+                }
+                else if (beParentChildRelationObjToAdd.ChildBEIds.length == 1) {
+                    $scope.scopeModel.errorMessage = "";
+                }
+                else if ((beParentChildRelationObjToAdd.ChildBEIds.length > 1)) {
+                    $scope.scopeModel.errorMessage = "* " + response.Message;
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
         function updateBEParentChildRelation() {
             $scope.scopeModel.isLoading = true;
+
+            buildBEParentChildRelationObjFromScope()
 
             return VR_GenericData_BEParentChildRelationAPIService.UpdateBEParentChildRelation(buildBEParentChildRelationObjFromScope())
                 .then(function (response) {
@@ -212,12 +226,26 @@
                 });
         }
 
-        function buildBEParentChildRelationObjFromScope() {
+        function buildBEParentChildrenRelationObjFromScope() {
             var obj = {
                 BEParentChildRelationId: beParentChildRelationId,
                 RelationDefinitionId: beParentChildRelationDefinitionId,
                 ParentBEId: parentBESelectorAPI.getSelectedIds(),
-                ChildBEId: childBESelectorAPI.getSelectedIds(),
+                ChildBEIds: childBESelectorAPI.getSelectedIds(),
+                BED: $scope.scopeModel.beginEffectiveDate,
+                EED: $scope.scopeModel.endEffectiveDate
+            };
+            return obj;
+        }
+        function buildBEParentChildRelationObjFromScope() {
+
+            var childBEIds = childBESelectorAPI.getSelectedIds();
+
+            var obj = {
+                BEParentChildRelationId: beParentChildRelationId,
+                RelationDefinitionId: beParentChildRelationDefinitionId,
+                ParentBEId: parentBESelectorAPI.getSelectedIds(),
+                ChildBEId: childBEIds[0],
                 BED: $scope.scopeModel.beginEffectiveDate,
                 EED: $scope.scopeModel.endEffectiveDate
             };

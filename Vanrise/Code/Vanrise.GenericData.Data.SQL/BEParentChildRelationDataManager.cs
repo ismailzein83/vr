@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.GenericData.Entities;
 
@@ -12,6 +14,7 @@ namespace Vanrise.GenericData.Data.SQL
     public class BEParentChildRelationDataManager : BaseSQLDataManager, IBEParentChildRelationDataManager
     {
         #region ctor/Local Variables
+
         public BEParentChildRelationDataManager()
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnStringKey"))
         {
@@ -42,11 +45,64 @@ namespace Vanrise.GenericData.Data.SQL
             return (affectedRecords > 0);
         }
 
+        public bool Insert(List<BEParentChildRelation> beParentChildRelations)
+        {
+            if (beParentChildRelations == null || beParentChildRelations.Count == 0)
+                return true;
+
+            DataTable dtBEParentChildRelation = BuildBEParentChildRelationTable(beParentChildRelations);
+            int recordsEffected = ExecuteNonQuerySPCmd("[genericdata].[sp_BEParentChildRelation_InsertMultiple]", (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@BEParentChildRelations", SqlDbType.Structured);
+                dtPrm.Value = dtBEParentChildRelation;
+                cmd.Parameters.Add(dtPrm);
+            });
+            return (recordsEffected > 0);
+        }
+
         public bool Update(BEParentChildRelation BEParentChildRelationItem)
         {
             int affectedRecords = ExecuteNonQuerySP("[genericdata].[sp_BEParentChildRelation_Update]", BEParentChildRelationItem.BEParentChildRelationId, BEParentChildRelationItem.RelationDefinitionId, BEParentChildRelationItem.ParentBEId,
                 BEParentChildRelationItem.ChildBEId, BEParentChildRelationItem.BED, BEParentChildRelationItem.EED);
             return (affectedRecords > 0);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        DataTable BuildBEParentChildRelationTable(List<BEParentChildRelation> beParentChildRelations)
+        {
+            DataTable dtBEParentChildRelation = GetBEParentChildRelationTable();
+            dtBEParentChildRelation.BeginLoadData();
+            foreach (var beParentChildRelation in beParentChildRelations)
+            {
+                DataRow dr = dtBEParentChildRelation.NewRow();
+                dr["RelationDefinitionID"] = beParentChildRelation.RelationDefinitionId;
+                dr["ParentBEID"] = beParentChildRelation.ParentBEId;
+                dr["ChildBEID"] = beParentChildRelation.ChildBEId;
+                dr["BED"] = beParentChildRelation.BED;
+
+                if (beParentChildRelation.EED.HasValue)
+                    dr["EED"] = beParentChildRelation.EED.Value;
+                else
+                    dr["EED"] = DBNull.Value;
+
+                dtBEParentChildRelation.Rows.Add(dr);
+            }
+            dtBEParentChildRelation.EndLoadData();
+            return dtBEParentChildRelation;
+        }
+
+        DataTable GetBEParentChildRelationTable()
+        {
+            DataTable dtBEParentChildRelation = new DataTable();
+            dtBEParentChildRelation.Columns.Add("RelationDefinitionID", typeof(Guid));
+            dtBEParentChildRelation.Columns.Add("ParentBEID", typeof(string));
+            dtBEParentChildRelation.Columns.Add("ChildBEID", typeof(string));
+            dtBEParentChildRelation.Columns.Add("BED", typeof(DateTime));
+            dtBEParentChildRelation.Columns.Add("EED", typeof(DateTime));
+            return dtBEParentChildRelation;
         }
 
         #endregion

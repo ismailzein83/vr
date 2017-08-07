@@ -51,6 +51,16 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpPost]
+        [Route("AddBEParentChildrenRelation")]
+        public object AddBEParentChildrenRelation(BEParentChildrenRelation beParentChildsRelationItem)
+        {
+            if (!DoesUserHaveAddAccess(beParentChildsRelationItem.RelationDefinitionId))
+                return GetUnauthorizedResponse();
+
+            return _parentChildRelationManager.AddBEParentChildrenRelation(beParentChildsRelationItem);
+        }
+
+        [HttpPost]
         [Route("UpdateBEParentChildRelation")]
         public object UpdateBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
@@ -66,6 +76,5 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _parentChildRelationManager.GetLastAssignedEED(beParentChildRelationDefinitionId, beChildId);
         }
-
     }
 }

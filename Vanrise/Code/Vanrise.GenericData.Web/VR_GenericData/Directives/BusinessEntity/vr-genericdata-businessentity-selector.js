@@ -13,7 +13,8 @@
                 label: '@',
                 customvalidate: '=',
                 isrequired: '=',
-                onselectionchanged: '='
+                onselectionchanged: '=',
+                ismultipleselection: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -22,8 +23,25 @@
             },
             controllerAs: "ctrlBE",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntity/Templates/BusinessEntitySelectorTemplate.html"
+            template: function (element, attrs) {
+                return getTemplate(attrs);
+            }
         };
+
+        function getTemplate(attrs) {
+
+            var multipleselection = "";
+
+            if (attrs.ismultipleselection != undefined) {
+                multipleselection = "ismultipleselection";
+            }
+
+            return '<span vr-loader="scopeModel.isLoadingDirective">' +
+                        '<vr-directivewrapper directive="scopeModel.Editor" on-ready="scopeModel.onDirectiveReady" onselectionchanged="ctrlBE.onselectionchanged" ' +
+                            'customvalidate="{{ctrlBE.customvalidate}}" normal-col-num="{{ctrlBE.normalColNum}}" isrequired="{{ctrlBE.isrequired}}" ' + multipleselection + '>'
+                        '</vr-directivewrapper>' +
+                   '</span>'
+        }
 
         function BusinessEntitySelectorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
@@ -55,7 +73,7 @@
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) { 
+                api.load = function (payload) {
 
                     var promises = [];
 

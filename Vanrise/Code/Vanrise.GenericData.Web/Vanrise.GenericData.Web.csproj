@@ -217,7 +217,6 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\OverriddenBEDefinition.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-runtimeselectorsettings.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-overriddenconfiguration-bedefinition.js" />
-    <Content Include="VR_GenericData\Directives\BusinessEntity\Templates\BusinessEntitySelectorTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntity\vr-genericdata-businessentity-remoteselector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntity\vr-genericdata-businessentity-selector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\vr-genericdata-businessentitydefinition-remoteselector.js" />
@@ -618,7 +617,9 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagement.html" />
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VR_GenericData\Directives\BusinessEntity\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditor.html" />

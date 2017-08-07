@@ -86,6 +86,80 @@ namespace Vanrise.GenericData.Business
             return insertOperationOutput;
         }
 
+        public InsertOperationOutput<BEParentChildRelationDetail> AddBEParentChildrenRelation(BEParentChildrenRelation beParentChildrenRelation)
+        {
+            beParentChildrenRelation.ChildBEIds.ThrowIfNull("beParentChildrenRelation.ChildBEIds");
+
+            if (beParentChildrenRelation.ChildBEIds.Count == 1)
+            {
+                return AddBEParentChildRelation(new BEParentChildRelation()
+                {
+                    RelationDefinitionId = beParentChildrenRelation.RelationDefinitionId,
+                    ParentBEId = beParentChildrenRelation.ParentBEId,
+                    ChildBEId = beParentChildrenRelation.ChildBEIds.First(),
+                    BED = beParentChildrenRelation.BED,
+                    EED = beParentChildrenRelation.EED
+                });
+            }
+
+            var insertOperationOutput = new InsertOperationOutput<BEParentChildRelationDetail>();
+            insertOperationOutput.Result = InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+
+            List<string> overlappedChildBEIds = new List<string>();
+            List<BEParentChildRelation> beParentChildRelationsToAdd = new List<BEParentChildRelation>();
+
+            foreach (var childBEId in beParentChildrenRelation.ChildBEIds)
+            {
+                BEParentChildRelation beParentChildRelation = new BEParentChildRelation()
+                {
+                    RelationDefinitionId = beParentChildrenRelation.RelationDefinitionId,
+                    ParentBEId = beParentChildrenRelation.ParentBEId,
+                    ChildBEId = childBEId,
+                    BED = beParentChildrenRelation.BED,
+                    EED = beParentChildrenRelation.EED
+                };
+
+                IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = this.GetParents(beParentChildrenRelation.RelationDefinitionId, childBEId);
+
+                if (beParentChildrenRelation.BED != beParentChildrenRelation.EED && !IsOverlappedWith(beParentChildRelation, beParentChildRelations))
+                    beParentChildRelationsToAdd.Add(beParentChildRelation);
+                else
+                    overlappedChildBEIds.Add(childBEId);
+            }
+
+            if (overlappedChildBEIds.Count == 0)
+            {
+                IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
+
+                if (_dataManager.Insert(beParentChildRelationsToAdd))
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(beParentChildrenRelation.RelationDefinitionId);
+                    insertOperationOutput.Result = InsertOperationResult.Succeeded;
+                }
+                else
+                {
+                    insertOperationOutput.Result = InsertOperationResult.SameExists;
+                }
+            }
+            else
+            {
+                BusinessEntityManager businessEntityManager = new BusinessEntityManager();
+                List<string> overlappedChildBEDescriptions = new List<string>();
+
+                BEParentChildRelationDefinition beParentChildRelationDefinition = new BEParentChildRelationDefinitionManager().GetBEParentChildRelationDefinition(beParentChildrenRelation.RelationDefinitionId);
+                beParentChildRelationDefinition.ThrowIfNull("beParentChildRelationDefinition", beParentChildrenRelation.RelationDefinitionId);
+                beParentChildRelationDefinition.Settings.ThrowIfNull("beParentChildRelationDefinition.Settings", beParentChildrenRelation.RelationDefinitionId);
+
+                foreach (string childBEId in overlappedChildBEIds)
+                    overlappedChildBEDescriptions.Add(businessEntityManager.GetEntityDescription(beParentChildRelationDefinition.Settings.ChildBEDefinitionId, childBEId));
+
+                insertOperationOutput.Message = string.Format("Specified Interval overlaps with other assignments of DIDs: {0}", string.Join(", ", overlappedChildBEDescriptions));
+            }
+
+            return insertOperationOutput;
+        }
+
         public UpdateOperationOutput<BEParentChildRelationDetail> UpdateBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
         {
             var updateOperationOutput = new UpdateOperationOutput<BEParentChildRelationDetail>();
@@ -180,11 +254,11 @@ namespace Vanrise.GenericData.Business
         public bool IsChildAssignedToParentWithoutEED(Guid beParentChildRelationDefinitionId, string childId)
         {
             IOrderedEnumerable<BEParentChildRelation> beParentChildRelations = this.GetParents(beParentChildRelationDefinitionId, childId);
-
             if (beParentChildRelations == null || beParentChildRelations.Count() == 0)
                 return false;
 
-            if (beParentChildRelations.First().EED.HasValue)
+            var item = beParentChildRelations.FirstOrDefault(itm => !itm.EED.HasValue || itm.EED.Value != itm.BED);
+            if (item != null && item.EED.HasValue)
                 return false;
 
             return true;

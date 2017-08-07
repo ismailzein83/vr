@@ -54,6 +54,7 @@
     <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition\BEParentChildRelationDefinitionSettings.cs" />
     <Compile Include="BEParentChildRelation\BEParentChildRelationDetail.cs" />
     <Compile Include="BEParentChildRelation\BEParentChildRelationQuery.cs" />
+    <Compile Include="BEParentChildRelation\BEParentChildrenRelation.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionDetail.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionFilter.cs" />
     <Compile Include="BusinessEntities\BELookupRuleDefinition\BELookupRuleDefinitionInfo.cs" />
