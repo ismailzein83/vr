@@ -150,6 +150,8 @@
   <ItemGroup>
     <Content Include="VR_Rules\Constants\ModuleConfig.js" />
     <Content Include="VR_Rules\Constants\FirstPeriodRateTypeEnum.js" />
+    <Content Include="VR_Rules\Constants\RemoveDirectionEnum.js" />
+    <Content Include="VR_Rules\Constants\TextOccurrenceEnum.js" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TaxActions\Templates\PricingRulePercentageTaxTemplate.html" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TaxActions\vr-rules-pricingrulesettings-tax-percentage.js" />
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\ExtraChargeActions\Templates\PricingRuleFixedExtraChargeTemplate.html" />
@@ -166,9 +168,11 @@
     <Content Include="VR_Rules\Directives\MainExtensions\PricingRules\TariffSettings\vr-rules-pricingrulesettings-tarrif-regular.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\Templates\AddPrefixDirectiveTemplate.html" />
     <Content Include="VR_Rules\Directives\NormalizationRule\Templates\NormalizeNumberSettingsDirectiveTemplate.html" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\Templates\RemoveDirectiveTemplate.html" />
     <Content Include="VR_Rules\Directives\NormalizationRule\Templates\ReplaceStringDirectiveTemplate.html" />
     <Content Include="VR_Rules\Directives\NormalizationRule\Templates\SubstringDirectiveTemplate.html" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-addprefix.js" />
+    <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-remove.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-replacestring.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizationnumbersettings-substring.js" />
     <Content Include="VR_Rules\Directives\NormalizationRule\vr-rules-normalizenumbersettings.js" />
