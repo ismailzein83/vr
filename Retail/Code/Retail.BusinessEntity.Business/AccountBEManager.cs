@@ -595,6 +595,29 @@ namespace Retail.BusinessEntity.Business
                 return true;
             return false;
         }
+
+        /// <summary>
+        /// this method is called from the data transformation
+        /// </summary>
+        /// <param name="accountBEDefinitionId"></param>
+        /// <param name="account1Id"></param>
+        /// <param name="account2Id"></param>
+        /// <returns></returns>
+        public bool AreAccountsInLocalService(Guid accountBEDefinitionId, long account1Id, long account2Id)
+        {
+            var accountBEDefinitionSetting = _accountBEDefinitionManager.GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            accountBEDefinitionSetting.ThrowIfNull("accountBEDefinitionSetting", accountBEDefinitionId);
+            if(!accountBEDefinitionSetting.LocalServiceAccountTypeId.HasValue)
+                return false;
+            
+            if (account1Id == account2Id)
+                return true;
+            
+            var account1Parent = GetSelfOrParentAccountOfType(accountBEDefinitionId, account1Id, accountBEDefinitionSetting.LocalServiceAccountTypeId.Value);
+            var account2Parent = GetSelfOrParentAccountOfType(accountBEDefinitionId, account2Id, accountBEDefinitionSetting.LocalServiceAccountTypeId.Value);
+            return account1Parent != null && account2Parent != null && account1Parent.AccountId == account2Parent.AccountId;
+        }
+
         #endregion
 
         #region ExtendedSettings

@@ -37,6 +37,8 @@ namespace Retail.BusinessEntity.Entities
             get { return "retail-be-account-selector"; }
         }
 
+        public Guid? LocalServiceAccountTypeId { get; set; }
+
         public bool UseRemoteSelector { get; set; }
         public Guid StatusBEDefinitionId { get; set; }
         public List<AccountExtraFieldDefinition> AccountExtraFieldDefinitions { get; set; }
