@@ -12,15 +12,18 @@ namespace TOne.WhS.Sales.Business.Reader
 {
     public class SaleRateReadRPChanges : ISaleRateReader
     {
+        #region Fields / Constructors
+
         private SaleRatesByOwner _allSaleRatesByOwner;
 
         public SaleRateReadRPChanges(IEnumerable<SaleRate> customerSaleRates, RoutingCustomerInfoDetails routingCustomerInfo, List<long> zoneIds,
             DateTime minimumDate, Dictionary<long, DateTime> zonesEffectiveDateTimes)
         {
             //TODO: consider for this type of readers that selling product may be different in past
-            _allSaleRatesByOwner = GetAllSaleRates(customerSaleRates, routingCustomerInfo.SellingProductId,
-                routingCustomerInfo.CustomerId, zoneIds, minimumDate, zonesEffectiveDateTimes);
+            _allSaleRatesByOwner = GetAllSaleRates(customerSaleRates, routingCustomerInfo.SellingProductId, routingCustomerInfo.CustomerId, zoneIds, minimumDate, zonesEffectiveDateTimes);
         }
+
+        #endregion
 
         public SaleRatesByZone GetZoneRates(SalePriceListOwnerType ownerType, int ownerId)
         {
@@ -33,6 +36,9 @@ namespace TOne.WhS.Sales.Business.Reader
 
             return saleRateByOwnerType == null ? null : saleRateByOwnerType.GetRecord(ownerId);
         }
+
+        #region Private Methods
+
         private SaleRatesByOwner GetAllSaleRates(IEnumerable<SaleRate> customerSaleRates, int sellingProductId, int customerId, IEnumerable<long> zoneIds, DateTime minimumDate, Dictionary<long, DateTime> zonesEffectiveDateTimes)
         {
             SaleRatesByOwner saleRatesByOwner = new SaleRatesByOwner
@@ -69,5 +75,7 @@ namespace TOne.WhS.Sales.Business.Reader
             }
             return saleRatesByOwner;
         }
+
+        #endregion
     }
 }
