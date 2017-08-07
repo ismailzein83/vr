@@ -134,6 +134,7 @@
     <Folder Include="dataparser\" />
     <Folder Include="dataparser\Tables\" />
     <Folder Include="dataparser\Stored Procedures\" />
+    <Folder Include="genericdata\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -649,6 +650,8 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_TryUpdateEffectiveDate.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_GetLast.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetLast.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BEParentChildRelation_InsertMultiple.sql" />
+    <Build Include="genericdata\User Defined Types\BEParentChildRelationType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
