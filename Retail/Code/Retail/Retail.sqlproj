@@ -71,6 +71,7 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Retail_BE\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail\Tables\Package.sql" />
@@ -171,5 +172,7 @@
     <Build Include="Retail_BE\Stored Procedures\sp_ProductFamily_GetAll.sql" />
     <Build Include="Retail\Stored Procedures\sp_Account_UpdateExtendedSettings.sql" />
     <Build Include="Retail\Stored Procedures\sp_AccountPackage_Update.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_DID_InsertMultiple.sql" />
+    <Build Include="Retail_BE\User Defined Types\DIDType.sql" />
   </ItemGroup>
 </Project>
