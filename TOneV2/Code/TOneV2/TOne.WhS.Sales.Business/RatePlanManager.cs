@@ -904,7 +904,7 @@ namespace TOne.WhS.Sales.Business
                 {
                     DateTime zoneEffectiveDate;
                     if (!effectiveDatesByZoneId.TryGetValue(customerZoneRate.ZoneId, out zoneEffectiveDate))
-                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The action date of zone '{0}' was not found"));
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The action date of zone '{0}' was not found", customerZoneRate.ZoneId));
                     if (customerZoneRate.IsInTimeRange(zoneEffectiveDate))
                         validCustomerZoneRates.Add(customerZoneRate);
                 }
