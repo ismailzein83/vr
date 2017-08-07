@@ -209,7 +209,7 @@
         function updateBEParentChildRelation() {
             $scope.scopeModel.isLoading = true;
 
-            buildBEParentChildRelationObjFromScope()
+            buildBEParentChildRelationObjFromScope();
 
             return VR_GenericData_BEParentChildRelationAPIService.UpdateBEParentChildRelation(buildBEParentChildRelationObjFromScope())
                 .then(function (response) {

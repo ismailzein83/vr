@@ -38,9 +38,9 @@
 
             return '<span vr-loader="scopeModel.isLoadingDirective">' +
                         '<vr-directivewrapper directive="scopeModel.Editor" on-ready="scopeModel.onDirectiveReady" onselectionchanged="ctrlBE.onselectionchanged" ' +
-                            'customvalidate="{{ctrlBE.customvalidate}}" normal-col-num="{{ctrlBE.normalColNum}}" isrequired="{{ctrlBE.isrequired}}" ' + multipleselection + '>'
-                        '</vr-directivewrapper>' +
-                   '</span>'
+                            'customvalidate="{{ctrlBE.customvalidate}}" normal-col-num="{{ctrlBE.normalColNum}}" isrequired="{{ctrlBE.isrequired}}" ' + multipleselection + '>' +
+            '</vr-directivewrapper>' +
+       '</span>';
         }
 
         function BusinessEntitySelectorCtor($scope, ctrl, $attrs) {
