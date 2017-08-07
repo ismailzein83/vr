@@ -91,8 +91,7 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                         $scope.scopeModel.beginEffectiveDate = payload.bulkAction.BED;
                     }
 
-                    if (bulkActionContext.ownerType != undefined && bulkActionContext.ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value)
-                        $scope.scopeModel.showRateSource = true;
+                   
                 }
 
                 var promises = [];
