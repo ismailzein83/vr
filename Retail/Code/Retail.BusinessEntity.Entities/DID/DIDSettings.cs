@@ -8,15 +8,15 @@ namespace Retail.BusinessEntity.Entities
 {
     public class DIDSettings
     {
-        public bool IsInternational { get; set; }
-
-        public int NumberOfChannels { get; set; }
-
         public List<string> Numbers { get; set; }
 
         public List<DIDRange> Ranges { get; set; }
 
+        public int NumberOfChannels { get; set; }
+
         public int? DIDSo { get; set; }
+
+        public bool IsInternational { get; set; }
     }
 
     public class DIDRange

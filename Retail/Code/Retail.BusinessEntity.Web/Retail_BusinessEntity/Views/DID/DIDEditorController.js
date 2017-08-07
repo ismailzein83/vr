@@ -41,7 +41,14 @@
             };
             $scope.scopeModel.onDirectiveReady = function (api) {
                 directiveAPI = api;
-                directiveReadyDeferred.resolve();
+
+                if (directiveReadyDeferred != undefined) {
+                    directiveReadyDeferred.resolve();
+                }
+                else {
+                    var didNumberTypeDirectivePayload = { isEditMode: isEditMode };
+                    VRUIUtilsService.callDirectiveLoad(directiveAPI, didNumberTypeDirectivePayload, undefined);
+                }
             };
 
             $scope.scopeModel.save = function () {
@@ -100,7 +107,6 @@
                    $scope.scopeModel.isLoading = false;
                });
         }
-
         function setTitle() {
             $scope.title = isEditMode ? UtilsService.buildTitleForUpdateEditor(description ? description : undefined, 'DID') : UtilsService.buildTitleForAddEditor('DID');
         };
@@ -132,20 +138,25 @@
             var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
             directiveReadyDeferred.promise.then(function () {
+                directiveReadyDeferred = undefined;
 
-                var didNumberTypeDirectivePayload = { didObj: didEntity };
+                var didNumberTypeDirectivePayload = {
+                    didObj: didEntity,
+                    isEditMode: isEditMode
+                };
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, didNumberTypeDirectivePayload, directiveLoadDeferred);
             });
+
             return directiveLoadDeferred.promise;
         };
 
         function insertDID() {
             $scope.scopeModel.isLoading = true;
+            var didObjToAdd = buildDIDObjFromScope();
 
-            return Retail_BE_DIDAPIService.AddDID(buildDIDObjFromScope())
-                .then(function (response) {
+            return Retail_BE_DIDAPIService.AddDID(didObjToAdd).then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("DID", response, "Number")) {
-                        if ($scope.onDIDAdded != undefined)
+                        if ($scope.onDIDAdded != undefined && didObjToAdd.CreateAsSeparate != true)
                             $scope.onDIDAdded(response.InsertedObject);
                         $scope.modalContext.closeModal();
                     }
@@ -157,9 +168,9 @@
         }
         function updateDID() {
             $scope.scopeModel.isLoading = true;
+            var didObjToUpdate = buildDIDObjFromScope();
 
-            return Retail_BE_DIDAPIService.UpdateDID(buildDIDObjFromScope())
-                .then(function (response) {
+            return Retail_BE_DIDAPIService.UpdateDID(didObjToUpdate).then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated("DID", response, "Number")) {
                         if ($scope.onDIDUpdated != undefined)
                             $scope.onDIDUpdated(response.UpdatedObject);
@@ -176,7 +187,6 @@
         function buildDIDObjFromScope() {
             var obj = {
                 DIDId: didId,
-                //Number: $scope.scopeModel.number,
                 Settings: {
                     IsInternational: $scope.scopeModel.isInternational,
                     NumberOfChannels: $scope.scopeModel.numberOfChannels,

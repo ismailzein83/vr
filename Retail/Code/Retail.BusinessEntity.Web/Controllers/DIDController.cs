@@ -2,10 +2,7 @@
 using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
-using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
 
@@ -26,30 +23,30 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetDIDRuntimeEditor")]
-        public DIDRuntimeEditor GetDIDRuntimeEditor(int dIDId)
+        public DIDRuntimeEditor GetDIDRuntimeEditor(int didId)
         {
-            return manager.GetDIDRuntimeEditor(dIDId);
+            return manager.GetDIDRuntimeEditor(didId);
         }
         
         [HttpGet]
         [Route("GetDID")]
-        public DID GetDID(int dIDId)
+        public DID GetDID(int didId)
         {
-            return manager.GetDID(dIDId,true);
+            return manager.GetDID(didId,true);
         }
 
         [HttpPost]
         [Route("AddDID")]
-        public Vanrise.Entities.InsertOperationOutput<DIDDetail> AddDID(DID DID)
+        public Vanrise.Entities.InsertOperationOutput<DIDDetail> AddDID(DIDToInsert didToInsert)
         {
-            return manager.AddDID(DID);
+            return manager.AddDID(didToInsert);
         }
 
         [HttpPost]
         [Route("UpdateDID")]
-        public Vanrise.Entities.UpdateOperationOutput<DIDDetail> UpdateDID(DID DID)
+        public Vanrise.Entities.UpdateOperationOutput<DIDDetail> UpdateDID(DID did)
         {
-            return manager.UpdateDID(DID);
+            return manager.UpdateDID(did);
         }
 
         [HttpGet]

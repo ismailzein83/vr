@@ -12,8 +12,13 @@ namespace Retail.BusinessEntity.Data
     public interface IDIDDataManager : IDataManager
     {
         List<DID> GetAllDIDs();
+
         bool Insert(DID dID, out int dIDId);
+
+        bool Insert(List<DID> dids);
+
         bool Update(DID dID);
+
         bool AreDIDsUpdated(ref object updateHandle);
     }
 }

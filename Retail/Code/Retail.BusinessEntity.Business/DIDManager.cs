@@ -124,13 +124,37 @@ namespace Retail.BusinessEntity.Business
             return dids.GetRecord(sourceId);
         }
 
-        public bool TryAddDID(DID did, out int didId)
+        public InsertOperationOutput<DIDDetail> AddDID(DIDToInsert didToInsert)
+        {
+            InsertOperationOutput<DIDDetail> insertOperationOutput = new InsertOperationOutput<DIDDetail>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            int didId = -1;
+
+            if (TryAddDID(didToInsert, out didId))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                didToInsert.DIDId = didId;
+                VRActionLogger.Current.TrackAndLogObjectAdded(DIDLoggableEntity.Instance, didToInsert);
+                insertOperationOutput.InsertedObject = DIDDetailMapper(didToInsert);
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
+
+            return insertOperationOutput;
+        }
+
+        public bool TryAddDID(DIDToInsert didToInsert, out int didId)
         {
             didId = 0;
             var cachedDIDs = GetCachedDIDsGroupByNumber();
             bool alreadyExist = false;
 
-            ManipulateDIDs(did, (number, handle) =>
+            ManipulateDIDs(didToInsert, (number, handle) =>
             {
                 alreadyExist = cachedDIDs.ContainsKey(number);
                 if (alreadyExist)
@@ -140,34 +164,40 @@ namespace Retail.BusinessEntity.Business
             if (!alreadyExist)
             {
                 IDIDDataManager dataManager = BEDataManagerFactory.GetDataManager<IDIDDataManager>();
-                return dataManager.Insert(did, out didId);
+                DIDNumberType didNumberType = GetDIDNumberType(didToInsert);
+
+                if (didNumberType == DIDNumberType.Range && didToInsert.CreateAsSeparate)
+                {
+                    List<DID> dids = CreateRangeAsSeparateDIDs(didToInsert);
+                    return dids != null ? dataManager.Insert(dids) : true;
+                }
+                else
+                {
+                    return dataManager.Insert(didToInsert, out didId);
+                }
             }
             return false;
         }
-        public InsertOperationOutput<DIDDetail> AddDID(DID did)
+
+        public UpdateOperationOutput<DIDDetail> UpdateDID(DID did)
         {
-            InsertOperationOutput<DIDDetail> insertOperationOutput = new InsertOperationOutput<DIDDetail>();
+            UpdateOperationOutput<DIDDetail> updateOperationOutput = new UpdateOperationOutput<DIDDetail>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
 
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
-            int didId = -1;
-
-            bool insertActionSucc = TryAddDID(did, out didId);
-
-            if (insertActionSucc)
+            if (TryUpdateDID(did))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                did.DIDId = didId;
-                VRActionLogger.Current.TrackAndLogObjectAdded(DIDLoggableEntity.Instance, did);
-                insertOperationOutput.InsertedObject = DIDDetailMapper(did);
+
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = DIDDetailMapper(did);
             }
             else
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
 
-            return insertOperationOutput;
+            return updateOperationOutput;
         }
 
         public bool TryUpdateDID(DID did)
@@ -191,26 +221,6 @@ namespace Retail.BusinessEntity.Business
                 return success;
             }
             return false;
-        }
-        public UpdateOperationOutput<DIDDetail> UpdateDID(DID did)
-        {
-            UpdateOperationOutput<DIDDetail> updateOperationOutput = new UpdateOperationOutput<DIDDetail>();
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            if (TryUpdateDID(did))
-            {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = DIDDetailMapper(did);
-            }
-            else
-            {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-            }
-
-            return updateOperationOutput;
         }
 
         public IEnumerable<DIDInfo> GetDIDsInfo(DIDFilter filter)
@@ -343,10 +353,14 @@ namespace Retail.BusinessEntity.Business
 
         public void ManipulateDIDs(DID did, Action<string, DIDNumberHandle> onNumberLoaded)
         {
+            did.ThrowIfNull("did");
+            did.Settings.ThrowIfNull("did.Settings");
+
             DIDNumberType didNumberType = GetDIDNumberType(did);
             switch (didNumberType)
             {
                 case DIDNumberType.Number:
+                    did.Settings.Numbers.ThrowIfNull("did.Settings.Numbers");
                     foreach (var number in did.Settings.Numbers)
                     {
                         DIDNumberHandle handle = new DIDNumberHandle();
@@ -355,7 +369,9 @@ namespace Retail.BusinessEntity.Business
                             break;
                     }
                     break;
+
                 case DIDNumberType.Range:
+                    did.Settings.Ranges.ThrowIfNull("did.Settings.Ranges", did.DIDId);
                     foreach (var range in did.Settings.Ranges)
                     {
                         DIDNumberHandle handle = new DIDNumberHandle();
@@ -372,6 +388,7 @@ namespace Retail.BusinessEntity.Business
                             break;
                     }
                     break;
+
                 default: throw new Exception("Invalid Type for DID.");
             }
         }
@@ -422,6 +439,44 @@ namespace Retail.BusinessEntity.Business
                 return false;
 
             return accountIds.Contains(long.Parse(beParentChildRelation.ParentBEId));
+        }
+
+        private List<DID> CreateRangeAsSeparateDIDs(DID didToInsert)
+        {
+            didToInsert.ThrowIfNull("didToInsert");
+            didToInsert.Settings.ThrowIfNull("didToInsert.Settings");
+            didToInsert.Settings.Ranges.ThrowIfNull("didToInsert.Settings.Numbers");
+
+            List<DID> dids = new List<DID>();
+
+            foreach (var range in didToInsert.Settings.Ranges)
+            {
+                long from = range.From.TryParseWithValidate<long>(long.TryParse);
+                long to = range.To.TryParseWithValidate<long>(long.TryParse);
+
+                for (long currentNumber = from; currentNumber <= to; currentNumber++)
+                {
+                    List<string> numbers = new List<string>();
+                    numbers.Add(currentNumber.ToString());
+
+                    DID did = new DID()
+                    {
+                        DIDId = didToInsert.DIDId,
+                        SourceId = didToInsert.SourceId,
+                        Settings = new DIDSettings()
+                        {
+                            Numbers = numbers,
+                            Ranges = null,
+                            NumberOfChannels = didToInsert.Settings.NumberOfChannels,
+                            DIDSo = didToInsert.Settings.DIDSo,
+                            IsInternational = didToInsert.Settings.IsInternational
+                        }
+                    };
+                    dids.Add(did);
+                }
+            }
+
+            return dids.Count > 0 ? dids : null;
         }
 
         #endregion

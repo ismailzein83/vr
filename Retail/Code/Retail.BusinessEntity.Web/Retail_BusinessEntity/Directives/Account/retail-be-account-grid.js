@@ -162,13 +162,16 @@ app.directive('retailBeAccountGrid', ['VRNotificationService', 'UtilsService', '
                         return accountActionDefinitionsLoadPromiseDeferred.promise;
                     }
                     function buildGridQuery(gridQuery) {
-                        if (gridQuery == undefined)
-                            gridQuery = {};
 
-                        gridQuery.AccountBEDefinitionId = accountBEDefinitionId;
-                        gridQuery.ParentAccountId = parentAccountId;
-                        gridQuery.Columns = gridColumnFieldNames;
-                        return gridQuery;
+                        return {
+                            AccountBEDefinitionId: accountBEDefinitionId,
+                            ParentAccountId: parentAccountId,
+                            Columns: gridColumnFieldNames,
+                            Name: gridQuery != undefined ? gridQuery.Name : undefined,
+                            OnlyRootAccount: gridQuery != undefined ? gridQuery.OnlyRootAccount : undefined,
+                            AccountTypeIds: gridQuery != undefined ? gridQuery.AccountTypeIds : undefined,
+                            FilterGroup: gridQuery != undefined ? gridQuery.FilterGroup : undefined
+                        };
                     }
 
                     return gridLoadDeferred.promise;

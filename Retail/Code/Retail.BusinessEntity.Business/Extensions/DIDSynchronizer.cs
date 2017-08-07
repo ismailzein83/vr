@@ -35,7 +35,12 @@ namespace Retail.BusinessEntity.Business
             {
                 SourceDIDData sourceDID = targetDID as SourceDIDData;
                 int DIDId;
-                didManager.TryAddDID(sourceDID.DID, out DIDId);
+
+                if (sourceDID.DID == null)
+                    continue;
+
+                DID did = sourceDID.DID;
+                didManager.TryAddDID(new DIDToInsert(did.SourceId, did.Settings, false), out DIDId);
                 if (DIDId > 0)
                 {
                     context.WriteBusinessTrackingMsg(LogEntryType.Information, "New DID Number '{0}' is Added", sourceDID.DID.Settings.Numbers.First());
@@ -65,7 +70,7 @@ namespace Retail.BusinessEntity.Business
                 {
                     string accountName = new AccountBEManager().GetAccountName(AccountBEDefinitionId, accountData.AccountId.Value);
                     InsertParentChildRelation(accountData, accountDIDRelationDefinitionId, parentChildRelationManager, didIdAsString, accountIdAsString);
-                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} is linked to Account {1} effective on {2}", accountData.DID.Settings.Numbers.First(),  accountName, accountData.BED.Value.ToShortDateString());
+                    context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} is linked to Account {1} effective on {2}", accountData.DID.Settings.Numbers.First(), accountName, accountData.BED.Value.ToShortDateString());
                 }
             }
             else

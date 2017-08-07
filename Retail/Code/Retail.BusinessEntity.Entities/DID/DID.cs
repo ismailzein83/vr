@@ -18,6 +18,18 @@ namespace Retail.BusinessEntity.Entities
         public DIDSettings Settings { get; set; }
     }
 
+    public class DIDToInsert : DID
+    {
+        public bool CreateAsSeparate { get; set; }
+
+        public DIDToInsert(string sourceId, DIDSettings settings, bool createAsSeparate)
+        {
+            SourceId = sourceId;
+            Settings = settings;
+            CreateAsSeparate = createAsSeparate;
+        }
+    }
+
     public class DIDRuntimeEditor
     {
         public DID DID { get; set; }

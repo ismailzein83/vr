@@ -38,6 +38,7 @@
             $scope.scopeModel.isAccountBEDefinitionSelected = false;
             $scope.scopeModel.showBusinessEntityDefinitionSelector = false;
             $scope.scopeModel.showAddAccount = false;
+            $scope.scopeModel.onlyRootAccount = true;
 
             $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                 businessEntityDefinitionSelectorAPI = api;
@@ -54,7 +55,10 @@
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 var gridPayload = {
-                    accountBEDefinitionId: accountBEDefinitionId
+                    accountBEDefinitionId: accountBEDefinitionId,
+                    query: {
+                        OnlyRootAccount: $scope.scopeModel.onlyRootAccount
+                    }
                 };
                 gridAPI.load(gridPayload);
             };
@@ -71,16 +75,29 @@
                     Retail_BE_AccountBEAPIService.DoesUserHaveAddAccess(accountBEDefinitionId).then(function (response) {
                         $scope.scopeModel.showAddAccount = response;
                     });
-                    loadAllControls().then(function() {
+                    loadAllControls().then(function () {
                         $scope.scopeModel.isGridLoaded = true;
                     });
                 }
             };
+            $scope.scopeModel.onlyRootAccountValueChanged = function () {
+
+                var payload = {
+                    filter: {
+                        AccountBEDefinitionId: accountBEDefinitionId,
+                        RootAccountTypeOnly: $scope.scopeModel.onlyRootAccount
+                    }
+                };
+                var setLoader = function (value) {
+                    $scope.scopeModel.isAccountTypeSelectorLoading = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSelectorAPI, payload, setLoader, undefined);
+            };
 
             $scope.scopeModel.search = function () {
                 var gridPayload = {
-                    query: buildGridQuery(),
-                    accountBEDefinitionId: accountBEDefinitionId
+                    accountBEDefinitionId: accountBEDefinitionId,
+                    query: buildGridQuery()
                 };
 
                 return gridAPI.load(gridPayload);
@@ -105,7 +122,7 @@
         }
 
         function loadBEDefinitionSelectorLabel() {
-            return VR_Sec_ViewAPIService.GetView(viewId).then(function (response) {              
+            return VR_Sec_ViewAPIService.GetView(viewId).then(function (response) {
                 if (response != undefined && response.Settings != undefined) {
                     $scope.scopeModel.BEDefinitionSelectorLabel = response.Settings.AccountDefinitionSelectorLabel;
                 }
@@ -150,10 +167,11 @@
             var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             accountTypeSelectorReadyDeferred.promise.then(function () {
+
                 var payload = {
                     filter: {
                         AccountBEDefinitionId: accountBEDefinitionId,
-                        RootAccountTypeOnly: true
+                        RootAccountTypeOnly: $scope.scopeModel.onlyRootAccount
                     }
                 };
                 VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, payload, accountTypeSelectorLoadDeferred);
@@ -206,9 +224,9 @@
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
+                OnlyRootAccount: $scope.scopeModel.onlyRootAccount,
                 AccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
                 FilterGroup: recordFilterDirectiveAPI.getData().filterObj,
-                ParentAccountId: null
             };
         }
     }

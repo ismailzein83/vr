@@ -6,5 +6,8 @@
         <vr-columns width="1/2row">
             <vr-textbox value="scopeModel.to" label="To" isrequired type="number" decimalprecision="0"></vr-textbox>
         </vr-columns>
+        <vr-columns width="fullrow" ng-show="scopeModel.showCreateAsSeparate">
+            <vr-switch value="scopeModel.createAsSeparate" label="Split range into separate DIDs"></vr-switch>
+        </vr-columns>
     </vr-validator>
 </vr-columns>

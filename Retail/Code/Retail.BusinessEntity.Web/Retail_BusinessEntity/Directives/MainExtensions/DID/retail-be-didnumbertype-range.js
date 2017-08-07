@@ -2,11 +2,9 @@
 
 app.directive('retailBeDidnumbertypeRange', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
-
         var directiveDefinitionObject = {
             restrict: 'E',
-            scope:
-            {
+            scope: {
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
@@ -29,11 +27,12 @@ app.directive('retailBeDidnumbertypeRange', ['UtilsService', 'VRUIUtilsService',
         };
 
         function rangeCtor(ctrl, $scope) {
-
             this.initializeController = initializeController;
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.showCreateAsSeparate = true;
+                //$scope.scopeModel.colNum = 4;
 
                 $scope.scopeModel.validateRangeData = function () {
                     if ($scope.scopeModel.from == undefined || $scope.scopeModel.to == undefined)
@@ -47,6 +46,7 @@ app.directive('retailBeDidnumbertypeRange', ['UtilsService', 'VRUIUtilsService',
 
                     return null;
                 };
+
                 defineAPI();
             }
 
@@ -54,11 +54,17 @@ app.directive('retailBeDidnumbertypeRange', ['UtilsService', 'VRUIUtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+
                     if (payload != undefined && payload.didObj != undefined && payload.didObj.Settings != undefined
                         && payload.didObj.Settings.Ranges != undefined && payload.didObj.Settings.Ranges.length > 0) {
                         var range = payload.didObj.Settings.Ranges[0];
                         $scope.scopeModel.from = range.From;
                         $scope.scopeModel.to = range.To;
+                    }
+
+                    if (payload != undefined && payload.isEditMode == true) {
+                        $scope.scopeModel.showCreateAsSeparate = false;
+                        //$scope.scopeModel.colNum = 6;
                     }
                 };
 
@@ -74,6 +80,8 @@ app.directive('retailBeDidnumbertypeRange', ['UtilsService', 'VRUIUtilsService',
                         didObj.Settings.Ranges.length = 0;
                     }
                     didObj.Settings.Ranges.push(rangeObj);
+
+                    didObj.CreateAsSeparate = $scope.scopeModel.createAsSeparate;
                 };
 
                 if (ctrl.onReady != null)
@@ -81,6 +89,7 @@ app.directive('retailBeDidnumbertypeRange', ['UtilsService', 'VRUIUtilsService',
             }
 
         }
+
         return directiveDefinitionObject;
     }
 ]);
