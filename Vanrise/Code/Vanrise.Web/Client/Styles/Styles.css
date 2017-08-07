@@ -3402,17 +3402,20 @@ vr-overall-widget  .list-group-item {
 }
 
 .vr-toolbox .item{
-    width:100px;
-    display:inline-block;
-    margin:2px ;
-    padding:0px 2px;
-    border: 1px solid #ccc;
+    width: 100px;
+    display: inline-block;
+    margin: 2px;
+    padding: 0px 2px;
+    border: 1px solid #666;
     cursor: move !important;
-    border-radius:4px;
-    text-overflow:ellipsis;
+    border-radius: 4px;
+    text-overflow: ellipsis;
     white-space: nowrap;
-    overflow-x:hidden;
+    overflow-x: hidden;
     transition: all .2s ease-in-out;
+    background-color: #20407d;
+    color: #fff;
+    text-align: center;
 }
 vr-toolbox[medium] .item{
     width:150px;   
@@ -3426,10 +3429,8 @@ vr-toolbox[large] .item{
     transform: scale(1.1);*/
 
     border-color: gray;
-    font-weight: bold;
-    transform: scale(1.07);
-    background-color: #fff;
-    box-shadow: 5px 5px 5px #ccc;
+    font-weight: 600; 
+    transform: translate(1px ,1px);
 }
 .vr-toolbox .item .icon > div{
     display:inline-block;
