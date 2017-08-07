@@ -229,6 +229,13 @@
     <Reference Include="Vanrise.GenericData.QueueActivators">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.QueueActivators.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Data.SQL">
+      <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Data.SQL.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Web">
       <HintPath>..\..\Vanrise\Code\Output\Vanrise.GenericData.Web.dll</HintPath>
     </Reference>

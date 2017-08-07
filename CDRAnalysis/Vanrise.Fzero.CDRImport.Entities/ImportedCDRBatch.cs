@@ -10,12 +10,12 @@ namespace Vanrise.Fzero.CDRImport.Entities
         static ImportedCDRBatch()
         {
             CDR dummy = new CDR();//DO NOT REMOVE 
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(ImportedCDRBatch), "CDRs", "Datasource");           
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(ImportedCDRBatch), "CDRs", "Datasource");
         }
 
         public override string GenerateDescription()
         {
-            return String.Format("Imported CDR Batch of {0} CDRs", CDRs.Count);
+            return String.Format("Imported CDR Batch of {0} CDRs", CDRs != null ? CDRs.Count : 0);
         }
 
         public List<CDR> CDRs { get; set; }

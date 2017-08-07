@@ -13,7 +13,7 @@ namespace Vanrise.Fzero.CDRImport.QueueActivators
 
         public override void OnDisposed()
         {
-            
+
         }
 
         public override void ProcessItem(IQueueActivatorExecutionContext context)
@@ -31,22 +31,23 @@ namespace Vanrise.Fzero.CDRImport.QueueActivators
                 TimeOffset = currentSwitch.TimeOffset;
             }
 
-            foreach (var cdr in cdrBatch.CDRs)
+            if (cdrBatch.CDRs != null)
             {
+                foreach (var cdr in cdrBatch.CDRs)
+                {
+                    if (cdr.ConnectDateTime != null)
+                        cdr.ConnectDateTime = cdr.ConnectDateTime.Add(TimeOffset);
 
-                if (cdr.ConnectDateTime != null)
-                    cdr.ConnectDateTime = cdr.ConnectDateTime.Add(TimeOffset);
+                    if (cdr.DisconnectDateTime != null)
+                        cdr.DisconnectDateTime = cdr.DisconnectDateTime.Value.Add(TimeOffset);
 
-                if (cdr.DisconnectDateTime != null)
-                    cdr.DisconnectDateTime = cdr.DisconnectDateTime.Value.Add(TimeOffset);
+                    cdr.SwitchId = SwitchId;
 
-                cdr.SwitchId = SwitchId;
-
-                normalizationManager.Normalize(cdr);
-                normalizationManager.SetAreaCode(cdr);
+                    normalizationManager.Normalize(cdr);
+                    normalizationManager.SetAreaCode(cdr);
+                }
+                context.OutputItems.Add("Save Normal CDRs", cdrBatch);
             }
-
-            context.OutputItems.Add("Save Normal CDRs", cdrBatch);
         }
     }
 }
