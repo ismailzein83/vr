@@ -21,9 +21,9 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow">
+                        <vr-columns width="1/3row" >
                             <vr-datalist maxitemsperrow="6" datasource="scopeModel.qualityConfigurationSignsFields" onitemclicked="scopeModel.qualityConfigurationFieldClicked">
-                                {{dataItem.Title}}
+                                <vr-label largesize prespace>{{dataItem.Title}}</vr-label> 
                             </vr-datalist>
                         </vr-columns>
                     </vr-row>
