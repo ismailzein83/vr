@@ -20,6 +20,8 @@ namespace Vanrise.Rules.Normalization.MainExtensions
 
         public override void Execute(INormalizeNumberActionContext context, NormalizeNumberTarget target)
         {
+            if (string.IsNullOrEmpty(target.PhoneNumber))
+                return;
             if (this.StartIndex >= 1 && this.StartIndex <= target.PhoneNumber.Length)
             {
                 var startIndex = this.StartIndex - 1;
