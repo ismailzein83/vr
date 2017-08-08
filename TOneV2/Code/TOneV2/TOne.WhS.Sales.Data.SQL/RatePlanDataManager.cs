@@ -55,6 +55,25 @@ namespace TOne.WhS.Sales.Data.SQL
 
         #endregion
 
+        #region GetDraftTaskData
+        public  DraftTaskData GetDratftTaskData(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status)
+        {
+            return GetItemSP("TOneWhS_Sales.sp_RatePlan_GetDraftTaskData", DraftTaskDatMapper, ownerType, ownerId, status);
+        }
+
+        private DraftTaskData DraftTaskDatMapper(IDataReader reader)
+        {
+            return Vanrise.Common.Serializer.Deserialize<DraftTaskData>(reader["DraftTaskData"] as string);
+        }
+        #endregion
+
+        public bool InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status)
+        {
+            string serializedDraftTaskData = Vanrise.Common.Serializer.Serialize(draftTaskData);
+
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_InsertOrUpdateDraftTask", ownerType, ownerId, serializedDraftTaskData, status);
+            return affectedRows > 0;
+        }
         public bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status)
         {
             string serializedChanges = Vanrise.Common.Serializer.Serialize(changes);
