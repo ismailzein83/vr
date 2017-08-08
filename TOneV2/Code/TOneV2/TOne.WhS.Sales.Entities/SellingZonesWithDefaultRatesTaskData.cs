@@ -8,5 +8,6 @@ namespace TOne.WhS.Sales.Entities
 {
   public class SellingZonesWithDefaultRatesTaskData
     {
+      public Dictionary<int, List<long>> ZoneIdsWithDefaultRatesByCountryIds { get; set; }
     }
 }

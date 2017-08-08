@@ -8,5 +8,6 @@ namespace TOne.WhS.Sales.Entities
 {
    public class DraftTaskData
     {
+       public SellingZonesWithDefaultRatesTaskData sellingZonesWithDefaultRatesTaskData { get; set; }
     }
 }
