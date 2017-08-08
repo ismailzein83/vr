@@ -56,7 +56,7 @@ namespace TOne.WhS.Sales.Data.SQL
         #endregion
 
         #region GetDraftTaskData
-        public  DraftTaskData GetDratftTaskData(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status)
+        public DraftTaskData GetDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status)
         {
             return GetItemSP("TOneWhS_Sales.sp_RatePlan_GetDraftTaskData", DraftTaskDatMapper, ownerType, ownerId, status);
         }

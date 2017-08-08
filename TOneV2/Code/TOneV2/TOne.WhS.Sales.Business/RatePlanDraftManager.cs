@@ -12,19 +12,12 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-
-
     public class RatePlanDraftManager
     {
         public Changes GetDraft(SalePriceListOwnerType ownerType, int ownerId)
         {
             IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
             return ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
-        }
-        public SellingZonesWithDefaultRatesTaskData GetSellingZonesWithDefaultRatesTaskData(SalePriceListOwnerType ownerType, int ownerId)
-        {
-            IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return ratePlanDataManager.GetDratftTaskData(ownerType, ownerId, RatePlanStatus.Draft).sellingZonesWithDefaultRatesTaskData;
         }
         public bool DoesDraftExist(SalePriceListOwnerType ownerType, int ownerId)
         {
@@ -46,7 +39,6 @@ namespace TOne.WhS.Sales.Business
 
             return false;
         }
-
         public CountryChanges GetCountryChanges(int customerId)
         {
             Changes draft = GetDraft(SalePriceListOwnerType.Customer, customerId);
@@ -74,6 +66,7 @@ namespace TOne.WhS.Sales.Business
             if (draftTaskData != null)
                 ratePlanDataManager.InsertOrUpdateDraftTaskData(ownerType, ownerId, draftTaskData, RatePlanStatus.Draft);
         }
+
         private Changes MergeChanges(Changes existingChanges, Changes newChanges)
         {
             return Merge(existingChanges, newChanges, () =>
@@ -93,8 +86,6 @@ namespace TOne.WhS.Sales.Business
                 return allChanges;
             });
         }
-
-
         private IEnumerable<int> GetRemovedCountryIds(IEnumerable<DraftNewCountry> existingCountries, IEnumerable<DraftNewCountry> newCountries)
         {
             if (existingCountries == null)
@@ -107,7 +98,6 @@ namespace TOne.WhS.Sales.Business
             IEnumerable<int> newCountryIds = newCountries.MapRecords(x => x.CountryId);
             return existingCountryIds.FindAllRecords(x => !newCountryIds.Contains(x));
         }
-
         private List<ZoneChanges> MergeZoneChanges(List<ZoneChanges> existingZoneChanges, List<ZoneChanges> newZoneChanges, IEnumerable<int> removedCountryIds)
         {
             return Merge(existingZoneChanges, newZoneChanges, () =>
@@ -123,7 +113,6 @@ namespace TOne.WhS.Sales.Business
                     return newZoneChanges;
             });
         }
-
         private T Merge<T>(T existingChanges, T newChanges, Func<T> mergeLogic) where T : class
         {
             if (existingChanges != null && newChanges != null)
@@ -138,7 +127,6 @@ namespace TOne.WhS.Sales.Business
             var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
             return ratePlanDataManager.CancelRatePlanChanges(ownerType, ownerId);
         }
-
         public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
         {
             Changes draft = GetDraft(ownerType, ownerId);
@@ -146,7 +134,6 @@ namespace TOne.WhS.Sales.Business
                 return draft.CurrencyId;
             return null;
         }
-
         public void DefineNewRatesConvertedToCurrency(DefineNewRatesConvertedToCurrencyInput input)
         {
             var ratePlanManager = new RatePlanManager();
@@ -251,11 +238,20 @@ namespace TOne.WhS.Sales.Business
             draft.ZoneChanges = updatedZoneDrafts;
             SaveDraft(SalePriceListOwnerType.Customer, input.CustomerId, draft);
         }
+        public SellingZonesWithDefaultRatesTaskData GetSellingZonesWithDefaultRatesTaskData(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            return ratePlanDataManager.GetDraftTaskData(ownerType, ownerId, RatePlanStatus.Draft).sellingZonesWithDefaultRatesTaskData;
+        }
+
+        #region Private Methods
 
         private decimal ConvertToCurrencyAndRound(decimal rate, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
         {
             return UtilitiesManager.ConvertToCurrencyAndRound(rate, fromCurrencyId, toCurrencyId, exchangeRateDate, decimalPrecision, exchangeRateManager);
         }
+
+        #endregion
     }
 
     public class SaveCountryChangesInput
