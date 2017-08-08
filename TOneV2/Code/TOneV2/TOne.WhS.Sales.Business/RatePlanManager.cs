@@ -875,41 +875,9 @@ namespace TOne.WhS.Sales.Business
                 rateReader = new SaleRateReadWithCache(effectiveOn);
             else
             {
-                DateTime today = DateTime.Today;
-                IEnumerable<int> ownerIds = new List<int>() { ownerId };
-                List<long> zoneIds = saleZones.MapRecords(x => x.SaleZoneId).ToList();
-                IEnumerable<SaleRate> customerZoneRates = saleRateManager.GetSaleRatesEffectiveAfterByOwnersAndZones(SalePriceListOwnerType.Customer, ownerIds, zoneIds, today);
-
-                var routingCustomerInfoDetails = new RoutingCustomerInfoDetails()
-                {
-                    CustomerId = ownerId,
-                    SellingProductId = sellingProductId.Value
-                };
-
-                var effectiveDatesByZoneId = new Dictionary<long, DateTime>();
-                foreach (SaleZone zone in saleZones)
-                {
-                    DateTime zoneCountryBED;
-                    if (!countryBEDsByCountryId.TryGetValue(zone.CountryId, out zoneCountryBED))
-                        throw new DataIntegrityValidationException(string.Format("The BED of the country '{0}' of zone '{1}' was not found", zone.CountryId, zone.Name));
-                    if (!effectiveDatesByZoneId.ContainsKey(zone.SaleZoneId))
-                    {
-                        DateTime effectiveZoneDate = Utilities.Max(Utilities.Max(today, zoneCountryBED), zone.BED);
-                        effectiveDatesByZoneId.Add(zone.SaleZoneId, effectiveZoneDate);
-                    }
-                }
-
-                var validCustomerZoneRates = new List<SaleRate>();
-                foreach (SaleRate customerZoneRate in customerZoneRates)
-                {
-                    DateTime zoneEffectiveDate;
-                    if (!effectiveDatesByZoneId.TryGetValue(customerZoneRate.ZoneId, out zoneEffectiveDate))
-                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The action date of zone '{0}' was not found", customerZoneRate.ZoneId));
-                    if (customerZoneRate.IsInTimeRange(zoneEffectiveDate))
-                        validCustomerZoneRates.Add(customerZoneRate);
-                }
-
-                rateReader = new SaleRateReadRPChanges(validCustomerZoneRates, routingCustomerInfoDetails, zoneIds, today, effectiveDatesByZoneId);
+                IEnumerable<long> zoneIds = saleZones.MapRecords(x => x.SaleZoneId);
+                Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones, countryBEDsByCountryId);
+                rateReader = new SaleRateReadRPChanges(ownerId, sellingProductId.Value, zoneIds, DateTime.Today, zoneEffectiveDatesByZoneId);
             }
 
             var rateLocator = new SaleEntityZoneRateLocator(rateReader);

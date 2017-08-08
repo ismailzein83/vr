@@ -217,6 +217,24 @@ namespace TOne.WhS.Sales.Business
             return closedCountryIds;
         }
 
+        public static Dictionary<long, DateTime> GetZoneEffectiveDatesByZoneId(IEnumerable<SaleZone> saleZones, Dictionary<int, DateTime> countryBEDsByCountryId)
+        {
+            var zoneEffectiveDatesByZoneId = new Dictionary<long, DateTime>();
+            DateTime today = DateTime.Today;
+            foreach (SaleZone saleZone in saleZones)
+            {
+                DateTime countryBED;
+                if (!countryBEDsByCountryId.TryGetValue(saleZone.CountryId, out countryBED))
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The BED of country '{0}' of zone '{1}' was not found", saleZone.CountryId, saleZone.Name));
+                if (!zoneEffectiveDatesByZoneId.ContainsKey(saleZone.SaleZoneId))
+                {
+                    DateTime zoneEffectiveDate = Utilities.Max(Utilities.Max(today, countryBED), saleZone.BED);
+                    zoneEffectiveDatesByZoneId.Add(saleZone.SaleZoneId, zoneEffectiveDate);
+                }
+            }
+            return zoneEffectiveDatesByZoneId;
+        }
+
         #endregion
 
         #region Private Methods
