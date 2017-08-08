@@ -68,12 +68,15 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 DateTime? xDate = Max(countryZone.BED, countryData.CountryBED, minRateActionDate.Value);
                 DateTime? yDate = Min(countryZone.EED, countryData.CountryEED, zoneRateActionDate);
 
-                IEnumerable<ExistingRate> effectiveOrFutureRates = GetEffectiveOrFutureRates(countryZone.ExistingRates, countryData.CountryBED);
-
-                if (AreZoneRatesInConflict(effectiveOrFutureRates, xDate.Value, yDate, ratePlanContext))
+                if (yDate > xDate)
                 {
-                    context.Message = string.Format("All rates of zones for country '{0}' must have same currency", countryName);
-                    return false;
+                    IEnumerable<ExistingRate> effectiveOrFutureRates = GetEffectiveOrFutureRates(countryZone.ExistingRates, countryData.CountryBED);
+
+                    if (AreZoneRatesInConflict(effectiveOrFutureRates, xDate.Value, yDate, ratePlanContext))
+                    {
+                        context.Message = string.Format("All rates of zones for country '{0}' must have same currency", countryName);
+                        return false;
+                    }
                 }
             }
 
