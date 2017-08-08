@@ -50,8 +50,15 @@
     [Subs_First_LAC]                   INT              NULL,
     [Subs_Last_LAC]                    INT              NULL,
     [FileName]                         NVARCHAR (200)   NULL,
+    [Called_First_CI]                  INT              NULL,
+    [Called_Last_CI]                   INT              NULL,
+    [Calling_First_CI]                 INT              NULL,
+    [Calling_Last_CI]                  INT              NULL,
+    [RecordTypeName]                   VARCHAR (100)    NULL,
     CONSTRAINT [PK_MobileCDR_1] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

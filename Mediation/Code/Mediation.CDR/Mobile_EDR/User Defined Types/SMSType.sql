@@ -66,7 +66,10 @@
     [FreeFromatData]                  VARCHAR (50)     NULL,
     [CamelSMSCAddress]                VARCHAR (50)     NULL,
     [UniqueIdentifier]                UNIQUEIDENTIFIER NULL,
-    [FileName]                        NVARCHAR (200)   NULL);
+    [FileName]                        NVARCHAR (200)   NULL,
+    [RecordTypeName]                  VARCHAR (200)    NULL);
+
+
 
 
 
