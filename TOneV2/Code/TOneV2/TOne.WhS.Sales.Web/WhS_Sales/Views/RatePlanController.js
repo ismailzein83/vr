@@ -523,6 +523,7 @@
                             VRNotificationService.showSuccess("Draft deleted");
 
                             countryChanges = undefined;
+                            draftCurrencyId = undefined;
                             if (gridAPI != undefined)
                                 gridAPI.clearDataSource();
                             $scope.showCancelButton = false;
