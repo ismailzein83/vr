@@ -68,7 +68,10 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
                     Thread.Sleep(s_TryLockInterval);
                     object isReadyObject = ExecuteScalarSP("[FraudAnalysis].[sp_CDRDatabase_GetIsReady]", fromTime);
                     if (isReadyObject != null && isReadyObject != DBNull.Value && (bool)isReadyObject)
+                    {
+                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                         return;
+                    }
                     else
                     {
                         retryCount++;
@@ -150,7 +153,7 @@ namespace Vanrise.Fzero.CDRImport.Data.SQL
         {
             var cachedDBs = GetAllCachedReadyDatabases();
             if (cachedDBs != null)
-                return cachedDBs.Values.FindAllRecords(itm => (itm.FromTime <= fromTime && fromTime <= itm.FromTime)
+                return cachedDBs.Values.FindAllRecords(itm => (itm.FromTime <= fromTime && fromTime <= itm.ToTime)
                     || (itm.FromTime <= toTime && toTime <= itm.ToTime));
             else
                 return null;
