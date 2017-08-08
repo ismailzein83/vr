@@ -12,6 +12,8 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
+
+
     public class RatePlanDraftManager
     {
         public Changes GetDraft(SalePriceListOwnerType ownerType, int ownerId)
@@ -19,7 +21,11 @@ namespace TOne.WhS.Sales.Business
             IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
             return ratePlanDataManager.GetChanges(ownerType, ownerId, RatePlanStatus.Draft);
         }
-
+        public SellingZonesWithDefaultRatesTaskData GetSellingZonesWithDefaultRatesTaskData(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            return ratePlanDataManager.GetDratftTaskData(ownerType, ownerId, RatePlanStatus.Draft).sellingZonesWithDefaultRatesTaskData;
+        }
         public bool DoesDraftExist(SalePriceListOwnerType ownerType, int ownerId)
         {
             var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
@@ -61,7 +67,13 @@ namespace TOne.WhS.Sales.Business
             if (allChanges != null)
                 ratePlanDataManager.InsertOrUpdateChanges(ownerType, ownerId, allChanges, RatePlanStatus.Draft);
         }
+        public void InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status)
+        {
+            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
 
+            if (draftTaskData != null)
+                ratePlanDataManager.InsertOrUpdateDraftTaskData(ownerType, ownerId, draftTaskData, RatePlanStatus.Draft);
+        }
         private Changes MergeChanges(Changes existingChanges, Changes newChanges)
         {
             return Merge(existingChanges, newChanges, () =>
@@ -81,6 +93,7 @@ namespace TOne.WhS.Sales.Business
                 return allChanges;
             });
         }
+
 
         private IEnumerable<int> GetRemovedCountryIds(IEnumerable<DraftNewCountry> existingCountries, IEnumerable<DraftNewCountry> newCountries)
         {
