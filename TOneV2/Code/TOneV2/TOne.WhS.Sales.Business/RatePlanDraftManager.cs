@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business.Reader;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
@@ -59,14 +60,6 @@ namespace TOne.WhS.Sales.Business
             if (allChanges != null)
                 ratePlanDataManager.InsertOrUpdateChanges(ownerType, ownerId, allChanges, RatePlanStatus.Draft);
         }
-        public void InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status)
-        {
-            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-
-            if (draftTaskData != null)
-                ratePlanDataManager.InsertOrUpdateDraftTaskData(ownerType, ownerId, draftTaskData, RatePlanStatus.Draft);
-        }
-
         private Changes MergeChanges(Changes existingChanges, Changes newChanges)
         {
             return Merge(existingChanges, newChanges, () =>
@@ -134,6 +127,21 @@ namespace TOne.WhS.Sales.Business
                 return draft.CurrencyId;
             return null;
         }
+        public SellingZonesWithDefaultRatesTaskData GetSellingZonesWithDefaultRatesTaskData(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            return ratePlanDataManager.GetDraftTaskData(ownerType, ownerId, RatePlanStatus.Draft).sellingZonesWithDefaultRatesTaskData;
+        }
+        public void InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status)
+        {
+            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+
+            if (draftTaskData != null)
+                ratePlanDataManager.InsertOrUpdateDraftTaskData(ownerType, ownerId, draftTaskData, RatePlanStatus.Draft);
+        }
+
+        #region Define New Rates Converted To Currency
+
         public void DefineNewRatesConvertedToCurrency(DefineNewRatesConvertedToCurrencyInput input)
         {
             var ratePlanManager = new RatePlanManager();
@@ -158,25 +166,24 @@ namespace TOne.WhS.Sales.Business
                 draft.ZoneChanges = new List<ZoneChanges>();
             }
 
-            var saleRateManager = new SaleRateManager();
-            var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
-            var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
-
-            int? sellingProductId = new CarrierAccountManager().GetSellingProductId(input.CustomerId);
-            if (!sellingProductId.HasValue)
-                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a selling product", input.CustomerId));
-
-            Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(input.CustomerId, input.EffectiveOn, true);
-            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
-
             if (allZones != null)
             {
-                foreach (SaleZone zone in allZones)
-                {
-                    if (input.NewCountryIds != null && input.NewCountryIds.Count() > 0 && !input.NewCountryIds.Contains(zone.CountryId))
-                        continue;
+                IEnumerable<long> filteredZoneIds;
+                IEnumerable<SaleZone> filteredZones = GetFilteredZones(allZones, input.NewCountryIds, out filteredZoneIds);
 
-                    SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(input.CustomerId, sellingProductId.Value, zone.SaleZoneId);
+                int sellingProductId = new CarrierAccountManager().GetSellingProductId(input.CustomerId);
+                Dictionary<int, DateTime> countryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(input.CustomerId, input.EffectiveOn, true);
+                Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(filteredZones, countryBEDsByCountryId);
+                var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadRPChanges(input.CustomerId, sellingProductId, filteredZoneIds, DateTime.Today, zoneEffectiveDatesByZoneId));
+
+                int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+
+                var saleRateManager = new SaleRateManager();
+                var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+
+                foreach (SaleZone zone in filteredZones)
+                {
+                    SaleEntityZoneRate zoneRate = rateLocator.GetCustomerZoneRate(input.CustomerId, sellingProductId, zone.SaleZoneId);
 
                     if (zoneRate != null && zoneRate.Rate != null && saleRateManager.GetCurrencyId(zoneRate.Rate) != input.NewCurrencyId)
                     {
@@ -191,7 +198,10 @@ namespace TOne.WhS.Sales.Business
                         });
 
                         var newRates = new List<DraftRateToChange>();
-                        DateTime newRateBED = Utilities.Max(countryBEDsByCountryId.GetRecord(zone.CountryId), DateTime.Today);
+
+                        DateTime newRateBED;
+                        if (!zoneEffectiveDatesByZoneId.TryGetValue(zone.SaleZoneId, out newRateBED))
+                            throw new DataIntegrityValidationException(string.Format("The effective date of zone '{0}' was not found", zone.Name));
 
                         newRates.Add(new DraftRateToChange()
                         {
@@ -238,11 +248,27 @@ namespace TOne.WhS.Sales.Business
             draft.ZoneChanges = updatedZoneDrafts;
             SaveDraft(SalePriceListOwnerType.Customer, input.CustomerId, draft);
         }
-        public SellingZonesWithDefaultRatesTaskData GetSellingZonesWithDefaultRatesTaskData(SalePriceListOwnerType ownerType, int ownerId)
+        private IEnumerable<SaleZone> GetFilteredZones(IEnumerable<SaleZone> zones, IEnumerable<int> newCountryIds, out IEnumerable<long> filteredZoneIds)
         {
-            IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return ratePlanDataManager.GetDraftTaskData(ownerType, ownerId, RatePlanStatus.Draft).sellingZonesWithDefaultRatesTaskData;
+            var filteredZones = new List<SaleZone>();
+            var filteredZoneIdsValue = new List<long>();
+
+            bool doNewCountriesExist = (newCountryIds != null && newCountryIds.Count() > 0);
+
+            foreach (SaleZone zone in zones)
+            {
+                if (!doNewCountriesExist || newCountryIds.Contains(zone.CountryId))
+                {
+                    filteredZones.Add(zone);
+                    filteredZoneIdsValue.Add(zone.SaleZoneId);
+                }
+            }
+
+            filteredZoneIds = filteredZoneIdsValue;
+            return filteredZones;
         }
+
+        #endregion
 
         #region Private Methods
 
