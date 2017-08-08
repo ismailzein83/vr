@@ -38,6 +38,9 @@ namespace Vanrise.Rules.Normalization.MainExtensions
 
         public override void Execute(INormalizeNumberActionContext context, NormalizeNumberTarget target)
         {
+            if (string.IsNullOrEmpty(target.PhoneNumber))
+                return;
+
             if (string.IsNullOrEmpty(TextToRemove))
                 throw new NullReferenceException("TextToRemove");
 
