@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\SupplierTargetMatchController.cs" />
     <Compile Include="Controllers\CodeCompareController.cs" />
     <Compile Include="Controllers\RatePlanConfigController.cs" />
     <Compile Include="Controllers\RatePlanController.cs" />
@@ -236,6 +237,10 @@
     <Content Include="WhS_Sales\Directives\Service\vr-whs-sales-zone-service.js" />
     <Content Include="WhS_Sales\Directives\Settings\Templates\RatePlanSettingsEditorTemplate.html" />
     <Content Include="WhS_Sales\Directives\Settings\vr-whs-sales-rateplan-settings-editor.js" />
+    <Content Include="WhS_Sales\Directives\SupplierTargetMatch\Templates\SupplierTargetMatchFilterTemplate.html" />
+    <Content Include="WhS_Sales\Directives\SupplierTargetMatch\Templates\SupplierTargetMatchGrid.html" />
+    <Content Include="WhS_Sales\Directives\SupplierTargetMatch\vr-whs-sales-suppliertargetmatch-filter.js" />
+    <Content Include="WhS_Sales\Directives\SupplierTargetMatch\vr-whs-sales-suppliertargetmatch-grid.js" />
     <Content Include="WhS_Sales\Directives\Templates\DefaultRoutingProductTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\PercentageCostCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Templates\RatePlanGridTemplate.html" />
@@ -258,6 +263,7 @@
     <Content Include="WhS_Sales\Services\APIServices\RatePlanConfigAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanPreviewAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\SellingRuleAPIService.js" />
+    <Content Include="WhS_Sales\Services\APIServices\SupplierTargetMatchAPIService.js" />
     <Content Include="WhS_Sales\Services\BulkActionUtilsService.js" />
     <Content Include="WhS_Sales\Services\CodeCompareService.js" />
     <Content Include="WhS_Sales\Services\RatePlanUtilsService.js" />
@@ -297,6 +303,8 @@
     <Content Include="WhS_Sales\Views\SellNewCountriesController.js" />
     <Content Include="WhS_Sales\Views\RatePlan.html" />
     <Content Include="WhS_Sales\Views\RatePlanController.js" />
+    <Content Include="WhS_Sales\Views\SupplierTargetMatch\SupplierTargetMatch.html" />
+    <Content Include="WhS_Sales\Views\SupplierTargetMatch\SupplierTargetMatchController.js" />
     <Content Include="WhS_Sales\Views\TQI\TQIEditor.html" />
     <Content Include="WhS_Sales\Views\TQI\TQIEditorController.js" />
     <Content Include="WhS_Sales\Views\ZoneInfo.html" />

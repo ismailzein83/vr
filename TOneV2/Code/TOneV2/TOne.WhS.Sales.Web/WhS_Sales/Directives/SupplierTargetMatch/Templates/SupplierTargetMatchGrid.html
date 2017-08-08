@@ -1,0 +1,18 @@
+﻿
+<vr-datagrid datasource="targetMatches"
+             pagingtype="'PagingOnScroll'"
+             on-ready="onGridReady">
+    <vr-datagridcolumn headertext="'Zone'" field="'Entity.SaleZone'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Volume'" field="'Entity.Volume'" ></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Route Options'" widthfactor="35" disablesorting="true">
+        <div vr-loader="dataItem.isLoadingRouteOptions">
+            <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
+        </div>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Target Volume'" field="'Entity.TargetVolume'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Target Route Options'" widthfactor="35" disablesorting="true">
+        <div vr-loader="dataItem.isLoadingTargetRouteOptions">
+            <vr-whs-routing-zonerouteoptions on-ready="dataItem.onTargetRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
+        </div>
+    </vr-datagridcolumn>
+</vr-datagrid>
