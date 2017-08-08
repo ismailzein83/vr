@@ -23,6 +23,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
         };
 
         function AccountBeDefinitionsSettingsEditorCtor(ctrl, $scope, $attrs) {
+            this.initializeController = initializeController;
 
             var statusBEDefinitionSelectorAPI;
             var statusBEDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
@@ -65,27 +66,34 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     accountGridDefinitionDirectiveAPI = api;
                     accountGridDefinitionDirectiveDeferred.resolve();
                 };
+
                 $scope.scopeModel.onAccountGridDefinitionExportExcelReady = function (api) {
                     accountGridDefinitionExportExcelDirectiveAPI = api;
                     accountGridDefinitionExportExcelDirectiveDeferred.resolve();
                 };
+
                 $scope.scopeModel.onAccountViewDefinitionsReady = function (api) {
                     accountViewDefinitionDirectiveAPI = api;
                     accountViewDefinitionDirectiveDeferred.resolve();
                 };
+
                 $scope.scopeModel.onAccountActionDefinitionsReady = function (api) {
                     accountActionDefinitionDirectiveAPI = api;
                     accountActionDefinitionDirectiveDeferred.resolve();
                 };
+
                 $scope.scopeModel.onAccountExtraFieldDefinitionsReady = function (api) {
                     accountExtraFieldDefinitionsDirectiveAPI = api;
                     accountExtraFieldDefinitionsDirectiveDeferred.resolve();
                 };
+
                 $scope.scopeModel.onAccountSecurityDefinitionsReady = function (api) {
                     securityDefinitionsDirectiveAPI = api;
                     securityDefinitionsDirectiveDeferred.resolve();
                 };
-                UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise, financialAccountLocatorDeferred.promise, accountGridDefinitionExportExcelDirectiveDeferred.promise]).then(function () {
+
+                UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise,
+                    accountActionDefinitionDirectiveDeferred.promise, financialAccountLocatorDeferred.promise, accountGridDefinitionExportExcelDirectiveDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
@@ -97,13 +105,14 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                     var accountBEDefinitionId;
                     var statusBEDefinitionId;
+                    var financialAccountLocator;
                     var accountGridDefinition;
                     var accountGridDefinitionExportExcel;
                     var accountViewDefinitions;
                     var accountActionDefinitions;
                     var accountExtraFieldDefinitions;
                     var securityDefinition;
-                    var financialAccountLocator;
+
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.businessEntityDefinitionId;
 
@@ -124,6 +133,10 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var statusBEDefinitionSelectorLoadPromise = getStatusDefinitionSelectorLoadPromise();
                     promises.push(statusBEDefinitionSelectorLoadPromise);
 
+                    //Loading FinancialAccountLocator Directive
+                    var financialAccountLocatorLoadPromise = getFinancialAccountLocatorLoadPromise();
+                    promises.push(financialAccountLocatorLoadPromise);
+
                     //Loading AccountGridDefinition Directive
                     var accountGridDefinitionLoadPromise = getAccountGridDefinitionLoadPromise();
                     promises.push(accountGridDefinitionLoadPromise);
@@ -140,14 +153,14 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountActionDefinitionLoadPromise = getAccountActionDefinitionLoadPromise();
                     promises.push(accountActionDefinitionLoadPromise);
 
+                    //Loading AccountExtraFieldDefinition Directive
                     var accountExtraFieldDefinitionsLoadPromise = getAccountExtraFieldDefinitionsLoadPromise();
                     promises.push(accountExtraFieldDefinitionsLoadPromise);
 
+                    //Loading AccountSecurityDefinition Directive
                     var accountSecurityDefinitionsLoadPromise = getAccountSecurityDefinitionsLoadPromise();
                     promises.push(accountSecurityDefinitionsLoadPromise);
 
-                    var financialAccountLocatorLoadPromise = getFinancialAccountLocatorLoadPromise();
-                    promises.push(financialAccountLocatorLoadPromise);
 
                     function getStatusDefinitionSelectorLoadPromise() {
                         var accountActionDefinitionPayload = {
@@ -159,6 +172,14 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             selectedIds: statusBEDefinitionId
                         };
                         return statusBEDefinitionSelectorAPI.load(accountActionDefinitionPayload);
+                    }
+
+                    function getFinancialAccountLocatorLoadPromise() {
+                        var financialAccountLocatorPayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            financialAccountLocator: financialAccountLocator
+                        };
+                        return financialAccountLocatorAPI.load(financialAccountLocatorPayload);
                     }
 
                     function getAccountGridDefinitionLoadPromise() {
@@ -205,14 +226,6 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         return securityDefinitionsDirectiveAPI.load(securityDefinition);
                     }
 
-                    function getFinancialAccountLocatorLoadPromise() {
-                        var financialAccountLocatorPayload = {
-                            accountBEDefinitionId: accountBEDefinitionId,
-                            financialAccountLocator: financialAccountLocator
-                        };
-                        return financialAccountLocatorAPI.load(financialAccountLocatorPayload);
-                    }
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -239,8 +252,6 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;
