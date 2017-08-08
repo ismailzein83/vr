@@ -12,7 +12,7 @@ namespace TOne.WhS.Sales.Data
         bool InsertSalePriceList(SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn, out int salePriceListId);
 
         Changes GetChanges(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
-
+        DraftTaskData GetDratftTaskData(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
         bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status);
 
         bool UpdateRatePlanStatus(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus existingStatus, RatePlanStatus newStatus);
@@ -22,5 +22,7 @@ namespace TOne.WhS.Sales.Data
         bool SyncImportedDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn);
 
         bool DeleteRatePlanDraft(SalePriceListOwnerType ownerType, int ownerId);
+
+        bool InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status);
     }
 }
