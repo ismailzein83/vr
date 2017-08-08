@@ -56,6 +56,9 @@ namespace Dean.Edwards
 
         static string ServerIP = System.Configuration.ConfigurationManager.AppSettings["ServerIP"];
         static string ActiveDBs = System.Configuration.ConfigurationManager.AppSettings["ActiveDBs"];
+
+        static string VersionDateFormat = System.Configuration.ConfigurationManager.AppSettings["VersionDateFormat"];
+        static string VersionNumber = System.Configuration.ConfigurationManager.AppSettings["VersionNumber"];
         public Packer()
         {
             //
@@ -716,6 +719,9 @@ namespace Dean.Edwards
                                 //File.Move(file, string.Format("{0}{1}", file, "processed"));
                             }
                         }
+
+                        fileContent = fileContent.Replace("#VersionDate#", DateTime.Now.ToString(VersionDateFormat));
+                        fileContent = fileContent.Replace("#VersionNumber#", VersionNumber);
 
                         File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql"), fileContent.ToString());
                         File.Delete(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt"));
