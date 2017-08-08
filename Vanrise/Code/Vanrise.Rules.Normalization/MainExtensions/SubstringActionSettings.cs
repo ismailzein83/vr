@@ -15,7 +15,7 @@ namespace Vanrise.Rules.Normalization.MainExtensions
 
         public override string GetDescription()
         {
-            return string.Format("Substring: Start Index = {0}, Length = {1}", StartIndex, Length);
+            return string.Format("Substring: Start Index = {0}{1} {2}", StartIndex, Length.HasValue ? ", Length =" : string.Empty, Length);
         }
 
         public override void Execute(INormalizeNumberActionContext context, NormalizeNumberTarget target)

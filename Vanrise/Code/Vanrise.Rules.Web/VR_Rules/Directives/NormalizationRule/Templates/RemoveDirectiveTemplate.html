@@ -1,32 +1,22 @@
-﻿<vr-columns width="1/3row">
-    <vr-textbox label="Start Index" value="ctrl.startIndex" type="number" minvalue="1" isrequired decimalprecision="0"></vr-textbox>
-</vr-columns>
-<vr-columns width="1/3row">
-    <vr-textbox label="Length" value="ctrl.length" type="number" minvalue="1" decimalprecision="0"></vr-textbox>
-</vr-columns>
-
-
-<vr-columns width="1/4row">
+﻿<vr-columns width="1/4row">
     <vr-select datasource="scopeModel.removeDirections"
                selectedvalues="scopeModel.selectedRemoveDirection"
                datavaluefield="value"
                datatextfield="description"
-               label="Remove Direction" isrequired="true">
+               label="Direction" isrequired="true" hideremoveicon>
     </vr-select>
 </vr-columns>
 <vr-columns width="1/4row">
-    <vr-textbox label="Text" value="scopeModel.textToRemove" type="text" isrequired="true"></vr-textbox>
+    <vr-textbox value="scopeModel.textToRemove" label="Text" type="text" isrequired="true"></vr-textbox>
 </vr-columns>
 <vr-columns width="1/4row">
     <vr-select datasource="scopeModel.textOccurrences"
                selectedvalues="scopeModel.selectedTextOccurrence"
                datavaluefield="value"
                datatextfield="description"
-               label="Text Occurrence" isrequired="true">
+               label="Text Occurrence" isrequired="true" hideremoveicon>
     </vr-select>
 </vr-columns>
 <vr-columns width="1/4row">
-    <vr-switch label="Including Text" value="scopeModel.includingText" type="text"></vr-switch>
+    <vr-switch value="scopeModel.includingText" label="Including Text" type="text"></vr-switch>
 </vr-columns>
-
-

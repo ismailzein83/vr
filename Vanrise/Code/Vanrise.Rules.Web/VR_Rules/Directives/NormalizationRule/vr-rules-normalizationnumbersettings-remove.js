@@ -49,20 +49,24 @@ app.directive("vrRulesNormalizationnumbersettingsRemove", ['UtilsService', 'VR_R
                         $scope.scopeModel.textToRemove = payload.TextToRemove;
                         $scope.scopeModel.includingText = payload.IncludingText;
                     }
+                    else {
+                        $scope.scopeModel.includingText = true;
+                    }
 
                     $scope.scopeModel.removeDirections = UtilsService.getArrayEnum(VR_Rules_RemoveDirectionEnum);
-                    $scope.scopeModel.selectedRemoveDirection = UtilsService.getItemByVal($scope.scopeModel.removeDirections, removeDirection, 'value');
+                    $scope.scopeModel.selectedRemoveDirection = removeDirection != undefined ? UtilsService.getItemByVal($scope.scopeModel.removeDirections, removeDirection, 'value') : $scope.scopeModel.removeDirections[0];
 
                     $scope.scopeModel.textOccurrences = UtilsService.getArrayEnum(VR_Rules_TextOccurrenceEnum);
-                    $scope.scopeModel.selectedTextOccurrence = UtilsService.getItemByVal($scope.scopeModel.textOccurrences, textOccurrence, 'value');
+                    $scope.scopeModel.selectedTextOccurrence = textOccurrence != undefined ? UtilsService.getItemByVal($scope.scopeModel.textOccurrences, textOccurrence, 'value') : $scope.scopeModel.textOccurrences[0];
                 };
 
                 api.getData = function () {
+
                     return {
                         $type: "Vanrise.Rules.Normalization.MainExtensions.RemoveActionSettings, Vanrise.Rules.Normalization",
-                        RemoveDirection: $scope.scopeModel.selectedRemoveDirection,
+                        RemoveDirection: $scope.scopeModel.selectedRemoveDirection.value,
                         TextToRemove: $scope.scopeModel.textToRemove,
-                        TextOccurrence: $scope.scopeModel.selectedTextOccurrence,
+                        TextOccurrence: $scope.scopeModel.selectedTextOccurrence.value,
                         IncludingText: $scope.scopeModel.includingText
                     };
                 };

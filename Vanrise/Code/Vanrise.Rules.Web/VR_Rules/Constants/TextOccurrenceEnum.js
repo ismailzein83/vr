@@ -1,4 +1,4 @@
 ﻿app.constant("VR_Rules_TextOccurrenceEnum", {
-    Before: { value: 0, description: "LastOccurrence" },
-    After: { value: 1, description: "FirstOccurrence" }
+    FirstOccurrence: { value: 0, description: "First Occurrence" },
+    LastOccurrence: { value: 1, description: "Last Occurrence" }
 });
