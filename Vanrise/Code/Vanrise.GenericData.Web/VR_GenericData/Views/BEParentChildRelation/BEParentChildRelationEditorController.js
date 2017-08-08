@@ -43,7 +43,7 @@
             $scope.scopeModel = {};
             $scope.scopeModel.isParentBESelectorDisabled = parentId != undefined ? true : false;
             $scope.scopeModel.isChildBESelectorDisabled = childIds.length > 0 ? true : false;
-            $scope.scopeModel.errorMessage = "";
+            //$scope.scopeModel.errorMessage = "";
 
             $scope.scopeModel.onParentBESelectorReady = function (api) {
                 parentBESelectorAPI = api;
@@ -176,6 +176,9 @@
                 } else {
                     childBESelectorPayload.selectedIds = childIds;
                 }
+
+                console.log(childBESelectorPayload);
+
                 VRUIUtilsService.callDirectiveLoad(childBESelectorAPI, childBESelectorPayload, childBESelectorLoadDeferred);
             });
 
@@ -194,7 +197,7 @@
                     $scope.modalContext.closeModal();
                 }
                 else if (beParentChildRelationObjToAdd.ChildBEIds.length == 1) {
-                    $scope.scopeModel.errorMessage = "";
+                    $scope.scopeModel.errorMessage = undefined;
                 }
                 else if ((beParentChildRelationObjToAdd.ChildBEIds.length > 1)) {
                     $scope.scopeModel.errorMessage = "* " + response.Message;
@@ -209,9 +212,9 @@
         function updateBEParentChildRelation() {
             $scope.scopeModel.isLoading = true;
 
-            buildBEParentChildRelationObjFromScope();
+            var beParentChildRelationObjToUpdate = buildBEParentChildRelationObjFromScope();
 
-            return VR_GenericData_BEParentChildRelationAPIService.UpdateBEParentChildRelation(buildBEParentChildRelationObjFromScope())
+            return VR_GenericData_BEParentChildRelationAPIService.UpdateBEParentChildRelation(beParentChildRelationObjToUpdate)
                 .then(function (response) {
                     if (VRNotificationService.notifyOnItemUpdated(beParentChildRelationDefinitionEntity.Name, response, "Name")) {
                         if ($scope.onBEParentChildRelationUpdated != undefined)

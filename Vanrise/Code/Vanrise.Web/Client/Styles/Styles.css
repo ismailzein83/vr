@@ -2345,6 +2345,10 @@ vr-label[ellipsis] .vr-control-label {
 vr-label[hasbackgroundcolor] .vr-control-label {   
     display:inline !important;
 }
+
+label[vr-alert].alert {   
+   padding:5px
+}
 .permmesion-background {
     background: url("../../Client/Images/bichartpermission.jpg") center no-repeat;
     background-size: contain;

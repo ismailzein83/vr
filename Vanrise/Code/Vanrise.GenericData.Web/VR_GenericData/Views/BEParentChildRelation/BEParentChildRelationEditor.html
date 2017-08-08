@@ -13,7 +13,8 @@
                             <vr-genericdata-businessentity-selector on-ready="scopeModel.onChildBESelectorReady"
                                                                     onselectionchanged="scopeModel.onChildBESelectionChanged"
                                                                     selectedvalues="scopeModel.selectedChildBE"
-                                                                    customlabel="Child" normal-col-num="6" isrequired="true" ismultipleselection hideremoveicon>
+                                                                    customlabel="Child" normal-col-num="6" isrequired="true"
+                                                                    showaddbutton ismultipleselection hideremoveicon>
                             </vr-genericdata-businessentity-selector>
                         </span>
                     </vr-row>
@@ -29,7 +30,7 @@
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow" ng-if="scopeModel.errorMessage != undefined">
-                            <label class="label label-danger" style="font-size:9pt;">{{scopeModel.errorMessage}}</label>
+                            <label class="alert alert-danger" vr-alert>{{scopeModel.errorMessage}}</label>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

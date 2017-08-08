@@ -258,7 +258,7 @@ namespace Vanrise.GenericData.Business
                 return false;
 
             var item = beParentChildRelations.FirstOrDefault(itm => !itm.EED.HasValue || itm.EED.Value != itm.BED);
-            if (item != null && item.EED.HasValue)
+            if (item == null || item.EED.HasValue)
                 return false;
 
             return true;

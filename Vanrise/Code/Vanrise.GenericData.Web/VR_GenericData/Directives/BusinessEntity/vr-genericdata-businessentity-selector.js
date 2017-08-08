@@ -31,16 +31,20 @@
         function getTemplate(attrs) {
 
             var multipleselection = "";
-
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
             }
 
+            var showaddbutton = "";
+            if (attrs.showaddbutton != undefined) {
+                showaddbutton = "showaddbutton";
+            }
+
             return '<span vr-loader="scopeModel.isLoadingDirective">' +
-                        '<vr-directivewrapper directive="scopeModel.Editor" on-ready="scopeModel.onDirectiveReady" onselectionchanged="ctrlBE.onselectionchanged" ' +
-                            'customvalidate="{{ctrlBE.customvalidate}}" normal-col-num="{{ctrlBE.normalColNum}}" isrequired="{{ctrlBE.isrequired}}" ' + multipleselection + '>' +
-            '</vr-directivewrapper>' +
-       '</span>';
+                        '<vr-directivewrapper directive="scopeModel.Editor" on-ready="scopeModel.onDirectiveReady" onselectionchanged="ctrlBE.onselectionchanged" ' + showaddbutton +
+                            ' customvalidate="{{ctrlBE.customvalidate}}" normal-col-num="{{ctrlBE.normalColNum}}" isrequired="{{ctrlBE.isrequired}}" ' + multipleselection + '>' +
+                        '</vr-directivewrapper>' +
+                   '</span>';
         }
 
         function BusinessEntitySelectorCtor($scope, ctrl, $attrs) {
@@ -53,7 +57,7 @@
             var directiveReadyDeferred;
 
             function initializeController() {
-                $scope.scopeModel = {};
+                $scope.scopeModel = { };
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
@@ -61,17 +65,17 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     var directivePayload = {
-                        businessEntityDefinitionId: businessEntityDefinitionId,
-                        filter: filter,
-                        beRuntimeSelectorFilter: beRuntimeSelectorFilter
-                    };
+                            businessEntityDefinitionId: businessEntityDefinitionId,
+                            filter: filter,
+                            beRuntimeSelectorFilter: beRuntimeSelectorFilter
+                        };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
 
                 defineAPI();
             }
             function defineAPI() {
-                var api = {};
+                var api = { };
 
                 api.load = function (payload) {
 
@@ -95,7 +99,7 @@
                     }
 
                     function getBusinessEntityDefinition(businessEntityDefinitionId) {
-                        return VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(businessEntityDefinitionId).then(function (response) {
+                        return VR_GenericData_BusinessEntityDefinitionAPIService.GetBusinessEntityDefinition(businessEntityDefinitionId).then(function(response) {
                             businessEntityDefinitionEntity = response;
 
                             if (businessEntityDefinitionEntity != undefined && businessEntityDefinitionEntity.Settings != undefined)
@@ -107,15 +111,15 @@
 
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        directiveReadyDeferred.promise.then(function () {
+                        directiveReadyDeferred.promise.then(function() {
                             directiveReadyDeferred = undefined;
 
                             var directivePayload = {
-                                businessEntityDefinitionId: businessEntityDefinitionId,
-                                selectedIds: selectedIds,
-                                filter: filter,
-                                beRuntimeSelectorFilter: beRuntimeSelectorFilter
-                            };
+                                    businessEntityDefinitionId: businessEntityDefinitionId,
+                                    selectedIds: selectedIds,
+                                    filter: filter,
+                                    beRuntimeSelectorFilter: beRuntimeSelectorFilter
+                                };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -138,4 +142,4 @@
 
     app.directive('vrGenericdataBusinessentitySelector', BusinessEntitySelectorDirective);
 
-})(app);
+}) (app);
