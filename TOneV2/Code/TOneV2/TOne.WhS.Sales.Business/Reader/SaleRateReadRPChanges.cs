@@ -16,11 +16,30 @@ namespace TOne.WhS.Sales.Business.Reader
 
         private SaleRatesByOwner _allSaleRatesByOwner;
 
-        public SaleRateReadRPChanges(IEnumerable<SaleRate> customerSaleRates, RoutingCustomerInfoDetails routingCustomerInfo, List<long> zoneIds,
-            DateTime minimumDate, Dictionary<long, DateTime> zonesEffectiveDateTimes)
+        public SaleRateReadRPChanges(IEnumerable<SaleRate> customerSaleRates, RoutingCustomerInfoDetails routingCustomerInfo, List<long> zoneIds, DateTime minimumDate, Dictionary<long, DateTime> zonesEffectiveDateTimes)
         {
             //TODO: consider for this type of readers that selling product may be different in past
             _allSaleRatesByOwner = GetAllSaleRates(customerSaleRates, routingCustomerInfo.SellingProductId, routingCustomerInfo.CustomerId, zoneIds, minimumDate, zonesEffectiveDateTimes);
+        }
+        public SaleRateReadRPChanges(int customerId, int sellingProductId, IEnumerable<long> saleZoneIds, DateTime minimumDate, Dictionary<long, DateTime> zoneEffectiveDatesByZoneIds)
+        {
+            IEnumerable<SaleRate> customerZoneRates = new SaleRateManager().GetExistingRatesByZoneIds(SalePriceListOwnerType.Customer, customerId, saleZoneIds, minimumDate);
+
+            var validCustomerZoneRates = new List<SaleRate>();
+            foreach (SaleRate customerZoneRate in customerZoneRates)
+            {
+                if (customerZoneRate.RateTypeId.HasValue)
+                    continue;
+
+                DateTime zoneEffectiveDate;
+                if (!zoneEffectiveDatesByZoneIds.TryGetValue(customerZoneRate.ZoneId, out zoneEffectiveDate))
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The action date of zone '{0}' was not found", customerZoneRate.ZoneId));
+
+                if (customerZoneRate.IsInTimeRange(zoneEffectiveDate))
+                    validCustomerZoneRates.Add(customerZoneRate);
+            }
+
+            _allSaleRatesByOwner = GetAllSaleRates(validCustomerZoneRates, sellingProductId, customerId, saleZoneIds, minimumDate, zoneEffectiveDatesByZoneIds);
         }
 
         #endregion
