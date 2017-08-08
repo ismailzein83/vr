@@ -8,7 +8,6 @@ using Vanrise.AccountBalance.Business;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using Vanrise.Common;
 using Vanrise.Notification.Business;
 using Vanrise.AccountBalance.Business.Extensions;
 
@@ -49,6 +48,33 @@ namespace Retail.BusinessEntity.Business
             var cachedFinancialAccounts = withInherited ? GetCachedFinancialAccountsWithInherited(accountDefinitionId) : GetCachedFinancialAccounts(accountDefinitionId);
             return cachedFinancialAccounts.GetRecord(accountId);
         }
+
+        public IOrderedEnumerable<FinancialAccountData> GetFinancialAccountsWithChildren(Guid accountDefinitionId, long accountId)
+        {
+            return GetCachedFinancialAccountsWithChildren(accountDefinitionId).GetRecord(accountId);
+        }
+
+        public List<FinancialAccountData> GetFinancialAccountsWithChildren(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
+        {
+            IOrderedEnumerable<FinancialAccountData> financialAccounts = GetFinancialAccountsWithChildren(accountDefinitionId, accountId);
+            List<FinancialAccountData> effectiveFinancialAccounts = new List<FinancialAccountData>();
+            if (financialAccounts != null)
+            {
+                foreach (var financialAccountData in financialAccounts)
+                {
+                    if (financialAccountData.FinancialAccount.IsEffective(effectiveOn))
+                    {
+                        effectiveFinancialAccounts.Add(financialAccountData);
+                    }
+                    else if (financialAccountData.FinancialAccount.BED < effectiveOn)
+                    {
+                        break;//financialAccounts are ordered by EED descendant
+                    }
+                }
+            }
+            return effectiveFinancialAccounts;
+        }
+
         public IEnumerable<FinancialAccountData> GetFinancialAccountsWithInheritedAndChilds(Guid accountDefinitionId, long accountId)
         {
             var allFinancialAccountsData = GetFinancialAccounts(accountDefinitionId, accountId, true).ToList();
@@ -63,6 +89,7 @@ namespace Retail.BusinessEntity.Business
             }
             return allFinancialAccountsData;
         }
+
         public bool TryGetFinancialAccount(Guid accountDefinitionId, long accountId, bool withInherited, DateTime effectiveOn, out FinancialAccountData financialAccountData)
         {
             IOrderedEnumerable<FinancialAccountData> financialAccounts = GetFinancialAccounts(accountDefinitionId, accountId, withInherited);
@@ -216,6 +243,7 @@ namespace Retail.BusinessEntity.Business
             accountBEDefinitionSettings.ThrowIfNull("accountBEDefinitionSettings", accountDefinitionId);
             return accountBEDefinitionSettings.FinancialAccountLocator != null ? accountBEDefinitionSettings.FinancialAccountLocator : new DefaultFinancialAccountLocator();
         }
+
         public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountBEDefinitionId ,FinancialAccountInfoFilter filter)
         {
             List<FinancialAccountInfo> financialAccountsInfo = new List<FinancialAccountInfo>();
@@ -262,23 +290,25 @@ namespace Retail.BusinessEntity.Business
         {
             return string.Format("{0}_{1}", accountId, sequenceNumber);
         }
+
         public FinancialAccountData GetFinancialAccountData(Guid accountBEDefinitionId, string financialAccountId)
         {
             var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
             return cachedFinancialAccountsData.GetRecord(financialAccountId);
         }
+
         public IEnumerable<string> GetAllFinancialAccountsIds(Guid accountBEDefinitionId)
         {
             var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
             return cachedFinancialAccountsData.Keys;
         }
+
         public IEnumerable<long> GetAccountIdsByFinancialAccountIds(Guid accountBEDefinitionId, List<string> financialAccountIds)
         {
             var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
             return cachedFinancialAccountsData.MapRecords(x=> x.Value.Account.AccountId, y=> financialAccountIds.Contains(y.Key));
         }
-
-        
+                
         public void ResolveBalanceAccountId(Guid balanceAccountTypeId, string balanceAccountId, out Guid accountBEDefinitionId, out long accountId, out FinancialAccountData financialAccountData)
         {
             accountBEDefinitionId = GetAccountBEDefinitionIdByBalanceAccountTypeId(balanceAccountTypeId);
@@ -418,6 +448,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
          
         #region Private Methods
+
         private AccountBEFinancialAccountsSettings GetAccountBEFinancialAccountsSettings(Guid accountBEDefinitionId, long accountId)
         {
             var accountBEFinancialAccountsSettings = s_accountManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(accountBEDefinitionId, accountId);
@@ -427,6 +458,7 @@ namespace Retail.BusinessEntity.Business
             }
             return accountBEFinancialAccountsSettings;
         }
+
         private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccounts(Guid accountDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccounts", accountDefinitionId,
@@ -449,22 +481,57 @@ namespace Retail.BusinessEntity.Business
                     return allFinancialAccountsData;
                 });
         }
-        private FinancialAccountData CreateFinancialAccountData(FinancialAccount financialAccount, Account account)
+
+        private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccountsWithInherited(Guid accountDefinitionId)
         {
-            var financialAccountData = new FinancialAccountData
-            {
-                FinancialAccountId = GetFinancialAccountId(account.AccountId, financialAccount.SequenceNumber),
-                FinancialAccount = financialAccount,
-                Account = account
-            };
-            financialAccount.ExtendedSettings.ThrowIfNull("financialAccount.ExtendedSettings", financialAccountData.FinancialAccountId);
-            var fillExtraDataContext = new FinancialAccountFillExtraDataContext
-            {
-                FinancialAccountData = financialAccountData
-            };
-            financialAccount.ExtendedSettings.FillExtraData(fillExtraDataContext);
-            return financialAccountData;
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccountsWithInherited", accountDefinitionId,
+                () =>
+                {
+                    Dictionary<long, List<FinancialAccountData>> allFinancialAccountsData = new Dictionary<long, List<FinancialAccountData>>();
+                    var allAccountNodes = s_accountManager.GetCacheAccountTreeNodes(accountDefinitionId);
+                    if (allAccountNodes != null)
+                    {
+                        foreach (var accountNode in allAccountNodes.Values)
+                        {
+                            if (!accountNode.Account.ParentAccountId.HasValue)//start from only root nodes
+                                AddAccountNodeFinancialAccounts(accountNode, allFinancialAccountsData);
+                        }
+                    }
+
+                    return allFinancialAccountsData.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(faItm => faItm.FinancialAccount.EED.HasValue ? faItm.FinancialAccount.EED.Value : DateTime.MaxValue));
+                });
         }
+
+        private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccountsWithChildren(Guid accountDefinitionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccountsWithChildren", accountDefinitionId,
+                () =>
+                {
+                    Dictionary<long, List<FinancialAccountData>> financialAccountsDataWithChildren = new Dictionary<long, List<FinancialAccountData>>();
+                    var cachedDirectFinancialAccounts = GetCachedFinancialAccounts(accountDefinitionId);
+                    var allAccountNodes = s_accountManager.GetCacheAccountTreeNodes(accountDefinitionId);
+                    if (cachedDirectFinancialAccounts != null)
+                    {
+                        allAccountNodes.ThrowIfNull("allAccountNodes");
+                        foreach (var accountFinancialAccountData in cachedDirectFinancialAccounts)
+                        {
+                            long accountId = accountFinancialAccountData.Key;
+                            IEnumerable<FinancialAccountData> financialAccounts = accountFinancialAccountData.Value;
+                            financialAccountsDataWithChildren.GetOrCreateItem(accountId).AddRange(financialAccounts);
+                            var accountNode = allAccountNodes.GetRecord(accountId);
+                            accountNode.ThrowIfNull("accountNode", accountId);
+                            var parentAccountNode = accountNode.ParentNode;
+                            while(parentAccountNode != null)
+                            {
+                                financialAccountsDataWithChildren.GetOrCreateItem(parentAccountNode.Account.AccountId).AddRange(financialAccounts);
+                                parentAccountNode = parentAccountNode.ParentNode;
+                            }
+                        }
+                    }
+                    return financialAccountsDataWithChildren.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(faItm => faItm.FinancialAccount.EED.HasValue ? faItm.FinancialAccount.EED.Value : DateTime.MaxValue));
+                });
+        }
+
         private Dictionary<string, FinancialAccountData> GetCachedFinancialAccountDataByFinancialAccountId(Guid accountDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccountDataByFinancialAccountId", accountDefinitionId,
@@ -485,26 +552,24 @@ namespace Retail.BusinessEntity.Business
                     return financialAccountDataByFinancialAccountId;
                 });
         }
-
-        private Dictionary<long, IOrderedEnumerable<FinancialAccountData>> GetCachedFinancialAccountsWithInherited(Guid accountDefinitionId)
+        
+        private FinancialAccountData CreateFinancialAccountData(FinancialAccount financialAccount, Account account)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccountsWithInherited", accountDefinitionId,
-                () =>
-                {
-                    Dictionary<long, List<FinancialAccountData>> allFinancialAccountsData = new Dictionary<long, List<FinancialAccountData>>();
-                    var allAccountNodes = s_accountManager.GetCacheAccountTreeNodes(accountDefinitionId);
-                    if(allAccountNodes != null)
-                    {
-                        foreach (var accountNode in allAccountNodes.Values)
-                        {
-                            if (!accountNode.Account.ParentAccountId.HasValue)//start from only root nodes
-                                AddAccountNodeFinancialAccounts(accountNode, allFinancialAccountsData);
-                        }
-                    }
-
-                    return allFinancialAccountsData.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(faItm => faItm.FinancialAccount.EED.HasValue ? faItm.FinancialAccount.EED.Value : DateTime.MaxValue));
-                });
+            var financialAccountData = new FinancialAccountData
+            {
+                FinancialAccountId = GetFinancialAccountId(account.AccountId, financialAccount.SequenceNumber),
+                FinancialAccount = financialAccount,
+                Account = account
+            };
+            financialAccount.ExtendedSettings.ThrowIfNull("financialAccount.ExtendedSettings", financialAccountData.FinancialAccountId);
+            var fillExtraDataContext = new FinancialAccountFillExtraDataContext
+            {
+                FinancialAccountData = financialAccountData
+            };
+            financialAccount.ExtendedSettings.FillExtraData(fillExtraDataContext);
+            return financialAccountData;
         }
+        
         private void AddAccountNodeFinancialAccounts(AccountTreeNode accountNode,  Dictionary<long, List<FinancialAccountData>> allFinancialAccountsData)
         {
             List<FinancialAccountData> financialAccounts = allFinancialAccountsData.GetOrCreateItem(accountNode.Account.AccountId);
@@ -536,14 +601,14 @@ namespace Retail.BusinessEntity.Business
                 }
             }
         }
-
-      
+              
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccountData financialAccountData)
         {
             var financialAccountDetail = FinancialAccountDetailMapper(financialAccountData.FinancialAccount);
             financialAccountDetail.FinancialAccountId = financialAccountData.FinancialAccountId;
             return financialAccountDetail;
         }
+
         private FinancialAccountDetail FinancialAccountDetailMapper(FinancialAccount financialAccount)
         {
             return new FinancialAccountDetail
@@ -555,6 +620,7 @@ namespace Retail.BusinessEntity.Business
                 BalanceAccountTypeId = s_financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId)
             };
         }
+
         private FinancialAccountInfo FinancialAccountInfoMapper(FinancialAccountData financialAccountData)
         {
             return new FinancialAccountInfo
@@ -564,10 +630,12 @@ namespace Retail.BusinessEntity.Business
                 IsEffectiveAndActive = IsFinancialAccountEffectiveAndActive(financialAccountData.FinancialAccount)
             };
         }
+
         private bool IsFinancialAccountEffectiveAndActive(FinancialAccount financialAccount)
         {
             return (financialAccount.BED <= DateTime.Now && !financialAccount.EED.HasValue || financialAccount.EED > DateTime.Now);
         }
+
         private string GetFinancialAccountDescription(FinancialAccount financialAccount)
         {
             StringBuilder description = new StringBuilder();
@@ -657,6 +725,7 @@ namespace Retail.BusinessEntity.Business
 
             return result;
         }
+
         #endregion
 
         #region Private Classes
