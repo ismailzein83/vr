@@ -2037,6 +2037,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "SwitchId",
                              Value = 2
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "Transit"
                             }
                     },
                     RecordType = "MobileCDR",
@@ -2064,6 +2069,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "SwitchId",
                              Value = 2
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "MobileOriginated"
                             }
                     },
                     RecordType = "MobileCDR",
@@ -2091,6 +2101,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "SwitchId",
                              Value = 2
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "Roaming"
                             }
                     },
                     RecordType = "MobileCDR",
@@ -2118,6 +2133,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "SwitchId",
                              Value = 2
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "CallForwarding"
                             }
                     },
                     RecordType = "MobileCDR",
@@ -2145,6 +2165,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "SwitchId",
                              Value = 2
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "MobileTerminated"
                             }
                     },
                     RecordType = "MobileCDR",
@@ -2172,6 +2197,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "SwitchId",
                              Value = 2
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "SMSOriginated"
                             }
                     },
                     RecordType = "SMS",
@@ -2198,6 +2228,11 @@ namespace Mediation.Runtime.DataParser
                             {
                              FieldName = "SwitchId",
                              Value = 2
+                            },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "SMSTerminated"
                             }
                     },
                     RecordType = "SMS",
@@ -3015,7 +3050,12 @@ namespace Mediation.Runtime.DataParser
                     },
                     RecordType = "MobileCDR",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "MobileOriginated"
+                            }
                     }
                     ,
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
@@ -3034,7 +3074,12 @@ namespace Mediation.Runtime.DataParser
                     },
                     RecordType = "MobileCDR",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "MobileTerminated"
+                            }
                     }
                     ,
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
@@ -3051,7 +3096,12 @@ namespace Mediation.Runtime.DataParser
                     },
                     RecordType = "MobileCDR",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "IncomingGateway"
+                            }
                     }
                     ,
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
@@ -3069,7 +3119,12 @@ namespace Mediation.Runtime.DataParser
                     },
                     RecordType = "MobileCDR",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "OutgoingGateway"
+                            }
                     }
                     ,
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
@@ -3086,7 +3141,12 @@ namespace Mediation.Runtime.DataParser
                     },
                     RecordType = "MobileCDR",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "Transit"
+                            }
                     }
                     ,
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
@@ -3103,7 +3163,12 @@ namespace Mediation.Runtime.DataParser
                     },
                     RecordType = "MobileCDR",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "CallForwarding"
+                            }
                     }
                     ,
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
@@ -3120,7 +3185,12 @@ namespace Mediation.Runtime.DataParser
                     },
                     RecordType = "SMS",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "SMSOriginated"
+                            }
                     },
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser_SMS()
                 }
@@ -3137,7 +3207,12 @@ namespace Mediation.Runtime.DataParser
                     },
                     RecordType = "SMS",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5}
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "SMSTerminated"
+                            }
                     },
                     CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser_SMS()
                 }
@@ -3288,7 +3363,7 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
-                                          FieldName = "SAC",
+                                          FieldName = "Calling_First_CI",
                                           NumberType = NumberType.Int
                                      }                            
                                 }
@@ -3298,6 +3373,28 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new NumberFieldParser
                                      {
                                           FieldName = "LocationAreaCode",
+                                          NumberType = NumberType.Int
+                                     }                            
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("AD", new HexTLVFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"81", new HexTLVFieldParser
+                                {
+                                     Settings = new NumberFieldParser
+                                     {
+                                          FieldName = "Calling_Last_CI",
                                           NumberType = NumberType.Int
                                      }                            
                                 }
@@ -3529,7 +3626,7 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
-                                          FieldName = "SAC",
+                                          FieldName = "Called_First_CI",
                                           NumberType = NumberType.Int
                                      }                            
                                 }
@@ -3539,6 +3636,28 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new NumberFieldParser
                                      {
                                           FieldName = "LocationAreaCode",
+                                          NumberType = NumberType.Int
+                                     }                            
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("AA", new HexTLVFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"81", new HexTLVFieldParser
+                                {
+                                     Settings = new NumberFieldParser
+                                     {
+                                          FieldName = "Called_Last_CI",
                                           NumberType = NumberType.Int
                                      }                            
                                 }
@@ -4632,7 +4751,7 @@ namespace Mediation.Runtime.DataParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
-                                          FieldName = "SAC",
+                                          FieldName = "Called_First_CI",
                                           NumberType = NumberType.Int
                                      }                            
                                 }
@@ -4642,6 +4761,28 @@ namespace Mediation.Runtime.DataParser
                                      Settings = new NumberFieldParser
                                      {
                                           FieldName = "LocationAreaCode",
+                                          NumberType = NumberType.Int
+                                     }                            
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("AD", new HexTLVFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"81", new HexTLVFieldParser
+                                {
+                                     Settings = new NumberFieldParser
+                                     {
+                                          FieldName = "Called_Last_CI",
                                           NumberType = NumberType.Int
                                      }                            
                                 }
@@ -5443,7 +5584,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "MobileOriginated"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
 
@@ -5466,7 +5612,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "MobileTerminated"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
                     RecordType = "MobileCDR"
@@ -5489,7 +5640,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "CallForwarding"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
                     RecordType = "MobileCDR"
@@ -5511,7 +5667,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "Roaming"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
                     RecordType = "MobileCDR"
@@ -5533,7 +5694,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "PSTN_Originated"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
                     RecordType = "MobileCDR"
@@ -5555,7 +5721,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "PSTN_Terminated"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
                     RecordType = "MobileCDR"
@@ -5577,7 +5748,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "PBX_Originated"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
                     RecordType = "MobileCDR"
@@ -5600,7 +5776,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "PBX_Terminated"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_Nokia(),
                     RecordType = "MobileCDR"
@@ -5622,7 +5803,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "SMSOriginated"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_SMS_Nokia(),
                     RecordType = "SMS"
@@ -5643,7 +5829,12 @@ namespace Mediation.Runtime.DataParser
                     {
                         FieldName = "SwitchId",
                         Value = 3
-                    }
+                    },
+                            new ParsedRecordFieldConstantValue
+                            {
+                             FieldName = "RecordTypeName",
+                             Value = "SMSTerminated"
+                            }
                     },
                     CompositeFieldsParsers = GetCompositeFieldParsers_SMS_Nokia(),
                     RecordType = "SMS"
@@ -5814,7 +6005,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         RemoveHexa = true,
                         Reverse = true,
-                        FieldName = "DurationInSeconds"
+                        FieldName = "CallDuration"
                     }
                 },
                 Length = 3,
@@ -5842,7 +6033,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "Subs_First_LAC",
+                        FieldName = "Calling_First_LAC",
                         Reverse = true
                     }
                 },
@@ -5857,7 +6048,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "Subs_Last_LAC",
+                        FieldName = "Calling_Last_LAC",
                         Reverse = true
                     }
                 },
@@ -5872,7 +6063,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "Subs_First_CI",
+                        FieldName = "Calling_First_CI",
                         Reverse = true
                     }
                 },
@@ -5887,7 +6078,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "Subs_Last_CI",
+                        FieldName = "Calling_Last_CI",
                         Reverse = true
                     }
                 },
@@ -6010,7 +6201,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new DateTimeParser
                     {
                         DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "ConnectDateTime",
+                        FieldName = "SetupTime",
                         DayIndex = 3,
                         MonthIndex = 4,
                         YearIndex = 5,
@@ -6031,7 +6222,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new DateTimeParser
                     {
                         DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "SetupTime",
+                        FieldName = "ConnectDateTime",
                         DayIndex = 3,
                         MonthIndex = 4,
                         YearIndex = 5,
@@ -6075,7 +6266,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         RemoveHexa = true,
                         Reverse = true,
-                        FieldName = "DurationInSeconds"
+                        FieldName = "CallDuration"
                     }
                 },
                 Length = 3,
@@ -6103,7 +6294,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "Subs_First_LAC",
+                        FieldName = "Called_First_LAC",
                         Reverse = true
                     }
                 },
@@ -6118,7 +6309,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "Subs_Last_LAC",
+                        FieldName = "Called_Last_LAC",
                         Reverse = true
                     }
                 },
@@ -6133,7 +6324,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "Subs_First_CI",
+                        FieldName = "Called_First_CI",
                         Reverse = true
                     }
                 },
@@ -6148,7 +6339,7 @@ namespace Mediation.Runtime.DataParser
                     Settings = new NumberFieldParser
                     {
                         NumberType = NumberType.Int,
-                        FieldName = "Subs_Last_CI",
+                        FieldName = "Called_Last_CI",
                         Reverse = true
                     }
                 },
@@ -6306,7 +6497,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         RemoveHexa = true,
                         Reverse = true,
-                        FieldName = "DurationInSeconds"
+                        FieldName = "CallDuration"
                     }
                 },
                 Length = 3,
@@ -6436,7 +6627,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         RemoveHexa = true,
                         Reverse = true,
-                        FieldName = "DurationInSeconds"
+                        FieldName = "CallDuration"
                     }
                 },
                 Length = 3,
@@ -6718,7 +6909,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         RemoveHexa = true,
                         Reverse = true,
-                        FieldName = "DurationInSeconds"
+                        FieldName = "CallDuration"
                     }
                 },
                 Length = 3,
@@ -6833,7 +7024,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         RemoveHexa = true,
                         Reverse = true,
-                        FieldName = "DurationInSeconds"
+                        FieldName = "CallDuration"
                     }
                 },
                 Length = 3,
@@ -6947,7 +7138,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         RemoveHexa = true,
                         Reverse = true,
-                        FieldName = "DurationInSeconds"
+                        FieldName = "CallDuration"
                     }
                 },
                 Length = 3,
@@ -7062,7 +7253,7 @@ namespace Mediation.Runtime.DataParser
                     {
                         RemoveHexa = true,
                         Reverse = true,
-                        FieldName = "DurationInSeconds"
+                        FieldName = "CallDuration"
                     }
                 },
                 Length = 3,
