@@ -36,7 +36,6 @@ app.directive('retailBeAccounttypeSelector', ['Retail_BE_AccountTypeAPIService',
     };
 
     function AccountTypeSelector(ctrl, $scope, attrs) {
-
         this.initializeController = initializeController;
 
         var selectorAPI;
@@ -106,19 +105,23 @@ app.directive('retailBeAccounttypeSelector', ['Retail_BE_AccountTypeAPIService',
 
         var multipleselection = "";
         var label = "Account Type";
-     
         if (attrs.ismultipleselection != undefined) {
             label = "Account Types";
             multipleselection = "ismultipleselection";
         }
-        if (attrs.customlabel != undefined)
+        if (attrs.customlabel != undefined) {
             label = attrs.customlabel;
+        }
+
+        var hideremoveicon = "";
+        if (attrs.hideremoveicon != undefined)
+            hideremoveicon = "hideremoveicon";
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
                     '<span vr-loader="ctrl.vrLoader">' +
                         '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="AccountTypeId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady"' +
                             ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"' +
-                            ' hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                            ' customvalidate="ctrl.customvalidate" ' + hideremoveicon + '>' +
                         '</vr-select>' +
                     '</span>' +
                '</vr-columns>';

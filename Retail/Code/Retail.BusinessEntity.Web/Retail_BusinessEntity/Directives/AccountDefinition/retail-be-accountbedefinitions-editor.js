@@ -28,6 +28,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             var statusBEDefinitionSelectorAPI;
             var statusBEDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
 
+            var accountTypeSelectorAPI;
+            var accountTypeSelectorDeferred = UtilsService.createPromiseDeferred();
+
             var financialAccountLocatorAPI;
             var financialAccountLocatorDeferred = UtilsService.createPromiseDeferred();
 
@@ -55,6 +58,11 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                 $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
                     statusBEDefinitionSelectorAPI = api;
                     statusBEDefinitionSelectorDeferred.resolve();
+                };
+
+                $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
+                    accountTypeSelectorAPI = api;
+                    accountTypeSelectorDeferred.resolve();
                 };
 
                 $scope.scopeModel.onFinancialAccountLocatorReady = function (api) {
@@ -92,10 +100,11 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     securityDefinitionsDirectiveDeferred.resolve();
                 };
 
-                UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise,
-                    accountActionDefinitionDirectiveDeferred.promise, financialAccountLocatorDeferred.promise, accountGridDefinitionExportExcelDirectiveDeferred.promise]).then(function () {
-                    defineAPI();
-                });
+                UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountTypeSelectorDeferred.promise, financialAccountLocatorDeferred.promise,
+                    accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise,
+                    accountGridDefinitionExportExcelDirectiveDeferred.promise]).then(function () {
+                        defineAPI();
+                    });
             }
             function defineAPI() {
                 var api = {};
@@ -105,6 +114,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                     var accountBEDefinitionId;
                     var statusBEDefinitionId;
+                    var localServiceAccountTypeId;
                     var financialAccountLocator;
                     var accountGridDefinition;
                     var accountGridDefinitionExportExcel;
@@ -118,13 +128,15 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                         if (payload.businessEntityDefinitionSettings != undefined) {
                             statusBEDefinitionId = payload.businessEntityDefinitionSettings.StatusBEDefinitionId;
+                            localServiceAccountTypeId = payload.businessEntityDefinitionSettings.LocalServiceAccountTypeId;
+                            financialAccountLocator = payload.businessEntityDefinitionSettings.FinancialAccountLocator;
                             accountGridDefinition = payload.businessEntityDefinitionSettings.GridDefinition.ColumnDefinitions;
                             accountGridDefinitionExportExcel = payload.businessEntityDefinitionSettings.GridDefinition.ExportColumnDefinitions;
                             accountViewDefinitions = payload.businessEntityDefinitionSettings.AccountViewDefinitions;
                             accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
                             accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
                             securityDefinition = payload.businessEntityDefinitionSettings.Security;
-                            financialAccountLocator = payload.businessEntityDefinitionSettings.FinancialAccountLocator;
+
                             $scope.scopeModel.useRemoteSelector = payload.businessEntityDefinitionSettings.UseRemoteSelector;
                         }
                     }
@@ -132,6 +144,12 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     //Loading Status Definition Directive
                     var statusBEDefinitionSelectorLoadPromise = getStatusDefinitionSelectorLoadPromise();
                     promises.push(statusBEDefinitionSelectorLoadPromise);
+
+                    //Loading AccountType Selector
+                    if (accountBEDefinitionId != undefined) {
+                        var accountTypeSelectorLoadPromise = getAccountTypeSelectorLoadPromise();
+                        promises.push(accountTypeSelectorLoadPromise);
+                    }
 
                     //Loading FinancialAccountLocator Directive
                     var financialAccountLocatorLoadPromise = getFinancialAccountLocatorLoadPromise();
@@ -174,6 +192,17 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         return statusBEDefinitionSelectorAPI.load(accountActionDefinitionPayload);
                     }
 
+                    function getAccountTypeSelectorLoadPromise() {
+
+                        var accountTypeSelectorPayload = {
+                            filter: {
+                                AccountBEDefinitionId: accountBEDefinitionId
+                            },
+                            selectedIds: localServiceAccountTypeId
+                        };
+                        return accountTypeSelectorAPI.load(accountTypeSelectorPayload);
+                    }
+
                     function getFinancialAccountLocatorLoadPromise() {
                         var financialAccountLocatorPayload = {
                             accountBEDefinitionId: accountBEDefinitionId,
@@ -203,7 +232,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountBEDefinitionId: accountBEDefinitionId,
                             accountViewDefinitions: accountViewDefinitions
                         };
-                       return accountViewDefinitionDirectiveAPI.load(accountViewDefinitionPayload);
+                        return accountViewDefinitionDirectiveAPI.load(accountViewDefinitionPayload);
                     }
 
                     function getAccountActionDefinitionLoadPromise() {
@@ -211,7 +240,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountBEDefinitionId: accountBEDefinitionId,
                             accountActionDefinitions: accountActionDefinitions
                         };
-                       return accountActionDefinitionDirectiveAPI.load(accountActionDefinitionPayload);
+                        return accountActionDefinitionDirectiveAPI.load(accountActionDefinitionPayload);
                     }
 
                     function getAccountExtraFieldDefinitionsLoadPromise() {
@@ -238,13 +267,14 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var obj = {
                         $type: "Retail.BusinessEntity.Entities.AccountBEDefinitionSettings, Retail.BusinessEntity.Entities",
                         StatusBEDefinitionId: statusBEDefinitionSelectorAPI.getSelectedIds(),
-                        UseRemoteSelector:$scope.scopeModel.useRemoteSelector,
+                        LocalServiceAccountTypeId: accountTypeSelectorAPI.getSelectedIds(),
+                        FinancialAccountLocator: financialAccountLocatorAPI.getData(),
+                        UseRemoteSelector: $scope.scopeModel.useRemoteSelector,
                         GridDefinition: gridDefinition,
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
                         AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData(),
-                        Security: securityDefinitionsDirectiveAPI.getData(),
-                        FinancialAccountLocator: financialAccountLocatorAPI.getData()
+                        Security: securityDefinitionsDirectiveAPI.getData()
                     };
                     return obj;
                 };
