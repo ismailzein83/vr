@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="zones"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.ZoneId" enableautoexport="true">
+
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.ZoneID'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

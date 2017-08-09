@@ -1,9 +1,13 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-datagrid datasource="countries"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.CountryId" enableautoexport="true">
 
-</body>
-</html>
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.CountryId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Country Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

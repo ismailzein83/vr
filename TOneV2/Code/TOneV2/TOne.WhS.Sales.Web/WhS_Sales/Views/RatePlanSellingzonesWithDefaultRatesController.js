@@ -1,97 +1,117 @@
-﻿//(function (appControllers) {
+﻿(function (appControllers) {
 
-//    "use strict";
+    "use strict";
 
-//    ratePlanSellingZonesWithDefaultratesController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_CountryAPIService'];
+    ratePlanSellingZonesWithDefaultratesController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'VRNotificationService', 'VRNavigationService', 'VRCommon_CountryAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-//    function ratePlanSellingZonesWithDefaultratesController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, VRCommon_CountryAPIService) {
+    function ratePlanSellingZonesWithDefaultratesController($scope, BusinessProcess_BPTaskAPIService, VRNotificationService, VRNavigationService, VRCommon_CountryAPIService, UtilsService, VRUIUtilsService) {
 
-//        var taskId;
-//        var countryIds;
-//        var countries;
-//        loadParameters();
-//        defineScope();
-//        load();
+        var taskId;
+        var ownerId;
+        var ownerType;
+        var countries;
+        var countryPreviewGridAPI;
+        var countryGridReadyDeferred = UtilsService.createPromiseDeferred();
+        loadParameters();
+        defineScope();
+        load();
 
-//        function loadParameters() {
-//            var parameters = VRNavigationService.getParameters($scope);
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
 
-//            if (parameters != undefined && parameters != null) {
-//                taskId = parameters.TaskId;
-//            }
-//        }
+            if (parameters != undefined && parameters != null) {
+                taskId = parameters.TaskId;
+            }
+        }
 
-//        function defineScope() {
-//            $scope.scopeModel = {};
+        function defineScope() {
+            $scope.scopeModel = {};
+            $scope.scopeModel.onCountryWithDefaultRateGridReady = function (api) {
+                countryPreviewGridAPI = api;
+                countryGridReadyDeferred.resolve();
+            };
+            $scope.scopeModel.continueTask = function () {
+                return executeTask(true);
+            };
+            $scope.scopeModel.stopTask = function () {
+                return executeTask(false);
+            };
+        }
 
-//            $scope.scopeModel.continueTask = function () {
-//                return executeTask(true);
-//            };
-//            $scope.scopeModel.stopTask = function () {
-//                return executeTask(false);
-//            };
-//        }
+        function load() {
 
-//        function load() {
-           
-//            $scope.scopeModel.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
-//            getTaskData().then(function () {
-//                getCountriesByCountryIds().then(function () {
-//                    for (var i = 0; i < countries.length; i++)
-//                    {
-//                        $scope.scopeModel.msg = $scope.scopeModel.msg + ' , ' + countries[i].Name;
-//                    }
-//                }).catch(function (error) {
-//                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-//                    $scope.scopeModel.isLoading = false;
-//                });
-//            }).catch(function (error) {
-//                VRNotificationService.notifyExceptionWithClose(error, $scope);
-//                $scope.scopeModel.isLoading = false;
-//            });
-//        }
-//        function getTaskData() {
-//            return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
-//                if (response == null)
-//                    return;
-//                if (response.TaskData == null)
-//                    return;
-//                countryIds = response.TaskData.countryIdsWithDefaultRates;
-//            });
-//        }
-//        function getCountriesByCountryIds()
-//        {
-//           return VRCommon_CountryAPIService.GetCountriesByCountryIds(countryIds).then(function (response) {
-//                if (response == null)
-//                    return;
-//                countries = response;
-//            })
-//        }
-//        function executeTask(decision) {
-//            $scope.scopeModel.isLoading = true;
+            getTaskData().then(function () {
+                loadAllControls();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+        function getTaskData() {
+            return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
+                if (response == null)
+                    return;
+                if (response.TaskData == null)
 
-//            var executionInformation = {
-//                $type: "TOne.WhS.Sales.BP.Arguments.Tasks.SellingZonesWithDefaultRatesTaskExecutionInformation, TOne.WhS.Sales.BP.Arguments",
-//                Decision: decision
-//            };
+                    return;
+                ownerType = response.TaskData.OwnerType;
+                ownerId = response.TaskData.OwnerId
+            });
+        }
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadCountryWithDefaultRateGrid]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+        function loadCountryWithDefaultRateGrid() {
+            var countryGridLoadDeferred = UtilsService.createPromiseDeferred();
 
-//            var input = {
-//                $type: "Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput, Vanrise.BusinessProcess.Entities",
-//                TaskId: taskId,
-//                ExecutionInformation: executionInformation
-//            };
+            countryGridReadyDeferred.promise.then(function () {
+                var countryGridPayload = {
+                    OwnerType: ownerType,
+                    OwnerId: ownerId
+                };
+                VRUIUtilsService.callDirectiveLoad(countryPreviewGridAPI, countryGridPayload, countryGridLoadDeferred);
+            });
 
-//            return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
-//                $scope.modalContext.closeModal();
-//            }).catch(function (error) {
-//                VRNotificationService.notifyException(error);
-//            }).finally(function () {
-//                $scope.scopeModel.isLoading = false;
-//            });
-//        }
-      
-//    }
+            return countryGridLoadDeferred.promise;
+        }
 
-//    appControllers.controller('WhS_Sales_RatePlanSellingzonesWithDefaultRatesController', ratePlanSellingZonesWithDefaultratesController);
-//})(appControllers);
+        //function getCountriesByCountryIds() {
+        //    return VRCommon_CountryAPIService.GetCountriesByCountryIds(countryIds).then(function (response) {
+        //        if (response == null)
+        //            return;
+        //        countries = response;
+        //    })
+        //}
+        function executeTask(decision) {
+            $scope.scopeModel.isLoading = true;
+
+            var executionInformation = {
+                $type: "TOne.WhS.Sales.BP.Arguments.Tasks.SellingZonesWithDefaultRatesTaskExecutionInformation, TOne.WhS.Sales.BP.Arguments",
+                createRatesWithDefaultValue: decision
+            };
+
+            var input = {
+                $type: "Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput, Vanrise.BusinessProcess.Entities",
+                TaskId: taskId,
+                ExecutionInformation: executionInformation
+            };
+
+            return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
+                $scope.modalContext.closeModal();
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+
+    }
+
+    appControllers.controller('WhS_Sales_RatePlanSellingzonesWithDefaultRatesController', ratePlanSellingZonesWithDefaultratesController);
+})(appControllers);

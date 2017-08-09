@@ -134,12 +134,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CountryWithDefaultRateController.cs" />
     <Compile Include="Controllers\SupplierTargetMatchController.cs" />
     <Compile Include="Controllers\CodeCompareController.cs" />
     <Compile Include="Controllers\RatePlanConfigController.cs" />
     <Compile Include="Controllers\RatePlanController.cs" />
     <Compile Include="Controllers\RatePlanPreviewController.cs" />
     <Compile Include="Controllers\SellingRuleController.cs" />
+    <Compile Include="Controllers\ZoneWithDefaultRateController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -260,17 +262,22 @@
     <Content Include="WhS_Sales\Directives\vr-whs-sales-rateplan-grid.js" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\vr-whs-sales-routepercentagecostcalculation.js" />
     <Content Include="WhS_Sales\Directives\vr-whs-sales-routingproduct-zone.js" />
+    <Content Include="WhS_Sales\Directives\Zone\Templates\ZoneWithDefaultRateGridTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Zone\vr-whs-sales-zonewithdefaultrate-grid.js" />
     <Content Include="WhS_Sales\Services\APIServices\CodeCompareAPIService.js" />
+    <Content Include="WhS_Sales\Services\APIServices\CountryWithDefaultRateAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanConfigAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanPreviewAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\SellingRuleAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\SupplierTargetMatchAPIService.js" />
+    <Content Include="WhS_Sales\Services\APIServices\ZoneWithDefaultRateAPIService.js" />
     <Content Include="WhS_Sales\Services\BulkActionUtilsService.js" />
     <Content Include="WhS_Sales\Services\CodeCompareService.js" />
     <Content Include="WhS_Sales\Services\RatePlanUtilsService.js" />
     <Content Include="WhS_Sales\Services\RatePlanService.js" />
     <Content Include="WhS_Sales\Services\SellingRuleService.js" />
+    <Content Include="WhS_Sales\Services\CountryWithDefaultRateService.js" />
     <Content Include="WhS_Sales\Views\AddCountries.html" />
     <Content Include="WhS_Sales\Views\AddCountriesController.js" />
     <Content Include="WhS_Sales\Views\BulkAction\BulkActionWizard.html" />

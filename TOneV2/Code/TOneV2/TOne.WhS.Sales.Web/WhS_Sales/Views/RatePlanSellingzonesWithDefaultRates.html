@@ -1,8 +1,10 @@
-﻿<!--<div vr-modalcontent ng-controller="WhS_Sales_RatePlanSellingzonesWithDefaultRatesController" width="'65%'" vr-loader="isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_RatePlanSellingzonesWithDefaultRatesController" width="'65%'" vr-loader="isLoading">
     <vr-modalbody>
         <vr-form name="formRatePlanSellingZonesWithDefaultRates">
-            <vr-row >
-                <vr-label>{{scopeModel.msg}}</vr-label>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-whs-sales-countrywithdefaultrate-grid on-ready="scopeModel.onCountryWithDefaultRateGridReady"></vr-whs-sales-countrywithdefaultrate-grid>
+                </vr-columns>
             </vr-row>
         </vr-form>
     </vr-modalbody>
@@ -14,4 +16,4 @@
             </div>
         </vr-actionbar>
     </div>
-</div>-->
+</div>
