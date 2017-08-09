@@ -246,6 +246,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-accountactiondefinitionsettings-bpaccountbackendexecutor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-bpaccountaction-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\Templates\BPAccountActionBackendExecutorSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\ChangeStatusAction\retail-be-accountactiondefinitionsettings-changestatus.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\ChangeStatusAction\Templates\ChangeStatusActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\EditAccountAction\retail-be-accountactiondefinitionsettings-editaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-accountactiondefinitionsettings-bpaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\EditAccountAction\Templates\EditAccountActionSettingsTemplate.html" />
@@ -683,6 +685,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountConditionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\ChangeStatusActionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageDefinitionAPIService.js" />

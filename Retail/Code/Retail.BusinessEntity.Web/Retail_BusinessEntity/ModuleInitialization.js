@@ -5,5 +5,7 @@
     Retail_BE_PackageService.registerObjectTrackingDrillDownToPackage();
     Retail_BE_ProductService.registerObjectTrackingDrillDownToProduct();
     Retail_BE_DIDService.registerObjectTrackingDrillDownToDID();
+    Retail_BE_AccountActionService.registerChangeStatusAction();
+    
 }]);
 

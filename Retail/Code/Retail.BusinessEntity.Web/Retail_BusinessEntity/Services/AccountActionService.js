@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_ActionRuntimeService', 'Retail_BE_AccountBEAPIService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_ActionRuntimeService, Retail_BE_AccountBEAPIService) {
+app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_ActionRuntimeService', 'Retail_BE_AccountBEAPIService','Retail_BE_ChangeStatusActionAPIService',
+    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_ActionRuntimeService, Retail_BE_AccountBEAPIService, Retail_BE_ChangeStatusActionAPIService) {
 
         var actionTypes = [];
 
@@ -117,13 +117,41 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
             registerActionType(actionType);
         }
 
+        function registerChangeStatusAction() {
 
+            var actionType = {
+                ActionTypeName: "ChangeStatusAction",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var account = payload.account;
+                    var onItemUpdated = payload.onItemUpdated;
+                    var accountActionDefinition = payload.accountActionDefinition;
+
+                    VRNotificationService.showConfirmation().then(function (confirmed) {
+                        if (confirmed) {
+                            return Retail_BE_ChangeStatusActionAPIService.ChangeAccountStatus(accountBEDefinitionId, account.AccountId, accountActionDefinition.AccountActionDefinitionId).then(function (response) {
+                                if (VRNotificationService.notifyOnItemUpdated('Account', response, 'Name')) {
+                                    if (onItemUpdated != undefined)
+                                        onItemUpdated(response.UpdatedObject);
+                                }
+                            }).catch(function (error) {
+                                VRNotificationService.notifyException(error, scope);
+                            });
+                        }
+                    });
+                }
+            };
+            registerActionType(actionType);
+        }
         return ({
             defineAccountMenuActions: defineAccountMenuActions,
             getActionTypeIfExist: getActionTypeIfExist,
             registerActionType: registerActionType,
             registerEditAccount: registerEditAccount,
             registerOpen360DegreeAccount: registerOpen360DegreeAccount,
-            registerBPActionAccount: registerBPActionAccount
+            registerBPActionAccount: registerBPActionAccount,
+            registerChangeStatusAction: registerChangeStatusAction
         });
     }]);

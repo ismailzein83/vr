@@ -399,6 +399,7 @@ namespace Retail.BusinessEntity.Business
             bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
             if (updateStatus)
             {
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountBELoggableEntity(accountBEDefinitionId), GetAccount(accountBEDefinitionId, accountId));
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
             }
             return updateStatus;

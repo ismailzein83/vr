@@ -33,7 +33,7 @@
             var directiveAPI;
             var directiveReadyDeferred;
             var directivePayload;
-
+            var accountBEDefinitionId;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
@@ -49,7 +49,10 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    var payload = {
+                        accountBEDefinitionId: accountBEDefinitionId
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -64,6 +67,7 @@
 
                     if (payload != undefined) {
                         accountActionDefinitionSettings = payload.accountActionDefinitionSettings;
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                     }
 
                     if (accountActionDefinitionSettings != undefined) {
@@ -94,7 +98,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { accountActionDefinitionSettings: accountActionDefinitionSettings };
+                            var directivePayload = { accountActionDefinitionSettings: accountActionDefinitionSettings, accountBEDefinitionId: accountBEDefinitionId };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
