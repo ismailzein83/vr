@@ -55,6 +55,7 @@
     <Compile Include="IAccountPackageRecurChargeDataManager.cs" />
     <Compile Include="IAccountPartDefinitionDataManager.cs" />
     <Compile Include="IAccountServiceDataManager.cs" />
+    <Compile Include="IAccountStatusHistoryDataManager.cs" />
     <Compile Include="IAccountTypeDataManager.cs" />
     <Compile Include="IActionDefinitionDataManager.cs" />
     <Compile Include="IAgentDataManager.cs" />

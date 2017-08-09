@@ -781,6 +781,14 @@ namespace Retail.BusinessEntity.Business
 
             if (dataManager.Insert(accountToInsert, out accountId))
             {
+                long accountStatusHistoryId;
+                new AccountStatusHistoryManager().TryAddAccountStatusHistory(new AccountStatusHistory
+                {
+                    AccountId = accountId,
+                   StatusChangedDate = DateTime.Now,
+                    StatusId = accountToInsert.StatusId
+
+                }, out accountStatusHistoryId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 account = GetAccount(accountToInsert.AccountBEDefinitionId, accountId);
                 VRActionLogger.Current.TrackAndLogObjectAdded(new AccountBELoggableEntity(accountToInsert.AccountBEDefinitionId), account);

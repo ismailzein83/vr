@@ -61,6 +61,7 @@
     <Compile Include="AccountPackageRecurChargeDataManager.cs" />
     <Compile Include="AccountPartDefinitionDataManager.cs" />
     <Compile Include="AccountServiceDataManager.cs" />
+    <Compile Include="AccountStatusHistoryDataManager.cs" />
     <Compile Include="AccountTypeDataManager.cs" />
     <Compile Include="ActionDefinitionDataManager.cs" />
     <Compile Include="DistributorDataManager.cs" />

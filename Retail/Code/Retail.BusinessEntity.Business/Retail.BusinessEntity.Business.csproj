@@ -151,6 +151,7 @@
     <Compile Include="AccountHandlers\BaseAccountEventPayload.cs" />
     <Compile Include="AccountPackageRecurChargeManager.cs" />
     <Compile Include="AccountPartDefinitionOverriddenConfiguration.cs" />
+    <Compile Include="AccountStatusHistory\AccountStatusHistoryManager.cs" />
     <Compile Include="AccountTypeOverriddenConfiguration.cs" />
     <Compile Include="Extensions\AccountBE360DegreeNodeType.cs" />
     <Compile Include="Extensions\AccountBERuntimeSelectorFilter.cs" />

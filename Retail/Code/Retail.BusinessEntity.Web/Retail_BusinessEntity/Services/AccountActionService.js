@@ -136,8 +136,6 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                                     if (onItemUpdated != undefined)
                                         onItemUpdated(response.UpdatedObject);
                                 }
-                            }).catch(function (error) {
-                                VRNotificationService.notifyException(error, scope);
                             });
                         }
                     });

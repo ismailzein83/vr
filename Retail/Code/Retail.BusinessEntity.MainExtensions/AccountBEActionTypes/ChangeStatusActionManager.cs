@@ -26,6 +26,14 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
             {
                 if (accountBEManager.UpdateStatus(accountBEDefinitionId, accountId, actionDefinitionSettings.StatusId))
                 {
+                    long accountStatusHistoryId;
+                    new AccountStatusHistoryManager().TryAddAccountStatusHistory(new AccountStatusHistory
+                    {
+                        AccountId = accountId,
+                        StatusChangedDate = DateTime.Now,
+                        StatusId = actionDefinitionSettings.StatusId
+
+                    }, out accountStatusHistoryId);
                     FinancialAccountManager financialAccountManager = new FinancialAccountManager();
                     financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, accountId);
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
