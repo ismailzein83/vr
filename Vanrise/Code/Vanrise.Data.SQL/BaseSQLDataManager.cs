@@ -174,6 +174,7 @@ namespace Vanrise.Data.SQL
                 using (IDataReader reader = db.ExecuteReader(cmd))
                 {
                     onReaderReady(reader);
+                    cmd.Cancel();
                     reader.Close();
                 }
             }
@@ -188,6 +189,7 @@ namespace Vanrise.Data.SQL
                 using (IDataReader reader = db.ExecuteReader(cmd))
                 {
                     onReaderReady(reader);
+                    cmd.Cancel();
                     reader.Close();
                 }
             }
@@ -205,6 +207,7 @@ namespace Vanrise.Data.SQL
                 using (IDataReader reader = db.ExecuteReader(cmd))
                 {
                     onReaderReady(reader);
+                    cmd.Cancel();
                     reader.Close();
                 }
             }

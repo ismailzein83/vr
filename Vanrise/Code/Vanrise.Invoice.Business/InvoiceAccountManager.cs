@@ -36,7 +36,8 @@ namespace Vanrise.Invoice.Business
         public bool TryUpdateInvoiceAccountStatus(Guid invoiceTypeId, string partnerId, VRAccountStatus status, bool isDeleted)
         {
             IInvoiceAccountDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceAccountDataManager>();
-            return dataManager.TryUpdateInvoiceAccountStatus(invoiceTypeId, partnerId, status, isDeleted);
+            dataManager.TryUpdateInvoiceAccountStatus(invoiceTypeId, partnerId, status, isDeleted);
+            return true;//no validation is needed
         }
         public bool TryUpdateInvoiceAccountEffectiveDate(Guid invoiceTypeId, string partnerId, DateTime? bed, DateTime? eed, out string errorMessage)
         {
