@@ -36,14 +36,14 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryData.CountryId);
 
-            if (closedRatesByZoneId.Count > 0 && ratePlanContext.CurrencyId != ratePlanContext.SystemCurrencyId)
+            IEnumerable<ExistingZone> existingZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryData.CountryId);
+            IEnumerable<ExistingZone> effectiveOrFutureZones = GetEffectiveOrFutureZones(existingZones, countryName, countryData.CountryBED);
+
+            if (closedRatesByZoneId.Count > 0 && closedRatesByZoneId.Count < effectiveOrFutureZones.Count() && ratePlanContext.CurrencyId != ratePlanContext.SystemCurrencyId)
             {
                 context.Message = string.Format("The currency of the process doesn't match the currecny of the system");
                 return false;
             }
-
-            IEnumerable<ExistingZone> existingZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryData.CountryId);
-            IEnumerable<ExistingZone> effectiveOrFutureZones = GetEffectiveOrFutureZones(existingZones, countryName, countryData.CountryBED);
 
             foreach (ExistingZone countryZone in effectiveOrFutureZones)
             {
