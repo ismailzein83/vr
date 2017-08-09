@@ -94,7 +94,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     Code = codeValue,
                     CodeGroup = codeGroup,
                     ZoneName = zoneNameValue,
-                    BED = priceListCode.EffectiveDate.Value,
+                    BED = (priceListCode.EffectiveDate.HasValue) ? priceListCode.EffectiveDate.Value : DateTime.MinValue,
                     EED = null
                 });
             }
@@ -160,8 +160,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
             }
 
-            if (minimumDate == default(DateTime))
-                throw new Vanrise.Entities.VRBusinessException(string.Format("The imported file contains invalid data"));
+          
 
             #region Imported Rates Validation
 

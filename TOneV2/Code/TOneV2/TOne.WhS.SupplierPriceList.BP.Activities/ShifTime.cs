@@ -45,16 +45,28 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var importedCode in importedCodes)
             {
+                if (importedCode.BED == DateTime.MinValue)
+                {
+                    throw new Vanrise.Entities.VRBusinessException(string.Format("The BED of imported code mapped to invalid column"));
+                }
                 importedCode.BED = ShiftDateTime(importedCode.BED, supplierTimeZone.Settings.Offset).Value;
                 importedCode.EED = ShiftDateTime(importedCode.EED, supplierTimeZone.Settings.Offset);
             }
             foreach (var importedRate in importedRates)
             {
+                if (importedRate.BED == DateTime.MinValue)
+                {
+                    throw new Vanrise.Entities.VRBusinessException(string.Format("The BED of imported rate mapped to invalid column"));
+                }
                 importedRate.BED = ShiftDateTime(importedRate.BED, supplierTimeZone.Settings.Offset).Value;
                 importedRate.EED = ShiftDateTime(importedRate.EED, supplierTimeZone.Settings.Offset);
             }
             foreach (var importedZoneService in importedZonesServices)
             {
+                if (importedZoneService.BED == DateTime.MinValue)
+                {
+                    throw new Vanrise.Entities.VRBusinessException(string.Format("The BED of imported service mapped to invalid column"));
+                }
                 importedZoneService.BED = ShiftDateTime(importedZoneService.BED, supplierTimeZone.Settings.Offset).Value;
                 importedZoneService.EED = ShiftDateTime(importedZoneService.EED, supplierTimeZone.Settings.Offset);
             }
