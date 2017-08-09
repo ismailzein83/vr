@@ -46,10 +46,8 @@ app.directive("mediationGenericMediationprocess", ["VRUIUtilsService", "UtilsSer
                 var api = {};
                 api.getData = function () {
                     return {
-                        InputArguments: {
-                            $type: "Mediation.Generic.BP.Arguments.MediationProcessInput, Mediation.Generic.BP.Arguments",
-                            MediationDefinitionId: mediationDefinitionSelectorAPI.getSelectedIds()
-                        }
+                        $type: "Mediation.Generic.BP.Arguments.MediationProcessInput, Mediation.Generic.BP.Arguments",
+                        MediationDefinitionId: mediationDefinitionSelectorAPI.getSelectedIds()
                     };
                 };
 
