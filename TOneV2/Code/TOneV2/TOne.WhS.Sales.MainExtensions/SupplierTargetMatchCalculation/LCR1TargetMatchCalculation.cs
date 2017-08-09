@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
 using TOne.WhS.Sales.Entities;
 
-namespace TOne.WhS.Sales.MainExtensions.TargetMatchCalculation
+namespace TOne.WhS.Sales.MainExtensions.SupplierTargetMatchCalculation
 {
     public class LCR1TargetMatchCalculation : TargetMatchCalculationMethod
     {

@@ -22,6 +22,11 @@ namespace TOne.WhS.Sales.Business
             return BigDataManager.Instance.RetrieveData(input, new SupplierTargetMatchRequestHandler());
         }
 
+        public IEnumerable<SupplierTargetMatchMethodConfig> GetTargetMatchMethodConfigs()
+        {
+            var extensionConfigManager = new ExtensionConfigurationManager();
+            return extensionConfigManager.GetExtensionConfigurations<SupplierTargetMatchMethodConfig>(SupplierTargetMatchMethodConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
+        }
 
         class SupplierTargetMatchRequestHandler : BigDataRequestHandler<SupplierTargetMatchQuery, SupplierTargetMatch, SupplierTargetMatchDetail>
         {

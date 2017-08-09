@@ -11,9 +11,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredSupplierTargetMatches"), input);
         }
 
+        function GetTargetMatchMethods() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetTargetMatchMethods"));
+        }
 
         return ({
-            GetFilteredSupplierTargetMatches: GetFilteredSupplierTargetMatches
+            GetFilteredSupplierTargetMatches: GetFilteredSupplierTargetMatches,
+            GetTargetMatchMethods: GetTargetMatchMethods
         });
     }
 

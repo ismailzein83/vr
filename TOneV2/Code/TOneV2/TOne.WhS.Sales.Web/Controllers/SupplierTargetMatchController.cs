@@ -21,5 +21,13 @@ namespace TOne.WhS.Sales.Web.Controllers
             SupplierTargetMatchManager manager = new SupplierTargetMatchManager();
             return GetWebResponse(input, manager.GetFilteredSupplierTargetMatches(input));
         }
+
+        [HttpGet]
+        [Route("GetTargetMatchMethods")]
+        public IEnumerable<SupplierTargetMatchMethodConfig> GetTargetMatchMethods()
+        {
+            var manager = new SupplierTargetMatchManager();
+            return manager.GetTargetMatchMethodConfigs();
+        }
     }
 }

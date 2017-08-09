@@ -215,6 +215,16 @@
     <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Fixed\vr-whs-sales-sellingrulesettings-fixed.js" />
     <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Margin\Templates\MarginRuleDirective.html" />
     <Content Include="WhS_Sales\Directives\Extensions\SellingRuleSettings\Margin\vr-whs-sales-sellingrulesettings-margin.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\Templates\SupplierTargetMatchMethodsLCR2Template.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\Templates\SupplierTargetMatchMethodsLCR3Template.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\Templates\SupplierTargetMatchMethodsAverageTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\Templates\SupplierTargetMatchMethodsWeightedAverageTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\Templates\SupplierTargetMatchMethodsLCR1Template.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\vr-whs-sales-suppliertargetmatchmethods-weightedaverage.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\vr-whs-sales-suppliertargetmatchmethods-average.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\vr-whs-sales-suppliertargetmatchmethods-lcr3.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\vr-whs-sales-suppliertargetmatchmethods-lcr2.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\SupplierTargetMatchMethods\vr-whs-sales-suppliertargetmatchmethods-lcr1.js" />
     <Content Include="WhS_Sales\Directives\Extensions\TQIMethods\Templates\FirstOptionTQIMethodTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\TQIMethods\Templates\SuggestedAverageTQIMethodTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\TQIMethods\Templates\WeightedAverageTQIMethodTemplate.html" />
@@ -243,8 +253,10 @@
     <Content Include="WhS_Sales\Directives\Settings\vr-whs-sales-rateplan-settings-editor.js" />
     <Content Include="WhS_Sales\Directives\SupplierTargetMatch\Templates\SupplierTargetMatchFilterTemplate.html" />
     <Content Include="WhS_Sales\Directives\SupplierTargetMatch\Templates\SupplierTargetMatchGrid.html" />
+    <Content Include="WhS_Sales\Directives\SupplierTargetMatch\Templates\SupplierTargetMatchMethodsSelectiveTemplate.html" />
     <Content Include="WhS_Sales\Directives\SupplierTargetMatch\vr-whs-sales-suppliertargetmatch-filter.js" />
     <Content Include="WhS_Sales\Directives\SupplierTargetMatch\vr-whs-sales-suppliertargetmatch-grid.js" />
+    <Content Include="WhS_Sales\Directives\SupplierTargetMatch\vr-whs-sales-suppliertargetmatchmethods-selective.js" />
     <Content Include="WhS_Sales\Directives\Templates\DefaultRoutingProductTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\CostCalculation\Templates\PercentageCostCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\Templates\RatePlanGridTemplate.html" />

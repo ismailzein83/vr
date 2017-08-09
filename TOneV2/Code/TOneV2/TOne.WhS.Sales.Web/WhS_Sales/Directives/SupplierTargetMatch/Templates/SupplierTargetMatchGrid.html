@@ -1,9 +1,10 @@
 ﻿
-<vr-datagrid datasource="targetMatches"
+<vr-datagrid datasource="scopeModel.targetMatches"
              pagingtype="'PagingOnScroll'"
-             on-ready="onGridReady">
+             on-ready="scopeModel.onGridReady"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction">
     <vr-datagridcolumn headertext="'Zone'" field="'Entity.SaleZone'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Volume'" field="'Entity.Volume'" ></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Volume'" field="'Entity.Volume'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Route Options'" widthfactor="35" disablesorting="true">
         <div vr-loader="dataItem.isLoadingRouteOptions">
             <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>

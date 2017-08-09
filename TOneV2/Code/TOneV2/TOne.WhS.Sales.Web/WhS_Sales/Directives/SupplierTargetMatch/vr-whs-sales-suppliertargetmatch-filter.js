@@ -37,6 +37,9 @@ app.directive('vrWhsSalesSuppliertargetmatchFilter', ['UtilsService', 'VRUIUtils
             var countryDirectiveApi;
             var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var calculationMethodDirectiveAPI;
+            var calculationMethodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var policySelectorAPI;
 
             function initializeController() {
@@ -89,9 +92,12 @@ app.directive('vrWhsSalesSuppliertargetmatchFilter', ['UtilsService', 'VRUIUtils
                     policySelectorAPI = api;
                 };
 
-                UtilsService.waitMultiplePromises([]).then(function () {
-                    defineAPI();
-                });
+                $scope.scopeModel.onCalculationMethodDirectiveReady = function (api) {
+                    calculationMethodDirectiveAPI = api;
+                    calculationMethodReadyPromiseDeferred.resolve();
+                }
+
+                defineAPI();
 
             }
 
@@ -110,6 +116,7 @@ app.directive('vrWhsSalesSuppliertargetmatchFilter', ['UtilsService', 'VRUIUtils
                     promises.push(loadRoutingProductSelector());
                     promises.push(loadRoutingDatabaseSelector());
                     promises.push(loadCountrySelector());
+                    promises.push(loadCalculationMethodSelective());
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -188,6 +195,15 @@ app.directive('vrWhsSalesSuppliertargetmatchFilter', ['UtilsService', 'VRUIUtils
                 });
                 return countryLoadPromiseDeferred.promise;
             }
+
+            function loadCalculationMethodSelective() {
+                var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                calculationMethodReadyPromiseDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(calculationMethodDirectiveAPI, undefined, loadPromiseDeferred);
+                });
+                return loadPromiseDeferred.promise;
+            }
+
 
             this.initializeController = initializeController;
         }

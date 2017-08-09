@@ -1,24 +1,26 @@
 ﻿<vr-panel ng-controller="WhS_Sales_SupplierTargetMatchController">
     <vr-form validationcontext="FilterGroup">
-
-        <div vr-loader="isLoadingFilterSection" ng-hide="filterSectionCollapsed">
-            <vr-row removeline>
-                <vr-columns width="fullrow">
-
-                </vr-columns>
-            </vr-row>
-        </div>
+        <vr-validation-group validationcontext="LoadTargetMatch">
+            <div vr-loader="isLoadingFilter" ng-hide="filterSectionCollapsed">
+                <vr-row removeline>
+                    <vr-columns width="fullrow">
+                        <vr-whs-sales-suppliertargetmatch-filter on-ready="onTargetMatchFilterDirectiveReady"></vr-whs-sales-suppliertargetmatch-filter>
+                    </vr-columns>
+                </vr-row>
+            </div>
+        </vr-validation-group>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Load" validationcontext="LoadTargetMatch" data-onclick="load"></vr-button>
+                    <vr-button type="Load" validationcontext="LoadTargetMatch" data-onclick="loadClicked"></vr-button>
                     <vr-button type="Export" ng-show="showExportButton"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
 
-        <div vr-loader="isLoading">
+        <vr-rows>
             <vr-whs-sales-suppliertargetmatch-grid on-ready="onGridReady"></vr-whs-sales-suppliertargetmatch-grid>
-        </div>
+        </vr-rows>
+
     </vr-form>
 </vr-panel>
