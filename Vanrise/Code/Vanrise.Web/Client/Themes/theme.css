@@ -307,4 +307,9 @@ f79624
     color: #FFF;
     border-bottom:0px;
 }
+.vr-toolbox .item{   
+    background-color: #01a082 !important;
+}
 /* override style.css*/
+
+

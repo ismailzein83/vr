@@ -233,3 +233,6 @@
     color: #FFF;
     border-bottom:0px;
 }
+.vr-toolbox .item{   
+    background-color: #027C65 !important;
+}
