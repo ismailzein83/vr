@@ -12,6 +12,8 @@ namespace Retail.BusinessEntity.Business
         public Guid AccountBEDefinitionId { get; set; }
         public bool IsMatched(IStatusDefinitionFilterContext context)
         {
+            if (this.AccountBEDefinitionId == Guid.Empty)
+                return false;
             var accountBEDefinitionSettings = new AccountBEDefinitionManager().GetAccountBEDefinitionSettings(this.AccountBEDefinitionId);
             if (accountBEDefinitionSettings.StatusBEDefinitionId != context.BusinessEntityDefinitionId)
                 return false;
