@@ -60,7 +60,7 @@ app.directive('whsRoutingActiondefinitionBlockcustomeraccount', ['UtilsService',
                     }
                 }
 
-            }
+            };
 
             UtilsService.waitMultiplePromises([dataRecordTypeSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
@@ -100,7 +100,7 @@ app.directive('whsRoutingActiondefinitionBlockcustomeraccount', ['UtilsService',
                             dataRecordTypeFieldsSelectorPayload = {
                                 selectedIds: payload.Settings.ExtendedSettings.CustomerFieldName,
                                 dataRecordTypeId: payload.Settings.ExtendedSettings.DataRecordTypeId
-                            }
+                            };
                         }
                         VRUIUtilsService.callDirectiveLoad(customerDataRecordTypeFieldsSelectorAPI, dataRecordTypeFieldsSelectorPayload, customerDataRecordTypeFieldsSelectorloadDeferred);
                     });

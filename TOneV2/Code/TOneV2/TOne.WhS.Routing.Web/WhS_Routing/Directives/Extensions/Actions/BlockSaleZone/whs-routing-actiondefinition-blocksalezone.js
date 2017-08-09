@@ -78,7 +78,7 @@ app.directive('whsRoutingActiondefinitionBlocksalezone', ['UtilsService', 'VRUIU
                     }
                 }
 
-            }
+            };
 
             UtilsService.waitMultiplePromises([dataRecordTypeSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
@@ -118,7 +118,7 @@ app.directive('whsRoutingActiondefinitionBlocksalezone', ['UtilsService', 'VRUIU
                             customerDataRecordTypeFieldsSelectorPayload = {
                                 selectedIds: payload.Settings.ExtendedSettings.CustomerFieldName,
                                 dataRecordTypeId: payload.Settings.ExtendedSettings.DataRecordTypeId
-                            }
+                            };
                         }
                         VRUIUtilsService.callDirectiveLoad(customerDataRecordTypeFieldsSelectorAPI, customerDataRecordTypeFieldsSelectorPayload, customerDataRecordTypeFieldsSelectorloadDeferred);
                     });
@@ -132,7 +132,7 @@ app.directive('whsRoutingActiondefinitionBlocksalezone', ['UtilsService', 'VRUIU
                             saleZoneDataRecordTypeFieldsSelectorPayload = {
                                 selectedIds: payload.Settings.ExtendedSettings.SaleZoneFieldName,
                                 dataRecordTypeId: payload.Settings.ExtendedSettings.DataRecordTypeId
-                            }
+                            };
                         }
                         VRUIUtilsService.callDirectiveLoad(saleZoneDataRecordTypeFieldsSelectorAPI, saleZoneDataRecordTypeFieldsSelectorPayload, saleZoneDataRecordTypeFieldsSelectorloadDeferred);
                     });

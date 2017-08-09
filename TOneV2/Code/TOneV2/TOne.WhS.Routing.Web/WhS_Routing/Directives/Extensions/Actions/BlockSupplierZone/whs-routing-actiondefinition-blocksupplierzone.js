@@ -78,7 +78,7 @@ app.directive('whsRoutingActiondefinitionBlocksupplierzone', ['UtilsService', 'V
                     }
                 }
 
-            }
+            };
 
             UtilsService.waitMultiplePromises([dataRecordTypeSelectorReadyDeferred.promise]).then(function () {
                 defineAPI();
@@ -119,7 +119,7 @@ app.directive('whsRoutingActiondefinitionBlocksupplierzone', ['UtilsService', 'V
                             supplierDataRecordTypeFieldsSelectorPayload = {
                                 selectedIds: payload.Settings.ExtendedSettings.SupplierFieldName,
                                 dataRecordTypeId: payload.Settings.ExtendedSettings.DataRecordTypeId
-                            }
+                            };
                         }
                         VRUIUtilsService.callDirectiveLoad(supplierDataRecordTypeFieldsSelectorAPI, supplierDataRecordTypeFieldsSelectorPayload, supplierDataRecordTypeFieldsSelectorloadDeferred);
                     });
@@ -132,7 +132,7 @@ app.directive('whsRoutingActiondefinitionBlocksupplierzone', ['UtilsService', 'V
                             supplierZoneDataRecordTypeFieldsSelectorPayload = {
                                 selectedIds: payload.Settings.ExtendedSettings.SupplierZoneFieldName,
                                 dataRecordTypeId: payload.Settings.ExtendedSettings.DataRecordTypeId
-                            }
+                            };
                         }
                         VRUIUtilsService.callDirectiveLoad(supplierZoneDataRecordTypeFieldsSelectorAPI, supplierZoneDataRecordTypeFieldsSelectorPayload, supplierZoneDataRecordTypeFieldsSelectorloadDeferred);
                     });
