@@ -98,7 +98,8 @@ namespace Vanrise.ExcelConversion.Business
             ConvertedExcelList lst = new ConvertedExcelList
             {
                 ListName = listMapping.ListName,
-                Records = new List<ConvertedExcelRecord>()
+                Records = new List<ConvertedExcelRecord>(),
+                FilteredRecords = new List<ConvertedExcelRecord>()
             };
 
             int maxdatacol = workSheet.Cells.MaxDataColumn + 1;
@@ -111,6 +112,7 @@ namespace Vanrise.ExcelConversion.Business
                     break;
                 }
                 Dictionary<string, Object> fieldValueByFieldName = new Dictionary<string, object>();
+                bool markedAsFiltered = false;
                 if (fieldTypeByFieldName != null)
                 {
                     RecordFilterManager manager = new RecordFilterManager();
@@ -127,12 +129,16 @@ namespace Vanrise.ExcelConversion.Business
                     }
                     context.fieldValueByFieldName = fieldValueByFieldName;
                     if (!manager.IsFilterGroupMatch(listMapping.Filter.FilterGroup, context))
-                        continue;
+                        markedAsFiltered = true;
                 }
 
                 var convertedRecord = new ConvertedExcelRecord { Fields = new ConvertedExcelFieldsByName() };
 
-                lst.Records.Add(convertedRecord);
+                if (markedAsFiltered)
+                    lst.FilteredRecords.Add(convertedRecord);
+                else
+                    lst.Records.Add(convertedRecord);
+
                 foreach (var fldMapping in listMapping.FieldMappings)
                 {
                     ConvertedExcelField fld = new ConvertedExcelField

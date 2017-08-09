@@ -11,6 +11,8 @@ namespace Vanrise.ExcelConversion.Entities
         public string ListName { get; set; }
 
         public List<ConvertedExcelRecord> Records { get; set; }
+
+        public List<ConvertedExcelRecord> FilteredRecords { get; set; }
     }
 
     public class ConvertedExcelListsByName : Dictionary<string, ConvertedExcelList>
