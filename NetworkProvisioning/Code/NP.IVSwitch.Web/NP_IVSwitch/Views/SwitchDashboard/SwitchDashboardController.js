@@ -75,10 +75,9 @@
                     return LabelColorsEnum.Processed.color;
                 }
             };
-            $scope.scopeModel.viewLiveCdr = function (dataItem)
-            {
+            $scope.scopeModel.viewLiveCdr = function (dataItem) {
                 NP_IVSwitch_SwitchDashboardService.viewLiveCdrs(dataItem);
-            }
+            };
             $scope.scopeModel.lastDistributionChartReady = function (api) {
                 lastDistributionChartAPI = api;
                 lastDistributionChartReadyDeferred.resolve();

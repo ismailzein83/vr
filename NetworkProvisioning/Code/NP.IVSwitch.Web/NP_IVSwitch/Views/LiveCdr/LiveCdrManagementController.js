@@ -51,7 +51,7 @@
                     var filter = {
                         query: {},
                         sorting:0 
-                    }
+                    };
                     gridAPI.loadGrid(filter);
                 }
                
