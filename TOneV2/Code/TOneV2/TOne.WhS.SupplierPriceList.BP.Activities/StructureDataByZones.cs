@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using Vanrise.Common;
+using TOne.WhS.SupplierPriceList.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -12,6 +14,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
+        
+        [RequiredArgument]
+        public InArgument<IEnumerable<PriceListCode>> FilteredImportedCodes { get; set; }
 
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedRate>> ImportedRates { get; set; }
@@ -25,6 +30,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ImportedCode> importedCodesList = this.ImportedCodes.Get(context);
+            IEnumerable<PriceListCode> filteredImportedCodesList = this.FilteredImportedCodes.Get(context);
             IEnumerable<ImportedRate> importedRatesList = this.ImportedRates.Get(context);
             IEnumerable<ImportedZoneService> importedZonesServices = this.ImportedZonesServices.Get(context);
 
@@ -48,27 +54,33 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 if (!importedDataByZoneName.TryGetValue(rate.ZoneName, out importedDataByZone))
                 {
-                    //This case will happen if a zone only exists in imported rates list
-                    //adding it to the dictionary is for validation purpose (business rule)
-                    if (importedDataByZone == null)
+                    if (!filteredImportedCodesList.Any(x => x.ZoneName == rate.ZoneName))
+                    {
+                        //This case will happen if a zone only exists in imported rates list
+                        //adding it to the dictionary is for validation purpose (business rule)
                         importedDataByZone = new ImportedDataByZone();
+                        importedDataByZone.ZoneName = rate.ZoneName;
 
-                    importedDataByZoneName.Add(rate.ZoneName, importedDataByZone);
-                }
-                if (rate.RateTypeId == null)
-                {
-                    importedDataByZone.ImportedNormalRates.Add(rate);
+                        importedDataByZoneName.Add(rate.ZoneName, importedDataByZone);
+                    }
                 }
                 else
                 {
-                    List<ImportedRate> otherRates = null;
-                    if (!importedDataByZone.ImportedOtherRates.TryGetValue(rate.RateTypeId.Value, out otherRates))
+                    if (rate.RateTypeId == null)
                     {
-                        otherRates = new List<ImportedRate>();
-                        importedDataByZone.ImportedOtherRates.Add(rate.RateTypeId.Value, otherRates);
+                        importedDataByZone.ImportedNormalRates.Add(rate);
                     }
+                    else
+                    {
+                        List<ImportedRate> otherRates = null;
+                        if (!importedDataByZone.ImportedOtherRates.TryGetValue(rate.RateTypeId.Value, out otherRates))
+                        {
+                            otherRates = new List<ImportedRate>();
+                            importedDataByZone.ImportedOtherRates.Add(rate.RateTypeId.Value, otherRates);
+                        }
 
-                    otherRates.Add(rate);
+                        otherRates.Add(rate);
+                    }
                 }
             }
 
@@ -78,11 +90,15 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 if (!importedDataByZoneName.TryGetValue(service.ZoneName, out importedDataByZone))
                 {
-                    importedDataByZone = new ImportedDataByZone();
-                    importedZoneServices = new List<ImportedZoneService>();
-                    importedZoneServices.Add(service);
-                    importedDataByZone.ImportedZoneServicesToValidate.Add(service.ServiceId, importedZoneServices);
-                    importedDataByZoneName.Add(service.ZoneName, importedDataByZone);
+                    if (!filteredImportedCodesList.Any(x => x.ZoneName == service.ZoneName))
+                    {
+                        importedDataByZone = new ImportedDataByZone();
+                        importedDataByZone.ZoneName = service.ZoneName;
+                        importedZoneServices = new List<ImportedZoneService>();
+                        importedZoneServices.Add(service);
+                        importedDataByZone.ImportedZoneServicesToValidate.Add(service.ServiceId, importedZoneServices);
+                        importedDataByZoneName.Add(service.ZoneName, importedDataByZone);
+                    }
                 }
                 else
                 {

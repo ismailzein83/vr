@@ -65,6 +65,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
             return new ConvertedPriceList
             {
                 PriceListCodes = BuildPriceListCodes(convertedExcel),
+                FilteredPriceListCodes = BuildFilteredPriceListCodes(convertedExcel),
                 PriceListRates = BuildPriceListRates(convertedExcel),
                 PriceListOtherRates = BuildPriceListOtherRates(convertedExcel),
                 PriceListServices = BuildPriceListFlaggedServices(convertedExcel),
@@ -74,91 +75,101 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
         private List<PriceListCode> BuildPriceListCodes(ConvertedExcel convertedExcel)
         {
             List<PriceListCode> priceListCodes = new List<PriceListCode>();
-            ConvertedExcelList CodeConvertedExcelList;
-            if (convertedExcel.Lists.TryGetValue("CodeList", out CodeConvertedExcelList))
+            ConvertedExcelList codeConvertedExcelList;
+            if (convertedExcel.Lists.TryGetValue("CodeList", out codeConvertedExcelList))
             {
-                foreach (var obj in CodeConvertedExcelList.Records)
+                priceListCodes.AddRange(this.GetPricelistCodes(codeConvertedExcelList.Records));
+            }
+            return priceListCodes;
+        }
+
+        private List<PriceListCode> BuildFilteredPriceListCodes(ConvertedExcel convertedExcel)
+        {
+            List<PriceListCode> priceListCodes = new List<PriceListCode>();
+            ConvertedExcelList codeConvertedExcelList;
+            if (convertedExcel.Lists.TryGetValue("CodeList", out codeConvertedExcelList))
+            {
+                priceListCodes.AddRange(this.GetPricelistCodes(codeConvertedExcelList.FilteredRecords));
+            }
+            return priceListCodes;
+        }
+
+        private List<PriceListCode> GetPricelistCodes(List<ConvertedExcelRecord> excelRecords)
+        {
+            List<PriceListCode> priceListCodes = new List<PriceListCode>();
+
+            foreach (var record in excelRecords)
+            {
+                ConvertedExcelField zoneField;
+                ConvertedExcelField codeField;
+                ConvertedExcelField codeEffectiveDateField;
+                DateTime? result = null;
+                ConvertedExcelField codeGroupField;
+                string codeGroup = null;
+                if (record.Fields.TryGetValue("CodeGroup", out codeGroupField))
                 {
-                    ConvertedExcelField zoneField;
-                    ConvertedExcelField codeField;
-                    ConvertedExcelField codeEffectiveDateField;
-                    DateTime? result = null;
-                    ConvertedExcelField codeGroupField;
-                    string codeGroup = null;
-                    if (obj.Fields.TryGetValue("CodeGroup", out codeGroupField))
-                    {
-                        if (codeGroupField.FieldValue == null || String.IsNullOrWhiteSpace(codeGroupField.FieldValue.ToString()))
-                            throw new Vanrise.Entities.VRBusinessException(string.Format("A code group is missing"));
-                        
-                        codeGroup = codeGroupField.FieldValue.ToString();
-                    };
-                    if (obj.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
-                    {
-                        if (codeEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(codeEffectiveDateField.FieldValue.ToString()))
-                            result = Convert.ToDateTime(codeEffectiveDateField.FieldValue).Date;
-                    };
-                    if (obj.Fields.TryGetValue("Zone", out zoneField))
-                    {
-                        string zone = null;
-                        if (zoneField.FieldValue != null && !String.IsNullOrWhiteSpace(zoneField.FieldValue.ToString()))
-                            zone = zoneField.FieldValue.ToString();
+                    if (codeGroupField.FieldValue == null || String.IsNullOrWhiteSpace(codeGroupField.FieldValue.ToString()))
+                        throw new Vanrise.Entities.VRBusinessException(string.Format("A code group is missing"));
 
-                        if (obj.Fields.TryGetValue("Code", out codeField))
+                    codeGroup = codeGroupField.FieldValue.ToString();
+                };
+                if (record.Fields.TryGetValue("EffectiveDate", out codeEffectiveDateField))
+                {
+                    if (codeEffectiveDateField.FieldValue != null && !String.IsNullOrWhiteSpace(codeEffectiveDateField.FieldValue.ToString()))
+                        result = Convert.ToDateTime(codeEffectiveDateField.FieldValue).Date;
+                };
+                if (record.Fields.TryGetValue("Zone", out zoneField))
+                {
+                    string zone = null;
+                    if (zoneField.FieldValue != null && !String.IsNullOrWhiteSpace(zoneField.FieldValue.ToString()))
+                        zone = zoneField.FieldValue.ToString();
+
+                    if (record.Fields.TryGetValue("Code", out codeField))
+                    {
+                        if (codeField.FieldValue == null || String.IsNullOrWhiteSpace(codeField.FieldValue.ToString()))
                         {
-                            if (codeField.FieldValue == null || String.IsNullOrWhiteSpace(codeField.FieldValue.ToString()))
+                            priceListCodes.Add(new PriceListCode
                             {
-                                priceListCodes.Add(new PriceListCode
-                                {
-                                    ZoneName = zone,
-                                    Code = codeGroup != null ? codeGroup : null,
-                                    EffectiveDate = result
-                                });
-                                continue;
-                            }
-                            string code = codeField.FieldValue.ToString();
-                            if (this.CodeLayout == CodeLayout.Delimitedcode)
+                                ZoneName = zone,
+                                Code = codeGroup != null ? codeGroup : null,
+                                EffectiveDate = result
+                            });
+                            continue;
+                        }
+                        string code = codeField.FieldValue.ToString();
+                        if (this.CodeLayout == CodeLayout.Delimitedcode)
+                        {
+                            var codesObj = code.Trim().Split(this.Delimiter).ToList();
+                            foreach (string codeValue in codesObj)
                             {
-                                var codesObj = code.Trim().Split(this.Delimiter).ToList();
-                                foreach (string codeValue in codesObj)
+                                string codeValueTrimmed = codeValue.Trim();
+                                if (codeValueTrimmed == string.Empty)
+                                    continue;
+                                if (this.HasCodeRange)
                                 {
-                                    string codeValueTrimmed = codeValue.Trim();
-                                    if (codeValueTrimmed == string.Empty)
-                                        continue;
-                                    if (this.HasCodeRange)
+                                    var rangeCode = codeValueTrimmed.Split(this.RangeSeparator);
+                                    if (rangeCode.Length > 0)
                                     {
-                                        var rangeCode = codeValueTrimmed.Split(this.RangeSeparator);
-                                        if (rangeCode.Length > 0)
+                                        long firstCode;
+                                        long lastCode;
+                                        if (long.TryParse(rangeCode.FirstOrDefault(), out firstCode) && long.TryParse(rangeCode.LastOrDefault(), out lastCode))
                                         {
-                                            long firstCode;
-                                            long lastCode;
-                                            if (long.TryParse(rangeCode.FirstOrDefault(), out firstCode) && long.TryParse(rangeCode.LastOrDefault(), out lastCode))
+                                            while (firstCode <= lastCode)
                                             {
-                                                while (firstCode <= lastCode)
+                                                string increasedCode = (firstCode++).ToString().Trim();
+                                                priceListCodes.Add(new PriceListCode
                                                 {
-                                                    string increasedCode = (firstCode++).ToString().Trim();
-                                                    priceListCodes.Add(new PriceListCode
-                                                    {
-                                                        Code = codeGroup != null ? string.Concat(codeGroup, increasedCode) : increasedCode,
-                                                        EffectiveDate = result,
-                                                        ZoneName = zone,
-                                                    });
-                                                }
+                                                    Code = codeGroup != null ? string.Concat(codeGroup, increasedCode) : increasedCode,
+                                                    EffectiveDate = result,
+                                                    ZoneName = zone,
+                                                });
                                             }
-                                            else
-                                            {
-                                                throw new NullReferenceException("Invalid code due to a wrong range separator.");
-                                            }
-
                                         }
                                         else
                                         {
-                                            priceListCodes.Add(new PriceListCode
-                                            {
-                                                Code = codeGroup != null ? string.Concat(codeGroup, codeValueTrimmed) : codeValueTrimmed,
-                                                EffectiveDate = result,
-                                                ZoneName = zone,
-                                            });
+                                            throw new NullReferenceException("Invalid code due to a wrong range separator.");
                                         }
+
                                     }
                                     else
                                     {
@@ -170,22 +181,33 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                         });
                                     }
                                 }
-                            }
-                            else
-                            {
-                                priceListCodes.Add(new PriceListCode
+                                else
                                 {
-                                    Code = codeGroup != null ? string.Concat(codeGroup, code) : code,
-                                    EffectiveDate = result,
-                                    ZoneName = zone,
-                                });
+                                    priceListCodes.Add(new PriceListCode
+                                    {
+                                        Code = codeGroup != null ? string.Concat(codeGroup, codeValueTrimmed) : codeValueTrimmed,
+                                        EffectiveDate = result,
+                                        ZoneName = zone,
+                                    });
+                                }
                             }
+                        }
+                        else
+                        {
+                            priceListCodes.Add(new PriceListCode
+                            {
+                                Code = codeGroup != null ? string.Concat(codeGroup, code) : code,
+                                EffectiveDate = result,
+                                ZoneName = zone,
+                            });
                         }
                     }
                 }
             }
+
             return priceListCodes;
         }
+
         private List<PriceListRate> BuildPriceListRates(ConvertedExcel convertedExcel)
         {
             List<PriceListRate> priceListRates = new List<PriceListRate>();
