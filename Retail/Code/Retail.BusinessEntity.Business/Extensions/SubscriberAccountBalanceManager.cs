@@ -30,7 +30,7 @@ namespace Retail.BusinessEntity.Business
             account.ThrowIfNull("account", context.AccountId);
 
             Vanrise.Entities.VRAccountStatus status = Vanrise.Entities.VRAccountStatus.InActive;
-            if (accountBEManager.IsAccountActive(account))
+            if (accountBEManager.IsAccountBalanceActive(account))
             {
                 status = Vanrise.Entities.VRAccountStatus.Active;
             }

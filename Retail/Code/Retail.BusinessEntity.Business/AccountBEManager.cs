@@ -580,6 +580,10 @@ namespace Retail.BusinessEntity.Business
                 throw new Exception(string.Format("Account {0} does not have currency", account.AccountId));
             return currencyId;
         }
+   
+
+        #region Account Status
+
         public bool IsAccountActive(Guid accountBEDefinitionId, long accountId)
         {
 
@@ -596,6 +600,38 @@ namespace Retail.BusinessEntity.Business
                 return true;
             return false;
         }
+        public bool IsAccountBalanceActive(Guid accountBEDefinitionId, long accountId)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            account.ThrowIfNull("account", accountId);
+            return IsAccountBalanceActive(account);
+        }
+        public bool IsAccountBalanceActive(Account account)
+        {
+            var accountStatusDefinition = new Vanrise.Common.Business.StatusDefinitionManager().GetStatusDefinition(account.StatusId);
+            accountStatusDefinition.ThrowIfNull("accountStatusDefinition", account.StatusId);
+            accountStatusDefinition.Settings.ThrowIfNull("account.Settings");
+            if (accountStatusDefinition.Settings.IsAccountBalanceActive)
+                return true;
+            return false;
+        }
+        public bool IsAccountInvoiceActive(Guid accountBEDefinitionId, long accountId)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            account.ThrowIfNull("account", accountId);
+            return IsAccountInvoiceActive(account);
+        }
+        public bool IsAccountInvoiceActive(Account account)
+        {
+            var accountStatusDefinition = new Vanrise.Common.Business.StatusDefinitionManager().GetStatusDefinition(account.StatusId);
+            accountStatusDefinition.ThrowIfNull("accountStatusDefinition", account.StatusId);
+            accountStatusDefinition.Settings.ThrowIfNull("account.Settings");
+            if (accountStatusDefinition.Settings.IsInvoiceActive)
+                return true;
+            return false;
+        }
+        #endregion
+
 
         /// <summary>
         /// this method is called from the data transformation

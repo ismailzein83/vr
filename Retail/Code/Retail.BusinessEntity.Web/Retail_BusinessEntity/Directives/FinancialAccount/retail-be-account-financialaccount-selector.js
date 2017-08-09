@@ -60,7 +60,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
             var status;
             var effectiveDate;
             var isEffectiveInFuture;
-
+            var filter;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -89,7 +89,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                 AccountIds: accountIds,
                                 Status: status,
                                 EffectiveDate: effectiveDate,
-                                IsEffectiveInFuture: isEffectiveInFuture
+                                IsEffectiveInFuture: isEffectiveInFuture,
                             },
                             setItemsSelected : true
                         };
@@ -118,6 +118,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                         status = payload.status;
                         effectiveDate = payload.effectiveDate;
                         isEffectiveInFuture = payload.isEffectiveInFuture;
+                        filter = payload.filter;
                     }
 
                     var promises = [];
@@ -162,7 +163,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                     AccountIds: accountIds,
                                     Status: status,
                                     EffectiveDate: effectiveDate,
-                                    IsEffectiveInFuture: isEffectiveInFuture
+                                    IsEffectiveInFuture: isEffectiveInFuture,
                                 },
                                 setItemsSelected: true
                             };
@@ -174,18 +175,20 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                       promises.push(loadAccountSelector());
 
                     function loadAccountSelector(accountSelectedIds) {
+                        var accountSelectorFilter = filter != undefined ? filter : {};
+                        if (accountSelectorFilter.Filters == undefined)
+                            accountSelectorFilter.Filters = [];
                         var selectorPayload = {
                             AccountBEDefinitionId: accountBEDefinitionId,
-                            filter: {
-                                Filters: [{
-                                    $type: "Retail.BusinessEntity.Business.FinancialAccountBEFilter, Retail.BusinessEntity.Business",
-                                    Status: status,
-                                    EffectiveDate: effectiveDate,
-                                    IsEffectiveInFuture: isEffectiveInFuture
-                                }],
-                            },
-                            selectedIds:accountSelectedIds
+                            selectedIds: accountSelectedIds,
+                            filter: accountSelectorFilter
                         };
+                        selectorPayload.filter.Filters.push({
+                            $type: "Retail.BusinessEntity.Business.FinancialAccountBEFilter, Retail.BusinessEntity.Business",
+                            Status: status,
+                            EffectiveDate: effectiveDate,
+                            IsEffectiveInFuture: isEffectiveInFuture
+                        });
                         return accountSelectorAPI.load(selectorPayload);
                     }
 

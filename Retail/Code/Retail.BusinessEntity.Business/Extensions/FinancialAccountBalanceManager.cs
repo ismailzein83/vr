@@ -35,8 +35,8 @@ namespace Retail.BusinessEntity.Business
             financialAccountData.Account.ThrowIfNull("financialAccountData.Account", context.AccountId);
             Vanrise.Entities.VRAccountStatus status =Vanrise.Entities.VRAccountStatus.InActive;
             AccountBEManager accountBEManager = new AccountBEManager();
-          
-            if( accountBEManager.IsAccountActive( financialAccountData.Account))
+
+            if (accountBEManager.IsAccountBalanceActive(financialAccountData.Account))
             {
                 status = Vanrise.Entities.VRAccountStatus.Active;
             }

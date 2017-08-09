@@ -124,7 +124,13 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
                             selectedIds: selectedIds,
                             status : status,
                             effectiveDate :effectiveDate,
-                            isEffectiveInFuture : isEffectiveInFuture,
+                            isEffectiveInFuture: isEffectiveInFuture,
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.BusinessEntity.Business.Filters.AccountInvoiceStatusFilter ,Retail.BusinessEntity.Business",
+                                    Status: status
+                                }]
+                            }
                         };
                         return financialAccountSelectorAPI.load(financialAccountPayload);
                     }

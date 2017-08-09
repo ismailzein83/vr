@@ -14,5 +14,15 @@ namespace Retail.BusinessEntity.Entities
         public VRAccountStatus? Status { get; set; }
         public DateTime? EffectiveDate { get; set; }
         public bool? IsEffectiveInFuture { get; set; }
+        public List<IFinancialAccountFilter> Filters { get; set; }
+    }
+    public interface IFinancialAccountFilter
+    {
+        bool IsMatched(IFinancialAccountFilterContext context);
+    }
+    public interface IFinancialAccountFilterContext
+    {
+         Guid AccountBEDefinitionId { get; set; }
+         long AccountId { get; set; }
     }
 }

@@ -259,6 +259,7 @@ namespace Retail.BusinessEntity.Business
                             switch (filter.Status.Value)
                             {
                                 case VRAccountStatus.Active:
+                                   
                                     if (filter.IsEffectiveInFuture.HasValue)
                                     {
                                         if (filter.IsEffectiveInFuture.Value)
@@ -276,6 +277,17 @@ namespace Retail.BusinessEntity.Business
                                 case VRAccountStatus.InActive:
                                     break;
                             }
+                        }
+
+                        if(filter.Filters != null)
+                        {
+                            FinancialAccountFilterContext context = new FinancialAccountFilterContext
+                            {
+                                AccountBEDefinitionId = accountBEDefinitionId,
+                                AccountId = accountId
+                            };
+                            if (!filter.Filters.Any(y => y.IsMatched(context)))
+                                return false;
                         }
                         return true;
                     };
@@ -661,7 +673,7 @@ namespace Retail.BusinessEntity.Business
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             var financialAccountId = GetFinancialAccountId(accountId, financialAccount.SequenceNumber);
 
-            if (s_accountManager.IsAccountActive(accountBEDefinitionId, accountId))
+            if (s_accountManager.IsAccountInvoiceActive(accountBEDefinitionId, accountId))
             {
                 vrAccountStatus = VRAccountStatus.Active;
 

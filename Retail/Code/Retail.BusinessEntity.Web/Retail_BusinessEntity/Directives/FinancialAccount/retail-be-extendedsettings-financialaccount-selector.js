@@ -83,6 +83,7 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
                             status: status,
                             effectiveDate: effectiveDate,
                             isEffectiveInFuture: isEffectiveInFuture,
+                           
                         };
                         if (extendedSettings != undefined)
                             selectorPayload.AccountBEDefinitionId = extendedSettings.AccountBEDefinitionId;
@@ -110,7 +111,12 @@ app.directive('retailBeExtendedsettingsFinancialaccountSelector', ['UtilsService
                 var financialAccounts = {
                     $type: 'Retail.BusinessEntity.Business.AccountBalanceEnabledAccountFilter, Retail.BusinessEntity.Business',
                 };
-                filter.Filters.push(financialAccounts);
+                var financialAccountStatus = {
+                    $type: "Retail.BusinessEntity.Business.Filters.AccountBalanceStatusFilter ,Retail.BusinessEntity.Business",
+                    Status: status
+                };
+            filter.Filters.push(financialAccounts);
+            filter.Filters.push(financialAccountStatus);
                 return filter;
             }
             this.initializeController = initializeController;
