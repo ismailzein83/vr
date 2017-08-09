@@ -240,7 +240,12 @@ namespace Vanrise.AccountBalance.Business
             accountTypeSettings.ThrowIfNull("accountTypeSettings", accountTypeId);
             return accountTypeSettings.ShouldGroupUsagesByTransactionType;
         }
-
+        public bool ShouldExcludeUsageFromStatement(Guid accountTypeId)
+        {
+            AccountTypeSettings accountTypeSettings = GetAccountTypeSettings(accountTypeId);
+            accountTypeSettings.ThrowIfNull("accountTypeSettings", accountTypeId);
+            return accountTypeSettings.ExcludeUsageFromStatement;
+        }
         #endregion
 
         #region Private Methods

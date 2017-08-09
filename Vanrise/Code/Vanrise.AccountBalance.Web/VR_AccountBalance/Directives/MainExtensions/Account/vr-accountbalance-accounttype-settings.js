@@ -121,6 +121,9 @@ function (UtilsService, VRUIUtilsService, VR_AccountBalance_AccountTypeAPIServic
         function loadAllControls() {
             if (accountTypeEntity != undefined) {
                 $scope.scopeModel.name = accountTypeEntity.Name;
+
+                if (accountTypeEntity.Settings != undefined)
+                    $scope.scopeModel.excludeUsageFromStatement = accountTypeEntity.Settings.ExcludeUsageFromStatement;
             }
         }
         function loadRelationDefinitionSelector() {
@@ -241,7 +244,8 @@ function (UtilsService, VRUIUtilsService, VR_AccountBalance_AccountTypeAPIServic
                 },
                 InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds(),
                 AllowedBillingTransactionTypeIds: billingTransactionTypeSelectorAPI.getSelectedIds(),
-                ShouldGroupUsagesByTransactionType: $scope.scopeModel.shouldGroupUsagesByTransactionType
+                ShouldGroupUsagesByTransactionType: $scope.scopeModel.shouldGroupUsagesByTransactionType,
+                ExcludeUsageFromStatement: $scope.scopeModel.excludeUsageFromStatement
             };
         }
         function getBalancePeriodSettings() {

@@ -38,10 +38,10 @@ namespace Vanrise.AccountBalance.Business
 
                 int accountCurrencyId = accountInfo.CurrencyId;
                 _currencyName = new CurrencyManager().GetCurrencySymbol(accountCurrencyId);
-
-                bool shouldGroupUsagesByTransactionType = new AccountTypeManager().ShouldGroupUsagesByTransactionType(input.Query.AccountTypeId);
-
-                return BuildAccountStatementItems(input.Query.AccountTypeId, input.Query.AccountId, input.Query.FromDate, accountCurrencyId, shouldGroupUsagesByTransactionType,input.Query.Status, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture);
+                AccountTypeManager accountTypeManager = new Business.AccountTypeManager();
+                bool shouldGroupUsagesByTransactionType = accountTypeManager.ShouldGroupUsagesByTransactionType(input.Query.AccountTypeId);
+                bool excludeUsageFromStatement = accountTypeManager.ShouldExcludeUsageFromStatement(input.Query.AccountTypeId);
+                return BuildAccountStatementItems(input.Query.AccountTypeId, input.Query.AccountId, input.Query.FromDate, accountCurrencyId, shouldGroupUsagesByTransactionType, input.Query.Status, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, excludeUsageFromStatement);
             }
 
             protected override BigResult<AccountStatementItem> AllRecordsToBigResult(DataRetrievalInput<AccountStatementQuery> input, IEnumerable<AccountStatementItem> allRecords)
@@ -78,12 +78,18 @@ namespace Vanrise.AccountBalance.Business
 
             #region Private Methods
 
-            private List<AccountStatementItem> BuildAccountStatementItems(Guid accountTypeId, String accountId, DateTime fromDate, int accountCurrencyId, bool shouldGroupUsagesByTransactionType,VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
+            private List<AccountStatementItem> BuildAccountStatementItems(Guid accountTypeId, String accountId, DateTime fromDate, int accountCurrencyId, bool shouldGroupUsagesByTransactionType, VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture, bool excludeUsageFromStatement)
             {
                 var transactionManager = new BillingTransactionManager();
                 IEnumerable<BillingTransaction> transactions = transactionManager.GetBillingTransactionsByAccountId(accountTypeId, accountId, status, effectiveDate, isEffectiveInFuture);
 
-                IEnumerable<AccountUsage> accountUsages = new AccountUsageManager().GetAccountUsagesByAccount(accountTypeId, accountId, status,effectiveDate,isEffectiveInFuture);
+                IEnumerable<AccountUsage> accountUsages = null;
+                if(!excludeUsageFromStatement)
+                {
+                   accountUsages  = new AccountUsageManager().GetAccountUsagesByAccount(accountTypeId, accountId, status,effectiveDate,isEffectiveInFuture);
+                }
+
+
                 IEnumerable<BillingTransaction> convertedTransactions = transactionManager.ConvertAccountUsagesToBillingTransactions(accountUsages, shouldGroupUsagesByTransactionType);
 
                 var allTransactions = new List<BillingTransaction>();

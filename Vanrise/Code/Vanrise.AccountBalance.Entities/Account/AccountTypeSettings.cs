@@ -24,6 +24,7 @@ namespace Vanrise.AccountBalance.Entities
         public List<AccountBalanceFieldSource> Sources { get; set; }
         public AccountTypeSecurity Security { get; set; }
         public TimeSpan TimeOffset { get; set; }
+        public bool ExcludeUsageFromStatement { get; set; }
         public Guid? InvToAccBalanceRelationId { get; set; }
         public IEnumerable<Guid> AllowedBillingTransactionTypeIds { get; set; }
         public bool ShouldGroupUsagesByTransactionType { get; set; }

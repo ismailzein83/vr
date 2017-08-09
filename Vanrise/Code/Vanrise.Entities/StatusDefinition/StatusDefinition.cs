@@ -22,5 +22,7 @@ namespace Vanrise.Entities
 
         public bool HasRecurringCharge { get; set; }
         public bool IsActive { get; set; }
+        public bool IsInvoiceActive { get; set; }
+        public bool IsAccountBalanceActive { get; set; }
     }
 }

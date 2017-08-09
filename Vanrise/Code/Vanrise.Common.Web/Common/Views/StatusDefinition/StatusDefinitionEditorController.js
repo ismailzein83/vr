@@ -100,6 +100,9 @@
                 $scope.scopeModel.HasInitialCharge = statusDefinitionEntity.Settings.HasInitialCharge;
                 $scope.scopeModel.HasRecurringCharge = statusDefinitionEntity.Settings.HasRecurringCharge;
                 $scope.scopeModel.isActive = statusDefinitionEntity.Settings.IsActive;
+                $scope.scopeModel.isInvoiceActive = statusDefinitionEntity.Settings.IsInvoiceActive;
+                $scope.scopeModel.isAccountBalanceActive = statusDefinitionEntity.Settings.IsAccountBalanceActive;
+
             }
             function loadStyleDefinitionSelector() {
                 var styleDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -172,7 +175,9 @@
                 StyleDefinitionId: styleDefinitionAPI.getSelectedIds(),
                 HasInitialCharge: $scope.scopeModel.HasInitialCharge,
                 HasRecurringCharge: $scope.scopeModel.HasRecurringCharge,
-                IsActive: $scope.scopeModel.isActive
+                IsActive: $scope.scopeModel.isActive,
+                IsInvoiceActive: $scope.scopeModel.isInvoiceActive,
+                IsAccountBalanceActive: $scope.scopeModel.isAccountBalanceActive
             };
             return {
                 StatusDefinitionId: statusDefinitionEntity != undefined ? statusDefinitionEntity.StatusDefinitionId : undefined,
