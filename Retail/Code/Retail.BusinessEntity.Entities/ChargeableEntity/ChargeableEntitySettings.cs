@@ -8,5 +8,6 @@ namespace Retail.BusinessEntity.Entities
 {
     public class ChargeableEntitySettings : Vanrise.Entities.GenericLKUPItemExtendedSettings
     {
+        public Guid? TransactionTypeId { get; set; }
     }
 }
