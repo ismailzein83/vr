@@ -13,6 +13,9 @@
         var carrierAccountSelectorApi;
         var carrierAccountSelectorReadyDeferred = utilsService.createPromiseDeferred();
 
+        var salePricelistTypeSelectorApi;
+        var salePricelistTypeSelectorReadyDeferred = utilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -24,6 +27,11 @@
             $scope.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorApi = api;
                 carrierAccountSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onSalePricelistTypeSelectorReady = function (api) {
+                salePricelistTypeSelectorApi = api;
+                salePricelistTypeSelectorReadyDeferred.resolve();
             };
 
             $scope.onGridReady = function (api) {
@@ -41,7 +49,7 @@
 
         function loadAllControls() {
             $scope.isLoadingFilter = true;
-            return utilsService.waitMultipleAsyncOperations([loadCarrierAccount])
+            return utilsService.waitMultipleAsyncOperations([loadCarrierAccount,loadSalePricelistType])
               .catch(function (error) {
                   vrNotificationService.notifyExceptionWithClose(error, $scope);
               })
@@ -61,6 +69,14 @@
             });
             return carrierAccountSelectorLoadDeferred.promise;
         }
+        function loadSalePricelistType() {
+            var salePricelistTypeSelectorLoadDeferred = utilsService.createPromiseDeferred();
+            salePricelistTypeSelectorReadyDeferred.promise.then(function () {
+                var payload = {};
+                vruiUtilsService.callDirectiveLoad(salePricelistTypeSelectorApi, payload, salePricelistTypeSelectorLoadDeferred);
+            });
+            return salePricelistTypeSelectorLoadDeferred.promise;
+        }
         function loadSalePriceListGrid() {
             setGridQuery();
 
@@ -75,7 +91,8 @@
         function setGridQuery() {
             gridQuery = {
                 OwnerId: carrierAccountSelectorApi.getSelectedIds(),
-                CreationDate: $scope.CreationDate
+                CreationDate: $scope.CreationDate,
+                SalePricelistTypes: salePricelistTypeSelectorApi.getSelectedIds()
             };
         }
         function setGridContext() {

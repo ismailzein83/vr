@@ -8,5 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int? OwnerId { get; set; }
         public DateTime? CreationDate { get; set; }
         public IEnumerable<int> IncludedSalePriceListIds { get; set; }
+        public IEnumerable<SalePriceListType> SalePricelistTypes { get; set; }
     }
 }

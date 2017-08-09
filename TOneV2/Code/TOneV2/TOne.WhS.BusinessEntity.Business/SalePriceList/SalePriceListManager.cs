@@ -150,6 +150,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 if (input.Query.IncludedSalePriceListIds != null && !input.Query.IncludedSalePriceListIds.Contains(salePriceList.PriceListId))
                     return false;
+                if (input.Query.SalePricelistTypes != null && salePriceList.PriceListType == null)
+                    return false;
+                if (input.Query.SalePricelistTypes != null && salePriceList.PriceListType != null &&!input.Query.SalePricelistTypes.Contains(salePriceList.PriceListType.Value))
+                    return false;
+                
                 return true;
             };
 
@@ -157,7 +162,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SalePriceListExportExcelHandler()
             };
-
+                
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceLists.ToBigResult(input, filterExpression, SalePricelistDetailMapper), resultProcessingHandler);
         }
         public SalePriceList GetPriceList(int priceListId)
