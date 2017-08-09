@@ -27,7 +27,6 @@ namespace Vanrise.GenericData.Entities
         dynamic GetFieldValue(string fieldName);
     }
 
-
     public interface IDataRecordFieldFormulaConvertFilterContext : IDataRecordFieldFormulaContext
     {
         RecordFilter InitialFilter { get; }
