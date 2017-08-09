@@ -96,6 +96,7 @@
     <Compile Include="InvoiceType\InvoiceFieldInfo.cs" />
     <Compile Include="InvoiceType\InvoiceFileConverter.cs" />
     <Compile Include="InvoiceType\EffectivePartnerInvoiceSetting.cs" />
+    <Compile Include="InvoiceType\InvoiceSettingParts\AutomaticInvoiceActionsPart.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\AutomaticInvoiceSettingPart.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\AutomaticInvoiceSettingPartRuntime.cs" />
     <Compile Include="InvoiceType\InvoiceSettingParts\BillingPeriodInvoiceSettingPart.cs" />

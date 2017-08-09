@@ -169,6 +169,7 @@
         function getContext()
         {
             var requiredBillingPeriod = false;
+            var isAutomaticInvoiceActionsShown = false;
             var context = {
                 setRequiredBillingPeriod:function(value)
                 {
@@ -177,6 +178,14 @@
                 isBillingPeriodRequired : function()
                 {
                     return requiredBillingPeriod;
+                },
+                setAutomaticInvoiceActionsVisibility: function (value)
+                {
+                    isAutomaticInvoiceActionsShown = value;
+                },
+                isAutomaticInvoiceActionsShown: function ()
+                {
+                    return isAutomaticInvoiceActionsShown;
                 }
             };
             return context;

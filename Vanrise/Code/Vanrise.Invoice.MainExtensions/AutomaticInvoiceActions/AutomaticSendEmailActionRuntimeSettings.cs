@@ -35,59 +35,63 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
 
                 foreach (var emailActionAttachmentSet in EmailActionAttachmentSets)
                 {
-                    List<VRMailAttachement> vrMailAttachments = new List<VRMailAttachement>();
-                    invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
-                    var emailActionAttachmentSetDefinition = automaticSendEmailActionSettings.EmailActionAttachmentSets.FindRecord(x => x.EmailActionAttachmentSetId == emailActionAttachmentSet.EmailActionAttachmentSetId);
-                    var partnerInvoiceFilterConditionContext = new PartnerInvoiceFilterConditionContext
+                    if(emailActionAttachmentSet.IsEnabled)
                     {
-                        InvoiceType = invoiceType,
-                        generateInvoiceInput = new GenerateInvoiceInput
+                        List<VRMailAttachement> vrMailAttachments = new List<VRMailAttachement>();
+                        invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
+                        var emailActionAttachmentSetDefinition = automaticSendEmailActionSettings.EmailActionAttachmentSets.FindRecord(x => x.EmailActionAttachmentSetId == emailActionAttachmentSet.EmailActionAttachmentSetId);
+                        var partnerInvoiceFilterConditionContext = new PartnerInvoiceFilterConditionContext
                         {
-                            InvoiceTypeId = context.Invoice.InvoiceTypeId,
-                            IssueDate = context.Invoice.IssueDate,
-                            PartnerId = context.Invoice.PartnerId,
-                            FromDate = context.Invoice.FromDate,
-                            ToDate = context.Invoice.ToDate,
-                            TimeZoneId = context.Invoice.TimeZoneId
-                        }
-                    };
-                    if (emailActionAttachmentSetDefinition.FilterCondition == null || emailActionAttachmentSetDefinition.FilterCondition.IsFilterMatch(partnerInvoiceFilterConditionContext))
-                    {
-                        if (emailActionAttachmentSet.Attachments != null)
-                        {
-                            invoiceType.Settings.InvoiceAttachments.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
-                            foreach (var attachment in emailActionAttachmentSet.Attachments)
+                            InvoiceType = invoiceType,
+                            generateInvoiceInput = new GenerateInvoiceInput
                             {
-                                var invoiceAttachment = invoiceType.Settings.InvoiceAttachments.FindRecord(x => x.InvoiceAttachmentId == attachment.AttachmentId);
-                                invoiceAttachment.ThrowIfNull("invoiceAttachment", attachment.AttachmentId);
-                                invoiceAttachment.InvoiceFileConverter.ThrowIfNull("invoiceAttachment.InvoiceFileConverter");
-                                InvoiceRDLCFileConverterContext invoiceRDLCFileConverterContext = new InvoiceRDLCFileConverterContext
+                                InvoiceTypeId = context.Invoice.InvoiceTypeId,
+                                IssueDate = context.Invoice.IssueDate,
+                                PartnerId = context.Invoice.PartnerId,
+                                FromDate = context.Invoice.FromDate,
+                                ToDate = context.Invoice.ToDate,
+                                TimeZoneId = context.Invoice.TimeZoneId
+                            }
+                        };
+                        if (emailActionAttachmentSetDefinition.FilterCondition == null || emailActionAttachmentSetDefinition.FilterCondition.IsFilterMatch(partnerInvoiceFilterConditionContext))
+                        {
+                            if (emailActionAttachmentSet.Attachments != null)
+                            {
+                                invoiceType.Settings.InvoiceAttachments.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
+                                foreach (var attachment in emailActionAttachmentSet.Attachments)
                                 {
-                                    InvoiceId = context.Invoice.InvoiceId,
-                                };
-                                var invoicefile = invoiceAttachment.InvoiceFileConverter.ConvertToInvoiceFile(invoiceRDLCFileConverterContext);
-                                if (invoicefile != null)
-                                {
-                                    vrMailAttachments.Add(invoicefile.ConvertToAttachment());
+                                    var invoiceAttachment = invoiceType.Settings.InvoiceAttachments.FindRecord(x => x.InvoiceAttachmentId == attachment.AttachmentId);
+                                    invoiceAttachment.ThrowIfNull("invoiceAttachment", attachment.AttachmentId);
+                                    invoiceAttachment.InvoiceFileConverter.ThrowIfNull("invoiceAttachment.InvoiceFileConverter");
+                                    InvoiceRDLCFileConverterContext invoiceRDLCFileConverterContext = new InvoiceRDLCFileConverterContext
+                                    {
+                                        InvoiceId = context.Invoice.InvoiceId,
+                                    };
+                                    var invoicefile = invoiceAttachment.InvoiceFileConverter.ConvertToInvoiceFile(invoiceRDLCFileConverterContext);
+                                    if (invoicefile != null)
+                                    {
+                                        vrMailAttachments.Add(invoicefile.ConvertToAttachment());
+                                    }
                                 }
                             }
+                            Guid mailMessageTemplateId;
+                            if (emailActionAttachmentSet.MailMessageTemplateId.HasValue)
+                            {
+                                mailMessageTemplateId = emailActionAttachmentSet.MailMessageTemplateId.Value;
+                            }
+                            else if (this.MailMessageTemplateId.HasValue)
+                            {
+                                mailMessageTemplateId = this.MailMessageTemplateId.Value;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                            var emailTemplateEvaluator = invoiceEmailActionManager.GetEmailTemplate(context.Invoice, mailMessageTemplateId);
+                            vrMailManager.SendMail(emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body, vrMailAttachments);
                         }
-                        Guid mailMessageTemplateId;
-                        if (emailActionAttachmentSet.MailMessageTemplateId.HasValue)
-                        {
-                            mailMessageTemplateId = emailActionAttachmentSet.MailMessageTemplateId.Value;
-                        }
-                        else if (this.MailMessageTemplateId.HasValue)
-                        {
-                            mailMessageTemplateId = this.MailMessageTemplateId.Value;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                        var emailTemplateEvaluator = invoiceEmailActionManager.GetEmailTemplate(context.Invoice, mailMessageTemplateId);
-                        vrMailManager.SendMail(emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body, vrMailAttachments);
                     }
+           
 
                 }
             }
@@ -99,6 +103,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
         public Guid EmailActionAttachmentSetId { get; set; }
         public List<EmailActionAttachmentRuntime> Attachments { get; set; }
         public Guid? MailMessageTemplateId { get; set; }
+        public bool IsEnabled { get; set; }
 
     }
     public class EmailActionAttachmentRuntime

@@ -1,0 +1,7 @@
+﻿<vr-columns colnum="12" ng-if="scopeModel.showAutomaticInvoiceActions()">
+    <vr-section ng-repeat="action in scopeModel.actions" title="{{action.title}}">
+        <vr-directivewrapper directive="action.runtimeEditor" on-ready="action.onDirectiveReady" vr-loader="scopeModel.isLoadingDirective"></vr-directivewrapper>
+    </vr-section>
+</vr-columns>
+
+

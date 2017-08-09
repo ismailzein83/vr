@@ -110,7 +110,8 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                     {
                         var emailAttachmentSet = {
                             SetName: emailAttachmentSetPayload.payload.Name,
-                            EmailActionAttachmentSetId :emailAttachmentSetPayload.payload.EmailActionAttachmentSetId,
+                            EmailActionAttachmentSetId: emailAttachmentSetPayload.payload.EmailActionAttachmentSetId,
+                            IsEnabled:emailAttachmentSetValuePayload!=undefined? emailAttachmentSetValuePayload.IsEnabled:undefined,
                         };
                         emailAttachmentSet.onInvoiceAttachmentSelectorReady = function (api) {
                             emailAttachmentSet.invoiceAttachmentSelectorAPI = api;
@@ -174,7 +175,8 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                         emailActionAttachmentSets.push({
                             EmailActionAttachmentSetId: emailActionAttachmentSet.Entity.EmailActionAttachmentSetId,
                             Attachments: attachments,
-                            MailMessageTemplateId: emailActionAttachmentSet.Entity.mailMessageTemplateSelectorAPI != undefined ? emailActionAttachmentSet.Entity.mailMessageTemplateSelectorAPI.getSelectedIds() : undefined
+                            MailMessageTemplateId: emailActionAttachmentSet.Entity.mailMessageTemplateSelectorAPI != undefined ? emailActionAttachmentSet.Entity.mailMessageTemplateSelectorAPI.getSelectedIds() : undefined,
+                            IsEnabled: emailActionAttachmentSet.Entity.IsEnabled
                         });
                     }
 
