@@ -9,6 +9,8 @@ using Vanrise.Entities;
 
 namespace Retail.MultiNet.Business
 {
+
+   
     public class MultiNetBranchExtendedInfo : AccountPartSettings
     {
         public static Guid _ConfigId = new Guid("C6582B11-E9A0-4326-BF3A-DC58E36C2C8E");
@@ -29,7 +31,8 @@ namespace Retail.MultiNet.Business
         public string TechnicalAddress { get; set; }
         public string OfficeAddress { get; set; }
         public string HomeAddress { get; set; }
-
+        public MultiNetAccountType? AccountType { get; set; }
+        public DateTime? CNICExpiryDate  { get; set; }
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
             switch (context.FieldName)
@@ -47,6 +50,9 @@ namespace Retail.MultiNet.Business
                 case "PIN": return this.PIN;
                 case "RefNumber": return this.RefNumber;
                 case "RegistrationNumber": return this.RegistrationNumber;
+                case "AccountType": return this.AccountType;
+                case "CNICExpiryDate": return this.CNICExpiryDate;
+
                 default: return null;
             }
         }

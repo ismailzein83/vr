@@ -104,7 +104,8 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                                 email: settings != undefined ? settings.Email : undefined,
                                 contactType: contactType.Name,
                                 disabledphone: true,
-                                phoneNumbers: settings != undefined ? phoneNumbers : []
+                                phoneNumbers: settings != undefined ? phoneNumbers : [],
+                                notes: settings != undefined ? settings.Notes : undefined
                             };
 
                             contact.onSalutationReady = function (api) {
@@ -171,7 +172,8 @@ app.directive('retailBeAccounttypePartRuntimeCompanyprofile', ["UtilsService", "
                             Title: contact.title,
                             Email: contact.email,
                             PhoneNumbers: contact.phoneNumbers,
-                            Salutation: contact.salutationAPI != undefined ? contact.salutationAPI.getSelectedIds() : undefined
+                            Salutation: contact.salutationAPI != undefined ? contact.salutationAPI.getSelectedIds() : undefined,
+                            Notes: contact.notes
                         };
                         if (obj != null)
                             contacts[contact.contactType] = obj;

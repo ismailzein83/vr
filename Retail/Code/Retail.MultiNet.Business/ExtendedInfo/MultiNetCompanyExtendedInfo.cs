@@ -23,6 +23,7 @@ namespace Retail.MultiNet.Business
         public string GPSiteID { get; set; }
         public bool ExcludeTaxes  { get; set; }
         public MultiNetAccountType? AccountType { get; set; }
+        public long CustomerLogo { get; set; }
 
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {

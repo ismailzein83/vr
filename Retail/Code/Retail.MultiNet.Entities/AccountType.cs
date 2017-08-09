@@ -14,7 +14,9 @@ namespace Retail.MultiNet.Entities
         [Description("POTS")]
         POTS = 1,
         [Description("IP Centrex")]
-        IPCentrex = 2
+        IPCentrex = 2,
+        [Description("Residential")]
+        Residential = 3
     }
 
 }

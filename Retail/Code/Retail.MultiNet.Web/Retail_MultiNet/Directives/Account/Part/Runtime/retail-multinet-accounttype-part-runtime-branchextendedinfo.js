@@ -20,13 +20,24 @@ app.directive('retailMultinetAccounttypePartRuntimeBranchextendedinfo', ["UtilsS
 
         this.initializeController = initializeController;
 
+        var accountTypeAPI;
+        var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         $scope.scopeModel = {};
+
+        $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
+            accountTypeAPI = api;
+            accountTypeSelectorReadyDeferred.resolve();
+        };
+       
         function initializeController() {
             defineAPI();
         }
         function defineAPI() {
             var api = {};
             api.load = function (payload) {
+                var promises = [];
+
                 if (payload != undefined && payload.partSettings != undefined) {
                     $scope.scopeModel.branchCode = payload.partSettings.BranchCode;
                     $scope.scopeModel.contractReferenceNumber = payload.partSettings.ContractReferenceNumber;
@@ -41,7 +52,24 @@ app.directive('retailMultinetAccounttypePartRuntimeBranchextendedinfo', ["UtilsS
                     $scope.scopeModel.technicalAddress = payload.partSettings.TechnicalAddress;
                     $scope.scopeModel.officeAddress = payload.partSettings.OfficeAddress;
                     $scope.scopeModel.homeAddress = payload.partSettings.HomeAddress;
+                    $scope.scopeModel.cNICExpiryDate = payload.partSettings.CNICExpiryDate;
                 }
+                promises.push(loadAccountTypeSelector());
+
+                function loadAccountTypeSelector() {
+                    var accountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    accountTypeSelectorReadyDeferred.promise.then(function () {
+                        var selectorPayload = {
+                            selectedIds: payload != undefined && payload.partSettings != undefined ? payload.partSettings.AccountType : undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(accountTypeAPI, selectorPayload, accountSelectorLoadDeferred);
+                    });
+                    return accountSelectorLoadDeferred.promise;
+                };
+
+
+                return UtilsService.waitMultiplePromises(promises);
+
             };
             api.getData = function () {
                 return {
@@ -58,7 +86,9 @@ app.directive('retailMultinetAccounttypePartRuntimeBranchextendedinfo', ["UtilsS
                     BillingAddress: $scope.scopeModel.billingAddress,
                     TechnicalAddress: $scope.scopeModel.technicalAddress,
                     OfficeAddress: $scope.scopeModel.officeAddress,
-                    HomeAddress: $scope.scopeModel.homeAddress
+                    HomeAddress: $scope.scopeModel.homeAddress,
+                    AccountType: accountTypeAPI.getSelectedIds(),
+                    CNICExpiryDate: $scope.scopeModel.cNICExpiryDate
                 }
             };
             if (ctrl.onReady != null)

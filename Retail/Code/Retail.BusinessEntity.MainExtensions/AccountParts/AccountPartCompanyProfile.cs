@@ -100,6 +100,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                 var contact = this.Contacts.GetRecord(namePart[0]);
                 return contact != null ? contact.Title : null;
             }
+            if (FieldName.Contains("Notes"))
+            {
+                List<string> namePart = FieldName.Split('_').ToList();
+                var contact = this.Contacts.GetRecord(namePart[0]);
+                return contact != null ? contact.Notes : null;
+            }
             else
                 return null;
         }
@@ -112,7 +118,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public string Email { get; set; }
         public List<string> PhoneNumbers { get; set; }
         public List<string> MobileNumbers { get; set; }
-        public SalutationType? Salutation { get; set; }      
+        public SalutationType? Salutation { get; set; }
+        public string Notes { get; set; }
     }
 
    
