@@ -50,7 +50,7 @@
                 api.load = function (payload) {
                     var promises = [];
 
-                    var dataRecordTypeId
+                    var dataRecordTypeId;
                     var recordAggregate;
 
                     if (payload != undefined) {
