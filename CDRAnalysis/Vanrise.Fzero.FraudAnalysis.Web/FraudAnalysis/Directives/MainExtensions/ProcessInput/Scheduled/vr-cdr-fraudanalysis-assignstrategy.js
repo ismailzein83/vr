@@ -42,7 +42,7 @@ app.directive("vrCdrFraudanalysisAssignstrategy", [ function () {
             var api = {};
             api.getData = function () {
                 return {
-                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.AssignStrategyExecutionCasesProcess, Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.AssignStrategyCasesProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments"
                 };
             };
             api.getExpressionsData = function () {

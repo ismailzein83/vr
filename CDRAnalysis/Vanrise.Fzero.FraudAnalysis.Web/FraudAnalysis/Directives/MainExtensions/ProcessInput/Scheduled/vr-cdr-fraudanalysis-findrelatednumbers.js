@@ -42,7 +42,7 @@ app.directive("vrCdrFraudanalysisFindrelatednumbers", [function () {
             var api = {};
             api.getData = function () {
                 return {
-                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcess, Vanrise.Fzero.FraudAnalysis.BP.Arguments"
+                    $type: "Vanrise.Fzero.FraudAnalysis.BP.Arguments.FindRelatedNumbersProcessInput, Vanrise.Fzero.FraudAnalysis.BP.Arguments"
                 };
             };
             api.getExpressionsData = function () {
