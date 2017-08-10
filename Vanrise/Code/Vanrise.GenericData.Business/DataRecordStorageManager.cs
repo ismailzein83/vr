@@ -41,27 +41,21 @@ namespace Vanrise.GenericData.Business
                 throw new NullReferenceException(String.Format("dataStore.Settings. Id '{0}'", dataRecordStorage.DataStoreId));
 
             var remoteRecordDataManager = dataStore.Settings.GetRemoteRecordDataManager(new GetRemoteRecordStorageDataManagerContext() { DataStore = dataStore, DataRecordStorage = dataRecordStorage });
-
             if (remoteRecordDataManager != null)
+            {
                 return remoteRecordDataManager.GetFilteredDataRecords(input);
+            }
             else
             {
-                if (input.Query.Columns == null)
-                    throw new NullReferenceException("input.Query.Columns");
-
+                input.Query.Columns.ThrowIfNull("input.Query.Columns");
                 input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
 
-                if (input.Query.ColumnTitles == null)
-                    throw new NullReferenceException("input.Query.ColumnTitles");
-
+                input.Query.ColumnTitles.ThrowIfNull("input.Query.ColumnTitles");
                 input.Query.ColumnTitles = new HashSet<string>(input.Query.ColumnTitles).ToList();
 
-                var recordTypeManager = new DataRecordTypeManager();
-                DataRecordType recordType = recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
-                if (recordType == null)
-                    throw new NullReferenceException(String.Format("recordType ID '{0}'", dataRecordStorage.DataRecordTypeId));
-                if (recordType.Fields == null)
-                    throw new NullReferenceException(String.Format("recordType.Fields ID '{0}'", dataRecordStorage.DataRecordTypeId));
+                DataRecordType recordType = new DataRecordTypeManager().GetDataRecordType(dataRecordStorage.DataRecordTypeId);
+                recordType.ThrowIfNull("recordType", dataRecordStorage.DataRecordTypeId);
+                recordType.Fields.ThrowIfNull("recordType.Fields", dataRecordStorage.DataRecordTypeId);
 
                 if (input.Query.FilterGroup != null)
                 {
@@ -74,6 +68,7 @@ namespace Vanrise.GenericData.Business
                     string[] fieldValueproperty = input.SortByColumnName.Split('.');
                     input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldValueproperty[0], fieldValueproperty[1], fieldValueproperty[2]);
                 }
+
                 return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler() { DataRecordTypeId = dataRecordStorage.DataRecordTypeId });
             }
         }
@@ -490,7 +485,6 @@ namespace Vanrise.GenericData.Business
             public Guid DataRecordTypeId { get; set; }
 
             private DataRecordType _recordType;
-
             private DataRecordType RecordType
             {
                 get
@@ -505,7 +499,6 @@ namespace Vanrise.GenericData.Business
             }
 
             private Dictionary<string, DataRecordField> _dataRecordFieldDict;
-
             private Dictionary<string, DataRecordField> DataRecordFieldDict
             {
                 get
@@ -519,7 +512,6 @@ namespace Vanrise.GenericData.Business
             }
 
             private Dictionary<string, DataRecordFieldType> _dataRecordFieldTypeDict;
-
             private Dictionary<string, DataRecordFieldType> DataRecordFieldTypeDict
             {
                 get
@@ -530,6 +522,27 @@ namespace Vanrise.GenericData.Business
                     }
                     return _dataRecordFieldTypeDict;
                 }
+            }
+
+            #region Public and Protected Methods
+
+            public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
+            {
+                Vanrise.Entities.DataRetrievalInput<DataRecordQuery> clonedInput = Vanrise.Common.Utilities.CloneObject<Vanrise.Entities.DataRetrievalInput<DataRecordQuery>>(input);
+                List<DataRecord> records = new List<DataRecord>();
+
+                if (clonedInput.Query.Columns != null && clonedInput.Query.Columns.Count > 0)
+                    clonedInput.Query.Columns.RemoveAll(itm => DataRecordFieldDict.GetRecord(itm).Formula != null);
+
+                foreach (Guid dataRecordStorageId in input.Query.DataRecordStorageIds)
+                {
+                    var result = GetDataRecords(clonedInput, dataRecordStorageId);
+                    if (result != null)
+                    {
+                        records.AddRange(result);
+                    }
+                }
+                return records.Count > 0 ? input.Query.Direction == OrderDirection.Ascending ? records.OrderBy(itm => itm.RecordTime).Take(input.Query.LimitResult) : records.OrderByDescending(itm => itm.RecordTime).Take(input.Query.LimitResult) : null;
             }
 
             public override DataRecordDetail EntityDetailMapper(DataRecord entity)
@@ -556,44 +569,15 @@ namespace Vanrise.GenericData.Business
                 return dataRecordDetail;
             }
 
-            private List<DataRecordDetail> DataRecordDetailMapperList(IEnumerable<DataRecord> dataRecords)
-            {
-                if (dataRecords == null)
-                    return null;
-
-                List<DataRecordDetail> result = new List<DataRecordDetail>();
-                foreach (DataRecord dataRecord in dataRecords)
-                    result.Add(EntityDetailMapper(dataRecord));
-
-                return result;
-            }
-            public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
-            {
-                Vanrise.Entities.DataRetrievalInput<DataRecordQuery> clonedInput = Vanrise.Common.Utilities.CloneObject<Vanrise.Entities.DataRetrievalInput<DataRecordQuery>>(input);
-                List<DataRecord> records = new List<DataRecord>();
-
-                if (clonedInput.Query.Columns != null && clonedInput.Query.Columns.Count > 0)
-                    clonedInput.Query.Columns.RemoveAll(itm => DataRecordFieldDict.GetRecord(itm).Formula != null);
-
-                foreach (Guid dataRecordStorageId in input.Query.DataRecordStorageIds)
-                {
-                    var result = GetDataRecords(clonedInput, dataRecordStorageId);
-                    if (result != null)
-                    {
-                        records.AddRange(result);
-                    }
-                }
-                return records.Count > 0 ? input.Query.Direction == OrderDirection.Ascending ? records.OrderBy(itm => itm.RecordTime).Take(input.Query.LimitResult) : records.OrderByDescending(itm => itm.RecordTime).Take(input.Query.LimitResult) : null;
-            }
             protected override Vanrise.Entities.BigResult<DataRecordDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, IEnumerable<DataRecord> allRecords)
             {
                 if (allRecords == null)
                     return new Vanrise.Entities.BigResult<DataRecordDetail>()
-                {
-                    ResultKey = input.ResultKey,
-                    Data = null,
-                    TotalCount = 0
-                };
+                    {
+                        ResultKey = input.ResultKey,
+                        Data = null,
+                        TotalCount = 0
+                    };
 
                 IEnumerable<DataRecordDetail> allRecordsDetails = DataRecordDetailMapperList(allRecords);
 
@@ -616,6 +600,30 @@ namespace Vanrise.GenericData.Business
                 };
 
                 return dataRecordBigResult;
+            }
+
+            protected override ResultProcessingHandler<DataRecordDetail> GetResultProcessingHandler(DataRetrievalInput<DataRecordQuery> input, BigResult<DataRecordDetail> bigResult)
+            {
+                return new ResultProcessingHandler<DataRecordDetail>
+                {
+                    ExportExcelHandler = new DataRecordStorageExcelExportHandler(input.Query)
+                };
+            }
+
+            #endregion
+
+            #region Private Methods
+
+            private List<DataRecordDetail> DataRecordDetailMapperList(IEnumerable<DataRecord> dataRecords)
+            {
+                if (dataRecords == null)
+                    return null;
+
+                List<DataRecordDetail> result = new List<DataRecordDetail>();
+                foreach (DataRecord dataRecord in dataRecords)
+                    result.Add(EntityDetailMapper(dataRecord));
+
+                return result;
             }
 
             private IOrderedEnumerable<DataRecordDetail> GetOrderedByFields(List<SortColumn> sortColumns, IOrderedEnumerable<DataRecordDetail> orderedRecords)
@@ -653,14 +661,7 @@ namespace Vanrise.GenericData.Business
                 return dataManager.GetFilteredDataRecords(input);
             }
 
-            protected override ResultProcessingHandler<DataRecordDetail> GetResultProcessingHandler(DataRetrievalInput<DataRecordQuery> input, BigResult<DataRecordDetail> bigResult)
-            {
-                return new ResultProcessingHandler<DataRecordDetail>
-                {
-                    ExportExcelHandler = new DataRecordStorageExcelExportHandler(input.Query)
-                };
-            }
-
+            #endregion
         }
 
         private class DataRecordStorageExcelExportHandler : ExcelExportHandler<DataRecordDetail>
