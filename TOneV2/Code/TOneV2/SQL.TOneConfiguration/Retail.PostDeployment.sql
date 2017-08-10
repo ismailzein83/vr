@@ -87,6 +87,7 @@ as (select * from (values
 ('385AB73F-D18D-4A1B-8552-FC4E6AC487DE','SubAccountCondition','Can Have Sub Accounts','Retail_BE_AccountConditionConfig'												,'{"Editor":"retail-be-accountcondition-subaccount"}'),
 ('EE17B999-5473-467F-A9BF-623EEF6CD409','FinancialAccountCondition','Is Financial','Retail_BE_AccountConditionConfig'													,'{"Editor":"retail-be-accountcondition-financialaccount"}'),
 ('1B1AF5DD-52EB-42C7-97EF-8CE824BB7D03','FilterGroupAccountCondition','Expression','Retail_BE_AccountConditionConfig'													,'{"Editor":"retail-be-accountcondition-filtergroup"}'),
+('20aba92b-ecb3-497e-b136-59e4c71bd3b7','AssignableToPackage','Assignable To Package','Retail_BE_AccountConditionConfig'												,'{"Editor":"retail-be-accountcondition-assignabletopackage"}'),
 
 ('F123F0C6-42CF-4B6F-B3EB-F1AD5E0E8931','Assign Product and Packages Handler','Assign Product and Packages Handler','Retail_BE_AccountSynchronizerInsertHandlerConfig'	,'{"Editor":"retail-be-accountsynchronizerhandler-assignproductandpackages"}'),
 ('1CBD8BEF-14D6-4D47-BB9B-264ECC0E92B4','Portal Account Handler','Portal Account Handler','Retail_BE_AccountSynchronizerInsertHandlerConfig'							,'{"Editor":"retail-be-accountsynchronizerhandler-portalaccount"}'),
