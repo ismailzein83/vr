@@ -52,6 +52,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             var securityDefinitionsDirectiveAPI;
             var securityDefinitionsDirectiveDeferred = UtilsService.createPromiseDeferred();
 
+            var accountConditionSelectiveDirectiveAPI;
+            var accountConditionSelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -100,9 +103,14 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     securityDefinitionsDirectiveDeferred.resolve();
                 };
 
+                $scope.scopeModel.onPackageAssignmentConditionReady = function (api) {
+                    accountConditionSelectiveDirectiveAPI = api;
+                    accountConditionSelectiveDirectivePromiseDeferred.resolve();
+                };
+
                 UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountTypeSelectorDeferred.promise, financialAccountLocatorDeferred.promise,
                     accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise,
-                    accountGridDefinitionExportExcelDirectiveDeferred.promise]).then(function () {
+                    accountGridDefinitionExportExcelDirectiveDeferred.promise, accountConditionSelectiveDirectivePromiseDeferred.promise]).then(function () {
                         defineAPI();
                     });
             }
@@ -122,7 +130,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountActionDefinitions;
                     var accountExtraFieldDefinitions;
                     var securityDefinition;
-
+                    var packageAssignmentCondition;
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.businessEntityDefinitionId;
 
@@ -136,6 +144,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountActionDefinitions = payload.businessEntityDefinitionSettings.ActionDefinitions;
                             accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
                             securityDefinition = payload.businessEntityDefinitionSettings.Security;
+                            packageAssignmentCondition = payload.businessEntityDefinitionSettings.PackageAssignmentCondition;
 
                             $scope.scopeModel.useRemoteSelector = payload.businessEntityDefinitionSettings.UseRemoteSelector;
                         }
@@ -179,6 +188,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountSecurityDefinitionsLoadPromise = getAccountSecurityDefinitionsLoadPromise();
                     promises.push(accountSecurityDefinitionsLoadPromise);
 
+                    var accountConditionSelectiveLoadPromise = getAccountConditionSelectiveDirectiveLoadPromise();
+                    promises.push(accountConditionSelectiveLoadPromise);
 
                     function getStatusDefinitionSelectorLoadPromise() {
                         var accountActionDefinitionPayload = {
@@ -255,6 +266,16 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         return securityDefinitionsDirectiveAPI.load(securityDefinition);
                     }
 
+                    function getAccountConditionSelectiveDirectiveLoadPromise() {
+
+                        var accountConditionSelectivePayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            beFilter: packageAssignmentCondition
+                        };
+                        return accountConditionSelectiveDirectiveAPI.load(accountConditionSelectivePayload);
+                    }
+
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -274,6 +295,7 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
                         AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData(),
+                        PackageAssignmentCondition:accountConditionSelectiveDirectiveAPI.getData(),
                         Security: securityDefinitionsDirectiveAPI.getData()
                     };
                     return obj;

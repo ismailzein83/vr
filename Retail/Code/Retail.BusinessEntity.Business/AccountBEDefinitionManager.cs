@@ -47,7 +47,11 @@ namespace Retail.BusinessEntity.Business
             businessEntityDefinition.ThrowIfNull("businessEntityDefinition", accountBEDefinitionId);
             return businessEntityDefinition.Settings.CastWithValidate<AccountBEDefinitionSettings>("businessEntityDefinition.Settings", accountBEDefinitionId);
         }
-
+        public AccountCondition GetPackageAssignmentCondition(Guid accountBEDefinitionId)
+        {
+            AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            return accountBEDefinitionSettings.PackageAssignmentCondition;
+        }
         public AccountGridDefinition GetAccountGridDefinition(Guid accountBEDefinitionId)
         {
             AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);

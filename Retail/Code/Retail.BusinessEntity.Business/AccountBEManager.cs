@@ -580,7 +580,18 @@ namespace Retail.BusinessEntity.Business
                 throw new Exception(string.Format("Account {0} does not have currency", account.AccountId));
             return currencyId;
         }
-   
+
+
+        public bool IsAccountAssignableToPackage(Account account)
+        {
+            account.ThrowIfNull("account");
+            var accountDefinitionId = new AccountTypeManager().GetAccountBEDefinitionId(account.TypeId);
+            var packageAssignmentCondition = new AccountBEDefinitionManager().GetPackageAssignmentCondition(accountDefinitionId);
+            if (packageAssignmentCondition == null)
+                return true;
+            return EvaluateAccountCondition(account, packageAssignmentCondition);
+        }
+
 
         #region Account Status
 

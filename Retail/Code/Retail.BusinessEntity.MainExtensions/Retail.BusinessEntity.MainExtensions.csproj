@@ -142,6 +142,7 @@
     <Compile Include="AccountBEActionTypes\ChangeStatusActionSettings.cs" />
     <Compile Include="AccountChargeEvaluators\FixedChargeAccountRecurringChargeEvaluator.cs" />
     <Compile Include="AccountCitySerialNumberPart.cs" />
+    <Compile Include="AccountConditions\AssignableToPackageCondition.cs" />
     <Compile Include="AccountConditions\ConditionGroupAccountCondition.cs" />
     <Compile Include="AccountConditions\FinancialAccountCondition.cs" />
     <Compile Include="AccountConditions\SubAccountCondition.cs" />
