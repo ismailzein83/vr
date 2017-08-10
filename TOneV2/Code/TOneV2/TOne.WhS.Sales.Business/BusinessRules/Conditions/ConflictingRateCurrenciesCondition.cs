@@ -41,7 +41,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (closedRatesByZoneId.Count > 0 && closedRatesByZoneId.Count < effectiveOrFutureZones.Count() && ratePlanContext.CurrencyId != ratePlanContext.SystemCurrencyId)
             {
-                context.Message = string.Format("The currency of the process doesn't match the currecny of the system");
+                var currencyManager = new Vanrise.Common.Business.CurrencyManager();
+                context.Message = string.Format("The currency of the customer '{0}' doesn't match the currecny of its selling product '{1}'", currencyManager.GetCurrencySymbol(ratePlanContext.CurrencyId), currencyManager.GetCurrencySymbol(ratePlanContext.SystemCurrencyId));
                 return false;
             }
 
@@ -68,7 +69,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 DateTime? xDate = Max(countryZone.BED, countryData.CountryBED, minRateActionDate.Value);
                 DateTime? yDate = Min(countryZone.EED, countryData.CountryEED, zoneRateActionDate);
 
-                if (yDate > xDate)
+                if (!yDate.HasValue || yDate.Value > xDate)
                 {
                     IEnumerable<ExistingRate> effectiveOrFutureRates = GetEffectiveOrFutureRates(countryZone.ExistingRates, countryData.CountryBED);
 
