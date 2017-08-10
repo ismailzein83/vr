@@ -22,7 +22,7 @@ namespace Retail.BusinessEntity.Business
         PackageManager _packageManager = new PackageManager();
         const string fieldMessage = "Package Assignment Failed. It overlaps with other assignement";
         #endregion
-            
+
         #region Public Methods
 
         public IDataRetrievalResult<AccountPackageDetail> GetFilteredAccountPackages(DataRetrievalInput<AccountPackageQuery> input)
@@ -37,6 +37,23 @@ namespace Retail.BusinessEntity.Business
 
             return DataRetrievalManager.Instance.ProcessResult(input, cachedAccountPackages.ToBigResult(input, filterExpression,
                     (accountPackage) => AccountPackageDetailMapper(input.Query.AccountBEDefinitionId, accountPackage)), handler);
+        }
+
+        public IEnumerable<AccountPackage> GetEffectiveAssignedPackages(DateTime effectiveDate, bool withFutureEntities = false)
+        {
+            Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
+            Func<AccountPackage, bool> predicate = (itm) =>
+            {
+                if (withFutureEntities && !itm.IsEffectiveOrFuture(effectiveDate))
+                    return false;
+
+                if (!withFutureEntities && !itm.IsEffective(effectiveDate))
+                    return false;
+
+                return true;
+            };
+
+            return cachedAccountPackages.FindAllRecords(predicate);
         }
 
         public AccountPackage GetAccountPackage(int accountPackageId)
@@ -133,7 +150,7 @@ namespace Retail.BusinessEntity.Business
             Guid accountBEDefinitionId;
 
             string errorMessage;
-            if(!IsPackageAssignmentValid(accountPackageToAdd.AccountPackageId, accountPackageToAdd.PackageId, accountPackageToAdd.AccountId, 
+            if (!IsPackageAssignmentValid(accountPackageToAdd.AccountPackageId, accountPackageToAdd.PackageId, accountPackageToAdd.AccountId,
                 accountPackageToAdd.BED, accountPackageToAdd.EED, out package, out account, out accountBEDefinitionId, out errorMessage))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -167,12 +184,12 @@ namespace Retail.BusinessEntity.Business
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountPackageDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            
+
             Package package;
             Account account;
             Guid accountBEDefinitionId;
             string errorMessage;
-            if(!IsPackageAssignmentValid(accountPackageToEdit.AccountPackageId, existingAccountPackage.PackageId, existingAccountPackage.AccountId, 
+            if (!IsPackageAssignmentValid(accountPackageToEdit.AccountPackageId, existingAccountPackage.PackageId, existingAccountPackage.AccountId,
                 accountPackageToEdit.BED, accountPackageToEdit.EED, out package, out account, out accountBEDefinitionId, out errorMessage))
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -194,7 +211,7 @@ namespace Retail.BusinessEntity.Business
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
                 }
             }
-            
+
             return updateOperationOutput;
         }
 
@@ -215,17 +232,17 @@ namespace Retail.BusinessEntity.Business
 
             };
             package.Settings.ExtendedSettings.ValidatePackageAssignment(packageSettingAssignementValidateContext);
-            if(!packageSettingAssignementValidateContext.IsValid)
+            if (!packageSettingAssignementValidateContext.IsValid)
             {
                 errorMessage = packageSettingAssignementValidateContext.ErrorMessage;
                 return false;
             }
-            if(ArePackageAssignementsOverlapped(accountPackageId, accountId, packageId, bed, eed))
+            if (ArePackageAssignementsOverlapped(accountPackageId, accountId, packageId, bed, eed))
             {
                 errorMessage = "It overlaps with other assignements";
                 return false;
             }
-            if(!CanAssignPackageToAccount(package, accountBEDefinitionId, accountId))
+            if (!CanAssignPackageToAccount(package, accountBEDefinitionId, accountId))
             {
                 errorMessage = "Package is not compatible with the account";
                 return false;
@@ -256,7 +273,7 @@ namespace Retail.BusinessEntity.Business
             package.ThrowIfNull("package");
             package.Settings.ThrowIfNull("package.Settings", package.PackageId);
             package.Settings.ExtendedSettings.ThrowIfNull("package.Settings.ExtendedSettings", package.PackageId);
-            
+
             Guid packageAccountDefinitonId = _packageManager.GetPackageAccountDefinitionId(package);
             if (packageAccountDefinitonId != accountBEDefinitionId)
                 return false;
@@ -274,11 +291,13 @@ namespace Retail.BusinessEntity.Business
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return new AccountBEDefinitionManager().DoesUserHaveViewAccountPackageAccess(userId, accountBEDefinitionId);
         }
+        
         public bool DoesUserHaveAddAccountPackageAccess(Guid accountBEDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return new AccountBEDefinitionManager().DoesUserHaveAddAccountPackageAccess(userId, accountBEDefinitionId);
         }
+       
         public bool DoesUserHaveEditAccountPackageAccess(int accountPackageId)
         {
             var accountpackage = GetAccountPackage(accountPackageId);
@@ -316,7 +335,7 @@ namespace Retail.BusinessEntity.Business
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.AccountPackageId });
                             row.Cells.Add(new ExportExcelCell { Value = record.PackageName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED }); 
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
                         }
                     }
@@ -337,11 +356,11 @@ namespace Retail.BusinessEntity.Business
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreAccountPackagesUpdated(ref _updateHandle) 
+                return _dataManager.AreAccountPackagesUpdated(ref _updateHandle)
                     //|
                     //_accountCacheManager.IsCacheExpired(ref _accountCacheLastCheck)
                     |
-                   _packageCacheManager.IsCacheExpired(ref _packageCacheLastCheck); 
+                   _packageCacheManager.IsCacheExpired(ref _packageCacheLastCheck);
             }
         }
 

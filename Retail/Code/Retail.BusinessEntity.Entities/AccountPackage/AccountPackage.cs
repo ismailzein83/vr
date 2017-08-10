@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -14,6 +10,8 @@ namespace Retail.BusinessEntity.Entities
 
         public int PackageId { get; set; }
 
+        public Guid AccountBEDefinitionId { get; set; }
+
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
@@ -21,17 +19,14 @@ namespace Retail.BusinessEntity.Entities
 
     public class AccountPackageToAdd : AccountPackage
     {
-        public Guid AccountBEDefinitionId { get; set; }
     }
 
-    public class AccountPackageToEdit 
+    public class AccountPackageToEdit
     {
-     
         public int AccountPackageId { get; set; }
 
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
     }
-    
 }

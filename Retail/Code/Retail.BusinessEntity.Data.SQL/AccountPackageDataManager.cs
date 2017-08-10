@@ -31,7 +31,7 @@ namespace Retail.BusinessEntity.Data.SQL
         public bool Insert(AccountPackage accountPackage, out int insertedId)
         {
             object accountPackageId;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_AccountPackage_Insert", out accountPackageId, accountPackage.AccountId, accountPackage.PackageId, accountPackage.BED, accountPackage.EED);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_AccountPackage_Insert", out accountPackageId, accountPackage.AccountId, accountPackage.PackageId, accountPackage.AccountBEDefinitionId, accountPackage.BED, accountPackage.EED);
 
             if (affectedRecords > 0)
             {
@@ -63,6 +63,7 @@ namespace Retail.BusinessEntity.Data.SQL
                 AccountPackageId = (int)reader["ID"],
                 AccountId = (long)reader["AccountID"],
                 PackageId = (int)reader["PackageID"],
+                AccountBEDefinitionId = (Guid)reader["AccountBEDefinitionId"],
                 BED = (DateTime)reader["BED"],
                 EED = GetReaderValue<DateTime?>(reader, "EED")
             };
