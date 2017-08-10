@@ -223,6 +223,14 @@ namespace Retail.BusinessEntity.Business
             account = _accountBEManager.GetAccount(accountBEDefinitionId, accountId);
             account.ThrowIfNull("account", accountId);
 
+
+            if(!_accountBEManager.IsAccountAssignableToPackage(account))
+            {
+                errorMessage = string.Format("Account: '{0}' connot be assigned to package: '{1}'", _accountBEManager.GetAccountName(account), package.Name);
+                return false;
+
+            }
+
             PackageSettingAssignementValidateContext packageSettingAssignementValidateContext = new PackageSettingAssignementValidateContext
             {
                 Account = account,

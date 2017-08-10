@@ -581,7 +581,11 @@ namespace Retail.BusinessEntity.Business
             return currencyId;
         }
 
-
+        public bool IsAccountAssignableToPackage(Guid accountBEDefinitionId,long accountId)
+        {
+            var account = GetAccount(accountBEDefinitionId, accountId);
+            return IsAccountAssignableToPackage( account);
+        }
         public bool IsAccountAssignableToPackage(Account account)
         {
             account.ThrowIfNull("account");
