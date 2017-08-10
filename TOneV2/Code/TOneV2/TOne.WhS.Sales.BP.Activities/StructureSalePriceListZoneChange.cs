@@ -531,16 +531,17 @@ namespace TOne.WhS.Sales.BP.Activities
                     ZoneId = rateToAdd.ZoneId,
                     ZoneName = rateToAdd.ZoneName,
                     Rate = rateToAdd.NormalRate,
-                    RecentRate = UtilitiesManager.ConvertToCurrencyAndRound(recentRate.Rate.Rate, saleRateManager.GetCurrencyId(recentRate.Rate)
-                    , context.CurrencyId, DateTime.Now, longPrecision, currencyExchangeRateManager),
+                    RecentRate = recentRate.Rate.Rate,
                     BED = rateToAdd.BED,
                     EED = null,
                     CurrencyId = context.CurrencyId
                 };
 
-                if (rateToAdd.NormalRate > salePricelistRateChange.RecentRate.Value)
+                Decimal convertedRate = UtilitiesManager.ConvertToCurrencyAndRound(recentRate.Rate.Rate, saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now, longPrecision, currencyExchangeRateManager);
+
+                if (rateToAdd.NormalRate > convertedRate)
                     salePricelistRateChange.ChangeType = RateChangeType.Increase;
-                else if (rateToAdd.NormalRate < salePricelistRateChange.RecentRate.Value)
+                else if (rateToAdd.NormalRate < convertedRate)
                     salePricelistRateChange.ChangeType = RateChangeType.Decrease;
 
                 context.RateChangesOutArgument.Add(salePricelistRateChange);
@@ -567,9 +568,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     CountryId = countryId.Value,
                     ZoneId = rateToClose.ZoneId,
                     ZoneName = rateToClose.ZoneName,
-                    Rate = UtilitiesManager.ConvertToCurrencyAndRound(newRate.Rate.Rate,
-                            saleRateManager.GetCurrencyId(newRate.Rate)
-                            , context.CurrencyId, DateTime.Now, longPrecision, currencyExchangeRateManager),
+                    Rate = newRate.Rate.Rate,
                     RecentRate = UtilitiesManager.ConvertToCurrencyAndRound(recentRate.Rate.Rate,
                         saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now, longPrecision,
                         currencyExchangeRateManager),
@@ -578,9 +577,11 @@ namespace TOne.WhS.Sales.BP.Activities
                     CurrencyId = saleRateManager.GetCurrencyId(newRate.Rate)
                 };
 
-                if (salePriceListRateChange.Rate > salePriceListRateChange.RecentRate)
+                Decimal convertedRate = UtilitiesManager.ConvertToCurrencyAndRound(newRate.Rate.Rate, saleRateManager.GetCurrencyId(newRate.Rate), context.CurrencyId, DateTime.Now, longPrecision, currencyExchangeRateManager);
+
+                if (convertedRate > salePriceListRateChange.RecentRate)
                     salePriceListRateChange.ChangeType = RateChangeType.Increase;
-                else if (salePriceListRateChange.Rate > salePriceListRateChange.RecentRate)
+                else if (convertedRate > salePriceListRateChange.RecentRate)
                     salePriceListRateChange.ChangeType = RateChangeType.Decrease;
 
                 context.RateChangesOutArgument.Add(salePriceListRateChange);
