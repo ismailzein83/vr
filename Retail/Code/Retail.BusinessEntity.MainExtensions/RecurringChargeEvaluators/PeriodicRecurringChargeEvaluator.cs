@@ -54,7 +54,9 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
                 { 
                     ChargeableEntityId = periodicChargeDefinition.ChargeableEntityId,
                     Amount = priceToCharge,
-                    CurrencyId = this.CurrencyId
+                    CurrencyId = this.CurrencyId,
+                    ChargingStart = context.ChargingStart,
+                    ChargingEnd = context.ChargingEnd
                 }
             };
         }

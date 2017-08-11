@@ -13,5 +13,9 @@ namespace Retail.BusinessEntity.Entities
         public Decimal Amount { get; set; }
 
         public int CurrencyId { get; set; }
+
+        public DateTime ChargingStart { get; set; }
+
+        public DateTime ChargingEnd { get; set; }
     }
 }

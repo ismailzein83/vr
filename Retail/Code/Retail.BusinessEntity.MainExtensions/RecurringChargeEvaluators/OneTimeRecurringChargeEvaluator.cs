@@ -31,7 +31,9 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
                 { 
                     ChargeableEntityId = oneTimeChargeDefinition.ChargeableEntityId,
                     Amount = priceToCharge,
-                    CurrencyId = this.CurrencyId
+                    CurrencyId = this.CurrencyId,
+                    ChargingStart = context.ChargingStart,
+                    ChargingEnd = context.ChargingEnd
                 }
             };
         }

@@ -13,6 +13,8 @@ namespace Retail.BusinessEntity.Entities
         {
             DateTime chargingStart = Utilities.Max(context.PackageAssignmentStart, context.ChargingPeriodStart);
             DateTime chargingEnd = Utilities.Min(context.PackageAssignmentEnd.HasValue ? context.PackageAssignmentEnd.Value : DateTime.MaxValue, context.ChargingPeriodEnd);
+            context.ChargingStart = chargingStart;
+            context.ChargingEnd = chargingEnd;
             return (int)(chargingEnd - chargingStart).TotalDays;
         }
         public abstract void ValidatePackageAssignment(IValidateAssignmentRecurringChargeEvaluatorContext context);
@@ -32,6 +34,10 @@ namespace Retail.BusinessEntity.Entities
         DateTime PackageAssignmentStart { get; }
 
         DateTime? PackageAssignmentEnd { get; }
+
+        DateTime ChargingStart { get; set; }
+
+        DateTime ChargingEnd { get; set; }
     }
     public interface IValidateAssignmentRecurringChargeEvaluatorContext
     {
@@ -45,7 +51,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public Account Account { set; get; }
         public DateTime PackageAssignmentStart { set; get; }
-        public DateTime? PackageAssignmentEnd { set;  get; }
+        public DateTime? PackageAssignmentEnd { set; get; }
         public bool IsValid { set; get; }
         public string ErrorMessage { get; set; }
     }

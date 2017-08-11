@@ -35,15 +35,45 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activities" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.WFActivities">
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="AccountRecurringChargeEvaluatorProcess.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.BP.Activities\Retail.BusinessEntity.BP.Activities.csproj">
+      <Project>{5ecd4fc8-3080-43e8-ad80-581289f30509}</Project>
+      <Name>Retail.BusinessEntity.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail\Retail.sqlproj">
+      <Project>{BAC71345-402F-46AC-8FEC-1401F493305E}</Project>
+      <Name>Retail</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

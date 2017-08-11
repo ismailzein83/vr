@@ -85,6 +85,11 @@ namespace Retail.BusinessEntity.Business
             {
                 get { return _accountPackage.EED; }
             }
+
+
+            public DateTime ChargingStart { get; set; }
+
+            public DateTime ChargingEnd { get; set; }
         }
 
 

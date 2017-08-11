@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.Data
 {
-    public interface IAccountPackageRecurChargeDataManager
+    public interface IAccountPackageRecurChargeDataManager : IDataManager
     {
+        List<AccountPackageRecurCharge> GetAccountPackageRecurChargesNotSent(DateTime effectiveDate);
+
+        void ApplyAccountPackageReccuringCharges(List<AccountPackageRecurCharge> accountPackageRecurChargeList, DateTime effectiveDate, long processInstanceId);
     }
 }
