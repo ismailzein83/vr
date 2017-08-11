@@ -14,6 +14,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
 
         public string ChildFieldName { get; set; }
 
+        public override List<string> GetDependentFields(IDataRecordFieldFormulaGetDependentFieldsContext context)
+        {
+            return new List<string>() { ChildFieldName };
+        }
+
         public override dynamic CalculateValue(IDataRecordFieldFormulaCalculateValueContext context)
         {
             DataRecordFields.FieldBusinessEntityType currentBEFieldType;
@@ -65,6 +70,5 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             if (childBEFieldType == null)
                 throw new NullReferenceException(String.Format("childBRFieldType '{0}'", this.ChildFieldName));
         }
-
     }
 }
