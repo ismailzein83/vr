@@ -10,6 +10,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Notification.Business;
 using Vanrise.AccountBalance.Business.Extensions;
+using Retail.BusinessEntity.APIEntities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -20,6 +21,196 @@ namespace Retail.BusinessEntity.Business
         static FinancialAccountDefinitionManager s_financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
       
         #region Public Methods
+
+        #region Main Methods
+        public IDataRetrievalResult<FinancialAccountDetail> GetFilteredFinancialAccounts(DataRetrievalInput<FinancialAccountQuery> input)
+        {
+            var cachedFinancialAccounts = GetFinancialAccounts(input.Query.AccountBEDefinitionId, input.Query.AccountId, false);
+            Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
+            {
+                return true;
+            };
+            return DataRetrievalManager.Instance.ProcessResult(input, cachedFinancialAccounts.ToBigResult(input, filterExpression, FinancialAccountDetailMapper));
+        }
+        public Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail> AddFinancialAccount(FinancialAccountToInsert financialAccountToInsert)
+        {
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail>();
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            string message = null;
+            if (CheckFinancialAccountOverlaping(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId, financialAccountToInsert.FinancialAccount, out  message))
+            {
+                var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId);
+                AddFinancialAccountToExtSettings(financialAccountToInsert.FinancialAccount, accountBEFinancialAccountsSettings);
+
+                if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId, accountBEFinancialAccountsSettings))
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToInsert.AccountBEDefinitionId);
+
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccountToInsert.FinancialAccount);
+                }
+                else
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                }
+            }
+            else
+            {
+                insertOperationOutput.Message = message;
+            }
+            return insertOperationOutput;
+        }
+        public Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail> UpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            string errorrMessage = null;
+            if (CheckFinancialAccountOverlaping(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out  errorrMessage))
+            {
+                var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId);
+                var financialAccount = accountBEFinancialAccountsSettings.FinancialAccounts.FindRecord(x => x.SequenceNumber == financialAccountToEdit.FinancialAccount.SequenceNumber);
+                accountBEFinancialAccountsSettings.FinancialAccounts.Remove(financialAccount);
+                accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToEdit.FinancialAccount);
+
+                if (UpdateAccountEffectiveDate(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out errorrMessage))
+                {
+                    if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
+                    {
+                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToEdit.AccountBEDefinitionId);
+
+                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                        updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
+                    }
+                    else
+                    {
+                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                    }
+
+                }
+            }
+            if (errorrMessage != null)
+            {
+                updateOperationOutput.Message = errorrMessage;
+                updateOperationOutput.ShowExactMessage = true;
+            }
+            return updateOperationOutput;
+        }
+        public FinancialAccountRuntimeEditor GetFinancialAccountEditorRuntime(Guid accountBEDefinitionId, long accountId, int sequenceNumber)
+        {
+            IOrderedEnumerable<FinancialAccountData> financialAccounts = GetFinancialAccounts(accountBEDefinitionId, accountId, false);
+            if (financialAccounts != null)
+            {
+                FinancialAccountData financialAccountData = financialAccounts.FindRecord(itm => itm.FinancialAccount.SequenceNumber == sequenceNumber);
+                if (financialAccountData == null)
+                    return null;
+                return new FinancialAccountRuntimeEditor
+                {
+                    FinancialAccount = financialAccountData.FinancialAccount
+                };
+            }
+            return null;
+        }
+        public bool CheckAllowAddFinancialAccounts(Guid accountDefinitionId, long accountId)
+        {
+            var financialAccountsData = GetFinancialAccountsWithInheritedAndChilds(accountDefinitionId, accountId);
+            foreach (var financialAccount in financialAccountsData)
+            {
+                if (!financialAccount.FinancialAccount.EED.HasValue)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public FinancialAccountRuntimeData GetAccountFinancialInfo(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
+        {
+            var financialAccountLocatorContext = new Retail.BusinessEntity.Business.FinancialAccountLocatorContext();
+            financialAccountLocatorContext.AccountDefinitionId = accountDefinitionId;
+            financialAccountLocatorContext.AccountId = accountId;
+            financialAccountLocatorContext.EffectiveOn = effectiveOn;
+
+            FinancialAccountLocator financialAccountLocator = GetFinancialAccountLocator(accountDefinitionId, accountId, effectiveOn);
+            financialAccountLocator.ThrowIfNull("financialAccountLocator");
+
+            if (financialAccountLocator.TryGetFinancialAccountId(financialAccountLocatorContext))
+            {
+                return new FinancialAccountRuntimeData()
+                {
+                    FinancialAccountId = financialAccountLocatorContext.FinancialAccountId,
+                    BalanceAccountId = financialAccountLocatorContext.BalanceAccountId,
+                    BalanceAccountTypeId = financialAccountLocatorContext._balanceAccountTypeId
+                };
+            }
+
+            return null;
+        }
+        public string GetFinancialAccountId(long accountId, int sequenceNumber)
+        {
+            return string.Format("{0}_{1}", accountId, sequenceNumber);
+        }
+        public IEnumerable<long> GetAccountIdsByFinancialAccountIds(Guid accountBEDefinitionId, List<string> financialAccountIds)
+        {
+            var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
+            return cachedFinancialAccountsData.MapRecords(x => x.Value.Account.AccountId, y => financialAccountIds.Contains(y.Key));
+        }
+        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountBEDefinitionId, FinancialAccountInfoFilter filter)
+        {
+            List<FinancialAccountInfo> financialAccountsInfo = new List<FinancialAccountInfo>();
+            if (filter != null && filter.AccountIds != null)
+            {
+                foreach (var accountId in filter.AccountIds)
+                {
+                    var cachedFinancialAccounts = GetFinancialAccounts(accountBEDefinitionId, accountId, false);
+                    Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
+                    {
+                        if (filter.Status.HasValue)
+                        {
+                            switch (filter.Status.Value)
+                            {
+                                case VRAccountStatus.Active:
+
+                                    if (filter.IsEffectiveInFuture.HasValue)
+                                    {
+                                        if (filter.IsEffectiveInFuture.Value)
+                                        {
+                                            if (financialAccountData.FinancialAccount.EED.HasValue && financialAccountData.FinancialAccount.EED < DateTime.Now)
+                                                return false;
+                                        }
+                                    }
+                                    if (filter.EffectiveDate.HasValue)
+                                    {
+                                        if (financialAccountData.FinancialAccount.BED > filter.EffectiveDate.Value || (financialAccountData.FinancialAccount.EED.HasValue && financialAccountData.FinancialAccount.EED.Value < filter.EffectiveDate.Value))
+                                            return false;
+                                    }
+                                    break;
+                                case VRAccountStatus.InActive:
+                                    break;
+                            }
+                        }
+
+                        if (filter.Filters != null)
+                        {
+                            FinancialAccountFilterContext context = new FinancialAccountFilterContext
+                            {
+                                AccountBEDefinitionId = accountBEDefinitionId,
+                                AccountId = accountId
+                            };
+                            if (!filter.Filters.Any(y => y.IsMatched(context)))
+                                return false;
+                        }
+                        return true;
+                    };
+                    financialAccountsInfo.AddRange(cachedFinancialAccounts.MapRecords(FinancialAccountInfoMapper, filterExpression));
+
+                }
+            }
+            return financialAccountsInfo;
+        }
+
+        #endregion
 
         public void UpdateAccountStatus(Guid accountDefinitionId, long accountId)
         {
@@ -33,16 +224,6 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        public IDataRetrievalResult<FinancialAccountDetail> GetFilteredFinancialAccounts(DataRetrievalInput<FinancialAccountQuery> input)
-        {
-            var cachedFinancialAccounts = GetFinancialAccounts(input.Query.AccountBEDefinitionId, input.Query.AccountId, false);
-            Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
-            {
-                return true;
-            };
-            return DataRetrievalManager.Instance.ProcessResult(input, cachedFinancialAccounts.ToBigResult(input, filterExpression, FinancialAccountDetailMapper));
-        }
-        
         public IOrderedEnumerable<FinancialAccountData> GetFinancialAccounts(Guid accountDefinitionId, long accountId, bool withInherited)
         {
             var cachedFinancialAccounts = withInherited ? GetCachedFinancialAccountsWithInherited(accountDefinitionId) : GetCachedFinancialAccounts(accountDefinitionId);
@@ -105,35 +286,6 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        public Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail> AddFinancialAccount(FinancialAccountToInsert financialAccountToInsert)
-        {
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<FinancialAccountDetail>();
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
-            string message = null;
-            if (CheckFinancialAccountOverlaping(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId, financialAccountToInsert.FinancialAccount, out  message))
-            {
-                var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId);
-                AddFinancialAccountToExtSettings(financialAccountToInsert.FinancialAccount, accountBEFinancialAccountsSettings);
-
-                if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToInsert.AccountBEDefinitionId, financialAccountToInsert.AccountId, accountBEFinancialAccountsSettings))
-                {
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToInsert.AccountBEDefinitionId);
-
-                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccountToInsert.FinancialAccount);
-                }
-                else
-                {
-                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-                }
-            }else
-            {
-                insertOperationOutput.Message = message;
-            }
-            return insertOperationOutput;
-        }
-        
         public AccountBEFinancialAccountsSettings CreateAccountFinancialAccountExtSettings()
         {
             var accountBEFinancialAccountsSettings = new AccountBEFinancialAccountsSettings();
@@ -147,96 +299,7 @@ namespace Retail.BusinessEntity.Business
             financialAccount.SequenceNumber = accountBEFinancialAccountsSettings.LastTakenSequenceNumber;
             accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccount);
         }
-
-        public Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail> UpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit)
-        {
-            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<FinancialAccountDetail>();
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-            string errorrMessage = null;
-            if (CheckFinancialAccountOverlaping(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out  errorrMessage))
-            {
-                var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId);
-                var financialAccount = accountBEFinancialAccountsSettings.FinancialAccounts.FindRecord(x => x.SequenceNumber == financialAccountToEdit.FinancialAccount.SequenceNumber);
-                accountBEFinancialAccountsSettings.FinancialAccounts.Remove(financialAccount);
-                accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToEdit.FinancialAccount);
-
-                if (UpdateAccountEffectiveDate(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out errorrMessage))
-                {
-                    if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
-                    {
-                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToEdit.AccountBEDefinitionId);
-
-                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                        updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
-                    }
-                    else
-                    {
-                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-                    }
-
-                }
-            }
-            if (errorrMessage != null)
-            {
-                updateOperationOutput.Message = errorrMessage;
-                updateOperationOutput.ShowExactMessage = true;
-            }
-            return updateOperationOutput;
-        }
-         
-        public FinancialAccountRuntimeEditor GetFinancialAccountEditorRuntime(Guid accountBEDefinitionId, long accountId, int sequenceNumber)
-        {
-            IOrderedEnumerable<FinancialAccountData> financialAccounts = GetFinancialAccounts(accountBEDefinitionId, accountId, false);
-            if (financialAccounts != null)
-            {
-                FinancialAccountData financialAccountData = financialAccounts.FindRecord(itm => itm.FinancialAccount.SequenceNumber == sequenceNumber);
-                if (financialAccountData == null)
-                    return null;
-                return new FinancialAccountRuntimeEditor
-                {
-                    FinancialAccount = financialAccountData.FinancialAccount
-                };
-            }
-            return null;
-        }
-
-        public bool CheckAllowAddFinancialAccounts(Guid accountDefinitionId, long accountId)
-        {
-            var financialAccountsData =  GetFinancialAccountsWithInheritedAndChilds( accountDefinitionId,  accountId);
-            foreach (var financialAccount in financialAccountsData)
-            {
-                if (!financialAccount.FinancialAccount.EED.HasValue)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public FinancialAccountRuntimeData GetAccountFinancialInfo(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
-        {
-            var financialAccountLocatorContext = new Retail.BusinessEntity.Business.FinancialAccountLocatorContext();
-            financialAccountLocatorContext.AccountDefinitionId = accountDefinitionId;
-            financialAccountLocatorContext.AccountId = accountId;
-            financialAccountLocatorContext.EffectiveOn = effectiveOn;
-
-            FinancialAccountLocator financialAccountLocator = GetFinancialAccountLocator(accountDefinitionId, accountId, effectiveOn);
-            financialAccountLocator.ThrowIfNull("financialAccountLocator");
-
-            if (financialAccountLocator.TryGetFinancialAccountId(financialAccountLocatorContext))
-            {
-                return new FinancialAccountRuntimeData()
-                {
-                    FinancialAccountId = financialAccountLocatorContext.FinancialAccountId,
-                    BalanceAccountId = financialAccountLocatorContext.BalanceAccountId,
-                    BalanceAccountTypeId = financialAccountLocatorContext._balanceAccountTypeId
-                };
-            }
-
-            return null;
-        }
-
+       
         public FinancialAccountLocator GetFinancialAccountLocator(Guid accountDefinitionId, long accountId, DateTime effectiveOn)
         {
             var accountBEDefinitionSettings = s_accountBEDefinitionManager.GetAccountBEDefinitionSettings(accountDefinitionId);
@@ -244,109 +307,15 @@ namespace Retail.BusinessEntity.Business
             return accountBEDefinitionSettings.FinancialAccountLocator != null ? accountBEDefinitionSettings.FinancialAccountLocator : new DefaultFinancialAccountLocator();
         }
 
-        public IEnumerable<FinancialAccountInfo> GetFinancialAccountsInfo(Guid accountBEDefinitionId ,FinancialAccountInfoFilter filter)
-        {
-            List<FinancialAccountInfo> financialAccountsInfo = new List<FinancialAccountInfo>();
-            if (filter != null && filter.AccountIds != null)
-            {
-                foreach (var accountId in filter.AccountIds)
-                { 
-                    var cachedFinancialAccounts = GetFinancialAccounts(accountBEDefinitionId, accountId, false);
-                    Func<FinancialAccountData, bool> filterExpression = (financialAccountData) =>
-                    {
-                        if (filter.Status.HasValue)
-                        {
-                            switch (filter.Status.Value)
-                            {
-                                case VRAccountStatus.Active:
-                                   
-                                    if (filter.IsEffectiveInFuture.HasValue)
-                                    {
-                                        if (filter.IsEffectiveInFuture.Value)
-                                        {
-                                            if (financialAccountData.FinancialAccount.EED.HasValue && financialAccountData.FinancialAccount.EED < DateTime.Now)
-                                                return false;
-                                        }
-                                    }
-                                    if (filter.EffectiveDate.HasValue)
-                                    {
-                                        if (financialAccountData.FinancialAccount.BED > filter.EffectiveDate.Value || (financialAccountData.FinancialAccount.EED.HasValue && financialAccountData.FinancialAccount.EED.Value < filter.EffectiveDate.Value))
-                                            return false;
-                                    }
-                                    break;
-                                case VRAccountStatus.InActive:
-                                    break;
-                            }
-                        }
-
-                        if(filter.Filters != null)
-                        {
-                            FinancialAccountFilterContext context = new FinancialAccountFilterContext
-                            {
-                                AccountBEDefinitionId = accountBEDefinitionId,
-                                AccountId = accountId
-                            };
-                            if (!filter.Filters.Any(y => y.IsMatched(context)))
-                                return false;
-                        }
-                        return true;
-                    };
-                    financialAccountsInfo.AddRange(cachedFinancialAccounts.MapRecords(FinancialAccountInfoMapper, filterExpression));
-
-                }
-            }
-            return financialAccountsInfo;
-        }
-
-        public string GetFinancialAccountId(long accountId, int sequenceNumber)
-        {
-            return string.Format("{0}_{1}", accountId, sequenceNumber);
-        }
-
         public FinancialAccountData GetFinancialAccountData(Guid accountBEDefinitionId, string financialAccountId)
         {
             var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
             return cachedFinancialAccountsData.GetRecord(financialAccountId);
         }
-
         public IEnumerable<string> GetAllFinancialAccountsIds(Guid accountBEDefinitionId)
         {
             var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
             return cachedFinancialAccountsData.Keys;
-        }
-
-        public IEnumerable<long> GetAccountIdsByFinancialAccountIds(Guid accountBEDefinitionId, List<string> financialAccountIds)
-        {
-            var cachedFinancialAccountsData = GetCachedFinancialAccountDataByFinancialAccountId(accountBEDefinitionId);
-            return cachedFinancialAccountsData.MapRecords(x=> x.Value.Account.AccountId, y=> financialAccountIds.Contains(y.Key));
-        }
-                
-        public void ResolveBalanceAccountId(Guid balanceAccountTypeId, string balanceAccountId, out Guid accountBEDefinitionId, out long accountId, out FinancialAccountData financialAccountData)
-        {
-            accountBEDefinitionId = GetAccountBEDefinitionIdByBalanceAccountTypeId(balanceAccountTypeId);
-            financialAccountData = GetFinancialAccountData(accountBEDefinitionId, balanceAccountId);
-            if (financialAccountData != null)
-            {
-                accountId = financialAccountData.Account.AccountId;
-            }
-            else
-            {
-                accountId = balanceAccountId.TryParseWithValidate<long>(long.TryParse);
-            }
-        }
-
-        public void ResolveInvoiceAccountId(Guid invoiceTypeId, string invoiceAccountId, out Guid accountBEDefinitionId, out long accountId, out FinancialAccountData financialAccountData)
-        {
-            accountBEDefinitionId = GetAccountBEDefinitionIdByInvoiceTypeId(invoiceTypeId);
-            financialAccountData = GetFinancialAccountData(accountBEDefinitionId, invoiceAccountId);
-            if (financialAccountData != null)
-            {
-                accountId = financialAccountData.Account.AccountId;
-            }
-            else
-            {
-                accountId = invoiceAccountId.TryParseWithValidate<long>(long.TryParse);
-            }
         }
 
         public bool TryGetBalanceAccountCreditLimit(Guid accountTypeId, string balanceAccountId, out Guid accountBEDefinitionId, out long accountId, out FinancialAccountData financialAccountData, out Decimal creditLimit, out int currencyId)
@@ -386,33 +355,6 @@ namespace Retail.BusinessEntity.Business
             currencyId = default(int);
             return false;
         }
-
-        public Guid GetAccountBEDefinitionIdByBalanceAccountTypeId(Guid accountTypeId)
-        {
-            var retailAccountBalanceSetting = GetSubscriberAccountBalanceSetting(accountTypeId);
-            return retailAccountBalanceSetting.AccountBEDefinitionId;
-        }
-
-        public SubscriberAccountBalanceSetting GetSubscriberAccountBalanceSetting(Guid accountTypeId)
-        {
-            Vanrise.AccountBalance.Business.AccountTypeManager balanceAccountTypeManager = new Vanrise.AccountBalance.Business.AccountTypeManager();
-            Vanrise.AccountBalance.Entities.AccountTypeSettings accountTypeSettings = balanceAccountTypeManager.GetAccountTypeSettings(accountTypeId);
-            accountTypeSettings.ThrowIfNull("accountTypeSettings", accountTypeId);
-            return accountTypeSettings.ExtendedSettings.CastWithValidate<SubscriberAccountBalanceSetting>("accountTypeSettings.ExtendedSettings");
-        }
-
-        public Guid GetAccountBEDefinitionIdByInvoiceTypeId(Guid invoiceTypeId)
-        {
-            return GetRetailInvoiceSetting(invoiceTypeId).AccountBEDefinitionId;
-        }
-
-        public BaseRetailInvoiceTypeSettings GetRetailInvoiceSetting(Guid invoiceTypeId)
-        {
-            var invoiceTypeManager = new Vanrise.Invoice.Business.InvoiceTypeManager();
-            var invoiceTypeExtendedSettings = invoiceTypeManager.GetInvoiceTypeExtendedSettings(invoiceTypeId);
-            return invoiceTypeExtendedSettings.CastWithValidate<BaseRetailInvoiceTypeSettings>("invoiceTypeExtendedSettings");
-        }
-
         public Guid GetBalanceAccountTypeIdByAlertRuleTypeId(Guid alertRuleTypeId)
         {
             VRAlertRuleTypeManager alertRuleTypeManager = new VRAlertRuleTypeManager();
@@ -421,6 +363,136 @@ namespace Retail.BusinessEntity.Business
 
             return balanceRuleTypeSettings.AccountTypeId;
         }
+
+
+        #region Resolving Methods
+        public void ResolveInvoiceAccountId(Guid invoiceTypeId, string invoiceAccountId, out Guid accountBEDefinitionId, out long accountId, out FinancialAccountData financialAccountData)
+        {
+            accountBEDefinitionId = GetAccountBEDefinitionIdByInvoiceTypeId(invoiceTypeId);
+            financialAccountData = GetFinancialAccountData(accountBEDefinitionId, invoiceAccountId);
+            if (financialAccountData != null)
+            {
+                accountId = financialAccountData.Account.AccountId;
+            }
+            else
+            {
+                accountId = invoiceAccountId.TryParseWithValidate<long>(long.TryParse);
+            }
+        }
+        public Guid GetAccountBEDefinitionIdByInvoiceTypeId(Guid invoiceTypeId)
+        {
+            return GetRetailInvoiceSetting(invoiceTypeId).AccountBEDefinitionId;
+        }
+        public BaseRetailInvoiceTypeSettings GetRetailInvoiceSetting(Guid invoiceTypeId)
+        {
+            var invoiceTypeManager = new Vanrise.Invoice.Business.InvoiceTypeManager();
+            var invoiceTypeExtendedSettings = invoiceTypeManager.GetInvoiceTypeExtendedSettings(invoiceTypeId);
+            return invoiceTypeExtendedSettings.CastWithValidate<BaseRetailInvoiceTypeSettings>("invoiceTypeExtendedSettings");
+        }
+        public void ResolveBalanceAccountId(Guid balanceAccountTypeId, string balanceAccountId, out Guid accountBEDefinitionId, out long accountId, out FinancialAccountData financialAccountData)
+        {
+            accountBEDefinitionId = GetAccountBEDefinitionIdByBalanceAccountTypeId(balanceAccountTypeId);
+            financialAccountData = GetFinancialAccountData(accountBEDefinitionId, balanceAccountId);
+            if (financialAccountData != null)
+            {
+                accountId = financialAccountData.Account.AccountId;
+            }
+            else
+            {
+                accountId = balanceAccountId.TryParseWithValidate<long>(long.TryParse);
+            }
+        }
+        public Guid GetAccountBEDefinitionIdByBalanceAccountTypeId(Guid accountTypeId)
+        {
+            var retailAccountBalanceSetting = GetSubscriberAccountBalanceSetting(accountTypeId);
+            return retailAccountBalanceSetting.AccountBEDefinitionId;
+        }
+        public SubscriberAccountBalanceSetting GetSubscriberAccountBalanceSetting(Guid accountTypeId)
+        {
+            Vanrise.AccountBalance.Business.AccountTypeManager balanceAccountTypeManager = new Vanrise.AccountBalance.Business.AccountTypeManager();
+            Vanrise.AccountBalance.Entities.AccountTypeSettings accountTypeSettings = balanceAccountTypeManager.GetAccountTypeSettings(accountTypeId);
+            accountTypeSettings.ThrowIfNull("accountTypeSettings", accountTypeId);
+            return accountTypeSettings.ExtendedSettings.CastWithValidate<SubscriberAccountBalanceSetting>("accountTypeSettings.ExtendedSettings");
+        }
+        
+        #endregion
+
+
+        #region Client API
+        public List<ClientInvoiceAccountInfo> GetClientInvoiceAccounts(Guid invoiceTypeId, long accountId)
+        {
+            Guid accountBEDefinitionId = GetAccountBEDefinitionIdByInvoiceTypeId(invoiceTypeId);
+            List<ClientInvoiceAccountInfo> invoiceAccounts = new List<ClientInvoiceAccountInfo>();
+            if (s_accountBEDefinitionManager.IsFinancialAccountModuleUsed(accountBEDefinitionId))
+            {
+                var financialAccounts = GetFinancialAccountsWithChildren(accountBEDefinitionId, accountId);
+                if (financialAccounts != null)
+                {
+
+                    foreach (var financialAccount in financialAccounts)
+                    {
+                        var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccount.FinancialAccountDefinitionId);
+                        if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
+                        {
+                            invoiceAccounts.Add(new ClientInvoiceAccountInfo
+                            {
+                                InvoiceAccountId = financialAccount.FinancialAccountId,
+                                Name = s_accountManager.GetAccountName(financialAccount.Account)
+                            });
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                invoiceAccounts.Add(new ClientInvoiceAccountInfo
+                {
+                    InvoiceAccountId = accountId.ToString(),
+                    Name = s_accountManager.GetAccountName(accountBEDefinitionId, accountId)
+                });
+            }
+            return invoiceAccounts;
+        }
+        public List<ClientBalanceAccountInfo> GetClientBalanceAccounts(Guid balanceAccountTypeId, long accountId)
+        {
+            Guid accountBEDefinitionId = GetAccountBEDefinitionIdByBalanceAccountTypeId(balanceAccountTypeId);
+            List<ClientBalanceAccountInfo> balanceAccounts = new List<ClientBalanceAccountInfo>();
+            if (s_accountBEDefinitionManager.IsFinancialAccountModuleUsed(accountBEDefinitionId))
+            {
+                var financialAccounts = GetFinancialAccountsWithChildren(accountBEDefinitionId, accountId);
+                if (financialAccounts != null)
+                {
+
+                    foreach (var financialAccount in financialAccounts)
+                    {
+                        var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccount.FinancialAccountDefinitionId);
+                        if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
+                        {
+                            balanceAccounts.Add(new ClientBalanceAccountInfo
+                            {
+                                BalanceAccountId = financialAccount.FinancialAccountId,
+                                Name = s_accountManager.GetAccountName(financialAccount.Account)
+                            });
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                balanceAccounts.Add(new ClientBalanceAccountInfo
+                {
+                    BalanceAccountId = accountId.ToString(),
+                    Name = s_accountManager.GetAccountName(accountBEDefinitionId, accountId)
+                });
+            }
+            return balanceAccounts;
+        }
+        #endregion
+
+
+   
 
         #endregion
 

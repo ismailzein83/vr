@@ -258,6 +258,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.APIEntities\Retail.BusinessEntity.APIEntities.csproj">
+      <Project>{bc95dcad-b0aa-4e3e-9ea0-3963f0d54d23}</Project>
+      <Name>Retail.BusinessEntity.APIEntities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.Data\Retail.BusinessEntity.Data.csproj">
       <Project>{45bee1a0-30fd-405d-b476-c3b2d0b2a21f}</Project>
       <Name>Retail.BusinessEntity.Data</Name>

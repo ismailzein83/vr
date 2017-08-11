@@ -134,7 +134,11 @@ namespace Retail.BusinessEntity.Business
             }
             return results;
         }
-
+        public bool IsFinancialAccountModuleUsed(Guid accountBEDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            return accountBEDefinitionSettings.UseFinancialAccountModule;
+        }
         public List<AccountViewDefinition> GetAccountViewDefinitions(Guid accountBEDefinitionId)
         {
             AccountBEDefinitionSettings accountBEDefinitionSettings = this.GetAccountBEDefinitionSettings(accountBEDefinitionId);

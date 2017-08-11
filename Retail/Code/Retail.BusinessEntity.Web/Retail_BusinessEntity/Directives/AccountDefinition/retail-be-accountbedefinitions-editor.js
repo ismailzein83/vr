@@ -145,6 +145,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
                             securityDefinition = payload.businessEntityDefinitionSettings.Security;
                             packageAssignmentCondition = payload.businessEntityDefinitionSettings.PackageAssignmentCondition;
+                          
+                            $scope.scopeModel.useFinancialAccountModule = payload.businessEntityDefinitionSettings.UseFinancialAccountModule;
 
                             $scope.scopeModel.useRemoteSelector = payload.businessEntityDefinitionSettings.UseRemoteSelector;
                         }
@@ -295,7 +297,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         AccountViewDefinitions: accountViewDefinitionDirectiveAPI.getData(),
                         ActionDefinitions: accountActionDefinitionDirectiveAPI.getData(),
                         AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData(),
-                        PackageAssignmentCondition:accountConditionSelectiveDirectiveAPI.getData(),
+                        PackageAssignmentCondition: accountConditionSelectiveDirectiveAPI.getData(),
+                        UseFinancialAccountModule:$scope.scopeModel.useFinancialAccountModule,
                         Security: securityDefinitionsDirectiveAPI.getData()
                     };
                     return obj;

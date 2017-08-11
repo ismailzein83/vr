@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Business;
+﻿using Retail.BusinessEntity.APIEntities;
+using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,20 @@ namespace Retail.BusinessEntity.Web.Controllers
         public IEnumerable<long> GetAccountIdsByFinancialAccountIds(Guid accountBEDefinitionId, [FromUri] List<string> financialAccountIds)
         {
             return _manager.GetAccountIdsByFinancialAccountIds(accountBEDefinitionId, financialAccountIds);
+        }
+
+        [HttpGet]
+        [Route("GetClientInvoiceAccounts")]
+        public List<ClientInvoiceAccountInfo> GetClientInvoiceAccounts(Guid invoiceTypeId, long accountId)
+        {
+            return _manager.GetClientInvoiceAccounts(invoiceTypeId, accountId);
+        }
+
+        [HttpGet]
+        [Route("GetClientBalanceAccounts")]
+        public List<ClientBalanceAccountInfo> GetClientBalanceAccounts(Guid balanceAccountTypeId, long accountId)
+        {
+            return _manager.GetClientBalanceAccounts(balanceAccountTypeId, accountId);
         }
     }
 }

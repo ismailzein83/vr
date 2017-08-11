@@ -201,6 +201,10 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.APIEntities\Retail.BusinessEntity.APIEntities.csproj">
+      <Project>{bc95dcad-b0aa-4e3e-9ea0-3963f0d54d23}</Project>
+      <Name>Retail.BusinessEntity.APIEntities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
       <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
       <Name>Retail.BusinessEntity.Business</Name>

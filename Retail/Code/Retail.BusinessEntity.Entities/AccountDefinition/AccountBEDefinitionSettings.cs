@@ -37,7 +37,7 @@ namespace Retail.BusinessEntity.Entities
 
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
         public AccountCondition PackageAssignmentCondition { get; set; }
-
+        public bool UseFinancialAccountModule { get; set; }
         public AccountBEDefinitionSecurity Security { get; set; }
 
         public override Vanrise.Entities.VRLoggableEntityBase GetLoggableEntity(Vanrise.GenericData.Entities.IBusinessEntityDefinitionSettingsGetLoggableEntityContext context)
