@@ -9,16 +9,30 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
-	public class ApplicableZoneIdsContext : IApplicableZoneIdsContext
-	{
-		public SalePriceListOwnerType OwnerType { get; set; }
+    public class ApplicableZoneIdsContext : IApplicableZoneIdsContext
+    {
+        private Func<int, long, SaleEntityZoneRate> _getSellingProductZoneRate;
+        private Func<int, int, long, SaleEntityZoneRate> _getCustomerZoneRate;
 
-		public int OwnerId { get; set; }
+        public ApplicableZoneIdsContext(Func<int, long, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, SaleEntityZoneRate> getCustomerZoneRate)
+        {
+            _getSellingProductZoneRate = getSellingProductZoneRate;
+            _getCustomerZoneRate = getCustomerZoneRate;
+        }
 
-		public IEnumerable<SaleZone> SaleZones { get; set; }
+        public SalePriceListOwnerType OwnerType { get; set; }
+        public int OwnerId { get; set; }
+        public IEnumerable<SaleZone> SaleZones { get; set; }
+        public Changes DraftData { get; set; }
+        public BulkActionType BulkAction { get; set; }
 
-		public Changes DraftData { get; set; }
-
-		public BulkActionType BulkAction { get; set; }
-	}
+        public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId)
+        {
+            return _getSellingProductZoneRate(sellingProductId, zoneId);
+        }
+        public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId)
+        {
+            return _getCustomerZoneRate(customerId, sellingProductId, zoneId);
+        }
+    }
 }

@@ -235,6 +235,48 @@ namespace TOne.WhS.Sales.Business
             return zoneEffectiveDatesByZoneId;
         }
 
+        public static void SetBulkActionContextCurrentRateHelpers(ISaleRateReader rateReader, out SaleEntityZoneRateLocator rateLocator, out Func<int, long, SaleEntityZoneRate> getSellingProductZoneRate, out Func<int, int, long, SaleEntityZoneRate> getCustomerZoneRate)
+        {
+            var rateLocatorValue = new SaleEntityZoneRateLocator(rateReader);
+            rateLocator = rateLocatorValue;
+            getSellingProductZoneRate = (sellingProductId, zoneId) => { return rateLocatorValue.GetSellingProductZoneRate(sellingProductId, zoneId); };
+            getCustomerZoneRate = (customerId, sellingProductId, zoneId) => { return rateLocatorValue.GetCustomerZoneRate(customerId, sellingProductId, zoneId); };
+        }
+
+        public static void SetBulkActionContextHelpers(Func<int, long, SaleEntityZoneRate> getSellingProductZoneCurrentRate, Func<int, int, long, SaleEntityZoneRate> getCustomerZoneCurrentRate, out Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, out Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, out Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP, out Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP)
+        {
+            var futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
+            var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Today));
+
+            getSellingProductZoneRate = (sellingProductId, zoneId, shouldGetFutureRate) =>
+            {
+                return (shouldGetFutureRate) ? futureRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId) : getSellingProductZoneCurrentRate(sellingProductId, zoneId);
+            };
+
+            getCustomerZoneRate = (customerId, sellingProductId, zoneId, shouldGetFutureRate) =>
+            {
+                return (shouldGetFutureRate) ? futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId) : getCustomerZoneCurrentRate(customerId, sellingProductId, zoneId);
+            };
+
+            getSellingProductZoneCurrentRP = (sellingProductId, zoneId) =>
+            {
+                return routingProductLocator.GetSellingProductZoneRoutingProduct(sellingProductId, zoneId);
+            };
+
+            getCustomerZoneCurrentRP = (customerId, sellingProductId, zoneId) =>
+            {
+                return routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneId);
+            };
+        }
+
+        public static decimal ConvertToCurrencyAndRound(decimal value, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
+        {
+            if (fromCurrencyId == toCurrencyId)
+                return value;
+            decimal convertedValue = exchangeRateManager.ConvertValueToCurrency(value, fromCurrencyId, toCurrencyId, exchangeRateDate);
+            return decimal.Round(convertedValue, decimalPrecision);
+        }
+
         #endregion
 
         #region Private Methods
@@ -249,18 +291,6 @@ namespace TOne.WhS.Sales.Business
 
             return dates.ElementAt(0);
         }
-        #endregion
-
-        #region New Methods
-
-        public static decimal ConvertToCurrencyAndRound(decimal value, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
-        {
-            if (fromCurrencyId == toCurrencyId)
-                return value;
-            decimal convertedValue = exchangeRateManager.ConvertValueToCurrency(value, fromCurrencyId, toCurrencyId, exchangeRateDate);
-            return decimal.Round(convertedValue, decimalPrecision);
-        }
-
         #endregion
     }
 

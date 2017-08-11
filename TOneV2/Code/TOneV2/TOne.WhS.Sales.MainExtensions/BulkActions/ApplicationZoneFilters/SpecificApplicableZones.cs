@@ -30,30 +30,12 @@ namespace TOne.WhS.Sales.MainExtensions
 
                 if (ownerSaleZones != null)
                 {
-                    DateTime today = DateTime.Today;
-                    var currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(today));
-                    var futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
-                    var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(today));
+                    Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate;
+                    Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate;
+                    Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP;
+                    Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP;
 
-                    Func<int, long, SaleEntityZoneRoutingProduct> getCurrentSellingProductZoneRP = (sellingProductId, saleZoneId) =>
-                    {
-                        return routingProductLocator.GetSellingProductZoneRoutingProduct(sellingProductId, saleZoneId);
-                    };
-
-                    Func<int, int, long, SaleEntityZoneRoutingProduct> getCurrentCustomerZoneRP = (customerId, sellingProductId, saleZoneId) =>
-                    {
-                        return routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, saleZoneId);
-                    };
-
-                    Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate = (sellingProductId, zoneId, getFutureRate) =>
-                    {
-                        return (getFutureRate) ? futureRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId) : currentRateLocator.GetSellingProductZoneRate(sellingNumberPlanId, zoneId);
-                    };
-
-                    Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate = (customerId, sellingProductId, zoneId, getFutureRate) =>
-                    {
-                        return (getFutureRate) ? futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId) : currentRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
-                    };
+                    UtilitiesManager.SetBulkActionContextHelpers(context.GetSellingProductZoneRate, context.GetCustomerZoneRate, out getSellingProductZoneRate, out getCustomerZoneRate, out getSellingProductZoneCurrentRP, out getCustomerZoneCurrentRP);
 
                     var excludedSaleZoneIds = new List<long>();
                     foreach (CountryZones countryZones in CountryZonesByCountry.Values)
@@ -78,8 +60,8 @@ namespace TOne.WhS.Sales.MainExtensions
                             SaleZone = saleZone,
                             BulkAction = context.BulkAction,
                             Draft = context.DraftData,
-                            GetCurrentSellingProductZoneRP = getCurrentSellingProductZoneRP,
-                            GetCurrentCustomerZoneRP = getCurrentCustomerZoneRP,
+                            GetCurrentSellingProductZoneRP = getSellingProductZoneCurrentRP,
+                            GetCurrentCustomerZoneRP = getCustomerZoneCurrentRP,
                             GetSellingProductZoneRate = getSellingProductZoneRate,
                             GetCustomerZoneRate = getCustomerZoneRate
                         };

@@ -7,23 +7,27 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-	public abstract class BulkActionZoneFilter
-	{
-		public abstract Guid ConfigId { get; }
+    public abstract class BulkActionZoneFilter
+    {
+        public abstract Guid ConfigId { get; }
 
-		public abstract IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context);
-	}
+        public abstract IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context);
+    }
 
-	public interface IApplicableZoneIdsContext
-	{
-		SalePriceListOwnerType OwnerType { get; }
+    public interface IApplicableZoneIdsContext
+    {
+        SalePriceListOwnerType OwnerType { get; }
 
-		int OwnerId { get; }
+        int OwnerId { get; }
 
-		IEnumerable<SaleZone> SaleZones { get; }
+        IEnumerable<SaleZone> SaleZones { get; }
 
-		Changes DraftData { get; }
+        Changes DraftData { get; }
 
-		BulkActionType BulkAction { get; }
-	}
+        BulkActionType BulkAction { get; }
+
+        SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId);
+
+        SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId);
+    }
 }
