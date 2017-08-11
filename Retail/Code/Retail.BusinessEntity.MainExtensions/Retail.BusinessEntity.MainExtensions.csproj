@@ -157,7 +157,7 @@
     <Compile Include="AccountViews\AccountPackages.cs" />
     <Compile Include="AccountViews\AccountHistoryView.cs" />
     <Compile Include="AccountViews\FinancialAccounts.cs" />
-    <Compile Include="DataRecordFieldFormulas\DestinationZoneEvaluatorFieldFormula.cs" />
+    <Compile Include="DataRecordFieldFormulas\ZoneEvaluatorFieldFormula.cs" />
     <Compile Include="FinancialAccount\PostpaidFinancialAccount.cs" />
     <Compile Include="FinancialAccount\PostpaidFinancialAccountDefinition.cs" />
     <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
