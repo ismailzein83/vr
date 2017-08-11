@@ -17,28 +17,23 @@ namespace TOne.WhS.Sales.MainExtensions.SupplierTargetMatchCalculation
 
         public override void Evaluate(ITargetMatchCalculationMethodContext context)
         {
-            RPRouteOptionDetail lcr1 = context.RPRouteDetail.RouteOptionsDetails.ElementAtOrDefault(0);
-            if (lcr1 != null)
+            RPRouteOptionDetail lcr = context.RPRouteDetail.RouteOptionsDetails.ElementAtOrDefault(0);
+            if (lcr != null)
             {
-                RPRouteOptionDetail rpRouteOptionDetail = Vanrise.Common.Utilities.CloneObject<RPRouteOptionDetail>(lcr1);
-                rpRouteOptionDetail.Entity.SupplierRate = EvaluateRate(lcr1.Entity.SupplierRate, context);
-                context.RPRouteOptionDetail = rpRouteOptionDetail;
+                var supplierAnalyticInfo = context.GetSupplierAnalyticInfo(lcr.Entity.SupplierId);
+                if (supplierAnalyticInfo != null)
+                {
+                    SupplierTargetMatchAnalyticOption option = new SupplierTargetMatchAnalyticOption
+                    {
+                        Rate = context.EvaluateRate(lcr.Entity.SupplierRate),
+                        ACD = supplierAnalyticInfo.ACD,
+                        ASR = supplierAnalyticInfo.ACD,
+                        Duration = supplierAnalyticInfo.Duration
+                    };
+                    context.Options = new List<SupplierTargetMatchAnalyticOption> { option };
+                }
             }
-        }
 
-        private decimal EvaluateRate(decimal originalRate, ITargetMatchCalculationMethodContext context)
-        {
-            decimal value = 0;
-            switch (context.MarginType)
-            {
-                case MarginType.Percentage:
-                    value = originalRate * (100 - context.MarginValue) / 100;
-                    break;
-                case MarginType.Fixed:
-                    value = context.MarginValue;
-                    break;
-            }
-            return value;
         }
     }
 }

@@ -12,5 +12,8 @@ namespace TOne.WhS.Routing.Entities
         public string SupplierName { get; set; }
         public decimal ConvertedSupplierRate { get; set; }
         public int OptionOrder { get; set; }
+        public decimal? ACD { get; set; }
+        public decimal? ASR { get; set; }
+        public decimal? Duration { get; set; }
     }
 }

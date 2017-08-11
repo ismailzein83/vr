@@ -32,8 +32,8 @@ namespace TOne.WhS.Sales.Entities
 
     public enum MarginType
     {
-        Percentage,
-        Fixed
+        Fixed,
+        Percentage
     }
 
 

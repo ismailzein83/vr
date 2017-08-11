@@ -51,42 +51,54 @@ namespace TOne.WhS.Sales.Business
                 foreach (var rpRouteDetail in rpRouteDetails)
                 {
                     SupplierAnalyticDetail supplierAnalyticDetail;
-                    TargetMatchCalculationMethodContext context = new TargetMatchCalculationMethodContext
-                    {
-                        RPRouteDetail = rpRouteDetail,
-                        MarginType = input.Query.Settings.MarginType,
-                        MarginValue = input.Query.Settings.MarginValue
-
-                    };
                     SupplierTargetMatch targetMatch = new SupplierTargetMatch
                     {
-                        RPRouteDetail = rpRouteDetail,
-                        TargetRPRouteDetail = Vanrise.Common.Utilities.CloneObject<RPRouteDetail>(rpRouteDetail)
+                        SaleZone = rpRouteDetail.SaleZoneName,
+                        Options = rpRouteDetail.RouteOptionsDetails,
+                        SaleZoneId = rpRouteDetail.SaleZoneId
                     };
 
-                    //targetMatch.TargetRPRouteDetail.RouteOptionsDetails = new List<RPRouteOptionDetail> { input.Query.Settings.CalculationMethod.Evaluate(context) };
-
-                    if (zoneAnalyticDetails.TryGetValue(rpRouteDetail.SaleZoneId, out supplierAnalyticDetail))
+                    if (rpRouteDetail.RouteOptionsDetails != null)
                     {
-                        List<RPRouteOptionDetail> routeOptionsDetails = new List<RPRouteOptionDetail>();
-                        foreach (var supplierOption in rpRouteDetail.RouteOptionsDetails)
+                        if (zoneAnalyticDetails.TryGetValue(rpRouteDetail.SaleZoneId, out supplierAnalyticDetail))
                         {
-                            SupplierAnalyticInfo supplierAnalyticInfo;
-                            if (supplierAnalyticDetail.TryGetValue(supplierOption.Entity.SupplierId, out supplierAnalyticInfo))
+                            TargetMatchCalculationMethodContext context = new TargetMatchCalculationMethodContext(supplierAnalyticDetail)
                             {
-                                targetMatch.Volume += supplierAnalyticInfo.Duration;
+                                RPRouteDetail = rpRouteDetail,
+                                MarginType = input.Query.Settings.MarginType,
+                                MarginValue = input.Query.Settings.MarginValue
+
+                            };
+
+                            input.Query.Settings.CalculationMethod.Evaluate(context);
+
+                            targetMatch.TargetOptions = context.Options;
+
+                            foreach (var supplierOption in rpRouteDetail.RouteOptionsDetails)
+                            {
+                                SupplierTargetMatchAnalyticOption supplierAnalyticInfo;
+
+                                if (supplierAnalyticDetail.TryGetValue(supplierOption.Entity.SupplierId, out supplierAnalyticInfo))
+                                {
+                                    supplierOption.ASR = supplierAnalyticInfo.ASR;
+                                    supplierOption.ACD = supplierAnalyticInfo.ACD;
+                                    supplierOption.Duration = supplierAnalyticInfo.Duration;
+
+                                    targetMatch.Volume += supplierAnalyticInfo.Duration;
+                                }
                             }
+                            targetMatch.TargetVolume = input.Query.Settings.VolumeMultiplier * targetMatch.Volume;
                         }
-                        targetMatch.TargetVolume = input.Query.Settings.VolumeMultiplier * targetMatch.Volume;
-                        if (targetMatch.TargetVolume < input.Query.Settings.DefaultVolume)
-                            targetMatch.TargetVolume = input.Query.Settings.DefaultVolume;
                     }
+                    if (targetMatch.TargetVolume < input.Query.Settings.DefaultVolume)
+                        targetMatch.TargetVolume = input.Query.Settings.DefaultVolume;
                     result.Add(targetMatch);
                 }
+
                 return result;
             }
 
-            private ZoneAnalyticDetail GetAnalyticZoneDetails(DataRetrievalInput<SupplierTargetMatchQuery> input, List<RPZone> rpZones)
+            ZoneAnalyticDetail GetAnalyticZoneDetails(DataRetrievalInput<SupplierTargetMatchQuery> input, List<RPZone> rpZones)
             {
                 var analyticResult = GetFilteredRecords(rpZones, input.Query.Filter.From, input.Query.Filter.To);
                 ZoneAnalyticDetail zoneAnalyticDetails = new ZoneAnalyticDetail();
@@ -103,15 +115,13 @@ namespace TOne.WhS.Sales.Business
                         var supplierDetails = zoneAnalyticDetails.GetOrCreateItem(zoneId);
                         if (supplierId.HasValue)
                         {
-
-                            supplierDetails.GetOrCreateItem(supplierId.Value, () => new SupplierAnalyticInfo
+                            supplierDetails.GetOrCreateItem(supplierId.Value, () => new SupplierTargetMatchAnalyticOption
                             {
                                 Duration = GetDecimalMeasureValue(analyticRecord, "DurationInMinutes"),
                                 ACD = GetDecimalMeasureValue(analyticRecord, "ACD"),
                                 ASR = GetDecimalMeasureValue(analyticRecord, "ASR")
                             });
                         }
-
                     }
                 }
                 return zoneAnalyticDetails;
@@ -158,23 +168,30 @@ namespace TOne.WhS.Sales.Business
 
             List<RPZone> GetRPZones(DataRetrievalInput<SupplierTargetMatchQuery> input)
             {
-                if (input.Query.Filter.CountryIds == null)
-                    return null;
-
                 List<RPZone> rpZones = new List<RPZone>();
                 SaleZoneManager saleZoneManager = new SaleZoneManager();
-                foreach (var countryId in input.Query.Filter.CountryIds)
+                List<SaleZone> saleZones = new List<SaleZone>();
+
+                if (input.Query.Filter.CountryIds == null)
                 {
-                    IEnumerable<SaleZone> saleZones = saleZoneManager.GetSaleZonesByCountryId(input.Query.Filter.SellingNumberPlanId, countryId, DateTime.Now);
-                    foreach (var saleZone in saleZones)
+                    saleZones.AddRange(saleZoneManager.GetSaleZonesEffectiveAfter(input.Query.Filter.SellingNumberPlanId, DateTime.Now));
+                }
+                else
+                {
+                    foreach (var countryId in input.Query.Filter.CountryIds)
                     {
-                        RPZone rpZone = new RPZone
-                        {
-                            RoutingProductId = input.Query.Filter.RoutingProductId,
-                            SaleZoneId = saleZone.SaleZoneId
-                        };
-                        rpZones.Add(rpZone);
+                        saleZones.AddRange(saleZoneManager.GetSaleZonesByCountryId(input.Query.Filter.SellingNumberPlanId, countryId, DateTime.Now));
                     }
+                }
+
+                foreach (var saleZone in saleZones)
+                {
+                    RPZone rpZone = new RPZone
+                    {
+                        RoutingProductId = input.Query.Filter.RoutingProductId,
+                        SaleZoneId = saleZone.SaleZoneId
+                    };
+                    rpZones.Add(rpZone);
                 }
                 return rpZones;
             }
@@ -183,15 +200,12 @@ namespace TOne.WhS.Sales.Business
 
     public class TargetMatchCalculationMethodContext : ITargetMatchCalculationMethodContext
     {
-
-        public RPRouteDetail RPRouteDetail
+        Dictionary<int, SupplierTargetMatchAnalyticOption> _SupplierAnalyticOptions;
+        public TargetMatchCalculationMethodContext(Dictionary<int, SupplierTargetMatchAnalyticOption> supplierAnalyticOptions)
         {
-            get;
-            set;
+            _SupplierAnalyticOptions = supplierAnalyticOptions;
         }
-
-
-        public RPRouteOptionDetail RPRouteOptionDetail
+        public RPRouteDetail RPRouteDetail
         {
             get;
             set;
@@ -208,19 +222,34 @@ namespace TOne.WhS.Sales.Business
             get;
             set;
         }
+
+        public List<SupplierTargetMatchAnalyticOption> Options
+        {
+            get;
+            set;
+        }
+
+        public SupplierTargetMatchAnalyticOption GetSupplierAnalyticInfo(int supplierId)
+        {
+            SupplierTargetMatchAnalyticOption supplierTargetMatchAnalyticOption;
+            _SupplierAnalyticOptions.TryGetValue(supplierId, out supplierTargetMatchAnalyticOption);
+            return supplierTargetMatchAnalyticOption;
+        }
+
+
+        public decimal EvaluateRate(decimal originalRate)
+        {
+            decimal value = 0;
+            switch (MarginType)
+            {
+                case MarginType.Percentage:
+                    value = originalRate * (100 - MarginValue) / 100;
+                    break;
+                case MarginType.Fixed:
+                    value = MarginValue;
+                    break;
+            }
+            return value;
+        }
     }
-
-    class ZoneAnalyticDetail : Dictionary<long, SupplierAnalyticDetail> { }
-
-    class SupplierAnalyticDetail : Dictionary<int, SupplierAnalyticInfo>
-    {
-
-    }
-    class SupplierAnalyticInfo
-    {
-        public decimal Duration { get; set; }
-        public decimal ASR { get; set; }
-        public decimal ACD { get; set; }
-    }
-
 }

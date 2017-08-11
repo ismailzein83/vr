@@ -10,10 +10,10 @@ namespace TOne.WhS.Sales.Entities
     public interface ITargetMatchCalculationMethodContext
     {
         RPRouteDetail RPRouteDetail { get; }
-
-        RPRouteOptionDetail RPRouteOptionDetail { set; }
+        List<SupplierTargetMatchAnalyticOption> Options { set; }
         decimal MarginValue { get; }
         MarginType MarginType { get; }
-
+        SupplierTargetMatchAnalyticOption GetSupplierAnalyticInfo(int supplierId);
+        decimal EvaluateRate(decimal originalRate);
     }
 }

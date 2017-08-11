@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesSuppliertargetmatchGrid', ['WhS_Sales_SupplierTargetMatchAPIService', 'UtilsService', 'VRNotificationService', 'VRValidationService',
-    function (WhS_Sales_SupplierTargetMatchAPIService, UtilsService, VRNotificationService, VRValidationService) {
+app.directive('vrWhsSalesSuppliertargetmatchGrid', ['WhS_Sales_SupplierTargetMatchAPIService', 'UtilsService', 'VRNotificationService', 'VRValidationService', 'VRUIUtilsService',
+    function (WhS_Sales_SupplierTargetMatchAPIService, UtilsService, VRNotificationService, VRValidationService, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -41,7 +41,8 @@ app.directive('vrWhsSalesSuppliertargetmatchGrid', ['WhS_Sales_SupplierTargetMat
                     return WhS_Sales_SupplierTargetMatchAPIService.GetFilteredSupplierTargetMatches(dataRetrievalInput).then(function (response) {
                         if (response != null && response.Data != null) {
                             for (var i = 0; i < response.Data.length; i++) {
-
+                                var targetMatch = response.Data[i];
+                                extendTargetMatchItem(targetMatch);
                             }
                         }
                         onResponseReady(response);
@@ -54,6 +55,7 @@ app.directive('vrWhsSalesSuppliertargetmatchGrid', ['WhS_Sales_SupplierTargetMat
                     return gridAPI.retrieveData(gridQuery);
                 };
             }
+
             function defineAPI() {
 
                 var api = {};
@@ -77,6 +79,30 @@ app.directive('vrWhsSalesSuppliertargetmatchGrid', ['WhS_Sales_SupplierTargetMat
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function extendTargetMatchItem(targetMatchItem) {
+                targetMatchItem.RouteOptionsLoadDeferred = UtilsService.createPromiseDeferred();
+
+                targetMatchItem.onRouteOptionsReady = function (api) {
+                    targetMatchItem.RouteOptionsAPI = api;
+                    var routeOptionsDirectivePayload = getRouteOptionsDirectivePayload(targetMatchItem.Entity);
+                    console.log(routeOptionsDirectivePayload);
+                    VRUIUtilsService.callDirectiveLoad(targetMatchItem.RouteOptionsAPI, routeOptionsDirectivePayload, targetMatchItem.RouteOptionsLoadDeferred);
+                };
+            }
+
+            function getRouteOptionsDirectivePayload(dataItem) {
+                return {
+                    RouteOptions: dataItem.Options,
+                    SaleZoneId: dataItem.SaleZoneId,
+                    RoutingDatabaseId: gridQuery.RoutingDatabaseId,
+                    RoutingProductId: gridQuery.RoutingProductId,
+                    CurrencyId: 1,
+                    AnalyticDetails: {
+                        ACD: 0
+                    }
+                };
             }
         }
     }]);

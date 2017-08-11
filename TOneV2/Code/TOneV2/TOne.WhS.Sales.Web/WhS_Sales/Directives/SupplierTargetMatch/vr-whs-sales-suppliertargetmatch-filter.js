@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesSuppliertargetmatchFilter', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesSuppliertargetmatchFilter', ['WhS_Sales_MarginTypesEnum', 'UtilsService', 'VRUIUtilsService',
+    function (WhS_Sales_MarginTypesEnum, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -45,6 +45,9 @@ app.directive('vrWhsSalesSuppliertargetmatchFilter', ['UtilsService', 'VRUIUtils
             function initializeController() {
 
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.marginTypes = UtilsService.getArrayEnum(WhS_Sales_MarginTypesEnum);
+                $scope.scopeModel.selectedMarginType = UtilsService.getItemByVal($scope.scopeModel.marginTypes, WhS_Sales_MarginTypesEnum.Fixed.value, 'value');
 
                 $scope.scopeModel.numberOfOptions = 3;
 
@@ -154,7 +157,10 @@ app.directive('vrWhsSalesSuppliertargetmatchFilter', ['UtilsService', 'VRUIUtils
                     DefaultASR: $scope.scopeModel.defaultASR,
                     DefaultACD: $scope.scopeModel.defaultACD,
                     IncludeACD_ASR: $scope.scopeModel.withACD_ASR,
-                    VolumeMultiplier: $scope.scopeModel.volumeMultiplier
+                    VolumeMultiplier: $scope.scopeModel.volumeMultiplier,
+                    MarginType: $scope.scopeModel.selectedMarginType.value,
+                    MarginValue: $scope.scopeModel.margin,
+                    CalculationMethod: calculationMethodDirectiveAPI.getData()
                 };
             }
 

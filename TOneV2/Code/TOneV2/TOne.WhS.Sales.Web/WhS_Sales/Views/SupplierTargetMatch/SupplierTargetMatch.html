@@ -9,7 +9,7 @@
                 </vr-row>
             </div>
         </vr-validation-group>
-        <vr-row removeline>
+        <vr-row>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Load" validationcontext="LoadTargetMatch" data-onclick="loadClicked"></vr-button>
@@ -19,8 +19,9 @@
         </vr-row>
 
         <vr-rows>
-            <vr-whs-sales-suppliertargetmatch-grid on-ready="onGridReady"></vr-whs-sales-suppliertargetmatch-grid>
+            <vr-columns width="fullrow">
+                <vr-whs-sales-suppliertargetmatch-grid on-ready="onGridReady"></vr-whs-sales-suppliertargetmatch-grid>
+            </vr-columns>
         </vr-rows>
-
     </vr-form>
 </vr-panel>
