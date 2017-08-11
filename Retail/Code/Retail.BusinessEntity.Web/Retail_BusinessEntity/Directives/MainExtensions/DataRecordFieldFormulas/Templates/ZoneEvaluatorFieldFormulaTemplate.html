@@ -1,0 +1,42 @@
+﻿<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.fields"
+               datatextfield="fieldTitle"
+               datavaluefield="fieldName"
+               selectedvalues="scopeModel.selectedSubscriberZoneFieldName"
+               entityname="Field Name"
+               label="Subscriber Zone Field Name"
+               isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.fields"
+               datatextfield="fieldTitle"
+               datavaluefield="fieldName"
+               selectedvalues="scopeModel.selectedOtherPartyZoneFieldName"
+               entityname="Field Name"
+               label="Other Party Zone Field Name"
+               isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-switch value="scopeModel.isDestinationZoneEvaluator" label="Destination Zone Evaluator"></vr-switch>
+</vr-columns>
+
+<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.fields"
+               datatextfield="fieldTitle"
+               datavaluefield="fieldName"
+               selectedvalues="scopeModel.selectedTrafficDirectionFieldName"
+               entityname="Field Name"
+               label="Traffic Direction Field Name"
+               isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+<span ng-show="scopeModel.selectedTrafficDirectionFieldName != undefined">
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.trafficDirectionInputValue" label="Traffic Direction Input Value"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.trafficDirectionOutputValue" label="Traffic Direction Output Value"></vr-textbox>
+    </vr-columns>
+</span>

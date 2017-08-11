@@ -72,8 +72,8 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
                 FieldBusinessEntityType otherPartyZoneBEFieldType;
                 GetFieldTypes(context, out subscriberZoneBEFieldType, out otherPartyZoneBEFieldType);
 
-                var subscriberZoneFilter = ConvertToRecordFilter(subscriberZoneBEFieldType, objectListFilter);
-                var otherPartyZoneFilter = ConvertToRecordFilter(otherPartyZoneBEFieldType, objectListFilter);
+                var subscriberZoneFilter = ConvertToRecordFilter(this.SubscriberZoneFieldName, subscriberZoneBEFieldType, objectListFilter);
+                var otherPartyZoneFilter = ConvertToRecordFilter(this.OtherPartyZoneFieldName, otherPartyZoneBEFieldType, objectListFilter);
 
                 if (IsDestinationZoneEvaluator)
                 {
@@ -123,12 +123,11 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
                 throw new NullReferenceException(String.Format("otherPartyZoneBEFieldType '{0}'", this.OtherPartyZoneFieldName));
         }
 
-        private RecordFilter ConvertToRecordFilter(FieldBusinessEntityType fieldBusinessEntityType, ObjectListRecordFilter objectListRecordFilter)
+        private RecordFilter ConvertToRecordFilter(string fieldName, FieldBusinessEntityType fieldBusinessEntityType, ObjectListRecordFilter objectListRecordFilter)
         {
-            var zoneFilter = fieldBusinessEntityType.ConvertToRecordFilter(this.SubscriberZoneFieldName, objectListRecordFilter.Values);
+            var zoneFilter = fieldBusinessEntityType.ConvertToRecordFilter(fieldName, objectListRecordFilter.Values);
             if (zoneFilter is ObjectListRecordFilter)
                 ((ObjectListRecordFilter)zoneFilter).CompareOperator = objectListRecordFilter.CompareOperator;
-
             return zoneFilter;
         }
     }

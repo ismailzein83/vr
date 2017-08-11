@@ -406,8 +406,8 @@
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\ActionDefinitions\Templates\ActionDefinitionSendEmailSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\retail-be-balancealertrule-threshold-percentage.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\BalanceAlertRule\Templates\PercentageBalanceAlertThresholdTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DataRecordFieldFormulas\Templates\DestinationZoneEvaluatorFieldFormulaTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DataRecordFieldFormulas\retail-be-datarecordtypefields-formula-destinationzoneevaluator.js" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DataRecordFieldFormulas\Templates\ZoneEvaluatorFieldFormulaTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DataRecordFieldFormulas\retail-be-datarecordtypefields-formula-zoneevaluator.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DID\retail-be-didnumbertype-range.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DID\retail-be-didnumbertype-number.js" />
     <Content Include="Retail_BusinessEntity\Directives\MainExtensions\DID\Templates\DIDRange.html" />
