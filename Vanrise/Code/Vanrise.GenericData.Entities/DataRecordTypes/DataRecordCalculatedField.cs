@@ -10,9 +10,15 @@ namespace Vanrise.GenericData.Entities
     {
         public  abstract Guid ConfigId { get; }
 
+        public abstract List<string> GetDependentFields(IDataRecordFieldFormulaGetDependentFieldsContext context);
+
         public abstract dynamic CalculateValue(IDataRecordFieldFormulaCalculateValueContext context);
 
         public abstract RecordFilter ConvertFilter(IDataRecordFieldFormulaConvertFilterContext context);
+    }
+
+    public interface IDataRecordFieldFormulaGetDependentFieldsContext
+    {
     }
 
     public interface IDataRecordFieldFormulaContext
