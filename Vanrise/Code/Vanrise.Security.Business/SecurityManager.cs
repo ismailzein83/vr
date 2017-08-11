@@ -97,7 +97,7 @@ namespace Vanrise.Security.Business
             else
             {
                 authenticationOperationOutput.Result = AuthenticateOperationResult.UserNotExists;
-                LoggerFactory.GetLogger().WriteError("Try login with user not exists");
+                LoggerFactory.GetLogger().WriteError("User '{0}' failed to login", email);
             }
 
             return authenticationOperationOutput;
