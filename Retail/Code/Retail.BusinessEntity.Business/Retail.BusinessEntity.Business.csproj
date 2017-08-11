@@ -153,6 +153,7 @@
     <Compile Include="AccountPartDefinitionOverriddenConfiguration.cs" />
     <Compile Include="AccountStatusHistory\AccountStatusHistoryManager.cs" />
     <Compile Include="AccountTypeOverriddenConfiguration.cs" />
+    <Compile Include="ChargeableEntity\ChargeableEntityManager.cs" />
     <Compile Include="Context\FinancialAccountFilterContext.cs" />
     <Compile Include="Extensions\AccountBE360DegreeNodeType.cs" />
     <Compile Include="Extensions\AccountBERuntimeSelectorFilter.cs" />
