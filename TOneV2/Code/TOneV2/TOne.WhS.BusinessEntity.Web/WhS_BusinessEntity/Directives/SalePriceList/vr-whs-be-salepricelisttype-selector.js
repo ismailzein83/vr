@@ -46,7 +46,7 @@ app.directive('vrWhsBeSalepricelisttypeSelector', ['UtilsService', 'VRUIUtilsSer
         function getTemplate(attrs) {
             var label;
             if (attrs.hidelabel == undefined)
-                label = 'label="PriceList Type"';
+                label = 'label="Pricelist Type"';
             var disabled = "";
             if (attrs.isdisabled)
                 disabled = "vr-disabled='true'";
