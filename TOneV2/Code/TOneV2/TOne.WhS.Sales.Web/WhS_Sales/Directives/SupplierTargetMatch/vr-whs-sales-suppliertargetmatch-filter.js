@@ -98,7 +98,7 @@ app.directive('vrWhsSalesSuppliertargetmatchFilter', ['WhS_Sales_MarginTypesEnum
                 $scope.scopeModel.onCalculationMethodDirectiveReady = function (api) {
                     calculationMethodDirectiveAPI = api;
                     calculationMethodReadyPromiseDeferred.resolve();
-                }
+                };
 
                 defineAPI();
 
