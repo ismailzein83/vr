@@ -277,6 +277,17 @@ namespace TOne.WhS.Sales.Business
             return decimal.Round(convertedValue, decimalPrecision);
         }
 
+        public static bool RateSourcesContain(SaleEntityZoneRate rate, IEnumerable<RateSource> rateSources)
+        {
+            if (rate.Source == SalePriceListOwnerType.SellingProduct && !rateSources.Contains(RateSource.Inherited))
+                return false;
+
+            if (rate.Source == SalePriceListOwnerType.Customer && !rateSources.Contains(RateSource.Explicit))
+                return false;
+
+            return true;
+        }
+
         #endregion
 
         #region Private Methods

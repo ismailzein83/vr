@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', 'WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService','WhS_BE_SalePriceListOwnerTypeEnum', function (WhS_Sales_RatePlanAPIService, WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService,WhS_BE_SalePriceListOwnerTypeEnum) {
+app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', 'WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', function (WhS_Sales_RatePlanAPIService, WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum) {
     return {
         restrict: "E",
         scope: {
@@ -91,7 +91,8 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                         $scope.scopeModel.beginEffectiveDate = payload.bulkAction.BED;
                     }
 
-                   
+                    if (bulkActionContext.ownerType != undefined && bulkActionContext.ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value)
+                        $scope.scopeModel.showRateSource = true;
                 }
 
                 var promises = [];
@@ -122,10 +123,8 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 
                 function loadRateSourceSelector() {
                     var rateSourceLoadDeferred = UtilsService.createPromiseDeferred();
-                    rateSourceSelectorReadyDeferred.promise.then(function () {
-                        var payload = {};
-                        VRUIUtilsService.callDirectiveLoad(rateSourceSelectorAPI, payload, rateSourceLoadDeferred);
-
+                    rateSourceSelectorReadyDeferred.promise.then(function () {                       
+                        VRUIUtilsService.callDirectiveLoad(rateSourceSelectorAPI, undefined, rateSourceLoadDeferred);
                     });
                     return rateSourceLoadDeferred.promise;
                 }
@@ -151,7 +150,8 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                 return {
                     $type: 'TOne.WhS.Sales.MainExtensions.RateBulkAction, TOne.WhS.Sales.MainExtensions',
                     RateCalculationMethod: (directiveAPI != undefined) ? directiveAPI.getData() : null,
-                    BED: ($scope.scopeModel.beginEffectiveDate != undefined) ? UtilsService.getDateFromDateTime($scope.scopeModel.beginEffectiveDate) : null
+                    BED: ($scope.scopeModel.beginEffectiveDate != undefined) ? UtilsService.getDateFromDateTime($scope.scopeModel.beginEffectiveDate) : null,
+                    RateSources: rateSourceSelectorAPI.getSelectedIds()
                 };
             };
 
@@ -159,14 +159,20 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                 var rateCalculationMethodTitle = ($scope.scopeModel.selectedRateCalculationMethod != undefined) ? $scope.scopeModel.selectedRateCalculationMethod.Title : 'None';
 
                 var rateCalculationMethodDescription = 'None';
+                var rateSourcesText = 'None';
                 if (directiveAPI != undefined) {
                     var directiveDescription = directiveAPI.getDescription();
                     if (directiveDescription != undefined)
                         rateCalculationMethodDescription = directiveDescription;
                 }
-
+                if (rateSourceSelectorAPI.getSelectedIds() != undefined)
+                    rateSourcesText = rateSourceSelectorAPI.getSelectedText().join(',');
                 var bedAsString = ($scope.scopeModel.beginEffectiveDate != undefined) ? UtilsService.getShortDate($scope.scopeModel.beginEffectiveDate) : 'None';
-                return 'Rate Calculation Method: ' + rateCalculationMethodTitle + ' | Value: ' + rateCalculationMethodDescription + ' | BED: ' + bedAsString;
+
+                var summary = 'Rate Calculation Method: ' + rateCalculationMethodTitle + ' | Value: ' + rateCalculationMethodDescription;
+                if ($scope.scopeModel.showRateSource == true)
+                    summary += ' | Rate Source: ' + rateSourcesText;
+                return summary;
             };
 
             if (rateBulkActionTypeCtrl.onReady != null) {

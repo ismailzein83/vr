@@ -1,104 +1,135 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', function (WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService, VRNotificationService) {
-	return {
-		restrict: "E",
-		scope: {
-			onReady: "=",
-			normalColNum: '@',
-			isrequired: '='
-		},
-		controller: function ($scope, $element, $attrs) {
-			var ctrl = this;
-			var routingProductBulkActionType = new RoutingProductBulkActionType($scope, ctrl, $attrs);
-			routingProductBulkActionType.initializeController();
-		},
-		controllerAs: "ctrl",
-		bindToController: true,
-		template: function (element, attrs) {
-			return getTemplate(attrs);
-		}
-	};
+app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUtilsService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SalePriceListOwnerTypeEnum', function (WhS_Sales_BulkActionUtilsService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SalePriceListOwnerTypeEnum) {
+    return {
+        restrict: "E",
+        scope: {
+            onReady: "=",
+            normalColNum: '@',
+            isrequired: '='
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            var routingProductBulkActionType = new RoutingProductBulkActionType($scope, ctrl, $attrs);
+            routingProductBulkActionType.initializeController();
+        },
+        controllerAs: "ctrl",
+        bindToController: true,
+        template: function (element, attrs) {
+            return getTemplate(attrs);
+        }
+    };
 
-	function RoutingProductBulkActionType($scope, ctrl, $attrs) {
+    function RoutingProductBulkActionType($scope, ctrl, $attrs) {
 
-		this.initializeController = initializeController;
+        this.initializeController = initializeController;
 
-		var bulkActionContext;
+        var bulkActionContext;
 
-		var routingProductSelectorAPI;
+        var routingProductSelectorAPI;
 
-		function initializeController() {
+        var rateSourceSelectorAPI;
+        var rateSourceSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-			$scope.scopeModel = {};
-			$scope.scopeModel.followRateDate = true;
+        function initializeController() {
 
-			$scope.scopeModel.onSelectorReady = function (api) {
-				routingProductSelectorAPI = api;
-				defineAPI();
-			};
+            $scope.scopeModel = {};
+            $scope.scopeModel.followRateDate = true;
+            $scope.scopeModel.showRateSource = false;
 
-			$scope.scopeModel.onRoutingProductSelected = function (selectedRoutingProduct) {
-				if (selectedRoutingProduct.IsDefinedForAllZones === false)
-					VRNotificationService.showInformation("Routing product '" + selectedRoutingProduct.Name + "' is defined for specific zones");
-				WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
-			};
-		}
+            $scope.scopeModel.onSelectorReady = function (api) {
+                routingProductSelectorAPI = api;
+                defineAPI();
+            };
+            $scope.scopeModel.onRateSourceSelectorReady = function (api) {
+                rateSourceSelectorAPI = api;
+                rateSourceSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onRoutingProductSelected = function (selectedRoutingProduct) {
+                if (selectedRoutingProduct.IsDefinedForAllZones === false)
+                    VRNotificationService.showInformation("Routing product '" + selectedRoutingProduct.Name + "' is defined for specific zones");
+                WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
+            };
+        }
 
-		function defineAPI() {
+        function defineAPI() {
 
-			var api = {};
+            var api = {};
 
-			api.load = function (payload) {
+            api.load = function (payload) {
 
-				var routingProductId;
+                var routingProductId;
 
-				if (payload != undefined) {
-					bulkActionContext = payload.bulkActionContext;
-					if (payload.bulkAction != undefined) {
-						routingProductId = payload.bulkAction.RoutingProductId;
-						$scope.scopeModel.followRateDate = payload.bulkAction.ApplyNewNormalRateBED;
-					}
-				}
+                if (payload != undefined) {
+                    bulkActionContext = payload.bulkActionContext;
+                    if (payload.bulkAction != undefined) {
+                        routingProductId = payload.bulkAction.RoutingProductId;
+                        $scope.scopeModel.followRateDate = payload.bulkAction.ApplyNewNormalRateBED;
+                    }
+                    if (bulkActionContext.ownerType != undefined && bulkActionContext.ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value)
+                        $scope.scopeModel.showRateSource = true;
+                }
 
-				function loadRoutingProductSelector() {
-					var routingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-					var routingProductSelectorPayload = {
-						filter: {},
-						selectedIds: routingProductId
-					};
-					if (bulkActionContext != undefined) {
-						routingProductSelectorPayload.filter.SellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
-					}
-					VRUIUtilsService.callDirectiveLoad(routingProductSelectorAPI, routingProductSelectorPayload, routingProductSelectorLoadDeferred);
-					return routingProductSelectorLoadDeferred.promise;
-				}
+                var promises = [];
 
-				return loadRoutingProductSelector();
-			};
+                var loadRoutingProductSelectorPromise = loadRoutingProductSelector();
+                promises.push(loadRoutingProductSelectorPromise);
 
-			api.getData = function () {
-				return {
-					$type: 'TOne.WhS.Sales.MainExtensions.RoutingProductBulkActionType, TOne.WhS.Sales.MainExtensions',
-					RoutingProductId: routingProductSelectorAPI.getSelectedIds(),
-					ApplyNewNormalRateBED: $scope.scopeModel.followRateDate
-				};
-			};
+                function loadRoutingProductSelector() {
+                    var routingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    var routingProductSelectorPayload = {
+                        filter: {},
+                        selectedIds: routingProductId
+                    };
+                    if (bulkActionContext != undefined) {
+                        routingProductSelectorPayload.filter.SellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(routingProductSelectorAPI, routingProductSelectorPayload, routingProductSelectorLoadDeferred);
+                    return routingProductSelectorLoadDeferred.promise;
+                }
+                var loadRateSourcePromise = loadRateSourceSelector();
+                promises.push(loadRateSourcePromise);
 
-			api.getSummary = function () {
-			    var routingProductName = ($scope.scopeModel.selectedRoutingProduct != undefined) ? $scope.scopeModel.selectedRoutingProduct.Name : 'None';
-			    var followsRateDateAsString = ($scope.scopeModel.followRateDate === true) ? 'Follows Rate Date' : 'Does Not Follow Rate Date';
-			    return 'Routing Product: ' + routingProductName + ' | ' + followsRateDateAsString;
-			};
+                function loadRateSourceSelector() {
+                    var rateSourceLoadDeferred = UtilsService.createPromiseDeferred();
+                    rateSourceSelectorReadyDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(rateSourceSelectorAPI, undefined, rateSourceLoadDeferred);
+                    });
+                    return rateSourceLoadDeferred.promise;
+                }
+                return UtilsService.waitMultiplePromises(promises);
+            };
 
-			if (ctrl.onReady != null) {
-				ctrl.onReady(api);
-			}
-		}
-	}
+            api.getData = function () {
+                return {
+                    $type: 'TOne.WhS.Sales.MainExtensions.RoutingProductBulkActionType, TOne.WhS.Sales.MainExtensions',
+                    RoutingProductId: routingProductSelectorAPI.getSelectedIds(),
+                    ApplyNewNormalRateBED: $scope.scopeModel.followRateDate,
+                    RateSources: rateSourceSelectorAPI.getSelectedIds()
+                };
+            };
 
-	function getTemplate(attrs) {
-		return '<vr-columns colnum="{{ctrl.normalColNum}}">\
+            api.getSummary = function () {
+                var routingProductName = ($scope.scopeModel.selectedRoutingProduct != undefined) ? $scope.scopeModel.selectedRoutingProduct.Name : 'None';
+                var followsRateDateAsString = ($scope.scopeModel.followRateDate === true) ? 'Follows Rate Date' : 'Does Not Follow Rate Date';
+                var rateSourcesText = 'None';
+                if (rateSourceSelectorAPI.getSelectedIds() != undefined)
+                    rateSourcesText = rateSourceSelectorAPI.getSelectedText().join(',');
+
+                var summary = 'Routing Product: ' + routingProductName + ' | ' + followsRateDateAsString;
+                if ($scope.scopeModel.showRateSource == true)
+                    summary += ' | Rate Source: ' + rateSourcesText;
+                return summary;
+            };
+
+            if (ctrl.onReady != null) {
+                ctrl.onReady(api);
+            }
+        }
+    }
+
+    function getTemplate(attrs) {
+        return '<vr-columns colnum="{{ctrl.normalColNum}}">\
 					<vr-whs-be-routingproduct-selector on-ready="scopeModel.onSelectorReady"\
 						selectedvalues="scopeModel.selectedRoutingProduct"\
 						onselectitem="scopeModel.onRoutingProductSelected"\
@@ -106,8 +137,11 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 						hideremoveicon="ctrl.isrequired">\
 					</vr-whs-be-routingproduct-selector>\
 				</vr-columns>\
-				<vr-columns colnum="{{ctrl.normalColNum}}">\
+				<vr-columns colnum="{{ctrl.normalColNum}}"  ng-show="scopeModel.showRateSource">\
+                    <vr-whs-sales-ratesource-selector ismultipleselection on-ready="scopeModel.onRateSourceSelectorReady"></vr-whs-sales-ratesource-selector>\
+				</vr-columns>\
+		        <vr-columns colnum="{{ctrl.normalColNum}}">\
 					<vr-switch label="Follow Rate Date" value="scopeModel.followRateDate" isrequired="ctrl.isrequired"></vr-switch>\
-				</vr-columns>';
-	}
+                </vr-columns>';
+    }
 }]);

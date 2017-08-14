@@ -26,6 +26,8 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public bool ApplyNewNormalRateBED { get; set; }
 
+        public List<RateSource> RateSources { get; set; }
+
         #region Bulk Action Members
 
         public override Guid ConfigId
@@ -60,6 +62,16 @@ namespace TOne.WhS.Sales.MainExtensions
                 if (UtilitiesManager.CustomerZoneHasPendingClosedNormalRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, context.GetCustomerZoneRate))
                     return false;
 
+                if (RateSources != null && RateSources.Count > 0)
+                {
+                    SaleEntityZoneRate currentCustomerZoneRate = context.GetCustomerZoneRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, false);
+
+                    if (currentCustomerZoneRate == null)
+                        return false;
+
+                    if (!UtilitiesManager.RateSourcesContain(currentCustomerZoneRate, RateSources))
+                        return false;
+                }
                 currentZoneRP = context.GetCurrentCustomerZoneRP(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId);
             }
             else

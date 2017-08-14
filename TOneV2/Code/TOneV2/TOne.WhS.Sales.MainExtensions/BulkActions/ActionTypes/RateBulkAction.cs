@@ -38,7 +38,6 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public DateTime? BED { get; set; }
 
-
         public List<RateSource> RateSources { get; set; }
 
         #region Bulk Action Members
@@ -142,6 +141,18 @@ namespace TOne.WhS.Sales.MainExtensions
 
                 if (BED.HasValue && !UtilitiesManager.IsCustomerZoneCountryApplicable(context.SaleZone.CountryId, BED.Value, _datesByCountry))
                     return false;
+
+                if (RateSources != null && RateSources.Count > 0)
+                {
+                    SaleEntityZoneRate currentCustomerZoneRate = context.GetCustomerZoneRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, false);
+
+                    if (currentCustomerZoneRate == null)
+                        return false;
+
+                    if (!UtilitiesManager.RateSourcesContain(currentCustomerZoneRate, RateSources))
+                        return false;
+                }
+
             }
 
             return true;

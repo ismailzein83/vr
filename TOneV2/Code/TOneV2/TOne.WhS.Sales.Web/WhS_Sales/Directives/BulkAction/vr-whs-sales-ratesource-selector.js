@@ -66,6 +66,9 @@ function (UtilsService, VRUIUtilsService, WhS_Sales_RateSourceEnum) {
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('value', $attrs, ctrl);
             };
+            api.getSelectedText = function () {
+                return VRUIUtilsService.getIdSelectedIds('description', $attrs, ctrl);
+            };
             api.load = function (payload) {
                 var selectedIds;
                 if (payload != undefined) {
