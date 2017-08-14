@@ -9,6 +9,7 @@ using Vanrise.DataParser.MainExtensions.CompositeFieldParsers;
 using Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers;
 using Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers;
 using Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers;
+using System.Linq;
 
 namespace Mediation.Runtime.DataParser
 {
@@ -5844,10 +5845,58 @@ namespace Mediation.Runtime.DataParser
 
             return recordParsers;
         }
+        private List<CompositeFieldsParser> GetCompositeFieldParsers_Nokia()
+        {
+            return new List<CompositeFieldsParser> 
+                    { 
+                    new TimestampDateTimeCompositeParser
+                    {
+                        FieldName = "ConnectTimestamp",
+                        DateTimeFieldName = "ConnectDateTime",
+                        DateTimeShift = new DateTime(1970, 01, 01)
+                    },
+                    new TimestampDateTimeCompositeParser
+                    {
+                        FieldName = "DisconnectTimestamp",
+                        DateTimeFieldName = "DisconnectDateTime",
+                        DateTimeShift = new DateTime(1970, 01, 01)
+                    },
+                     new TimestampDateTimeCompositeParser
+                    {
+                        FieldName = "SetupTimestamp",
+                        DateTimeFieldName = "SetupTime",
+                        DateTimeShift = new DateTime(1970, 01, 01)
+                    },
+                    new GuidCompositeParser{
+                     FieldName = "UniqueIdentifier"
+                    },
+                     new FileNameCompositeParser{
+                         FieldName = "FileName" 
+                        }
+                    };
+        }
+        private List<CompositeFieldsParser> GetCompositeFieldParsers_SMS_Nokia()
+        {
+            return new List<CompositeFieldsParser> 
+                    { 
+                    new TimestampDateTimeCompositeParser
+                    {
+                        FieldName = "MessageTimestamp",
+                        DateTimeFieldName = "MessageTime",
+                        DateTimeShift = new DateTime(1970, 01, 01)
+                    },
+                    new GuidCompositeParser{
+                     FieldName = "UniqueIdentifier"
+                    },
+                     new FileNameCompositeParser{
+                         FieldName = "FileName" 
+                        }
+                    };
+        }
         private List<PositionedFieldParser> Get_PositionedFieldParsers_MOC_Call()
         {
             List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
-
+            fieldParsers.Sum(s =>(decimal) s.Position);
             fieldParsers.Add(new PositionedFieldParser
             {
                 FieldParser = new HexTLVFieldParser
@@ -6086,52 +6135,76 @@ namespace Mediation.Runtime.DataParser
                 Position = 115
             });
 
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "CallType"
+                    }
+                },
+                Length = 1,
+                Position = 154
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateChargingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 26
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallReference",
+                        NumberType = NumberType.BigInt
+                    }
+                },
+                Length = 5,
+                Position = 10
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateRecordNumber"
+                    }
+                },
+                Length = 1,
+                Position = 25
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new HexaParser
+                    {
+                        FieldName = "GlobalCallReference"
+                    }
+                },
+                Length = 21,
+                Position = 252
+            });
 
             return fieldParsers;
-        }
-
-        private List<CompositeFieldsParser> GetCompositeFieldParsers_Nokia()
-        {
-            return new List<CompositeFieldsParser> 
-                    { 
-                    new TimestampDateTimeCompositeParser
-                    {
-                        FieldName = "ConnectTimestamp",
-                        DateTimeFieldName = "ConnectDateTime",
-                        DateTimeShift = new DateTime(1970, 01, 01)
-                    },
-                    new TimestampDateTimeCompositeParser
-                    {
-                        FieldName = "DisconnectTimestamp",
-                        DateTimeFieldName = "DisconnectDateTime",
-                        DateTimeShift = new DateTime(1970, 01, 01)
-                    },
-                    new GuidCompositeParser{
-                     FieldName = "UniqueIdentifier"
-                    },
-                     new FileNameCompositeParser{
-                         FieldName = "FileName" 
-                        }
-                    };
-        }
-
-        private List<CompositeFieldsParser> GetCompositeFieldParsers_SMS_Nokia()
-        {
-            return new List<CompositeFieldsParser> 
-                    { 
-                    new TimestampDateTimeCompositeParser
-                    {
-                        FieldName = "MessageTimestamp",
-                        DateTimeFieldName = "MessageTime",
-                        DateTimeShift = new DateTime(1970, 01, 01)
-                    },
-                    new GuidCompositeParser{
-                     FieldName = "UniqueIdentifier"
-                    },
-                     new FileNameCompositeParser{
-                         FieldName = "FileName" 
-                        }
-                    };
         }
         private List<PositionedFieldParser> Get_PositionedFieldParsers_MOT_Call()
         {
@@ -6347,6 +6420,75 @@ namespace Mediation.Runtime.DataParser
                 Position = 88
             });
 
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "CallType"
+                    }
+                },
+                Length = 1,
+                Position = 123
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateChargingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 26
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallReference",
+                        NumberType = NumberType.BigInt
+                    }
+                },
+                Length = 5,
+                Position = 10
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateRecordNumber"
+                    }
+                },
+                Length = 1,
+                Position = 25
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new HexaParser
+                    {
+                        FieldName = "GlobalCallReference"
+                    }
+                },
+                Length = 21,
+                Position = 214
+            });
+
             return fieldParsers;
         }
         private List<PositionedFieldParser> Get_PositionedFieldParsers_Forward_Call()
@@ -6379,7 +6521,7 @@ namespace Mediation.Runtime.DataParser
                     }
                 },
                 Length = 12,
-                Position = 37
+                Position = 65
             });
 
             fieldParsers.Add(new PositionedFieldParser
@@ -6410,19 +6552,19 @@ namespace Mediation.Runtime.DataParser
                 Position = 49
             });
 
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new TBCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        FieldName = "CallingIMSI"
-                    }
-                },
-                Length = 8,
-                Position = 29
-            });
+            //fieldParsers.Add(new PositionedFieldParser
+            //{
+            //    FieldParser = new HexTLVFieldParser
+            //    {
+            //        Settings = new TBCDNumberParser
+            //        {
+            //            RemoveHexa = true,
+            //            FieldName = "CallingIMSI"
+            //        }
+            //    },
+            //    Length = 8,
+            //    Position = 29
+            //});
 
             fieldParsers.Add(new PositionedFieldParser
             {
@@ -6502,6 +6644,75 @@ namespace Mediation.Runtime.DataParser
                 },
                 Length = 3,
                 Position = 132
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "CallType"
+                    }
+                },
+                Length = 1,
+                Position = 129
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateChargingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 26
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallReference",
+                        NumberType = NumberType.BigInt
+                    }
+                },
+                Length = 5,
+                Position = 10
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateRecordNumber"
+                    }
+                },
+                Length = 1,
+                Position = 25
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new HexaParser
+                    {
+                        FieldName = "GlobalCallReference"
+                    }
+                },
+                Length = 21,
+                Position = 201
             });
 
             return fieldParsers;
@@ -6632,6 +6843,806 @@ namespace Mediation.Runtime.DataParser
                 },
                 Length = 3,
                 Position = 111
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "CallType"
+                    }
+                },
+                Length = 1,
+                Position = 109
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateChargingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 26
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallReference",
+                        NumberType = NumberType.BigInt
+                    }
+                },
+                Length = 5,
+                Position = 10
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateRecordNumber"
+                    }
+                },
+                Length = 1,
+                Position = 25
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new HexaParser
+                    {
+                        FieldName = "GlobalCallReference"
+                    }
+                },
+                Length = 21,
+                Position = 173
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_PSTN_Originated_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new TBCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        FieldName = "CallingNumber"
+                    }
+                },
+                Length = 12,
+                Position = 29
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new TBCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        FieldName = "CalledNumber"
+                    }
+                },
+                Length = 12,
+                Position = 42
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "SetupTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 118
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "ConnectDateTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 65
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "DisconnectDateTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 72
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        Reverse = true,
+                        FieldName = "CallDuration"
+                    }
+                },
+                Length = 3,
+                Position = 86
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "CallType"
+                    }
+                },
+                Length = 1,
+                Position = 83
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateChargingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 26
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallReference",
+                        NumberType = NumberType.BigInt
+                    }
+                },
+                Length = 5,
+                Position = 10
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateRecordNumber"
+                    }
+                },
+                Length = 1,
+                Position = 25
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new HexaParser
+                    {
+                        FieldName = "GlobalCallReference"
+                    }
+                },
+                Length = 21,
+                Position = 146
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_PSTN_Terminated_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new TBCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        FieldName = "CallingNumber"
+                    }
+                },
+                Length = 12,
+                Position = 29
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new TBCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        FieldName = "CalledNumber"
+                    }
+                },
+                Length = 12,
+                Position = 42
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "SetupTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 123
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "ConnectDateTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 65
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "DisconnectDateTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        Reverse = true,
+                        FieldName = "CallDuration"
+                    }
+                },
+                Length = 3,
+                Position = 86
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "CallType"
+                    }
+                },
+                Length = 1,
+                Position = 83
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateChargingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 26
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallReference",
+                        NumberType = NumberType.BigInt
+                    }
+                },
+                Length = 5,
+                Position = 10
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateRecordNumber"
+                    }
+                },
+                Length = 1,
+                Position = 25
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new HexaParser
+                    {
+                        FieldName = "GlobalCallReference"
+                    }
+                },
+                Length = 21,
+                Position = 133
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_PBX_Originated_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new TBCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        FieldName = "CallingNumber"
+                    }
+                },
+                Length = 12,
+                Position = 29
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new TBCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        FieldName = "CalledNumber"
+                    }
+                },
+                Length = 12,
+                Position = 42
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "SetupTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 115
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "ConnectDateTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 65
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "DisconnectDateTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        Reverse = true,
+                        FieldName = "CallDuration"
+                    }
+                },
+                Length = 3,
+                Position = 85
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "CallType"
+                    }
+                },
+                Length = 1,
+                Position = 83
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateChargingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 26
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallReference",
+                        NumberType = NumberType.BigInt
+                    }
+                },
+                Length = 5,
+                Position = 10
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateRecordNumber"
+                    }
+                },
+                Length = 1,
+                Position = 25
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new HexaParser
+                    {
+                        FieldName = "GlobalCallReference"
+                    }
+                },
+                Length = 21,
+                Position = 143
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_PBX_Terminated_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new TBCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        FieldName = "CallingNumber"
+                    }
+                },
+                Length = 12,
+                Position = 29
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new TBCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        FieldName = "CalledNumber"
+                    }
+                },
+                Length = 12,
+                Position = 42
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "SetupTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 100
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "ConnectDateTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 65
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new DateTimeParser
+                    {
+                        DateTimeParsingType = DateTimeParsingType.DateTime,
+                        FieldName = "DisconnectDateTime",
+                        DayIndex = 3,
+                        MonthIndex = 4,
+                        YearIndex = 5,
+                        HoursIndex = 2,
+                        MinutesIndex = 1,
+                        SecondsIndex = 0,
+                        WithOffset = false
+                    }
+                },
+                Length = 7,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        RemoveHexa = true,
+                        Reverse = true,
+                        FieldName = "CallDuration"
+                    }
+                },
+                Length = 3,
+                Position = 85
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "CallType"
+                    }
+                },
+                Length = 1,
+                Position = 83
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateChargingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 26
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "CallReference",
+                        NumberType = NumberType.BigInt
+                    }
+                },
+                Length = 5,
+                Position = 10
+            });
+            
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateRecordNumber"
+                    }
+                },
+                Length = 1,
+                Position = 25
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new HexaParser
+                    {
+                        FieldName = "GlobalCallReference"
+                    }
+                },
+                Length = 21,
+                Position = 110
             });
 
             return fieldParsers;
@@ -6807,462 +7818,6 @@ namespace Mediation.Runtime.DataParser
 
             return fieldParsers;
         }
-        private List<PositionedFieldParser> Get_PositionedFieldParsers_PSTN_Originated_Call()
-        {
-            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new TBCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        FieldName = "CallingNumber"
-                    }
-                },
-                Length = 12,
-                Position = 29
-
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new TBCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        FieldName = "CalledNumber"
-                    }
-                },
-                Length = 12,
-                Position = 42
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "SetupTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 118
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "ConnectDateTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 65
-            });
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "DisconnectDateTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 72
-            });
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new BCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        Reverse = true,
-                        FieldName = "CallDuration"
-                    }
-                },
-                Length = 3,
-                Position = 86
-            });
-
-            return fieldParsers;
-        }
-        private List<PositionedFieldParser> Get_PositionedFieldParsers_PSTN_Terminated_Call()
-        {
-            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new TBCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        FieldName = "CallingNumber"
-                    }
-                },
-                Length = 12,
-                Position = 29
-
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new TBCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        FieldName = "CalledNumber"
-                    }
-                },
-                Length = 12,
-                Position = 42
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "SetupTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 123
-            });
-
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "ConnectDateTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 65
-            });
-
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "DisconnectDateTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 72
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new BCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        Reverse = true,
-                        FieldName = "CallDuration"
-                    }
-                },
-                Length = 3,
-                Position = 86
-            });
-
-            return fieldParsers;
-        }
-        private List<PositionedFieldParser> Get_PositionedFieldParsers_PBX_Originated_Call()
-        {
-            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new TBCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        FieldName = "CallingNumber"
-                    }
-                },
-                Length = 12,
-                Position = 29
-
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new TBCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        FieldName = "CalledNumber"
-                    }
-                },
-                Length = 12,
-                Position = 42
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "SetupTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 115
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "ConnectDateTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 65
-            });
-
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "DisconnectDateTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 72
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new BCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        Reverse = true,
-                        FieldName = "CallDuration"
-                    }
-                },
-                Length = 3,
-                Position = 85
-            });
-
-            return fieldParsers;
-        }
-        private List<PositionedFieldParser> Get_PositionedFieldParsers_PBX_Terminated_Call()
-        {
-            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new TBCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        FieldName = "CallingNumber"
-                    }
-                },
-                Length = 12,
-                Position = 29
-
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new TBCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        FieldName = "CalledNumber"
-                    }
-                },
-                Length = 12,
-                Position = 42
-            });
-
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "SetupTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 100
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "ConnectDateTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 65
-            });
-
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new DateTimeParser
-                    {
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        FieldName = "DisconnectDateTime",
-                        DayIndex = 3,
-                        MonthIndex = 4,
-                        YearIndex = 5,
-                        HoursIndex = 2,
-                        MinutesIndex = 1,
-                        SecondsIndex = 0,
-                        WithOffset = false
-                    }
-                },
-                Length = 7,
-                Position = 72
-            });
-
-            fieldParsers.Add(new PositionedFieldParser
-            {
-                FieldParser = new HexTLVFieldParser
-                {
-                    Settings = new BCDNumberParser
-                    {
-                        RemoveHexa = true,
-                        Reverse = true,
-                        FieldName = "CallDuration"
-                    }
-                },
-                Length = 3,
-                Position = 85
-            });
-
-            return fieldParsers;
-        }
-
         #endregion
     }
 

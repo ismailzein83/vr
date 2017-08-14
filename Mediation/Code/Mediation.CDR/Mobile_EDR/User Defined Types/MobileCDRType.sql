@@ -49,7 +49,13 @@
     [Called_Last_CI]                   INT              NULL,
     [Calling_First_CI]                 INT              NULL,
     [Calling_Last_CI]                  INT              NULL,
-    [RecordTypeName]                   VARCHAR (100)    NULL);
+    [RecordTypeName]                   VARCHAR (100)    NULL,
+    [IntermediateChargingIndicator]    INT              NULL,
+    [CallReference]                    BIGINT           NULL,
+    [GlobalCallReference]              VARCHAR (200)    NULL,
+    [IntermediateRecordNumber]         INT              NULL);
+
+
 
 
 
