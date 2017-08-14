@@ -134,8 +134,9 @@ as (select * from (values
 ('22C9E36D-D328-4220-83E8-E45AD1B005D8','AccountType','Account Type','VRCommon_OverriddenConfiguration','{"Editor":"retail-be-overriddenconfiguration-accounttype"}'),
 ('63E3987B-302B-42BA-8E61-A7762FA7BFD3','DefaultFinancialAccountLocator','Default Locator','Retail_BE_FinancialAccountLocator','{"Editor":"retail-be-accountbedefinition-financialaccountlocator-default"}'),
 ('C01FA066-28C8-4225-9F59-39F5EECF86ED','AccountPartDefinitionOverriddenConfiguration','Account Part Definition','VRCommon_OverriddenConfiguration','{"Editor":"retail-overriddenconfiguration-accountpartdefinition"}'),
-('9b59a5e8-923a-4e9e-8338-9549150ec88c','Account City','Account City','VR_InvoiceType_SerialNumberParts','{"Editor":"retail-invoicetype-serialnumber-accountcity"}')
+('9b59a5e8-923a-4e9e-8338-9549150ec88c','Account City','Account City','VR_InvoiceType_SerialNumberParts','{"Editor":"retail-invoicetype-serialnumber-accountcity"}'),
 
+('3A88F4C6-5CCE-4A31-A74E-E83BF73A6892','Retail_BE_DataRecordFieldFormula_ZoneEvaluator','Zone Evaluator','VR_Generic_DataRecordFieldFormula','{"Editor":"retail-be-datarecordtypefields-formula-zoneevaluator"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
