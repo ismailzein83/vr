@@ -46,6 +46,8 @@ app.directive('retailBeAccountactiondefinitionsettingsChangestatus', ['UtilsServ
                     if (payload != undefined) {
                         accountActionDefinitionSettings = payload.accountActionDefinitionSettings;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
+                        if (accountActionDefinitionSettings != undefined)
+                            $scope.scopeModel.applyToChildren = accountActionDefinitionSettings.ApplyToChildren;
                     }
 
                     function loadStatusDefinitionSelector() {
@@ -71,7 +73,8 @@ app.directive('retailBeAccountactiondefinitionsettingsChangestatus', ['UtilsServ
                 api.getData = function () {
                     return {
                         $type: 'Retail.BusinessEntity.MainExtensions.AccountBEActionTypes.ChangeStatusActionSettings, Retail.BusinessEntity.MainExtensions',
-                        StatusId: statusDefinitionSelectorAPI.getSelectedIds()
+                        StatusId: statusDefinitionSelectorAPI.getSelectedIds(),
+                        ApplyToChildren: $scope.scopeModel.applyToChildren
                     };
                 };
 

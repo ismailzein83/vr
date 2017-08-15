@@ -34,10 +34,18 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
                         StatusId = actionDefinitionSettings.StatusId
 
                     }, out accountStatusHistoryId);
+
+                    
                     FinancialAccountManager financialAccountManager = new FinancialAccountManager();
                     financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, accountId);
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(accountBEDefinitionId, accountId);
+                    if (actionDefinitionSettings.ApplyToChildren)
+                    {
+                        if (AppyChangeStatusToChilds(actionDefinitionSettings, actionDefinition.AvailabilityCondition, accountBEDefinitionId, accountId))
+                        {
+                            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                            updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(accountBEDefinitionId, accountId);
+                        };
+                    }
                 }
                 else
                 {
@@ -45,6 +53,38 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
                 }
             }
             return updateOperationOutput;
+        }
+        private bool AppyChangeStatusToChilds(ChangeStatusActionSettings actionDefinitionSettings,AccountCondition actionCondition, Guid accountBEDefinitionId, long accountId)
+        {
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            AccountStatusHistoryManager accountStatusHistoryManager = new Business.AccountStatusHistoryManager();
+            AccountBEManager accountBEManager = new AccountBEManager();
+            var childAccouts = accountBEManager.GetChildAccounts(accountBEDefinitionId, accountId,true);
+            if(childAccouts != null)
+            {
+                foreach(var childAccout in childAccouts)
+                {
+                    if (accountBEManager.EvaluateAccountCondition(childAccout, actionCondition))
+                    {
+                        if (accountBEManager.UpdateStatus(accountBEDefinitionId, childAccout.AccountId, actionDefinitionSettings.StatusId))
+                        {
+                            long accountStatusHistoryId;
+                            accountStatusHistoryManager.TryAddAccountStatusHistory(new AccountStatusHistory
+                            {
+                                AccountId = childAccout.AccountId,
+                                StatusChangedDate = DateTime.Now,
+                                StatusId = actionDefinitionSettings.StatusId
+
+                            }, out accountStatusHistoryId);
+                            financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, childAccout.AccountId);
+                        }else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
     }

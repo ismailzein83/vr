@@ -20,6 +20,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
             get { return "ChangeStatusAction"; }
         }
         public Guid StatusId { get; set; }
+        public bool ApplyToChildren { get; set; }
         public override bool DoesUserHaveAccess(IAccountActionDefinitionCheckAccessContext context)
         {
             return new AccountBEDefinitionManager().DoesUserHaveEditAccess(context.UserId, context.AccountBEDefinitionId);
