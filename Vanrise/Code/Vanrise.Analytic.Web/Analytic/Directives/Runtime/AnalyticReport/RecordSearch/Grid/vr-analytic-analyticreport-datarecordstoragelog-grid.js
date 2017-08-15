@@ -93,12 +93,12 @@
                             DataRecordStorageIds: query.DataRecordStorageIds,
                             FromTime: query.FromTime,
                             ToTime: query.ToTime,
-                            Columns: getColumnsName(query.GridColumns, query.ItemDetails),
                             FilterGroup: query.FilterGroup,
                             LimitResult: query.LimitResult,
-                            Direction: query.Direction,
-                            ColumnTitles: getColumnsTitle(query.GridColumns, query.ItemDetails)
+                            Direction: query.Direction
                         };
+
+                        fillQueryColumns(searchQuery, query.GridColumns, query.ItemDetails);
 
                         if (query.SortColumns && query.SortColumns.length > 0) {
                             searchQuery.SortColumns = [];
@@ -174,39 +174,30 @@
                 return type.indexOf('Date') > -1 || type.indexOf('Number') > -1 ? 'FieldValues.' + fieldName + '.Value' : 'FieldValues.' + fieldName + '.Description';
             }
 
-            function getColumnsName(gridColumns, itemDetails) {
+            function fillQueryColumns(query, gridColumns, itemDetails) {
+                query.Columns = [];
+                query.ColumnTitles = [];
+
                 var columns = [];
                 for (var x = 0; x < gridColumns.length; x++) {
                     var currentColumn = gridColumns[x];
-                    columns.push(currentColumn.FieldName);
+                    if (query.Columns.indexOf(currentColumn.FieldName) < 0) {
+                        query.Columns.push(currentColumn.FieldName);
+                        query.ColumnTitles.push(currentColumn.FieldTitle);
+                    }
                 }
 
                 if (itemDetails != undefined && itemDetails != null && itemDetails.length > 0) {
                     for (var y = 0; y < itemDetails.length; y++) {
                         var currentDetail = itemDetails[y];
-                        columns.push(currentDetail.FieldName);
+                        if (query.Columns.indexOf(currentDetail.FieldName) < 0) {
+                            query.Columns.push(currentDetail.FieldName);
+                            query.ColumnTitles.push(currentDetail.FieldTitle);
+                        }
                     }
                 }
                 return columns;
             }
-
-            function getColumnsTitle(gridColumns, itemDetails) {
-                var columnTitles = [];
-
-                for (var x = 0; x < gridColumns.length; x++) {
-                    var currentColumn = gridColumns[x];
-                    columnTitles.push(currentColumn.FieldTitle);
-                }
-
-                if (itemDetails != undefined && itemDetails != null && itemDetails.length > 0) {
-                    for (var y = 0; y < itemDetails.length; y++) {
-                        var currentDetail = itemDetails[y];
-                        columnTitles.push(currentDetail.FieldTitle);
-                    }
-                }
-                return columnTitles;
-            }
-
 
             function buildItemDetails(itemDetails) {
                 if (itemDetails) {
