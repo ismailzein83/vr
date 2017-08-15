@@ -424,6 +424,18 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceAttachmentsInfo;
         }
+        public InvoiceAttachment GeInvoiceTypeAttachment(Guid invoiceTypeId,Guid invoiceAttachmentId)
+        {
+            var invoiceTypes = GetCachedInvoiceTypes();
+            var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
+            if (invoiceType == null)
+                throw new NullReferenceException(string.Format("invoiceType:{0}", invoiceTypeId));
+            if (invoiceType.Settings.InvoiceAttachments != null && invoiceType.Settings.InvoiceAttachments.Count > 0)
+            {
+              return  invoiceType.Settings.InvoiceAttachments.FindRecord(x => x.InvoiceAttachmentId == invoiceAttachmentId);
+            }
+            return null;
+        }
         public IEnumerable<ItemSetNameStorageRule> GetItemSetNamesStorageRules(Guid invoiceTypeId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);

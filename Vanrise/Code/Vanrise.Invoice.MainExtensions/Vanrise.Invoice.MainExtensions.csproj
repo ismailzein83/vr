@@ -71,6 +71,7 @@
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceEmailActionController.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceEmailActionManager.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\Configs\SendEmailAttachmentTypeConfig.cs" />
+    <Compile Include="InvoiceActionSettings\EmailAction\InvoiceFileConvertor\ConditionalInvoiceFile.cs" />
     <Compile Include="InvoiceActionSettings\InvoiceNoteAction.cs" />
     <Compile Include="InvoiceActionSettings\OpenRDLCReportActionManager.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceFileConvertor\InvoiceRDLCFileConverter.cs" />
