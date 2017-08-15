@@ -35,15 +35,17 @@ namespace Vanrise.HelperTools
             {
                 javascriptsOutputPath = Common.JavascriptsOutputPath;
             }
-
-            var allFiles = Directory.GetFiles(string.Format(javascriptsOutputPath, currentDateShort, folder), "*.js", SearchOption.AllDirectories);
-
-            string ExtraFilename = string.Empty;
-
-            Parallel.ForEach(allFiles, file =>
+            if (Directory.Exists(string.Format(javascriptsOutputPath, currentDateShort, folder)))
             {
-                CompressFile(file, ExtraFilename, p);
-            });
+                var allFiles = Directory.GetFiles(string.Format(javascriptsOutputPath, currentDateShort, folder), "*.js", SearchOption.AllDirectories);
+
+                string ExtraFilename = string.Empty;
+
+                Parallel.ForEach(allFiles, file =>
+                {
+                    CompressFile(file, ExtraFilename, p);
+                });
+            }
         }
 
         public static void CompressFile(string file, string ExtraFilename, ECMAScriptPacker p)
@@ -57,33 +59,36 @@ namespace Vanrise.HelperTools
             {
                 javascriptsOutputPath = Common.JavascriptsOutputPath;
             }
-            var allDirectories = Directory.GetDirectories(string.Format(javascriptsOutputPath, currentDateShort, folder), "*", SearchOption.TopDirectoryOnly);
-
-            Parallel.ForEach(allDirectories, directory =>
+            if (Directory.Exists(string.Format(javascriptsOutputPath, currentDateShort, folder)))
             {
-                var allFiles = Directory.GetFiles(directory, "*.js", SearchOption.AllDirectories);
+                var allDirectories = Directory.GetDirectories(string.Format(javascriptsOutputPath, currentDateShort, folder), "*", SearchOption.TopDirectoryOnly);
 
-                var orgDirectoryName = Path.GetFileName(directory);
-                var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
-
-                //create file if not exisit
-                if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".js")))
+                Parallel.ForEach(allDirectories, directory =>
                 {
-                    StringBuilder fileContent = new StringBuilder();
+                    var allFiles = Directory.GetFiles(directory, "*.js", SearchOption.AllDirectories);
 
-                    //add folder content to created file
-                    foreach (var file in allFiles)
+                    var orgDirectoryName = Path.GetFileName(directory);
+                    var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
+
+                    //create file if not exisit
+                    if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".js")))
                     {
-                        fileContent.Append(File.ReadAllText(file));
-                        fileContent.Append(";");
-                        //rename or remove file
-                        File.Delete(file);
-                        //File.Move(file, string.Format("{0}{1}", file, "processed"));
-                    }
+                        StringBuilder fileContent = new StringBuilder();
 
-                    File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".js"), fileContent.ToString());
-                }
-            });
+                        //add folder content to created file
+                        foreach (var file in allFiles)
+                        {
+                            fileContent.Append(File.ReadAllText(file));
+                            fileContent.Append(";");
+                            //rename or remove file
+                            File.Delete(file);
+                            //File.Move(file, string.Format("{0}{1}", file, "processed"));
+                        }
+
+                        File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".js"), fileContent.ToString());
+                    }
+                });
+            }
         }
 
 
