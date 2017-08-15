@@ -50,6 +50,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
             SalePLChangeType plChangeType;
             SalePriceListType salePriceListType;
+
+            int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
+            
             if (countriesToChange != null && countriesToChange.Any())
             {
                 customerIdsWithPriceList = new List<int> { ratePlanContext.OwnerId };
@@ -69,7 +72,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 CustomerPriceListChanges = customerPriceListChanges,
                 EffectiveDate = ratePlanContext.EffectiveDate,
                 ChangeType = plChangeType,
-                CurrencyId = currencyId
+                CurrencyId = currencyId,
+                UserId = userId
             };
             salePricelistFileContext.SalePriceLists = CreatePriceList(ownerId, ownerType, priceListId, currencyId,
                 salePriceListType, salePricelistFileContext.ProcessInstanceId);
@@ -80,7 +84,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Private Methods
 
-       private IEnumerable<SalePriceList> CreatePriceList(int ownerId, SalePriceListOwnerType ownerType, int? reservedId, int currencyId, SalePriceListType salePriceListType, long processInstanceId)
+        private IEnumerable<SalePriceList> CreatePriceList(int ownerId, SalePriceListOwnerType ownerType, int? reservedId, int currencyId, SalePriceListType salePriceListType, long processInstanceId)
         {
             if (!reservedId.HasValue) return new List<SalePriceList>();
             return new List<SalePriceList>

@@ -34,13 +34,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
             int sellingNumberPlanId = SellingNumberPlanId.Get(context);
             SalePriceListsByOwner salePriceListByOwner = SalePriceListsByOwner.Get(context);
             IEnumerable<CustomerPriceListChange> customerPriceListChanges = CustomerChanges.Get(context);
             DateTime minimumDate = MinimumDate.Get(context);
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             IEnumerable<SalePriceList> salePriceLists = ConvertPriceList(salePriceListByOwner, processInstanceId);
-            SavePriceLists(sellingNumberPlanId, customerPriceListChanges, processInstanceId, minimumDate, salePriceLists);
+            SavePriceLists(sellingNumberPlanId, customerPriceListChanges, processInstanceId, minimumDate, salePriceLists, userId);
             var customersToSave = GetCustomersToSavePriceListsFor(sellingNumberPlanId, customerPriceListChanges);
             CustomersWithPriceListFile.Set(context, customersToSave);
         }
@@ -57,7 +58,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 ProcessInstanceId = processInstanceId
             });
         }
-        private void SavePriceLists(int sellingNumberPlanId, IEnumerable<CustomerPriceListChange> customerPriceListChanges, long processInstanceId, DateTime effectiveOn, IEnumerable<SalePriceList> salePriceLists)
+        private void SavePriceLists(int sellingNumberPlanId, IEnumerable<CustomerPriceListChange> customerPriceListChanges, long processInstanceId, DateTime effectiveOn, IEnumerable<SalePriceList> salePriceLists, int userId)
         {
             ISalePricelistFileContext salePriceListFileContext = new SalePricelistFileContext
             {
@@ -66,7 +67,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 CustomerPriceListChanges = customerPriceListChanges,
                 EffectiveDate = effectiveOn,
                 ChangeType = SalePLChangeType.CodeAndRate,
-                SalePriceLists = salePriceLists
+                SalePriceLists = salePriceLists,
+                UserId = userId
             };
             SalePriceListManager salePricelistManager = new SalePriceListManager();
             salePricelistManager.SavePricelistFiles(salePriceListFileContext);

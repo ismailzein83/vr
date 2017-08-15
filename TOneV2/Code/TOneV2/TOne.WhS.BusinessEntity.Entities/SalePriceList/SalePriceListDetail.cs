@@ -15,5 +15,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string CurrencyName { get; set; }
         public string OwnerName { get; set; }
         public string PriceListTypeName { get; set; }
+        public string UserName { get; set; }
     }
 }

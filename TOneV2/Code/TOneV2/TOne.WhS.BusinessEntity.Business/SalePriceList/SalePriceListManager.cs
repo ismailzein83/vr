@@ -71,7 +71,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
                         VRFile file = GetPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, pricelistType);
-                        SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId);
+                        SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId,context.UserId);
 
                         var customerPriceListChange = context.CustomerPriceListChanges.First(r => r.CustomerId == customerId);
                         customerPriceListChange.PriceListId = priceList.PriceListId;
@@ -153,6 +153,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (input.Query.SalePricelistTypes != null && salePriceList.PriceListType == null)
                     return false;
                 if (input.Query.SalePricelistTypes != null && salePriceList.PriceListType != null &&!input.Query.SalePricelistTypes.Contains(salePriceList.PriceListType.Value))
+                    return false;
+                if (input.Query.UserIds != null && !input.Query.UserIds.Contains(salePriceList.UserId))
                     return false;
                 
                 return true;
@@ -610,7 +612,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     return ".xls";
             }
         }
-        private SalePriceList AddOrUpdateSalePriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, long processInstanceId, VRFile file, int? currencyId, Dictionary<int, SalePriceList> currentSalePriceLists)
+        private SalePriceList AddOrUpdateSalePriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, long processInstanceId, VRFile file, int? currencyId, Dictionary<int, SalePriceList> currentSalePriceLists, int userId)
         {
             SalePriceList salePriceList;
             var salePriceListManager = new SalePriceListManager();
@@ -634,6 +636,7 @@ namespace TOne.WhS.BusinessEntity.Business
             salePriceList.ProcessInstanceId = processInstanceId;
             salePriceList.EffectiveOn = DateTime.Today;
             salePriceList.CurrencyId = currencyId ?? customer.CarrierAccountSettings.CurrencyId;
+            salePriceList.UserId = userId;
             return salePriceList;
         }
         private Dictionary<int, SalePriceList> GetSalePriceListByCustomerId(IEnumerable<SalePriceList> salePriceLists, out List<SalePriceList> sellingProductPriceList)
@@ -894,6 +897,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 EffectiveDate = salePriceList.CreatedTime,
                 SellingNumberPlanId = sellingNumberPlanId,
                 ProcessInstanceId = salePriceList.ProcessInstanceId,
+                UserId=salePriceList.UserId,
                 SaleCodes = saleCodeSnapshot
             };
             SalePriceListOutputContext salePriceListOutput = PrepareSalePriceListContext(salePriceListContext);
@@ -1070,6 +1074,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public DateTime EffectiveDate { get; set; }
             public int SellingNumberPlanId { get; set; }
             public long ProcessInstanceId { get; set; }
+            public int UserId { get; set; }
             public IEnumerable<SaleCode> SaleCodes { get; set; }
         }
         private class SalePriceListOutputContext
@@ -1154,7 +1159,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Mappers
 
         private SalePriceListDetail SalePricelistDetailMapper(SalePriceList priceList)
-        {
+        {     
             SalePriceListDetail pricelistDetail = new SalePriceListDetail();
             pricelistDetail.Entity = priceList;
             pricelistDetail.OwnerType = Vanrise.Common.Utilities.GetEnumDescription(priceList.OwnerType);
@@ -1172,6 +1177,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 pricelistDetail.OwnerName = _carrierAccountManager.GetCarrierAccountName(priceList.OwnerId);
             }
 
+            UserManager userManager = new UserManager();
+            pricelistDetail.UserName = userManager.GetUserName(priceList.UserId);
 
             pricelistDetail.CurrencyName = GetCurrencyName(priceList.CurrencyId);
             return pricelistDetail;

@@ -16,5 +16,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         IEnumerable<CustomerPriceListChange> CustomerPriceListChanges { get; }
         IEnumerable<SalePriceList> SalePriceLists { get; }
         int? CurrencyId { get; }
+        int UserId { get; }
     }
 }

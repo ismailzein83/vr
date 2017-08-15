@@ -29,6 +29,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime EffectiveOn { get; set; }
         public long ProcessInstanceId { get; set; }
         public long FileId { get; set; }
+        public int UserId { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsSent { get; set; }

@@ -16,6 +16,9 @@
         var salePricelistTypeSelectorApi;
         var salePricelistTypeSelectorReadyDeferred = utilsService.createPromiseDeferred();
 
+        var userSelectorApi;
+        var userSelectorReadyDeferred = utilsService.createPromiseDeferred();
+
         defineScope();
         load();
 
@@ -34,6 +37,11 @@
                 salePricelistTypeSelectorReadyDeferred.resolve();
             };
 
+            $scope.onUserSelectorReady = function (api) {
+                userSelectorApi = api;
+                userSelectorReadyDeferred.resolve();
+            }
+
             $scope.onGridReady = function (api) {
                 gridApi = api;
                 loadSalePriceListGrid();
@@ -49,7 +57,7 @@
 
         function loadAllControls() {
             $scope.isLoadingFilter = true;
-            return utilsService.waitMultipleAsyncOperations([loadCarrierAccount,loadSalePricelistType])
+            return utilsService.waitMultipleAsyncOperations([loadCarrierAccount,loadSalePricelistType,loadUserSelector])
               .catch(function (error) {
                   vrNotificationService.notifyExceptionWithClose(error, $scope);
               })
@@ -77,6 +85,15 @@
             });
             return salePricelistTypeSelectorLoadDeferred.promise;
         }
+
+        function loadUserSelector() {
+            var userSelectorLoadDeferred = utilsService.createPromiseDeferred();
+            userSelectorReadyDeferred.promise.then(function () {
+                var userSelectorPayload = {};
+                vruiUtilsService.callDirectiveLoad(userSelectorApi, userSelectorPayload, userSelectorLoadDeferred);
+            })
+        }
+
         function loadSalePriceListGrid() {
             setGridQuery();
 
@@ -92,7 +109,8 @@
             gridQuery = {
                 OwnerId: carrierAccountSelectorApi.getSelectedIds(),
                 CreationDate: $scope.CreationDate,
-                SalePricelistTypes: salePricelistTypeSelectorApi.getSelectedIds()
+                SalePricelistTypes: salePricelistTypeSelectorApi.getSelectedIds(),
+                UserIds: userSelectorApi.getSelectedIds()
             };
         }
         function setGridContext() {
