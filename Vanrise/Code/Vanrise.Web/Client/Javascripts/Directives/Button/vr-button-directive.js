@@ -74,6 +74,8 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
                 var validationContext = ctrl.validationcontext != undefined ? ctrl.validationcontext : ctrl.formname;
                 if (validationContext != undefined && validationContext.validate() != null)
                     return true;
+                if (ctrl.formname != undefined && ctrl.formname.validate() != null)
+                    return true;
                 var isDisabled;
                 if (isSubmitting == true)
                     isDisabled = true;
