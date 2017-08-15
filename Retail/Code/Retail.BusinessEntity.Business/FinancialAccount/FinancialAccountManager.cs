@@ -217,7 +217,8 @@ namespace Retail.BusinessEntity.Business
             AccountBEFinancialAccountsSettings accountFinancialAccountsSettings = s_accountManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(accountDefinitionId, accountId);
             if (accountFinancialAccountsSettings != null && accountFinancialAccountsSettings.FinancialAccounts != null)
             {
-                foreach (var financialAccount in accountFinancialAccountsSettings.FinancialAccounts)
+                var financialAccounts = Utilities.CloneObject(accountFinancialAccountsSettings.FinancialAccounts);
+                foreach (var financialAccount in financialAccounts)
                 {
                     UpdateAccountStatus(accountDefinitionId, accountId, financialAccount);
                 }
@@ -748,7 +749,18 @@ namespace Retail.BusinessEntity.Business
             if (s_accountManager.IsAccountInvoiceActive(accountBEDefinitionId, accountId))
             {
                 vrAccountStatus = VRAccountStatus.Active;
-
+                if (!financialAccount.EED.HasValue || financialAccount.EED.Value > DateTime.Now)
+                {
+                    UpdateFinancialAccount(new FinancialAccountToEdit
+                    {
+                        AccountBEDefinitionId = accountBEDefinitionId,
+                        AccountId = accountId,
+                        FinancialAccount = financialAccount
+                    });
+                }
+            }
+            else
+            {
                 if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
                 {
                     var lastInvoiceDate = new Vanrise.Invoice.Business.InvoiceManager().GetLastInvoiceToDate(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId);
@@ -761,22 +773,10 @@ namespace Retail.BusinessEntity.Business
                         financialAccount.EED = financialAccount.BED;
                     }
                 }
-            }
-            else
-            {
 
-                if (!financialAccount.EED.HasValue || financialAccount.EED.Value > DateTime.Now)
-                {
-                    UpdateFinancialAccount(new FinancialAccountToEdit
-                    {
-                        AccountBEDefinitionId = accountBEDefinitionId,
-                        AccountId = accountId,
-                        FinancialAccount = financialAccount
-                    });
-                }
+               
             }
 
-            
             var result = false;
             if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
             {

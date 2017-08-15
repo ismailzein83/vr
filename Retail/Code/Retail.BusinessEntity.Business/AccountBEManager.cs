@@ -196,12 +196,16 @@ namespace Retail.BusinessEntity.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-
+            var currentAccount = GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
+            currentAccount.ThrowIfNull("account", accountToEdit.AccountId);
             Account account;
             if (TryUpdateAccount(accountToEdit, out account))
             {
                 FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-                financialAccountManager.UpdateAccountStatus(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
+                if (account.StatusId != currentAccount.StatusId)
+                {
+                    financialAccountManager.UpdateAccountStatus(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
+                }
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = AccountDetailMapper(account);
             }
