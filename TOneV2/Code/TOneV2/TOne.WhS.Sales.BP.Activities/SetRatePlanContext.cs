@@ -58,7 +58,7 @@ namespace TOne.WhS.Sales.BP.Activities
             ratePlanContext.FutureRateLocator = GetFutureRateLocator(ownerType, ownerId, effectiveDate);
             ratePlanContext.PriceListCurrencyId = currencyId;
             if (ownerType == SalePriceListOwnerType.SellingProduct)
-                ratePlanContext.IsFirstSellingProductOffer = !new SalePriceListManager().CheckExistingPriceList(ownerId, SalePriceListOwnerType.SellingProduct);
+                ratePlanContext.IsFirstSellingProductOffer = !new SalePriceListManager().CheckIfAnyPriceListExists(SalePriceListOwnerType.SellingProduct, ownerId);
         }
 
         #region Private Methods
