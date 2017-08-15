@@ -17,6 +17,7 @@ using Microsoft.SqlServer.Management.Sdk.Sfc;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Vanrise.HelperTools;
 
 namespace Dean.Edwards
 {
@@ -437,39 +438,11 @@ namespace Dean.Edwards
             string jsFilesPath = txtDirectory.Text;
             if (!string.IsNullOrEmpty(jsFilesPath))
             {
-                ECMAScriptPacker p = new ECMAScriptPacker((ECMAScriptPacker.PackerEncoding)Encoding.SelectedItem, fastDecode.Checked, specialChars.Checked);
-
-                var allFiles = Directory.GetFiles(jsFilesPath, "*.js", SearchOption.AllDirectories);
-
-                // Display the ProgressBar control.
-                pBar1.Visible = true;
-                // Set Minimum to 1 to represent the first file being copied.
-                pBar1.Minimum = 1;
-                // Set Maximum to the total number of files to copy.
-                pBar1.Maximum = allFiles.Length;
-                // Set the initial value of the ProgressBar.
-                pBar1.Value = 1;
-                // Set the Step property to a value of 1 to represent each file being copied.
-                pBar1.Step = 1;
-
-
-                string ExtraFilename = replaceFiles.Checked ? string.Empty : ".min";
-                tbSource.Text = string.Empty;
-                //foreach (var file in allFiles)
-                //{
-                //    tbSource.Text = string.Format("Current: {0}\r\n", Path.GetFullPath(file));
-                //    tbSource.Text += string.Format("New: {0}\\{1}{2}{3}\r\n", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file));
-
-                //    File.WriteAllText(string.Format("{0}\\{1}{2}{3}", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file)), p.Pack(File.ReadAllText(Path.GetFullPath(file))));
-
-                //    // Perform the increment on the ProgressBar.
-                //    pBar1.PerformStep();
-                //}
-
-                Parallel.ForEach(allFiles, file =>
-                {
-                    CompressFile(file, ExtraFilename, p);
-                });
+                DisplayProgressBar(2);
+                Thread.Sleep(1000);
+                pBar1.PerformStep();
+                Common.CompressJSFiles("currentDateShort", "Javascripts", jsFilesPath);
+                pBar1.PerformStep();
             }
             else
             {
@@ -582,79 +555,11 @@ namespace Dean.Edwards
             string jsFilesPath = txtDirectory.Text;
             if (!string.IsNullOrEmpty(jsFilesPath))
             {
-                var allDirectories = Directory.GetDirectories(jsFilesPath, "*", SearchOption.TopDirectoryOnly);
-
-                tbSource.Text = string.Empty;
-
-                // Display the ProgressBar control.
-                pBar1.Visible = true;
-                // Set Minimum to 1 to represent the first file being copied.
-                pBar1.Minimum = 1;
-                // Set Maximum to the total number of files to copy.
-                pBar1.Maximum = allDirectories.Length;
-                // Set the initial value of the ProgressBar.
-                pBar1.Value = 1;
-                // Set the Step property to a value of 1 to represent each file being copied.
-                pBar1.Step = 1;
-
-                //foreach (var directory in allDirectories)
-                //{
-                //    var allFiles = Directory.GetFiles(directory, "*.js", SearchOption.AllDirectories);
-
-                //    pBar1.PerformStep();
-
-                //    //var directoryName = Path.GetFileName(directory);
-                    
-                //    var orgDirectoryName = Path.GetFileName(directory);
-                //    var directoryName = chkOverriddenNode.Checked ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
-
-                //    //create file if not exisit
-                //    if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".js")))
-                //    {
-                //        StringBuilder fileContent = new StringBuilder();
-
-                //        //add folder content to created file
-                //        foreach (var file in allFiles)
-                //        {
-                //            fileContent.Append(File.ReadAllText(file));
-                //            fileContent.Append(";");
-                //            //rename or remove file
-                //            File.Delete(file);
-                //            //File.Move(file, string.Format("{0}{1}", file, "processed"));
-                //        }
-
-                //        File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".js"), fileContent.ToString());
-                //    }
-                //}
-                Parallel.ForEach(allDirectories, directory =>
-                {
-                    var allFiles = Directory.GetFiles(directory, "*.js", SearchOption.AllDirectories);
-
-                    pBar1.PerformStep();
-
-                    //var directoryName = Path.GetFileName(directory);
-
-                    var orgDirectoryName = Path.GetFileName(directory);
-                    var directoryName = chkOverriddenNode.Checked ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
-
-                    //create file if not exisit
-                    if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".js")))
-                    {
-                        StringBuilder fileContent = new StringBuilder();
-
-                        //add folder content to created file
-                        foreach (var file in allFiles)
-                        {
-                            fileContent.Append(File.ReadAllText(file));
-                            fileContent.Append(";");
-                            //rename or remove file
-                            File.Delete(file);
-                            //File.Move(file, string.Format("{0}{1}", file, "processed"));
-                        }
-
-                        File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".js"), fileContent.ToString());
-                    }
-                });
+                DisplayProgressBar(2);
+                Thread.Sleep(1000);
+                pBar1.PerformStep();
+                Common.GroupJSFiles("currentDateShort", "Javascripts", false, jsFilesPath);
+                pBar1.PerformStep();
             }
             else
             {
@@ -667,66 +572,11 @@ namespace Dean.Edwards
             string jsFilesPath = txtDirectory.Text;
             if (!string.IsNullOrEmpty(jsFilesPath))
             {
-                var allDirectories = Directory.GetDirectories(jsFilesPath, "*", SearchOption.TopDirectoryOnly);
-
-                tbSource.Text = string.Empty;
-
-                // Display the ProgressBar control.
-                pBar1.Visible = true;
-                // Set Minimum to 1 to represent the first file being copied.
-                pBar1.Minimum = 1;
-                // Set Maximum to the total number of files to copy.
-                pBar1.Maximum = allDirectories.Length;
-                // Set the initial value of the ProgressBar.
-                pBar1.Value = 1;
-                // Set the Step property to a value of 1 to represent each file being copied.
-                pBar1.Step = 1;
-
-                foreach (var directory in allDirectories)
-                {
-                    pBar1.PerformStep();
-                    var orgDirectoryName = Path.GetFileName(directory);
-                    var directoryName = chkOverriddenNode.Checked ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
-
-                    //create file if not exisit
-                    if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql")))
-                    {
-                        StringBuilder fileContent = new StringBuilder();
-
-                        string[] allFiles = Directory.GetFiles(directory, "*.sql", SearchOption.AllDirectories); ;
-                        Array.Sort(allFiles);
-                        if (File.Exists(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt")))
-                        {
-                            allFiles = File.ReadAllLines(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt"));                            
-                        }
-
-                        //add folder content to created file
-                        foreach (var file in allFiles)
-                        {
-                            string addDicrectory = string.Format("{0}\\", directory);
-                            if (file.Contains("\\"))
-                            {
-                                addDicrectory = string.Empty;
-                            }
-                            if (File.Exists(string.Format("{0}{1}", addDicrectory, file)))
-                            {
-                                fileContent.AppendLine(string.Format("-----------------------FILE {0}-----------------------------------------------", file));
-                                fileContent.Append(File.ReadAllText(string.Format("{0}{1}", addDicrectory, file)));
-                                fileContent.AppendLine();
-
-                                //rename or remove file
-                                File.Delete(string.Format("{0}{1}", addDicrectory, file));
-                                //File.Move(file, string.Format("{0}{1}", file, "processed"));
-                            }
-                        }
-
-                        fileContent = fileContent.Replace("#VersionDate#", DateTime.Now.ToString(VersionDateFormat));
-                        fileContent = fileContent.Replace("#VersionNumber#", VersionNumber);
-
-                        File.WriteAllText(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql"), fileContent.ToString());
-                        File.Delete(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt"));
-                    }
-                }
+                DisplayProgressBar(2);
+                Thread.Sleep(1000);
+                pBar1.PerformStep();
+                Common.GroupSQLPostScriptFiles("currentDateShort", chkOverriddenNode.Checked, jsFilesPath);
+                pBar1.PerformStep();
             }
             else
             {
@@ -764,18 +614,10 @@ namespace Dean.Edwards
                 }
             }
 
-            DisplayProgressBar(3);
+            DisplayProgressBar(2);
+            Thread.Sleep(1000);
             pBar1.PerformStep();
-            //foreach (string item in lstDBs)
-            //{
-            //    GenerateSQLDBScript(item, sqlFilesOutputPath, currentDate, currentDateShort);
-            //}
-
-            Parallel.ForEach(lstDBs, item =>
-            {
-                GenerateSQLDBScript(item, sqlFilesOutputPath, currentDate, currentDateShort);
-            });
-
+            Common.GenerateDBStructure(currentDate, currentDateShort, lstDBs, sqlFilesOutputPath);
             pBar1.PerformStep();
         }
 
