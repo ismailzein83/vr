@@ -109,13 +109,10 @@
         }
 
         function validateNewRate(dataItem, ownerCurrencyId) {
-            var newRate = Number(dataItem.NewRate);
-
-            if (isNaN(newRate))
-                return 'New rate must be a number';
+            var newRate = parseFloat(dataItem.NewRate);
             if (newRate <= 0)
                 return 'New rate must be greater than 0';
-            if (dataItem.CurrentRate != null && dataItem.CurrentRateCurrencyId == ownerCurrencyId && Number(dataItem.CurrentRate) == newRate)
+            if (dataItem.CurrentRate != null && dataItem.CurrentRateCurrencyId == ownerCurrencyId && parseFloat(dataItem.CurrentRate) == newRate)
                 return 'New rate must be different than the current rate';
 
             return null;
