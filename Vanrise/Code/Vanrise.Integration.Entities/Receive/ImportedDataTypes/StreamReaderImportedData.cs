@@ -36,7 +36,7 @@ namespace Vanrise.Integration.Entities
 
         public string Description
         {
-            get { return null; }
+            get { return this.Name; }
         }
 
 
@@ -48,7 +48,7 @@ namespace Vanrise.Integration.Entities
 
         public void OnDisposed()
         {
-            if(this.StreamReader != null)
+            if (this.StreamReader != null)
             {
                 this.StreamReader.Close();
                 this.StreamReader.Dispose();
