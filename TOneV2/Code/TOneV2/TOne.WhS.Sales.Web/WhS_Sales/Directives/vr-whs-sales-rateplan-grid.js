@@ -425,6 +425,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             setRouteOptionProperties(zoneItem);
             setServiceViewerLoad(zoneItem);
             setNormalRateIconProperties(zoneItem);
+            setCurrencyIconProperties(zoneItem);
 
 
             zoneItem.IsCurrentRateEditable = (zoneItem.IsCurrentRateEditable == null) ? false : zoneItem.IsCurrentRateEditable;
@@ -637,6 +638,18 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 else if (dataItem.IsCurrentRateEditable === false) {
                     dataItem.iconType = 'inherited';
                     dataItem.iconTooltip = 'Inherited';
+                }
+            }
+            function setCurrencyIconProperties(dataItem) {
+                if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
+                    return;
+                if (dataItem.CurrentRate == null)
+                    return;
+                if (gridQuery.CurrencyId == undefined || gridQuery.CurrencyId == null)
+                    return;
+                if (gridQuery.CurrencyId != dataItem.CurrentRateCurrencyId) {
+                    dataItem.currencyIconType = 'music';
+                    dataItem.currencyIconTooltip = dataItem.CurrentRateCurrencySymbol;
                 }
             }
         }

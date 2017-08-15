@@ -32,6 +32,7 @@ namespace TOne.WhS.Sales.Entities
         public long? CurrentRateId { get; set; }
         public Decimal? CurrentRate { get; set; }
         public int? CurrentRateCurrencyId { get; set; }
+        public string CurrentRateCurrencySymbol { get; set; }
         public DateTime? CurrentRateBED { get; set; }
         public DateTime? CurrentRateEED { get; set; }
         public DateTime? CurrentRateNewEED { get; set; }

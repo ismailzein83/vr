@@ -35,6 +35,7 @@ namespace TOne.WhS.Sales.Business
         private IEnumerable<RateType> _rateTypes;
         private Vanrise.GenericData.Pricing.RateTypeRuleManager _rateTypeRuleManager;
 
+        private CurrencyManager _currencyManager;
         #endregion
 
         #region Public Methods
@@ -63,6 +64,8 @@ namespace TOne.WhS.Sales.Business
             _rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
             _rateTypes = GetRateTypes();
             _rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
+
+            _currencyManager = new CurrencyManager();
         }
 
         public void SetZoneRate(ZoneItem zoneItem)
@@ -78,6 +81,7 @@ namespace TOne.WhS.Sales.Business
                     zoneItem.CurrentRateId = rate.Rate.SaleRateId;
                     zoneItem.CurrentRate = ConvertToCurrencyAndRound(rate.Rate);
                     zoneItem.CurrentRateCurrencyId = _saleRateManager.GetCurrencyId(rate.Rate);
+                    zoneItem.CurrentRateCurrencySymbol = _currencyManager.GetCurrencySymbol(zoneItem.CurrentRateCurrencyId.Value);
                     zoneItem.CurrentRateBED = rate.Rate.BED;
                     zoneItem.CurrentRateEED = rate.Rate.EED;
                     zoneItem.IsCurrentRateEditable = (rate.Source == _ownerType);
