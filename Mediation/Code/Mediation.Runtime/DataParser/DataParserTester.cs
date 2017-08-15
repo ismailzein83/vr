@@ -2423,7 +2423,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new TBCDNumberParser
                 {
-                    FieldName = "CalledIMSI",
+                    FieldName = "CallingIMSI",
                     RemoveHexa = true
                 }
             });
@@ -2432,7 +2432,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new TBCDNumberParser
                 {
-                    FieldName = "CalledIMEI",
+                    FieldName = "CallingIMEI",
                     RemoveHexa = true
                 }
             });
@@ -2478,7 +2478,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new CallLocationInformationParser
                 {
-                    FieldName = "CallingLocationInformation_First"
+                    FieldName = "Calling_First_CI"
                 }
             });
 
@@ -2486,7 +2486,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new CallLocationInformationParser
                 {
-                    FieldName = "CalledLocationInformation_First"
+                    FieldName = "Calling_Last_CI"
                 }
             });
 
@@ -2807,7 +2807,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new CallLocationInformationParser
                 {
-                    FieldName = "CallingLocationInformation_First"
+                    FieldName = "Called_First_CI"
                 }
             });
 
@@ -2815,7 +2815,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new CallLocationInformationParser
                 {
-                    FieldName = "CalledLocationInformation_First"
+                    FieldName = "Called_Last_CI"
                 }
             });
 
