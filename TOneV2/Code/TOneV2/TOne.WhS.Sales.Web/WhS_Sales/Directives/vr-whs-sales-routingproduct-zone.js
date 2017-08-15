@@ -54,7 +54,6 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
                     rpSelectedDeferred = undefined;
                     return;
                 }
-
                 zoneItem.IsDirty = true;
                 zoneItem.refreshZoneItem(zoneItem);
             };
@@ -183,10 +182,7 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
                 };
             }
             else {
-                zoneItem.NewRoutingProductId = null;
-                zoneItem.NewRoutingProductBED = null;
-                zoneItem.NewRoutingProductEED = null;
-                zoneItem.FollowRateDate = ctrl.followRateDate;
+                zoneItem.NewRoutingProduct = null;
             }
         }
         function setRoutingProductChange() {
@@ -199,6 +195,9 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
                     EED: UtilsService.getDateFromDateTime(new Date()),
                     ApplyNewNormalRateBED: ctrl.followRateDate,
                 };
+            }
+            else {
+                zoneItem.ResetRoutingProduct = null;
             }
         }
     }
