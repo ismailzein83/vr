@@ -232,8 +232,9 @@ as (select * from (values
 ('0E89CCF7-9240-4D1B-8A01-F91957ECA321','Retail_BE_Operator','Operator'								,'FC455C73-490D-48F2-A2B8-C2385137DE0F',0,'["View","Add","Edit"]'),
 
 ('1F99405A-9FDD-4E73-BDC7-EEE33FD01D7C','Retail_BE_Product','Product'								,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
-('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Package'						,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
+('BE4E62AA-CCE6-48AD-94ED-87D54A605D35','Retail_BE_Package','Package'								,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit","View Assigned Subscribers","Assign Subscribers"]'),
 ('2045E39B-B9AA-4720-AD1E-7DEF11985335','Retail_BE_ChargingPolicy','Charging Policy'				,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
+('32E40D20-A8B9-4286-AADE-F4E229D054A9','Retail_BE_CreditClasses','Credit Classes'					,'783139D6-4BC9-4EC5-8191-A809937E590D',0,'["View","Add","Edit"]'),
 
 ('B5634DD0-11C7-4074-B902-8A7C0B68E5AC','Retail_CDRRules','CDR Rules'								,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View","Add","Edit"]')
 
@@ -309,11 +310,7 @@ as (select * from (values
 ('Retail_BE/ActionDefinition/GetProvisionerDefinitionExtensionConfigs',null),
 ('Retail_BE/ActionDefinition/GetActionDefinitionsInfo',null),
 
-('Retail_BE/CreditClass/GetFilteredCreditClasses',null),
-('Retail_BE/CreditClass/GetCreditClass',null),
-('Retail_BE/CreditClass/AddCreditClass',null),
-('Retail_BE/CreditClass/UpdateCreditClass',null),
-('Retail_BE/CreditClass/GetCreditClassesInfo',null),
+('Retail_BE/CreditClass/GetFilteredCreditClasses','Retail_BE_CreditClasses:  View'),('Retail_BE/CreditClass/GetCreditClass',null),('Retail_BE/CreditClass/AddCreditClass','Retail_BE_CreditClasses:  Add'),('Retail_BE/CreditClass/UpdateCreditClass','Retail_BE_CreditClasses:  Edit'),('Retail_BE/CreditClass/GetCreditClassesInfo',null),
 
 ('Retail_BE/Switch/GetFilteredSwitches',null),
 ('Retail_BE/Switch/GetSwitchSettingsTemplateConfigs',null),
