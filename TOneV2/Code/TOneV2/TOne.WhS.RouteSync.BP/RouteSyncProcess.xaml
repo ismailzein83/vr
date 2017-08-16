@@ -56,11 +56,11 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
-      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
     </sco:Collection>
@@ -451,7 +451,23 @@ subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
         </InArgument>
       </local:FinalizeRouteSyncSwitches.SwitchesInProcess>
     </local:FinalizeRouteSyncSwitches>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNQcm9jZXNzLnhhbWxjRAPHAw4CAQFMC0yCAQIBA1A1UDwCAQJSBVJjAwHhBFMFXiUDAc4EXwVqGgMBuwRrBXQKAwGvBHUFhQEhAwGTBIYBBZsBKQMB7gOcAQWiAS8DAeQDowEFswEqAwHIA7QBBb0BCgMBvAO+AQWzAwoCASm0AwW0A2kCASi1AwXFAycCAQxSQ1JgAwHiBFYLVnQDAdgEWwtbYwMBzwRnC2dqAwHFBGILYnkDAbwEbgtubwMBsARyCXJ8AwG5BH0LfXUDAaYEggELggF5AwGdBHgLeHoDAZQEkwELkwFiAwGKBJgBC5gBegMBgQSOAQuOAZYBAwH4A4kBC4kBcgMB7wOfAQufAY4BAwHlA7ABC7ABjgEDAdsDqwELqwFWAwHSA6YBC6YBYwMByQO3AQu3AXsDAb0DuwEJuwGNAQMBxgPBAQvBAWUCASrFAQnmAhQDAZYB6QIJsQMUAgEzwgMLwgNyAgEfvQMLvQOOAQIBFrgDC7gDcgIBDXJZcnkDAboEuwFZuwGKAQMBxwPIATnIATwDAZcBywEL1gEzAwGjA9cBC+UCHQMBmAHtAgv+Ai0DAYEB/wILsAMQAgE0zgERzgHmAQMBsAPTARHTAXEDAaQD2gER2gF6AwGXA+EBD+MCGgMBmQH7AhH7ApEBAwGMAfACEfYCIAMBggGCAxGCA7sBAgE1hgMPrgMaAgE/5QER9wEiAwH5AvgBEYMCGgMB3AKEAhG1AhYDAfMBtgIR4gIWAwGaAYcDEZIDOwIBbJMDEaMDNgIBTaQDEa0DFgIBQOgBF+8BIAMBiQP0ARf0AYoBAwH7AuUBvQHlAcMBAwH6AoACF4ACtwEDAesC+wEX+wGXAQMB3QKHAheHAsEBAwH0AYsCFbMCIAMBggK5Ahe5ArkBAwGbAb0CFcQCKQMB5AHHAhXgAiADAakBjwMXjwO5AQIBd4oDF4oDogECAW2gAxegA5oBAgFimwMXmwNiAgFYlgMXlgNvAgFOpwMXpwNnAgFBqwMVqwOZAQIBS4wCF5cCQQMBvwKYAheoAjwDAZQCqQIXsgIcAwGDAsACG8ECPQMB5QHIAhfTAiADAccB1AIX3wIyAwGqAasDZasDlgECAUyUAh2UAr8BAwHOAo8CHY8CqAEDAcACpQIdpQKgAQMBsQKgAh2gAmgDAaMCmwIdmwJ1AwGVAqwCHawCbQMBhAKwAhuwAp8BAwGSAtACHdACbwMB1gHLAh3LAnUDAcgB3AId3AKXAQMBuQHXAh3XAp4CAwGrAbACa7ACnAEDAZMC</sads:DebugSymbol.Symbol>
+    <If sap2010:WorkflowViewState.IdRef="If_10">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">switchSyncOutputDict != null &amp;&amp; switchSyncOutputDict.Values.FirstOrDefault(itm =&gt; itm.SwitchSyncResult == SwitchSyncResult.Failed || itm.SwitchSyncResult == SwitchSyncResult.PartialFailed) != null</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_7">
+          <TerminateWorkflow.Exception>
+            <InArgument x:TypeArguments="s:Exception">
+              <mca:CSharpValue x:TypeArguments="s:Exception">new Vanrise.Entities.VRBusinessException("Route Sync Process Completed successfully but errors occured on some switches. Check error logs.")</mca:CSharpValue>
+            </InArgument>
+          </TerminateWorkflow.Exception>
+        </TerminateWorkflow>
+      </If.Then>
+    </If>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNQcm9jZXNzLnhhbWxnRAPXAw4CAQFMC0yCAQIBA1A1UDwCAQJSBVJjAwH1BFMFXiUDAeIEXwVqGgMBzwRrBXQKAwHDBHUFhQEhAwGnBIYBBZsBKQMBggScAQWiAS8DAfgDowEFswEqAwHcA7QBBb0BCgMB0AO+AQWzAwoCAT20AwW0A2kCATy1AwXFAycCASDGAwXVAwoCAQxSQ1JgAwH2BFYLVnQDAewEWwtbYwMB4wRnC2dqAwHZBGILYnkDAdAEbgtubwMBxARyCXJ8AwHNBH0LfXUDAboEggELggF5AwGxBHgLeHoDAagEkwELkwFiAwGeBJgBC5gBegMBlQSOAQuOAZYBAwGMBIkBC4kBcgMBgwSfAQufAY4BAwH5A7ABC7ABjgEDAe8DqwELqwFWAwHmA6YBC6YBYwMB3QO3AQu3AXsDAdEDuwEJuwGNAQMB2gPBAQvBAWUCAT7FAQnmAhQDAaoB6QIJsQMUAgFHwgMLwgNyAgEzvQMLvQOOAQIBKrgDC7gDcgIBIckDC8kDmQICAQ3NAwnTAx0CARZyWXJ5AwHOBLsBWbsBigEDAdsDyAE5yAE8AwGrAcsBC9YBMwMBtwPXAQvlAh0DAawB7QIL/gItAwGVAf8CC7ADEAIBSNADD9AD3AECARfOARHOAeYBAwHEA9MBEdMBcQMBuAPaARHaAXoDAasD4QEP4wIaAwGtAfsCEfsCkQEDAaAB8AIR9gIgAwGWAYIDEYIDuwECAUmGAw+uAxoCAVPlARH3ASIDAY0D+AERgwIaAwHwAoQCEbUCFgMBhwK2AhHiAhYDAa4BhwMRkgM7AwGAAZMDEaMDNgIBYaQDEa0DFgIBVOgBF+8BIAMBnQP0ARf0AYoBAwGPA+UBvQHlAcMBAwGOA4ACF4ACtwEDAf8C+wEX+wGXAQMB8QKHAheHAsEBAwGIAosCFbMCIAMBlgK5Ahe5ArkBAwGvAb0CFcQCKQMB+AHHAhXgAiADAb0BjwMXjwO5AQMBiwGKAxeKA6IBAwGBAaADF6ADmgECAXabAxebA2ICAWyWAxeWA28CAWKnAxenA2cCAVWrAxWrA5kBAgFfjAIXlwJBAwHTApgCF6gCPAMBqAKpAheyAhwDAZcCwAIbwQI9AwH5AcgCF9MCIAMB2wHUAhffAjIDAb4BqwNlqwOWAQIBYJQCHZQCvwEDAeICjwIdjwKoAQMB1AKlAh2lAqABAwHFAqACHaACaAMBtwKbAh2bAnUDAakCrAIdrAJtAwGYArACG7ACnwEDAaYC0AId0AJvAwHqAcsCHcsCdQMB3AHcAh3cApcBAwHNAdcCHdcCngIDAb8BsAJrsAKcAQMBpwI=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -538,14 +554,16 @@ subProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="UnloadSwitchSyncOutputDict_1" sap:VirtualizedContainerService.HintSize="1343,22" />
       <sap2010:ViewStateData Id="FinalizeRouteSyncSwitches_1" sap:VirtualizedContainerService.HintSize="1343,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1365,3042">
+      <sap2010:ViewStateData Id="TerminateWorkflow_7" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="1343,210" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1365,3292">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.RouteSyncProcess_1" sap:VirtualizedContainerService.HintSize="1405,3122" />
+      <sap2010:ViewStateData Id="TOne.WhS.RouteSync.BP.RouteSyncProcess_1" sap:VirtualizedContainerService.HintSize="1405,3372" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
