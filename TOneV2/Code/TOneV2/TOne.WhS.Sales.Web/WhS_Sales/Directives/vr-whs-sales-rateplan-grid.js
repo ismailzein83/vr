@@ -432,8 +432,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             if (zoneItem.NewRate != null) {
                 zoneItem.IsDirty = true;
-                zoneItem.showNewRateBED = true;
-                zoneItem.showNewRateEED = true;
 
                 if (zoneItem.NewRateEED == null)
                     zoneItem.NewRateEED = zoneItem.ZoneEED;

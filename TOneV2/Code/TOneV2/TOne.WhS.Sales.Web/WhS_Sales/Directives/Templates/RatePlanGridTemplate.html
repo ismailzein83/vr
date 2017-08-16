@@ -125,7 +125,7 @@
                             <span vr-disabled="true">
                                 <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null" customvalidate="dataItem.validateRateChangeDates()" disablefocus></vr-datetimepicker>
                             </span>
-                            <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.NewRate != null" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.showNewRateBED" disablefocus></vr-datetimepicker>
+                            <vr-datetimepicker type="date" value="dataItem.NewRateBED" ng-show="dataItem.NewRate != null" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.NewRate != null" disablefocus></vr-datetimepicker>
                         </span>
                     </vr-datagridcolumn>
 
