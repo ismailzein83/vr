@@ -12,5 +12,6 @@ namespace PartnerPortal.Invoice.Entities
         public DateTime FromTime { get; set; }
         public DateTime? ToTime { get; set; }
         public Guid InvoiceViewerTypeId { get; set; }
+        public List<string> PartnerIds { get; set; }
     }
 }

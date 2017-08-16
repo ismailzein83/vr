@@ -154,6 +154,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="PartnerPortal_CustomerAccess\Constant\ModuleConfig.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\MainExtensions\AccountStatementExtendedSettings\partnerportal-customeraccess-accountstatement-extendedsettings-default.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\MainExtensions\AccountStatementExtendedSettings\Templates\DefaultAccountStatementExtendedSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\partnerportal-customeraccess-accountstatement-extendedsettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Directives\partnerportal-customeraccess-accountstatement-selector.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\AnalyticQueryEditorController.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\partnerportal-customeraccess-analytictiledefinitionsettings-queries.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\partnerportal-customeraccess-analytictiledefinitionsettings.js" />

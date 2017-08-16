@@ -2,6 +2,7 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
+                <partnerportal-customeraccess-accountstatement-selector on-ready="scopeModel.onAccountStatementSelectorReady" normal-col-num="2" isrequired="true"></partnerportal-customeraccess-accountstatement-selector>
                 <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="From" value="scopeModel.fromDate" isrequired="true"></vr-datetimepicker>
                 </vr-columns>

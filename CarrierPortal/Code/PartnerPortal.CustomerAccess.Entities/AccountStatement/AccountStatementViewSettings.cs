@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.Security.Entities;
 
 namespace PartnerPortal.CustomerAccess.Entities
@@ -18,7 +19,20 @@ namespace PartnerPortal.CustomerAccess.Entities
         public Guid VRConnectionId { get; set; }
 
         public Guid AccountTypeId { get; set; }
-
+       
+        public AccountStatementExtendedSettings ExtendedSettings { get; set; }
+       
         public AccountStatementContextHandler AccountStatementHandler { get; set; }
+    }
+    public abstract class AccountStatementExtendedSettings
+    {
+        public abstract Guid ConfigId { get; }
+       
+        public abstract IEnumerable<PortalBalanceAccount> GetBalanceAccounts(IAccountStatementExtendedSettingsContext context);
+    }
+    public interface IAccountStatementExtendedSettingsContext
+    {
+        AccountStatementViewData AccountStatementViewData { get; }
+        int UserId { get;}
     }
 }

@@ -3,7 +3,6 @@ app.service('PartnerPortal_Invoice_InvoiceService', ['VRModalService', 'Security
     function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VRNotificationService, PartnerPortal_Invoice_InvoiceViewerTypeGridActionService) {
 
         function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, invoiceTypeId, invoiceViewerTypeId, gridActions) {
-            console.log(gridActions);
             if (gridActions == null)
                 return;
 

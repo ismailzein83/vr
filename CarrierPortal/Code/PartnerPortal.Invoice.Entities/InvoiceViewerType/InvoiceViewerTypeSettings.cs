@@ -16,6 +16,7 @@ namespace PartnerPortal.Invoice.Entities
         public Guid VRConnectionId { get; set; }
         public Guid InvoiceTypeId { get; set; }
         public InvoiceViewerTypeGridSettings GridSettings { get; set; }
+        public InvoiceViewerTypeExtendedSettings ExtendedSettings { get; set; }
         public InvoiceQueryInterceptor InvoiceQueryInterceptor { get; set; }
 
     }
@@ -35,6 +36,16 @@ namespace PartnerPortal.Invoice.Entities
     {
         public virtual string ActionTypeName { get; set; }
         public abstract Guid ConfigId { get; }
+    }
+    public abstract class InvoiceViewerTypeExtendedSettings
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract IEnumerable<PortalInvoiceAccount> GetInvoiceAccounts(IInvoiceViewerTypeExtendedSettingsContext context);
+    }
+    public interface IInvoiceViewerTypeExtendedSettingsContext
+    {
+         InvoiceViewerTypeSettings InvoiceViewerTypeSettings { get; set; }
+         int UserId { get; set; }
     }
     public class InvoiceViewerTypeGridField
     {

@@ -30,6 +30,10 @@ app.directive("partnerportalCustomeraccessAccountstatementVieweditor", ["UtilsSe
             var accountStatementHandlerApi;
             var accountStatementHandlerPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var accountStatementExtendedSettingsApi;
+            var accountStatementExtendedSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -42,8 +46,14 @@ app.directive("partnerportalCustomeraccessAccountstatementVieweditor", ["UtilsSe
                     accountStatementHandlerApi = api;
                     accountStatementHandlerPromiseDeferred.resolve();
                 };
-
-                defineAPI();
+                $scope.scopeModel.onAccountStatementExtendedSettingsReady = function (api) {
+                    accountStatementExtendedSettingsApi = api;
+                    accountStatementExtendedSettingsPromiseDeferred.resolve();
+                };
+                UtilsService.waitMultiplePromises([accountStatementExtendedSettingsPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+                
             }
 
             function defineAPI() {
@@ -81,18 +91,32 @@ app.directive("partnerportalCustomeraccessAccountstatementVieweditor", ["UtilsSe
                     });
                     promises.push(accountStatementHandlerLoadDeferred.promise);
 
+
+                    promises.push(loadAccountStatementExtendedSettings());
+
+                    function loadAccountStatementExtendedSettings()
+                    {
+                        var extendedSettingsPayload;
+                        if (payload != undefined && payload.AccountStatementViewData != undefined) {
+                            extendedSettingsPayload = {
+                                extendedSettings: payload.AccountStatementViewData.ExtendedSettings
+                            }
+                        };
+                        return accountStatementExtendedSettingsApi.load(extendedSettingsPayload);
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "PartnerPortal.CustomerAccess.Entities.AccountStatementViewSettings, PartnerPortal.CustomerAccess.Entities",
-                        AccountStatementViewData:
-                            {
-                                VRConnectionId: connectionSelectorApi.getSelectedIds(),
-                                AccountTypeId: $scope.scopeModel.accountTypeId,
-                                AccountStatementHandler: accountStatementHandlerApi.getData()
-                            }
+                        AccountStatementViewData: {
+                            VRConnectionId: connectionSelectorApi.getSelectedIds(),
+                            AccountTypeId: $scope.scopeModel.accountTypeId,
+                            AccountStatementHandler: accountStatementHandlerApi.getData(),
+                            ExtendedSettings: accountStatementExtendedSettingsApi.getData()
+                        }
                     };
                 };
 

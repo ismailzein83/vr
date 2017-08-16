@@ -6,7 +6,7 @@ using Vanrise.Security.Entities;
 using PartnerPortal.CustomerAccess.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Security.Business;
-
+using Vanrise.Common;
 namespace PartnerPortal.CustomerAccess.Business
 {
     public class AccountStatementManager
@@ -27,8 +27,15 @@ namespace PartnerPortal.CustomerAccess.Business
 
             input.Query.AccountTypeId = settings.AccountStatementViewData.AccountTypeId;
 
-            AccountStatementContextHandlerContext context = new AccountStatementContextHandlerContext() { Query = input.Query };
-            settings.AccountStatementViewData.AccountStatementHandler.PrepareQuery(context);
+            if (settings.AccountStatementViewData.AccountStatementHandler != null)
+            {
+                AccountStatementContextHandlerContext context = new AccountStatementContextHandlerContext() { Query = input.Query };
+                settings.AccountStatementViewData.AccountStatementHandler.PrepareQuery(context);
+            }
+            if (!ValidateBalanceAccount(settings.AccountStatementViewData, input.Query.AccountId))
+            {
+                throw new Exception("Account not valid.");
+            }
 
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(settings.AccountStatementViewData.VRConnectionId);
@@ -38,7 +45,7 @@ namespace PartnerPortal.CustomerAccess.Business
             var clonedInput = Vanrise.Common.Utilities.CloneObject<DataRetrievalInput<AccountStatementAppQuery>>(input);
             clonedInput.IsAPICall = true;
 
-            if(input.DataRetrievalResultType == DataRetrievalResultType.Excel)
+            if (input.DataRetrievalResultType == DataRetrievalResultType.Excel)
             {
                 return connectionSettings.Post<DataRetrievalInput<AccountStatementAppQuery>, RemoteExcelResult<AccountStatementItem>>("/api/VR_AccountBalance/AccountStatement/GetFilteredAccountStatments", clonedInput);
             }
@@ -50,6 +57,47 @@ namespace PartnerPortal.CustomerAccess.Business
         {
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<AccountStatementContextHandlerTemplate>(AccountStatementContextHandlerTemplate.EXTENSION_TYPE);
+        }
+        public IEnumerable<PortalBalanceAccount> GetBalanceAccounts(Guid viewId)
+        {
+            ViewManager viewManager = new ViewManager();
+            var view = viewManager.GetView(viewId);
+            view.ThrowIfNull("view", viewId);
+            view.Settings.ThrowIfNull("view.Settings");
+            var accountStatementViewSettings = view.Settings as PartnerPortal.CustomerAccess.Entities.AccountStatementViewSettings;
+            accountStatementViewSettings.ThrowIfNull("accountStatementViewSettings");
+            accountStatementViewSettings.AccountStatementViewData.ThrowIfNull("accountStatementViewSettings.AccountStatementViewData");
+            accountStatementViewSettings.AccountStatementViewData.ExtendedSettings.ThrowIfNull("accountStatementViewSettings.AccountStatementViewData.ExtendedSettings");
+            AccountStatementExtendedSettingsContext context = new AccountStatementExtendedSettingsContext
+            {
+                AccountStatementViewData = accountStatementViewSettings.AccountStatementViewData,
+                UserId = SecurityContext.Current.GetLoggedInUserId()
+            };
+            return accountStatementViewSettings.AccountStatementViewData.ExtendedSettings.GetBalanceAccounts(context);
+        }
+        public IEnumerable<AccountStatementExtendedSettingsConfigs> GetAccountStatementExtendedSettingsConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<AccountStatementExtendedSettingsConfigs>(AccountStatementExtendedSettingsConfigs.EXTENSION_TYPE);
+        }
+
+        public bool ValidateBalanceAccount(AccountStatementViewData accountStatementViewData, string accountId)
+        {
+            accountStatementViewData.ThrowIfNull("accountStatementViewData");
+            accountStatementViewData.ExtendedSettings.ThrowIfNull("settings.AccountStatementViewData.ExtendedSettings");
+            AccountStatementExtendedSettingsContext accountStatementExtendedSettingsContext = new Business.AccountStatementExtendedSettingsContext
+            {
+                AccountStatementViewData = accountStatementViewData,
+                UserId = SecurityContext.Current.GetLoggedInUserId()
+            };
+            var balanceAccounts = accountStatementViewData.ExtendedSettings.GetBalanceAccounts(accountStatementExtendedSettingsContext);
+            balanceAccounts.ThrowIfNull("balanceAccounts");
+
+            if (balanceAccounts.FindRecord(x => x.PortalBalanceAccountId == accountId) == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -18,10 +18,10 @@ namespace PartnerPortal.Invoice.MainExtensions.Invoice
 
         public override void PrepareQuery(IInvoiceQueryInterceptorContext context)
         {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            RetailAccountUserManager manager = new RetailAccountUserManager();
-            context.Query.PartnerIds = new List<string>();
-            context.Query.PartnerIds.Add(manager.GetRetailAccountId(userId).ToString());
+            //int userId = SecurityContext.Current.GetLoggedInUserId();
+            //RetailAccountUserManager manager = new RetailAccountUserManager();
+            //context.Query.PartnerIds = new List<string>();
+            //context.Query.PartnerIds.Add(manager.GetRetailAccountId(userId).ToString());
         }
     }
 }

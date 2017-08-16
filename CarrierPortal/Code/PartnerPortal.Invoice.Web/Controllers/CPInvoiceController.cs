@@ -28,6 +28,12 @@ namespace PartnerPortal.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GetRemoteLastInvoice(connectionId, invoiceTypeId, viewId);
         }
-      
+        [HttpGet]
+        [Route("GetInvoiceAccounts")]
+        public IEnumerable<PortalInvoiceAccount> GetInvoiceAccounts(Guid invoiceViewerTypeId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetInvoiceAccounts(invoiceViewerTypeId);
+        }
     }
 }

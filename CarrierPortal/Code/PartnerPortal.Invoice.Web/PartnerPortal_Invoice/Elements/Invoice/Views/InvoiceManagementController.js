@@ -8,6 +8,9 @@
         var invoiceViewerTypeSelectorAPI;
         var invoiceViewerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceAccountsSelectorAPI;
+        var invoiceAccountsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var viewId;
 
         var invoiceViewerTypeRuntimeEntity;
@@ -34,12 +37,18 @@
                 invoiceViewerTypeSelectorAPI = api;
                 invoiceViewerTypeSelectorReadyDeferred.resolve();
             };
-
+            $scope.onInvoiceAccountsSelectorReady = function (api) {
+                invoiceAccountsSelectorAPI = api;
+                invoiceAccountsSelectorReadyDeferred.resolve();
+            };
             $scope.onInvoiceViewerTypeSelectorSelectionChanged = function () {
                 var invoiceViewerTypeId = invoiceViewerTypeSelectorAPI.getSelectedIds();
                 if (invoiceViewerTypeId != undefined)
                 {
-                    getInvoiceViewerType(invoiceViewerTypeId).then(function () {
+                    var promises = [];
+                    promises.push(getInvoiceViewerType(invoiceViewerTypeId));
+                    promises.push(loadInvoiceAccountsSelectorDirective());
+                    UtilsService.waitMultiplePromises(promises).then(function () {
                         return gridAPI.loadGrid(getFilterObject());
                     });
                 }
@@ -66,6 +75,7 @@
                     FromTime: $scope.fromDate,
                     ToTime: $scope.toDate,
                     InvoiceViewerTypeId: invoiceViewerTypeId,
+                    PartnerIds: invoiceAccountsSelectorAPI.getSelectedIds()
                 }
             };
             return filter;
@@ -98,6 +108,16 @@
                 VRUIUtilsService.callDirectiveLoad(invoiceViewerTypeSelectorAPI, invoiceViewerTypeSelectorPayload, invoiceViewerTypeSelectorPayloadLoadDeferred);
             });
             return invoiceViewerTypeSelectorPayloadLoadDeferred.promise;
+        }
+        function loadInvoiceAccountsSelectorDirective() {
+            var invoiceAccountsSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+            invoiceAccountsSelectorReadyDeferred.promise.then(function () {
+                var invoiceAccountsSelectorPayload = {
+                    invoiceViewerTypeId: invoiceViewerTypeSelectorAPI.getSelectedIds(),
+                };
+                VRUIUtilsService.callDirectiveLoad(invoiceAccountsSelectorAPI, invoiceAccountsSelectorPayload, invoiceAccountsSelectorPayloadLoadDeferred);
+            });
+            return invoiceAccountsSelectorPayloadLoadDeferred.promise;
         }
     }
 

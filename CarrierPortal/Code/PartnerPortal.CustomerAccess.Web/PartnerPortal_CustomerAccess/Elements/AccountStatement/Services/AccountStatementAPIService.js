@@ -14,10 +14,20 @@
         function GetAccountStatementContextHandlerTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_CustomerAccess_ModuleConfig.moduleName, controllerName, "GetAccountStatementContextHandlerTemplates"));
         };
-
+        function GetAccountStatementExtendedSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_CustomerAccess_ModuleConfig.moduleName, controllerName, "GetAccountStatementExtendedSettingsConfigs"));
+        };
+        function GetBalanceAccounts(viewId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_CustomerAccess_ModuleConfig.moduleName, controllerName, "GetBalanceAccounts"), {
+                viewId:viewId
+            });
+        };
         return {
             GetFilteredAccountStatments: GetFilteredAccountStatments,
-            GetAccountStatementContextHandlerTemplates: GetAccountStatementContextHandlerTemplates
+            GetAccountStatementContextHandlerTemplates: GetAccountStatementContextHandlerTemplates,
+            GetAccountStatementExtendedSettingsConfigs: GetAccountStatementExtendedSettingsConfigs,
+            GetBalanceAccounts: GetBalanceAccounts
+
         };
     }
 

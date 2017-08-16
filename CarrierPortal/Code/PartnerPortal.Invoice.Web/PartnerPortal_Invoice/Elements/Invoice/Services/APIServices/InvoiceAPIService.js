@@ -17,10 +17,16 @@
                 viewId: viewId
             });
         };
+        function GetInvoiceAccounts(invoiceViewerTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceAccounts"), {
+                invoiceViewerTypeId: invoiceViewerTypeId,
+            });
+        };
 
         return {
             GetFilteredInvoices: GetFilteredInvoices,
-            GetRemoteLastInvoice: GetRemoteLastInvoice
+            GetRemoteLastInvoice: GetRemoteLastInvoice,
+            GetInvoiceAccounts: GetInvoiceAccounts
         };
     }
 

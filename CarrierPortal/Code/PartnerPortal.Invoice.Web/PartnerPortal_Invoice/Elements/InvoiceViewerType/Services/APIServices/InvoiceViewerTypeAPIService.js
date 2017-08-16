@@ -28,12 +28,18 @@
         function GetInvoiceGridActionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceGridActionSettingsConfigs"));
         };
+
+        function GetInvoiceViewerTypeExtendedSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceViewerTypeExtendedSettingsConfigs"));
+        };
+
         return {
             GetInvoiceViewerTypeInfo: GetInvoiceViewerTypeInfo,
             GetInvoiceViewerType: GetInvoiceViewerType,
             GetInvoiceViewerTypeRuntime: GetInvoiceViewerTypeRuntime,
             GetInvoiceQueryInterceptorTemplates: GetInvoiceQueryInterceptorTemplates,
-            GetInvoiceGridActionSettingsConfigs:GetInvoiceGridActionSettingsConfigs
+            GetInvoiceGridActionSettingsConfigs: GetInvoiceGridActionSettingsConfigs,
+            GetInvoiceViewerTypeExtendedSettingsConfigs: GetInvoiceViewerTypeExtendedSettingsConfigs
         };
     }
 

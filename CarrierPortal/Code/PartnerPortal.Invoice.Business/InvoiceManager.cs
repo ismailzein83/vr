@@ -9,7 +9,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Security.Business;
-
+using Vanrise.Common;
 namespace PartnerPortal.Invoice.Business
 {
     public class InvoiceManager
@@ -21,43 +21,70 @@ namespace PartnerPortal.Invoice.Business
 
             if (invoiceViewerTypeSettings.InvoiceQueryInterceptor == null)
                 throw new NullReferenceException("invoiceViewerTypeSettings.InvoiceContextHandler");
+            IEnumerable<string> partnerIds = null;
 
-            DataRetrievalInput<InvoiceQuery> query = new DataRetrievalInput<InvoiceQuery>
+            InvoiceViewerTypeExtendedSettingsContext invoiceViewerTypeExtendedSettingsContext = new InvoiceViewerTypeExtendedSettingsContext
             {
-                DataRetrievalResultType = input.DataRetrievalResultType,
-                FromRow = input.FromRow,
-                SortByColumnName = input.SortByColumnName,
-                GetSummary = input.GetSummary,
-                IsSortDescending = input.IsSortDescending,
-                ResultKey = input.ResultKey,
-                ToRow = input.ToRow,
-                Query = new InvoiceQuery
-                {
-                    FromTime = input.Query.FromTime,
-                    ToTime =input.Query.ToTime,
-                }
+                InvoiceViewerTypeSettings = invoiceViewerTypeSettings,
+                UserId = SecurityContext.Current.GetLoggedInUserId()
             };
-            query.Query.InvoiceTypeId = invoiceViewerTypeSettings.InvoiceTypeId;
-            InvoiceQueryInterceptorContext context = new InvoiceQueryInterceptorContext { Query = query.Query };
-            invoiceViewerTypeSettings.InvoiceQueryInterceptor.PrepareQuery(context);
-
-            VRConnectionManager connectionManager = new VRConnectionManager();
-            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(invoiceViewerTypeSettings.VRConnectionId);
-            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-            var bigResult = connectionSettings.Post<DataRetrievalInput<InvoiceQuery>, BigResult<InvoiceClientDetail>>("/api/VR_Invoice/Invoice/GetFilteredClientInvoices", query);
-            BigResult<InvoiceAppDetail> finalResult = new BigResult<InvoiceAppDetail>();
-            finalResult.ResultKey = bigResult.ResultKey;
-            finalResult.TotalCount = bigResult.TotalCount;
-            if(bigResult != null && bigResult.Data != null)
+            var invoiceAccounts = invoiceViewerTypeSettings.ExtendedSettings.GetInvoiceAccounts(invoiceViewerTypeExtendedSettingsContext);
+            if (invoiceAccounts != null && invoiceAccounts.Count() > 0)
             {
-                List<InvoiceAppDetail> result = new List<InvoiceAppDetail>();
-                foreach(var invoiceItem in bigResult.Data )
+                if (input.Query.PartnerIds != null && input.Query.PartnerIds.Count > 0)
                 {
-                    var invoiceAppDetail = ConvertInvoiceClientDetailToInoviceAppDetail(invoiceItem);
-                    FillClientInvoiceDataNeeded(invoiceAppDetail, invoiceViewerTypeSettings.GridSettings.InvoiceGridActions);
-                    result.Add(invoiceAppDetail);
+                    if (!input.Query.PartnerIds.All(x=> invoiceAccounts.Any(y=>y.PortalInvoiceAccountId == x)))
+                    {
+                        throw new Exception("Account not valid.");
+                    }
+                    partnerIds = input.Query.PartnerIds;
+                }else
+                {
+                    partnerIds = invoiceAccounts.MapRecords(x => x.PortalInvoiceAccountId);
                 }
-                finalResult.Data = result;
+            }
+            
+            BigResult<InvoiceAppDetail> finalResult = new BigResult<InvoiceAppDetail>();
+
+            if (partnerIds != null)
+            {
+                DataRetrievalInput<InvoiceQuery> query = new DataRetrievalInput<InvoiceQuery>
+                {
+                    DataRetrievalResultType = input.DataRetrievalResultType,
+                    FromRow = input.FromRow,
+                    SortByColumnName = input.SortByColumnName,
+                    GetSummary = input.GetSummary,
+                    IsSortDescending = input.IsSortDescending,
+                    ResultKey = input.ResultKey,
+                    ToRow = input.ToRow,
+                    Query = new InvoiceQuery
+                    {
+                        FromTime = input.Query.FromTime,
+                        ToTime = input.Query.ToTime,
+                        PartnerIds = partnerIds.ToList()
+                    }
+                };
+                query.Query.InvoiceTypeId = invoiceViewerTypeSettings.InvoiceTypeId;
+                InvoiceQueryInterceptorContext context = new InvoiceQueryInterceptorContext { Query = query.Query };
+                invoiceViewerTypeSettings.InvoiceQueryInterceptor.PrepareQuery(context);
+
+                VRConnectionManager connectionManager = new VRConnectionManager();
+                var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(invoiceViewerTypeSettings.VRConnectionId);
+                VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+                var bigResult = connectionSettings.Post<DataRetrievalInput<InvoiceQuery>, BigResult<InvoiceClientDetail>>("/api/VR_Invoice/Invoice/GetFilteredClientInvoices", query);
+                finalResult.ResultKey = bigResult.ResultKey;
+                finalResult.TotalCount = bigResult.TotalCount;
+                if (bigResult != null && bigResult.Data != null)
+                {
+                    List<InvoiceAppDetail> result = new List<InvoiceAppDetail>();
+                    foreach (var invoiceItem in bigResult.Data)
+                    {
+                        var invoiceAppDetail = ConvertInvoiceClientDetailToInoviceAppDetail(invoiceItem);
+                        FillClientInvoiceDataNeeded(invoiceAppDetail, invoiceViewerTypeSettings.GridSettings.InvoiceGridActions);
+                        result.Add(invoiceAppDetail);
+                    }
+                    finalResult.Data = result;
+                }
             }
             return finalResult;
         }
@@ -111,7 +138,10 @@ namespace PartnerPortal.Invoice.Business
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
+           
             string partnerId = manager.GetRetailAccountId(userId).ToString();
+
+
             VRInterAppRestConnection connectionSettings = new InvoiceTypeManager().GetVRInterAppRestConnection(connectionId);
             var invoiceDetail = connectionSettings.Get<InvoiceClientDetail>(string.Format("/api/VR_Invoice/Invoice/GetLastInvoice?invoiceTypeId={0}&partnerId={1}", invoiceTypeId, partnerId));
             InvoiceTile invoiceTile = new Entities.InvoiceTile
@@ -127,6 +157,21 @@ namespace PartnerPortal.Invoice.Business
                 invoiceTile.ViewURL = view.Url;
             }
             return invoiceTile;
+        }
+
+
+        public IEnumerable<PortalInvoiceAccount> GetInvoiceAccounts(Guid invoiceViewerTypeId)
+        {
+            VRComponentTypeManager vrComponentTypeManager = new VRComponentTypeManager();
+            InvoiceViewerTypeSettings invoiceViewerTypeSettings = vrComponentTypeManager.GetComponentTypeSettings<InvoiceViewerTypeSettings>(invoiceViewerTypeId);
+            invoiceViewerTypeSettings.ThrowIfNull("invoiceViewerTypeSettings",invoiceViewerTypeId);
+            invoiceViewerTypeSettings.ExtendedSettings.ThrowIfNull("invoiceViewerTypeSettings.ExtendedSettings");
+            InvoiceViewerTypeExtendedSettingsContext context = new InvoiceViewerTypeExtendedSettingsContext{
+                InvoiceViewerTypeSettings = invoiceViewerTypeSettings,
+                UserId = SecurityContext.Current.GetLoggedInUserId()
+            };
+            return invoiceViewerTypeSettings.ExtendedSettings.GetInvoiceAccounts(context);
+
         }
     }
 }

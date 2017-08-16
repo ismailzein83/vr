@@ -11,9 +11,9 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.AccountStatement
 
         public override void PrepareQuery(IAccountStatementContextHandlerContext context)
         {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            RetailAccountUserManager manager = new RetailAccountUserManager();
-            context.Query.AccountId = manager.GetRetailAccountId(userId).ToString();
+            //int userId = SecurityContext.Current.GetLoggedInUserId();
+            //RetailAccountUserManager manager = new RetailAccountUserManager();
+            //context.Query.AccountId = manager.GetRetailAccountId(userId).ToString();
         }
     }
 }

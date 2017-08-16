@@ -68,6 +68,7 @@
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoiceTileDefinitionSettings.cs" />
     <Compile Include="InvoiceTypeManager.cs" />
+    <Compile Include="InvoiceViewerTypeExtendedSettingsContext.cs" />
     <Compile Include="InvoiceViewerTypeInfoFilterContext.cs" />
     <Compile Include="InvoiceViewerTypeManager.cs" />
     <Compile Include="InvoiceViewerTypeViewFilter.cs" />

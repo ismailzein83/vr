@@ -84,6 +84,11 @@ namespace PartnerPortal.Invoice.Business
             var templateConfigManager = new ExtensionConfigurationManager();
             return templateConfigManager.GetExtensionConfigurations<Entities.InvoiceGridActionSettingsConfig>(Entities.InvoiceGridActionSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<Entities.InvoiceViewerTypeExtendedSettingsConfigs> GetInvoiceViewerTypeExtendedSettingsConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<InvoiceViewerTypeExtendedSettingsConfigs>(InvoiceViewerTypeExtendedSettingsConfigs.EXTENSION_TYPE);
+        }
         private InvoiceViewerTypeInfo InvoiceViewerTypeInfoMapper(InvoiceViewerType invoiceViewerType)
         {
             return new InvoiceViewerTypeInfo

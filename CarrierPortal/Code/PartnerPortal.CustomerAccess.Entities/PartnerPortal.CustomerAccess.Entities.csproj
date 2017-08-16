@@ -59,8 +59,10 @@
     <Compile Include="AccountStatement\AccountStatementAppQuery.cs" />
     <Compile Include="AccountStatement\AccountStatementContextHandler.cs" />
     <Compile Include="AccountStatement\AccountStatementContextHandlerTemplate.cs" />
+    <Compile Include="AccountStatement\AccountStatementExtendedSettingsConfigs.cs" />
     <Compile Include="AccountStatement\AccountStatementViewSettings.cs" />
     <Compile Include="AccountStatement\AccountStatementContextHandlerContext.cs" />
+    <Compile Include="AccountStatement\PortalBalanceAccount.cs" />
     <Compile Include="AnalyticTileInfo.cs" />
     <Compile Include="CurrentAccountBalanceTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

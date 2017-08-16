@@ -42,6 +42,9 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
             var gridActionsSectionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
+            var extendedSettingsApi;
+            var extendedSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -61,7 +64,10 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                     invoiceTypeSelectorApi = api;
                     invoiceTypeSelectorPromiseDeferred.resolve();
                 };
-
+                $scope.scopeModel.onExtendedSettingsReady = function (api) {
+                    extendedSettingsApi = api;
+                    extendedSettingsPromiseDeferred.resolve();
+                };
                 $scope.scopeModel.onInvoiceQueryInterceptorReady = function (api) {
                     invoiceQueryInterceptorApi = api;
                     invoiceQueryInterceptorPromiseDeferred.resolve();
@@ -95,7 +101,11 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                         
                     }
                 };
-                defineAPI();
+
+                UtilsService.waitMultiplePromises([extendedSettingsPromiseDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+            
             }
 
             function defineAPI() {
@@ -121,7 +131,7 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
 
                     }
                     promises.push(loadInvoiceQueryInterceptor());
-                 
+                    promises.push(loadExtendedSettings());
 
                     function loadConnectionSelector()
                     {
@@ -187,6 +197,12 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                         });
                         return gridActionsSectionLoadPromiseDeferred.promise;
                     }
+                    function loadExtendedSettings() {
+                            var payloadSelector = {
+                                extendedSettings: invoiceViewerTypeSettings != undefined && invoiceViewerTypeSettings.Settings != undefined? invoiceViewerTypeSettings.Settings.ExtendedSettings:undefined,
+                            };
+                            return extendedSettingsApi.load(payloadSelector);
+                    }
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         selectedConnectionSelectorPromiseDeferred = undefined;
                     });
@@ -203,7 +219,8 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                             GridSettings:{
                                 InvoiceGridFields: gridColumnsAPI.getData(),
                                 InvoiceGridActions: gridActionsAPI.getData()
-                            }
+                            },
+                            ExtendedSettings: extendedSettingsApi.getData()
                         }
                     };
                 };

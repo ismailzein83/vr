@@ -46,7 +46,12 @@ namespace PartnerPortal.Invoice.Web.Controllers
         {
             return _manager.GetInvoiceGridActionSettingsConfigs();
         }
-
+        [HttpGet]
+        [Route("GetInvoiceViewerTypeExtendedSettingsConfigs")]
+        public IEnumerable<InvoiceViewerTypeExtendedSettingsConfigs> GetInvoiceViewerTypeExtendedSettingsConfigs()
+        {
+            return _manager.GetInvoiceViewerTypeExtendedSettingsConfigs();
+        }
         
     }
 }
