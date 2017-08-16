@@ -555,6 +555,8 @@ namespace MigrateIDs
                 IsPrimaryColumn = true,
                 UpdatedTables = new List<MiratorTableInfo>()
             };
+
+
             MigratorManager manager = new MigratorManager();
             //manager.Migrate(manager.BuildAddOldColumnQuery(parameter));
             //manager.Migrate(manager.BuildUpdateOldIdsQuery(parameter));
@@ -617,29 +619,48 @@ namespace MigrateIDs
         }
         private bool MigrateScheduleTask()
         {
-            MiratorParameter parameter = new MiratorParameter
+            //MiratorParameter parameter = new MiratorParameter
+            //{
+            //    SchemaName = "runtime",
+            //    MainTableName = "ScheduleTask",
+            //    OldColumnName = "OldActionTypeId",
+            //    IDColumnName = "ActionTypeId",
+            //    IDColumnType="int",
+            //    UpdatedTables = new List<MiratorTableInfo>()
+            //};
+            //MigratorManager manager = new MigratorManager();
+            ////manager.Migrate(manager.BuildAddOldColumnQuery(parameter));
+            ////manager.Migrate(manager.BuildUpdateOldIdsQuery(parameter));
+            ////manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter));
+
+            //MiratorParameter parameter1 = new MiratorParameter
+            //{
+            //    SchemaName = "runtime",
+            //    MainTableName = "ScheduleTask",
+            //    OldColumnName = "OldTriggerTypeId",
+            //    IDColumnName = "TriggerTypeId",
+            //    IDColumnType = "int",
+            //    UpdatedTables = new List<MiratorTableInfo>()
+            //};
+
+
+            MiratorParameter parameter2 = new MiratorParameter
             {
                 SchemaName = "runtime",
                 MainTableName = "ScheduleTask",
-                OldColumnName = "OldActionTypeId",
-                IDColumnName = "ActionTypeId",
-                IDColumnType="int",
-                UpdatedTables = new List<MiratorTableInfo>()
+                OldColumnName = "OldId",
+                IDColumnName = "Id",
+                IDColumnType = "int",
+                IsPrimaryColumn = true,
+                UpdatedTables = new List<MiratorTableInfo> { }
             };
             MigratorManager manager = new MigratorManager();
-            //manager.Migrate(manager.BuildAddOldColumnQuery(parameter));
-            //manager.Migrate(manager.BuildUpdateOldIdsQuery(parameter));
-            //manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter));
+            manager.Migrate(manager.BuildAddOldColumnQuery(parameter2));
+            manager.Migrate(manager.BuildUpdateOldIdsQuery(parameter2));
+            manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter2));
 
-            MiratorParameter parameter1 = new MiratorParameter
-            {
-                SchemaName = "runtime",
-                MainTableName = "ScheduleTask",
-                OldColumnName = "OldTriggerTypeId",
-                IDColumnName = "TriggerTypeId",
-                IDColumnType = "int",
-                UpdatedTables = new List<MiratorTableInfo>()
-            };
+           
+
             //manager.Migrate(manager.BuildAddOldColumnQuery(parameter));
             //manager.Migrate(manager.BuildUpdateOldIdsQuery(parameter));
             //manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter));
@@ -681,7 +702,6 @@ namespace MigrateIDs
             //manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter));
             return true;
         }
-
         private bool MigrateBPBusinessRuleDefinition()
         {
             MiratorParameter parameter = new MiratorParameter
@@ -698,8 +718,6 @@ namespace MigrateIDs
             manager.Migrate(manager.BuildAddOldColumnQuery(parameter));
             manager.Migrate(manager.BuildUpdateOldIdsQuery(parameter));
             manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter));
-
-
 
             MiratorParameter parameter1 = new MiratorParameter
             {
@@ -849,7 +867,6 @@ namespace MigrateIDs
             manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter1));
             return true;
         }
-
         private bool MigrateQueueExecutionFlowDefinition()
         {
             MiratorParameter parameter = new MiratorParameter
@@ -876,7 +893,6 @@ namespace MigrateIDs
             manager.Migrate(manager.BuildQuery(parameter));
             return true;
         }
-    
         private bool MigrateQueueInstance()
         {
             MiratorParameter parameter = new MiratorParameter
@@ -895,6 +911,57 @@ namespace MigrateIDs
             manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter));
             return true;
         }
+
+        private bool MigrateDataSource()
+        {
+            MiratorParameter parameter = new MiratorParameter
+            {
+                SchemaName = "integration",
+                MainTableName = "DataSource",
+                OldColumnName = "OldID",
+                IDColumnName = "ID",
+                IDColumnType = "int",
+                IsPrimaryColumn = true,
+                UpdatedTables = new List<MiratorTableInfo>()
+            };
+            MigratorManager manager = new MigratorManager();
+            manager.Migrate(manager.BuildAddOldColumnQuery(parameter));
+            manager.Migrate(manager.BuildUpdateOldIdsQuery(parameter));
+            manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter));
+            MiratorParameter parameter3 = new MiratorParameter
+            {
+                SchemaName = "integration",
+                MainTableName = "DataSource",
+                OldColumnName = "OldTaskId",
+                IDColumnName = "TaskId",
+                IDColumnType = "int",
+                IsPrimaryColumn = false,
+                UpdatedTables = new List<MiratorTableInfo>()
+            };
+            manager.Migrate(manager.BuildAddOldColumnQuery(parameter3));
+            manager.Migrate(manager.BuildUpdateOldIdsQuery(parameter3));
+            manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter3));
+
+            MiratorParameter parameter1 = new MiratorParameter
+            {
+                SchemaName = "integration",
+                MainTableName = "DataSource",
+                OldColumnName = "OldAdapterID",
+                IDColumnName = "AdapterID",
+                IDColumnType = "int",
+                IsPrimaryColumn = false,
+                UpdatedTables = new List<MiratorTableInfo>()
+            };
+            manager.Migrate(manager.BuildAddOldColumnQuery(parameter1));
+            manager.Migrate(manager.BuildUpdateOldIdsQuery(parameter1));
+            manager.Migrate(manager.BuildDropOldIdAndAddNewOneColumnQuery(parameter1));
+          
+
+
+            return true;
+        }
+
+
         private void button1_Click(object sender, EventArgs e)
         {
             try
@@ -933,6 +1000,7 @@ namespace MigrateIDs
                     case MigratorOptions.QueueExecutionFlow: result = MigrateQueueExecutionFlow(); break;
                     case MigratorOptions.QueueInstance: result = MigrateQueueInstance(); break;
                     case MigratorOptions.ExecutionFlowDefinition: result = MigrateQueueExecutionFlowDefinition(); break;
+                    case MigratorOptions.DataSource: result = MigrateDataSource(); break;
 
                     default: return;
                 }
