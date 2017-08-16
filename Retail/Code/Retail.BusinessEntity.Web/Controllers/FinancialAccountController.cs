@@ -69,9 +69,9 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetClientBalanceAccounts")]
-        public List<ClientBalanceAccountInfo> GetClientBalanceAccounts(Guid balanceAccountTypeId, long accountId)
+        public List<ClientBalanceAccountInfo> GetClientBalanceAccounts(Guid accountTypeId, long accountId)
         {
-            return _manager.GetClientBalanceAccounts(balanceAccountTypeId, accountId);
+            return _manager.GetClientBalanceAccounts(accountTypeId, accountId);
         }
     }
 }
