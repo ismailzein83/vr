@@ -41,10 +41,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.BusinessProcess.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Runtime.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
     </Reference>
@@ -55,6 +51,10 @@
     <Compile Include="WFShcedulerTaskActionExtendedSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.BusinessProcess.Business\Vanrise.BusinessProcess.Business.csproj">
+      <Project>{ce8a7fee-d6c7-43c6-851f-beba44b03b13}</Project>
+      <Name>Vanrise.BusinessProcess.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
