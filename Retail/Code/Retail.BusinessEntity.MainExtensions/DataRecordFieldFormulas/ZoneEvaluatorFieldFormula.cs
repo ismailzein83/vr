@@ -29,22 +29,11 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
             dynamic trafficDirection = context.GetFieldValue(TrafficDirectionFieldName);
             if (trafficDirection != null)
             {
-                if (IsDestinationZoneEvaluator)
-                {
-                    if (trafficDirection == TrafficDirectionInputValue)
-                        return context.GetFieldValue(SubscriberZoneFieldName);
+                if (trafficDirection == TrafficDirectionInputValue)
+                    return IsDestinationZoneEvaluator ? context.GetFieldValue(SubscriberZoneFieldName) : context.GetFieldValue(OtherPartyZoneFieldName);
 
-                    if (trafficDirection == TrafficDirectionOutputValue)
-                        return context.GetFieldValue(OtherPartyZoneFieldName);
-                }
-                else
-                {
-                    if (trafficDirection == TrafficDirectionInputValue)
-                        return context.GetFieldValue(OtherPartyZoneFieldName);
-
-                    if (trafficDirection == TrafficDirectionOutputValue)
-                        return context.GetFieldValue(SubscriberZoneFieldName);
-                }
+                if (trafficDirection == TrafficDirectionOutputValue)
+                    return IsDestinationZoneEvaluator ? context.GetFieldValue(OtherPartyZoneFieldName) : context.GetFieldValue(SubscriberZoneFieldName);
             }
             return null;
         }
@@ -65,26 +54,21 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
             NumberRecordFilter trafficDirectionInputRecordFilter = new NumberRecordFilter() { CompareOperator = NumberRecordFilterOperator.Equals, FieldName = TrafficDirectionFieldName, Value = TrafficDirectionInputValue };
             NumberRecordFilter trafficDirectionOutputRecordFilter = new NumberRecordFilter() { CompareOperator = NumberRecordFilterOperator.Equals, FieldName = TrafficDirectionFieldName, Value = TrafficDirectionOutputValue };
 
+            string inputZoneFieldName = IsDestinationZoneEvaluator ? this.SubscriberZoneFieldName : this.OtherPartyZoneFieldName;
+            string outputZoneFieldName = IsDestinationZoneEvaluator ? this.OtherPartyZoneFieldName : this.SubscriberZoneFieldName;
+
             ObjectListRecordFilter objectListFilter = context.InitialFilter as ObjectListRecordFilter;
             if (objectListFilter != null)
             {
-                FieldBusinessEntityType subscriberZoneBEFieldType;
-                FieldBusinessEntityType otherPartyZoneBEFieldType;
-                GetFieldTypes(context, out subscriberZoneBEFieldType, out otherPartyZoneBEFieldType);
+                FieldBusinessEntityType inputZoneBEFieldType;
+                FieldBusinessEntityType outputZoneBEFieldType;
+                GetFieldTypes(context, inputZoneFieldName, outputZoneFieldName, out inputZoneBEFieldType, out outputZoneBEFieldType);
 
-                var subscriberZoneFilter = ConvertToRecordFilter(this.SubscriberZoneFieldName, subscriberZoneBEFieldType, objectListFilter);
-                var otherPartyZoneFilter = ConvertToRecordFilter(this.OtherPartyZoneFieldName, otherPartyZoneBEFieldType, objectListFilter);
+                var inputZoneFilter = ConvertToRecordFilter(inputZoneFieldName, inputZoneBEFieldType, objectListFilter);
+                var outputZoneFilter = ConvertToRecordFilter(outputZoneFieldName, outputZoneBEFieldType, objectListFilter);
 
-                if (IsDestinationZoneEvaluator)
-                {
-                    trafficDirectionInputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilter, subscriberZoneFilter };
-                    trafficDirectionOutputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionOutputRecordFilter, otherPartyZoneFilter };
-                }
-                else
-                {
-                    trafficDirectionInputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilter, otherPartyZoneFilter };
-                    trafficDirectionOutputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionOutputRecordFilter, subscriberZoneFilter };
-                }
+                trafficDirectionInputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilter, inputZoneFilter };
+                trafficDirectionOutputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionOutputRecordFilter, outputZoneFilter };
 
                 childRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilterGroup, trafficDirectionOutputRecordFilterGroup };
                 return childRecordFilterGroup;
@@ -93,8 +77,9 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
             EmptyRecordFilter emptyFilter = context.InitialFilter as EmptyRecordFilter;
             if (emptyFilter != null)
             {
-                trafficDirectionInputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilter, new EmptyRecordFilter { FieldName = this.SubscriberZoneFieldName } };
-                trafficDirectionOutputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionOutputRecordFilter, new EmptyRecordFilter { FieldName = this.OtherPartyZoneFieldName } };
+                trafficDirectionInputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilter, new EmptyRecordFilter { FieldName = inputZoneFieldName } };
+                trafficDirectionOutputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionOutputRecordFilter, new EmptyRecordFilter { FieldName = outputZoneFieldName } };
+
                 childRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilterGroup, trafficDirectionOutputRecordFilterGroup };
                 return childRecordFilterGroup;
             }
@@ -102,8 +87,9 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
             NonEmptyRecordFilter nonEmptyFilter = context.InitialFilter as NonEmptyRecordFilter;
             if (nonEmptyFilter != null)
             {
-                trafficDirectionInputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilter, new NonEmptyRecordFilter { FieldName = this.SubscriberZoneFieldName } };
-                trafficDirectionOutputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionOutputRecordFilter, new NonEmptyRecordFilter { FieldName = this.OtherPartyZoneFieldName } };
+                trafficDirectionInputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilter, new NonEmptyRecordFilter { FieldName = inputZoneFieldName } };
+                trafficDirectionOutputRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionOutputRecordFilter, new NonEmptyRecordFilter { FieldName = outputZoneFieldName } };
+
                 childRecordFilterGroup.Filters = new List<RecordFilter>() { trafficDirectionInputRecordFilterGroup, trafficDirectionOutputRecordFilterGroup };
                 return childRecordFilterGroup;
             }
@@ -111,16 +97,15 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
             throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
         }
 
-
-        private void GetFieldTypes(IDataRecordFieldFormulaContext context, out FieldBusinessEntityType subscriberZoneBEFieldType, out FieldBusinessEntityType otherPartyZoneBEFieldType)
+        private void GetFieldTypes(IDataRecordFieldFormulaConvertFilterContext context, string inputZoneFieldName, string outputZoneFieldName, out FieldBusinessEntityType inputZoneBEFieldType, out FieldBusinessEntityType outputZoneBEFieldType)
         {
-            subscriberZoneBEFieldType = context.GetFieldType(this.SubscriberZoneFieldName) as FieldBusinessEntityType;
-            if (subscriberZoneBEFieldType == null)
-                throw new NullReferenceException(String.Format("subscriberZoneBEFieldType '{0}'", this.SubscriberZoneFieldName));
+            inputZoneBEFieldType = context.GetFieldType(inputZoneFieldName) as FieldBusinessEntityType;
+            if (inputZoneBEFieldType == null)
+                throw new NullReferenceException(String.Format("inputZoneBEFieldType '{0}'", inputZoneFieldName));
 
-            otherPartyZoneBEFieldType = context.GetFieldType(this.OtherPartyZoneFieldName) as FieldBusinessEntityType;
-            if (otherPartyZoneBEFieldType == null)
-                throw new NullReferenceException(String.Format("otherPartyZoneBEFieldType '{0}'", this.OtherPartyZoneFieldName));
+            outputZoneBEFieldType = context.GetFieldType(outputZoneFieldName) as FieldBusinessEntityType;
+            if (outputZoneBEFieldType == null)
+                throw new NullReferenceException(String.Format("outputZoneBEFieldType '{0}'", outputZoneFieldName));
         }
 
         private RecordFilter ConvertToRecordFilter(string fieldName, FieldBusinessEntityType fieldBusinessEntityType, ObjectListRecordFilter objectListRecordFilter)
