@@ -40,7 +40,7 @@
             $scope.onUserSelectorReady = function (api) {
                 userSelectorApi = api;
                 userSelectorReadyDeferred.resolve();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridApi = api;
@@ -91,7 +91,7 @@
             userSelectorReadyDeferred.promise.then(function () {
                 var userSelectorPayload = {};
                 vruiUtilsService.callDirectiveLoad(userSelectorApi, userSelectorPayload, userSelectorLoadDeferred);
-            })
+            });
         }
 
         function loadSalePriceListGrid() {
