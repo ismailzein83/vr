@@ -57,7 +57,7 @@ namespace TOne.WhS.Invoice.Business
 
                 var accounts = carrierAccountManager.GetCarriersByProfileId(carrierProfile.CarrierProfileId, getCustomers, getSuppliers);
 
-                if (!carrierProfile.IsDeleted && carrierProfile.Settings.CustomerInvoiceByProfile)
+                if (!carrierProfile.IsDeleted)
                 {
                     if (getProfiles)
                     {
