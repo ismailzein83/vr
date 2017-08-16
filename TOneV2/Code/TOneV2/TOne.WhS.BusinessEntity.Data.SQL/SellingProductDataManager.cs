@@ -30,7 +30,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Update(SellingProductToEdit sellingProduct)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name, Vanrise.Common.Serializer.Serialize(sellingProduct.Settings));
+            var settings = (sellingProduct.Settings != null) ? Vanrise.Common.Serializer.Serialize(sellingProduct.Settings) : null;
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name, settings);
             return (recordsEffected > 0);
         }
         public bool AreSellingProductsUpdated(ref object updateHandle)

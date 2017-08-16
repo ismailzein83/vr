@@ -11,8 +11,14 @@
                             <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="scopeModal.onSellingNumberPlansDirectiveReady" isrequired="true">
                             </vr-whs-be-sellingnumberplan-selector>
                         </span>
+                        <span vr-disabled="!scopeModal.canEditCurrency">
+                            <vr-common-currency-selector on-ready="scopeModal.onCurrencySelectorReady"
+                                                         normal-col-num="6"
+                                                         onselectitem="scopeModal.onCurrencyChanged"
+                                                         isrequired="true">
+                            </vr-common-currency-selector>
+                        </span>
                     </vr-row>
-
                 </vr-tab>
             </vr-tabs>
         </vr-form>

@@ -44,5 +44,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             return new SalePriceListManager().SendCustomerPriceLists(customerPriceListIds);
         }
+
+        [HttpGet]
+        [Route("CheckIfAnyPriceListExists")]
+        public bool CheckIfAnyPriceListExists(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            return new SalePriceListManager().CheckIfAnyPriceListExists(ownerType, ownerId);
+        }
     }
 }

@@ -21,7 +21,12 @@
                 processInstanceId: processInstanceId
             });
         }
-
+        function CheckIfAnyPriceListExists(ownerType, ownerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "CheckIfAnyPriceListExists"), {
+                ownerType: ownerType,
+                ownerId: ownerId
+            });
+        }
         function SendCustomerPriceLists(customerPriceListIds) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "SendCustomerPriceLists"), customerPriceListIds);
         }
@@ -30,7 +35,8 @@
             GetFilteredSalePriceLists: GetFilteredSalePriceLists,
             SendPriceList: SendPriceList,
             GetSalePriceListIdsByProcessInstanceId: GetSalePriceListIdsByProcessInstanceId,
-            SendCustomerPriceLists: SendCustomerPriceLists
+            SendCustomerPriceLists: SendCustomerPriceLists,
+            CheckIfAnyPriceListExists: CheckIfAnyPriceListExists
         };
     }
 

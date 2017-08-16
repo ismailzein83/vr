@@ -2,9 +2,9 @@
 
     "use strict";
 
-    sellingProductEditorController.$inject = ['$scope', 'WhS_BE_SellingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    sellingProductEditorController.$inject = ['$scope', 'WhS_BE_SellingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_BE_SalePricelistAPIService', 'WhS_BE_SalePriceListOwnerTypeEnum'];
 
-    function sellingProductEditorController($scope, WhS_BE_SellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function sellingProductEditorController($scope, WhS_BE_SellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_BE_SalePricelistAPIService, WhS_BE_SalePriceListOwnerTypeEnum) {
         var isEditMode;
         var sellingProductId;
         var fixedSellingNumberPlanId;
@@ -13,6 +13,10 @@
         var sellingProductEntity;
         var context;
         var isViewHistoryMode;
+
+        var currencySelectorAPI;
+        var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -40,8 +44,9 @@
             };
 
             $scope.scopeModal = {};
+            $scope.scopeModal.canEditCurrency = true;
             $scope.scopeModal.isEditMode = isEditMode;
-            $scope.scopeModal.fixedSellingNumberPlanID = fixedSellingNumberPlanId!=undefined;
+            $scope.scopeModal.fixedSellingNumberPlanID = fixedSellingNumberPlanId != undefined;
             $scope.scopeModal.saveSellingProduct = function () {
                 if (isEditMode) {
                     return updateSellingProduct();
@@ -59,6 +64,10 @@
                 sellingNumberPlanDirectiveAPI = api;
                 sellingNumberPlanReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModal.onCurrencySelectorReady = function (api) {
+                currencySelectorAPI = api;
+                currencySelectorReadyDeferred.resolve();
+            };
         }
 
         function load() {
@@ -66,10 +75,7 @@
 
             if (isEditMode) {
                 getSellingProduct().then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            sellingProductEntity = undefined;
-                        });
+                    loadAllControls();
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModal.isLoading = false;
@@ -91,12 +97,14 @@
                 loadAllControls();
             }
         }
+
         function getSellingProductHistory() {
             return WhS_BE_SellingProductAPIService.GetSellingProductHistoryDetailbyHistoryId(context.historyId).then(function (response) {
-                sellingProductEntity=response;
+                sellingProductEntity = response;
 
             });
         }
+
         function getSellingProduct() {
             return WhS_BE_SellingProductAPIService.GetSellingProduct(sellingProductId).then(function (sellingProduct) {
                 sellingProductEntity = sellingProduct;
@@ -104,11 +112,18 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadFilterBySection, loadSellingNumberPlans])
+
+            var asyncOperations = [setTitle, loadFilterBySection, loadSellingNumberPlans, loadCurrencySelector];
+
+            if (isEditMode)
+                asyncOperations.push(checkIfAnyPriceListExists);
+
+            return UtilsService.waitMultipleAsyncOperations(asyncOperations)
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
+                  sellingProductEntity = undefined;
                   $scope.scopeModal.isLoading = false;
               });
         }
@@ -121,6 +136,28 @@
             if (sellingProductEntity != undefined) {
                 $scope.scopeModal.name = sellingProductEntity.Name;
             }
+        }
+
+        function checkIfAnyPriceListExists() {
+            return WhS_BE_SalePricelistAPIService.CheckIfAnyPriceListExists(WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value, sellingProductId).then(function (response) {
+                $scope.scopeModal.canEditCurrency = !response;
+            });
+        }
+
+        function loadCurrencySelector() {
+            var currencySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            currencySelectorReadyDeferred.promise.then(function () {
+                var payload;
+                if (sellingProductEntity != undefined && sellingProductEntity.Settings != undefined) {
+                    payload = {
+                        selectedIds: sellingProductEntity.Settings.CurrencyId
+                    }
+                }
+                VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, payload, currencySelectorLoadDeferred);
+            });
+
+            return currencySelectorLoadDeferred.promise;
         }
 
         function loadSellingNumberPlans() {
@@ -174,6 +211,10 @@
             var obj = {
                 SellingProductId: (sellingProductId != null) ? sellingProductId : 0,
                 Name: $scope.scopeModal.name
+            };
+
+            obj.Settings = {
+                CurrencyId: currencySelectorAPI.getSelectedIds()
             };
 
             if (!isEditMode) {

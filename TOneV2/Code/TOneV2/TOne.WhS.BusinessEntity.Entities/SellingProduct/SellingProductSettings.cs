@@ -7,5 +7,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SellingProductSettings
     {
+        public int CurrencyId { get; set; }
     }
 }

@@ -138,7 +138,8 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public UpdateOperationOutput<SellingProductDetail> UpdateSellingProduct(SellingProductToEdit sellingProductToEdit)
         {
-            ValidateSellingProductToEdit(sellingProductToEdit);
+            SellingProduct existingSellingProduct = GetSellingProduct(sellingProductToEdit.SellingProductId);
+            ValidateSellingProductToEdit(sellingProductToEdit, existingSellingProduct);
 
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
 
@@ -151,10 +152,10 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                var sellingProduct = GetSellingProduct(sellingProductToEdit.SellingProductId);
-                VRActionLogger.Current.TrackAndLogObjectUpdated(SellingProductLoggableEntity.Instance, sellingProduct);
+                SellingProduct updatedSellingProduct = GetSellingProduct(sellingProductToEdit.SellingProductId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SellingProductLoggableEntity.Instance, updatedSellingProduct);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(this.GetSellingProduct(sellingProductToEdit.SellingProductId));
+                updateOperationOutput.UpdatedObject = SellingProductDetailMapper(updatedSellingProduct);
             }
             else
             {
@@ -178,9 +179,18 @@ namespace TOne.WhS.BusinessEntity.Business
             ValidateSellingProduct(sellingProduct.Name);
         }
 
-        void ValidateSellingProductToEdit(SellingProductToEdit sellingProduct)
+        void ValidateSellingProductToEdit(SellingProductToEdit sellingProduct, SellingProduct existingSellingProduct)
         {
             ValidateSellingProduct(sellingProduct.Name);
+
+            if (existingSellingProduct == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Selling product '{0}' was not found", sellingProduct.SellingProductId));
+            if (existingSellingProduct.Settings == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Settings of selling product '{0}' were not found", sellingProduct.SellingProductId));
+
+            bool anyPriceListExists = new SalePriceListManager().CheckIfAnyPriceListExists(SalePriceListOwnerType.SellingProduct, sellingProduct.SellingProductId);
+            if (anyPriceListExists && sellingProduct.Settings.CurrencyId != existingSellingProduct.Settings.CurrencyId)
+                throw new Vanrise.Entities.VRBusinessException("Cannot change the currency of a priced selling product");
         }
 
         void ValidateSellingProduct(string spName)
