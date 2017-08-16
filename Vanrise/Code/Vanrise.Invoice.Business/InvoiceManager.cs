@@ -176,7 +176,7 @@ namespace Vanrise.Invoice.Business
                 var duePeriod = _partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                 var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                 if(invoiceAccountData.Status == VRAccountStatus.InActive)
-                    throw new InvoiceGeneratorException("Connot generate invoice for inactive account.");
+                    throw new InvoiceGeneratorException("Cannot generate invoice for inactive account.");
 
                 IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions;
                 GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod,invoiceAccountData, out billingTransactions);

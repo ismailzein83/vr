@@ -8,7 +8,7 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 using Vanrise.Security.Business;
-
+using Vanrise.Common;
 namespace Vanrise.Invoice.Business
 {
     public class PreviewInvoiceActionContext : IInvoiceActionContext
@@ -38,9 +38,20 @@ namespace Vanrise.Invoice.Business
                     toDate = this.ToDate.Add(-timeZone.Settings.Offset);
                 }
             }
+            PartnerManager _partnerManager = new PartnerManager();
+
+            var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, this.PartnerId);
+            invoiceAccountData.ThrowIfNull("invoiceAccountData");
+            if ((invoiceAccountData.BED.HasValue && fromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && toDate > invoiceAccountData.EED.Value))
+                throw new InvoiceGeneratorException("From date and To date should be within the effective date of invoice account.");
+
             PartnerManager partnerManager = new PartnerManager();
 
             var duePeriod = partnerManager.GetPartnerDuePeriod(this.InvoiceTypeId, this.PartnerId);
+
+
+
+
 
             InvoiceGenerationContext context = new InvoiceGenerationContext
             {
@@ -53,6 +64,9 @@ namespace Vanrise.Invoice.Business
                 GeneratedToDate = this.ToDate,
                 DuePeriod = duePeriod
             };
+
+
+
             var invoiceGenerator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
             invoiceGenerator.GenerateInvoice(context);
             
