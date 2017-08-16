@@ -119,13 +119,22 @@ namespace Vanrise.GenericData.Entities
         [Description(" < ")]
         Less = 4,
         [Description(" <= ")]
-        LessOrEquals = 5
+        LessOrEquals = 5,
+        [Description(" Between ")]
+        Between = 6
     }
+
+    public enum DateTimeRecordFilterComparisonPart { DateTime = 0, DateOnly = 1, TimeOnly = 2}
+
     public class DateTimeRecordFilter : RecordFilter
     {
         public DateTimeRecordFilterOperator CompareOperator { get; set; }
 
+        public DateTimeRecordFilterComparisonPart ComparisonPart { get; set; }
+
         public DateTime Value { get; set; }
+
+        public DateTime Value2 { get; set; }
 
         public Guid? ValueParameterId { get; set; }
 
