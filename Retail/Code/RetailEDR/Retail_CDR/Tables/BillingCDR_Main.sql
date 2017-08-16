@@ -19,6 +19,7 @@
     [InterconnectOperatorId] BIGINT           NULL,
     [SubscriberZoneId]       BIGINT           NULL,
     [Zone]                   BIGINT           NULL,
+    [NationalCallType]       INT              NULL,
     [PackageId]              INT              NULL,
     [ChargingPolicyId]       INT              NULL,
     [SaleDurationInSeconds]  DECIMAL (20, 4)  NULL,
@@ -38,6 +39,8 @@
     [Extension]              VARCHAR (20)     NULL,
     [QueueItemId]            BIGINT           NULL
 );
+
+
 
 
 

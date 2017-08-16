@@ -10,6 +10,7 @@
     [InterconnectOperatorId] BIGINT           NULL,
     [SubscriberZoneId]       BIGINT           NULL,
     [ZoneId]                 BIGINT           NULL,
+    [NationalCallType]       INT              NULL,
     [PackageId]              INT              NULL,
     [ChargingPolicyId]       INT              NULL,
     [SaleRate]               DECIMAL (20, 8)  NULL,
@@ -18,8 +19,11 @@
     [TotalSaleDuration]      DECIMAL (20, 4)  NULL,
     [TotalSaleAmount]        DECIMAL (26, 10) NULL,
     [NumberOfCDRs]           INT              NULL,
+    [SameZone]               BIT              NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
