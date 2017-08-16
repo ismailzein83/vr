@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.NumberingPlan.Data;
 using Vanrise.NumberingPlan.Entities;
 
@@ -129,6 +130,53 @@ namespace Vanrise.NumberingPlan.Business
             {
                 ISaleCodeDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
                 return input.Query.GetFilteredSaleCodes();
+            }
+            
+            protected override ResultProcessingHandler<SaleCodeDetail> GetResultProcessingHandler(DataRetrievalInput<BaseSaleCodeQueryHandler> input, BigResult<SaleCodeDetail> bigResult)
+            {
+                return new ResultProcessingHandler<SaleCodeDetail>
+                {
+                    ExportExcelHandler = new SaleCodeDetailExportExcelHandler()
+                };
+            }
+        }
+
+
+        private class SaleCodeDetailExportExcelHandler : ExcelExportHandler<SaleCodeDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SaleCodeDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Sales Codes",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Zone", Width = 30 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Code" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SaleCodeId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Code });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
             }
         }
 

@@ -34,8 +34,11 @@ namespace Vanrise.NumberingPlan.Business
                  (input.Query.Code == null || prod.Code.ToLower().StartsWith(input.Query.Code.ToLower()))
                   &&
                  (input.Query.CountriesIds == null || input.Query.CountriesIds.Count() == 0 || input.Query.CountriesIds.Contains(prod.CountryId));
-
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, CodeGroupDetailMapper));
+            ResultProcessingHandler<CodeGroupDetail> handler = new ResultProcessingHandler<CodeGroupDetail>()
+            {
+                ExportExcelHandler = new CodeGroupExcelExportHandler()
+            };
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCodeGroups.ToBigResult(input, filterExpression, CodeGroupDetailMapper), handler);
         }
         public IEnumerable<CodeGroupInfo> GetAllCodeGroups()
         {
@@ -286,6 +289,39 @@ namespace Vanrise.NumberingPlan.Business
         {
             var cachedCodeGroups = GetCachedCodeGroups();
             return new CodeIterator<CodeGroup>(cachedCodeGroups.Values);
+        }
+
+        private class CodeGroupExcelExportHandler : ExcelExportHandler<CodeGroupDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CodeGroupDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Code Groups",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code Group" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country", Width = 50 });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CodeGroupId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Code });
+                            row.Cells.Add(new ExportExcelCell { Value = record.CountryName });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
         #endregion
 
