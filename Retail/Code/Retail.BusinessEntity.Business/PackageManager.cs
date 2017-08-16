@@ -35,7 +35,11 @@ namespace Retail.BusinessEntity.Business
                     return false;
                 return true;
             };
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPackages.ToBigResult(input, filterExpression, PackageDetailMapper));
+            var resultProcessingHandler = new ResultProcessingHandler<PackageDetail>()
+            {
+                ExportExcelHandler = new PackageDetailExportExcelHandler()
+            };
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allPackages.ToBigResult(input, filterExpression, PackageDetailMapper), resultProcessingHandler);
         }
 
         public Package GetPackage(int packageId, bool isViewedFromUI)
@@ -313,6 +317,36 @@ namespace Retail.BusinessEntity.Business
             public override string ModuleName
             {
                 get { return "Business Entity"; }
+            }
+        }
+
+        private class PackageDetailExportExcelHandler : ExcelExportHandler<PackageDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<PackageDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Credit Classes",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.PackageId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
             }
         }
         #endregion

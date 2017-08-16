@@ -19,7 +19,11 @@ namespace Retail.BusinessEntity.Business
         {
             var allCreditClass = this.GetCachedCreditClasses();
             Func<CreditClass, bool> filterExpression = (x) => (input.Query.Name == null || x.Name.ToLower().Contains(input.Query.Name.ToLower()));
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCreditClass.ToBigResult(input, filterExpression, CreditClassDetailMapper));
+            var resultProcessingHandler = new ResultProcessingHandler<CreditClassDetail>()
+            {
+                ExportExcelHandler = new CreditClassDetailExportExcelHandler()
+            };
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allCreditClass.ToBigResult(input, filterExpression, CreditClassDetailMapper), resultProcessingHandler);
         }
 
         public CreditClass GetCreditClass(int creditClassId)
@@ -101,6 +105,36 @@ namespace Retail.BusinessEntity.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return _dataManager.AreCreditClassUpdated(ref _updateHandle);
+            }
+        }
+
+        private class CreditClassDetailExportExcelHandler : ExcelExportHandler<CreditClassDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CreditClassDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Credit Classes",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CreditClassId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
             }
         }
 

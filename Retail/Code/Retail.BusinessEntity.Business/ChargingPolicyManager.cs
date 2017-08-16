@@ -31,7 +31,13 @@ namespace Retail.BusinessEntity.Business
                 (input.Query.Name == null || chargingPolicy.Name.ToLower().Contains(input.Query.Name.ToLower())) &&
                 (input.Query.ServiceTypeIds == null || input.Query.ServiceTypeIds.Contains(chargingPolicy.ServiceTypeId));
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedChargingPolicies.ToBigResult(input, filterExpression, ChargingPolicyDetailMapper));
+
+            var resultProcessingHandler = new ResultProcessingHandler<ChargingPolicyDetail>()
+            {
+                ExportExcelHandler = new ChargingPolicyDetailExportExcelHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedChargingPolicies.ToBigResult(input, filterExpression, ChargingPolicyDetailMapper), resultProcessingHandler);
         }
         public IEnumerable<ChargingPolicyInfo> GetChargingPoliciesInfo(ChargingPolicyInfoFilter filter)
         {
@@ -232,6 +238,38 @@ namespace Retail.BusinessEntity.Business
             }
 
            
+        }
+
+        private class ChargingPolicyDetailExportExcelHandler : ExcelExportHandler<ChargingPolicyDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<ChargingPolicyDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Charging Policies",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name"});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Service Type" });
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.ChargingPolicyId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.ServiceTypeName });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         #endregion

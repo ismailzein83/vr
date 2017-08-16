@@ -42,7 +42,13 @@ namespace Retail.BusinessEntity.Business
 
                     return true;
                 };
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allProductFamilies.ToBigResult(input, filterExpression, ProductFamilyDetailMapper));
+
+            var resultProcessingHandler = new ResultProcessingHandler<ProductFamilyDetail>()
+            {
+                ExportExcelHandler = new ProductFamilyDetailExportExcelHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allProductFamilies.ToBigResult(input, filterExpression, ProductFamilyDetailMapper), resultProcessingHandler);
         }
 
         public ProductFamily GetProductFamily(int productFamilyId, bool isViewedFromUI)
@@ -237,6 +243,36 @@ namespace Retail.BusinessEntity.Business
             public override string ModuleName
             {
                 get { return "Business Entity"; }
+            }
+        }
+
+        private class ProductFamilyDetailExportExcelHandler : ExcelExportHandler<ProductFamilyDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<ProductFamilyDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Product Families",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.ProductFamilyId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
             }
         }
 

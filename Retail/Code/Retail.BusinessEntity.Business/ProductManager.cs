@@ -42,8 +42,13 @@ namespace Retail.BusinessEntity.Business
                         return false;
                     return true;
                 };
-           
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allProducts.ToBigResult(input, filterExpression, ProductDetailMapper));
+
+            var resultProcessingHandler = new ResultProcessingHandler<ProductDetail>()
+            {
+                ExportExcelHandler = new ProductDetailExportExcelHandler()
+            };
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allProducts.ToBigResult(input, filterExpression, ProductDetailMapper), resultProcessingHandler);
         }
 
         public IEnumerable<Product> GetAllProducts()
@@ -254,6 +259,37 @@ namespace Retail.BusinessEntity.Business
                 get { return "Business Entity"; }
             }
         }
+
+        private class ProductDetailExportExcelHandler : ExcelExportHandler<ProductDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<ProductDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Products",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.ProductId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
         #endregion
 
         #region Private Methods
