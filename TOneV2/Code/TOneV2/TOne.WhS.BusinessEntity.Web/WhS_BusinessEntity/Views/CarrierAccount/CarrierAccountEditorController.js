@@ -92,9 +92,6 @@
                 carrierProfileSelectorAPI = api;
                 carrierProfileSelectorReadyDeferred.resolve();
             };
-            $scope.scopeModel.onCarrierProfileSelectionChanged = function () {
-                showInvoiceSetting();
-            };
             $scope.scopeModel.onActivationStatusSelectorReady = function (api) {
                 activationStatusSelectorAPI = api;
                 activationStatusSelectorReadyPromiseDeferred.resolve();
@@ -104,7 +101,6 @@
                 carrierAccountTypeSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onCarrierAccountTypeChanged = function () {
-                showInvoiceSetting();
 
                 if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
                     if ($scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Customer.value || $scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
@@ -632,28 +628,6 @@
             return supplierRoutingStatusSelectorLoadDeferred.promise;
         }
 
-        function showInvoiceSetting() {
-            $scope.scopeModel.viewInvoiceSettings = true;
-            if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
-                if ($scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Supplier.value) {
-                    $scope.scopeModel.viewInvoiceSettings = false;
-                }
-            }
-            carrierProfileId = carrierProfileSelectorAPI.getSelectedIds();
-
-            if (carrierProfileId != undefined) {
-
-                getCarrierProfile()
-                    .then(function (carrier) {
-                        carrierAccountEntity = carrier;
-                        if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.CustomerInvoiceByProfile != undefined) {
-                            if (carrierProfileEntity.Settings.CustomerInvoiceByProfile == true) {
-                                $scope.scopeModel.viewInvoiceSettings = false;
-                            }
-                        }
-                    });
-            }
-        }
         function getDefaultServices() {
             if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != null && carrierAccountEntity.SupplierSettings.DefaultServices != null) {
                 var defaultServices = [];
