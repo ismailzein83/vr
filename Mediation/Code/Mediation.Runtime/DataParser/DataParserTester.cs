@@ -31,20 +31,11 @@ namespace Mediation.Runtime.DataParser
 
                 throw;
             }
-
-
-            //DateTimeOffset do1 = new DateTimeOffset(2017, 05, 22, 5, 0, 0, new TimeSpan(-5, 0, 0));
-            //var newDate = do1.ToLocalTime().DateTime;
-            //ParseHuaweiNamibia();
-
-            //ParseEricsson();
         }
 
         void CreateMediationSettingsFile(string settings, string name)
         {
             string path = string.Format(@"D:\Mediation\{0}.txt", name);
-            //if (!File.Exists(path))
-            //{
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
                 using (var tw = new StreamWriter(fileStream))
@@ -53,16 +44,6 @@ namespace Mediation.Runtime.DataParser
                     tw.Close();
                 }
             }
-
-            //}
-            //else if (File.Exists(path))
-            //{
-            //    using (var tw = new StreamWriter(path, true))
-            //    {
-            //        tw.WriteLine(settings);
-            //        tw.Close();
-            //    }
-            //}
         }
 
         #region Huawei Namibia
@@ -2324,10 +2305,9 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("8B", new HexTLVFieldParser
             {
-                Settings = new NumberFieldParser
+                Settings = new TimeParser
                 {
-                    FieldName = "CallDuration",
-                    NumberType = NumberType.Int
+                    FieldName = "CallDuration"
                 }
             });
 
@@ -2376,6 +2356,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("9F2E", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "GlobalCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
             return parsers;
         }
 
@@ -2403,6 +2392,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("9F44", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "GlobalCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
             parsers.Add("8B", new HexTLVFieldParser
             {
                 Settings = new TimeParser
@@ -2413,10 +2411,9 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("8C", new HexTLVFieldParser
             {
-                Settings = new NumberFieldParser
+                Settings = new TimeParser
                 {
-                    FieldName = "CallDuration",
-                    NumberType = NumberType.Int
+                    FieldName = "CallDuration"
                 }
             });
 
@@ -2536,10 +2533,9 @@ namespace Mediation.Runtime.DataParser
             });
             parsers.Add("8C", new HexTLVFieldParser
             {
-                Settings = new NumberFieldParser
+                Settings = new TimeParser
                 {
-                    FieldName = "CallDuration",
-                    NumberType = NumberType.Int
+                    FieldName = "CallDuration"
                 }
             });
 
@@ -2597,6 +2593,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("9F31", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "GlobalCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
             return parsers;
         }
 
@@ -2634,10 +2639,9 @@ namespace Mediation.Runtime.DataParser
             });
             parsers.Add("90", new HexTLVFieldParser
             {
-                Settings = new NumberFieldParser
+                Settings = new TimeParser
                 {
-                    FieldName = "CallDuration",
-                    NumberType = NumberType.Int
+                    FieldName = "CallDuration"
                 }
             });
 
@@ -2695,6 +2699,14 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("9F39", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "GlobalCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
             return parsers;
         }
 
@@ -2733,10 +2745,9 @@ namespace Mediation.Runtime.DataParser
 
             parsers.Add("8D", new HexTLVFieldParser
             {
-                Settings = new NumberFieldParser
+                Settings = new TimeParser
                 {
-                    FieldName = "CallDuration",
-                    NumberType = NumberType.Int
+                    FieldName = "CallDuration"
                 }
             });
 
@@ -2826,6 +2837,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "LocationNumber",
                     RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F43", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "GlobalCallReference",
+                    NumberType = NumberType.BigInt
                 }
             });
 
@@ -3331,7 +3351,8 @@ namespace Mediation.Runtime.DataParser
                         SecondsIndex = 5,
                         TimeShiftIndicatorIndex = 6,
                         HoursTimeShiftIndex = 7,
-                        MinutesTimeShiftIndex = 8
+                        MinutesTimeShiftIndex = 8,
+                        IsBCD = true
                     };
         }
         private string GetHuaweiIraqParserSettings()
@@ -4091,16 +4112,6 @@ namespace Mediation.Runtime.DataParser
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            //parsers.Add("9F814B", new HexTLVFieldParser
-            //{
-            //    Settings = new DateTimeParser
-            //    {
-            //        FieldName = "SetupTime",
-            //        WithOffset = false,
-            //        DateTimeParsingType = DateTimeParsingType.DateTime
-            //    }
-            //});
-
             parsers.Add("9F8150", new HexTLVFieldParser
             {
                 Settings = new NumberFieldParser
@@ -4274,16 +4285,6 @@ namespace Mediation.Runtime.DataParser
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            //parsers.Add("9F8149", new HexTLVFieldParser
-            //{
-            //    Settings = new DateTimeParser
-            //    {
-            //        FieldName = "SetupTime",
-            //        WithOffset = false,
-            //        DateTimeParsingType = DateTimeParsingType.DateTime
-            //    }
-            //});
-
             parsers.Add("9F814D", new HexTLVFieldParser
             {
                 Settings = new NumberFieldParser
@@ -4449,16 +4450,6 @@ namespace Mediation.Runtime.DataParser
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            //parsers.Add("9F8149", new HexTLVFieldParser
-            //{
-            //    Settings = new DateTimeParser
-            //    {
-            //        FieldName = "SetupTime",
-            //        WithOffset = false,
-            //        DateTimeParsingType = DateTimeParsingType.DateTime
-            //    }
-            //});
-
             parsers.Add("9F814D", new HexTLVFieldParser
             {
                 Settings = new NumberFieldParser
@@ -4606,16 +4597,6 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
-
-            //parsers.Add("9F8149", new HexTLVFieldParser
-            //{
-            //    Settings = new DateTimeParser
-            //    {
-            //        FieldName = "SetupTime",
-            //        WithOffset = false,
-            //        DateTimeParsingType = DateTimeParsingType.DateTime
-            //    }
-            //});
 
             parsers.Add("9F814D", new HexTLVFieldParser
             {
@@ -5223,16 +5204,6 @@ namespace Mediation.Runtime.DataParser
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            //parsers.Add("9F8149", new HexTLVFieldParser
-            //{
-            //    Settings = new DateTimeParser
-            //    {
-            //        FieldName = "SetupTime",
-            //        WithOffset = false,
-            //        DateTimeParsingType = DateTimeParsingType.DateTime
-            //    }
-            //});
-
             parsers.Add("9F814D", new HexTLVFieldParser
             {
                 Settings = new NumberFieldParser
@@ -5775,7 +5746,8 @@ namespace Mediation.Runtime.DataParser
                                                              {
                                                                   FieldName = "ChangeTime",
                                                                   DateTimeParsingType = DateTimeParsingType.DateTime,
-                                                                  WithOffset = true
+                                                                  WithOffset = true,
+                                                                  IsBCD = true
                                                              }                            
                                                         }
                                                     }
@@ -6356,7 +6328,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -6377,7 +6350,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -6399,7 +6373,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -6641,7 +6616,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -6662,7 +6638,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -6684,7 +6661,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -6940,7 +6918,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -6961,7 +6940,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -6983,7 +6963,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7139,7 +7120,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7161,7 +7143,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7183,7 +7166,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7323,7 +7307,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7344,7 +7329,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7364,7 +7350,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7503,7 +7490,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7525,7 +7513,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7547,7 +7536,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7687,7 +7677,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7708,7 +7699,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7730,7 +7722,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7871,7 +7864,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7892,7 +7886,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -7914,7 +7909,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -8083,7 +8079,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -8168,7 +8165,8 @@ namespace Mediation.Runtime.DataParser
                         HoursIndex = 2,
                         MinutesIndex = 1,
                         SecondsIndex = 0,
-                        WithOffset = false
+                        WithOffset = false,
+                        IsBCD = true
                     }
                 },
                 Length = 7,
@@ -8180,65 +8178,4 @@ namespace Mediation.Runtime.DataParser
         }
         #endregion
     }
-
-    #region Classes
-
-
-    public class ParserTypeExecuteContext : IParserTypeExecuteContext
-    {
-        Action<ParsedRecord> _OnRecordParsed;
-        public ParserTypeExecuteContext(Action<ParsedRecord> onRecordParsed)
-        {
-            _OnRecordParsed = onRecordParsed;
-        }
-
-
-        public IDataParserInput Input
-        {
-            get;
-            set;
-        }
-
-        public void OnRecordParsed(ParsedRecord parsedRecord)
-        {
-            _OnRecordParsed(parsedRecord);
-        }
-
-        public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
-        {
-            FldDictParsedRecord parsedRecord = new FldDictParsedRecord
-            {
-
-            };
-            return parsedRecord;
-        }
-    }
-
-    public class TagValueParserExecuteContext : ITagValueParserExecuteContext
-    {
-
-        public ParsedRecord Record
-        {
-            get;
-            set;
-        }
-
-        public byte[] TagValue
-        {
-            get;
-            set;
-        }
-    }
-
-    public class DataParserInput : IDataParserInput
-    {
-        public byte[] Data
-        {
-            get;
-            set;
-        }
-    }
-
-    #endregion
-
 }
