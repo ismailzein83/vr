@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public enum UserStatus { Active = 1, Inactive = 0 }
+    public enum UserStatus {
+        [Description("Active")]
+        Active = 1,
+        [Description("Inactive")]
+        Inactive = 0
+    }
 
     public class User
     {
