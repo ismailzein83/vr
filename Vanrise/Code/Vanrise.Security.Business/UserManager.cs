@@ -42,7 +42,13 @@ namespace Vanrise.Security.Business
                  &&
                  (input.Query.Email == null || itemObject.Email.ToLower().Contains(input.Query.Email.ToLower()));
             VRActionLogger.Current.LogGetFilteredAction(UserLoggableEntity.Instance, input);
-            return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, UserDetailMapper));
+
+            var resultProcessingHandler = new ResultProcessingHandler<UserDetail>()
+            {
+                ExportExcelHandler = new UserDetailExportExcelHandler()
+            };
+
+            return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, UserDetailMapper), resultProcessingHandler);
         }
 
         public T GetUserExtendedSettings<T>(int userId) where T : class
@@ -895,6 +901,51 @@ namespace Vanrise.Security.Business
                 return s_userManager.GetUserName(user);
             }
         }
+
+        private class UserDetailExportExcelHandler : ExcelExportHandler<UserDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<UserDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Users",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Email"});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Status" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Enable Till", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Last Login Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Groups"});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Description" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.UserId });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Email });
+                            row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Status) });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EnabledTill });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.LastLogin });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.GroupNames });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Description });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
+
 
 
         #endregion

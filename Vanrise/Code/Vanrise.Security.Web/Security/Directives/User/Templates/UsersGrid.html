@@ -3,8 +3,8 @@
              pagingtype="'PagingOnScroll'"
              on-ready="onGridReady"
              menuactions="gridMenuActions"
-             idfield="Entity.UserId">
-
+             idfield="Entity.UserId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.UserId'" fixedwidth="'50'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="'250'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Email'" field="'Entity.Email'" fixedwidth="'200'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Status'" fixedwidth="'75'">
