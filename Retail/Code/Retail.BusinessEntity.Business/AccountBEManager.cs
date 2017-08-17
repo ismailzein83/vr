@@ -397,13 +397,21 @@ namespace Retail.BusinessEntity.Business
             Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId(accountBEDefinitionId);
             return cachedAccounts.GetRecord(sourceId);
         }
-        public bool UpdateStatus(Guid accountBEDefinitionId, long accountId, Guid statusId)
+        public bool UpdateStatus(Guid accountBEDefinitionId, long accountId, Guid statusId,string actionName = null)
         {
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
             bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
             if (updateStatus)
             {
-                VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountBELoggableEntity(accountBEDefinitionId), GetAccount(accountBEDefinitionId, accountId));
+                if (actionName != null)
+                {
+                    VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), actionName, true, GetAccount(accountBEDefinitionId, accountId));
+                }else
+                {
+                    var status = new StatusDefinitionManager().GetStatusDefinition(statusId);
+                    VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), string.Format("Update Status"), true, GetAccount(accountBEDefinitionId, accountId), string.Format("Status Changed to {0}", status.Name));
+                }
+               
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
             }
             return updateStatus;

@@ -1,0 +1,19 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_ChangeStatusActionEditorController" size="small" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formChangeStatusActionEditor">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    Are you sure you want to continue?
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Yes" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="No" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

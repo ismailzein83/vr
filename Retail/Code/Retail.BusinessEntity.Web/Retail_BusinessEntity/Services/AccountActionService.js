@@ -26,7 +26,6 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                 account.menuActions.push({
                     name: accountActionDefinition.Name,
                     clicked: function (selectedAccount) {
-
                         Retail_BE_AccountBEAPIService.GetAccount(accountBEDefinitionId, account.AccountId).then(function (response) {
                             var payload = {
                                 accountBEDefinitionId: accountBEDefinitionId,
@@ -38,7 +37,6 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                                     gridAPI.itemUpdated(updatedItem);
                                 }
                             };
-
                             var promise = actionType.ExecuteAction(payload);
                         });
                     }
@@ -128,21 +126,26 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
                     var account = payload.account;
                     var onItemUpdated = payload.onItemUpdated;
                     var accountActionDefinition = payload.accountActionDefinition;
-
-                    VRNotificationService.showConfirmation().then(function (confirmed) {
-                        if (confirmed) {
-                            return Retail_BE_ChangeStatusActionAPIService.ChangeAccountStatus(accountBEDefinitionId, account.AccountId, accountActionDefinition.AccountActionDefinitionId).then(function (response) {
-                                if (VRNotificationService.notifyOnItemUpdated('Account', response, 'Name')) {
-                                    if (onItemUpdated != undefined)
-                                        onItemUpdated(response.UpdatedObject);
-                                }
-                            });
-                        }
-                    });
+                    openChangeStatusEditor(onItemUpdated, accountBEDefinitionId, account.AccountId, accountActionDefinition.AccountActionDefinitionId);
                 }
             };
             registerActionType(actionType);
         }
+
+        function openChangeStatusEditor(onItemUpdated, accountBEDefinitionId, accountId, accountActionDefinitionId)
+        {
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onItemUpdated = onItemUpdated
+            };
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountActionDefinitionId: accountActionDefinitionId,
+                accountId: accountId,
+            };
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/ChangeStatusActionEditor.html', parameters, settings);
+        }
+
         return ({
             defineAccountMenuActions: defineAccountMenuActions,
             getActionTypeIfExist: getActionTypeIfExist,

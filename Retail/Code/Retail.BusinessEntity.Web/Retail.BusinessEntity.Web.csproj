@@ -769,6 +769,8 @@
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountViews\PortalAccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountViews\PortalAccountEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Account\ChangeStatusActionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Account\ChangeStatusActionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\ProductFamily\ProductFamilyEditor.html" />

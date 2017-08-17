@@ -24,7 +24,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
             actionDefinitionSettings.ThrowIfNull("actionDefinitionSettings");
             if (accountBEManager.EvaluateAccountCondition(accountBEDefinitionId,accountId,actionDefinition.AvailabilityCondition))
             {
-                if (accountBEManager.UpdateStatus(accountBEDefinitionId, accountId, actionDefinitionSettings.StatusId))
+                if (accountBEManager.UpdateStatus(accountBEDefinitionId, accountId, actionDefinitionSettings.StatusId, actionDefinition.Name))
                 {
                     long accountStatusHistoryId;
                     new AccountStatusHistoryManager().TryAddAccountStatusHistory(new AccountStatusHistory
@@ -40,7 +40,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
                     financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, accountId);
                     if (actionDefinitionSettings.ApplyToChildren)
                     {
-                        if (AppyChangeStatusToChilds(actionDefinitionSettings, actionDefinition.AvailabilityCondition, accountBEDefinitionId, accountId))
+                        if (AppyChangeStatusToChilds(actionDefinitionSettings, actionDefinition.AvailabilityCondition, accountBEDefinitionId, accountId, actionDefinition.Name))
                         {
                             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                             updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(accountBEDefinitionId, accountId);
@@ -54,7 +54,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
             }
             return updateOperationOutput;
         }
-        private bool AppyChangeStatusToChilds(ChangeStatusActionSettings actionDefinitionSettings,AccountCondition actionCondition, Guid accountBEDefinitionId, long accountId)
+        private bool AppyChangeStatusToChilds(ChangeStatusActionSettings actionDefinitionSettings,AccountCondition actionCondition, Guid accountBEDefinitionId, long accountId,string actionName)
         {
             FinancialAccountManager financialAccountManager = new FinancialAccountManager();
             AccountStatusHistoryManager accountStatusHistoryManager = new Business.AccountStatusHistoryManager();
@@ -66,7 +66,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
                 {
                     if (accountBEManager.EvaluateAccountCondition(childAccout, actionCondition))
                     {
-                        if (accountBEManager.UpdateStatus(accountBEDefinitionId, childAccout.AccountId, actionDefinitionSettings.StatusId))
+                        if (accountBEManager.UpdateStatus(accountBEDefinitionId, childAccout.AccountId, actionDefinitionSettings.StatusId,actionName))
                         {
                             long accountStatusHistoryId;
                             accountStatusHistoryManager.TryAddAccountStatusHistory(new AccountStatusHistory
