@@ -46,16 +46,24 @@ app.directive('retailBeDidSelector', ['UtilsService', 'VRUIUtilsService', 'Retai
 
             function initializeController() {
 
+                ctrl.onSelectorReady = function (api) {
+                    selectorAPI = api;
+                    defineAPI();
+                };
+
                 ctrl.addNewDID = function () {
                     var onDIDAdded = function (didObj) {
 
                         if (attrs.ismultipleselection != undefined) {
                             var previousSelectedIds = VRUIUtilsService.getIdSelectedIds('DIDId', attrs, ctrl);
                             selectedIds = previousSelectedIds != undefined ? previousSelectedIds : [];
-                            selectedIds.push(didObj.Entity.DIDId);
+
+                            if (didObj != undefined && didObj.Entity != undefined)
+                                selectedIds.push(didObj.Entity.DIDId);
                         }
                         else {
-                            selectedIds = didObj.Entity.DIDId;
+                            if (didObj != undefined && didObj.Entity != undefined)
+                                selectedIds = didObj.Entity.DIDId;
                         }
 
                         ctrl.vrLoader = true;
@@ -63,16 +71,12 @@ app.directive('retailBeDidSelector', ['UtilsService', 'VRUIUtilsService', 'Retai
                             ctrl.vrLoader = false;
                         });
                     };
+
                     Retail_BE_DIDService.addDID(onDIDAdded);
                 };
 
                 ctrl.haspermission = function () {
                     return Retail_BE_DIDAPIService.HasAddDIDPermission();
-                };
-
-                ctrl.onSelectorReady = function (api) {
-                    selectorAPI = api;
-                    defineAPI();
                 };
             }
 

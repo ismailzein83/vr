@@ -41,7 +41,8 @@
 
             $scope.scopeModel.add = function () {
                 var onDIDAdded = function (addedDID) {
-                    gridAPI.onDIDAdded(addedDID);
+                    if (addedDID != undefined)
+                        gridAPI.onDIDAdded(addedDID);
                 };
 
                 Retail_BE_DIDService.addDID(onDIDAdded);

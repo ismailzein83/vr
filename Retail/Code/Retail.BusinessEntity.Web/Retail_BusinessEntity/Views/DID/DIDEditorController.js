@@ -156,7 +156,7 @@
 
             return Retail_BE_DIDAPIService.AddDID(didObjToAdd).then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("DID", response, "Number")) {
-                        if ($scope.onDIDAdded != undefined && didObjToAdd.CreateAsSeparate != true)
+                        if ($scope.onDIDAdded != undefined)
                             $scope.onDIDAdded(response.InsertedObject);
                         $scope.modalContext.closeModal();
                     }

@@ -127,18 +127,20 @@ namespace Retail.BusinessEntity.Business
         public InsertOperationOutput<DIDDetail> AddDID(DIDToInsert didToInsert)
         {
             InsertOperationOutput<DIDDetail> insertOperationOutput = new InsertOperationOutput<DIDDetail>();
-
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int didId = -1;
 
+            int didId;
             if (TryAddDID(didToInsert, out didId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 didToInsert.DIDId = didId;
+
+                if (!didToInsert.CreateAsSeparate)
+                    insertOperationOutput.InsertedObject = DIDDetailMapper(didToInsert);
+
                 VRActionLogger.Current.TrackAndLogObjectAdded(DIDLoggableEntity.Instance, didToInsert);
-                insertOperationOutput.InsertedObject = DIDDetailMapper(didToInsert);
             }
             else
             {
@@ -150,10 +152,10 @@ namespace Retail.BusinessEntity.Business
 
         public bool TryAddDID(DIDToInsert didToInsert, out int didId)
         {
-            didId = 0;
-            var cachedDIDs = GetCachedDIDsGroupByNumber();
+            didId = -1;
             bool alreadyExist = false;
 
+            var cachedDIDs = GetCachedDIDsGroupByNumber();
             ManipulateDIDs(didToInsert, (number, handle) =>
             {
                 alreadyExist = cachedDIDs.ContainsKey(number);
