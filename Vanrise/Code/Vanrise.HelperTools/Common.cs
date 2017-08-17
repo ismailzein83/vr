@@ -26,8 +26,13 @@ namespace Vanrise.HelperTools
         public static string SQLUsername { get { return ConfigurationManager.AppSettings["SQLUsername"]; } }
         public static string SQLPassword { get { return ConfigurationManager.AppSettings["SQLPassword"]; } }
 
+        public static List<string> GetDBs(string projectName)
+        {
+            return ConfigurationManager.AppSettings[projectName].ToString().Split('#').ToList();
+        }
+
         #region CompressJS, GRPJS and GRPJSOverridden
-        public static void CompressJSFiles(string currentDateShort, string folder, string javascriptsOutputPath)
+        public static void CompressJSFiles(string currentDateShort, string folder, string javascriptsOutputPath, string projectName)
         {
             ECMAScriptPacker p = new ECMAScriptPacker((ECMAScriptPacker.PackerEncoding)ECMAScriptPacker.PackerEncoding.None, false, false);
 
@@ -35,9 +40,9 @@ namespace Vanrise.HelperTools
             {
                 javascriptsOutputPath = Common.JavascriptsOutputPath;
             }
-            if (Directory.Exists(string.Format(javascriptsOutputPath, currentDateShort, folder)))
+            if (Directory.Exists(string.Format(javascriptsOutputPath, currentDateShort, folder, projectName)))
             {
-                var allFiles = Directory.GetFiles(string.Format(javascriptsOutputPath, currentDateShort, folder), "*.js", SearchOption.AllDirectories);
+                var allFiles = Directory.GetFiles(string.Format(javascriptsOutputPath, currentDateShort, folder, projectName), "*.js", SearchOption.AllDirectories);
 
                 string ExtraFilename = string.Empty;
 
@@ -53,15 +58,15 @@ namespace Vanrise.HelperTools
             File.WriteAllText(string.Format("{0}\\{1}{2}{3}", Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file), ExtraFilename, Path.GetExtension(file)), p.Pack(File.ReadAllText(Path.GetFullPath(file))));
         }
 
-        public static void GroupJSFiles(string currentDateShort, string folder, bool overridden, string javascriptsOutputPath)
+        public static void GroupJSFiles(string currentDateShort, string folder, bool overridden, string javascriptsOutputPath, string projectName)
         {
             if (string.IsNullOrEmpty(javascriptsOutputPath))
             {
                 javascriptsOutputPath = Common.JavascriptsOutputPath;
             }
-            if (Directory.Exists(string.Format(javascriptsOutputPath, currentDateShort, folder)))
+            if (Directory.Exists(string.Format(javascriptsOutputPath, currentDateShort, folder, projectName)))
             {
-                var allDirectories = Directory.GetDirectories(string.Format(javascriptsOutputPath, currentDateShort, folder), "*", SearchOption.TopDirectoryOnly);
+                var allDirectories = Directory.GetDirectories(string.Format(javascriptsOutputPath, currentDateShort, folder, projectName), "*", SearchOption.TopDirectoryOnly);
 
                 Parallel.ForEach(allDirectories, directory =>
                 {
@@ -96,14 +101,14 @@ namespace Vanrise.HelperTools
         #endregion
 
         #region GRPSQL and GRPSQLOverridden
-        public static void GroupSQLPostScriptFiles(string currentDateShort, bool overridden, string sqlFilesOutputPath)
+        public static void GroupSQLPostScriptFiles(string currentDateShort, bool overridden, string sqlFilesOutputPath, string projectName)
         {
             if (string.IsNullOrEmpty(sqlFilesOutputPath))
             {
                 sqlFilesOutputPath = Common.SqlFilesOutputPath;
             }
 
-            var allDirectories = Directory.GetDirectories(string.Format(sqlFilesOutputPath, currentDateShort, ""), "*", SearchOption.TopDirectoryOnly);
+            var allDirectories = Directory.GetDirectories(string.Format(sqlFilesOutputPath, currentDateShort, "", projectName), "*", SearchOption.TopDirectoryOnly);
 
             foreach (var directory in allDirectories)
             {
@@ -155,11 +160,11 @@ namespace Vanrise.HelperTools
 
         #region GenerateDBStructure
 
-        public static void GenerateDBStructure(string currentDate, string currentDateShort, List<string> lstDBs, string sqlFilesOutputPath)
+        public static void GenerateDBStructure(string currentDate, string currentDateShort, List<string> lstDBs, string sqlFilesOutputPath, string projectName)
         {
             if (lstDBs.Count < 1)
             {
-                lstDBs.AddRange(Common.ActiveDBs.Split('#'));
+                lstDBs.AddRange(GetDBs(projectName));
             }
             if (string.IsNullOrEmpty(sqlFilesOutputPath))
             {
@@ -169,7 +174,7 @@ namespace Vanrise.HelperTools
             Parallel.ForEach(lstDBs, item =>
             {
                 Console.WriteLine(string.Format("Creating database structure for: {0}", item));
-                GenerateSQLDBScript(item, string.Format(sqlFilesOutputPath, currentDateShort, "DBsStructure"), currentDate, currentDateShort);
+                GenerateSQLDBScript(item, string.Format(sqlFilesOutputPath, currentDateShort, "DBsStructure", projectName), currentDate, currentDateShort);
                 Console.WriteLine(string.Format("Finish creating database structure for: {0}", item));
             });
         }

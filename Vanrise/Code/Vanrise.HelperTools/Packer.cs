@@ -55,11 +55,6 @@ namespace Dean.Edwards
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        static string ServerIP = System.Configuration.ConfigurationManager.AppSettings["ServerIP"];
-        static string ActiveDBs = System.Configuration.ConfigurationManager.AppSettings["ActiveDBs"];
-
-        static string VersionDateFormat = System.Configuration.ConfigurationManager.AppSettings["VersionDateFormat"];
-        static string VersionNumber = System.Configuration.ConfigurationManager.AppSettings["VersionNumber"];
         public Packer()
         {
             //
@@ -441,7 +436,7 @@ namespace Dean.Edwards
                 DisplayProgressBar(2);
                 Thread.Sleep(1000);
                 pBar1.PerformStep();
-                Common.CompressJSFiles("currentDateShort", "Javascripts", jsFilesPath);
+                Common.CompressJSFiles("currentDateShort", "Javascripts", jsFilesPath,"");
                 pBar1.PerformStep();
             }
             else
@@ -470,9 +465,9 @@ namespace Dean.Edwards
             Encoding.SelectedItem = ECMAScriptPacker.PackerEncoding.None;
 
             //load DBs
-            if (string.IsNullOrEmpty(ActiveDBs))
+            if (string.IsNullOrEmpty(Common.ActiveDBs))
             {
-                Server myServer = new Server(ServerIP);
+                Server myServer = new Server(Common.ServerIP);
                 foreach (Database db in myServer.Databases)
                 {
                     if (db.Name.StartsWith("Standard"))
@@ -483,7 +478,7 @@ namespace Dean.Edwards
             }
             else
             {
-                chklstDatabases.Items.AddRange(ActiveDBs.Split('#'));
+                chklstDatabases.Items.AddRange(Common.ActiveDBs.Split('#'));
             }
         }
 
@@ -558,7 +553,7 @@ namespace Dean.Edwards
                 DisplayProgressBar(2);
                 Thread.Sleep(1000);
                 pBar1.PerformStep();
-                Common.GroupJSFiles("currentDateShort", "Javascripts", false, jsFilesPath);
+                Common.GroupJSFiles("currentDateShort", "Javascripts", false, jsFilesPath,"");
                 pBar1.PerformStep();
             }
             else
@@ -575,7 +570,7 @@ namespace Dean.Edwards
                 DisplayProgressBar(2);
                 Thread.Sleep(1000);
                 pBar1.PerformStep();
-                Common.GroupSQLPostScriptFiles("currentDateShort", chkOverriddenNode.Checked, jsFilesPath);
+                Common.GroupSQLPostScriptFiles("currentDateShort", chkOverriddenNode.Checked, jsFilesPath,"");
                 pBar1.PerformStep();
             }
             else
@@ -617,7 +612,7 @@ namespace Dean.Edwards
             DisplayProgressBar(2);
             Thread.Sleep(1000);
             pBar1.PerformStep();
-            Common.GenerateDBStructure(currentDate, currentDateShort, lstDBs, sqlFilesOutputPath);
+            Common.GenerateDBStructure(currentDate, currentDateShort, lstDBs, sqlFilesOutputPath,"");
             pBar1.PerformStep();
         }
 
@@ -638,7 +633,7 @@ namespace Dean.Edwards
         {
             var sb = new StringBuilder();
 
-            Server myServer = new Server(ServerIP);
+            Server myServer = new Server(Common.ServerIP);
             Scripter scripter = new Scripter(myServer);
             Database dbname = myServer.Databases[item];
 
