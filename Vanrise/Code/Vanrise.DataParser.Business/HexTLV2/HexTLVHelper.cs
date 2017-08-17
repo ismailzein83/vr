@@ -77,7 +77,8 @@ namespace Vanrise.DataParser.Business
                 i++;
 
                 int tag = ParserHelper.GetInt(rawData, start, i - start);
-
+                if (tag == 0 || tag == 255)
+                    continue;
                 // parse Length
                 bool multiByteLength = (rawData[i] & 0x80) != 0;
 
@@ -86,17 +87,26 @@ namespace Vanrise.DataParser.Business
 
                 // fill data
                 byte[] result = new byte[length];
-                Array.Copy(rawData, i, result, 0, length);
-
-                HexTLVTagValue tagValue = new HexTLVTagValue
+                try
                 {
-                    Value = result,
-                    Length = length,
-                    Tag = tag.ToString("X2")
-                };
-                tags.Add(tagValue);
-                i += length;
-                onTagValueRead(tagValue);
+                    Array.Copy(rawData, i, result, 0, length);
+
+                    HexTLVTagValue tagValue = new HexTLVTagValue
+                    {
+                        Value = result,
+                        Length = length,
+                        Tag = tag.ToString("X2")
+                    };
+                    tags.Add(tagValue);
+                    i += length;
+                    onTagValueRead(tagValue);
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+
             }
         }
         public static void ExecuteRecordParser(HexTLVRecordParser subRecordsParser, Stream recordStream, IHexTLVRecordParserContext parentRecordContext)

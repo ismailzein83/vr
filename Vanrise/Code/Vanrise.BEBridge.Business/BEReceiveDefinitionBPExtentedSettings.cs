@@ -19,7 +19,7 @@ namespace Vanrise.BEBridge.Business
             SourceBESyncProcessInput beBridgeProcessInput = context.IntanceToRun.InputArgument.CastWithValidate<SourceBESyncProcessInput>("context.IntanceToRun.InputArgument");
             foreach (var startedInstance in context.GetStartedBPInstances())
             {
-                SourceBESyncProcessInput processInput = startedInstance.InputArgument.CastWithValidate<SourceBESyncProcessInput>("context.IntanceToRun.InputArgument");
+                SourceBESyncProcessInput processInput = startedInstance.InputArgument.CastWithValidate<SourceBESyncProcessInput>("context.InputArgument.InputArgument");
                 if (processInput != null)
                 {
                     foreach (var beReceiveDefinitionId in processInput.BEReceiveDefinitionIds)

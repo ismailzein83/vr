@@ -20,7 +20,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers
             TimeSpan timeSpan = new TimeSpan(ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[0]))
                                                    , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[1]))
                                                    , ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[2])));
-            context.Record.SetFieldValue(FieldName, timeSpan);
+            context.Record.SetFieldValue(FieldName, timeSpan.TotalSeconds);
         }
     }
 }

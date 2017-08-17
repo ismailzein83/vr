@@ -20,8 +20,8 @@ namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
         public override void Execute(ICompositeFieldsParserContext context)
         {
             DateTime dateTimeField = (DateTime)context.Record.GetFieldValue(DateFieldName);
-            TimeSpan timeSpanField = (TimeSpan)context.Record.GetFieldValue(TimeFieldName);
-            var value = dateTimeField.AddTicks(timeSpanField.Ticks);
+            double timeSpanField = (double)context.Record.GetFieldValue(TimeFieldName);
+            var value = dateTimeField.AddSeconds(timeSpanField);
             context.Record.SetFieldValue(FieldName, value);
         }
     }
