@@ -3,17 +3,15 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [Retail_BE].sp_AccountStatusHistory_Insert
+CREATE PROCEDURE [Retail_BE].[sp_AccountStatusHistory_Insert]
+	@AccountBEDefinitionID uniqueidentifier,
 	@AccountID BIGINT,
-	@StatusId uniqueidentifier,
-	@StatusChangedDate DATETIME,
-	@ID BIGINT OUT
+	@StatusId uniqueidentifier
 AS
 BEGIN
 	
 	BEGIN
-		INSERT INTO [Retail_BE].AccountStatusHistory (AccountID, StatusId, StatusChangedDate)
-		VALUES (@AccountID, @StatusId,@StatusChangedDate)
-		SET @ID = SCOPE_IDENTITY()
+		INSERT INTO [Retail_BE].AccountStatusHistory ([AccountBEDefinitionID], AccountID, StatusId, StatusChangedDate)
+		VALUES (@AccountBEDefinitionID, @AccountID, @StatusId,GETDATE())
 	END
 END

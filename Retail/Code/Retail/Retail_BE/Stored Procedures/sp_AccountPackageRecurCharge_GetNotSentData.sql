@@ -6,7 +6,8 @@ BEGIN
 	;WITH groupingKeys AS (
 	  SELECT BalanceAccountTypeID, BalanceAccountID, ChargeDay, TransactionTypeID
 	  FROM [Retail_BE].[AccountPackageRecurCharge]
-	  WHERE ChargeDay>=@EffectiveDate
+	  WHERE ChargeDay>=@EffectiveDate AND BalanceAccountTypeID is not null AND BalanceAccountID is not null 
+	  AND (IsSentToAccountBalance is null OR IsSentToAccountBalance = 0) 
 	  GROUP BY BalanceAccountTypeID, BalanceAccountID, ChargeDay, TransactionTypeID
 	),
 
@@ -19,7 +20,7 @@ BEGIN
 	)
 
 	SELECT [ID],[AccountPackageID],[ChargeableEntityID],recurrChar.[BalanceAccountTypeID],recurrChar.[BalanceAccountID],recurrChar.[ChargeDay],[ChargeAmount],[CurrencyID],recurrChar.[TransactionTypeID],
-		   [ProcessInstanceID],[IsSentToAccountBalance],[CreatedTime]
+		   [ProcessInstanceID],[IsSentToAccountBalance],[CreatedTime], AccountID, AccountBEDefinitionId
 	FROM [Retail_BE].[AccountPackageRecurCharge] recurrChar
 	JOIN tempAccountPackageRecurCharge tempRecurrChar on tempRecurrChar.BalanceAccountID = recurrChar.BalanceAccountID AND tempRecurrChar.BalanceAccountTypeID = recurrChar.BalanceAccountTypeID 
 	AND tempRecurrChar.ChargeDay = recurrChar.ChargeDay AND tempRecurrChar.TransactionTypeID = recurrChar.TransactionTypeID
