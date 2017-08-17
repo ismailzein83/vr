@@ -48,7 +48,19 @@
     [UniqueIdentifier]           UNIQUEIDENTIFIER NULL,
     [RecordOpeningTimestamp]     BIGINT           NULL,
     [ChangeTimestamp]            BIGINT           NULL,
-    [FileName]                   NVARCHAR (200)   NULL);
+    [FileName]                   NVARCHAR (200)   NULL,
+    [SwitchID]                   INT              NULL,
+    [StartTime]                  DATETIME         NULL,
+    [StopTime]                   DATETIME         NULL,
+    [UserLocationInformation]    VARCHAR (100)    NULL,
+    [GWAddress]                  VARCHAR (100)    NULL,
+    [ServingNodeAddress]         VARCHAR (100)    NULL,
+    [RATType]                    INT              NULL,
+    [ServingNodeType]            INT              NULL,
+    [PDNConnectionID]            INT              NULL,
+    [GWPLMNIdentifier]           VARCHAR (100)    NULL);
+
+
 
 
 

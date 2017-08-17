@@ -24,6 +24,7 @@ namespace Mediation.Runtime.DataParser
                 CreateMediationSettingsFile(GetHuaweiIraqParserSettings_GPRS(), "Huawei_Iraq_GPRS");
                 CreateMediationSettingsFile(GetEricssonIraqParserSettings(), "Ericsson_Iraq");
                 CreateMediationSettingsFile(GetNokiaParserSettings(), "Nokia_Iraq");
+                CreateMediationSettingsFile(GetEricssonParserSettings_GPRS(), "Ericsson_GPRS");
             }
             catch (Exception ex)
             {
@@ -2953,6 +2954,365 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
+        #region GPRS
+
+        private string GetEricssonParserSettings_GPRS()
+        {
+            HexTLVParserType hexParser = new HexTLVParserType
+            {
+                RecordParser = new SplitByTagRecordParser
+                {
+                    SubRecordsParsersByTag = GetTemplateParsers_Ericsson_GPRS()
+                }
+            };
+
+            ParserType parserType = new ParserType
+            {
+                Name = "Huawei Iraq GPRS Parser",
+                ParserTypeId = new Guid("B9648105-8914-4C70-8550-F63D946F5B0C"),
+                Settings = new ParserTypeSettings
+                {
+                    ExtendedSettings = hexParser
+                }
+            };
+
+            return Serializer.Serialize(parserType.Settings);
+        }
+        private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Ericsson_GPRS()
+        {
+            Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
+
+            parsers.Add("BF4F", new HexTLVRecordParser
+            {
+                Settings = new CreateRecordRecordParser
+                {
+                    FieldParsers = new HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = Get_B4_FieldParsers_Ericsson()
+                    },
+                    RecordType = "GPRS",
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 2}
+                    },
+                    CompositeFieldsParsers = GetEricssonCompositeFieldsParser_GPRS()
+                }
+
+            });
+
+            return parsers;
+        }
+        private List<CompositeFieldsParser> GetEricssonCompositeFieldsParser_GPRS()
+        {
+            List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser>
+            {
+
+            };
+
+            return fieldParsers;
+        }
+
+        private Dictionary<string, HexTLVFieldParser> Get_B4_FieldParsers_Ericsson()
+        {
+            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+
+            parsers.Add("80", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordType",
+                    NumberType = NumberType.Int
+                }
+            });
+
+
+            parsers.Add("83", new HexTLVFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "ServedIMSI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9D", new HexTLVFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "ServedIMEI",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("85", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "ChargingID",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("96", new HexTLVFieldParser
+            {
+                Settings = new TBCDNumberParser
+                {
+                    FieldName = "ServedMSISDN",
+                    RemoveHexa = true
+                }
+            });
+
+            parsers.Add("87", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "AccessPointNameNI"
+                }
+            });
+
+            parsers.Add("88", new HexTLVFieldParser
+            {
+                Settings = new HexaParser
+                {
+                    FieldName = "PDPType"
+                }
+            });
+
+            parsers.Add("89", new HexTLVFieldParser
+               {
+                   Settings = new NumberFieldParser
+                   {
+                       FieldName = "ServedPDPAddress",
+                       NumberType = NumberType.Int
+                   }
+               });
+
+            parsers.Add("8B", new HexTLVFieldParser
+            {
+                Settings = new BoolFieldParser
+                {
+                    FieldName = "DynamicAddressFlag"
+                }
+            });
+
+            parsers.Add("8D", new HexTLVFieldParser
+            {
+                Settings = GetHuaweiDateTimeParser("RecordOpeningTime")
+            });
+
+            parsers.Add("9F26", new HexTLVFieldParser
+            {
+                Settings = GetHuaweiDateTimeParser("StartTime")
+            });
+
+            parsers.Add("9F27", new HexTLVFieldParser
+            {
+                Settings = GetHuaweiDateTimeParser("StopTime")
+            });
+
+            parsers.Add("8E", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "Duration",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("8F", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CauseForRecClosing",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("91", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RecordSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+
+            parsers.Add("92", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "NodeID"
+                }
+            });
+
+            parsers.Add("94", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "LocalSequenceNumber",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("95", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "APNSelectionMode",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("97", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "ChargingCharacteristics",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("98", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "ChSelectionMode",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9E", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "RATType",
+                    NumberType = NumberType.Int
+                }
+            });
+            parsers.Add("9F2D", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "PDNConnectionID",
+                    NumberType = NumberType.Int
+                }
+            });
+
+            parsers.Add("9F25", new HexTLVFieldParser
+            {
+                Settings = new HexaParser
+                {
+                    FieldName = "GWPLMNIdentifier "
+                }
+            });
+
+            parsers.Add("9F20", new HexTLVFieldParser
+            {
+                Settings = new HexaParser
+                {
+                    FieldName = "UserLocationInformation"
+                }
+            });
+
+            parsers.Add("84", new HexTLVFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"80", new HexTLVFieldParser
+                                {
+                                     Settings = new IPv4Parser
+                                     {
+                                          FieldName = "GWAddress"                                          
+                                     }                            
+                                }
+                            },
+                            {"82", new HexTLVFieldParser
+                                {
+                                     Settings = new IPv4Parser
+                                     {
+                                          FieldName = "GWAddress"                                          
+                                     }                            
+                                }
+                            },
+                            {"81", new HexTLVFieldParser
+                                {
+                                     Settings = new IPv4Parser
+                                     {
+                                          FieldName = "GWAddress"                                          
+                                     }                            
+                                }
+                            },
+                            {"83", new HexTLVFieldParser
+                                {
+                                     Settings = new IPv4Parser
+                                     {
+                                          FieldName = "GWAddress"                                          
+                                     }                            
+                                }
+                            }
+
+                        }
+                    }
+                }
+            });
+
+            parsers.Add("86", new HexTLVFieldParser
+            {
+                Settings = new SequenceFieldParser
+                {
+                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    {
+                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        {
+                            {"80", new HexTLVFieldParser
+                                {
+                                     Settings = new IPv4Parser
+                                     {
+                                          FieldName = "ServingNodeAddress"                                          
+                                     }                            
+                                }
+                            },
+                            {"82", new HexTLVFieldParser
+                                {
+                                     Settings = new IPv4Parser
+                                     {
+                                          FieldName = "ServingNodeAddress"                                          
+                                     }                            
+                                }
+                            },
+                            {"81", new HexTLVFieldParser
+                                {
+                                     Settings = new IPv4Parser
+                                     {
+                                          FieldName = "ServingNodeAddress"                                          
+                                     }                            
+                                }
+                            },
+                            {"83", new HexTLVFieldParser
+                                {
+                                     Settings = new IPv4Parser
+                                     {
+                                          FieldName = "ServingNodeAddress"                                          
+                                     }                            
+                                }
+                            }
+
+                        }
+                    }
+                }
+            });
+
+
+            return parsers;
+        }
+
+
+        #endregion
+
         #endregion
 
         #region Huawei Iraq
@@ -2968,8 +3328,8 @@ namespace Mediation.Runtime.DataParser
                         DayIndex = 2,
                         HoursIndex = 3,
                         MinutesIndex = 4,
-                        TimeShiftIndicatorIndex = 6,
                         SecondsIndex = 5,
+                        TimeShiftIndicatorIndex = 6,
                         HoursTimeShiftIndex = 7,
                         MinutesTimeShiftIndex = 8
                     };
@@ -5896,7 +6256,7 @@ namespace Mediation.Runtime.DataParser
         private List<PositionedFieldParser> Get_PositionedFieldParsers_MOC_Call()
         {
             List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
-            fieldParsers.Sum(s =>(decimal) s.Position);
+            fieldParsers.Sum(s => (decimal)s.Position);
             fieldParsers.Add(new PositionedFieldParser
             {
                 FieldParser = new HexTLVFieldParser
@@ -7617,7 +7977,7 @@ namespace Mediation.Runtime.DataParser
                 Length = 5,
                 Position = 10
             });
-            
+
             fieldParsers.Add(new PositionedFieldParser
             {
                 FieldParser = new HexTLVFieldParser
