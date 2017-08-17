@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C7915B15-7FC1-4DBD-B0CF-8381B48B2856}</ProjectGuid>
+    <ProjectGuid>{E64443DF-5575-4B8B-BDF9-8456AD2070DA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Retail.BusinessEntity.BP</RootNamespace>
-    <AssemblyName>Retail.BusinessEntity.BP</AssemblyName>
+    <RootNamespace>Retail.BusinessEntity.BP.Arguments</RootNamespace>
+    <AssemblyName>Retail.BusinessEntity.BP.Arguments</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -35,11 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Activities" />
-    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,39 +44,10 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.WFActivities">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountRecurringChargeEvaluatorInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <XamlAppDef Include="AccountRecurringChargeEvaluatorProcess.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </XamlAppDef>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Retail.BusinessEntity.BP.Activities\Retail.BusinessEntity.BP.Activities.csproj">
-      <Project>{5ecd4fc8-3080-43e8-ad80-581289f30509}</Project>
-      <Name>Retail.BusinessEntity.BP.Activities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Retail.BusinessEntity.BP.Arguments\Retail.BusinessEntity.BP.Arguments.csproj">
-      <Project>{e64443df-5575-4b8b-bdf9-8456ad2070da}</Project>
-      <Name>Retail.BusinessEntity.BP.Arguments</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
-      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
-      <Name>Retail.BusinessEntity.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Retail\Retail.sqlproj">
-      <Project>{BAC71345-402F-46AC-8FEC-1401F493305E}</Project>
-      <Name>Retail</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

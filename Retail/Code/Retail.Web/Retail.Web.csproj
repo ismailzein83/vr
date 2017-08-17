@@ -662,6 +662,10 @@
       <Project>{bc95dcad-b0aa-4e3e-9ea0-3963f0d54d23}</Project>
       <Name>Retail.BusinessEntity.APIEntities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.BP.Arguments\Retail.BusinessEntity.BP.Arguments.csproj">
+      <Project>{e64443df-5575-4b8b-bdf9-8456ad2070da}</Project>
+      <Name>Retail.BusinessEntity.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
       <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
       <Name>Retail.BusinessEntity.Business</Name>

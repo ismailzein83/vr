@@ -625,6 +625,10 @@
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRule\Templates\RecurringChargeRuleEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\AccountRecurringChargeRule\Templates\RecurringChargeRuleManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RecurringChargeDefinition\retail-be-recurringchargedefinition-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ProcessInput\retail-be-recurringcharge-process.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ProcessInput\Templates\RecurringChargProcessTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ScheduleTask\retail-be-recurringcharge-task.js" />
+    <Content Include="Retail_BusinessEntity\Directives\RecurringCharge\ScheduleTask\Templates\RecurringChargeTaskTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\retail-be-revenuecomparison-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\RevenueComparison\Templates\RevenueComparisonGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\RingoExtensions\TargetConvertor\retail-be-targetconvertor-directive.js" />

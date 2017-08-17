@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Activities;
 using Vanrise.BusinessProcess;
-using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Business;
@@ -19,7 +18,7 @@ namespace Retail.BusinessEntity.BP.Activities
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
-        public OutArgument<Dictionary<AccountPackageRecurChargeKey, List<AccountPackageRecurCharge>>> AccountPackageRecurChargeDict { get; set; }
+        public OutArgument<List<AccountPackageRecurCharge>> AccountPackageRecurChargeList { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -32,7 +31,7 @@ namespace Retail.BusinessEntity.BP.Activities
             FinancialAccountManager financialAccountManager = new Business.FinancialAccountManager();
             ChargeableEntityManager chargeableEntityManager = new Business.ChargeableEntityManager();
 
-            Dictionary<AccountPackageRecurChargeKey, List<AccountPackageRecurCharge>> accountPackageRecurChargeDict = new Dictionary<AccountPackageRecurChargeKey, List<AccountPackageRecurCharge>>();
+            List<AccountPackageRecurCharge> accountPackageRecurChargeList =new List<AccountPackageRecurCharge>();
 
             foreach (AccountPackageRecurChargeData accountPackageRecurChargeData in accountPackageRecurChargeDataList)
             {
@@ -75,23 +74,12 @@ namespace Retail.BusinessEntity.BP.Activities
                             TransactionTypeID = chargeableEntitySettings.TransactionTypeId.Value
                         };
 
-                        List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargeDict.GetOrCreateItem(BuildAccountPackageRecurChargeKey(accountPackageRecurCharge));
                         accountPackageRecurChargeList.Add(accountPackageRecurCharge);
                         chargeDay = chargeDay.AddDays(1);
                     }
                 }
             }
-            this.AccountPackageRecurChargeDict.Set(context, accountPackageRecurChargeDict);
-        }
-
-        private AccountPackageRecurChargeKey BuildAccountPackageRecurChargeKey(AccountPackageRecurCharge accountPackageRecurCharge)
-        {
-            return new AccountPackageRecurChargeKey()
-            {
-                BalanceAccountTypeID = accountPackageRecurCharge.BalanceAccountTypeID,
-                ChargeDay = accountPackageRecurCharge.ChargeDay,
-                TransactionTypeId = accountPackageRecurCharge.TransactionTypeID
-            };
+            this.AccountPackageRecurChargeList.Set(context, accountPackageRecurChargeList);
         }
     }
 }

@@ -26,22 +26,56 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         this.initializeController = initializeController;
 
+        var billingTransactionTypeSelectorAPI;
+        var billingTransactionTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
 
             $scope.scopeModel = {};
+
+            $scope.scopeModel.onBillingTransactionTypeSelectorReady = function (api) {
+                billingTransactionTypeSelectorAPI = api;
+                billingTransactionTypeSelectorReadyDeferred.resolve();
+            };
+
             defineAPI();
         }
         function defineAPI() {
             var api = {};
+            var selectedTransactionType;
 
             api.load = function (payload) {
                 var promises = [];
+
+                if (payload != undefined) {
+                    selectedTransactionType = payload.TransactionTypeId;
+                }
+
+                var loadBillingTransactionTypeSelectorPromise = loadBillingTransactionTypeSelector();
+                promises.push(loadBillingTransactionTypeSelectorPromise);
                 return UtilsService.waitMultiplePromises(promises);
             };
+
+            function loadBillingTransactionTypeSelector() {
+                var billingTransactionTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                billingTransactionTypeSelectorReadyDeferred.promise.then(function () {
+                    var billingTransactionTypeSelectorPayload;
+                    if (selectedTransactionType != undefined) {
+                        billingTransactionTypeSelectorPayload = {
+                            selectedIds: selectedTransactionType
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(billingTransactionTypeSelectorAPI, billingTransactionTypeSelectorPayload, billingTransactionTypeSelectorLoadDeferred);
+                });
+
+                return billingTransactionTypeSelectorLoadDeferred.promise;
+            }
 
             api.getData = function () {
                 return {
                     $type: "Retail.BusinessEntity.Entities.ChargeableEntitySettings ,Retail.BusinessEntity.Entities",
+                    TransactionTypeId: billingTransactionTypeSelectorAPI.getSelectedIds()
                 };
             };
 

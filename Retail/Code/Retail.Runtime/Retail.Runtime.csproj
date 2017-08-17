@@ -595,6 +595,18 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.BP.Activities\Retail.BusinessEntity.BP.Activities.csproj">
+      <Project>{5ecd4fc8-3080-43e8-ad80-581289f30509}</Project>
+      <Name>Retail.BusinessEntity.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.BP.Arguments\Retail.BusinessEntity.BP.Arguments.csproj">
+      <Project>{e64443df-5575-4b8b-bdf9-8456ad2070da}</Project>
+      <Name>Retail.BusinessEntity.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.BP\Retail.BusinessEntity.BP.csproj">
+      <Project>{c7915b15-7fc1-4dbd-b0cf-8381b48b2856}</Project>
+      <Name>Retail.BusinessEntity.BP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
       <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
       <Name>Retail.BusinessEntity.Business</Name>
