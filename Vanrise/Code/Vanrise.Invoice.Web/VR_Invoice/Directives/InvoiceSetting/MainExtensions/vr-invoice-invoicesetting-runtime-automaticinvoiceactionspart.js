@@ -83,10 +83,13 @@ app.directive('vrInvoiceInvoicesettingRuntimeAutomaticinvoiceactionspart', ['Uti
                         invoiceTypeId = payload.invoiceTypeId;
                         var promises = [];
                         var finalPromise = UtilsService.createPromiseDeferred();
-                        if (payload.fieldValue != undefined) {
-                            isSectionsLoaded = UtilsService.createPromiseDeferred();
+                        if (currentContext != undefined) {
+                            if (currentContext.isAutomaticInvoiceActionsShown != undefined) {
+                                if (currentContext.isAutomaticInvoiceActionsShown()) {
+                                    isSectionsLoaded = UtilsService.createPromiseDeferred();
+                                }
+                            }
                         }
-
                         loadAutomaticInvoiceSettings(invoiceTypeId).then(function () {
                             if (automaticInvoiceActions) {
                                 if (currentContext != undefined) {
