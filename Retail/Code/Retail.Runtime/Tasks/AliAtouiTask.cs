@@ -1,19 +1,17 @@
-﻿using Retail.BusinessEntity.Business;
-using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.MainExtensions.AccountParts;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
+using Vanrise.Caching.Runtime;
 using Vanrise.Common.Business;
+using Vanrise.Integration.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 
 namespace Retail.Runtime.Tasks
 {
-    class AliAtouiTask : ITask
+    public class AliAtouiTask : ITask
     {
         public void Execute()
         {
@@ -24,12 +22,97 @@ namespace Retail.Runtime.Tasks
             #region RetailAccountPropertyEvaluatorTask
             //RetailAccountPropertyEvaluatorTask.RetailAccountPropertyEvaluator_Main();
             #endregion
+        }
 
-            //AccountBEManager accountBEManager = new AccountBEManager();
-            //bool isPulDorMobileOperator =  accountBEManager.IsMobileOperator(new Guid("a5c1852b-2c92-4d66-b959-e3f49304338a"), 421538);
-            //bool isOperator2MobileOperator = accountBEManager.IsMobileOperator(new Guid("a5c1852b-2c92-4d66-b959-e3f49304338a"), 422086);
-            //bool isDistMobileOperator = accountBEManager.IsMobileOperator(new Guid("2f57cde2-033e-48f9-bd33-03113d77c9ac"), 418094);
-            //bool isErrorMobileOperator = accountBEManager.IsMobileOperator(new Guid("a5c1852b-2c92-4d66-b959-e3f49304338a"), 418094); 
+        public static MappingOutput DataSourceMapData(IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        {
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var cdrs = new List<dynamic>();
+
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDRCost");
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("CDRCost");
+
+            var currentItemCount = 21;
+            System.IO.StreamReader sr = ImportedData.StreamReader;
+            Vanrise.Common.Business.CurrencyManager currencyManager = new Vanrise.Common.Business.CurrencyManager();
+
+            while (!sr.EndOfStream)
+            {
+                string currentLine = sr.ReadLine();
+                if (string.IsNullOrEmpty(currentLine))
+                    continue;
+
+                string[] rowData = currentLine.Split(';');
+                if (rowData.Length != currentItemCount)
+                    continue;
+
+                string customerName = rowData[18];
+                string durationAsString;
+                string amountAsString;
+
+                if (string.Compare(customerName, "FLL-Incoming (Dom)", true) == 0)
+                {
+                    durationAsString = rowData[17];
+                    amountAsString = rowData[14];
+                }
+                else if (string.Compare(customerName, "FLL-Incoming (IDD)", true) == 0 || string.Compare(customerName, "FLL_Incoming (IDD)", true) == 0)
+                {
+                    durationAsString = rowData[16];
+                    amountAsString = rowData[13];
+                }
+                else
+                    continue;
+
+                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+                cdr.SourceID = rowData[0];
+                cdr.AttemptDateTime = DateTime.ParseExact(rowData[1], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                cdr.CGPN = rowData[4];
+                cdr.CDPN = rowData[5];
+                cdr.DurationInSeconds = !string.IsNullOrEmpty(durationAsString) ? decimal.Parse(durationAsString) : default(decimal?);
+                cdr.Amount = !string.IsNullOrEmpty(amountAsString) ? decimal.Parse(amountAsString) : default(decimal?);
+
+                string rateAsString = rowData[12];
+                cdr.Rate = !string.IsNullOrEmpty(rateAsString) ? decimal.Parse(rateAsString) : default(decimal?);
+
+                cdr.SupplierName = rowData[19];
+                string currencySymbol = rowData[10];
+                if (!string.IsNullOrEmpty(currencySymbol))
+                {
+                    var currency = currencyManager.GetCurrencyBySymbol(currencySymbol);
+                    if (currency != null)
+                        cdr.Currency = currency.CurrencyId;
+                }
+                string statusAsString = rowData[20];
+                if (!string.IsNullOrEmpty(statusAsString) && string.Compare(statusAsString, "R", true) == 0)
+                    cdr.IsReRate = true;
+
+                cdrs.Add(cdr);
+            }
+
+            if (cdrs.Count > 0)
+            {
+                long startingId;
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, cdrs.Count, out startingId);
+                long currentCDRId = startingId;
+
+                foreach (var cdr in cdrs)
+                {
+                    cdr.ID = currentCDRId;
+                    currentCDRId++;
+                }
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDRCost");
+                mappedBatches.Add("CDR Cost Storage Stage", batch);
+            }
+            else
+            {
+                ImportedData.IsEmpty = true;
+            }
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+
+            return result;
         }
     }
 
@@ -38,6 +121,12 @@ namespace Retail.Runtime.Tasks
         public static void Runtime_Main()
         {
             var runtimeServices = new List<RuntimeService>();
+
+            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
+            runtimeServices.Add(schedulerService);
+
+            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bpRegulatorRuntimeService);
 
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpService);
@@ -51,17 +140,23 @@ namespace Retail.Runtime.Tasks
             SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(summaryQueueActivationService);
 
-            SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
-            runtimeServices.Add(schedulerService);
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dsRuntimeService);
 
             Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bigDataService);
 
-            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(dsRuntimeService);
+            CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingRuntimeService);
 
-            BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(bpRegulatorRuntimeService);
+            CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingDistributorRuntimeService);
+
+            DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService = new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingExecutorRuntimeService);
+
+            DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService = new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingDistributorRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
