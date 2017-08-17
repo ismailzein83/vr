@@ -10,8 +10,11 @@
     [Rate]              DECIMAL (20, 8) NULL,
     [Amount]            DECIMAL (22, 6) NULL,
     [IsReRate]          BIT             NULL,
-    [IsDeleted]         BIT             NULL
+    [IsDeleted]         BIT             NULL,
+    [FileName]          VARCHAR (255)   NULL
 );
+
+
 
 
 GO
