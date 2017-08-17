@@ -334,36 +334,35 @@ namespace Vanrise.Invoice.Business
                 return null;
             BillingInterval billingInterval = new Entities.BillingInterval();
 
+
+            BillingPeriodContext billingPeriodContext = new Context.BillingPeriodContext
+            {
+                IssueDate = issueDate,
+            };
             var billingPeriodInfo = new BillingPeriodInfoManager().GetBillingPeriodInfoById(partnerId, invoiceTypeId);
             if (billingPeriodInfo != null)
             {
-                BillingPeriodContext billingPeriodContext = new Context.BillingPeriodContext
-                {
-                    IssueDate = issueDate,
-                    PreviousPeriodEndDate = billingPeriodInfo.NextPeriodStart
-                };
-                var billingInertval = billingperiod.GetPeriod(billingPeriodContext);
-                billingInterval.FromDate = billingInertval.FromDate;
-                billingInterval.ToDate = billingInertval.ToDate;
+                billingPeriodContext.PreviousPeriodEndDate = billingPeriodInfo.NextPeriodStart;
             }
-            else
-            {
-                BillingPeriodContext billingPeriodContext = new Context.BillingPeriodContext
-                {
-                    IssueDate = issueDate,
-                };
-                billingInterval = billingperiod.GetPeriod(billingPeriodContext);
-            }
+            billingInterval = billingperiod.GetPeriod(billingPeriodContext);
+            billingInterval.ToDate = new DateTime(billingInterval.ToDate.Year, billingInterval.ToDate.Month, billingInterval.ToDate.Day, 23, 59, 59);
             var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceTypeId, partnerId);
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
-            if (invoiceAccountData.BED.HasValue && billingInterval.FromDate < invoiceAccountData.BED.Value)
+
+            if(Utilities.AreTimePeriodsOverlapped(billingInterval.FromDate,billingInterval.ToDate,invoiceAccountData.BED,invoiceAccountData.EED))
             {
-                billingInterval.FromDate = invoiceAccountData.BED.Value;
-            }
-            if ((invoiceAccountData.EED.HasValue && billingInterval.ToDate > invoiceAccountData.EED.Value))
+                if (invoiceAccountData.BED.HasValue && billingInterval.FromDate < invoiceAccountData.BED.Value)
+                {
+                    billingInterval.FromDate = invoiceAccountData.BED.Value;
+                }
+                if ((invoiceAccountData.EED.HasValue && billingInterval.ToDate > invoiceAccountData.EED.Value))
+                {
+                    var toDate = invoiceAccountData.EED.Value.AddDays(-1);
+                    billingInterval.ToDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
+                }
+            }else
             {
-                var toDate = invoiceAccountData.EED.Value.AddDays(-1);
-                billingInterval.ToDate = new DateTime(toDate.Year,toDate.Month,toDate.Day,23,59,59);
+                return null;
             }
             return billingInterval;
         }
@@ -465,13 +464,17 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.GetLasInvoices(invoiceTypeId, partnerId, beforeDate, lastInvoices);
         }
-
-
         public VRPopulatedPeriod GetInvoicesPopulatedPeriod(Guid invoiceTypeId, string partnerId)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.GetInvoicesPopulatedPeriod(invoiceTypeId, partnerId);
 
+        }
+
+        public bool CheckPartnerIfHasInvoices(Guid invoiceTypeId, string partnerId)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.CheckPartnerIfHasInvoices(invoiceTypeId, partnerId);
         }
         #endregion
 

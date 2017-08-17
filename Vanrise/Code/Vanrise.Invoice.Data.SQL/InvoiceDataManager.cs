@@ -226,6 +226,12 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return GetItemSP("VR_Invoice.sp_Invoice_GetPopulatedPeriod", VRPopulatedPeriodMapper, invoiceTypeId, partnerId);
         }
+
+        public bool CheckPartnerIfHasInvoices(Guid invoiceTypeId, string partnerId)
+        {
+            return GetItemSP("VR_Invoice.sp_Invoice_CheckIfHasInvoices", (reader) => { return (bool)reader["HasInvoices"]; }, invoiceTypeId, partnerId);
+        }
+
         #endregion
 
         #region Private Methods
