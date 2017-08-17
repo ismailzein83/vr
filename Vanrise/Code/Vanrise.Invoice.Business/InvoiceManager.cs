@@ -227,11 +227,13 @@ namespace Vanrise.Invoice.Business
                     insertOperationOutput.ShowExactMessage = true;
 
                     BillingPeriodInfoManager billingPeriodInfoManager = new BillingPeriodInfoManager();
+                    var todate = createInvoiceInput.ToDate.AddDays(1);
+                    var nextPeriodStart = new DateTime(todate.Year, todate.Month, todate.Day, 0, 0, 0);
                     BillingPeriodInfo billingPeriodInfo = new BillingPeriodInfo
                     {
                         InvoiceTypeId = createInvoiceInput.InvoiceTypeId,
                         PartnerId = createInvoiceInput.PartnerId,
-                        NextPeriodStart = createInvoiceInput.ToDate.AddDays(1)
+                        NextPeriodStart = nextPeriodStart
                     };
                     billingPeriodInfoManager.InsertOrUpdateBillingPeriodInfo(billingPeriodInfo);
                    
