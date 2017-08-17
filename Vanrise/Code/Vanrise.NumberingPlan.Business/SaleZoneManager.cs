@@ -125,6 +125,7 @@ namespace Vanrise.NumberingPlan.Business
         public int GetSaleZoneCountryId(long saleZoneId)
         {
             SaleZone saleZone = GetSaleZone(saleZoneId);
+            saleZone.ThrowIfNull("saleZone", saleZoneId);
             return saleZone.CountryId;
         }
 

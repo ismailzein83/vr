@@ -156,8 +156,9 @@ namespace Vanrise.Invoice.Business
             var configClass = Activator.CreateInstance(typeof(T)) as InvoiceSettingPart;
             InvoiceSettingPart invoiceSettingPart;
             if (invoiceSetting.Details.InvoiceSettingParts.TryGetValue(configClass.ConfigId, out invoiceSettingPart))
-             return  invoiceSettingPart as T;
-            throw new NullReferenceException("invoiceSettingPart");
+                return invoiceSettingPart as T;
+            else
+                return null;
         }
         public List<InvoiceSettingPartUISection> GetOverridableInvoiceSetting(Guid invoiceSettingId)
         {

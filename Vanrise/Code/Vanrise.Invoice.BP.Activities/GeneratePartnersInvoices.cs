@@ -45,7 +45,7 @@ namespace Vanrise.Invoice.BP.Activities
                         InvoiceTypeId = invoiceTypeId,
                         PartnerId = partnerId
                     });
-                if (automaticInvoiceSettingPart.IsEnabled)
+                if (automaticInvoiceSettingPart != null && automaticInvoiceSettingPart.IsEnabled)
                 {
 
                     int endDateOffsetFromToday = this.EndDateOffsetFromToday.Get(context.ActivityContext);
@@ -85,21 +85,17 @@ namespace Vanrise.Invoice.BP.Activities
                                         InvoiceTypeId = invoiceTypeId,
                                         PartnerId = partnerId
                                     });
-                                if (automaticInvoiceActionsPart != null)
+                                if (automaticInvoiceActionsPart != null && automaticInvoiceActionsPart.Actions != null)
                                 {
-                                    if (automaticInvoiceActionsPart.Actions != null)
+                                    foreach (var action in automaticInvoiceActionsPart.Actions)
                                     {
-                                        foreach (var action in automaticInvoiceActionsPart.Actions)
+                                        AutomaticSendEmailActionRuntimeSettingsContext automaticSendEmailActionContext = new Business.Context.AutomaticSendEmailActionRuntimeSettingsContext
                                         {
-                                            AutomaticSendEmailActionRuntimeSettingsContext automaticSendEmailActionContext = new Business.Context.AutomaticSendEmailActionRuntimeSettingsContext
-                                            {
-                                                Invoice = generatedInvoice.InsertedObject.Entity,
-                                                AutomaticInvoiceActionId = action.AutomaticInvoiceActionId
-                                            };
-                                            action.Settings.Execute(automaticSendEmailActionContext);
+                                            Invoice = generatedInvoice.InsertedObject.Entity,
+                                            AutomaticInvoiceActionId = action.AutomaticInvoiceActionId
                                         };
-                                    }
-
+                                        action.Settings.Execute(automaticSendEmailActionContext);
+                                    };
                                 } 
                                 context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Information, "Invoice generated for '{0}' from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}", partnerName, billingPeriod.FromDate, billingPeriod.ToDate);
                                 
