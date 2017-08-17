@@ -9,6 +9,6 @@ namespace Retail.BusinessEntity.Data
 {
     public interface IAccountStatusHistoryDataManager:IDataManager
     {
-        bool Insert(AccountStatusHistory accountStatusHistory, out long insertedId);
+        void Insert(Guid accountDefinitionId, long accountId, Guid statusDefinitionId);
     }
 }

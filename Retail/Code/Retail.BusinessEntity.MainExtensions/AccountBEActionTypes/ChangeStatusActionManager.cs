@@ -25,17 +25,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
             if (accountBEManager.EvaluateAccountCondition(accountBEDefinitionId,accountId,actionDefinition.AvailabilityCondition))
             {
                 if (accountBEManager.UpdateStatus(accountBEDefinitionId, accountId, actionDefinitionSettings.StatusId, actionDefinition.Name))
-                {
-                    long accountStatusHistoryId;
-                    new AccountStatusHistoryManager().TryAddAccountStatusHistory(new AccountStatusHistory
-                    {
-                        AccountId = accountId,
-                        StatusChangedDate = DateTime.Now,
-                        StatusId = actionDefinitionSettings.StatusId
-
-                    }, out accountStatusHistoryId);
-
-                    
+                {                    
                     FinancialAccountManager financialAccountManager = new FinancialAccountManager();
                     financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, accountId);
                     if (actionDefinitionSettings.ApplyToChildren)
@@ -57,7 +47,6 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
         private bool AppyChangeStatusToChilds(ChangeStatusActionSettings actionDefinitionSettings,AccountCondition actionCondition, Guid accountBEDefinitionId, long accountId,string actionName)
         {
             FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            AccountStatusHistoryManager accountStatusHistoryManager = new Business.AccountStatusHistoryManager();
             AccountBEManager accountBEManager = new AccountBEManager();
             var childAccouts = accountBEManager.GetChildAccounts(accountBEDefinitionId, accountId,true);
             if(childAccouts != null)
@@ -67,17 +56,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
                     if (accountBEManager.EvaluateAccountCondition(childAccout, actionCondition))
                     {
                         if (accountBEManager.UpdateStatus(accountBEDefinitionId, childAccout.AccountId, actionDefinitionSettings.StatusId,actionName))
-                        {
-                            long accountStatusHistoryId;
-                            accountStatusHistoryManager.TryAddAccountStatusHistory(new AccountStatusHistory
-                            {
-                                AccountId = childAccout.AccountId,
-                                StatusChangedDate = DateTime.Now,
-                                StatusId = actionDefinitionSettings.StatusId
-
-                            }, out accountStatusHistoryId);
+                        {                            
                             financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, childAccout.AccountId);
-                        }else
+                        }
+                        else
                         {
                             return false;
                         }

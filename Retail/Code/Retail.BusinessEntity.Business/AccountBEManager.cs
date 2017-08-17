@@ -403,6 +403,7 @@ namespace Retail.BusinessEntity.Business
             bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
             if (updateStatus)
             {
+                new AccountStatusHistoryManager().AddAccountStatusHistory(accountBEDefinitionId, accountId, statusId);
                 if (actionName != null)
                 {
                     VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), actionName, true, GetAccount(accountBEDefinitionId, accountId));
@@ -844,14 +845,7 @@ namespace Retail.BusinessEntity.Business
 
             if (dataManager.Insert(accountToInsert, out accountId))
             {
-                long accountStatusHistoryId;
-                new AccountStatusHistoryManager().TryAddAccountStatusHistory(new AccountStatusHistory
-                {
-                    AccountId = accountId,
-                   StatusChangedDate = DateTime.Now,
-                    StatusId = accountToInsert.StatusId
-
-                }, out accountStatusHistoryId);
+                new AccountStatusHistoryManager().AddAccountStatusHistory(accountToInsert.AccountBEDefinitionId, accountId, accountToInsert.StatusId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 account = GetAccount(accountToInsert.AccountBEDefinitionId, accountId);
                 VRActionLogger.Current.TrackAndLogObjectAdded(new AccountBELoggableEntity(accountToInsert.AccountBEDefinitionId), account);

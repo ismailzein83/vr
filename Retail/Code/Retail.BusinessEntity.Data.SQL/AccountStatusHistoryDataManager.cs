@@ -20,17 +20,9 @@ namespace Retail.BusinessEntity.Data.SQL
 
         #endregion
 
-        public bool Insert(AccountStatusHistory accountStatusHistory, out long insertedId)
+        public void Insert(Guid accountDefinitionId, long accountId, Guid statusDefinitionId)
         {
-            object accountStatusHistoryId;
-            int affectedRecords = ExecuteNonQuerySP("Retail_BE.sp_AccountStatusHistory_Insert", out accountStatusHistoryId, accountStatusHistory.AccountId, accountStatusHistory.StatusId, accountStatusHistory.StatusChangedDate);
-            if (affectedRecords > 0)
-            {
-                insertedId = (long)accountStatusHistoryId;
-                return true;
-            }
-            insertedId = -1;
-            return false;
+            ExecuteNonQuerySP("Retail_BE.sp_AccountStatusHistory_Insert", accountDefinitionId, accountId, statusDefinitionId);
         }
     }
 }

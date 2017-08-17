@@ -10,17 +10,10 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountStatusHistoryManager
     {
-        public bool TryAddAccountStatusHistory(AccountStatusHistory accountStatusHistory, out long accountId)
+        public void AddAccountStatusHistory(Guid accountDefinitionId, long accountId, Guid statusDefinitionId)
         {
             IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
-            if (dataManager.Insert(accountStatusHistory, out accountId))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            dataManager.Insert(accountDefinitionId, accountId, statusDefinitionId);
         }
     }
 }
