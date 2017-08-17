@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using TestRuntime;
 using TOne.WhS.BusinessEntity.Business;
@@ -8,7 +9,10 @@ using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Caching.Runtime;
 using Vanrise.Common.Business;
+using Vanrise.Integration.Entities;
+using Vanrise.Integration.Mappers;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 
@@ -17,6 +21,7 @@ namespace TOne.WhS.Runtime.Tasks
     public class AliAtouiTask : ITask
     {
         #region Public Methods
+        
         public void Execute()
         {
             #region Runtime
@@ -34,11 +39,86 @@ namespace TOne.WhS.Runtime.Tasks
             //VRMailMessageTemplateTask vrMailMessageTemplateTask = new VRMailMessageTemplateTask();
             //vrMailMessageTemplateTask.VRMailMessageTemplate_Main();
             #endregion
-        } 
+        }
+
+        public static MappingOutput DataSourceMapData(IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        {
+            var cdrs = new List<dynamic>();
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("CDR");
+
+            long startingId;
+            int batchSize = 50000;
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("CDR");
+
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, batchSize, out startingId);
+
+            var importedData = ((Vanrise.Integration.Entities.DBReaderImportedData)(data));
+
+            IDataReader reader = importedData.Reader;
+
+            long currentCDRId = startingId;
+            int rowCount = 0;
+            while (reader.Read())
+            {
+                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+                cdr.Id = currentCDRId;
+                cdr.SwitchId = 83;
+                cdr.IDonSwitch = Utils.GetReaderValue<long>(reader, "IDonSwitch");
+                cdr.Tag = reader["Tag"] as string;
+                cdr.AttemptDateTime = (DateTime)reader["AttemptDateTime"];
+                cdr.AlertDateTime = Utils.GetReaderValue<DateTime>(reader, "AlertDateTime");
+                cdr.ConnectDateTime = Utils.GetReaderValue<DateTime>(reader, "ConnectDateTime");
+                cdr.DisconnectDateTime = Utils.GetReaderValue<DateTime>(reader, "DisconnectDateTime");
+                cdr.DurationInSeconds = Utils.GetReaderValue<Decimal>(reader, "DurationInSeconds");
+                cdr.InTrunk = reader["IN_TRUNK"] as string;
+                cdr.InCircuit = reader["IN_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["IN_CIRCUIT"]) : default(Int64);
+                cdr.InCarrier = reader["IN_CARRIER"] as string;
+                cdr.InIP = reader["IN_IP"] as string;
+                cdr.OutTrunk = reader["OUT_TRUNK"] as string;
+                cdr.OutCircuit = reader["OUT_CIRCUIT"] != DBNull.Value ? Convert.ToInt64(reader["OUT_CIRCUIT"]) : default(Int64);
+                cdr.OutCarrier = reader["OUT_CARRIER"] as string;
+                cdr.OutIP = reader["OUT_IP"] as string;
+
+                cdr.CGPN = reader["CGPN"] as string;
+                cdr.CDPN = reader["CDPN"] as string;
+                cdr.CauseFromReleaseCode = reader["CAUSE_FROM_RELEASE_CODE"] as string;
+                cdr.CauseFrom = reader["CAUSE_FROM"] as string;
+                cdr.CauseToReleaseCode = reader["CAUSE_TO_RELEASE_CODE"] as string;
+                cdr.CauseTo = reader["CAUSE_TO"] as string;
+                cdr.IsRerouted = reader["IsRerouted"] != DBNull.Value ? ((reader["IsRerouted"] as string) == "Y") : false;
+                cdr.CDPNOut = reader["CDPNOut"] as string;
+                cdr.CDPNIn = reader["CDPNIn"] as string;
+                cdr.SIP = reader["SIP"] as string;
+
+                cdrs.Add(cdr);
+                importedData.LastImportedId = reader["CDRID"];
+
+                currentCDRId++;
+                rowCount++;
+                if (rowCount == batchSize)
+                    break;
+
+            }
+            if (cdrs.Count > 0)
+            {
+                var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDR");
+                mappedBatches.Add("Distribute Raw CDRs Stage", batch);
+            }
+            else
+                importedData.IsEmpty = true;
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            
+            return result;
+        }
+
         #endregion
 
         #region Private Methods
-        void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
+
+        private void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
         {
             foreach (CodePrefixInfo item in codePrefixes)
                 Console.WriteLine(item.CodePrefix + "   " + item.Count);
@@ -46,16 +126,16 @@ namespace TOne.WhS.Runtime.Tasks
             Console.WriteLine("\n");
         }
 
-        static byte[] StringToByteArray(string hex)
+        private static byte[] StringToByteArray(string hex)
         {
             return Enumerable.Range(0, hex.Length)
                              .Where(x => x % 2 == 0)
                              .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
                              .ToArray(); 
         }
+
         #endregion
     }
-
 
     public class ExecuteRuntime
     {
@@ -75,17 +155,29 @@ namespace TOne.WhS.Runtime.Tasks
             QueueRegulatorRuntimeService queueRegulatorService = new QueueRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(queueRegulatorService);
 
-            //SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(summaryQueueActivationService);
+            QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService);
 
-            //QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(queueActivationService);
+            SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService);
 
-            //Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(bigDataService);
+            Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dsRuntimeService);
 
-            //Vanrise.Integration.Business.DataSourceRuntimeService dsRuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            //runtimeServices.Add(dsRuntimeService);
+            Vanrise.Common.Business.BigDataRuntimeService bigDataService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(bigDataService);
+
+            CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingRuntimeService);
+
+            CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(cachingDistributorRuntimeService);
+
+            DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService = new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingExecutorRuntimeService);
+
+            DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService = new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(dataGroupingDistributorRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
