@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Sales.Entities
 {
-   public class DraftTaskData
+    public class DraftTaskData
     {
-       public SellingZonesWithDefaultRatesTaskData sellingZonesWithDefaultRatesTaskData { get; set; }
+        public SellingZonesWithDefaultRatesTaskData SellingZonesWithDefaultRatesTaskData { get; set; }
     }
 }

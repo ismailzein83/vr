@@ -17,6 +17,10 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 		public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
 		{
 			DataByZone zone = context.Target as DataByZone;
+            IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
+
+            if (ratePlanContext.IsFirstSellingProductOffer.HasValue && ratePlanContext.IsFirstSellingProductOffer.Value)
+                return true;
 
 			if (zone.EED.HasValue)
 			{

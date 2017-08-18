@@ -1,7 +1,7 @@
 ﻿
 "use strict";
 
-app.directive("vrWhsSalesCountrywithdefaultrateGrid", ["UtilsService", "VRNotificationService", "WhS_Sales_CountryWithDefaultRateAPIService", "WhS_Sales_CountryWithDefaultRateService", "VRUIUtilsService",
+app.directive("vrWhsSalesCountrieswithdefaultrateGrid", ["UtilsService", "VRNotificationService", "WhS_Sales_CountryWithDefaultRateAPIService", "WhS_Sales_CountryWithDefaultRateService", "VRUIUtilsService",
 function (UtilsService, VRNotificationService, WhS_Sales_CountryWithDefaultRateAPIService, WhS_Sales_CountryWithDefaultRateService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -20,7 +20,7 @@ function (UtilsService, VRNotificationService, WhS_Sales_CountryWithDefaultRateA
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/WhS_Sales/Directives/Country/Templates/CountryWithDefaultRatesGridTemplate.html'
+        templateUrl: '/Client/Modules/WhS_Sales/Directives/Country/Templates/CountriesWithDefaultRatesGridTemplate.html'
 
     };
 
@@ -46,7 +46,7 @@ function (UtilsService, VRNotificationService, WhS_Sales_CountryWithDefaultRateA
                 function registerZoneDrillDownToCountry() {
                     var drillDownDefinition = {};
 
-                    drillDownDefinition.title = "Zones with default rate";
+                    drillDownDefinition.title = "Zones";
                     drillDownDefinition.directive = "vr-whs-sales-zonewithdefaultrate-grid";
 
 

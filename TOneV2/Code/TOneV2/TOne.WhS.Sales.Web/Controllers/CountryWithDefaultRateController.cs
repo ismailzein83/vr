@@ -13,12 +13,12 @@ namespace TOne.WhS.Sales.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "CountryWithDefaultRate")]
     public class CountryWithDefaultRateController : BaseAPIController
     {
-        //[HttpPost]
-        //[Route("GetFilteredCountries")]
-        //public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryWithDefaultRateQuery> input)
-        //{
-        //    CountryWithDefaultRateManager manager = new CountryWithDefaultRateManager();
-        //    return GetWebResponse(input, manager.GetFilteredCountries(input));
-        //}
+        [HttpPost]
+        [Route("GetFilteredCountries")]
+        public object GetFilteredCountries(Vanrise.Entities.DataRetrievalInput<CountryWithDefaultRateQuery> input)
+        {
+            CountryWithDefaultRateManager manager = new CountryWithDefaultRateManager();
+            return GetWebResponse(input, manager.GetFilteredCountries(input));
+        }
     }
 }

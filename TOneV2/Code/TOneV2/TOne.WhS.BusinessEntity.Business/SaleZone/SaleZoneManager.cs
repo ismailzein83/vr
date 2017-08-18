@@ -31,6 +31,15 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
+        public IEnumerable<SaleZone> GetAllZones()
+        {
+            var allZones = GetCachedSaleZones();
+            if (allZones == null)
+                return null;
+
+            return allZones.Values;
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
         {
             IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(input.Query.SellingNumberId);

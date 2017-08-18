@@ -130,14 +130,12 @@ namespace TOne.WhS.Sales.Business
         public SellingZonesWithDefaultRatesTaskData GetSellingZonesWithDefaultRatesTaskData(SalePriceListOwnerType ownerType, int ownerId)
         {
             IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-            return ratePlanDataManager.GetDraftTaskData(ownerType, ownerId, RatePlanStatus.Draft).sellingZonesWithDefaultRatesTaskData;
+            return ratePlanDataManager.GetDraftTaskData(ownerType, ownerId, RatePlanStatus.Draft).SellingZonesWithDefaultRatesTaskData;
         }
         public void InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status)
         {
             var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
-
-            if (draftTaskData != null)
-                ratePlanDataManager.InsertOrUpdateDraftTaskData(ownerType, ownerId, draftTaskData, RatePlanStatus.Draft);
+             ratePlanDataManager.InsertOrUpdateDraftTaskData(ownerType, ownerId, draftTaskData, RatePlanStatus.Draft);
         }
 
         #region Define New Rates Converted To Currency

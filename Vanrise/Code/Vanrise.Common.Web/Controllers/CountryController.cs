@@ -103,5 +103,14 @@ namespace Vanrise.Common.Web.Controllers
 			byte[] bytes = manager.DownloadCountryLog(fileID);
 			return GetExcelResponse(bytes, "ImportedCountriesResults.xls");
 		}
+
+        [HttpPost]
+        [Route("GetCountriesByCountryIds")]
+        public IEnumerable<Country> GetCountriesByCountryIds(IEnumerable<int> countryIds)
+        {
+            CountryManager manager = new CountryManager();
+           return  manager.GetCountriesByCountryIds(countryIds);
+        }
+
 	}
 }

@@ -89,6 +89,8 @@
     <Compile Include="BackupData.cs" />
     <Compile Include="DeleteRatePlanDraft.cs" />
     <Compile Include="GetExistingCustomerCountries.cs" />
+    <Compile Include="FillArgumentFromContext.cs" />
+    <Compile Include="GetZonesWithMissingRates.cs" />
     <Compile Include="LogEmailedCustomers.cs" />
     <Compile Include="SetContextActionRateLocator.cs" />
     <Compile Include="PrepareCustomerCountryPreviews.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="SetContextEffectiveAfterCustomerZoneRatesByZone.cs" />
     <Compile Include="SetContextExistingZonesByCountry.cs" />
     <Compile Include="SetContextIntersectedSellingProductZoneRatesByZone.cs" />
+    <Compile Include="SetDefaultRates.cs" />
     <Compile Include="SetRatePlanContext.cs" />
     <Compile Include="StructureDataByCountry.cs" />
     <Compile Include="StructureDefaultData.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="ReserveIdsForNewEntities.cs" />
     <Compile Include="StructureDataByZones.cs" />
     <Compile Include="StructureSalePriceListZoneChange.cs" />
+    <Compile Include="StructZoneDataByCountryIds.cs" />
     <Compile Include="SyncImportedDataWithDB.cs" />
     <Compile Include="UpdateZonesData.cs" />
   </ItemGroup>
@@ -156,6 +160,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.BP.Arguments\TOne.WhS.Sales.BP.Arguments.csproj">
+      <Project>{26331fab-47a3-40dd-975d-9a0a5022584f}</Project>
+      <Name>TOne.WhS.Sales.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Sales.Business\TOne.WhS.Sales.Business.csproj">
       <Project>{101b3960-9114-451e-8344-4074998e32f6}</Project>

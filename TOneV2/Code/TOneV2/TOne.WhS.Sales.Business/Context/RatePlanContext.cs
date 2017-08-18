@@ -46,7 +46,7 @@ namespace TOne.WhS.Sales.Business
         public int OwnerId { get; set; }
         public int OwnerSellingNumberPlanId { get; set; }
         public int CurrencyId { get; set; }
-        public int SystemCurrencyId { get; set; }
+        public int SellingProductCurrencyId { get; set; }
         public DateTime EffectiveDate { get; set; }
         public SaleEntityZoneRateLocator RateLocator { get; set; }
         public SaleEntityZoneRateLocator FutureRateLocator { get; set; }
@@ -124,7 +124,7 @@ namespace TOne.WhS.Sales.Business
         int OwnerId { get; }
         int OwnerSellingNumberPlanId { get; }
         int CurrencyId { get; }
-        int SystemCurrencyId { get; }
+        int SellingProductCurrencyId { get; }
         DateTime EffectiveDate { get; }
         SaleEntityZoneRateLocator RateLocator { get; }
         SaleEntityZoneRateLocator FutureRateLocator { get; }

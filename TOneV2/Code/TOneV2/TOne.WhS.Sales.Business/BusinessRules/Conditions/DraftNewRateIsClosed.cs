@@ -19,7 +19,11 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             var zoneData = context.Target as DataByZone;
 
             var invalidRateTypeNames = new List<string>();
+            IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
+            if (ratePlanContext.IsFirstSellingProductOffer.HasValue && ratePlanContext.IsFirstSellingProductOffer.Value)
+               
+                return true;
             if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.EED.HasValue)
             {
                 invalidRateTypeNames.Add("Normal");

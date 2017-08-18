@@ -84,7 +84,12 @@ namespace Vanrise.Common.Business
             return allCountries.Values;
         }
 
-       
+       public IEnumerable<Country> GetCountriesByCountryIds(IEnumerable<int> countryIds)
+        {
+            if (countryIds == null)
+                throw new ArgumentNullException("countryIds");
+            return GetCachedCountries().Values.FindAllRecords(x => countryIds.Contains(x.CountryId));
+        }
 
         public Country GetCountry(int countryId, bool isViewedFromUI)
         {

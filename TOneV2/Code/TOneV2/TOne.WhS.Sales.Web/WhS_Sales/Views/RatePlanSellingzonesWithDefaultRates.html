@@ -3,7 +3,12 @@
         <vr-form name="formRatePlanSellingZonesWithDefaultRates">
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-whs-sales-countrywithdefaultrate-grid on-ready="scopeModel.onCountryWithDefaultRateGridReady"></vr-whs-sales-countrywithdefaultrate-grid>
+                    <vr-label largesize>{{scopeModel.msg}}</vr-label>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-whs-sales-countrieswithdefaultrate-grid on-ready="scopeModel.onCountryWithDefaultRateGridReady"></vr-whs-sales-countrieswithdefaultrate-grid>
                 </vr-columns>
             </vr-row>
         </vr-form>

@@ -109,10 +109,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return businessEntitySettingsData.CachingExpirationIntervals;
         }
 
-        public decimal GetDefaultRate()
+        public decimal GetRoundedDefaultRate()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
-            return saleAreaSettings.DefaultRate;
+            var defaultRate = saleAreaSettings.DefaultRate;
+            var longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+            return Decimal.Round(defaultRate, longPrecision);
         }
         public int GetSaleAreaEffectiveDateDayOffset()
         {

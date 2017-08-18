@@ -69,9 +69,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
         public bool InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status)
         {
-            string serializedDraftTaskData = Vanrise.Common.Serializer.Serialize(draftTaskData);
-
-            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_InsertOrUpdateDraftTask", ownerType, ownerId, serializedDraftTaskData, status);
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_InsertOrUpdateDraftTaskData", ownerType, ownerId, Vanrise.Common.Serializer.Serialize(draftTaskData), status);
             return affectedRows > 0;
         }
         public bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status)

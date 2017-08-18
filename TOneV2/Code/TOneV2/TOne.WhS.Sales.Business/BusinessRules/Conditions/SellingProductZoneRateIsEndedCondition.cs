@@ -19,7 +19,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
+            if (ratePlanContext.IsFirstSellingProductOffer.HasValue && ratePlanContext.IsFirstSellingProductOffer.Value)
 
+                return true;
             if (ratePlanContext.OwnerType == TOne.WhS.BusinessEntity.Entities.SalePriceListOwnerType.Customer)
                 return true;
 

@@ -56,7 +56,9 @@
         function UploadCountries(fileId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UploadCountries"), { fileId: fileId });
         }
-
+        function GetCountriesByCountryIds(countryIds) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountriesByCountryIds"),countryIds);
+        }
         function HasAddCountryPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddCountry']));
         }
@@ -89,7 +91,8 @@
             HasUploadCountryPermission: HasUploadCountryPermission,
             HasDownloadCountryPermission: HasDownloadCountryPermission,
             HasEditCountryPermission: HasEditCountryPermission,
-            GetCountryHistoryDetailbyHistoryId: GetCountryHistoryDetailbyHistoryId
+            GetCountryHistoryDetailbyHistoryId: GetCountryHistoryDetailbyHistoryId,
+            GetCountriesByCountryIds: GetCountriesByCountryIds
         });
     }
 

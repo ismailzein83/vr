@@ -52,7 +52,10 @@ namespace TOne.WhS.Sales.BP.Activities
             ratePlanContext.OwnerId = ownerId;
             ratePlanContext.OwnerSellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
             ratePlanContext.CurrencyId = currencyId;
-            ratePlanContext.SystemCurrencyId = new Vanrise.Common.Business.CurrencyManager().GetSystemCurrency().CurrencyId;
+
+            int sellingProductId = (ownerType == SalePriceListOwnerType.SellingProduct) ? ownerId : new CarrierAccountManager().GetSellingProductId(ownerId);
+            ratePlanContext.SellingProductCurrencyId = new SellingProductManager().GetSellingProductCurrencyId(sellingProductId);
+
             ratePlanContext.EffectiveDate = effectiveDate;
             ratePlanContext.RateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveDate));
             ratePlanContext.FutureRateLocator = GetFutureRateLocator(ownerType, ownerId, effectiveDate);

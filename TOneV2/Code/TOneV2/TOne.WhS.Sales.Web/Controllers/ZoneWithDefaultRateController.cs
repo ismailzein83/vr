@@ -13,12 +13,12 @@ namespace TOne.WhS.Sales.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "ZoneWithDefaultRate")]
     public class ZoneWithDefaultRateController : BaseAPIController
     {
-        //[HttpPost]
-        //[Route("GetFilteredZones")]
-        //public object GetFilteredZones(Vanrise.Entities.DataRetrievalInput<ZoneWithDefaultRateQuery> input)
-        //{
-        //    ZoneWithDefaultRateManager manager = new ZoneWithDefaultRateManager();
-        //    return GetWebResponse(input, manager.GetFilteredZones(input));
-        //}
+        [HttpPost]
+        [Route("GetFilteredZones")]
+        public object GetFilteredZones(Vanrise.Entities.DataRetrievalInput<ZoneWithDefaultRateQuery> input)
+        {
+            ZoneWithDefaultRateManager manager = new ZoneWithDefaultRateManager();
+            return GetWebResponse(input, manager.GetFilteredZones(input));
+        }
     }
 }

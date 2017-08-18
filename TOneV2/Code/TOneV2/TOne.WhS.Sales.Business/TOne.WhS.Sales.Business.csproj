@@ -131,6 +131,7 @@
     <Compile Include="Country\BulkActionApplicableToCountryContext.cs" />
     <Compile Include="Country\BulkActionApplicableToCountryFilter.cs" />
     <Compile Include="Country\CountrySoldToCustomerFilter.cs" />
+    <Compile Include="Country\CountryWithDefaultRateManager.cs" />
     <Compile Include="DefaultItemManager.cs" />
     <Compile Include="ImportRatePlan\ImportBulkActionValidationCacheManager.cs" />
     <Compile Include="ImportRatePlan\ImportedRowValidator.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="ZoneItem\ZoneRouteOptionManager.cs" />
     <Compile Include="ZoneItem\ZoneRPManager.cs" />
     <Compile Include="ZoneItem\ZoneServiceManager.cs" />
+    <Compile Include="ZoneWithDefaultRateManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

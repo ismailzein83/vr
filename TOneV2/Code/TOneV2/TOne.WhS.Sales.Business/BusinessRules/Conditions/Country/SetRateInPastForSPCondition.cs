@@ -7,15 +7,14 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common.Business;
 
-namespace TOne.WhS.Sales.Business.BusinessRules.Conditions.Country
+namespace TOne.WhS.Sales.Business.BusinessRules
 {
     public class SetRateInPastForSPCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is CountryData;
+            return target is ZoneDataByCountryIds;
         }
-
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
@@ -23,38 +22,43 @@ namespace TOne.WhS.Sales.Business.BusinessRules.Conditions.Country
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer || ratePlanContext.IsFirstSellingProductOffer.Value)
                 return true;
 
-            var countryData = context.Target as CountryData;
+            var zoneDataByCountryIds = context.Target as ZoneDataByCountryIds;
+            var invalidCountryNames = new List<string>();
 
-            if (countryData.ZoneDataByZoneId != null)
+            foreach (KeyValuePair<int, List<DataByZone>> kvp in zoneDataByCountryIds)
             {
-                string countryName = new CountryManager().GetCountryName(countryData.CountryId);
-                string errorMessage = string.Format("Some of the zones of country '{0}' have rates with a BED that's less than today", countryName);
+                string countryName = new CountryManager().GetCountryName(kvp.Key);
 
-                foreach (var zoneElement in countryData.ZoneDataByZoneId)
+                foreach (DataByZone zoneData in kvp.Value)
                 {
-                    if (zoneElement.Value.NormalRateToChange != null && zoneElement.Value.NormalRateToChange.BED < DateTime.Today)
+                    if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED < DateTime.Today)
                     {
-                        context.Message = errorMessage;
-                        return false;
+                        invalidCountryNames.Add(countryName);
+                        break;
                     }
 
-                    if (zoneElement.Value.OtherRatesToChange != null)
+                    if (zoneData.OtherRatesToChange != null)
                     {
-                        foreach (var rate in zoneElement.Value.OtherRatesToChange)
+                        foreach (RateToChange otherRate in zoneData.OtherRatesToChange)
                         {
-                            if (rate.BED < DateTime.Today)
+                            if (otherRate.BED < DateTime.Today)
                             {
-                                context.Message = errorMessage;
-                                return false;
+                                invalidCountryNames.Add(countryName);
+                                break;
                             }
                         }
                     }
                 }
             }
 
+            if (invalidCountryNames.Count > 0)
+            {
+                context.Message = string.Format("The following countries have zones with rates whose BED is less than today: {0}", string.Join(", ", invalidCountryNames));
+                return false;
+            }
+
             return true;
         }
-
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
             throw new NotImplementedException();

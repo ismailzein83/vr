@@ -7,8 +7,9 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class SellingZonesWithDefaultRatesTaskData
+   public  class CountryWithDefaultRateQuery
     {
-        public Dictionary<int, List<long>> ZoneIdsWithDefaultRatesByCountryIds { get; set; }
+      public  SalePriceListOwnerType OwnerType { get; set; }
+      public   int OwnerId { get; set; }
     }
 }

@@ -35,7 +35,7 @@ namespace TOne.WhS.Sales.BP.Activities
         #region Output Arguments
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<RateToChange>> RatesToChange { get; set; }
+        public OutArgument<List<RateToChange>> RatesToChange { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<RateToClose>> RatesToClose { get; set; }

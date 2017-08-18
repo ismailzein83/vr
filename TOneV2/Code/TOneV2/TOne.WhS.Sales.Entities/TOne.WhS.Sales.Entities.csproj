@@ -73,6 +73,7 @@
     <Compile Include="CodeComparison\CodeCompareItem.cs" />
     <Compile Include="CodeComparison\CodeCompareItemDetail.cs" />
     <Compile Include="CodeComparison\CodeCompareQuery.cs" />
+    <Compile Include="CountryWithDefaultRateQuery.cs" />
     <Compile Include="DraftTaskData.cs" />
     <Compile Include="RateManagement\Zone\ZoneDataByCountryIds.cs" />
     <Compile Include="SellingZonesWithDefaultRatesTaskData.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="TQI\TQISupplierInfoWithSummary.cs" />
     <Compile Include="TQI\TQISupplierPercentage.cs" />
     <Compile Include="TQI\TQISuppplierInfo.cs" />
+    <Compile Include="ZoneWithDefaultRateQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">

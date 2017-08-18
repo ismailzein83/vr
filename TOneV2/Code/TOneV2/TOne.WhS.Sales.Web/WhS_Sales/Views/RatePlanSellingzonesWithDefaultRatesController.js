@@ -9,7 +9,6 @@
         var taskId;
         var ownerId;
         var ownerType;
-        var countries;
         var countryPreviewGridAPI;
         var countryGridReadyDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
@@ -26,6 +25,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.msg="Below countries having empty rates they will be filled by default rate"
             $scope.scopeModel.onCountryWithDefaultRateGridReady = function (api) {
                 countryPreviewGridAPI = api;
                 countryGridReadyDeferred.resolve();
@@ -51,10 +51,7 @@
         }
         function getTaskData() {
             return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
-                if (response == null)
-                    return;
-                if (response.TaskData == null)
-
+                if (response == null || response.TaskData == null)
                     return;
                 ownerType = response.TaskData.OwnerType;
                 ownerId = response.TaskData.OwnerId
@@ -62,7 +59,7 @@
         }
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([loadCountryWithDefaultRateGrid]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
@@ -81,19 +78,12 @@
             return countryGridLoadDeferred.promise;
         }
 
-        //function getCountriesByCountryIds() {
-        //    return VRCommon_CountryAPIService.GetCountriesByCountryIds(countryIds).then(function (response) {
-        //        if (response == null)
-        //            return;
-        //        countries = response;
-        //    })
-        //}
         function executeTask(decision) {
             $scope.scopeModel.isLoading = true;
 
             var executionInformation = {
                 $type: "TOne.WhS.Sales.BP.Arguments.Tasks.SellingZonesWithDefaultRatesTaskExecutionInformation, TOne.WhS.Sales.BP.Arguments",
-                createRatesWithDefaultValue: decision
+                Decision: decision
             };
 
             var input = {

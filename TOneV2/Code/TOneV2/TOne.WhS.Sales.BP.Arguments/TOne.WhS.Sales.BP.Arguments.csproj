@@ -64,6 +64,8 @@
     <Compile Include="Tasks\EmailTaskExecutionInformation.cs" />
     <Compile Include="Tasks\PreviewTaskData.cs" />
     <Compile Include="Tasks\PreviewTaskExecutionInformation.cs" />
+    <Compile Include="Tasks\SellingZonesWithDefaultRatesTasKData.cs" />
+    <Compile Include="Tasks\SellingZonesWithDefaultRatesTaskExecutionInformation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
