@@ -339,17 +339,17 @@ namespace Retail.BusinessEntity.Business
                 return false;
             }
         }
-        
+
         public int GetCityId(Guid accountBEDefinitionId, long accountId, bool getInherited)
         {
             IAccountProfile accountProfile;
-            if(!HasAccountProfile( accountBEDefinitionId,  accountId,  getInherited, out accountProfile))
+            if (!HasAccountProfile(accountBEDefinitionId, accountId, getInherited, out accountProfile))
                 throw new NullReferenceException("accountProfile");
-           
+
             if (!accountProfile.CityId.HasValue)
                 throw new NullReferenceException("accountProfile.CityId");
             return accountProfile.CityId.Value;
-          
+
         }
         public bool HasAccountProfile(Guid accountBEDefinitionId, long accountId, bool getInherited, out IAccountProfile accountProfile)
         {
@@ -397,7 +397,7 @@ namespace Retail.BusinessEntity.Business
             Dictionary<string, Account> cachedAccounts = this.GetCachedAccountsBySourceId(accountBEDefinitionId);
             return cachedAccounts.GetRecord(sourceId);
         }
-        public bool UpdateStatus(Guid accountBEDefinitionId, long accountId, Guid statusId,string actionName = null)
+        public bool UpdateStatus(Guid accountBEDefinitionId, long accountId, Guid statusId, string actionName = null)
         {
             var existingAccount = GetAccount(accountBEDefinitionId, accountId);
             existingAccount.ThrowIfNull("existingAccount", accountId);
@@ -410,12 +410,13 @@ namespace Retail.BusinessEntity.Business
                 if (actionName != null)
                 {
                     VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), actionName, true, GetAccount(accountBEDefinitionId, accountId));
-                }else
+                }
+                else
                 {
                     var status = new StatusDefinitionManager().GetStatusDefinition(statusId);
                     VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), string.Format("Update Status"), true, GetAccount(accountBEDefinitionId, accountId), string.Format("Status Changed to {0}", status.Name));
                 }
-               
+
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
             }
             return updateStatus;
@@ -487,12 +488,15 @@ namespace Retail.BusinessEntity.Business
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
             if (account == null)
-                throw new NullReferenceException(String.Format("Account '{0}'", account));
+                throw new NullReferenceException(String.Format("Account of Id: '{0}' and AccountBEDefinitionId: '{1}'", account, accountBEDefinitionId));
+
             if (account.TypeId == accountTypeId)
                 return account;
-            else if (account.ParentAccountId.HasValue)
+
+            if (account.ParentAccountId.HasValue)
                 return GetSelfOrParentAccountOfType(accountBEDefinitionId, account.ParentAccountId.Value, accountTypeId);
-            else return null;
+
+            return null;
         }
         public Dictionary<long, Account> GetAccounts(Guid accountBEDefinitionId)
         {
@@ -597,10 +601,10 @@ namespace Retail.BusinessEntity.Business
             return currencyId;
         }
 
-        public bool IsAccountAssignableToPackage(Guid accountBEDefinitionId,long accountId)
+        public bool IsAccountAssignableToPackage(Guid accountBEDefinitionId, long accountId)
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
-            return IsAccountAssignableToPackage( account);
+            return IsAccountAssignableToPackage(account);
         }
         public bool IsAccountAssignableToPackage(Account account)
         {
@@ -675,12 +679,12 @@ namespace Retail.BusinessEntity.Business
         {
             var accountBEDefinitionSetting = _accountBEDefinitionManager.GetAccountBEDefinitionSettings(accountBEDefinitionId);
             accountBEDefinitionSetting.ThrowIfNull("accountBEDefinitionSetting", accountBEDefinitionId);
-            if(!accountBEDefinitionSetting.LocalServiceAccountTypeId.HasValue)
+            if (!accountBEDefinitionSetting.LocalServiceAccountTypeId.HasValue)
                 return false;
-            
+
             if (account1Id == account2Id)
                 return true;
-            
+
             var account1Parent = GetSelfOrParentAccountOfType(accountBEDefinitionId, account1Id, accountBEDefinitionSetting.LocalServiceAccountTypeId.Value);
             var account2Parent = GetSelfOrParentAccountOfType(accountBEDefinitionId, account2Id, accountBEDefinitionSetting.LocalServiceAccountTypeId.Value);
             return account1Parent != null && account2Parent != null && account1Parent.AccountId == account2Parent.AccountId;
@@ -1091,7 +1095,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Validation Methods
-                
+
 
         private void ValidateAccountToAdd(AccountToInsert accountToInsert, bool donotValidateParent)
         {
