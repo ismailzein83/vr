@@ -34,7 +34,8 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			vrIn.Notes,
 			vrIn.TimeZoneId,
 			vrIn.TimeZoneOffset, 
-			vrIn.SourceId
+			vrIn.SourceId,
+			vrIn.IsAutomatic
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	Inner Join VR_Invoice.InvoiceAccount vrInAcc 
 	on vrIn.InvoiceTypeID = vrInAcc.InvoiceTypeId and 
