@@ -145,11 +145,10 @@
                     promises.push(getGenericLKUPDefinitionExtendedSetings(genericLKUPItemEntity.BusinessEntityDefinitionId));
 
                     var loadExtendedSettingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-                   
                     UtilsService.waitMultiplePromises([extendedSettingReadyPromiseDeferred.promise, selectedBeDefinitionSelectorPromiseDeferred.promise])
                             .then(function () {
                                 selectedBeDefinitionSelectorPromiseDeferred = undefined;
-                                var extendedSettingsPayload = genericLKUPItemEntity != undefined && genericLKUPItemEntity.Setting != undefined ? genericLKUPItemEntity.Settings.ExtendedSettings : undefined;
+                                var extendedSettingsPayload = genericLKUPItemEntity != undefined && genericLKUPItemEntity.Settings != undefined ? genericLKUPItemEntity.Settings.ExtendedSettings : undefined;
                                 VRUIUtilsService.callDirectiveLoad(extendedSettingDirectiveAPI, extendedSettingsPayload, loadExtendedSettingDirectivePromiseDeferred);
                             });
 

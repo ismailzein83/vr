@@ -11,13 +11,13 @@
                     <vr-row>
                         <vr-common-genericlkupdefinition-selector on-ready="scopeModel.onGenericLKUPDefinitionSelectorReady"
                                                                   isrequired="true"
-                                                                  normal-col-num="6"
+                                                                  normal-col-num="6" selectedvalues="scopeModel.selectedGenericlkupdefinition"
                                                                   onselectionchanged="scopeModel.loadExtendedSettingsRuntimeEditor">
                         </vr-common-genericlkupdefinition-selector>
                     </vr-row>
                 </vr-tab>
                 <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective"
-                                     ng-if="scopeModel.RuntimeEditor!=undefined"
+                                     ng-if="scopeModel.selectedGenericlkupdefinition!=undefined && scopeModel.RuntimeEditor!=undefined"
                                      directive="scopeModel.RuntimeEditor"
                                      on-ready="scopeModel.onRuntimeEditorReady"
                                      normal-col-num="4"
