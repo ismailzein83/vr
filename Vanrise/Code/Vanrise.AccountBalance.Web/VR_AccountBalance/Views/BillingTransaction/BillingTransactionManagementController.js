@@ -40,10 +40,9 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.showAddButton = false;
-            var today = new Date();
-            today.setMonth(today.getMonth() - 1);
-            today.setHours(0, 0, 0, 0);
-            $scope.scopeModel.fromTime = today;
+
+            var now = new Date();
+            $scope.scopeModel.fromTime = new Date(now.getFullYear(), now.getMonth(), 1);
 
             $scope.scopeModel.onAccountStatusSelectorReady = function (api) {
                 accountStatusSelectorAPI = api;
