@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RouteruleViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'WhS_Routing_RouteRuleService'];
+    RouteruleViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService'];
 
-    function RouteruleViewDirective(UtilsService, VRNotificationService, WhS_Routing_RouteRuleService) {
+    function RouteruleViewDirective(UtilsService, VRNotificationService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -32,7 +32,9 @@
 
             var gridAPI;
             var defaultRouteRuleValues;
-
+            var routingProductId;
+            var sellingNumberPlanId;
+            
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -40,12 +42,19 @@
                     gridAPI = api;
                     defineAPI();
                 };
+                $scope.scopeModel.hasAddRulePermission = function () {
+                    return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
+                };
 
                 $scope.scopeModel.addRouteRule = function () {
                     var onRouteRuleAdded = function (addedItem) {
                         gridAPI.onRouteRuleAdded(addedItem);
                     };
-                    var context = { defaultRouteRuleValues: defaultRouteRuleValues };
+                    var context = {
+                        defaultRouteRuleValues: defaultRouteRuleValues,
+                        routingProductId: routingProductId,
+                        sellingNumberPlanId: sellingNumberPlanId
+                    };
                     WhS_Routing_RouteRuleService.addRouteRule(onRouteRuleAdded, context);
                 };
             }
@@ -55,6 +64,10 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         defaultRouteRuleValues = payload.defaultRouteRuleValues;
+                        if (payload.query != undefined) {
+                            routingProductId = payload.query.RoutingProductId;
+                            sellingNumberPlanId = payload.query.SellingNumberPlanId;
+                        }
                     }
                     $scope.scopeModel.isGridLoading = true;
                     return gridAPI.loadGrid(buildGridPayload(payload)).then(function () {

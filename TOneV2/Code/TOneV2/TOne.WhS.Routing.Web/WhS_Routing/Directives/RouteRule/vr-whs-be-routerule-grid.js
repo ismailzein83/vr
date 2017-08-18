@@ -51,14 +51,15 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                         if (query.loadedFromRoutingProduct) {
                             $scope.showCustomerColumn = false;
                             $scope.showIncludedCodesColumn = false;
-                            query = payload.query;
+                            if (payload.query != undefined)
+                                query = payload.query;
                         }
 
-                        if (query.hideCustomerColumn) {
+                        if (query!=undefined && query.hideCustomerColumn) {
                             $scope.showCustomerColumn = false;
                         }
 
-                        if (query.hideIncludedCodesColumn) {
+                        if (query != undefined && query.hideIncludedCodesColumn) {
                             $scope.showIncludedCodesColumn = false;
                         }
 

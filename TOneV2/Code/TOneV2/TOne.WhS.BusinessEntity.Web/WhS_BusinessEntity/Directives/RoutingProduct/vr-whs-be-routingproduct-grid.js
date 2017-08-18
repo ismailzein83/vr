@@ -76,16 +76,19 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
             var directiveTab = {
                 title: "Route Rules",
-                directive: "vr-whs-routing-routerule-grid",
+                directive: "vr-whs-routing-routerule-view",
                 loadDirective: function (directiveAPI, routingProductDataItem) {
                     routingProductDataItem.routeRuleGridAPI = directiveAPI;
 
-                    var routeRuleGridPayload = {
-                        loadedFromRoutingProduct: true,
-                        query: { RoutingProductId: routingProductDataItem.Entity.RoutingProductId }
+                    var routeRuleGridPayload = {                        
+                        query: {
+                            loadedFromRoutingProduct: true,
+                            RoutingProductId: routingProductDataItem.Entity.RoutingProductId,
+                            sellingNumberPlanId: routingProductDataItem.Entity.SellingNumberPlanId
+                        }
                     };
 
-                    return routingProductDataItem.routeRuleGridAPI.loadGrid(routeRuleGridPayload);
+                    return routingProductDataItem.routeRuleGridAPI.load(routeRuleGridPayload);
                 }
             };
             directiveTabs.push(directiveTab);
@@ -120,15 +123,10 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
                     clicked: viewRoutingProduct,
                     haspermission: hasViewRoutingProductPermission
                 },
-                    {
-                        name: "Edit",
-                        clicked: editRoutingProduct,
-                        haspermission: hasUpdateRoutingProductPermission
-                    },
                 {
-                    name: "Add Route Rule",
-                    clicked: addRouteRule,
-                    haspermission: hasAddRulePermission
+                    name: "Edit",
+                    clicked: editRoutingProduct,
+                    haspermission: hasUpdateRoutingProductPermission
                 }
             ];
         }
@@ -146,21 +144,6 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
         function hasAddRulePermission() {
             return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
-        }
-
-        function addRouteRule(dataItem) {
-            gridAPI.expandRow(dataItem);
-
-            var onRouteRuleAdded = function (addedItem) {
-                dataItem.routeRuleGridAPI.onRouteRuleAdded(addedItem);
-            };
-
-            var context = {
-                routingProductId: dataItem.Entity.RoutingProductId,
-                sellingNumberPlanId: dataItem.Entity.SellingNumberPlanId
-            };
-
-            WhS_Routing_RouteRuleService.addRouteRule(onRouteRuleAdded, context);
         }
 
         function editRoutingProduct(routingProduct) {
