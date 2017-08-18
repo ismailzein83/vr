@@ -17,5 +17,6 @@ namespace TOne.WhS.Sales.Entities
         public string NewDefaultRoutingProductName { get; set; }
 
         public string ResetToDefaultRoutingProductName { get; set; }
+        public string AssignedToSellingProductCurrencySymbol { get; set; }
     }
 }
