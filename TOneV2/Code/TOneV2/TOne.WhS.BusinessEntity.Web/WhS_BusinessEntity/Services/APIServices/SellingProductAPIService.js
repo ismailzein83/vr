@@ -14,6 +14,11 @@
                 sellingProductId: sellingProductId
             });
         }
+        function GetSellingProductCurrencyId(sellingProductId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSellingProductCurrencyId"), {
+                sellingProductId: sellingProductId
+            });
+        }
         function AddSellingProduct(sellingProductObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "AddSellingProduct"), sellingProductObject);
         }
@@ -57,7 +62,8 @@
             HasUpdateSellingProductPermission: HasUpdateSellingProductPermission,
             HasAddSellingProductPermission: HasAddSellingProductPermission,
             GetSellingProductHistoryDetailbyHistoryId: GetSellingProductHistoryDetailbyHistoryId,
-            GetSellingProductName: GetSellingProductName
+            GetSellingProductName: GetSellingProductName,
+            GetSellingProductCurrencyId: GetSellingProductCurrencyId
         });
     }
 

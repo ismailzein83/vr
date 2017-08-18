@@ -69,5 +69,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SellingProductManager manager = new SellingProductManager();
             return manager.GetSellingProductName(sellingProductId);
         }
+        [HttpGet]
+        [Route("GetSellingProductCurrencyId")]
+        public int GetSellingProductCurrencyId(int sellingProductId)
+        {
+            SellingProductManager manager = new SellingProductManager();
+            return manager.GetSellingProductCurrencyId(sellingProductId);
+        }
     }
 }

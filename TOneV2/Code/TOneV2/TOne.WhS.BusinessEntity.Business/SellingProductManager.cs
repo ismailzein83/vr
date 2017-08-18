@@ -93,6 +93,16 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetSellingProduct(sellingProductId, false);
         }
+
+        public int GetSellingProductCurrencyId(int sellingProductId)
+        {
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            if (sellingProduct == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Selling product '{0}' was not found", sellingProductId));
+            if (sellingProduct.Settings == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Settings of selling product '{0}' were not found", sellingProductId));
+            return sellingProduct.Settings.CurrencyId;
+        }
         public string GetSellingProductName(int sellingProductId)
         {
             var sellingProduct = GetSellingProduct(sellingProductId);

@@ -419,13 +419,13 @@ namespace TOne.WhS.Sales.Business
                 defaultRoutingProduct = routingProductLocator.GetSellingProductDefaultRoutingProduct(ownerId);
             else
             {
-                sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(ownerId, effectiveOn, false);
+                sellingProductId = new CarrierAccountManager().GetSellingProductId(ownerId);
 
                 if (!sellingProductId.HasValue)
                     throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a Selling Product on '{1}'", ownerId, effectiveOn));
-
                 ownerInfo.AssignedToSellingProductName = new SellingProductManager().GetSellingProductName(sellingProductId.Value);
-
+                int currencyId=new SellingProductManager().GetSellingProductCurrencyId(sellingProductId.Value);
+                ownerInfo.AssignedToSellingProductCurrencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId);
                 defaultRoutingProduct = routingProductLocator.GetCustomerDefaultRoutingProduct(ownerId, sellingProductId.Value);
             }
 
