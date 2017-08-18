@@ -106,7 +106,7 @@ namespace Vanrise.Invoice.Business
                     IEnumerable<GeneratedInvoiceBillingTransaction> billingTarnsactions;
                     GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod,invoiceAccountData, out billingTarnsactions);
 
-                    Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.TimeZoneId, offset, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod);
+                    Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.TimeZoneId, offset, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic);
                     invoice.SerialNumber = currentInvocie.SerialNumber;
                     invoice.Note = currentInvocie.Note;
 
@@ -188,7 +188,7 @@ namespace Vanrise.Invoice.Business
                 }
 
 
-                var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.TimeZoneId, offset, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod);
+                var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.TimeZoneId, offset, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic);
 
                 var serialNumber = _partnerManager.GetPartnerSerialNumberPattern(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId); InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext
                 {
@@ -705,6 +705,8 @@ namespace Vanrise.Invoice.Business
                                         break;
                                     case InvoiceField.InvoiceId: value = item.Entity.InvoiceId;
                                         break;
+                                    case InvoiceField.IsAutomatic: value = item.Entity.IsAutomatic;
+                                        break;
                                     case InvoiceField.IssueDate: value = item.Entity.IssueDate;
                                         break;
                                     case InvoiceField.Lock: value = item.Lock;
@@ -754,7 +756,7 @@ namespace Vanrise.Invoice.Business
         #endregion
 
         #region Private Methods
-        private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, int? timeZoneId, string timeZoneOffset, DateTime issueDate, dynamic invoiceDetails, int duePeriod)
+        private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, int? timeZoneId, string timeZoneOffset, DateTime issueDate, dynamic invoiceDetails, int duePeriod,bool isAutomatic)
         {
             Entities.Invoice invoice = new Entities.Invoice
             {
@@ -766,7 +768,8 @@ namespace Vanrise.Invoice.Business
                 ToDate = toDate,
                 IssueDate = issueDate,
                 TimeZoneId = timeZoneId,
-                TimeZoneOffset = timeZoneOffset
+                TimeZoneOffset = timeZoneOffset,
+                IsAutomatic = isAutomatic
             };
 
             var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerManager();

@@ -156,6 +156,9 @@ namespace Vanrise.Invoice.Business
                     case InvoiceField.UserId:
                         attribute = new FieldTextType().GetGridColumnAttribute(null);
                         break;
+                    case InvoiceField.IsAutomatic:
+                        attribute = new FieldBooleanType().GetGridColumnAttribute(null);
+                        break;
                 }
               
                 gridColumns.Add(new InvoiceUIGridColumnRunTime

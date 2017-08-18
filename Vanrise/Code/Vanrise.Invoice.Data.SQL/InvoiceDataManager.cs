@@ -135,7 +135,8 @@ namespace Vanrise.Invoice.Data.SQL
                 Vanrise.Common.Serializer.Serialize(invoiceEntity.Details),
                 invoiceEntity.Note,
                 invoiceEntity.SourceId,
-                true
+                true,
+                invoiceEntity.IsAutomatic
             );
 
             insertedInvoiceId = Convert.ToInt64(invoiceId);
@@ -288,7 +289,8 @@ namespace Vanrise.Invoice.Data.SQL
                 Note = reader["Notes"] as string,
                 TimeZoneId = GetReaderValue<int?>(reader, "TimeZoneId"),
                 TimeZoneOffset = reader["TimeZoneOffset"] as string,
-                SourceId = reader["SourceID"] as string
+                SourceId = reader["SourceID"] as string,
+                IsAutomatic = GetReaderValue<Boolean>(reader, "IsAutomatic")
             };
             return invoice;
         }

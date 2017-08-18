@@ -69,7 +69,8 @@ namespace Vanrise.Invoice.BP.Activities
                                                       PartnerId = partnerId,
                                                       FromDate = new DateTime(billingPeriod.FromDate.Year, billingPeriod.FromDate.Month, billingPeriod.FromDate.Day, 0, 0, 0),
                                                       ToDate = new DateTime(billingPeriod.ToDate.Year, billingPeriod.ToDate.Month, billingPeriod.ToDate.Day, 23, 59, 59, 998),
-                                                      TimeZoneId = timeZoneId
+                                                      TimeZoneId = timeZoneId,
+                                                      IsAutomatic = true
                                                   });
                             PartnerNameManagerContext PartnerNameManagerContext = new PartnerNameManagerContext
                             {

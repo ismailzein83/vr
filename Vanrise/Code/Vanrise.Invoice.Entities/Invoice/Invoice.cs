@@ -30,6 +30,7 @@ namespace Vanrise.Invoice.Entities
         public int? TimeZoneId { get; set; }
         public string TimeZoneOffset { get; set; }
         public string SourceId { get; set; }
+        public Boolean IsAutomatic { get; set; }
         public Invoice() { }
         public IEnumerable<Invoice> GetInvoiceRDLCSchema()
         {

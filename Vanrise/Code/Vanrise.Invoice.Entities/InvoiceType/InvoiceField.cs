@@ -22,6 +22,7 @@ namespace Vanrise.Invoice.Entities
         Lock = 11,
         Note = 12,
         TimeZone = 13,
-        TimeZoneOffset = 14
+        TimeZoneOffset = 14,
+        IsAutomatic = 15
     }
 }

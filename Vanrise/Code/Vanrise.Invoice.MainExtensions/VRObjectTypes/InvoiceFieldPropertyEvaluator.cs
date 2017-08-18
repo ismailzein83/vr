@@ -60,6 +60,9 @@ namespace Vanrise.Invoice.MainExtensions
                     return userManager.GetUserName(invoice.UserId);
                 case InvoiceField.SerialNumber:
                     return invoice.SerialNumber;
+                case InvoiceField.IsAutomatic: 
+                    return invoice.IsAutomatic;
+
                 case InvoiceField.CustomField:
                     return invoice.Details.GetType().GetProperty(this.FieldName).GetValue(invoice.Details, null);//Utilities.GetPropValue(this.FieldName, invoice.Details);
                 //    //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);

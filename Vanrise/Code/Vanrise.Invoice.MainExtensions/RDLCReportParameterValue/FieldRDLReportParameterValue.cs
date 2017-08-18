@@ -28,6 +28,7 @@ namespace Vanrise.Invoice.MainExtensions
                 case Entities.InvoiceField.Partner: return context.Invoice.PartnerId;
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate;
+                case Entities.InvoiceField.IsAutomatic: return context.Invoice.IsAutomatic;
                 case InvoiceField.TimeZone:
                     if (context.Invoice.TimeZoneId.HasValue)
                     {
