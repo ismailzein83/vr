@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
@@ -13,8 +11,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
         public override Guid ConfigId { get { return new Guid("fc4b69f0-d577-4319-8d10-ed8f95e07441"); } }
 
         public string ChildFieldName { get; set; }
-
-        #region Public Methods
 
         public override List<string> GetDependentFields(IDataRecordFieldFormulaGetDependentFieldsContext context)
         {
@@ -62,10 +58,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
         }
 
-        #endregion
-
-        #region Private Methods
-
         private void GetFieldTypes(IDataRecordFieldFormulaContext context, out DataRecordFields.FieldBusinessEntityType currentBEFieldType, out DataRecordFields.FieldBusinessEntityType childBEFieldType)
         {
             currentBEFieldType = context.FieldType as DataRecordFields.FieldBusinessEntityType;
@@ -75,8 +67,5 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             if (childBEFieldType == null)
                 throw new NullReferenceException(String.Format("childBRFieldType '{0}'", this.ChildFieldName));
         }
-
-
-        #endregion
     }
 }
