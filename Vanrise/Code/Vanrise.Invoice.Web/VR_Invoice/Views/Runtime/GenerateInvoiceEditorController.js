@@ -446,7 +446,8 @@
                                             $scope.scopeModel.fromDate = new Date(fromDate.setHours(0, 0, 0, 0));
 
                                         }
-
+                                        if (responseDate.ToDate == undefined || responseDate.FromDate == undefined)
+                                            $scope.scopeModel.isDateDisabled = false;
                                         $scope.scopeModel.isLoading = false;
                                     }).catch(function (error) {
                                         $scope.scopeModel.isLoading = false;
@@ -455,6 +456,7 @@
                                 } else {
                                     $scope.scopeModel.fromDate = undefined;
                                     $scope.scopeModel.toDate = undefined;
+                                    $scope.scopeModel.isDateDisabled = false;
                                 }
                             }).catch(function (error) {
                                 $scope.scopeModel.isLoading = false;
