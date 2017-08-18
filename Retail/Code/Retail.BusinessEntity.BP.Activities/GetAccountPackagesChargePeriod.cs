@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Activities;
 using Retail.BusinessEntity.Entities;
+using Vanrise.Entities;
+using Vanrise.BusinessProcess;
 
 namespace Retail.BusinessEntity.BP.Activities
 {
@@ -18,6 +20,7 @@ namespace Retail.BusinessEntity.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Loading Account Packages Charging Period has started", null);
             List<AccountPackage> accountPackages = context.GetValue(this.AccountPackages);
             DateTime effectiveDate = context.GetValue(this.EffectiveDate);
 
@@ -34,6 +37,7 @@ namespace Retail.BusinessEntity.BP.Activities
             }
 
             this.AccountPackageRecurChargeDataList.Set(context, accountPackageRecurChargeDataList);
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Loading Account Packages Charging Period is done", null);
         }
 
         private DateTime GetEndChargePeriod(DateTime effectiveDate)

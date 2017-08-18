@@ -27,7 +27,7 @@ namespace Retail.BusinessEntity.Data.SQL
 
         public List<AccountPackageRecurCharge> GetAccountPackageRecurChargesNotSent(DateTime effectiveDate)
         {
-            return GetItemsSP("Retail_BE.sp_AccountPackageRecurCharge_GetNotSentData", AccountPackageRecurChargeMapper);
+            return GetItemsSP("Retail_BE.sp_AccountPackageRecurCharge_GetNotSentData", AccountPackageRecurChargeMapper, effectiveDate);
         }
 
         public void ApplyAccountPackageReccuringCharges(List<AccountPackageRecurCharge> accountPackageRecurChargeList, DateTime effectiveDate, long processInstanceId)
@@ -43,6 +43,15 @@ namespace Retail.BusinessEntity.Data.SQL
             });
         }
 
+        public void UpdateAccountPackageRecurChargeToSent(DateTime effectiveDate)
+        {
+            ExecuteNonQuerySP("[Retail_BE].[sp_AccountPackageRecurCharge_UpdateToSent]", effectiveDate);
+        }
+
+        public List<AccountPackageRecurCharge> GetAccountRecurringCharges(Guid acountBEDefinitionId, long accountId, DateTime includedFromDate, DateTime includedToDate)
+        {
+            return GetItemsSP("[Retail_BE].[sp_AccountPackageRecurCharge_GetByAccount]", AccountPackageRecurChargeMapper, acountBEDefinitionId, accountId, includedFromDate, includedToDate);
+        }
         #endregion
 
         #region Private Methods
@@ -62,11 +71,18 @@ namespace Retail.BusinessEntity.Data.SQL
                 else
                     dr["BalanceAccountTypeID"] = DBNull.Value;
 
-                dr["BalanceAccountID"] = accountPackageRecurCharge.BalanceAccountID;
+                if (!string.IsNullOrEmpty(accountPackageRecurCharge.BalanceAccountID))
+                    dr["BalanceAccountID"] = accountPackageRecurCharge.BalanceAccountID;
+                else
+                    dr["BalanceAccountID"] = DBNull.Value;
+
                 dr["ChargeDay"] = accountPackageRecurCharge.ChargeDay;
                 dr["ChargeAmount"] = accountPackageRecurCharge.ChargeAmount;
                 dr["CurrencyID"] = accountPackageRecurCharge.CurrencyID;
                 dr["TransactionTypeID"] = accountPackageRecurCharge.TransactionTypeID;
+                dr["AccountID"] = accountPackageRecurCharge.AccountID;
+                dr["AccountBEDefinitionId"] = accountPackageRecurCharge.AccountBEDefinitionId;
+
                 dtAccountPackageRecurCharge.Rows.Add(dr);
             }
             dtAccountPackageRecurCharge.EndLoadData();
@@ -84,7 +100,8 @@ namespace Retail.BusinessEntity.Data.SQL
             dtAccountPackageRecurCharge.Columns.Add("ChargeAmount", typeof(decimal));
             dtAccountPackageRecurCharge.Columns.Add("CurrencyID", typeof(int));
             dtAccountPackageRecurCharge.Columns.Add("TransactionTypeID", typeof(Guid));
-            dtAccountPackageRecurCharge.Columns.Add("ProcessInstanceID", typeof(long));
+            dtAccountPackageRecurCharge.Columns.Add("AccountID", typeof(long));
+            dtAccountPackageRecurCharge.Columns.Add("AccountBEDefinitionId", typeof(Guid));
             return dtAccountPackageRecurCharge;
         }
 
@@ -99,14 +116,16 @@ namespace Retail.BusinessEntity.Data.SQL
                 AccountPackageRecurChargeId = (long)reader["ID"],
                 AccountPackageID = (int)reader["AccountPackageID"],
                 ChargeableEntityID = (Guid)reader["ChargeableEntityID"],
-                BalanceAccountTypeID = (Guid)reader["BalanceAccountTypeID"],
+                BalanceAccountTypeID = GetReaderValue<Guid>(reader, "BalanceAccountTypeID"),
                 BalanceAccountID = reader["BalanceAccountID"] as string,
+                AccountID = (long)reader["AccountID"],
+                AccountBEDefinitionId = (Guid)reader["AccountBEDefinitionId"],
                 ChargeDay = (DateTime)reader["ChargeDay"],
                 ChargeAmount = (decimal)reader["ChargeAmount"],
                 CurrencyID = (int)reader["CurrencyID"],
                 TransactionTypeID = (Guid)reader["TransactionTypeID"],
                 ProcessInstanceID = (long)reader["ProcessInstanceID"],
-                IsSentToAccountBalance = (bool)reader["IsSentToAccountBalance"],
+                IsSentToAccountBalance = GetReaderValue<bool>(reader, "IsSentToAccountBalance"),
                 CreatedTime = (DateTime)reader["CreatedTime"]
             };
         }

@@ -18,5 +18,17 @@ namespace Retail.BusinessEntity.Business
             IAccountPackageRecurChargeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageRecurChargeDataManager>();
             return dataManager.GetAccountPackageRecurChargesNotSent(effectiveDate);
         }
+
+        public void UpdateAccountPackageRecurChargeToSent(DateTime effectiveDate)
+        {
+            IAccountPackageRecurChargeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageRecurChargeDataManager>();
+            dataManager.UpdateAccountPackageRecurChargeToSent(effectiveDate);
+        }
+
+        public List<AccountPackageRecurCharge> GetAccountRecurringCharges(Guid acountBEDefinitionId, long accountId, DateTime includedFromDate, DateTime includedToDate)
+        {
+            IAccountPackageRecurChargeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageRecurChargeDataManager>();
+            return dataManager.GetAccountRecurringCharges(acountBEDefinitionId, accountId, includedFromDate, includedToDate);
+        }
     }
 }

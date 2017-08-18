@@ -4,6 +4,8 @@ using System.Linq;
 using System.Activities;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Business;
+using Vanrise.Entities;
+using Vanrise.BusinessProcess;
 
 namespace Retail.BusinessEntity.BP.Activities
 {
@@ -20,6 +22,7 @@ namespace Retail.BusinessEntity.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Loading Account Packages has started", null);
             DateTime effectiveDate = context.GetValue(this.EffectiveDate);
             bool withFutureAccountPackages = context.GetValue(this.WithFutureAccountPackages);
 
@@ -28,6 +31,7 @@ namespace Retail.BusinessEntity.BP.Activities
 
             List<AccountPackage> accountPackages = effectiveAssignedPackages != null ? effectiveAssignedPackages.ToList() : null;
             this.AccountPackages.Set(context, accountPackages);
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Loading Account Packages is done", null);
         }
     }
 }

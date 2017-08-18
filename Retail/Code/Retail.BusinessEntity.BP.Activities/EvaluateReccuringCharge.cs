@@ -6,6 +6,7 @@ using Vanrise.Common;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.MainExtensions.PackageTypes;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.BP.Activities
 {
@@ -22,6 +23,7 @@ namespace Retail.BusinessEntity.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Evaluate Reccuring Charge has started", null);
             List<AccountPackageRecurChargeData> accountPackageRecurChargeDataList = context.GetValue(this.AccountPackageRecurChargeDataList);
             DateTime effectiveDate = context.GetValue(this.EffectiveDate);
 
@@ -31,7 +33,7 @@ namespace Retail.BusinessEntity.BP.Activities
             FinancialAccountManager financialAccountManager = new Business.FinancialAccountManager();
             ChargeableEntityManager chargeableEntityManager = new Business.ChargeableEntityManager();
 
-            List<AccountPackageRecurCharge> accountPackageRecurChargeList =new List<AccountPackageRecurCharge>();
+            List<AccountPackageRecurCharge> accountPackageRecurChargeList = new List<AccountPackageRecurCharge>();
 
             foreach (AccountPackageRecurChargeData accountPackageRecurChargeData in accountPackageRecurChargeDataList)
             {
@@ -51,6 +53,9 @@ namespace Retail.BusinessEntity.BP.Activities
                     continue;
 
                 FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, effectiveDate);
+
+                int numberOfDays = Convert.ToInt32(accountPackageRecurChargeData.EndChargePeriod.Subtract(accountPackageRecurChargeData.BeginChargePeriod).TotalDays);
+
                 foreach (RecurringChargeEvaluatorOutput recurringChargeEvaluatorOutput in recurringChargeEvaluatorOutputs)
                 {
                     ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(recurringChargeEvaluatorOutput.ChargeableEntityId);
@@ -58,20 +63,25 @@ namespace Retail.BusinessEntity.BP.Activities
                     if (!chargeableEntitySettings.TransactionTypeId.HasValue)
                         throw new NullReferenceException(string.Format("chargeableEntitySettings.TransactionTypeId ChargeableEntityId:{0}", recurringChargeEvaluatorOutput.ChargeableEntityId));
 
+                    decimal amountPerDay = recurringChargeEvaluatorOutput.Amount / numberOfDays;
+
+
                     DateTime chargeDay = accountPackageRecurChargeData.BeginChargePeriod;
-                    while (chargeDay <= accountPackageRecurChargeData.EndChargePeriod)
+                    while (chargeDay < accountPackageRecurChargeData.EndChargePeriod)
                     {
                         AccountPackageRecurCharge accountPackageRecurCharge = new AccountPackageRecurCharge()
                         {
                             AccountPackageID = accountPackageRecurChargeData.AccountPackage.AccountPackageId,
-                            BalanceAccountID = financialAccountRuntimeData.BalanceAccountId,
-                            BalanceAccountTypeID = financialAccountRuntimeData.BalanceAccountTypeId,
+                            BalanceAccountID = financialAccountRuntimeData != null ? financialAccountRuntimeData.BalanceAccountId : null,
+                            BalanceAccountTypeID = financialAccountRuntimeData != null ? financialAccountRuntimeData.BalanceAccountTypeId : null,
                             ChargeableEntityID = recurringChargeEvaluatorOutput.ChargeableEntityId,
-                            ChargeAmount = chargeDay >= recurringChargeEvaluatorOutput.ChargingStart && chargeDay < recurringChargeEvaluatorOutput.ChargingEnd ? recurringChargeEvaluatorOutput.Amount : 0,
+                            ChargeAmount = chargeDay >= recurringChargeEvaluatorOutput.ChargingStart && chargeDay < recurringChargeEvaluatorOutput.ChargingEnd ? amountPerDay : 0,
                             ChargeDay = chargeDay,
                             CurrencyID = recurringChargeEvaluatorOutput.CurrencyId,
                             ProcessInstanceID = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
-                            TransactionTypeID = chargeableEntitySettings.TransactionTypeId.Value
+                            TransactionTypeID = chargeableEntitySettings.TransactionTypeId.Value,
+                            AccountID = accountPackageRecurChargeData.AccountPackage.AccountId,
+                            AccountBEDefinitionId = accountBEDefinitionId
                         };
 
                         accountPackageRecurChargeList.Add(accountPackageRecurCharge);
@@ -80,6 +90,7 @@ namespace Retail.BusinessEntity.BP.Activities
                 }
             }
             this.AccountPackageRecurChargeList.Set(context, accountPackageRecurChargeList);
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Evaluate Reccuring Charge is done", null);
         }
     }
 }

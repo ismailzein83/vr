@@ -5,8 +5,11 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.BusinessProcess;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Business;
+using Vanrise.Entities;
+using System.Linq;
 
 namespace Retail.BusinessEntity.BP.Activities
 {
@@ -17,6 +20,8 @@ namespace Retail.BusinessEntity.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Apply Reccuring Charge To Balance has started", null);
+
             DateTime effectiveDate = context.GetValue(this.EffectiveDate);
             AccountPackageRecurChargeManager accountPackageRecurChargeManager = new AccountPackageRecurChargeManager();
             List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargeManager.GetAccountPackageRecurChargesNotSent(effectiveDate);
@@ -44,9 +49,6 @@ namespace Retail.BusinessEntity.BP.Activities
                     if (!accountPackageRecurChargeItemKey.BalanceAccountTypeID.HasValue)
                         continue;
 
-                    if (accountPackageRecurChargeItemList == null || accountPackageRecurChargeItemList.Count == 0)
-                        continue;
-
                     CorrectUsageBalancePayload payload = new CorrectUsageBalancePayload()
                     {
                         CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem>(),
@@ -55,14 +57,28 @@ namespace Retail.BusinessEntity.BP.Activities
                         TransactionTypeId = accountPackageRecurChargeItemKey.TransactionTypeId
                     };
 
+                    Dictionary<string, AccountAmount> accountBalanceAmount = new Dictionary<string, AccountAmount>();
+
                     foreach (AccountPackageRecurCharge accountPackageRecurChargeItem in accountPackageRecurChargeItemList)
                     {
-                        decimal convertedAmount = currencyExchangeRateManager.ConvertValueToCurrency(accountPackageRecurChargeItem.ChargeAmount, accountPackageRecurChargeItem.CurrencyID, systemCurrencyId, accountPackageRecurChargeItemKey.ChargeDay);
-                        payload.CorrectUsageBalanceItems.Add(new CorrectUsageBalanceItem() { AccountId = accountPackageRecurChargeItem.BalanceAccountID, CurrencyId = systemCurrencyId, Value = convertedAmount });
+                        if (!string.IsNullOrEmpty(accountPackageRecurChargeItem.BalanceAccountID))
+                        {
+                            decimal convertedAmount = currencyExchangeRateManager.ConvertValueToCurrency(accountPackageRecurChargeItem.ChargeAmount, accountPackageRecurChargeItem.CurrencyID, systemCurrencyId, accountPackageRecurChargeItemKey.ChargeDay);
+                            AccountAmount accountAmount = accountBalanceAmount.GetOrCreateItem(accountPackageRecurChargeItem.BalanceAccountID, () => { return new AccountAmount() { Amount = 0 }; });
+                            accountAmount.Amount += convertedAmount;
+                        }
                     }
-                    usageBalanceManager.CorrectUsageBalance(accountPackageRecurChargeItemKey.BalanceAccountTypeID.Value, payload);
+
+                    if (accountBalanceAmount.Count > 0)
+                    {
+                        payload.CorrectUsageBalanceItems.AddRange(accountBalanceAmount.Select(itm => new CorrectUsageBalanceItem() { AccountId = itm.Key, CurrencyId = systemCurrencyId, Value = itm.Value.Amount }));
+                        usageBalanceManager.CorrectUsageBalance(accountPackageRecurChargeItemKey.BalanceAccountTypeID.Value, payload);
+                    }
                 }
             }
+
+            accountPackageRecurChargeManager.UpdateAccountPackageRecurChargeToSent(effectiveDate);
+            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Apply Reccuring Charge To Balance is done", null);
         }
 
         private AccountPackageRecurChargeKey BuildAccountPackageRecurChargeKey(AccountPackageRecurCharge accountPackageRecurCharge)
@@ -73,6 +89,11 @@ namespace Retail.BusinessEntity.BP.Activities
                 ChargeDay = accountPackageRecurCharge.ChargeDay,
                 TransactionTypeId = accountPackageRecurCharge.TransactionTypeID
             };
+        }
+
+        private class AccountAmount
+        {
+            public decimal Amount { get; set; }
         }
     }
 }

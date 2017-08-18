@@ -16,6 +16,8 @@ namespace Retail.BusinessEntity.Entities
         public Guid ChargeableEntityID { get; set; }
         public Guid? BalanceAccountTypeID { get; set; }
         public string BalanceAccountID { get; set; }
+        public Guid AccountBEDefinitionId { get; set; }
+        public long AccountID { get; set; }
         public DateTime ChargeDay { get; set; }
         public decimal ChargeAmount { get; set; }
         public int CurrencyID { get; set; }

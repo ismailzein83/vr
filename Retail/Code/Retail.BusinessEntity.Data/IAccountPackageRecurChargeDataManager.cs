@@ -9,5 +9,9 @@ namespace Retail.BusinessEntity.Data
         List<AccountPackageRecurCharge> GetAccountPackageRecurChargesNotSent(DateTime effectiveDate);
 
         void ApplyAccountPackageReccuringCharges(List<AccountPackageRecurCharge> accountPackageRecurChargeList, DateTime effectiveDate, long processInstanceId);
+
+        void UpdateAccountPackageRecurChargeToSent(DateTime effectiveDate);
+
+        List<AccountPackageRecurCharge> GetAccountRecurringCharges(Guid acountBEDefinitionId, long accountId, DateTime includedFromDate, DateTime includedToDate);
     }
 }

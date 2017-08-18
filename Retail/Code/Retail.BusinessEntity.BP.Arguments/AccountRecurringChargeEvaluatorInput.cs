@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.BP.Arguments
 
         public override string GetTitle()
         {
-            return String.Format("Account Recurring Charge Evaluator Process for Effective Date: {0}", EffectiveDate);
+            return String.Format("Account Recurring Charge Evaluator Process for Effective Date: {0}", EffectiveDate.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)

@@ -77,10 +77,6 @@
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Retail\Retail.sqlproj">
-      <Project>{BAC71345-402F-46AC-8FEC-1401F493305E}</Project>
-      <Name>Retail</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

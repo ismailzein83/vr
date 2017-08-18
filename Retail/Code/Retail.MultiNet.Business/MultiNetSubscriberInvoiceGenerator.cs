@@ -61,7 +61,7 @@ namespace Retail.MultiNet.Business
 
         #region Constructors
 
-        public MultiNetSubscriberInvoiceGenerator(Guid acountBEDefinitionId, List<Guid> salesTaxChargeableEntities, List<Guid> wHTaxChargeableEntities, Guid inComingChargeableEntity, Guid outGoingChargeableEntity, Guid salesTaxRuleDefinitionId, Guid wHTaxRuleDefinitionId, Guid latePaymentRuleDefinitionId, Guid mainDataRecordStorageId, Guid branchTypeId, Guid companyTypeId,Guid otcChargeableEntity, Guid lineRentChargeableEntity)
+        public MultiNetSubscriberInvoiceGenerator(Guid acountBEDefinitionId, List<Guid> salesTaxChargeableEntities, List<Guid> wHTaxChargeableEntities, Guid inComingChargeableEntity, Guid outGoingChargeableEntity, Guid salesTaxRuleDefinitionId, Guid wHTaxRuleDefinitionId, Guid latePaymentRuleDefinitionId, Guid mainDataRecordStorageId, Guid branchTypeId, Guid companyTypeId, Guid otcChargeableEntity, Guid lineRentChargeableEntity)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
             this._salesTaxChargeableEntities = salesTaxChargeableEntities;
@@ -74,8 +74,8 @@ namespace Retail.MultiNet.Business
             this._mainDataRecordStorageId = mainDataRecordStorageId;
             this._branchTypeId = branchTypeId;
             this._companyTypeId = companyTypeId;
-             this._otcChargeableEntity= otcChargeableEntity;
-             this._lineRentChargeableEntity= lineRentChargeableEntity;
+            this._otcChargeableEntity = otcChargeableEntity;
+            this._lineRentChargeableEntity = lineRentChargeableEntity;
         }
 
         #endregion
@@ -101,10 +101,10 @@ namespace Retail.MultiNet.Business
             companyAccount.ThrowIfNull("companyAccount");
             companyAccount.Settings.ThrowIfNull("companyAccount.Settings");
             companyAccount.Settings.Parts.ThrowIfNull(" companyAccount.Settings.Parts");
-            foreach(var accountPart in companyAccount.Settings.Parts)
+            foreach (var accountPart in companyAccount.Settings.Parts)
             {
                 var multiNetCompanyExtendedInfo = accountPart.Value.Settings as MultiNetCompanyExtendedInfo;
-                if(multiNetCompanyExtendedInfo != null)
+                if (multiNetCompanyExtendedInfo != null)
                 {
                     excludeTaxes = multiNetCompanyExtendedInfo.ExcludeTaxes;
                 }
@@ -224,7 +224,7 @@ namespace Retail.MultiNet.Business
                         if (this._wHTaxChargeableEntities.Contains(summaryItem.ChargeableEntityId))
                             whAmount += summaryItem.NetAmount;
                     }
-                    
+
 
                     if (summaryItem.ChargeableEntityId == this._otcChargeableEntity)
                         branchSummary.OTC += summaryItem.NetAmount;
@@ -585,48 +585,81 @@ namespace Retail.MultiNet.Business
 
         private void AddRecurringChargeToBranchSummary(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate)
         {
+            if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
+                multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long, List<BranchSummaryItem>>();
 
-            var accountPackages = _accountPackageManager.GetAccountPackagesByAccountId(account.AccountId);
-            List<int> accountPackagesIds = new List<int>();
-            if (accountPackages != null && accountPackages.Count > 0)
+            var billingSummaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
+
+            AccountPackageRecurChargeManager accountPackageRecurChargeManager = new AccountPackageRecurChargeManager();
+            List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargeManager.GetAccountRecurringCharges(_acountBEDefinitionId, account.AccountId, fromDate.Date, toDate.Date);
+
+            if (accountPackageRecurChargeList != null)
             {
-                if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
-                    multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long, List<BranchSummaryItem>>();
+                CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
 
-                var billingSummaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
-                RecurringChargeManager recurringChargeManager = new RecurringChargeManager();
-                PackageDefinitionManager packageDefinitionManager = new PackageDefinitionManager();
-                foreach (var accountPackage in accountPackages)
+                Dictionary<Guid, AmountData> amountDataByChargeableEntity = new Dictionary<Guid, AmountData>();
+                foreach (AccountPackageRecurCharge accountPackageRecurCharge in accountPackageRecurChargeList)
                 {
-                    if (Vanrise.Common.Utilities.AreTimePeriodsOverlapped(accountPackage.BED, accountPackage.EED, fromDate, toDate))
-                    {
-                        var package = _packageManager.GetPackage(accountPackage.PackageId);
-                        var packageDefinition = packageDefinitionManager.GetPackageDefinitionById(package.Settings.PackageDefinitionId);
-                        var recurChargePackageDefinitionSettings = packageDefinition.Settings.ExtendedSettings as RecurChargePackageDefinitionSettings;
-                        var recurChargePackageSettings = package.Settings.ExtendedSettings as RecurChargePackageSettings;
-                        if (recurChargePackageSettings != null && recurChargePackageDefinitionSettings != null)
-                        {
-                            var evaluateRecurringCharge = recurringChargeManager.EvaluateRecurringCharge(recurChargePackageSettings.Evaluator, recurChargePackageDefinitionSettings.EvaluatorDefinitionSettings, fromDate, toDate, this._acountBEDefinitionId, accountPackage);
-                            if (evaluateRecurringCharge != null && evaluateRecurringCharge.Count > 0)
-                            {
-                                foreach (var output in evaluateRecurringCharge)
-                                {
-                                    BranchSummaryItem branchSummary = new BranchSummaryItem()
-                                    {
-                                        AccountId = account.AccountId,
-                                        ChargeableEntityId = output.ChargeableEntityId,
-                                        UsageDescription = _genericLKUPManager.GetGenericLKUPItemName(output.ChargeableEntityId),
-                                        Quantity = 1,
-                                        NetAmount = output.Amount
-                                    };
-                                    billingSummaryItems.Add(branchSummary);
-                                }
-                            }
-                        }
+                    AmountData amountData = amountDataByChargeableEntity.GetOrCreateItem(accountPackageRecurCharge.ChargeableEntityID, () => { return new AmountData() { Amount = 0 }; });
+                    decimal convertedAmount = currencyExchangeRateManager.ConvertValueToCurrency(accountPackageRecurCharge.ChargeAmount, accountPackageRecurCharge.CurrencyID, currencyId, accountPackageRecurCharge.ChargeDay);
+                    amountData.Amount += convertedAmount;
+                }
 
-                    }
+                foreach (var amountDataItem in amountDataByChargeableEntity)
+                {
+                    BranchSummaryItem branchSummary = new BranchSummaryItem()
+                    {
+                        AccountId = account.AccountId,
+                        ChargeableEntityId = amountDataItem.Key,
+                        UsageDescription = _genericLKUPManager.GetGenericLKUPItemName(amountDataItem.Key),
+                        Quantity = 1,
+                        NetAmount = amountDataItem.Value.Amount
+                    };
+                    billingSummaryItems.Add(branchSummary);
                 }
             }
+
+            //var accountPackages = _accountPackageManager.GetAccountPackagesByAccountId(account.AccountId);
+            //List<int> accountPackagesIds = new List<int>();
+            //if (accountPackages != null && accountPackages.Count > 0)
+            //{
+            //    if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch == null)
+            //        multiNetInvoiceGeneratorContext.SummaryItemsByBranch = new Dictionary<long, List<BranchSummaryItem>>();
+
+            //    var billingSummaryItems = multiNetInvoiceGeneratorContext.SummaryItemsByBranch.GetOrCreateItem(account.AccountId);
+            //    RecurringChargeManager recurringChargeManager = new RecurringChargeManager();
+            //    PackageDefinitionManager packageDefinitionManager = new PackageDefinitionManager();
+            //    foreach (var accountPackage in accountPackages)
+            //    {
+            //        if (Vanrise.Common.Utilities.AreTimePeriodsOverlapped(accountPackage.BED, accountPackage.EED, fromDate, toDate.AddDays(1).Date))
+            //        {
+            //            var package = _packageManager.GetPackage(accountPackage.PackageId);
+            //            var packageDefinition = packageDefinitionManager.GetPackageDefinitionById(package.Settings.PackageDefinitionId);
+            //            var recurChargePackageDefinitionSettings = packageDefinition.Settings.ExtendedSettings as RecurChargePackageDefinitionSettings;
+            //            var recurChargePackageSettings = package.Settings.ExtendedSettings as RecurChargePackageSettings;
+            //            if (recurChargePackageSettings != null && recurChargePackageDefinitionSettings != null)
+            //            {
+            //                var evaluateRecurringCharge = recurringChargeManager.EvaluateRecurringCharge(recurChargePackageSettings.Evaluator, recurChargePackageDefinitionSettings.EvaluatorDefinitionSettings, fromDate, toDate.AddDays(1).Date, this._acountBEDefinitionId, accountPackage);
+            //                if (evaluateRecurringCharge != null && evaluateRecurringCharge.Count > 0)
+            //                {
+            //                    foreach (var output in evaluateRecurringCharge)
+            //                    {
+            //                        BranchSummaryItem branchSummary = new BranchSummaryItem()
+            //                        {
+            //                            AccountId = account.AccountId,
+            //                            ChargeableEntityId = output.ChargeableEntityId,
+            //                            UsageDescription = _genericLKUPManager.GetGenericLKUPItemName(output.ChargeableEntityId),
+            //                            Quantity = 1,
+            //                            NetAmount = output.Amount
+            //                        };
+            //                        billingSummaryItems.Add(branchSummary);
+            //                    }
+            //                }
+            //            }
+
+            //        }
+            //    }
+            //}
         }
         private void LoadTrafficData(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, long branchAccountId, DateTime fromDate, DateTime toDate, int currencyId, Guid branchTypeId)
         {
@@ -698,7 +731,7 @@ namespace Retail.MultiNet.Business
                                 Amount = Convert.ToDecimal(amountMeasure.Value ?? 0.0),
                                 CountCDRs = Convert.ToInt32(countCDRsMeasure.Value),
                                 TotalDuration = totalDuration,
-                               
+
                                 TrafficDirection = (TrafficDirection)trafficDirection.Value,
                             };
                             Guid serviceTypeId;
@@ -888,6 +921,11 @@ namespace Retail.MultiNet.Business
             public int SaleCurrencyId { get; set; }
         }
 
+        private class AmountData
+        {
+            public decimal Amount { get; set; }
+        }
+
         #endregion
     }
 
@@ -951,7 +989,7 @@ namespace Retail.MultiNet.Business
         public string SubItemIdentifier { get; set; }
         public DateTime AttemptDateTime { get; set; }
         public decimal DurationInSeconds { get; set; }
-        public string  DurationDescription { get; set; }
+        public string DurationDescription { get; set; }
         public string CallingNumber { get; set; }
         public string CalledNumber { get; set; }
         public decimal SaleAmount { get; set; }
