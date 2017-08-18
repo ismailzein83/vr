@@ -8,6 +8,7 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business.BusinessRules
 {
+    //This rule has been deleted
     public class CustomerZoneHavingPendingClosedRateIsModified : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
