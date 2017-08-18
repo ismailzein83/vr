@@ -201,9 +201,44 @@ namespace Vanrise.GenericData.Business
             return businessEntityDefinition.Settings.IdType;
         }
 
+        public Dictionary<Guid, BusinessEntityDefinition> GetBusinessEntityDefinitionsByConfigId(Guid beConfigId)
+        {
+            return GetCachedBusinessEntityDefinitionsByConfigId().GetRecord(beConfigId);
+        }
+
         #endregion
 
         #region Private Methods
+
+        public Dictionary<Guid, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
+        {
+            return s_cacheManager.GetOrCreateObject("GetCachedBusinessEntityDefinitions",
+                () =>
+                {
+                    IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
+                    IEnumerable<BusinessEntityDefinition> beDefinitions = dataManager.GetBusinessEntityDefinitions();
+                    return beDefinitions.ToDictionary(beDefinition => beDefinition.BusinessEntityDefinitionId, beDefinition => beDefinition);
+                });
+        }
+
+        private Dictionary<Guid, Dictionary<Guid, BusinessEntityDefinition>> GetCachedBusinessEntityDefinitionsByConfigId()
+        {
+            return s_cacheManager.GetOrCreateObject("GetCachedBusinessEntityDefinitionsByConfigId",
+                () =>
+                {
+                    Dictionary<Guid, Dictionary<Guid, BusinessEntityDefinition>> rslt = new Dictionary<Guid, Dictionary<Guid, BusinessEntityDefinition>>();
+                    var allBEDefinitions = GetCachedBusinessEntityDefinitions();
+                    if(allBEDefinitions != null)
+                    {
+                        foreach(var beDefinition in allBEDefinitions.Values)
+                        {
+                            beDefinition.Settings.ThrowIfNull("beDefinition.Settings", beDefinition.BusinessEntityDefinitionId);
+                            rslt.GetOrCreateItem(beDefinition.Settings.ConfigId).Add(beDefinition.BusinessEntityDefinitionId, beDefinition);
+                        }
+                    }
+                    return rslt;
+                });
+        }
 
         private bool CheckIfFilterIsMatch(BusinessEntityDefinition entityDefinition, List<IBusinessEntityDefinitionFilter> filters)
         {
@@ -269,17 +304,6 @@ namespace Vanrise.GenericData.Business
         public T GetCachedOrCreate<T>(Object cacheName, Func<T> createObject)
         {
             return s_cacheManager.GetOrCreateObject(cacheName, createObject);
-        }
-
-        public Dictionary<Guid, BusinessEntityDefinition> GetCachedBusinessEntityDefinitions()
-        {
-            return s_cacheManager.GetOrCreateObject("GetBusinessEntityDefinitions",
-                () =>
-                {
-                    IBusinessEntityDefinitionDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
-                    IEnumerable<BusinessEntityDefinition> beDefinitions = dataManager.GetBusinessEntityDefinitions();
-                    return beDefinitions.ToDictionary(beDefinition => beDefinition.BusinessEntityDefinitionId, beDefinition => beDefinition);
-                });
         }
 
         internal class CacheManager : Vanrise.Caching.BaseCacheManager
