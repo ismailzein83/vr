@@ -151,6 +151,7 @@
     <Compile Include="AccountHandlers\BaseAccountEventPayload.cs" />
     <Compile Include="AccountPackageRecurChargeManager.cs" />
     <Compile Include="AccountPartDefinitionOverriddenConfiguration.cs" />
+    <Compile Include="AccountRecurringChargeEvaluatorBPDefinitionSettings.cs" />
     <Compile Include="AccountStatusHistory\AccountStatusHistoryManager.cs" />
     <Compile Include="AccountTypeOverriddenConfiguration.cs" />
     <Compile Include="ChargeableEntity\ChargeableEntityManager.cs" />
@@ -261,6 +262,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.APIEntities\Retail.BusinessEntity.APIEntities.csproj">
       <Project>{bc95dcad-b0aa-4e3e-9ea0-3963f0d54d23}</Project>
       <Name>Retail.BusinessEntity.APIEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.BP.Arguments\Retail.BusinessEntity.BP.Arguments.csproj">
+      <Project>{e64443df-5575-4b8b-bdf9-8456ad2070da}</Project>
+      <Name>Retail.BusinessEntity.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.Data\Retail.BusinessEntity.Data.csproj">
       <Project>{45bee1a0-30fd-405d-b476-c3b2d0b2a21f}</Project>

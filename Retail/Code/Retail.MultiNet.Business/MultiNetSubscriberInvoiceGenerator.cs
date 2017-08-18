@@ -173,8 +173,25 @@ namespace Retail.MultiNet.Business
                     TransactionTypeId = usageTransactionTypeId
                 });
             }
+            AddRecurringChargeTransactionType(billingTransaction, _otcChargeableEntity);
+            AddRecurringChargeTransactionType(billingTransaction, _lineRentChargeableEntity);
 
             context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
+        }
+
+        private void AddRecurringChargeTransactionType(GeneratedInvoiceBillingTransaction billingTransaction, Guid chargeableEntityId)
+        {
+            ChargeableEntityManager chargeableEntityManager = new ChargeableEntityManager();
+            ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(chargeableEntityId);
+
+            chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", chargeableEntityId);
+            if (!chargeableEntitySettings.TransactionTypeId.HasValue)
+                throw new NullReferenceException(string.Format("chargeableEntitySettings.TransactionTypeId ChargeableEntityId: {0}", chargeableEntityId));
+
+            billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
+            {
+                TransactionTypeId = chargeableEntitySettings.TransactionTypeId.Value
+            });
         }
 
         private Guid GetBillingTransactionAccountTypeId(Guid invoiceTypeId, string accountId, DateTime effectiveOn)
