@@ -14,7 +14,7 @@ using Vanrise.GenericData.MainExtensions.DataRecordFields;
 using Vanrise.Security.Business;
 
 namespace Vanrise.Analytic.Business
-{ 
+{
     public class AnalyticManager
     {
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
@@ -32,11 +32,11 @@ namespace Vanrise.Analytic.Business
                 string[] measureProperty = input.SortByColumnName.Split('.');
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
             }
-            if(input.Query.AdvancedOrderOptions != null)
+            if (input.Query.AdvancedOrderOptions != null)
             {
                 input.Query.MeasureFields.ThrowIfNull("input.Query.MeasureFields");
                 List<string> additionalMeasureNames = input.Query.AdvancedOrderOptions.GetAdditionalMeasureNames();
-                foreach(var m in additionalMeasureNames)
+                foreach (var m in additionalMeasureNames)
                 {
                     if (!input.Query.MeasureFields.Contains(m))
                         input.Query.MeasureFields.Add(m);
@@ -49,9 +49,14 @@ namespace Vanrise.Analytic.Business
             Guid dataRecordTypeId = GetDataRecordTypeForReportBySourceName(input.ReportId, input.SourceName);
             DataRecordTypeManager dataRecordTypeManager = new GenericData.Business.DataRecordTypeManager();
             var recordType = dataRecordTypeManager.GetDataRecordType(dataRecordTypeId);
+
             AnalyticItemConfigManager analyticItemConfigManager = new Business.AnalyticItemConfigManager();
             var analyticDimensions = analyticItemConfigManager.GetDimensions(input.TableId);
+
             RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+            recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
+            recordFilterGroup.Filters = new List<RecordFilter>();
+
             foreach (var dimensionFilter in input.DimensionFilters)
             {
                 AnalyticDimension dimension;
@@ -59,25 +64,41 @@ namespace Vanrise.Analytic.Business
                 {
                     var dimensionFieldMapping = dimension.Config.DimensionFieldMappings.Find(x => x.DataRecordTypeId == dataRecordTypeId);
                     if (dimensionFieldMapping == null)
-                    {
                         throw new ArgumentNullException(string.Format("Dimension {0} is not mapped to record type {1}.", dimension.Name, recordType.Name));
-                    }
+
                     var record = recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
                     if (record == null)
-                    {
                         throw new ArgumentNullException(string.Format("Record field mapping for dimension {0} not found.", dimension.Name));
+
+                    List<object> notNullFilterValues = dimensionFilter.FilterValues.Where(itm => itm != null).ToList();
+                    RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? record.Type.ConvertToRecordFilter(record.Name, notNullFilterValues) : null;
+                    EmptyRecordFilter emptyRecordFilter = notNullFilterValues.Count != dimensionFilter.FilterValues.Count ? new EmptyRecordFilter { FieldName = record.Name } : null;
+
+                    if (notNullValuesRecordFilter != null && emptyRecordFilter != null)
+                    {
+                        RecordFilterGroup dimensionsRecordFilterGroup = new RecordFilterGroup();
+                        dimensionsRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
+                        dimensionsRecordFilterGroup.Filters = new List<RecordFilter>();
+                        dimensionsRecordFilterGroup.Filters.Add(emptyRecordFilter);
+                        dimensionsRecordFilterGroup.Filters.Add(notNullValuesRecordFilter);
+
+                        recordFilterGroup.Filters.Add(dimensionsRecordFilterGroup);
                     }
-                    var recordFilter = record.Type.ConvertToRecordFilter(record.Name, dimensionFilter.FilterValues);
-                    // recordFilter.FieldName = record.Name;
-                    if (recordFilterGroup.Filters == null)
-                        recordFilterGroup.Filters = new List<RecordFilter>();
-                    recordFilterGroup.Filters.Add(recordFilter);
+                    else if (notNullValuesRecordFilter != null)
+                    {
+                        recordFilterGroup.Filters.Add(notNullValuesRecordFilter);
+                    }
+                    else if (emptyRecordFilter != null)
+                    {
+                        recordFilterGroup.Filters.Add(emptyRecordFilter);
+                    }
                 }
             }
+
             if (input.FilterGroup != null)
             {
                 var filterGroup = ConvertRecordFilterGroup(input.FilterGroup, recordType, analyticDimensions);
-                recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
+
                 if (input.FilterGroup.LogicalOperator == RecordQueryLogicalOperator.And)
                 {
                     foreach (var filter in filterGroup.Filters)
@@ -90,6 +111,7 @@ namespace Vanrise.Analytic.Business
                     recordFilterGroup.Filters.Add(filterGroup);
                 }
             }
+
             return recordFilterGroup;
         }
         public Guid GetDataRecordTypeForReportBySourceName(Guid reportId, string sourceName)
@@ -300,7 +322,7 @@ namespace Vanrise.Analytic.Business
                 while (fromTime <= toTime)
                 {
                     timeForMissingData.Add(fromTime);
-                   fromTime = GetNextDateTime(fromTime, analyticTableQueryContext.Query.TimeGroupingUnit.Value);
+                    fromTime = GetNextDateTime(fromTime, analyticTableQueryContext.Query.TimeGroupingUnit.Value);
                 }
             }
             foreach (var dbRecordEntry in groupedRecordsByDimensionsKey)
@@ -314,7 +336,7 @@ namespace Vanrise.Analytic.Business
                 if (analyticTableQueryContext.Query.TopRecords.HasValue)
                 {
                     if (!allMeasuresAreNull)
-                      analyticRecords.Add(analyticRecord);
+                        analyticRecords.Add(analyticRecord);
                 }
                 else
                 {
@@ -335,13 +357,13 @@ namespace Vanrise.Analytic.Business
                 bool allSummaryMeasuresAreNull;
                 summaryRecord = BuildAnalyticRecordFromSQLRecord(analyticTableQueryContext, null, summarySQLRecord, null, allDimensionNames, measureNames, null, measureExternalSourcesResults, out allSummaryMeasuresAreNull);
             }
-               
+
             else
                 summaryRecord = null;
             return analyticRecords;
         }
 
-        private AnalyticRecord CreateAnalyticRecordFilledWithDefaultValues(IAnalyticTableQueryContext analyticTableQueryContext,List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,DateTime dateTime)
+        private AnalyticRecord CreateAnalyticRecordFilledWithDefaultValues(IAnalyticTableQueryContext analyticTableQueryContext, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, DateTime dateTime)
         {
             AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dateTime, MeasureValues = new MeasureValues() };
             foreach (var measureName in measureNames)
@@ -372,7 +394,7 @@ namespace Vanrise.Analytic.Business
             }
             return analyticRecord;
         }
-       
+
         private DateTime GetNextDateTime(DateTime time, TimeGroupingUnit timeGroupingUnit)
         {
             switch (timeGroupingUnit)
@@ -381,7 +403,7 @@ namespace Vanrise.Analytic.Business
                     return time.AddDays(1);
                 case TimeGroupingUnit.Hour:
                     return time.AddHours(1);
-                default :
+                default:
                     return time;
             }
         }
@@ -392,7 +414,7 @@ namespace Vanrise.Analytic.Business
                 case TimeGroupingUnit.Day:
                     return time.Date;
                 case TimeGroupingUnit.Hour:
-                    return new DateTime(time.Year,time.Month,time.Day,time.Hour,0,0);
+                    return new DateTime(time.Year, time.Month, time.Day, time.Hour, 0, 0);
                 default:
                     return time;
             }
@@ -432,7 +454,7 @@ namespace Vanrise.Analytic.Business
         }
 
         private string GetDimensionGroupingKey(List<string> requestedDimensionNames, DBAnalyticRecord record)
-        {            
+        {
             Func<string, object> getDimensionValue = (dimensionName) =>
             {
                 DBAnalyticRecordGroupingValue groupingValue;
@@ -492,7 +514,7 @@ namespace Vanrise.Analytic.Business
         }
 
         private AnalyticRecord BuildAnalyticRecordFromSQLRecord(IAnalyticTableQueryContext analyticTableQueryContext, string groupingKey, DBAnalyticRecord dbRecord, List<string> dimensionNames,
-            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, Dictionary<string, AnalyticMeasureExternalSourceProcessedResult> measureExternalSourcesResults,out bool allMeasuresAreNull)
+            HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, Dictionary<string, AnalyticMeasureExternalSourceProcessedResult> measureExternalSourcesResults, out bool allMeasuresAreNull)
         {
             AnalyticRecord analyticRecord = new AnalyticRecord() { Time = dbRecord.Time, MeasureValues = new MeasureValues() };
 
@@ -516,7 +538,7 @@ namespace Vanrise.Analytic.Business
             {
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
-              
+
                 RecordFilterManager filterManager = new RecordFilterManager();
                 string styleCode = null;
                 if (measureStyleRulesDictionary != null)
@@ -551,10 +573,10 @@ namespace Vanrise.Analytic.Business
             {
                 OriginalResult = originalResult
             };
-            if(originalResult.Records != null)
+            if (originalResult.Records != null)
             {
                 processedResult.RecordsByDimensionKey = new Dictionary<string, AnalyticMeasureExternalSourceRecord>();
-                foreach(var record in originalResult.Records)
+                foreach (var record in originalResult.Records)
                 {
                     Func<string, object> getDimensionValue = (dimensionName) =>
                     {
@@ -594,7 +616,7 @@ namespace Vanrise.Analytic.Business
             public override IEnumerable<AnalyticRecord> RetrieveAllData(DataRetrievalInput<AnalyticQuery> input)
             {
                 var analyticManager = new AnalyticManager();
-                if(input.Query.LastHours.HasValue)
+                if (input.Query.LastHours.HasValue)
                 {
                     input.Query.FromTime = DateTime.Now.AddHours(-input.Query.LastHours.Value);
                 }
@@ -605,7 +627,7 @@ namespace Vanrise.Analytic.Business
                     dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.SQL.SQLAnalyticDataProvider, Vanrise.Analytic.Data.SQL")) as AnalyticDataProvider;
                 var dataManager = dataProvider.CreateDataManager(queryContext);
                 HashSet<string> includeDBDimensions = null;
-                
+
 
                 List<Action> actions = new List<Action>();
                 IEnumerable<DBAnalyticRecord> dbRecords = null;
@@ -613,7 +635,7 @@ namespace Vanrise.Analytic.Business
 
                 List<AnalyticMeasureExternalSource> measureExternalSources = GetMeasureExternalSources(input.Query, queryContext);
                 Dictionary<string, AnalyticMeasureExternalSourceProcessedResult> measureExternalSourcesResults = new Dictionary<string, AnalyticMeasureExternalSourceProcessedResult>();
-                if(measureExternalSources != null)
+                if (measureExternalSources != null)
                 {
                     foreach (var measureExternalSource in measureExternalSources)
                     {
@@ -643,19 +665,19 @@ namespace Vanrise.Analytic.Business
                     return null;
             }
 
-            private List<AnalyticMeasureExternalSource> GetMeasureExternalSources(AnalyticQuery analyticQuery,AnalyticTableQueryContext queryContext)
+            private List<AnalyticMeasureExternalSource> GetMeasureExternalSources(AnalyticQuery analyticQuery, AnalyticTableQueryContext queryContext)
             {
                 Dictionary<string, AnalyticMeasureExternalSource> sources = new Dictionary<string, AnalyticMeasureExternalSource>();
-                if(analyticQuery.MeasureFields != null)
+                if (analyticQuery.MeasureFields != null)
                 {
-                    foreach(var measure in analyticQuery.MeasureFields)
+                    foreach (var measure in analyticQuery.MeasureFields)
                     {
                         var measureConfig = queryContext.GetMeasureConfig(measure);
-                        if(measureConfig.Config.ExternalSources != null)
+                        if (measureConfig.Config.ExternalSources != null)
                         {
-                            foreach(var sourceName in measureConfig.Config.ExternalSources)
+                            foreach (var sourceName in measureConfig.Config.ExternalSources)
                             {
-                                if(!sources.ContainsKey(sourceName))
+                                if (!sources.ContainsKey(sourceName))
                                 {
                                     AnalyticMeasureExternalSource source = queryContext.GetMeasureExternalSourceConfig(sourceName);
                                     sources.Add(sourceName, source);
@@ -819,7 +841,7 @@ namespace Vanrise.Analytic.Business
                         dimension.ThrowIfNull("dimension", dimName);
                         dimension.Config.ThrowIfNull("dimension.Config", dimName);
                         dimension.Config.FieldType.ThrowIfNull("dimension.Config.FieldType", dimName);
-                        var excelHeaderCell = new ExportExcelHeaderCell{ Title = dimName };
+                        var excelHeaderCell = new ExportExcelHeaderCell { Title = dimName };
                         var setTypeContext = new DataRecordFieldTypeSetExcelCellTypeContext { HeaderCell = excelHeaderCell };
                         dimension.Config.FieldType.SetExcelCellType(setTypeContext);
                         sheet.Header.Cells.Add(excelHeaderCell);
@@ -866,7 +888,7 @@ namespace Vanrise.Analytic.Business
                         }
                     }
                 }
-                
+
                 context.MainSheet = sheet;
             }
 
@@ -930,5 +952,4 @@ namespace Vanrise.Analytic.Business
 
         public Dictionary<string, AnalyticMeasureExternalSourceRecord> RecordsByDimensionKey { get; set; }
     }
-
 }

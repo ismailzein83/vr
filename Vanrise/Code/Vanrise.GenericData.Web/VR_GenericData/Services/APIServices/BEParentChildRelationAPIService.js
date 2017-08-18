@@ -19,16 +19,6 @@
             });
         }
 
-        function HasAddChildRelationPermission(beParentChildRelationDefinitionId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'), {
-                beParentChildRelationDefinitionId: beParentChildRelationDefinitionId
-            });
-        }
-
-        function AddBEParentChildRelation(beParentChildRelationItem) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddBEParentChildRelation'), beParentChildRelationItem);
-        }
-
         function AddBEParentChildrenRelation(beParentChildrenRelation) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddBEParentChildrenRelation'), beParentChildrenRelation);
         }
@@ -44,15 +34,19 @@
             });
         }
 
+        function HasAddChildRelationPermission(beParentChildRelationDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'), {
+                beParentChildRelationDefinitionId: beParentChildRelationDefinitionId
+            });
+        }
 
         return {
             GetFilteredBEParentChildRelations: GetFilteredBEParentChildRelations,
             GetBEParentChildRelation: GetBEParentChildRelation,
-            AddBEParentChildRelation: AddBEParentChildRelation,
             AddBEParentChildrenRelation: AddBEParentChildrenRelation,
             UpdateBEParentChildRelation: UpdateBEParentChildRelation,
-            HasAddChildRelationPermission: HasAddChildRelationPermission,
-            GetLastAssignedEED: GetLastAssignedEED
+            GetLastAssignedEED: GetLastAssignedEED,
+            HasAddChildRelationPermission: HasAddChildRelationPermission
         };
     }
 

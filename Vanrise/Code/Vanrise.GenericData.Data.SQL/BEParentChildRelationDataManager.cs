@@ -45,21 +45,6 @@ namespace Vanrise.GenericData.Data.SQL
             return (affectedRecords > 0);
         }
 
-        public bool Insert(List<BEParentChildRelation> beParentChildRelations)
-        {
-            if (beParentChildRelations == null || beParentChildRelations.Count == 0)
-                return true;
-
-            DataTable dtBEParentChildRelation = BuildBEParentChildRelationTable(beParentChildRelations);
-            int recordsEffected = ExecuteNonQuerySPCmd("[genericdata].[sp_BEParentChildRelation_InsertMultiple]", (cmd) =>
-            {
-                var dtPrm = new SqlParameter("@BEParentChildRelations", SqlDbType.Structured);
-                dtPrm.Value = dtBEParentChildRelation;
-                cmd.Parameters.Add(dtPrm);
-            });
-            return (recordsEffected > 0);
-        }
-
         public bool Update(BEParentChildRelation BEParentChildRelationItem)
         {
             int affectedRecords = ExecuteNonQuerySP("[genericdata].[sp_BEParentChildRelation_Update]", BEParentChildRelationItem.BEParentChildRelationId, BEParentChildRelationItem.RelationDefinitionId, BEParentChildRelationItem.ParentBEId,

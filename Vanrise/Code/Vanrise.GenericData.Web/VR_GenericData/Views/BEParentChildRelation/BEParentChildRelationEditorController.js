@@ -176,9 +176,6 @@
                 } else {
                     childBESelectorPayload.selectedIds = childIds;
                 }
-
-                console.log(childBESelectorPayload);
-
                 VRUIUtilsService.callDirectiveLoad(childBESelectorAPI, childBESelectorPayload, childBESelectorLoadDeferred);
             });
 
@@ -192,8 +189,11 @@
 
             return VR_GenericData_BEParentChildRelationAPIService.AddBEParentChildrenRelation(beParentChildRelationObjToAdd).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded(beParentChildRelationDefinitionEntity.Name, response, "Name")) {
-                    if ($scope.onBEParentChildRelationAdded != undefined && beParentChildRelationObjToAdd.ChildBEIds.length == 1)
-                        $scope.onBEParentChildRelationAdded(response.InsertedObject);
+                    if ($scope.onBEParentChildRelationAdded != undefined) {
+                        for (var index = 0; index < response.InsertedObject.length; index++) {
+                            $scope.onBEParentChildRelationAdded(response.InsertedObject[index]);
+                        }
+                    }
                     $scope.modalContext.closeModal();
                 }
                 else if (beParentChildRelationObjToAdd.ChildBEIds.length == 1) {

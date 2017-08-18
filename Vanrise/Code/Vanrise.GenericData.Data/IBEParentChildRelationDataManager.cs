@@ -15,8 +15,6 @@ namespace Vanrise.GenericData.Data
 
         bool Insert(BEParentChildRelation BEParentChildRelationItem, out long insertedId);
 
-        bool Insert(List<BEParentChildRelation> BEParentChildRelations);   
-
         bool Update(BEParentChildRelation BEParentChildRelationItem);
     }
 }

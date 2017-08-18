@@ -41,16 +41,6 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpPost]
-        [Route("AddBEParentChildRelation")]
-        public object AddBEParentChildRelation(BEParentChildRelation beParentChildRelationItem)
-        {
-            if (!DoesUserHaveAddAccess(beParentChildRelationItem.RelationDefinitionId))
-                return GetUnauthorizedResponse();
-
-            return _parentChildRelationManager.AddBEParentChildRelation(beParentChildRelationItem);
-        }
-
-        [HttpPost]
         [Route("AddBEParentChildrenRelation")]
         public object AddBEParentChildrenRelation(BEParentChildrenRelation beParentChildsRelationItem)
         {
