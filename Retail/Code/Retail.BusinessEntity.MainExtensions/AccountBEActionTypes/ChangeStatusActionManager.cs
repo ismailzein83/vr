@@ -28,13 +28,18 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
                 {                    
                     FinancialAccountManager financialAccountManager = new FinancialAccountManager();
                     financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, accountId);
+                    bool isSucceeded = true;
                     if (actionDefinitionSettings.ApplyToChildren)
                     {
-                        if (AppyChangeStatusToChilds(actionDefinitionSettings, actionDefinition.AvailabilityCondition, accountBEDefinitionId, accountId, actionDefinition.Name))
+                        if (!AppyChangeStatusToChilds(actionDefinitionSettings, actionDefinition.AvailabilityCondition, accountBEDefinitionId, accountId, actionDefinition.Name))
                         {
-                            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                            updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(accountBEDefinitionId, accountId);
+                            isSucceeded = false;
                         };
+                    }
+                    if(isSucceeded)
+                    {
+                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                        updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(accountBEDefinitionId, accountId);
                     }
                 }
                 else

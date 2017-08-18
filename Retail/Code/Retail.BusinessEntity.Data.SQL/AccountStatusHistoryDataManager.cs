@@ -20,9 +20,9 @@ namespace Retail.BusinessEntity.Data.SQL
 
         #endregion
 
-        public void Insert(Guid accountDefinitionId, long accountId, Guid statusDefinitionId)
+        public void Insert(Guid accountDefinitionId, long accountId, Guid statusDefinitionId, Guid? previousStatusId)
         {
-            ExecuteNonQuerySP("Retail_BE.sp_AccountStatusHistory_Insert", accountDefinitionId, accountId, statusDefinitionId);
+            ExecuteNonQuerySP("Retail_BE.sp_AccountStatusHistory_Insert", accountDefinitionId, accountId, statusDefinitionId, previousStatusId);
         }
     }
 }

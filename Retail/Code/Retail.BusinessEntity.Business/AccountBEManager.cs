@@ -399,11 +399,14 @@ namespace Retail.BusinessEntity.Business
         }
         public bool UpdateStatus(Guid accountBEDefinitionId, long accountId, Guid statusId,string actionName = null)
         {
+            var existingAccount = GetAccount(accountBEDefinitionId, accountId);
+            existingAccount.ThrowIfNull("existingAccount", accountId);
+            Guid previousStatusId = existingAccount.StatusId;
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
             bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
             if (updateStatus)
             {
-                new AccountStatusHistoryManager().AddAccountStatusHistory(accountBEDefinitionId, accountId, statusId);
+                new AccountStatusHistoryManager().AddAccountStatusHistory(accountBEDefinitionId, accountId, statusId, previousStatusId);
                 if (actionName != null)
                 {
                     VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), actionName, true, GetAccount(accountBEDefinitionId, accountId));
@@ -845,7 +848,7 @@ namespace Retail.BusinessEntity.Business
 
             if (dataManager.Insert(accountToInsert, out accountId))
             {
-                new AccountStatusHistoryManager().AddAccountStatusHistory(accountToInsert.AccountBEDefinitionId, accountId, accountToInsert.StatusId);
+                new AccountStatusHistoryManager().AddAccountStatusHistory(accountToInsert.AccountBEDefinitionId, accountId, accountToInsert.StatusId, null);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 account = GetAccount(accountToInsert.AccountBEDefinitionId, accountId);
                 VRActionLogger.Current.TrackAndLogObjectAdded(new AccountBELoggableEntity(accountToInsert.AccountBEDefinitionId), account);
@@ -1088,6 +1091,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Validation Methods
+                
 
         private void ValidateAccountToAdd(AccountToInsert accountToInsert, bool donotValidateParent)
         {
