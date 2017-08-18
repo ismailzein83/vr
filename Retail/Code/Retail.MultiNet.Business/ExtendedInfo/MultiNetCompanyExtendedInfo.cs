@@ -17,6 +17,8 @@ namespace Retail.MultiNet.Business
 
         public string CNIC { get; set; }
 
+        public DateTime? CNICExpiryDate { get; set; }
+
         public string NTN { get; set; }
 
 
@@ -30,6 +32,7 @@ namespace Retail.MultiNet.Business
             switch (context.FieldName)
             {
                 case "CNIC": return this.CNIC;
+                case "CNICExpiryDate": return this.CNICExpiryDate;
                 case "NTN": return this.NTN;
                 case "GPSiteID": return this.GPSiteID;
                 case "AccountType": return this.AccountType;

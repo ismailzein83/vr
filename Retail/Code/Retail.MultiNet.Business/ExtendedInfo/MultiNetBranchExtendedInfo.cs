@@ -21,6 +21,7 @@ namespace Retail.MultiNet.Business
         public string ContractReferenceNumber { get; set; }
 
         public string CNIC { get; set; }
+        public DateTime? CNICExpiryDate { get; set; }
         public string NTN { get; set; }
         public string RegistrationNumber { get; set; }
         public string RefNumber { get; set; }
@@ -32,7 +33,6 @@ namespace Retail.MultiNet.Business
         public string OfficeAddress { get; set; }
         public string HomeAddress { get; set; }
         public MultiNetAccountType? AccountType { get; set; }
-        public DateTime? CNICExpiryDate  { get; set; }
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
             switch (context.FieldName)
