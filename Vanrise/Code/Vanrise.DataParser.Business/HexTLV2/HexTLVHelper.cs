@@ -87,26 +87,17 @@ namespace Vanrise.DataParser.Business
 
                 // fill data
                 byte[] result = new byte[length];
-                try
+
+                Array.Copy(rawData, i, result, 0, length);
+                HexTLVTagValue tagValue = new HexTLVTagValue
                 {
-                    Array.Copy(rawData, i, result, 0, length);
-
-                    HexTLVTagValue tagValue = new HexTLVTagValue
-                    {
-                        Value = result,
-                        Length = length,
-                        Tag = tag.ToString("X2")
-                    };
-                    tags.Add(tagValue);
-                    i += length;
-                    onTagValueRead(tagValue);
-                }
-                catch (Exception ex)
-                {
-
-                    throw ex;
-                }
-
+                    Value = result,
+                    Length = length,
+                    Tag = tag.ToString("X2")
+                };
+                tags.Add(tagValue);
+                i += length;
+                onTagValueRead(tagValue);
             }
         }
         public static void ExecuteRecordParser(HexTLVRecordParser subRecordsParser, Stream recordStream, IHexTLVRecordParserContext parentRecordContext)

@@ -30,16 +30,21 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
             Object recordValue = context.Record.GetFieldValue(FieldName);
             DateTime value = recordValue == null ? default(DateTime) : (DateTime)recordValue;
 
+            string yearValue = IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[YearIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[YearIndex])).ToString();
+            string monthValue = IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex])).ToString();
+            string dayValue = IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[DayIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[DayIndex])).ToString();
+            monthValue = monthValue.Length == 1 ? "0" + monthValue : monthValue;
+            dayValue = dayValue.Length == 1 ? "0" + dayValue : dayValue;
+
             bool dateParsed = false;
             switch (DateTimeParsingType)
             {
                 case DateTimeParsingType.Date:
-                    dateParsed = DateTime.TryParse(string.Format("{0}/{1}/{2}",
-                        IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[DayIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[DayIndex])).ToString(),
-                        IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex])).ToString(),
-                        IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[YearIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[YearIndex])).ToString()),
-                             out value);
-
+                    dateParsed = DateTime.TryParseExact(string.Format("{0}/{1}/{2}", dayValue, monthValue, yearValue),
+                                                        "dd/MM/yy",
+                                                        System.Globalization.CultureInfo.InvariantCulture,
+                                                        System.Globalization.DateTimeStyles.None,
+                                                        out value);
                     break;
                 case DateTimeParsingType.Time:
                     TimeSpan timeSpan = new TimeSpan(
@@ -50,13 +55,16 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
                     break;
                 case DateTimeParsingType.DateTime:
                     dateParsed = DateTime.TryParseExact(string.Format("{0}/{1}/{2} {3}:{4}:{5}",
-                        IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[DayIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[DayIndex])).ToString(),
-                                                          IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[MonthIndex])).ToString(),
-                                                          IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[YearIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[YearIndex])).ToString(),
+                                                          dayValue,
+                                                          monthValue,
+                                                          yearValue,
                                                           IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[HoursIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[HoursIndex])).ToString(),
                                                           IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[MinutesIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[MinutesIndex])).ToString(),
                                                           IsBCD ? ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex]) : ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex])).ToString()),
-                                              "dd/MM/yy HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out value);
+                                                          "dd/MM/yy HH:mm:ss",
+                                                          System.Globalization.CultureInfo.InvariantCulture,
+                                                          System.Globalization.DateTimeStyles.None,
+                                                          out value);
 
                     //Removed As discussed with Sari, date should be saved without time shift from mediation
                     //if (dateParsed && WithOffset)

@@ -16,11 +16,13 @@ namespace Vanrise.DataParser.MainExtensions.CompositeFieldParsers
         public string FieldName { get; set; }
         public string DateFieldName { get; set; }
         public string TimeFieldName { get; set; }
+        public bool SubtractTime { get; set; }
 
         public override void Execute(ICompositeFieldsParserContext context)
         {
             DateTime dateTimeField = (DateTime)context.Record.GetFieldValue(DateFieldName);
             double timeSpanField = (double)context.Record.GetFieldValue(TimeFieldName);
+            timeSpanField = SubtractTime ? -timeSpanField : timeSpanField;
             var value = dateTimeField.AddSeconds(timeSpanField);
             context.Record.SetFieldValue(FieldName, value);
         }
