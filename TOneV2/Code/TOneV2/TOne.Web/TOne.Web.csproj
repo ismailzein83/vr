@@ -608,6 +608,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PublishTOneV2.pubxml" />
+    <Content Include="appSettings.config" />
+    <Content Include="ConnectionStrings.config" />
     <Content Include="Web.config.CloudXPoint.exclude" />
     <Content Include="WebBI.config.exclude" />
     <None Include="Web.Release.config">
