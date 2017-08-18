@@ -1,0 +1,14 @@
+﻿<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.fields"
+               datatextfield="fieldTitle"
+               datavaluefield="fieldName"
+               selectedvalues="scopeModel.selectedAccount"
+               onselectionchanged="scopeModel.onAccountSelectionChanged"
+               entityname="Field Name"
+               label="Subscriber Zone Field Name"
+               isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+<span ng-show="scopeModel.showAccountTypeSelector" vr-loader="scopeModel.isAccountTypeSelectorLoading">
+    <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" normal-col-num="4" isrequired="true"></retail-be-accounttype-selector>
+</span>

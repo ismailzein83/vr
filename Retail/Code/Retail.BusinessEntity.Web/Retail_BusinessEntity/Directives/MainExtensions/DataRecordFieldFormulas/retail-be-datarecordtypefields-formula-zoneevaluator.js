@@ -48,7 +48,7 @@ app.directive('retailBeDatarecordtypefieldsFormulaZoneevaluator', ['UtilsService
                             $scope.scopeModel.selectedTrafficDirectionFieldName = UtilsService.getItemByVal($scope.scopeModel.fields, payload.formula.TrafficDirectionFieldName, "fieldName");
                             $scope.scopeModel.trafficDirectionInputValue = payload.formula.TrafficDirectionInputValue;
                             $scope.scopeModel.trafficDirectionOutputValue = payload.formula.TrafficDirectionOutputValue;
-                            $scope.scopeModel.isDestinationZoneEvaluator = payload.formula.IsDestinationZoneEvaluator
+                            $scope.scopeModel.isDestinationZoneEvaluator = payload.formula.IsDestinationZoneEvaluator;
                         }
                     }
                 };
