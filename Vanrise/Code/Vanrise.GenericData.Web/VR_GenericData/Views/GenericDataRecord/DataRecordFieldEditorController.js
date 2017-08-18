@@ -125,7 +125,7 @@
                     {
                         for (var i = 0; i < existingFields.length; i++) {
                             var existingField = existingFields[i];
-                            fields.push({ fieldName: existingField.Name, fieldTitle: existingField.Title});
+                            fields.push({ fieldName: existingField.Name, fieldTitle: existingField.Title, fieldType: existingField.Type });
                         }
                     }
                     return fields;
