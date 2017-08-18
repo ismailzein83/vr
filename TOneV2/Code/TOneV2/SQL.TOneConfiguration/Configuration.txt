@@ -57,6 +57,9 @@ Retail_Multinet.PostDeployment.sql
 Retail_Multinet_Overridden.PostDeployment.sql
 Retail_Cost.PostDeployment.sql
 
+REtail_Ringo
+Retail_Ringo.PostDeployment.sql
+
 CarrierPortal
 CarrierPortal.PostDeployment.sql
 
