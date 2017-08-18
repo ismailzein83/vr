@@ -14,6 +14,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
 
         public string ChildFieldName { get; set; }
 
+        #region Public Methods
+
         public override List<string> GetDependentFields(IDataRecordFieldFormulaGetDependentFieldsContext context)
         {
             return new List<string>() { ChildFieldName };
@@ -39,7 +41,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 DataRecordFields.FieldBusinessEntityType currentBEFieldType;
                 DataRecordFields.FieldBusinessEntityType childBEFieldType;
                 GetFieldTypes(context, out currentBEFieldType, out childBEFieldType);
-                
+
                 BusinessEntityManager beManager = new BusinessEntityManager();
                 IEnumerable<dynamic> childValues = beManager.GetChildEntitiesIds(currentBEFieldType.BusinessEntityDefinitionId, childBEFieldType.BusinessEntityDefinitionId, objectListFilter.Values.Cast<dynamic>());
 
@@ -60,6 +62,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
         }
 
+        #endregion
+
+        #region Private Methods
 
         private void GetFieldTypes(IDataRecordFieldFormulaContext context, out DataRecordFields.FieldBusinessEntityType currentBEFieldType, out DataRecordFields.FieldBusinessEntityType childBEFieldType)
         {
@@ -70,5 +75,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             if (childBEFieldType == null)
                 throw new NullReferenceException(String.Format("childBRFieldType '{0}'", this.ChildFieldName));
         }
+
+
+        #endregion
     }
 }
