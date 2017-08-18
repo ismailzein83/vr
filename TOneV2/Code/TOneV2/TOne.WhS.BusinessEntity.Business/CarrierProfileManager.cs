@@ -128,44 +128,53 @@ namespace TOne.WhS.BusinessEntity.Business
         public CarrierProfileActivationStatus GetCarrierProfileActivationStatus(int carrierProfileId)
         {
             var carrierProfile = GetCarrierProfile(carrierProfileId);
+            carrierProfile.ThrowIfNull("carrierProfile", carrierProfileId);
             return carrierProfile.Settings.ActivationStatus;
         }
 
-        public void ReevaluateCarrierProfileActivationStatus(int carrierProfileId)
+        public bool IsCarrierProfileActive(int carrierProfileId)
+        {
+            return GetCarrierProfileActivationStatus(carrierProfileId) != CarrierProfileActivationStatus.InActive;
+        }
+
+        public void EvaluateAndUpdateCarrierProfileStatus(int carrierProfileId)
+        {
+            CarrierProfileActivationStatus newStatus = EvaluateCarrierProfileStatus(carrierProfileId, true, true);
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
+            carrierProfile.ThrowIfNull("carrierProfile", carrierProfileId);
+            if (carrierProfile.Settings.ActivationStatus != newStatus)
+            {
+                var carrierProfileSettingsCopy = carrierProfile.Settings.VRDeepCopy();
+                carrierProfileSettingsCopy.ActivationStatus = newStatus;
+                ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
+                bool updateActionSucc = dataManager.Update(new CarrierProfileToEdit
+                {
+                    CarrierProfileId = carrierProfile.CarrierProfileId,
+                    CreatedTime = carrierProfile.CreatedTime,
+                    Name = carrierProfile.Name,
+                    Settings = carrierProfileSettingsCopy,
+                    SourceId = carrierProfile.SourceId
+                });
+                VREventManager vrEventManager = new VREventManager();
+                vrEventManager.ExecuteEventHandlersAsync(new CarrierProfileStatusChangedEventPayload { CarrierProfileId = carrierProfileId });
+            }
+        }
+
+        public CarrierProfileActivationStatus EvaluateCarrierProfileStatus(int carrierProfileId, bool asCustomer, bool asSupplier)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierProfileId, true, true);
+            var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierProfileId, asCustomer, asSupplier);
             if (profileCarrierAccounts != null)
-            {
-                CarrierProfileActivationStatus status = CarrierProfileActivationStatus.InActive;
+            {                
                 foreach (var profileCarrierAccount in profileCarrierAccounts)
                 {
-                    switch (profileCarrierAccount.CarrierAccountSettings.ActivationStatus)
+                    if (profileCarrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active)
                     {
-                        case ActivationStatus.Active:
-                            status = CarrierProfileActivationStatus.Active;
-                            break;
+                        return  CarrierProfileActivationStatus.Active;
                     }
-                    if (status == CarrierProfileActivationStatus.Active)
-                        break;
-                }
-                var carrierProfile = GetCarrierProfile(carrierProfileId);
-                if (carrierProfile.Settings.ActivationStatus != status)
-                {
-                    carrierProfile.Settings.ActivationStatus = status;
-                    ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-                    bool updateActionSucc = dataManager.Update(new CarrierProfileToEdit
-                    {
-                        CarrierProfileId = carrierProfile.CarrierProfileId,
-                        CreatedTime = carrierProfile.CreatedTime,
-                        Name = carrierProfile.Name,
-                        Settings = carrierProfile.Settings,
-                        SourceId = carrierProfile.SourceId
-                    });
-                    VREventManager vrEventManager = new VREventManager();
-                    vrEventManager.ExecuteEventHandlersAsync(new CarrierProfileStatusChangedEventPayload { CarrierProfileId = carrierProfileId });
                 }
             }
+            return CarrierProfileActivationStatus.InActive;
         }
         #endregion
 

@@ -552,8 +552,14 @@ namespace TOne.WhS.BusinessEntity.Business
         public bool IsCarrierAccountActive(CarrierAccount carrierAccount)
         {
            carrierAccount.CarrierAccountSettings.ThrowIfNull("carrierAccount.CarrierAccountSettings", carrierAccount.CarrierAccountId);
-            return (carrierAccount.CarrierAccountSettings.ActivationStatus != ActivationStatus.Inactive);
+           return IsStatusActive(carrierAccount.CarrierAccountSettings.ActivationStatus);
         }
+
+        public bool IsStatusActive(ActivationStatus status)
+        {
+            return status != ActivationStatus.Inactive;
+        }
+
         public int? GetCarrierProfileId(int carrierAccountId)
         {
             CarrierAccount carrierAccount = GetCarrierAccount(carrierAccountId);

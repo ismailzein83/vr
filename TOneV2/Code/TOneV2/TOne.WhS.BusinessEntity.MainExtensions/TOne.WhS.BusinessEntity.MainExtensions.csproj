@@ -78,6 +78,16 @@
   <ItemGroup>
     <Compile Include="CodeCriteriaGroups\SelectiveCodeCriteriaGroup.cs" />
     <Compile Include="CustomerGroups\SelectiveCustomerGroup.cs" />
+    <Compile Include="FinancialAccountTypes\CustomerPostpaid\CustomerPostpaidDefinitionSettings.cs" />
+    <Compile Include="FinancialAccountTypes\CustomerPostpaid\CustomerPostpaidSettings.cs" />
+    <Compile Include="FinancialAccountTypes\CustomerPrepaid\CustomerPrepaidDefinitionSettings.cs" />
+    <Compile Include="FinancialAccountTypes\CustomerPrepaid\CustomerPrepaidSettings.cs" />
+    <Compile Include="FinancialAccountTypes\Netting\NettingDefinitionSettings.cs" />
+    <Compile Include="FinancialAccountTypes\Netting\NettingSettings.cs" />
+    <Compile Include="FinancialAccountTypes\SupplierPostpaid\SupplierPostpaidDefinitionSettings.cs" />
+    <Compile Include="FinancialAccountTypes\SupplierPostpaid\SupplierPostpaidSettings.cs" />
+    <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidDefinitionSettings.cs" />
+    <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidSettings.cs" />
     <Compile Include="MappingSteps\GetCDPNsForIdentificationStep.cs" />
     <Compile Include="MappingSteps\CheckSoldCountryForCustomerStep.cs" />
     <Compile Include="MappingSteps\GetCDPNsForZoneMatchStep.cs" />

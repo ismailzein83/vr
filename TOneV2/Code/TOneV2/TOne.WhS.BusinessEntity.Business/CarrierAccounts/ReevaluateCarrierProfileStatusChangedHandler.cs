@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business.EventHandler
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var carrierAccount = carrierAccountManager.GetCarrierAccount(eventPayload.CarrierAccountId);
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-            carrierProfileManager.ReevaluateCarrierProfileActivationStatus(carrierAccount.CarrierProfileId);
+            carrierProfileManager.EvaluateAndUpdateCarrierProfileStatus(carrierAccount.CarrierProfileId);
         }
     }
 }

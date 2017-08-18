@@ -120,6 +120,15 @@
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
     <Compile Include="CodePrefixInfo.cs" />
     <Compile Include="CustomerInvoiceSettingInfo.cs" />
+    <Compile Include="FinancialAccount\WHSCarrierFinancialAccountData.cs" />
+    <Compile Include="FinancialAccount\Enums.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccount.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionExtendedSettings.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountDetail.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountInfo.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountInfoFilter.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountQuery.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountToEdit.cs" />
     <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="IBusinessEntity.cs" />
