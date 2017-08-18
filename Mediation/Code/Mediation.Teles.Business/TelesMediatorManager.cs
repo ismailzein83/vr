@@ -36,7 +36,6 @@ namespace Mediation.Teles.Business
                 opEntity.DisconnectDateTime = opEntity.DisconnectDateTime == null ? stopRecord.TC_TIMESTAMP : opEntity.DisconnectDateTime;
                 dynamic cookedCDR = null;
 
-
                 string[] terminatorIds = StripAndGetNumbers(string.IsNullOrEmpty(startRecord.TC_TERMINATORID) ? startRecord.TC_ORIGINALDIALEDNUMBER : startRecord.TC_TERMINATORID).ToArray();
                 string[] terminatorNumbers = StripAndGetNumbers(string.IsNullOrEmpty(startRecord.TC_TERMINATORNUMBER) ? startRecord.TC_ORIGINALDIALEDNUMBER : startRecord.TC_TERMINATORNUMBER).ToArray();
                 for (int i = 0; i < terminatorIds.Length; i++)
@@ -48,12 +47,8 @@ namespace Mediation.Teles.Business
                     if (!string.IsNullOrEmpty(terminatorId) && terminatorId.Length <= _extensionMaxLength)
                     {
                         extension = terminatorNumber.Substring(0, terminatorNumber.Length - terminatorId.Length);
-                        //terminatorNumber = terminatorNumber.Substring(0, terminatorNumber.Length - terminatorId.Length);
                     }
-                    else
-                    {
-                        terminatorId = null;
-                    }
+
                     string originatorNumber = string.IsNullOrEmpty(opEntity.PrevTerminatorNumber) ? StripAndGetNumber(startRecord.TC_ORIGINATORNUMBER as string) : opEntity.PrevTerminatorNumber;
                     receiveCallType = receiveCallTypes.Count >= terminatorNumbers.Length ? receiveCallTypes[i] : receiveCallTypes[0];
                     cookedCDR = GetCookedCDR(startRecord,
@@ -61,17 +56,18 @@ namespace Mediation.Teles.Business
                                                 cookedCDRRecordTypeName,
                                                 originatorNumber,
                                                 terminatorNumber,
+                                                terminatorId,
                                                 opEntity.DisconnectDateTime,
                                                 sendCallType,
                                                 GetRecieveCallType(opEntity.IsLast, terminatorNumbers, i, receiveCallType),
                                                 false,
                                                 opEntity.PrevTerminatorExtension,
-                                                terminatorId);
+                                                extension);
 
                     sendCallType = Utilities.GetEnumAttribute<CentrixReceiveCallType, ReceiveCallTypeAttribute>(receiveCallType).CorrespondingSendCallType;
 
-                    opEntity.PrevTerminatorNumber = extension;
-                    opEntity.PrevTerminatorExtension = terminatorId;
+                    opEntity.PrevTerminatorNumber = terminatorNumber;
+                    opEntity.PrevTerminatorExtension = extension;
                     processCDREntity.CallType = receiveCallType;
                     processCDREntity.CookedCDRs.Add(cookedCDR);
                 }
@@ -116,7 +112,16 @@ namespace Mediation.Teles.Business
         {
             if (stopRecord != null && startRecord == null && !string.IsNullOrEmpty(stopRecord.TC_DISCONNECTREASON) && stopRecord.TC_DISCONNECTREASON != "BYE")
             {
-                processCDREntity.CookedCDRs.Add(GetCookedCDR(startRecord, stopRecord, cookedCDRRecordTypeName, StripAndGetNumber(stopRecord.TC_ORIGINATORNUMBER), StripAndGetNumber(stopRecord.TC_TERMINATORNUMBER), stopRecord.TC_TIMESTAMP, CentrixSendCallType.Cancel, CentrixReceiveCallType.Cancel, true));
+                processCDREntity.CookedCDRs.Add(GetCookedCDR(startRecord,
+                                                             stopRecord,
+                                                             cookedCDRRecordTypeName,
+                                                             StripAndGetNumber(stopRecord.TC_ORIGINATORNUMBER),
+                                                             StripAndGetNumber(stopRecord.TC_TERMINATORNUMBER),
+                                                             StripAndGetNumber(stopRecord.TC_TERMINATORID),
+                                                             stopRecord.TC_TIMESTAMP,
+                                                             CentrixSendCallType.Cancel,
+                                                             CentrixReceiveCallType.Cancel,
+                                                             true));
                 return true;
             }
             else if (startRecord == null || stopRecord == null)
@@ -181,7 +186,7 @@ namespace Mediation.Teles.Business
             }
             return CentrixReceiveCallType.Normal;
         }
-        static dynamic GetCookedCDR(dynamic startRecord, dynamic stopRecord, string cookedCDRRecordTypeName, string originatorNumber, string terminatorNumber, DateTime? disconnectDateTime, CentrixSendCallType sendCallType, CentrixReceiveCallType receiveCallType, bool isZeroDuration, string originatorExtension = null, string terminatorExtension = null)
+        static dynamic GetCookedCDR(dynamic startRecord, dynamic stopRecord, string cookedCDRRecordTypeName, string originatorNumber, string terminatorNumber, string terminatorId, DateTime? disconnectDateTime, CentrixSendCallType sendCallType, CentrixReceiveCallType receiveCallType, bool isZeroDuration, string originatorExtension = null, string terminatorExtension = null)
         {
             if (startRecord == null)
                 startRecord = stopRecord;
@@ -196,7 +201,7 @@ namespace Mediation.Teles.Business
             cookedCDR.OriginatorId = StripAndGetNumber(stopRecord.TC_ORIGINATORID);
             cookedCDR.OriginatorFromNumber = StripAndGetNumber(stopRecord.TC_ORIGINALFROMNUMBER);
             cookedCDR.OriginalDialedNumber = StripAndGetNumber(stopRecord.TC_ORIGINALDIALEDNUMBER);
-            cookedCDR.TerminatorId = StripAndGetNumber(stopRecord.TC_TERMINATORID);
+            cookedCDR.TerminatorId = terminatorId;
             cookedCDR.IncomingGwId = stopRecord.TC_INCOMINGGWID;
             cookedCDR.OutgoingGwId = stopRecord.TC_OUTGOINGGWID;
             cookedCDR.TransferredCallId = stopRecord.TC_TRANSFERREDCALLID;
