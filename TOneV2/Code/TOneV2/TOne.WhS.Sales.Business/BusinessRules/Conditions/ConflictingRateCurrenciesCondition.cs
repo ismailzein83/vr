@@ -39,10 +39,10 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             IEnumerable<ExistingZone> existingZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryData.CountryId);
             IEnumerable<ExistingZone> effectiveOrFutureZones = GetEffectiveOrFutureZones(existingZones, countryName, countryData.CountryBED);
 
-            if (closedRatesByZoneId.Count > 0 && closedRatesByZoneId.Count < effectiveOrFutureZones.Count() && ratePlanContext.CurrencyId != ratePlanContext.SystemCurrencyId)
+            if (closedRatesByZoneId.Count > 0 && closedRatesByZoneId.Count < effectiveOrFutureZones.Count() && ratePlanContext.CurrencyId != ratePlanContext.SellingProductCurrencyId)
             {
                 var currencyManager = new Vanrise.Common.Business.CurrencyManager();
-                context.Message = string.Format("The currency of the customer '{0}' doesn't match the currecny of its selling product '{1}'", currencyManager.GetCurrencySymbol(ratePlanContext.CurrencyId), currencyManager.GetCurrencySymbol(ratePlanContext.SystemCurrencyId));
+                context.Message = string.Format("The currency of the customer '{0}' doesn't match the currecny of its selling product '{1}'", currencyManager.GetCurrencySymbol(ratePlanContext.CurrencyId), currencyManager.GetCurrencySymbol(ratePlanContext.SellingProductCurrencyId));
                 return false;
             }
 
@@ -192,7 +192,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         private bool AreProcessAndSystemCurrenciesInConflict(IRatePlanContext ratePlanContext)
         {
-            return ratePlanContext.CurrencyId != ratePlanContext.SystemCurrencyId;
+            return ratePlanContext.CurrencyId != ratePlanContext.SellingProductCurrencyId;
         }
 
         private DateTime? Max(params DateTime?[] dates)
