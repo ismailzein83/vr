@@ -24,7 +24,9 @@
                 $scope.scopeModel.showMapping = true;
 
                 $scope.scopeModel.priceListTypes = UtilsService.getArrayEnum(WhS_SupPL_SupplierPriceListTypeEnum);
-
+                $scope.scopeModel.reset = function () {
+                    supplierPriceListConfigurationAPI.reset();
+                };
                 $scope.scopeModel.testConversion = function () {
                     $scope.scopeModel.isLoading = true;
                     var priceListTemplateObject =

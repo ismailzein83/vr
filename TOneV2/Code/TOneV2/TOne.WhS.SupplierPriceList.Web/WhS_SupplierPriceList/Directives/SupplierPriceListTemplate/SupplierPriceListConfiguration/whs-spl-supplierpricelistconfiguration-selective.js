@@ -128,7 +128,12 @@
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
-
+                api.reset = function () {
+                   var payload = {
+                        context: context
+                    };
+                    api.load(payload)
+                };
                 api.getData = getData;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
