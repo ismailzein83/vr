@@ -181,5 +181,6 @@
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_GetNotSentData.sql" />
     <Build Include="Retail_BE\User Defined Types\AccountPackageRecurChargeType.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_UpdateToSent.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_GetByAccount.sql" />
   </ItemGroup>
 </Project>

@@ -3,9 +3,12 @@
     [AccountBEDefinitionID] UNIQUEIDENTIFIER NOT NULL,
     [AccountID]             BIGINT           NOT NULL,
     [StatusID]              UNIQUEIDENTIFIER NOT NULL,
+    [PreviousStatusID]      UNIQUEIDENTIFIER NULL,
     [StatusChangedDate]     DATETIME         NOT NULL,
     CONSTRAINT [PK_AccountStatusHistory] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
