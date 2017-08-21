@@ -102,8 +102,7 @@
             $scope.onSellingNumberPlanSelectorChanged = function () {
                
                 var selectedSellingNumberingPlan = sellingNumberPlanDirectiveAPI.getSelectedIds();
-                if (selectedSellingNumberingPlan != undefined)
-                {
+                if (selectedSellingNumberingPlan != undefined) {
                     $scope.isLoading = true;
                     WhS_CP_CodePrepService.hasRunningProcessesForSellingNumberPlan(selectedSellingNumberingPlan).then(function (response) {
                         $scope.isLoading = false;
@@ -112,6 +111,8 @@
                         VRNotificationService.notifyException(error, $scope);
                     })
                 }
+                else
+                    $scope.currentNode = undefined;
                 
             };
 
