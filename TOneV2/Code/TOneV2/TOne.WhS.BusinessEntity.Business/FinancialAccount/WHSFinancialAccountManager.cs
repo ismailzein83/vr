@@ -274,51 +274,24 @@ namespace TOne.WhS.BusinessEntity.Business
                 matchExistingSupplierFinancialAccounts.AddRange(existingSupplierFinancialAccountData.Values.Where(itm => isFinancialAccountMatchWithExisting(itm.FinancialAccount)));
         }
 
-        public bool CanAddUpdateFinancialAccount(int? financialAccountId, Guid financialAccountDefinitionId, int? carrierAccountId, int? carrierProfileId, DateTime bed, DateTime? eed,
-            List<WHSCarrierFinancialAccountData> matchExistingCustomerFinancialAccounts, List<WHSCarrierFinancialAccountData> matchExistingSupplierFinancialAccounts, out string message)
+        public bool CanSelectFinAccDefInAddOrUpdate(int? financialAccountId, Guid financialAccountDefinitionId, int? carrierAccountId, int? carrierProfileId,
+            List<WHSCarrierFinancialAccountData> matchExistingCustomerFinancialAccounts, List<WHSCarrierFinancialAccountData> matchExistingSupplierFinancialAccounts)
         {
-            if (eed.HasValue && eed.Value < DateTime.Today)
+            if(financialAccountId.HasValue)//In Update, only same definition could be selected
             {
-                message = "EED must not be less than today.";
-                return false;
+                var existingFinancialAccount = GetFinancialAccount(financialAccountId.Value);
+                existingFinancialAccount.ThrowIfNull("existingFinancialAccount", financialAccountId.Value);
+                return existingFinancialAccount.FinancialAccountDefinitionId == financialAccountDefinitionId;
             }
-            bool isApplicableToCustomer;
-            bool isApplicableToSupplier;
-            if (!IsFinancialAccountDefinitionApplicableToCarrier(financialAccountDefinitionId, carrierAccountId, carrierProfileId, out isApplicableToCustomer, out isApplicableToSupplier))
+            else
             {
-                message = "Financial Account Definition is not compatible with Carrier";
-                return false;
+                string message;
+                return CanAddUpdateFinancialAccount(null, financialAccountDefinitionId, carrierAccountId, carrierProfileId, true, null, null, 
+                    matchExistingCustomerFinancialAccounts, matchExistingSupplierFinancialAccounts, out message);
             }
-
-            Func<WHSFinancialAccount, bool> isFinancialAccountConflictedWithExisting = (existingFA) =>
-            {
-                if (financialAccountId.HasValue && financialAccountId.Value == existingFA.FinancialAccountId)
-                    return false;
-                if (!Utilities.AreTimePeriodsOverlapped(existingFA.BED, existingFA.EED, bed, eed))
-                    return false;
-                return true;
-            };
-            if (isApplicableToCustomer && matchExistingCustomerFinancialAccounts != null)
-            {
-                if (matchExistingCustomerFinancialAccounts.Any(itm => isFinancialAccountConflictedWithExisting(itm.FinancialAccount)))
-                {
-                    message = "Financial account overlaps with existing one";
-                    return false;
-                }
-            }
-            if (isApplicableToSupplier && matchExistingSupplierFinancialAccounts != null)
-            {
-                if (matchExistingSupplierFinancialAccounts.Any(itm => isFinancialAccountConflictedWithExisting(itm.FinancialAccount)))
-                {
-                    message = "Financial account overlaps with existing one";
-                    return false;
-                }
-            }
-            message = null;
-            return true;
         }
 
-        public bool CanAddFinancialAccount(int? carrierAccountId, int? carrierProfileId)
+        public bool CanAddFinancialAccountToCarrier(int? carrierAccountId, int? carrierProfileId)
         {
             var financialAccountDefinitions = s_financialAccountDefinitionManager.GetAllFinancialAccountDefinitions();
             if (financialAccountDefinitions != null && financialAccountDefinitions.Count > 0)
@@ -329,9 +302,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 GetMatchExistingFinancialAccounts(carrierAccountId, carrierProfileId, out matchExistingCustomerFinancialAccounts, out matchExistingSupplierFinancialAccounts);
                 foreach (var financialAccountDefinition in financialAccountDefinitions.Values)
                 {
-                    string errorMessage;
-                    if (CanAddUpdateFinancialAccount(null, financialAccountDefinition.BusinessEntityDefinitionId, carrierAccountId, carrierProfileId, DateTime.Today, null,
-                        matchExistingCustomerFinancialAccounts, matchExistingSupplierFinancialAccounts, out errorMessage))
+                    if (CanSelectFinAccDefInAddOrUpdate(null, financialAccountDefinition.BusinessEntityDefinitionId, carrierAccountId, carrierProfileId,
+                        matchExistingCustomerFinancialAccounts, matchExistingSupplierFinancialAccounts))
                         return true;
                 }
             }
@@ -703,6 +675,64 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Validation Methods
+        
+        private bool CanAddUpdateFinancialAccount(int? financialAccountId, Guid financialAccountDefinitionId, int? carrierAccountId, int? carrierProfileId, bool beforeAddingNewFinancialAccount, DateTime? bed, DateTime? eed,
+            List<WHSCarrierFinancialAccountData> matchExistingCustomerFinancialAccounts, List<WHSCarrierFinancialAccountData> matchExistingSupplierFinancialAccounts, out string message)
+        {
+            if (!beforeAddingNewFinancialAccount)
+            {
+                if (!bed.HasValue)
+                    throw new ArgumentNullException("bed && beforeAddingNewFinancialAccount");
+            }
+            if (eed.HasValue && eed.Value < DateTime.Today)
+            {
+                message = "EED must not be less than today.";
+                return false;
+            }
+            bool isApplicableToCustomer;
+            bool isApplicableToSupplier;
+            if (!IsFinancialAccountDefinitionApplicableToCarrier(financialAccountDefinitionId, carrierAccountId, carrierProfileId, out isApplicableToCustomer, out isApplicableToSupplier))
+            {
+                message = "Financial Account Definition is not compatible with Carrier";
+                return false;
+            }
+
+            Func<WHSFinancialAccount, bool> isFinancialAccountConflictedWithExisting = (existingFA) =>
+            {
+                if (financialAccountId.HasValue && financialAccountId.Value == existingFA.FinancialAccountId)
+                    return false;
+                if (beforeAddingNewFinancialAccount)
+                {
+                    if (!existingFA.EED.HasValue)
+                        return true;
+                }
+                else
+                {
+                    if (Utilities.AreTimePeriodsOverlapped(existingFA.BED, existingFA.EED, bed.Value, eed))
+                        return true;
+                }
+                return false;
+            };
+            if (isApplicableToCustomer && matchExistingCustomerFinancialAccounts != null)
+            {
+                if (matchExistingCustomerFinancialAccounts.Any(itm => isFinancialAccountConflictedWithExisting(itm.FinancialAccount)))
+                {
+                    message = "Financial account overlaps with existing one";
+                    return false;
+                }
+            }
+            if (isApplicableToSupplier && matchExistingSupplierFinancialAccounts != null)
+            {
+                if (matchExistingSupplierFinancialAccounts.Any(itm => isFinancialAccountConflictedWithExisting(itm.FinancialAccount)))
+                {
+                    message = "Financial account overlaps with existing one";
+                    return false;
+                }
+            }
+            message = null;
+            return true;
+        }
+
         private bool CanAddFinancialAccount(WHSFinancialAccount financialAccount, out string message)
         {
             ValidateFinancialAccount(financialAccount);
@@ -718,10 +748,8 @@ namespace TOne.WhS.BusinessEntity.Business
             GetMatchExistingFinancialAccounts(financialAccount.CarrierAccountId, financialAccount.CarrierProfileId, out matchExistingCustomerFinancialAccounts, out matchExistingSupplierFinancialAccounts);
 
             if (!CanAddUpdateFinancialAccount(financialAccount.FinancialAccountId, financialAccount.FinancialAccountDefinitionId, financialAccount.CarrierAccountId, financialAccount.CarrierProfileId,
-                financialAccount.BED, financialAccount.EED, matchExistingCustomerFinancialAccounts, matchExistingSupplierFinancialAccounts, out message))
-            {
+                false, financialAccount.BED, financialAccount.EED, matchExistingCustomerFinancialAccounts, matchExistingSupplierFinancialAccounts, out message))
                 return false;
-            }
             message = null;
             return true;
         }
@@ -739,7 +767,7 @@ namespace TOne.WhS.BusinessEntity.Business
             GetMatchExistingFinancialAccounts(existingFinancialAccount.CarrierAccountId, existingFinancialAccount.CarrierProfileId, out matchExistingCustomerFinancialAccounts, out matchExistingSupplierFinancialAccounts);
 
             if (!CanAddUpdateFinancialAccount(financialAccountToEdit.FinancialAccountId, existingFinancialAccount.FinancialAccountDefinitionId, existingFinancialAccount.CarrierAccountId, existingFinancialAccount.CarrierProfileId,
-                financialAccountToEdit.BED, financialAccountToEdit.EED, matchExistingCustomerFinancialAccounts, matchExistingSupplierFinancialAccounts, out message))
+                false, financialAccountToEdit.BED, financialAccountToEdit.EED, matchExistingCustomerFinancialAccounts, matchExistingSupplierFinancialAccounts, out message))
                 return false;
             message = null;
             return true;
