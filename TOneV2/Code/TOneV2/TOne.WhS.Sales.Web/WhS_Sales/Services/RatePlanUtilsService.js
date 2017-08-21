@@ -29,7 +29,7 @@
                 dataItem.CurrentRateNewEED = (dataItem.CurrentRateEED != null) ? dataItem.CurrentRateEED : dataItem.ZoneEED;
 
                 var zoneBED = UtilsService.createDateFromString(dataItem.ZoneBED);
-                var newRateBED = getNewRateBED(dataItem.CurrentRate, dataItem.NewRate, settings);
+                var newRateBED = getNewRateBED(dataItem.CurrentRate, dataItem.NewRate, settings, dataItem.IsCountryNew);
                 dataItem.NewRateBED = (newRateBED > zoneBED) ? newRateBED : zoneBED;
 
                 if (dataItem.CountryBED != null) {
@@ -46,7 +46,7 @@
             if (dataItem.NewRateEED == null)
                 dataItem.NewRateEED = dataItem.ZoneEED;
         }
-        function getNewRateBED(currentRate, newRate, settings) {
+        function getNewRateBED(currentRate, newRate, settings,isCountryNew) {
             var dayOffset = 0;
 
             if (currentRate == undefined) {
@@ -55,8 +55,10 @@
             else {
                 var currentRateAsNumber = Number(currentRate);
                 var newRateAsNumber = Number(newRate);
-
-                if (newRateAsNumber > currentRateAsNumber) {
+                if (isCountryNew) {
+                    dayOffset = 0;
+                }
+                else if (newRateAsNumber > currentRateAsNumber) {
                     dayOffset = settings.increasedRateDayOffset;
                 }
                 else if (newRateAsNumber < currentRateAsNumber) {
