@@ -52,6 +52,10 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                                     && DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) >= 0)
                                     continue;
                             }
+
+                            if (!string.IsNullOrEmpty(SFTPAdapterArgument.LastImportedFile) && SFTPAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
+                                continue;
+
                             String filePath = SFTPAdapterArgument.Directory + "/" + fileObj.Name;
                             CreateStreamReader(context.OnDataReceived, sftp, fileObj, filePath);
                             AfterImport(sftp, fileObj, filePath, SFTPAdapterArgument);

@@ -46,10 +46,14 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                         {
                             if (ftpAdapterArgument.BasedOnLastModifiedTime)
                             {
-                                if ((!localLastRetrievedFileTime.HasValue || DateTime.Compare(localLastRetrievedFileTime.Value, fileObj.Modified) != 0) 
-                                    && DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) >= 0 )
+                                if ((!localLastRetrievedFileTime.HasValue || DateTime.Compare(localLastRetrievedFileTime.Value, fileObj.Modified) != 0)
+                                    && DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) >= 0)
                                     continue;
                             }
+
+                            if (!string.IsNullOrEmpty(ftpAdapterArgument.LastImportedFile) && ftpAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
+                                continue;
+
                             String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
                             CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath);
                             AfterImport(ftp, fileObj, filePath, ftpAdapterArgument);

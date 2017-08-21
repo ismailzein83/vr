@@ -25,6 +25,9 @@
         <vr-switch label="Based On Modified Time" value="basedOnTime"></vr-switch>
     </vr-columns>
     <vr-columns width="1/3row">
+        <vr-textbox value="lastImportedFile" label="Last Imported File" />
+    </vr-columns>
+    <vr-columns width="1/3row">
         <vr-select datasource="actionsAfterImport" datatextfield="name" datavaluefield="value" label="Action After Import" selectedvalues="selectedAction" isrequired ="actionIsRequired()"></vr-select>
     </vr-columns>
     <vr-columns width="1/3row">

@@ -62,7 +62,8 @@ function (UtilsService) {
                     Password: $scope.password,
                     DirectorytoMoveFile: $scope.directorytoMoveFile,
                     ActionAfterImport: $scope.selectedAction ? $scope.selectedAction.value : undefined,
-                    BasedOnLastModifiedTime: $scope.basedOnTime
+                    BasedOnLastModifiedTime: $scope.basedOnTime,
+                    LastImportedFile: $scope.lastImportedFile
                 };
             };
             api.getStateData = function () {
@@ -86,6 +87,7 @@ function (UtilsService) {
                         $scope.directorytoMoveFile = argumentData.DirectorytoMoveFile;
                         $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, argumentData.ActionAfterImport, "value");
                         $scope.basedOnTime = argumentData.BasedOnLastModifiedTime;
+                        $scope.lastImportedFile = argumentData.LastImportedFile;
                     }
 
                 }

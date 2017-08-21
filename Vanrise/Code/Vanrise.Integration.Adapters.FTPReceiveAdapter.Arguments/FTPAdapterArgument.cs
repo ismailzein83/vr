@@ -27,6 +27,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
         public string DirectorytoMoveFile { get; set; }
         public int? ActionAfterImport { get; set; }
         public bool BasedOnLastModifiedTime { get; set; }
+        public string LastImportedFile { get; set; }
 
         # endregion
     }
