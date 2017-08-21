@@ -22,8 +22,6 @@ namespace Retail.BusinessEntity.Entities
         public decimal ChargeAmount { get; set; }
         public int CurrencyID { get; set; }
         public Guid TransactionTypeID { get; set; }
-        public long ProcessInstanceID { get; set; }
-        public bool IsSentToAccountBalance { get; set; }
         public DateTime CreatedTime { get; set; }
     }
 }

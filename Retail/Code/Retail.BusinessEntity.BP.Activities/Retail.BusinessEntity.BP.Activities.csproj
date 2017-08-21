@@ -76,11 +76,26 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApplyReccuringChargeToBalance.cs" />
     <Compile Include="ApplyReccuringChargeToDB.cs" />
+    <Compile Include="EvaluateChargingDatesPeriod.cs" />
     <Compile Include="EvaluateReccuringCharge.cs" />
+    <Compile Include="ApplyRecurChargeBalanceUpdateSummaryToDB.cs" />
+    <Compile Include="DeleteRecurChargeBalanceUpdateSummary.cs" />
+    <Compile Include="PrepareAndApplyRecurChargeToBalance.cs" />
+    <Compile Include="PrepareRecurChargeBalanceUpdateSummary.cs" />
+    <Compile Include="LoadRecurChargeBalanceUpdateSummaryListFromDB.cs" />
+    <Compile Include="LoadAccountPackageRecurChargeKeysFromDB.cs" />
+    <Compile Include="GetAccountPackageRecurChargeList.cs" />
     <Compile Include="GetAccountPackagesChargePeriod.cs" />
     <Compile Include="GetAccountPackages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

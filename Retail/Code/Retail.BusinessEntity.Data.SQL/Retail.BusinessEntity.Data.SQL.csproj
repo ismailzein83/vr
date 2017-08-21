@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="AccountBEDataManager.cs" />
     <Compile Include="AccountPackageDataManager.cs" />
+    <Compile Include="RecurChargeBalanceUpdateSummaryDataManager.cs" />
     <Compile Include="AccountPackageRecurChargeDataManager.cs" />
     <Compile Include="AccountPartDefinitionDataManager.cs" />
     <Compile Include="AccountServiceDataManager.cs" />

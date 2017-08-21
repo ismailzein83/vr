@@ -25,33 +25,37 @@ namespace Retail.BusinessEntity.Data.SQL
 
         #region Public Methods
 
-        public List<AccountPackageRecurCharge> GetAccountPackageRecurChargesNotSent(DateTime effectiveDate)
-        {
-            return GetItemsSP("Retail_BE.sp_AccountPackageRecurCharge_GetNotSentData", AccountPackageRecurChargeMapper, effectiveDate);
-        }
-
-        public void ApplyAccountPackageReccuringCharges(List<AccountPackageRecurCharge> accountPackageRecurChargeList, DateTime effectiveDate, long processInstanceId)
+        public void ApplyAccountPackageReccuringCharges(List<AccountPackageRecurCharge> accountPackageRecurChargeList, DateTime chargeDay)
         {
             DataTable dtAccountPackageRecurCharge = BuildAccountPackageReccuringChargeTable(accountPackageRecurChargeList);
             int recordsEffected = ExecuteNonQuerySPCmd("[Retail_BE].[sp_AccountPackageRecurCharge_InsertOrUpdate]", (cmd) =>
             {
-                cmd.Parameters.Add(new SqlParameter("@EffectiveDate", effectiveDate));
-                cmd.Parameters.Add(new SqlParameter("@ProcessInstanceID", processInstanceId));
+                cmd.Parameters.Add(new SqlParameter("@ChargeDay", chargeDay));
                 var dtPrm = new SqlParameter("@AccountPackageRecurCharges", SqlDbType.Structured);
                 dtPrm.Value = dtAccountPackageRecurCharge;
                 cmd.Parameters.Add(dtPrm);
             });
         }
 
-        public void UpdateAccountPackageRecurChargeToSent(DateTime effectiveDate)
-        {
-            ExecuteNonQuerySP("[Retail_BE].[sp_AccountPackageRecurCharge_UpdateToSent]", effectiveDate);
-        }
-
         public List<AccountPackageRecurCharge> GetAccountRecurringCharges(Guid acountBEDefinitionId, long accountId, DateTime includedFromDate, DateTime includedToDate)
         {
             return GetItemsSP("[Retail_BE].[sp_AccountPackageRecurCharge_GetByAccount]", AccountPackageRecurChargeMapper, acountBEDefinitionId, accountId, includedFromDate, includedToDate);
         }
+
+
+        public DateTime? GetMaximumChargeDay()
+        {
+            object maximumChargeDay = ExecuteScalarSP("[Retail_BE].[sp_AccountPackageRecurCharge_GetMaximumChargeDay]");
+            if (maximumChargeDay != null)
+                return (DateTime)maximumChargeDay;
+            return null;
+        }
+
+        public List<AccountPackageRecurChargeKey> GetAccountRecurringChargeKeys(DateTime chargeDay)
+        {
+            return GetItemsSP("[Retail_BE].[sp_AccountPackageRecurChargeKey_GetByChargeDay]", AccountPackageRecurChargeKeyMapper, chargeDay);
+        }
+
         #endregion
 
         #region Private Methods
@@ -124,12 +128,19 @@ namespace Retail.BusinessEntity.Data.SQL
                 ChargeAmount = (decimal)reader["ChargeAmount"],
                 CurrencyID = (int)reader["CurrencyID"],
                 TransactionTypeID = (Guid)reader["TransactionTypeID"],
-                ProcessInstanceID = (long)reader["ProcessInstanceID"],
-                IsSentToAccountBalance = GetReaderValue<bool>(reader, "IsSentToAccountBalance"),
                 CreatedTime = (DateTime)reader["CreatedTime"]
             };
         }
 
+        private AccountPackageRecurChargeKey AccountPackageRecurChargeKeyMapper(IDataReader reader)
+        {
+            return new AccountPackageRecurChargeKey()
+            {
+                BalanceAccountTypeID = GetReaderValue<Guid>(reader, "BalanceAccountTypeID"),
+                ChargeDay = (DateTime)reader["ChargeDay"],
+                TransactionTypeId = (Guid)reader["TransactionTypeID"]
+            };
+        }
         #endregion
     }
 }

@@ -40,7 +40,7 @@ app.directive("retailBeRecurringchargeTask", ['UtilsService', 'VRUIUtilsService'
                 var api = {};
                 api.getData = function () {
                     return {
-                        $type: "Retail.BusinessEntity.BP.Arguments.AccountRecurringChargeEvaluatorInput, Retail.BusinessEntity.BP.Arguments",
+                        $type: "Retail.BusinessEntity.BP.Arguments.AccountRecurringChargeEvaluatorProcessInput, Retail.BusinessEntity.BP.Arguments",
                     };
                 };
 

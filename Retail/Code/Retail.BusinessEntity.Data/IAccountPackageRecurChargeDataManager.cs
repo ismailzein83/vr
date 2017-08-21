@@ -6,12 +6,12 @@ namespace Retail.BusinessEntity.Data
 {
     public interface IAccountPackageRecurChargeDataManager : IDataManager
     {
-        List<AccountPackageRecurCharge> GetAccountPackageRecurChargesNotSent(DateTime effectiveDate);
-
-        void ApplyAccountPackageReccuringCharges(List<AccountPackageRecurCharge> accountPackageRecurChargeList, DateTime effectiveDate, long processInstanceId);
-
-        void UpdateAccountPackageRecurChargeToSent(DateTime effectiveDate);
+        void ApplyAccountPackageReccuringCharges(List<AccountPackageRecurCharge> accountPackageRecurChargeList, DateTime chargeDay);
 
         List<AccountPackageRecurCharge> GetAccountRecurringCharges(Guid acountBEDefinitionId, long accountId, DateTime includedFromDate, DateTime includedToDate);
+
+        DateTime? GetMaximumChargeDay();
+
+        List<AccountPackageRecurChargeKey> GetAccountRecurringChargeKeys(DateTime chargeDay);
     }
 }

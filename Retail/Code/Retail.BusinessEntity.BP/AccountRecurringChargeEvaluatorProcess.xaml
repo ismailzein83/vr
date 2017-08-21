@@ -1,5 +1,6 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Retail.BusinessEntity.BP.AccountRecurringChargeEvaluatorProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:Retail.BusinessEntity.BP"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:rbba="clr-namespace:Retail.BusinessEntity.BP.Arguments;assembly=Retail.BusinessEntity.BP.Arguments"
@@ -15,7 +16,7 @@
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="Input" Type="InArgument(rbba:AccountRecurringChargeEvaluatorInput)" />
+    <x:Property Name="Input" Type="InArgument(rbba:AccountRecurringChargeEvaluatorProcessInput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Retail.BusinessEntity.BP.AccountRecurringChargeEvaluatorProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -27,6 +28,8 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>Retail.BusinessEntity.BP.Arguments</x:String>
+      <x:String>Vanrise.BusinessProcess.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -42,12 +45,16 @@
       <AssemblyReference>Microsoft.CSharp</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.BP.Activities</AssemblyReference>
-      <AssemblyReference>Retail.BusinessEntity.Entities</AssemblyReference>
-      <AssemblyReference>Retail</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.BP</AssemblyReference>
     </sco:Collection>
@@ -60,7 +67,10 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate.Date</mca:CSharpValue>
         </Variable.Default>
       </Variable>
-      <Variable x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)" Name="AccountPackageRecurChargeList" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="subProcessCompleted" />
+      <Variable x:TypeArguments="scg:Dictionary(s:DateTime, scg:List(rbe:AccountPackageRecurCharge))" Name="AccountPackageRecurChargesByDate" />
+      <Variable x:TypeArguments="scg:List(s:DateTime)" Name="ChargingDatesPeriod" />
+      <Variable x:TypeArguments="s:DateTime" Name="MaximumEndChargePeriod" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Account Recurring Charge Evaluator Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -88,7 +98,7 @@
         </InArgument>
       </If.Condition>
       <If.Then>
-        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+        <Sequence DisplayName="AccountPackage_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_2">
           <Sequence.Variables>
             <Variable x:TypeArguments="scg:List(rbe:AccountPackageRecurChargeData)" Name="AccountPackageRecurChargeDataList" />
           </Sequence.Variables>
@@ -108,6 +118,11 @@
                 <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
               </InArgument>
             </rbba1:GetAccountPackagesChargePeriod.EffectiveDate>
+            <rbba1:GetAccountPackagesChargePeriod.MaximumEndChargePeriod>
+              <OutArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpReference x:TypeArguments="s:DateTime">MaximumEndChargePeriod</mca:CSharpReference>
+              </OutArgument>
+            </rbba1:GetAccountPackagesChargePeriod.MaximumEndChargePeriod>
           </rbba1:GetAccountPackagesChargePeriod>
           <rbba1:EvaluateReccuringCharge sap2010:WorkflowViewState.IdRef="EvaluateReccuringCharge_1">
             <rbba1:EvaluateReccuringCharge.AccountPackageRecurChargeDataList>
@@ -115,37 +130,103 @@
                 <mca:CSharpValue x:TypeArguments="scg:List(rbe:AccountPackageRecurChargeData)">AccountPackageRecurChargeDataList</mca:CSharpValue>
               </InArgument>
             </rbba1:EvaluateReccuringCharge.AccountPackageRecurChargeDataList>
-            <rbba1:EvaluateReccuringCharge.AccountPackageRecurChargeList>
-              <OutArgument x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">
-                <mca:CSharpReference x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">AccountPackageRecurChargeList</mca:CSharpReference>
+            <rbba1:EvaluateReccuringCharge.AccountPackageRecurChargesByDate>
+              <OutArgument x:TypeArguments="scg:Dictionary(s:DateTime, scg:List(rbe:AccountPackageRecurCharge))">
+                <mca:CSharpReference x:TypeArguments="scg:Dictionary(s:DateTime, scg:List(rbe:AccountPackageRecurCharge))">AccountPackageRecurChargesByDate</mca:CSharpReference>
               </OutArgument>
-            </rbba1:EvaluateReccuringCharge.AccountPackageRecurChargeList>
+            </rbba1:EvaluateReccuringCharge.AccountPackageRecurChargesByDate>
             <rbba1:EvaluateReccuringCharge.EffectiveDate>
               <InArgument x:TypeArguments="s:DateTime">
                 <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
               </InArgument>
             </rbba1:EvaluateReccuringCharge.EffectiveDate>
           </rbba1:EvaluateReccuringCharge>
-          <rbba1:ApplyReccuringChargeToDB sap2010:WorkflowViewState.IdRef="ApplyReccuringChargeToDB_1">
-            <rbba1:ApplyReccuringChargeToDB.AccountPackageRecurChargeList>
-              <InArgument x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">
-                <mca:CSharpValue x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">AccountPackageRecurChargeList</mca:CSharpValue>
-              </InArgument>
-            </rbba1:ApplyReccuringChargeToDB.AccountPackageRecurChargeList>
-            <rbba1:ApplyReccuringChargeToDB.EffectiveDate>
-              <InArgument x:TypeArguments="s:DateTime">
-                <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
-              </InArgument>
-            </rbba1:ApplyReccuringChargeToDB.EffectiveDate>
-          </rbba1:ApplyReccuringChargeToDB>
-          <rbba1:ApplyReccuringChargeToBalance sap2010:WorkflowViewState.IdRef="ApplyReccuringChargeToBalance_1">
-            <rbba1:ApplyReccuringChargeToBalance.EffectiveDate>
-              <InArgument x:TypeArguments="s:DateTime">
-                <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
-              </InArgument>
-            </rbba1:ApplyReccuringChargeToBalance.EffectiveDate>
-          </rbba1:ApplyReccuringChargeToBalance>
         </Sequence>
+      </If.Then>
+    </If>
+    <rbba1:EvaluateChargingDatesPeriod sap2010:WorkflowViewState.IdRef="EvaluateChargingDatesPeriod_1">
+      <rbba1:EvaluateChargingDatesPeriod.ChargingDatesPeriod>
+        <OutArgument x:TypeArguments="scg:List(s:DateTime)">
+          <mca:CSharpReference x:TypeArguments="scg:List(s:DateTime)">ChargingDatesPeriod</mca:CSharpReference>
+        </OutArgument>
+      </rbba1:EvaluateChargingDatesPeriod.ChargingDatesPeriod>
+      <rbba1:EvaluateChargingDatesPeriod.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </rbba1:EvaluateChargingDatesPeriod.EffectiveDate>
+      <rbba1:EvaluateChargingDatesPeriod.MaximumEndChargePeriod>
+        <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">MaximumEndChargePeriod</mca:CSharpValue>
+        </InArgument>
+      </rbba1:EvaluateChargingDatesPeriod.MaximumEndChargePeriod>
+    </rbba1:EvaluateChargingDatesPeriod>
+    <If sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">ChargingDatesPeriod != null &amp;&amp; ChargingDatesPeriod.Count &gt; 0</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <ForEach x:TypeArguments="s:DateTime" DisplayName="ForEach&lt;DateTime&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
+          <ForEach.Values>
+            <InArgument x:TypeArguments="scg:IEnumerable(s:DateTime)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(s:DateTime)">ChargingDatesPeriod</mca:CSharpValue>
+            </InArgument>
+          </ForEach.Values>
+          <ActivityAction x:TypeArguments="s:DateTime">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="s:DateTime" Name="chargeDay" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="SubSequence" sap2010:WorkflowViewState.IdRef="Sequence_3">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)" Name="AccountPackageRecurChargeList" />
+              </Sequence.Variables>
+              <rbba1:GetAccountPackageRecurChargeList sap2010:WorkflowViewState.IdRef="GetAccountPackageRecurChargeList_1">
+                <rbba1:GetAccountPackageRecurChargeList.AccountPackageRecurChargeList>
+                  <OutArgument x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">
+                    <mca:CSharpReference x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">AccountPackageRecurChargeList</mca:CSharpReference>
+                  </OutArgument>
+                </rbba1:GetAccountPackageRecurChargeList.AccountPackageRecurChargeList>
+                <rbba1:GetAccountPackageRecurChargeList.AccountPackageRecurChargesByDate>
+                  <InArgument x:TypeArguments="scg:Dictionary(s:DateTime, scg:List(rbe:AccountPackageRecurCharge))">
+                    <mca:CSharpValue x:TypeArguments="scg:Dictionary(s:DateTime, scg:List(rbe:AccountPackageRecurCharge))">AccountPackageRecurChargesByDate</mca:CSharpValue>
+                  </InArgument>
+                </rbba1:GetAccountPackageRecurChargeList.AccountPackageRecurChargesByDate>
+                <rbba1:GetAccountPackageRecurChargeList.ChargeDay>
+                  <InArgument x:TypeArguments="s:DateTime">
+                    <mca:CSharpValue x:TypeArguments="s:DateTime">chargeDay</mca:CSharpValue>
+                  </InArgument>
+                </rbba1:GetAccountPackageRecurChargeList.ChargeDay>
+              </rbba1:GetAccountPackageRecurChargeList>
+              <local:ApplyRecurringCharge Input="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyRecurringCharge_1" />
+              <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpReference x:TypeArguments="x:Int32">subProcessCompleted</mca:CSharpReference>
+                  </OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpValue x:TypeArguments="x:Int32">subProcessCompleted + 1</mca:CSharpValue>
+                  </InArgument>
+                </Assign.Value>
+              </Assign>
+              <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4">
+                <vbw:WriteTrackingMessage.Message>
+                  <InArgument x:TypeArguments="x:String">
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Charge Day '{0}' completed. {1} charge days remaining", chargeDay.ToString("yyyy-MM-dd"), subProcessCompleted)</mca:CSharpValue>
+                  </InArgument>
+                </vbw:WriteTrackingMessage.Message>
+                <vbw:WriteTrackingMessage.Severity>
+                  <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                    <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                  </InArgument>
+                </vbw:WriteTrackingMessage.Severity>
+              </vbw:WriteTrackingMessage>
+            </Sequence>
+          </ActivityAction>
+        </ForEach>
       </If.Then>
     </If>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" Message="Finished Account Recurring Charge Evaluator Process.">
@@ -155,7 +236,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d1dDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFjY291bnRSZWN1cnJpbmdDaGFyZ2VFdmFsdWF0b3JQcm9jZXNzLnhhbWwcNwOfAQ4CAQE8CzxjAgECQQVHIAIBW0gFUyACAU9UBZYBCgIBDpcBBZ0BIAIBB0QLRIUBAgFdQWBBlgECAVxLC0t0AgFWUAtQWAIBUUhwSHYCAVBXC1dfAgEPWwmUARQCARSaAQuaAYUBAgEJlwFglwGWAQIBCF8LbzICATxwC4ABKwIBKYEBC4wBLAIBHI0BC5MBMQIBFWcRZ3ICAUlsEWxeAgFDYhFimwECAT19EX1eAgE2cxFzkwECATB4EXiTAQIBKokBEYkBXgIBI4QBEYQBiwECAR2QARGQAV4CARY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1dDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFjY291bnRSZWN1cnJpbmdDaGFyZ2VFdmFsdWF0b3JQcm9jZXNzLnhhbWwtPgPwAQ4CAQFDC0NjAgEDRjNGNgIBAksFUSADAegBUgVdIAMB1gFeBZIBCgMBiwGTAQWjASkCAXKkAQXnAQoCARXoAQXuASACAQtOC06FAQMB6gFLYEuWAQMB6QFVC1V0AwHgAVoLWlgDAdgBUnBSdgMB1wFhC2FfAwGMAWUJkAEUAwGUAZsBC5sBWAMBgwGgAQugAW0CAXuWAQuWAXACAXOnAQunAZEBAgEWqwEJ5QETAgEe6wEL6wGFAQIBDegBYOgBlgECAQxpC34yAwGxAX8LjwErAwGVAa4BD64BcwIBarUBDeMBGAIBH3ERcXIDAc0BdhF2XgMBxAFsEWybAQMBuwF7EXtvAwGyAYwBEYwBXgMBqAGCARGCAZMBAwGfAYcBEYcBsgEDAZYBuQEPyQE4AgFLygEPygF3AgFKywEP1gEYAgE11wEP4gEqAgEgxgEVxgFeAgFgvAEVvAGXAQIBVsEBFcEBrgECAUzTARXTAWkCAUDOARXOAW0CATbfARXfAY8BAgEr2gEV2gHbAQIBIQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -163,25 +244,37 @@
       <sap2010:ViewStateData Id="GetAccountPackages_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="GetAccountPackagesChargePeriod_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="EvaluateReccuringCharge_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ApplyReccuringChargeToDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ApplyReccuringChargeToBalance_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,332">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,482" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,358" />
+      <sap2010:ViewStateData Id="EvaluateChargingDatesPeriod_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="GetAccountPackageRecurChargeList_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="ApplyRecurringCharge_1" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="242,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="264,372">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="294,522" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,672" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,792">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,1442">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Retail.BusinessEntity.BP.AccountRecurringChargeEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="526,872" />
+      <sap2010:ViewStateData Id="Retail.BusinessEntity.BP.AccountRecurringChargeEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="526,1522" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

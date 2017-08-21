@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Activities;
-using Vanrise.BusinessProcess;
+using System.Collections.Generic;
+using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.BusinessProcess;
 using Retail.BusinessEntity.Entities;
 using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.MainExtensions.PackageTypes;
-using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.BP.Activities
 {
@@ -19,7 +19,7 @@ namespace Retail.BusinessEntity.BP.Activities
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
-        public OutArgument<List<AccountPackageRecurCharge>> AccountPackageRecurChargeList { get; set; }
+        public OutArgument<Dictionary<DateTime, List<AccountPackageRecurCharge>>> AccountPackageRecurChargesByDate { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -33,7 +33,7 @@ namespace Retail.BusinessEntity.BP.Activities
             FinancialAccountManager financialAccountManager = new Business.FinancialAccountManager();
             ChargeableEntityManager chargeableEntityManager = new Business.ChargeableEntityManager();
 
-            List<AccountPackageRecurCharge> accountPackageRecurChargeList = new List<AccountPackageRecurCharge>();
+            Dictionary<DateTime, List<AccountPackageRecurCharge>> accountPackageRecurChargesByDate = new Dictionary<DateTime, List<AccountPackageRecurCharge>>();
 
             foreach (AccountPackageRecurChargeData accountPackageRecurChargeData in accountPackageRecurChargeDataList)
             {
@@ -78,18 +78,17 @@ namespace Retail.BusinessEntity.BP.Activities
                             ChargeAmount = chargeDay >= recurringChargeEvaluatorOutput.ChargingStart && chargeDay < recurringChargeEvaluatorOutput.ChargingEnd ? amountPerDay : 0,
                             ChargeDay = chargeDay,
                             CurrencyID = recurringChargeEvaluatorOutput.CurrencyId,
-                            ProcessInstanceID = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
                             TransactionTypeID = chargeableEntitySettings.TransactionTypeId.Value,
                             AccountID = accountPackageRecurChargeData.AccountPackage.AccountId,
                             AccountBEDefinitionId = accountBEDefinitionId
                         };
-
+                        List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargesByDate.GetOrCreateItem(accountPackageRecurCharge.ChargeDay, () => { return new List<AccountPackageRecurCharge>(); });
                         accountPackageRecurChargeList.Add(accountPackageRecurCharge);
                         chargeDay = chargeDay.AddDays(1);
                     }
                 }
             }
-            this.AccountPackageRecurChargeList.Set(context, accountPackageRecurChargeList);
+            this.AccountPackageRecurChargesByDate.Set(context, accountPackageRecurChargesByDate);
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Evaluate Reccuring Charge is done", null);
         }
     }

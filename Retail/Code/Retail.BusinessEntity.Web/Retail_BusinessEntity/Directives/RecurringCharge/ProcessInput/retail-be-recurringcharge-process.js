@@ -41,7 +41,7 @@ app.directive("retailBeRecurringchargeProcess", ['UtilsService', 'VRUIUtilsServi
                 api.getData = function () {
                     return {
                         InputArguments: {
-                            $type: "Retail.BusinessEntity.BP.Arguments.AccountRecurringChargeEvaluatorInput, Retail.BusinessEntity.BP.Arguments",
+                            $type: "Retail.BusinessEntity.BP.Arguments.AccountRecurringChargeEvaluatorProcessInput, Retail.BusinessEntity.BP.Arguments",
                             EffectiveDate: $scope.effectiveDate
                         }
                     };

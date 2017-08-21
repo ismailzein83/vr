@@ -52,6 +52,7 @@
     <Compile Include="BEDataManagerFactory.cs" />
     <Compile Include="IAccountBEDataManager.cs" />
     <Compile Include="IAccountPackageDataManager.cs" />
+    <Compile Include="IRecurChargeBalanceUpdateSummaryDataManager.cs" />
     <Compile Include="IAccountPackageRecurChargeDataManager.cs" />
     <Compile Include="IAccountPartDefinitionDataManager.cs" />
     <Compile Include="IAccountServiceDataManager.cs" />

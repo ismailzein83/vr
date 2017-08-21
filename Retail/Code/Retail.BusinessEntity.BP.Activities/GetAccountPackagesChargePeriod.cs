@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Activities;
-using Retail.BusinessEntity.Entities;
+using System.Collections.Generic;
 using Vanrise.Entities;
 using Vanrise.BusinessProcess;
+using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.BP.Activities
 {
@@ -14,6 +15,9 @@ namespace Retail.BusinessEntity.BP.Activities
 
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<DateTime> MaximumEndChargePeriod { get; set; }
 
         [RequiredArgument]
         public OutArgument<List<AccountPackageRecurChargeData>> AccountPackageRecurChargeDataList { get; set; }
@@ -36,6 +40,9 @@ namespace Retail.BusinessEntity.BP.Activities
                 accountPackageRecurChargeDataList.Add(accountPackageRecurChargeData);
             }
 
+            DateTime maximumEndChargePeriod = accountPackageRecurChargeDataList.Select(itm => itm.EndChargePeriod).Max();
+
+            this.MaximumEndChargePeriod.Set(context, maximumEndChargePeriod);
             this.AccountPackageRecurChargeDataList.Set(context, accountPackageRecurChargeDataList);
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Loading Account Packages Charging Period is done", null);
         }

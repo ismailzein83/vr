@@ -10,7 +10,7 @@ namespace Retail.BusinessEntity.Business
         {
             foreach (var startedBPInstance in context.GetStartedBPInstances())
             {
-                var startedBPInstanceReprocessArg = startedBPInstance.InputArgument as AccountRecurringChargeEvaluatorInput;
+                var startedBPInstanceReprocessArg = startedBPInstance.InputArgument as AccountRecurringChargeEvaluatorProcessInput;
                 if (startedBPInstanceReprocessArg != null)
                 {
                     context.Reason = "Another Account Recurring Charge Evaluator instance is running";

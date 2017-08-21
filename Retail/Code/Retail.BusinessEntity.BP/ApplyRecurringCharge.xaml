@@ -1,0 +1,181 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Retail.BusinessEntity.BP.ApplyRecurringCharge"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:rbba="clr-namespace:Retail.BusinessEntity.BP.Arguments;assembly=Retail.BusinessEntity.BP.Arguments"
+ xmlns:rbba1="clr-namespace:Retail.BusinessEntity.BP.Activities;assembly=Retail.BusinessEntity.BP.Activities"
+ xmlns:rbe="clr-namespace:Retail.BusinessEntity.Entities;assembly=Retail.BusinessEntity.Entities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=System.Core"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(rbba:ApplyRecurringChargeInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Retail.BusinessEntity.BP.ApplyRecurringCharge_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Retail.BusinessEntity.BP.Arguments</x:String>
+      <x:String>Retail.BusinessEntity.Entities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.BP.Activities</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="s:DateTime" Name="ChargeDay">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ChargeDay</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="scg:List(rbe:RecurChargeBalanceUpdateSummary)" Name="PreviousRecurChargeBalanceUpdateSummaryList" />
+      <Variable x:TypeArguments="scg1:HashSet(rbe:AccountPackageRecurChargeKey)" Name="ExistingAccountPackageRecurChargeKeys" />
+      <Variable x:TypeArguments="rbe:RecurChargeBalanceUpdateSummary" Name="RecurChargeBalanceUpdateSummary" />
+    </Sequence.Variables>
+    <rbba1:LoadRecurChargeBalanceUpdateSummaryListFromDB sap2010:WorkflowViewState.IdRef="LoadRecurChargeBalanceUpdateSummaryListFromDB_1">
+      <rbba1:LoadRecurChargeBalanceUpdateSummaryListFromDB.ChargeDay>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">ChargeDay</mca:CSharpValue>
+        </InArgument>
+      </rbba1:LoadRecurChargeBalanceUpdateSummaryListFromDB.ChargeDay>
+      <rbba1:LoadRecurChargeBalanceUpdateSummaryListFromDB.RecurChargeBalanceUpdateSummaryList>
+        <OutArgument x:TypeArguments="scg:List(rbe:RecurChargeBalanceUpdateSummary)">
+          <mca:CSharpReference x:TypeArguments="scg:List(rbe:RecurChargeBalanceUpdateSummary)">PreviousRecurChargeBalanceUpdateSummaryList</mca:CSharpReference>
+        </OutArgument>
+      </rbba1:LoadRecurChargeBalanceUpdateSummaryListFromDB.RecurChargeBalanceUpdateSummaryList>
+    </rbba1:LoadRecurChargeBalanceUpdateSummaryListFromDB>
+    <rbba1:LoadAccountPackageRecurChargeKeysFromDB sap2010:WorkflowViewState.IdRef="LoadAccountPackageRecurChargeKeysFromDB_1">
+      <rbba1:LoadAccountPackageRecurChargeKeysFromDB.AccountPackageRecurChargeKeys>
+        <OutArgument x:TypeArguments="scg1:HashSet(rbe:AccountPackageRecurChargeKey)">
+          <mca:CSharpReference x:TypeArguments="scg1:HashSet(rbe:AccountPackageRecurChargeKey)">ExistingAccountPackageRecurChargeKeys</mca:CSharpReference>
+        </OutArgument>
+      </rbba1:LoadAccountPackageRecurChargeKeysFromDB.AccountPackageRecurChargeKeys>
+      <rbba1:LoadAccountPackageRecurChargeKeysFromDB.ChargeDay>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">ChargeDay</mca:CSharpValue>
+        </InArgument>
+      </rbba1:LoadAccountPackageRecurChargeKeysFromDB.ChargeDay>
+    </rbba1:LoadAccountPackageRecurChargeKeysFromDB>
+    <rbba1:PrepareRecurChargeBalanceUpdateSummary sap2010:WorkflowViewState.IdRef="PrepareRecurChargeBalanceUpdateSummary_1">
+      <rbba1:PrepareRecurChargeBalanceUpdateSummary.AccountPackageRecurChargeList>
+        <InArgument x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">
+          <mca:CSharpValue x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">Input.AccountPackageRecurChargeList</mca:CSharpValue>
+        </InArgument>
+      </rbba1:PrepareRecurChargeBalanceUpdateSummary.AccountPackageRecurChargeList>
+      <rbba1:PrepareRecurChargeBalanceUpdateSummary.ChargeDay>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">ChargeDay</mca:CSharpValue>
+        </InArgument>
+      </rbba1:PrepareRecurChargeBalanceUpdateSummary.ChargeDay>
+      <rbba1:PrepareRecurChargeBalanceUpdateSummary.RecurChargeBalanceUpdateSummary>
+        <OutArgument x:TypeArguments="rbe:RecurChargeBalanceUpdateSummary">
+          <mca:CSharpReference x:TypeArguments="rbe:RecurChargeBalanceUpdateSummary">RecurChargeBalanceUpdateSummary</mca:CSharpReference>
+        </OutArgument>
+      </rbba1:PrepareRecurChargeBalanceUpdateSummary.RecurChargeBalanceUpdateSummary>
+    </rbba1:PrepareRecurChargeBalanceUpdateSummary>
+    <rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB sap2010:WorkflowViewState.IdRef="ApplyRecurChargeBalanceUpdateSummaryToDB_1">
+      <rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB.RecurChargeBalanceUpdateSummary>
+        <InArgument x:TypeArguments="rbe:RecurChargeBalanceUpdateSummary">
+          <mca:CSharpValue x:TypeArguments="rbe:RecurChargeBalanceUpdateSummary">RecurChargeBalanceUpdateSummary</mca:CSharpValue>
+        </InArgument>
+      </rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB.RecurChargeBalanceUpdateSummary>
+    </rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB>
+    <rbba1:PrepareAndApplyRecurChargeToBalance sap2010:WorkflowViewState.IdRef="PrepareAndApplyRecurChargeToBalance_1">
+      <rbba1:PrepareAndApplyRecurChargeToBalance.AccountPackageRecurChargeList>
+        <InArgument x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">
+          <mca:CSharpValue x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">Input.AccountPackageRecurChargeList</mca:CSharpValue>
+        </InArgument>
+      </rbba1:PrepareAndApplyRecurChargeToBalance.AccountPackageRecurChargeList>
+      <rbba1:PrepareAndApplyRecurChargeToBalance.ChargeDay>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">ChargeDay</mca:CSharpValue>
+        </InArgument>
+      </rbba1:PrepareAndApplyRecurChargeToBalance.ChargeDay>
+      <rbba1:PrepareAndApplyRecurChargeToBalance.ExistingAccountPackageRecurChargeKeys>
+        <InArgument x:TypeArguments="scg1:HashSet(rbe:AccountPackageRecurChargeKey)">
+          <mca:CSharpValue x:TypeArguments="scg1:HashSet(rbe:AccountPackageRecurChargeKey)">ExistingAccountPackageRecurChargeKeys</mca:CSharpValue>
+        </InArgument>
+      </rbba1:PrepareAndApplyRecurChargeToBalance.ExistingAccountPackageRecurChargeKeys>
+      <rbba1:PrepareAndApplyRecurChargeToBalance.PreviousRecurChargeBalanceUpdateSummaryList>
+        <InArgument x:TypeArguments="scg:List(rbe:RecurChargeBalanceUpdateSummary)">
+          <mca:CSharpValue x:TypeArguments="scg:List(rbe:RecurChargeBalanceUpdateSummary)">PreviousRecurChargeBalanceUpdateSummaryList</mca:CSharpValue>
+        </InArgument>
+      </rbba1:PrepareAndApplyRecurChargeToBalance.PreviousRecurChargeBalanceUpdateSummaryList>
+    </rbba1:PrepareAndApplyRecurChargeToBalance>
+    <rbba1:ApplyReccuringChargeToDB>
+      <rbba1:ApplyReccuringChargeToDB.AccountPackageRecurChargeList>
+        <InArgument x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">
+          <mca:CSharpValue x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">Input.AccountPackageRecurChargeList</mca:CSharpValue>
+        </InArgument>
+      </rbba1:ApplyReccuringChargeToDB.AccountPackageRecurChargeList>
+      <rbba1:ApplyReccuringChargeToDB.ChargeDay>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">ChargeDay</mca:CSharpValue>
+        </InArgument>
+      </rbba1:ApplyReccuringChargeToDB.ChargeDay>
+      <sap2010:WorkflowViewState.IdRef>ApplyReccuringChargeToDB_1</sap2010:WorkflowViewState.IdRef>
+    </rbba1:ApplyReccuringChargeToDB>
+    <rbba1:DeleteRecurChargeBalanceUpdateSummary sap2010:WorkflowViewState.IdRef="DeleteRecurChargeBalanceUpdateSummary_1">
+      <rbba1:DeleteRecurChargeBalanceUpdateSummary.ChargeDay>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">ChargeDay</mca:CSharpValue>
+        </InArgument>
+      </rbba1:DeleteRecurChargeBalanceUpdateSummary.ChargeDay>
+    </rbba1:DeleteRecurChargeBalanceUpdateSummary>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFwcGx5UmVjdXJyaW5nQ2hhcmdlLnhhbWwYOwOhAQ4CAQE/Cz9aAgECRgVROwIBXFIFXTUCAU9eBW40AgE8bwV1NgIBNXYFiwExAgEcjAEFmAEmAgEPmQEFnwEzAgEITgtOoQECAWNJC0lUAgFdWgtaVAIBVlULVZwBAgFQZgtmVAIBSWsLa4sBAgFDYQthiwECAT1yC3KDAQIBNoMBC4MBlAECAS+IAQuIAZkBAgEpfgt+VAIBI3kLeYsBAgEdlAELlAFUAgEWjwELjwGLAQIBEJwBC5wBVAIBCQ==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LoadRecurChargeBalanceUpdateSummaryListFromDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="LoadAccountPackageRecurChargeKeysFromDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="PrepareRecurChargeBalanceUpdateSummary_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ApplyRecurChargeBalanceUpdateSummaryToDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="PrepareAndApplyRecurChargeToBalance_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ApplyReccuringChargeToDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="DeleteRecurChargeBalanceUpdateSummary_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,518">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Retail.BusinessEntity.BP.ApplyRecurringCharge_1" sap:VirtualizedContainerService.HintSize="262,598" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
