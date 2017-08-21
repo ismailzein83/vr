@@ -35,6 +35,8 @@ namespace TOne.WhS.Sales.BP.Activities
         public IEnumerable<SaleZoneServiceToClose> SaleZoneServicesToClose { get; set; }
 
 		public IEnumerable<CustomerCountryToChange> CustomerCountriesToChange { get; set; }
+        		
+        public IEnumerable<CustomerCountryToAdd> CustomerCountriesToAdd { get; set; }
     }
 
     public class PrepareRatePlanPreviewSummaryOutput
@@ -79,7 +81,9 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<IEnumerable<SaleZoneServiceToClose>> SaleZoneServicesToClose { get; set; }
 
 		[RequiredArgument]
-		public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
+		public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }	
+        [RequiredArgument]		
+        public InArgument<IEnumerable<CustomerCountryToAdd>> CustomerCountriesToAdd { get; set; }
 
         #endregion
 
@@ -104,7 +108,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 DefaultServiceToClose = this.DefaultServiceToClose.Get(context),
                 SaleZoneServicesToAdd = this.SaleZoneServicesToAdd.Get(context),
                 SaleZoneServicesToClose = this.SaleZoneServicesToClose.Get(context),
-				CustomerCountriesToChange = this.CustomerCountriesToChange.Get(context)
+				CustomerCountriesToChange = this.CustomerCountriesToChange.Get(context),		
+                CustomerCountriesToAdd = this.CustomerCountriesToAdd.Get(context)
             };
         }
 
@@ -133,6 +138,7 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<SaleZoneServiceToClose> saleZoneServicesToClose = inputArgument.SaleZoneServicesToClose;
 
 			IEnumerable<CustomerCountryToChange> countriesToChange = inputArgument.CustomerCountriesToChange;
+            IEnumerable<CustomerCountryToAdd> countriesToAdd = inputArgument.CustomerCountriesToAdd;
 
             var summary = new RatePlanPreviewSummary();
 
@@ -141,7 +147,7 @@ namespace TOne.WhS.Sales.BP.Activities
             SetZoneRoutingProductProperties(summary, saleZoneRoutingProductsToAdd, saleZoneRoutingProductsToClose);
             SetDefaultServiceProperties(summary, defaultServiceToAdd, defaultServiceToClose);
             SetSaleZoneServiceProperties(summary, saleZoneServicesToAdd, saleZoneServicesToClose);
-			SetCountryProperties(summary, countriesToChange);
+            SetCountryProperties(summary, countriesToChange, countriesToAdd);
 
             return new PrepareRatePlanPreviewSummaryOutput()
             {
@@ -244,11 +250,16 @@ namespace TOne.WhS.Sales.BP.Activities
             summary.NumberOfClosedSaleZoneServices = closedSaleZoneServices.Count();
         }
 
-		private void SetCountryProperties(RatePlanPreviewSummary summary, IEnumerable<CustomerCountryToChange> customerCountriesToChange)
+        private void SetCountryProperties(RatePlanPreviewSummary summary, IEnumerable<CustomerCountryToChange> customerCountriesToChange, IEnumerable<CustomerCountryToAdd> customerCountriesToAdd)
 		{
-			if (customerCountriesToChange == null)
-				return;
-			summary.NumberOfChangedCountries = customerCountriesToChange.Count();
+            if (customerCountriesToChange != null)
+            {
+                summary.NumberOfChangedCountries = customerCountriesToChange.Count();
+            }
+            if (customerCountriesToAdd != null)
+            {
+                summary.NumberOfNewCountries = customerCountriesToAdd.Count();
+            }
 		}
 
         #endregion

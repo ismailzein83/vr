@@ -60,7 +60,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 summary.ClosedDefaultServiceEffectiveOn,
                 summary.NumberOfNewSaleZoneServices,
                 summary.NumberOfClosedSaleZoneServices,
-				summary.NumberOfChangedCountries
+				summary.NumberOfChangedCountries,
+                summary.NumberOfNewCountries
             );
         }
         
@@ -86,7 +87,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 ClosedDefaultServiceEffectiveOn = GetReaderValue<DateTime?>(reader, "ClosedDefaultServiceEffectiveOn"),
                 NumberOfNewSaleZoneServices = (int)reader["NumberOfNewSaleZoneServices"],
                 NumberOfClosedSaleZoneServices = (int)reader["NumberOfClosedSaleZoneServices"],
-				NumberOfChangedCountries = (int)reader["NumberOfChangedCountries"]
+                NumberOfChangedCountries = (int)reader["NumberOfChangedCountries"],
+                NumberOfNewCountries = (int)reader["NumberOfNewCountries"]
             };
         }
         

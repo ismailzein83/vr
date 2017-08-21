@@ -150,6 +150,7 @@
 					$scope.scopeModel.numberOfClosedSaleZoneServices = response.NumberOfClosedSaleZoneServices;
 
 					$scope.scopeModel.numberOfChangedCountries = response.NumberOfChangedCountries;
+					$scope.scopeModel.numberOfNewCountries = response.NumberOfNewCountries;
 
 					if (response.NewDefaultServices == null)
 						summaryServiceViewerLoadDeferred.resolve();
