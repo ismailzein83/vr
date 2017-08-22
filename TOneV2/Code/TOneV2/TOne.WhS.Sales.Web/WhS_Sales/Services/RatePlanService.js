@@ -78,10 +78,11 @@
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/TQI/TQIEditor.html", parameters, settings);
         }
 
-        function viewFutureRate(zoneName, futureRate) {
+        function viewFutureRate(zoneName, futureRate, primarySaleEntity) {
             var parameters = {
                 zoneName: zoneName,
-                futureRate: futureRate
+                futureRate: futureRate,
+                primarySaleEntity: primarySaleEntity
             };
 
             var settings = {};

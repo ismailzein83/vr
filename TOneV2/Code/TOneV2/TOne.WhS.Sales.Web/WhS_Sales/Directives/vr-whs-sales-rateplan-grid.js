@@ -103,7 +103,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
 
             $scope.onCurrentRateClicked = function (dataItem) {
-                WhS_Sales_RatePlanService.viewFutureRate(dataItem.ZoneName, dataItem.FutureNormalRate);
+                WhS_Sales_RatePlanService.viewFutureRate(dataItem.ZoneName, dataItem.FutureNormalRate, gridQuery.SaleAreaSettings.PrimarySaleEntity);
             };
 
             $scope.onTQIClicked = function (dataItem) {
@@ -711,7 +711,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         ZoneId: zoneItem.ZoneId,
                         RateId: zoneItem.CurrentRateId,
                         EED: zoneItem.CurrentRateEED
-                    };
+                        };
                     zoneChanges.ClosedRates = [rateToClose];
                 }
 

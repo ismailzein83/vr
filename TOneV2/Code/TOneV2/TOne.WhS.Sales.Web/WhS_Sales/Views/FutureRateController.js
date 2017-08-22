@@ -2,12 +2,13 @@
 
     'use strict';
 
-    FutureRateController.$inject = ['$scope', 'UtilsService', 'VRNavigationService'];
+    FutureRateController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'WhS_BE_PrimarySaleEntityEnum'];
 
-    function FutureRateController($scope, UtilsService, VRNavigationService)
+    function FutureRateController($scope, UtilsService, VRNavigationService, WhS_BE_PrimarySaleEntityEnum)
     {
         var zoneName;
         var futureRate;
+        var primarySaleEntity;
 
         loadParameters();
         defineScope();
@@ -16,11 +17,12 @@
         function loadParameters()
         {
             var parameters = VRNavigationService.getParameters($scope);
-            
+
             if (parameters != undefined)
             {
                 zoneName = parameters.zoneName;
                 futureRate = parameters.futureRate;
+                primarySaleEntity = parameters.primarySaleEntity;
             }
         }
 
@@ -35,8 +37,19 @@
                 var rateType = (futureRate.RateTypeId != null) ? 'Other' : 'Normal';
                 $scope.title = 'Future ' + rateType + ' Rate of Zone ' + zoneName;
                 $scope.scopeModel.rate = futureRate.Rate;
-                if (!futureRate.IsRateEditable)
-                    $scope.scopeModel.isInheritedMessage = ' (Inherited)';
+
+                if (primarySaleEntity == WhS_BE_PrimarySaleEntityEnum.SellingProduct.value) {
+                    if (futureRate.IsRateEditable) {
+                        $scope.scopeModel.futureRateIconType = 'explicit';
+                        $scope.scopeModel.futureRateIconTooltip = 'Explicit';
+                    }
+                    
+                }
+                else if (!futureRate.IsRateEditable) {
+                    $scope.scopeModel.futureRateIconType = 'inherited';
+                    $scope.scopeModel.futureRateIconTooltip = 'Inherited';
+                }
+                
                 $scope.scopeModel.rateBED = UtilsService.getShortDate(new Date(futureRate.BED));
             }
 
