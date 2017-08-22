@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.BP.Activities
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
-        public OutArgument<DateTime> MaximumEndChargePeriod { get; set; }
+        public OutArgument<DateTime?> MaximumEndChargePeriod { get; set; }
 
         [RequiredArgument]
         public OutArgument<List<AccountPackageRecurChargeData>> AccountPackageRecurChargeDataList { get; set; }
@@ -40,7 +40,7 @@ namespace Retail.BusinessEntity.BP.Activities
                 accountPackageRecurChargeDataList.Add(accountPackageRecurChargeData);
             }
 
-            DateTime maximumEndChargePeriod = accountPackageRecurChargeDataList.Select(itm => itm.EndChargePeriod).Max();
+            DateTime maximumEndChargePeriod = accountPackageRecurChargeDataList.Select(itm => itm.EndChargePeriod).Max().AddDays(-1);
 
             this.MaximumEndChargePeriod.Set(context, maximumEndChargePeriod);
             this.AccountPackageRecurChargeDataList.Set(context, accountPackageRecurChargeDataList);
@@ -49,8 +49,8 @@ namespace Retail.BusinessEntity.BP.Activities
 
         private DateTime GetEndChargePeriod(DateTime effectiveDate)
         {
-            effectiveDate = effectiveDate.AddMonths(1);
-            return new DateTime(effectiveDate.Year, effectiveDate.Month, 1);
+            DateTime modifiedDate = DateTime.Now.AddMonths(1);
+            return new DateTime(modifiedDate.Year, modifiedDate.Month, 1);
         }
     }
 }

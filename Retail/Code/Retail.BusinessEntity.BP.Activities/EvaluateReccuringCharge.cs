@@ -52,8 +52,6 @@ namespace Retail.BusinessEntity.BP.Activities
                 if (recurringChargeEvaluatorOutputs == null)
                     continue;
 
-                FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, effectiveDate);
-
                 int numberOfDays = Convert.ToInt32(accountPackageRecurChargeData.EndChargePeriod.Subtract(accountPackageRecurChargeData.BeginChargePeriod).TotalDays);
 
                 foreach (RecurringChargeEvaluatorOutput recurringChargeEvaluatorOutput in recurringChargeEvaluatorOutputs)
@@ -69,6 +67,7 @@ namespace Retail.BusinessEntity.BP.Activities
                     DateTime chargeDay = accountPackageRecurChargeData.BeginChargePeriod;
                     while (chargeDay < accountPackageRecurChargeData.EndChargePeriod)
                     {
+                        FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, chargeDay);
                         AccountPackageRecurCharge accountPackageRecurCharge = new AccountPackageRecurCharge()
                         {
                             AccountPackageID = accountPackageRecurChargeData.AccountPackage.AccountPackageId,

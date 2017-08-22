@@ -19,13 +19,11 @@ namespace Retail.BusinessEntity.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Apply Reccuring Charge To Database has started", null);
             List<AccountPackageRecurCharge> accountPackageRecurChargeList = context.GetValue(this.AccountPackageRecurChargeList);
             DateTime chargeDay = context.GetValue(this.ChargeDay);
 
             AccountPackageRecurChargeManager accountPackageRecurChargeManager = new AccountPackageRecurChargeManager();
             accountPackageRecurChargeManager.ApplyAccountPackageReccuringCharges(accountPackageRecurChargeList, chargeDay);
-            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Apply Reccuring Charge To Database is done", null);
         }
     }
 }

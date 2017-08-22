@@ -33,10 +33,12 @@ namespace Retail.BusinessEntity.Data.SQL
 
         public DateTime? GetMaximumChargeDay()
         {
-            object maximumChargeDay = ExecuteScalarSP("[Retail_BE].[sp_RecurChargeBalanceUpdateSummary_GetMaximumChargeDay]");
-            if (maximumChargeDay != null)
-                return (DateTime)maximumChargeDay;
-            return null;
+            object maximumChargeDayAsObj = ExecuteScalarSP("[Retail_BE].[sp_RecurChargeBalanceUpdateSummary_GetMaximumChargeDay]");
+            DateTime? maximumChargeDay = null;
+            if (maximumChargeDayAsObj != DBNull.Value)
+                maximumChargeDay = (DateTime)maximumChargeDayAsObj;
+
+            return maximumChargeDay;
         }
 
         public void Delete(DateTime chargeDay)

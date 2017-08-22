@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.BP.Activities
         public InArgument<List<AccountPackageRecurCharge>> AccountPackageRecurChargeList { get; set; }
 
         [RequiredArgument]
-        public InArgument<DateTime > ChargeDay { get; set; }
+        public InArgument<DateTime> ChargeDay { get; set; }
 
         [RequiredArgument]
         public OutArgument<RecurChargeBalanceUpdateSummary> RecurChargeBalanceUpdateSummary { get; set; }
@@ -25,9 +25,14 @@ namespace Retail.BusinessEntity.BP.Activities
             if (accountPackageRecurChargeList != null)
             {
                 recurChargeBalanceUpdateSummary = new Entities.RecurChargeBalanceUpdateSummary()
-                { 
+                {
                     ChargeDay = this.ChargeDay.Get(context),
-                    AccountPackageRecurChargeKeys = accountPackageRecurChargeList.Select(itm => new AccountPackageRecurChargeKey() { }).ToHashSet()
+                    AccountPackageRecurChargeKeys = accountPackageRecurChargeList.Select(itm => new AccountPackageRecurChargeKey() 
+                    { 
+                        BalanceAccountTypeID = itm.BalanceAccountTypeID, 
+                        ChargeDay = itm.ChargeDay, 
+                        TransactionTypeId = itm.TransactionTypeID 
+                    }).ToHashSet()
                 };
             }
 

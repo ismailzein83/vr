@@ -45,10 +45,13 @@ namespace Retail.BusinessEntity.Data.SQL
 
         public DateTime? GetMaximumChargeDay()
         {
-            object maximumChargeDay = ExecuteScalarSP("[Retail_BE].[sp_AccountPackageRecurCharge_GetMaximumChargeDay]");
-            if (maximumChargeDay != null)
-                return (DateTime)maximumChargeDay;
-            return null;
+            object maximumChargeDayAsObj = ExecuteScalarSP("[Retail_BE].[sp_AccountPackageRecurCharge_GetMaximumChargeDay]");
+
+            DateTime? maximumChargeDay = null;
+            if (maximumChargeDayAsObj != DBNull.Value)
+                maximumChargeDay = (DateTime)maximumChargeDayAsObj;
+
+            return maximumChargeDay;
         }
 
         public List<AccountPackageRecurChargeKey> GetAccountRecurringChargeKeys(DateTime chargeDay)
@@ -64,30 +67,33 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             DataTable dtAccountPackageRecurCharge = GetAccountPackageRecurChargeTable();
             dtAccountPackageRecurCharge.BeginLoadData();
-            foreach (var accountPackageRecurCharge in accountPackageRecurChargeList)
+            if (accountPackageRecurChargeList != null)
             {
-                DataRow dr = dtAccountPackageRecurCharge.NewRow();
-                dr["AccountPackageID"] = accountPackageRecurCharge.AccountPackageID;
-                dr["ChargeableEntityID"] = accountPackageRecurCharge.ChargeableEntityID;
+                foreach (var accountPackageRecurCharge in accountPackageRecurChargeList)
+                {
+                    DataRow dr = dtAccountPackageRecurCharge.NewRow();
+                    dr["AccountPackageID"] = accountPackageRecurCharge.AccountPackageID;
+                    dr["ChargeableEntityID"] = accountPackageRecurCharge.ChargeableEntityID;
 
-                if (accountPackageRecurCharge.BalanceAccountTypeID.HasValue)
-                    dr["BalanceAccountTypeID"] = accountPackageRecurCharge.BalanceAccountTypeID.Value;
-                else
-                    dr["BalanceAccountTypeID"] = DBNull.Value;
+                    if (accountPackageRecurCharge.BalanceAccountTypeID.HasValue)
+                        dr["BalanceAccountTypeID"] = accountPackageRecurCharge.BalanceAccountTypeID.Value;
+                    else
+                        dr["BalanceAccountTypeID"] = DBNull.Value;
 
-                if (!string.IsNullOrEmpty(accountPackageRecurCharge.BalanceAccountID))
-                    dr["BalanceAccountID"] = accountPackageRecurCharge.BalanceAccountID;
-                else
-                    dr["BalanceAccountID"] = DBNull.Value;
+                    if (!string.IsNullOrEmpty(accountPackageRecurCharge.BalanceAccountID))
+                        dr["BalanceAccountID"] = accountPackageRecurCharge.BalanceAccountID;
+                    else
+                        dr["BalanceAccountID"] = DBNull.Value;
 
-                dr["ChargeDay"] = accountPackageRecurCharge.ChargeDay;
-                dr["ChargeAmount"] = accountPackageRecurCharge.ChargeAmount;
-                dr["CurrencyID"] = accountPackageRecurCharge.CurrencyID;
-                dr["TransactionTypeID"] = accountPackageRecurCharge.TransactionTypeID;
-                dr["AccountID"] = accountPackageRecurCharge.AccountID;
-                dr["AccountBEDefinitionId"] = accountPackageRecurCharge.AccountBEDefinitionId;
+                    dr["ChargeDay"] = accountPackageRecurCharge.ChargeDay;
+                    dr["ChargeAmount"] = accountPackageRecurCharge.ChargeAmount;
+                    dr["CurrencyID"] = accountPackageRecurCharge.CurrencyID;
+                    dr["TransactionTypeID"] = accountPackageRecurCharge.TransactionTypeID;
+                    dr["AccountID"] = accountPackageRecurCharge.AccountID;
+                    dr["AccountBEDefinitionId"] = accountPackageRecurCharge.AccountBEDefinitionId;
 
-                dtAccountPackageRecurCharge.Rows.Add(dr);
+                    dtAccountPackageRecurCharge.Rows.Add(dr);
+                }
             }
             dtAccountPackageRecurCharge.EndLoadData();
             return dtAccountPackageRecurCharge;
@@ -120,7 +126,7 @@ namespace Retail.BusinessEntity.Data.SQL
                 AccountPackageRecurChargeId = (long)reader["ID"],
                 AccountPackageID = (int)reader["AccountPackageID"],
                 ChargeableEntityID = (Guid)reader["ChargeableEntityID"],
-                BalanceAccountTypeID = GetReaderValue<Guid>(reader, "BalanceAccountTypeID"),
+                BalanceAccountTypeID = GetReaderValue<Guid?>(reader, "BalanceAccountTypeID"),
                 BalanceAccountID = reader["BalanceAccountID"] as string,
                 AccountID = (long)reader["AccountID"],
                 AccountBEDefinitionId = (Guid)reader["AccountBEDefinitionId"],
@@ -136,7 +142,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return new AccountPackageRecurChargeKey()
             {
-                BalanceAccountTypeID = GetReaderValue<Guid>(reader, "BalanceAccountTypeID"),
+                BalanceAccountTypeID = GetReaderValue<Guid?>(reader, "BalanceAccountTypeID"),
                 ChargeDay = (DateTime)reader["ChargeDay"],
                 TransactionTypeId = (Guid)reader["TransactionTypeID"]
             };

@@ -108,13 +108,23 @@
         </OutArgument>
       </rbba1:PrepareRecurChargeBalanceUpdateSummary.RecurChargeBalanceUpdateSummary>
     </rbba1:PrepareRecurChargeBalanceUpdateSummary>
-    <rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB sap2010:WorkflowViewState.IdRef="ApplyRecurChargeBalanceUpdateSummaryToDB_1">
-      <rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB.RecurChargeBalanceUpdateSummary>
-        <InArgument x:TypeArguments="rbe:RecurChargeBalanceUpdateSummary">
-          <mca:CSharpValue x:TypeArguments="rbe:RecurChargeBalanceUpdateSummary">RecurChargeBalanceUpdateSummary</mca:CSharpValue>
+    <If>
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">RecurChargeBalanceUpdateSummary !=null</mca:CSharpValue>
         </InArgument>
-      </rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB.RecurChargeBalanceUpdateSummary>
-    </rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB>
+      </If.Condition>
+      <If.Then>
+        <rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB sap2010:WorkflowViewState.IdRef="ApplyRecurChargeBalanceUpdateSummaryToDB_1">
+          <rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB.RecurChargeBalanceUpdateSummary>
+            <InArgument x:TypeArguments="rbe:RecurChargeBalanceUpdateSummary">
+              <mca:CSharpValue x:TypeArguments="rbe:RecurChargeBalanceUpdateSummary">RecurChargeBalanceUpdateSummary</mca:CSharpValue>
+            </InArgument>
+          </rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB.RecurChargeBalanceUpdateSummary>
+        </rbba1:ApplyRecurChargeBalanceUpdateSummaryToDB>
+      </If.Then>
+      <sap2010:WorkflowViewState.IdRef>If_1</sap2010:WorkflowViewState.IdRef>
+    </If>
     <rbba1:PrepareAndApplyRecurChargeToBalance sap2010:WorkflowViewState.IdRef="PrepareAndApplyRecurChargeToBalance_1">
       <rbba1:PrepareAndApplyRecurChargeToBalance.AccountPackageRecurChargeList>
         <InArgument x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">
@@ -137,7 +147,7 @@
         </InArgument>
       </rbba1:PrepareAndApplyRecurChargeToBalance.PreviousRecurChargeBalanceUpdateSummaryList>
     </rbba1:PrepareAndApplyRecurChargeToBalance>
-    <rbba1:ApplyReccuringChargeToDB>
+    <rbba1:ApplyReccuringChargeToDB sap2010:WorkflowViewState.IdRef="ApplyReccuringChargeToDB_1">
       <rbba1:ApplyReccuringChargeToDB.AccountPackageRecurChargeList>
         <InArgument x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">
           <mca:CSharpValue x:TypeArguments="scg:List(rbe:AccountPackageRecurCharge)">Input.AccountPackageRecurChargeList</mca:CSharpValue>
@@ -148,7 +158,6 @@
           <mca:CSharpValue x:TypeArguments="s:DateTime">ChargeDay</mca:CSharpValue>
         </InArgument>
       </rbba1:ApplyReccuringChargeToDB.ChargeDay>
-      <sap2010:WorkflowViewState.IdRef>ApplyReccuringChargeToDB_1</sap2010:WorkflowViewState.IdRef>
     </rbba1:ApplyReccuringChargeToDB>
     <rbba1:DeleteRecurChargeBalanceUpdateSummary sap2010:WorkflowViewState.IdRef="DeleteRecurChargeBalanceUpdateSummary_1">
       <rbba1:DeleteRecurChargeBalanceUpdateSummary.ChargeDay>
@@ -157,25 +166,26 @@
         </InArgument>
       </rbba1:DeleteRecurChargeBalanceUpdateSummary.ChargeDay>
     </rbba1:DeleteRecurChargeBalanceUpdateSummary>
-    <sads:DebugSymbol.Symbol>d0VDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFwcGx5UmVjdXJyaW5nQ2hhcmdlLnhhbWwYOwOhAQ4CAQE/Cz9aAgECRgVROwIBXFIFXTUCAU9eBW40AgE8bwV1NgIBNXYFiwExAgEcjAEFmAEmAgEPmQEFnwEzAgEITgtOoQECAWNJC0lUAgFdWgtaVAIBVlULVZwBAgFQZgtmVAIBSWsLa4sBAgFDYQthiwECAT1yC3KDAQIBNoMBC4MBlAECAS+IAQuIAZkBAgEpfgt+VAIBI3kLeYsBAgEdlAELlAFUAgEWjwELjwGLAQIBEJwBC5wBVAIBCQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0VDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFwcGx5UmVjdXJyaW5nQ2hhcmdlLnhhbWwaOwOqAQ4CAQE/Cz9aAgECRgVROwIBY1IFXTUCAVZeBW40AgFDbwV/CgIBNYABBZUBMQIBHJYBBaEBJgIBD6IBBagBMwIBCE4LTqEBAgFqSQtJVAIBZFoLWlQCAV1VC1WcAQIBV2YLZlQCAVBrC2uLAQIBSmELYYsBAgFEcgtycAIBNnYJfDoCATyNAQuNAZQBAgEvkgELkgGZAQIBKYgBC4gBVAIBI4MBC4MBiwECAR2eAQueAVQCARaZAQuZAYsBAgEQpQELpQFUAgEJeQ95hwECAT0=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="LoadRecurChargeBalanceUpdateSummaryListFromDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="LoadAccountPackageRecurChargeKeysFromDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="PrepareRecurChargeBalanceUpdateSummary_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="LoadRecurChargeBalanceUpdateSummaryListFromDB_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="LoadAccountPackageRecurChargeKeysFromDB_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="PrepareRecurChargeBalanceUpdateSummary_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="ApplyRecurChargeBalanceUpdateSummaryToDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="PrepareAndApplyRecurChargeToBalance_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ApplyReccuringChargeToDB_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="DeleteRecurChargeBalanceUpdateSummary_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,518">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="PrepareAndApplyRecurChargeToBalance_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="ApplyReccuringChargeToDB_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="DeleteRecurChargeBalanceUpdateSummary_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,706">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Retail.BusinessEntity.BP.ApplyRecurringCharge_1" sap:VirtualizedContainerService.HintSize="262,598" />
+      <sap2010:ViewStateData Id="Retail.BusinessEntity.BP.ApplyRecurringCharge_1" sap:VirtualizedContainerService.HintSize="526,786" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

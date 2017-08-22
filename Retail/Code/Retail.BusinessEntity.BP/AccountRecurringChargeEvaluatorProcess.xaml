@@ -50,11 +50,11 @@
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.BP.Activities</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.BP.Arguments</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
-      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.BP</AssemblyReference>
     </sco:Collection>
@@ -70,7 +70,7 @@
       <Variable x:TypeArguments="x:Int32" Default="0" Name="subProcessCompleted" />
       <Variable x:TypeArguments="scg:Dictionary(s:DateTime, scg:List(rbe:AccountPackageRecurCharge))" Name="AccountPackageRecurChargesByDate" />
       <Variable x:TypeArguments="scg:List(s:DateTime)" Name="ChargingDatesPeriod" />
-      <Variable x:TypeArguments="s:DateTime" Name="MaximumEndChargePeriod" />
+      <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="MaximumEndChargePeriod" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Account Recurring Charge Evaluator Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -119,8 +119,8 @@
               </InArgument>
             </rbba1:GetAccountPackagesChargePeriod.EffectiveDate>
             <rbba1:GetAccountPackagesChargePeriod.MaximumEndChargePeriod>
-              <OutArgument x:TypeArguments="s:DateTime">
-                <mca:CSharpReference x:TypeArguments="s:DateTime">MaximumEndChargePeriod</mca:CSharpReference>
+              <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">MaximumEndChargePeriod</mca:CSharpReference>
               </OutArgument>
             </rbba1:GetAccountPackagesChargePeriod.MaximumEndChargePeriod>
           </rbba1:GetAccountPackagesChargePeriod>
@@ -199,7 +199,13 @@
                   </InArgument>
                 </rbba1:GetAccountPackageRecurChargeList.ChargeDay>
               </rbba1:GetAccountPackageRecurChargeList>
-              <local:ApplyRecurringCharge Input="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyRecurringCharge_1" />
+              <local:ApplyRecurringCharge sap2010:WorkflowViewState.IdRef="ApplyRecurringCharge_1">
+                <local:ApplyRecurringCharge.Input>
+                  <InArgument x:TypeArguments="rbba:ApplyRecurringChargeInput">
+                    <mca:CSharpValue x:TypeArguments="rbba:ApplyRecurringChargeInput">new ApplyRecurringChargeInput() { AccountPackageRecurChargeList = AccountPackageRecurChargeList, ChargeDay = chargeDay}</mca:CSharpValue>
+                  </InArgument>
+                </local:ApplyRecurringCharge.Input>
+              </local:ApplyRecurringCharge>
               <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
                 <Assign.To>
                   <OutArgument x:TypeArguments="x:Int32">
@@ -215,7 +221,7 @@
               <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4">
                 <vbw:WriteTrackingMessage.Message>
                   <InArgument x:TypeArguments="x:String">
-                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Charge Day '{0}' completed. {1} charge days remaining", chargeDay.ToString("yyyy-MM-dd"), subProcessCompleted)</mca:CSharpValue>
+                    <mca:CSharpValue x:TypeArguments="x:String">String.Format("Processing Charge Day '{0}' completed. {1} charge days remaining", chargeDay.ToString("yyyy-MM-dd"),ChargingDatesPeriod.Count - subProcessCompleted)</mca:CSharpValue>
                   </InArgument>
                 </vbw:WriteTrackingMessage.Message>
                 <vbw:WriteTrackingMessage.Severity>
@@ -236,7 +242,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d1dDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFjY291bnRSZWN1cnJpbmdDaGFyZ2VFdmFsdWF0b3JQcm9jZXNzLnhhbWwtPgPwAQ4CAQFDC0NjAgEDRjNGNgIBAksFUSADAegBUgVdIAMB1gFeBZIBCgMBiwGTAQWjASkCAXKkAQXnAQoCARXoAQXuASACAQtOC06FAQMB6gFLYEuWAQMB6QFVC1V0AwHgAVoLWlgDAdgBUnBSdgMB1wFhC2FfAwGMAWUJkAEUAwGUAZsBC5sBWAMBgwGgAQugAW0CAXuWAQuWAXACAXOnAQunAZEBAgEWqwEJ5QETAgEe6wEL6wGFAQIBDegBYOgBlgECAQxpC34yAwGxAX8LjwErAwGVAa4BD64BcwIBarUBDeMBGAIBH3ERcXIDAc0BdhF2XgMBxAFsEWybAQMBuwF7EXtvAwGyAYwBEYwBXgMBqAGCARGCAZMBAwGfAYcBEYcBsgEDAZYBuQEPyQE4AgFLygEPygF3AgFKywEP1gEYAgE11wEP4gEqAgEgxgEVxgFeAgFgvAEVvAGXAQIBVsEBFcEBrgECAUzTARXTAWkCAUDOARXOAW0CATbfARXfAY8BAgEr2gEV2gHbAQIBIQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1dDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFjY291bnRSZWN1cnJpbmdDaGFyZ2VFdmFsdWF0b3JQcm9jZXNzLnhhbWwuPgP2AQ4CAQFDC0NjAgEDRjNGNgIBAksFUSADAfIBUgVdIAMB4AFeBZIBCgMBlQGTAQWjASkCAXykAQXtAQoCARXuAQX0ASACAQtOC06FAQMB9AFLYEuWAQMB8wFVC1V0AwHqAVoLWlgDAeIBUnBSdgMB4QFhC2FfAwGWAWUJkAEUAwGeAZsBC5sBWAMBjQGgAQugAW0DAYUBlgELlgFwAgF9pwELpwGRAQIBFqsBCesBEwIBHvEBC/EBhQECAQ3uAWDuAZYBAgEMaQt+MgMBuwF/C48BKwMBnwGuAQ+uAXMCAXS1AQ3pARgCAR9xEXFyAwHXAXYRdl4DAc4BbBFsmwEDAcUBexF7ewMBvAGMARGMAV4DAbIBggERggGTAQMBqQGHARGHAbIBAwGgAbkBD8kBOAIBVcoBD9ABLAIBStEBD9wBGAIBNd0BD+gBKgIBIMYBFcYBXgIBarwBFbwBlwECAWDBARXBAa4BAgFWzQEVzQHgAQIBS9kBFdkBaQIBQNQBFdQBbQIBNuUBFeUBjwECASvgARXgAfYBAgEh</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
