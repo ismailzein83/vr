@@ -85,6 +85,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         }
 
         public string RecentZoneName { get; set; }
+        public string SplitByZoneName { get; set; }
 
         public DateTime BED { get; set; }
 

@@ -34,35 +34,277 @@ namespace TOne.WhS.CodePreparation.Business
             ExistingRateGroupByZoneName existingRateGroupByZoneName, SalePriceListsByOwner salePriceListsByOwner, DateTime effectiveDate, int sellingNumberPlanId)
         {
             //If no existing zones exist, no need to perform the whole process
-            if (existingZones.Count() == 0)
+            if (!existingZones.Any())
                 return;
-
-            IEnumerable<ExistingRate> effectiveExistingRates = existingRates.FindAllRecords(itm => itm.EED == itm.ParentZone.EED);
-            ExistingRatesByZoneName effectiveExistingRatesByZoneName = StructureEffectiveExistingRatesByZoneName(effectiveExistingRates);
-
-
-            SettingManager settingManager = new SettingManager();
-            SaleAreaSettingsData saleAreaSettingsData = settingManager.GetSetting<SaleAreaSettingsData>(TOne.WhS.BusinessEntity.Business.Constants.SaleAreaSettings);
-
-            Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType = StructureZonesByType(existingZones, saleAreaSettingsData);
 
             ExistingRateGroup existingRateGroup;
             foreach (ZoneToProcess zoneToProcess in zonesToProcess)
             {
                 existingRateGroupByZoneName.TryGetValue(zoneToProcess.ZoneName, out existingRateGroup);
 
-                if (zoneToProcess.ChangeType == ZoneChangeType.New)
-                    CreateRatesForNewZones(zoneToProcess, sellingNumberPlanId, saleAreaSettingsData, zonesByType, effectiveExistingRatesByZoneName, effectiveDate, salePriceListsByOwner);
-                else if (zoneToProcess.ChangeType == ZoneChangeType.Renamed)
-                {
-                    existingRateGroupByZoneName.TryGetValue(zoneToProcess.RecentZoneName, out existingRateGroup);
-                    GenerateRatesForRenamedZoneFromOriginalZone(zoneToProcess, existingRateGroup, effectiveDate, salePriceListsByOwner);
-                }
+                if (zoneToProcess.ChangeType == ZoneChangeType.New || zoneToProcess.ChangeType == ZoneChangeType.Renamed)
+                    ManageRate(zoneToProcess, existingRates, existingZones, salePriceListsByOwner, effectiveDate);
                 else
                     PrepareDataForPreview(zoneToProcess, existingRateGroup);
             }
         }
 
+        #region Manage rates
+
+        private void ManageRate(ZoneToProcess zoneToProcess, IEnumerable<ExistingRate> existingRates, IEnumerable<ExistingZone> existingZones, SalePriceListsByOwner salePriceListsByOwner, DateTime effectiveDate)
+        {
+            IEnumerable<ExistingRate> effectiveExistingRates = existingRates.FindAllRecords(itm => itm.EED == itm.ParentZone.EED);
+            ExistingRatesByZoneName effectiveExistingRatesByZoneName = StructureEffectiveExistingRatesByZoneName(effectiveExistingRates);
+
+            SettingManager settingManager = new SettingManager();
+            SaleAreaSettingsData saleAreaSettingsData = settingManager.GetSetting<SaleAreaSettingsData>(BusinessEntity.Business.Constants.SaleAreaSettings);
+
+            Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType = StructureZonesByType(existingZones, saleAreaSettingsData);
+
+            IEnumerable<ExistingZone> fixedZones = zonesByType[SaleZoneTypeEnum.Fixed];
+            IEnumerable<ExistingZone> mobileZones = zonesByType[SaleZoneTypeEnum.Mobile];
+            SaleZoneTypeEnum saleZoneType = GetSaleZoneType(zoneToProcess.ZoneName, saleAreaSettingsData);
+
+            if (!fixedZones.Any() && !mobileZones.Any())
+                return;
+
+            IEnumerable<NewZoneRateEntity> rates;
+
+            if (saleZoneType == SaleZoneTypeEnum.Mobile && !mobileZones.Any() && fixedZones.Any())
+            {
+                rates = CreateRatesWithDefaultValue(fixedZones.Select(z => z.Name), effectiveExistingRatesByZoneName);
+            }
+            else if (saleZoneType == SaleZoneTypeEnum.Fixed && !fixedZones.Any() && mobileZones.Any())
+            {
+                rates = CreateRatesWithDefaultValue(mobileZones.Select(z => z.Name), effectiveExistingRatesByZoneName);
+            }
+            else
+            {
+                IEnumerable<string> matchedZoneNames = GetMatchedZones(zoneToProcess, saleZoneType, zonesByType);
+                rates = GetHighestRatesFromZoneMatchesSaleEntities(matchedZoneNames, effectiveExistingRatesByZoneName);
+            }
+            AddRateToAddToZoneToProcess(zoneToProcess, effectiveDate, salePriceListsByOwner, rates);
+        }
+
+        private List<string> GetMatchedZones(ZoneToProcess zoneToProcess, SaleZoneTypeEnum saleZoneType, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType)
+        {
+            List<string> matchedZoneNames = new List<string>();
+            string recentZoneName = zoneToProcess.ChangeType == ZoneChangeType.Renamed
+                ? zoneToProcess.RecentZoneName
+                : zoneToProcess.SplitByZoneName;
+
+            if (!string.IsNullOrEmpty(recentZoneName))
+                matchedZoneNames.Add(recentZoneName);
+
+            else
+            {
+                List<ExistingZone> matchingZones = new List<ExistingZone>();
+                List<string> codes = GetCodes(zoneToProcess.CodesToMove, zoneToProcess.CodesToAdd);
+
+                if (!codes.Any()) throw new Exception(string.Format("A new zone '{0}' does not have any new codes", zoneToProcess.ZoneName));
+
+                IEnumerable<ExistingZone> fixedZones = zonesByType[SaleZoneTypeEnum.Fixed];
+                IEnumerable<ExistingZone> mobileZones = zonesByType[SaleZoneTypeEnum.Mobile];
+
+                if (fixedZones.Any() && saleZoneType == SaleZoneTypeEnum.Fixed)
+                    matchingZones = GetMatchedExistingZones(codes, fixedZones);
+                if (mobileZones.Any() && saleZoneType == SaleZoneTypeEnum.Mobile)
+                    matchingZones = GetMatchedExistingZones(codes, mobileZones);
+
+                matchedZoneNames = matchingZones.Select(z => z.Name).ToList();
+            }
+            return matchedZoneNames;
+        }
+
+        private List<string> GetCodes(IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToAdd> codesToAdd)
+        {
+            List<string> codes = new List<string>();
+            if (codesToMove.Any())
+                codes.AddRange(codesToMove.Select(c => c.Code));
+            if (codesToAdd.Any())
+                codes.AddRange(codesToAdd.Select(c => c.Code));
+
+            return codes;
+        }
+        private void AddRateToAddToZoneToProcess(ZoneToProcess zoneToProcess, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner, IEnumerable<NewZoneRateEntity> rates)
+        {
+            foreach (var rate in rates)
+            {
+                PriceListToAdd priceListToAdd = new PriceListToAdd
+                {
+                    OwnerId = rate.OwnerId,
+                    OwnerType = rate.OwnerType,
+                    EffectiveOn = effectiveDate,
+                    CurrencyId = GetOwnerCurreny(rate.OwnerId, rate.OwnerType)
+                };
+
+                priceListToAdd = salePriceListsByOwner.TryAddValue(priceListToAdd);
+
+                RateToAdd rateToAdd = new RateToAdd
+                {
+                    PriceListToAdd = priceListToAdd,
+                    Rate = rate.Rate,
+                    ZoneName = zoneToProcess.ZoneName,
+                    CurrencyId = rate.CurrencyId
+                };
+
+                foreach (AddedZone addedZone in zoneToProcess.AddedZones)
+                {
+                    rateToAdd.AddedRates.Add(new AddedRate
+                    {
+                        BED = addedZone.BED > rate.RateBED ? addedZone.BED : rate.RateBED,
+                        EED = addedZone.EED,
+                        PriceListToAdd = rateToAdd.PriceListToAdd,
+                        NormalRate = rateToAdd.Rate,
+                        AddedZone = addedZone
+                    });
+                }
+                zoneToProcess.RatesToAdd.Add(rateToAdd);
+            }
+        }
+
+        private List<ExistingZone> GetMatchedExistingZones(IEnumerable<string> codes, IEnumerable<ExistingZone> existingZonesByType)
+        {
+            List<ExistingZone> matchedExistingZones = new List<ExistingZone>();
+
+            List<SaleCode> saleCodes = new List<SaleCode>();
+
+            foreach (ExistingZone existingZone in existingZonesByType)
+            {
+                saleCodes.AddRange(existingZone.ExistingCodes.Select(item => item.CodeEntity));
+            }
+
+            CodeIterator<SaleCode> codeIterator = new CodeIterator<SaleCode>(saleCodes);
+            foreach (string code in codes)
+            {
+                SaleCode matchedCode = codeIterator.GetLongestMatch(code);
+                if (matchedCode != null)
+                {
+                    ExistingZone existingZone = existingZonesByType.FindRecord(item => item.ZoneId == matchedCode.ZoneId);
+                    if (!matchedExistingZones.Contains(existingZone))
+                        matchedExistingZones.Add(existingZone);
+                }
+            }
+            //In case no matching zones from new codes to add, take all zones from matching type, i.e: all mobile zones or all fixed zones
+            return matchedExistingZones.Any() ? matchedExistingZones : existingZonesByType.ToList();
+        }
+
+        private List<NewZoneRateEntity> GetHighestRatesFromZoneMatchesSaleEntities(IEnumerable<string> matchedZones, ExistingRatesByZoneName existingRatesByZoneName)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
+            ExistingRatesByOwner existingRatesByOwner = new ExistingRatesByOwner();
+
+            List<ExistingRate> effectiveExistingRates;
+            foreach (string matchedzone in matchedZones)
+            {
+                if (existingRatesByZoneName.TryGetValue(matchedzone, out effectiveExistingRates))
+                {
+                    foreach (ExistingRate existingRate in effectiveExistingRates)
+                    {
+                        if (existingRate.RateEntity.RateTypeId != null)
+                            continue;
+
+                        SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
+                        if (salePriceList.OwnerType == SalePriceListOwnerType.Customer)
+                        {
+                            CarrierAccount customer = carrierAccountManager.GetCarrierAccount(salePriceList.OwnerId);
+                            if (customer.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
+                                continue;
+                        }
+                        existingRatesByOwner.TryAddValue((int)salePriceList.OwnerType, salePriceList.OwnerId, existingRate);
+                    }
+                }
+            }
+
+            List<NewZoneRateEntity> ratesEntities = new List<NewZoneRateEntity>();
+
+            var e = existingRatesByOwner.GetEnumerator();
+            while (e.MoveNext())
+            {
+                Owner owner = existingRatesByOwner.GetOwner(e.Current.Key);
+
+                HighestRate highestRate = GetHighestRate(e.Current.Value);
+
+                if (highestRate == null) continue;
+
+                NewZoneRateEntity zoneRate = new NewZoneRateEntity
+                {
+                    OwnerId = owner.OwnerId,
+                    OwnerType = owner.OwnerType,
+                    CurrencyId = highestRate.CurrencyId,
+                    Rate = highestRate.Value,
+                    RateBED = highestRate.BED
+                };
+                ratesEntities.Add(zoneRate);
+            }
+            return ratesEntities;
+        }
+
+        private HighestRate GetHighestRate(IEnumerable<ExistingRate> existingRates)
+        {
+            SaleRateManager saleRateManager = new SaleRateManager();
+
+            HighestRate highestRate = new HighestRate();
+            if (existingRates == null || !existingRates.Any()) return null;
+
+            foreach (var existingRate in existingRates)
+            {
+                if (existingRate.RateEntity.Rate > highestRate.Value)
+                {
+                    highestRate.Value = existingRate.RateEntity.Rate;
+                    highestRate.CurrencyId = saleRateManager.GetCurrencyId(existingRate.RateEntity);
+                    highestRate.BED = existingRate.RateEntity.BED;
+                }
+            }
+            return highestRate;
+        }
+
+        private List<NewZoneRateEntity> CreateRatesWithDefaultValue(IEnumerable<string> zoneNames, ExistingRatesByZoneName existingRatesByZoneName)
+        {
+            Dictionary<int, NewZoneRateEntity> defaultRates = new Dictionary<int, NewZoneRateEntity>();
+
+            SalePriceListManager priceListManager = new SalePriceListManager();
+            CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            BusinessEntity.Business.ConfigManager businessConfigmanager = new BusinessEntity.Business.ConfigManager();
+
+            int systemCurrencyId = configManager.GetSystemCurrencyId();
+            decimal defaultRate = businessConfigmanager.GetRoundedDefaultRate();
+
+            foreach (string zoneName in zoneNames)
+            {
+                List<ExistingRate> effectiveExistingRates = null;
+                if (existingRatesByZoneName.TryGetValue(zoneName, out effectiveExistingRates))
+                {
+                    foreach (ExistingRate effectiveRate in effectiveExistingRates)
+                    {
+                        SalePriceList pricelist = priceListManager.GetPriceList(effectiveRate.RateEntity.PriceListId);
+                        if (!defaultRates.ContainsKey(pricelist.OwnerId))
+                        {
+                            int newRateCurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(pricelist.OwnerId);
+                            NewZoneRateEntity rate = new NewZoneRateEntity
+                            {
+                                OwnerId = pricelist.OwnerId,
+                                OwnerType = pricelist.OwnerType,
+                                CurrencyId = pricelist.OwnerType == SalePriceListOwnerType.SellingProduct
+                                    ? systemCurrencyId
+                                    : newRateCurrencyId,
+                                Rate = pricelist.OwnerType == SalePriceListOwnerType.SellingProduct
+                                    ? defaultRate
+                                    : currencyExchangeRateManager.ConvertValueToCurrency(defaultRate, systemCurrencyId, newRateCurrencyId, DateTime.Now)
+                            };
+                            defaultRates.Add(pricelist.OwnerId, rate);
+                        }
+                    }
+                }
+            }
+            return defaultRates.Values.ToList();
+        }
+
+        #endregion
         private ExistingRatesByZoneName StructureEffectiveExistingRatesByZoneName(IEnumerable<ExistingRate> effectiveExistingRates)
         {
             ExistingRatesByZoneName effectiveExistingRatesByZoneName = new ExistingRatesByZoneName();
@@ -81,95 +323,6 @@ namespace TOne.WhS.CodePreparation.Business
             }
             return effectiveExistingRatesByZoneName;
         }
-        private void GenerateRatesForRenamedZoneFromOriginalZone(ZoneToProcess zoneToProcess, ExistingRateGroup existingRateGroup, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
-        {
-            if (existingRateGroup != null)
-            {
-                ExistingRatesByOwner existingRatesByOwner = new ExistingRatesByOwner();
-                SaleRateManager saleRateManager = new SaleRateManager();
-
-                var e = existingRateGroup.NormalRates.GetEnumerator();
-
-                while (e.MoveNext())
-                {
-                    ExistingRate lastExistingRate = GetLastExistingRateFromConnectedExistingRates(e.Current.Value);
-                    Owner owner = existingRatesByOwner.GetOwner(e.Current.Key);
-                    int currencyId = saleRateManager.GetCurrencyId(lastExistingRate.RateEntity);
-
-                    PriceListToAdd priceListToAdd = new PriceListToAdd()
-                    {
-                        OwnerId = owner.OwnerId,
-                        OwnerType = owner.OwnerType,
-                        EffectiveOn = effectiveDate,
-                        CurrencyId = currencyId
-                    };
-
-                    priceListToAdd = salePriceListsByOwner.TryAddValue(priceListToAdd);
-
-                    RateToAdd rateToAdd = new RateToAdd()
-                    {
-                        PriceListToAdd = priceListToAdd,
-                        Rate = lastExistingRate.RateEntity.Rate,
-                        ZoneName = zoneToProcess.ZoneName,
-                        CurrencyId = currencyId
-                    };
-
-                    foreach (AddedZone addedZone in zoneToProcess.AddedZones)
-                    {
-                        rateToAdd.AddedRates.Add(new AddedRate()
-                        {
-                            BED = addedZone.BED,
-                            EED = addedZone.EED,
-                            PriceListToAdd = rateToAdd.PriceListToAdd,
-                            NormalRate = rateToAdd.Rate,
-                            AddedZone = addedZone
-                        });
-                    }
-
-                    zoneToProcess.RatesToAdd.Add(rateToAdd);
-                }
-            }
-        }
-
-        private void GenerateRatesForRenamedZoneFromOriginalZone(ZoneToProcess zoneToProcess, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
-        {
-            foreach (NotImportedRate notImportedRate in zoneToProcess.NotImportedNormalRates)
-            {
-                PriceListToAdd priceListToAdd = new PriceListToAdd()
-                {
-                    OwnerId = notImportedRate.OwnerId,
-                    OwnerType = notImportedRate.OwnerType,
-                    EffectiveOn = effectiveDate,
-                    //CurrencyId = notImportedRate.
-                };
-
-                priceListToAdd = salePriceListsByOwner.TryAddValue(priceListToAdd);
-
-                RateToAdd rateToAdd = new RateToAdd()
-                {
-                    PriceListToAdd = priceListToAdd,
-                    Rate = notImportedRate.Rate,
-                    ZoneName = zoneToProcess.ZoneName,
-                };
-
-                foreach (AddedZone addedZone in zoneToProcess.AddedZones)
-                {
-                    rateToAdd.AddedRates.Add(new AddedRate()
-                    {
-                        BED = addedZone.BED,
-                        EED = addedZone.EED,
-                        PriceListToAdd = rateToAdd.PriceListToAdd,
-                        NormalRate = rateToAdd.Rate,
-                        AddedZone = addedZone
-                    });
-                }
-
-                zoneToProcess.RatesToAdd.Add(rateToAdd);
-            }
-        }
-
-
-
         private void PrepareDataForPreview(ZoneToProcess zoneToProcess, ExistingRateGroup existingRateGroup)
         {
             if (existingRateGroup == null)
@@ -178,14 +331,12 @@ namespace TOne.WhS.CodePreparation.Business
             IEnumerable<NotImportedRate> notImportedNormalRates = this.GetNotImportedRatesFromExistingRatesByOwner(zoneToProcess.ZoneName, existingRateGroup.NormalRates);
             zoneToProcess.NotImportedNormalRates.AddRange(notImportedNormalRates);
         }
-
         private void ProcessNotImportedData(IEnumerable<NotImportedZone> notImportedZones, IEnumerable<ExistingZone> existingZones,
             ExistingRateGroupByZoneName existingRateGroupByZoneName)
         {
             CloseRatesForClosedZones(existingZones);
             FillRatesForNotImportedZones(notImportedZones, existingRateGroupByZoneName);
         }
-
         private void FillRatesForNotImportedZones(IEnumerable<NotImportedZone> notImportedZones, ExistingRateGroupByZoneName existingRateGroupByZoneName)
         {
             if (notImportedZones == null)
@@ -204,7 +355,6 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
         }
-
         private ExistingRateGroupByZoneName StructureExistingRatesByZoneName(IEnumerable<ExistingRate> existingRates)
         {
             ExistingRateGroupByZoneName existingRateGroupByZoneName = new ExistingRateGroupByZoneName();
@@ -234,57 +384,6 @@ namespace TOne.WhS.CodePreparation.Business
             }
 
             return existingRateGroupByZoneName;
-        }
-
-        private void CreateRatesForNewZones(ZoneToProcess zoneToProcess, int sellingNumberPlanId, SaleAreaSettingsData saleAreaSettingsData,
-            Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType, ExistingRatesByZoneName effectiveExistingRates, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner)
-        {
-            SaleZoneTypeEnum saleZoneType = this.GetSaleZoneType(zoneToProcess.ZoneName, saleAreaSettingsData);
-            NewZoneRateLocator locator;
-            if (saleZoneType == SaleZoneTypeEnum.Fixed)
-                locator = new FixedZoneRateLocator(sellingNumberPlanId);
-            else
-                locator = new MobileZoneRateLocator(sellingNumberPlanId);
-
-            IEnumerable<NewZoneRateEntity> rates = locator.GetRates(zoneToProcess.CodesToAdd, zonesByType, effectiveExistingRates);
-
-            //in some case locators return null indicating that this new zone must not have new rates assigned
-            if (rates == null)
-                return;
-
-            foreach (NewZoneRateEntity zoneRate in rates)
-            {
-                PriceListToAdd priceListToAdd = new PriceListToAdd()
-                {
-                    OwnerId = zoneRate.OwnerId,
-                    OwnerType = zoneRate.OwnerType,
-                    EffectiveOn = effectiveDate,
-                    CurrencyId = GetOwnerCurreny(zoneRate.OwnerId, zoneRate.OwnerType)
-                };
-
-                priceListToAdd = salePriceListsByOwner.TryAddValue(priceListToAdd);
-
-                RateToAdd rateToAdd = new RateToAdd()
-                {
-                    PriceListToAdd = priceListToAdd,
-                    Rate = zoneRate.Rate,
-                    ZoneName = zoneToProcess.ZoneName,
-                    CurrencyId = zoneRate.CurrencyId
-                };
-
-                foreach (AddedZone addedZone in zoneToProcess.AddedZones)
-                {
-                    rateToAdd.AddedRates.Add(new AddedRate
-                    {
-                        BED = addedZone.BED > zoneRate.RateBED ? addedZone.BED : zoneRate.RateBED,
-                        EED = addedZone.EED,
-                        PriceListToAdd = rateToAdd.PriceListToAdd,
-                        NormalRate = rateToAdd.Rate,
-                        AddedZone = addedZone
-                    });
-                }
-                zoneToProcess.RatesToAdd.Add(rateToAdd);
-            }
         }
         private int GetOwnerCurreny(int ownerId, SalePriceListOwnerType ownerType)
         {
@@ -326,7 +425,6 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
         }
-
         private Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> StructureZonesByType(IEnumerable<ExistingZone> existingZones, SaleAreaSettingsData saleAreaSettingsData)
         {
             List<ExistingZone> fixedExistingZones = new List<ExistingZone>();
@@ -349,7 +447,6 @@ namespace TOne.WhS.CodePreparation.Business
 
             return zonesByType;
         }
-
         private SaleZoneTypeEnum GetSaleZoneType(string zoneName, SaleAreaSettingsData saleAreaSettingsData)
         {
             if (saleAreaSettingsData != null && saleAreaSettingsData.MobileKeywords.Select(item => item.ToLower()).Any(zoneName.ToLower().Contains))
@@ -357,8 +454,6 @@ namespace TOne.WhS.CodePreparation.Business
 
             return SaleZoneTypeEnum.Fixed;
         }
-
-
         private IEnumerable<NotImportedRate> GetNotImportedRatesFromExistingRatesByOwner(string zoneName, ExistingRatesByOwner existingRatesByOwner)
         {
             List<NotImportedRate> notImportedRates = new List<NotImportedRate>();
@@ -374,7 +469,6 @@ namespace TOne.WhS.CodePreparation.Business
 
             return notImportedRates;
         }
-
         private NotImportedRate GetNotImportedRate(string zoneName, Owner owner, List<ExistingRate> existingRates, bool hasChanged)
         {
             ExistingRate lastElement = GetLastExistingRateFromConnectedExistingRates(existingRates);
@@ -395,7 +489,6 @@ namespace TOne.WhS.CodePreparation.Business
                 CurrencyId = saleRateManager.GetCurrencyId(lastElement.RateEntity)
             };
         }
-
         private ExistingRate GetLastExistingRateFromConnectedExistingRates(List<ExistingRate> existingRates)
         {
             List<ExistingRate> connectedExistingRates = existingRates.GetConnectedEntities(DateTime.Today);

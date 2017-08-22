@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Activities;
+using System.Activities.Expressions;
 using Vanrise.Common;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using TOne.WhS.CodePreparation.Entities;
@@ -47,7 +48,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<ExistingCode>> ExistingCodes { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<string,List<ExistingZone>>> ClosedExistingZones { get; set; }
+        public InArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
@@ -104,8 +105,41 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 zoneToProcess.BED = GetZoneBED(zoneToProcess);
                 zoneToProcess.EED = GetZoneEED(zoneToProcess);
             }
+            CheckForRenamedOrSplitZones(zonesToProcess.Where(z => z.ChangeType == ZoneChangeType.New), closedExistingZones);
         }
 
+        private void CheckForRenamedOrSplitZones(IEnumerable<ZoneToProcess> newZonesToProcess, Dictionary<string, List<ExistingZone>> closedExistingZones)
+        {
+            foreach (var newZone in newZonesToProcess)
+            {
+                if (newZone.CodesToMove.Any() && !newZone.ExistingZones.Any())
+                {
+                    //Check if all codes are coming from the same original zone; otherwise we cannot consider it as renamed
+                    string originalZoneName = newZone.CodesToMove.First().OldZoneName;
+                    if (newZone.CodesToMove.All(itm => itm.OldZoneName.Equals(originalZoneName, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        //Check if the original zone has been close, otherwise the original still exists change type of this zone cannot be considered as renamed
+                        List<ExistingZone> matchedRenamedExistingZones;
+                        if (closedExistingZones != null && closedExistingZones.TryGetValue(originalZoneName, out matchedRenamedExistingZones))
+                        {
+                            //The last check is on the count of zones between original and new zone, in case they are not equal we cannot consider this zone as renamed
+                            HashSet<string> codesFromOriginalZone = NumberingPlanHelper.GetExistingCodes(matchedRenamedExistingZones);
+                            if (newZone.CodesToMove.Count == codesFromOriginalZone.Count)
+                            {
+                                newZone.RecentZoneName = originalZoneName;
+                                newZone.ChangeType = ZoneChangeType.Renamed;
+                            }
+                        }
+                        else
+                        {
+                            if (!newZone.CodesToAdd.Any())
+                                newZone.SplitByZoneName = originalZoneName;
+                        }
+                    }
+                }
+
+            }
+        }
         private IEnumerable<NotImportedZone> PrepareNotImportedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
             Dictionary<string, List<ExistingZone>> notImportedZonesByZoneName = new Dictionary<string, List<ExistingZone>>();
@@ -168,30 +202,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
-            if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.ExistingZones.Count() == 0)
-            {
-                //Check if all codes are coming from the same original zone; otherwise we cannot consider it as renamed
-                string originalZoneName = zoneToProcess.CodesToMove.First().OldZoneName;
-                if (zoneToProcess.CodesToMove.All(itm => itm.OldZoneName.Equals(originalZoneName, StringComparison.InvariantCultureIgnoreCase)))
-                {
-                    //Check if the original zone has been close, otherwise the original still exists change type of this zone cannot be considered as renamed
-                    List<ExistingZone> matchedRenamedExistingZones;
-                    if (closedExistingZones != null && closedExistingZones.TryGetValue(originalZoneName, out matchedRenamedExistingZones))
-                    {
-                        //The last check is on the count of zones between original and new zone, in case they are not equal we cannot consider this zone as renamed
-                        HashSet<string> codesFromOriginalZone = NumberingPlanHelper.GetExistingCodes(matchedRenamedExistingZones);
-                        if(zoneToProcess.CodesToMove.Count == codesFromOriginalZone.Count)
-                        {
-                            zoneToProcess.RecentZoneName = originalZoneName;
-                            return ZoneChangeType.Renamed;
-                        }
-                    }
-                }
-            }
-
             List<ExistingZone> matchedExistingZones;
             if (closedExistingZones != null && closedExistingZones.TryGetValue(zoneToProcess.ZoneName, out matchedExistingZones))
-                 return ZoneChangeType.Deleted; 
+                return ZoneChangeType.Deleted;
 
             if (zoneToProcess.AddedZones.Count() > 0 && zoneToProcess.ExistingZones.Count() == 0)
                 return ZoneChangeType.New;
