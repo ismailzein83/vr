@@ -164,7 +164,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                             EED: otherRate.NewRateEED
                         });
                     }
-                    else if (!compareDates(otherRate.CurrentRateEED, otherRate.CurrentRateNewEED))
+                    else if (!WhS_Sales_RatePlanService.areDatesTheSame(otherRate.CurrentRateEED, otherRate.CurrentRateNewEED))
                     {
                         zoneItem.ClosedRates.push({
                             ZoneId: zoneItem.ZoneId,
@@ -198,21 +198,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             		zoneItem.ClosedRates.splice(closedOtherRateIndex, 1);
             		return true;
             	}
-            	return false;
-            }
-
-            function compareDates(date1, date2) {
-                if (date1 && date2) {
-                    if (typeof date1 == 'string')
-                        date1 = new Date(date1);
-                    if (typeof date2 == 'string')
-                        date2 = new Date(date2);
-                    return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
-                }
-                else if (!date1 && !date2)
-                    return true;
-                else
-                    return false;
+                return false;
             }
 
             if (ctrl.onReady != null)

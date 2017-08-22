@@ -708,7 +708,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             function setDraftRateToClose(zoneChanges, zoneItem) {
                 zoneChanges.RateChange = null;
 
-                if (zoneItem.IsCurrentRateEditable && !compareDates(zoneItem.CurrentRateEED, zoneItem.currentRateEED)) {
+                if (zoneItem.IsCurrentRateEditable && !WhS_Sales_RatePlanService.areDatesTheSame(zoneItem.CurrentRateEED, zoneItem.currentRateEED)) {
                     var rateToClose = {
                         ZoneId: zoneItem.ZoneId,
                         RateId: zoneItem.CurrentRateId,
@@ -717,20 +717,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     zoneChanges.ClosedRates = [rateToClose];
                 }
 
-                function compareDates(date1, date2) {
-                    if (date1 && date2) {
-                        if (typeof date1 == 'string')
-                            date1 = new Date(date1);
-                        if (typeof date2 == 'string')
-                            date2 = new Date(date2);
-                        return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
-                    }
-                    else if (!date1 && !date2)
-                        return true;
-                    else
-                        return false;
                 }
-            }
 
             function applyRoutingProductChanges() {
                 zoneItemChanges.NewRoutingProduct = zoneItem.NewRoutingProduct;

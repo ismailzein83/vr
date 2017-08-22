@@ -15,7 +15,8 @@
             openBulkActionWizard: openBulkActionWizard,
             openTQIEditor: openTQIEditor,
             importRatePlan: importRatePlan,
-            addCountries: addCountries
+            addCountries: addCountries,
+            areDatesTheSame: areDatesTheSame
         };
 
         function sellNewCountries(input) {
@@ -176,6 +177,21 @@
 
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/AddCountries.html", parameters, settings);
         }
+
+        function areDatesTheSame(date1, date2) {
+            if (date1 && date2) {
+                if (typeof date1 == 'string')
+                    date1 = new Date(date1);
+                if (typeof date2 == 'string')
+                    date2 = new Date(date2);
+                return (date1.getDay() == date2.getDay() && date1.getMonth() == date2.getMonth() && date1.getYear() == date2.getYear());
+            }
+            else if (!date1 && !date2)
+                return true;
+            else
+                return false;
+        }
+
     }
 
     appControllers.service('WhS_Sales_RatePlanService', RatePlanService);
