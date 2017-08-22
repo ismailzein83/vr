@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -33,6 +35,43 @@ namespace TOne.WhS.BusinessEntity.Business
             var financialAccountDefinition = GetAllFinancialAccountDefinitions().GetRecord(financialAccountDefinitionId);
             financialAccountDefinition.ThrowIfNull("financialAccountDefinition", financialAccountDefinitionId);
             return financialAccountDefinition;
+        }
+
+        public IEnumerable<WHSFinancialAccountDefinitionConfig> GetFinancialAccountDefinitionsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<WHSFinancialAccountDefinitionConfig>(WHSFinancialAccountDefinitionConfig.EXTENSION_TYPE);
+        }
+        public IEnumerable<WHSFinancialAccountDefinitionInfo> GetFinancialAccountDefinitionInfo(WHSFinancialAccountDefinitionInfoFilter filter)
+        {
+            var financialAccountDefinitions = GetAllFinancialAccountDefinitions();
+            Func<BusinessEntityDefinition, bool> filterExpression = (businessEntityDefinition) =>
+            {
+                if (filter != null)
+                {
+                    if (filter.Filters != null)
+                    {
+                        WHSFinancialAccountDefinitionFilterContext financialAccountDefinitionFilterContext = new WHSFinancialAccountDefinitionFilterContext
+                        {
+                            FinancialAccountDefinitionId = businessEntityDefinition.BusinessEntityDefinitionId
+                        };
+                        if (!filter.Filters.Any(x => x.IsMatched(financialAccountDefinitionFilterContext)))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            };
+            return financialAccountDefinitions.MapRecords(FinancialAccountDefinitionInfoMapper, filterExpression);
+        }
+        private WHSFinancialAccountDefinitionInfo FinancialAccountDefinitionInfoMapper(BusinessEntityDefinition businessEntityDefinition)
+        {
+            return new WHSFinancialAccountDefinitionInfo
+            {
+                FinancialAccountDefinitionId = businessEntityDefinition.BusinessEntityDefinitionId,
+                Name = businessEntityDefinition.Name
+            };
         }
     }
 }

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.AccountBalance.Business;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Business;
@@ -63,19 +65,19 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 int financialAccountId;
 
-                //IFinancialAccountDataManager dataManager = AccountBalanceManagerFactory.GetDataManager<IFinancialAccountDataManager>();
-                //bool insertActionSucc = dataManager.Insert(financialAccount, out financialAccountId);
-                //if (insertActionSucc)
-                //{
-                //    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                //    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                //    financialAccount.FinancialAccountId = financialAccountId;
-                //    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccount);
-                //}
-                //else
-                //{
-                //    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-                //}
+                IWHSFinancialAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
+                bool insertActionSucc = dataManager.Insert(financialAccount, out financialAccountId);
+                if (insertActionSucc)
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    financialAccount.FinancialAccountId = financialAccountId;
+                    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccount);
+                }
+                else
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                }
             }
             insertOperationOutput.Message = message;
             return insertOperationOutput;
@@ -94,19 +96,19 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 if (TryReflectEffectiveDateToInvoiceAndBalanceAccounts(financialAccountToEdit, out message))
                 {
-                    //    IFinancialAccountDataManager dataManager = AccountBalanceManagerFactory.GetDataManager<IFinancialAccountDataManager>();
-                    //    bool updateActionSucc = dataManager.Update(financialAccount);
-                    //    if (updateActionSucc)
-                    //    {
-                    //        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                    //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    //        updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccount);
-                    //    }
-                    //    else
-                    //    {
-                    //updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-                    //updateOperationOutput.Message = "Account not exists";
-                    //    }
+                    IWHSFinancialAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
+                    bool updateActionSucc = dataManager.Update(financialAccountToEdit);
+                    if (updateActionSucc)
+                    {
+                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                        updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(this.GetFinancialAccount(financialAccountToEdit.FinancialAccountId));
+                    }
+                    else
+                    {
+                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+                        updateOperationOutput.Message = "Account not exists";
+                    }
                 }
             }
             updateOperationOutput.Message = message;
@@ -375,19 +377,28 @@ namespace TOne.WhS.BusinessEntity.Business
             return true;
         }
 
+        public string GetAccountCurrencyName(int? carrierProfileId, int? carrierAccountId)
+        {
+            int currencyId = -1;
+            if (carrierProfileId.HasValue)
+                currencyId = new CarrierProfileManager().GetCarrierProfileCurrencyId(carrierProfileId.Value);
+            else
+                currencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(carrierAccountId.Value);
+            CurrencyManager currencyManager = new CurrencyManager();
+            return currencyManager.GetCurrencySymbol(currencyId);
+        }
         #endregion
 
         #region Private Classes
 
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            //IFinancialAccountDataManager _dataManager = AccountBalanceManagerFactory.GetDataManager<IFinancialAccountDataManager>();
+            IWHSFinancialAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
             object _updateHandle;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                throw new NotImplementedException();
-                //return _dataManager.AreFinancialAccountsUpdated(ref _updateHandle);
+                return _dataManager.AreFinancialAccountsUpdated(ref _updateHandle);
             }
         }
 
@@ -418,8 +429,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccounts",
                () =>
                {
-                   throw new NotImplementedException();
-                   return new Dictionary<int, WHSFinancialAccount>();
+                   IWHSFinancialAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
+                   IEnumerable<WHSFinancialAccount> financialAccounts = dataManager.GetFinancialAccounts();
+                   return financialAccounts.ToDictionary(fa => fa.FinancialAccountId, fa => fa);
                });
         }
 
@@ -881,12 +893,14 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         private WHSFinancialAccountDetail FinancialAccountDetailMapper(WHSFinancialAccount financialAccount)
         {
-
+            var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             return new WHSFinancialAccountDetail
             {
                 Entity = financialAccount,
                 AccountTypeDescription = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccount.FinancialAccountDefinitionId),
-                IsActive = IsFinancialAccountActive(financialAccount)
+                IsActive = IsFinancialAccountActive(financialAccount),
+                BalanceAccountTypeId =financialAccountDefinitionSettings.BalanceAccountTypeId ,
+                InvoiceTypeId = financialAccountDefinitionSettings.InvoiceTypeId,
             };
         }
         #endregion

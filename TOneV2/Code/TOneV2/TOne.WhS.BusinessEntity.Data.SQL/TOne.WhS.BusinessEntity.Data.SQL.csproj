@@ -92,6 +92,7 @@
     <Compile Include="SupplierZoneDataManager.cs" />
     <Compile Include="SwitchConnectivityDataManager.cs" />
     <Compile Include="SwitchDataManager.cs" />
+    <Compile Include="WHSFinancialAccountDataManager.cs" />
     <Compile Include="ZoneServiceConfigDataManager.cs" />
   </ItemGroup>
   <ItemGroup>

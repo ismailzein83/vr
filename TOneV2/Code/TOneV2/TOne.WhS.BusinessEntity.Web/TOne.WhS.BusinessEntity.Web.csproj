@@ -146,6 +146,8 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CustomerCountryController.cs" />
+    <Compile Include="Controllers\WHSFinancialAccountController.cs" />
+    <Compile Include="Controllers\WHSFinancialAccountDefinitionController.cs" />
     <Compile Include="Controllers\OtherSaleRateController.cs" />
     <Compile Include="Controllers\SaleEntityZoneRoutingProductHistoryController.cs" />
     <Compile Include="Controllers\SalePriceListChangeController.cs" />
@@ -250,6 +252,34 @@
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\Templates\CodeGroupGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CodeGroup\vr-whs-be-codegroup-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPostpaid\Templates\CustomerPostpaidDefinitionSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPostpaid\Templates\CustomerPostpaidSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPostpaid\whs-be-financialaccountdefinitionsettings-customerpostpaid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPostpaid\whs-be-financialaccountruntimesettings-customerpostpaid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPrepaid\Templates\CustomerPrepaidDefinitionSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPrepaid\Templates\CustomerPrepaidSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPrepaid\whs-be-financialaccountdefinitionsettings-customerprepaid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\CustomerPrepaid\whs-be-financialaccountruntimesettings-customerprepaid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\Netting\Templates\NettingDefinitionSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\Netting\Templates\NettingSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\Netting\whs-be-financialaccountdefinitionsettings-netting.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\Netting\whs-be-financialaccountruntimesettings-netting.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\SupplierPostpaid\Templates\SupplierPostpaidDefinitionSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\SupplierPostpaid\Templates\SupplierPostpaidSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\SupplierPostpaid\whs-be-financialaccountdefinitionsettings-supplierpostpaid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\SupplierPostpaid\whs-be-financialaccountruntimesettings-supplierpostpaid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\SupplierPrepaid\Templates\SupplierPrepaidDefinitionSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\SupplierPrepaid\Templates\SupplierPrepaidSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\SupplierPrepaid\whs-be-financialaccountdefinitionsettings-supplierprepaid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\MainExtensions\SupplierPrepaid\whs-be-financialaccountruntimesettings-supplierprepaid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountBEDefinition.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountSearch.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountdefinition-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccount-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccount-search.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-editor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-extendedsettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
@@ -427,6 +457,8 @@
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerCountryAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\OtherSaleRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneRoutingProductHistoryAPIService.js" />
@@ -447,6 +479,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\TechnicalSettingsAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneRoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />
+    <Content Include="WhS_BusinessEntity\Services\FinancialAccountService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListChangeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListTemplateService.js" />
@@ -500,6 +533,8 @@
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\CodeGroup\CodeGroupUploadEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\FinancialAccount\FinancialAccountEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\FinancialAccount\FinancialAccountEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\RoutingProduct\RoutingProductManagement.html" />
@@ -574,6 +609,7 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Templates\Sale Pricelist Template.xlsx" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

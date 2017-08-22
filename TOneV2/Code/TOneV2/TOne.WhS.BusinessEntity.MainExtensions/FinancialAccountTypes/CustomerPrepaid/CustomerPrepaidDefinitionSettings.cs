@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.FinancialAccountTypes.CustomerP
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("D36D9E9B-FEB9-4A1C-AAE4-73F8296E26FF"); }
         }
 
         public override bool IsApplicableToCustomer
@@ -23,5 +23,6 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.FinancialAccountTypes.CustomerP
         {
             get { return false; }
         }
+        public override string RuntimeEditor { get { return "whs-be-financialaccountruntimesettings-customerprepaid"; } }
     }
 }

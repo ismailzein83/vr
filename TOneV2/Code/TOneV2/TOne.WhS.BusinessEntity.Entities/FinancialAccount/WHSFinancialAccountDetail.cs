@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public WHSFinancialAccount Entity { get; set; }
         public string AccountTypeDescription { get; set; }
         public bool IsActive { get; set; }
+        public Guid? BalanceAccountTypeId { get; set; }
+        public Guid? InvoiceTypeId { get; set; }
     }
 }

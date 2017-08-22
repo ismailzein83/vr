@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.FinancialAccountTypes.Netting
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("9D509D1B-5473-464E-BABB-FCD5D7F4701B"); }
         }
 
         public override bool IsApplicableToCustomer
@@ -23,5 +23,6 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.FinancialAccountTypes.Netting
         {
             get { return true; }
         }
+        public override string RuntimeEditor { get { return "whs-be-financialaccountruntimesettings-netting"; } }
     }
 }

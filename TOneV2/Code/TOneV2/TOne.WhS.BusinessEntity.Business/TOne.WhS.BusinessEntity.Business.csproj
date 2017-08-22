@@ -138,6 +138,8 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FinancialAccount\EventHandlers\FinancialAccountCarrierAccountStatusChangedHandler.cs" />
     <Compile Include="FinancialAccount\EventHandlers\FinancialAccountCarrierProfileStatusChangedHandler.cs" />
+    <Compile Include="FinancialAccount\FinancialAccountDefinitionFilter.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionFilterContext.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountBESettings.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionManager.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountManager.cs" />

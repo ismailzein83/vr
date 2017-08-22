@@ -35,9 +35,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override string SelectorUIControl
         {
-            get { throw new NotImplementedException(); }
+            get { return ""; }
         }
-
+        public override string DefinitionEditor
+        {
+            get { return "whs-be-financialaccountbedefinition-editor"; }
+        }
+        
         #endregion
     }
 }
