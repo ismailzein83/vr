@@ -42,7 +42,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                 if (currentItems.Count > 0)
                 {
                     DateTime? localLastRetrievedFileTime = null;
-                    foreach (var fileObj in currentItems.OrderBy(c => c.Modified))
+                    foreach (var fileObj in currentItems.OrderBy(c => c.Modified).ThenBy(c => c.Name))
                     {
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
