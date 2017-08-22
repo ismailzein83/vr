@@ -273,7 +273,9 @@
     <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-criteria.js" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-management.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\NullToBooleanFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\ParentBusinessEntityFieldFormulaTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-nulltoboolean.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\vr-genericdata-datarecordtypefields-formula-parentbusinessentity.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\Templates\VRActionDefinitionSendEmail.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\vr-genericdata-datarecord-vractiondefinition-extendedsettings-sendemail.js" />

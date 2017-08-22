@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataRecordFieldFormulas\NullToBooleanFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\ParentBusinessEntityFieldFormula.cs" />
     <Compile Include="DataRecordFields\FieldArrayType.cs" />
     <Compile Include="DataRecordFields\FieldTypeHelper.cs" />
