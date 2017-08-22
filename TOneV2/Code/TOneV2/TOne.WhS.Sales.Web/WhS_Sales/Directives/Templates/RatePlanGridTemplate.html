@@ -132,7 +132,7 @@
                     <vr-datagridcolumn headertext="'EED'" fixedwidth="100" disablesorting="true">
                         <span vr-disabled="{{dataItem.IsCountryEnded}} || {{dataItem.IsZonePendingClosed}}">
                             <span vr-disabled="dataItem.isSellingProductZone">
-                                <span vr-disabled="!dataItem.IsCurrentRateEditable">
+                                <span vr-disabled="!dataItem.IsCurrentRateEditable||dataItem.currentRateEED">
                                     <vr-datetimepicker type="date"
                                                        value="dataItem.CurrentRateEED"
                                                        onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"

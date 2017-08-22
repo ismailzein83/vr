@@ -674,7 +674,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 };
 
                 setDraftRateToChange(zoneItemChanges, zoneItem);
-                setDraftRateToClose(zoneItemChanges, zoneItem);
+                if (WhS_Sales_RatePlanUtilsService.isStringEmpty(zoneItem.NewRate)) {
+                    setDraftRateToClose(zoneItemChanges, zoneItem);
+                }
 
                 for (var i = 0; i < zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.length; i++) {
                     var item = zoneItem.drillDownExtensionObject.drillDownDirectiveTabs[i];
