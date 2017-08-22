@@ -20,20 +20,20 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ZoneToProcess zoneTopProcess = context.Target as ZoneToProcess;
+            ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
 
-            if (zoneTopProcess.ChangeType == ZoneChangeType.New || zoneTopProcess.ChangeType == ZoneChangeType.Renamed)
+            if (zoneToProcess.ChangeType == ZoneChangeType.New || zoneToProcess.ChangeType == ZoneChangeType.Renamed)
                 return true;
 
-            if (zoneTopProcess.CodesToAdd.Count() > 0 && zoneTopProcess.BED > DateTime.Today.Date)
+            if (zoneToProcess.CodesToAdd.Count() > 0 && zoneToProcess.BED > DateTime.Today.Date)
             {
-                context.Message = string.Format("Cannot add codes to the pending zone {0}", zoneTopProcess.ZoneName);
+                context.Message = string.Format("Cannot add codes to the pending effective zone {0}", zoneToProcess.ZoneName);
                 return false;
             }
 
-            if (zoneTopProcess.CodesToMove.Count() > 0 && zoneTopProcess.BED > DateTime.Today.Date)
+            if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.BED > DateTime.Today.Date)
             {
-                context.Message = string.Format("Cannot move codes to the pending zone {0}", zoneTopProcess.ZoneName);
+                context.Message = string.Format("Cannot move codes to the pending effective zone {0}", zoneToProcess.ZoneName);
                 return false;
             }
 

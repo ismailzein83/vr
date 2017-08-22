@@ -182,7 +182,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         private DateTime GetZoneBED(ZoneToProcess zoneToProcess)
         {
-            if (zoneToProcess.AddedZones.Count() > 0)
+            if (zoneToProcess.ChangeType == ZoneChangeType.New)
                 return zoneToProcess.AddedZones.Min(item => item.BED);
 
             IEnumerable<ExistingZone> connectedExistingZones = this.GetConnectedExistingZones(zoneToProcess.ExistingZones, zoneToProcess.ZoneName);
