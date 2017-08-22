@@ -581,7 +581,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 if (convertedRate > salePriceListRateChange.RecentRate)
                     salePriceListRateChange.ChangeType = RateChangeType.Increase;
-                else if (convertedRate > salePriceListRateChange.RecentRate)
+                else if (convertedRate < salePriceListRateChange.RecentRate)
                     salePriceListRateChange.ChangeType = RateChangeType.Decrease;
 
                 context.RateChangesOutArgument.Add(salePriceListRateChange);
