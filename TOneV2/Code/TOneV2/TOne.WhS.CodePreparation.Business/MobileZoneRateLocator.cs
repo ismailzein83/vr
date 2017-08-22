@@ -11,6 +11,7 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.CodePreparation.Business
 {
+    //TODO to remove this class because it's no longer used
     public class MobileZoneRateLocator : NewZoneRateLocator
     {
         public MobileZoneRateLocator(int sellingNumberPlanId)

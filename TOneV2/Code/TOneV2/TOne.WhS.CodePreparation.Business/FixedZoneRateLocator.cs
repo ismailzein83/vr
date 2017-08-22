@@ -9,6 +9,7 @@ using TOne.WhS.CodePreparation.Entities.Processing;
 
 namespace TOne.WhS.CodePreparation.Business
 {
+    //TODO to remove this class because it's no longer used
     public class FixedZoneRateLocator : NewZoneRateLocator
     {
         public FixedZoneRateLocator(int sellingNumberPlanId)
