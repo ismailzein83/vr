@@ -24,11 +24,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
-            if (ratePlanContext.IntersectedSellingProductZoneRatesByZone == null)
-                return true;
-
             var countryToAdd = context.Target as CustomerCountryToAdd;
-
             IEnumerable<ExistingZone> countryZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryToAdd.CountryId);
 
             if (countryZones == null || countryZones.Count() == 0)
@@ -38,14 +34,15 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             foreach (ExistingZone countryZone in countryZones)
             {
-                IEnumerable<SaleRate> zoneRates = ratePlanContext.IntersectedSellingProductZoneRatesByZone.GetRecord(countryZone.ZoneId);
+                ZoneInheritedRates zoneRates = ratePlanContext.InheritedRatesByZoneId.GetRecord(countryZone.ZoneId);
+                IEnumerable<SaleRate> zoneNormalRates = (zoneRates != null) ? zoneRates.NormalRates : null;
 
-                if (zoneRates == null || zoneRates.Count() == 0)
+                if (zoneNormalRates == null || zoneNormalRates.Count() == 0)
                     continue;
 
-                if (zoneRates.FindAllRecords(x => !x.EED.HasValue || x.EED.Value > countryToAdd.BED).Count() > 1)
+                if (zoneNormalRates.FindAllRecords(x => !x.EED.HasValue || x.EED.Value > countryToAdd.BED).Count() > 1)
                 {
-                    DateTime lastRateBED = zoneRates.Last().BED;
+                    DateTime lastRateBED = zoneNormalRates.Last().BED;
                     if (!validCountryBED.HasValue || validCountryBED.Value < lastRateBED)
                         validCountryBED = lastRateBED;
                 }

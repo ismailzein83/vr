@@ -67,7 +67,7 @@ namespace TOne.WhS.Sales.Business
             set { _priceListCurrencyId = value; }
         }
         public EffectiveAfterCustomerZoneRatesByZone EffectiveAfterCustomerZoneRatesByZone { get; set; }
-        public IntersectedSellingProductZoneRatesByZone IntersectedSellingProductZoneRatesByZone { get; set; }
+        public InheritedRatesByZoneId InheritedRatesByZoneId { get; set; }
         public Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; set; } // Should be removed; EffectiveAndFutureExistingZonesByCountry should be used instead
         public Dictionary<int, List<ExistingZone>> EffectiveAndFutureExistingZonesByCountry { get; set; }
         public bool ProcessHasChanges
@@ -131,7 +131,7 @@ namespace TOne.WhS.Sales.Business
         SaleEntityZoneRateLocator ActionRateLocator { get; }
         DateTime RetroactiveDate { get; }
         EffectiveAfterCustomerZoneRatesByZone EffectiveAfterCustomerZoneRatesByZone { get; }
-        IntersectedSellingProductZoneRatesByZone IntersectedSellingProductZoneRatesByZone { get; }
+        InheritedRatesByZoneId InheritedRatesByZoneId { get; }
         Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; }
         Dictionary<int, List<ExistingZone>> EffectiveAndFutureExistingZonesByCountry { get; }
         bool ProcessHasChanges { get; }

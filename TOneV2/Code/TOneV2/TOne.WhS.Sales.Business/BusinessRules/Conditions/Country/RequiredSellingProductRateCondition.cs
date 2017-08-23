@@ -26,14 +26,13 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             var countryToAdd = context.Target as CustomerCountryToAdd;
 
             IEnumerable<ExistingZone> countryZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryToAdd.CountryId);
-            IntersectedSellingProductZoneRatesByZone spZoneRatesByZone = ratePlanContext.IntersectedSellingProductZoneRatesByZone;
 
             if (countryZones == null || countryZones.Count() == 0)
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Zones of Country '{0}' were not found"));
 
             string errorMessage = "The Zones of newly sold Countries must all have Rates at the level of the assigned Selling Products";
 
-            if (spZoneRatesByZone == null || spZoneRatesByZone.Count == 0)
+            if (ratePlanContext.InheritedRatesByZoneId.Count == 0)
             {
                 context.Message = errorMessage;
                 return false;
@@ -41,10 +40,12 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             foreach (ExistingZone countryZone in countryZones)
             {
-                List<SaleRate> spZoneRates = spZoneRatesByZone.GetRecord(countryZone.ZoneId);
+                ZoneInheritedRates zoneRates = ratePlanContext.InheritedRatesByZoneId.GetRecord(countryZone.ZoneId);
+                IEnumerable<SaleRate> zoneNormalRates = (zoneRates != null) ? zoneRates.NormalRates : null;
+
                 DateTime effectiveOn = Utilities.Max(countryToAdd.BED, countryZone.BED);
 
-                if (spZoneRates == null || spZoneRates.Count == 0 || !spZoneRates.Any(spZoneRate => spZoneRate.IsEffective(effectiveOn)))
+                if (zoneNormalRates == null || zoneNormalRates.Count() == 0 || !zoneNormalRates.Any(x => x.IsEffective(effectiveOn)))
                 {
                     context.Message = errorMessage;
                     return false;
