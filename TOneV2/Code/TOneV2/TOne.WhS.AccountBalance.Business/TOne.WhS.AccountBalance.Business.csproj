@@ -78,10 +78,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TOne.WhS.AccountBalance.Data\TOne.WhS.AccountBalance.Data.csproj">
-      <Project>{dda303d7-61bb-4a64-9e56-94821bb4bc45}</Project>
-      <Name>TOne.WhS.AccountBalance.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.AccountBalance.Entities\TOne.WhS.AccountBalance.Entities.csproj">
       <Project>{6463e524-5b13-453f-bd95-6974ed0c7b86}</Project>
       <Name>TOne.WhS.AccountBalance.Entities</Name>

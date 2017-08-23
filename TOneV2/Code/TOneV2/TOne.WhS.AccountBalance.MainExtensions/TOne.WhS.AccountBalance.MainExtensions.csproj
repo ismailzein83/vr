@@ -107,8 +107,6 @@
     <Compile Include="VRBalanceAlertThresholds\PrePaid\CustFixedThreshold.cs" />
     <Compile Include="VRBalanceAlertThresholds\PostPaid\CustTolerancePercThreshold.cs" />
     <Compile Include="VRBalanceAlertThresholds\SuppTolerancePercBalAlertThreshold.cs" />
-    <Compile Include="VRObjectTypes\FinancialAccountObjectType.cs" />
-    <Compile Include="VRObjectTypes\FinancialAccountPropertyEvaluator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.AccountBalance.Business\TOne.WhS.AccountBalance.Business.csproj">

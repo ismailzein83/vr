@@ -142,9 +142,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="WhS_AccountBalance\Constant\FinancialAccountPropertyEnum.js" />
-    <Content Include="WhS_AccountBalance\Constant\FinancialAccountCarrierTypeEnum.js" />
-    <Content Include="WhS_AccountBalance\Constant\FinancialAccountEffectiveStatusEnum.js" />
     <Content Include="WhS_AccountBalance\Constant\ModuleConfig.js" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\UnBlockCustomerAction\Directives\Templates\UnBlockCustomerAction.html" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\UnBlockCustomerAction\Directives\Templates\UnBlockCustomerActionDefinition.html" />
@@ -179,10 +176,6 @@
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\BlockCustomerAction\Directives\Templates\BlockCustomerActionDefinition.html" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\BlockCustomerAction\Directives\whs-accountbalance-actiondefinition-customer-block.js" />
     <Content Include="WhS_AccountBalance\Elements\AccountBalanceActions\SendCustomerEmailAction\Directives\whs-accountbalance-actiondefinition-customer-sendemail.js" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\VRObjectTypes\Templates\FinancialAccountObjectTypeTemplate.html" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\VRObjectTypes\Templates\FinancialAccountPropertyEvaluatorTemplate.html" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\VRObjectTypes\whs-accountbalance-financialaccountobjecttype.js" />
-    <Content Include="WhS_AccountBalance\Elements\FinancialAccount\Directives\VRObjectTypes\whs-accountbalance-financialaccountpropertyevaluator.js" />
     <Content Include="WhS_AccountBalance\Elements\QueueActivators\Directives\Templates\QueueActivatorUpdateWhSBalancesTemplate.html" />
     <Content Include="WhS_AccountBalance\Elements\QueueActivators\Directives\whs-accountbalance-queueactivator-updatewhsbalances.js" />
   </ItemGroup>
