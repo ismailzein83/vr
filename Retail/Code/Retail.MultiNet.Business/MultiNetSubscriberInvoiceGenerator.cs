@@ -185,13 +185,13 @@ namespace Retail.MultiNet.Business
             ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(chargeableEntityId);
 
             chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", chargeableEntityId);
-            if (!chargeableEntitySettings.TransactionTypeId.HasValue)
-                throw new NullReferenceException(string.Format("chargeableEntitySettings.TransactionTypeId ChargeableEntityId: {0}", chargeableEntityId));
-
-            billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
+            if (chargeableEntitySettings.TransactionTypeId.HasValue)
             {
-                TransactionTypeId = chargeableEntitySettings.TransactionTypeId.Value
-            });
+                billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
+                {
+                    TransactionTypeId = chargeableEntitySettings.TransactionTypeId.Value
+                });
+            }
         }
 
         private Guid GetBillingTransactionAccountTypeId(Guid invoiceTypeId, string accountId, DateTime effectiveOn)

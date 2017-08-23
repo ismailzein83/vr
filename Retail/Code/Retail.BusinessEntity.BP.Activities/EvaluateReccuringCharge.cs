@@ -39,7 +39,13 @@ namespace Retail.BusinessEntity.BP.Activities
             {
                 Guid accountBEDefinitionId = accountPackageRecurChargeData.AccountPackage.AccountBEDefinitionId;
                 Package package = packageManager.GetPackage(accountPackageRecurChargeData.AccountPackage.PackageId);
+                package.ThrowIfNull("package", accountPackageRecurChargeData.AccountPackage.PackageId);
+                package.Settings.ThrowIfNull("package.Settings", accountPackageRecurChargeData.AccountPackage.PackageId);
+
                 PackageDefinition packageDefinition = packageDefinitionManager.GetPackageDefinitionById(package.Settings.PackageDefinitionId);
+                packageDefinition.ThrowIfNull("packageDefinition", package.Settings.PackageDefinitionId);
+                packageDefinition.Settings.ThrowIfNull("packageDefinition.Settings", package.Settings.PackageDefinitionId);
+
                 RecurChargePackageDefinitionSettings recurChargePackageDefinitionSettings = packageDefinition.Settings.ExtendedSettings as RecurChargePackageDefinitionSettings;
                 RecurChargePackageSettings recurChargePackageSettings = package.Settings.ExtendedSettings as RecurChargePackageSettings;
 
@@ -60,11 +66,10 @@ namespace Retail.BusinessEntity.BP.Activities
                     {
                         ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(recurringChargeEvaluatorOutput.ChargeableEntityId);
                         chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", recurringChargeEvaluatorOutput.ChargeableEntityId);
-                        if (!chargeableEntitySettings.TransactionTypeId.HasValue)
-                            throw new NullReferenceException(string.Format("chargeableEntitySettings.TransactionTypeId ChargeableEntityId:{0}", recurringChargeEvaluatorOutput.ChargeableEntityId));
+                        //if (!chargeableEntitySettings.TransactionTypeId.HasValue)
+                        //    throw new NullReferenceException(string.Format("chargeableEntitySettings.TransactionTypeId ChargeableEntityId:{0}", recurringChargeEvaluatorOutput.ChargeableEntityId));
 
                         decimal amountPerDay = recurringChargeEvaluatorOutput.Amount / numberOfDays;
-
 
                         DateTime chargeDay = accountPackageRecurChargeData.BeginChargePeriod;
                         while (chargeDay < accountPackageRecurChargeData.EndChargePeriod)
@@ -79,10 +84,11 @@ namespace Retail.BusinessEntity.BP.Activities
                                 ChargeAmount = chargeDay >= recurringChargeEvaluatorOutput.ChargingStart && chargeDay < recurringChargeEvaluatorOutput.ChargingEnd ? amountPerDay : 0,
                                 ChargeDay = chargeDay,
                                 CurrencyID = recurringChargeEvaluatorOutput.CurrencyId,
-                                TransactionTypeID = chargeableEntitySettings.TransactionTypeId.Value,
+                                TransactionTypeID = chargeableEntitySettings.TransactionTypeId,
                                 AccountID = accountPackageRecurChargeData.AccountPackage.AccountId,
                                 AccountBEDefinitionId = accountBEDefinitionId
                             };
+
                             List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargesByDate.GetOrCreateItem(accountPackageRecurCharge.ChargeDay, () => { return new List<AccountPackageRecurCharge>(); });
                             accountPackageRecurChargeList.Add(accountPackageRecurCharge);
                             chargeDay = chargeDay.AddDays(1);

@@ -13,9 +13,6 @@ namespace Retail.BusinessEntity.BP.Activities
     public sealed class PrepareAndApplyRecurChargeToBalance : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<DateTime> ChargeDay { get; set; }
-
-        [RequiredArgument]
         public InArgument<List<AccountPackageRecurCharge>> AccountPackageRecurChargeList { get; set; }
 
         [RequiredArgument]
@@ -39,7 +36,7 @@ namespace Retail.BusinessEntity.BP.Activities
                 itemsToBeDeleted.UnionWith(previousRecurChargeBalanceUpdateSummaryList.SelectMany(itm => itm.AccountPackageRecurChargeKeys));
 
             UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
-            
+
 
             if (accountPackageRecurChargeList != null && accountPackageRecurChargeList.Count > 0)
             {
@@ -60,7 +57,7 @@ namespace Retail.BusinessEntity.BP.Activities
                     AccountPackageRecurChargeKey accountPackageRecurChargeItemKey = item.Key;
                     List<AccountPackageRecurCharge> accountPackageRecurChargeItemList = item.Value;
 
-                    if (!accountPackageRecurChargeItemKey.BalanceAccountTypeID.HasValue)
+                    if (!accountPackageRecurChargeItemKey.BalanceAccountTypeID.HasValue || !accountPackageRecurChargeItemKey.TransactionTypeId.HasValue)
                         continue;
 
                     Guid correctionProcessId = usageBalanceManager.InitializeUpdateUsageBalance();
@@ -69,7 +66,7 @@ namespace Retail.BusinessEntity.BP.Activities
                         CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem>(),
                         PeriodDate = accountPackageRecurChargeItemKey.ChargeDay,
                         CorrectionProcessId = correctionProcessId,
-                        TransactionTypeId = accountPackageRecurChargeItemKey.TransactionTypeId,
+                        TransactionTypeId = accountPackageRecurChargeItemKey.TransactionTypeId.Value,
                         IsLastBatch = true
                     };
 
@@ -96,19 +93,19 @@ namespace Retail.BusinessEntity.BP.Activities
             {
                 foreach (AccountPackageRecurChargeKey accountPackageRecurChargeKey in itemsToBeDeleted)
                 {
-                    if (accountPackageRecurChargeKey.BalanceAccountTypeID.HasValue)
+                    if (!accountPackageRecurChargeKey.BalanceAccountTypeID.HasValue || !accountPackageRecurChargeKey.TransactionTypeId.HasValue)
+                        continue;
+                    
+                    Guid correctionProcessId = usageBalanceManager.InitializeUpdateUsageBalance();
+                    CorrectUsageBalancePayload payload = new CorrectUsageBalancePayload()
                     {
-                        Guid correctionProcessId = usageBalanceManager.InitializeUpdateUsageBalance();
-                        CorrectUsageBalancePayload payload = new CorrectUsageBalancePayload()
-                        {
-                            CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem>(),
-                            PeriodDate = accountPackageRecurChargeKey.ChargeDay,
-                            CorrectionProcessId = correctionProcessId,
-                            TransactionTypeId = accountPackageRecurChargeKey.TransactionTypeId,
-                            IsLastBatch = true
-                        };
-                        usageBalanceManager.CorrectUsageBalance(accountPackageRecurChargeKey.BalanceAccountTypeID.Value, payload);
-                    }
+                        CorrectUsageBalanceItems = new List<CorrectUsageBalanceItem>(),
+                        PeriodDate = accountPackageRecurChargeKey.ChargeDay,
+                        CorrectionProcessId = correctionProcessId,
+                        TransactionTypeId = accountPackageRecurChargeKey.TransactionTypeId.Value,
+                        IsLastBatch = true
+                    };
+                    usageBalanceManager.CorrectUsageBalance(accountPackageRecurChargeKey.BalanceAccountTypeID.Value, payload);
                 }
             }
         }

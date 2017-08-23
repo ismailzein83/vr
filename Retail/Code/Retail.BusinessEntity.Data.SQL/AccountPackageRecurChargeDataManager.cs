@@ -88,7 +88,12 @@ namespace Retail.BusinessEntity.Data.SQL
                     dr["ChargeDay"] = accountPackageRecurCharge.ChargeDay;
                     dr["ChargeAmount"] = accountPackageRecurCharge.ChargeAmount;
                     dr["CurrencyID"] = accountPackageRecurCharge.CurrencyID;
-                    dr["TransactionTypeID"] = accountPackageRecurCharge.TransactionTypeID;
+
+                    if (accountPackageRecurCharge.TransactionTypeID.HasValue)
+                        dr["TransactionTypeID"] = accountPackageRecurCharge.TransactionTypeID.Value;
+                    else
+                        dr["TransactionTypeID"] = DBNull.Value;
+
                     dr["AccountID"] = accountPackageRecurCharge.AccountID;
                     dr["AccountBEDefinitionId"] = accountPackageRecurCharge.AccountBEDefinitionId;
 
@@ -133,7 +138,7 @@ namespace Retail.BusinessEntity.Data.SQL
                 ChargeDay = (DateTime)reader["ChargeDay"],
                 ChargeAmount = (decimal)reader["ChargeAmount"],
                 CurrencyID = (int)reader["CurrencyID"],
-                TransactionTypeID = (Guid)reader["TransactionTypeID"],
+                TransactionTypeID = GetReaderValue<Guid?>(reader, "TransactionTypeID"),
                 CreatedTime = (DateTime)reader["CreatedTime"]
             };
         }
@@ -144,7 +149,7 @@ namespace Retail.BusinessEntity.Data.SQL
             {
                 BalanceAccountTypeID = GetReaderValue<Guid?>(reader, "BalanceAccountTypeID"),
                 ChargeDay = (DateTime)reader["ChargeDay"],
-                TransactionTypeId = (Guid)reader["TransactionTypeID"]
+                TransactionTypeId = GetReaderValue<Guid?>(reader, "TransactionTypeID")
             };
         }
         #endregion

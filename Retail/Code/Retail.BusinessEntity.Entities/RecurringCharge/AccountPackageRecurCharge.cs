@@ -5,7 +5,7 @@ namespace Retail.BusinessEntity.Entities
     public struct AccountPackageRecurChargeKey
     {
         public Guid? BalanceAccountTypeID { get; set; }
-        public Guid TransactionTypeId { get; set; }
+        public Guid? TransactionTypeId { get; set; }
         public DateTime ChargeDay { get; set; }
     }
 
@@ -21,7 +21,7 @@ namespace Retail.BusinessEntity.Entities
         public DateTime ChargeDay { get; set; }
         public decimal ChargeAmount { get; set; }
         public int CurrencyID { get; set; }
-        public Guid TransactionTypeID { get; set; }
+        public Guid? TransactionTypeID { get; set; }
         public DateTime CreatedTime { get; set; }
     }
 }
