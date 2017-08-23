@@ -13,7 +13,25 @@ namespace Vanrise.Security.Entities
 
         public MailMessageTemplateSettings MailMessageTemplateSettings { get; set; }
 
-        public PasswordSettings PasswordSettings { get; set; }
+        PasswordSettings _passwordSettings;
+        public PasswordSettings PasswordSettings
+        {
+            get
+            {
+                if(_passwordSettings == null)
+                {
+                    _passwordSettings = new PasswordSettings
+                    {
+                        PasswordLength = 6
+                    };
+                }
+                return _passwordSettings;
+            }
+            set
+            {
+                _passwordSettings = value;
+            }
+        }
 
         public bool SendEmailNewUser { get; set; }
 

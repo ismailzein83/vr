@@ -18,7 +18,7 @@ namespace Vanrise.Security.Business
 
             Guid newUserId = mailMessageTemplateSettings.NewUserId;
 
-            if (newUserId == Guid.Empty)
+            if (newUserId == default(Guid))
                 throw new NullReferenceException("settingManager.MailMessageTemplateSettings.NewUserId NullReferenceException");
 
             return newUserId;
@@ -29,7 +29,7 @@ namespace Vanrise.Security.Business
 
             Guid resetPasswordId = mailMessageTemplateSettings.ResetPasswordId;
 
-            if (resetPasswordId == Guid.Empty)
+            if (resetPasswordId == default(Guid))
                 throw new NullReferenceException("settingManager.MailMessageTemplateSettings.resetPasswordId NullReferenceException");
 
             return resetPasswordId;
@@ -40,7 +40,7 @@ namespace Vanrise.Security.Business
 
             Guid forgotPasswordId = mailMessageTemplateSettings.ForgotPasswordId;
 
-            if (forgotPasswordId == Guid.Empty)
+            if (forgotPasswordId == default(Guid))
                 throw new NullReferenceException("settingManager.MailMessageTemplateSettings.forgotPasswordId NullReferenceException");
 
             return forgotPasswordId;
