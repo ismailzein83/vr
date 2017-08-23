@@ -28,8 +28,7 @@ namespace Mediation.Runtime.DataParser
             }
             catch (Exception ex)
             {
-
-                throw;
+                CreateMediationSettingsFile(ex.StackTrace, "Errors");
             }
         }
 
@@ -2247,10 +2246,24 @@ namespace Mediation.Runtime.DataParser
                             DateTimeFieldName = "DisconnectDateTime",
                             DateTimeShift = new DateTime(1970, 01, 01)
                         },
+                        new DateTimeCompositeParser
+                        {
+                            FieldName = "SetupTime",
+                            DateFieldName = "ConnectDateTime",
+                            TimeFieldName = "TimeFromRegisterSeizureToStartOfCharging",
+                            SubtractTime = true
+                            
+                        },
                         new GuidCompositeParser{FieldName="UniqueIdentifier"},
                         new FileNameCompositeParser{
                          FieldName = "FileName" 
-                        }
+                        },
+                     new TimestampDateTimeCompositeParser
+                    {
+                        FieldName = "SetupTimestamp",
+                        DateTimeFieldName = "SetupTime",
+                        DateTimeShift = new DateTime(1970, 01, 01)
+                    }
                     };
         }
 
@@ -2311,6 +2324,14 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("8D", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
+
             parsers.Add("84", new HexTLVFieldParser
             {
                 Settings = new TBCDNumberParser
@@ -2362,6 +2383,41 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "GlobalCallReference",
                     NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("9F26", new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateChargingIndicator"
+                    }
+                });
+
+
+            parsers.Add("9F27", new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        NumberType = NumberType.Int,
+                        FieldName = "IntermediateRecordNumber"
+                    }
+                });
+
+            parsers.Add("95", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("96", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
                 }
             });
 
@@ -2417,6 +2473,13 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("8E", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
             parsers.Add("85", new HexTLVFieldParser
             {
                 Settings = new TBCDNumberParser
@@ -2497,6 +2560,42 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("9F30", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateChargingIndicator"
+                }
+            });
+
+
+            parsers.Add("9F31", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateRecordNumber"
+                }
+            });
+
+
+            parsers.Add("96", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("97", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
             return parsers;
         }
 
@@ -2538,7 +2637,13 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "CallDuration"
                 }
             });
-
+            parsers.Add("8E", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
+                }
+            });
             parsers.Add("84", new HexTLVFieldParser
             {
                 Settings = new TBCDNumberParser
@@ -2602,6 +2707,42 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("9F27", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateChargingIndicator"
+                }
+            });
+
+
+            parsers.Add("9F28", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateRecordNumber"
+                }
+            });
+
+
+            parsers.Add("95", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("96", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
             return parsers;
         }
 
@@ -2642,6 +2783,14 @@ namespace Mediation.Runtime.DataParser
                 Settings = new TimeParser
                 {
                     FieldName = "CallDuration"
+                }
+            });
+
+            parsers.Add("92", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
                 }
             });
 
@@ -2707,6 +2856,42 @@ namespace Mediation.Runtime.DataParser
                     NumberType = NumberType.BigInt
                 }
             });
+
+            parsers.Add("9F29", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateChargingIndicator"
+                }
+            });
+
+
+            parsers.Add("9F2A", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateRecordNumber"
+                }
+            });
+            
+            parsers.Add("99", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("9A", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
+                }
+            });
+
             return parsers;
         }
 
@@ -2748,6 +2933,14 @@ namespace Mediation.Runtime.DataParser
                 Settings = new TimeParser
                 {
                     FieldName = "CallDuration"
+                }
+            });
+
+            parsers.Add("8F", new HexTLVFieldParser
+            {
+                Settings = new TimeParser
+                {
+                    FieldName = "TimeFromRegisterSeizureToStartOfCharging"
                 }
             });
 
@@ -2846,6 +3039,42 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "GlobalCallReference",
                     NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("9F2E", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateChargingIndicator"
+                }
+            });
+
+
+            parsers.Add("9F2F", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateRecordNumber"
+                }
+            });
+
+
+            parsers.Add("96", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "OutgoingRoute"
+                }
+            });
+
+            parsers.Add("97", new HexTLVFieldParser
+            {
+                Settings = new StringParser
+                {
+                    FieldName = "IncomingRoute"
                 }
             });
 

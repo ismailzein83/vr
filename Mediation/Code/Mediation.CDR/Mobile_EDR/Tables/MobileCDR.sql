@@ -25,8 +25,12 @@
     [CallReference]                 BIGINT           NULL,
     [GlobalCallReference]           VARCHAR (200)    NULL,
     [IntermediateRecordNumber]      INT              NULL,
+    [OutgoingRoute]                 VARCHAR (50)     NULL,
+    [IncomingRoute]                 VARCHAR (50)     NULL,
     CONSTRAINT [PK_MobileCDR_1] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

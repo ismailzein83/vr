@@ -67,7 +67,12 @@
     [CamelSMSCAddress]                VARCHAR (50)     NULL,
     [UniqueIdentifier]                UNIQUEIDENTIFIER NULL,
     [FileName]                        NVARCHAR (200)   NULL,
-    [RecordTypeName]                  VARCHAR (200)    NULL);
+    [RecordTypeName]                  VARCHAR (200)    NULL,
+    [NormalizedServedMSISDN]          VARCHAR (100)    NULL,
+    [NormalizedServiceCenter]         VARCHAR (100)    NULL,
+    [NormalizedDestinationNumber]     VARCHAR (100)    NULL);
+
+
 
 
 
