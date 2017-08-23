@@ -118,7 +118,11 @@
                             if (iAttrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
-                                var negativeArray = String(newValue).split("-");                                
+                                var negativeArray = String(newValue).split("-");
+                                if (String(newValue).indexOf(".") > -1 && ctrl.decimalprecision == 0) {
+                                    ctrl.value = oldValue;
+                                    return;
+                                }
                                 //if (arr.length === 0) return;
                                 //if (iAttrs.onlypositive != undefined && negativeArray.length > 1)
                                 //    ctrl.value = oldValue;
