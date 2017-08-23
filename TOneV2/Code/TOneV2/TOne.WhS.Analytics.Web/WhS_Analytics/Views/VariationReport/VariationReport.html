@@ -30,7 +30,7 @@
                     </vr-select>
                 </vr-columns>
                 <vr-columns width="normal" ng-show="scopeModel.showTopFilter">
-                    <vr-textbox label="Top" type="number" value="scopeModel.top" minvalue="1" customvalidate="scopeModel.validateTopFilter()" isrequired="scopeModel.showTopFilter"></vr-textbox>
+                    <vr-textbox label="Top Destination" type="number" value="scopeModel.top" minvalue="1" customvalidate="scopeModel.validateTopFilter()" isrequired="scopeModel.showTopFilter"></vr-textbox>
                 </vr-columns>
                 <span ng-show="scopeModel.showCurrencyFilter">
                     <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="scopeModel.showCurrencyFilter" normal-col-num="2" hideremoveicon="true"></vr-common-currency-selector>
