@@ -39,7 +39,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('94E29C06-8B09-4460-B495-5A7413C52C8C','Notifications'	,null,null,null,80,1)
+('94E29C06-8B09-4460-B495-5A7413C52C8C','Notifications'	,null,null,null,115,1)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
 merge	[sec].[Module] as t
