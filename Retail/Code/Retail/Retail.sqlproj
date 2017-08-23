@@ -178,9 +178,15 @@
     <Build Include="Retail_BE\Tables\AccountPackageRecurCharge.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountStatusHistory_Insert.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_InsertOrUpdate.sql" />
-    <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_GetNotSentData.sql" />
     <Build Include="Retail_BE\User Defined Types\AccountPackageRecurChargeType.sql" />
-    <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_UpdateToSent.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_GetByAccount.sql" />
+    <Build Include="Retail_BE\Tables\RecurChargeBalanceUpdateSummary.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_RecurChargeBalanceUpdateSummary_Insert.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_RecurChargeBalanceUpdateSummary_GetMaximumChargeDay.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_RecurChargeBalanceUpdateSummary_GetByChargeDay.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_RecurChargeBalanceUpdateSummary_DeleteByChargeDay.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurChargeKey_GetByChargeDay.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_GetMaximumChargeDay.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_GetByChargeDay.sql" />
   </ItemGroup>
 </Project>

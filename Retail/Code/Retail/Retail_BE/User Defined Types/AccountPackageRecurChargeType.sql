@@ -6,9 +6,11 @@
     [ChargeDay]             DATETIME         NOT NULL,
     [ChargeAmount]          DECIMAL (24, 10) NOT NULL,
     [CurrencyID]            INT              NOT NULL,
-    [TransactionTypeID]     UNIQUEIDENTIFIER NOT NULL,
+    [TransactionTypeID]     UNIQUEIDENTIFIER NULL,
     [AccountID]             BIGINT           NOT NULL,
     [AccountBEDefinitionId] UNIQUEIDENTIFIER NOT NULL);
+
+
 
 
 

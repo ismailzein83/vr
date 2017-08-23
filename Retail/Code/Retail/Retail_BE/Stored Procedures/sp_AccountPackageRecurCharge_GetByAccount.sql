@@ -9,7 +9,7 @@ AS
 BEGIN
 	
 	select [ID],[AccountPackageID],[ChargeableEntityID],[BalanceAccountTypeID],[BalanceAccountID],[ChargeDay],[ChargeAmount],[CurrencyID],[TransactionTypeID],
-		   [ProcessInstanceID],[IsSentToAccountBalance],[CreatedTime], AccountID, AccountBEDefinitionId
-	FROM [Retail_BE].[AccountPackageRecurCharge]
+		   [CreatedTime], AccountID, AccountBEDefinitionId
+	FROM [Retail_BE].[AccountPackageRecurCharge] with(nolock)
 	where AccountBEDefinitionId = @AcountBEDefinitionId AND AccountID = @AccountId AND ChargeDay >= @IncludedFromDate AND ChargeDay<=@IncludedToDate
 END

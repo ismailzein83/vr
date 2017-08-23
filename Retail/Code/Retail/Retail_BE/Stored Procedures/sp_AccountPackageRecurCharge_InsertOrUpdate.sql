@@ -1,7 +1,6 @@
 ﻿
 CREATE PROCEDURE [Retail_BE].[sp_AccountPackageRecurCharge_InsertOrUpdate]
-@EffectiveDate Datetime,
-@ProcessInstanceID BIGINT,
+@ChargeDay Datetime,
 @AccountPackageRecurCharges [Retail_BE].[AccountPackageRecurChargeType] Readonly
 AS
 BEGIN
@@ -12,29 +11,23 @@ BEGIN
 	FROM  @AccountPackageRecurCharges t2
 	left join [Retail_BE].[AccountPackageRecurCharge] t1 on t1.AccountPackageID = t2.AccountPackageID and t1.ChargeableEntityID = t2.ChargeableEntityID 
 	and ISNULL(t1.BalanceAccountTypeID,'00000000-0000-0000-0000-000000000000') = ISNULL(t2.BalanceAccountTypeID,'00000000-0000-0000-0000-000000000000')
-	and ISNULL(t1.BalanceAccountID,'') = ISNULL(t2.BalanceAccountID,'') 
-	and t1.ChargeDay = t2.ChargeDay and t1.TransactionTypeID = t2.TransactionTypeID and t1.AccountID = t2.AccountID and t1.AccountBEDefinitionId = t2.AccountBEDefinitionId
+	and ISNULL(t1.BalanceAccountID,'') = ISNULL(t2.BalanceAccountID,'') and t1.ChargeDay = t2.ChargeDay 
+	and ISNULL(t1.TransactionTypeID,'00000000-0000-0000-0000-000000000000') = ISNULL(t2.TransactionTypeID,'00000000-0000-0000-0000-000000000000')
+	and t1.AccountID = t2.AccountID and t1.AccountBEDefinitionId = t2.AccountBEDefinitionId
 
-	--Update accountPackageRecurCharge
-	--set IsSentToAccountBalance = 0, ProcessInstanceID = @ProcessInstanceID
-	--from [Retail_BE].[AccountPackageRecurCharge] accountPackageRecurCharge
-	--LEFT JOIN #tempAccountPackageRecurCharge tempStorage on accountPackageRecurCharge.ID = tempStorage.ID and tempStorage.ID is not null
-	--WHERE tempStorage.ID is null and accountPackageRecurCharge.ChargeDay >= @EffectiveDate
-
-	INSERT INTO [Retail_BE].[AccountPackageRecurCharge]([AccountPackageID],[ChargeableEntityID],[BalanceAccountTypeID],[BalanceAccountID],[ChargeDay],[ChargeAmount],[CurrencyId],[TransactionTypeID],[ProcessInstanceID],AccountID,AccountBEDefinitionId)
-	select [AccountPackageID],[ChargeableEntityID],[BalanceAccountTypeID],[BalanceAccountID],[ChargeDay],[NewChargeAmount],[NewCurrencyId],[TransactionTypeID],@ProcessInstanceID,AccountID,AccountBEDefinitionId
-	FROM #tempAccountPackageRecurCharge tempStorage
-	where tempStorage.ID is null
-	
-	DELETE from #tempAccountPackageRecurCharge where Id is null or (NewChargeAmount = OldChargeAmount and NewCurrencyID  = OldCurrencyId)
+	DELETE FROM [Retail_BE].[AccountPackageRecurCharge] where Id not in (select ID from #tempAccountPackageRecurCharge where ID is not null) and ChargeDay = @ChargeDay
 
 	UPDATE accountPackageRecurCharge
-    SET accountPackageRecurCharge.ChargeAmount = tempStorage.NewChargeAmount, accountPackageRecurCharge.CurrencyID  = tempStorage.NewCurrencyId, accountPackageRecurCharge.ProcessInstanceID= @ProcessInstanceID,
-	accountPackageRecurCharge.IsSentToAccountBalance = 0
+    SET accountPackageRecurCharge.ChargeAmount = tempStorage.NewChargeAmount, accountPackageRecurCharge.CurrencyID  = tempStorage.NewCurrencyId
     FROM AccountPackageRecurCharge accountPackageRecurCharge
     JOIN #tempAccountPackageRecurCharge tempStorage
     ON accountPackageRecurCharge.ID = tempStorage.ID 
-    where accountPackageRecurCharge.ChargeDay >= @EffectiveDate
+    where accountPackageRecurCharge.ChargeDay = @ChargeDay
 
+	INSERT INTO [Retail_BE].[AccountPackageRecurCharge]([AccountPackageID],[ChargeableEntityID],[BalanceAccountTypeID],[BalanceAccountID],[ChargeDay],[ChargeAmount],[CurrencyId],[TransactionTypeID],AccountID,AccountBEDefinitionId)
+	select [AccountPackageID],[ChargeableEntityID],[BalanceAccountTypeID],[BalanceAccountID],[ChargeDay],[NewChargeAmount],[NewCurrencyId],[TransactionTypeID],AccountID,AccountBEDefinitionId
+	FROM #tempAccountPackageRecurCharge tempStorage
+	where tempStorage.ID is null
+	
 	DROP TABLE #tempAccountPackageRecurCharge
 END
