@@ -17,10 +17,10 @@
                 <vr-columns width="fullrow" haschildcolumns ng-show="showPasswordSection">
                     <vr-validator validate="validatePasswords()">
                         <vr-columns width="1/2row">
-                            <vr-textbox label="Password" type="password" value="password"></vr-textbox>
+                            <vr-textbox label="Password" type="password" value="password" hint="{{passwordHint}}" largehint isrequired="{{requiredPassword}}"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
-                            <vr-textbox label="Confirm Password" type="password" value="confirmedPassword"></vr-textbox>
+                            <vr-textbox label="Confirm Password" type="password" value="confirmedPassword" isrequired="{{requiredPassword}}"></vr-textbox>
                         </vr-columns>
                     </vr-validator>
                 </vr-columns>

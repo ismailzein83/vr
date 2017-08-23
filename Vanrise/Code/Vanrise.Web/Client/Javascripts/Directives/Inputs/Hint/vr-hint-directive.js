@@ -7,7 +7,7 @@ app.directive('vrHint', ['SecurityService', function (SecurityService) {
         scope: {
             value:'@'
         },
-        controller: function ($scope, $element) {
+        controller: function ($scope, $element, $attrs) {
 
             $scope.adjustTooltipPosition = function (e) {
                 setTimeout(function () {
@@ -15,11 +15,14 @@ app.directive('vrHint', ['SecurityService', function (SecurityService) {
                     var selfHeight = $(self).height();
                     var selfOffset = $(self).offset();
                     var tooltip = self.parent().find('.tooltip-info')[0];
-                    $(tooltip).css({ display: 'block !important' });
+                    $(tooltip).css({ display: 'block' });
                     var innerTooltip = self.parent().find('.tooltip-inner')[0];
                     var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
-                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 20, left: selfOffset.left - 5 });
-                    $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left });
+                    if ($attrs.largehint != undefined)
+                        $(innerTooltip).addClass('large-hint');
+                    var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
+                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth });
+                    $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
                 }, 1);
             };
         },

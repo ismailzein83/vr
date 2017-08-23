@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    ActivatePasswordEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNavigationService', 'VRNotificationService'];
+    ActivatePasswordEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNavigationService', 'VRNotificationService', 'VR_Sec_SecurityAPIService'];
 
-    function ActivatePasswordEditorController($scope, VR_Sec_UserAPIService, VRNavigationService, VRNotificationService) {
+    function ActivatePasswordEditorController($scope, VR_Sec_UserAPIService, VRNavigationService, VRNotificationService, VR_Sec_SecurityAPIService) {
         var email;
         var userObj;
         var tempPassword;
@@ -22,6 +22,7 @@
         }
 
         function defineScope() {
+            $scope.passwordHint = "";
             $scope.save = function () {
                 var activatePasswordInput = {
                     Email: email,
@@ -55,8 +56,11 @@
         }
 
         function load() {
-            setTitle();
-            setData();
+            return loadPasswordHint().then(function () {
+                setTitle();
+                setData();
+            });
+            
         }
 
         function setData() {
@@ -65,6 +69,12 @@
 
         function setTitle() {
             $scope.title = 'Activate Password';
+        }
+
+        function loadPasswordHint() {
+            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
+                $scope.passwordHint = response.RequirementsMessage;
+            });
         }
     }
 

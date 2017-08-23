@@ -59,5 +59,16 @@ namespace Vanrise.Security.Web.Controllers
             CloudAuthServerManager manager = new CloudAuthServerManager();
             return manager.HasAuthServer();
         }
+
+        [IsAnonymous]
+        [HttpGet]
+        [Route("GetPasswordValidationInfo")]
+        public PasswordValidationInfo GetPasswordValidationInfo()
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.GetPasswordValidationInfo();
+        }
+
+
     }
 }

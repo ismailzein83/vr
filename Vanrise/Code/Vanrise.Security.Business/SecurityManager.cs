@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -71,7 +72,7 @@ namespace Vanrise.Security.Business
                         authenticationOperationOutput.AuthenticationObject = authToken;
 
                         dataManager.UpdateLastLogin(user.UserId);
-                        VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance,"Login",false, user,"Login successfully");
+                        VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Login successfully");
 
                     }
                     else
@@ -148,12 +149,12 @@ namespace Vanrise.Security.Business
         public RequiredPermissionSettings MergeRequiredPermissions(List<RequiredPermissionSettings> requiredPermissions)
         {
             Dictionary<Guid, RequiredPermissionEntry> entitiesPermissions = new Dictionary<Guid, RequiredPermissionEntry>();
-            foreach(var requiredPerm in requiredPermissions)
+            foreach (var requiredPerm in requiredPermissions)
             {
                 foreach (var entry in requiredPerm.Entries)
                 {
                     RequiredPermissionEntry matchEntry = entitiesPermissions.GetOrCreateItem(entry.EntityId, () => new RequiredPermissionEntry { EntityId = entry.EntityId, PermissionOptions = new List<string>() });
-                    foreach(var flag in entry.PermissionOptions)
+                    foreach (var flag in entry.PermissionOptions)
                     {
                         if (!matchEntry.PermissionOptions.Contains(flag))
                             matchEntry.PermissionOptions.Add(flag);
@@ -172,6 +173,13 @@ namespace Vanrise.Security.Business
             Vanrise.Entities.UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+
+            string validationMessage;
+            if (!DoesPasswordMeetRequirement(newPassword, out validationMessage))
+            {
+                updateOperationOutput.Message = validationMessage;
+                return updateOperationOutput;
+            }
 
             User currentUser = manager.GetUserbyId(loggedInUserId);
             string currentUserPassword = manager.GetUserPassword(loggedInUserId);
@@ -239,6 +247,68 @@ namespace Vanrise.Security.Business
             else
                 return null;
         }
+
+        public int GetPasswordComplexityScore(string password)
+        {
+            int score = -1;
+            if (Regex.Match(password, @"[0-9]", RegexOptions.ECMAScript).Success)
+                score++;
+            if (Regex.Match(password, @"[A-Z]", RegexOptions.ECMAScript).Success)
+                score++;
+            if (Regex.Match(password, @"[a-z]", RegexOptions.ECMAScript).Success)
+                score++;
+            if (Regex.Match(password, @"[~!@#$%^&*?_~£(){}]", RegexOptions.ECMAScript).Success)
+                score++;
+            return score;
+        }
+
+        public bool DoesPasswordMeetRequirement(string password, out string errorMessage)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                errorMessage = "Password cannot be empty";
+                return false;
+            }
+            ConfigManager configManager = new ConfigManager();
+            int passwordLength = configManager.GetPasswordLength();
+            var complexity = configManager.GetPasswordComplexity();
+            if (password.Trim().Length < passwordLength)
+            {
+                errorMessage = string.Format("Password must be at least {0} characters.", passwordLength);
+                return false;
+            }
+            if (complexity.HasValue && GetPasswordComplexityScore(password) < (int)complexity.Value)
+            {
+                errorMessage = "Password does not match complexity level.";
+                return false;
+            }
+            errorMessage = null;
+            return true;
+        }
+
+        public PasswordValidationInfo GetPasswordValidationInfo()
+        {
+            StringBuilder msg = new StringBuilder();
+            msg.Append("Password must meet complexity requirements:");
+            ConfigManager cManager = new ConfigManager();
+            int passwordLength = cManager.GetPasswordLength();
+            var complexity = cManager.GetPasswordComplexity();
+            msg.Append(string.Format("<br> - Length must be at least {0} characters.", passwordLength));
+            if (complexity.HasValue)
+            {
+                msg.Append(string.Format("<br> - Passwords must contain characters from {0} of the following four categories:", complexity.Value == PasswordComplexity.Medium ? "two" : "three"));
+                msg.Append("<ul><li>Uppercase characters of European languages (A through Z).</li>");
+                msg.Append("<li>Lowercase characters of European languages (a through z).</li>");
+                msg.Append("<li>Base 10 digits (0 through 9).</li>");
+                msg.Append("<li>Nonalphanumeric characters:  ~,!,@,#,$,%,^,&,*,?,_,~,-,£,(,).</li></ul>");
+            }
+            return new PasswordValidationInfo()
+            {
+                RequirementsMessage = msg.ToString(),
+                RequiredPassword = !cManager.ShouldSendEmailOnNewUser()
+            };
+        }
+
 
         public bool CheckTokenAccess(SecurityToken securityToken, out string errorMessage, out InvalidAccess invalidAccess)
         {
@@ -378,7 +448,7 @@ namespace Vanrise.Security.Business
                         builder.Append(",");
                     isFirstOption = false;
                     builder.Append(s);
-                }  
+                }
             }
             return builder.ToString();
         }

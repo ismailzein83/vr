@@ -122,6 +122,7 @@
     <Content Include="Security\Constants\ModuleConfig.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
     <Content Include="Security\Constants\UserProfilePropertyEnum.js" />
+    <Content Include="Security\Constants\PasswordComplexityEnum.js" />
     <Content Include="Security\Constants\ViewTypeEnum.js" />
     <Content Include="Security\Constants\WidgetSectionEnum.js" />
     <Content Include="Security\Directives\BusinessEntity\Templates\BusinessEntityGridTemplate.html" />
@@ -141,8 +142,11 @@
     <Content Include="Security\Directives\RequiredPermission\Templates\RequiredPermissionTemplate.html" />
     <Content Include="Security\Directives\RequiredPermission\vr-sec-permissionoptions-selector.js" />
     <Content Include="Security\Directives\RequiredPermission\vr-sec-requiredpermission-grid.js" />
+    <Content Include="Security\Directives\Settings\Templates\PasswordSettingsTemplate.html" />
     <Content Include="Security\Directives\Settings\Templates\SecuritySettingsTemplate.html" />
     <Content Include="Security\Directives\Settings\Templates\MailMessageTemplateSettingsTemplate.html" />
+    <Content Include="Security\Directives\Settings\vr-sec-passwordsettings.js" />
+    <Content Include="Security\Directives\Settings\vr-sec-passwordcomplexity-selector.js" />
     <Content Include="Security\Directives\Settings\vr-sec-mailmessagetemplatesettings.js" />
     <Content Include="Security\Directives\Settings\vr-sec-settings-editor.js" />
     <Content Include="Security\Directives\Tenant\Templates\TenantsGrid.html" />

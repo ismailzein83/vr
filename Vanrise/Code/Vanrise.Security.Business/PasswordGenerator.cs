@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-namespace Vanrise.Common
+namespace Vanrise.Security.Business
 {
     public class PasswordGenerator
     {
         public PasswordGenerator()
         {
-            this.Minimum = DefaultMinimum;
-            this.Maximum = DefaultMaximum;
+            this.Minimum = Math.Max( new ConfigManager().GetPasswordLength(), DefaultMinimum);
+            this.Maximum = this.Minimum + 2; 
             this.ConsecutiveCharacters = false;
             this.RepeatCharacters = true;
             this.ExcludeSymbols = false;
@@ -167,8 +167,7 @@ namespace Vanrise.Common
             get { return this.hasConsecutive; }
             set { this.hasConsecutive = value; }
         }
-
-        private const int DefaultMinimum = 8;
+        private const int DefaultMinimum =  8 ;
         private const int DefaultMaximum = 10;
         private const int UBoundDigit = 61;
 

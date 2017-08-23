@@ -118,7 +118,7 @@
                             if (iAttrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
-                                var negativeArray = String(newValue).split("-");
+                                var negativeArray = String(newValue).split("-");                                
                                 //if (arr.length === 0) return;
                                 //if (iAttrs.onlypositive != undefined && negativeArray.length > 1)
                                 //    ctrl.value = oldValue;
@@ -195,7 +195,9 @@
                                 $(tooltip).css({ display: 'block' });
                                 var innerTooltip = self.parent().find('.tooltip-inner')[0];
                                 var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
-                                var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
+                                if (iAttrs.largehint != undefined)
+                                    $(innerTooltip).addClass('large-hint');
+                                var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);                              
                                 $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth });
                                 $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 

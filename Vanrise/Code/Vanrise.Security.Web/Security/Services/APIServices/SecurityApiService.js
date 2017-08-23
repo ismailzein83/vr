@@ -12,7 +12,8 @@
             ChangePassword: ChangePassword,
             IsAllowed: IsAllowed,
             HasPermissionToActions: HasPermissionToActions,
-            HasAuthServer: HasAuthServer
+            HasAuthServer: HasAuthServer,
+            GetPasswordValidationInfo: GetPasswordValidationInfo
         });
 
         function Authenticate(credentialsObject) {
@@ -35,6 +36,9 @@
 
         function HasAuthServer() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'HasAuthServer'));
+        }
+        function GetPasswordValidationInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetPasswordValidationInfo'));
         }
     }
 

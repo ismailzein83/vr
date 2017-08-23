@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    ResetPasswordEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNavigationService', 'VRNotificationService'];
+    ResetPasswordEditorController.$inject = ['$scope', 'VR_Sec_UserAPIService', 'VRNavigationService', 'VRNotificationService', 'VR_Sec_SecurityAPIService'];
 
-    function ResetPasswordEditorController($scope, VR_Sec_UserAPIService, VRNavigationService, VRNotificationService) {
+    function ResetPasswordEditorController($scope, VR_Sec_UserAPIService, VRNavigationService, VRNotificationService, VR_Sec_SecurityAPIService) {
         var userId;
 
         loadParameters();
@@ -53,13 +53,21 @@
         }
 
         function load() {
-            setTitle();
+            return loadPasswordHint().then(function () {
+                setTitle();
+            });
+          
         }
 
-        function setTitle()
-        {
+        function setTitle(){
             $scope.title = 'Reset Password';
         }
+        function loadPasswordHint() {
+            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
+                $scope.passwordHint = response.RequirementsMessage;
+            });
+        }
+       
     }
 
     appControllers.controller('VR_Sec_ResetPasswordEditorController', ResetPasswordEditorController);

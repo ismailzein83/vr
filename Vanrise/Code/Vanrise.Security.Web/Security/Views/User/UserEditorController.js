@@ -35,6 +35,10 @@
         function defineScope() {
             $scope.showTenantSelector = true;
 
+            $scope.passwordHint = "";
+
+            $scope.requiredPassword = false;
+
             $scope.showPasswordSection = !isEditMode;
 
             $scope.save = function () {
@@ -128,7 +132,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, hasAuthServer, loadTenantSelector, loadGroupSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, hasAuthServer, loadTenantSelector, loadGroupSelector , loadPasswordHint])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -162,6 +166,13 @@
             });
 
             return loadGroupPromiseDeferred.promise;
+        }
+
+        function loadPasswordHint() {
+            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
+                $scope.passwordHint = response.RequirementsMessage;
+                $scope.requiredPassword = response.RequiredPassword;
+            });
         }
 
         function hasAuthServer() {

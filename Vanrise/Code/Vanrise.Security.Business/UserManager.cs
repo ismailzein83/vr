@@ -19,10 +19,16 @@ namespace Vanrise.Security.Business
         static TimeSpan s_tempPasswordValidity;
 
         GroupManager _groupManager;
+        SecurityManager _securityManager;
+        ConfigManager _configManager;
         public UserManager()
         {
 
-            _groupManager =  new GroupManager();
+            _groupManager = new GroupManager();
+
+            _securityManager = new SecurityManager();
+
+           _configManager = new ConfigManager();
 
         }
         static UserManager()
@@ -197,8 +203,28 @@ namespace Vanrise.Security.Business
             }
             else
             {
-                PasswordGenerator passwordGenerator = new PasswordGenerator();
-                string pwd = (string.IsNullOrEmpty(userObject.Password)) ? passwordGenerator.Generate() : userObject.Password;
+                
+                string pwd;
+                if (!String.IsNullOrWhiteSpace(userObject.Password))//password is not required when adding User, it is auto-generated
+                {
+                    string validationMessage;
+                    if (!_securityManager.DoesPasswordMeetRequirement(userObject.Password, out validationMessage))
+                    {
+                        insertOperationOutput.Message = validationMessage;
+                        return insertOperationOutput;
+                    }
+                    pwd = userObject.Password;
+                }
+                else
+                {
+                    if (!_configManager.ShouldSendEmailOnNewUser())
+                    {
+                        insertOperationOutput.Message = "Password cannot be empty.";
+                        return insertOperationOutput;
+                    }
+                    PasswordGenerator passwordGenerator = new PasswordGenerator();
+                    pwd = passwordGenerator.Generate();
+                }
                 string encryptedPassword = HashingUtility.ComputeHash(pwd, "", null);
 
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
@@ -212,7 +238,7 @@ namespace Vanrise.Security.Business
                     ExtendedSettings = userObject.ExtendedSettings
                 };
                 insertActionSucc = dataManager.AddUser(addedUser, encryptedPassword, out userId);
-                
+
                 if (insertActionSucc)
                 {
                     addedUser.UserId = userId;
@@ -222,9 +248,9 @@ namespace Vanrise.Security.Business
                     //emailTemplateManager.SendEmail(userObject.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
 
 
-                    ConfigManager cManager = new ConfigManager();
-                    Guid newUserId = cManager.GetNewUserId();
-                    if (cManager.ShouldSendEmailOnNewUser())
+            
+                    Guid newUserId = _configManager.GetNewUserId();
+                    if (_configManager.ShouldSendEmailOnNewUser())
                     {
                         Task sendMailTask = new Task(() =>
                         {
@@ -243,11 +269,12 @@ namespace Vanrise.Security.Business
                 VRActionLogger.Current.TrackAndLogObjectAdded(UserLoggableEntity.Instance, addedUser);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 if (userObject.GroupIds != null && userObject.GroupIds.Count() > 0)
-                    foreach(int groupId in userObject.GroupIds)
-                    { 
-                        UserGroup userGroup = new UserGroup(){
+                    foreach (int groupId in userObject.GroupIds)
+                    {
+                        UserGroup userGroup = new UserGroup()
+                        {
                             UserId = addedUser.UserId,
-                            GroupId= groupId
+                            GroupId = groupId
                         };
                         _groupManager.AssignUserToGroup(userGroup);
                     }
@@ -315,11 +342,11 @@ namespace Vanrise.Security.Business
                 VRActionLogger.Current.TrackAndLogObjectUpdated(UserLoggableEntity.Instance, updatedUser);
 
                 var currentGroupsIds = _groupManager.GetUserGroups(userObject.UserId);
-                var updatedGroupIds = userObject.GroupIds!=null? userObject.GroupIds : new List<int>();
+                var updatedGroupIds = userObject.GroupIds != null ? userObject.GroupIds : new List<int>();
 
                 List<int> groupsToAdd = updatedGroupIds.FindAllRecords(x => !currentGroupsIds.Contains(x)).ToList();
                 List<int> groupsToRemove = currentGroupsIds.FindAllRecords(y => !updatedGroupIds.Contains(y)).ToList();
-                if (groupsToAdd!=null && groupsToAdd.Count() > 0)
+                if (groupsToAdd != null && groupsToAdd.Count() > 0)
                     foreach (int groupId in groupsToAdd)
                     {
                         UserGroup userGroup = new UserGroup()
@@ -430,6 +457,14 @@ namespace Vanrise.Security.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+
+            string validationMessage;
+            if (!_securityManager.DoesPasswordMeetRequirement(password, out validationMessage))
+            {
+                updateOperationOutput.Message = validationMessage;
+                return updateOperationOutput;
+            }
+
             User user = GetUserbyId(userId);
 
             bool updateActionSucc;
@@ -533,7 +568,7 @@ namespace Vanrise.Security.Business
                 if (user == null)
                     return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
 
-                Vanrise.Common.PasswordGenerator pwdGenerator = new PasswordGenerator();
+                PasswordGenerator pwdGenerator = new PasswordGenerator();
                 string pwd = pwdGenerator.Generate();
 
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
@@ -614,14 +649,24 @@ namespace Vanrise.Security.Business
             var user = userManager.GetUserbyEmail(email);
             if (user == null)
                 return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
+            UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
+
+            string validationMessage;
+            if (!_securityManager.DoesPasswordMeetRequirement(password, out validationMessage))
+            {
+                updateOperationOutput.Message = validationMessage;
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+                return updateOperationOutput;
+            }
 
             string loggedInUserTempPassword = GetUserTempPassword(user.UserId);
             if (!HashingUtility.VerifyHash(tempPassword, "", loggedInUserTempPassword))
                 return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
 
+
+
             bool updateActionSucc = dataManager.ActivatePassword(email, HashingUtility.ComputeHash(password, "", null), name);
 
-            UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -633,7 +678,6 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
-
         public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
@@ -914,11 +958,11 @@ namespace Vanrise.Security.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Email"});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Email" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Status" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Enable Till", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Last Login Date", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Groups"});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Groups" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Description" });
 
                 sheet.Rows = new List<ExportExcelRow>();
@@ -973,13 +1017,14 @@ namespace Vanrise.Security.Business
 
         private string GetGroupNames(int userId)
         {
-           var groupIds = _groupManager.GetUserGroups(userId);
-           List<string> names = new List<string>();
-           foreach(var id in groupIds){
-               string groupName = _groupManager.GetGroupName(id);
-               names.Add(groupName);
-           }
-           return string.Join(",", names);
+            var groupIds = _groupManager.GetUserGroups(userId);
+            List<string> names = new List<string>();
+            foreach (var id in groupIds)
+            {
+                string groupName = _groupManager.GetGroupName(id);
+                names.Add(groupName);
+            }
+            return string.Join(",", names);
         }
 
         #endregion

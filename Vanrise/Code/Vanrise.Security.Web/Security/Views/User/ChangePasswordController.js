@@ -14,6 +14,8 @@
         }
 
         function defineScope() {
+            $scope.passwordHint = "";
+
             $scope.save = function () {
                 var changedPasswordObject = {
                     OldPassword: $scope.oldPassword,
@@ -41,6 +43,13 @@
         }
 
         function load() {
+            return loadPasswordHint();
+        }
+
+        function loadPasswordHint() {
+            return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
+                $scope.passwordHint = response.RequirementsMessage;
+            });
         }
     };
 

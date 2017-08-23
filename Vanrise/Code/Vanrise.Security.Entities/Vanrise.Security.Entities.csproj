@@ -86,6 +86,7 @@
     <Compile Include="OrgChart\OrgChartLinkedEntityInfo.cs" />
     <Compile Include="OrgChart\OrgChartLinkedEntityInstance.cs" />
     <Compile Include="OrgChart\OrgChartQuery.cs" />
+    <Compile Include="PasswordValidationInfo.cs" />
     <Compile Include="Permission\Permission.cs" />
     <Compile Include="Permission\PermissionDetail.cs" />
     <Compile Include="Permission\PermissionQuery.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="RequiredPermissionSet\RequiredPermissionSet.cs" />
     <Compile Include="ResetPassword.cs" />
     <Compile Include="Settings\MailMessageTemplateSettings.cs" />
+    <Compile Include="Settings\PasswordSettings.cs" />
     <Compile Include="Settings\SecuritySettings.cs" />
     <Compile Include="SystemAction\SystemAction.cs" />
     <Compile Include="Tenant\Tenant.cs" />

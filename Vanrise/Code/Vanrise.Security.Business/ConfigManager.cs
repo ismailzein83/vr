@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Security.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Security.Business
 {
@@ -17,7 +18,7 @@ namespace Vanrise.Security.Business
 
             Guid newUserId = mailMessageTemplateSettings.NewUserId;
 
-            if (newUserId == null)
+            if (newUserId == Guid.Empty)
                 throw new NullReferenceException("settingManager.MailMessageTemplateSettings.NewUserId NullReferenceException");
 
             return newUserId;
@@ -28,7 +29,7 @@ namespace Vanrise.Security.Business
 
             Guid resetPasswordId = mailMessageTemplateSettings.ResetPasswordId;
 
-            if (resetPasswordId == null)
+            if (resetPasswordId == Guid.Empty)
                 throw new NullReferenceException("settingManager.MailMessageTemplateSettings.resetPasswordId NullReferenceException");
 
             return resetPasswordId;
@@ -39,7 +40,7 @@ namespace Vanrise.Security.Business
 
             Guid forgotPasswordId = mailMessageTemplateSettings.ForgotPasswordId;
 
-            if (forgotPasswordId == null)
+            if (forgotPasswordId == Guid.Empty)
                 throw new NullReferenceException("settingManager.MailMessageTemplateSettings.forgotPasswordId NullReferenceException");
 
             return forgotPasswordId;
@@ -48,6 +49,17 @@ namespace Vanrise.Security.Business
         public bool ShouldSendEmailOnNewUser()
         {
             return GetSecuritySettings().SendEmailNewUser;
+        }
+
+
+        public int GetPasswordLength()
+        {
+            return GetPasswordSettings().PasswordLength;
+        }
+
+        public PasswordComplexity? GetPasswordComplexity()
+        {
+            return GetPasswordSettings().PasswordComplexity;
         }
 
         public bool ShouldSendEmailOnResetPasswordByAdmin()
@@ -63,18 +75,25 @@ namespace Vanrise.Security.Business
         {
             MailMessageTemplateSettings mailMessageTemplateSettings = GetSecuritySettings().MailMessageTemplateSettings;
 
-            if (mailMessageTemplateSettings == null)
-                throw new NullReferenceException("settingManager.MailMessageTemplateSettings NullReferenceException");
+            mailMessageTemplateSettings.ThrowIfNull("mailMessageTemplateSettings");
 
             return mailMessageTemplateSettings;
+        }
+
+        private PasswordSettings GetPasswordSettings()
+        {
+            PasswordSettings passwordSettings = GetSecuritySettings().PasswordSettings;
+
+            passwordSettings.ThrowIfNull("passwordSettings");
+
+            return passwordSettings;
         }
         private SecuritySettings GetSecuritySettings()
         {
             SettingManager settingManager = new SettingManager();
             SecuritySettings securitySettings = settingManager.GetSetting<SecuritySettings>(SecuritySettings.SETTING_TYPE);
 
-            if (securitySettings == null)
-                throw new NullReferenceException("settingManager NullReferenceException");
+            securitySettings.ThrowIfNull("securitySettings");
 
             return securitySettings;
         }

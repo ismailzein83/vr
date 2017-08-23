@@ -2558,15 +2558,11 @@ label[vr-alert].alert {
     min-width: 200px;
     font-size: 11px;
     /*position:fixed;*/
-    text-align: left;
-    max-width: 100%;
     min-width: initial;
-    font-size: 11px;
     overflow-y: auto;
     max-width: 200px;
     text-align: justify;
 }
-
 .tooltip.bottom {
     margin-top: 10px;
 }
@@ -2598,6 +2594,9 @@ label[vr-alert].alert {
 .vr-hint-input{
     top : -7px;
     color:#337AB7
+}
+.large-hint{
+    max-width:440px !important;
 }
 .vr-numeric .vr-numeric-control .unit {
     position: absolute;

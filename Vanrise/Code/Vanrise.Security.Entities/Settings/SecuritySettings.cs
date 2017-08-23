@@ -12,8 +12,14 @@ namespace Vanrise.Security.Entities
         public const string SETTING_TYPE = "VR_Sec_Settings";
 
         public MailMessageTemplateSettings MailMessageTemplateSettings { get; set; }
+
+        public PasswordSettings PasswordSettings { get; set; }
+
         public bool SendEmailNewUser { get; set; }
 
         public bool SendEmailOnResetPasswordByAdmin { get; set; }
+
+       
     }
+
 }
