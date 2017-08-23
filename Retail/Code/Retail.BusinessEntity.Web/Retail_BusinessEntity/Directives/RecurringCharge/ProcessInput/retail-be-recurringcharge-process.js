@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBeRecurringchargeProcess", ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive("retailBeRecurringchargeProcess", ['UtilsService',
+    function (UtilsService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -27,12 +27,18 @@ app.directive("retailBeRecurringchargeProcess", ['UtilsService', 'VRUIUtilsServi
 
         function DirectiveConstructor($scope, ctrl) {
 
-            var gridAPI;
             this.initializeController = initializeController;
-
+            var lastDayOfMonth;
 
             function initializeController() {
                 defineAPI();
+
+                $scope.validateEffectiveDate = function () {
+                    if (lastDayOfMonth != undefined && $scope.effectiveDate != undefined && $scope.effectiveDate > lastDayOfMonth) {
+                        return "Effective Date should not exceed end of the month";
+                    }
+                    return null;
+                };
             }
 
             function defineAPI() {
@@ -50,6 +56,7 @@ app.directive("retailBeRecurringchargeProcess", ['UtilsService', 'VRUIUtilsServi
                 api.load = function (payload) {
                     var promises = [];
                     $scope.effectiveDate = new Date();
+                    lastDayOfMonth = new Date($scope.effectiveDate.getFullYear(), $scope.effectiveDate.getMonth() + 1, 0);
                     return UtilsService.waitMultiplePromises(promises);
                 };
 

@@ -54,36 +54,39 @@ namespace Retail.BusinessEntity.BP.Activities
 
                 int numberOfDays = Convert.ToInt32(accountPackageRecurChargeData.EndChargePeriod.Subtract(accountPackageRecurChargeData.BeginChargePeriod).TotalDays);
 
-                foreach (RecurringChargeEvaluatorOutput recurringChargeEvaluatorOutput in recurringChargeEvaluatorOutputs)
+                if (numberOfDays > 0)
                 {
-                    ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(recurringChargeEvaluatorOutput.ChargeableEntityId);
-                    chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", recurringChargeEvaluatorOutput.ChargeableEntityId);
-                    if (!chargeableEntitySettings.TransactionTypeId.HasValue)
-                        throw new NullReferenceException(string.Format("chargeableEntitySettings.TransactionTypeId ChargeableEntityId:{0}", recurringChargeEvaluatorOutput.ChargeableEntityId));
-
-                    decimal amountPerDay = recurringChargeEvaluatorOutput.Amount / numberOfDays;
-
-
-                    DateTime chargeDay = accountPackageRecurChargeData.BeginChargePeriod;
-                    while (chargeDay < accountPackageRecurChargeData.EndChargePeriod)
+                    foreach (RecurringChargeEvaluatorOutput recurringChargeEvaluatorOutput in recurringChargeEvaluatorOutputs)
                     {
-                        FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, chargeDay);
-                        AccountPackageRecurCharge accountPackageRecurCharge = new AccountPackageRecurCharge()
+                        ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(recurringChargeEvaluatorOutput.ChargeableEntityId);
+                        chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", recurringChargeEvaluatorOutput.ChargeableEntityId);
+                        if (!chargeableEntitySettings.TransactionTypeId.HasValue)
+                            throw new NullReferenceException(string.Format("chargeableEntitySettings.TransactionTypeId ChargeableEntityId:{0}", recurringChargeEvaluatorOutput.ChargeableEntityId));
+
+                        decimal amountPerDay = recurringChargeEvaluatorOutput.Amount / numberOfDays;
+
+
+                        DateTime chargeDay = accountPackageRecurChargeData.BeginChargePeriod;
+                        while (chargeDay < accountPackageRecurChargeData.EndChargePeriod)
                         {
-                            AccountPackageID = accountPackageRecurChargeData.AccountPackage.AccountPackageId,
-                            BalanceAccountID = financialAccountRuntimeData != null ? financialAccountRuntimeData.BalanceAccountId : null,
-                            BalanceAccountTypeID = financialAccountRuntimeData != null ? financialAccountRuntimeData.BalanceAccountTypeId : null,
-                            ChargeableEntityID = recurringChargeEvaluatorOutput.ChargeableEntityId,
-                            ChargeAmount = chargeDay >= recurringChargeEvaluatorOutput.ChargingStart && chargeDay < recurringChargeEvaluatorOutput.ChargingEnd ? amountPerDay : 0,
-                            ChargeDay = chargeDay,
-                            CurrencyID = recurringChargeEvaluatorOutput.CurrencyId,
-                            TransactionTypeID = chargeableEntitySettings.TransactionTypeId.Value,
-                            AccountID = accountPackageRecurChargeData.AccountPackage.AccountId,
-                            AccountBEDefinitionId = accountBEDefinitionId
-                        };
-                        List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargesByDate.GetOrCreateItem(accountPackageRecurCharge.ChargeDay, () => { return new List<AccountPackageRecurCharge>(); });
-                        accountPackageRecurChargeList.Add(accountPackageRecurCharge);
-                        chargeDay = chargeDay.AddDays(1);
+                            FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, chargeDay);
+                            AccountPackageRecurCharge accountPackageRecurCharge = new AccountPackageRecurCharge()
+                            {
+                                AccountPackageID = accountPackageRecurChargeData.AccountPackage.AccountPackageId,
+                                BalanceAccountID = financialAccountRuntimeData != null ? financialAccountRuntimeData.BalanceAccountId : null,
+                                BalanceAccountTypeID = financialAccountRuntimeData != null ? financialAccountRuntimeData.BalanceAccountTypeId : null,
+                                ChargeableEntityID = recurringChargeEvaluatorOutput.ChargeableEntityId,
+                                ChargeAmount = chargeDay >= recurringChargeEvaluatorOutput.ChargingStart && chargeDay < recurringChargeEvaluatorOutput.ChargingEnd ? amountPerDay : 0,
+                                ChargeDay = chargeDay,
+                                CurrencyID = recurringChargeEvaluatorOutput.CurrencyId,
+                                TransactionTypeID = chargeableEntitySettings.TransactionTypeId.Value,
+                                AccountID = accountPackageRecurChargeData.AccountPackage.AccountId,
+                                AccountBEDefinitionId = accountBEDefinitionId
+                            };
+                            List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargesByDate.GetOrCreateItem(accountPackageRecurCharge.ChargeDay, () => { return new List<AccountPackageRecurCharge>(); });
+                            accountPackageRecurChargeList.Add(accountPackageRecurCharge);
+                            chargeDay = chargeDay.AddDays(1);
+                        }
                     }
                 }
             }
