@@ -1,6 +1,10 @@
 ﻿<vr-columns width="normal">
-    <vr-select label="Condition" datatextfield="description" datavaluefield="value" hideremoveicon
-               datasource="filters" selectedvalues="selectedFilter" isrequired="true"></vr-select>
+    <vr-select datasource="filters"
+               datavaluefield="value"
+               datatextfield="description"
+               selectedvalues="selectedFilter"
+               label="Condition" isrequired="true" hideremoveicon>
+    </vr-select>
 </vr-columns>
 
 <vr-genericdata-fieldtype-datetime-filtereditor on-ready="onDateFilterEditorReady" isrequired="true" selectionmode="single" normal-col-num="4"></vr-genericdata-fieldtype-datetime-filtereditor>
