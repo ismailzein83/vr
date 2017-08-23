@@ -11,11 +11,12 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.AccountBalance.Entities;
 namespace TOne.WhS.AccountBalance.Business
 {
     public class AccountBalanceManager : Vanrise.AccountBalance.Entities.IAccountManager
     {
-        static FinancialAccountManager s_financialAccountManager = new FinancialAccountManager();
+        static WHSFinancialAccountManager s_financialAccountManager = new WHSFinancialAccountManager();
 
         #region Public Methods
 
@@ -24,11 +25,11 @@ namespace TOne.WhS.AccountBalance.Business
             carrierAccountId = null;
             carrierProfileId = null;
             int financialAccountId = ParseFinancialAccountId(balanceEntityId);
-            FinancialAccount financialAccount = new FinancialAccountManager().GetFinancialAccount(financialAccountId);
+            WHSFinancialAccount financialAccount = s_financialAccountManager.GetFinancialAccount(financialAccountId);
+            financialAccount.ThrowIfNull("financialAccount", financialAccountId);
             bed = financialAccount.BED;
             eed = financialAccount.EED;
             status = VRAccountStatus.Active;
-           
             if (financialAccount.CarrierProfileId.HasValue)
             {
                 carrierProfileId = financialAccount.CarrierProfileId.Value;
@@ -61,29 +62,24 @@ namespace TOne.WhS.AccountBalance.Business
         public Decimal GetCustomerCreditLimit(string balanceEntityId, out int carrierCurrencyId)
         {
             int financeAccountId = ParseFinancialAccountId(balanceEntityId);
-            CarrierFinancialAccountData financialAccountData = s_financialAccountManager.GetCustCarrierFinancialByFinAccId(financeAccountId);
+            WHSCarrierFinancialAccountData financialAccountData = s_financialAccountManager.GetCustCarrierFinancialByFinAccId(financeAccountId);
             
-            if (!financialAccountData.CreditLimit.HasValue)
+            if (!financialAccountData.AccountBalanceData.CreditLimit.HasValue)
                 throw new Vanrise.Entities.VRBusinessException(String.Format("Credit Limit must have a value for the Financial Account: '{0}'", balanceEntityId));
 
-            carrierCurrencyId = financialAccountData.CarrierCurrencyId;
-            return financialAccountData.CreditLimit.Value;
+            carrierCurrencyId = financialAccountData.CurrencyId;
+            return financialAccountData.AccountBalanceData.CreditLimit.Value;
         }
 
         public Decimal GetSupplierCreditLimit(string balanceEntityId)
         {
             int financeAccountId = ParseFinancialAccountId(balanceEntityId);
-            CarrierFinancialAccountData financialAccountData = s_financialAccountManager.GetSuppCarrierFinancialByFinAccId(financeAccountId);
-            if (!financialAccountData.CreditLimit.HasValue)
+            WHSCarrierFinancialAccountData financialAccountData = s_financialAccountManager.GetSuppCarrierFinancialByFinAccId(financeAccountId);
+            if (!financialAccountData.AccountBalanceData.CreditLimit.HasValue)
                 throw new NullReferenceException(String.Format("financialAccountData.CreditLimit '{0}'", balanceEntityId));
-            return financialAccountData.CreditLimit.Value;
+            return financialAccountData.AccountBalanceData.CreditLimit.Value;
         }
 
-        public bool CheckFinancialAccountTranasactions(Guid accountTypeId ,int financialAccountId)
-        {
-            LiveBalanceManager liveBalanceManager = new LiveBalanceManager();
-            return liveBalanceManager.CheckIfAccountHasTransactions(accountTypeId, financialAccountId.ToString());
-        }
         #endregion
 
         #region Private Methods
@@ -103,7 +99,7 @@ namespace TOne.WhS.AccountBalance.Business
         dynamic Vanrise.AccountBalance.Entities.IAccountManager.GetAccount(Vanrise.AccountBalance.Entities.IAccountContext context)
         {
              int financialAccountId = ParseFinancialAccountId(context.AccountId);
-             return new FinancialAccountManager().GetFinancialAccount(financialAccountId);
+             return  s_financialAccountManager.GetFinancialAccount(financialAccountId);
         }
 
         Vanrise.AccountBalance.Entities.AccountInfo Vanrise.AccountBalance.Entities.IAccountManager.GetAccountInfo(Vanrise.AccountBalance.Entities.IAccountInfoContext context)
@@ -114,32 +110,26 @@ namespace TOne.WhS.AccountBalance.Business
             DateTime? eed;
             VRAccountStatus status;
             GetAccountOrProfile(context.AccountId, out carrierAccount, out carrierProfile,out bed, out eed,out status);
+            AccountInfo accountInfo = new AccountInfo
+            {
+                BED = bed,
+                EED = eed,
+                Status = status,
+                IsDeleted = false
+            };
             if (carrierProfile != null)
             {
                 var carrierProfileManager = new CarrierProfileManager();
-                return new Vanrise.AccountBalance.Entities.AccountInfo
-                {
-                    Name = carrierProfileManager.GetCarrierProfileName(carrierProfile),
-                    CurrencyId = carrierProfileManager.GetCarrierProfileCurrencyId(carrierProfile),
-                    BED = bed,
-                    EED= eed,
-                    Status = status,
-                    IsDeleted = false
-                };
+                accountInfo.Name = carrierProfileManager.GetCarrierProfileName(carrierProfile);
+                accountInfo.CurrencyId = carrierProfileManager.GetCarrierProfileCurrencyId(carrierProfile);
             }
             else
             {
                 var carrierAccountManager = new CarrierAccountManager();
-                return new Vanrise.AccountBalance.Entities.AccountInfo
-                {
-                    Name = carrierAccountManager.GetCarrierAccountName(carrierAccount),
-                    CurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(carrierAccount),
-                    BED = bed,
-                    EED = eed,
-                    Status = status,
-                    IsDeleted = false
-                };
+                accountInfo.Name = carrierAccountManager.GetCarrierAccountName(carrierAccount);
+                accountInfo.CurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(carrierAccount);
             }
+            return accountInfo;
         }
 
         #endregion

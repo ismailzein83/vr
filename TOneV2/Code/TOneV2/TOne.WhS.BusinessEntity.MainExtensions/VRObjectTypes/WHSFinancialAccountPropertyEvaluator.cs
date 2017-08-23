@@ -7,20 +7,19 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
-using TOne.WhS.AccountBalance.Entities;
 
-namespace TOne.WhS.AccountBalance.MainExtensions
+namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public enum FinancialAccountField { FinancialAccountId = 0 }
+    public enum WHSFinancialAccountField { FinancialAccountId = 0 }
 
-    public class FinancialAccountPropertyEvaluator : VRObjectPropertyEvaluator
+    public class WHSFinancialAccountPropertyEvaluator : VRObjectPropertyEvaluator
     {
         public override Guid ConfigId
         {
             get { return new Guid("DEFE74EF-2E24-43A7-8420-E8A194AD189C"); } 
         }
 
-        public FinancialAccountField FinancialAccountField { get; set; }
+        public WHSFinancialAccountField FinancialAccountField { get; set; }
 
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
@@ -31,7 +30,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
 
             switch (this.FinancialAccountField)
             {
-                case FinancialAccountField.FinancialAccountId:
+                case WHSFinancialAccountField.FinancialAccountId:
                     return financialAccount.FinancialAccountId;
             }
 

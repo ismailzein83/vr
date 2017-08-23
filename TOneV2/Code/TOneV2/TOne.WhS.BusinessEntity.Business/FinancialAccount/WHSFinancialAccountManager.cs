@@ -180,8 +180,20 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 filterFunc = (financialAccount) =>
                 {
-                    if (financialAccount.FinancialAccountDefinitionId != filter.FinancialAccountDefinitionId)
-                        return false;
+                    if (filter.FinancialAccountDefinitionId.HasValue && financialAccount.FinancialAccountDefinitionId != filter.FinancialAccountDefinitionId.Value)
+                            return false;
+                    if(filter.InvoiceTypeId.HasValue)
+                    {
+                        var invoiceTypeId = s_financialAccountDefinitionManager.GetInvoiceTypeId(financialAccount.FinancialAccountDefinitionId);
+                        if (invoiceTypeId != filter.InvoiceTypeId)
+                            return false;
+                    }
+                    if (filter.BalanceAccountTypeId.HasValue)
+                    {
+                        var balanceAccountTypeId = s_financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId);
+                        if (balanceAccountTypeId != filter.BalanceAccountTypeId)
+                            return false;
+                    }
                     if (filter.CarrierType.HasValue)
                     {
                         switch (filter.CarrierType.Value)
@@ -679,7 +691,6 @@ namespace TOne.WhS.BusinessEntity.Business
         private WHSFinancialAccountDefinitionSettings GetDefinitionWithValidate(Guid financialAccountDefinitionId)
         {
             WHSFinancialAccountDefinitionSettings definitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
-            definitionSettings.ThrowIfNull("definitionSettings", financialAccountDefinitionId);
             definitionSettings.ExtendedSettings.ThrowIfNull("definitionSettings.ExtendedSettings", financialAccountDefinitionId);
             return definitionSettings;
         }

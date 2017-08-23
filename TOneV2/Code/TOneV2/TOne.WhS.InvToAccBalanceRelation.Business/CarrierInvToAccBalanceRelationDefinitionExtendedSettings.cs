@@ -26,55 +26,28 @@ namespace TOne.WhS.InvToAccBalanceRelation.Business
         public override List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> GetBalanceInvoiceAccounts(IInvToAccBalanceRelGetBalanceInvoiceAccountsContext context)
         {
 
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            var financialAccount = new FinancialAccountManager().GetFinancialAccount(Convert.ToInt32(context.AccountId));
-            if (financialAccount == null)
-                throw new NullReferenceException(string.Format("financialAccount: financialAccountId {0}", context.AccountId));
-            List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> invoiceAccountInfo = new List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo>();
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+            var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.AccountId));
+            financialAccount.ThrowIfNull("financialAccount", context.AccountId);
+            
 
-            FinancialAccountDefinitionManager financialAccountDefinitionManager = new AccountBalance.Business.FinancialAccountDefinitionManager();
-            var accountBalanceSettings = financialAccountDefinitionManager.GetFinancialAccountDefinitionExtendedSettings<AccountBalanceSettings>(context.AccountTypeId);
-           
-            InvoiceAccountManager invoiceAccountManager = new InvoiceAccountManager();
-            if(accountBalanceSettings.IsApplicableToCustomer)
+            WHSFinancialAccountDefinitionManager financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
+            var financialAccountDefinitionSettings = financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
+            if(financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
             {
-                if(financialAccount.CarrierProfileId.HasValue)
+                return new List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo>
                 {
-                    List<CarrierInvoiceAccountData> carrierInvoiceAccountsData;
-                    if (invoiceAccountManager.TryGetCustProfInvoiceAccountData(financialAccount.CarrierProfileId.Value, context.EffectiveOn, out carrierInvoiceAccountsData))
+                    new Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo
                     {
-                        AddInvoiceAccountInfo(invoiceAccountInfo, carrierInvoiceAccountsData);
+                         InvoiceTypeId = financialAccountDefinitionSettings.InvoiceTypeId.Value,
+                          PartnerId = context.AccountId
                     }
-                }else
-                {
-                    CarrierInvoiceAccountData carrierInvoiceAccountData;
-                    if (invoiceAccountManager.TryGetCustAccInvoiceAccountData(financialAccount.CarrierAccountId.Value, context.EffectiveOn, out carrierInvoiceAccountData))
-                    {
-                        AddInvoiceAccountInfo(invoiceAccountInfo, carrierInvoiceAccountData);
-                    }
-                }
+                };
             }
-            if(accountBalanceSettings.IsApplicableToSupplier)
+            else
             {
-                if (financialAccount.CarrierProfileId.HasValue)
-                {
-                    List<CarrierInvoiceAccountData> carrierInvoiceAccountsData;
-                    if (invoiceAccountManager.TryGetSuppProfInvoiceAccountData(financialAccount.CarrierProfileId.Value, context.EffectiveOn, out carrierInvoiceAccountsData))
-                    {
-                      AddInvoiceAccountInfo(invoiceAccountInfo,carrierInvoiceAccountsData);
-                    }
-                }
-                else
-                {
-                    CarrierInvoiceAccountData carrierInvoiceAccountData;
-                    if (invoiceAccountManager.TryGetSuppAccInvoiceAccountData(financialAccount.CarrierAccountId.Value, context.EffectiveOn, out carrierInvoiceAccountData))
-                    {
-                        AddInvoiceAccountInfo(invoiceAccountInfo,carrierInvoiceAccountData);
-                    }
-                }
+                return null;
             }
-          //  var customerInvoiceTypeId = new Guid("EADC10C8-FFD7-4EE3-9501-0B2CE09029AD");
-            return invoiceAccountInfo;
         }
 
         public override List<BalanceAccountInfo> GetInvoiceBalanceAccounts(IInvToAccBalanceRelGetInvoiceBalanceAccountsContext context)
@@ -83,28 +56,5 @@ namespace TOne.WhS.InvToAccBalanceRelation.Business
 
         }
 
-        private void AddInvoiceAccountInfo(List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> invoiceAccountInfo , CarrierInvoiceAccountData carrierInvoiceAccountData)
-        {
-            var partnerId = carrierInvoiceAccountData.InvoiceAccountId.ToString();
-            if(!invoiceAccountInfo.Any(x=>x.InvoiceTypeId == carrierInvoiceAccountData.InvoiceTypeId && x.PartnerId == partnerId))
-            {
-               invoiceAccountInfo.Add(CreateInvoiceAccountInfo(carrierInvoiceAccountData.InvoiceTypeId,partnerId));
-            }
-        }
-        private void AddInvoiceAccountInfo(List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> invoiceAccountInfo, List<CarrierInvoiceAccountData> carrierInvoiceAccountsData)
-        {
-            foreach (var carrierInvoiceAccountData in carrierInvoiceAccountsData)
-            {
-                AddInvoiceAccountInfo(invoiceAccountInfo, carrierInvoiceAccountData);
-            }
-        }
-        private Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo CreateInvoiceAccountInfo(Guid invoiceTypeId, string partnerId)
-        {
-            return new Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo
-            {
-                InvoiceTypeId = invoiceTypeId,
-                PartnerId = partnerId
-            };
-        }
     }
 }

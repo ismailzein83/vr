@@ -23,9 +23,9 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
         {
             VRBalanceAlertEventPayload eventPayload = context.EventPayload as VRBalanceAlertEventPayload;
             eventPayload.ThrowIfNull("eventPayload", "");
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
 
-            FinancialAccount financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(eventPayload.EntityId));
+            WHSFinancialAccount financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(eventPayload.EntityId));
             financialAccount.ThrowIfNull("financialAccount", eventPayload.EntityId);
 
             SwitchManager switchManager = new SwitchManager();
@@ -39,9 +39,12 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
             else
             {
                 var carrierAccounts = _carrierAccountManager.GetCarriersByProfileId(financialAccount.CarrierProfileId.Value, true, false);
-                foreach (var carrierAccount in carrierAccounts)
+                if (carrierAccounts != null)
                 {
-                    UnBlockCustomer(carrierAccount, switches);
+                    foreach (var carrierAccount in carrierAccounts)
+                    {
+                        UnBlockCustomer(carrierAccount, switches);
+                    }
                 }
             }
         }

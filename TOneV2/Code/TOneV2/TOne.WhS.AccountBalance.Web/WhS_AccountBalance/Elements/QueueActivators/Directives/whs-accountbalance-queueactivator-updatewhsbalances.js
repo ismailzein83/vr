@@ -35,15 +35,32 @@
             var updateAccountBalanceSettingsDirectiveAPI;
             var updateAccountBalanceSettingsDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var supplierUsageTransactionTypeApi;
+            var supplierUsageTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var customerUsageTransactionTypeApi;
+            var customerUsageTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.onSupplierUsageTransactionTypeReady = function (api) {
+                    supplierUsageTransactionTypeApi = api;
+                    supplierUsageTransactionTypePromiseDeferred.resolve();
+                };
 
+                $scope.scopeModel.onCustomerUsageTransactionTypeReady = function (api) {
+                    customerUsageTransactionTypeApi = api;
+                    customerUsageTransactionTypePromiseDeferred.resolve();
+                };
                 $scope.scopeModel.onUpdateAccountBalanceSettingsDirectiveReady = function (api) {
                     updateAccountBalanceSettingsDirectiveAPI = api;
                     updateAccountBalanceSettingsDirectiveReadyDeferred.resolve();
                 };
-
-                defineAPI();
+                UtilsService.waitMultiplePromises([supplierUsageTransactionTypePromiseDeferred.promise, customerUsageTransactionTypePromiseDeferred.promise, updateAccountBalanceSettingsDirectiveReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+               
             }
             function defineAPI() {
                 var api = {};
@@ -52,29 +69,45 @@
                     var promises = [];
 
                     var updateAccountBalanceSettings;
-
+                    var queueActivator;
                     if (payload != undefined && payload.QueueActivator != undefined) {
                         updateAccountBalanceSettings = payload.QueueActivator.UpdateAccountBalanceSettings;
+                        queueActivator = payload.QueueActivator;
                     }
 
-                    var updateAccountBalanceSettingsDirectiveLoadPromise = getUpdateAccountBalanceSettingsDirectiveLoadPromise();
-                    promises.push(updateAccountBalanceSettingsDirectiveLoadPromise);
+                    promises.push(getUpdateAccountBalanceSettingsDirectiveLoadPromise());
 
                     function getUpdateAccountBalanceSettingsDirectiveLoadPromise() {
-                        var updateAccountBalanceSettingsDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                        var payload;
+                        if (updateAccountBalanceSettings != undefined) {
+                            payload = {
+                                updateAccountBalanceSettings: updateAccountBalanceSettings
+                            };
+                        }
+                        return   updateAccountBalanceSettingsDirectiveAPI.load(payload);
+                    }
+                    promises.push(supplierUsageTransactionTypeLoadPromise());
 
-                        updateAccountBalanceSettingsDirectiveReadyDeferred.promise.then(function () {
+                    function supplierUsageTransactionTypeLoadPromise() {
+                        var supplierUsageTransactionPayload;
+                        if (queueActivator != undefined) {
+                            supplierUsageTransactionPayload = {
+                                selectedIds: queueActivator.SupplierUsageTransactionTypeId
+                            };
+                        }
+                        return supplierUsageTransactionTypeApi.load(supplierUsageTransactionPayload);
+                    }
 
-                            var payload;
-                            if (updateAccountBalanceSettings != undefined) {
-                                payload = {
-                                    updateAccountBalanceSettings: updateAccountBalanceSettings
-                                };
-                            }
-                            VRUIUtilsService.callDirectiveLoad(updateAccountBalanceSettingsDirectiveAPI, payload, updateAccountBalanceSettingsDirectiveLoadDeferred);
-                        });
+                    promises.push(customerUsageTransactionTypeLoadPromise());
 
-                        return updateAccountBalanceSettingsDirectiveLoadDeferred.promise;
+                    function customerUsageTransactionTypeLoadPromise() {
+                        var customerUsageTransactionPayload;
+                        if (queueActivator != undefined) {
+                            customerUsageTransactionPayload = {
+                                selectedIds: queueActivator.CustomerUsageTransactionTypeId
+                            };
+                        }
+                        return customerUsageTransactionTypeApi.load(customerUsageTransactionPayload);
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -84,7 +117,9 @@
 
                     return {
                         $type: 'TOne.WhS.AccountBalance.MainExtensions.QueueActivators.UpdateWhSBalancesQueueActivator, TOne.WhS.AccountBalance.MainExtensions',
-                        UpdateAccountBalanceSettings: updateAccountBalanceSettingsDirectiveAPI.getData()
+                        UpdateAccountBalanceSettings: updateAccountBalanceSettingsDirectiveAPI.getData(),
+                        SupplierUsageTransactionTypeId: supplierUsageTransactionTypeApi.getSelectedIds(),
+                        CustomerUsageTransactionTypeId: customerUsageTransactionTypeApi.getSelectedIds()
                     };
                 };
 

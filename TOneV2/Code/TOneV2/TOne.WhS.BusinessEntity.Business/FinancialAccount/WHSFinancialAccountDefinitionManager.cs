@@ -70,8 +70,19 @@ namespace TOne.WhS.BusinessEntity.Business
             return new WHSFinancialAccountDefinitionInfo
             {
                 FinancialAccountDefinitionId = businessEntityDefinition.BusinessEntityDefinitionId,
-                Name = businessEntityDefinition.Name
+                Name = businessEntityDefinition.Title
             };
+        }
+
+        public Guid? GetBalanceAccountTypeId(Guid financialAccountDefinitionId)
+        {
+            var financialAccountDefinitionSettings = GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
+            return financialAccountDefinitionSettings.BalanceAccountTypeId;
+        }
+        public Guid? GetInvoiceTypeId(Guid financialAccountDefinitionId)
+        {
+            var financialAccountDefinitionSettings = GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
+            return financialAccountDefinitionSettings.InvoiceTypeId;
         }
     }
 }

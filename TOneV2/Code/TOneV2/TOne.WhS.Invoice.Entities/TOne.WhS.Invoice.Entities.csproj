@@ -57,17 +57,6 @@
   <ItemGroup>
     <Compile Include="CustomerInvoiceDetails.cs" />
     <Compile Include="CustomerInvoiceItemDetails.cs" />
-    <Compile Include="InvoiceAccount\CarrierInvoiceAccountData.cs" />
-    <Compile Include="InvoiceAccount\InvoiceAccountDetail.cs" />
-    <Compile Include="InvoiceAccount\InvoiceAccountEditorRuntime.cs" />
-    <Compile Include="InvoiceAccount\InvoiceAccountInfo.cs" />
-    <Compile Include="InvoiceAccount\InvoiceAccountInfoFilter.cs" />
-    <Compile Include="InvoiceAccount\InvoiceAccount.cs" />
-    <Compile Include="InvoiceAccount\InvoiceAccountQuery.cs" />
-    <Compile Include="InvoiceAccount\InvoiceAccountSettings.cs" />
-    <Compile Include="InvoiceAccount\InvoiceValidationData.cs" />
-    <Compile Include="InvoiceCarrier.cs" />
-    <Compile Include="InvoiceCarrierFilter.cs" />
     <Compile Include="InvoiceComparisonInput.cs" />
     <Compile Include="InvoiceComparisonResult.cs" />
     <Compile Include="InvoiceComparisonResultDetail.cs" />

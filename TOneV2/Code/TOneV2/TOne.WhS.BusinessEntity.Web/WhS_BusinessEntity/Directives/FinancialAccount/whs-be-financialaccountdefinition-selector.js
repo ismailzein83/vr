@@ -46,9 +46,9 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FinancialAccountDefinitionAPISe
     function getTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Financial Account Definitions";
+        var label = "Type";
         if (attrs.ismultipleselection != undefined) {
-            label = "Financial Account Definitions";
+            label = "Types";
             multipleselection = "ismultipleselection";
         }
 

@@ -13,13 +13,6 @@ namespace TOne.WhS.Invoice.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "WhSInvoice")]
     public class WhSInvoiceController:BaseAPIController
     {
-        [HttpPost]
-        [Route("GetInvoiceCarriers")]
-        public IEnumerable<InvoiceCarrier> GetInvoiceCarriers(InvoiceCarrierFilter filter)
-        {
-            InvoiceManager manager = new InvoiceManager();
-            return manager.GetInvoiceCarriers(filter);
-        }
 
         [HttpPost]
         [Route("CompareInvoices")]

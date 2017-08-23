@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.Invoice.Business.Extensions
@@ -17,9 +18,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public CarrierType CarrierType { get; set; }
         public override bool IsFilterMatch(IPartnerInvoiceFilterConditionContext context)
         {
-            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
-            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.generateInvoiceInput.PartnerId));
-            if(invoiceAccount.CarrierProfileId.HasValue)
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+            var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.generateInvoiceInput.PartnerId));
+
+
+            if (financialAccount.CarrierProfileId.HasValue)
             {
                 return this.CarrierType == CarrierType.Profile;
             }else

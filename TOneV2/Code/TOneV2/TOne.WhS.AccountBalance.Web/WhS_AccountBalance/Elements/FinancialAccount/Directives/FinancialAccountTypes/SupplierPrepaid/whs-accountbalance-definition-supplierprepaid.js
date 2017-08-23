@@ -27,16 +27,11 @@ app.directive("whsAccountbalanceDefinitionSupplierprepaid", ["UtilsService", "VR
 
         function SupplierPrepaid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            var usageTransactionTypeApi;
-            var usageTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
-
+       
             function initializeController() {
                 $scope.scopeModel = {};
 
-                $scope.scopeModel.onUsageTransactionTypeReady = function (api) {
-                    usageTransactionTypeApi = api;
-                    usageTransactionTypePromiseDeferred.resolve();
-                };
+           
                 defineAPI();
             }
 
@@ -49,21 +44,6 @@ app.directive("whsAccountbalanceDefinitionSupplierprepaid", ["UtilsService", "VR
                         extendedSettingsEntity = payload.extendedSettingsEntity;
                     }
                     var promises = [];
-                    promises.push(usageTransactionTypeLoadPromise());
-
-                    function usageTransactionTypeLoadPromise() {
-                        var usageTransactionTypeLoadDeferred = UtilsService.createPromiseDeferred();
-                        usageTransactionTypePromiseDeferred.promise.then(function () {
-                            var definitionSettingsPayload;
-                            if (payload != undefined) {
-                                definitionSettingsPayload = {
-                                    selectedIds: extendedSettingsEntity != undefined ? extendedSettingsEntity.UsageTransactionTypeId : undefined
-                                };
-                            }
-                            VRUIUtilsService.callDirectiveLoad(usageTransactionTypeApi, definitionSettingsPayload, usageTransactionTypeLoadDeferred);
-                        });
-                        return usageTransactionTypeLoadDeferred.promise;
-                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -71,7 +51,6 @@ app.directive("whsAccountbalanceDefinitionSupplierprepaid", ["UtilsService", "VR
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierPrepaid.SupplierPrepaidDefinitionSettings ,TOne.WhS.AccountBalance.MainExtensions",
-                        UsageTransactionTypeId: usageTransactionTypeApi.getSelectedIds()
                     };
                 };
 

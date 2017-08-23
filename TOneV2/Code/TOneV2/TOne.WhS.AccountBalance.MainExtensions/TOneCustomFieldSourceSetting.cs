@@ -9,7 +9,12 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
-
+using Vanrise.Common;
+using TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.CustomerPostpaid;
+using TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.CustomerPrepaid;
+using TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.Netting;
+using TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierPrepaid;
+using TOne.WhS.AccountBalance.MainExtensions.FinancialAccountTypes.SupplierPostpaid;
 namespace TOne.WhS.AccountBalance.MainExtensions
 {
     public class TOneCustomFieldSourceSetting : AccountBalanceFieldSourceSetting
@@ -19,7 +24,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             get { return new Guid("BD8DB941-019D-40C2-9E9A-DEBA0F567878"); }
         }
         CarrierAccountManager carrierAccountManager;
-        FinancialAccountManager financialAccountManager;
+        WHSFinancialAccountManager financialAccountManager;
+
         public override List<AccountBalanceFieldDefinition> GetFieldDefinitions(IAccountBalanceFieldSourceGetFieldDefinitionsContext context)
         {
             List<AccountBalanceFieldDefinition> definitionFields = new List<AccountBalanceFieldDefinition>();
@@ -49,13 +55,14 @@ namespace TOne.WhS.AccountBalance.MainExtensions
 
         public override object PrepareSourceData(IAccountBalanceFieldSourcePrepareSourceDataContext context)
         {
-            AccountBalanceSettings accountBalanceSettings = context.AccountTypeSettings.ExtendedSettings as AccountBalanceSettings;
-             financialAccountManager = new FinancialAccountManager();
+            financialAccountManager = new WHSFinancialAccountManager();
              carrierAccountManager = new CarrierAccountManager();
+             AccountBalanceSettings accountBalanceSettings = context.AccountTypeSettings.ExtendedSettings as AccountBalanceSettings;
+
             Dictionary<string, TOneCustomFieldsData> toneCustomFieldsDataByAccountId = new Dictionary<string, TOneCustomFieldsData>();
             foreach (var item in context.AccountBalances)
             {
-                int accountId = Convert.ToInt32(item.AccountId);
+                int financialAccountId = Convert.ToInt32(item.AccountId);
 
 
                 TOneCustomFieldsData toneCustomFieldsData;
@@ -65,7 +72,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                     decimal? supplierCreditLimit = null;
                     decimal consumed = 0;
 
-                    var financialAccount = financialAccountManager.GetFinancialAccount(accountId);
+                    var financialAccount = financialAccountManager.GetFinancialAccount(financialAccountId);
                     toneCustomFieldsData = new TOneCustomFieldsData
                     {
                         CarrierType = financialAccount.CarrierAccountId.HasValue ? "Account" : "Profile"
@@ -73,7 +80,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
 
                     if (accountBalanceSettings.IsApplicableToCustomer)
                     {
-                        customerCreditLimit = GetCustomerCreditLimit(accountId);
+                        customerCreditLimit = GetCustomerCreditLimit(financialAccountId);
                         toneCustomFieldsData.CustomerCreditLimit = customerCreditLimit;
                         toneCustomFieldsData.CustomerTolerance = customerCreditLimit.HasValue ? (customerCreditLimit.Value + item.CurrentBalance) : item.CurrentBalance;
 
@@ -85,7 +92,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                     }
                     if (accountBalanceSettings.IsApplicableToSupplier)
                     {
-                        supplierCreditLimit = GetSupplierCreditLimit(accountId);
+                        supplierCreditLimit = GetSupplierCreditLimit(financialAccountId);
                         toneCustomFieldsData.SupplierCreditLimit = supplierCreditLimit;
                         toneCustomFieldsData.SupplierTolerance = supplierCreditLimit.HasValue ? (supplierCreditLimit.Value - item.CurrentBalance) : item.CurrentBalance;
 
@@ -189,20 +196,24 @@ namespace TOne.WhS.AccountBalance.MainExtensions
                 FieldType = new FieldTextType(),
             });
         }
-        private decimal? GetCustomerCreditLimit(int accountId)
+        private decimal? GetCustomerCreditLimit(int financialAccountId)
         {
-             FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-             CarrierFinancialAccountData carrierFinancialAccountData =  financialAccountManager.GetCustCarrierFinancialByFinAccId(accountId);
-            return carrierFinancialAccountData.CreditLimit;
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+            WHSCarrierFinancialAccountData carrierFinancialAccountData = financialAccountManager.GetCustCarrierFinancialByFinAccId(financialAccountId);
+             carrierFinancialAccountData.ThrowIfNull("carrierFinancialAccountData");
+             carrierFinancialAccountData.AccountBalanceData.ThrowIfNull("carrierFinancialAccountData.AccountBalanceData");
+            return carrierFinancialAccountData.AccountBalanceData.CreditLimit;
         }
-        private decimal? GetSupplierCreditLimit(int accountId)
+        private decimal? GetSupplierCreditLimit(int financialAccountId)
         {
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            CarrierFinancialAccountData carrierFinancialAccountData = financialAccountManager.GetSuppCarrierFinancialByFinAccId(accountId);
-            return carrierFinancialAccountData.CreditLimit;
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+            WHSCarrierFinancialAccountData carrierFinancialAccountData = financialAccountManager.GetSuppCarrierFinancialByFinAccId(financialAccountId);
+            carrierFinancialAccountData.ThrowIfNull("carrierFinancialAccountData");
+            carrierFinancialAccountData.AccountBalanceData.ThrowIfNull("carrierFinancialAccountData.AccountBalanceData");
+            return carrierFinancialAccountData.AccountBalanceData.CreditLimit;
         }
 
-        private bool IsRoutingStatusEnabled(FinancialAccount financialAccount, bool isCustomerApplicable)
+        private bool IsRoutingStatusEnabled(WHSFinancialAccount financialAccount, bool isCustomerApplicable)
         {
 
             if (financialAccount.CarrierAccountId.HasValue)

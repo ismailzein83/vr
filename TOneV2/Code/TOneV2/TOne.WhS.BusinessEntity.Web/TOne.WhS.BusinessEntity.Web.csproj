@@ -209,6 +209,9 @@
     <Content Include="WhS_BusinessEntity\Constant\CodeChangeTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\FinancialAccountCarrierTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\FinancialAccountPropertyEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\FinancialAccountStatusEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PriceListExtensionFormatEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PeriodTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ProfilePropertyEnum.js" />
@@ -275,6 +278,7 @@
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountBEDefinition.html" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\Templates\FinancialAccountSearch.html" />
+    <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccount-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountdefinition-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccount-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccount-search.js" />
@@ -321,6 +325,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\Templates\SupplierZoneRateStepTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate-preview.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\TransformationSteps\SupplierZoneRateStep\vr-whs-be-datatransformation-supplierzonerate.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\WHSFinancialAccountObjectTypeTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\WHSFinancialAccountPropertyEvaluatorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\ProfilePropertyEvaluatorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\ProfileObjectTypeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\SalePriceListObjectTypeTemplate.html" />
@@ -333,6 +339,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-salepricelistpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerobjecttype.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\whs-be-financialaccountobjecttype.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\whs-be-financialaccountpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\SalePriceListRoutingProductChangeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-salepricelistroutingproductchange-grid.js" />

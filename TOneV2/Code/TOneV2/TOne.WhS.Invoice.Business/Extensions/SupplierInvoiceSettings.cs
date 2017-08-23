@@ -13,7 +13,7 @@ using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.Invoice.Business.Extensions
 {
-    public class SupplierInvoiceSettings : InvoiceSettings
+    public class SupplierInvoiceSettings : InvoiceTypeExtendedSettings
     {
         public override Guid ConfigId
         {
@@ -30,8 +30,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
 
-            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
-            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.Invoice.PartnerId));
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+            var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.Invoice.PartnerId));
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
             
             switch(context.InfoType)
@@ -42,14 +42,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         objects.Add("SupplierInvoice", context.Invoice);
                         CarrierProfile carrierProfile = null;
                         int carrierProfileId;
-                        if (invoiceAccount.CarrierProfileId.HasValue)
+                        if (financialAccount.CarrierProfileId.HasValue)
                         {
-                            carrierProfileId = invoiceAccount.CarrierProfileId.Value;
+                            carrierProfileId = financialAccount.CarrierProfileId.Value;
                         }
                         else
                         {
                             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                            var account = carrierAccountManager.GetCarrierAccount(invoiceAccount.CarrierAccountId.Value);
+                            var account = carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
                             carrierProfileId = account.CarrierProfileId;
                         }
                         carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId);
@@ -64,14 +64,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         #region Taxes
                         IEnumerable<VRTaxItemDetail> taxItemDetails = null;
 
-                        if (invoiceAccount.CarrierProfileId.HasValue)
+                        if (financialAccount.CarrierProfileId.HasValue)
                         {
-                            taxItemDetails = carrierProfileManager.GetTaxItemDetails(invoiceAccount.CarrierProfileId.Value);
+                            taxItemDetails = carrierProfileManager.GetTaxItemDetails(financialAccount.CarrierProfileId.Value);
                         }
                         else
                         {
                             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                            var carrierAccount = carrierAccountManager.GetCarrierAccount(invoiceAccount.CarrierAccountId.Value);
+                            var carrierAccount = carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
                             taxItemDetails = carrierProfileManager.GetTaxItemDetails(carrierAccount.CarrierProfileId);
                         }
                         return taxItemDetails;
@@ -81,14 +81,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     {
                         #region BankDetails
                         IEnumerable<Guid> bankDetails = null;
-                        if (invoiceAccount.CarrierProfileId.HasValue)
+                        if (financialAccount.CarrierProfileId.HasValue)
                         {
-                            bankDetails = carrierProfileManager.GetBankDetails(invoiceAccount.CarrierProfileId.Value);
+                            bankDetails = carrierProfileManager.GetBankDetails(financialAccount.CarrierProfileId.Value);
                         }
                         else
                         {
                              CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                             bankDetails = carrierAccountManager.GetBankDetails(invoiceAccount.CarrierAccountId.Value);
+                             bankDetails = carrierAccountManager.GetBankDetails(financialAccount.CarrierAccountId.Value);
                         }
                         return bankDetails;
                         #endregion
@@ -98,57 +98,41 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public override void GetInitialPeriodInfo(IInitialPeriodInfoContext context)
         {
-            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
-            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+            var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
             CarrierProfile carrierProfile = null;
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-            if (invoiceAccount.CarrierProfileId.HasValue)
+            if (financialAccount.CarrierProfileId.HasValue)
             {
-                carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(invoiceAccount.CarrierProfileId.Value));
+                carrierProfile = carrierProfileManager.GetCarrierProfile(Convert.ToInt32(financialAccount.CarrierProfileId.Value));
                 context.PartnerCreationDate = carrierProfile.CreatedTime;
             }
             else
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(invoiceAccount.CarrierAccountId.Value));
+                var account = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(financialAccount.CarrierAccountId.Value));
                 context.PartnerCreationDate = account.CreatedTime;
             }
         }
         public override IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context)
         {
-            InvoiceAccountInfoFilter invoiceAccountInfoFilter = new InvoiceAccountInfoFilter { InvoiceTypeId = context.InvoiceTypeId};
+            WHSFinancialAccountInfoFilter invoiceAccountInfoFilter = new WHSFinancialAccountInfoFilter { InvoiceTypeId = context.InvoiceTypeId };
             switch (context.PartnerRetrievalType)
             {
                 case PartnerRetrievalType.GetAll:
                   break;
                 case PartnerRetrievalType.GetActive:
-                  invoiceAccountInfoFilter.ActivationStatus = ActivationStatus.Active;
+                  invoiceAccountInfoFilter.Status = VRAccountStatus.Active;
                   break;
                 case PartnerRetrievalType.GetInactive:
-                  invoiceAccountInfoFilter.ActivationStatus = ActivationStatus.Inactive;
+                  invoiceAccountInfoFilter.Status = VRAccountStatus.InActive;
                     break;
                 default : throw new NotSupportedException(string.Format("PartnerRetrievalType {0} not supported.",context.PartnerRetrievalType));
             }
-            var carriers = new InvoiceAccountManager().GetInvoiceAccountsInfo(invoiceAccountInfoFilter);
+            var carriers = new WHSFinancialAccountManager().GetFinancialAccountsInfo(invoiceAccountInfoFilter);
              if (carriers == null)
                         return null;
-            return carriers.Select(x => x.InvoiceAccountId.ToString());
-        }
-
-        public override bool IsApplicableToCustomer
-        {
-            get { return false; }
-        }
-        public override bool IsApplicableToSupplier
-        {
-            get { return true; }
-        }
-        public override string RuntimeEditor
-        {
-            get
-            {
-                return "whs-invoicetype-runtime-supplierinvoicesettings";
-            }
+            return carriers.Select(x => x.FinancialAccountId.ToString());
         }
     }
 }

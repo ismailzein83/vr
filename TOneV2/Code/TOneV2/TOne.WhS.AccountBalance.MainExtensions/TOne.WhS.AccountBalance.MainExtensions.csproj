@@ -90,16 +90,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FinancialAccountTypes\CustomerPostpaid\CustomerPostpaidSettings.cs" />
     <Compile Include="FinancialAccountTypes\CustomerPostpaid\CustomerPostpaidDefinitionSettings.cs" />
-    <Compile Include="FinancialAccountTypes\CustomerPrepaid\CustomerPrepaidSettings.cs" />
     <Compile Include="FinancialAccountTypes\CustomerPrepaid\CustomerPrepaidDefinitionSettings.cs" />
-    <Compile Include="FinancialAccountTypes\Netting\NettingSettings.cs" />
     <Compile Include="FinancialAccountTypes\Netting\NettingDefinitionSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FinancialAccountTypes\SupplierPostpaid\SupplierPostpaidSettings.cs" />
     <Compile Include="FinancialAccountTypes\SupplierPostpaid\SupplierPostpaidDefinitionSettings.cs" />
-    <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidSettings.cs" />
     <Compile Include="FinancialAccountTypes\SupplierPrepaid\SupplierPrepaidDefinitionSettings.cs" />
     <Compile Include="QueueActivators\UpdateWhSBalancesQueueActivator.cs" />
     <Compile Include="TOneCustomFieldSourceSetting.cs" />

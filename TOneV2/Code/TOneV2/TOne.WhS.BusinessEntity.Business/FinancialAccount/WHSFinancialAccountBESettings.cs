@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override string SelectorUIControl
         {
-            get { return ""; }
+            get { return "whs-be-financialaccount-selector"; }
         }
         public override string DefinitionEditor
         {

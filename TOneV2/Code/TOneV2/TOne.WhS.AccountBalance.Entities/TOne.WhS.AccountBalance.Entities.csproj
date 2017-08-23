@@ -49,18 +49,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CarrierFinancialAccountData.cs" />
-    <Compile Include="FinancialAccountInfo.cs" />
-    <Compile Include="FinancialAccountInfoFilter.cs" />
-    <Compile Include="FinancialAccountIsCustomerAccountContext.cs" />
-    <Compile Include="FinancialAccountIsSupplierAccountContext.cs" />
-    <Compile Include="FinancialAccountEditorRuntime.cs" />
-    <Compile Include="FinancialValidationData.cs" />
-    <Compile Include="GetUsageTransactionTypesContext.cs" />
-    <Compile Include="FinancialAccount.cs" />
-    <Compile Include="FinancialAccountDetail.cs" />
-    <Compile Include="FinancialAccountQuery.cs" />
-    <Compile Include="FinancialAccountSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CustomerRoutingStatusState.cs" />
   </ItemGroup>

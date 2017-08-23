@@ -11,6 +11,7 @@ using TOne.WhS.AccountBalance.Entities;
 using TOne.WhS.AccountBalance.Business;
 using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Common.Business;
+using TOne.WhS.BusinessEntity.Entities;
 namespace TOne.WhS.AccountBalance.MainExtensions
 {
     public class SendCustomerEmailAction : VRAction
@@ -29,9 +30,9 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             UserManager userManager = new UserManager();
             User user = userManager.GetUserbyId(context.UserID);
             user.ThrowIfNull("user", context.UserID);
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
 
-            FinancialAccount financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(eventPayload.EntityId));
+            WHSFinancialAccount financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(eventPayload.EntityId));
             financialAccount.ThrowIfNull("financialAccount", eventPayload.EntityId);
           
             objects.Add("User", user);

@@ -24,16 +24,18 @@ namespace TOne.WhS.Invoice.Business.Extensions
             int currencyId = -1;
             IEnumerable<VRTaxItemDetail> taxItemDetails = null;
             CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-            InvoiceAccountManager invoiceAccountManager = new Business.InvoiceAccountManager();
-            var invoiceAccount = invoiceAccountManager.GetInvoiceAccount(Convert.ToInt32(context.PartnerId));
+
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+            var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
+         
             string partnerType = null;
             int dimensionValue;
             int carrierProfileId;
-            if(invoiceAccount.CarrierProfileId.HasValue)
+            if (financialAccount.CarrierProfileId.HasValue)
             {
                 partnerType = "Profile";
-                dimensionValue = invoiceAccount.CarrierProfileId.Value;
-                carrierProfileId = invoiceAccount.CarrierProfileId.Value;
+                dimensionValue = financialAccount.CarrierProfileId.Value;
+                carrierProfileId = financialAccount.CarrierProfileId.Value;
                 dimentionName = "SupplierProfile";
                 currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(dimensionValue);
             }
@@ -41,7 +43,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 partnerType = "Account";
                 dimentionName = "Supplier";
-                dimensionValue = invoiceAccount.CarrierAccountId.Value;
+                dimensionValue = financialAccount.CarrierAccountId.Value;
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                 currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(dimensionValue);
                 var carrierAccount = carrierAccountManager.GetCarrierAccount(dimensionValue);

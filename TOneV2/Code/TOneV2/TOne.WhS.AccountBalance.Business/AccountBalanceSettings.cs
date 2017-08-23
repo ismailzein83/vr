@@ -13,13 +13,10 @@ namespace TOne.WhS.AccountBalance.Business
     {
         public override string AccountSelector { get { return "whs-accountbalance-account-selector"; } }
 
+        public override IAccountManager GetAccountManager() { return new AccountBalanceManager(); }
         public abstract bool IsApplicableToCustomer { get; }
 
         public abstract bool IsApplicableToSupplier { get; }
-
-        public virtual string RuntimeEditor { get; set; }
-
-        public override IAccountManager GetAccountManager() { return new AccountBalanceManager(); }
 
         public override VRActionTargetType GetActionTargetType()
         {

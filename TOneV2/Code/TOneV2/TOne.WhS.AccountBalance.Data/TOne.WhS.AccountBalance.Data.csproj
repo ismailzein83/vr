@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="AccountBalanceManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="IFinancialAccountDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

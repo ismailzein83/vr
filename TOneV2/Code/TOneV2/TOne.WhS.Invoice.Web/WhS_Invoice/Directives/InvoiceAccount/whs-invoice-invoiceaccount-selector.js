@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('whsAccountbalanceAccountSelector', ['VRUIUtilsService', 'UtilsService',
+app.directive('whsInvoiceInvoiceaccountSelector', ['VRUIUtilsService', 'UtilsService',
     function (VRUIUtilsService, UtilsService) {
 
         var directiveDefinitionObject = {
@@ -17,7 +17,7 @@ app.directive('whsAccountbalanceAccountSelector', ['VRUIUtilsService', 'UtilsSer
 
                 var ctrl = this;
                 ctrl.datasource = [];
-                var ctor = new AccountBalanceSelectorCtor(ctrl, $scope, $attrs);
+                var ctor = new InvoiceAccountSelectorCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
             },
@@ -44,7 +44,7 @@ app.directive('whsAccountbalanceAccountSelector', ['VRUIUtilsService', 'UtilsSer
             return '<whs-be-financialaccount-selector on-ready="scopeModel.onFinancialAccountSelectorReady" ' + multipleselection + ' onselectionchanged="scopeModel.onAccountSelected" isrequired="ctrl.isrequired" normal-col-num = "{{ctrl.normalColNum}}"> </whs-be-financialaccount-selector>';
         }
 
-        function AccountBalanceSelectorCtor(ctrl, $scope, attrs) {
+        function InvoiceAccountSelectorCtor(ctrl, $scope, attrs) {
 
             this.initializeController = initializeController;
 
@@ -75,15 +75,23 @@ app.directive('whsAccountbalanceAccountSelector', ['VRUIUtilsService', 'UtilsSer
                     defineAPI();
                 });
             }
-
             function reloadContextFunctions(selectedIds) {
                 if (context != undefined) {
                     if (context.onAccountSelected != undefined) {
                         context.onAccountSelected(selectedIds);
                     }
+                    if (context.reloadPregeneratorActions != undefined) {
+                        context.reloadPregeneratorActions();
+                    }
+                    //if (context.setTimeZone != undefined) {
+                    //    var timeZoneId = selectedAccount != undefined ? selectedAccount.TimeZoneId : undefined;
+                    //    context.setTimeZone(timeZoneId);
+                    //}
+                    if (context.reloadBillingPeriod != undefined) {
+                        context.reloadBillingPeriod();
+                    }
                 }
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -95,7 +103,7 @@ app.directive('whsAccountbalanceAccountSelector', ['VRUIUtilsService', 'UtilsSer
                         filter = payload.filter;
                         if (filter == undefined)
                             filter = {};
-                        filter.BalanceAccountTypeId = payload.accountTypeId;
+                        filter.InvoiceTypeId = payload.invoiceTypeId;
                         selectedIds = payload.selectedIds;
                     }
 
@@ -106,7 +114,7 @@ app.directive('whsAccountbalanceAccountSelector', ['VRUIUtilsService', 'UtilsSer
                     function loadFinancialAccountSelector() {
                         var financialAccountPayload = {
                             selectedIds: selectedIds,
-                            filter: filter
+                            filter:filter
                         };
                         return financialAccountSelectorAPI.load(financialAccountPayload);
                     }

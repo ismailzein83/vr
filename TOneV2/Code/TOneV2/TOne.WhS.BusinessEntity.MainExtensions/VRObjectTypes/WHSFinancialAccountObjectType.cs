@@ -1,13 +1,11 @@
 ﻿using System;
-using TOne.WhS.AccountBalance.Business;
-using TOne.WhS.AccountBalance.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 
-namespace TOne.WhS.AccountBalance.MainExtensions
+namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public class FinancialAccountObjectType : VRObjectType
+    public class WHSFinancialAccountObjectType : VRObjectType
     {
         public override Guid ConfigId
         {
