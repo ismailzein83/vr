@@ -491,6 +491,7 @@
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListChangeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListTemplateService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SupplierPriceListService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierZoneService_Service.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchConnectivityService.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchService.js" />
