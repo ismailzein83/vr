@@ -10,15 +10,26 @@ using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
+    public enum FieldDateTimeDataType
+    {
+        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
+        DateTime = 0,
+        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(Vanrise.Entities.Time))]
+        Time = 1,
+        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
+        Date = 2
+    }
+
     public class FieldDateTimeType : DataRecordFieldType
     {
         public override Guid ConfigId { get { return new Guid("b8712417-83ab-4d4b-9ee1-109d20ceb909"); } }
 
-        #region Public Methods
-
         public FieldDateTimeDataType DataType { get; set; }
 
         public bool IsNullable { get; set; }
+
+
+        #region Public Methods
 
         public override Type GetRuntimeType()
         {
@@ -44,15 +55,19 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return (DataType == FieldDateTimeDataType.Time) ? DoTimesMatch(fieldValue, filterValue) : DoDateTimesMatch(fieldValue, filterValue);
         }
+
         public override bool IsMatched(object fieldValue, RecordFilter recordFilter)
         {
             if (fieldValue == null)
                 return false;
+
             DateTimeRecordFilter dateTimeRecordFilter = recordFilter as DateTimeRecordFilter;
             if (dateTimeRecordFilter == null)
                 throw new NullReferenceException("dateTimeRecordFilter");
+            
             DateTime valueAsDateTime = (DateTime)fieldValue;
             DateTime filterValue = dateTimeRecordFilter.Value;
+
             switch (dateTimeRecordFilter.CompareOperator)
             {
                 case DateTimeRecordFilterOperator.Equals: return valueAsDateTime == filterValue;
@@ -62,6 +77,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case DateTimeRecordFilterOperator.Less: return valueAsDateTime < filterValue;
                 case DateTimeRecordFilterOperator.LessOrEquals: return valueAsDateTime <= filterValue;
             }
+
             return false;
         }
 
@@ -70,89 +86,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             context.HeaderCell.ThrowIfNull("context.HeaderCell");
             var headerCell = context.HeaderCell;
             headerCell.CellType = ExcelCellType.DateTime;
-            switch(this.DataType)
+            switch (this.DataType)
             {
                 case FieldDateTimeDataType.DateTime: headerCell.DateTimeType = DateTimeType.LongDateTime; break;
                 case FieldDateTimeDataType.Date: headerCell.DateTimeType = DateTimeType.Date; break;
                 default: headerCell.DateTimeType = DateTimeType.LongDateTime; break;
             }
         }
-        #endregion
-
-        #region Private Methods
-
-        string GetTimeDescription(object fieldValue)
-        {
-            IEnumerable<Time> timeValues = FieldTypeHelper.ConvertFieldValueToList<Time>(fieldValue);
-
-            if (timeValues == null)
-            {
-                Time time = fieldValue as Time;
-                return time.ToLongTimeString();
-            }
-
-            var descriptions = new List<string>();
-
-            foreach (Time timeValue in timeValues)
-                descriptions.Add(timeValue.ToLongTimeString());
-
-            return String.Join(",", descriptions);
-        }
-
-        string GetDateTimeDescription(object fieldValue)
-        {
-            IEnumerable<DateTime> dateTimeValues = FieldTypeHelper.ConvertFieldValueToList<DateTime>(fieldValue);
-
-            if (dateTimeValues == null)
-                return DateTimeValueToString(fieldValue);
-
-            var descriptions = new List<string>();
-
-            foreach (DateTime dateTimeValue in dateTimeValues)
-                descriptions.Add(GetDateTimeDescription(dateTimeValue));
-
-            return String.Join(",", descriptions);
-        }
-
-        string DateTimeValueToString(object value)
-        {
-            if (value == null)
-                return null;
-            switch(this.DataType)
-            {
-                case FieldDateTimeDataType.Date: return Convert.ToDateTime(value).ToString("yyyy-MM-dd");
-                case FieldDateTimeDataType.DateTime: return Convert.ToDateTime(value).ToString("yyyy-MM-dd HH:mm:ss");
-                case FieldDateTimeDataType.Time: return ((Vanrise.Entities.Time)value).ToShortTimeString();
-            }
-            return null;
-        }
-        
-        bool DoDateTimesMatch(object fieldValue, object filterValue)
-        {
-            IEnumerable<DateTime> dateTimeValues = FieldTypeHelper.ConvertFieldValueToList<DateTime>(fieldValue);
-            return (dateTimeValues != null) ? dateTimeValues.Contains(Convert.ToDateTime(filterValue)) : Convert.ToDateTime(fieldValue).CompareTo(Convert.ToDateTime(filterValue)) == 0;
-        }
-
-        bool DoTimesMatch(object fieldValue, object filterValue)
-        {
-            IEnumerable<Time> timeValues = FieldTypeHelper.ConvertFieldValueToList<Time>(fieldValue);
-            var filterValueAsTime = filterValue as Time;
-            if (timeValues != null) {
-                foreach (Time timeValue in timeValues)
-                {
-                    if (timeValue.Equals(filterValueAsTime))
-                        return true;
-                }
-                return false;
-            }
-            else
-            {
-                var fieldValueAsTime = fieldValue as Time;
-                return fieldValueAsTime.Equals(filterValueAsTime);
-            }
-        }
-
-        #endregion
 
         public override GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
         {
@@ -185,15 +125,92 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return recordFilterGroup;
         }
-    }
-    public enum FieldDateTimeDataType
-    {
-        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
-        DateTime = 0,
-        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(Vanrise.Entities.Time))]
-        Time = 1,
-        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
-        Date = 2
+
+        #endregion
+
+        #region Private Methods
+
+        string GetTimeDescription(object fieldValue)
+        {
+            IEnumerable<Time> timeValues = FieldTypeHelper.ConvertFieldValueToList<Time>(fieldValue);
+
+            if (timeValues == null)
+            {
+                Time time;
+                if (fieldValue is TimeSpan)
+                {
+                    TimeSpan ts = TimeSpan.Parse(fieldValue.ToString());
+                    time = new Time() { Hour = ts.Hours, MilliSecond = ts.Milliseconds, Minute = ts.Minutes, Second = ts.Seconds };
+                    return time.ToLongTimeString();
+                }
+
+                time = fieldValue as Time;
+                return time.ToLongTimeString();
+            }
+
+            var descriptions = new List<string>();
+
+            foreach (Time timeValue in timeValues)
+                descriptions.Add(timeValue.ToLongTimeString());
+
+            return String.Join(",", descriptions);
+        }
+
+        string GetDateTimeDescription(object fieldValue)
+        {
+            IEnumerable<DateTime> dateTimeValues = FieldTypeHelper.ConvertFieldValueToList<DateTime>(fieldValue);
+
+            if (dateTimeValues == null)
+                return DateTimeValueToString(fieldValue);
+
+            var descriptions = new List<string>();
+
+            foreach (DateTime dateTimeValue in dateTimeValues)
+                descriptions.Add(GetDateTimeDescription(dateTimeValue));
+
+            return String.Join(",", descriptions);
+        }
+
+        string DateTimeValueToString(object value)
+        {
+            if (value == null)
+                return null;
+            switch (this.DataType)
+            {
+                case FieldDateTimeDataType.Date: return Convert.ToDateTime(value).ToString("yyyy-MM-dd");
+                case FieldDateTimeDataType.DateTime: return Convert.ToDateTime(value).ToString("yyyy-MM-dd HH:mm:ss");
+                case FieldDateTimeDataType.Time: return ((Vanrise.Entities.Time)value).ToShortTimeString();
+            }
+            return null;
+        }
+
+        bool DoDateTimesMatch(object fieldValue, object filterValue)
+        {
+            IEnumerable<DateTime> dateTimeValues = FieldTypeHelper.ConvertFieldValueToList<DateTime>(fieldValue);
+            return (dateTimeValues != null) ? dateTimeValues.Contains(Convert.ToDateTime(filterValue)) : Convert.ToDateTime(fieldValue).CompareTo(Convert.ToDateTime(filterValue)) == 0;
+        }
+
+        bool DoTimesMatch(object fieldValue, object filterValue)
+        {
+            IEnumerable<Time> timeValues = FieldTypeHelper.ConvertFieldValueToList<Time>(fieldValue);
+            var filterValueAsTime = filterValue as Time;
+            if (timeValues != null)
+            {
+                foreach (Time timeValue in timeValues)
+                {
+                    if (timeValue.Equals(filterValueAsTime))
+                        return true;
+                }
+                return false;
+            }
+            else
+            {
+                var fieldValueAsTime = fieldValue as Time;
+                return fieldValueAsTime.Equals(filterValueAsTime);
+            }
+        }
+
+        #endregion
     }
 
     public class FieldDateTimeDataTypeInfoAttribute : Attribute
