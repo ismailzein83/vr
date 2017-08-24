@@ -26,8 +26,11 @@
     [SIP]                     VARCHAR (100)   NULL,
     [SwitchID]                INT             NULL,
     [CDPNIn]                  VARCHAR (50)    NULL,
-    [QueueItemId]             BIGINT          NULL
+    [QueueItemId]             BIGINT          NULL,
+    CONSTRAINT [IX_CDR_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
@@ -46,6 +49,5 @@ CREATE CLUSTERED INDEX [IX_CDR_AttemptDateTime]
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_CDR_Id]
-    ON [TOneWhS_CDR].[CDR]([Id] ASC);
+
 
