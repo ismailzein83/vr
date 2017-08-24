@@ -125,19 +125,74 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector, loadBillingTransactionTypeSelector]).catch(function (error) {
+
+            function setTitle() {
+                $scope.title = UtilsService.buildTitleForAddEditor('Financial Transactions');
+            }
+            function loadStaticData() {
+
+            }
+            function loadCurrencySelector() {
+                var promises = [];
+
+                var getAccountInfoDeferred = UtilsService.createPromiseDeferred();
+                promises.push(getAccountInfoDeferred.promise);
+
+                var currencyLoadDeferred = UtilsService.createPromiseDeferred();
+                promises.push(currencyLoadDeferred.promise);
+
+                var selectedCurrencyId;
+
+                if (accountId == undefined)
+                    getAccountInfoDeferred.resolve();
+                else {
+                    VR_AccountBalance_AccountAPIService.GetAccountInfo(accountTypeId, accountId).then(function (response) {
+                        if (response != undefined)
+                            selectedCurrencyId = response.CurrencyId;
+                        getAccountInfoDeferred.resolve();
+                    }).catch(function (error) {
+                        getAccountInfoDeferred.reject(error);
+                    });
+                }
+
+                getAccountInfoDeferred.promise.then(function () {
+                    currencySelectorReadyDeferred.promise.then(function () {
+                        var currencySelectorPayload = { selectedIds: selectedCurrencyId };
+                        VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencyLoadDeferred);
+                    });
+                });
+
+                return UtilsService.waitMultiplePromises(promises);
+            }
+            function loadBillingTransactionTypeSelector() {
+                var loadTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
+                billingTransactionTypeSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        filter: {
+                            AccountTypeId: accountTypeId,
+                            Filters: [{
+                                $type: "Vanrise.AccountBalance.Entities.ManualAddEnabledBillingTransactionTypeFilter, Vanrise.AccountBalance.Entities"
+                            }]
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(billingTransactionTypeSelectorAPI, payload, loadTransactionTypePromiseDeferred);
+                });
+                return loadTransactionTypePromiseDeferred.promise;
+            }
+            function loadAccountBalanceInvoicesByAccountParameter()
+            {
+                if(accountId != undefined)
+                {
+                  return  loadAccountBalanceInvoices(accountId);
+                }
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCurrencySelector, loadBillingTransactionTypeSelector, loadAccountBalanceInvoicesByAccountParameter]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
-        function setTitle() {
-            $scope.title = UtilsService.buildTitleForAddEditor('Financial Transactions');
-        }
-        function loadStaticData() {
-
-        }
-
+    
         function loadAccountSection() {
             var loadAccountSectionPromiseDeferred = UtilsService.createPromiseDeferred();
             accountStatusSelectedDeferred = UtilsService.createPromiseDeferred();
@@ -183,59 +238,10 @@
             return loadAccountSelectorPromiseDeferred.promise
         }
 
-
         function loadGridDirective() {
             gridReadyDeferred.promise.then(function () {
                 gridAPI.loadGrid(getFilterObject());
             });
-        }
-
-        function loadCurrencySelector() {
-            var promises = [];
-
-            var getAccountInfoDeferred = UtilsService.createPromiseDeferred();
-            promises.push(getAccountInfoDeferred.promise);
-
-            var currencyLoadDeferred = UtilsService.createPromiseDeferred();
-            promises.push(currencyLoadDeferred.promise);
-
-            var selectedCurrencyId;
-
-            if (accountId == undefined)
-                getAccountInfoDeferred.resolve();
-            else {
-                VR_AccountBalance_AccountAPIService.GetAccountInfo(accountTypeId, accountId).then(function (response) {
-                    if (response != undefined)
-                        selectedCurrencyId = response.CurrencyId;
-                    getAccountInfoDeferred.resolve();
-                }).catch(function (error) {
-                    getAccountInfoDeferred.reject(error);
-                });
-            }
-
-            getAccountInfoDeferred.promise.then(function () {
-                currencySelectorReadyDeferred.promise.then(function () {
-                    var currencySelectorPayload = { selectedIds: selectedCurrencyId };
-                    VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencyLoadDeferred);
-                });
-            });
-
-            return UtilsService.waitMultiplePromises(promises);
-        }
-        function loadBillingTransactionTypeSelector() {
-            var loadTransactionTypePromiseDeferred = UtilsService.createPromiseDeferred();
-            billingTransactionTypeSelectorReadyDeferred.promise.then(function () {
-                var payload = {
-                    filter: {
-                        AccountTypeId: accountTypeId,
-                        Filters: [{
-                            $type: "Vanrise.AccountBalance.Entities.ManualAddEnabledBillingTransactionTypeFilter, Vanrise.AccountBalance.Entities"
-                        }]
-                    }
-                };
-                VRUIUtilsService.callDirectiveLoad(billingTransactionTypeSelectorAPI, payload, loadTransactionTypePromiseDeferred);
-            });
-            return loadTransactionTypePromiseDeferred.promise;
         }
 
         function insertBillingTransaction() {
