@@ -21,5 +21,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime CreateTime { get; set; }
 
         public string SourceId { get; set; }
+
+        public long? ProcessInstanceId { get; set; }
+
+        public long? SPLStateBackupId { get; set; }
     }
 }
