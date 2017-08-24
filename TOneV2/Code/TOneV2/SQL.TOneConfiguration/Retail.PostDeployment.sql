@@ -99,7 +99,7 @@ as (select * from (values
 ('CE9260A7-732F-4573-BEF8-9A3F8FC7BCC6','PackageDefinition','Package Definition','VR_Common_VRComponentType'												,'{"Editor":"retail-be-packagedefinition-settings"}'),
 
 ('76A889A4-9F93-4327-91C4-EE2F1EF2026E','Pricing','Pricing','Retail_BE_PackageDefinition'																				,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-pricing"}'),
-('E326482A-9AB5-4715-848F-11CAF4940040','InvoiceRecurCharge','Invoice RecurCharge','Retail_BE_PackageDefinition'														,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-invoicerecurcharge"}'),
+('E326482A-9AB5-4715-848F-11CAF4940040','InvoiceRecurCharge','Invoice RecurCharge','Retail_BE_PackageDefinition'														,'{"DefinitionEditor":"retail-be-packagedefinition-extendedsettings-recurcharge"}'),
 
 ('82B558C6-CEF2-4318-8819-A8495097E770','VR_GenericData_BEParentChildRelationDefinition','Parent-Child Relation Definition','VR_Common_VRComponentType'		,'{"Editor":"vr-genericdata-beparentchildrelationdefinition-settings"}'),
 
