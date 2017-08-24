@@ -347,10 +347,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             SellingNumberPlanManager sellingNumberPlanManager = new SellingNumberPlanManager();
             SellingNumberPlan sellingNumberPlan = sellingNumberPlanManager.GetSellingNumberPlan(sellingProduct.SellingNumberPlanId);
+            CurrencyManager currencyManager = new CurrencyManager();
+            string sellingProductCurrencyName = currencyManager.GetCurrencyName(sellingProduct.Settings.CurrencyId);
 
             if (sellingNumberPlan != null)
             {
                 sellingProductDetail.SellingNumberPlanName = sellingNumberPlan.Name;
+            }
+            if (sellingProductCurrencyName != null)
+            {
+                sellingProductDetail.SellingProductCurrencyName = sellingProductCurrencyName;
             }
             return sellingProductDetail;
         }

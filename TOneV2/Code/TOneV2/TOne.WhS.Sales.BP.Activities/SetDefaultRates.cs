@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -26,6 +27,9 @@ namespace TOne.WhS.Sales.BP.Activities
                     IRatePlanContext ratePlanContext = context.GetRatePlanContext();
                     TOne.WhS.BusinessEntity.Business.ConfigManager configManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
                     var roundDefaultRate = configManager.GetRoundedDefaultRate();
+                    var systemCurrency = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
+                    CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+                    var convertedDefaultRate = currencyExchangeRateManager.ConvertValueToCurrency(roundDefaultRate,systemCurrency, ratePlanContext.SellingProductCurrencyId,DateTime.Today);
                     List<RateToChange> ratesToChange = this.RatesToChange.Get(context);
                     SaleZoneManager saleZoneManager = new SaleZoneManager();
                     foreach (var zoneId in zoneIdsWithMissingRates)
@@ -35,7 +39,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         {
                             ZoneId = zoneId,
                             ZoneName = zone.Name,
-                            NormalRate = roundDefaultRate,
+                            NormalRate = convertedDefaultRate,
                             CurrencyId = ratePlanContext.CurrencyId,
                             BED = zone.BED,
                             EED =(zone.EED !=null)?zone.EED:null

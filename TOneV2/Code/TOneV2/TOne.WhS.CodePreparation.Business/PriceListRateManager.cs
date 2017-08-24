@@ -267,7 +267,7 @@ namespace TOne.WhS.CodePreparation.Business
             SalePriceListManager priceListManager = new SalePriceListManager();
             CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-
+            SellingProductManager sellingProductManager = new SellingProductManager();
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
             BusinessEntity.Business.ConfigManager businessConfigmanager = new BusinessEntity.Business.ConfigManager();
 
@@ -284,17 +284,14 @@ namespace TOne.WhS.CodePreparation.Business
                         SalePriceList pricelist = priceListManager.GetPriceList(effectiveRate.RateEntity.PriceListId);
                         if (!defaultRates.ContainsKey(pricelist.OwnerId))
                         {
-                            int newRateCurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(pricelist.OwnerId);
+                            int newRateCurrencyId = (pricelist.OwnerType == SalePriceListOwnerType.SellingProduct)?sellingProductManager.GetSellingProductCurrencyId(pricelist.OwnerId):carrierAccountManager.GetCarrierAccountCurrencyId(pricelist.OwnerId);
+                            var defaultRateConverted = currencyExchangeRateManager.ConvertValueToCurrency(defaultRate, systemCurrencyId, newRateCurrencyId, DateTime.Now);
                             NewZoneRateEntity rate = new NewZoneRateEntity
                             {
                                 OwnerId = pricelist.OwnerId,
                                 OwnerType = pricelist.OwnerType,
-                                CurrencyId = pricelist.OwnerType == SalePriceListOwnerType.SellingProduct
-                                    ? systemCurrencyId
-                                    : newRateCurrencyId,
-                                Rate = pricelist.OwnerType == SalePriceListOwnerType.SellingProduct
-                                    ? defaultRate
-                                    : currencyExchangeRateManager.ConvertValueToCurrency(defaultRate, systemCurrencyId, newRateCurrencyId, DateTime.Now)
+                                CurrencyId =  newRateCurrencyId,
+                                Rate = defaultRateConverted
                             };
                             defaultRates.Add(pricelist.OwnerId, rate);
                         }
@@ -389,8 +386,8 @@ namespace TOne.WhS.CodePreparation.Business
         {
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
-                CurrencyManager currencyManager = new CurrencyManager();
-                return currencyManager.GetSystemCurrency().CurrencyId;
+                SellingProductManager sellingProductManager = new SellingProductManager();
+                return sellingProductManager.GetSellingProductCurrencyId(ownerId);
             }
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();

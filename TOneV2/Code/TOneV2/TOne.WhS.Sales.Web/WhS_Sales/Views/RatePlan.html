@@ -45,14 +45,14 @@
                         </span>
                     </vr-validation-group>
 
-                    <span ng-show="isSettingsSelected && showCarrierAccountSelector">
+                    <span ng-show="isSettingsSelected" >
                         <vr-common-currency-selector on-ready="onCurrencySelectorReady"
                                                      normal-col-num="2"
                                                      onselectitem="onCurrencyChanged"
-                                                     isrequired="showCarrierAccountSelector">
+                                                     vr-disabled="!showCarrierAccountSelector"
+                                                     isrequired="false">
                         </vr-common-currency-selector>
                     </span>
-
                     <vr-columns colnum="2" ng-show="isSettingsSelected">
                         <vr-whs-routing-routingdatabase-selector on-ready="onDatabaseSelectorReady"
                                                                  getroutingproductroutes
@@ -80,11 +80,10 @@
 
                     <span ng-show="isInfoSelected">
                         <vr-columns colnum="4" ng-show="assignedToSellingProductName != undefined">
-                            <vr-label>Assigned to Selling Product:</vr-label>
-                            <vr-label isvalue>{{assignedToSellingProductName}}</vr-label>
+                            <vr-label>Selling Product:</vr-label>
+                            <vr-label isvalue>{{assignedToSellingProductName}} ({{assignedToSellingProductCurrencySymbol}})</vr-label>
                         </vr-columns>
                     </span>
-
                     <span ng-show="isInfoSelected">
                         <vr-columns colnum="4" ng-show="currentDefaultRoutingProductName != undefined">
                             <vr-label>Current Default Routing Product:</vr-label>

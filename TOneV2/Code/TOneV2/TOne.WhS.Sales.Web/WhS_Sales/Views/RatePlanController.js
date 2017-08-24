@@ -22,7 +22,7 @@
         var currencySelectorAPI;
         var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var systemCurrencyId;
+        var sellingProductCurrencyId;
         var draftCurrencyId;
         var defaultCustomerCurrencyId;
         var longPrecision;
@@ -38,7 +38,7 @@
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var getSellingProductCurrencyIdPromise;
         var settings = {};
         var pricingSettings;
         var ratePlanSettingsData;
@@ -90,11 +90,12 @@
                 showActionButtons(false);
                 if (selectedSellingProduct == undefined)
                     return;
-
+               
                 $scope.isLoadingFilterSection = true;
                 getEntityIds(WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value, selectedSellingProduct.SellingProductId).then(
                     function (entityIds) {
                         hasRunningProcessesForCustomerOrSellingProduct(entityIds, selectedSellingProduct.SellingProductId, WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value).then(function (response) {
+                            getSellingProductCurrencyId(selectedSellingProduct);
                             buildRatePlanListForSellingProduct(selectedSellingProduct);
                         }).catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -277,7 +278,6 @@
                 var customerId = $scope.selectedCustomer.CarrierAccountId;
                 var onCountryChangesUpdated = function (updatedCountryChanges) {
                     countryChanges = updatedCountryChanges;
-
                     var promises = [];
 
                     var saveDraftPromise = saveDraft(false);
@@ -288,7 +288,7 @@
 
                     var customerCurrencyId = currencySelectorAPI.getSelectedIds();
 
-                    if (customerCurrencyId !== systemCurrencyId && countryChanges != null && countryChanges.NewCountries != undefined && countryChanges.NewCountries.length > 0) {
+                    if (customerCurrencyId !== sellingProductCurrencyId && countryChanges != null && countryChanges.NewCountries != undefined && countryChanges.NewCountries.length > 0) {
                         saveDraftPromise.then(function () {
 
                             var defineNewRatesInput = {
@@ -614,7 +614,8 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadCurrencySelector, loadRatePlanSettingsData, loadSaleAreaSettingsData, getSystemCurrencyId, getLongPrecisionValue, loadCountrySelector, loadTextFilter]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadOwnerFilterSection, loadRouteOptionsFilterSection, loadCurrencySelector, loadRatePlanSettingsData, loadSaleAreaSettingsData, getLongPrecisionValue, loadCountrySelector, loadTextFilter]).then(function () {
+            }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterSection = false;
@@ -684,11 +685,7 @@
                 saleAreaSettingsData = response;
             });
         }
-        function getSystemCurrencyId() {
-            return VRCommon_CurrencyAPIService.GetSystemCurrencyId().then(function (response) {
-                systemCurrencyId = response;
-            });
-        }
+
         function getLongPrecisionValue() {
             return WhS_Sales_RatePlanConfigAPIService.GetGeneralSettingsLongPrecisionValue().then(function (response) {
                 longPrecision = response;
@@ -801,7 +798,6 @@
                 query.context.showRatePlan = showRatePlan;
                 query.context.isFilterApplied = isFilterApplied;
             }
-
             return query;
         }
 
@@ -1122,7 +1118,7 @@
             }
         }
         function getCurrencyId() {
-            return (ownerTypeSelectorAPI.getSelectedIds() == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? systemCurrencyId : currencySelectorAPI.getSelectedIds();
+            return (ownerTypeSelectorAPI.getSelectedIds() == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ? sellingProductCurrencyId : currencySelectorAPI.getSelectedIds();
         }
         function isFilterApplied() {
             var selectedCountryIds = countrySelectorAPI.getSelectedIds();
@@ -1156,7 +1152,7 @@
             return WhS_Sales_RatePlanAPIService.GetOwnerInfo(ownerType, ownerId, effectiveOn).then(function (response) {
                 if (response != undefined) {
                     $scope.assignedToSellingProductName = response.AssignedToSellingProductName;
-
+                    $scope.assignedToSellingProductCurrencySymbol = response.AssignedToSellingProductCurrencySymbol;
                     $scope.currentDefaultRoutingProductName = response.CurrentDefaultRoutingProductName;
                     if (response.IsCurrentDefaultRoutingProductInherited)
                         $scope.currentDefaultRoutingProductName += ' (Inherited)';
@@ -1179,7 +1175,13 @@
             $scope.showSaveButton = showValue;
             $scope.showCancelButton = showValue;
         }
-
+        function getSellingProductCurrencyId(selectedSellingProduct)
+        {
+            return WhS_BE_SellingProductAPIService.GetSellingProductCurrencyId(selectedSellingProduct.SellingProductId).then(function (response) {
+                sellingProductCurrencyId = response;
+                currencySelectorAPI.selectedCurrency(response);
+            });
+        }
         function getEntityIds(ownerType, ownerId) {
             var entityIdPromiseDeferred = UtilsService.createPromiseDeferred();
 
