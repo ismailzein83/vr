@@ -1899,7 +1899,7 @@ namespace Vanrise.Fzero.Bypass
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Verified)
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Reopened)
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Ignored)
-                                   && (u.b_number == u.RCb_number))
+                                  && (u.RCb_number == null || u.b_number == u.RCb_number))
                                   .OrderByDescending(u => u.AttemptDateTime)
                                   .ToList();
                 }
@@ -1930,7 +1930,7 @@ namespace Vanrise.Fzero.Bypass
                                   && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Verified)
                                   && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Reopened)
                                   && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Ignored)
-                                  && (u.b_number == u.RCb_number))
+                                  && (u.RCb_number == null || u.b_number == u.RCb_number))
                                   .OrderByDescending(u => u.AttemptDateTime)
                                   .ToList();
                 }
@@ -1960,7 +1960,7 @@ namespace Vanrise.Fzero.Bypass
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Verified) 
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Reopened)
                                   && (u.ReportingStatusID != (int)Enums.ReportingStatuses.Ignored)
-                                  && (u.b_number == u.RCb_number))
+                                   && (u.RCb_number == null || u.b_number == u.RCb_number))
                                   .OrderByDescending(u => u.AttemptDateTime)
                                   .ToList();
                 }
@@ -1990,7 +1990,7 @@ namespace Vanrise.Fzero.Bypass
                                   && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Verified) 
                                   && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Reopened) 
                                   && (u.ReportingStatusSecurityID != (int)Enums.ReportingStatuses.Ignored)
-                                   && (u.b_number == u.RCb_number))
+                                  && (u.RCb_number == null || u.b_number == u.RCb_number))
                                   .OrderByDescending(u => u.AttemptDateTime)
                                   .ToList();
                 }
