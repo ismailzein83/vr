@@ -25,7 +25,8 @@
     [FileName]             VARCHAR (200)    NULL,
     [QueueItemId]          BIGINT           NULL,
     [OriginatorExtension]  VARCHAR (20)     NULL,
-    [TerminatorExtension]  VARCHAR (20)     NULL
+    [TerminatorExtension]  VARCHAR (20)     NULL,
+    CONSTRAINT [IX_CDR_CDRId] UNIQUE NONCLUSTERED ([ID] ASC)
 );
 
 
@@ -47,9 +48,10 @@
 
 
 
+
+
 GO
-CREATE NONCLUSTERED INDEX [IX_CDR_CDRId]
-    ON [Retail_CDR].[CDR]([ID] ASC);
+
 
 
 GO
