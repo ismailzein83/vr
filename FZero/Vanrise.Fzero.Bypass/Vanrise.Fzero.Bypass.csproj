@@ -376,6 +376,9 @@
     <Compile Include="ViewGeneratedCall.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewGeneratedCallsNew.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="ViewSummary.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

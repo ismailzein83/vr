@@ -65,40 +65,40 @@ public partial class testingReports : BasePage
         ReportDataSource rptDataSourcedsViewGeneratedCalls = new ReportDataSource("dsViewGeneratedCalls", GeneratedCall.GetReportedCalls(ReportID, (Vanrise.Fzero.Bypass.MobileOperator.Load(ddlSearchMobileOperator.SelectedValue.ToInt()).User.GMT - SysParameter.Global_GMT)));
         rvToOperator.LocalReport.DataSources.Add(rptDataSourcedsViewGeneratedCalls);
 
-
-        if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.ST)//-- Syrian Telecom
-        {
-            rvToOperator.LocalReport.ReportPath = "Reports\\rptToSyrianOperator.rdlc";
-        }
-        else if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.Zain)//-- Zain
-        {
-            rvToOperator.LocalReport.ReportPath = "Reports\\rptToZainOperator.rdlc";
-        }
-        else if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.ITPC)//-- ITPC
-        {
-            rvToOperator.LocalReport.ReportPath = "Reports\\rptToOperator.rdlc";
-        }
-        else
-        {
-            rvToOperator.LocalReport.ReportPath = "Reports\\rptToOperator.rdlc";
-        }
-
-
-        parameters[2] = new ReportParameter("HideSignature", "true");
-        rvToOperator.LocalReport.SetParameters(parameters);
-        rvToOperator.LocalReport.Refresh();
-        ClientVariables.ExportReportToExcel(ReportID + ".xls", rvToOperator);
-
-        parameters[2] = new ReportParameter("HideSignature", "true");
-        rvToOperator.LocalReport.SetParameters(parameters);
-        rvToOperator.LocalReport.Refresh();
-        ClientVariables.ExportReportToCSV(ReportID + ".csv", rvToOperator);
+        var fraudCases = GeneratedCall.GetFraudCases(ddlSearchClient.SelectedValue.ToInt(), ddlSearchMobileOperator.SelectedValue.ToInt());
+        //if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.ST)//-- Syrian Telecom
+        //{
+        //    rvToOperator.LocalReport.ReportPath = "Reports\\rptToSyrianOperator.rdlc";
+        //}
+        //else if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.Zain)//-- Zain
+        //{
+        //    rvToOperator.LocalReport.ReportPath = "Reports\\rptToZainOperator.rdlc";
+        //}
+        //else if (ddlSearchClient.SelectedValue.ToInt() == (int)Enums.Clients.ITPC)//-- ITPC
+        //{
+        //    rvToOperator.LocalReport.ReportPath = "Reports\\rptToOperator.rdlc";
+        //}
+        //else
+        //{
+        //    rvToOperator.LocalReport.ReportPath = "Reports\\rptToOperator.rdlc";
+        //}
 
 
-        parameters[2] = new ReportParameter("HideSignature", "false");
-        rvToOperator.LocalReport.SetParameters(parameters);
-        rvToOperator.LocalReport.Refresh();
-        ClientVariables.ExportReportToPDF(ReportID + ".pdf", rvToOperator);
+        //parameters[2] = new ReportParameter("HideSignature", "true");
+        //rvToOperator.LocalReport.SetParameters(parameters);
+        //rvToOperator.LocalReport.Refresh();
+        //ClientVariables.ExportReportToExcel(ReportID + ".xls", rvToOperator);
+
+        //parameters[2] = new ReportParameter("HideSignature", "true");
+        //rvToOperator.LocalReport.SetParameters(parameters);
+        //rvToOperator.LocalReport.Refresh();
+        //ClientVariables.ExportReportToCSV(ReportID + ".csv", rvToOperator);
+
+
+        //parameters[2] = new ReportParameter("HideSignature", "false");
+        //rvToOperator.LocalReport.SetParameters(parameters);
+        //rvToOperator.LocalReport.Refresh();
+        //ClientVariables.ExportReportToPDF(ReportID + ".pdf", rvToOperator);
 
 
     }

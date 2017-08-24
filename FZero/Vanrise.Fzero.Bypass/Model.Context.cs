@@ -79,6 +79,7 @@ namespace Vanrise.Fzero.Bypass
         public DbSet<Client> Clients { get; set; }
         public DbSet<GeneratedCall> GeneratedCalls { get; set; }
         public DbSet<ViewGeneratedCall> ViewGeneratedCalls { get; set; }
+        public DbSet<ViewGeneratedCallsNew> ViewGeneratedCallsNews { get; set; }
     
         public virtual int delete_asp_Write_String_To_File(string @string, string path, string filename)
         {

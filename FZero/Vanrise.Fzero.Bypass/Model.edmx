@@ -536,6 +536,71 @@ warning 6002: The table/view 'FMS.dbo.ViewGeneratedCalls' does not have a primar
           <Property Name="ReportedBeforeSecurity" Type="bit" />
           <Property Name="ReportingStatusSecurityID" Type="int" />
           <Property Name="ReportSecID" Type="int" />
+          <Property Name="RCb_number" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'FMS.dbo.ViewGeneratedCallsNew' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ViewGeneratedCallsNew">
+          <Key>
+            <PropertyRef Name="SourceID" />
+            <PropertyRef Name="StatusID" />
+            <PropertyRef Name="ReportingStatusID" />
+            <PropertyRef Name="AttemptDateTime" />
+            <PropertyRef Name="b_number" />
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ClientID" Type="int" />
+          <Property Name="SourceID" Type="int" Nullable="false" />
+          <Property Name="CaseID" Type="varchar" MaxLength="24" />
+          <Property Name="MobileOperatorID" Type="int" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="PriorityID" Type="int" />
+          <Property Name="ReportingStatusID" Type="int" Nullable="false" />
+          <Property Name="DurationInSeconds" Type="int" />
+          <Property Name="MobileOperatorFeedbackID" Type="int" />
+          <Property Name="OriginationNetwork" Type="varchar" MaxLength="100" />
+          <Property Name="AssignedTo" Type="int" />
+          <Property Name="AssignedBy" Type="int" />
+          <Property Name="ReportID" Type="int" />
+          <Property Name="AttemptDateTime" Type="datetime2" Precision="0" Nullable="false" />
+          <Property Name="FeedbackDateTime" Type="datetime2" Precision="0" />
+          <Property Name="AssignmentDateTime" Type="datetime2" Precision="0" />
+          <Property Name="ReportingStatusName" Type="varchar" MaxLength="20" />
+          <Property Name="PriorityName" Type="varchar" MaxLength="50" />
+          <Property Name="ReportRealID" Type="varchar" MaxLength="50" />
+          <Property Name="SourceName" Type="varchar" MaxLength="100" />
+          <Property Name="StatusName" Type="varchar" MaxLength="20" />
+          <Property Name="AssignedToFullName" Type="nvarchar" MaxLength="100" />
+          <Property Name="a_number" Type="varchar" MaxLength="100" />
+          <Property Name="b_number" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="MobileOperatorName" Type="nvarchar" MaxLength="100" />
+          <Property Name="RecommendedActionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReportingDateTime" Type="datetime2" Precision="0" />
+          <Property Name="ReportedByName" Type="nvarchar" MaxLength="100" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="RecommendedActionID" Type="int" />
+          <Property Name="Level1Comparison" Type="bit" />
+          <Property Name="Level2Comparison" Type="bit" />
+          <Property Name="ReceivedSourceName" Type="varchar" MaxLength="100" />
+          <Property Name="ReceivedSourceID" Type="int" />
+          <Property Name="CLI" Type="varchar" MaxLength="100" />
+          <Property Name="ToneFeedbackID" Type="int" />
+          <Property Name="LevelOneComparisonDateTime" Type="datetime2" Precision="0" />
+          <Property Name="LevelTwoComparisonDateTime" Type="datetime2" Precision="0" />
+          <Property Name="ToneFeedbackName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReceivedMobileOperatorID" Type="int" />
+          <Property Name="ReceivedMobileOperatorFeedbackName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ReportedBefore" Type="bit" />
+          <Property Name="ToBeReportedBefore" Type="bit" />
+          <Property Name="FeedbackNotes" Type="varchar" MaxLength="5000" />
+          <Property Name="MobileOperatorFeedbackName" Type="varchar" MaxLength="20" />
+          <Property Name="Carrier" Type="varchar" MaxLength="100" />
+          <Property Name="ReportedBeforeSecurity" Type="bit" />
+          <Property Name="ReportingStatusSecurityID" Type="int" />
+          <Property Name="ReportSecID" Type="int" />
+          <Property Name="RCb_number" Type="varchar" MaxLength="100" />
+          <Property Name="RecievedCallsID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'FMS.dbo.ViewSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1530,8 +1595,65 @@ FROM [dbo].[View_Origination] AS [View_Origination]</DefiningQuery>
 [ViewGeneratedCalls].[Carrier] AS [Carrier], 
 [ViewGeneratedCalls].[ReportedBeforeSecurity] AS [ReportedBeforeSecurity], 
 [ViewGeneratedCalls].[ReportingStatusSecurityID] AS [ReportingStatusSecurityID], 
-[ViewGeneratedCalls].[ReportSecID] AS [ReportSecID]
+[ViewGeneratedCalls].[ReportSecID] AS [ReportSecID], 
+[ViewGeneratedCalls].[RCb_number] AS [RCb_number]
 FROM [dbo].[ViewGeneratedCalls] AS [ViewGeneratedCalls]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ViewGeneratedCallsNew" EntityType="Self.ViewGeneratedCallsNew" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[ViewGeneratedCallsNew].[ClientID] AS [ClientID], 
+[ViewGeneratedCallsNew].[SourceID] AS [SourceID], 
+[ViewGeneratedCallsNew].[CaseID] AS [CaseID], 
+[ViewGeneratedCallsNew].[MobileOperatorID] AS [MobileOperatorID], 
+[ViewGeneratedCallsNew].[StatusID] AS [StatusID], 
+[ViewGeneratedCallsNew].[PriorityID] AS [PriorityID], 
+[ViewGeneratedCallsNew].[ReportingStatusID] AS [ReportingStatusID], 
+[ViewGeneratedCallsNew].[DurationInSeconds] AS [DurationInSeconds], 
+[ViewGeneratedCallsNew].[MobileOperatorFeedbackID] AS [MobileOperatorFeedbackID], 
+[ViewGeneratedCallsNew].[OriginationNetwork] AS [OriginationNetwork], 
+[ViewGeneratedCallsNew].[AssignedTo] AS [AssignedTo], 
+[ViewGeneratedCallsNew].[AssignedBy] AS [AssignedBy], 
+[ViewGeneratedCallsNew].[ReportID] AS [ReportID], 
+[ViewGeneratedCallsNew].[AttemptDateTime] AS [AttemptDateTime], 
+[ViewGeneratedCallsNew].[FeedbackDateTime] AS [FeedbackDateTime], 
+[ViewGeneratedCallsNew].[AssignmentDateTime] AS [AssignmentDateTime], 
+[ViewGeneratedCallsNew].[ReportingStatusName] AS [ReportingStatusName], 
+[ViewGeneratedCallsNew].[PriorityName] AS [PriorityName], 
+[ViewGeneratedCallsNew].[ReportRealID] AS [ReportRealID], 
+[ViewGeneratedCallsNew].[SourceName] AS [SourceName], 
+[ViewGeneratedCallsNew].[StatusName] AS [StatusName], 
+[ViewGeneratedCallsNew].[AssignedToFullName] AS [AssignedToFullName], 
+[ViewGeneratedCallsNew].[a_number] AS [a_number], 
+[ViewGeneratedCallsNew].[b_number] AS [b_number], 
+[ViewGeneratedCallsNew].[MobileOperatorName] AS [MobileOperatorName], 
+[ViewGeneratedCallsNew].[RecommendedActionName] AS [RecommendedActionName], 
+[ViewGeneratedCallsNew].[ReportingDateTime] AS [ReportingDateTime], 
+[ViewGeneratedCallsNew].[ReportedByName] AS [ReportedByName], 
+[ViewGeneratedCallsNew].[MobileNumber] AS [MobileNumber], 
+[ViewGeneratedCallsNew].[RecommendedActionID] AS [RecommendedActionID], 
+[ViewGeneratedCallsNew].[Level1Comparison] AS [Level1Comparison], 
+[ViewGeneratedCallsNew].[Level2Comparison] AS [Level2Comparison], 
+[ViewGeneratedCallsNew].[ReceivedSourceName] AS [ReceivedSourceName], 
+[ViewGeneratedCallsNew].[ReceivedSourceID] AS [ReceivedSourceID], 
+[ViewGeneratedCallsNew].[CLI] AS [CLI], 
+[ViewGeneratedCallsNew].[ToneFeedbackID] AS [ToneFeedbackID], 
+[ViewGeneratedCallsNew].[LevelOneComparisonDateTime] AS [LevelOneComparisonDateTime], 
+[ViewGeneratedCallsNew].[LevelTwoComparisonDateTime] AS [LevelTwoComparisonDateTime], 
+[ViewGeneratedCallsNew].[ToneFeedbackName] AS [ToneFeedbackName], 
+[ViewGeneratedCallsNew].[ReceivedMobileOperatorID] AS [ReceivedMobileOperatorID], 
+[ViewGeneratedCallsNew].[ReceivedMobileOperatorFeedbackName] AS [ReceivedMobileOperatorFeedbackName], 
+[ViewGeneratedCallsNew].[ID] AS [ID], 
+[ViewGeneratedCallsNew].[ReportedBefore] AS [ReportedBefore], 
+[ViewGeneratedCallsNew].[ToBeReportedBefore] AS [ToBeReportedBefore], 
+[ViewGeneratedCallsNew].[FeedbackNotes] AS [FeedbackNotes], 
+[ViewGeneratedCallsNew].[MobileOperatorFeedbackName] AS [MobileOperatorFeedbackName], 
+[ViewGeneratedCallsNew].[Carrier] AS [Carrier], 
+[ViewGeneratedCallsNew].[ReportedBeforeSecurity] AS [ReportedBeforeSecurity], 
+[ViewGeneratedCallsNew].[ReportingStatusSecurityID] AS [ReportingStatusSecurityID], 
+[ViewGeneratedCallsNew].[ReportSecID] AS [ReportSecID], 
+[ViewGeneratedCallsNew].[RCb_number] AS [RCb_number], 
+[ViewGeneratedCallsNew].[RecievedCallsID] AS [RecievedCallsID]
+FROM [dbo].[ViewGeneratedCallsNew] AS [ViewGeneratedCallsNew]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="ViewSummary" EntityType="Self.ViewSummary" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -2336,6 +2458,7 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
             <End Role="GeneratedCall" EntitySet="GeneratedCalls" />
           </AssociationSet>
           <EntitySet Name="ViewGeneratedCalls" EntityType="Model.ViewGeneratedCall" />
+          <EntitySet Name="ViewGeneratedCallsNews" EntityType="Model.ViewGeneratedCallsNew" />
           </EntityContainer>
         <ComplexType Name="delete_prSummary_Admin_Result">
           <Property Type="Int32" Name="ordered" Nullable="false" />
@@ -3848,6 +3971,69 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="ReportedBeforeSecurity" Type="Boolean" />
           <Property Name="ReportingStatusSecurityID" Type="Int32" />
           <Property Name="ReportSecID" Type="Int32" />
+          <Property Name="RCb_number" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ViewGeneratedCallsNew">
+          <Key>
+            <PropertyRef Name="SourceID" />
+            <PropertyRef Name="StatusID" />
+            <PropertyRef Name="ReportingStatusID" />
+            <PropertyRef Name="AttemptDateTime" />
+            <PropertyRef Name="b_number" />
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ClientID" Type="Int32" />
+          <Property Name="SourceID" Type="Int32" Nullable="false" />
+          <Property Name="CaseID" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="MobileOperatorID" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="PriorityID" Type="Int32" />
+          <Property Name="ReportingStatusID" Type="Int32" Nullable="false" />
+          <Property Name="DurationInSeconds" Type="Int32" />
+          <Property Name="MobileOperatorFeedbackID" Type="Int32" />
+          <Property Name="OriginationNetwork" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AssignedTo" Type="Int32" />
+          <Property Name="AssignedBy" Type="Int32" />
+          <Property Name="ReportID" Type="Int32" />
+          <Property Name="AttemptDateTime" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="FeedbackDateTime" Type="DateTime" Precision="0" />
+          <Property Name="AssignmentDateTime" Type="DateTime" Precision="0" />
+          <Property Name="ReportingStatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PriorityName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportRealID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SourceName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="AssignedToFullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="a_number" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="b_number" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MobileOperatorName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RecommendedActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReportingDateTime" Type="DateTime" Precision="0" />
+          <Property Name="ReportedByName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RecommendedActionID" Type="Int32" />
+          <Property Name="Level1Comparison" Type="Boolean" />
+          <Property Name="Level2Comparison" Type="Boolean" />
+          <Property Name="ReceivedSourceName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ReceivedSourceID" Type="Int32" />
+          <Property Name="CLI" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ToneFeedbackID" Type="Int32" />
+          <Property Name="LevelOneComparisonDateTime" Type="DateTime" Precision="0" />
+          <Property Name="LevelTwoComparisonDateTime" Type="DateTime" Precision="0" />
+          <Property Name="ToneFeedbackName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReceivedMobileOperatorID" Type="Int32" />
+          <Property Name="ReceivedMobileOperatorFeedbackName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ReportedBefore" Type="Boolean" />
+          <Property Name="ToBeReportedBefore" Type="Boolean" />
+          <Property Name="FeedbackNotes" Type="String" MaxLength="5000" FixedLength="false" Unicode="false" />
+          <Property Name="MobileOperatorFeedbackName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Carrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ReportedBeforeSecurity" Type="Boolean" />
+          <Property Name="ReportingStatusSecurityID" Type="Int32" />
+          <Property Name="ReportSecID" Type="Int32" />
+          <Property Name="RCb_number" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="RecievedCallsID" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -4858,6 +5044,65 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="ViewGeneratedCalls">
             <EntityTypeMapping TypeName="Model.ViewGeneratedCall">
               <MappingFragment StoreEntitySet="ViewGeneratedCalls">
+                <ScalarProperty Name="RCb_number" ColumnName="RCb_number" />
+                <ScalarProperty Name="ReportSecID" ColumnName="ReportSecID" />
+                <ScalarProperty Name="ReportingStatusSecurityID" ColumnName="ReportingStatusSecurityID" />
+                <ScalarProperty Name="ReportedBeforeSecurity" ColumnName="ReportedBeforeSecurity" />
+                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+                <ScalarProperty Name="MobileOperatorFeedbackName" ColumnName="MobileOperatorFeedbackName" />
+                <ScalarProperty Name="FeedbackNotes" ColumnName="FeedbackNotes" />
+                <ScalarProperty Name="ToBeReportedBefore" ColumnName="ToBeReportedBefore" />
+                <ScalarProperty Name="ReportedBefore" ColumnName="ReportedBefore" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ReceivedMobileOperatorFeedbackName" ColumnName="ReceivedMobileOperatorFeedbackName" />
+                <ScalarProperty Name="ReceivedMobileOperatorID" ColumnName="ReceivedMobileOperatorID" />
+                <ScalarProperty Name="ToneFeedbackName" ColumnName="ToneFeedbackName" />
+                <ScalarProperty Name="LevelTwoComparisonDateTime" ColumnName="LevelTwoComparisonDateTime" />
+                <ScalarProperty Name="LevelOneComparisonDateTime" ColumnName="LevelOneComparisonDateTime" />
+                <ScalarProperty Name="ToneFeedbackID" ColumnName="ToneFeedbackID" />
+                <ScalarProperty Name="CLI" ColumnName="CLI" />
+                <ScalarProperty Name="ReceivedSourceID" ColumnName="ReceivedSourceID" />
+                <ScalarProperty Name="ReceivedSourceName" ColumnName="ReceivedSourceName" />
+                <ScalarProperty Name="Level2Comparison" ColumnName="Level2Comparison" />
+                <ScalarProperty Name="Level1Comparison" ColumnName="Level1Comparison" />
+                <ScalarProperty Name="RecommendedActionID" ColumnName="RecommendedActionID" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="ReportedByName" ColumnName="ReportedByName" />
+                <ScalarProperty Name="ReportingDateTime" ColumnName="ReportingDateTime" />
+                <ScalarProperty Name="RecommendedActionName" ColumnName="RecommendedActionName" />
+                <ScalarProperty Name="MobileOperatorName" ColumnName="MobileOperatorName" />
+                <ScalarProperty Name="b_number" ColumnName="b_number" />
+                <ScalarProperty Name="a_number" ColumnName="a_number" />
+                <ScalarProperty Name="AssignedToFullName" ColumnName="AssignedToFullName" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="SourceName" ColumnName="SourceName" />
+                <ScalarProperty Name="ReportRealID" ColumnName="ReportRealID" />
+                <ScalarProperty Name="PriorityName" ColumnName="PriorityName" />
+                <ScalarProperty Name="ReportingStatusName" ColumnName="ReportingStatusName" />
+                <ScalarProperty Name="AssignmentDateTime" ColumnName="AssignmentDateTime" />
+                <ScalarProperty Name="FeedbackDateTime" ColumnName="FeedbackDateTime" />
+                <ScalarProperty Name="AttemptDateTime" ColumnName="AttemptDateTime" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="AssignedBy" ColumnName="AssignedBy" />
+                <ScalarProperty Name="AssignedTo" ColumnName="AssignedTo" />
+                <ScalarProperty Name="OriginationNetwork" ColumnName="OriginationNetwork" />
+                <ScalarProperty Name="MobileOperatorFeedbackID" ColumnName="MobileOperatorFeedbackID" />
+                <ScalarProperty Name="DurationInSeconds" ColumnName="DurationInSeconds" />
+                <ScalarProperty Name="ReportingStatusID" ColumnName="ReportingStatusID" />
+                <ScalarProperty Name="PriorityID" ColumnName="PriorityID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="MobileOperatorID" ColumnName="MobileOperatorID" />
+                <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+                <ScalarProperty Name="SourceID" ColumnName="SourceID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ViewGeneratedCallsNews">
+            <EntityTypeMapping TypeName="Model.ViewGeneratedCallsNew">
+              <MappingFragment StoreEntitySet="ViewGeneratedCallsNew">
+                <ScalarProperty Name="RecievedCallsID" ColumnName="RecievedCallsID" />
+                <ScalarProperty Name="RCb_number" ColumnName="RCb_number" />
                 <ScalarProperty Name="ReportSecID" ColumnName="ReportSecID" />
                 <ScalarProperty Name="ReportingStatusSecurityID" ColumnName="ReportingStatusSecurityID" />
                 <ScalarProperty Name="ReportedBeforeSecurity" ColumnName="ReportedBeforeSecurity" />

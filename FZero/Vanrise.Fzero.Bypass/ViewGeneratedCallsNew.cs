@@ -12,7 +12,7 @@ namespace Vanrise.Fzero.Bypass
     using System;
     using System.Collections.Generic;
     
-    public partial class ViewGeneratedCall
+    public partial class ViewGeneratedCallsNew
     {
         public Nullable<int> ClientID { get; set; }
         public int SourceID { get; set; }
@@ -66,6 +66,5 @@ namespace Vanrise.Fzero.Bypass
         public Nullable<int> ReportSecID { get; set; }
         public string RCb_number { get; set; }
         public Nullable<int> RecievedCallsID { get; set; }
-
     }
 }
