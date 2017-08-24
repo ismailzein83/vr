@@ -35,7 +35,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ? new List<int> { ownerId }
                 : backupSaleEntityData.SellingProductCustomerIds;
 
-            backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, customerIds));
+            if (customerIds != null && customerIds.Any())
+                backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, customerIds));
             return backupCommand.ToString();
         }
 
@@ -61,7 +62,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             var customerIds = backupSaleEntityData.OwnerType == SalePriceListOwnerType.Customer
                ? new List<int> { ownerId }
                : backupSaleEntityData.SellingProductCustomerIds;
-            restoreCommands.AppendLine(customerCountryDataManager.GetDeleteCommandsByOwner(customerIds));
+            if (customerIds != null && customerIds.Any())
+                restoreCommands.AppendLine(customerCountryDataManager.GetDeleteCommandsByOwner(customerIds));
 
             restoreCommands.AppendLine(salePriceListDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleRateDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
