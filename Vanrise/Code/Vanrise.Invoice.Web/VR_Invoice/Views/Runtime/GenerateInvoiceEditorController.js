@@ -406,6 +406,9 @@
 
                         return promise;
                     }
+                    setTimeout(function () {
+                        UtilsService.safeApply();
+                    });
                     $scope.scopeModel.isLoading = false;
                 });
             }
