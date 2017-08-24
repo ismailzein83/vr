@@ -30,17 +30,20 @@ namespace TOne.WhS.Sales.BP.Activities
 
             SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
 
-
-            StateBackupSaleEntity backupCustomer = new StateBackupSaleEntity()
+            StateBackupSaleEntity backupCustomer = new StateBackupSaleEntity
             {
                 OwnerId = ownerId,
                 OwnerType = ownerType,
                 UserId = userId
             };
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                backupCustomer.SellingProductCustomerIds = carrierAccountManager.GetCarrierAccountIdsAssignedToSellingProduct(ownerId);
+            }
 
             StateBackupManager manager = new StateBackupManager();
             manager.BackupData(backupCustomer);
-
         }
     }
 }

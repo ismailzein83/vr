@@ -29,13 +29,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             SaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
             backupCommand.AppendLine(saleEntityRoutingProductDataManager.BackupAllSaleEntityRoutingProductDataByByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
 
-            if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.Customer)
-            {
-                CustomerCountryDataManager customerCountryDataManager = new CustomerCountryDataManager();
-                backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId,
-                    BackupDatabaseName, ownerId));
-            }
+            CustomerCountryDataManager customerCountryDataManager = new CustomerCountryDataManager();
 
+            var customerIds = backupSaleEntityData.OwnerType == SalePriceListOwnerType.Customer
+                ? new List<int> { ownerId }
+                : backupSaleEntityData.SellingProductCustomerIds;
+
+            backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, customerIds));
             return backupCommand.ToString();
         }
 
@@ -57,16 +57,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             restoreCommands.AppendLine(saleEntityServiceDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
             restoreCommands.AppendLine(saleEntityRoutingProductDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
             restoreCommands.AppendLine(salePriceListDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
-            if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.Customer)
-                restoreCommands.AppendLine(customerCountryDataManager.GetDeleteCommandsByOwner(ownerId));
+
+            var customerIds = backupSaleEntityData.OwnerType == SalePriceListOwnerType.Customer
+               ? new List<int> { ownerId }
+               : backupSaleEntityData.SellingProductCustomerIds;
+            restoreCommands.AppendLine(customerCountryDataManager.GetDeleteCommandsByOwner(customerIds));
 
             restoreCommands.AppendLine(salePriceListDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleRateDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleEntityServiceDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleEntityRoutingProductDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
-            if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.Customer)
-                restoreCommands.AppendLine(customerCountryDataManager.GetRestoreCommands(stateBackupId,
-                    BackupDatabaseName));
+            restoreCommands.AppendLine(customerCountryDataManager.GetRestoreCommands(stateBackupId, BackupDatabaseName));
 
             return restoreCommands.ToString();
         }

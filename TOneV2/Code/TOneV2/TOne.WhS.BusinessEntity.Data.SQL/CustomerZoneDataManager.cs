@@ -111,8 +111,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 sellingNumberPlanId);
         }
 
-        public string BackupSaleEntityCustomerCountryByOwner(long stateBackupId, string backupDatabase, int ownerId)
+        public string BackupSaleEntityCustomerCountryByOwner(long stateBackupId, string backupDatabase, IEnumerable<int> customerIds)
         {
+            string customerIdsString = null;
+            if (customerIds != null && customerIds.Any())
+                customerIdsString = string.Join<int>(",", customerIds);
+
             return String.Format(@"INSERT INTO {0}.[TOneWhS_BE_Bkup].[CustomerCountry] WITH (TABLOCK)
                                                (ID
                                                ,CustomerID
@@ -128,14 +132,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                               ,cc.EED
                                               ,cc.ProcessInstanceID
                                               ,{1}
-                                          FROM [TOneWhS_BE].[CustomerCountry] cc  WITH(NOLOCK) where CustomerID = {2}",
+                                          FROM [TOneWhS_BE].[CustomerCountry] cc  WITH(NOLOCK) where CustomerID IN ( {2} )",
                 backupDatabase,
-                stateBackupId, ownerId);
+                stateBackupId, customerIdsString);
         }
-        public string GetDeleteCommandsByOwner(int ownerId)
+        public string GetDeleteCommandsByOwner(IEnumerable<int> customerIds)
         {
+            string customerIdsString = null;
+            if (customerIds != null && customerIds.Any())
+                customerIdsString = string.Join<int>(",", customerIds);
             return String.Format(@"DELETE FROM [TOneWhS_BE].[CustomerCountry]
-                                           Where CustomerID ={0} ", ownerId);
+                                           Where CustomerID IN ({0})", customerIdsString);
         }
         public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)
         {
