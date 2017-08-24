@@ -12,7 +12,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             if ($attrs.ispreview != undefined) {
                 UtilsService.setContextReadOnly($scope);
-                ctrl.maxHeight = (window.innerHeight - 337) + 'px'
+                ctrl.maxHeight = (window.innerHeight - 337) + 'px';
             }
 
             var ratePlanGrid = new RatePlanGrid($scope, ctrl, $attrs);
@@ -103,7 +103,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
 
             $scope.onCurrentRateClicked = function (dataItem) {
-                WhS_Sales_RatePlanService.viewFutureRate(dataItem.ZoneName, dataItem.FutureNormalRate, gridQuery.SaleAreaSettings.PrimarySaleEntity);
+                WhS_Sales_RatePlanService.viewFutureRate(dataItem.ZoneName, dataItem.FutureNormalRate, gridQuery.SaleAreaSettings.PrimarySaleEntity, gridQuery.OwnerType);
             };
 
             $scope.onTQIClicked = function (dataItem) {

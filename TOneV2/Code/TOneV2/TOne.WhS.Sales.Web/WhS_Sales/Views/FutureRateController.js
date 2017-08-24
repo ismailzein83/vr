@@ -9,6 +9,7 @@
         var zoneName;
         var futureRate;
         var primarySaleEntity;
+        var ownerType;
 
         loadParameters();
         defineScope();
@@ -23,6 +24,7 @@
                 zoneName = parameters.zoneName;
                 futureRate = parameters.futureRate;
                 primarySaleEntity = parameters.primarySaleEntity;
+                ownerType = parameters.ownerType;
             }
         }
 
@@ -37,20 +39,22 @@
                 var rateType = (futureRate.RateTypeId != null) ? 'Other' : 'Normal';
                 $scope.title = 'Future ' + rateType + ' Rate of Zone ' + zoneName;
                 $scope.scopeModel.rate = futureRate.Rate;
-
-                if (primarySaleEntity == WhS_BE_PrimarySaleEntityEnum.SellingProduct.value) {
-                    if (futureRate.IsRateEditable) {
-                        $scope.scopeModel.futureRateIconType = 'explicit';
-                        $scope.scopeModel.futureRateIconTooltip = 'Explicit';
-                    }
-                    
-                }
-                else if (!futureRate.IsRateEditable) {
-                    $scope.scopeModel.futureRateIconType = 'inherited';
-                    $scope.scopeModel.futureRateIconTooltip = 'Inherited';
-                }
-                
                 $scope.scopeModel.rateBED = UtilsService.getShortDate(new Date(futureRate.BED));
+
+                if (ownerType == WhS_BE_PrimarySaleEntityEnum.Customer.value) {
+
+                    if (primarySaleEntity == WhS_BE_PrimarySaleEntityEnum.SellingProduct.value) {
+                        if (futureRate.IsRateEditable) {
+                            $scope.scopeModel.futureRateIconType = 'explicit';
+                            $scope.scopeModel.futureRateIconTooltip = 'Explicit';
+                        }
+
+                    }
+                    else if (!futureRate.IsRateEditable) {
+                        $scope.scopeModel.futureRateIconType = 'inherited';
+                        $scope.scopeModel.futureRateIconTooltip = 'Inherited';
+                    }
+                }
             }
 
             $scope.close = function () {
