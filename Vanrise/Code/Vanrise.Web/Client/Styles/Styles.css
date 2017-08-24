@@ -687,7 +687,6 @@ add padding .left-addon input {
     padding: 5px 2px;
     font-size: 12px;
     right: 17px;
-    top: 0px;
     color:#5cb85c;
 }
 .vr-select-disabled-item{
@@ -2018,6 +2017,10 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 .divDisabled  vr-validator > div {
     pointer-events: none;
     opacity: 0.5;
+}
+
+.divDisabled vr-validator > div input[type="text"] {
+   background-color:#ddd;
 }
 .read-only-frame{
       pointer-events: none !important;
