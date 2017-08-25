@@ -114,7 +114,8 @@ app.directive('whsInvoiceInvoiceaccountSelector', ['VRUIUtilsService', 'UtilsSer
                     function loadFinancialAccountSelector() {
                         var financialAccountPayload = {
                             selectedIds: selectedIds,
-                            filter:filter
+                            filter: filter,
+                            context:getContext()
                         };
                         return financialAccountSelectorAPI.load(financialAccountPayload);
                     }
@@ -127,7 +128,15 @@ app.directive('whsInvoiceInvoiceaccountSelector', ['VRUIUtilsService', 'UtilsSer
                         selectedIds: financialAccountSelectorAPI.getSelectedIds()
                     };
                 };
-
+                function getContext()
+                {
+                    var currentContext = context;
+                    if(currentContext == undefined)
+                    {
+                        currentContext = {};
+                    }
+                    return currentContext;
+                }
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
 
