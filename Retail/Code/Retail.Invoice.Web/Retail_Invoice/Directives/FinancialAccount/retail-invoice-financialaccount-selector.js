@@ -47,8 +47,14 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
                 };
 
                 ctrl.onSelectionChanged = function (selectedAccount) {
-                    if (selectedAccount != undefined && context != undefined && context.reloadBillingPeriod != undefined) {
-                        context.reloadBillingPeriod();
+                    if (selectedAccount != undefined && context != undefined) {
+                    
+                        if (context.reloadBillingPeriod != undefined) {
+                            context.reloadBillingPeriod();
+                        }
+                        if (context.reloadPregeneratorActions != undefined) {
+                            context.reloadPregeneratorActions();
+                        }
                     }
                 };
                 defineAPI();

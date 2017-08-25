@@ -42,7 +42,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                 multipleselection = "ismultipleselection";
             }
             return '<retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" isrequired="ctrl.isrequired" ' + multipleselection + '  normal-col-num = "{{ctrl.normalColNum}}" onselectionchanged="scopeModel.onAccountSelectionChanged"> </retail-be-account-selector>'
-                    +'<retail-be-financialaccount-selector on-ready="scopeModel.onFinancialAccountSelectorReady" ' + multipleselection + ' isrequired="ctrl.isrequired" normal-col-num = "{{ctrl.normalColNum}}"> </retail-be-financialaccount-selector>';
+                    + '<retail-be-financialaccount-selector on-ready="scopeModel.onFinancialAccountSelectorReady" ' + multipleselection + ' isrequired="ctrl.isrequired" normal-col-num = "{{ctrl.normalColNum}}" onselectionchanged="scopeModel.onFinancialAccountSelectionChanged"> </retail-be-financialaccount-selector>';
         }
 
         function FinancialAccountSelectorCtor(ctrl, $scope, attrs) {
@@ -73,7 +73,10 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                     financialAccountSelectorAPI = api;
                     financialAccountSelectorPromiseDeferred.resolve();
                 };
-
+                $scope.scopeModel.onFinancialAccountSelectionChanged = function (value) {
+                    if (ctrl.onselectionchanged != undefined && value != undefined)
+                        ctrl.onselectionchanged(value);
+                };
                 $scope.scopeModel.onAccountSelectionChanged = function (value) {
                   
                     var selectedIds = accountSelectorAPI.getSelectedIds();
@@ -98,8 +101,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, financialAccountSelectorAPI, selectorPayload, setLoader, financialAccountSelectorPromiseDeferred);
                     }
-                    if (ctrl.onselectionchanged != undefined)
-                        ctrl.onselectionchanged(value);
+                   
                 };
 
                 UtilsService.waitMultiplePromises([accountSelectorPromiseDeferred.promise, financialAccountSelectorPromiseDeferred.promise]).then(function () {

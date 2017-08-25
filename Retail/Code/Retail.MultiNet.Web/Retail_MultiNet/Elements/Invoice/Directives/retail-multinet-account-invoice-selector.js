@@ -83,7 +83,9 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
                     if (context.onAccountSelected != undefined) {
                         context.onAccountSelected(selectedIds);
                     }
-
+                    if (context.reloadPregeneratorActions != undefined) {
+                        context.reloadPregeneratorActions();
+                    }
                     //if (context.setTimeZone != undefined) {
                     //    var timeZoneId = selectedAccount != undefined ? selectedAccount.TimeZoneId : undefined;
                     //    context.setTimeZone(timeZoneId);
