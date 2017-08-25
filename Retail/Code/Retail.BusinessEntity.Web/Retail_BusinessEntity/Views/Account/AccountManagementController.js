@@ -13,6 +13,9 @@
         var businessEntityDefinitionSelectorAPI;
         var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var accountRootTypeSelectorAPI;
+        var accountRootTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var accountTypeSelectorAPI;
         var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -44,6 +47,12 @@
                 businessEntityDefinitionSelectorAPI = api;
                 businessEntityDefinitionSelectorReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onAccountRootTypeSelectorReady = function (api) {
+                accountRootTypeSelectorAPI = api;
+                accountRootTypeSelectorReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
                 accountTypeSelectorAPI = api;
                 accountTypeSelectorReadyDeferred.resolve();
@@ -81,17 +90,19 @@
                 }
             };
             $scope.scopeModel.onlyRootAccountValueChanged = function () {
+                if (accountRootTypeSelectorAPI.getSelectedIds() != undefined) {
+                    var payload = {
+                        filter: {
+                            AccountBEDefinitionId: accountBEDefinitionId,
+                            RootAccountTypeOnly: accountRootTypeSelectorAPI.getSelectedIds()
+                        }
+                    };
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isAccountTypeSelectorLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSelectorAPI, payload, setLoader, undefined);
+                }
 
-                var payload = {
-                    filter: {
-                        AccountBEDefinitionId: accountBEDefinitionId,
-                        RootAccountTypeOnly: $scope.scopeModel.onlyRootAccount
-                    }
-                };
-                var setLoader = function (value) {
-                    $scope.scopeModel.isAccountTypeSelectorLoading = value;
-                };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSelectorAPI, payload, setLoader, undefined);
             };
 
             $scope.scopeModel.search = function () {
@@ -157,7 +168,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSelector, loadRecordFilterDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSelector, loadRootAccountTypeSelector, loadRecordFilterDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -178,6 +189,15 @@
             });
 
             return accountTypeSelectorLoadDeferred.promise;
+        }
+        function loadRootAccountTypeSelector() {
+            var rootAccountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            accountRootTypeSelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(accountRootTypeSelectorAPI, undefined, rootAccountTypeSelectorLoadDeferred);
+            });
+
+            return rootAccountTypeSelectorLoadDeferred.promise;
         }
         function loadRecordFilterDirective() {
             var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -224,7 +244,7 @@
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
-                OnlyRootAccount: $scope.scopeModel.onlyRootAccount,
+                OnlyRootAccount: accountRootTypeSelectorAPI.getSelectedIds(),
                 AccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
                 FilterGroup: recordFilterDirectiveAPI.getData().filterObj,
             };

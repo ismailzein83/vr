@@ -19,8 +19,8 @@
                 <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
                     <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
                 </vr-columns>
-                <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="small">
-                    <vr-switch value="scopeModel.onlyRootAccount" onvaluechanged="scopeModel.onlyRootAccountValueChanged" label="Only Root Account"></vr-switch>
+                <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
+                    <retail-be-account-roottype-selector on-ready="scopeModel.onAccountRootTypeSelectorReady" onselectionchanged="scopeModel.onlyRootAccountValueChanged"></retail-be-account-roottype-selector>
                 </vr-columns>
                 <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" ng-show="scopeModel.isAccountBEDefinitionSelected"
                                                 vr-loader="scopeModel.isAccountTypeSelectorLoading" normal-col-num="2" ismultipleselection="true">

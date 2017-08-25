@@ -218,6 +218,7 @@
     <Content Include="Retail_BusinessEntity\Constant\AccountPartAvailabilityOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
+    <Content Include="Retail_BusinessEntity\Constant\RootSelectorTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\DIDNumberTypeEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\FinancialAccountEffectiveEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\LogicalOperatorEnum.js" />
@@ -359,6 +360,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountSynchronizerEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-roottype-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\ChargeableEntity\Definition\retail-be-chargeableentitydefinitionsettings.js" />
     <Content Include="Retail_BusinessEntity\Directives\ChargeableEntity\Definition\Templates\ChargeableEntityDefinitionSettingDirective.html" />
     <Content Include="Retail_BusinessEntity\Directives\ChargeableEntity\retail-be-chargeableentitysettings.js" />
