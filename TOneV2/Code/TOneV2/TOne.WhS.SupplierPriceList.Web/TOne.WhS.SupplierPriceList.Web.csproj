@@ -172,6 +172,8 @@
     <Content Include="WhS_SupplierPriceList\Directives\CountryPreview\whs-spl-countrypreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\Templates\BasicSupplierPriceListConfiguration.html" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\whs-spl-supplierpricelistconfiguration-basic.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewDirective\SupplierPriceListPreviewDirectiveTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewDirective\whs-spl-supplierpricelistpreview-directive.js" />
     <Content Include="WhS_SupplierPriceList\Directives\ZoneServicesPreview\Templates\SupplierPriceListZoneServicesPreviewGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\ZoneServicesPreview\whs-spl-zoneservicespreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\OtherRatesPreview\Templates\SupplierPriceListOtherRatesPreviewGridTemplate.html" />
@@ -182,12 +184,15 @@
     <Content Include="WhS_SupplierPriceList\Directives\ZonePreview\whs-spl-zonepreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\CodePreview\Templates\SupplierPriceListCodePreviewGridTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\CodePreview\whs-spl-codepreview-grid.js" />
+    <Content Include="WhS_SupplierPriceList\ModuleInitialization.js" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListTemplateAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListPreviewAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\APIServices\SupplierPriceListAPIService.js" />
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListTemplateService.js" />
     <Content Include="WhS_SupplierPriceList\Services\SupplierPriceListService.js" />
     <Content Include="WhS_SupplierPriceList\Template\Supplier Price List Sample.xlsx" />
+    <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreviewForGrid.html" />
+    <Content Include="WhS_SupplierPriceList\Views\SupplierPriceListPreviewForGridController.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />

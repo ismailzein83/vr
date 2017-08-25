@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSupplierpricelistGrid", ["UtilsService", "VRNotificationService", "FileAPIService", "WhS_BE_SupplierPriceListAPIService",
-function (UtilsService, VRNotificationService, FileAPIService, WhS_BE_SupplierPriceListAPIService) {
+app.directive("vrWhsBeSupplierpricelistGrid", ["UtilsService", "VRNotificationService", "FileAPIService", "WhS_BE_SupplierPriceListAPIService", "WhS_BE_SupplierPriceListService",
+function (UtilsService, VRNotificationService, FileAPIService, WhS_BE_SupplierPriceListAPIService, WhS_BE_SupplierPriceListService) {
 
     var directiveDefinitionObject = {
 
@@ -67,6 +67,15 @@ function (UtilsService, VRNotificationService, FileAPIService, WhS_BE_SupplierPr
                 name: "Download",
                 clicked: downloadPriceList
             }];
+            var newMenuActions = WhS_BE_SupplierPriceListService.getAdditionalActionForSupplierPricelistGrid();
+            if (newMenuActions != null && newMenuActions != undefined) {
+                angular.forEach(newMenuActions, function (newMenuAction) {
+                        var tempMenuAction = {};
+                        tempMenuAction.name = newMenuAction.name;
+                        tempMenuAction.clicked = newMenuAction.clicked;
+                        $scope.gridMenuActions.push(tempMenuAction);
+                });
+            }
         }
 
         function downloadPriceList(priceListObj) {

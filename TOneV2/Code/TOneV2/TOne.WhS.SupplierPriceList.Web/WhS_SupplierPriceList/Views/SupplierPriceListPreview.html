@@ -1,40 +1,6 @@
-﻿<div vr-modalcontent ng-controller="WhS_SupPL_SupplierPriceListPreviewController" vr-loader="isLoading" size="xlarge">
+﻿<div vr-modalcontent ng-controller="WhS_SupPL_SupplierPriceListPreviewController" vr-loader="scopeModal.isLoading" size="xlarge">
     <vr-modalbody>
-        <vr-form name="formSellNewZones" vr-loader="scopeModal.isLoading">
-            <vr-tabs>
-                <vr-tab header="'Preview Data'">
-                    <vr-row ng-hide="filterSectionCollapsed">
-                        <span>
-                            <whs-spl-viewchangetype-selector on-ready="onViewChangeTypeSelectorReady"
-                                                            onselectitem="onViewChangeTypeSelectItem"
-                                                            normal-col-num="3"
-                                                            hideremoveicon="true"></span>
-                        <span>
-                            <whs-spl-groupedby-selector on-ready="onGroupedBySelectorReady"
-                                                       normal-col-num="3"
-                                                       hideremoveicon="true"
-                                                       selectedvalues="selectedGroupedBy">
-                        </span>
-                    </vr-row>
-
-                    <vr-row>
-                        <span vr-loader="scopeModal.isLoadingPreviewDataSection">
-                            <vr-directivewrapper directive="selectedGroupedBy.dwGrid" on-ready="onDirectiveWrapperReady"></vr-directivewrapper>
-                        </span>
-                    </vr-row>
-
-                </vr-tab>
-                <vr-tab header="'Violated Rules'">
-                    <vr-row>
-                        <vr-columns width="fullrow">
-                            <businessprocess-bp-validation-message-history on-ready="scopeModal.onValidationMessageHistoryGridReady"></businessprocess-bp-validation-message-history>
-                        </vr-columns>
-
-                    </vr-row>
-
-                </vr-tab>
-            </vr-tabs>
-        </vr-form>
+        <whs-spl-supplierpricelistpreview-directive on-ready="onSupplierPriceListPreviewDirectiveReady"></whs-spl-supplierpricelistpreview-directive>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
