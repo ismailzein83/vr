@@ -2,8 +2,11 @@
     <vr-select datasource="scopeModel.fields"
                datatextfield="fieldTitle"
                datavaluefield="fieldName"
-               selectedvalues="scopeModel.selectedNullableFieldFieldName"
-               entityname="Nullable Field Field Name"
-               label="Nullable Field Field Name" isrequired="true">
+               selectedvalues="scopeModel.selectedNullableFieldName"
+               entityname="Nullable Field Name"
+               label="Nullable Field Name" isrequired="true" hideremoveicon>
     </vr-select>
+</vr-columns>
+<vr-columns width="1/3row">
+    <vr-switch value="scopeModel.nullIsFalse" label="Null Is False"></vr-switch>
 </vr-columns>

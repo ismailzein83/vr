@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -106,6 +107,7 @@ namespace Vanrise.GenericData.Entities
         }
     }
 
+    public enum DateTimeRecordFilterComparisonPart { DateTime = 0, TimeOnly = 1, DateOnly = 2 }
     public enum DateTimeRecordFilterOperator
     {
         [Description(" = ")]
@@ -123,9 +125,6 @@ namespace Vanrise.GenericData.Entities
         [Description(" Between ")]
         Between = 6
     }
-
-    public enum DateTimeRecordFilterComparisonPart { DateTime = 0, DateOnly = 1, TimeOnly = 2}
-
     public class DateTimeRecordFilter : RecordFilter
     {
         public DateTimeRecordFilterOperator CompareOperator { get; set; }
@@ -228,6 +227,14 @@ namespace Vanrise.GenericData.Entities
         public override string GetDescription(IRecordFilterGetDescriptionContext context)
         {
             return string.Format(" {0} {1} ( {2} ) ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Values.Cast<Object>().ToList()));
+        }
+    }
+
+    public class AlwaysFalseRecordFilter : RecordFilter
+    {
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

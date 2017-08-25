@@ -75,48 +75,71 @@ namespace Vanrise.GenericData.Business
 
         private RecordFilterGroup ConvertFilterGroup(RecordFilterGroup filterGroup, DataRecordType recordType)
         {
-            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
-            recordFilterGroup.LogicalOperator = filterGroup.LogicalOperator;
+            List<RecordFilter> convertedFilters = new List<RecordFilter>();
+
             foreach (var filter in filterGroup.Filters)
             {
-                ConvertChildFilterGroup(recordFilterGroup, filter, recordType);
+                ConvertChildFilterGroup(filter, recordType, convertedFilters);
             }
-            return recordFilterGroup;
 
+            if (convertedFilters.Count > 0)
+            {
+                RecordFilterGroup recordFilterGroup = new RecordFilterGroup() { };
+                recordFilterGroup.LogicalOperator = filterGroup.LogicalOperator;
+                recordFilterGroup.Filters = convertedFilters;
+
+                return recordFilterGroup;
+            }
+
+            return null;
         }
-        public void ConvertChildFilterGroup(RecordFilterGroup recordFilterGroup, RecordFilter recordFilter, DataRecordType recordType)
+        public void ConvertChildFilterGroup(RecordFilter recordFilter, DataRecordType recordType, List<RecordFilter> convertedFilters)
         {
-            if (recordFilterGroup.Filters == null)
-                recordFilterGroup.Filters = new List<RecordFilter>();
-
             RecordFilterGroup childFilterGroup = recordFilter as RecordFilterGroup;
             if (childFilterGroup != null)
             {
-                RecordFilterGroup childRecordFilterGroup = new RecordFilterGroup();
-                childRecordFilterGroup.LogicalOperator = childFilterGroup.LogicalOperator;
-                recordFilterGroup.Filters.Add(childRecordFilterGroup);
+                List<RecordFilter> convertedChildFilters = new List<RecordFilter>();
+
                 foreach (var filter in childFilterGroup.Filters)
                 {
-                    ConvertChildFilterGroup(childRecordFilterGroup, filter, recordType);
+                    ConvertChildFilterGroup(filter, recordType, convertedChildFilters);
+                }
+
+                if (convertedChildFilters.Count > 0)
+                {
+                    RecordFilterGroup childRecordFilterGroup = new RecordFilterGroup();
+                    childRecordFilterGroup.LogicalOperator = childFilterGroup.LogicalOperator;
+                    childRecordFilterGroup.Filters = convertedChildFilters;
+
+                    convertedFilters.Add(childRecordFilterGroup);
                 }
             }
-            else if (recordFilter.FieldName != null)
+            else
             {
-                var record = recordType.Fields.FindRecord(x => x.Name == recordFilter.FieldName);
-                if (record != null)
+                if (recordFilter.FieldName != null)
                 {
-                    if (record.Formula != null)
+                    var record = recordType.Fields.FindRecord(x => x.Name == recordFilter.FieldName);
+                    if (record != null)
                     {
-                        var context = new DataRecordFieldFormulaConvertFilterContext(recordType.DataRecordTypeId, recordFilter.FieldName);
-                        context.InitialFilter = recordFilter;
-                        var recordFilterObj = record.Formula.ConvertFilter(context);
-                        ConvertChildFilterGroup(recordFilterGroup, recordFilterObj, recordType);
+                        if (record.Formula != null)
+                        {
+                            var context = new DataRecordFieldFormulaConvertFilterContext(recordType.DataRecordTypeId, recordFilter.FieldName);
+                            context.InitialFilter = recordFilter;
+
+                            var recordFilterObj = record.Formula.ConvertFilter(context);
+                            if (recordFilterObj != null)
+                                ConvertChildFilterGroup(recordFilterObj, recordType, convertedFilters);
+                        }
+                        else
+                        {
+                            //recordFilter.FieldName = record.Name; 
+                            convertedFilters.Add(recordFilter);
+                        }
                     }
-                    else
-                    {
-                        recordFilter.FieldName = record.Name;
-                        recordFilterGroup.Filters.Add(recordFilter);
-                    }
+                }
+                else //used in case of filter without FieldName like AlwaysFalseRecordFilter
+                {
+                    convertedFilters.Add(recordFilter);
                 }
             }
         }

@@ -36,7 +36,10 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
 
                     var payload = { dataRecordTypeField: $scope.scopeModel.dataRecordTypeField };
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoading = value;
+                        setTimeout(function () {
+                            $scope.scopeModel.isDirectiveLoading = value;
+                            UtilsService.safeApply($scope);
+                        });
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeFieldEditorApi, payload, setLoader, dataRecordTypeFieldReadyDeferred);
 

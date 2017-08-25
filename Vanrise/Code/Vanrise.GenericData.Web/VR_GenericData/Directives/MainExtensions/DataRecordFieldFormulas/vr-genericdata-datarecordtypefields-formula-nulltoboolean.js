@@ -35,7 +35,8 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaNulltoboolean', ['UtilsSe
             var context;
 
             function initializeController() {
-                $scope.fields = [];
+                $scope.scopeModel = {};
+                $scope.scopeModel.fields = [];
 
                 defineAPI();
             }
@@ -52,7 +53,11 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaNulltoboolean', ['UtilsSe
                         }
 
                         if (payload.formula != undefined) {
-                            $scope.scopeModel.selectedNullableFieldFieldName = UtilsService.getItemByVal($scope.scopeModel.fields, payload.formula.NullableFieldFieldName, "fieldName");
+                            $scope.scopeModel.selectedNullableFieldName = UtilsService.getItemByVal($scope.scopeModel.fields, payload.formula.NullableFieldName, "fieldName");
+                            $scope.scopeModel.nullIsFalse = payload.formula.NullIsFalse;
+                        }
+                        else {
+                            $scope.scopeModel.nullIsFalse = true;
                         }
                     }
                 };
@@ -60,7 +65,8 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaNulltoboolean', ['UtilsSe
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas.NullToBooleanFieldFormula, Vanrise.GenericData.MainExtensions",
-                        NullableFieldFieldName: $scope.selectedFieldName != undefined ? $scope.selectedFieldName.fieldName : undefined
+                        NullableFieldName: $scope.scopeModel.selectedNullableFieldName.fieldName,
+                        NullIsFalse: $scope.scopeModel.nullIsFalse
                     };
                 };
 

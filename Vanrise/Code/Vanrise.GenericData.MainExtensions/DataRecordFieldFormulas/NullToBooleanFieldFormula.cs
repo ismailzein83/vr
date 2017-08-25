@@ -9,18 +9,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
     {
         public override Guid ConfigId { get { return new Guid("458EBD88-4537-4B57-B2AB-14AFAB2EF9B6"); } }
 
-        public string NullableFieldFieldName { get; set; }
+        public string NullableFieldName { get; set; }
 
         public bool NullIsFalse { get; set; }
 
         public override List<string> GetDependentFields(IDataRecordFieldFormulaGetDependentFieldsContext context)
         {
-            return new List<string>() { NullableFieldFieldName };
+            return new List<string>() { NullableFieldName };
         }
 
         public override dynamic CalculateValue(IDataRecordFieldFormulaCalculateValueContext context)
         {
-            dynamic nullableField = context.GetFieldValue(NullableFieldFieldName);
+            dynamic nullableField = context.GetFieldValue(NullableFieldName);
 
             if (NullIsFalse)
                 return nullableField == null ? false : true;
@@ -33,20 +33,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             if (context.InitialFilter == null)
                 throw new ArgumentNullException("context.InitialFilter");
 
-            ObjectListRecordFilter objectListFilter = context.InitialFilter as ObjectListRecordFilter;
-            if (objectListFilter != null)
+            BooleanRecordFilter booleanRecordFilter = context.InitialFilter as BooleanRecordFilter;
+            if (booleanRecordFilter != null)
             {
-                bool booleanFieldValue = Convert.ToBoolean(objectListFilter.Values.First());
-
-                if((NullIsFalse && !booleanFieldValue) || (!NullIsFalse && booleanFieldValue))
-                    return new EmptyRecordFilter() { FieldName = NullableFieldFieldName };
+                if ((NullIsFalse && !booleanRecordFilter.IsTrue) || (!NullIsFalse && booleanRecordFilter.IsTrue))
+                    return new EmptyRecordFilter() { FieldName = NullableFieldName };
                 else
-                    return new NonEmptyRecordFilter() { FieldName = NullableFieldFieldName }; 
+                    return new NonEmptyRecordFilter() { FieldName = NullableFieldName };
             }
 
-            //EmptyRecordFilter emptyFilter = context.InitialFilter as EmptyRecordFilter;
-            //if (emptyFilter != null)
-            //    return new AlwaysFalseRecordFilter() { };
+            EmptyRecordFilter emptyFilter = context.InitialFilter as EmptyRecordFilter;
+            if (emptyFilter != null)
+                return new AlwaysFalseRecordFilter() { };
 
             NonEmptyRecordFilter nonEmptyFilter = context.InitialFilter as NonEmptyRecordFilter;
             if (nonEmptyFilter != null)

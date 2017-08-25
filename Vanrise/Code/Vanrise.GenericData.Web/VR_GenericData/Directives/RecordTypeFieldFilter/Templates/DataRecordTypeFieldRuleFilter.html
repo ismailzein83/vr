@@ -10,7 +10,7 @@
     <vr-columns width="2/3row" ng-if="scopeModel.ruleFilterEditor!=undefined && !scopeModel.selectedCondition.showDirective" vr-loader="scopeModel.isLoading">
         <vr-directivewrapper directive="scopeModel.selectedCondition.editor" on-ready="scopeModel.onDataRecordTypeFieldFilterReady"></vr-directivewrapper>
     </vr-columns>
-    <vr-columns width="2/3row" ng-if="scopeModel.ruleFilterEditor!=undefined && scopeModel.selectedCondition.showDirective" vr-loader="scopeModel.isLoading">
+    <vr-columns width="2/3row" ng-if="scopeModel.ruleFilterEditor!=undefined && scopeModel.selectedCondition.showDirective" vr-loader="scopeModel.isDirectiveLoading">
         <vr-directivewrapper directive="scopeModel.ruleFilterEditor" on-ready="scopeModel.onDataRecordTypeFieldEditorReady"></vr-directivewrapper>
     </vr-columns>
 </vr-row>
