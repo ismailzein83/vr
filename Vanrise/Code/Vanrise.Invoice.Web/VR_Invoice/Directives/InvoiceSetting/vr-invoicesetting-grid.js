@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService", "VR_Invoice_PartnerInvoiceSettingService", "VR_Invoice_PartnerInvoiceSettingAPIService",
-    function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, VR_Invoice_InvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_InvoiceSettingService, VR_Invoice_PartnerInvoiceSettingService, VR_Invoice_PartnerInvoiceSettingAPIService) {
+app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "UtilsService", "VRNotificationService", "VR_Invoice_InvoiceSettingAPIService", "VRUIUtilsService", "VR_Invoice_InvoiceSettingService", "VR_Invoice_PartnerInvoiceSettingService",
+    function (VRCommon_ObjectTrackingService, UtilsService, VRNotificationService, VR_Invoice_InvoiceSettingAPIService, VRUIUtilsService, VR_Invoice_InvoiceSettingService, VR_Invoice_PartnerInvoiceSettingService) {
 
         var directiveDefinitionObject = {
 
@@ -43,32 +43,16 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                     var drillDownDefinition = {};
                     var drillDownDefinitionHistory = {};
 
-                    drillDownDefinition.title = "Partner Invoice Setting";
-                    drillDownDefinition.directive = "vr-partnerinvoicesetting-grid";
+                    drillDownDefinition.title = "Linked Partners";
+                    drillDownDefinition.directive = "vr-invoice-partnerinvoiecsetting-search";
 
                     drillDownDefinition.loadDirective = function (directiveAPI, invoiceSettingItem) {
                         invoiceSettingItem.partnerInvoiceSettingGridAPI = directiveAPI;
                         var query = {
-                            InvoiceSettingId: invoiceSettingItem.Entity.InvoiceSettingId
+                            invoiceSettingId: invoiceSettingItem.Entity.InvoiceSettingId
                         };
-                        return invoiceSettingItem.partnerInvoiceSettingGridAPI.loadGrid(query);
+                        return invoiceSettingItem.partnerInvoiceSettingGridAPI.load(query);
                     };
-                    drillDownDefinition.parentMenuActions = [{
-                        name: "Add Partner Invoice Setting",
-                        haspermission: function(dataItem){
-                            return VR_Invoice_PartnerInvoiceSettingAPIService.HasAssignPartnerAccess(dataItem.Entity.InvoiceSettingId);
-                        },
-                        clicked: function (invoiceSettingItem) {
-                            if (drillDownDefinition.setTabSelected != undefined)
-                                drillDownDefinition.setTabSelected(invoiceSettingItem);
-                            var onPartnerInvoiceSettingAdded = function (partnerInvoiceSettingObj) {
-                                if (invoiceSettingItem.partnerInvoiceSettingGridAPI != undefined) {
-                                    invoiceSettingItem.partnerInvoiceSettingGridAPI.onPartnerInvoiceSettingAdded(partnerInvoiceSettingObj);
-                                }
-                            };
-                            VR_Invoice_PartnerInvoiceSettingService.addPartnerInvoiceSetting(onPartnerInvoiceSettingAdded, invoiceSettingItem.Entity.InvoiceSettingId);
-                        }
-                    }];
                     drillDownDefinitions.push(drillDownDefinition);
 
                     drillDownDefinitionHistory.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();

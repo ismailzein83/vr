@@ -135,7 +135,12 @@ app.directive('vrInvoiceInvoicesettingRuntimeAutomaticinvoiceactionspart', ['Uti
                                 section.directiveAPI = api;
                                 sectionPayload.readyPromiseDeferred.resolve();
                             };
-                            UtilsService.waitMultiplePromises([isSectionsLoaded.promise, sectionPayload.readyPromiseDeferred.promise]).then(function () {
+                            var currentPromises = [];
+                            currentPromises.push(sectionPayload.readyPromiseDeferred.promise);
+                            if (isSectionsLoaded != undefined)
+                                currentPromises.push(isSectionsLoaded.promise);
+
+                            UtilsService.waitMultiplePromises(currentPromises).then(function () {
                                 var directivePayload = {
                                     emailActionSettings: sectionPayload.payload.Settings,
                                     invoiceTypeId: invoiceTypeId,

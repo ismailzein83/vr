@@ -396,6 +396,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\MainExtensions\vr-invoicetype-openrdlcreport-parametersettings-customfield.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\RDLCReport\RDLCReportParameterValue\MainExtensions\vr-invoicetype-openrdlcreport-parametersettings-field.js" />
     <Content Include="VR_Invoice\Directives\PartnerInvoiceSetting\Templates\PartnerInvoiceSettingGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\PartnerInvoiceSetting\Templates\PartnerInvoiceSettingSearch.html" />
+    <Content Include="VR_Invoice\Directives\PartnerInvoiceSetting\vr-invoice-partnerinvoiecsetting-search.js" />
     <Content Include="VR_Invoice\Directives\PartnerInvoiceSetting\vr-partnerinvoicesetting-grid.js" />
     <Content Include="VR_Invoice\ModuleInitialization.js" />
     <Content Include="VR_Invoice\Reports\InvoiceReport.aspx" />

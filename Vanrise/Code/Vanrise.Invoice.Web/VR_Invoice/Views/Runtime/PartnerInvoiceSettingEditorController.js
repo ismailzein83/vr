@@ -142,9 +142,9 @@
         function loadAllControls() {
             function setTitle() {
                 if ($scope.scopeModel.isEditMode)
-                    $scope.title = "Partner Invoice Setting";
+                    $scope.title = "Linked Partner";
                 else
-                    $scope.title = "Partner Invoice Setting";
+                    $scope.title = "Linked Partner";
             }
             function loadRuntimeEditor() {
                 if (invoiceSettingDefinition != undefined) {
