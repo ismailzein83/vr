@@ -18,14 +18,16 @@
     [IncomingGwId]         VARCHAR (100)    NULL,
     [OutgoingGwId]         VARCHAR (100)    NULL,
     [TransferredCall_Id]   VARCHAR (100)    NULL,
-    [OriginatorIP]         VARCHAR (50)     NULL,
-    [TerminatorIP]         VARCHAR (50)     NULL,
+    [OriginatorIP]         VARCHAR (250)    NULL,
+    [TerminatorIP]         VARCHAR (250)    NULL,
     [InitiationCallType]   INT              NULL,
     [TerminationCallType]  INT              NULL,
     [FileName]             VARCHAR (200)    NULL,
     [OriginatorExtension]  VARCHAR (20)     NULL,
     [TerminatorExtension]  VARCHAR (20)     NULL,
     [QueueItemId]          BIGINT           NULL);
+
+
 
 
 
