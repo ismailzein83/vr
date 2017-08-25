@@ -49,7 +49,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CurrencyId = (int)reader["CurrencyID"],
                 PriceListId = (int)reader["ID"],
                 FileId = GetReaderValue<long?>(reader, "FileID"),
-                CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime")
+                CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                ProcessInstanceId = GetReaderValue<long?>(reader, "ProcessInstanceID"),
+                SPLStateBackupId = GetReaderValue<long?>(reader, "SPLStateBackupID")
             };
             return supplierPriceList;
         }
@@ -62,14 +64,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierPriceList] WITH (TABLOCK)
-                                            SELECT [ID] ,[SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierPriceList]
+                                            SELECT [ID] ,[SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierPriceList]
                                             WITH (NOLOCK) Where SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierPriceList] ([ID], [SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID])
-                                            SELECT [ID], [SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierPriceList]
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierPriceList] ([ID], [SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID])
+                                            SELECT [ID], [SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierPriceList]
                                             WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 

@@ -38,10 +38,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return extensionConfigurationManager.GetExtensionConfigurations<StateBackupTypeConfig>(StateBackupTypeConfig.EXTENSION_TYPE);
         }
 
-        public void BackupData(StateBackupType backupType)
+        public object BackupData(StateBackupType backupType)
         {
             IStateBackupDataManager manager = BEDataManagerFactory.GetDataManager<IStateBackupDataManager>();
-            manager.BackupData(backupType);
+            return manager.BackupData(backupType);
         }
 
         public UpdateOperationOutput<StateBackup> RestoreData(long stateBackupId)

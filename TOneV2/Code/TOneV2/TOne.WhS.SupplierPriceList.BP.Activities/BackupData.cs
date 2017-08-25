@@ -21,6 +21,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<int> UserId { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<long> StateBackupId { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             int supplierId = this.SupplierId.Get(context);
@@ -33,7 +36,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             };
 
             StateBackupManager manager = new StateBackupManager();
-            manager.BackupData(backupSupplier);
+            object stateBackupId;
+            stateBackupId = manager.BackupData(backupSupplier);
+            if (stateBackupId != null)
+                StateBackupId.Set(context, (long)stateBackupId);
 
         }
     }

@@ -19,10 +19,10 @@ namespace TOne.WhS.SupplierPriceList.Business
         }
        
 
-        public bool AddPriceListAndSyncImportedDataWithDB(int priceListId, long processInstanceId, int supplierId, int currencyId, long fileId, DateTime effectiveOn)
+        public bool AddPriceListAndSyncImportedDataWithDB(int priceListId, long processInstanceId, long splStateBackupId, int supplierId, int currencyId, long fileId, DateTime effectiveOn)
         {
             ISupplierPriceListDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
-            return dataManager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, supplierId, currencyId, fileId, effectiveOn);
+            return dataManager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, splStateBackupId, supplierId, currencyId, fileId, effectiveOn);
         }
 
        

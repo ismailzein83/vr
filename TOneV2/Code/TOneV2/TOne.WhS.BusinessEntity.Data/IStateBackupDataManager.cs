@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface IStateBackupDataManager : IDataManager
     {
-        void BackupData(StateBackupType backupType);
+        object BackupData(StateBackupType backupType);
 
         bool RestoreData(long stateBackupId, int userId);
 

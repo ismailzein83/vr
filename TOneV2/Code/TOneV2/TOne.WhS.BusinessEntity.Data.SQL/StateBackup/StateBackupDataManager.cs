@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("[TOneWhS_BE].[sp_StateBackup_GetFiltered]", StateBackupMapper, input.BackupTypeFilterConfigId, input.From, input.To);
         }
 
-        public void BackupData(StateBackupType backupType)
+        public object BackupData(StateBackupType backupType)
         {
             this.PrepareData(backupType);
 
@@ -45,15 +45,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 Timeout = TransactionManager.MaximumTimeout
             };
 
+            object stateBackupId;
+
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                object stateBackupId;
                 ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Insert", out stateBackupId, backupType.ConfigId, Vanrise.Common.Serializer.Serialize(backupType), DateTime.Now, backupType.UserId);
                 string backupCommand = _stateBackupBehavior.GetBackupCommands((long)stateBackupId);
                 ExecuteNonQueryText(backupCommand, null);
                 scope.Complete();
             }
 
+            return stateBackupId;
         }
 
         public bool RestoreData(long stateBackupId, int userId)
