@@ -21,7 +21,6 @@
         var selectedTimeZoneSelectorPayloadLoadDeferred;
         var invoiceGeneratorActions;
         var invoiceEntity;
-        var validateResult = false;
         $scope.scopeModel.isEditMode;
 
         defineScope();
@@ -90,18 +89,6 @@
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
-            };
-            $scope.scopeModel.validateForm = function () {
-                var partnerObject;
-                if (partnerSelectorAPI != undefined)
-                    partnerObject = partnerSelectorAPI.getData();
-                if ($scope.scopeModel.issueDate != undefined && partnerObject != undefined && partnerObject.selectedIds != undefined && $scope.scopeModel.fromDate != undefined && $scope.scopeModel.toDate != undefined) {
-                    buildInvoiceGeneratorActions();
-                    validateResult = true;
-                    return null;
-                }
-                validateResult = false;
-                return null;
             };
             function tryGenerateInvoice() {
                 var incvoiceObject = buildInvoiceObjFromScope();
@@ -310,7 +297,6 @@
         }
 
         function buildInvoiceGeneratorActions() {
-            if (!validateResult) {
                 $scope.scopeModel.isLoading = true;
                 $scope.scopeModel.actions.length = 0;
                 function getGeneratorActions() {
@@ -406,12 +392,8 @@
 
                         return promise;
                     }
-                    setTimeout(function () {
-                        UtilsService.safeApply();
-                    });
                     $scope.scopeModel.isLoading = false;
                 });
-            }
         }
 
         function getContext()
@@ -419,7 +401,7 @@
             var context = {
                 reloadPregeneratorActions:function()
                 {
-                    validateResult = false;
+                    buildInvoiceGeneratorActions();
                 },
                 reloadBillingPeriod:function()
                 {

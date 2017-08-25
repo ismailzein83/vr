@@ -1,7 +1,6 @@
 ﻿<div vr-modalcontent ng-controller="VR_Invoice_GenericInvoiceEditorController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formGenericInvoiceEditor">
-            <vr-validator validate="scopeModel.validateForm()">
                 <vr-row removeline>
                     <vr-invoice-accountstatus-selector hideremoveicon on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="4" vr-disabled="scopeModel.isEditMode" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
 
@@ -26,14 +25,12 @@
                         <vr-common-timezone-selector on-ready="scopeModel.onTimeZoneSelectorReady" normal-col-num="4" isrequired="true" selectedvalues="scopeModel.selectedTimeZone"></vr-common-timezone-selector>
                     </span>
                 </vr-row>
-            </vr-validator>
-
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <span ng-repeat="action in scopeModel.actions">
+                <span ng-repeat="action in scopeModel.actions" ng-if="scopeModel.actions.length > 0">
                     <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" menuactions="action.menuActions" formname="formGenericInvoiceEditor"></vr-directivewrapper>
                 </span>
                 <vr-button type="GenerateInvoice" formname="formGenericInvoiceEditor" data-onclick="scopeModel.generateInvoice"></vr-button>
