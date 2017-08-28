@@ -114,7 +114,7 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
         function SendPriceList(priceListObj) {
             whSBeSalePricelistApiService.SendPriceList(priceListObj.Entity.PriceListId)
                 .then(function (response) {
-                    vrNotificationService.showSuccess('Email Sended Successfully');
+                    vrNotificationService.showSuccess('Email Sent Successfully');
                 });
         }
         function PreviewPriceList(priceListObj) {
