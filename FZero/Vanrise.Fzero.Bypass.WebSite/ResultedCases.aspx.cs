@@ -235,20 +235,51 @@ public partial class ResultedCases : BasePage
         }
 
 
-            if (ddlSearchStatus.SelectedValue.ToInt() == (int)Enums.Statuses.DistintFraud || ddlSearchStatus.SelectedValue.ToInt() == (int)Enums.Statuses.Fraud || ddlSearchStatus.SelectedValue.ToInt() == 0)
+            if (ddlSearchStatus.SelectedValue.ToInt() == (int)Enums.Statuses.DistintFraud || ddlSearchStatus.SelectedValue.ToInt() == (int)Enums.Statuses.Fraud)
             {
                 spanFraudCases.InnerText= ListViewGeneratedCalls.Where(x => x.StatusID == (int)Enums.Statuses.Fraud).Count().ToString();
                 spanDistinctFraudCases.InnerText = ListViewGeneratedCalls.Where(x => x.StatusID == (int)Enums.Statuses.Fraud).GroupBy(x => x.CLI).Count().ToString();
-                tblSummary.Visible = true;
+
+                SetFraudDataVisibility(true);
+                SetSuspectDataVisibility(false);
+            }
+            else if (ddlSearchStatus.SelectedValue.ToInt() == (int)Enums.Statuses.Suspect)
+            {
+                SetFraudDataVisibility(false);
+                spanSuspectCases.InnerText = ListViewGeneratedCalls.Where(x => x.StatusID == (int)Enums.Statuses.Suspect).GroupBy(x => x.CLI).Count().ToString();
+                SetSuspectDataVisibility(true);
+            }
+            else if (ddlSearchStatus.SelectedValue.ToInt() == 0)
+            {
+                spanFraudCases.InnerText = ListViewGeneratedCalls.Where(x => x.StatusID == (int)Enums.Statuses.Fraud).Count().ToString();
+                spanDistinctFraudCases.InnerText = ListViewGeneratedCalls.Where(x => x.StatusID == (int)Enums.Statuses.Fraud).GroupBy(x => x.CLI).Count().ToString();
+                spanSuspectCases.InnerText = ListViewGeneratedCalls.Where(x => x.StatusID == (int)Enums.Statuses.Suspect).GroupBy(x => x.CLI).Count().ToString();
+                SetFraudDataVisibility(true);
+                SetSuspectDataVisibility(true);
             }
             else
             {
                 spanFraudCases.InnerText = string.Empty;
                 spanDistinctFraudCases.InnerText = string.Empty;
-                tblSummary.Visible = false;
+                spanSuspectCases.InnerText = string.Empty;
+                SetFraudDataVisibility(false);
+                SetSuspectDataVisibility(false);
+              
             }
             gvGeneratedCalls.DataSource = FinalListViewGeneratedCalls;
 
+    }
+
+    private void SetFraudDataVisibility(bool isVisible)
+    {
+        fraudText.Visible = isVisible;
+        distinctFraudText.Visible = isVisible;
+        fraudButtons.Visible = isVisible;
+    }
+    private void SetSuspectDataVisibility(bool isVisible)
+    {
+        suspectButtons.Visible = isVisible;
+        suspectText.Visible = isVisible;
     }
 
     protected void gvGeneratedCalls_ItemCommand(object sender, GridCommandEventArgs e)
@@ -378,9 +409,6 @@ public partial class ResultedCases : BasePage
             {
 
                 
-                
-
-
                 lbl.Font.Bold = true;
                 if (lbl.Text == "Fraud")
                 {
@@ -612,7 +640,79 @@ public partial class ResultedCases : BasePage
         }
 
     }
+    protected void btnReportingStatus_MarkAsClean_Click(object sender, EventArgs e)
+    {
+        List<int> ListIds = new List<int>();
+        IList<string> CLIs = new List<String>();
 
+        foreach (GridDataItem item in gvGeneratedCalls.Items)
+        {
+            
+            if (item.Selected)
+            {
+                if (!ValidateData(item, CLIs))
+                    return;
+                ListIds.Add(item.GetDataKeyValue("ID").ToString().ToInt());
+            }
+        }
+        if (ListIds.Count == 0)
+        {
+            ShowError("Specify the cases to update reporting status");
+            return;
+        }
+        GeneratedCall.UpdateStatus(ListIds, (int)Enums.Statuses.Clean);
+        gvGeneratedCalls.Rebind();
+        LoggedAction.AddLoggedAction((int)Enums.ActionTypes.ChangedcasesreportingstatusToBeReported, CurrentUser.User.ID);
+    }
+    protected void btnReportingStatus_MarkAsFraud_Click(object sender, EventArgs e)
+    {
+        List<int> ListIds = new List<int>();
+        IList<string> CLIs = new List<String>();
+
+        foreach (GridDataItem item in gvGeneratedCalls.Items)
+        {
+            if (item.Selected)
+            {
+                if (!ValidateData(item, CLIs))
+                    return;
+                ListIds.Add(item.GetDataKeyValue("ID").ToString().ToInt());
+            }
+        }
+        if (ListIds.Count == 0)
+        {
+            ShowError("Specify the cases to update reporting status");
+            return;
+        }
+        GeneratedCall.UpdateStatus(ListIds, (int)Enums.Statuses.Fraud);
+        gvGeneratedCalls.Rebind();
+        LoggedAction.AddLoggedAction((int)Enums.ActionTypes.ChangedcasesreportingstatusToBeReported, CurrentUser.User.ID);
+    }
+
+    private bool ValidateData(GridDataItem item, IList<string> CLIs)
+    {
+        if (item.GetDataKeyValue("MobileOperatorFeedbackName") != null)
+        {
+            ShowError("Please Uncheck Cases that has feedback from operator.");
+            return false;
+        }
+        if (item.GetDataKeyValue("CLIReported").ToString().ToBoolean())
+        {
+            ShowError("Please Uncheck Previously Reported Numbers");
+            return false;
+        }
+
+
+        if (CLIs.Contains(item.GetDataKeyValue("CLI").ToString()))
+        {
+            ShowError("Please Uncheck Repeated CLIs");
+            return false;
+        }
+        else
+        {
+            CLIs.Add(item.GetDataKeyValue("CLI").ToString());
+        }
+        return true;
+    }
     #endregion
 
 

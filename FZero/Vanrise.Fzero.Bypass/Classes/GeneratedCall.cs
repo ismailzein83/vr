@@ -1347,6 +1347,44 @@ namespace Vanrise.Fzero.Bypass
 
 
         }
+        public static bool UpdateStatus(List<int> ListIds, int statusID)
+        {
+
+            bool success = false;
+            try
+            {
+                using (Entities context = new Entities())
+                {
+
+                    foreach (int id in ListIds)
+                    {
+                        foreach (GeneratedCall generatedCall in context.GeneratedCalls.Where(x => x.ID == id).ToList())
+                        {
+                            generatedCall.StatusID = statusID;
+                            context.Entry(generatedCall).State = System.Data.EntityState.Modified;
+                        }
+                    }
+                    context.SaveChanges();
+                }
+                List<CasesLog> ListCasesLogs = new List<CasesLog>();
+                foreach (int ID in ListIds)
+                {
+                    CasesLog cl1 = new CasesLog();
+                    cl1.UpdatedOn = DateTime.Now;
+                    cl1.ChangeTypeID = (int)Enums.ChangeType.ChangedStatus;
+                    cl1.GeneratedCallID = ID;
+                    cl1.StatusID = statusID;
+                    ListCasesLogs.Add(cl1);
+                }
+                CasesLog.SaveBulk("CasesLogs", ListCasesLogs);
+                success = true;
+            }
+            catch (Exception err)
+            {
+                FileLogger.Write("Error in Vanrise.Fzero.Bypass.UserPermission.UpdateStatus(" + ListIds.Count.ToString() + ")", err);
+            }
+            return success;
+        }
 
         public static bool UpdateReportStatusSecurity(List<int> ListIds, int ReportingStatusID, int? ReportingStatusChangedBy)
         {

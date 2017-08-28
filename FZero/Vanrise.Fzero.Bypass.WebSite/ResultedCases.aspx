@@ -439,48 +439,45 @@
 
                                 <table style="width: 100%" runat="server" id="tblSummary">
                                     <tr>
-                                        <td style="text-align: right;">
-
-
-
-                                           
-
-                                            <asp:Label ID="Label1" runat="server" Text="Fraud Cases: "></asp:Label>
-
-                                        </td>
-                                        <td style="text-align: left;">
+                                        <td style="text-align: left" runat="server" id="fraudText">
+                                            <asp:Label ID="Label1" runat="server" Text="Fraud: "></asp:Label>
                                             <span runat="server" id="spanFraudCases"></span>
+                                        </td>
+                                        <td style="text-align: left;" runat="server" id="distinctFraudText">
+                                            <asp:Label ID="Label2" runat="server" Text="Distinct Fraud: "></asp:Label>
+                                             <span runat="server" id="spanDistinctFraudCases"></span>
 
                                         </td>
+                                        <td style="text-align: left" runat="server" id="suspectText">
+                                            <asp:Label ID="Label4" runat="server" Text="Suspect: "></asp:Label>
+                                             <span runat="server" id="spanSuspectCases"></span>
+                                        </td>
+                                     
                                         <td style="text-align: right;">
-                                            <asp:Label ID="Label2" runat="server" Text="Distinct Fraud Cases: "></asp:Label>
-
-                                        </td>
-                                        <td style="text-align: left;">
-                                            <span runat="server" id="spanDistinctFraudCases"></span>
-                                        </td>
-                                        <td style="text-align: right;">
-
-
-
-                                            <asp:LinkButton ID="btnReportingStatus_ToBeReported" runat="server" CssClass="btn btn-success" OnClick="btnReportingStatus_ToBeReported_Click">
+                                              <span  id="suspectButtons" runat="server" >
+                                           <asp:LinkButton  ID="btnReportingStatus_SetClean" runat="server" CssClass="btn btn-success" OnClick="btnReportingStatus_MarkAsClean_Click">
+                                                                 <i class="icon-ok icon-white"></i> Set Clean</asp:LinkButton>
+                                     
+                                            <asp:LinkButton  ID="btnReportingStatus_SetFraud" runat="server" CssClass="btn btn-danger" OnClick="btnReportingStatus_MarkAsFraud_Click">
+                                                                 <i class="icon-warning-sign icon-white"></i> Set Fraud</asp:LinkButton>
+                                                  </span>
+                                            <span  id="fraudButtons" runat="server" >
+                                                 <asp:LinkButton  ID="btnReportingStatus_ToBeReported" runat="server" CssClass="btn btn-success" OnClick="btnReportingStatus_ToBeReported_Click">
                                                                  <i class="icon-fullscreen icon-white"></i> to be Rep </asp:LinkButton>
-
-                                            <asp:LinkButton ID="btnReportingStatus_Ignored" runat="server" CssClass="btn btn-success" OnClick="btnReportingStatus_Ignored_Click">
-                                                                 <i class="icon-certificate icon-white"></i> Ignored </asp:LinkButton>
-
-                                            <asp:LinkButton ID="btnVerified" runat="server" CssClass="btn btn-success" OnClick="btnVerified_Click">
-                                                                 <i class="icon-fire icon-white"></i> Verified </asp:LinkButton>
-
-                                            <asp:LinkButton ID="btnReOpen" runat="server" CssClass="btn btn-success" OnClick="btnReOpen_Click">
-                                                                 <i class="icon-remove-circle icon-white"></i> Re-Open </asp:LinkButton>
-
-                                            <asp:LinkButton ID="btnToBeInvestigated" runat="server" CssClass="btn btn-success" OnClick="btnToBeInvestigated_Click">
-                                                                 <i class="icon-wrench icon-white"></i> to be Inv </asp:LinkButton>
-
-
-
-
+                                       
+                                                <asp:LinkButton  ID="btnReportingStatus_Ignored" runat="server" CssClass="btn btn-success" OnClick="btnReportingStatus_Ignored_Click">
+                                                                     <i class="icon-certificate icon-white"></i> Ignored </asp:LinkButton>
+                                        
+                                                <asp:LinkButton ID="btnVerified" runat="server" CssClass="btn btn-success" OnClick="btnVerified_Click">
+                                                                     <i class="icon-fire icon-white"></i> Verified </asp:LinkButton>
+                                        
+                                                <asp:LinkButton  ID="btnReOpen" runat="server" CssClass="btn btn-success" OnClick="btnReOpen_Click">
+                                                                     <i class="icon-remove-circle icon-white"></i> Re-Open </asp:LinkButton>
+                                       
+                                                <asp:LinkButton  ID="btnToBeInvestigated" runat="server" CssClass="btn btn-success" OnClick="btnToBeInvestigated_Click">
+                                                                     <i class="icon-wrench icon-white"></i> to be Inv </asp:LinkButton>
+                                            </span>
+                                           
                                         </td>
                                     </tr>
                                 </table>
