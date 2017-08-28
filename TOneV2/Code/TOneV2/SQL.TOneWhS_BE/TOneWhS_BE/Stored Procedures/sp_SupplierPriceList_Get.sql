@@ -11,7 +11,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    SELECT	[ID],[SupplierID],[CurrencyID],[FileID]
+    SELECT	[ID],[SupplierID],[CurrencyID],[FileID],[ProcessInstanceID],[SPLStateBackupID]
     from	[TOneWhS_BE].SupplierPriceList WITH(NOLOCK) 
     where	ID = @PriceListID 
 END

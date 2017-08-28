@@ -11,8 +11,11 @@
     [FileID]            BIGINT       NULL,
     [IsSent]            BIT          CONSTRAINT [DF_SalePriceList_IsSent] DEFAULT ((0)) NULL,
     [CreatedTime]       DATETIME     CONSTRAINT [cce5d9f5-0099-4b32-9375-2cb3bc44b990] DEFAULT (getdate()) NULL,
+    [UserID]            INT          NULL,
     CONSTRAINT [PK_SalePriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

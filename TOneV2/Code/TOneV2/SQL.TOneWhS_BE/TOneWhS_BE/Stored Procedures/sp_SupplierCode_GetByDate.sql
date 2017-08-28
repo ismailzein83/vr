@@ -15,6 +15,7 @@ BEGIN
 	SELECT  sc.[ID],sc.Code,sc.ZoneID,sc.BED,sc.EED,sc.CodeGroupID,sc.SourceID
 	FROM	[TOneWhS_BE].SupplierCode sc WITH(NOLOCK) 
 			LEFT JOIN [TOneWhS_BE].SupplierZone sz WITH(NOLOCK) ON sc.ZoneID=sz.ID 
-	Where	(sc.EED is null or sc.EED > @When_local)
+	Where	(sc.EED is null or sc.EED > @When_local and sc.BED != sc.EED)
 			and sz.SupplierID=@SupplierId_local
+			
 END

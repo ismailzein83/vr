@@ -486,5 +486,13 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistSnapShot.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetCodeIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_checkIfCodeGroupHasRelatedCodes.sql" />
+    <Build Include="TOneWhS_BE\Tables\FinancialAccount.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlan_InsertOrUpdateDraftTaskData.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlan_GetDraftTaskData.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_NumberOfRelatedSaleEntities.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_RoutingProduct_CheckIfRoutingProductHasRelatedSaleEntities.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_FinancialAccount_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_FinancialAccount_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_FinancialAccount_GetAll.sql" />
   </ItemGroup>
 </Project>

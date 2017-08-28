@@ -6,6 +6,7 @@
 CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierPriceList_SyncWithImportedData]
 	@PriceListId INT,
 	@ProcessInstanceId BIGINT,
+	@StateBackupId BIGINT = null,
 	@SupplierID int,
 	@CurrencyID INT,
 	@FileID BIGINT,
@@ -19,11 +20,11 @@ BEGIN
 	exec [TOneWhS_BE].[sp_SupplierPriceList_SyncWithImportedData_SubProcedure]
 	@PriceListId = @PriceListId,
 	@ProcessInstanceId = @ProcessInstanceId,
+	@StateBackupId=@StateBackupId,
 	@SupplierID = @SupplierID,
 	@CurrencyID = @CurrencyID,
 	@FileID = @FileID,
 	@EffectiveOn = @EffectiveOn
-	
 	END TRY
 	
 	Begin Catch

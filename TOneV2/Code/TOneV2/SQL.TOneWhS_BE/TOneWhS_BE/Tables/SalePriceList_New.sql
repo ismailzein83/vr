@@ -10,6 +10,9 @@
     [ProcessInstanceID] BIGINT       NULL,
     [FileID]            BIGINT       NULL,
     [CreatedTime]       DATETIME     CONSTRAINT [DF__CP_SalePr__Creat__22751F6C] DEFAULT (getdate()) NULL,
-    [IsSent]            BIT          CONSTRAINT [DF__CP_SalePr__IsSen__236943A5] DEFAULT ((0)) NOT NULL
+    [IsSent]            BIT          CONSTRAINT [DF__CP_SalePr__IsSen__236943A5] DEFAULT ((0)) NOT NULL,
+    [UserID]            INT          NULL
 );
+
+
 

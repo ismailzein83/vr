@@ -12,8 +12,11 @@
     [ClosedDefaultServiceEffectiveOn]       DATETIME       NULL,
     [NumberOfNewSaleZoneServices]           INT            NOT NULL,
     [NumberOfClosedSaleZoneServices]        INT            NOT NULL,
-    [NumberOfChangedCountries]              INT            NOT NULL
+    [NumberOfChangedCountries]              INT            NOT NULL,
+    [NumberOfNewCountries]                  INT            NULL
 );
+
+
 
 
 

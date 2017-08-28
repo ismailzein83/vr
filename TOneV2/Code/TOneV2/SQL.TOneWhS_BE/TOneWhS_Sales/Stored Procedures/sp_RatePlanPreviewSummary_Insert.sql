@@ -17,7 +17,8 @@ CREATE PROCEDURE [TOneWhS_Sales].[sp_RatePlanPreviewSummary_Insert]
 	@ClosedDefaultServiceEffectiveOn datetime = null,
 	@NumberOfNewSaleZoneServices int,
 	@NumberOfClosedSaleZoneServices int,
-	@NumberOfChangedCountries int
+	@NumberOfChangedCountries int,
+	@NumberOfNewCountries int
 AS
 BEGIN
 	insert into TOneWhS_Sales.RP_RatePlanPreview_Summary
@@ -35,7 +36,8 @@ BEGIN
 		ClosedDefaultServiceEffectiveOn,
 		NumberOfNewSaleZoneServices,
 		NumberOfClosedSaleZoneServices,
-		NumberOfChangedCountries
+		NumberOfChangedCountries,
+		NumberOfNewCountries
 	)
 	
 	values
@@ -53,6 +55,7 @@ BEGIN
 		@ClosedDefaultServiceEffectiveOn,
 		@NumberOfNewSaleZoneServices,
 		@NumberOfClosedSaleZoneServices,
-		@NumberOfChangedCountries
+		@NumberOfChangedCountries,
+		@NumberOfNewCountries
 	)
 END

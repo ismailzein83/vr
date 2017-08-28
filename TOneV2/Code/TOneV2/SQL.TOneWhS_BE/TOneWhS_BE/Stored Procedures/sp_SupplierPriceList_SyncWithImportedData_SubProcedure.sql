@@ -3,9 +3,10 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [TOneWhS_BE].[sp_SupplierPriceList_SyncWithImportedData_SubProcedure]
+CREATE PROCEDURE [TOneWhS_BE].[sp_SupplierPriceList_SyncWithImportedData_SubProcedure]
 	@PriceListId INT,
 	@ProcessInstanceId BIGINT,
+	@StateBackupId BIGINT = null,
 	@SupplierID int,
 	@CurrencyID INT,
 	@FileID BIGINT,
@@ -17,8 +18,8 @@ BEGIN
 	Begin Try
 	BEGIN TRAN
 
-    Insert into Tonewhs_be.SupplierPriceList (ID, SupplierID, CurrencyID, FileID, EffectiveOn)
-	values(@PriceListId, @SupplierID, @CurrencyID, @FileID, @EffectiveOn)
+    Insert into Tonewhs_be.SupplierPriceList (ID, ProcessInstanceID, SPLStateBackupID, SupplierID, CurrencyID, FileID, EffectiveOn)
+	values(@PriceListId, @ProcessInstanceId, @StateBackupId, @SupplierID, @CurrencyID, @FileID, @EffectiveOn)
 	
 	Insert into TOneWhS_BE.SupplierZone (ID, CountryID, Name, SupplierID, BED, EED)
 	Select sznew.ID, sznew.CountryID, sznew.Name, sznew.SupplierID, sznew.BED, sznew.EED 

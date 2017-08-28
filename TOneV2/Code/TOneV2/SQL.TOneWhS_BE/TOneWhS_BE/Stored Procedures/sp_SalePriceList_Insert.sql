@@ -11,13 +11,14 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_Insert]
       @CurrencyID int,
       @EffectiveOn datetime,
       @ProcessInstanceID bigint,
-      @FileID bigint
+      @FileID bigint,
+	  @UserID int
 AS
 BEGIN
 
 	BEGIN
-		 INSERT INTO [TOneWhS_BE].[SalePriceList]([ID], [OwnerType], [OwnerID], [CurrencyID], [EffectiveOn], [PriceListType], [ProcessInstanceID], [FileID])
-     VALUES (@ID, @OwnerType, @OwnerID, @CurrencyID, @EffectiveOn, @PriceListType, @ProcessInstanceID, @FileID)
+		 INSERT INTO [TOneWhS_BE].[SalePriceList]([ID], [OwnerType], [OwnerID], [CurrencyID], [EffectiveOn], [PriceListType], [ProcessInstanceID], [FileID],[UserID])
+     VALUES (@ID, @OwnerType, @OwnerID, @CurrencyID, @EffectiveOn, @PriceListType, @ProcessInstanceID, @FileID, @UserID)
 
 	END
 END

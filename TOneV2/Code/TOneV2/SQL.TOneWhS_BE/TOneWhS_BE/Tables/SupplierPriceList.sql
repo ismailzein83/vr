@@ -1,14 +1,18 @@
 ﻿CREATE TABLE [TOneWhS_BE].[SupplierPriceList] (
-    [ID]          INT          NOT NULL,
-    [SupplierID]  INT          NOT NULL,
-    [CurrencyID]  INT          NOT NULL,
-    [FileID]      BIGINT       NULL,
-    [EffectiveOn] DATETIME     NULL,
-    [CreatedTime] DATETIME     CONSTRAINT [DF_SupplierPriceList_CreatedDate] DEFAULT (getdate()) NULL,
-    [timestamp]   ROWVERSION   NULL,
-    [SourceID]    VARCHAR (50) NULL,
+    [ID]                INT          NOT NULL,
+    [SupplierID]        INT          NOT NULL,
+    [CurrencyID]        INT          NOT NULL,
+    [FileID]            BIGINT       NULL,
+    [EffectiveOn]       DATETIME     NULL,
+    [CreatedTime]       DATETIME     CONSTRAINT [DF_SupplierPriceList_CreatedDate] DEFAULT (getdate()) NULL,
+    [timestamp]         ROWVERSION   NULL,
+    [SourceID]          VARCHAR (50) NULL,
+    [ProcessInstanceID] BIGINT       NULL,
+    [SPLStateBackupID]  BIGINT       NULL,
     CONSTRAINT [PK_SupplierPriceList] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
