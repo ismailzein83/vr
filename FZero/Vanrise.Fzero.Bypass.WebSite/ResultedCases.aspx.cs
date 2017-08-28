@@ -650,7 +650,7 @@ public partial class ResultedCases : BasePage
             
             if (item.Selected)
             {
-                if (!ValidateData(item, CLIs))
+                if (!ValidateData(item))
                     return;
                 ListIds.Add(item.GetDataKeyValue("ID").ToString().ToInt());
             }
@@ -673,7 +673,7 @@ public partial class ResultedCases : BasePage
         {
             if (item.Selected)
             {
-                if (!ValidateData(item, CLIs))
+                if (!ValidateData(item))
                     return;
                 ListIds.Add(item.GetDataKeyValue("ID").ToString().ToInt());
             }
@@ -688,7 +688,7 @@ public partial class ResultedCases : BasePage
         LoggedAction.AddLoggedAction((int)Enums.ActionTypes.ChangedcasesreportingstatusToBeReported, CurrentUser.User.ID);
     }
 
-    private bool ValidateData(GridDataItem item, IList<string> CLIs)
+    private bool ValidateData(GridDataItem item)
     {
         if (item.GetDataKeyValue("MobileOperatorFeedbackName") != null)
         {
@@ -701,16 +701,6 @@ public partial class ResultedCases : BasePage
             return false;
         }
 
-
-        if (CLIs.Contains(item.GetDataKeyValue("CLI").ToString()))
-        {
-            ShowError("Please Uncheck Repeated CLIs");
-            return false;
-        }
-        else
-        {
-            CLIs.Add(item.GetDataKeyValue("CLI").ToString());
-        }
         return true;
     }
     #endregion
