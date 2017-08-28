@@ -17,10 +17,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'AddGenericLKUPItem'), genericLKUPItem);
         }
 
+        function HasAddGenericLKUPItemPermission() {
+
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddGenericLKUPItem']));
+        }
+
         function UpdateGenericLKUPItem(genericLKUPItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateGenericLKUPItem'), genericLKUPItem);
         }
 
+        function HasEditGenericLKUPItemPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateGenericLKUPItem']));
+        }
 
         function GetGenericLKUPItem(genericLKUPItemId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetGenericLKUPItem'), {
@@ -41,7 +49,9 @@
         return ({
             GetFilteredGenericLKUPItems: GetFilteredGenericLKUPItems,
             AddGenericLKUPItem: AddGenericLKUPItem,
+            HasAddGenericLKUPItemPermission:HasAddGenericLKUPItemPermission,
             UpdateGenericLKUPItem: UpdateGenericLKUPItem,
+            HasEditGenericLKUPItemPermission:HasEditGenericLKUPItemPermission,
             GetGenericLKUPItem: GetGenericLKUPItem,
             GetGenericLKUPDefinitionExtendedSetings: GetGenericLKUPDefinitionExtendedSetings,
             GetGenericLKUPItemsInfo: GetGenericLKUPItemsInfo

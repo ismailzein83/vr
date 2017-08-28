@@ -1,8 +1,8 @@
 ﻿(function (appControllers) {
 
     "use strict";
-
-    GenericLKUPManagementController.$inject = ['$scope', 'VR_Common_GenericLKUPService', 'VR_Common_GnericLKUPAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService'];
+    
+    GenericLKUPManagementController.$inject = ['$scope', 'VR_Common_GenericLKUPService','VR_Common_GnericLKUPAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService'];
 
     function GenericLKUPManagementController($scope, VR_Common_GenericLKUPService, VR_Common_GnericLKUPAPIService, VRNotificationService, UtilsService, VRUIUtilsService) {
 
@@ -30,6 +30,10 @@
                     gridAPI.onGenericLKUPAdded(addedGenericLKUP);
                 };
                 VR_Common_GenericLKUPService.addGenericLKUP(onGenericLKUPAdded);
+            };
+
+            $scope.hasAddSGenericLKUPItemPermission = function () {
+                return VR_Common_GnericLKUPAPIService.HasAddGenericLKUPItemPermission();
             };
 
             $scope.onGridReady = function (api) {

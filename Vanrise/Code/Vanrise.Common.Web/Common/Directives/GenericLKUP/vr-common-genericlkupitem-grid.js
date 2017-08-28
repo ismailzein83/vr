@@ -70,6 +70,7 @@ app.directive('vrCommonGenericlkupitemGrid', ['VR_Common_GnericLKUPAPIService', 
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editGenericLKUPItem,
+                    haspermission:hasEditGenericLKUPPermission
 
                 });
             }
@@ -82,6 +83,10 @@ app.directive('vrCommonGenericlkupitemGrid', ['VR_Common_GnericLKUPAPIService', 
                 };
 
                 VR_Common_GenericLKUPService.editGenericLKUP(genericLKUPItem.Entity.GenericLKUPItemId, onGenericLKUPUpdated);
+            }
+
+            function hasEditGenericLKUPPermission() {
+                return VR_Common_GnericLKUPAPIService.HasEditGenericLKUPItemPermission();
             }
         }
     }]);
