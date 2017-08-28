@@ -45,7 +45,12 @@
                 filter: filter
             });
         }
-        
+        function GetGenericLKUPItemHistoryDetailbyHistoryId(genericLKUPItemHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetGenericLKUPItemHistoryDetailbyHistoryId'), {
+                genericLKUPItemHistoryId: genericLKUPItemHistoryId
+            });
+        }
         return ({
             GetFilteredGenericLKUPItems: GetFilteredGenericLKUPItems,
             AddGenericLKUPItem: AddGenericLKUPItem,
@@ -54,7 +59,8 @@
             HasEditGenericLKUPItemPermission:HasEditGenericLKUPItemPermission,
             GetGenericLKUPItem: GetGenericLKUPItem,
             GetGenericLKUPDefinitionExtendedSetings: GetGenericLKUPDefinitionExtendedSetings,
-            GetGenericLKUPItemsInfo: GetGenericLKUPItemsInfo
+            GetGenericLKUPItemsInfo: GetGenericLKUPItemsInfo,
+            GetGenericLKUPItemHistoryDetailbyHistoryId: GetGenericLKUPItemHistoryDetailbyHistoryId
         });
     }
 

@@ -34,7 +34,16 @@ namespace Vanrise.Common.Business
                     return false;
                 return true;
             };
+            VRActionLogger.Current.LogGetFilteredAction(GenericLKUPItemLoggableEntity.Instance, input);
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<GenericLKUPItemDetail>(input, allGenericLKUPItems.ToBigResult(input, filterExpression, GenericLKUPItemDetailMapper));
+        }
+
+        public GenericLKUPItem GetGenericLKUPItemHistoryDetailbyHistoryId(int genericLKUPItemHistoryId)
+        {
+            VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
+            var genericLKUPItem = s_vrObjectTrackingManager.GetObjectDetailById(genericLKUPItemHistoryId);
+            return genericLKUPItem.CastWithValidate<GenericLKUPItem>("GenericLKUPItem : historyId ", genericLKUPItemHistoryId);
         }
         public Vanrise.Entities.InsertOperationOutput<GenericLKUPItemDetail> AddGenericLKUPItem(GenericLKUPItem genericLKUPItem)
         {
@@ -50,6 +59,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Insert(genericLKUPItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectAdded(GenericLKUPItemLoggableEntity.Instance, genericLKUPItem);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = GenericLKUPItemDetailMapper(genericLKUPItem);
             }
@@ -73,6 +83,7 @@ namespace Vanrise.Common.Business
             if (dataManager.Update(genericLKUPItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(GenericLKUPItemLoggableEntity.Instance, genericLKUPItem);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GenericLKUPItemDetailMapper(this.GetGenericLKUPItem(genericLKUPItem.GenericLKUPItemId));
             }
@@ -115,7 +126,49 @@ namespace Vanrise.Common.Business
                 return _dataManager.AreGenericLKUPItemUpdated(ref _updateHandle);
             }
         }
+        private class GenericLKUPItemLoggableEntity : VRLoggableEntityBase
+        {
+            public static GenericLKUPItemLoggableEntity Instance = new GenericLKUPItemLoggableEntity();
 
+            private GenericLKUPItemLoggableEntity()
+            {
+
+            }
+
+            static GenericLKUPManager s_genericLKUPManager = new GenericLKUPManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "VR_Common_GenericLKUPItem"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Common"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "GenericLKUPItem"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "VR_Common_GenericLKUPItem_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                GenericLKUPItem genericLKUPItem = context.Object.CastWithValidate<GenericLKUPItem>("context.Object");
+                return genericLKUPItem.GenericLKUPItemId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                GenericLKUPItem genericLKUPItemId = context.Object.CastWithValidate<GenericLKUPItem>("context.Object");
+                return s_genericLKUPManager.GetGenericLKUPItemName(genericLKUPItemId.GenericLKUPItemId);
+            }
+        }
 
 
         Dictionary<Guid, GenericLKUPItem> GetCachedGenericLKUPItems()

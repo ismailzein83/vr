@@ -7,7 +7,8 @@
     function GenericLKUPEditorController($scope, UtilsService, VR_Common_GnericLKUPAPIService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
-
+        var context;
+        var isViewHistoryMode;
         var genericLKUPItemId;
         var genericLKUPItemEntity;
 
@@ -30,8 +31,11 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 genericLKUPItemId = parameters.genericLKUPItemId;
+                context = parameters.context;
             }
             isEditMode = (genericLKUPItemId != undefined);
+            isViewHistoryMode = (context != undefined && context.historyId != undefined);
+
         }
         function defineScope() {
             $scope.scopeModel = {};
@@ -91,6 +95,18 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            else if (isViewHistoryMode) {
+                getGenericLKUPItemHistory().then(function () {
+                    loadAllControls().finally(function () {
+                        cityEntity = undefined;
+                    });
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    $scope.isLoading = false;
+                });
+
+            }
+
             else {
                 loadAllControls();
             }
@@ -98,6 +114,11 @@
 
         function getGenericLKUPItem() {
             return VR_Common_GnericLKUPAPIService.GetGenericLKUPItem(genericLKUPItemId).then(function (response) {
+                genericLKUPItemEntity = response;
+            });
+        }
+        function getGenericLKUPItemHistory() {            
+            return VR_Common_GnericLKUPAPIService.GetGenericLKUPItemHistoryDetailbyHistoryId(context.historyId).then(function (response) {
                 genericLKUPItemEntity = response;
             });
         }

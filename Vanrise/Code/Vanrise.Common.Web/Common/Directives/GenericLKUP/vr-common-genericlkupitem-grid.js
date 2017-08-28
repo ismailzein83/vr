@@ -30,12 +30,17 @@ app.directive('vrCommonGenericlkupitemGrid', ['VR_Common_GnericLKUPAPIService', 
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VR_Common_GenericLKUPService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VR_Common_GnericLKUPAPIService.GetFilteredGenericLKUPItems(dataRetrievalInput).then(function (response) {
                         if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
                         }
                         onResponseReady(response);
                     }).catch(function (error) {
@@ -79,6 +84,7 @@ app.directive('vrCommonGenericlkupitemGrid', ['VR_Common_GnericLKUPAPIService', 
             function editGenericLKUPItem(genericLKUPItem) {
 
                 var onGenericLKUPUpdated = function (updatedGenericLKUPItem) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedGenericLKUPItem);
                     gridAPI.itemUpdated(updatedGenericLKUPItem);
                 };
 

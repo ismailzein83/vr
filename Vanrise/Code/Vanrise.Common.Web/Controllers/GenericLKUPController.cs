@@ -21,6 +21,12 @@ namespace Vanrise.Common.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredGenericLKUPItems(input));
         }
+        [HttpGet]
+        [Route("GetGenericLKUPItemHistoryDetailbyHistoryId")]
+        public GenericLKUPItem GetGenericLKUPItemHistoryDetailbyHistoryId(int genericLKUPItemHistoryId)
+        {
+            return _manager.GetGenericLKUPItemHistoryDetailbyHistoryId(genericLKUPItemHistoryId);
+        }
 
         [HttpPost]
         [Route("AddGenericLKUPItem")]
