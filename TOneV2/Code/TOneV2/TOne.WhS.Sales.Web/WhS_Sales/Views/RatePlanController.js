@@ -303,7 +303,7 @@
                                 defineNewRatesInput.NewCountryIds.push(countryChanges.NewCountries[i].CountryId);
 
                             WhS_Sales_RatePlanAPIService.DefineNewRatesConvertedToCurrency(defineNewRatesInput).then(function () {
-                                defineNewRatesDeferred.resolve()
+                                defineNewRatesDeferred.resolve();
                             }).catch(function (error) {
                                 defineNewRatesDeferred.reject($scope, error);
                             });
@@ -728,7 +728,7 @@
                 getDraftCurrencyIdPromise.then(function (response) {
                     if (response != undefined) {
                         draftCurrencyId = response;
-                        currencySelectorAPI.selectedCurrency(response)
+                        currencySelectorAPI.selectedCurrency(response);
                     }
                     if (draftCurrencyId == undefined)
                         draftCurrencyId = defaultCustomerCurrencyId;

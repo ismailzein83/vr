@@ -14,10 +14,10 @@
 
             var settings = {};
             settings.onScopeReady = function (modalScope) {
-                modalScope.onFinancialAccountAdded = onFinancialAccountAdded
+                modalScope.onFinancialAccountAdded = onFinancialAccountAdded;
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/FinancialAccount/FinancialAccountEditor.html', parameters, settings);
-        };
+        }
 
         function editFinancialAccount(onFinancialAccountUpdated, financialAccountId) {
             var parameters = {
@@ -26,10 +26,10 @@
 
             var settings = {};
             settings.onScopeReady = function (modalScope) {
-                modalScope.onFinancialAccountUpdated = onFinancialAccountUpdated
+                modalScope.onFinancialAccountUpdated = onFinancialAccountUpdated;
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/FinancialAccount/FinancialAccountEditor.html', parameters, settings);
-        };
+        }
 
         function registerDrillDownToCarrierAccount() {
             var drillDownDefinition = {};
@@ -89,7 +89,7 @@
                 drillDownTab.title = "Financial Transactions";
                 drillDownTab.directive = "vr-accountbalance-billingtransaction-search";
 
-                drillDownTab.loadDirective =function (billingTransactionSearchAPI, financialAccountObj) {
+                drillDownTab.loadDirective = function (billingTransactionSearchAPI, financialAccountObj) {
                     financialAccountObj.billingTransactionSearchAPI = billingTransactionSearchAPI;
 
                     var financialAccountId = financialAccount.Entity.FinancialAccountId;
@@ -100,7 +100,7 @@
                         AccountsIds: [financialAccountId]
                     };
                     return billingTransactionSearchAPI.loadDirective(billingTransactionSearchPayload);
-                }
+                };
 
                 drillDownTabs.push(drillDownTab);
             }

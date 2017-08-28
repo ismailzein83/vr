@@ -25,7 +25,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.msg="Below countries having empty rates they will be filled by default rate"
+            $scope.scopeModel.msg = "Below countries have empty rates, they will be filled by default rate";
             $scope.scopeModel.onCountryWithDefaultRateGridReady = function (api) {
                 countryPreviewGridAPI = api;
                 countryGridReadyDeferred.resolve();
@@ -54,7 +54,7 @@
                 if (response == null || response.TaskData == null)
                     return;
                 ownerType = response.TaskData.OwnerType;
-                ownerId = response.TaskData.OwnerId
+                ownerId = response.TaskData.OwnerId;
             });
         }
         function loadAllControls() {

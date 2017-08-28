@@ -60,7 +60,7 @@ app.directive("whsBeFinancialaccountbedefinitionEditor", ["UtilsService", "VRNot
                 api.load = function (payload) {
                     var promises = [];
 
-                    var beDefinitionSettings
+                    var beDefinitionSettings;
 
                     if (payload != undefined && payload.businessEntityDefinitionSettings != undefined) {
                          beDefinitionSettings = payload.businessEntityDefinitionSettings;
