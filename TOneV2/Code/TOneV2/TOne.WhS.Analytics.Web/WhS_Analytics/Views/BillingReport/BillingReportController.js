@@ -1,7 +1,11 @@
 ﻿"use strict";
 BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'SecurityService', 'VRUIUtilsService', 'PeriodEnum', 'WhS_Analytics_BillingReportAPIService'];
 
-function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService,  SecurityService, VRUIUtilsService, PeriodEnum, BillingReportAPIService) {
+function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService, SecurityService, VRUIUtilsService, PeriodEnum, BillingReportAPIService) {
+
+
+    var typeSelectorAPI;
+    var typeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     var currencySelectorAPI;
     var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -60,10 +64,10 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         } else {
             var diffDate = new Date($scope.fromDate);
             diffDate.setMonth($scope.fromDate.getMonth() + 1);
-            numberOfDays = UtilsService.diffDays($scope.fromDate, diffDate) -1;
+            numberOfDays = UtilsService.diffDays($scope.fromDate, diffDate) - 1;
         }
         if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true && UtilsService.diffDays($scope.fromDate, $scope.toDate) < numberOfDays) {
-            return 'At least you have to choose ' +  numberOfDays +' days.';
+            return 'At least you have to choose ' + numberOfDays + ' days.';
         }
         return null;
 
@@ -86,14 +90,14 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         selectedSuppliers: [],
         selectedCurrency: null,
         zones: [],
-        isCost: false,
         service: false,
         commission: false,
         bySupplier: false,
         margin: 10,
         isExchange: false,
         top: 10,
-        pageBreak: false
+        pageBreak: false,
+        isCost: false
     };
 
 
@@ -105,16 +109,25 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             timeRangeDirectiveAPI = api;
             timeRangeReadyPromiseDeferred.resolve();
         };
-
+        $scope.onBillingReportTypeSelectReady = function (api) {
+            typeSelectorAPI = api;
+            typeReadyPromiseDeferred.resolve();
+        };
         $scope.onCurrencySelectReady = function (api) {
             currencySelectorAPI = api;
             currencyReadyPromiseDeferred.resolve();
         };
-
         $scope.onSaleZoneDirectiveReady = function (api) {
             saleZoneDirectiveAPI = api;
             saleZoneReadyPromiseDeferred.resolve();
         };
+
+        $scope.onTypeSelectionChanged = function () {
+            if (typeSelectorAPI.getSelectedIds() != undefined) {
+                $scope.params.isCost = typeSelectorAPI.getSelectedIds();
+                $scope.params.bySupplier = false;
+            }
+        }
 
         $scope.openReport = function () {
             var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
@@ -129,7 +142,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             paramsurl += "&toDate=" + UtilsService.dateToServerFormat($scope.toDate);
             paramsurl += "&groupByCustomer=" + $scope.params.groupByCustomer;
             paramsurl += "&groupByProfile=" + $scope.params.groupByProfile;
-            paramsurl += "&isCost=" + $scope.params.isCost;
+            paramsurl += "&isCost=" + typeSelectorAPI.getSelectedIds();
             paramsurl += "&service=" + $scope.params.service;
             paramsurl += "&commission=" + $scope.params.commission;
             paramsurl += "&bySupplier=" + $scope.params.bySupplier;
@@ -149,9 +162,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 return $scope.export();
         };
 
-        $scope.resetGroupBySupplier = function () {
-            $scope.params.bySupplier = false;
-        };
+
         $scope.resetReportParams = function () {
             $scope.singleCustomer = null;
             $scope.customers = [];
@@ -159,14 +170,14 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             $scope.selectedPeriod = $scope.periods[6];
 
             if ($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == true) {
-                setTimeout(function() {
+                setTimeout(function () {
                     $scope.selectedPeriod = $scope.periods[1];
                 });
 
             }
-            else {
-                $scope.selectedPeriod = $scope.periods[6];
-            }
+            //else {
+            //    $scope.selectedPeriod = $scope.periods[6];
+            //}
             $scope.params = {
                 groupByCustomer: false,
                 groupByProfile: false,
@@ -181,10 +192,13 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 margin: 10,
                 isExchange: false,
                 top: 10,
-                pageBreak: false
+                pageBreak: false,
+                isCost: false
             };
             if (saleZoneDirectiveAPI != undefined)
                 saleZoneDirectiveAPI.load();
+            if (typeSelectorAPI != undefined)
+                typeSelectorAPI.load();
         };
     }
 
@@ -194,7 +208,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadReportTypes, loadCurrencySelector, loadCustomers, loadSingleCustomers, loadSuppliers, loadTimeRangeSelector, loadSaleZones])
+        return UtilsService.waitMultipleAsyncOperations([loadReportTypes, loadBillingReportTypeSelector, loadCurrencySelector, loadCustomers, loadSingleCustomers, loadSuppliers, loadTimeRangeSelector, loadSaleZones])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -202,6 +216,17 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 $scope.isLoading = false;
             });
     }
+
+    function loadBillingReportTypeSelector() {
+        var typeLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        typeReadyPromiseDeferred.promise
+            .then(function () {
+                VRUIUtilsService.callDirectiveLoad(typeSelectorAPI, undefined, typeLoadPromiseDeferred);
+            });
+        return typeLoadPromiseDeferred.promise;
+    }
+
 
     function loadCurrencySelector() {
         var currencyLoadPromiseDeferred = UtilsService.createPromiseDeferred();
