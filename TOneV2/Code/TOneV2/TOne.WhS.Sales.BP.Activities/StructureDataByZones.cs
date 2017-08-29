@@ -67,6 +67,12 @@ namespace TOne.WhS.Sales.BP.Activities
             var endedCountryIds = new List<int>();
             if (countriesToChange != null)
                 endedCountryIds.AddRange(countriesToChange.MapRecords(x => x.CountryId));
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer)
+            {
+                IEnumerable<CustomerCountry2> soldEndedCountries = new CustomerCountryManager().GetEndedCustomerCountriesEffectiveAfter(ratePlanContext.OwnerId, ratePlanContext.EffectiveDate);
+                if (soldEndedCountries != null && soldEndedCountries.Count() > 0)
+                    endedCountryIds.AddRange(soldEndedCountries.MapRecords(x => x.CountryId));
+            }
 
             IEnumerable<RateToChange> ratesToChange = this.RatesToChange.Get(context);
             IEnumerable<RateToClose> ratesToClose = this.RatesToClose.Get(context);

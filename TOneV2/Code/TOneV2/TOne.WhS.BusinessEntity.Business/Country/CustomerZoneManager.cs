@@ -254,6 +254,15 @@ namespace TOne.WhS.BusinessEntity.Business
             return (customerCountries != null && customerCountries.Any(x => x.IsEffectiveOrFuture(date)));
         }
 
+        public IEnumerable<CustomerCountry2> GetEndedCustomerCountriesEffectiveAfter(int customerId, DateTime effectiveOn)
+        {
+            Dictionary<int, List<CustomerCountry2>> countriesByCustomerId = GetAllCachedCustomerCountries();
+            List<CustomerCountry2> customerCountries;
+            if (countriesByCustomerId.TryGetValue(customerId, out customerCountries))
+                return customerCountries.FindAllRecords(x => x.EED.HasValue && x.IsEffectiveOrFuture(effectiveOn));
+            return null;
+        }
+
         #endregion
 
         #region Private Classes
