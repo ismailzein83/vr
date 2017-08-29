@@ -52,8 +52,11 @@ app.directive("mediationGenericMediationprocess", ["VRUIUtilsService", "UtilsSer
                 };
 
                 api.load = function (payload) {
+                    var mediationDefinitionId;
+                    if (payload != undefined && payload.data != undefined)
+                        mediationDefinitionId = payload.data.MediationDefinitionId;
                     var promises = [];
-                    promises.push(loadMediationDefinitionSelector());
+                    promises.push(loadMediationDefinitionSelector(mediationDefinitionId));
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -61,10 +64,13 @@ app.directive("mediationGenericMediationprocess", ["VRUIUtilsService", "UtilsSer
                     ctrl.onReady(api);
             }
 
-            function loadMediationDefinitionSelector() {
+            function loadMediationDefinitionSelector(mediationDefinitionId) {
                 var mediationDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 mediationDefinitionSelectorAPIReadyDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(mediationDefinitionSelectorAPI, undefined, mediationDefinitionSelectorLoadDeferred);
+                    var payload = {
+                        selectedIds: mediationDefinitionId
+                    };
+                    VRUIUtilsService.callDirectiveLoad(mediationDefinitionSelectorAPI, payload, mediationDefinitionSelectorLoadDeferred);
                 });
 
                 return mediationDefinitionSelectorLoadDeferred.promise;
