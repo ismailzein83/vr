@@ -94,6 +94,8 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override ProcessRatesOutput DoWorkWithResult(ProcessRatesInput inputArgument, AsyncActivityHandle handle)
         {
+            RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
+
             IEnumerable<RateToChange> ratesToChange = inputArgument.RatesToChange;
             IEnumerable<RateToClose> ratesToClose = inputArgument.RatesToClose;
             IEnumerable<ExistingZone> existingZones = inputArgument.ExistingZones;
@@ -108,14 +110,14 @@ namespace TOne.WhS.Sales.BP.Activities
                 RatesToClose = ratesToClose,
                 ExistingZones = existingZones,
                 ExistingRates = existingRates,
-                ExplicitlyChangedExistingCustomerCountries = explicitlyChangedExistingCustomerCountries
+                ExplicitlyChangedExistingCustomerCountries = explicitlyChangedExistingCustomerCountries,
+                InheritedRatesByZoneId = ratePlanContext.InheritedRatesByZoneId
             };
 
             priceListRateManager.ProcessCountryRates(processRatesContext);
 
             if (DoRateChangesExist(processRatesContext))
             {
-                RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
                 ratePlanContext.SetProcessHasChangesToTrueWithLock();
             }
 

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -13,14 +15,20 @@ namespace TOne.WhS.Sales.Business
     {
         public void ProcessCountryRates(IProcessRatesContext context)
         {
-            ProcessRates(context.RatesToChange, context.RatesToClose, context.ExistingRates, context.ExistingZones, context.ExplicitlyChangedExistingCustomerCountries);
-            context.NewRates = context.RatesToChange.SelectMany(x => x.NewRates);
+            var newExplicitRates = new List<NewRate>();
+            ProcessRates(context.RatesToChange, context.RatesToClose, context.ExistingRates, context.ExistingZones, context.ExplicitlyChangedExistingCustomerCountries, context.InheritedRatesByZoneId, newExplicitRates);
+
+            List<NewRate> newRates = new List<NewRate>();
+            newRates.AddRange(context.RatesToChange.SelectMany(x => x.NewRates));
+            newRates.AddRange(newExplicitRates);
+
+            context.NewRates = newRates;
             context.ChangedRates = context.ExistingRates.Where(x => x.ChangedRate != null).Select(x => x.ChangedRate);
         }
 
         #region Private Methods
 
-        private void ProcessRates(IEnumerable<RateToChange> ratesToChange, IEnumerable<RateToClose> ratesToClose, IEnumerable<ExistingRate> existingRates, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries)
+        private void ProcessRates(IEnumerable<RateToChange> ratesToChange, IEnumerable<RateToClose> ratesToClose, IEnumerable<ExistingRate> existingRates, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries, InheritedRatesByZoneId inheritedRatesByZoneId, List<NewRate> newExplicitRates)
         {
             Dictionary<int, List<ExistingZone>> existingZonesByCountry;
             ExistingZonesByName existingZonesByName;
@@ -67,11 +75,27 @@ namespace TOne.WhS.Sales.Business
                     CloseExistingRates(rateToClose, matchExistingRates);
             }
 
-            foreach (ExistingCustomerCountry changedExistingCountry in explicitlyChangedExistingCustomerCountries)
+            if (explicitlyChangedExistingCustomerCountries.Count() > 0)
             {
-                List<ExistingZone> matchedExistingZones;
-                if (existingZonesByCountry.TryGetValue(changedExistingCountry.CustomerCountryEntity.CountryId, out matchedExistingZones))
-                    ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones);
+                Dictionary<int, CountryRange> endedCountryRangesByCountryId = GetEndedCountryRangesByCountryId(explicitlyChangedExistingCustomerCountries);
+
+                var countryManager = new Vanrise.Common.Business.CountryManager();
+
+                foreach (ExistingCustomerCountry changedExistingCountry in explicitlyChangedExistingCustomerCountries)
+                {
+                    int countryId = changedExistingCountry.CustomerCountryEntity.CountryId;
+                    string countryName = countryManager.GetCountryName(countryId);
+
+                    List<ExistingZone> matchedExistingZones = existingZonesByCountry.GetRecord(countryId);
+                    if (matchedExistingZones == null || matchedExistingZones.Count == 0)
+                        throw new DataIntegrityValidationException(string.Format("No existing zones for country '{0}' were found", countryName));
+
+                    CountryRange countryRange = endedCountryRangesByCountryId.GetRecord(countryId);
+                    if (countryRange == null)
+                        throw new DataIntegrityValidationException(string.Format("The BED of country '{0}' was not found", countryName));
+
+                    ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones, inheritedRatesByZoneId, countryRange, newExplicitRates);
+                }
             }
         }
 
@@ -224,7 +248,9 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
-        private void ProcessChangedExistingCountry(ExistingCustomerCountry changedExistingCountry, IEnumerable<ExistingZone> matchedExistingZones)
+        #region Process Changed Existing Countries
+
+        private void ProcessChangedExistingCountry(ExistingCustomerCountry changedExistingCountry, IEnumerable<ExistingZone> matchedExistingZones, InheritedRatesByZoneId inheritedRatesByZoneId, CountryRange countryRange, List<NewRate> newExplicitRates)
         {
             foreach (ExistingZone existingZone in matchedExistingZones)
             {
@@ -239,8 +265,130 @@ namespace TOne.WhS.Sales.Business
                         };
                     }
                 }
+                AddZoneExplicitRates(existingZone, inheritedRatesByZoneId.GetRecord(existingZone.ZoneId), countryRange, newExplicitRates);
             }
         }
+
+        private Dictionary<int, CountryRange> GetEndedCountryRangesByCountryId(IEnumerable<ExistingCustomerCountry> changedExistingCountries)
+        {
+            var endedCountryRangesByCountryId = new Dictionary<int, CountryRange>();
+
+            foreach (ExistingCustomerCountry endedCountry in changedExistingCountries)
+            {
+                int endedCountryId = endedCountry.CustomerCountryEntity.CountryId;
+
+                if (!endedCountryRangesByCountryId.ContainsKey(endedCountryId))
+                {
+                    endedCountryRangesByCountryId.Add(endedCountryId, new CountryRange()
+                    {
+                        BED = Utilities.Max(endedCountry.BED, DateTime.Today),
+                        EED = endedCountry.EED
+                    });
+                }
+            }
+
+            return endedCountryRangesByCountryId;
+        }
+
+        private void AddZoneExplicitRates(ExistingZone existingZone, ZoneInheritedRates zoneInheritedRates, CountryRange countryRange, List<NewRate> newExplicitRates)
+        {
+            if (zoneInheritedRates == null)
+                throw new DataIntegrityValidationException(string.Format("No inherited rates were found for zone '{0}'", existingZone.Name));
+
+            // Step 1: Prepare the inherited normal rates
+
+            if (zoneInheritedRates.NormalRates == null || zoneInheritedRates.NormalRates.Count == 0)
+                throw new DataIntegrityValidationException(string.Format("No inherited normal rates were found for zone '{0}'", existingZone.Name));
+
+            Action<SaleRate, Rate> mapSaleRate = (saleRate, rate) =>
+            {
+                rate.RateTypeId = saleRate.RateTypeId;
+                rate.RateValue = saleRate.Rate;
+                rate.ZoneId = saleRate.ZoneId;
+                rate.CurrencyId = saleRate.CurrencyId;
+                rate.PriceListId = saleRate.PriceListId;
+                rate.RateChange = saleRate.RateChange;
+                rate.Source = SalePriceListOwnerType.SellingProduct;
+            };
+            var countryRangeAsList = new List<CountryRange>() { countryRange };
+            IEnumerable<Rate> inheritedNormalRates = Utilities.GetQIntersectT<CountryRange, SaleRate, Rate>(countryRangeAsList, zoneInheritedRates.NormalRates, mapSaleRate);
+
+            if (inheritedNormalRates == null || inheritedNormalRates.Count() == 0)
+                throw new DataIntegrityValidationException(string.Format("No inherited normal rates were found for zone '{0}'", existingZone.Name));
+
+            // Step 2: Prepare the existing explicit normal rates
+
+            Func<ExistingRate, Rate> mapExistingRate = (existingRate) =>
+            {
+                return new Rate()
+                {
+                    RateTypeId = existingRate.RateEntity.RateTypeId,
+                    RateValue = existingRate.RateEntity.Rate,
+                    ZoneId = existingRate.RateEntity.ZoneId,
+                    CurrencyId = existingRate.RateEntity.CurrencyId,
+                    PriceListId = existingRate.RateEntity.PriceListId,
+                    BED = existingRate.BED,
+                    EED = existingRate.EED,
+                    RateChange = existingRate.RateEntity.RateChange,
+                    Source = SalePriceListOwnerType.Customer
+                };
+            };
+            IEnumerable<Rate> explicitNormalRates = existingZone.ExistingRates.MapRecords(mapExistingRate, x => !x.RateEntity.RateTypeId.HasValue);
+
+            // Step 3: Merge the inherited normal rates with the existing explicit normal ones
+
+            Action<Rate, Rate> mapRate = (rate, rRate) =>
+            {
+                rRate.RateTypeId = rate.RateTypeId;
+                rRate.RateValue = rate.RateValue;
+                rRate.ZoneId = rate.ZoneId;
+                rRate.CurrencyId = rate.CurrencyId;
+                rRate.PriceListId = rate.PriceListId;
+                rRate.RateChange = rate.RateChange;
+                rRate.Source = rate.Source;
+            };
+            IEnumerable<Rate> mergedNormalRates = Utilities.MergeUnionWithQForce(inheritedNormalRates.ToList(), explicitNormalRates.ToList(), mapRate, mapRate);
+
+            // Step 4: Create new explicit normal rates from the inherited normal ones that have resulted from the merge process
+
+            foreach (Rate mergedNormalRate in mergedNormalRates)
+            {
+                if (mergedNormalRate.Source == SalePriceListOwnerType.SellingProduct)
+                {
+                    newExplicitRates.Add(new NewRate()
+                    {
+                        RateId = 0,
+                        Zone = existingZone,
+                        RateTypeId = mergedNormalRate.RateTypeId,
+                        Rate = mergedNormalRate.RateValue,
+                        CurrencyId = mergedNormalRate.CurrencyId,
+                        BED = mergedNormalRate.BED,
+                        EED = mergedNormalRate.EED
+                    });
+                }
+            }
+        }
+
+        private class CountryRange : Vanrise.Entities.IDateEffectiveSettingsEditable
+        {
+            public DateTime BED { get; set; }
+            public DateTime? EED { get; set; }
+        }
+
+        private class Rate : Vanrise.Entities.IDateEffectiveSettings, Vanrise.Entities.IDateEffectiveSettingsEditable
+        {
+            public int? RateTypeId { get; set; }
+            public decimal RateValue { get; set; }
+            public long ZoneId { get; set; }
+            public int? CurrencyId { get; set; }
+            public int PriceListId { get; set; }
+            public DateTime BED { get; set; }
+            public DateTime? EED { get; set; }
+            public RateChangeType RateChange { get; set; }
+            public SalePriceListOwnerType Source { get; set; }
+        }
+
+        #endregion
 
         #endregion
     }
