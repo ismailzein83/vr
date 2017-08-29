@@ -10,12 +10,8 @@ namespace Retail.BusinessEntity.Entities
     {
         public Guid ChargeableEntityId { get; set; }
 
-        public Decimal Amount { get; set; }
+        public Decimal AmountPerDay { get; set; }
 
         public int CurrencyId { get; set; }
-
-        public DateTime ChargingStart { get; set; }
-
-        public DateTime ChargingEnd { get; set; }
     }
 }

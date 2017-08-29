@@ -42,6 +42,16 @@ namespace Retail.BusinessEntity.Data.SQL
             return GetItemsSP("[Retail_BE].[sp_AccountPackageRecurCharge_GetByAccount]", AccountPackageRecurChargeMapper, acountBEDefinitionId, accountId, includedFromDate, includedToDate);
         }
 
+        public List<AccountPackageRecurCharge> GetAccountRecurringCharges(List<AccountPackageRecurChargePeriod> accountPackageRecurChargePeriods)
+        {
+            DataTable dtAccountPackageRecurChargePeriod = BuildAccountPackageRecurChargePeriodTable(accountPackageRecurChargePeriods);
+            return GetItemsSPCmd("[Retail_BE].[sp_AccountPackageRecurCharge_GetByAccountPackages]", AccountPackageRecurChargeMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@AccountPackageRecurChargePeriods", SqlDbType.Structured);
+                dtPrm.Value = dtAccountPackageRecurChargePeriod;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
 
         public DateTime? GetMaximumChargeDay()
         {
@@ -59,9 +69,40 @@ namespace Retail.BusinessEntity.Data.SQL
             return GetItemsSP("[Retail_BE].[sp_AccountPackageRecurChargeKey_GetByChargeDay]", AccountPackageRecurChargeKeyMapper, chargeDay);
         }
 
+        public int GetChargeAmountPrecision()
+        {
+            return 10;
+        }
         #endregion
 
         #region Private Methods
+        private DataTable BuildAccountPackageRecurChargePeriodTable(List<AccountPackageRecurChargePeriod> accountPackageRecurChargePeriods)
+        {
+            DataTable dtAccountPackageRecurChargePeriod = GetAccountPackageRecurChargePeriodTable();
+            dtAccountPackageRecurChargePeriod.BeginLoadData();
+            if (accountPackageRecurChargePeriods != null)
+            {
+                foreach (var accountPackageRecurChargePeriod in accountPackageRecurChargePeriods)
+                {
+                    DataRow dr = dtAccountPackageRecurChargePeriod.NewRow();
+                    dr["AccountPackageId"] = accountPackageRecurChargePeriod.AccountPackageId;
+                    dr["FromDate"] = accountPackageRecurChargePeriod.FromDate;
+                    dr["ToDate"] = accountPackageRecurChargePeriod.ToDate;
+                    dtAccountPackageRecurChargePeriod.Rows.Add(dr);
+                }
+            }
+            dtAccountPackageRecurChargePeriod.EndLoadData();
+            return dtAccountPackageRecurChargePeriod;
+        }
+
+        private DataTable GetAccountPackageRecurChargePeriodTable()
+        {
+            DataTable dtAccountPackageRecurChargePeriod = new DataTable();
+            dtAccountPackageRecurChargePeriod.Columns.Add("AccountPackageId", typeof(int));
+            dtAccountPackageRecurChargePeriod.Columns.Add("FromDate", typeof(DateTime));
+            dtAccountPackageRecurChargePeriod.Columns.Add("ToDate", typeof(DateTime));
+            return dtAccountPackageRecurChargePeriod;
+        }
 
         DataTable BuildAccountPackageReccuringChargeTable(List<AccountPackageRecurCharge> accountPackageRecurChargeList)
         {

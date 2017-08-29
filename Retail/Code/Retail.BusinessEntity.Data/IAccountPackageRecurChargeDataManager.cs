@@ -13,5 +13,9 @@ namespace Retail.BusinessEntity.Data
         DateTime? GetMaximumChargeDay();
 
         List<AccountPackageRecurChargeKey> GetAccountRecurringChargeKeys(DateTime chargeDay);
+
+        List<AccountPackageRecurCharge> GetAccountRecurringCharges(List<AccountPackageRecurChargePeriod> accountPackageRecurChargePeriods);
+
+        int GetChargeAmountPrecision();
     }
 }

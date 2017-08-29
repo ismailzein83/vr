@@ -19,6 +19,7 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
 
         public Guid ChargeableEntityId { get; set; }
 
-        public AccountCondition AccountCondition { get; set; }
+        public List<Guid> PricingStatuses { get; set; }
+        //public AccountCondition AccountCondition { get; set; }
     }
 }

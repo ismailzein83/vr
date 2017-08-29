@@ -1,10 +1,9 @@
-﻿using Retail.BusinessEntity.Data;
-using Retail.BusinessEntity.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Vanrise.Common;
+using Retail.BusinessEntity.Data;
+using Retail.BusinessEntity.Entities;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -14,6 +13,27 @@ namespace Retail.BusinessEntity.Business
         {
             IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
             dataManager.Insert(accountDefinitionId, accountId, statusDefinitionId, previousStatusId);
+        }
+
+        public Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> GetAccountStatusHistoryListByAccountDefinition(HashSet<AccountDefinition> accountDefinitions)
+        {
+            IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
+            List<AccountStatusHistory> accountStatusHistoryList = dataManager.GetAccountStatusHistoryList(accountDefinitions);
+            if (accountStatusHistoryList == null)
+                return null;
+
+            Dictionary<AccountDefinition, List<AccountStatusHistory>> accountStatusHistoryListByAccountDefinition = new Dictionary<AccountDefinition, List<AccountStatusHistory>>();
+            foreach (AccountStatusHistory accountStatusHistory in accountStatusHistoryList)
+            {
+                AccountDefinition accountDefinition = new AccountDefinition()
+                {
+                    AccountBEDefinitionId = accountStatusHistory.AccountBEDefinitionId,
+                    AccountId = accountStatusHistory.AccountId
+                };
+                List<AccountStatusHistory> tempAccountStatusHistoryList = accountStatusHistoryListByAccountDefinition.GetOrCreateItem(accountDefinition, () => { return new List<AccountStatusHistory>(); });
+                tempAccountStatusHistoryList.Add(accountStatusHistory);
+            }
+            return accountStatusHistoryListByAccountDefinition.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(historyItem => historyItem.StatusChangedDate));
         }
     }
 }

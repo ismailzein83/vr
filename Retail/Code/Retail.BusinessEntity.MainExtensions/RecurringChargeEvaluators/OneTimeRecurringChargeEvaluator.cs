@@ -1,10 +1,8 @@
-﻿using Retail.BusinessEntity.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
+using Retail.BusinessEntity.Entities;
+using Retail.BusinessEntity.Business;
 
 namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
 {
@@ -23,17 +21,25 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
             int packageAssignmentDays = (int)(context.PackageAssignmentEnd.Value - context.PackageAssignmentStart).TotalDays;
             if (packageAssignmentDays == 0)
                 throw new NullReferenceException("packageAssignmentDays");
-            int daysToCharge = CalculateNbOfDaysToCharge(context);
-            Decimal priceToCharge = this.Price * daysToCharge / packageAssignmentDays;
+
+            int chargeAmountPrecision = new AccountPackageRecurChargeManager().GetChargeAmountPrecision();
+
+            Decimal priceToChargePerDay = decimal.Round(this.Price / packageAssignmentDays, chargeAmountPrecision);
+
+            Decimal effectivePriceToChargePerDay;
+
+            if (context.ChargeDay != context.PackageAssignmentEnd.Value.AddDays(-1))
+                effectivePriceToChargePerDay = context.ChargeDay >= context.PackageAssignmentStart && context.ChargeDay < context.PackageAssignmentEnd.Value ? priceToChargePerDay : 0;
+            else
+                effectivePriceToChargePerDay = Price - priceToChargePerDay * (packageAssignmentDays - 1);
+
             return new List<RecurringChargeEvaluatorOutput>
             {
                 new RecurringChargeEvaluatorOutput 
                 { 
                     ChargeableEntityId = oneTimeChargeDefinition.ChargeableEntityId,
-                    Amount = priceToCharge,
-                    CurrencyId = this.CurrencyId,
-                    ChargingStart = context.ChargingStart,
-                    ChargingEnd = context.ChargingEnd
+                    AmountPerDay = effectivePriceToChargePerDay,
+                    CurrencyId = this.CurrencyId
                 }
             };
         }

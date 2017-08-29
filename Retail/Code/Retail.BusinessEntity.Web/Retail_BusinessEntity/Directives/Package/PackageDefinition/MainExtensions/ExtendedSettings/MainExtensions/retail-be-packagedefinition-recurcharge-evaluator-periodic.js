@@ -28,6 +28,8 @@ app.directive('retailBePackagedefinitionRecurchargeEvaluatorPeriodic', ['UtilsSe
             var genericLKUPItemSelectorApi;
             var genericLKUPItemSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var statusDefinitionSelectorAPI;
+            var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -51,6 +53,11 @@ app.directive('retailBePackagedefinitionRecurchargeEvaluatorPeriodic', ['UtilsSe
                     }
                 };
 
+                $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
+                    statusDefinitionSelectorAPI = api;
+                    statusDefinitionSelectorReadyDeferred.resolve();
+                };
+
                 $scope.scopeModel.onGenericLKUPItemSelectorReady = function (api) {
                     genericLKUPItemSelectorApi = api;
                     genericLKUPItemSelectorPromiseDeferred.resolve();
@@ -67,12 +74,31 @@ app.directive('retailBePackagedefinitionRecurchargeEvaluatorPeriodic', ['UtilsSe
 
                 api.load = function (payload) {
                     var promises = [];
+                    var selectedPricingStatuses;
                     var evaluatorDefinitionSettings;
+
                     if (payload != undefined) {
                         evaluatorDefinitionSettings = payload.evaluatorDefinitionSettings;
-                        if (evaluatorDefinitionSettings != undefined)
+                        if (evaluatorDefinitionSettings != undefined) {
                             selectedGenericLKUPDefinitionSelectorDeferred = UtilsService.createPromiseDeferred();
+                            selectedPricingStatuses = evaluatorDefinitionSettings.PricingStatuses;
+                        }
                     }
+
+                    var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    statusDefinitionSelectorReadyDeferred.promise.then(function () {
+                        var statusDefinitionSelectorPayload = {
+                            selectedIds: selectedPricingStatuses != undefined ? selectedPricingStatuses : undefined,
+                            filter: {
+                                Filters: [{
+                                    $type: "Retail.BusinessEntity.Business.AccountBEStatusDefinitionFilter, Retail.BusinessEntity.Business",
+                                    AccountBEDefinitionId: '9a427357-cf55-4f33-99f7-745206dee7cd'
+                                }]
+                            }
+                        };
+                        VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
+                    });
+                    promises.push(statusDefinitionSelectorLoadDeferred.promise);
 
                     promises.push(loadGenericLKUPDefinitionSelector());
                     function loadGenericLKUPDefinitionSelector() {
@@ -116,7 +142,8 @@ app.directive('retailBePackagedefinitionRecurchargeEvaluatorPeriodic', ['UtilsSe
                     return {
                         $type: 'Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators.PeriodicRecurringChargeEvaluatorDefinitionSettings, Retail.BusinessEntity.MainExtensions',
                         ChargeableEntityBEDefinitionId: genericLKUPDefinitionSelectorApi.getSelectedIds(),
-                        ChargeableEntityId: genericLKUPItemSelectorApi.getSelectedIds()
+                        ChargeableEntityId: genericLKUPItemSelectorApi.getSelectedIds(),
+                        PricingStatuses: statusDefinitionSelectorAPI.getSelectedIds()
                     };
                 };
 

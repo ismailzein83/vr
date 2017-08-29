@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.Entities
 {
+    public struct AccountDefinition
+    {
+        public Guid AccountBEDefinitionId { get; set; }
+
+        public long AccountId { get; set; }
+    }
+
     public class BaseAccount
     {
         public long AccountId { get; set; }

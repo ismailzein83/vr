@@ -20,6 +20,23 @@ namespace Retail.BusinessEntity.Business
             return dataManager.GetAccountRecurringCharges(acountBEDefinitionId, accountId, includedFromDate, includedToDate);
         }
 
+        public Dictionary<int, List<AccountPackageRecurCharge>> GetAccountRecurringChargesByAccountPackage(List<AccountPackageRecurChargePeriod> accountPackageRecurChargePeriods)
+        {
+            IAccountPackageRecurChargeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageRecurChargeDataManager>();
+            List<AccountPackageRecurCharge> accountPackageRecurCharges = dataManager.GetAccountRecurringCharges(accountPackageRecurChargePeriods);
+            if (accountPackageRecurCharges == null)
+                return null;
+
+            Dictionary<int, List<AccountPackageRecurCharge>> accountRecurringChargesByAccountPackage = new Dictionary<int, List<AccountPackageRecurCharge>>();
+            foreach (AccountPackageRecurCharge accountPackageRecurCharge in accountPackageRecurCharges)
+            {
+               List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountRecurringChargesByAccountPackage.GetOrCreateItem(accountPackageRecurCharge.AccountPackageID, () => { return new List<AccountPackageRecurCharge>(); });
+               accountPackageRecurChargeList.Add(accountPackageRecurCharge);
+            }
+
+            return accountRecurringChargesByAccountPackage;
+        }
+
         public DateTime? GetMaximumChargeDay()
         {
             IAccountPackageRecurChargeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageRecurChargeDataManager>();
@@ -29,12 +46,18 @@ namespace Retail.BusinessEntity.Business
         public HashSet<AccountPackageRecurChargeKey> GetAccountRecurringChargeKeys(DateTime chargeDay)
         {
             IAccountPackageRecurChargeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageRecurChargeDataManager>();
-            List<AccountPackageRecurChargeKey> accountPackageRecurChargeKeyList= dataManager.GetAccountRecurringChargeKeys(chargeDay);
+            List<AccountPackageRecurChargeKey> accountPackageRecurChargeKeyList = dataManager.GetAccountRecurringChargeKeys(chargeDay);
 
             if (accountPackageRecurChargeKeyList == null)
                 return null;
 
             return accountPackageRecurChargeKeyList.ToHashSet();
+        }
+
+        public int GetChargeAmountPrecision()
+        {
+            IAccountPackageRecurChargeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageRecurChargeDataManager>();
+            return dataManager.GetChargeAmountPrecision();
         }
     }
 }

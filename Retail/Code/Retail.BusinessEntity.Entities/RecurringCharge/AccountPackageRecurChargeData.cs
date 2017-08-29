@@ -1,4 +1,5 @@
 ﻿using System;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -9,5 +10,14 @@ namespace Retail.BusinessEntity.Entities
         public DateTime BeginChargePeriod { get; set; }
 
         public DateTime EndChargePeriod { get; set; }
+    }
+
+    public class AccountPackageRecurChargePeriod
+    {
+        public int AccountPackageId { get; set; }
+
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
     }
 }

@@ -4,20 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
     public abstract class RecurringChargeEvaluatorSettings
     {
-        protected int CalculateNbOfDaysToCharge(IRecurringChargeEvaluatorContext context)
-        {
-            DateTime chargingStart = Utilities.Max(context.PackageAssignmentStart, context.ChargingPeriodStart);
-            DateTime chargingEnd = Utilities.Min(context.PackageAssignmentEnd.HasValue ? context.PackageAssignmentEnd.Value : DateTime.MaxValue, context.ChargingPeriodEnd);
-            context.ChargingStart = chargingStart;
-            context.ChargingEnd = chargingEnd;
-            return (int)(chargingEnd - chargingStart).TotalDays;
-        }
         public abstract void ValidatePackageAssignment(IValidateAssignmentRecurringChargeEvaluatorContext context);
+
+        public virtual void Initialize(IInitializeRecurringChargeContext context) { }
+        
         public abstract List<RecurringChargeEvaluatorOutput> Evaluate(IRecurringChargeEvaluatorContext context);
     }
 
@@ -35,10 +31,32 @@ namespace Retail.BusinessEntity.Entities
 
         DateTime? PackageAssignmentEnd { get; }
 
-        DateTime ChargingStart { get; set; }
+        DateTime ChargeDay { get; }
 
-        DateTime ChargingEnd { get; set; }
+        int AccountPackageId { get; }
+
+        Object InitializeData { get; }
+
+        Func<int, DateTimeRange, List<AccountPackageRecurCharge>> GetAccountPackageRecurCharges { get; }
+
+        Guid AccountStatusId { get; }
     }
+
+    public interface IInitializeRecurringChargeContext
+    {
+        DateTime ChargingPeriodStart { get; }
+
+        DateTime ChargingPeriodEnd { get; }
+
+        DateTime PackageAssignmentStart { get; }
+
+        DateTime? PackageAssignmentEnd { get; }
+
+        object InitializeData { set; }
+
+        DateTimeRange RecurringChargePeriod { set; }
+    }
+
     public interface IValidateAssignmentRecurringChargeEvaluatorContext
     {
         Account Account { get; }
