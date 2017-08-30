@@ -654,6 +654,7 @@
     <Build Include="genericdata\User Defined Types\BEParentChildRelationType.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceAccount_GetByPartnerIds.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_CheckIfHasInvoices.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_InsertOrUpdate.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
