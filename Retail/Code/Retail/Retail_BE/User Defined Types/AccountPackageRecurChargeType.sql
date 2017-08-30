@@ -1,5 +1,5 @@
 ﻿CREATE TYPE [Retail_BE].[AccountPackageRecurChargeType] AS TABLE (
-    [AccountPackageID]      INT              NOT NULL,
+    [AccountPackageID]      BIGINT           NOT NULL,
     [ChargeableEntityID]    UNIQUEIDENTIFIER NOT NULL,
     [BalanceAccountTypeID]  UNIQUEIDENTIFIER NULL,
     [BalanceAccountID]      VARCHAR (50)     NULL,
@@ -9,6 +9,8 @@
     [TransactionTypeID]     UNIQUEIDENTIFIER NULL,
     [AccountID]             BIGINT           NOT NULL,
     [AccountBEDefinitionId] UNIQUEIDENTIFIER NOT NULL);
+
+
 
 
 

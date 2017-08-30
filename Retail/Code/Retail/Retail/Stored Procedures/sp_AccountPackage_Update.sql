@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [Retail].[sp_AccountPackage_Update]
-@AccountPackgeID INT,
+@AccountPackgeID BIGINT,
 	@BED DATETIME,
 	@EED DATETIME
 AS

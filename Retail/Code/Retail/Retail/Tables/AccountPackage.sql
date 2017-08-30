@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Retail].[AccountPackage] (
-    [ID]                    INT              IDENTITY (1, 1) NOT NULL,
+    [ID]                    BIGINT           IDENTITY (1, 1) NOT NULL,
     [AccountID]             BIGINT           NOT NULL,
     [PackageID]             INT              NOT NULL,
     [AccountBEDefinitionId] UNIQUEIDENTIFIER NOT NULL,
@@ -11,6 +11,8 @@
     CONSTRAINT [FK_AccountPackage_Account] FOREIGN KEY ([AccountID]) REFERENCES [Retail].[Account] ([ID]),
     CONSTRAINT [FK_AccountPackage_Package] FOREIGN KEY ([PackageID]) REFERENCES [Retail].[Package] ([ID])
 );
+
+
 
 
 

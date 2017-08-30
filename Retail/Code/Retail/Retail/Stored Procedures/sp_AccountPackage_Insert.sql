@@ -9,7 +9,7 @@ CREATE PROCEDURE [Retail].[sp_AccountPackage_Insert]
 	@AccountBEDefinitionId uniqueidentifier,
 	@BED DATETIME,
 	@EED DATETIME,
-	@ID INT OUT
+	@ID BIGINT OUT
 AS
 BEGIN
 	
