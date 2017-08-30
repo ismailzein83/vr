@@ -2,12 +2,16 @@
 
     "use strict";
 
-    supplierPricelistController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','VRValidationService'];
+    supplierPricelistController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService'];
 
     function supplierPricelistController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService) {
 
         var supplierDirectiveApi;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var userSelectorApi;
+        var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var gridAPI;
         var filter = {};
         defineScope();
@@ -25,19 +29,25 @@
                     setFilterObject();
                     return gridAPI.loadGrid(filter);
                 }
-
             };
+
             $scope.onSupplierReady = function (api) {
                 supplierDirectiveApi = api;
                 supplierReadyPromiseDeferred.resolve();
             };
+
+            $scope.onUserSelectorReady = function (api) {
+                userSelectorApi = api;
+                userSelectorReadyDeferred.resolve();
+            };
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 setFilterObject();
                 api.loadGrid(filter);
             };
 
-          
+
         }
 
         function load() {
@@ -45,7 +55,7 @@
             loadAllControls();
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadSupplierSelector, loadUserSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -63,11 +73,23 @@
                 });
             return supplierLoadPromiseDeferred.promise;
         }
+
+        function loadUserSelector() {
+            var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            userSelectorReadyDeferred.promise.then(function () {
+                var userSelectorPayload = {
+            };
+                VRUIUtilsService.callDirectiveLoad(userSelectorApi, userSelectorPayload, userSelectorLoadDeferred);
+            });
+            return userSelectorLoadDeferred.promise;
+        }
+
         function setFilterObject() {
             filter = {
                 SupplierIds: supplierDirectiveApi.getSelectedIds(),
                 FromDate: $scope.fromDate,
-                ToDate: $scope.toDate
+                ToDate: $scope.toDate,
+                UserIds: userSelectorApi.getSelectedIds()
             };
         }
     }

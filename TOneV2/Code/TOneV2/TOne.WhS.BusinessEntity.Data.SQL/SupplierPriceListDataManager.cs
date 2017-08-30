@@ -51,7 +51,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 FileId = GetReaderValue<long?>(reader, "FileID"),
                 CreateTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 ProcessInstanceId = GetReaderValue<long?>(reader, "ProcessInstanceID"),
-                SPLStateBackupId = GetReaderValue<long?>(reader, "SPLStateBackupID")
+                SPLStateBackupId = GetReaderValue<long?>(reader, "SPLStateBackupID"),
+                UserId = GetReaderValue<int>(reader, "UserID")
             };
             return supplierPriceList;
         }
@@ -64,14 +65,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierPriceList] WITH (TABLOCK)
-                                            SELECT [ID] ,[SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierPriceList]
+                                            SELECT [ID] ,[SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID],[UserID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierPriceList]
                                             WITH (NOLOCK) Where SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
         {
-            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierPriceList] ([ID], [SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID])
-                                            SELECT [ID], [SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierPriceList]
+            return String.Format(@"INSERT INTO [TOneWhS_BE].[SupplierPriceList] ([ID], [SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID],[UserID])
+                                            SELECT [ID], [SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID],[UserID] FROM [{0}].[TOneWhS_BE_Bkup].[SupplierPriceList]
                                             WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }
 

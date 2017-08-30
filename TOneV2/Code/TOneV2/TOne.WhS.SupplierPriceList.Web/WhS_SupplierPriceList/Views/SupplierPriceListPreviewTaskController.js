@@ -2,10 +2,11 @@
 
     "use strict";
 
-    supplierPriceListPreviewController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    supplierPriceListPreviewTaskController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'WhS_SupPL_PreviewChangeTypeEnum', 'WhS_SupPL_PreviewGroupedBy', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function supplierPriceListPreviewController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function supplierPriceListPreviewTaskController($scope, BusinessProcess_BPTaskAPIService, WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
+        var bpTaskId;
         var processInstanceId;
 
         var SupplierPriceListPreviewSectionApi;
@@ -20,13 +21,21 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters !== undefined && parameters !== null) {
-                processInstanceId = parameters.processInstanceId;
+                bpTaskId = parameters.TaskId;
             }
         }
 
         function defineScope() {
 
             $scope.scopeModal = {};
+
+            $scope.scopeModal.continueTask = function () {
+                return executeTask(true);
+            };
+
+            $scope.scopeModal.stopTask = function () {
+                return executeTask(false);
+            };
 
             $scope.onSupplierPriceListPreviewSectionReady = function (api) {
                 SupplierPriceListPreviewSectionApi = api;
@@ -35,12 +44,35 @@
 
         }
 
+        function executeTask(taskAction) {
+            var executionInformation = {
+                $type: "TOne.WhS.SupplierPriceList.BP.Arguments.Tasks.PreviewTaskExecutionInformation, TOne.WhS.SupplierPriceList.BP.Arguments",
+                Decision: taskAction
+            };
+
+            var input = {
+                $type: "Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput, Vanrise.BusinessProcess.Entities",
+                TaskId: bpTaskId,
+                ExecutionInformation: executionInformation
+            };
+
+            return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
+                $scope.modalContext.closeModal();
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error);
+            });
+        }
+
         function load() {
             $scope.scopeModal.isLoading = true;
-            loadAllControls();
+            BusinessProcess_BPTaskAPIService.GetTask(bpTaskId).then(function (response) {
+                processInstanceId = response.ProcessInstanceId;
+                loadAllControls();
+            });
         }
 
         function loadAllControls() {
+
             return UtilsService.waitMultipleAsyncOperations([loadSupplierPriceListPreviewSection])
                           .catch(function (error) {
                               VRNotificationService.notifyException(error);
@@ -48,6 +80,7 @@
                           .finally(function () {
                               $scope.scopeModal.isLoading = false;
                           });
+
         }
 
         function loadSupplierPriceListPreviewSection() {
@@ -57,9 +90,10 @@
                     processInstanceId: processInstanceId,
                 };
                 VRUIUtilsService.callDirectiveLoad(SupplierPriceListPreviewSectionApi, SupplierPriceListPreviewSectionPayload, loadSupplierPriceListPreviewSectionPromiseDeferred);
+
             });
             return loadSupplierPriceListPreviewSectionPromiseDeferred.promise;
         }
     }
-    appControllers.controller('WhS_SupPL_SupplierPriceListPreviewController', supplierPriceListPreviewController);
+    appControllers.controller('WhS_SupPL_SupplierPriceListPreviewTaskController', supplierPriceListPreviewTaskController);
 })(appControllers);

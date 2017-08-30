@@ -63,29 +63,47 @@ function (UtilsService, VRNotificationService, FileAPIService, WhS_BE_SupplierPr
 
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Download",
-                clicked: downloadPriceList
-            }];
-            var newMenuActions = WhS_BE_SupplierPriceListService.getAdditionalActionForSupplierPricelistGrid();
-            if (newMenuActions != null && newMenuActions != undefined) {
-                angular.forEach(newMenuActions, function (newMenuAction) {
-                        var tempMenuAction = {};
-                        tempMenuAction.name = newMenuAction.name;
-                        tempMenuAction.clicked = newMenuAction.clicked;
-                        $scope.gridMenuActions.push(tempMenuAction);
-                });
+            $scope.gridMenuActions = function (dataItem) {
+                var menuActions = [];
+                var processInstanceId = dataItem.Entity.ProcessInstanceId;
+
+                if (dataItem.Entity.FileId !== 0 && dataItem.Entity.FileId!=null) {
+                    var downloadPricelistAction = {
+                        name: "Download",
+                        clicked: downloadPriceList
+                    };
+                    menuActions.push(downloadPricelistAction);
+                }
+
+                if (processInstanceId != null) {
+                    var additionalMenuActions = WhS_BE_SupplierPriceListService.getAdditionalActionOfSupplierPricelistGrid();
+                    for (var i = 0, length = additionalMenuActions.length; i < length; i++) {
+                        var additionalMenuAction = additionalMenuActions[i];
+                        var menuAction = {
+                                name: additionalMenuAction.name,
+                                clicked: function (dataItem) {
+                                var payload = {
+                                        processInstanceId: dataItem.Entity.ProcessInstanceId
+                                };
+                                additionalMenuAction.clicked(payload);
+                        }
+                    };
+                        menuActions.push(menuAction);
+                }
             }
-        }
+
+                return menuActions;
+        };
+    }
 
         function downloadPriceList(priceListObj) {
             FileAPIService.DownloadFile(priceListObj.Entity.FileId)
                     .then(function (response) {
                         UtilsService.downloadFile(response.data, response.headers);
-                    });
-        }
-
+        });
     }
+
+}
 
     return directiveDefinitionObject;
 

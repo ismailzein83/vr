@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("whsSplSupplierpricelistpreviewDirective", ["WhS_SupPL_PreviewChangeTypeEnum", "WhS_SupPL_PreviewGroupedBy", "UtilsService", "VRUIUtilsService", "VRNotificationService",
+app.directive("whsSplSupplierpricelistpreviewSection", ["WhS_SupPL_PreviewChangeTypeEnum", "WhS_SupPL_PreviewGroupedBy", "UtilsService", "VRUIUtilsService", "VRNotificationService",
 function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsService, VRUIUtilsService, VRNotificationService) {
 
     var directiveDefinitionObject = {
@@ -10,17 +10,17 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var supplierPriceListPreviewDirctive = new SupplierPriceListPreviewDirctive($scope, ctrl, $attrs);
-            supplierPriceListPreviewDirctive.initializeController();
+            var supplierPriceListPreviewSection = new SupplierPriceListPreviewSection($scope, ctrl, $attrs);
+            supplierPriceListPreviewSection.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
         compile: function (element, attrs) {
         },
-        templateUrl: "/Client/Modules/WhS_SupplierPriceList/Directives/SupplierPriceListPreviewDirective/SupplierPriceListPreviewDirectiveTemplate.html"
+        templateUrl: "/Client/Modules/WhS_SupplierPriceList/Directives/SupplierPriceListPreviewSection/Templates/SupplierPriceListPreviewSectionTemplate.html"
     };
 
-    function SupplierPriceListPreviewDirctive($scope, ctrl, $attrs) {
+    function SupplierPriceListPreviewSection($scope, ctrl, $attrs) {
 
         var processInstanceId;
         var changeType = true;

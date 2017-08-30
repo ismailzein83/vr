@@ -15,9 +15,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int CurrencyId { get; set; }
 
         public DateTime EffectiveOn { get; set; }
-        
+
         public long? FileId { get; set; }
-        
+
         public DateTime CreateTime { get; set; }
 
         public string SourceId { get; set; }
@@ -25,5 +25,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long? ProcessInstanceId { get; set; }
 
         public long? SPLStateBackupId { get; set; }
+
+        public int UserId { get; set; }
     }
 }

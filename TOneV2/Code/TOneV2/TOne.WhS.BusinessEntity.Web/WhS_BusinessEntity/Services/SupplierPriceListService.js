@@ -9,14 +9,14 @@
 
         return ({
             registerAdditionalActionToSupplierPricelistGrid: registerAdditionalActionToSupplierPricelistGrid,
-            getAdditionalActionForSupplierPricelistGrid: getAdditionalActionForSupplierPricelistGrid
+            getAdditionalActionOfSupplierPricelistGrid: getAdditionalActionOfSupplierPricelistGrid
         });
 
-        function registerAdditionalActionToSupplierPricelistGrid(newMenuAction) {
-            supplierPricelistGridAdditionalActions.push(newMenuAction);
+        function registerAdditionalActionToSupplierPricelistGrid(additionalMenuAction) {
+            supplierPricelistGridAdditionalActions.push(additionalMenuAction);
         }
 
-        function getAdditionalActionForSupplierPricelistGrid() {
+        function getAdditionalActionOfSupplierPricelistGrid() {
             return supplierPricelistGridAdditionalActions;
         }
 

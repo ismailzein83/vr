@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SupplierPriceListManager
@@ -27,7 +28,8 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<SupplierPriceList, bool> filterExpression = (item) =>
                 (input.Query.SupplierIds == null || input.Query.SupplierIds.Contains(item.SupplierId))
                 && (input.Query.FromDate == null || item.CreateTime >= input.Query.FromDate)
-                && (!input.Query.ToDate.HasValue || item.CreateTime <= input.Query.ToDate);
+                && (!input.Query.ToDate.HasValue || item.CreateTime <= input.Query.ToDate)
+                && (input.Query.UserIds==null || input.Query.UserIds.Contains(item.UserId));
 
             ResultProcessingHandler<SupplierPriceListDetail> handler = new ResultProcessingHandler<SupplierPriceListDetail>()
             {
@@ -137,7 +139,8 @@ namespace TOne.WhS.BusinessEntity.Business
             supplierPriceListDetail.Currency = currency != null ? currency.Symbol : null;
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             supplierPriceListDetail.SupplierName = carrierAccountManager.GetCarrierAccountName(priceList.SupplierId);
-
+            UserManager userManager = new UserManager();
+            supplierPriceListDetail.UserName = userManager.GetUserName(priceList.UserId);
             return supplierPriceListDetail;
         }
 

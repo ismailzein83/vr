@@ -1,0 +1,13 @@
+﻿<div vr-modalcontent ng-controller="WhS_SupPL_SupplierPriceListPreviewTaskController" vr-loader="scopeModal.isLoading" size="xlarge">
+    <vr-modalbody>
+        <whs-spl-supplierpricelistpreview-section on-ready="onSupplierPriceListPreviewSectionReady"></whs-spl-supplierpricelistpreview-section>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Continue" data-onclick="scopeModal.continueTask" formname="formSellNewZones"></vr-button>
+                <vr-button type="Stop" data-onclick="scopeModal.stopTask"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -7,8 +7,8 @@
     function SupplierPriceListService(VRModalService, WhS_BE_SupplierPriceListService) {
 
         return ({
+            previewSupplierPriceListTask: previewSupplierPriceListTask,
             previewSupplierPriceList: previewSupplierPriceList,
-            previewSupplierPriceListForGrid: previewSupplierPriceListForGrid,
             registerPreviewActionToSupplierPricelistGrid: registerPreviewActionToSupplierPricelistGrid
         });
 
@@ -16,13 +16,13 @@
             var previewAction = {
                 name: "Preview",
                 clicked: function (payload) {
-                    previewSupplierPriceListForGrid(payload.Entity.ProcessInstanceId);
+                    previewSupplierPriceList(payload.processInstanceId);
                 }
             };
             WhS_BE_SupplierPriceListService.registerAdditionalActionToSupplierPricelistGrid(previewAction);
         }
 
-        function previewSupplierPriceList(priceListId) {
+        function previewSupplierPriceListTask(priceListId) {
 
             var settings = {
             };
@@ -35,10 +35,10 @@
                 PriceListId: priceListId
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreview.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreviewTask.html', parameters, settings);
         }
 
-        function previewSupplierPriceListForGrid(processInstanceId) {
+        function previewSupplierPriceList(processInstanceId) {
 
             var settings = {
             };
@@ -51,7 +51,7 @@
                 processInstanceId: processInstanceId
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreviewForGrid.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/WhS_SupplierPriceList/Views/SupplierPriceListPreview.html', parameters, settings);
         }
 
     }

@@ -11,5 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public List<int?> SupplierIds { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+        public List<int> UserIds { get; set; }
     }
 }

@@ -36,11 +36,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             long fileId = this.FileId.Get(context);
             long stateBackupId = this.StateBackupId.Get(context);
             DateTime effectiveOn = this.EffectiveOn.Get(context);
-
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
 
             TOne.WhS.SupplierPriceList.Business.SupplierPriceListManager manager = new Business.SupplierPriceListManager();
-            manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, stateBackupId, supplierId, currencyId, fileId, effectiveOn);
+            manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, stateBackupId, supplierId, currencyId, fileId, effectiveOn, userId);
         }
     }
 }
