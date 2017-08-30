@@ -100,6 +100,11 @@ namespace Vanrise.Invoice.Business
                 return null;
             return partnerInvoiceSettings.FirstOrDefault(x => x.PartnerId == partnerId);
         }
+        public bool LinkPartnerToInvoiceSetting(Guid partnerInvoiceSettingId,string partnerId, Guid invoiceSettingId)
+        {            
+            IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
+            return dataManager.InsertOrUpdateInvoiceSetting(partnerInvoiceSettingId, partnerId, invoiceSettingId);
+        }
         public T GetPartnerInvoiceSettingDetailByType<T>(Guid partnerInvoiceSettingId) where T : InvoiceSettingPart
         {
             var partnerInvoiceSettings = GetPartnerInvoiceSetting(partnerInvoiceSettingId);

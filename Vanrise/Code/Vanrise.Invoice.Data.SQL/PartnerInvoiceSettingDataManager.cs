@@ -52,6 +52,12 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_PartnerInvoiceSetting_Delete", partnerInvoiceSettingId);
             return (affectedRows > 0);
         }
+        public bool InsertOrUpdateInvoiceSetting(Guid partnerInvoiceSettingId,string partnerId, Guid invoiceSettingId)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_PartnerInvoiceSetting_InsertOrUpdate", partnerInvoiceSettingId, partnerId, invoiceSettingId);
+            return (affectedRows > -1);
+        }
+
         #endregion
         
         #region Mappers

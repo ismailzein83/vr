@@ -8,5 +8,6 @@ namespace Vanrise.Invoice.Entities
 {
     public class InvoiceSettingFilter
     {
+        public Guid InvoiceTypeId { get; set; }
     }
 }

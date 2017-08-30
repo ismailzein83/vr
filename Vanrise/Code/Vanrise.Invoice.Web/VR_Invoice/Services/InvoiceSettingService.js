@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.service('VR_Invoice_InvoiceSettingService', ['VRModalService',
-    function (VRModalService) {
+app.service('VR_Invoice_InvoiceSettingService', ['VRModalService','UtilsService',
+    function (VRModalService, UtilsService) {
 
         function addInvoiceSetting(onInvoiceSettingAdded, invoiceTypeId) {
             var settings = {
@@ -31,10 +31,23 @@ app.service('VR_Invoice_InvoiceSettingService', ['VRModalService',
         function getEntityUniqueName(invoiceTypeId) {
             return "VR_Invoice_InvoiceSetting_" + invoiceTypeId;
         }
+        function viewInvoiceSetting(invoiceSettingId,invoiceTypeId) {
+            var parameters = {
+                invoiceSettingId: invoiceSettingId,
+                invoiceTypeId: invoiceTypeId
+            };
+            var settings = {};
 
+            settings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/InvoiceSettingEditor.html', parameters, settings);
+        }
         return ({
             addInvoiceSetting: addInvoiceSetting,
             editInvoiceSetting: editInvoiceSetting,
             getEntityUniqueName: getEntityUniqueName,
+            viewInvoiceSetting: viewInvoiceSetting
         });
     }]);

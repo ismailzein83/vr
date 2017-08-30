@@ -14,6 +14,7 @@ namespace Vanrise.Invoice.Data
         bool InsertPartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting);
         bool UpdatePartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting);
         bool DeletePartnerInvoiceSetting(Guid partnerInvoiceSettingId);
+        bool InsertOrUpdateInvoiceSetting(Guid partnerInvoiceSettingId, string partnerId, Guid invoiceSettingId);
 
     }
 }

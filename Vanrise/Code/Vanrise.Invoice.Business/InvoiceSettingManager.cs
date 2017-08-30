@@ -109,10 +109,12 @@ namespace Vanrise.Invoice.Business
         public IEnumerable<InvoiceSettingInfo> GetInvoiceSettingsInfo(InvoiceSettingFilter filter)
         {
             var invoiceSettings = GetCachedInvoiceSettings();
-            if (filter != null)
-            {
-            }
-            return invoiceSettings.MapRecords(InvoiceSettingInfoMapper);
+            Func<InvoiceSetting,bool> filterExpression = (invoiceSetting) => {
+                if(invoiceSetting.InvoiceTypeId != filter.InvoiceTypeId)
+                    return false;
+                return true;
+            };
+            return invoiceSettings.MapRecords(InvoiceSettingInfoMapper, filterExpression);
         }
         public IEnumerable<InvoiceSetting> GetInvoiceSettings(Guid invoiceTypeId)
         {
