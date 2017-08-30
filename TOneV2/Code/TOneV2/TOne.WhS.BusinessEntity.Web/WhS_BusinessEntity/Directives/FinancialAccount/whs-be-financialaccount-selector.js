@@ -9,7 +9,8 @@ app.directive('whsBeFinancialaccountSelector', ['WhS_BE_FinancialAccountAPIServi
             normalColNum: '@',
             ismultipleselection: '@',
             isrequired: '=',
-            onselectionchanged:'='
+            onselectionchanged: '=',
+            selectedvalues:'='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

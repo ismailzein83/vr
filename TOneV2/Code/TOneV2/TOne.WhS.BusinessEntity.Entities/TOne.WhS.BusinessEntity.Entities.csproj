@@ -131,6 +131,8 @@
     <Compile Include="FinancialAccount\WHSFinancialAccountInfo.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountInfoFilter.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountQuery.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountRuntimeEditor.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountToAdd.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountToEdit.cs" />
     <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Enumerations.cs" />

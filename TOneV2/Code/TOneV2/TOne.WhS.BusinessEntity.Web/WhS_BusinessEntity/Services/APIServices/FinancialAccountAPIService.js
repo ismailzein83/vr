@@ -43,7 +43,11 @@
                 financialAccountId: financialAccountId
             });
         }
-
+        function GetFinancialAccountRuntimeEditor(financialAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetFinancialAccountRuntimeEditor"), {
+                financialAccountId: financialAccountId
+            });
+        }
         return ({
             GetAccountCurrencyName: GetAccountCurrencyName,
             AddFinancialAccount: AddFinancialAccount,
@@ -51,7 +55,8 @@
             GetFinancialAccountsInfo: GetFinancialAccountsInfo,
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             CanAddFinancialAccountToCarrier: CanAddFinancialAccountToCarrier,
-            GetFinancialAccount: GetFinancialAccount
+            GetFinancialAccount: GetFinancialAccount,
+            GetFinancialAccountRuntimeEditor: GetFinancialAccountRuntimeEditor
         });
     }
 

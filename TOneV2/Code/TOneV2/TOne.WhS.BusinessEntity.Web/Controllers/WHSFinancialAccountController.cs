@@ -31,9 +31,9 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("AddFinancialAccount")]
-        public Vanrise.Entities.InsertOperationOutput<WHSFinancialAccountDetail> AddFinancialAccount(WHSFinancialAccount financialAccount)
+        public Vanrise.Entities.InsertOperationOutput<WHSFinancialAccountDetail> AddFinancialAccount(WHSFinancialAccountToAdd financialAccountToAdd)
         {
-            return _manager.AddFinancialAccount(financialAccount);
+            return _manager.AddFinancialAccount(financialAccountToAdd);
         }
 
         [HttpPost]
@@ -64,6 +64,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             return _manager.GetFinancialAccount(financialAccountId);
         }
-       
+        [HttpGet]
+        [Route("GetFinancialAccountRuntimeEditor")]
+        public WHSFinancialAccountRuntimeEditor GetFinancialAccountRuntimeEditor(int financialAccountId)
+        {
+            return _manager.GetFinancialAccountRuntimeEditor(financialAccountId);
+        }
     }
 }

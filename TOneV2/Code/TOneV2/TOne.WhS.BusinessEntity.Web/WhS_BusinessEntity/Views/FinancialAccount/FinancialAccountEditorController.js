@@ -9,12 +9,17 @@
         var carrierProfileId;
 
         var financialAccountId;
-        var financialAccountEntity;
+        var financialAccountRuntimeEntity;
 
+        var financialAccountDefinitionSettings;
         var isEditMode;
 
         var financialAccountDefinitionSelectorDirectiveAPI;
         var financialAccountDefinitionSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var selectedFinancialAccountDefinitionDeferred;
+
+        var invoiceSettingSelectorAPI;
+        var invoiceSettingSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var directiveAPI;
         var directiveReadyDeferred;
@@ -45,12 +50,40 @@
                 financialAccountDefinitionSelectorDirectiveReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onInvoiceSettingDirectiveReady = function (api) {
+                invoiceSettingSelectorAPI = api;
+                invoiceSettingSelectorReadyDeferred.resolve();
+               
+            };
+
             $scope.scopeModel.onFinancialAccountDefinitionSelectionChanged = function (value) {
                 if (value != undefined) {
-                    $scope.scopeModel.isLoading = true;
-                    getFinancialAccountDefinitionSetting().finally(function () {
-                        $scope.scopeModel.isLoading = false;
-                    });
+                    if (selectedFinancialAccountDefinitionDeferred != undefined)
+                        selectedFinancialAccountDefinitionDeferred.resolve();
+                    else {
+                        $scope.scopeModel.isLoading = true;
+                        getFinancialAccountDefinitionSetting().then(function () {
+
+                            if ($scope.scopeModel.showInvoiceSettingSelector) {
+                                invoiceSettingSelectorReadyDeferred.promise.then(function () {
+                                    var setLoader = function (value) {
+                                        $scope.scopeModel.isLoadingInvoiceSettingDirective = value;
+                                    };
+                                    var selectedValue = financialAccountDefinitionSelectorDirectiveAPI.getSelectedValue();
+                                    var directivePayload = {
+                                        invoiceTypeId: selectedValue.InvoiceTypeId,
+                                        filter: {
+                                            InvoiceTypeId: selectedValue.InvoiceTypeId,
+                                        }
+                                    };
+                                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, invoiceSettingSelectorAPI, directivePayload, setLoader);
+                                });
+                            }
+
+                        }).finally(function () {
+                            $scope.scopeModel.isLoading = false;
+                        });
+                    }
                 } else {
                     $scope.scopeModel.financialAccountDefinitionRuntimeDirective = undefined;
                 }
@@ -62,12 +95,14 @@
                     $scope.scopeModel.isLoadingDirective = value;
                 };
                 var directivePayload;
-                if (financialAccountEntity != undefined) {
+                if (financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.FinancialAccount != undefined) {
                     directivePayload = {
-                        carrierProfileId: financialAccountEntity.CarrierProfileId,
-                        carrierAccountId: financialAccountEntity.CarrierAccountId
+                        carrierProfileId: financialAccountRuntimeEntity.FinancialAccount.CarrierProfileId,
+                        carrierAccountId: financialAccountRuntimeEntity.FinancialAccount.CarrierAccountId
                     };
+
                 } else {
+
                     directivePayload = { carrierProfileId: carrierProfileId, carrierAccountId: carrierAccountId };
                 }
 
@@ -101,8 +136,10 @@
 
             if (isEditMode) {
                 getFinancialAccount().then(function () {
-                    loadAllControls();
-                }).catch(function () {
+                    getFinancialAccountDefinitionSetting().then(function () {
+                        loadAllControls();
+                    });
+                }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
                 });;
@@ -112,8 +149,8 @@
         }
 
         function getFinancialAccount() {
-            return WhS_BE_FinancialAccountAPIService.GetFinancialAccount(financialAccountId).then(function (response) {
-                financialAccountEntity = response;
+            return WhS_BE_FinancialAccountAPIService.GetFinancialAccountRuntimeEditor(financialAccountId).then(function (response) {
+                financialAccountRuntimeEntity = response;
             });
         }
 
@@ -124,10 +161,14 @@
             }
 
             function loadStaticData() {
-                if (financialAccountEntity != undefined) {
-                    $scope.scopeModel.beginEffectiveDate = financialAccountEntity.BED;
-                    $scope.scopeModel.endEffectiveDate = financialAccountEntity.EED;
-                    $scope.scopeModel.disableAccountDefinitionAndBED = true;
+                if (financialAccountRuntimeEntity != undefined) {
+                    if (financialAccountRuntimeEntity.FinancialAccount != undefined)
+                    {
+                        $scope.scopeModel.beginEffectiveDate = financialAccountRuntimeEntity.FinancialAccount.BED;
+                        $scope.scopeModel.endEffectiveDate = financialAccountRuntimeEntity.FinancialAccount.EED;
+                    }
+                    $scope.scopeModel.disableFinancialAccountDefinition = true;
+                    selectedFinancialAccountDefinitionDeferred = UtilsService.createPromiseDeferred();
                 }
             }
 
@@ -138,12 +179,12 @@
                         filter: {
                             Filters: [{
                                 $type: "TOne.WhS.BusinessEntity.Business.FinancialAccountDefinitionFilter, TOne.WhS.BusinessEntity.Business",
-                                CarrierProfileId: financialAccountEntity != undefined ? financialAccountEntity.CarrierProfileId : carrierProfileId,
-                                CarrierAccountId: financialAccountEntity != undefined ? financialAccountEntity.CarrierAccountId : carrierAccountId,
-                                FinancialAccountId: financialAccountEntity != undefined? financialAccountEntity.FinancialAccountId : undefined,
+                                CarrierProfileId: financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.FinancialAccount != undefined ? financialAccountRuntimeEntity.FinancialAccount.CarrierProfileId : carrierProfileId,
+                                CarrierAccountId: financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.FinancialAccount != undefined ? financialAccountRuntimeEntity.FinancialAccount.CarrierAccountId : carrierAccountId,
+                                FinancialAccountId: financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.FinancialAccount != undefined ? financialAccountRuntimeEntity.FinancialAccount.FinancialAccountId : undefined,
                             }]
                         },
-                        selectedIds: financialAccountEntity != undefined ? financialAccountEntity.FinancialAccountDefinitionId : undefined
+                        selectedIds: financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.FinancialAccount != undefined ? financialAccountRuntimeEntity.FinancialAccount.FinancialAccountDefinitionId : undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(financialAccountDefinitionSelectorDirectiveAPI, payload, loadFinancialAccountDefinitionSelectorPromiseDeferred);
                 });
@@ -151,14 +192,14 @@
             }
 
             function loadDirective() {
-                if (financialAccountEntity != undefined && financialAccountEntity.Settings != undefined) {
+                if (financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.FinancialAccount != undefined && financialAccountRuntimeEntity.FinancialAccount.Settings != undefined) {
                     directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
                     var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                     directiveReadyDeferred.promise.then(function () {
                         directiveReadyDeferred = undefined;
-                        var directivePayload = { extendedSettings: financialAccountEntity.Settings.ExtendedSettings, carrierProfileId: financialAccountEntity.CarrierProfileId, carrierAccountId: financialAccountEntity.CarrierAccountId };
+                        var directivePayload = { extendedSettings: financialAccountRuntimeEntity.FinancialAccount.Settings.ExtendedSettings, carrierProfileId: financialAccountRuntimeEntity.FinancialAccount.CarrierProfileId, carrierAccountId: financialAccountRuntimeEntity.FinancialAccount.CarrierAccountId };
                         VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                     });
 
@@ -167,7 +208,31 @@
 
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFinancialAccountDefinitionSelector, loadDirective]).catch(function (error) {
+            function loadInvoiceSettingSelectorDirective() {
+                if (financialAccountDefinitionSettings != undefined)
+                {
+                    if ($scope.scopeModel.showInvoiceSettingSelector) {
+                        var invoiceSettingSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        var promises = [];
+                        promises.push(selectedFinancialAccountDefinitionDeferred.promise);
+                        promises.push(invoiceSettingSelectorReadyDeferred.promise);
+
+                        UtilsService.waitMultiplePromises(promises).then(function () {
+                            selectedFinancialAccountDefinitionDeferred = undefined;
+                            var invoiceSettingSelectorPayload = {
+                                invoiceTypeId: financialAccountDefinitionSettings.InvoiceTypeId,
+                                filter: {
+                                    InvoiceTypeId: financialAccountDefinitionSettings.InvoiceTypeId,
+                                },
+                                selectedIds: financialAccountRuntimeEntity != undefined?financialAccountRuntimeEntity.InvoiceSettingId:undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(invoiceSettingSelectorAPI, invoiceSettingSelectorPayload, invoiceSettingSelectorLoadDeferred);
+                        });
+                        return invoiceSettingSelectorLoadDeferred.promise;
+                    }
+                }
+            }
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFinancialAccountDefinitionSelector, loadDirective, loadInvoiceSettingSelectorDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -175,17 +240,29 @@
         }
 
         function getFinancialAccountDefinitionSetting() {
-            var selectedfinancialAccountDefinitionId = financialAccountDefinitionSelectorDirectiveAPI.getSelectedIds();
+            var selectedfinancialAccountDefinitionId;
+            if (financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.FinancialAccount != undefined)
+                selectedfinancialAccountDefinitionId = financialAccountRuntimeEntity.FinancialAccount.FinancialAccountDefinitionId;
+            else
+              selectedfinancialAccountDefinitionId = financialAccountDefinitionSelectorDirectiveAPI.getSelectedIds();
+
             return WhS_BE_FinancialAccountDefinitionAPIService.GetFinancialAccountDefinitionSettings(selectedfinancialAccountDefinitionId).then(function (response) {
-                if (response != undefined && response.ExtendedSettings != undefined)
-                    $scope.scopeModel.financialAccountDefinitionRuntimeDirective = response.ExtendedSettings.RuntimeEditor;
+                if (response != undefined)
+                {
+                    financialAccountDefinitionSettings = response;
+                    if (response.ExtendedSettings != undefined)
+                        $scope.scopeModel.financialAccountDefinitionRuntimeDirective = response.ExtendedSettings.RuntimeEditor;
+                    $scope.scopeModel.showInvoiceSettingSelector = (financialAccountDefinitionSettings.InvoiceTypeId != undefined);
+
+                }
+                    
             });
         }
 
         function insertFinancialAccount() {
             $scope.scopeModel.isLoading = true;
 
-            var financialAccountObj = buildFinancialAccountObjFromScope();
+            var financialAccountObj = buildFinancialAccountToAddObjFromScope();
 
             return WhS_BE_FinancialAccountAPIService.AddFinancialAccount(financialAccountObj).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded('Financial Account', response, 'Name')) {
@@ -203,7 +280,7 @@
         function updateFinancialAccount() {
             $scope.scopeModel.isLoading = true;
 
-            var financialAccountToEdit = buildFinancialAccountObjFromScope();
+            var financialAccountToEdit = buildFinancialAccountToEditObjFromScope();
 
             return WhS_BE_FinancialAccountAPIService.UpdateFinancialAccount(financialAccountToEdit).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated('Financial Account', response, 'Name')) {
@@ -218,7 +295,7 @@
             });
         }
 
-        function buildFinancialAccountObjFromScope() {
+        function buildFinancialAccountToEditObjFromScope() {
             var financialAccount = {
                 FinancialAccountId: financialAccountId,
                 BED: $scope.scopeModel.beginEffectiveDate,
@@ -226,16 +303,31 @@
                 Settings: {
                     ExtendedSettings: directiveAPI.getData()
                 },
-
+                InvoiceSettingId: invoiceSettingSelectorAPI != undefined ? invoiceSettingSelectorAPI.getSelectedIds() : undefined,
+                PartnerInvoiceSettingId: financialAccountRuntimeEntity != undefined ? financialAccountRuntimeEntity.PartnerInvoiceSettingId : undefined
             };
-            if (financialAccountEntity == undefined)
-            {
-                financialAccount.CarrierAccountId = carrierAccountId;
-                financialAccount.CarrierProfileId = carrierProfileId;
-                financialAccount.FinancialAccountDefinitionId = financialAccountDefinitionSelectorDirectiveAPI.getSelectedIds();
-            }
+            
             return financialAccount;
         }
+
+        function buildFinancialAccountToAddObjFromScope() {
+            var financialAccount = {
+                FinancialAccount:{
+                    BED: $scope.scopeModel.beginEffectiveDate,
+                    EED: $scope.scopeModel.endEffectiveDate,
+                    Settings: {
+                        ExtendedSettings: directiveAPI.getData()
+                    },
+                    CarrierAccountId: carrierAccountId,
+                    CarrierProfileId: carrierProfileId,
+                    FinancialAccountDefinitionId : financialAccountDefinitionSelectorDirectiveAPI.getSelectedIds()
+                },
+                InvoiceSettingId: invoiceSettingSelectorAPI != undefined? invoiceSettingSelectorAPI.getSelectedIds():undefined
+
+            };
+            return financialAccount;
+        }
+
     }
 
     appControllers.controller('WhS_BE_FinancialAccountEditorController', financialAccountEditorController);

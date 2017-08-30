@@ -67,10 +67,14 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         private WHSFinancialAccountDefinitionInfo FinancialAccountDefinitionInfoMapper(BusinessEntityDefinition businessEntityDefinition)
         {
+
+            var settings = businessEntityDefinition.Settings.CastWithValidate<WHSFinancialAccountDefinitionSettings>("beDefinition.Settings");
             return new WHSFinancialAccountDefinitionInfo
             {
                 FinancialAccountDefinitionId = businessEntityDefinition.BusinessEntityDefinitionId,
-                Name = businessEntityDefinition.Title
+                Name = businessEntityDefinition.Title,
+                BalanceAccountTypeId = settings.BalanceAccountTypeId,
+                InvoiceTypeId = settings.InvoiceTypeId,
             };
         }
 

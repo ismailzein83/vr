@@ -54,25 +54,29 @@ namespace TOne.WhS.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allFinancialAccounts.ToBigResult(input, filterExpression, FinancialAccountDetailMapper));
         }
 
-        public Vanrise.Entities.InsertOperationOutput<WHSFinancialAccountDetail> AddFinancialAccount(WHSFinancialAccount financialAccount)
+        public Vanrise.Entities.InsertOperationOutput<WHSFinancialAccountDetail> AddFinancialAccount(WHSFinancialAccountToAdd financialAccountToAdd)
         {
             Vanrise.Entities.InsertOperationOutput<WHSFinancialAccountDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<WHSFinancialAccountDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             string message;
-            if (CanAddFinancialAccount(financialAccount, out message))
+            if (CanAddFinancialAccount(financialAccountToAdd.FinancialAccount, out message))
             {
                 int financialAccountId;
 
                 IWHSFinancialAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
-                bool insertActionSucc = dataManager.Insert(financialAccount, out financialAccountId);
+                bool insertActionSucc = dataManager.Insert(financialAccountToAdd.FinancialAccount, out financialAccountId);
                 if (insertActionSucc)
                 {
+                    if (financialAccountToAdd.InvoiceSettingId.HasValue)
+                    {
+                        LinkPartnerToInvoiceSetting(Guid.NewGuid(), financialAccountToAdd.InvoiceSettingId.Value, financialAccountId.ToString());
+                    }
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    financialAccount.FinancialAccountId = financialAccountId;
-                    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccount);
+                    financialAccountToAdd.FinancialAccount.FinancialAccountId = financialAccountId;
+                    insertOperationOutput.InsertedObject = FinancialAccountDetailMapper(financialAccountToAdd.FinancialAccount);
                 }
                 else
                 {
@@ -100,6 +104,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     bool updateActionSucc = dataManager.Update(financialAccountToEdit);
                     if (updateActionSucc)
                     {
+                        if(financialAccountToEdit.InvoiceSettingId.HasValue)
+                        {
+                            Guid partnerInvoiceSettingId = financialAccountToEdit.PartnerInvoiceSettingId.HasValue ? financialAccountToEdit.PartnerInvoiceSettingId.Value : Guid.NewGuid();
+                            LinkPartnerToInvoiceSetting(partnerInvoiceSettingId, financialAccountToEdit.InvoiceSettingId.Value, financialAccountToEdit.FinancialAccountId.ToString());
+                        }
                         Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                         updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                         updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(this.GetFinancialAccount(financialAccountToEdit.FinancialAccountId));
@@ -120,7 +129,28 @@ namespace TOne.WhS.BusinessEntity.Business
             var allFinancialAccounts = GetCachedFinancialAccounts();
             return allFinancialAccounts.GetRecord(financialAccountId);
         }
+        public WHSFinancialAccountRuntimeEditor GetFinancialAccountRuntimeEditor(int financialAccountId)
+        {
+            var financialAccount =  GetFinancialAccount(financialAccountId);
+            financialAccount.ThrowIfNull("financialAccount",financialAccountId);
+             WHSFinancialAccountRuntimeEditor financialAccountRuntimeEditor = new WHSFinancialAccountRuntimeEditor{
+                FinancialAccount = financialAccount
+            };
 
+            WHSFinancialAccountDefinitionManager financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
+            var financialAccountDefinitionSetting = financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
+           
+            if(financialAccountDefinitionSetting.InvoiceTypeId.HasValue)
+            {
+                var partnerInvoiceSetting = new PartnerInvoiceSettingManager().GetPartnerInvoiceSettingByPartnerId(financialAccountId.ToString());
+                if(partnerInvoiceSetting != null)
+                {
+                    financialAccountRuntimeEditor.InvoiceSettingId = partnerInvoiceSetting.InvoiceSettingID;
+                    financialAccountRuntimeEditor.PartnerInvoiceSettingId = partnerInvoiceSetting.PartnerInvoiceSettingId;
+                }
+            }
+            return financialAccountRuntimeEditor;
+        }
         public WHSCarrierFinancialAccountData GetCustCarrierFinancialByFinAccId(int financialAccountId)
         {
             WHSCarrierFinancialAccountData carrierFinancialAccountData = GetCachedCustCarrierFinancialsByFinAccId().GetRecord(financialAccountId);
@@ -677,6 +707,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private void ValidateFinancialAccount(WHSFinancialAccount financialAccount)
         {
+            financialAccount.ThrowIfNull("financialAccount");
             financialAccount.Settings.ThrowIfNull("financialAccount.Settings", financialAccount.FinancialAccountId);
             financialAccount.Settings.ExtendedSettings.ThrowIfNull("financialAccount.Settings.ExtendedSettings", financialAccount.FinancialAccountId);
             if (!financialAccount.CarrierAccountId.HasValue && !financialAccount.CarrierProfileId.HasValue)
@@ -695,6 +726,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return definitionSettings;
         }
 
+        private bool LinkPartnerToInvoiceSetting(Guid partnerInvoiceSettingId, Guid invoiceSettingId, string partnerId)
+        {
+            PartnerInvoiceSettingManager partnerInvoiceSettingManager = new Vanrise.Invoice.Business.PartnerInvoiceSettingManager();
+            return  partnerInvoiceSettingManager.LinkPartnerToInvoiceSetting(partnerInvoiceSettingId,partnerId, invoiceSettingId);
+        }
+
         #endregion
 
         #region Private Validation Methods
@@ -706,11 +743,6 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 if (!bed.HasValue)
                     throw new ArgumentNullException("bed && beforeAddingNewFinancialAccount");
-            }
-            if (eed.HasValue && eed.Value < DateTime.Today)
-            {
-                message = "EED must not be less than today.";
-                return false;
             }
             bool isApplicableToCustomer;
             bool isApplicableToSupplier;
@@ -860,11 +892,15 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Mappers
 
         private WHSFinancialAccountInfo FinancialAccountInfoMapper(WHSFinancialAccount financialAccount)
-        {
+        {           
+            
+            var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             var financialAccountInfo = new WHSFinancialAccountInfo()
             {
                 FinancialAccountId = financialAccount.FinancialAccountId,
-                EffectiveStatus = GetFinancialAccountEffectiveStatus(financialAccount.BED, financialAccount.EED)
+                EffectiveStatus = GetFinancialAccountEffectiveStatus(financialAccount.BED, financialAccount.EED),
+                BalanceAccountTypeId = financialAccountDefinitionSettings.BalanceAccountTypeId,
+                InvoiceTypeId = financialAccountDefinitionSettings.InvoiceTypeId
             };
             if (financialAccount.CarrierProfileId.HasValue)
             {

@@ -6,15 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class WHSFinancialAccountToEdit
+    public class WHSFinancialAccountRuntimeEditor
     {
-        public int FinancialAccountId { get; set; }
-
-        public WHSFinancialAccountSettings Settings { get; set; }
-
-        public DateTime BED { get; set; }
-
-        public DateTime? EED { get; set; }
+        public WHSFinancialAccount FinancialAccount { get; set; }
         public Guid? InvoiceSettingId { get; set; }
         public Guid? PartnerInvoiceSettingId { get; set; }
     }

@@ -57,8 +57,9 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FinancialAccountDefinitionAPISe
             hideselectedvaluessection = "hideselectedvaluessection";
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="FinancialAccountDefinitionId" on-ready="ctrl.onSelectorReady"  isrequired="ctrl.isrequired" label="' + label + '" ' + hideselectedvaluessection + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" vr-disabled="ctrl.isdisabled" ></vr-select>'
-           + '</vr-columns>';
+           + '<span  vr-disabled="ctrl.isdisabled">'
+            + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="FinancialAccountDefinitionId" on-ready="ctrl.onSelectorReady"  isrequired="ctrl.isrequired" label="' + label + '" ' + hideselectedvaluessection + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ></vr-select>'
+           + '</span></vr-columns>';
     }
 
     function financialAccountDefinitionSelectorCtor(ctrl, $scope, $attrs) {
@@ -76,7 +77,9 @@ function (UtilsService, VRUIUtilsService, WhS_BE_FinancialAccountDefinitionAPISe
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('FinancialAccountDefinitionId', $attrs, ctrl);
             };
-
+            api.getSelectedValue = function () {
+                return ctrl.selectedvalues;
+            };
             api.load = function (payload) {
                 selectorApi.clearDataSource();
                 ctrl.datasource.length = 0;

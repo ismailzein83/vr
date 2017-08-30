@@ -4,15 +4,13 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
-                        <span vr-disabled="scopeModel.disableAccountTypeAndBED">
-                            <whs-be-financialaccountdefinition-selector on-ready="scopeModel.onFinancialAccountDefinitionSelectorReady" selectedvalues="scopeModel.selectedFinancialAccountDefinition" onselectionchanged=" scopeModel.onFinancialAccountDefinitionSelectionChanged" normal-col-num="6" isrequired="true" customlabel="Financial Account Type"></whs-be-financialaccountdefinition-selector>
-                        </span>
+                        <whs-be-financialaccountdefinition-selector isdisabled="scopeModel.disableFinancialAccountDefinition" on-ready="scopeModel.onFinancialAccountDefinitionSelectorReady" selectedvalues="scopeModel.selectedFinancialAccountDefinition" onselectionchanged=" scopeModel.onFinancialAccountDefinitionSelectionChanged" normal-col-num="6" isrequired="true" customlabel="Financial Account Type"></whs-be-financialaccountdefinition-selector>
                     </vr-row>
                     <vr-directivewrapper ng-if="scopeModel.financialAccountDefinitionRuntimeDirective != undefined" vr-loader="scopeModel.isLoadingDirective" directive="scopeModel.financialAccountDefinitionRuntimeDirective"
                                          on-ready="scopeModel.onDirectiveReady" isrequired="true">
                     </vr-directivewrapper>
                 </vr-tab>
-                <vr-tab header="'Time Settings'">
+                <vr-tab header="'Settings'">
                     <vr-row removeline>
                         <vr-columns width="1/2row">
                             <vr-datetimepicker value="scopeModel.beginEffectiveDate" type="date" label="BED" isrequired customvalidate="scopeModel.validateDates()" vr-disabled="scopeModel.disableAccountTypeAndBED"></vr-datetimepicker>
@@ -20,6 +18,8 @@
                         <vr-columns width="1/2row">
                             <vr-datetimepicker value="scopeModel.endEffectiveDate" type="date" label="EED" customvalidate="scopeModel.validateEEDDate()" vr-disabled="scopeModel.disableEED"></vr-datetimepicker>
                         </vr-columns>
+                        <vr-invoice-invoicesetting-selector ng-if="scopeModel.showInvoiceSettingSelector" on-ready="scopeModel.onInvoiceSettingDirectiveReady" showviewbutton showaddbutton normal-col-num="6"></vr-invoice-invoicesetting-selector>
+
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
