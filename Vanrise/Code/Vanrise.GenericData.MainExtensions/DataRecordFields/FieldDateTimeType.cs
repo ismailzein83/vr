@@ -64,9 +64,44 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             DateTimeRecordFilter dateTimeRecordFilter = recordFilter as DateTimeRecordFilter;
             if (dateTimeRecordFilter == null)
                 throw new NullReferenceException("dateTimeRecordFilter");
-            
+
             DateTime valueAsDateTime = (DateTime)fieldValue;
-            DateTime filterValue = dateTimeRecordFilter.Value;
+
+            DateTime filterValue = default(DateTime);
+            DateTime filterValue2 = default(DateTime);
+
+            bool hasSecondValue = Vanrise.Common.Utilities.GetEnumAttribute<DateTimeRecordFilterOperator, DateTimeRecordFilterOperatorAttribute>(dateTimeRecordFilter.CompareOperator).HasSecondValue;
+
+            switch (dateTimeRecordFilter.ComparisonPart)
+            {
+                case DateTimeRecordFilterComparisonPart.DateTime:
+                    filterValue = Convert.ToDateTime(dateTimeRecordFilter.Value);
+                    if (hasSecondValue)
+                        filterValue2 = Convert.ToDateTime(dateTimeRecordFilter.Value2);
+                    break;
+
+                case DateTimeRecordFilterComparisonPart.DateOnly:
+                    valueAsDateTime = valueAsDateTime.Date;
+                    filterValue = Convert.ToDateTime(dateTimeRecordFilter.Value).Date;
+                    if (hasSecondValue)
+                        filterValue2 = Convert.ToDateTime(dateTimeRecordFilter.Value2).Date;
+                    break;
+
+                case DateTimeRecordFilterComparisonPart.TimeOnly:
+                    DateTime tempDateTime = DateTime.Now;
+
+                    TimeSpan valueAsTimeSpan = valueAsDateTime.TimeOfDay;
+                    valueAsDateTime = new DateTime(tempDateTime.Year, tempDateTime.Month, tempDateTime.Day, valueAsTimeSpan.Hours, valueAsTimeSpan.Minutes, valueAsTimeSpan.Seconds, valueAsTimeSpan.Milliseconds);
+
+                    Time filterValueAsTime = dateTimeRecordFilter.Value as Time;
+                    filterValue = Vanrise.Common.Utilities.AppendTimeToDateTime(filterValueAsTime, tempDateTime);
+                    if (hasSecondValue)
+                    {
+                        Time filterValue2AsTime = dateTimeRecordFilter.Value2 as Time;
+                        filterValue2 = Vanrise.Common.Utilities.AppendTimeToDateTime(filterValue2AsTime, tempDateTime);
+                    }
+                    break;
+            }
 
             switch (dateTimeRecordFilter.CompareOperator)
             {
@@ -76,6 +111,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case DateTimeRecordFilterOperator.GreaterOrEquals: return valueAsDateTime >= filterValue;
                 case DateTimeRecordFilterOperator.Less: return valueAsDateTime < filterValue;
                 case DateTimeRecordFilterOperator.LessOrEquals: return valueAsDateTime <= filterValue;
+                case DateTimeRecordFilterOperator.Between:
+                    if (dateTimeRecordFilter.ExcludeValue2)
+                        return valueAsDateTime >= filterValue && valueAsDateTime < filterValue2;
+                    else
+                        return valueAsDateTime >= filterValue && valueAsDateTime <= filterValue2;
             }
 
             return false;
@@ -108,22 +148,50 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
-            var values = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
-            RecordFilterGroup recordFilterGroup = new RecordFilterGroup
+            if (filterValues == null || filterValues.Count == 0)
+                return null;
+
+            List<RecordFilter> recordFilters = null;
+
+            switch (this.DataType)
             {
-                LogicalOperator = RecordQueryLogicalOperator.Or,
-                Filters = new List<RecordFilter>(),
-            };
-            foreach (var value in values)
+                case FieldDateTimeDataType.DateTime:
+                    var dateTimeValues = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    recordFilters = GetDateTimeRecordFilters(fieldName, dateTimeValues, DateTimeRecordFilterComparisonPart.DateTime);
+                    break;
+
+                case FieldDateTimeDataType.Date:
+                    var dateValues = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    recordFilters = GetDateTimeRecordFilters(fieldName, dateValues, DateTimeRecordFilterComparisonPart.DateOnly);
+                    break;
+
+                case FieldDateTimeDataType.Time:
+                    var timeValues = filterValues.Select(value => new Time(value.ToString())).ToList();
+                    recordFilters = GetDateTimeRecordFilters(fieldName, timeValues, DateTimeRecordFilterComparisonPart.TimeOnly);
+                    break;
+
+                default: throw new NotSupportedException(string.Format("fieldDateTimeDataType '{0}'", this.DataType));
+            }
+
+            return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
+        }
+
+        private List<RecordFilter> GetDateTimeRecordFilters<T>(string fieldName, List<T> filterValues, DateTimeRecordFilterComparisonPart comparisonPart)
+        {
+            List<RecordFilter> recordFilters = new List<RecordFilter>();
+
+            foreach (var value in filterValues)
             {
-                recordFilterGroup.Filters.Add(new DateTimeRecordFilter
+                recordFilters.Add(new DateTimeRecordFilter
                 {
                     CompareOperator = DateTimeRecordFilterOperator.Equals,
-                    Value = value,
-                    FieldName = fieldName
+                    ComparisonPart = comparisonPart,
+                    FieldName = fieldName,
+                    Value = value
                 });
-            }
-            return recordFilterGroup;
+            };
+
+            return recordFilters;
         }
 
         #endregion

@@ -9,10 +9,8 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaNulltoboolean', ['UtilsSe
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
-                var ctor = new textTypeCtor(ctrl, $scope);
+                var ctor = new nullToBooleanCtor(ctrl, $scope);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -30,9 +28,7 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaNulltoboolean', ['UtilsSe
 
         };
 
-        function textTypeCtor(ctrl, $scope) {
-
-            var context;
+        function nullToBooleanCtor(ctrl, $scope) {
 
             function initializeController() {
                 $scope.scopeModel = {};

@@ -10,7 +10,8 @@
             scope: {
                 onReady: '=',
                 normalColNum: '@',
-                isrequired: '='
+                isrequired: '=',
+                customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -41,22 +42,31 @@
 
             function getDirectiveAPI() {
                 var api = {};
+
                 api.load = function (payload) {
                     return directiveAPI.load(payload);
                 };
+
                 api.getValuesAsArray = function () {
                     return directiveAPI.getData();
 
                 };
+
                 api.getData = function () {
                     return directiveAPI.getData();
                 };
+
+                api.setLabel = function (value) {
+                    return directiveAPI.setLabel(value);
+                };
+
                 return api;
             }
         }
 
         function getDirectiveTemplate(attrs) {
-            return '<vr-genericdata-fieldtype-datetime-runtimeeditor on-ready="filterEditorCtrl.onDirectiveReady" selectionmode="single" normal-col-num="{{filterEditorCtrl.normalColNum}}" isrequired="filterEditorCtrl.isrequired" />';
+            return '<vr-genericdata-fieldtype-datetime-runtimeeditor on-ready="filterEditorCtrl.onDirectiveReady" selectionmode="single" normal-col-num="{{filterEditorCtrl.normalColNum}}" ' +
+                   ' normal-col-num="{{filterEditorCtrl.normalColNum}}" customvalidate="filterEditorCtrl.customvalidate" isrequired="filterEditorCtrl.isrequired" />';
         }
     }
 

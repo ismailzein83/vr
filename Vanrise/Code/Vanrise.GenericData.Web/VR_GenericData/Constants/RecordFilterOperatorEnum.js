@@ -25,7 +25,7 @@ app.constant('VR_GenericData_DateTimeRecordFilterOperatorEnum', {
     GreaterOrEquals: { value: 3, description: '>=' },
     Less: { value: 4, description: '<' },
     LessOrEquals: { value: 5, description: '<=' },
-    Between: { value: 6, description: 'between', showSecondDateTimePicker: true }
+    Between: { value: 6, description: 'Between', showSecondDateTimePicker: true }
 });
 
 app.constant('VR_GenericData_DateTimeRecordFilterComparisonPartEnum', {

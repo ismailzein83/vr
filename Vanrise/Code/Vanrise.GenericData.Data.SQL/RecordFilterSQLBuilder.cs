@@ -176,10 +176,16 @@ namespace Vanrise.GenericData.Data.SQL
             return string.Format("{0} {1} {2}", GetSQLExpression(numberFilter), compareOperator, parameterName);
         }
 
+
         private string BuildRecordFilter(DateTimeRecordFilter dateTimeFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
+            string compareOperator = string.Empty;
+            string columnName = GetSQLExpression(dateTimeFilter);
+
             string parameterName = GenerateParameterName(ref parameterIndex);
-            string compareOperator = null;
+            parameterValues.Add(parameterName, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value));
+
+            string secondDateTimeValue = string.Empty;
 
             switch (dateTimeFilter.CompareOperator)
             {
@@ -189,10 +195,46 @@ namespace Vanrise.GenericData.Data.SQL
                 case DateTimeRecordFilterOperator.GreaterOrEquals: compareOperator = ">="; break;
                 case DateTimeRecordFilterOperator.Less: compareOperator = "<"; break;
                 case DateTimeRecordFilterOperator.LessOrEquals: compareOperator = "<="; break;
+
+                case DateTimeRecordFilterOperator.Between:
+                    string parameter2Name = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(parameter2Name, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2));
+                    compareOperator = ">=";
+                    secondDateTimeValue = string.Format(" and {0} <{1} {2}", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), dateTimeFilter.ExcludeValue2 ? "" : "=",
+                        CastAsComparisonPart(dateTimeFilter.ComparisonPart, parameter2Name));
+                    break;
             }
-            parameterValues.Add(parameterName, dateTimeFilter.Value);
-            return string.Format("{0} {1} {2}", GetSQLExpression(dateTimeFilter), compareOperator, parameterName);
+
+            return string.Format("{0} {1} {2} {3}", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), compareOperator,
+                                                    CastAsComparisonPart(dateTimeFilter.ComparisonPart, parameterName), secondDateTimeValue);
         }
+
+        private DateTime GetDateTimeValue(DateTimeRecordFilterComparisonPart comparisonPart, object value)
+        {
+            switch (comparisonPart)
+            {
+                case DateTimeRecordFilterComparisonPart.TimeOnly:
+                    return Vanrise.Common.Utilities.AppendTimeToDateTime((Vanrise.Entities.Time)value, DateTime.Now);
+
+                case DateTimeRecordFilterComparisonPart.DateTime:
+                case DateTimeRecordFilterComparisonPart.DateOnly:
+                    return (DateTime)value;
+
+                default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", comparisonPart));
+            }
+        }
+
+        private string CastAsComparisonPart(DateTimeRecordFilterComparisonPart comparisonPart, string columnName)
+        {
+            switch (comparisonPart)
+            {
+                case DateTimeRecordFilterComparisonPart.DateTime: return columnName;
+                case DateTimeRecordFilterComparisonPart.TimeOnly: return string.Format("Cast({0} as time(0))", columnName);
+                case DateTimeRecordFilterComparisonPart.DateOnly: return string.Format("Cast({0} as date)", columnName);
+                default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", comparisonPart));
+            }
+        }
+
 
         private string BuildRecordFilter(BooleanRecordFilter booleanFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {

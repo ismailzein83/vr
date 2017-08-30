@@ -599,6 +599,12 @@ namespace Vanrise.Common
 
             return null;
         }
+
+        public static DateTime AppendTimeToDateTime(Time time, DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, time.Hour, time.Minute, time.Second, time.MilliSecond);
+        }
+
     }
 
     public interface IPropValueReader

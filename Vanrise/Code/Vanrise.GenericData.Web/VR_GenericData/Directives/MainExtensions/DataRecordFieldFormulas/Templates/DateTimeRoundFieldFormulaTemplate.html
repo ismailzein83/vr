@@ -7,3 +7,22 @@
                label="Date Time Field Name" isrequired="true" hideremoveicon>
     </vr-select>
 </vr-columns>
+
+<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.comparisonParts"
+               datavaluefield="value"
+               datatextfield="description"
+               selectedvalues="scopeModel.selectedComparisonPart"
+               onselectionchanged="scopeModel.onComparisonPartSelectionChanged"
+               label="Comparison Part" isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+
+<vr-columns width="1/3row" ng-show="scopeModel.showRoundingIntervalInMinutes"> 
+    <vr-select datasource="scopeModel.timeRoundingInterval"
+               datavaluefield="value"
+               datatextfield="description"
+               selectedvalues="scopeModel.selectedTimeRoundingInterval"
+               label="Time Rounding Interval" isrequired="scopeModel.showRoundingIntervalInMinutes" hideremoveicon>
+    </vr-select>
+</vr-columns>

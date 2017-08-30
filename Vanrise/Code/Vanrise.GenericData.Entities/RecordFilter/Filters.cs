@@ -110,36 +110,55 @@ namespace Vanrise.GenericData.Entities
     public enum DateTimeRecordFilterComparisonPart { DateTime = 0, TimeOnly = 1, DateOnly = 2 }
     public enum DateTimeRecordFilterOperator
     {
-        [Description(" = ")]
+        [Description(" = "), DateTimeRecordFilterOperatorAttribute(false)]
         Equals = 0,
-        [Description(" <> ")]
+        [Description(" <> "), DateTimeRecordFilterOperatorAttribute(false)]
         NotEquals = 1,
-        [Description(" > ")]
+        [Description(" > "), DateTimeRecordFilterOperatorAttribute(false)]
         Greater = 2,
-        [Description(" >= ")]
+        [Description(" >= "), DateTimeRecordFilterOperatorAttribute(false)]
         GreaterOrEquals = 3,
-        [Description(" < ")]
+        [Description(" < "), DateTimeRecordFilterOperatorAttribute(false)]
         Less = 4,
-        [Description(" <= ")]
+        [Description(" <= "), DateTimeRecordFilterOperatorAttribute(false)]
         LessOrEquals = 5,
-        [Description(" Between ")]
+        [Description(" Between "), DateTimeRecordFilterOperatorAttribute(true)]
         Between = 6
+    }
+    public class DateTimeRecordFilterOperatorAttribute : Attribute
+    {
+        public bool HasSecondValue { get; set; }
+
+        public DateTimeRecordFilterOperatorAttribute(bool hasSecondValue)
+        {
+            this.HasSecondValue = hasSecondValue;
+        }
     }
     public class DateTimeRecordFilter : RecordFilter
     {
-        public DateTimeRecordFilterOperator CompareOperator { get; set; }
-
         public DateTimeRecordFilterComparisonPart ComparisonPart { get; set; }
 
-        public DateTime Value { get; set; }
+        public DateTimeRecordFilterOperator CompareOperator { get; set; }
 
-        public DateTime Value2 { get; set; }
+        public object Value { get; set; }
+
+        public object Value2 { get; set; }
+
+        public bool ExcludeValue2 { get; set; }
 
         public Guid? ValueParameterId { get; set; }
 
         public override string GetDescription(IRecordFilterGetDescriptionContext context)
         {
-            return string.Format(" {0} {1} {2} ", context.GetFieldTitle(FieldName), Utilities.GetEnumDescription(CompareOperator), context.GetFieldValueDescription(FieldName, Value));
+            string fieldTitle = context.GetFieldTitle(FieldName);
+            string compareOperatorDescription = Utilities.GetEnumDescription(CompareOperator);
+            string valueDescription = GetValueDescription(this.Value);
+
+            bool hasSecondValue = Vanrise.Common.Utilities.GetEnumAttribute<DateTimeRecordFilterOperator, DateTimeRecordFilterOperatorAttribute>(this.CompareOperator).HasSecondValue;
+            if (hasSecondValue)
+                return string.Format(" {0} {1} {2} and {3} ", fieldTitle, compareOperatorDescription, valueDescription, GetValueDescription(this.Value2));
+            else
+                return string.Format(" {0} {1} {2} ", fieldTitle, compareOperatorDescription, valueDescription);
         }
 
         public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
@@ -149,6 +168,32 @@ namespace Vanrise.GenericData.Entities
                 dynamic parameterValue;
                 if (context.TryGetParameterValue(this.ValueParameterId.Value, out parameterValue))
                     this.Value = (DateTime)parameterValue;
+            }
+        }
+
+        private string GetValueDescription(object value)
+        {
+            switch (this.ComparisonPart)
+            {
+                case DateTimeRecordFilterComparisonPart.DateTime:
+                    if (this.Value is DateTime)
+                        return Convert.ToDateTime(value).ToString("yyyy-MM-dd HH:mm:ss");
+                    else
+                        throw new DataIntegrityValidationException("DateTimeRecordFilter.Value should be of type DateTime");
+
+                case DateTimeRecordFilterComparisonPart.DateOnly:
+                    if (this.Value is DateTime)
+                        return Convert.ToDateTime(value).ToString("yyyy-MM-dd");
+                    else
+                        throw new DataIntegrityValidationException("DateTimeRecordFilter.Value should be of type DateTime");
+
+                case DateTimeRecordFilterComparisonPart.TimeOnly:
+                    if (this.Value is Time)
+                        return ((Vanrise.Entities.Time)value).ToShortTimeString();
+                    else
+                        throw new DataIntegrityValidationException("DateTimeRecordFilter.Value should be of type Time");
+
+                default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", this.ComparisonPart));
             }
         }
     }

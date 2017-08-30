@@ -3,8 +3,31 @@
                datavaluefield="value"
                datatextfield="description"
                selectedvalues="selectedFilter"
+               onselectionchanged="onFilterSelectionChanged"
                label="Condition" isrequired="true" hideremoveicon>
     </vr-select>
 </vr-columns>
 
-<vr-genericdata-fieldtype-datetime-filtereditor on-ready="onDateFilterEditorReady" isrequired="true" selectionmode="single" normal-col-num="4"></vr-genericdata-fieldtype-datetime-filtereditor>
+<span vr-loader="isDateFilterEditorLoading" ng-if="isDateFilterRecompiling">
+    <vr-genericdata-fieldtype-datetime-filtereditor on-ready="onDateFilterEditorReady" selectionmode="single"
+                                                    isrequired="true" normal-col-num="4" customvalidate="validateDates">
+    </vr-genericdata-fieldtype-datetime-filtereditor>
+</span>
+
+<span ng-show="selectedFilter.showSecondDateTimePicker" vr-loader="isDate2FilterEditorLoading" ng-if="isDate2FilterRecompiling">
+    <vr-genericdata-fieldtype-datetime-filtereditor on-ready="onDate2FilterEditorReady" selectionmode="single"
+                                                    isrequired="selectedFilter.showSecondDateTimePicker" normal-col-num="4" customvalidate="validateDates">
+    </vr-genericdata-fieldtype-datetime-filtereditor>
+</span>
+
+<vr-columns width="normal" ng-show="comparisonParts.length > 1">
+    <vr-select datasource="comparisonParts"
+               datavaluefield="value"
+               datatextfield="description"
+               selectedvalues="selectedComparisonPart"
+               onselectionchanged="onComparisonPartSelectionChanged"
+               label="Comparison Part" isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+
+<!--vr-recompiler-ready="onDateFilterRecompilerReady(api)"-->

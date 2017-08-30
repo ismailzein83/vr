@@ -199,6 +199,7 @@
     <Content Include="VR_GenericData\Constants\MappingRuleStructureBehaviorTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\ModuleConfig.js" />
     <Content Include="VR_GenericData\Constants\DataRecordFieldComparisonOperatorEnum.js" />
+    <Content Include="VR_GenericData\Constants\TimeRoundingIntervalEnum.js" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\Templates\BELookupRuleDefinitionGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\BELookupRuleDefinition\vr-genericdata-belookupruledefinition-selector.js" />

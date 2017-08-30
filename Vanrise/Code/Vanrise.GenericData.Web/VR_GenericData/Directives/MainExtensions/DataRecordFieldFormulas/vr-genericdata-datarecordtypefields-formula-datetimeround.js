@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDatarecordtypefieldsFormulaDatetimeround', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrGenericdataDatarecordtypefieldsFormulaDatetimeround', ['UtilsService', 'VR_GenericData_DateTimeRecordFilterComparisonPartEnum', 'VR_GenericData_TimeRoundingIntervalEnum',
+    function (UtilsService, VR_GenericData_DateTimeRecordFilterComparisonPartEnum, VR_GenericData_TimeRoundingIntervalEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -30,11 +30,14 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaDatetimeround', ['UtilsSe
         function dateTimeRoundCtor(ctrl, $scope) {
             this.initializeController = initializeController;
 
-            var context;
-
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.fields = [];
+                $scope.scopeModel.showRoundingIntervalInMinutes = false;
+
+                $scope.scopeModel.onComparisonPartSelectionChanged = function (selectedComparisonPart) {
+                    $scope.scopeModel.showRoundingIntervalInMinutes = selectedComparisonPart != undefined && selectedComparisonPart.value == 1;
+                };
 
                 defineAPI();
             }
@@ -44,6 +47,9 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaDatetimeround', ['UtilsSe
 
                 api.load = function (payload) {
 
+                    $scope.scopeModel.comparisonParts = UtilsService.getArrayEnum(VR_GenericData_DateTimeRecordFilterComparisonPartEnum);
+                    $scope.scopeModel.timeRoundingInterval = UtilsService.getArrayEnum(VR_GenericData_TimeRoundingIntervalEnum);
+
                     if (payload != undefined) {
                         var context = payload.context;
                         if (context != undefined && context.getFields != undefined) {
@@ -52,14 +58,19 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaDatetimeround', ['UtilsSe
 
                         if (payload.formula != undefined) {
                             $scope.scopeModel.selectedDateTimeFieldName = UtilsService.getItemByVal($scope.scopeModel.fields, payload.formula.DateTimeFieldName, "fieldName");
+                            $scope.scopeModel.selectedComparisonPart = UtilsService.getItemByVal($scope.scopeModel.comparisonParts, payload.formula.ComparisonPart, "value");
+                            $scope.scopeModel.selectedTimeRoundingInterval = UtilsService.getItemByVal($scope.scopeModel.timeRoundingInterval, payload.formula.TimeRoundingInterval, "value");
                         }
                     }
                 };
 
                 api.getData = function () {
+
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas.DateTimeRoundFieldFormula, Vanrise.GenericData.MainExtensions",
-                        DateTimeFieldName: $scope.scopeModel.selectedDateTimeFieldName.fieldName
+                        DateTimeFieldName: $scope.scopeModel.selectedDateTimeFieldName.fieldName,
+                        ComparisonPart: $scope.scopeModel.selectedComparisonPart.value,
+                        TimeRoundingInterval: $scope.scopeModel.showRoundingIntervalInMinutes ? $scope.scopeModel.selectedTimeRoundingInterval.value : undefined
                     };
                 };
 
@@ -68,6 +79,7 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaDatetimeround', ['UtilsSe
             }
 
         }
+
         return directiveDefinitionObject;
     }
 ]);
