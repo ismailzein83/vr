@@ -289,7 +289,23 @@ namespace Vanrise.Fzero.Services.Mysql
         public List<string>[] SelectCalls(int LastCallID)
         {
             NewLastCallID = LastCallID;
-            string querycalls = "SELECT   a.id_call as ID,  IFNULL(c.Name,'') as ClientName,  a.id_call, a.caller_id, SUBSTRING(a.called_number, 7) as called_number, a.call_start, a.duration , IFNULL(b.Origination,'') as Origination ,    IFNULL(b.Carrier,'') as RouteID,    IFNULL(b.Type,'SIP') as Type    FROM         calls as a left outer join CarrierPrefixes as b on    Left(a.called_number, 6) = b.Prefix      left outer join clients as c on    a.id_Client = c.ID where id_call>" + LastCallID.ToString();
+            string querycalls = @"SELECT   a.id_call as ID,
+                                          IFNULL(c.Name,'') as ClientName, 
+                                          a.id_call, 
+                                          a.caller_id, 
+                                          case when Left(a.called_number, 3) = 999
+                                          then SUBSTRING(a.called_number,4)
+                                          else SUBSTRING(a.called_number,9) END  as called_number,
+                                          a.call_start,
+                                          a.duration , 
+                                          IFNULL(b.Origination,'') as Origination ,
+                                          IFNULL(b.Carrier,'') as RouteID,   
+                                          IFNULL(b.Type,'SIP') as Type  
+                                    FROM     calls as a 
+                                    left outer join CarrierPrefixes as b 
+                                    on    Left(a.called_number, 8) = b.Prefix
+                                    left outer join clients as c 
+                                    on    a.id_Client = c.ID where id_call>" + LastCallID.ToString();
 
             //Create a list to store the result
             List<string>[] listcalls = new List<string>[10];
@@ -353,7 +369,21 @@ namespace Vanrise.Fzero.Services.Mysql
         public List<string>[] SelectCallsFailed(int LastCallFailedID)
         {
             NewLastCallFailedID = LastCallFailedID;
-            string querycallsfailed = "SELECT     a.id_failed_call as ID, IFNULL(c.Name,'') as ClientName, a.id_failed_call, a.caller_id, SUBSTRING(a.called_number, 7) as called_number, a.call_start, 0 as duration,  IFNULL(b.Origination,'') as Origination ,    IFNULL(b.Carrier,'') as RouteID,    IFNULL(b.Type,'SIP') as Type    FROM         callsfailed as a left outer join CarrierPrefixes as b on    Left(a.called_number, 6) = b.Prefix       left outer join clients as c on    a.id_Client = c.ID  where id_failed_call>" + LastCallFailedID.ToString();
+            string querycallsfailed = @"SELECT     a.id_failed_call as ID,
+                                                   IFNULL(c.Name,'') as ClientName,
+                                                   a.id_failed_call,
+                                                   a.caller_id,
+                                                   case when Left(a.called_number, 3) = 999 then SUBSTRING(a.called_number,4) else SUBSTRING(a.called_number,9) END  as called_number,
+                                                   a.call_start, 0 as duration, 
+                                                   IFNULL(b.Origination,'') as Origination ,
+                                                   IFNULL(b.Carrier,'') as RouteID,
+                                                   IFNULL(b.Type,'SIP') as Type 
+                                          FROM   callsfailed as a 
+                                          left outer join CarrierPrefixes as b 
+                                          on    Left(a.called_number, 8) = b.Prefix   
+                                          left outer join clients as c
+                                          on    a.id_Client = c.ID  
+                                          where id_failed_call>" + LastCallFailedID.ToString();
 
             //Create a list to store the result
             List<string>[] list_failedcalls = new List<string>[10];
