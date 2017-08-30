@@ -19,9 +19,10 @@
     [TotalSaleDuration]      DECIMAL (20, 4)  NULL,
     [TotalSaleAmount]        DECIMAL (26, 10) NULL,
     [NumberOfCDRs]           INT              NULL,
-    [SameZone]               BIT              NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
