@@ -27,11 +27,11 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleZoneManager _saleZoneManager = new SaleZoneManager();
 
             #region mapper
-            private ZoneRoutingProduct ZoneRoutingProductMapper(SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct, long zoneId, int countryId, IEnumerable<int> serviceIds, bool IsInherited)
+            private ZoneRoutingProduct ZoneRoutingProductMapper(SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct, long zoneId, DateTime zoneBED, int countryId, IEnumerable<int> serviceIds, bool IsInherited)
             {
                 return new ZoneRoutingProduct
                 {
-                    BED = saleEntityZoneRoutingProduct.BED,
+                    BED = saleEntityZoneRoutingProduct.BED > zoneBED ? saleEntityZoneRoutingProduct.BED : zoneBED,
                     EED = saleEntityZoneRoutingProduct.EED,
                     ZoneRoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId,
                     ZoneId = zoneId,
@@ -73,7 +73,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var serviceIds = _routingProductManager.GetZoneServiceIds(
                                 saleEntityZoneRoutingProduct.RoutingProductId, saleZone.SaleZoneId);
-                            ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(saleEntityZoneRoutingProduct, saleZone.SaleZoneId, saleZone.CountryId, serviceIds, false);
+                            ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(saleEntityZoneRoutingProduct, saleZone.SaleZoneId, saleZone.BED, saleZone.CountryId, serviceIds, false);
                             zoneRoutingProducts.Add(routingProduct);
                         }
                     }
@@ -97,7 +97,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             var serviceIds = _routingProductManager.GetZoneServiceIds(
                                 zoneRoutingProduct.RoutingProductId, saleZone.SaleZoneId);
                             ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(zoneRoutingProduct,
-                                saleZone.SaleZoneId, saleZone.CountryId, serviceIds,
+                                saleZone.SaleZoneId, saleZone.BED, saleZone.CountryId, serviceIds,
                                 zoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone);
                             zoneRoutingProducts.Add(routingProduct);
                         }
@@ -129,7 +129,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 30});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Routing Product" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
