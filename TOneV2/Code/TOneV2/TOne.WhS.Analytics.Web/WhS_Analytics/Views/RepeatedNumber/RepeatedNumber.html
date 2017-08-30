@@ -3,31 +3,18 @@
 
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-choices-filter selectedindex="selectedFilternIndex">
-                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
-                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
-                    </vr-choices-filter>
-
-                </vr-columns>
-            </vr-row>
-            <vr-row removeline>
                 <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate"></vr-timerange>
 
-                <span>
-                    <vr-whs-analytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady" isrequired="true"></vr-whs-analytics-callstatus-selector>
-                </span>
+                <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
 
-                <span>
-                    <vr-whs-analytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true"></vr-whs-analytics-phonenumber-selector>
-                </span>
+                <vr-whs-analytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady" isrequired="true"></vr-whs-analytics-callstatus-selector>
+
+                <vr-whs-analytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true"></vr-whs-analytics-phonenumber-selector>
 
                 <vr-columns width="normal">
                     <vr-textbox type="number" value="nRecords" label="Repeated More Than" minvalue="0" decimalprecision="0" isrequired></vr-textbox>
                 </vr-columns>
-                <span ng-show="advancedSelected">
-                    <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
-                </span>
+
             </vr-row>
         </div>
 
