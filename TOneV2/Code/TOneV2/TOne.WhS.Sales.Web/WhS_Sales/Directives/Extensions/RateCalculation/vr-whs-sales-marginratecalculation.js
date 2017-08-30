@@ -43,8 +43,6 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
 
             $scope.scopeModel.optionNumbers = [{ value: 1, description: 'Option 1' }, { value: 2, description: 'Option 2' }, { value: 3, description: 'Option 3' }];
 
-            $scope.scopeModel.showMarginLabel = true;
-            $scope.scopeModel.showMarginPercentageLabel = false;
 
             $scope.scopeModel.types = UtilsService.getArrayEnum(WhS_Sales_MarginRateCalculationMethodType);
             $scope.scopeModel.costColumns = [];
@@ -76,11 +74,6 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
             };
 
-            $scope.scopeModel.onIsPercentageChanged = function () {
-                WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
-                $scope.scopeModel.showMarginLabel = !$scope.scopeModel.showMarginLabel;
-                $scope.scopeModel.showMarginPercentageLabel = !$scope.scopeModel.showMarginPercentageLabel;
-            };
 
             $scope.scopeModel.onCostColumnSelectorReady = function (api) {
                 costColumnSelectorAPI = api;
@@ -101,14 +94,23 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 supplierSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.validateRequiredMargin = function () {
+                if ($scope.scopeModel.margin == undefined && $scope.scopeModel.marginPercentage == undefined)
+                    return "at list one margin should be set.";
+                return null;
+
+            };
             $scope.scopeModel.validateMargin = function () {
                 if ($scope.scopeModel.margin == undefined)
                     return;
-                if ($scope.scopeModel.isPercentage) {
-                    if ($scope.scopeModel.margin < 0 || $scope.scopeModel.margin > 100)
-                        return 'Margin % must be between 0 and 100';
-                }
-                else {
+                if ($scope.scopeModel.margin == 0)
+                    return 'Margin must be different than 0';
+                return null;
+            }
+            $scope.scopeModel.validateMarginPercentage = function () {
+                if ($scope.scopeModel.marginPercentage!=undefined) {
+                    if ($scope.scopeModel.marginPercentage < 0 || $scope.scopeModel.marginPercentage > 100)
+                       return 'Margin % must be between 0 and 100';
                     if ($scope.scopeModel.margin == 0)
                         return 'Margin must be different than 0';
                 }
@@ -183,7 +185,7 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 var data = {
                     $type: "TOne.WhS.Sales.MainExtensions.RateCalculation.MarginRateCalculationMethod, TOne.WhS.Sales.MainExtensions",
                     Margin: $scope.scopeModel.margin,
-                    IsPercentage: $scope.scopeModel.isPercentage,
+                    MarginPercentage: $scope.scopeModel.marginPercentage,
                     Type: $scope.scopeModel.selectedType.value,
                     SupplierId: supplierSelectorAPI.getSelectedIds()
                 };
@@ -195,7 +197,15 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
             };
 
             api.getDescription = function () {
-                return $scope.scopeModel.margin;
+                var marginPercentageDescription;
+                if ($scope.scopeModel.marginPercentage != undefined && $scope.scopeModel.margin != undefined)
+                    return 'Value: '+$scope.scopeModel.margin + ' , Percentage: ' + $scope.scopeModel.marginPercentage;
+                else {
+                    if ($scope.scopeModel.margin!=undefined)
+                        return 'Value: ' + $scope.scopeModel.margin
+                    if ($scope.scopeModel.marginPercentage != undefined)
+                        return ' Precentage: ' + $scope.scopeModel.marginPercentage;
+                }
             };
 
             if (ctrl.onReady != null)

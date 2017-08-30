@@ -169,7 +169,7 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                     rateSourcesText = rateSourceSelectorAPI.getSelectedText().join(',');
                 var bedAsString = ($scope.scopeModel.beginEffectiveDate != undefined) ? UtilsService.getShortDate($scope.scopeModel.beginEffectiveDate) : 'None';
 
-                var summary = 'Rate Calculation Method: ' + rateCalculationMethodTitle + ' | Value: ' + rateCalculationMethodDescription;
+                var summary = 'Rate Calculation Method: ' + rateCalculationMethodTitle + ' | ' + rateCalculationMethodDescription;
                 if ($scope.scopeModel.showRateSource == true)
                     summary += ' | Rate Source: ' + rateSourcesText;
                 return summary;

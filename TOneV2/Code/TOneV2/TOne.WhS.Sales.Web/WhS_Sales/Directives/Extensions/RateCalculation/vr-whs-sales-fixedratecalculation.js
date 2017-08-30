@@ -69,7 +69,7 @@ app.directive("vrWhsSalesFixedratecalculation", ['WhS_Sales_BulkActionUtilsServi
             };
 
             api.getDescription = function () {
-                return UtilsService.round(ctrl.fixedRate, bulkActionContext.longPrecision);
+                return 'Value: '+UtilsService.round(ctrl.fixedRate, bulkActionContext.longPrecision);
             };
 
             if (ctrl.onReady != null)

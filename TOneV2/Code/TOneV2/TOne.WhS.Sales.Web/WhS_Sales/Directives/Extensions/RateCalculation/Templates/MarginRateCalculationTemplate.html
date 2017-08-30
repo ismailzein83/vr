@@ -41,12 +41,15 @@
                                      hideremoveicon>
         </vr-whs-be-supplier-selector>
     </span>
-    <vr-columns colnum="{{ctrl.normalColNum / 2}}">
-        <vr-label ng-show="scopeModel.showMarginLabel">Margin</vr-label>
-        <vr-label ng-show="scopeModel.showMarginPercentageLabel">Margin %</vr-label>
-        <vr-textbox type="number" value="scopeModel.margin" onvaluechanged="scopeModel.onMarginChanged" isrequired="ctrl.isrequired" customvalidate="scopeModel.validateMargin()"></vr-textbox>
+    <vr-columns colnum="{{ctrl.normalColNum}}" haschildcolumns>
+        <vr-validator validate="scopeModel.validateRequiredMargin()">
+            <vr-columns width="1/2row">
+                <vr-textbox label="Margin" type="number" value="scopeModel.margin" onvaluechanged="scopeModel.onMarginChanged" customvalidate="scopeModel.validateMargin()"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/2row">
+                <vr-textbox label="Margin %" type="number" value="scopeModel.marginPercentage" onvaluechanged="scopeModel.onMarginChanged" customvalidate="scopeModel.validateMarginPercentage()"></vr-textbox>
+            </vr-columns>
+        </vr-validator>
     </vr-columns>
-    <vr-columns colnum="{{ctrl.normalColNum / 2}}">
-        <vr-switch value="scopeModel.isPercentage" label="Percentage" onvaluechanged="scopeModel.onIsPercentageChanged"></vr-switch>
-    </vr-columns>
+
 </vr-columns>

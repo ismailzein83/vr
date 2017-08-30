@@ -15,7 +15,7 @@ namespace TOne.WhS.Sales.MainExtensions.RateCalculation
 
         public decimal Margin { get; set; }
 
-        public bool IsPercentage { get; set; }
+        public decimal MarginPercentage { get; set; }
 
         public MarginRateCalculationMethodType Type { get; set; }
 
@@ -77,7 +77,8 @@ namespace TOne.WhS.Sales.MainExtensions.RateCalculation
 
         private decimal ApplyMargin(decimal rate)
         {
-            return (IsPercentage) ? (rate + ((Margin * rate) / 100)) : (rate + Margin);
+            decimal marginRate = rate + Margin;
+            return (MarginPercentage != 0) ? (marginRate + ((MarginPercentage * marginRate) / 100)) : marginRate;
         }
 
         #endregion
