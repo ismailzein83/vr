@@ -27,6 +27,8 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     var codeGroupDirectiveAPI;
     var codeGroupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+    var saleZoneDirectiveAPI;
+    var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     defineScope();
     load();
@@ -67,6 +69,11 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
             codeGroupDirectiveAPI = api;
             codeGroupReadyPromiseDeferred.resolve();
         };
+        $scope.onSaleZoneDirectiveReady = function (api) {
+            saleZoneDirectiveAPI = api;
+            saleZoneReadyPromiseDeferred.resolve();
+        };
+
         $scope.onMainGridReady = function (api) {
             mainGridAPI = api;
         };
@@ -93,7 +100,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadReleaseCodeDimessionSection, loadCustomers, loadSuppliers, loadSwitches, /*loadCountries,*/ loadCodeGroups])
+        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadReleaseCodeDimessionSection, loadCustomers, loadSuppliers, loadSwitches, /*loadCountries,*/ loadCodeGroups, loadSaleZoneSection])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -110,6 +117,8 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         filter.SupplierIds = supplierDirectiveAPI.getSelectedIds();
         filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
         filter.CodeGroupIds = codeGroupDirectiveAPI.getSelectedIds();
+        filter.MasterSaleZoneIds = saleZoneDirectiveAPI.getSelectedIds();
+
         return filter;
     }
     function loadTimeRangeSelector() {
@@ -170,6 +179,14 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         return loadCodeGroupPromiseDeferred.promise;
     }
 
+
+    function loadSaleZoneSection() {
+        var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
+        saleZoneReadyPromiseDeferred.promise.then(function () {
+            VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, undefined, loadSaleZonePromiseDeferred);
+        });
+        return loadSaleZonePromiseDeferred.promise;
+    }
 
 
 };

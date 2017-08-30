@@ -241,6 +241,8 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddFilter(whereBuilder, filter.SwitchIds, "SwitchId");
             AddFilter(whereBuilder, filter.SupplierIds, "SupplierID");
             AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
+            AddFilter(whereBuilder, filter.MasterSaleZoneIds, "MasterPlanZoneID");
+
             AddFilter(whereBuilder, codes, "SaleCode");
 
 

@@ -3,35 +3,24 @@
 
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-choices-filter selectedindex="selectedFilternIndex">
-                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
-                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
-                    </vr-choices-filter>
+                <vr-whs-analytics-releasecode-dimenssion-selector normal-col-num="2" ismultipleselection on-ready="onReleaseCodeDimenssionDirectiveReady"></vr-whs-analytics-releasecode-dimenssion-selector>
 
-                </vr-columns>
-            </vr-row>
-            <vr-row removeline>
-                <span >
-                    <vr-whs-analytics-releasecode-dimenssion-selector normal-col-num="2" ismultipleselection on-ready="onReleaseCodeDimenssionDirectiveReady"></vr-whs-analytics-releasecode-dimenssion-selector>
-                </span>
-                <span ng-show="advancedSelected">
-                    <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerDirectiveReady"></vr-whs-be-customer-selector>
-                </span>
-                <span ng-show="advancedSelected">
-                    <vr-whs-be-supplier-selector normal-col-num="2" ismultipleselection on-ready="onSupplierDirectiveReady"></vr-whs-be-supplier-selector>
-                </span>
-                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate" ></vr-timerange>
-                <span ng-show="advancedSelected">
-                    <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
-                </span>
+                <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerDirectiveReady"></vr-whs-be-customer-selector>
+
+                <vr-whs-be-supplier-selector normal-col-num="2" ismultipleselection on-ready="onSupplierDirectiveReady"></vr-whs-be-supplier-selector>
+
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="dateTime" width="normal" period="today" from="fromDate" to="toDate"></vr-timerange>
+                <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
                 <!--<span ng-show="advancedSelected">
                     <vr-common-country-selector normal-col-num="2" on-ready="onCountryDirectiveReady" ismultipleselection></vr-common-country-selector>
                 </span>-->
 
-                <vr-columns width="normal" ng-show="advancedSelected">
+                <vr-columns width="normal">
                     <vr-whs-be-codegroup-selector normal-col-num="2" on-ready="onCodeGroupDirectiveReady" ismultipleselection></vr-whs-be-codegroup-selector>
                 </vr-columns>
+
+                <vr-whs-be-salezone-masterplan-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady"></vr-whs-be-salezone-masterplan-selector>
+
             </vr-row>
         </div>
 
