@@ -136,7 +136,8 @@ as (select * from (values
 ('C01FA066-28C8-4225-9F59-39F5EECF86ED','AccountPartDefinitionOverriddenConfiguration','Account Part Definition','VRCommon_OverriddenConfiguration','{"Editor":"retail-overriddenconfiguration-accountpartdefinition"}'),
 ('9b59a5e8-923a-4e9e-8338-9549150ec88c','Account City','Account City','VR_InvoiceType_SerialNumberParts','{"Editor":"retail-invoicetype-serialnumber-accountcity"}'),
 
-('3A88F4C6-5CCE-4A31-A74E-E83BF73A6892','Retail_BE_DataRecordFieldFormula_ZoneEvaluator','Zone Evaluator','VR_Generic_DataRecordFieldFormula','{"Editor":"retail-be-datarecordtypefields-formula-zoneevaluator"}')
+('3A88F4C6-5CCE-4A31-A74E-E83BF73A6892','Retail_BE_DataRecordFieldFormula_ZoneEvaluator','Zone Evaluator','VR_Generic_DataRecordFieldFormula'			,'{"Editor":"retail-be-datarecordtypefields-formula-zoneevaluator"}'),
+('B3D9B0A4-B751-4544-8A7A-6764687059ED','Retail_BE_DataRecordFieldFormula_ParentAccount','Retail Parent Account','VR_Generic_DataRecordFieldFormula'	,'{"Editor":"retail-be-datarecordtypefields-formula-parentaccount"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
