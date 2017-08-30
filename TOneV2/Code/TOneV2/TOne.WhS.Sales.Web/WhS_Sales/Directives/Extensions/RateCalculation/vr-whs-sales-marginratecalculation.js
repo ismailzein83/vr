@@ -106,7 +106,7 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 if ($scope.scopeModel.margin == 0)
                     return 'Margin must be different than 0';
                 return null;
-            }
+            };
             $scope.scopeModel.validateMarginPercentage = function () {
                 if ($scope.scopeModel.marginPercentage!=undefined) {
                     if ($scope.scopeModel.marginPercentage < 0 || $scope.scopeModel.marginPercentage > 100)
@@ -201,8 +201,8 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 if ($scope.scopeModel.marginPercentage != undefined && $scope.scopeModel.margin != undefined)
                     return 'Value: '+$scope.scopeModel.margin + ' , Percentage: ' + $scope.scopeModel.marginPercentage;
                 else {
-                    if ($scope.scopeModel.margin!=undefined)
-                        return 'Value: ' + $scope.scopeModel.margin
+                    if ($scope.scopeModel.margin != undefined)
+                        return 'Value: ' + $scope.scopeModel.margin;
                     if ($scope.scopeModel.marginPercentage != undefined)
                         return ' Precentage: ' + $scope.scopeModel.marginPercentage;
                 }

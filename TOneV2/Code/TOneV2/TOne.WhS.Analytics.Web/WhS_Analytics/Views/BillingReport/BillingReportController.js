@@ -127,7 +127,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
                 $scope.params.isCost = typeSelectorAPI.getSelectedIds();
                 $scope.params.bySupplier = false;
             }
-        }
+        };
 
         $scope.openReport = function () {
             var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
@@ -289,6 +289,6 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
 
         return loadSaleZonesPromiseDeferred.promise;
     }
-};
+}
 
 appControllers.controller('WhS_Analytics_BillingReportsController', BillingReportsController);
