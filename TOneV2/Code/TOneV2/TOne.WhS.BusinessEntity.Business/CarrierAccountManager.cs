@@ -75,6 +75,22 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
+        public int GetSupplierEffectiveDateDayOffset(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+
+            carrierAccount.ThrowIfNull("Carrier Account", carrierAccountId);
+            carrierAccount.SupplierSettings.ThrowIfNull("CarrierAccount.CustomerSetting", carrierAccountId);
+
+            var supplierEffectiveDateDayOffset = carrierAccount.SupplierSettings.EffectiveDateDayOffset;
+
+            if (supplierEffectiveDateDayOffset.HasValue)
+                return supplierEffectiveDateDayOffset.Value;
+
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetPurchaseAreaEffectiveDateDayOffset();
+        }
+
         public PriceListExtensionFormat GetPriceListExtensionFormat(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);

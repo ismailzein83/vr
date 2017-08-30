@@ -16,5 +16,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int? TimeZoneId { get; set; }
 
         public bool IncludeProcessingTimeZone { get; set; }
+
+        public int? EffectiveDateDayOffset { get; set; }
     }
 }

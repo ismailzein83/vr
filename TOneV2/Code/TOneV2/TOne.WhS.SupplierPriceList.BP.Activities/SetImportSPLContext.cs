@@ -15,6 +15,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         #region Input Arguments
 
         [RequiredArgument]
+        public InArgument<int> SupplierId { get; set; }
+
+        [RequiredArgument]
         public InArgument<int> CurrencyId { get; set; }
 
         #endregion
@@ -26,9 +29,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            int supplierId = SupplierId.Get(context);
             int currencyId = CurrencyId.Get(context);
             ImportSPLContext importSPLContext = context.GetSPLParameterContext() as ImportSPLContext;
             importSPLContext.PriceListCurrencyId = currencyId;
+            importSPLContext.SetSupplierEffectiveDateDayOffset(supplierId);
         }
     }
 
@@ -58,8 +63,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         private Dictionary<int, decimal> _maximumRateConvertedByCurrency = new Dictionary<int, decimal>();
         public ImportSPLContext()
         {
-            int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetPurchaseAreaEffectiveDateDayOffset();
-            _codeCloseDateOffset = new TimeSpan(effectiveDateDayOffset, 0, 0, 0);
 
             CurrencyManager currencyManager = new CurrencyManager();
             var systemCurrency = currencyManager.GetSystemCurrency();
@@ -84,15 +87,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 return this._processHasChanges;
             }
         }
-
         public TimeSpan CodeCloseDateOffset
         {
             get
             {
                 return _codeCloseDateOffset;
             }
+            set { _codeCloseDateOffset = value; }
         }
-
         public decimal MaximumRate { get; set; }
 
         #region public functions
@@ -124,6 +126,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public int GetImportedRateCurrencyId(ImportedRate importedRate)
         {
             return _priceListCurrencyId;
+        }
+
+        public void SetSupplierEffectiveDateDayOffset (int supplierId)
+        {
+            int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetSupplierEffectiveDateDayOffset(supplierId);
+            TimeSpan codeCloseDateOffset = new TimeSpan(effectiveDateDayOffset, 0, 0, 0);
+            _codeCloseDateOffset = codeCloseDateOffset;
         }
         #endregion
     }

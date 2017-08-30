@@ -105,7 +105,7 @@
                 if ($scope.scopeModel.selectedCarrierAccountType != undefined) {
                     if ($scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Customer.value || $scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
                         if (sellingNumberPlanSelectorAPI != undefined) {
-                            var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value };
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value; };
                             var payload = {
                                 selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined
                             };
@@ -113,7 +113,7 @@
                         }
 
                         if (customerTimeZoneSelectorAPI != undefined) {
-                            var setLoader = function (value) { $scope.scopeModel.isLoadingCustomer = value };
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingCustomer = value; };
                             var payload;
                             if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != null && carrierAccountEntity.CustomerSettings.TimeZoneId != 0)
                                 payload = {
@@ -131,7 +131,7 @@
 
                     if ($scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Supplier.value || $scope.scopeModel.selectedCarrierAccountType.value == WhS_BE_CarrierAccountTypeEnum.Exchange.value) {
                         if (zoneServiceConfigSelectorAPI != undefined) {
-                            var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value };
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value; };
                             var payload = {
                                 selectedIds: getDefaultServices()
                             };
@@ -139,7 +139,7 @@
                         }
 
                         if (supplierTimeZoneSelectorAPI != undefined) {
-                            var setLoader = function (value) { $scope.scopeModel.isLoadingSupplier = value };
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingSupplier = value; };
                             var payload;
                             if (carrierAccountEntity != undefined && carrierAccountEntity.SupplierSettings != null && carrierAccountEntity.SupplierSettings.TimeZoneId != 0)
                                 payload = {
@@ -172,12 +172,12 @@
             // Customer Settings
             $scope.scopeModel.onCustomerTimeSelectorReady = function (api) {
                 customerTimeZoneSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerTimeZoneSelector = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerTimeZoneSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerTimeZoneSelectorAPI, undefined, setLoader, customerTimeZoneSelectorReadyDeferred);
             };
             $scope.scopeModel.onSellingNumberPlanSelectorReady = function (api) {
                 sellingNumberPlanSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlanSelector = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlanSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanSelectorAPI, undefined, setLoader, sellingNumberPlanSelectorReadyDeferred);
             };
             $scope.scopeModel.onSellingNumberPlanChanged = function (selectedSellingNumberPlan) {
@@ -202,34 +202,34 @@
             };
             $scope.scopeModel.onCustomerRoutingStatusSelectorReady = function (api) {
                 customerRoutingStatusSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerRoutingStatusSelector = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerRoutingStatusSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerRoutingStatusSelectorAPI, undefined, setLoader, customerRoutingStatusSelectorReadyDeferred);
             };
             $scope.scopeModel.onPriceListExtensionFormatSelectorReady = function (api) {
                 priceListExtensionFormatSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingPRiceListExtensionFormatSelector = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingPRiceListExtensionFormatSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceListExtensionFormatSelectorAPI, undefined, setLoader, priceListExtensionFormatSelectorReadyDeferred);
             };
             $scope.scopeModel.onPriceListTypeSelectorReady = function (api) {
                 priceLisTypeSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingPriceListTypeFormatSelector = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingPriceListTypeFormatSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceLisTypeSelectorAPI, undefined, setLoader, priceListTypeSelectorReadyDeferred);
             };
             // Supplier Settings
             $scope.scopeModel.onSupplierTimeSelectorReady = function (api) {
                 supplierTimeZoneSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSupplierTimeZoneSelector = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSupplierTimeZoneSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierTimeZoneSelectorAPI, undefined, setLoader, supplierTimeZoneSelectorReadyDeferred);
 
             };
             $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
                 zoneServiceConfigSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, undefined, setLoader, zoneServiceConfigSelectorReadyDeferred);
             };
             $scope.scopeModel.onSupplierRoutingStatusSelectorReady = function (api) {
                 supplierRoutingStatusSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSupplierRoutingStatusSelector = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSupplierRoutingStatusSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierRoutingStatusSelectorAPI, undefined, setLoader, supplierRoutingStatusSelectorReadyDeferred);
             };
 
@@ -382,6 +382,7 @@
                     }
                     if (carrierAccountEntity.SupplierSettings) {
                         $scope.scopeModel.supIncludeProcessingTimeZone = carrierAccountEntity.SupplierSettings.IncludeProcessingTimeZone;
+                        $scope.scopeModel.supplierEffectiveDateDayOffset = carrierAccountEntity.SupplierSettings.EffectiveDateDayOffset;
                     }
 
                     if (carrierAccountEntity.CustomerSettings) {
@@ -703,7 +704,8 @@
                     DefaultServices: zoneServiceConfigSelectorAPI != undefined ? getSelectedDefaultServices() : null,
                     TimeZoneId: supplierTimeZoneSelectorAPI != undefined ? supplierTimeZoneSelectorAPI.getSelectedIds() : undefined,
                     RoutingStatus: supplierRoutingStatusSelectorAPI != undefined ? supplierRoutingStatusSelectorAPI.getSelectedIds() : undefined,
-                    IncludeProcessingTimeZone: $scope.scopeModel.supIncludeProcessingTimeZone
+                    IncludeProcessingTimeZone: $scope.scopeModel.supIncludeProcessingTimeZone,
+                    EffectiveDateDayOffset: $scope.scopeModel.supplierEffectiveDateDayOffset
                 },
                 CustomerSettings: {
                     TimeZoneId: customerTimeZoneSelectorAPI != undefined ? customerTimeZoneSelectorAPI.getSelectedIds() : undefined,
