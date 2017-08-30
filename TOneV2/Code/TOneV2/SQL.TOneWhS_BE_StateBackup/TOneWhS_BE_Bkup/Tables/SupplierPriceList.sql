@@ -8,8 +8,11 @@
     [SourceID]          VARCHAR (50) NULL,
     [ProcessInstanceID] BIGINT       NULL,
     [SPLStateBackupID]  BIGINT       NULL,
+    [UserID]            INT          NULL,
     [StateBackupID]     BIGINT       NULL
 );
+
+
 
 
 
