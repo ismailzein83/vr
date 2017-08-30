@@ -26,9 +26,9 @@ namespace Retail.BusinessEntity.Business
 
         public List<RecurringChargeEvaluatorOutput> EvaluateRecurringCharge(RecurringChargeEvaluatorSettings recurringCharge, RecurringChargeEvaluatorDefinitionSettings recurringChargeDefinition,
             DateTime chargingPeriodStart, DateTime chargingPeriodEnd, Guid accountBEDefinitionId, AccountPackage accountPackage, DateTime chargeDay, object initializeData,
-            Func<int, DateTimeRange, List<AccountPackageRecurCharge>> getAccountPackageRecurCharges, Guid accountStatusId)
+            Func<int, DateTimeRange, List<AccountPackageRecurCharge>> getAccountPackageRecurCharges, Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> accountStatusHistoryListByAccountDefinition)
         {
-            var context = new RecurringChargeEvaluatorContext(recurringChargeDefinition, chargingPeriodStart, chargingPeriodEnd, accountBEDefinitionId, accountPackage, chargeDay, initializeData, getAccountPackageRecurCharges, accountStatusId);
+            var context = new RecurringChargeEvaluatorContext(recurringChargeDefinition, chargingPeriodStart, chargingPeriodEnd, accountBEDefinitionId, accountPackage, chargeDay, initializeData, getAccountPackageRecurCharges, accountStatusHistoryListByAccountDefinition);
             return recurringCharge.Evaluate(context);
         }
 
@@ -52,10 +52,11 @@ namespace Retail.BusinessEntity.Business
             DateTime _chargeDay;
             object _initializeData;
             Func<int, DateTimeRange, List<AccountPackageRecurCharge>> _getAccountPackageRecurCharges;
-            Guid _accountStatusId;
+            Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> _accountStatusHistoryListByAccountDefinition;
 
             public RecurringChargeEvaluatorContext(RecurringChargeEvaluatorDefinitionSettings recurringChargeDefinition, DateTime chargingPeriodStart, DateTime chargingPeriodEnd,
-                Guid accountBEDefinitionId, AccountPackage accountPackage, DateTime chargeDay, object initializeData, Func<int, DateTimeRange, List<AccountPackageRecurCharge>> getAccountPackageRecurCharges, Guid accountStatusId)
+                Guid accountBEDefinitionId, AccountPackage accountPackage, DateTime chargeDay, object initializeData, Func<int, DateTimeRange, List<AccountPackageRecurCharge>> getAccountPackageRecurCharges, 
+                Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> accountStatusHistoryListByAccountDefinition)
             {
                 _recurringChargeDefinition = recurringChargeDefinition;
                 _chargingPeriodStart = chargingPeriodStart;
@@ -65,7 +66,7 @@ namespace Retail.BusinessEntity.Business
                 _chargeDay = chargeDay;
                 _initializeData = initializeData;
                 _getAccountPackageRecurCharges = getAccountPackageRecurCharges;
-                _accountStatusId = accountStatusId;
+                _accountStatusHistoryListByAccountDefinition = accountStatusHistoryListByAccountDefinition;
             }
 
             public RecurringChargeEvaluatorDefinitionSettings EvaluatorDefinitionSettings
@@ -127,9 +128,14 @@ namespace Retail.BusinessEntity.Business
                 get { return _initializeData; }
             }
 
-            public Guid AccountStatusId
+            public Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> AccountStatusHistoryListByAccountDefinition
             {
-                get { return _accountStatusId; }
+                get { return _accountStatusHistoryListByAccountDefinition; }
+            }
+
+            public Guid AccountBEDefinitionId
+            {
+                get { return _accountBEDefinitionId; }
             }
         }
 

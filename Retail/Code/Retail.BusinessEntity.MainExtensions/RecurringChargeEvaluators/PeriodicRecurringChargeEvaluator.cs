@@ -27,8 +27,9 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
             context.ThrowIfNull("context");
             PeriodicRecurringChargeEvaluatorDefinitionSettings periodicChargeDefinition = context.EvaluatorDefinitionSettings.CastWithValidate<PeriodicRecurringChargeEvaluatorDefinitionSettings>("periodicChargeDefinition");
             periodicChargeDefinition.PricingStatuses.ThrowIfNull("periodicChargeDefinition.PricingStatuses");
-
-            if (!periodicChargeDefinition.PricingStatuses.Contains(context.AccountStatusId))
+            
+            Guid accountStatusId = new AccountStatusHistoryManager().GetAccountStatus(context.AccountStatusHistoryListByAccountDefinition, context.AccountBEDefinitionId, context.Account, context.ChargeDay);
+            if (!periodicChargeDefinition.PricingStatuses.Contains(accountStatusId))
             {
                 return new List<RecurringChargeEvaluatorOutput>
                 {

@@ -82,13 +82,12 @@ namespace Retail.BusinessEntity.BP.Activities
                 DateTime chargeDay = accountPackageRecurChargeData.BeginChargePeriod;
                 while (chargeDay < accountPackageRecurChargeData.EndChargePeriod)
                 {
-                    Guid accountStatusId = GetAccountStatus(accountStatusHistoryListByAccountDefinition, accountBEDefinitionId, accountId, chargeDay);
                     List<RecurringChargeEvaluatorOutput> recurringChargeEvaluatorOutputs = recurringChargeManager.EvaluateRecurringCharge(accountPackageRecurChargeDetails.RecurChargePackageSettings.Evaluator, accountPackageRecurChargeDetails.RecurChargePackageDefinitionSettings.EvaluatorDefinitionSettings,
                     accountPackageRecurChargeData.BeginChargePeriod, accountPackageRecurChargeData.EndChargePeriod, accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage, chargeDay, accountPackageRecurChargeDetails.InitializeData,
                     (accountPackageId, dateTimeRange) =>
                     {
                         return GetAccountPackageRecurCharges(accountPackageRecurChargesByAccountPackage, accountPackageId, dateTimeRange);
-                    }, accountStatusId);
+                    }, accountStatusHistoryListByAccountDefinition);
 
                     if (recurringChargeEvaluatorOutputs == null)
                         continue;
@@ -113,18 +112,6 @@ namespace Retail.BusinessEntity.BP.Activities
 
             this.AccountPackageRecurChargesByDate.Set(context, accountPackageRecurChargesByDate);
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Evaluate Reccuring Charge is done", null);
-        }
-
-        private Guid GetAccountStatus(Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> accountStatusHistoryListByAccountDefinition, Guid accountBEDefinitionId, long accountId, DateTime chargeDay)
-        {
-            IOrderedEnumerable<AccountStatusHistory> accountStatusHistoryList = accountStatusHistoryListByAccountDefinition.GetRecord(new AccountDefinition() { AccountBEDefinitionId = accountBEDefinitionId, AccountId = accountId });
-            if (accountStatusHistoryList == null)
-                throw new NullReferenceException(string.Format("accountStatusHistory for accountBEDefinitionId '{0}' and accountId '{1}'", accountBEDefinitionId, accountId));
-
-            AccountStatusHistory accountStatusHistory = accountStatusHistoryList.FirstOrDefault(itm => itm.StatusChangedDate <= chargeDay);
-            if (accountStatusHistory == null)
-                throw new NullReferenceException(string.Format("accountStatusHistory for accountBEDefinitionId '{0}' and accountId '{1}' and chargeday '{2}'", accountBEDefinitionId, accountId, chargeDay.ToString("yyyy-MM-dd")));
-            return accountStatusHistory.StatusId;
         }
 
         private AccountPackageRecurCharge BuildAccountPackageRecurCharge(AccountPackageRecurChargeData accountPackageRecurChargeData,

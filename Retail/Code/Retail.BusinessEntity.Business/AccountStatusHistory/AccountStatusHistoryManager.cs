@@ -35,5 +35,30 @@ namespace Retail.BusinessEntity.Business
             }
             return accountStatusHistoryListByAccountDefinition.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(historyItem => historyItem.StatusChangedDate));
         }
+
+        public Guid GetAccountStatus(Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> accountStatusHistoryListByAccountDefinition, Guid accountBEDefinitionId, Account account, DateTime chargeDay)
+        {
+            account.ThrowIfNull("account");
+
+            if (accountStatusHistoryListByAccountDefinition == null || accountStatusHistoryListByAccountDefinition.Count == 0)
+                return account.StatusId;
+
+            IOrderedEnumerable<AccountStatusHistory> accountStatusHistoryList = accountStatusHistoryListByAccountDefinition.GetRecord(new AccountDefinition() { AccountBEDefinitionId = accountBEDefinitionId, AccountId = account.AccountId });
+            if (accountStatusHistoryList == null || accountStatusHistoryList.Count() == 0)
+                return account.StatusId;
+
+            AccountStatusHistory previousAccountStatusHistory = null;
+            foreach (AccountStatusHistory accountStatusHistory in accountStatusHistoryList)
+            {
+                if (accountStatusHistory.StatusChangedDate <= chargeDay)
+                    return accountStatusHistory.StatusId;
+
+                previousAccountStatusHistory = accountStatusHistory;
+            }
+            if (previousAccountStatusHistory != null && previousAccountStatusHistory.PreviousStatusId.HasValue)
+                return previousAccountStatusHistory.PreviousStatusId.Value;
+
+            return account.StatusId;
+        }
     }
 }

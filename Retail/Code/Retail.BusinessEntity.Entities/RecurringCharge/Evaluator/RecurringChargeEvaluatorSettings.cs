@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Entities
         public abstract void ValidatePackageAssignment(IValidateAssignmentRecurringChargeEvaluatorContext context);
 
         public virtual void Initialize(IInitializeRecurringChargeContext context) { }
-        
+
         public abstract List<RecurringChargeEvaluatorOutput> Evaluate(IRecurringChargeEvaluatorContext context);
     }
 
@@ -37,9 +37,11 @@ namespace Retail.BusinessEntity.Entities
 
         Object InitializeData { get; }
 
+        Guid AccountBEDefinitionId { get; }
+
         Func<int, DateTimeRange, List<AccountPackageRecurCharge>> GetAccountPackageRecurCharges { get; }
 
-        Guid AccountStatusId { get; }
+        Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> AccountStatusHistoryListByAccountDefinition { get; }
     }
 
     public interface IInitializeRecurringChargeContext
