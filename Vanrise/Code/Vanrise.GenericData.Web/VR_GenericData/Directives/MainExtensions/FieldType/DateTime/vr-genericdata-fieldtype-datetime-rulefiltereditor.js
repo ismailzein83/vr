@@ -54,7 +54,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                     };
                     var setLoader = function (value) {
                         $scope.isDateFilterEditorLoading = value;
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dateFilterEditorAPI, dateFilterPayload, setLoader, dateFilterReadyDeferred);
                 };
                 $scope.onDate2FilterEditorReady = function (api) {
@@ -67,7 +67,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                     };
                     var setLoader = function (value) {
                         $scope.isDate2FilterEditorLoading = value;
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, date2FilterEditorAPI, date2FilterPayload, setLoader, date2FilterReadyDeferred);
                 };
 
@@ -89,11 +89,11 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                                 setTimeout(function () {
                                     $scope.isDate2FilterEditorLoading = value;
                                 }, 0);
-                            }
+                            };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, date2FilterEditorAPI, date2FilterPayload, setLoader);
                         }
                         else {
-                            var label = ($scope.selectedComparisonPart.value == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time.value) ? 'Time' : 'Date'
+                            var label = ($scope.selectedComparisonPart.value == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time.value) ? 'Time' : 'Date';
                             dateFilterEditorAPI.setLabel(label);
                         }
                     }
