@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.Data
     {
         IEnumerable<AccountPackage> GetAccountPackages();
 
-        bool Insert(AccountPackage accountPackage, out int insertedId);
+        bool Insert(AccountPackage accountPackage, out long insertedId);
 
         bool Update(AccountPackageToEdit accountPackage);
 

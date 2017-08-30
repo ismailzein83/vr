@@ -40,7 +40,7 @@ namespace Retail.BusinessEntity.BP.Activities
             List<AccountPackageRecurChargePeriod> accountPackageRecurChargePeriods = new List<AccountPackageRecurChargePeriod>();
             List<AccountPackageRecurChargeDetails> accountPackageRecurChargeDetailsList = new List<AccountPackageRecurChargeDetails>();
 
-            Dictionary<int, List<AccountPackageRecurCharge>> accountPackageRecurChargesByAccountPackage = null;
+            Dictionary<long, List<AccountPackageRecurCharge>> accountPackageRecurChargesByAccountPackage = null;
 
             HashSet<AccountDefinition> accountDefinitions = new HashSet<AccountDefinition>();
 
@@ -69,7 +69,7 @@ namespace Retail.BusinessEntity.BP.Activities
                 accountPackageRecurChargesByAccountPackage = accountPackageRecurChargeManager.GetAccountRecurringChargesByAccountPackage(accountPackageRecurChargePeriods);
 
             if (accountPackageRecurChargesByAccountPackage == null)
-                accountPackageRecurChargesByAccountPackage = new Dictionary<int, List<AccountPackageRecurCharge>>();
+                accountPackageRecurChargesByAccountPackage = new Dictionary<long, List<AccountPackageRecurCharge>>();
 
             Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> accountStatusHistoryListByAccountDefinition = new AccountStatusHistoryManager().GetAccountStatusHistoryListByAccountDefinition(accountDefinitions);
 
@@ -134,7 +134,7 @@ namespace Retail.BusinessEntity.BP.Activities
             return accountPackageRecurCharge;
         }
 
-        private List<AccountPackageRecurCharge> GetAccountPackageRecurCharges(Dictionary<int, List<AccountPackageRecurCharge>> accountPackageRecurChargesByAccountPackage, int accountPackageId, DateTimeRange dateTimeRange)
+        private List<AccountPackageRecurCharge> GetAccountPackageRecurCharges(Dictionary<long, List<AccountPackageRecurCharge>> accountPackageRecurChargesByAccountPackage, int accountPackageId, DateTimeRange dateTimeRange)
         {
             List<AccountPackageRecurCharge> tempAccountPackageRecurCharge = accountPackageRecurChargesByAccountPackage.GetOrCreateItem(accountPackageId);
             if (tempAccountPackageRecurCharge == null)

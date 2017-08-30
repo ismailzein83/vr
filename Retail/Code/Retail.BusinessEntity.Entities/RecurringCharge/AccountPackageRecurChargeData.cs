@@ -14,7 +14,7 @@ namespace Retail.BusinessEntity.Entities
 
     public class AccountPackageRecurChargePeriod
     {
-        public int AccountPackageId { get; set; }
+        public long AccountPackageId { get; set; }
 
         public DateTime FromDate { get; set; }
 

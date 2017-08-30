@@ -20,18 +20,18 @@ namespace Retail.BusinessEntity.Business
             return dataManager.GetAccountRecurringCharges(acountBEDefinitionId, accountId, includedFromDate, includedToDate);
         }
 
-        public Dictionary<int, List<AccountPackageRecurCharge>> GetAccountRecurringChargesByAccountPackage(List<AccountPackageRecurChargePeriod> accountPackageRecurChargePeriods)
+        public Dictionary<long, List<AccountPackageRecurCharge>> GetAccountRecurringChargesByAccountPackage(List<AccountPackageRecurChargePeriod> accountPackageRecurChargePeriods)
         {
             IAccountPackageRecurChargeDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageRecurChargeDataManager>();
             List<AccountPackageRecurCharge> accountPackageRecurCharges = dataManager.GetAccountRecurringCharges(accountPackageRecurChargePeriods);
             if (accountPackageRecurCharges == null)
                 return null;
 
-            Dictionary<int, List<AccountPackageRecurCharge>> accountRecurringChargesByAccountPackage = new Dictionary<int, List<AccountPackageRecurCharge>>();
+            Dictionary<long, List<AccountPackageRecurCharge>> accountRecurringChargesByAccountPackage = new Dictionary<long, List<AccountPackageRecurCharge>>();
             foreach (AccountPackageRecurCharge accountPackageRecurCharge in accountPackageRecurCharges)
             {
-               List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountRecurringChargesByAccountPackage.GetOrCreateItem(accountPackageRecurCharge.AccountPackageID, () => { return new List<AccountPackageRecurCharge>(); });
-               accountPackageRecurChargeList.Add(accountPackageRecurCharge);
+                List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountRecurringChargesByAccountPackage.GetOrCreateItem(accountPackageRecurCharge.AccountPackageID);
+                accountPackageRecurChargeList.Add(accountPackageRecurCharge);
             }
 
             return accountRecurringChargesByAccountPackage;

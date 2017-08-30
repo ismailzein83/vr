@@ -12,7 +12,7 @@ namespace Retail.BusinessEntity.Entities
     public class AccountPackageRecurCharge
     {
         public long AccountPackageRecurChargeId { get; set; }
-        public int AccountPackageID { get; set; }
+        public long AccountPackageID { get; set; }
         public Guid ChargeableEntityID { get; set; }
         public Guid? BalanceAccountTypeID { get; set; }
         public string BalanceAccountID { get; set; }

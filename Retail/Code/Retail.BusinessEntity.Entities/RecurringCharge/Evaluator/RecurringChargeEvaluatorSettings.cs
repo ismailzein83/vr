@@ -33,7 +33,7 @@ namespace Retail.BusinessEntity.Entities
 
         DateTime ChargeDay { get; }
 
-        int AccountPackageId { get; }
+        long AccountPackageId { get; }
 
         Object InitializeData { get; }
 

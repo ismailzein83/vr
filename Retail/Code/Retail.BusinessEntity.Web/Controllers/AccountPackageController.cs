@@ -32,7 +32,7 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetAccountPackage")]
-        public AccountPackage GetAccountPackage(int accountPackageId)
+        public AccountPackage GetAccountPackage(long accountPackageId)
         {
             return _manager.GetAccountPackage(accountPackageId);
         }
@@ -45,8 +45,9 @@ namespace Retail.BusinessEntity.Web.Controllers
                 return GetUnauthorizedResponse();
             return _manager.AddAccountPackage(accountPackageToAdd);
         }
-         [HttpPost]
-         [Route("UpdateAccountPackage")]
+
+        [HttpPost]
+        [Route("UpdateAccountPackage")]
         public object UpdateAccountPackage(AccountPackageToEdit accountPackageToEdit)
         {
 
@@ -54,6 +55,5 @@ namespace Retail.BusinessEntity.Web.Controllers
                 return GetUnauthorizedResponse();
             return _manager.UpdateAccountPackage(accountPackageToEdit);
         }
-        
     }
 }

@@ -28,14 +28,14 @@ namespace Retail.BusinessEntity.Data.SQL
             return GetItemsSP("Retail.sp_AccountPackage_GetAll", AccountPackageMapper);
         }
 
-        public bool Insert(AccountPackage accountPackage, out int insertedId)
+        public bool Insert(AccountPackage accountPackage, out long insertedId)
         {
             object accountPackageId;
             int affectedRecords = ExecuteNonQuerySP("Retail.sp_AccountPackage_Insert", out accountPackageId, accountPackage.AccountId, accountPackage.PackageId, accountPackage.AccountBEDefinitionId, accountPackage.BED, accountPackage.EED);
 
             if (affectedRecords > 0)
             {
-                insertedId = (int)accountPackageId;
+                insertedId = (long)accountPackageId;
                 return true;
             }
 
@@ -60,7 +60,7 @@ namespace Retail.BusinessEntity.Data.SQL
         {
             return new AccountPackage()
             {
-                AccountPackageId = (int)reader["ID"],
+                AccountPackageId = (long)reader["ID"],
                 AccountId = (long)reader["AccountID"],
                 PackageId = (int)reader["PackageID"],
                 AccountBEDefinitionId = (Guid)reader["AccountBEDefinitionId"],

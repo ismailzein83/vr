@@ -118,7 +118,7 @@ namespace Retail.BusinessEntity.Business
                 get { return _getAccountPackageRecurCharges; }
             }
 
-            public int AccountPackageId
+            public long AccountPackageId
             {
                 get { return _accountPackage.AccountPackageId; }
             }

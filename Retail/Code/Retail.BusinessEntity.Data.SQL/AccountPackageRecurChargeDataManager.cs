@@ -98,7 +98,7 @@ namespace Retail.BusinessEntity.Data.SQL
         private DataTable GetAccountPackageRecurChargePeriodTable()
         {
             DataTable dtAccountPackageRecurChargePeriod = new DataTable();
-            dtAccountPackageRecurChargePeriod.Columns.Add("AccountPackageId", typeof(int));
+            dtAccountPackageRecurChargePeriod.Columns.Add("AccountPackageId", typeof(long));
             dtAccountPackageRecurChargePeriod.Columns.Add("FromDate", typeof(DateTime));
             dtAccountPackageRecurChargePeriod.Columns.Add("ToDate", typeof(DateTime));
             return dtAccountPackageRecurChargePeriod;
@@ -148,7 +148,7 @@ namespace Retail.BusinessEntity.Data.SQL
         DataTable GetAccountPackageRecurChargeTable()
         {
             DataTable dtAccountPackageRecurCharge = new DataTable();
-            dtAccountPackageRecurCharge.Columns.Add("AccountPackageID", typeof(int));
+            dtAccountPackageRecurCharge.Columns.Add("AccountPackageID", typeof(long));
             dtAccountPackageRecurCharge.Columns.Add("ChargeableEntityID", typeof(Guid));
             dtAccountPackageRecurCharge.Columns.Add("BalanceAccountTypeID", typeof(Guid));
             dtAccountPackageRecurCharge.Columns.Add("BalanceAccountID", typeof(string));
@@ -170,7 +170,7 @@ namespace Retail.BusinessEntity.Data.SQL
             return new AccountPackageRecurCharge()
             {
                 AccountPackageRecurChargeId = (long)reader["ID"],
-                AccountPackageID = (int)reader["AccountPackageID"],
+                AccountPackageID = (long)reader["AccountPackageID"],
                 ChargeableEntityID = (Guid)reader["ChargeableEntityID"],
                 BalanceAccountTypeID = GetReaderValue<Guid?>(reader, "BalanceAccountTypeID"),
                 BalanceAccountID = reader["BalanceAccountID"] as string,

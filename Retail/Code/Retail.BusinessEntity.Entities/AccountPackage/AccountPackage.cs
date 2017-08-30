@@ -4,7 +4,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public class AccountPackage : Vanrise.Entities.IDateEffectiveSettings
     {
-        public int AccountPackageId { get; set; }
+        public long AccountPackageId { get; set; }
 
         public long AccountId { get; set; }
 
@@ -23,7 +23,7 @@ namespace Retail.BusinessEntity.Entities
 
     public class AccountPackageToEdit
     {
-        public int AccountPackageId { get; set; }
+        public long AccountPackageId { get; set; }
 
         public DateTime BED { get; set; }
 

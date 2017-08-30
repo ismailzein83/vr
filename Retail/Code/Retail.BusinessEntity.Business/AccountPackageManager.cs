@@ -27,7 +27,7 @@ namespace Retail.BusinessEntity.Business
 
         public IDataRetrievalResult<AccountPackageDetail> GetFilteredAccountPackages(DataRetrievalInput<AccountPackageQuery> input)
         {
-            Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
+            Dictionary<long, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
             Func<AccountPackage, bool> filterExpression = (accountPackage) => (accountPackage.AccountId == input.Query.AssignedToAccountId);
 
             ResultProcessingHandler<AccountPackageDetail> handler = new ResultProcessingHandler<AccountPackageDetail>()
@@ -41,7 +41,7 @@ namespace Retail.BusinessEntity.Business
 
         public IEnumerable<AccountPackage> GetEffectiveAssignedPackages(DateTime effectiveDate, bool withFutureEntities = false)
         {
-            Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
+            Dictionary<long, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
             Func<AccountPackage, bool> predicate = (itm) =>
             {
                 if (withFutureEntities && !itm.IsEffectiveOrFuture(effectiveDate))
@@ -56,9 +56,9 @@ namespace Retail.BusinessEntity.Business
             return cachedAccountPackages.FindAllRecords(predicate);
         }
 
-        public AccountPackage GetAccountPackage(int accountPackageId)
+        public AccountPackage GetAccountPackage(long accountPackageId)
         {
-            Dictionary<int, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
+            Dictionary<long, AccountPackage> cachedAccountPackages = this.GetCachedAccountPackages();
             return cachedAccountPackages.GetRecord(accountPackageId);
         }
 
@@ -159,7 +159,7 @@ namespace Retail.BusinessEntity.Business
             else
             {
                 IAccountPackageDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountPackageDataManager>();
-                int accountPackageId = -1;
+                long accountPackageId = -1;
                 if (dataManager.Insert(accountPackageToAdd, out accountPackageId))
                 {
                     var packageName = _packageManager.GetPackageName(package);
@@ -215,7 +215,7 @@ namespace Retail.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        bool IsPackageAssignmentValid(int accountPackageId, int packageId, long accountId, DateTime bed, DateTime? eed, out Package package, out Account account, out Guid accountBEDefinitionId, out string errorMessage)
+        bool IsPackageAssignmentValid(long accountPackageId, int packageId, long accountId, DateTime bed, DateTime? eed, out Package package, out Account account, out Guid accountBEDefinitionId, out string errorMessage)
         {
             package = _packageManager.GetPackage(packageId);
             package.ThrowIfNull("package", packageId);
@@ -259,7 +259,7 @@ namespace Retail.BusinessEntity.Business
             return true;
         }
 
-        public bool ArePackageAssignementsOverlapped(int accountPackageId, long accountId, int packageId, DateTime bed, DateTime? eed)
+        public bool ArePackageAssignementsOverlapped(long accountPackageId, long accountId, int packageId, DateTime bed, DateTime? eed)
         {
             var accountPackages = GetAccountPackagesByAccountId(accountId);
             if (accountPackages != null)
@@ -306,7 +306,7 @@ namespace Retail.BusinessEntity.Business
             return new AccountBEDefinitionManager().DoesUserHaveAddAccountPackageAccess(userId, accountBEDefinitionId);
         }
        
-        public bool DoesUserHaveEditAccountPackageAccess(int accountPackageId)
+        public bool DoesUserHaveEditAccountPackageAccess(long accountPackageId)
         {
             var accountpackage = GetAccountPackage(accountPackageId);
             var accountBEDefinitionId = _packageManager.GetPackageAccountDefinitionId(accountpackage.PackageId);
@@ -426,7 +426,7 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, AccountPackage> GetCachedAccountPackages()
+        Dictionary<long, AccountPackage> GetCachedAccountPackages()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountPackages", () =>
             {
