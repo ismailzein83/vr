@@ -54,7 +54,15 @@ namespace Vanrise.BusinessProcess
             definition.WorkflowType.ThrowIfNull("bpDefinition.WorkflowType", definition.BPDefinitionID);
             _definition = definition;
             _definitionId = definition.BPDefinitionID;
-            _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;
+            try
+            {
+                _workflowDefinition = Activator.CreateInstance(definition.WorkflowType) as Activity;
+            }
+            catch (Exception ex)
+            {
+                Vanrise.Common.LoggerFactory.GetLogger().WriteError("Unable to create instance from type '{0}' for BPDefinitionID: '{1}'", definition.WorkflowType, definition.BPDefinitionID);
+                throw;
+            }
             if (_workflowDefinition == null)
                 throw new Exception(String.Format("'{0}' is not of type Activity", definition.WorkflowType));
         }
