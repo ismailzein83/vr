@@ -31,7 +31,6 @@ app.directive("whsBeFinancialaccountruntimesettingsCustomerpostpaid", ["UtilsSer
             var carrierProfileId;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.creditLimit = 0;
              
                 defineAPI();
             }

@@ -31,9 +31,7 @@ app.directive("whsBeFinancialaccountruntimesettingsNetting", ["UtilsService", "V
             var carrierProfileId;
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.customerCreditLimit = 0;
-                $scope.scopeModel.supplierCreditLimit = 0;
-
+           
                
                 defineAPI();
             }
