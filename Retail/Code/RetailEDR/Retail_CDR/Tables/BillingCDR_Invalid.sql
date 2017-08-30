@@ -14,9 +14,9 @@
     [TrafficDirection]        INT              NULL,
     [InitiationCallType]      INT              NULL,
     [TerminationCallType]     INT              NULL,
-    [Calling]                 VARCHAR (100)    NULL,
-    [Called]                  VARCHAR (100)    NULL,
-    [OtherPartyNumber]        VARCHAR (100)    NULL,
+    [Calling]                 VARCHAR (500)    NULL,
+    [Called]                  VARCHAR (500)    NULL,
+    [OtherPartyNumber]        VARCHAR (500)    NULL,
     [InterconnectOperatorId]  BIGINT           NULL,
     [SubscriberZoneId]        BIGINT           NULL,
     [Zone]                    BIGINT           NULL,
@@ -29,6 +29,8 @@
     [SaleExtraChargeRuleId]   INT              NULL,
     [Extension]               VARCHAR (20)     NULL
 );
+
+
 
 
 
