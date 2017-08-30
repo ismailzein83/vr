@@ -34,6 +34,8 @@ namespace Retail.Cost.Business
             Guid dataRecordTypeId = cdrCostTechnicalSettingData.DataRecordTypeId.Value;
 
             List<CDRCostRequest> cdrCostRequests = new List<CDRCostRequest>();
+            var configManager = new Vanrise.Common.Business.ConfigManager();
+            int systemCurrencyId = configManager.GetSystemCurrencyId();
 
             foreach (var cdr in cdrs)
             {
@@ -47,6 +49,9 @@ namespace Retail.Cost.Business
 
                     if (!string.IsNullOrEmpty(cdrCostFieldNames.CostRate))
                         cdr.SetFieldValue(cdrCostFieldNames.CostRate, 0);
+
+                    if (!string.IsNullOrEmpty(cdrCostFieldNames.CostCurrency))
+                        cdr.SetFieldValue(cdrCostFieldNames.CostCurrency, systemCurrencyId);
 
                     continue;
                 }

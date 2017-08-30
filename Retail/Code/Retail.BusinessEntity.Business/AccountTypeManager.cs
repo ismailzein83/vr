@@ -82,29 +82,49 @@ namespace Retail.BusinessEntity.Business
             return cachedAccountTypes.MapRecords(AccountTypeInfoMapper, filterExpression).OrderBy(x => x.Title);
         }
 
-        public IEnumerable<Guid> GetSupportedParentAccountTypeIds(Guid accountBEDefinitionId, long parentAccountId)
+        public List<Guid> GetSupportedParentAccountTypeIds(Guid accountBEDefinitionId, long parentAccountId)
         {
-            var accountBEManager = new AccountBEManager();
-            Account parentAccount = accountBEManager.GetAccount(accountBEDefinitionId, parentAccountId);
-            if (parentAccount == null)
-                throw new NullReferenceException("parentAccount");
-            AccountType parentAccountType = this.GetAccountType(parentAccount.TypeId);
-            if (parentAccountType == null)
-                throw new NullReferenceException("parentAccountType");
-            if (parentAccountType.Settings == null)
-                throw new NullReferenceException("parentAccountType.Settings");
-            return parentAccountType.Settings.SupportedParentAccountTypeIds;
+            Account parentAccount = new AccountBEManager().GetAccount(accountBEDefinitionId, parentAccountId);
+            parentAccount.ThrowIfNull("parentAccount", parentAccountId);
+            return GetSupportedParentAccountTypeIds(parentAccount.TypeId);
         }
-        public IEnumerable<Guid> GetSupportedParentAccountTypeIds(Guid accountTypeId)
+        public List<Guid> GetSupportedParentAccountTypeIds(Guid accountTypeId)
         {
             AccountType accountType = this.GetAccountType(accountTypeId);
-            if (accountType == null)
-                throw new NullReferenceException(string.Format("accountType of Id: {0}", accountTypeId));
-
-            if (accountType.Settings == null)
-                throw new NullReferenceException(string.Format("accountType.Settings of accountTypeId: {0}", accountTypeId));
+            accountType.ThrowIfNull("accountType", accountType.AccountTypeId);
+            accountType.Settings.ThrowIfNull("accountType.Settings", accountType.AccountTypeId);
 
             return accountType.Settings.SupportedParentAccountTypeIds;
+        }
+
+        public HashSet<Guid> GetSelfAndSupportedChildrenAccountTypeIds(Guid parentAccountTypeId)
+        {
+            List<AccountType> allAccountTypes = GetCachedAccountTypesWithHidden().Values.ToList();
+
+            HashSet<Guid> supportedChildrenAccountTypeIds = new HashSet<Guid>() { parentAccountTypeId };
+            GetSupportedChildrenAccountTypeIds(allAccountTypes, supportedChildrenAccountTypeIds);
+
+            return supportedChildrenAccountTypeIds.Count > 0 ? supportedChildrenAccountTypeIds : null;
+        }
+        private void GetSupportedChildrenAccountTypeIds(List<AccountType> accountTypes, HashSet<Guid> childrenAccountTypeIds)
+        {
+            bool hasAddedItems = false;
+
+            foreach (var accountType in accountTypes)
+            {
+                if (childrenAccountTypeIds.Contains(accountType.AccountTypeId))
+                    continue;
+
+                var accountTypeParentIds = GetSupportedParentAccountTypeIds(accountType.AccountTypeId);
+                if (accountTypeParentIds != null && accountTypeParentIds.Any(itm => childrenAccountTypeIds.Contains(itm)))
+                {
+                    childrenAccountTypeIds.Add(accountType.AccountTypeId);
+                    hasAddedItems = true;
+                }
+            }
+
+            if (hasAddedItems)
+                GetSupportedChildrenAccountTypeIds(accountTypes, childrenAccountTypeIds);
         }
 
         public IEnumerable<AccountPartDefinitionConfig> GetAccountTypePartDefinitionExtensionConfigs()

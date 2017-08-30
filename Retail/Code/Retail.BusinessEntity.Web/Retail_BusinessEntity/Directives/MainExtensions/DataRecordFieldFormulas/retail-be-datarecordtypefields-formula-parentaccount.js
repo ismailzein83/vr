@@ -24,42 +24,42 @@ app.directive('retailBeDatarecordtypefieldsFormulaParentaccount', ['UtilsService
         function parentAccountEvaluatorFieldFormulaCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
-            var accountField;
             var accountBEDefinitionId;
 
-            var accountSelectionChangedPromiseDeffered = UtilsService.createPromiseDeferred();
+            var accountSelectionChangedPromiseDeffered;
 
-            var accountTypeSelectorAPI;
-            var accountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var parentAccountTypeSelectorAPI;
+            var parentAccountTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.fields = [];
-                $scope.scopeModel.showAccountTypeSelector = false;
 
-                $scope.scopeModel.onAccountTypeSelectorReady = function (api) {
-                    accountTypeSelectorAPI = api;
-                    accountTypeSelectorReadyDeferred.resolve();
+                $scope.scopeModel.onParentAccountTypeSelectorReady = function (api) {
+                    parentAccountTypeSelectorAPI = api;
+                    parentAccountTypeSelectorReadyDeferred.resolve();
                 };
 
-                $scope.scopeModel.onAccountSelectionChanged = function (selectedItem) {
+                $scope.scopeModel.onAccountSelectionChanged = function (selectedField) {
 
-                    console.log(selectedItem);
+                    if (selectedField != undefined) {
 
-                    if (selectedItem != undefined) {
-                        $scope.scopeModel.showAccountTypeSelector = true;
-
-                        var accountField = UtilsService.getItemByVal($scope.scopeModel.fields, selectedItem.fieldName, "fieldType");
+                        var accountField = UtilsService.getItemByVal($scope.scopeModel.fields, selectedField.fieldName, "fieldName");
                         accountBEDefinitionId = accountField.fieldType.BusinessEntityDefinitionId;
 
-                        var accountTypeSelectorPayload = {
-                            filter: { AccountBEDefinitionId: accountBEDefinitionId }
-                        };
+                        if (accountSelectionChangedPromiseDeffered != undefined) {
+                            accountSelectionChangedPromiseDeffered.resolve();
+                        }
+                        else {
+                            var parentAccountTypeSelectorPayload = {
+                                filter: { AccountBEDefinitionId: accountBEDefinitionId }
+                            };
 
-                        var setLoader = function (value) {
-                            $scope.scopeModel.isAccountTypeSelectorLoading = value;
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, accountTypeSelectorAPI, accountTypeSelectorPayload, setLoader, accountSelectionChangedPromiseDeffered);
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isParentAccountTypeSelectorLoading = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, parentAccountTypeSelectorAPI, parentAccountTypeSelectorPayload, setLoader);
+                        }
                     }
                 };
 
@@ -72,9 +72,8 @@ app.directive('retailBeDatarecordtypefieldsFormulaParentaccount', ['UtilsService
                 api.load = function (payload) {
                     var promises = [];
 
-                    console.log(payload);
-
-                    var parentAccountTypeId;
+                    var isEditMode;
+                    var accountTypeFieldName, accountFieldName, parentAccountTypeId;
 
                     if (payload != undefined) {
                         var context = payload.context;
@@ -83,37 +82,38 @@ app.directive('retailBeDatarecordtypefieldsFormulaParentaccount', ['UtilsService
                         }
 
                         if (payload.formula != undefined) {
+                            accountTypeFieldName = payload.formula.AccountTypeFieldName;
+                            accountFieldName = payload.formula.AccountFieldName;
                             parentAccountTypeId = payload.formula.ParentAccountTypeId;
-                            accountField = UtilsService.getItemByVal($scope.scopeModel.fields, payload.formula.AccountFieldName, "fieldName");
+                            isEditMode = (accountTypeFieldName != undefined && accountFieldName != undefined && parentAccountTypeId != undefined) ? true : false;
                         }
                     }
 
-                    $scope.scopeModel.selectedAccount = accountField;
+                    $scope.scopeModel.selectedAccountType = UtilsService.getItemByVal($scope.scopeModel.fields, accountTypeFieldName, "fieldName");
+                    $scope.scopeModel.selectedAccount = UtilsService.getItemByVal($scope.scopeModel.fields, accountFieldName, "fieldName");
 
-                    console.log("Loading AccountTypeSelector!!");;
+                    if (isEditMode) {
+                        accountSelectionChangedPromiseDeffered = UtilsService.createPromiseDeferred();
 
-                    if (parentAccountTypeId != undefined) {
-                        var accountTypeSelectorLoadPromise = getAccountTypeSelectorLoadPromise();
-                        promises.push(accountTypeSelectorLoadPromise);
-                    }
-                    else {
-                        accountSelectionChangedPromiseDeffered.resolve();
+                        var parentAccountTypeSelectorLoadPromise = getParentAccountTypeSelectorLoadPromise();
+                        promises.push(parentAccountTypeSelectorLoadPromise);
                     }
 
 
-                    function getAccountTypeSelectorLoadPromise() {
-                        var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    function getParentAccountTypeSelectorLoadPromise() {
+                        var parentAccountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-                        UtilsService.waitMultiplePromises([accountTypeSelectorReadyDeferred, accountSelectionChangedPromiseDeffered]).promise.then(function () {
+                        UtilsService.waitMultiplePromises([parentAccountTypeSelectorReadyDeferred.promise, accountSelectionChangedPromiseDeffered.promise]).then(function () {
+                            accountSelectionChangedPromiseDeffered = undefined;
 
-                            var accountTypeSelectorPayload = {
+                            var parentAccountTypeSelectorPayload = {
                                 filter: { AccountBEDefinitionId: accountBEDefinitionId },
                                 selectedIds: parentAccountTypeId
                             };
-                            VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, accountTypeSelectorPayload, accountTypeSelectorLoadDeferred);
+                            VRUIUtilsService.callDirectiveLoad(parentAccountTypeSelectorAPI, parentAccountTypeSelectorPayload, parentAccountTypeSelectorLoadDeferred);
                         });
 
-                        return accountTypeSelectorLoadDeferred.promise;
+                        return parentAccountTypeSelectorLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -123,8 +123,9 @@ app.directive('retailBeDatarecordtypefieldsFormulaParentaccount', ['UtilsService
 
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas.ParentRetailAccountFieldFormula, Retail.BusinessEntity.MainExtensions",
+                        AccountTypeFieldName: $scope.scopeModel.selectedAccountType.fieldName,
                         AccountFieldName: $scope.scopeModel.selectedAccount.fieldName,
-                        ParentAccountTypeId: accountTypeSelectorAPI.getSelectedIds()
+                        ParentAccountTypeId: parentAccountTypeSelectorAPI.getSelectedIds()
                     };
                     return data;
                 };

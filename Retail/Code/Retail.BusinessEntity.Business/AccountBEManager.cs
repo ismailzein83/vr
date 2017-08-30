@@ -528,6 +528,15 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
+        public List<long> GetChildAccountIds(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
+        {
+            List<Account> accounts = GetChildAccounts(accountBEDefinitionId, accountId, withSubChildren);
+            if (accounts == null)
+                return null;
+
+            return accounts.Select(itm => itm.AccountId).ToList();
+        }
+
         public dynamic GetAccountGenericFieldValue(Guid accountBEDefinitionId, long accountId, string fieldName)
         {
             var account = GetAccount(accountBEDefinitionId, accountId);
@@ -688,6 +697,23 @@ namespace Retail.BusinessEntity.Business
             var account1Parent = GetSelfOrParentAccountOfType(accountBEDefinitionId, account1Id, accountBEDefinitionSetting.LocalServiceAccountTypeId.Value);
             var account2Parent = GetSelfOrParentAccountOfType(accountBEDefinitionId, account2Id, accountBEDefinitionSetting.LocalServiceAccountTypeId.Value);
             return account1Parent != null && account2Parent != null && account1Parent.AccountId == account2Parent.AccountId;
+        }
+
+        /// <summary>
+        /// this method is called from the data transformation
+        /// </summary>
+        /// <param name="accountBEDefinitionId"></param>
+        /// <param name="accountId"></param>
+        /// <returns></returns>
+        public Guid? GetAccountTypeId(Guid accountBEDefinitionId, long? accountId)
+        {
+            if (accountId.HasValue)
+            {
+                Account account = GetAccount(accountBEDefinitionId, accountId.Value);
+                if (account != null)
+                    return account.TypeId;
+            }
+            return null;
         }
 
         #endregion
