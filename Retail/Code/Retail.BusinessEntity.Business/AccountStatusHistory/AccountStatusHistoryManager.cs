@@ -55,8 +55,14 @@ namespace Retail.BusinessEntity.Business
 
                 previousAccountStatusHistory = accountStatusHistory;
             }
-            if (previousAccountStatusHistory != null && previousAccountStatusHistory.PreviousStatusId.HasValue)
-                return previousAccountStatusHistory.PreviousStatusId.Value;
+
+            if (previousAccountStatusHistory != null)
+            {
+                if (previousAccountStatusHistory.PreviousStatusId.HasValue)
+                    return previousAccountStatusHistory.PreviousStatusId.Value;
+                else
+                    return previousAccountStatusHistory.StatusId;
+            }
 
             return account.StatusId;
         }
