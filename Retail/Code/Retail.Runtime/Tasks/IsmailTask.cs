@@ -16,6 +16,32 @@ namespace Retail.Runtime.Tasks
       
         public void Execute()
         {
+            var analyticTableMeasureExternalSource =
+                new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
+                {
+                    ExtendedSettings =
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.AnalyticTableMeasureExternalSource
+                        {
+                            AnalyticTableId = 9,
+                            DimensionMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule>
+                {
+                    new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule { Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.ExcludeDimensions { ExcludedDimensions = new List<string> { "TrafficDirection" }}},
+                    new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule { Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionName()}
+                },
+                            MeasureMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule>
+                            {
+                                 new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                                 {
+                                      Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                                      {
+                                           MeasureName = "Attempts",
+                                            MappedMeasures = new List<string> {"CountDistinctOnNetLocalCDRs"}
+                                      }
+                                 }
+                            }
+                        }
+                };
+            var serializedAnalyticTableMeasureExternalSource = Vanrise.Common.Serializer.Serialize(analyticTableMeasureExternalSource);
             //TestData testData = new TestData();
             //string originatorNumber = Console.ReadLine();
             //int batchSize = int.Parse(Console.ReadLine());

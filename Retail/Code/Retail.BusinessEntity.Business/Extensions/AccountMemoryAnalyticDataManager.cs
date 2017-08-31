@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Analytic.Business;
+using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business
@@ -12,7 +13,7 @@ namespace Retail.BusinessEntity.Business
     {
         public Guid AccountBEDefinitionId { get; set; }
 
-        public override List<RawMemoryRecord> GetRawRecords(Vanrise.Entities.DataRetrievalInput<Vanrise.Analytic.Entities.AnalyticQuery> input, List<string> neededFieldNames)
+        public override List<RawMemoryRecord> GetRawRecords(AnalyticQuery query, List<string> neededFieldNames)
         {
             neededFieldNames.ThrowIfNull("neededFieldNames");
             AccountBEManager accountManager = new AccountBEManager();
