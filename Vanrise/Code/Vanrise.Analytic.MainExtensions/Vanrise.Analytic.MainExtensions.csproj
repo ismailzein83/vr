@@ -44,6 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticItemAction\OpenRecordSearchItemAction.cs" />
+    <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\AnalyticTableMeasureExternalSource.cs" />
+    <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\AnalyticTableMeasureExternalSourceResult.cs" />
+    <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\DimensionMappingRule.cs" />
+    <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\DimensionMappingRules\ExcludeDimensions.cs" />
+    <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\DimensionMappingRules\SameDimensionName.cs" />
+    <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\MeasureMappingRule.cs" />
+    <Compile Include="AnalyticMeasureExternalSources\MeasureMappingRules\SpecificMapping.cs" />
     <Compile Include="DARecordAggregates\CountAggregate.cs" />
     <Compile Include="DARecordAggregates\DistinctCountAggregate.cs" />
     <Compile Include="DARecordAggregates\SumAggregate.cs" />
@@ -62,6 +69,10 @@
     <Compile Include="TimeRangeFilters\PreviousPeriodFilter.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
+      <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
+      <Name>Vanrise.Analytic.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Analytic.Entities\Vanrise.Analytic.Entities.csproj">
       <Project>{bf85d7b4-84c2-441b-bca0-b42fe2619ae9}</Project>
       <Name>Vanrise.Analytic.Entities</Name>

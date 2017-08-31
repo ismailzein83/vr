@@ -23,18 +23,18 @@ namespace Vanrise.Analytic.Business
                 _analyticTableQueryContext = value;
             }
         }
-        public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, out HashSet<string> includedSQLDimensions)
+        public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(AnalyticQuery query, out HashSet<string> includedSQLDimensions)
         {
-            includedSQLDimensions = GetIncludedSQLDimensionNames(input.Query.DimensionFields, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup);
+            includedSQLDimensions = GetIncludedSQLDimensionNames(query.DimensionFields, query.MeasureFields, query.Filters, query.FilterGroup);
             var includedSQLDimensionsList = includedSQLDimensions.ToList();
             List<AnalyticDimension> dimensionConfigs = includedSQLDimensions.Select(dimName => GetDimensionConfig(dimName)).ToList();
-            HashSet<string> includedSQLAggregateNames = GetIncludedSQLAggregateNames(input.Query.MeasureFields);
+            HashSet<string> includedSQLAggregateNames = GetIncludedSQLAggregateNames(query.MeasureFields);
             List<AnalyticAggregate> aggregateConfigs = includedSQLAggregateNames.Select(aggName => GetAggregateConfig(aggName)).ToList();
             List<DBAnalyticRecord> groupedRecords = new List<DBAnalyticRecord>();
             List<string> neededFieldNames = new List<string>();
             neededFieldNames.AddRange(dimensionConfigs.Select(dimConfig => dimConfig.Config.SQLExpression).Distinct());
             neededFieldNames.AddRange(aggregateConfigs.Select(aggConfig => aggConfig.Config.SQLColumn).Distinct());
-            var rawRecords = GetRawRecords(input, neededFieldNames);
+            var rawRecords = GetRawRecords(query, neededFieldNames);
             if (rawRecords != null && rawRecords.Count > 0)
             {
                 Dictionary<string, StagingGroupedMemoryRecord> stagingGroupedRecordsByGroupingKey = new Dictionary<string, StagingGroupedMemoryRecord>();
@@ -115,7 +115,7 @@ namespace Vanrise.Analytic.Business
             return fieldValue;
         }
 
-        public abstract List<RawMemoryRecord> GetRawRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, List<string> neededFieldNames);
+        public abstract List<RawMemoryRecord> GetRawRecords(AnalyticQuery query, List<string> neededFieldNames);
 
         #region Private Methods
 

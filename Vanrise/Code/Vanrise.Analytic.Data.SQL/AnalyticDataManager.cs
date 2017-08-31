@@ -22,12 +22,12 @@ namespace Vanrise.Analytic.Data.SQL
 
         }
 
-        public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, out  HashSet<string> includedSQLDimensions)
+        public IEnumerable<DBAnalyticRecord> GetAnalyticRecords(AnalyticQuery query, out  HashSet<string> includedSQLDimensions)
         {            
             HashSet<string> includedSQLDimensions_Local;
             HashSet<string> includedSQLAggregates;
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
-            string query = BuildAnalyticQuery(input, out includedSQLDimensions_Local, out includedSQLAggregates, parameterValues);
+            string querySQL = BuildAnalyticQuery(query, out includedSQLDimensions_Local, out includedSQLAggregates, parameterValues);
             
             if(parameterValues.Count > 0)
             {
@@ -42,24 +42,24 @@ namespace Vanrise.Analytic.Data.SQL
                     parameterDeclarationBuilder.Append(String.Format("{0} varchar(max)", prm.Key));
                     parameterAssignementBuilder.Append(String.Format("{0} = {0}_FromOut", prm.Key));
                 }
-                query = string.Format(@"DECLARE {0}  
+                querySQL = string.Format(@"DECLARE {0}  
                 SELECT {1}
-                   {2} ", parameterDeclarationBuilder, parameterAssignementBuilder, query);
+                   {2} ", parameterDeclarationBuilder, parameterAssignementBuilder, querySQL);
             }
-            if (input.Query.CurrencyId.HasValue)
+            if (query.CurrencyId.HasValue)
             {
-                query = string.Format(@"DECLARE @Currency int
+                querySQL = string.Format(@"DECLARE @Currency int
                 SELECT @Currency = @Currency_FromOut
-                {0}", query);
+                {0}", querySQL);
             }
-            List<DBAnalyticRecord> dbRecords = GetItemsText(query, (reader) => SQLRecordMapper(reader, input.Query.TimeGroupingUnit, includedSQLDimensions_Local, includedSQLAggregates), (cmd) =>
+            List<DBAnalyticRecord> dbRecords = GetItemsText(querySQL, (reader) => SQLRecordMapper(reader, query.TimeGroupingUnit, includedSQLDimensions_Local, includedSQLAggregates), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
                     cmd.Parameters.Add(new SqlParameter(String.Format("{0}_FromOut", prm.Key), prm.Value));
                 }
-                if (input.Query.CurrencyId.HasValue)
-                    cmd.Parameters.Add(new SqlParameter("@Currency_FromOut", input.Query.CurrencyId.Value));
+                if (query.CurrencyId.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@Currency_FromOut", query.CurrencyId.Value));
             });
             includedSQLDimensions = includedSQLDimensions_Local;
             return dbRecords;
@@ -71,27 +71,27 @@ namespace Vanrise.Analytic.Data.SQL
 
         #region Query Builder
 
-        string BuildAnalyticQuery(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, out HashSet<string> includedSQLDimensionNames, out HashSet<string> includedSQLAggregateNames, Dictionary<string, Object> parameterValues)
+        string BuildAnalyticQuery(AnalyticQuery query, out HashSet<string> includedSQLDimensionNames, out HashSet<string> includedSQLAggregateNames, Dictionary<string, Object> parameterValues)
         {
             StringBuilder selectPartBuilder = new StringBuilder();
             HashSet<string> includeJoinConfigNames = new HashSet<string>();
-            includedSQLDimensionNames = GetIncludedSQLDimensionNames(input.Query.DimensionFields, input.Query.MeasureFields, input.Query.Filters, input.Query.FilterGroup);
+            includedSQLDimensionNames = GetIncludedSQLDimensionNames(query.DimensionFields, query.MeasureFields, query.Filters, query.FilterGroup);
             int parameterIndex = 0;
             string groupByPart = null;
             HashSet<string> joinStatements = new HashSet<string>();
-            var toTime = input.Query.ToTime.HasValue ? input.Query.ToTime.Value : DateTime.Now;
+            var toTime = query.ToTime.HasValue ? query.ToTime.Value : DateTime.Now;
             List<string> listCurrencySQLColumnNames = new List<string>();
-            groupByPart = BuildQueryGrouping(selectPartBuilder, input.Query.CurrencyId, listCurrencySQLColumnNames, includedSQLDimensionNames, input.Query.TimeGroupingUnit, includeJoinConfigNames, joinStatements, input.Query.FromTime, toTime, parameterValues, ref parameterIndex);
-            includedSQLAggregateNames = GetIncludedSQLAggregateNames(input.Query.MeasureFields);
-            BuildQueryAggregates(selectPartBuilder, input.Query.CurrencyId, listCurrencySQLColumnNames, includedSQLAggregateNames, includeJoinConfigNames, joinStatements, input.Query.FromTime, toTime, parameterValues, ref parameterIndex);
-            string filterPart = BuildQueryFilter(input.Query.Filters, includeJoinConfigNames, parameterValues, ref parameterIndex);
+            groupByPart = BuildQueryGrouping(selectPartBuilder, query.CurrencyId, listCurrencySQLColumnNames, includedSQLDimensionNames, query.TimeGroupingUnit, includeJoinConfigNames, joinStatements, query.FromTime, toTime, parameterValues, ref parameterIndex);
+            includedSQLAggregateNames = GetIncludedSQLAggregateNames(query.MeasureFields);
+            BuildQueryAggregates(selectPartBuilder, query.CurrencyId, listCurrencySQLColumnNames, includedSQLAggregateNames, includeJoinConfigNames, joinStatements, query.FromTime, toTime, parameterValues, ref parameterIndex);
+            string filterPart = BuildQueryFilter(query.Filters, includeJoinConfigNames, parameterValues, ref parameterIndex);
             string joinPart = BuildQueryJoins(includeJoinConfigNames, joinStatements);
 
             RecordFilterSQLBuilder recordFilterSQLBuilder = new RecordFilterSQLBuilder(GetDimensionColumnIdFromFieldName);
-            String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(input.Query.FilterGroup, ref parameterIndex, parameterValues);
+            String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(query.FilterGroup, ref parameterIndex, parameterValues);
 
 
-            StringBuilder queryBuilder = BuildGlobalQuery(input.Query.FromTime, toTime,
+            StringBuilder queryBuilder = BuildGlobalQuery(query.FromTime, toTime,
                 parameterValues, selectPartBuilder.ToString(), joinPart, filterPart, groupByPart, recordFilter, ref parameterIndex);
 
             return queryBuilder.ToString();

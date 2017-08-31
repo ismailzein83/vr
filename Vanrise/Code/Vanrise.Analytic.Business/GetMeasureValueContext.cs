@@ -16,8 +16,10 @@ namespace Vanrise.Analytic.Business
         DBAnalyticRecord _sqlRecord;
         HashSet<string> _allDimensions;
         IAnalyticTableQueryContext _analyticTableQueryContext;
-        Dictionary<string, AnalyticMeasureExternalSourceProcessedResult> _measureExternalSourcesResults;
-        internal GetMeasureValueContext(IAnalyticTableQueryContext analyticTableQueryContext, string recordGroupingKey, DBAnalyticRecord sqlRecord, HashSet<string> allDimensions, Dictionary<string, AnalyticMeasureExternalSourceProcessedResult> measureExternalSourcesResults)
+        AnalyticRecord _analyticRecord;
+        bool _isSummaryRecord;
+        internal GetMeasureValueContext(IAnalyticTableQueryContext analyticTableQueryContext, string recordGroupingKey, DBAnalyticRecord sqlRecord, HashSet<string> allDimensions,
+            AnalyticRecord analyticRecord, bool isSummaryRecord)
         {
             if (analyticTableQueryContext == null)
                 throw new ArgumentNullException("analyticTableQueryContext");
@@ -27,12 +29,14 @@ namespace Vanrise.Analytic.Business
                 throw new ArgumentNullException("sqlRecord");
             if (allDimensions == null)
                 throw new ArgumentNullException("allDimensions");
+            analyticRecord.ThrowIfNull("analyticRecord");
             _analyticTableQueryContext = analyticTableQueryContext;
             _query = _analyticTableQueryContext.Query;
             _recordGroupingKey = recordGroupingKey;
             _sqlRecord = sqlRecord;
             _allDimensions = allDimensions;
-            _measureExternalSourcesResults = measureExternalSourcesResults;
+            _analyticRecord = analyticRecord;
+            _isSummaryRecord = isSummaryRecord;
         }
         public dynamic GetAggregateValue(string aggregateName)
         {
@@ -79,31 +83,56 @@ namespace Vanrise.Analytic.Business
         }
 
 
-        public object GetExternalSourceValue(string sourceName, string measureName)
+        public dynamic GetExternalSourceMatchRecordMeasureValue(string sourceName, string measureName)
         {
-            _measureExternalSourcesResults.ThrowIfNull("_measureExternalSourcesResults");
-            AnalyticMeasureExternalSourceProcessedResult sourceResult;
-            if (!_measureExternalSourcesResults.TryGetValue(sourceName, out sourceResult))
-                throw new NullReferenceException(String.Format("sourceResult. Name '{0}'", sourceName));
-            Dictionary<string, Object> measureValues;
-            if(_recordGroupingKey != null)
+            var externalSourceRslt = _analyticTableQueryContext.GetMeasureExternalSourceResult(sourceName);
+            if(externalSourceRslt != null)
             {
-                AnalyticMeasureExternalSourceRecord matchRecord;
-                if (sourceResult.RecordsByDimensionKey != null && sourceResult.RecordsByDimensionKey.TryGetValue(_recordGroupingKey, out matchRecord))
-                    measureValues = matchRecord.MeasureValues;
-                else
-                    return null;
+                var getValueContext = new AnalyticMeasureExternalSourceResultGetMatchRecordMesureValueContext
+                {
+                    Query = _query,
+                    Record = _analyticRecord,
+                    IsSummaryRecord = _isSummaryRecord,
+                    MeasureName = measureName
+                };
+                return externalSourceRslt.GetMatchRecordMeasureValue(getValueContext);
             }
-            else//in case of summary record
+            else
             {
-                measureValues = sourceResult.OriginalResult.SummaryMeasureValues;
+                return null;
             }
-            if (measureValues == null)
-                throw new NullReferenceException(string.Format("measureValues. sourceName '{0}', grouping Key '{1}'", sourceName, _recordGroupingKey));
-            Object measureValue;
-            if (!measureValues.TryGetValue(measureName, out measureValue))
-                throw new NullReferenceException(String.Format("measureValue. Name '{0}' sourceName '{1}'", measureName, sourceName));
-            return measureValue;
         }
+
+        #region Private Methods
+
+        private class AnalyticMeasureExternalSourceResultGetMatchRecordMesureValueContext : IAnalyticMeasureExternalSourceResultGetMatchRecordMesureValueContext
+        {
+            public AnalyticQuery Query
+            {
+                get;
+                set;
+            }
+
+            public AnalyticRecord Record
+            {
+                get;
+                set;
+            }
+
+            public bool IsSummaryRecord
+            {
+                get;
+                set;
+            }
+
+            public string MeasureName
+            {
+                get;
+                set;
+            }
+        }
+
+
+        #endregion 
     }
 }

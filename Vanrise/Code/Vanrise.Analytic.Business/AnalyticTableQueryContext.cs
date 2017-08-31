@@ -17,6 +17,7 @@ namespace Vanrise.Analytic.Business
         Dictionary<string, AnalyticMeasure> _measures;
         Dictionary<string, AnalyticJoin> _joins;
         Dictionary<string, AnalyticMeasureExternalSource> _measureExternalSources;
+        Dictionary<string, AnalyticMeasureExternalSourceResult> _measureExternalSourceResults;
 
         public AnalyticTableQueryContext(AnalyticQuery query)
         {
@@ -117,5 +118,32 @@ namespace Vanrise.Analytic.Business
                 return _query;
             }
         }
+
+        public AnalyticMeasureExternalSourceResult GetMeasureExternalSourceResult(string sourceName)
+        {
+            if (_measureExternalSourceResults == null)
+                _measureExternalSourceResults = new Dictionary<string, AnalyticMeasureExternalSourceResult>();
+            AnalyticMeasureExternalSourceResult rslt;
+            if(!_measureExternalSourceResults.TryGetValue(sourceName, out rslt))
+            {
+                var externalSource = GetMeasureExternalSourceConfig(sourceName);
+                var measureExternalSourceContext = new AnalyticMeasureExternalSourceContext
+                {
+                    AnalyticQuery = _query
+                };
+                rslt = externalSource.Config.ExtendedSettings.Execute(measureExternalSourceContext);
+                _measureExternalSourceResults.Add(sourceName, rslt);
+            }
+            return rslt;
+        }
+
+        #region Private Classes
+
+        private class AnalyticMeasureExternalSourceContext : IAnalyticMeasureExternalSourceContext
+        {
+            public AnalyticQuery AnalyticQuery { get; set; }
+        }
+
+        #endregion
     }
 }

@@ -50,6 +50,6 @@ namespace Vanrise.Analytic.Entities
 
     public interface IAnalyticDataManager
     {
-        IEnumerable<DBAnalyticRecord> GetAnalyticRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input, out  HashSet<string> includedSQLDimensions);
+        IEnumerable<DBAnalyticRecord> GetAnalyticRecords(AnalyticQuery query, out  HashSet<string> includedSQLDimensions);
     }
 }

@@ -23,11 +23,24 @@ namespace Vanrise.Analytic.Entities
         AnalyticQuery AnalyticQuery { get; }
     }
 
-    public class AnalyticMeasureExternalSourceResult
+    public abstract class AnalyticMeasureExternalSourceResult
     {
         public List<AnalyticMeasureExternalSourceRecord> Records { get; set; }
 
         public Dictionary<string, Object> SummaryMeasureValues { get; set; }
+
+        public abstract dynamic GetMatchRecordMeasureValue(IAnalyticMeasureExternalSourceResultGetMatchRecordMesureValueContext context);
+    }
+
+    public interface IAnalyticMeasureExternalSourceResultGetMatchRecordMesureValueContext
+    {
+        AnalyticQuery Query { get; }
+
+        AnalyticRecord Record { get; }
+
+        bool IsSummaryRecord { get; }
+
+        string MeasureName { get; }
     }
 
     public class AnalyticMeasureExternalSourceRecord
