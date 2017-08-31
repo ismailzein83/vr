@@ -55,7 +55,7 @@ app.directive("retailBeRecurringchargeProcess", ['UtilsService',
 
                 api.load = function (payload) {
                     var promises = [];
-                    $scope.effectiveDate = new Date();
+                    $scope.effectiveDate = UtilsService.getDateFromDateTime(new Date());
                     lastDayOfMonth = new Date($scope.effectiveDate.getFullYear(), $scope.effectiveDate.getMonth() + 1, 0);
                     return UtilsService.waitMultiplePromises(promises);
                 };
