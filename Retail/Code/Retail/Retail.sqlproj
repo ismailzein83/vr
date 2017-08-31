@@ -187,7 +187,6 @@
     <Build Include="Retail_BE\Stored Procedures\sp_RecurChargeBalanceUpdateSummary_DeleteByChargeDay.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurChargeKey_GetByChargeDay.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_GetMaximumChargeDay.sql" />
-    <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_GetByChargeDay.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountStatusHistory_GetByAccountDefinitions.sql" />
     <Build Include="Retail_BE\Stored Procedures\sp_AccountPackageRecurCharge_GetByAccountPackages.sql" />
     <Build Include="Retail_BE\User Defined Types\AccountPackageRecurChargePeriodType.sql" />

@@ -20,3 +20,15 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_AccountPackageRecurCharge_ChargeDay]
+    ON [Retail_BE].[AccountPackageRecurCharge]([ChargeDay] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_AccountPackageRecurCharge_AccountID]
+    ON [Retail_BE].[AccountPackageRecurCharge]([AccountID] ASC);
+
