@@ -155,8 +155,6 @@
     <Compile Include="SaleRate\History\SaleRateHistoryQuery.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryRecord.cs" />
     <Compile Include="SaleRate\History\SellingProductZoneRates.cs" />
-    <Compile Include="StateBackup\Filters\RestoreStateBackupFilter.cs" />
-    <Compile Include="StateBackup\StateBackupRestore.cs" />
     <Compile Include="SupplierZone\SupplierZoneServiceToClose.cs" />
     <Compile Include="SupplierZone\SupplierZoneServiceToEdit.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryQuery.cs" />
