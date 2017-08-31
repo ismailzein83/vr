@@ -1,1 +1,24 @@
-﻿
+﻿<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.fields"
+               datatextfield="fieldTitle"
+               datavaluefield="fieldName"
+               selectedvalues="scopeModel.selectedFieldName"
+               entityname="Field Name"
+               label="Field Name" isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+
+<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.mathOperators"
+               datavaluefield="value"
+               datatextfield="description"
+               selectedvalues="scopeModel.selectedMathOperator"
+               label="Math Operator" isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+
+<vr-columns width="1/3row">
+    <vr-textbox value="scopeModel.value" label="Value" type="number" 
+                customvalidate="scopeModel.valueCustomValidation()" isrequired="true">
+    </vr-textbox>
+</vr-columns>
