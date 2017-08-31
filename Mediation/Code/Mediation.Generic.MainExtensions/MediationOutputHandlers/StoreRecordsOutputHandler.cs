@@ -26,20 +26,46 @@ namespace Mediation.Generic.MainExtensions.MediationOutputHandlers
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", this.DataRecordStorageId));
 
-            MemoryQueue<Object> queuePreparedBatchesForDBApply = new MemoryQueue<object>();
+            MemoryQueue<PreparedBatchForDBApply> queuePreparedBatchesForDBApply = new MemoryQueue<PreparedBatchForDBApply>();
             AsyncActivityStatus prepareBatchForDBApplyStatus = new AsyncActivityStatus();
 
             StartPrepareBatchForDBApplyTask(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
             ApplyBatchesToDB(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
         }
 
-        private static void StartPrepareBatchForDBApplyTask(IMediationOutputHandlerContext context, IDataRecordDataManager recordStorageDataManager, MemoryQueue<Object> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
+        private static void StartPrepareBatchForDBApplyTask(IMediationOutputHandlerContext context, IDataRecordDataManager recordStorageDataManager, MemoryQueue<PreparedBatchForDBApply> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
         {
             Task prepareDataTask = new Task(() =>
             {                
                 try
-                {
-                    context.PrepareDataForDBApply(recordStorageDataManager, context.InputQueue, queuePreparedBatchesForDBApply, CDRsBatch => CDRsBatch.BatchRecords.Cast<Object>());
+                {                    
+                    context.DoWhilePreviousRunning(() =>
+                    {
+                        bool hasItems = false;
+                        do
+                        {
+                            hasItems = context.InputQueue.TryDequeue(
+                            (inputBatch) =>
+                            {
+                                object dbApplyStream = recordStorageDataManager.InitialiazeStreamForDBApply();
+                                foreach (Object item in inputBatch.BatchRecords)
+                                {
+                                    recordStorageDataManager.WriteRecordToStream(item, dbApplyStream);
+                                }
+
+                                Object preparedItemsForDBApply = recordStorageDataManager.FinishDBApplyStream(dbApplyStream);
+                                queuePreparedBatchesForDBApply.Enqueue(
+                                    new PreparedBatchForDBApply
+                                    {
+                                        OriginalBatch = inputBatch,
+                                        BatchToApply = preparedItemsForDBApply
+                                    });
+
+                            });
+                        } while (!context.ShouldStop() && hasItems);
+                    });
+
+                    //context.PrepareDataForDBApply(recordStorageDataManager, context.InputQueue, queuePreparedBatchesForDBApply, CDRsBatch => CDRsBatch.BatchRecords.Cast<Object>());
                 }
                 finally
                 {
@@ -48,9 +74,9 @@ namespace Mediation.Generic.MainExtensions.MediationOutputHandlers
             });
             prepareDataTask.Start();
         }
-       
 
-        private void ApplyBatchesToDB(IMediationOutputHandlerContext context, IDataRecordDataManager recordStorageDataManager, MemoryQueue<object> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
+
+        private void ApplyBatchesToDB(IMediationOutputHandlerContext context, IDataRecordDataManager recordStorageDataManager, MemoryQueue<PreparedBatchForDBApply> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
         {
             context.DoWhilePreviousRunning(prepareBatchForDBApplyStatus, () =>
             {
@@ -59,10 +85,18 @@ namespace Mediation.Generic.MainExtensions.MediationOutputHandlers
                 {
                     hasItem = queuePreparedBatchesForDBApply.TryDequeue((preparedBatchForDBApply) =>
                     {
-                        recordStorageDataManager.ApplyStreamToDB(preparedBatchForDBApply);
+                        recordStorageDataManager.ApplyStreamToDB(preparedBatchForDBApply.BatchToApply);
+                        context.SetOutputHandlerExecutedOnBatch(preparedBatchForDBApply.OriginalBatch);
                     });
                 } while (!context.ShouldStop() && hasItem);
             });
+        }
+
+        private class PreparedBatchForDBApply
+        {
+            public PreparedRecordsBatch OriginalBatch { get; set; }
+
+            public Object BatchToApply { get; set; }
         }
     }
 }

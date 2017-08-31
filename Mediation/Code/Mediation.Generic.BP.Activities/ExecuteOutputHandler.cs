@@ -8,6 +8,7 @@ using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.Data;
+using Mediation.Generic.Data;
 
 namespace Mediation.Generic.BP.Activities
 {
@@ -34,7 +35,11 @@ namespace Mediation.Generic.BP.Activities
 
         protected override ExecuteOutputOutput DoWorkWithResult(ExecuteOutputInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
-            var executionContext = new MediationOutputHandlerContext(this, previousActivityStatus, handle, inputArgument.MediationDefinition, inputArgument.OutputHandlerExecutionEntity.InputQueue);
+            var executionContext = new MediationOutputHandlerContext(this,
+                                                                      previousActivityStatus,
+                                                                      handle,
+                                                                      inputArgument.MediationDefinition,
+                                                                      inputArgument.OutputHandlerExecutionEntity.InputQueue);
             inputArgument.OutputHandlerExecutionEntity.OutputHandler.Handler.Execute(executionContext);
 
             return new ExecuteOutputOutput { };
@@ -64,8 +69,11 @@ namespace Mediation.Generic.BP.Activities
             MediationDefinition _mediationDefinition;
             BaseQueue<PreparedRecordsBatch> _inputQueue;
 
-            public MediationOutputHandlerContext(ExecuteOutputHandler parentActivity, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle,
-                MediationDefinition mediationDefinition, BaseQueue<PreparedRecordsBatch> inputQueue)
+            public MediationOutputHandlerContext(ExecuteOutputHandler parentActivity,
+                                                 AsyncActivityStatus previousActivityStatus,
+                                                 AsyncActivityHandle handle,
+                                                 MediationDefinition mediationDefinition,
+                                                 BaseQueue<PreparedRecordsBatch> inputQueue)
             {
                 _parentActivity = parentActivity;
                 _previousActivityStatus = previousActivityStatus;
@@ -116,10 +124,22 @@ namespace Mediation.Generic.BP.Activities
             {
                 _parentActivity.PrepareDataForDBApply(_previousActivityStatus, _handle, dataManager, inputQueue, outputQueue, GetItems);
             }
+
+            public void SetOutputHandlerExecutedOnBatch(PreparedRecordsBatch batch)
+            {
+                var batchProxy = batch.Proxy;
+                lock (batchProxy)
+                {
+                    batchProxy.NbOfExecutedHandlers++;
+                }
+                if (batchProxy.NbOfExecutedHandlers == batchProxy.NbOfHandlersToExecute)
+                {
+                    IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
+                    dataManager.DeleteMediationRecordsBySessionIds(MediationDefinition.MediationDefinitionId, batchProxy.SessionIdToDelete);
+                }
+            }
         }
 
         #endregion
-
-        
     }
 }

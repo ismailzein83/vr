@@ -5,6 +5,6 @@ CREATE procedure [Mediation_Generic].[sp_MultiLegSessionID_GetByMediationDefinit
 as
 begin
 	SELECT	[MediationDefinitionID],[SessionID],[LegID]
-	FROM	[Mediation_Generic].[MultiLegSessionID]
+	FROM	[Mediation_Generic].[MultiLegSessionID] with(nolock)
 	Where	MediationDefinitionID = @MediationDefinitionID	
 end

@@ -34,6 +34,7 @@ namespace Mediation.Generic.MainExtensions.MediationOutputHandlers
                         MediationRecordsManager mediationRecordsManager = new MediationRecordsManager();
                         List<MediationRecord> mediationRecords = mediationRecordsManager.GenerateMediationRecordsFromBatchRecords(mediationDefinition, mediationDefinition.ParsedRecordTypeId, preparedCdrBatch.BatchRecords);
                         mediationRecordsManager.SaveMediationRecordsToDB(mediationRecords);
+                        context.SetOutputHandlerExecutedOnBatch(preparedCdrBatch);
                     });
                 } while (!context.ShouldStop() && hasItem);
             });

@@ -25,6 +25,7 @@ namespace Mediation.Generic.Entities
     {
         public string SessionIdField { get; set; }
         public string EventTimeField { get; set; }
+        public TimeSpan TimeOutInterval { get; set; }
         public List<StatusMapping> StatusMappings { get; set; }
 
     }

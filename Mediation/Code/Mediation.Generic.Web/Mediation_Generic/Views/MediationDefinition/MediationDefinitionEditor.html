@@ -45,6 +45,11 @@
                         </vr-columns>
 
                     </vr-row>
+                    <vr-row>
+                        <vr-columns width="1/4row">
+                            <vr-timespan value="scopeModel.timeOutInterval" label="Timeout Interval"></vr-timespan>
+                        </vr-columns>
+                    </vr-row>
                     <vr-row removeline>
                         <vr-section title="Event Status Conditions">
 
@@ -108,6 +113,7 @@
                     </vr-row>
 
                 </vr-tab>
+
                 <vr-tab header="'Output Handlers'">
                     <vr-row>
                         <vr-validator validate="scopeModel.validateHandlers()">

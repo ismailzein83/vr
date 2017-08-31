@@ -15,7 +15,7 @@
     [IncomingGwId]         VARCHAR (200)   NULL,
     [OutgoingGwId]         VARCHAR (200)   NULL,
     [TransferredCallId]    VARCHAR (200)   NULL,
-    [DurationInSeconds]    DECIMAL (20, 8) NULL,
+    [DurationInSeconds]    DECIMAL (20, 4) NULL,
     [AttemptDateTime]      DATETIME        NULL,
     [SendCallType]         TINYINT         NULL,
     [ReveiveCallType]      TINYINT         NULL,
@@ -27,6 +27,8 @@
     [TerminatorIp]         VARCHAR (100)   NULL,
     CONSTRAINT [PK_CookedCDR] PRIMARY KEY CLUSTERED ([CDRID] ASC)
 );
+
+
 
 
 

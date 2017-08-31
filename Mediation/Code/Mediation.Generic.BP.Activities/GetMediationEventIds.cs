@@ -15,12 +15,12 @@ namespace Mediation.Generic.BP.Activities
         public InArgument<IEnumerable<MediationRecord>> MediationRecords { get; set; }
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<string>> EventIds { get; set; }
+        public OutArgument<IEnumerable<string>> SessionIds { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<MediationRecord> mediationRecords = MediationRecords.Get(context);
-            EventIds.Set(context, mediationRecords.Select(s => s.SessionId).Distinct());
+            SessionIds.Set(context, mediationRecords.Select(s => s.SessionId).Distinct());
         }
     }
 }

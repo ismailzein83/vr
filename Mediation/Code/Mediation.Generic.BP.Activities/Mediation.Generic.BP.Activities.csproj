@@ -86,7 +86,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeleteProcessedMediationRecords.cs" />
     <Compile Include="ExecuteOutputHandler.cs" />
     <Compile Include="GetDataTransormationDefinition.cs" />
     <Compile Include="GetMediationDefinition.cs" />

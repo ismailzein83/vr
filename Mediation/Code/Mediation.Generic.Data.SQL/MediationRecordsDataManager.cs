@@ -56,13 +56,21 @@ namespace Mediation.Generic.Data.SQL
             Object preparedMediationRecords = FinishDBApplyStream(dbApplyStream);
             ApplyMediationRecordToDB(preparedMediationRecords);
         }
-        public IEnumerable<MediationRecord> GetMediationRecords()
+
+        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, Action<string> onSessionIdLoaded)
         {
-            return GetItemsSP("[Mediation_Generic].[sp_MediationRecord_GetAll]", MediationRecordMapper);
+            ExecuteReaderSP("[Mediation_Generic].[sp_MediationRecord_GetSessionIdByStatus]", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    onSessionIdLoaded(MediationRecordSessionIdMapper(reader));
+                }
+            }, mediationDefinitionId, (short)status);
         }
-        public IEnumerable<MediationRecord> GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status)
+
+        string MediationRecordSessionIdMapper(IDataReader reader)
         {
-            return GetItemsSP("[Mediation_Generic].[sp_MediationRecord_GetByStatus]", MediationRecordMapper, mediationDefinitionId, (short)status);
+            return reader["SessionId"] as string;
         }
         public IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds)
         {

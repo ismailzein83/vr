@@ -22,7 +22,6 @@ namespace Mediation.Generic.Entities
         MediationDefinition MediationDefinition { get; }
 
         BaseQueue<PreparedRecordsBatch> InputQueue { get; }
-
         void DoWhilePreviousRunning(Action actionToDo);
 
         void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, Action actionToDo);
@@ -34,5 +33,7 @@ namespace Mediation.Generic.Entities
         long ProcessInstanceId { get; }
 
         void PrepareDataForDBApply<R, S>(IBulkApplyDataManager<R> dataManager, BaseQueue<S> inputQueue, BaseQueue<object> outputQueue, Func<S, System.Collections.Generic.IEnumerable<R>> GetItems);
-    }    
+
+        void SetOutputHandlerExecutedOnBatch(PreparedRecordsBatch batch);
+    }
 }

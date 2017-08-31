@@ -14,7 +14,7 @@
     [IncomingGwId]         VARCHAR (200)   NULL,
     [OutgoingGwId]         VARCHAR (200)   NULL,
     [TransferredCallId]    VARCHAR (200)   NULL,
-    [DurationInSeconds]    DECIMAL (20, 8) NULL,
+    [DurationInSeconds]    DECIMAL (20, 4) NULL,
     [AttemptDateTime]      DATETIME        NULL,
     [SendCallType]         TINYINT         NULL,
     [ReveiveCallType]      TINYINT         NULL,
@@ -24,6 +24,8 @@
     [TerminatorExtension]  VARCHAR (20)    NULL,
     [OriginatorIp]         VARCHAR (100)   NULL,
     [TerminatorIp]         VARCHAR (100)   NULL);
+
+
 
 
 

@@ -13,7 +13,6 @@ SELECT [EventId]
       ,[EventDetails]
   FROM [Mediation_Generic].[MediationRecord] sr WITH(NOLOCK) 
    JOIN @Ids i ON sr.SessionId = i.SessionId  
-   where sr.MediationDefinitionId = @MediationDefinitionId
-   order by sr.SessionId
+   where sr.MediationDefinitionId = @MediationDefinitionId  
 
 end

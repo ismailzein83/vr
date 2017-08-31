@@ -42,8 +42,6 @@
 
         //#endregion
 
-
-
         loadParameters();
         defineScope();
         load();
@@ -392,8 +390,6 @@
 
         }
 
-
-
         function loadHandlerGrid() {
 
             return Mediation_Generic_MediationDefinitionAPIService.GetMediationHandlerConfigTypes().then(function (response) {
@@ -405,6 +401,7 @@
                     $scope.scopeModel.handlers = buildHandlersGridData(mediationDefinitionEntity.OutputHandlers);
             });
         }
+
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([loadDefinitionSection, setTitle, loadParsedToCookedSection, PrepareStatusMappings, loadHandlerGrid])
                  .catch(function (error) {
@@ -470,6 +467,7 @@
             };
             return item;
         }
+
         function buildHandlersGridData(handlers) {
             var tab = [];
             for (var i = 0 ; i < handlers.length ; i++) {
@@ -478,6 +476,7 @@
             }
             return tab;
         }
+
         function buildHandlerRecord(rec) {
             var handlerTypeConfig = (rec.Handler != null) ? UtilsService.getItemByVal(configTypes, rec.Handler.ConfigId, "ExtensionConfigurationId") : null;
             return {
@@ -544,7 +543,8 @@
             return {
                 SessionIdField: dataParsedRecordTypeFieldsSessionIdSelectorAPI.getSelectedIds(),
                 EventTimeField: dataParsedRecordTypeFieldsTimeSelectorAPI.getSelectedIds(),
-                StatusMappings: getStatusMappings()
+                StatusMappings: getStatusMappings(),
+                TimeOutInterval: $scope.scopeModel.timeOutInterval
             };
         }
 
@@ -592,6 +592,7 @@
 
             if (mediationDefinitionEntity != undefined && mediationDefinitionEntity.ParsedRecordIdentificationSetting != undefined) {
                 var statusMappings = mediationDefinitionEntity.ParsedRecordIdentificationSetting.StatusMappings;
+                $scope.scopeModel.timeOutInterval = mediationDefinitionEntity.ParsedRecordIdentificationSetting.TimeOutInterval;
                 for (var i = 0; i < statusMappings.length; i++) {
                     var index = statusMappings[i].Status;
                     var statusMappingObj = {

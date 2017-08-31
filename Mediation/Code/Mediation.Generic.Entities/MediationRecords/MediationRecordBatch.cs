@@ -12,6 +12,9 @@ namespace Mediation.Generic.Entities
         {
             this.MediationRecords = new List<MediationRecord>();
         }
+
+        public string SessionId { get; set; }
+
         public List<MediationRecord> MediationRecords { get; set; }
     }
 }

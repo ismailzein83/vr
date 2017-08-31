@@ -10,6 +10,8 @@ using Mediation.Generic.Business;
 using Vanrise.GenericData.Transformation;
 using Vanrise.GenericData.Transformation.Entities;
 using Vanrise.Common;
+using Mediation.Generic.Data;
+using Vanrise.Entities;
 
 namespace Mediation.Generic.BP.Activities
 {
@@ -35,56 +37,87 @@ namespace Mediation.Generic.BP.Activities
 
         protected override void DoWork(ProcessMediationRecordsBatchInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Start Processing Mediation Records");
             IMediationProcessContext mediationProcessContext = new MediationProcessContext(inputArgument.MediationDefinition.MediationDefinitionId);
             List<ProcessHandlerItem> processHandlers = new List<ProcessHandlerItem>();
+            var batchProxy = new PreparedRecordsBatchProxy { SessionIdToDelete = new List<string>() };
             foreach (var outputHandler in inputArgument.OutputHandlerExecutionEntities)
             {
                 ProcessHandlerItem item = new ProcessHandlerItem
                 {
                     RecordName = outputHandler.OutputHandler.OutputRecordName,
                     InputQueue = outputHandler.InputQueue,
-                    CdrBatch = new PreparedRecordsBatch()
+                    CdrBatch = new PreparedRecordsBatch { Proxy = batchProxy }
                 };
                 processHandlers.Add(item);
             }
+
             MediationDefinitionManager mediationDefinitionManager = new MediationDefinitionManager();
             DataTransformer dataTransformer = new DataTransformer();
+            bool needsContextRecord = inputArgument.DataTransformationDefinition.RecordTypes.Any(c => c.RecordName == "context");
+            bool needssessionIdRecord = inputArgument.DataTransformationDefinition.RecordTypes.Any(c => c.RecordName == "sessionId");
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItems = false;
                 do
                 {
-                    hasItems = inputArgument.MediationRecordsBatch.TryDequeue((mediationRecordBatch) =>
+                    hasItems = inputArgument.MediationRecordsBatch.TryDequeue((sessionMediationRecordBatch) =>
                     {
                         var transformationOutput = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.ParsedTransformationSettings.TransformationDefinitionId, (context) =>
                         {
-                            var contextRecordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == "context");
-                            if (contextRecordType != null)
+                            if (needsContextRecord)
                                 context.SetRecordValue("context", mediationProcessContext);
 
-                            var details = mediationRecordBatch.MediationRecords.Select(m => m.EventDetails).ToList();
+                            var details = sessionMediationRecordBatch.MediationRecords.Select(m => m.EventDetails).ToList();
+
                             context.SetRecordValue(inputArgument.MediationDefinition.ParsedTransformationSettings.ParsedRecordName, details);
 
-                            var sessionIdRecordType = inputArgument.DataTransformationDefinition.RecordTypes.FindRecord(c => c.RecordName == "sessionId");
-                            if (sessionIdRecordType != null)
+                            if (needssessionIdRecord)
                                 context.SetRecordValue("sessionId", details.Select(itm => itm.MultiLegSessionId).First());
-                           
+
                         });
 
+                        batchProxy.SessionIdToDelete.Add(sessionMediationRecordBatch.SessionId);
                         foreach (var processHandler in processHandlers)
                         {
                             UpdateProcessHandlers(inputArgument, transformationOutput, processHandler);
                         }
+                        if (batchProxy.SessionIdToDelete.Count > 10000)
+                        {
+
+                            SetNbOfHandlersToExecute(inputArgument.MediationDefinition.MediationDefinitionId, processHandlers, batchProxy, handle);
+                            batchProxy = new PreparedRecordsBatchProxy { SessionIdToDelete = new List<string>() };
+                            foreach (var processHandler in processHandlers)
+                            {
+                                if (processHandler.CdrBatch.BatchRecords.Count > 0)
+                                    processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
+                                processHandler.CdrBatch = new PreparedRecordsBatch { Proxy = batchProxy };
+                            }
+                        }
                     });
                 } while (!ShouldStop(handle) && hasItems);
-
-                foreach (var processHandler in processHandlers)
-                {
-                    if (processHandler.CdrBatch.BatchRecords.Count > 0)
-                        processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
-                }
             });
+
+            SetNbOfHandlersToExecute(inputArgument.MediationDefinition.MediationDefinitionId, processHandlers, batchProxy, handle);
+            foreach (var processHandler in processHandlers)
+            {
+                if (processHandler.CdrBatch.BatchRecords.Count > 0)
+                    processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
+            }
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "End Processing Mediation Records");
+        }
+
+        void SetNbOfHandlersToExecute(Guid mediationDefinitionId, List<ProcessHandlerItem> processHandlers, PreparedRecordsBatchProxy batchProxy, AsyncActivityHandle handle)
+        {
+            batchProxy.NbOfHandlersToExecute = processHandlers.Count(itm => itm.CdrBatch.BatchRecords.Count > 0);
+            if (batchProxy.NbOfHandlersToExecute == 0)
+            {
+
+                IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
+                dataManager.DeleteMediationRecordsBySessionIds(mediationDefinitionId, batchProxy.SessionIdToDelete);
+                handle.SharedInstanceData.WriteBusinessTrackingMsg(LogEntryType.Information, "{0} Session Ids are deleted", batchProxy.SessionIdToDelete.Count);
+            }
         }
 
         void UpdateProcessHandlers(ProcessMediationRecordsBatchInput inputArgument, DataTransformationExecutionOutput output, ProcessHandlerItem processHandler)
@@ -103,12 +136,6 @@ namespace Mediation.Generic.BP.Activities
                 if (record != null)
                     processHandler.CdrBatch.BatchRecords.Add(record);
             }
-
-            if (processHandler.CdrBatch.BatchRecords.Count > 100)
-            {
-                processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
-                processHandler.CdrBatch = new PreparedRecordsBatch();
-            }
         }
 
         protected override ProcessMediationRecordsBatchInput GetInputArgument2(AsyncCodeActivityContext context)
@@ -121,15 +148,6 @@ namespace Mediation.Generic.BP.Activities
                 OutputHandlerExecutionEntities = this.OutputHandlerExecutionEntities.Get(context)
             };
         }
-
-        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
-        {
-            if (this.MediationRecordsBatch.Get(context) == null)
-                this.MediationRecordsBatch.Set(context, new MemoryQueue<MediationRecord>());
-            if (this.DataTransformationDefinition.Get(context) == null)
-                this.DataTransformationDefinition.Set(context, new DataTransformationDefinition());
-            base.OnBeforeExecute(context, handle);
-        }
     }
 
     class ProcessHandlerItem
@@ -138,4 +156,6 @@ namespace Mediation.Generic.BP.Activities
         public BaseQueue<PreparedRecordsBatch> InputQueue { get; set; }
         public string RecordName { get; set; }
     }
+
+
 }

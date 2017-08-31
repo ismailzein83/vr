@@ -72,17 +72,6 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="mge:MediationDefinition" Name="mediationDefinition" />
       <Variable x:TypeArguments="vgte:DataTransformationDefinition" Name="dataTransformationDefinition" />
-      <Variable x:TypeArguments="scg:IEnumerable(mge:MediationRecord)" Name="mediationRecords">
-        <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">new List&lt;MediationRecord&gt;()</mca:CSharpValue>
-        </Variable.Default>
-      </Variable>
-      <Variable x:TypeArguments="scg:IEnumerable(x:String)" Name="eventIds">
-        <Variable.Default>
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">new List&lt;String&gt;()</mca:CSharpValue>
-        </Variable.Default>
-      </Variable>
-      <Variable x:TypeArguments="x:Boolean" Name="isDataDeleted" />
       <Variable x:TypeArguments="scg:List(mge:OutputHandlerExecutionEntity)" Name="outputHandlerExecutionEntities">
         <Variable.Default>
           <mca:CSharpValue x:TypeArguments="scg:List(mge:OutputHandlerExecutionEntity)">new List&lt;OutputHandlerExecutionEntity&gt;()</mca:CSharpValue>
@@ -121,47 +110,6 @@
         </InArgument>
       </mgba1:GetDataTransormationDefinition.TransformationDefinitionId>
     </mgba1:GetDataTransormationDefinition>
-    <mgba1:LoadMediationRecordsByStatus sap2010:WorkflowViewState.IdRef="LoadMediationRecordsByStatus_1">
-      <mgba1:LoadMediationRecordsByStatus.DataRecordTypeId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.ParsedRecordTypeId</mca:CSharpValue>
-        </InArgument>
-      </mgba1:LoadMediationRecordsByStatus.DataRecordTypeId>
-      <mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.MediationDefinitionId</mca:CSharpValue>
-        </InArgument>
-      </mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
-      <mgba1:LoadMediationRecordsByStatus.MediationRecords>
-        <OutArgument x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">mediationRecords</mca:CSharpReference>
-        </OutArgument>
-      </mgba1:LoadMediationRecordsByStatus.MediationRecords>
-      <mgba1:LoadMediationRecordsByStatus.Status>
-        <InArgument x:TypeArguments="mge:EventStatus">
-          <mca:CSharpValue x:TypeArguments="mge:EventStatus">EventStatus.Stop</mca:CSharpValue>
-        </InArgument>
-      </mgba1:LoadMediationRecordsByStatus.Status>
-    </mgba1:LoadMediationRecordsByStatus>
-    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3">
-      <vbw:WriteTrackingMessage.Message>
-        <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">string.Format("Mediation Records Loaded with count {0}.", mediationRecords.Count())</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Message>
-    </vbw:WriteTrackingMessage>
-    <mgba1:GetMediationEventIds sap2010:WorkflowViewState.IdRef="GetMediationEventIds_1">
-      <mgba1:GetMediationEventIds.EventIds>
-        <OutArgument x:TypeArguments="scg:IEnumerable(x:String)">
-          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(x:String)">eventIds</mca:CSharpReference>
-        </OutArgument>
-      </mgba1:GetMediationEventIds.EventIds>
-      <mgba1:GetMediationEventIds.MediationRecords>
-        <InArgument x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(mge:MediationRecord)">mediationRecords</mca:CSharpValue>
-        </InArgument>
-      </mgba1:GetMediationEventIds.MediationRecords>
-    </mgba1:GetMediationEventIds>
     <ForEach x:TypeArguments="mge:MediationOutputHandlerDefinition" DisplayName="ForEach&lt;MediationOutputHandlerDefinition&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
       <ForEach.Values>
         <InArgument x:TypeArguments="scg:IEnumerable(mge:MediationOutputHandlerDefinition)">
@@ -209,13 +157,42 @@
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">new MemoryQueue&lt;Object&gt;()</mca:CSharpValue>
           </Variable.Default>
         </Variable>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadSessionIdsByStatusStatus" />
+        <Variable x:TypeArguments="vq:BaseQueue(mge:SessionIdsBatch)" Name="queueSessionIds">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(mge:SessionIdsBatch)">new MemoryQueue&lt;SessionIdsBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="eventHandlersExecutedStatus" />
       </Parallel.Variables>
-      <mgba1:LoadMediationRecordsByIds PreviousActivityStatus="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadMediationRecordsByIds_1">
-        <mgba1:LoadMediationRecordsByIds.EventIds>
-          <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
-            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">eventIds</mca:CSharpValue>
+      <mgba1:LoadMediationRecordsByStatus PreviousActivityStatus="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadMediationRecordsByStatus_1">
+        <mgba1:LoadMediationRecordsByStatus.DataRecordTypeId>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.ParsedRecordTypeId</mca:CSharpValue>
           </InArgument>
-        </mgba1:LoadMediationRecordsByIds.EventIds>
+        </mgba1:LoadMediationRecordsByStatus.DataRecordTypeId>
+        <mgba1:LoadMediationRecordsByStatus.EventStatus>
+          <InArgument x:TypeArguments="mge:EventStatus">
+            <mca:CSharpValue x:TypeArguments="mge:EventStatus">EventStatus.Stop</mca:CSharpValue>
+          </InArgument>
+        </mgba1:LoadMediationRecordsByStatus.EventStatus>
+        <mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.MediationDefinitionId</mca:CSharpValue>
+          </InArgument>
+        </mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
+        <mgba1:LoadMediationRecordsByStatus.SessionIds>
+          <OutArgument x:TypeArguments="vq:BaseQueue(mge:SessionIdsBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(mge:SessionIdsBatch)">queueSessionIds</mca:CSharpReference>
+          </OutArgument>
+        </mgba1:LoadMediationRecordsByStatus.SessionIds>
+        <mgba1:LoadMediationRecordsByStatus.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadSessionIdsByStatusStatus</mca:CSharpReference>
+          </OutArgument>
+        </mgba1:LoadMediationRecordsByStatus.Status>
+      </mgba1:LoadMediationRecordsByStatus>
+      <mgba1:LoadMediationRecordsByIds sap2010:WorkflowViewState.IdRef="LoadMediationRecordsByIds_2">
         <mgba1:LoadMediationRecordsByIds.MediationDefinition>
           <InArgument x:TypeArguments="mge:MediationDefinition">
             <mca:CSharpValue x:TypeArguments="mge:MediationDefinition">mediationDefinition</mca:CSharpValue>
@@ -226,6 +203,16 @@
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(mge:MediationRecordBatch)">queueMediationRecordsBatch</mca:CSharpReference>
           </InOutArgument>
         </mgba1:LoadMediationRecordsByIds.MediationRecords>
+        <mgba1:LoadMediationRecordsByIds.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadSessionIdsByStatusStatus</mca:CSharpValue>
+          </InArgument>
+        </mgba1:LoadMediationRecordsByIds.PreviousActivityStatus>
+        <mgba1:LoadMediationRecordsByIds.SessionIds>
+          <InArgument x:TypeArguments="vq:BaseQueue(mge:SessionIdsBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(mge:SessionIdsBatch)">queueSessionIds</mca:CSharpValue>
+          </InArgument>
+        </mgba1:LoadMediationRecordsByIds.SessionIds>
         <mgba1:LoadMediationRecordsByIds.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadMediationRecordsStatus</mca:CSharpReference>
@@ -264,74 +251,67 @@
           </OutArgument>
         </mgba1:ProcessMediationRecordsBatch.Status>
       </mgba1:ProcessMediationRecordsBatch>
-      <ParallelForEach x:TypeArguments="mge:OutputHandlerExecutionEntity" DisplayName="ParallelForEach&lt;OutputHandlerExecutionEntity&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_3">
-        <ParallelForEach.Values>
-          <InArgument x:TypeArguments="scg:IEnumerable(mge:OutputHandlerExecutionEntity)">
-            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(mge:OutputHandlerExecutionEntity)">outputHandlerExecutionEntities</mca:CSharpValue>
-          </InArgument>
-        </ParallelForEach.Values>
-        <ActivityAction x:TypeArguments="mge:OutputHandlerExecutionEntity">
-          <ActivityAction.Argument>
-            <DelegateInArgument x:TypeArguments="mge:OutputHandlerExecutionEntity" Name="outputHandlerExecutionEntity" />
-          </ActivityAction.Argument>
-          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-            <mgba1:ExecuteOutputHandler Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ExecuteOutputHandler_2">
-              <mgba1:ExecuteOutputHandler.MediationDefinition>
-                <InArgument x:TypeArguments="mge:MediationDefinition">
-                  <mca:CSharpValue x:TypeArguments="mge:MediationDefinition">mediationDefinition</mca:CSharpValue>
-                </InArgument>
-              </mgba1:ExecuteOutputHandler.MediationDefinition>
-              <mgba1:ExecuteOutputHandler.OutputHandlerExecutionEntity>
-                <InArgument x:TypeArguments="mge:OutputHandlerExecutionEntity">
-                  <mca:CSharpValue x:TypeArguments="mge:OutputHandlerExecutionEntity">outputHandlerExecutionEntity</mca:CSharpValue>
-                </InArgument>
-              </mgba1:ExecuteOutputHandler.OutputHandlerExecutionEntity>
-              <mgba1:ExecuteOutputHandler.PreviousActivityStatus>
-                <InArgument x:TypeArguments="vb:AsyncActivityStatus">
-                  <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">processMediationRecordsStatus</mca:CSharpValue>
-                </InArgument>
-              </mgba1:ExecuteOutputHandler.PreviousActivityStatus>
-            </mgba1:ExecuteOutputHandler>
-          </Sequence>
-        </ActivityAction>
-      </ParallelForEach>
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+        <ParallelForEach x:TypeArguments="mge:OutputHandlerExecutionEntity" DisplayName="ParallelForEach&lt;OutputHandlerExecutionEntity&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_3">
+          <ParallelForEach.Values>
+            <InArgument x:TypeArguments="scg:IEnumerable(mge:OutputHandlerExecutionEntity)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(mge:OutputHandlerExecutionEntity)">outputHandlerExecutionEntities</mca:CSharpValue>
+            </InArgument>
+          </ParallelForEach.Values>
+          <ActivityAction x:TypeArguments="mge:OutputHandlerExecutionEntity">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="mge:OutputHandlerExecutionEntity" Name="outputHandlerExecutionEntity" />
+            </ActivityAction.Argument>
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+              <mgba1:ExecuteOutputHandler Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ExecuteOutputHandler_2">
+                <mgba1:ExecuteOutputHandler.MediationDefinition>
+                  <InArgument x:TypeArguments="mge:MediationDefinition">
+                    <mca:CSharpValue x:TypeArguments="mge:MediationDefinition">mediationDefinition</mca:CSharpValue>
+                  </InArgument>
+                </mgba1:ExecuteOutputHandler.MediationDefinition>
+                <mgba1:ExecuteOutputHandler.OutputHandlerExecutionEntity>
+                  <InArgument x:TypeArguments="mge:OutputHandlerExecutionEntity">
+                    <mca:CSharpValue x:TypeArguments="mge:OutputHandlerExecutionEntity">outputHandlerExecutionEntity</mca:CSharpValue>
+                  </InArgument>
+                </mgba1:ExecuteOutputHandler.OutputHandlerExecutionEntity>
+                <mgba1:ExecuteOutputHandler.PreviousActivityStatus>
+                  <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                    <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">processMediationRecordsStatus</mca:CSharpValue>
+                  </InArgument>
+                </mgba1:ExecuteOutputHandler.PreviousActivityStatus>
+              </mgba1:ExecuteOutputHandler>
+            </Sequence>
+          </ActivityAction>
+        </ParallelForEach>
+        <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+          <Assign.To>
+            <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">eventHandlersExecutedStatus</mca:CSharpReference>
+            </OutArgument>
+          </Assign.To>
+          <Assign.Value>
+            <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+              <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus" xml:space="preserve">new AsyncActivityStatus {  IsComplete = true}</mca:CSharpValue>
+            </InArgument>
+          </Assign.Value>
+        </Assign>
+      </Sequence>
     </Parallel>
-    <mgba1:DeleteProcessedMediationRecords sap2010:WorkflowViewState.IdRef="DeleteProcessedMediationRecords_1">
-      <mgba1:DeleteProcessedMediationRecords.EventIds>
-        <InArgument x:TypeArguments="scg:IEnumerable(x:String)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:String)">eventIds</mca:CSharpValue>
-        </InArgument>
-      </mgba1:DeleteProcessedMediationRecords.EventIds>
-      <mgba1:DeleteProcessedMediationRecords.IsDataDeleted>
-        <InOutArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpReference x:TypeArguments="x:Boolean">isDataDeleted</mca:CSharpReference>
-        </InOutArgument>
-      </mgba1:DeleteProcessedMediationRecords.IsDataDeleted>
-      <mgba1:DeleteProcessedMediationRecords.MediationDefinitionId>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.MediationDefinitionId</mca:CSharpValue>
-        </InArgument>
-      </mgba1:DeleteProcessedMediationRecords.MediationDefinitionId>
-    </mgba1:DeleteProcessedMediationRecords>
-    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4">
+    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5">
       <vbw:WriteTrackingMessage.Message>
         <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">string.Format("Processed Mediation Records were {0}.", isDataDeleted? "deleted" : "not deleted")</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:String">mediationDefinition.Name + " Process is finished."</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
     </vbw:WriteTrackingMessage>
-    <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_5" Message="Mediation Process is finished." />
-    <sads:DebugSymbol.Symbol>d0BDOlxURlNcTWVkaWF0aW9uXENvZGVcTWVkaWF0aW9uLkdlbmVyaWMuQlBcTWVkaWF0aW9uUHJvY2Vzcy54YW1sPUcDxQIOAgEBTQtNhgECARJSC1JyAgEKWAtYmQECAQJcBVySAQMBuANdBWgkAwGnA2kFbyADAZ4DcAV7LAMBjQN8BZEBKgMB7AKSAQWYASADAeMCmQEFpAEiAwHSAqUBBb8BDwMBtQLAAQWqAhACAT6rAgW7Ai0CASW8AgXCAiACARzDAgXDApcBAgEaXHRcjwEDAbkDZQtlYwMBsANgC2BzAwGoA2wLbJcBAwGfA3gLeJIBAwGWA3MLc4YBAwGOA38Lf20DAYUDiQELiQF9AwH9AoQBC4QBcQMB9QKOAQuOAWADAe0ClQELlQGcAQMB5AKhAQuhAXUDAdsCnAELnAFqAwHTAqgBC6gBmAEDAcoCrwEJvQEUAwG2AsUBDcUBlgECAVvLAQ3LAZYBAgFN0QEN0QF4AgE/1QEH6gEpAwH8AesBB4oCLAMBpwGLAgepAhkCAWm4Agu4AnECATazAguzAl8CAS6uAguuAmICASa/Agu/AqkBAgEdwwJ0wwKUAQIBG7ABC7wBHQMBtwLiAQ3iAYsBAwGnAucBDecBewMBmQLdAQ3dAW0DAYsC2AEN2AFkAwH9Af0BDf0BiwEDAe4B+AEN+AGDAQMB4AHuAQ3uAYABAwHSAYICDYICcwMBxAGHAg2HAn4DAbYB8wEN8wFtAwGoAY4CDY4CkgEDAZkBlQILpwIWAgFqugEPugGUAQMBwQKzARG2ASADAbgClgINpgIqAgFrowITowJ8AwGKAZkCE5kCcwIBe54CE54ChQECAWw=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0BDOlxURlNcTWVkaWF0aW9uXENvZGVcTWVkaWF0aW9uLkdlbmVyaWMuQlBcTWVkaWF0aW9uUHJvY2Vzcy54YW1sN0cDtAIOAgEBTQtNmQECAQJRBVGSAQMBtQNSBV0kAwGqA14FZCADAaQDZQVwLAMBmQNxBYsBDwMBhQOMAQWrAhACAQ2sAgWyAiACAQdRdFGPAQMBtgNaC1piAwGwA1ULVXMDAasDYQthlwEDAaUDbQttkgEDAZ8DaAtohgEDAZoDdAt0mAEDAZQDewmJARQDAYYDkQENkQGWAQIBOJcBDZcBlgECASqdAQ2dAXgCARyjAQ2jAYwBAgEOqAEHwgEsAwG+AsMBB90BKQMB9wHeAQf9ASwDAaIB/gEHqgISAgFGrwILrwJ7AgEIfAuIAR0DAYcDqwENqwFvAwH3ArABDbABYgMB6QK1AQ21AXIDAdsCugENugF7AwHNAr8BDb8BfQMBvwLLAQ3LAYsBAwGwAtUBDdUBcwMBogLQAQ3QAXUDAZQC2gEN2gF7AwGGAsYBDcYBbQMB+AHwAQ3wAYsBAwHpAesBDesBgwEDAdsB4QEN4QGAAQMBzQH1AQ31AXMDAb8B+gEN+gF+AwGxAeYBDeYBbQMBowH/AQmdAhsCAWSeAgmpAhICAUeGAQ+GAZQBAwGOA38RggEgAwGIA4ICD4IClAEDAZQBiQINmwIYAgFlpgIPpgKdAQIBVqECD6ECfgIBSIoCD5oCLAIBZpcCFZcCfgMBhQGNAhWNAnUCAXaSAhWSAocBAgFn</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="881,22" />
-      <sap2010:ViewStateData Id="GetMediationDefinition_1" sap:VirtualizedContainerService.HintSize="881,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="881,22" />
-      <sap2010:ViewStateData Id="GetDataTransormationDefinition_1" sap:VirtualizedContainerService.HintSize="881,22" />
-      <sap2010:ViewStateData Id="LoadMediationRecordsByStatus_1" sap:VirtualizedContainerService.HintSize="881,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="881,22" />
-      <sap2010:ViewStateData Id="GetMediationEventIds_1" sap:VirtualizedContainerService.HintSize="881,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1143,22" />
+      <sap2010:ViewStateData Id="GetMediationDefinition_1" sap:VirtualizedContainerService.HintSize="1143,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1143,22" />
+      <sap2010:ViewStateData Id="GetDataTransormationDefinition_1" sap:VirtualizedContainerService.HintSize="1143,22" />
       <sap2010:ViewStateData Id="AddToCollection`1_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
@@ -340,7 +320,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="881,296">
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="1143,296">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -348,29 +328,37 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="LoadMediationRecordsByIds_1" sap:VirtualizedContainerService.HintSize="200,296" />
-      <sap2010:ViewStateData Id="ProcessMediationRecordsBatch_4" sap:VirtualizedContainerService.HintSize="200,296" />
+      <sap2010:ViewStateData Id="LoadMediationRecordsByStatus_1" sap:VirtualizedContainerService.HintSize="200,522" />
+      <sap2010:ViewStateData Id="LoadMediationRecordsByIds_2" sap:VirtualizedContainerService.HintSize="200,522" />
+      <sap2010:ViewStateData Id="ProcessMediationRecordsBatch_4" sap:VirtualizedContainerService.HintSize="200,522" />
       <sap2010:ViewStateData Id="ExecuteOutputHandler_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ParallelForEach`1_3" sap:VirtualizedContainerService.HintSize="287,296" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="881,342" />
-      <sap2010:ViewStateData Id="DeleteProcessedMediationRecords_1" sap:VirtualizedContainerService.HintSize="881,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="881,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="881,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="903,1422">
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="287,62" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="309,522">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Mediation.Generic.BP.MediationProcess_1" sap:VirtualizedContainerService.HintSize="943,1502" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1143,568" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="1143,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1165,1338">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Mediation.Generic.BP.MediationProcess_1" sap:VirtualizedContainerService.HintSize="1205,1418" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -10,20 +10,14 @@ using Vanrise.GenericData.Business;
 namespace Mediation.Generic.Business
 {
     public class MediationRecordsManager
-    {
-        public IEnumerable<MediationRecord> GetMediationRecords()
-        {
-            IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
-            return dataManager.GetMediationRecords();
-        }
+    {      
 
-        public IEnumerable<MediationRecord> GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, Guid dataRecordTypeId)
+        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, Guid dataRecordTypeId, Action<string> onSessionIdLoaded)
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            Type recordType = dataRecordTypeManager.GetDataRecordRuntimeType(dataRecordTypeId);
             IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
             dataManager.DataRecordTypeId = dataRecordTypeId;
-            return dataManager.GetMediationRecordsByStatus(mediationDefinitionId, status);
+            dataManager.GetMediationRecordsByStatus(mediationDefinitionId, status, onSessionIdLoaded);
         }
         public IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds, Guid dataRecordTypeId)
         {
