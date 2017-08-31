@@ -101,21 +101,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
             var values = filterValues.Select(x => x.ToString()).ToList();
-            RecordFilterGroup recordFilterGroup = new RecordFilterGroup
-            {
-                LogicalOperator = RecordQueryLogicalOperator.Or,
-                Filters = new List<RecordFilter>(),
-            };
+            List<RecordFilter> recordFilters = new List<RecordFilter>();
+
             foreach (var value in values)
             {
-                recordFilterGroup.Filters.Add(new StringRecordFilter
+                recordFilters.Add(new StringRecordFilter
                 {
                     CompareOperator = StringRecordFilterOperator.Equals,
                     Value = value,
                     FieldName = fieldName
                 });
             }
-            return recordFilterGroup;
+            return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
         }
     }
 }

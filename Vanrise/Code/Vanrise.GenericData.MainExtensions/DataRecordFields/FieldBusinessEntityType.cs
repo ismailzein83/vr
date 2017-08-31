@@ -135,9 +135,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
+            if (filterValues == null || filterValues.Count == 0)
+                return null;
+
             List<Object> nonNullValues = new List<object>();
             if (filterValues != null)
                 nonNullValues.AddRange(filterValues.Where(itm => itm != null));
+
             if (nonNullValues.Count > 0)
             {
                 return new ObjectListRecordFilter

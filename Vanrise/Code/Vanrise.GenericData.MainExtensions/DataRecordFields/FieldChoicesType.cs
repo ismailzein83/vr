@@ -133,6 +133,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
+            if (filterValues == null || filterValues.Count == 0)
+                return null;
+
             return new NumberListRecordFilter
             {
                 CompareOperator = ListRecordFilterOperator.In,

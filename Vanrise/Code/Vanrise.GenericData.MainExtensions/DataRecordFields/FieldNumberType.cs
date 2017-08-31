@@ -158,22 +158,22 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues)
         {
+            if (filterValues == null || filterValues.Count == 0)
+                return null;
+
             var values = filterValues.Select(value => Convert.ToDecimal(value)).ToList();
-            RecordFilterGroup recordFilterGroup = new RecordFilterGroup
-            {
-                LogicalOperator = RecordQueryLogicalOperator.Or,
-                Filters = new List<RecordFilter>(),
-            };
+            List<RecordFilter> recordFilters = new List<RecordFilter>();
+
             foreach (var value in values)
             {
-                recordFilterGroup.Filters.Add(new NumberRecordFilter
+                recordFilters.Add(new NumberRecordFilter
                 {
                     CompareOperator = NumberRecordFilterOperator.Equals,
                     Value = value,
                     FieldName = fieldName
                 });
             }
-            return recordFilterGroup;
+            return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
         }
     }
 
