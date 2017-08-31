@@ -51,9 +51,11 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
                     pricePeriodDays = this.NumberOfDays.Value;
                     break;
                 case PeriodicRecurringChargePeriodType.Monthly:
-                    DateTime oneMonthFromToday = DateTime.Today.AddMonths(-1);
-                    DateTime monthDateToTake = Utilities.Max(oneMonthFromToday, context.PackageAssignmentStart);
-                    pricePeriodDays = DateTime.DaysInMonth(monthDateToTake.Year, monthDateToTake.Month);
+                    //DateTime oneMonthFromToday = DateTime.Today.AddMonths(-1);
+                    //DateTime monthDateToTake = Utilities.Max(oneMonthFromToday, context.PackageAssignmentStart);
+                    //pricePeriodDays = DateTime.DaysInMonth(monthDateToTake.Year, monthDateToTake.Month);
+
+                    pricePeriodDays = DateTime.DaysInMonth(context.ChargeDay.Year, context.ChargeDay.Month);
                     break;
                 default:
                     throw new NotSupportedException(string.Format("PeriodType '{0}'", this.PeriodType));
