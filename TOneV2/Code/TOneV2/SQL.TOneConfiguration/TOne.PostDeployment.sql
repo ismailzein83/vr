@@ -730,7 +730,8 @@ as (select * from (values
 ('330EEF59-79C2-4F44-99BF-C3584656985F','TOne.WhS.Sales.BP.Arguments.Tasks.PreviewTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/WhS_Sales/Views/RatePlanPreview.html","AutoOpenTask":true}'),
 ('9DAECF5B-9175-43C2-90D7-EB00A71C8B87','TOne.WhS.Sales.BP.Arguments.Tasks.EmailTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/WhS_Sales/Views/Email.html","AutoOpenTask":true}'),
 ('445E209E-034E-478F-AFE8-14EFCDD07F1E','TOne.WhS.CodePreparation.BP.Arguments.Tasks.NotificationTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/WhS_CodePreparation/Views/Notification.html","AutoOpenTask":true}'),
-('6A6231B0-2F41-4927-B0D9-E3B21D6433F7','TOne.WhS.Sales.BP.Arguments.Tasks.EmailCustomerTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/WhS_Sales/Views/EmailCustomer.html","AutoOpenTask":true}')
+('6A6231B0-2F41-4927-B0D9-E3B21D6433F7','TOne.WhS.Sales.BP.Arguments.Tasks.EmailCustomerTaskData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/WhS_Sales/Views/EmailCustomer.html","AutoOpenTask":true}'),
+('628BABA3-EB49-4E3B-8B89-D4BF22DCEDEE','TOne.WhS.Sales.BP.Arguments.Tasks.SellingZonesWithDefaultRatesTasKData','{"$type":"Vanrise.BusinessProcess.Entities.BPTaskTypeSettings, Vanrise.BusinessProcess.Entities","Editor":"/Client/Modules/WhS_Sales/Views/RatePlanSellingzonesWithDefaultRates.html","AutoOpenTask":true}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[bp].[BPTaskType] as t
