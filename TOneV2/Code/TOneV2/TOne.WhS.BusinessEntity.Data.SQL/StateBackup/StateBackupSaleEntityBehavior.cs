@@ -16,12 +16,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             int ownerType = (int)backupSaleEntityData.OwnerType;
 
             StringBuilder backupCommand = new StringBuilder();
+            var ownerIds = new List<int> { ownerId };
 
             SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
-            backupCommand.AppendLine(salePriceListDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
+            backupCommand.AppendLine(salePriceListDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, ownerIds, ownerType));
 
             SaleRateDataManager saleRateDataManager = new SaleRateDataManager();
-            backupCommand.AppendLine(saleRateDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
+            backupCommand.AppendLine(saleRateDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, ownerIds, ownerType));
 
             SaleEntityServiceDataManager saleEntityServiceDataManager = new SaleEntityServiceDataManager();
             backupCommand.AppendLine(saleEntityServiceDataManager.BackupAllSaleEntityZoneServiceDataByOwner(stateBackupId, base.BackupDatabaseName, ownerId, ownerType));
@@ -31,12 +32,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             CustomerCountryDataManager customerCountryDataManager = new CustomerCountryDataManager();
 
-            var customerIds = backupSaleEntityData.OwnerType == SalePriceListOwnerType.Customer
-                ? new List<int> { ownerId }
-                : backupSaleEntityData.SellingProductCustomerIds;
-
-            if (customerIds != null && customerIds.Any())
+            if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.SellingProduct)
+            {
+                var customerIds = backupSaleEntityData.SellingProductCustomerIds;
                 backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, customerIds));
+                backupCommand.AppendLine(salePriceListDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, customerIds, ownerType));
+                backupCommand.AppendLine(saleRateDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, customerIds, ownerType));
+            }
+            else
+                backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, ownerIds));
+
             return backupCommand.ToString();
         }
 
@@ -47,6 +52,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             int ownerType = (int)backupSaleEntityData.OwnerType;
 
             StringBuilder restoreCommands = new StringBuilder();
+            var ownerIds = new List<int> { ownerId };
 
             SalePriceListDataManager salePriceListDataManager = new SalePriceListDataManager();
             SaleRateDataManager saleRateDataManager = new SaleRateDataManager();
@@ -54,16 +60,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             SaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = new SaleEntityRoutingProductDataManager();
             CustomerCountryDataManager customerCountryDataManager = new CustomerCountryDataManager();
 
-            restoreCommands.AppendLine(saleRateDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
+            restoreCommands.AppendLine(saleRateDataManager.GetDeleteCommandsByOwner(ownerIds, ownerType));
             restoreCommands.AppendLine(saleEntityServiceDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
             restoreCommands.AppendLine(saleEntityRoutingProductDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
-            restoreCommands.AppendLine(salePriceListDataManager.GetDeleteCommandsByOwner(ownerId, ownerType));
+            restoreCommands.AppendLine(salePriceListDataManager.GetDeleteCommandsByOwner(ownerIds, ownerType));
 
-            var customerIds = backupSaleEntityData.OwnerType == SalePriceListOwnerType.Customer
-               ? new List<int> { ownerId }
-               : backupSaleEntityData.SellingProductCustomerIds;
-            if (customerIds != null && customerIds.Any())
+            if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.SellingProduct)
+            {
+                var customerIds = backupSaleEntityData.SellingProductCustomerIds;
                 restoreCommands.AppendLine(customerCountryDataManager.GetDeleteCommandsByOwner(customerIds));
+                restoreCommands.AppendLine(saleRateDataManager.GetDeleteCommandsByOwner(customerIds, ownerType));
+                restoreCommands.AppendLine(salePriceListDataManager.GetDeleteCommandsByOwner(customerIds, ownerType));
+            }
+            else
+                restoreCommands.AppendLine(customerCountryDataManager.GetDeleteCommandsByOwner(ownerIds));
 
             restoreCommands.AppendLine(salePriceListDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));
             restoreCommands.AppendLine(saleRateDataManager.GetRestoreCommands(stateBackupId, base.BackupDatabaseName));

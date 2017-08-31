@@ -188,8 +188,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
 
-        public string BackupAllDataByOwner(long stateBackupId, string backupDatabase, int ownerId, int ownerType)
+        public string BackupAllDataByOwner(long stateBackupId, string backupDatabase,IEnumerable<int> ownerIds, int ownerType)
         {
+            string ownerIdsString = null;
+            if (ownerIds != null && ownerIds.Any())
+                ownerIdsString = string.Join<int>(",", ownerIds);
+
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SalePriceList] WITH (TABLOCK)
                                                    ([ID]
                                                    ,[OwnerType]
@@ -218,7 +222,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                    ,[UserID]
                                                    ,{1} AS StateBackupID 
                                             FROM [TOneWhS_BE].[SalePriceList]
-                                            WITH (NOLOCK) Where OwnerId = {2} and OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
+                                            WITH (NOLOCK) Where OwnerId IN({2}) and OwnerType = {3}", backupDatabase, stateBackupId, ownerIdsString, ownerType);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
@@ -265,10 +269,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                             Where sellp.SellingNumberPlanID = {0} and sp.OwnerType=0)", sellingNumberPlanId);
         }
 
-        public string GetDeleteCommandsByOwner(int ownerId, int ownerType)
+        public string GetDeleteCommandsByOwner(IEnumerable<int> ownerIds, int ownerType)
         {
+            string ownerIdsString = null;
+            if (ownerIds != null && ownerIds.Any())
+                ownerIdsString = string.Join(",", ownerIds);
             return String.Format(@"DELETE FROM [TOneWhS_BE].[SalePriceList]
-                                           Where OwnerId = {0} and OwnerType = {1}", ownerId, ownerType);
+                                           Where OwnerId IN ( {0} ) and OwnerType = {1}", ownerIdsString, ownerType);
         }
 
 

@@ -206,12 +206,16 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                             Where sz.SellingNumberPlanID = {2}", backupDatabase, stateBackupId, sellingNumberPlanId);
         }
 
-        public string BackupAllDataByOwner(long stateBackupId, string backupDatabase, int ownerId, int ownerType)
+        public string BackupAllDataByOwner(long stateBackupId, string backupDatabase, IEnumerable<int> ownerIds, int ownerType)
         {
+            string ownerIdsString = null;
+            if (ownerIds != null && ownerIds.Any())
+                ownerIdsString = string.Join<int>(",", ownerIds);
+
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SaleRate] WITH (TABLOCK)
                                            SELECT sr.[ID], sr.[PriceListID], sr.[ZoneID], sr.[CurrencyID], sr.[RateTypeID], sr.[Rate], sr.[BED], sr.[EED], sr.[SourceID], sr.[Change], {1} AS StateBackupID FROM [TOneWhS_BE].[SaleRate]
                                            sr WITH (NOLOCK) Inner Join [TOneWhS_BE].[SalePriceList] pl WITH (NOLOCK) on sr.PriceListID = pl.ID
-                                           Where pl.OwnerId = {2} and pl.OwnerType = {3}", backupDatabase, stateBackupId, ownerId, ownerType);
+                                           Where pl.OwnerId IN ({2}) and pl.OwnerType = {3}", backupDatabase, stateBackupId, ownerIdsString, ownerType);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
@@ -227,10 +231,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                             Where sz.SellingNumberPlanID = {0}", sellingNumberPlanId);
         }
 
-        public string GetDeleteCommandsByOwner(int ownerId, int ownerType)
+        public string GetDeleteCommandsByOwner(IEnumerable<int> ownerIds, int ownerType)
         {
+            string ownerIdsString = null;
+            if (ownerIds != null && ownerIds.Any())
+                ownerIdsString = string.Join(",", ownerIds);
+
             return String.Format(@"DELETE sr FROM [TOneWhS_BE].[SaleRate] sr Inner Join [TOneWhS_BE].[SalePriceList] pl  on sr.PriceListID = pl.ID
-                                           Where pl.OwnerId = {0} and pl.OwnerType = {1}", ownerId, ownerType);
+                                           Where pl.OwnerId IN ( {0} ) and pl.OwnerType = {1}", ownerIdsString, ownerType);
         }
 
         #endregion
