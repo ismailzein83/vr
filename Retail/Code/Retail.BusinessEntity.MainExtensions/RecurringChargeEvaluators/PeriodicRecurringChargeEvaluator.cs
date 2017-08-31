@@ -27,7 +27,7 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
             context.ThrowIfNull("context");
             PeriodicRecurringChargeEvaluatorDefinitionSettings periodicChargeDefinition = context.EvaluatorDefinitionSettings.CastWithValidate<PeriodicRecurringChargeEvaluatorDefinitionSettings>("periodicChargeDefinition");
             periodicChargeDefinition.PricingStatuses.ThrowIfNull("periodicChargeDefinition.PricingStatuses");
-            
+
             Guid accountStatusId = new AccountStatusHistoryManager().GetAccountStatus(context.AccountStatusHistoryListByAccountDefinition, context.AccountBEDefinitionId, context.Account, context.ChargeDay);
             if (!periodicChargeDefinition.PricingStatuses.Contains(accountStatusId))
             {
@@ -136,6 +136,7 @@ namespace Retail.BusinessEntity.MainExtensions.RecurringChargeEvaluators
                         {
                             endOfMonths.Add(lastDayOfMonth);
                             lastDayOfMonth = lastDayOfMonth.AddMonths(1);
+                            lastDayOfMonth = lastDayOfMonth.GetLastDayOfMonth();
                         }
                         else
                         {
