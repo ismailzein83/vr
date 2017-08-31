@@ -10,42 +10,45 @@
 
                         <span vr-disabled="isEditMode">
                             <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberPlansSelectorReady" onselectionchanged="scopeModel.onSellingNumberPlanSelectionChanged"
-                                                                  selectedvalues="scopeModel.selectedSellingNumberPlan" normal-col-num="6" isrequired="true" >
+                                                                  selectedvalues="scopeModel.selectedSellingNumberPlan" normal-col-num="6" isrequired="true">
                             </vr-whs-be-sellingnumberplan-selector>
                         </span>
                     </vr-row>
                     <vr-row>
-                        <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceSelectorReady" label="Default Zone Services"
-                                                                normal-col-num="6" isrequired="true" ismultipleselection>
-                        </vr-whs-be-zone-service-config-selector>
+                        <span vr-disabled="scopeModel.isRoutingProductHasRelatedSaleEntities">
+                            <vr-whs-be-zone-service-config-selector on-ready="scopeModel.onZoneServiceSelectorReady" label="Default Zone Services"
+                                                                    normal-col-num="6" isrequired="true" ismultipleselection>
+                            </vr-whs-be-zone-service-config-selector>
+                        </span>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Sale Zones'" ng-show="scopeModel.selectedSellingNumberPlan">
-                    
+
                     <vr-row vr-loader="scopeModel.isLoadingSaleZonesSelector">
                         <vr-validator validate="scopeModel.validateSellingNumberPlan()">
 
-                                <vr-columns width="1/2row">
-                                    <vr-select datatextfield="description" datavaluefield="value" onselectionchanged="scopeModel.onSaleZoneRelationTypeSelectionChanged" label="Sale Zones Relation"
-                                               datasource="scopeModel.saleZoneRelationType" selectedvalues="scopeModel.selectedSaleZoneRelationType" hideremoveicon>
-                                    </vr-select>
-                                </vr-columns>
-                                <vr-columns width="1/2row" ng-show="scopeModel.showSaleZoneSelector">
-                                    <vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady"
-                                                                 selectedvalues="scopeModel.selectedSaleZones"
-                                                                 onselectitem="scopeModel.onSelectSaleZone"
-                                                                 ondeselectitem="scopeModel.onDeselectSaleZone"
-                                                                 isdisabled="!scopeModel.selectedSellingNumberPlan"
-                                                                 isrequired="scopeModel.showSaleZoneSelector"
-                                                                 ismultipleselection>
-                                    </vr-whs-be-salezone-selector>
-                                </vr-columns>
+                            <vr-columns width="1/2row">
+                                <vr-select datatextfield="description" datavaluefield="value" onselectionchanged="scopeModel.onSaleZoneRelationTypeSelectionChanged" label="Sale Zones Relation"
+                                           datasource="scopeModel.saleZoneRelationType" selectedvalues="scopeModel.selectedSaleZoneRelationType" hideremoveicon
+                                           vr-disabled="scopeModel.isRoutingProductHasRelatedSaleEntities">
+                                </vr-select>
+                            </vr-columns>
+                            <vr-columns width="1/2row" ng-show="scopeModel.showSaleZoneSelector">
+                                <vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady"
+                                                             selectedvalues="scopeModel.selectedSaleZones"
+                                                             onselectitem="scopeModel.onSelectSaleZone"
+                                                             ondeselectitem="scopeModel.onDeselectSaleZone"
+                                                             isdisabled="!scopeModel.selectedSellingNumberPlan || scopeModel.isRoutingProductHasRelatedSaleEntities"
+                                                             isrequired="scopeModel.showSaleZoneSelector"
+                                                             ismultipleselection>
+                                </vr-whs-be-salezone-selector>
+                            </vr-columns>
 
                         </vr-validator>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow" simplecol>
-                            <vr-button type="Add" data-onclick="scopeModel.onAddRoutingProductZoneService" standalone></vr-button>
+                            <vr-button type="Add" data-onclick="scopeModel.onAddRoutingProductZoneService" standalone vr-disabled="scopeModel.isRoutingProductHasRelatedSaleEntities"></vr-button>
                         </vr-columns>
                     </vr-row>
                     <vr-row>

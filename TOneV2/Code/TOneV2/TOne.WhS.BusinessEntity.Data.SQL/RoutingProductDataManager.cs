@@ -77,6 +77,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.IsDataUpdated("TOneWhS_BE.RoutingProduct", ref updateHandle);
         }
+
+        public bool CheckIfRoutingProductHasRelatedSaleEntities(int routingProductId)
+        {
+            return (Convert.ToBoolean(ExecuteScalarSP("TOneWhS_BE.sp_RoutingProduct_CheckIfRoutingProductHasRelatedSaleEntities", routingProductId)));
+        }
+
         #endregion
 
         #region Mappers

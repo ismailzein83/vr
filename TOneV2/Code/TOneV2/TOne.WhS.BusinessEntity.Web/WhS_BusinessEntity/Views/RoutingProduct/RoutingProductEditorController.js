@@ -51,6 +51,7 @@
 
             $scope.scopeModel = {};
             $scope.scopeModel.routingProductZoneServices = [];
+            $scope.scopeModel.menuActions = [];
 
             $scope.scopeModel.onSellingNumberPlansSelectorReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;
@@ -118,6 +119,8 @@
                 WhS_BE_RoutingProductZoneServiceService.addRoutingProductZoneService(selectedSellingNumberPlanId, availableZonesIds, excludedZoneIds, onRoutingProductZoneServiceAdded);
             };
             $scope.scopeModel.onRemoveRoutingProductZoneService = function (zoneService) {
+                if ($scope.scopeModel.isRoutingProductHasRelatedSaleEntities == true)
+                    return;
                 VRNotificationService.showConfirmation().then(function (confirmed) {
                     if (confirmed) {
                         var index = UtilsService.getItemIndexByVal($scope.scopeModel.routingProductZoneServices, zoneService.ZoneNames, 'ZoneNames');
@@ -158,30 +161,8 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
-
-            defineMenuActions();
-
-            function defineMenuActions() {
-                $scope.scopeModel.menuActions = [{
-                    name: "Edit",
-                    clicked: editZoneService,
-                }];
-            }
-            function editZoneService(zoneService) {
-
-                var onRoutingProductZoneServiceUpdated = function (updatedRoutingProductZoneService) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.routingProductZoneServices, zoneService.ZoneNames, 'ZoneNames');
-                    $scope.scopeModel.routingProductZoneServices[index] = updatedRoutingProductZoneService;
-                };
-
-                var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
-                var availableZonesIds = getAvailableZoneIds();
-                var excludedZoneIds = getExcludedZoneIds();
-
-                WhS_BE_RoutingProductZoneServiceService.editRoutingProductZoneService(zoneService, selectedSellingNumberPlanId, availableZonesIds, excludedZoneIds, onRoutingProductZoneServiceUpdated);
-            }
 
             function getSaleZoneSelectorPayload() {
                 var zoneIds = [];
@@ -192,39 +173,19 @@
 
                 return zoneIds;
             }
-            function getAvailableZoneIds() {
-                var availableZoneIds;
-                if ($scope.scopeModel.selectedSaleZones != undefined && $scope.scopeModel.selectedSaleZones.length > 0) {
-                    availableZoneIds = [];
-                    for (var i = 0; i < $scope.scopeModel.selectedSaleZones.length; i++) {
-                        availableZoneIds.push($scope.scopeModel.selectedSaleZones[i].SaleZoneId);
-                    }
-                }
-                return availableZoneIds;
-            }
-            function getExcludedZoneIds() {
-                var zoneServices = $scope.scopeModel.routingProductZoneServices;
-                if (zoneServices.length == 0)
-                    return;
 
-                var excludedZoneIds = [];
-                for (var i = 0; i < zoneServices.length; i++) {
-                    var currentZoneService = zoneServices[i];
-                    for (var index = 0; index < currentZoneService.ZoneIds.length; index++) {
-                        excludedZoneIds.push(currentZoneService.ZoneIds[index]);
-                    }
-                }
-                return excludedZoneIds;
-            }
         }
         function load() {
             $scope.scopeModel.isLoading = true;
 
             if (isEditMode) {
                 getRoutingProduct().then(function () {
-                    loadAllControls()
-                        .finally(function () {
-                            routingProductEntity = undefined;
+                    isRoutingProductHasRelatedSaleEntities()
+                        .then(function () {
+                            loadAllControls()
+                                .finally(function () {
+                                    routingProductEntity = undefined;
+                                });
                         });
                 }).catch(function () {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -242,7 +203,7 @@
 
                 routingProductEntity = routingProductEditorRuntime.Entity;
                 zoneNamesDict = routingProductEditorRuntime.ZoneNames,
-                serviceNamesDict = routingProductEditorRuntime.ServiceNames
+                serviceNamesDict = routingProductEditorRuntime.ServiceNames;
             });
         }
 
@@ -255,6 +216,12 @@
                         .finally(function () {
                             $scope.scopeModel.isLoading = false;
                         });
+        }
+
+        function isRoutingProductHasRelatedSaleEntities() {
+            return WhS_BE_RoutingProductAPIService.CheckIfRoutingProductHasRelatedSaleEntities(routingProductEntity.RoutingProductId).then(function (response) {
+                $scope.scopeModel.isRoutingProductHasRelatedSaleEntities = response;
+            });
         }
 
         function setTitle() {
@@ -315,6 +282,9 @@
             if (!isEditMode || !routingProductEntity || !routingProductEntity.Settings || !routingProductEntity.Settings.ZoneServices)
                 return;
 
+            if (!$scope.scopeModel.isRoutingProductHasRelatedSaleEntities)
+                defineMenuActions();
+
             saleZoneRelationTypeSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
 
             return UtilsService.waitMultiplePromises([saleZoneRelationTypeSelectionChangedPromiseDeferred.promise, routingProductZoneServiceGridReadyPromiseDeferred.promise]).then(function () {
@@ -328,6 +298,27 @@
                     $scope.scopeModel.routingProductZoneServices.push(currentZoneService);
                 }
             });
+
+            function defineMenuActions() {
+                $scope.scopeModel.menuActions.push({
+                    name: "Edit",
+                    clicked: editZoneService,
+                });
+            }
+
+            function editZoneService(zoneService) {
+
+                var onRoutingProductZoneServiceUpdated = function (updatedRoutingProductZoneService) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.routingProductZoneServices, zoneService.ZoneNames, 'ZoneNames');
+                    $scope.scopeModel.routingProductZoneServices[index] = updatedRoutingProductZoneService;
+                };
+
+                var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
+                var availableZonesIds = getAvailableZoneIds();
+                var excludedZoneIds = getExcludedZoneIds();
+
+                WhS_BE_RoutingProductZoneServiceService.editRoutingProductZoneService(zoneService, selectedSellingNumberPlanId, availableZonesIds, excludedZoneIds, onRoutingProductZoneServiceUpdated);
+            }
         }
         function loadSupplierRelationTypes() {
             $scope.scopeModel.supplierRelationType = UtilsService.getArrayEnum(WhS_BE_RoutingProductSupplierRelationTypeEnum);
@@ -497,6 +488,31 @@
             }
 
             return routingProductSuppliers;
+        }
+
+        function getAvailableZoneIds() {
+            var availableZoneIds;
+            if ($scope.scopeModel.selectedSaleZones != undefined && $scope.scopeModel.selectedSaleZones.length > 0) {
+                availableZoneIds = [];
+                for (var i = 0; i < $scope.scopeModel.selectedSaleZones.length; i++) {
+                    availableZoneIds.push($scope.scopeModel.selectedSaleZones[i].SaleZoneId);
+                }
+            }
+            return availableZoneIds;
+        }
+        function getExcludedZoneIds() {
+            var zoneServices = $scope.scopeModel.routingProductZoneServices;
+            if (zoneServices.length == 0)
+                return;
+
+            var excludedZoneIds = [];
+            for (var i = 0; i < zoneServices.length; i++) {
+                var currentZoneService = zoneServices[i];
+                for (var index = 0; index < currentZoneService.ZoneIds.length; index++) {
+                    excludedZoneIds.push(currentZoneService.ZoneIds[index]);
+                }
+            }
+            return excludedZoneIds;
         }
     }
 

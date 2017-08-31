@@ -49,6 +49,11 @@
             });
         }
 
+        function CheckIfRoutingProductHasRelatedSaleEntities(routingProductId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "CheckIfRoutingProductHasRelatedSaleEntities"), {
+                routingProductId: routingProductId
+            });
+        }
 
         function HasUpdateRoutingProductPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateRoutingProduct']));
@@ -68,6 +73,7 @@
             AddRoutingProduct: AddRoutingProduct,
             UpdateRoutingProduct: UpdateRoutingProduct,
             DeleteRoutingProduct: DeleteRoutingProduct,
+            CheckIfRoutingProductHasRelatedSaleEntities: CheckIfRoutingProductHasRelatedSaleEntities,
             HasUpdateRoutingProductPermission: HasUpdateRoutingProductPermission,
             HasAddRoutingProductPermission: HasAddRoutingProductPermission
         });

@@ -22,5 +22,7 @@ namespace TOne.WhS.BusinessEntity.Data
         bool Delete(int routingProductId);
 
         bool AreRoutingProductsUpdated(ref object updateHandle);
+
+        bool CheckIfRoutingProductHasRelatedSaleEntities(int routingProductId);
     }
 }

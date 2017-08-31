@@ -92,6 +92,7 @@
                 var userSelectorPayload = {};
                 vruiUtilsService.callDirectiveLoad(userSelectorApi, userSelectorPayload, userSelectorLoadDeferred);
             });
+            return userSelectorLoadDeferred.promise;
         }
 
         function loadSalePriceListGrid() {

@@ -73,6 +73,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public DeleteOperationOutput<object> DeleteRoutingProduct(int routingProductId)
         {
             return _manager.DeleteRoutingProduct(routingProductId);
+        }
+
+        [HttpGet]
+        [Route("CheckIfRoutingProductHasRelatedSaleEntities")]
+        public bool CheckIfRoutingProductHasRelatedSaleEntities(int routingProductId)
+        {
+            return _manager.CheckIfRoutingProductHasRelatedSaleEntities(routingProductId);
         } 
     }
 }
