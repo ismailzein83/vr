@@ -10,7 +10,7 @@ BEGIN
 	IF EXISTS(SELECT 1 FROM [TOneWhS_BE].SaleCode with (nolock)
 WHERE CodeGroupID = @codeGroupId) OR EXISTS(SELECT 1 FROM [TOneWhS_BE].SupplierCode with (nolock)
 WHERE CodeGroupID = @codeGroupId)
-SELECT 0
+SELECT 1
 ELSE
-  SELECT 1
+  SELECT 0
 END
