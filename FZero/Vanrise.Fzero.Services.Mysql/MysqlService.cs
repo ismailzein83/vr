@@ -293,9 +293,7 @@ namespace Vanrise.Fzero.Services.Mysql
                                           IFNULL(c.Name,'') as ClientName, 
                                           a.id_call, 
                                           a.caller_id, 
-                                          case when Left(a.called_number, 3) = 999
-                                          then SUBSTRING(a.called_number,4)
-                                          else SUBSTRING(a.called_number,9) END  as called_number,
+                                          SUBSTRING(a.called_number,6)  as called_number,
                                           a.call_start,
                                           a.duration , 
                                           IFNULL(b.Origination,'') as Origination ,
@@ -303,7 +301,7 @@ namespace Vanrise.Fzero.Services.Mysql
                                           IFNULL(b.Type,'SIP') as Type  
                                     FROM     calls as a 
                                     left outer join CarrierPrefixes as b 
-                                    on    Left(a.called_number, 8) = b.Prefix
+                                    on    Left(a.called_number, 5) = b.Prefix
                                     left outer join clients as c 
                                     on    a.id_Client = c.ID where id_call>" + LastCallID.ToString();
 
@@ -373,14 +371,14 @@ namespace Vanrise.Fzero.Services.Mysql
                                                    IFNULL(c.Name,'') as ClientName,
                                                    a.id_failed_call,
                                                    a.caller_id,
-                                                   case when Left(a.called_number, 3) = 999 then SUBSTRING(a.called_number,4) else SUBSTRING(a.called_number,9) END  as called_number,
+                                                   SUBSTRING(a.called_number,6)   as called_number,
                                                    a.call_start, 0 as duration, 
                                                    IFNULL(b.Origination,'') as Origination ,
                                                    IFNULL(b.Carrier,'') as RouteID,
                                                    IFNULL(b.Type,'SIP') as Type 
                                           FROM   callsfailed as a 
                                           left outer join CarrierPrefixes as b 
-                                          on    Left(a.called_number, 8) = b.Prefix   
+                                          on    Left(a.called_number, 5) = b.Prefix   
                                           left outer join clients as c
                                           on    a.id_Client = c.ID  
                                           where id_failed_call>" + LastCallFailedID.ToString();
