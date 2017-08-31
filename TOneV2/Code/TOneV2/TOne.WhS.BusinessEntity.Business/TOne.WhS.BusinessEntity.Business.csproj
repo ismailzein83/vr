@@ -153,6 +153,7 @@
     <Compile Include="SaleRate\History\SellingProductZoneRateHistoryLocator.cs" />
     <Compile Include="SaleRate\OtherSaleRateManager.cs" />
     <Compile Include="SaleRate\SaleRateReadLastRateNoCache.cs" />
+    <Compile Include="StateBackup\RestoreStateBackupBehavior.cs" />
     <Compile Include="ZoneRoutingProduct\SaleEntityZoneRoutingProductHistoryManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityZoneRoutingProductLocator.cs" />
