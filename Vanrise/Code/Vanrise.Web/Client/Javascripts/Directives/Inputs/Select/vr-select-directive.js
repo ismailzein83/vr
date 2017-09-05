@@ -398,7 +398,6 @@
                     var s = selectService.getSelectText(controller.selectedvalues.length, selectedVal, $attrs.placeholder, $attrs.selectplaceholder);
                     return s;
                 }
-
                 function getSelectedSectionClass() {
                     if (!selectedSectionVisible()) return 'single-col-checklist';
                     return controller.selectedvalues.length === 0 || controller.readOnly ? 'single-col-checklist' : 'double-col-checklist';
@@ -718,7 +717,7 @@
                         var noborder = attrs.noborder != undefined;
                         var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle vr-dropdown-select" style="' + (noborder ? 'border:none' : '') + '" type="button"  '
                                             + '   ' + validateButtonClass + '>'
-                                            + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " >{{ctrl.getLabel()}}</span>'
+                                            + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " ng-class="ctrl.selectedvalues == undefined || ctrl.selectedvalues.length == 0 ? \'vr-select-watermark\' : \'\'">{{ctrl.getLabel()}}</span>'
                                             + (noCaret === true ? '' : '<span ng-if="!ctrl.readOnly || ctrl.isMultiple()" class="caret vr-select-caret"></span>')
                                             + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
                         divDropdown.prepend(buttonTemplate);
