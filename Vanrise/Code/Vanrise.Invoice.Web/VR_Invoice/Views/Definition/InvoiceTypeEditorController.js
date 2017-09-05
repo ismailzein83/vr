@@ -83,6 +83,8 @@
         var relationDefinitionSelectorAPI;
         var relationDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var fileNamePartsAPI;
+        var fileNamePartsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var dataRecordTypeEntity;
 
@@ -165,7 +167,10 @@
                 concatenatedPartsAPI = api;
                 concatenatedPartsReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.onFileNamePartsReady = function (api) {
+                fileNamePartsAPI = api;
+                fileNamePartsReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onStartCalculationMethodDirectiveReady = function (api) {
                 startCalculationMethodAPI = api;
                 startCalculationMethodPromiseDeferred.resolve();
@@ -263,6 +268,9 @@
                         },
                         InvoiceSerialNumberSettings: {
                             SerialNumberParts: concatenatedPartsAPI.getData(),
+                        },
+                        InvoiceFileSettings: {
+                            InvoiceFileNameParts: fileNamePartsAPI.getData(),
                         },
                         SubSections: subSectionsAPI.getData(),
                         Security: {
@@ -423,7 +431,18 @@
                     });
                     return concatenatedPartsDeferredLoadPromiseDeferred.promise;
                 }
+                function loadFileNameParts() {
+                    var fileNamePartsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    fileNamePartsReadyPromiseDeferred.promise.then(function () {
+                        var fileNamePartsDirectivePayload = { context: getContext() };
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceFileSettings != undefined) {
+                            fileNamePartsDirectivePayload.fileNameParts = invoiceTypeEntity.Settings.InvoiceFileSettings.InvoiceFileNameParts;
+                        }
 
+                        VRUIUtilsService.callDirectiveLoad(fileNamePartsAPI, fileNamePartsDirectivePayload, fileNamePartsDeferredLoadPromiseDeferred);
+                    });
+                    return fileNamePartsDeferredLoadPromiseDeferred.promise;
+                }
                 function loadInvoiceActionsGrid() {
                     var invoiceActionsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     invoiceActionsReadyPromiseDeferred.promise.then(function () {
@@ -652,7 +671,7 @@
                 }
 
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector])
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection,loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })
@@ -679,7 +698,7 @@
                 getParts: function () {
                     return concatenatedPartsAPI.getData();
                 },
-
+               
                 getExtensionType: function () {
                     return "VR_InvoiceType_SerialNumberParts";
                 },

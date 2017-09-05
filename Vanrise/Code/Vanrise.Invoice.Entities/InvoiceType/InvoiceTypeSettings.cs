@@ -17,6 +17,8 @@ namespace Vanrise.Invoice.Entities
         public InvoiceTypeExtendedSettings ExtendedSettings { get; set; }
         public InvoiceGridSettings InvoiceGridSettings { get; set; }
         public InvoiceSerialNumberSettings InvoiceSerialNumberSettings { get; set; }
+        public InvoiceFileSettings InvoiceFileSettings { get; set; }
+
         public List<InvoiceSubSection> SubSections { get; set; }
         public List<ItemGrouping> ItemGroupings { get; set; }
         public InvoiceTypeSecurity Security { get; set; }
@@ -30,6 +32,24 @@ namespace Vanrise.Invoice.Entities
         public List<ItemSetNameStorageRule> ItemSetNamesStorageRules { get; set; }
     }
 
+
+    public class InvoiceFileSettings
+    {
+        public List<InvoiceFileNamePart> InvoiceFileNameParts { get; set; }
+
+    }
+    public class InvoiceFileNamePart
+    {
+        public string VariableName { get; set; }
+        public string Description { get; set; }
+        public Vanrise.Entities.VRConcatenatedPartSettings<IInvoiceFileNamePartContext> Settings { get; set; }
+
+    }
+    public interface IInvoiceFileNamePartContext
+    {
+        Invoice Invoice { get; }
+        Guid InvoiceTypeId { get; set; }
+    }
     public class ItemSetNameStorageRule
     {
         public Guid ItemSetNameStorageRuleId { get; set; }

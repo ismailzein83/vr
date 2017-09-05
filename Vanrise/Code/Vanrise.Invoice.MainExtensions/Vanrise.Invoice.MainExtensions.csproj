@@ -79,6 +79,8 @@
     <Compile Include="InvoiceDataSourceSettings\ItemGroupingDataSourceSettings.cs" />
     <Compile Include="InvoiceDataSourceSettings\LastInvoicesDataSourceSettings.cs" />
     <Compile Include="InvoiceDataSourceSettings\TaxesDataSourceSettings.cs" />
+    <Compile Include="InvoiceFileNamePart\InvoiceFieldFileNamePart.cs" />
+    <Compile Include="InvoiceFileNamePart\TimeFileNamePart.cs" />
     <Compile Include="InvoiceGeneratorActionFilter\InvoiceGeneratorActionFilterGroupCondition.cs" />
     <Compile Include="InvoiceActionSettings\LockInvoiceAction.cs" />
     <Compile Include="InvoiceActionSettings\RecreateInvoiceAction.cs" />
