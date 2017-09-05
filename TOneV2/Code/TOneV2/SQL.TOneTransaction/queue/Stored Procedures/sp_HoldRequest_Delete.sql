@@ -8,4 +8,6 @@ CREATE PROCEDURE [queue].[sp_HoldRequest_Delete]
 AS
 BEGIN
 	Delete From [queue].[HoldRequest] where ID = @HoldRequestId
+
+	Update [queue].[HoldRequest] set BPInstanceID = BPInstanceID
 END
