@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService) {
+    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService) {
 
         // Definition
         var carrierProfileSelectorAPI;
@@ -241,15 +241,52 @@
             };
 
             $scope.scopeModel.saveCarrierAccount = function () {
-                if (isEditMode)
-                    return updateCarrierAccount();
-                else
-                    return insertCarrierAccount();
+                validateCarrierAccountCurrency().then(function (response) {
+                    if (response) {
+                        if (isEditMode)
+                            return updateCarrierAccount();
+                        else
+                            return insertCarrierAccount();
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
             };
+
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+
+            function validateCarrierAccountCurrency() {
+                var continueSaveCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                if (sellingProductSelectorAPI == undefined) {
+                    continueSaveCarrierAccountPromiseDeferred.resolve(true);
+                    return continueSaveCarrierAccountPromiseDeferred.promise;
+                }
+
+                var sellingProductId = sellingProductSelectorAPI.getSelectedIds()
+                var carrierAccountCurrencyId = currencySelectorAPI.getSelectedIds();
+                var sellingProductCurrencyId;
+
+                WhS_BE_SellingProductAPIService.GetSellingProductCurrencyId(sellingProductId).then(function (response) {
+                    sellingProductCurrencyId = response;
+                    if (carrierAccountCurrencyId == sellingProductCurrencyId)
+                        continueSaveCarrierAccountPromiseDeferred.resolve(true);
+                    else {
+                        VRNotificationService.showConfirmation("Carrier account and selling product have different currency. Are you sure you want to continue ?").then(function (result) {
+                            continueSaveCarrierAccountPromiseDeferred.resolve(result);
+                        });
+                    }
+                }).catch(function (error) {
+                    continueSaveCarrierAccountPromiseDeferred.reject(error);;
+                });
+
+                return continueSaveCarrierAccountPromiseDeferred.promise;
+            }
+
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
 
