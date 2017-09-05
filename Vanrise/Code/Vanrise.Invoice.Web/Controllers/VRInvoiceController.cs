@@ -16,7 +16,7 @@ using System.Security;
 namespace Vanrise.Invoice.Web.Controllers
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "Invoice")]
-
+    [JSONWithTypeAttribute]
     public class VRInvoiceController : BaseAPIController
     {
         InvoiceTypeManager _invoiceTypeManager = new InvoiceTypeManager();

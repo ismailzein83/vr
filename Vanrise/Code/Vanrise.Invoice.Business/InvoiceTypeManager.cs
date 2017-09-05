@@ -144,12 +144,6 @@ namespace Vanrise.Invoice.Business
                     case InvoiceField.SerialNumber:
                         attribute = new FieldTextType().GetGridColumnAttribute(null);
                         break;
-                    case InvoiceField.TimeZone:
-                        attribute = new FieldTextType().GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.TimeZoneOffset:
-                        attribute = new FieldTextType().GetGridColumnAttribute(null);
-                        break;
                     case InvoiceField.ToDate:
                         attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.DateTime }.GetGridColumnAttribute(null);
                         break;

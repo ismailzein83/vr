@@ -90,7 +90,9 @@ app.directive("vrInvoicetypeMaingridcolumns", ["UtilsService", "VRNotificationSe
             }
 
             function addNeededFields(dataItem) {
-                dataItem.FieldDescription = UtilsService.getItemByVal(ctrl.invoiceFields, dataItem.Entity.Field, "value").description;
+                var item = UtilsService.getItemByVal(ctrl.invoiceFields, dataItem.Entity.Field, "value");
+                if(item !=  undefined)
+                    dataItem.FieldDescription = item.description;
                 return dataItem;
             }
 

@@ -29,15 +29,6 @@ namespace Vanrise.Invoice.MainExtensions
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate;
                 case Entities.InvoiceField.IsAutomatic: return context.Invoice.IsAutomatic;
-                case InvoiceField.TimeZone:
-                    if (context.Invoice.TimeZoneId.HasValue)
-                    {
-                        VRTimeZoneManager timeZoneManager = new VRTimeZoneManager();
-                        var timeZone = timeZoneManager.GetVRTimeZone(context.Invoice.TimeZoneId.Value);
-                        return timeZone.Name;
-                    }
-                    else
-                        return null;
                    
                 case Entities.InvoiceField.CustomField:
                     DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
@@ -57,8 +48,6 @@ namespace Vanrise.Invoice.MainExtensions
                         }
                     }
                     return null;
-                case InvoiceField.TimeZoneOffset:
-                    return context.Invoice.TimeZoneOffset;
             }
             return null;
         }

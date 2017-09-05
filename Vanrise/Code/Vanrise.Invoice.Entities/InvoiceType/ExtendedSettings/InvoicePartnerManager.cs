@@ -12,7 +12,6 @@ namespace Vanrise.Invoice.Entities
         public virtual string PartnerFilterSelector { get; set; }
         public abstract string GetPartnerName(IPartnerNameManagerContext context);
         public abstract dynamic GetPartnerInfo(IPartnerManagerInfoContext context);
-        public abstract int? GetPartnerTimeZoneId(IPartnerTimeZoneContext context);
         public abstract dynamic GetActualPartnerId(IActualPartnerContext context);
         public virtual EffectivePartnerInvoiceSetting GetEffectivePartnerInvoiceSetting(IInvoicePartnerSettingsContext context)
         {

@@ -68,17 +68,6 @@ namespace Vanrise.Invoice.MainExtensions
                 //    //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
                 case InvoiceField.Paid:
                     return invoice.PaidDate;
-                case InvoiceField.TimeZone:
-                    if (invoice.TimeZoneId.HasValue)
-                    {
-                        VRTimeZoneManager timeZoneManager = new VRTimeZoneManager();
-                        var timeZone = timeZoneManager.GetVRTimeZone(invoice.TimeZoneId.Value);
-                        return timeZone.Name;
-                    }
-                    else
-                        return null;
-                case InvoiceField.TimeZoneOffset:
-                    return invoice.TimeZoneOffset;
                 default: return null;
             }
         }

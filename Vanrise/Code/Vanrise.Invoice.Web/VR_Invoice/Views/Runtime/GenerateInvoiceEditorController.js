@@ -16,9 +16,9 @@
         var accountStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
 
-        var timeZoneSelectorAPI;
-        var timeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-        var selectedTimeZoneSelectorPayloadLoadDeferred;
+        var generationCustomSectionDirectiveAPI;
+        var generationCustomSectionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var selectedGenerationCustomSectionLoadDeferred;
         var invoiceGeneratorActions;
         var invoiceEntity;
         $scope.scopeModel.isEditMode;
@@ -60,9 +60,9 @@
                 }
             };
 
-            $scope.scopeModel.onTimeZoneSelectorReady = function (api) {
-                timeZoneSelectorAPI = api;
-                timeZoneSelectorReadyDeferred.resolve();
+            $scope.scopeModel.onGenerationCustomSectionDirectiveReady = function (api) {
+                generationCustomSectionDirectiveAPI = api;
+                generationCustomSectionDirectiveReadyDeferred.resolve();
             };
             $scope.scopeModel.onPartnerSelectorReady = function (api) {
                 partnerSelectorAPI = api;
@@ -237,34 +237,39 @@
                     }
                 }
             }
-            function loadTimeZoneSelector() {
-                if ($scope.scopeModel.invoiceTypeEntity != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.UseTimeZone)
+            function loadGenerationCustomSectionDirective() {
+                if ($scope.scopeModel.invoiceTypeEntity != undefined
+                    && $scope.scopeModel.invoiceTypeEntity.InvoiceType != undefined
+                    && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings != undefined
+                    && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings != undefined
+                    && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection != undefined
+                    && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective != undefined)
                 {
                     var promises = [];
 
                     if ($scope.scopeModel.isEditMode)
                     {
-                        selectedTimeZoneSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(selectedTimeZoneSelectorPayloadLoadDeferred.promise);
+                        selectedGenerationCustomSectionLoadDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(selectedGenerationCustomSectionLoadDeferred.promise);
                     }
-                    var timeZoneSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
-                    timeZoneSelectorReadyDeferred.promise.then(function () {
-                        var timeZoneSelectorPayload;
-                        if (invoiceEntity != undefined && invoiceEntity.Invoice != undefined) {
-                            timeZoneSelectorPayload = {
-                                selectedIds: invoiceEntity.Invoice.TimeZoneId
+                    var generationCustomSectionDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    generationCustomSectionDirectiveReadyDeferred.promise.then(function () {
+                        var generationCustomSectionPayload;
+                        if (invoiceEntity != undefined) {
+                            generationCustomSectionPayload = {
+                                invoice: invoiceEntity.Invoice
                             };
                         }
-                        VRUIUtilsService.callDirectiveLoad(timeZoneSelectorAPI, timeZoneSelectorPayload, timeZoneSelectorPayloadLoadDeferred);
+                        VRUIUtilsService.callDirectiveLoad(generationCustomSectionDirectiveAPI, generationCustomSectionPayload, generationCustomSectionDirectiveLoadDeferred);
                     });
-                    promises.push(timeZoneSelectorPayloadLoadDeferred.promise);
+                    promises.push(generationCustomSectionDirectiveLoadDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 }
             }
             
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadAccountStatusSelectorDirective, loadPartnerSelectorDirective]).then(function () {
-                var promise = loadTimeZoneSelector();
+                var promise = loadGenerationCustomSectionDirective();
                 if(promise != undefined)
                 {
                     promise.finally(function () {
@@ -291,7 +296,7 @@
                 FromDate: $scope.scopeModel.fromDate,
                 ToDate: $scope.scopeModel.toDate,
                 IssueDate: $scope.scopeModel.issueDate,
-                TimeZoneId: timeZoneSelectorAPI != undefined? timeZoneSelectorAPI.getSelectedIds():undefined
+                CustomSectionPayload: generationCustomSectionDirectiveAPI != undefined ? generationCustomSectionDirectiveAPI.getData() : undefined
             };
             return obj;
         }
@@ -381,7 +386,7 @@
                                 fromDate: $scope.scopeModel.fromDate,
                                 toDate: $scope.scopeModel.toDate,
                                 issueDate: $scope.scopeModel.issueDate,
-                                timeZoneId: timeZoneSelectorAPI != undefined ? timeZoneSelectorAPI.getSelectedIds() : undefined
+                                customSectionPayload: generationCustomSectionDirectiveAPI != undefined ? generationCustomSectionDirectiveAPI.getData() : undefined
                             },
                             invoiceAction: invoiceAction,
                             isPreGenerateAction: true
@@ -456,15 +461,13 @@
                           
                     }
                 },
-                setTimeZone: function(timeZoneId)
+                reloadCustomSectionPayload: function(payload)
                 {
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingTimeZoneDirective = value;
+                        $scope.scopeModel.isLoadingCustomSectionPayloadDirective = value;
                     };
-                    var payload = {
-                        selectedIds: timeZoneId,
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, timeZoneSelectorAPI, payload, setLoader, selectedTimeZoneSelectorPayloadLoadDeferred);
+                    var generationCustomSectionPayload = payload;
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, generationCustomSectionDirectiveAPI, generationCustomSectionPayload, setLoader, selectedGenerationCustomSectionLoadDeferred);
                 }
 
             };

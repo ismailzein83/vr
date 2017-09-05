@@ -50,7 +50,6 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                                 PartnerId = context.Invoice.PartnerId,
                                 FromDate = context.Invoice.FromDate,
                                 ToDate = context.Invoice.ToDate,
-                                TimeZoneId = context.Invoice.TimeZoneId
                             }
                         };
                         if (emailActionAttachmentSetDefinition.FilterCondition == null || emailActionAttachmentSetDefinition.FilterCondition.IsFilterMatch(partnerInvoiceFilterConditionContext))

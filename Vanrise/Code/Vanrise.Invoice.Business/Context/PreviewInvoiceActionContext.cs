@@ -20,29 +20,16 @@ namespace Vanrise.Invoice.Business
         public DateTime IssueDate { get; set; }
         public dynamic CustomSectionPayload { get; set; }
         private bool IsLoaded { get; set; }
-        public int? TimeZoneId { get; set; }
         public void InitializeInvoiceActionContext()
         {
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(this.InvoiceTypeId);
-            string offset = null;
-            DateTime fromDate = this.FromDate;
-            DateTime toDate = this.ToDate;
-            if (this.TimeZoneId.HasValue)
-            {
-                VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(this.TimeZoneId.Value);
-                if (timeZone != null)
-                {
-                    offset = timeZone.Settings.Offset.ToString();
-                    fromDate = this.FromDate.Add(-timeZone.Settings.Offset);
-                    toDate = this.ToDate.Add(-timeZone.Settings.Offset);
-                }
-            }
+          
             PartnerManager _partnerManager = new PartnerManager();
 
             var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, this.PartnerId);
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
-            if ((invoiceAccountData.BED.HasValue && fromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && toDate > invoiceAccountData.EED.Value))
+            if ((invoiceAccountData.BED.HasValue && this.FromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && this.ToDate > invoiceAccountData.EED.Value))
                 throw new InvoiceGeneratorException("From date and To date should be within the effective date of invoice account.");
 
             PartnerManager partnerManager = new PartnerManager();
@@ -57,11 +44,10 @@ namespace Vanrise.Invoice.Business
             {
                 InvoiceTypeId = this.InvoiceTypeId,
                 CustomSectionPayload = CustomSectionPayload,
-                FromDate = fromDate,
+                FromDate = this.FromDate,
                 PartnerId = this.PartnerId,
                 IssueDate = this.IssueDate,
-                ToDate = toDate,
-                GeneratedToDate = this.ToDate,
+                ToDate = this.ToDate,
                 DuePeriod = duePeriod
             };
 
@@ -84,8 +70,7 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeId = this.InvoiceTypeId,
                 IssueDate = this.IssueDate,
                 DueDate = this.IssueDate.AddDays(duePeriod),
-                TimeZoneId = this.TimeZoneId,
-                TimeZoneOffset = offset
+                
             };
 
 

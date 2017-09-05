@@ -97,8 +97,6 @@ namespace Vanrise.Invoice.Data.SQL
                                                                          invoice.SerialNumber,
                                                                          invoice.FromDate,
                                                                          invoice.ToDate,
-                                                                         invoice.TimeZoneId,
-                                                                         invoice.TimeZoneOffset,
                                                                          invoice.IssueDate,
                                                                          invoice.DueDate,
                                                                          Vanrise.Common.Serializer.Serialize(invoice.Details),
@@ -128,8 +126,6 @@ namespace Vanrise.Invoice.Data.SQL
                 invoiceEntity.SerialNumber,
                 invoiceEntity.FromDate,
                 invoiceEntity.ToDate,
-                invoiceEntity.TimeZoneId,
-                invoiceEntity.TimeZoneOffset,
                 invoiceEntity.IssueDate,
                 invoiceEntity.DueDate,
                 Vanrise.Common.Serializer.Serialize(invoiceEntity.Details),
@@ -287,8 +283,6 @@ namespace Vanrise.Invoice.Data.SQL
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 LockDate = GetReaderValue<DateTime?>(reader, "LockDate"),
                 Note = reader["Notes"] as string,
-                TimeZoneId = GetReaderValue<int?>(reader, "TimeZoneId"),
-                TimeZoneOffset = reader["TimeZoneOffset"] as string,
                 SourceId = reader["SourceID"] as string,
                 IsAutomatic = GetReaderValue<Boolean>(reader, "IsAutomatic")
             };

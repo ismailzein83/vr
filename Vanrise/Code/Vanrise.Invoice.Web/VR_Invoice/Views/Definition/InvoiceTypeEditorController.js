@@ -277,7 +277,6 @@
                         StartDateCalculationMethod:startCalculationMethodAPI.getData(),
                         InvoiceSettingPartUISections: invoiceSettingDefinitionDirectiveAPI.getData(),
                         AutomaticInvoiceActions: automaticInvoiceActionsAPI.getData(),
-                        UseTimeZone: $scope.scopeModel.useTimeZone,
                         InvoiceAttachments: invoiceAttachmentsAPI.getData(),
                         AmountFieldName: amountFieldAPI.getSelectedIds(),
                         CurrencyFieldName: currencyFieldAPI.getSelectedIds(),
@@ -358,7 +357,6 @@
                 function loadStaticData() {
                     if (invoiceTypeEntity != undefined) {
                         $scope.scopeModel.name = invoiceTypeEntity.Name;
-                        $scope.scopeModel.useTimeZone = invoiceTypeEntity.Settings.UseTimeZone;
                     }
                 }
 

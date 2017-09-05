@@ -21,8 +21,9 @@
                             <vr-datetimepicker type="date" label="To" value="scopeModel.toDate" isrequired="true" customvalidate="scopeModel.validateToDate()" vr-disabled="scopeModel.isDateDisabled" applytimemax></vr-datetimepicker>
                         </vr-columns>
                     </span>
-                    <span  ng-if="scopeModel.invoiceTypeEntity.InvoiceType.Settings.UseTimeZone" vr-loader="scopeModel.isLoadingTimeZoneDirective">
-                        <vr-common-timezone-selector on-ready="scopeModel.onTimeZoneSelectorReady" normal-col-num="4" isrequired="true" selectedvalues="scopeModel.selectedTimeZone"></vr-common-timezone-selector>
+
+                    <span ng-if="scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective" vr-loader="scopeModel.isLoadingCustomSectionPayloadDirective">
+                        <vr-directivewrapper directive="scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective" on-ready="scopeModel.onGenerationCustomSectionDirectiveReady" normal-col-num="4" isrequired="true"></vr-directivewrapper>
                     </span>
                 </vr-row>
         </vr-form>

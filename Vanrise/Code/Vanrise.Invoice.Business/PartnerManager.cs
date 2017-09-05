@@ -66,12 +66,6 @@ namespace Vanrise.Invoice.Business
                 return duePeriod.DuePeriod;
             return default(int);
         }
-        public int? GetPartnerTimeZone(Guid invoiceTypeId, string partnerId)
-        {
-            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
-            PartnerTimeZoneContext partnerTimeZoneContext = new PartnerTimeZoneContext { PartnerId = partnerId };
-            return invoicePartnerManager.GetPartnerTimeZoneId(partnerTimeZoneContext);
-        }
         public string GetPartnerSerialNumberPattern(Guid invoiceTypeId, string partnerId)
         {
             var invoicePartnerManager = GetPartnerManager(invoiceTypeId);

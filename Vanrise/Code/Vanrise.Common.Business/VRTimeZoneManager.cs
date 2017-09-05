@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class VRTimeZoneManager
+    public class VRTimeZoneManager : IBusinessEntityManager
     {
         #region Public Methods
 
@@ -238,5 +239,50 @@ namespace Vanrise.Common.Business
         }
 
         #endregion
+
+
+        #region IBusinessEntityManager
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetCachedVRTimeZones().Select(itm => itm as dynamic).ToList();
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetVRTimeZone(context.EntityId);
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var timeZone = context.Entity as VRTimeZone;
+            return timeZone.TimeZoneId;
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetVRTimeZoneName(Convert.ToInt32(context.EntityId));
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
     }
 }

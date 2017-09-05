@@ -9,12 +9,16 @@ namespace Vanrise.Invoice.Entities
     public abstract class InvoiceTypeExtendedSettings
     {
         public abstract Guid ConfigId { get; }
-        public virtual string GenerationCustomSectionDirective { get; set; }
         public abstract InvoiceGenerator GetInvoiceGenerator();
         public abstract InvoicePartnerManager GetPartnerManager();
         public abstract dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context);
         public abstract void GetInitialPeriodInfo(IInitialPeriodInfoContext context);
         public abstract IEnumerable<string> GetPartnerIds(IExtendedSettingsPartnerIdsContext context);
+        public virtual GenerationCustomSection GenerationCustomSection { get; set; }
+    }
+    public abstract class GenerationCustomSection
+    {
+        public abstract string GenerationCustomSectionDirective { get; }
     }
 
     public abstract class InvoiceGenerator
@@ -28,7 +32,6 @@ namespace Vanrise.Invoice.Entities
         DateTime IssueDate { get; }
         DateTime FromDate { get; }
         DateTime ToDate { get; }
-        DateTime GeneratedToDate { get; }
         dynamic CustomSectionPayload { get; }
         int GetDuePeriod();
         GeneratedInvoice Invoice { set; }

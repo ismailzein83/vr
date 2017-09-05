@@ -55,11 +55,6 @@ namespace Vanrise.Invoice.BP.Activities
                     var billingPeriod = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
                     if (billingPeriod != null)
                     {
-                        int? timeZoneId = null;
-                        if (invoiceType.Settings.UseTimeZone)
-                        {
-                            timeZoneId = partnerManager.GetPartnerTimeZone(invoiceTypeId, partnerId);
-                        }
                         if (CheckIFShouldGenerateInvoice(billingPeriod.ToDate, endDateOffsetFromToday))
                         {
                             var generatedInvoice = invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
@@ -69,8 +64,7 @@ namespace Vanrise.Invoice.BP.Activities
                                                       PartnerId = partnerId,
                                                       FromDate = new DateTime(billingPeriod.FromDate.Year, billingPeriod.FromDate.Month, billingPeriod.FromDate.Day, 0, 0, 0),
                                                       ToDate = new DateTime(billingPeriod.ToDate.Year, billingPeriod.ToDate.Month, billingPeriod.ToDate.Day, 23, 59, 59, 998),
-                                                      TimeZoneId = timeZoneId,
-                                                      IsAutomatic = true
+                                                      IsAutomatic = true,
                                                   });
                             PartnerNameManagerContext PartnerNameManagerContext = new PartnerNameManagerContext
                             {

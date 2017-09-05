@@ -10,9 +10,6 @@
                         <vr-columns width="1/3row">
                             <vr-genericdata-datarecordtype-selector isrequired="true" on-ready="scopeModel.onDataRecordTypeSelectorReady" label="Invoice Record Type" onselectionchanged="scopeModel.onDataRecordTypeSelectionChanged"></vr-genericdata-datarecordtype-selector>
                         </vr-columns>
-                        <vr-columns width="1/3row">
-                            <vr-switch label="Use Time Zone" value="scopeModel.useTimeZone"></vr-switch>
-                        </vr-columns>
                         <vr-columns width="1/3row" vr-loader="scopeModel.isLoadAmountField">
                             <vr-genericdata-datarecordtypefields-selector label="Amount Field Name" on-ready="scopeModel.onAmountFieldSelectorReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
                         </vr-columns>

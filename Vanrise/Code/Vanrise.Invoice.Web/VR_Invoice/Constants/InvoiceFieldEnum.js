@@ -12,7 +12,5 @@
     CreatedTime: { value: 10, description: "Created Date", fieldName: "Entity.CreatedTime", type: "Datetime" },
     Lock: { value: 11, description: "Lock", fieldName: "Lock", type: "Datetime" },
     Note: { value: 12, description: "Note", fieldName: "HasNote", type: "Text" },
-    TimeZone: { value: 13, description: "TimeZone", fieldName: "TimeZoneName", type: "Text" },
-    TimeZoneOffset: { value: 14, description: "TimeZoneOffset", fieldName: "TimeZoneOffset", type: "Text" },
     IsAutomatic: { value: 15, description: "Is Automatic", fieldName: "Entity.IsAutomatic", type: "Text" },
 });

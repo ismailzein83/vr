@@ -15,7 +15,6 @@ namespace Vanrise.Invoice.Entities
         public DateTime ToDate { get; set; }
         public DateTime IssueDate { get; set; }
         public dynamic CustomSectionPayload { get; set; }
-        public int? TimeZoneId { get; set; }
         public Boolean IsAutomatic { get; set; }
     }
 }

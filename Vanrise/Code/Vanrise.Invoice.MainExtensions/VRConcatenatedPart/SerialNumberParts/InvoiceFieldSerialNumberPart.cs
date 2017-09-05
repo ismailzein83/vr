@@ -34,19 +34,6 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate.ToString();
                 case Entities.InvoiceField.CustomField: return context.Invoice.Details != null ? context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null)
                : null;
-                case InvoiceField.TimeZone:
-                    if (context.Invoice.TimeZoneId.HasValue)
-                    {
-                        VRTimeZoneManager timeZoneManager = new VRTimeZoneManager();
-                        var timeZone = timeZoneManager.GetVRTimeZone(context.Invoice.TimeZoneId.Value);
-                        return timeZone.Name;
-                    }
-                    else
-                        return null;
-                case InvoiceField.TimeZoneOffset:
-                    return context.Invoice.TimeZoneOffset;
-                   // Utilities.GetPropValue(this.FieldName,context.Invoice.Details) 
-                       //  Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(context.Invoice.Details) 
             }
             return null;
         }
