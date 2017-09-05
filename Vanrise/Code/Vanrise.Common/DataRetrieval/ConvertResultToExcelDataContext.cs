@@ -20,5 +20,12 @@ namespace Vanrise.Common
             get;
             set;
         }
+
+
+        public DataRetrievalInput Input
+        {
+            get;
+            set;
+        }
     }
 }

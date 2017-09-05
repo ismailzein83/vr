@@ -16,6 +16,7 @@ namespace Vanrise.Entities
         BigResult<T> BigResult { get; }
 
         ExportExcelSheet MainSheet { set; }
+        DataRetrievalInput Input { get; }
     }
 
     public class ExportExcelSheet

@@ -48,6 +48,7 @@
     <Compile Include="IGenericLKUPItemDataManager.cs" />
     <Compile Include="IOverriddenConfigurationDataManager.cs" />
     <Compile Include="IOverriddenConfigurationGroupDataManager.cs" />
+    <Compile Include="IUtilityDataManager.cs" />
     <Compile Include="IVRActionAuditDataManager.cs" />
     <Compile Include="IVRActionAuditLKUPDataManager.cs" />
     <Compile Include="IVRApplicationVisibilityDataManager.cs" />

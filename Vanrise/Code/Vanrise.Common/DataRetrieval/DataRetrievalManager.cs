@@ -42,7 +42,7 @@ namespace Vanrise.Common
             switch (dataRetrievalInput.DataRetrievalResultType)
             {
                 case DataRetrievalResultType.Excel:
-                    var excelResult = _excelManager.ExportExcel(result, handler != null ? handler.ExportExcelHandler : null);
+                    var excelResult = _excelManager.ExportExcel(result, handler != null ? handler.ExportExcelHandler : null, dataRetrievalInput);
 
                     if (dataRetrievalInput.IsAPICall)
                         return _remoteExcelManager.ExportExcel(excelResult);

@@ -72,6 +72,7 @@
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeOverriddenConfiguration.cs" />
     <Compile Include="ConfigManager.cs" />
+    <Compile Include="UtilityManager.cs" />
     <Compile Include="Filters\GenericLKUPBEDefinitionFilter.cs" />
     <Compile Include="GenericLKUP\GenericLKUPBEDefinitionSettings.cs" />
     <Compile Include="GenericLKUP\GenericLKUPDefinitionManager.cs" />

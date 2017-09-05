@@ -15,12 +15,12 @@ namespace Vanrise.Common
     {
         const string DEFAULT_EXCEL_SHEET_NAME = "Result";
 
-        internal IDataRetrievalResult<T> ExportExcel<T>(BigResult<T> result, ExcelExportHandler<T> exportExcelHandler)
+        internal IDataRetrievalResult<T> ExportExcel<T>(BigResult<T> result, ExcelExportHandler<T> exportExcelHandler, DataRetrievalInput input)
         {
             ExportExcelSheet excelSheet;
             if (exportExcelHandler != null)
             {
-                ConvertResultToExcelDataContext<T> convertResultToExcelContext = new ConvertResultToExcelDataContext<T> { BigResult = result };
+                ConvertResultToExcelDataContext<T> convertResultToExcelContext = new ConvertResultToExcelDataContext<T> { BigResult = result, Input = input };
                 exportExcelHandler.ConvertResultToExcelData(convertResultToExcelContext);
                 if (convertResultToExcelContext.MainSheet == null)
                     throw new NullReferenceException("convertResultToExcelContext.MainSheet");
@@ -292,7 +292,7 @@ namespace Vanrise.Common
                 throw new ArgumentNullException("excelSheet.Rows");
         }
 
-        private void SetExcelCellFormat(Cell excelCell, ExportExcelHeaderCell headerCell,ExcelCellStyle style)
+        private void SetExcelCellFormat(Cell excelCell, ExportExcelHeaderCell headerCell, ExcelCellStyle style)
         {
             var cellStyle = excelCell.GetDisplayStyle();
             if (headerCell != null && headerCell.CellType.HasValue)
