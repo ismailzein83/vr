@@ -2022,6 +2022,9 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 .divDisabled vr-validator > div input[type="text"] {
    background-color:#ddd;
 }
+.divDisabled vr-validator > div input[type="text"].vr-date-input {
+    width: calc(100% + 9px);
+}
 .read-only-frame{
       pointer-events: none !important;
 }
