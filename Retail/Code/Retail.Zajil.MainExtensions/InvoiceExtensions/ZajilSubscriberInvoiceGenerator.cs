@@ -43,7 +43,7 @@ namespace Retail.Zajil.MainExtensions
 
             int currencyId = accountPayment.CurrencyId;
 
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, accountId, context.FromDate, context.GeneratedToDate, currencyId);
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, accountId, context.FromDate, context.ToDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
                 throw new InvoiceGeneratorException("No data available between the selected period.");

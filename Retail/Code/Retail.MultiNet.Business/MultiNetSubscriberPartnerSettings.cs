@@ -160,11 +160,7 @@ namespace Retail.MultiNet.Business
                 rdlcReportParameters = new Dictionary<string, VRRdlcReportParameter>();
             rdlcReportParameters.Add(key.ToString(), new VRRdlcReportParameter { Value = value, IsVisible = isVisible });
         }
-        public override int? GetPartnerTimeZoneId(IPartnerTimeZoneContext context)
-        {
-            return null;
-        }
-
+       
         public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
         {
             FinancialAccountManager financialAccountManager = new FinancialAccountManager();

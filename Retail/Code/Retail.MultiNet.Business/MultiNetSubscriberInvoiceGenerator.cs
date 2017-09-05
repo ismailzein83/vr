@@ -112,7 +112,7 @@ namespace Retail.MultiNet.Business
             if (financialAccountData.Account.TypeId == this._branchTypeId)
             {
 
-                var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, financialAccountData.Account, currencyId, context.FromDate, context.GeneratedToDate, _branchTypeId, excludeTaxes);
+                var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, financialAccountData.Account, currencyId, context.FromDate, context.ToDate, _branchTypeId, excludeTaxes);
                 if (branchSummary != null)
                     branchSummaries.Add(branchSummary);
             }
@@ -121,7 +121,7 @@ namespace Retail.MultiNet.Business
                 List<Account> childAccounts = _accountBEManager.GetChildAccounts(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false);
                 foreach (Account branchAccount in childAccounts)
                 {
-                    var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, branchAccount, currencyId, context.FromDate, context.GeneratedToDate, branchAccount.TypeId, excludeTaxes);
+                    var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, branchAccount, currencyId, context.FromDate, context.ToDate, branchAccount.TypeId, excludeTaxes);
                     if (branchSummary != null)
                         branchSummaries.Add(branchSummary);
                 }

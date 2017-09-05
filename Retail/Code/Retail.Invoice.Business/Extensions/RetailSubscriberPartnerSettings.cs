@@ -143,10 +143,6 @@ namespace Retail.Invoice.Business
         //   return "CONT-#Year#-#YearSequence#";
         //}
 
-        public override int? GetPartnerTimeZoneId(IPartnerTimeZoneContext context)
-        {
-            return null;
-        }
 
         public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
         {

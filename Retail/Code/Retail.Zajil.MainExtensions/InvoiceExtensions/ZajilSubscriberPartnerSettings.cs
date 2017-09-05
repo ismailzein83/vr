@@ -144,11 +144,7 @@ namespace Retail.Zajil.MainExtensions
         //   return "CONT-#Year#-#YearSequence#";
         //}
 
-        public override int? GetPartnerTimeZoneId(IPartnerTimeZoneContext context)
-        {
-            return null;
-        }
-
+     
         public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
         {
             return new VRInvoiceAccountData
