@@ -97,10 +97,13 @@ namespace Vanrise.Common
 
         public static bool AreTimePeriodsOverlapped(DateTime? p1From, DateTime? p1To, DateTime? p2From, DateTime? p2To)
         {
-            if (p1From == p1To || p2From == p2To)
+            DateTime effectiveP1From = p1From.HasValue ? p1From.Value : DateTime.MinValue;
+            DateTime effectiveP2From = p2From.HasValue ? p2From.Value : DateTime.MinValue;
+
+            if (effectiveP1From == p1To || effectiveP2From == p2To)
                 return false;
 
-            return p1To.VRGreaterThan(p2From) && p2To.VRGreaterThan(p1From);
+            return p1To.VRGreaterThan(effectiveP2From) && p2To.VRGreaterThan(effectiveP1From);
         }
 
         public static void ActivateAspose()
