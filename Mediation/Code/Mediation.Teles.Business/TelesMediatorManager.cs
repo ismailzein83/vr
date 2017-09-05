@@ -79,8 +79,14 @@ namespace Mediation.Teles.Business
 
             return processCDREntity;
         }
-        public static List<dynamic> ProcessMultiLegCDRs(List<dynamic> cdrLegs, string cookedCDRRecordTypeName)
+        public static MultiLegProcessingOutput ProcessMultiLegCDRs(List<dynamic> cdrLegs, string cookedCDRRecordTypeName)
         {
+            MultiLegProcessingOutput output = new MultiLegProcessingOutput();
+            if(!AreAllLegsReady(cdrLegs))
+            {
+                output.NeedsMoreMediationRecords = true;
+                return output;
+            }
             List<dynamic> records = new List<dynamic>();
             var groupedLegs = cdrLegs.GroupBy(itm => itm.TC_CALLID);
             string prevTerminationNumber = null;
@@ -104,7 +110,49 @@ namespace Mediation.Teles.Business
                 callType = ProcessCDREntity.CallType;
                 records.AddRange(ProcessCDREntity.CookedCDRs);
             }
-            return records;
+            output.CookedCDRs = records;
+            return output;
+        }
+
+        private static bool AreAllLegsReady(List<dynamic> cdrLegs)
+        {
+            List<string> stopCallIds = new List<string>();
+            List<string> startCallIds = new List<string>();
+            List<string> transferSentCallIds = new List<string>();
+            List<string> transferReceivedCallIds = new List<string>();
+            foreach(var cdr in cdrLegs)
+            {
+                string callId = cdr.TC_CALLID;
+                string cdrLogType = cdr.TC_LOGTYPE;
+                switch (cdrLogType)
+                {
+                    case "START": startCallIds.Add(callId); break;
+                    case "STOP":
+                        stopCallIds.Add(callId);
+                        string progressState = cdr.TC_CALLPROGRESSSTATE;
+                        if (progressState != null && progressState.Contains("XFER"))
+                            transferSentCallIds.Add(callId);
+                        if (!String.IsNullOrEmpty(cdr.TC_TRANSFERREDCALLID))
+                            transferReceivedCallIds.Add(cdr.TC_TRANSFERREDCALLID);
+                        break;
+                }
+            }
+            foreach(var startCallId in startCallIds)
+            {
+                if(!stopCallIds.Contains(startCallId))
+                    return false;
+            }
+            foreach (var transferSentCallId in transferSentCallIds)
+            {
+                if (!transferReceivedCallIds.Contains(transferSentCallId))
+                    return false;
+            }
+            foreach (var transferReceivedCallId in transferReceivedCallIds)
+            {
+                if (!transferSentCallIds.Contains(transferReceivedCallId))
+                    return false;
+            }
+            return true;
         }
 
         #region Private Functions
@@ -283,5 +331,12 @@ namespace Mediation.Teles.Business
         {
             CookedCDRs = new List<dynamic>();
         }
+    }
+
+    public class MultiLegProcessingOutput
+    {
+        public bool NeedsMoreMediationRecords { get; set; }
+
+        public List<dynamic> CookedCDRs { get; set; }
     }
 }

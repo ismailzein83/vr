@@ -19,6 +19,7 @@ namespace Mediation.Generic.Entities
         public ParsedRecordIdentificationSetting ParsedRecordIdentificationSetting { get; set; }
         public ParsedTransformationSettings ParsedTransformationSettings { get; set; }
         public List<MediationOutputHandlerDefinition> OutputHandlers { get; set; }
+        public Guid ExecutionFlowDefinitionId { get; set; }
     }
 
     public class ParsedRecordIdentificationSetting

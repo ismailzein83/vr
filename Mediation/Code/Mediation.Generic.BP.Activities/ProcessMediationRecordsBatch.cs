@@ -38,7 +38,7 @@ namespace Mediation.Generic.BP.Activities
         protected override void DoWork(ProcessMediationRecordsBatchInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Start Processing Mediation Records");
-            IMediationProcessContext mediationProcessContext = new MediationProcessContext(inputArgument.MediationDefinition.MediationDefinitionId);
+            MediationProcessWorkflowMainContext workflowMainContext = new MediationProcessWorkflowMainContext(inputArgument.MediationDefinition.MediationDefinitionId);
             List<ProcessHandlerItem> processHandlers = new List<ProcessHandlerItem>();
             var batchProxy = new PreparedRecordsBatchProxy { SessionIdToDelete = new List<string>() };
             foreach (var outputHandler in inputArgument.OutputHandlerExecutionEntities)
@@ -64,10 +64,11 @@ namespace Mediation.Generic.BP.Activities
                 {
                     hasItems = inputArgument.MediationRecordsBatch.TryDequeue((sessionMediationRecordBatch) =>
                     {
+                        var processingContext = new MediationProcessContext(workflowMainContext);
                         var transformationOutput = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.ParsedTransformationSettings.TransformationDefinitionId, (context) =>
                         {
                             if (needsContextRecord)
-                                context.SetRecordValue("context", mediationProcessContext);
+                                context.SetRecordValue("context", processingContext);
 
                             var details = sessionMediationRecordBatch.MediationRecords.Select(m => m.EventDetails).ToList();
 
@@ -78,21 +79,23 @@ namespace Mediation.Generic.BP.Activities
 
                         });
 
-                        batchProxy.SessionIdToDelete.Add(sessionMediationRecordBatch.SessionId);
-                        foreach (var processHandler in processHandlers)
+                        if (!processingContext.NeedsMoreMediationRecords)
                         {
-                            UpdateProcessHandlers(inputArgument, transformationOutput, processHandler);
-                        }
-                        if (batchProxy.SessionIdToDelete.Count > 10000)
-                        {
-
-                            SetNbOfHandlersToExecute(inputArgument.MediationDefinition.MediationDefinitionId, processHandlers, batchProxy, handle);
-                            batchProxy = new PreparedRecordsBatchProxy { SessionIdToDelete = new List<string>() };
+                            batchProxy.SessionIdToDelete.Add(sessionMediationRecordBatch.SessionId);
                             foreach (var processHandler in processHandlers)
                             {
-                                if (processHandler.CdrBatch.BatchRecords.Count > 0)
-                                    processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
-                                processHandler.CdrBatch = new PreparedRecordsBatch { Proxy = batchProxy };
+                                UpdateProcessHandlers(inputArgument, transformationOutput, processHandler);
+                            }
+                            if (batchProxy.SessionIdToDelete.Count > 10000)
+                            {
+                                SetNbOfHandlersToExecute(inputArgument.MediationDefinition.MediationDefinitionId, processHandlers, batchProxy, handle);
+                                batchProxy = new PreparedRecordsBatchProxy { SessionIdToDelete = new List<string>() };
+                                foreach (var processHandler in processHandlers)
+                                {
+                                    if (processHandler.CdrBatch.BatchRecords.Count > 0)
+                                        processHandler.InputQueue.Enqueue(processHandler.CdrBatch);
+                                    processHandler.CdrBatch = new PreparedRecordsBatch { Proxy = batchProxy };
+                                }
                             }
                         }
                     });

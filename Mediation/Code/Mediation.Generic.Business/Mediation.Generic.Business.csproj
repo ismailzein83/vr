@@ -41,6 +41,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BusinessProcess.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Caching">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
     </Reference>
@@ -69,18 +77,27 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Queueing.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileCustomParser.cs" />
+    <Compile Include="MediationBPDefinitionSettings.cs" />
     <Compile Include="MediationDefinitionManager.cs" />
     <Compile Include="MediationProcessContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MediationRecordsManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mediation.Generic.BP.Arguments\Mediation.Generic.BP.Arguments.csproj">
+      <Project>{c08816b3-1e52-4d76-8cfa-2672a00fac64}</Project>
+      <Name>Mediation.Generic.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mediation.Generic.Data.SQL\Mediation.Generic.Data.SQL.csproj">
       <Project>{bac8dc29-0eed-4cf2-9174-2d5e6d8cdd11}</Project>
       <Name>Mediation.Generic.Data.SQL</Name>

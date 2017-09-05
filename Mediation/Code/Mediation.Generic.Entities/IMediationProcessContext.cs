@@ -8,7 +8,9 @@ namespace Mediation.Generic.Entities
 {
     public interface IMediationProcessContext
     {
-        bool DeleteSessionId(string sessionId);
+        void DeleteSessionId(string sessionId);
         string GetMultiLegSessionId(params string[] legIds);
+
+        bool NeedsMoreMediationRecords { set; }
     }
 }

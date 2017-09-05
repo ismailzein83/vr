@@ -11,9 +11,37 @@ namespace Mediation.Generic.Business
 {
     public class MediationProcessContext : IMediationProcessContext
     {
-        Guid _mediationDefinitionId;
+        MediationProcessWorkflowMainContext _workflowMainContext;
 
-        public MediationProcessContext(Guid mediationDefinitionId)
+        public MediationProcessContext(MediationProcessWorkflowMainContext workflowMainContext)
+        {
+            workflowMainContext.ThrowIfNull("workflowMainContext");
+            _workflowMainContext = workflowMainContext;
+        }
+
+        public string GetMultiLegSessionId(params string[] legIds)
+        {
+            return _workflowMainContext.GetMultiLegSessionId(legIds);
+        }
+
+        public void DeleteSessionId(string sessionId)
+        {
+            _workflowMainContext.DeleteSessionId(sessionId);
+        }
+
+
+        public bool NeedsMoreMediationRecords
+        {
+            set;
+            get;
+        }
+    }
+
+    public class MediationProcessWorkflowMainContext
+    {
+         Guid _mediationDefinitionId;
+
+         public MediationProcessWorkflowMainContext(Guid mediationDefinitionId)
         {
             _mediationDefinitionId = mediationDefinitionId;
         }
@@ -60,13 +88,15 @@ namespace Mediation.Generic.Business
                 foreach (var legId in nonAssociatedLegIds)
                 {
                     sessionLegIds.Add(legId);
+                    if (sessionIdsMemStore.SessionIdsByLegId.ContainsKey(legId))
+                        throw new Exception(String.Format("legId '{0}' already exists in the store. session Id '{1}'", legId, sessionId));
                     sessionIdsMemStore.SessionIdsByLegId.Add(legId, sessionId);
                 }
             }
             return sessionId;
         }
 
-        public bool DeleteSessionId(string sessionId)
+        public void DeleteSessionId(string sessionId)
         {
             MultiLegSessionIdsMemoryStore sessionIdsMemStore = GetSessionIdsMemStore();
             DeleteSessionIdFromDB(sessionId);
@@ -79,7 +109,6 @@ namespace Mediation.Generic.Business
                     sessionIdsMemStore.SessionIdsByLegId.Remove(legId);
                 }
             }
-            return true;
         }
 
         #endregion

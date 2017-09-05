@@ -5,6 +5,16 @@ CREATE procedure [Mediation_Generic].[sp_MediationRecord_GetByIds]
 @MediationDefinitionId uniqueidentifier
 as
 begin
+
+DECLARE @MediationDefinitionId_Local uniqueidentifier,
+
+@Ids_Local dbo.StringIDType 
+
+SELECT @MediationDefinitionId_Local = @MediationDefinitionId
+
+INSERT INTO @Ids_Local
+SELECT * FROM @Ids
+
 SELECT [EventId]
       ,sr.[SessionId]
       ,[EventTime]
@@ -12,7 +22,6 @@ SELECT [EventId]
 	  ,MediationDefinitionId
       ,[EventDetails]
   FROM [Mediation_Generic].[MediationRecord] sr WITH(NOLOCK) 
-   JOIN @Ids i ON sr.SessionId = i.SessionId  
-   where sr.MediationDefinitionId = @MediationDefinitionId  
-
+  JOIN @Ids_Local i ON sr.MediationDefinitionId = @MediationDefinitionId_Local AND sr.SessionId  = i.SessionId
+   
 end

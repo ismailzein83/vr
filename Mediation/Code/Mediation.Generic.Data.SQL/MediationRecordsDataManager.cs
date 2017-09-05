@@ -42,7 +42,7 @@ namespace Mediation.Generic.Data.SQL
         public void WriteRecordToStream(MediationRecord record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.EventId, record.SessionId, record.EventTime.ToString("yyy-MM-dd HH:mm:ss"), (short)record.EventStatus, record.MediationDefinitionId, Serializer.Serialize(record.EventDetails, true));
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.EventId, record.SessionId, GetDateTimeForBCP(record.EventTime), (short)record.EventStatus, record.MediationDefinitionId, Serializer.Serialize(record.EventDetails, true));
         }
 
         #endregion

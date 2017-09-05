@@ -3,9 +3,22 @@
 @MediationDefinitionId uniqueidentifier
 as
 begin
-delete sr
-  FROM [Mediation_Generic].[MediationRecord] sr
-   JOIN @Ids i ON sr.SessionId = i.SessionId  
-   where sr.MediationDefinitionId = @MediationDefinitionId
+
+DECLARE @MediationDefinitionId_Local uniqueidentifier,
+
+@Ids_Local dbo.StringIDType 
+
+SELECT @MediationDefinitionId_Local = @MediationDefinitionId
+
+INSERT INTO @Ids_Local
+
+SELECT * FROM @Ids
+
+	delete sr
+	FROM [Mediation_Generic].[MediationRecord] sr-- WITH (NOLOCK)
+   JOIN @Ids_Local i ON sr.MediationDefinitionId = @MediationDefinitionId_Local AND sr.SessionId = i.SessionId
+   
+
+
 
 end

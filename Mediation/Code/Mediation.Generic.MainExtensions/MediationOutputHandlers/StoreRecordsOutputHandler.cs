@@ -8,6 +8,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Queueing;
+using Vanrise.Entities;
 
 namespace Mediation.Generic.MainExtensions.MediationOutputHandlers
 {
@@ -84,7 +85,7 @@ namespace Mediation.Generic.MainExtensions.MediationOutputHandlers
                 do
                 {
                     hasItem = queuePreparedBatchesForDBApply.TryDequeue((preparedBatchForDBApply) =>
-                    {
+                    {                        
                         recordStorageDataManager.ApplyStreamToDB(preparedBatchForDBApply.BatchToApply);
                         context.SetOutputHandlerExecutedOnBatch(preparedBatchForDBApply.OriginalBatch);
                     });

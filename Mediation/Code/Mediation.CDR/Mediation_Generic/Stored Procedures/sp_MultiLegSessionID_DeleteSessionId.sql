@@ -5,8 +5,15 @@ CREATE procedure [Mediation_Generic].[sp_MultiLegSessionID_DeleteSessionId]
 as
 begin
 
+
+DECLARE @MediationDefinitionId_local uniqueidentifier,
+@SessionID_Local varchar(200)
+
+SELECT @MediationDefinitionId_local = @MediationDefinionID,
+@SessionID_Local = @SessionID
+
  delete
- FROM	Mediation_Generic.MultiLegSessionID 
- where	MediationDefinitionID = @MediationDefinionID and SessionID = @SessionID
+ FROM	Mediation_Generic.MultiLegSessionID
+ where	MediationDefinitionID = @MediationDefinitionId_local and SessionID = @SessionID_Local
 
 end

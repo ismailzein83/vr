@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Mediation_Generic].[MediationRecord] (
-    [EventId]               BIGINT           IDENTITY (1, 1) NOT NULL,
+    [EventId]               BIGINT           NOT NULL,
     [SessionId]             NVARCHAR (400)   NULL,
     [EventTime]             DATETIME         NULL,
     [EventStatus]           TINYINT          NULL,
@@ -7,6 +7,8 @@
     [EventDetails]          NVARCHAR (MAX)   NULL,
     CONSTRAINT [IX_MediationRecord_EventId] UNIQUE NONCLUSTERED ([EventId] ASC)
 );
+
+
 
 
 

@@ -27,6 +27,12 @@ namespace Mediation.Generic.Business
         }
         public void SaveMediationRecordsToDB(List<MediationRecord> mediationRecords)
         {
+            long startingId;
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(Mediation.Generic.Entities.MediationRecord), mediationRecords.Count, out startingId);
+            foreach (var r in mediationRecords)
+            {
+                r.EventId = startingId++;
+            }
             IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
             dataManager.SaveMediationRecordsToDB(mediationRecords);
         }
