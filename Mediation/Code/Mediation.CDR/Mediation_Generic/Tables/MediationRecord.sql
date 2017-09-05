@@ -5,7 +5,7 @@
     [EventStatus]           TINYINT          NULL,
     [MediationDefinitionId] UNIQUEIDENTIFIER NULL,
     [EventDetails]          NVARCHAR (MAX)   NULL,
-    CONSTRAINT [PK_StoreStagingRecord] PRIMARY KEY CLUSTERED ([EventId] ASC)
+    CONSTRAINT [IX_MediationRecord_EventId] UNIQUE NONCLUSTERED ([EventId] ASC)
 );
 
 
@@ -13,9 +13,18 @@
 
 
 
+
+
 GO
-CREATE NONCLUSTERED INDEX [IX_MediationRecord_SessionId_MediationDefinition]
+CREATE CLUSTERED INDEX [IX_MediationRecord_SessionId_MediationDefinition]
     ON [Mediation_Generic].[MediationRecord]([MediationDefinitionId] ASC, [SessionId] ASC);
 
 
+
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_MediationRecord_DefId_Status]
+    ON [Mediation_Generic].[MediationRecord]([MediationDefinitionId] ASC, [EventStatus] ASC);
 
