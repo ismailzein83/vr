@@ -8,8 +8,10 @@
         var gridAPI;
         var supplierDirectiveApi;
         var supplierReadyPromiseDeferred = utilsService.createPromiseDeferred();
-        var supplierZoneDirectiveAPI;
-        var supplierZoneReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
+        var countryDirectiveApi;
+        var countryReadyPromiseDeferred = utilsService.createPromiseDeferred();
+
         defineScope();
         load();
         var payload = {};
@@ -22,32 +24,21 @@
                 return gridAPI.loadGrid(payload);
             };
 
-            $scope.onSupplierZoneDirectiveReady = function (api) {
-                supplierZoneDirectiveAPI = api;
-                supplierZoneReadyPromiseDeferred.resolve();
-            };
 
             $scope.resetDate = function () {
                 if ($scope.IsPending)
                     $scope.effectiveOn = utilsService.getDateFromDateTime(new Date());
             };
-            $scope.onSelectSupplier = function (selectedItem) {
-                $scope.showSupplierZoneSelector = true;
-                $scope.selectedSupplierZones.length = 0;
-
-                var payload = {
-                    supplierId: selectedItem.CarrierAccountId
-                };
-
-                var setLoader = function (value) { $scope.isLoadingSaleZonesSection = value; };
-                vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader);
-            };
-
 
 
             $scope.onSupplierReady = function (api) {
                 supplierDirectiveApi = api;
                 supplierReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onCountryReady = function (api) {
+                countryDirectiveApi = api;
+                countryReadyPromiseDeferred.resolve();
             };
 
             $scope.onGridReady = function (api) {
@@ -61,12 +52,8 @@
             loadAllControls();
         }
 
-        function loadSupplierZoneSection() {
-            return supplierZoneReadyPromiseDeferred.promise;
-        }
-
         function loadAllControls() {
-            return utilsService.waitMultipleAsyncOperations([loadSupplierSelector, loadSupplierZoneSection])
+            return utilsService.waitMultipleAsyncOperations([loadSupplierSelector, loadCountrySelector])
                .catch(function (error) {
                    vrNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -86,13 +73,24 @@
             return supplierLoadPromiseDeferred.promise;
         }
 
+        function loadCountrySelector() {
+            var countryLoadPromiseDeferred = utilsService.createPromiseDeferred();
+            countryReadyPromiseDeferred.promise
+                .then(function () {
+                    var directivePayload = {};
+                    vruiUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
+                });
+            return countryLoadPromiseDeferred.promise;
+        }
+
         function setFilterObject() {
             payload = {
                 $type: "TOne.WhS.BusinessEntity.Business.SupplierRateQueryHandler,TOne.WhS.BusinessEntity.Business",
                 Query: {
                     SupplierId: supplierDirectiveApi.getSelectedIds(),
                     EffectiveOn: $scope.effectiveOn,
-                    ZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
+                    CountriesIds: countryDirectiveApi.getSelectedIds(),
+                    SupplierZoneName: $scope.supplierZoneName,
                     ShowPending: $scope.IsPending
                 }
             };

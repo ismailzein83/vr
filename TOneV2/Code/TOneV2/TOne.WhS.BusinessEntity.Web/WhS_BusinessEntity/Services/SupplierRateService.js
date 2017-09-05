@@ -20,12 +20,12 @@
             drillDownDefinition.loadDirective = function (directiveAPI, supplierZoneItem) {
                 supplierZoneItem.supplierRateGridAPI = directiveAPI;
                 var payload = {
-                    $type: "TOne.WhS.BusinessEntity.Business.SupplierRateQueryHandler,TOne.WhS.BusinessEntity.Business",
+                    $type: "TOne.WhS.BusinessEntity.Business.SupplierRateForZoneQueryHandler,TOne.WhS.BusinessEntity.Business",
                     Query: {
-                        ZoneIds: [supplierZoneItem.Entity.SupplierZoneId],
-                        EffectiveOn: supplierZoneItem.EffectiveOn,
-                        HideHistory: true
-                    }
+                        SupplierZoneId: supplierZoneItem.Entity.SupplierZoneId,
+                            EffectiveOn: supplierZoneItem.EffectiveOn,
+                            HideHistory: true
+            }
                 };
                 return supplierZoneItem.supplierRateGridAPI.loadGrid(payload);
             };

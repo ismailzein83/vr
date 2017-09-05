@@ -63,19 +63,23 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery query)
         {
-            string zonesids = null;
-            if (query.ZoneIds != null && query.ZoneIds.Count() > 0)
-                zonesids = string.Join<int>(",", query.ZoneIds);
+            string countriesIds = null;
+            if (query.CountriesIds != null && query.CountriesIds.Count() > 0)
+                countriesIds = string.Join<int>(",", query.CountriesIds);
 
-
-            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetFiltered]", SupplierRateMapper, query.SupplierId, zonesids, query.EffectiveOn);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetFiltered]", SupplierRateMapper, query.SupplierId, countriesIds, query.SupplierZoneName, query.EffectiveOn);
         }
         public IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery query)
         {
-            string zonesids = null;
-            if (query.ZoneIds != null && query.ZoneIds.Any())
-                zonesids = string.Join(",", query.ZoneIds);
-            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetPending]", SupplierRateMapper, query.SupplierId, zonesids, query.EffectiveOn);
+            string countriesIds = null;
+            if (query.CountriesIds != null && query.CountriesIds.Count() > 0)
+                countriesIds = string.Join<int>(",", query.CountriesIds);
+
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetPending]", SupplierRateMapper, query.SupplierId, countriesIds, query.SupplierZoneName, query.EffectiveOn);
+        }
+        public IEnumerable<SupplierRate> GetSupplierRatesForZone(SupplierRateForZoneQuery query)
+        {
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetSupplierRatesForZone]", SupplierRateMapper, query.SupplierZoneId, query.EffectiveOn);
         }
 
         public IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds, List<int> countryIds, int supplierId)
@@ -99,15 +103,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             SupplierRate supplierRate = new SupplierRate
             {
+                SupplierRateId = GetReaderValue<long>(reader, "ID"),
+                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                ZoneId = GetReaderValue<long>(reader, "ZoneID"),
+                CurrencyId = GetReaderValue<int?>(reader, "CurrencyID"),
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
                 RateTypeId = GetReaderValue<int?>(reader, "RateTypeID"),
-                SupplierRateId = (long)reader["ID"],
-                ZoneId = (long)reader["ZoneID"],
-                PriceListId = GetReaderValue<int>(reader, "PriceListID"),
+                RateChange = (RateChangeType)GetReaderValue<byte>(reader, "Change"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED"),
-                CurrencyId = GetReaderValue<int?>(reader, "CurrencyId"),
-                RateChange = (RateChangeType)GetReaderValue<byte>(reader, "Change")
+                EED = GetReaderValue<DateTime?>(reader, "EED")
             };
             return supplierRate;
         }

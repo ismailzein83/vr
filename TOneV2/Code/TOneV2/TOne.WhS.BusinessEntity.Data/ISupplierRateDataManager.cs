@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds, List<int> countryIds, int supplierId);
         IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery input);
         IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery input);
+        IEnumerable<SupplierRate> GetSupplierRatesForZone(SupplierRateForZoneQuery input);
 
         List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate);
 
