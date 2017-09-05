@@ -147,9 +147,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public CustomerCountry2 GetCustomerCountry(int customerId, int countryId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);
+            var cachedCustomerCountriesByCustomerCountry = GetAllCachedCustomerCountriesByCustomerCountry();
+            if (cachedCustomerCountriesByCustomerCountry == null)
+                return null;
+
+            IOrderedEnumerable<CustomerCountry2> customerCountries = cachedCustomerCountriesByCustomerCountry.GetRecord(new CustomerCountryDefinition() { CustomerId = customerId, CountryId = countryId });
             if (customerCountries != null)
-                return customerCountries.FindAllRecords(x => x.CountryId == countryId && x.IsEffective(effectiveOn, isEffectiveInFuture)).FirstOrDefault();
+                return customerCountries.FindAllRecords(x => x.IsEffective(effectiveOn, isEffectiveInFuture)).FirstOrDefault();
             else
                 return null;
         }
@@ -244,7 +248,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<CustomerCountry2> GetCustomerCountries(int customerId)
         {
-            Dictionary<int, List<CustomerCountry2>> allCustomerCountries = GetAllCachedCustomerCountries();
+            Dictionary<int, List<CustomerCountry2>> allCustomerCountries = GetAllCachedCustomerCountriesByCustomer();
             return allCustomerCountries.GetRecord(customerId);
         }
 
@@ -256,7 +260,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public IEnumerable<CustomerCountry2> GetEndedCustomerCountriesEffectiveAfter(int customerId, DateTime effectiveOn)
         {
-            Dictionary<int, List<CustomerCountry2>> countriesByCustomerId = GetAllCachedCustomerCountries();
+            Dictionary<int, List<CustomerCountry2>> countriesByCustomerId = GetAllCachedCustomerCountriesByCustomer();
             List<CustomerCountry2> customerCountries;
             if (countriesByCustomerId.TryGetValue(customerId, out customerCountries))
                 return customerCountries.FindAllRecords(x => x.EED.HasValue && x.IsEffectiveOrFuture(effectiveOn));
@@ -282,15 +286,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
-        private Dictionary<int, List<CustomerCountry2>> GetAllCachedCustomerCountries()
+        private Dictionary<int, List<CustomerCountry2>> GetAllCachedCustomerCountriesByCustomer()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerCountries", () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerCountriesByCustomer", () =>
             {
-                var dataManager = BEDataManagerFactory.GetDataManager<ICustomerCountryDataManager>();
-                IEnumerable<CustomerCountry2> allCustomerCountries = dataManager.GetAll();
+                var cachedCustomerCountries = GetAllCachedCustomerCountries();
 
                 var countriesByCustomer = new Dictionary<int, List<CustomerCountry2>>();
-                foreach (CustomerCountry2 customerCountry in allCustomerCountries)
+                foreach (CustomerCountry2 customerCountry in cachedCustomerCountries.Values)
                 {
                     if (customerCountry.EED <= customerCountry.BED)
                         continue;
@@ -306,11 +309,46 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
+        private Dictionary<CustomerCountryDefinition, IOrderedEnumerable<CustomerCountry2>> GetAllCachedCustomerCountriesByCustomerCountry()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerCountriesByCustomerCountry", () =>
+            {
+                var cachedCustomerCountries = GetAllCachedCustomerCountries();
+
+                var countriesByCustomer = new Dictionary<CustomerCountryDefinition, List<CustomerCountry2>>();
+                foreach (CustomerCountry2 customerCountry in cachedCustomerCountries.Values)
+                {
+                    if (customerCountry.EED <= customerCountry.BED)
+                        continue;
+                    CustomerCountryDefinition customerCountryDefinition = new CustomerCountryDefinition() { CountryId = customerCountry.CountryId, CustomerId = customerCountry.CustomerId };
+                    List<CustomerCountry2> customerCountries = countriesByCustomer.GetOrCreateItem(customerCountryDefinition);
+                    customerCountries.Add(customerCountry);
+                }
+                return countriesByCustomer.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(item => item.BED));
+            });
+        }
+
+        private Dictionary<int, CustomerCountry2> GetAllCachedCustomerCountries()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAllCustomerCountries", () =>
+            {
+                var dataManager = BEDataManagerFactory.GetDataManager<ICustomerCountryDataManager>();
+                IEnumerable<CustomerCountry2> allCustomerCountries = dataManager.GetAll();
+                return allCustomerCountries.ToDictionary(cc => cc.CustomerCountryId, cc => cc);
+            });
+        }
+
         private Type GetCustomerCountryType()
         {
             return this.GetType();
         }
 
+
+        private struct CustomerCountryDefinition
+        {
+            public int CustomerId { get; set; }
+            public int CountryId { get; set; }
+        }
         #endregion
 
         #region Pending Methods
