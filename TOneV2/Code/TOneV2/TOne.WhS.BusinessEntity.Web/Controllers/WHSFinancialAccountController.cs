@@ -70,5 +70,18 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             return _manager.GetFinancialAccountRuntimeEditor(financialAccountId);
         }
+
+        [HttpGet]
+        [Route("GetSupplierTimeZoneId")]
+        public int GetSupplierTimeZoneId(int financialAccountId)
+        {
+            return _manager.GetSupplierTimeZoneId(financialAccountId);
+        }
+        [HttpGet]
+        [Route("GetCustomerTimeZoneId")]
+        public int GetCustomerTimeZoneId(int financialAccountId)
+        {
+            return _manager.GetCustomerTimeZoneId(financialAccountId);
+        }
     }
 }

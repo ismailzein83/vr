@@ -27,7 +27,32 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
-         
+            var supplierGenerationCustomSectionPayload = context.CustomSectionPayload as SupplierGenerationCustomSectionPayload;
+
+            int? timeZoneId = null;
+            if (supplierGenerationCustomSectionPayload != null && supplierGenerationCustomSectionPayload.TimeZoneId.HasValue)
+            {
+                timeZoneId = supplierGenerationCustomSectionPayload.TimeZoneId;
+            }
+            if (!timeZoneId.HasValue)
+            {
+                timeZoneId = financialAccountManager.GetSupplierTimeZoneId(financialAccount.FinancialAccountId);
+            }
+            string offset = null;
+            DateTime fromDate = context.FromDate;
+            DateTime toDate = context.ToDate;
+            if (timeZoneId.HasValue)
+            {
+                VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(timeZoneId.Value);
+                if (timeZone != null)
+                {
+                    offset = timeZone.Settings.Offset.ToString();
+                    fromDate = context.FromDate.Add(-timeZone.Settings.Offset);
+                    toDate = context.ToDate.Add(-timeZone.Settings.Offset);
+                }
+            }
+
+
             string partnerType = null;
             int dimensionValue;
             int carrierProfileId;
@@ -50,7 +75,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 carrierProfileId = carrierAccount.CarrierProfileId;
             }
             taxItemDetails = carrierProfileManager.GetTaxItemDetails(carrierProfileId);
-            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, context.FromDate, context.GeneratedToDate, currencyId);
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
                 throw new InvoiceGeneratorException("No data available between the selected period.");
@@ -61,6 +86,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             SupplierInvoiceDetails supplierInvoiceDetails = BuilSupplierInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate);
             if (supplierInvoiceDetails != null)
             {
+                supplierInvoiceDetails.TimeZoneId = timeZoneId;
                 supplierInvoiceDetails.TotalAmount = supplierInvoiceDetails.CostAmount;
                 if (taxItemDetails != null)
                 {

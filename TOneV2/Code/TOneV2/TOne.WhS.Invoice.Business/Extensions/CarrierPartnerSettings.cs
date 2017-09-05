@@ -163,23 +163,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             rdlcReportParameters.Add(key.ToString(), new VRRdlcReportParameter { Value = value, IsVisible = isVisible });
         }
 
-        public override int? GetPartnerTimeZoneId(IPartnerTimeZoneContext context)
-        {
-            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
-            var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
-
-            if (financialAccount.CarrierProfileId.HasValue)
-            {
-                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-                return carrierProfileManager.GetCustomerTimeZoneId(financialAccount.CarrierProfileId.Value);
-            }
-            else
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return carrierAccountManager.GetCustomerTimeZoneId(financialAccount.CarrierAccountId.Value);
-            }
-        }
-
         public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
         {
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();

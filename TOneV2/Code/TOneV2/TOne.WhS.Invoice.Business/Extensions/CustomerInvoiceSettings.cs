@@ -19,6 +19,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             get { return new Guid("FAD2C45F-FB61-4D65-9896-4CCADC2A656F"); }
         }
+        public override GenerationCustomSection GenerationCustomSection
+        {
+            get { return new CustomerGenerationCustomSection(); }
+        }
         public override InvoiceGenerator GetInvoiceGenerator()
         {
             return new CustomerInvoiceGenerator();

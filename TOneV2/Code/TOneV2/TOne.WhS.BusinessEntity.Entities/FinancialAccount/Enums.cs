@@ -11,10 +11,10 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public enum WHSFinancialAccountCarrierType
     {
-        [Description("Prof")]
+        [Description("per Profile")]
         Profile = 0,
 
-        [Description("Acc")]
+        [Description("per Account")]
         Account = 1
     }
 }

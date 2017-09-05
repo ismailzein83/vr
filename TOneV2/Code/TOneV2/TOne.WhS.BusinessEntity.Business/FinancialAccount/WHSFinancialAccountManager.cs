@@ -429,6 +429,34 @@ namespace TOne.WhS.BusinessEntity.Business
             CurrencyManager currencyManager = new CurrencyManager();
             return currencyManager.GetCurrencySymbol(currencyId);
         }
+
+
+        public int GetSupplierTimeZoneId(int financialAccountId)
+        {
+            var financialAccount = GetFinancialAccount(financialAccountId);
+            financialAccount.ThrowIfNull("financialAccount", financialAccountId);
+            if(financialAccount.CarrierAccountId.HasValue)
+            {
+                return s_carrierAccountManager.GetSupplierTimeZoneId(financialAccount.CarrierAccountId.Value);
+            }else
+            {
+                return s_carrierProfileManager.GetSupplierTimeZoneId(financialAccount.CarrierProfileId.Value);
+            }
+        }
+        public int GetCustomerTimeZoneId(int financialAccountId)
+        {
+            var financialAccount = GetFinancialAccount(financialAccountId);
+            financialAccount.ThrowIfNull("financialAccount", financialAccountId);
+            if (financialAccount.CarrierAccountId.HasValue)
+            {
+                return s_carrierAccountManager.GetCustomerTimeZoneId(financialAccount.CarrierAccountId.Value);
+            }
+            else
+            {
+                return s_carrierProfileManager.GetCustomerTimeZoneId(financialAccount.CarrierProfileId.Value);
+            }
+        }
+
         #endregion
 
         #region Private Classes
@@ -907,14 +935,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 financialAccountInfo.CarrierType = WHSFinancialAccountCarrierType.Profile;
                 financialAccountInfo.Name = s_carrierProfileManager.GetCarrierProfileName(financialAccount.CarrierProfileId.Value);
                 string profilePrefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Profile);
-                financialAccountInfo.Description = string.Format("({0}) {1}", profilePrefix, financialAccountInfo.Name);
+                financialAccountInfo.Description = string.Format("{1} ({0})", profilePrefix, financialAccountInfo.Name);
             }
             else
             {
                 financialAccountInfo.CarrierType = WHSFinancialAccountCarrierType.Account;
                 financialAccountInfo.Name = s_carrierAccountManager.GetCarrierAccountName(financialAccount.CarrierAccountId.Value);
                 string accountPrefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Account);
-                financialAccountInfo.Description = string.Format("({0}) {1}", accountPrefix, financialAccountInfo.Name);
+                financialAccountInfo.Description = string.Format("{1} ({0})", accountPrefix, financialAccountInfo.Name);
             }
             return financialAccountInfo;
         }

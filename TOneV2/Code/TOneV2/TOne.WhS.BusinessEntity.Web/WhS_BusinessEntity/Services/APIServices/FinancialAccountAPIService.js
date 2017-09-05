@@ -48,6 +48,17 @@
                 financialAccountId: financialAccountId
             });
         }
+
+        function GetSupplierTimeZoneId(financialAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSupplierTimeZoneId"), {
+                financialAccountId: financialAccountId
+            });
+        }
+        function GetCustomerTimeZoneId(financialAccountId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomerTimeZoneId"), {
+                financialAccountId: financialAccountId
+            });
+        }
         return ({
             GetAccountCurrencyName: GetAccountCurrencyName,
             AddFinancialAccount: AddFinancialAccount,
@@ -56,7 +67,9 @@
             GetFilteredFinancialAccounts: GetFilteredFinancialAccounts,
             CanAddFinancialAccountToCarrier: CanAddFinancialAccountToCarrier,
             GetFinancialAccount: GetFinancialAccount,
-            GetFinancialAccountRuntimeEditor: GetFinancialAccountRuntimeEditor
+            GetFinancialAccountRuntimeEditor: GetFinancialAccountRuntimeEditor,
+            GetSupplierTimeZoneId: GetSupplierTimeZoneId,
+            GetCustomerTimeZoneId: GetCustomerTimeZoneId
         });
     }
 

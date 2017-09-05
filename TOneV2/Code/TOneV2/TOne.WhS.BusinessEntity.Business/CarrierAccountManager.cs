@@ -1066,7 +1066,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 carrierAccountDetail.ServicesNames = ZoneServiceConfigManager.GetZoneServicesNames(carrierAccountDetail.Services);
             }
 
-
             return carrierAccountDetail;
         }
 

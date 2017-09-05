@@ -17,5 +17,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CarrierAccount Entity { get; set; }
         public List<int> Services { get; set; }
         public string ServicesNames { get; set; }
+        public bool InvoiceByAccount { get; set; }
+        public string InvoiceSettingName { get; set; }
     }
 }

@@ -83,10 +83,12 @@ app.directive('whsInvoiceInvoiceaccountSelector', ['VRUIUtilsService', 'UtilsSer
                     if (context.reloadPregeneratorActions != undefined) {
                         context.reloadPregeneratorActions();
                     }
-                    //if (context.setTimeZone != undefined) {
-                    //    var timeZoneId = selectedAccount != undefined ? selectedAccount.TimeZoneId : undefined;
-                    //    context.setTimeZone(timeZoneId);
-                    //}
+                    if (context.reloadCustomSectionPayload != undefined) {
+                        var customSectionPayload = {
+                            financialAccountId: selectedIds
+                        };
+                        context.reloadCustomSectionPayload(customSectionPayload);
+                    }
                     if (context.reloadBillingPeriod != undefined) {
                         context.reloadBillingPeriod();
                     }

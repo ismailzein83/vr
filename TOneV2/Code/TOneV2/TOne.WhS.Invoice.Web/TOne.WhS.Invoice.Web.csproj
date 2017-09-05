@@ -173,6 +173,10 @@
     <Content Include="WhS_Invoice\Constants\ComparisonResultEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\SupplierGenerationCustomSectionTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\CustomerGenerationCustomSectionTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\whs-invoicetype-generationcustomsection-supplier.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\whs-invoicetype-generationcustomsection-customer.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\Templates\CompareInvoiceActionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\whs-invoicetype-gridactionsettings-compare.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\Templates\PartnerConditionTemplate.html" />

@@ -18,6 +18,7 @@ namespace TOne.WhS.Invoice.Entities
         public int OriginalSaleCurrencyId { get; set; }
         public string OriginalSaleCurrency { get; set; }
         public Decimal TotalAmount { get; set; }
+        public int? TimeZoneId { get; set; }
         public CustomerInvoiceDetails() { }
         public IEnumerable<CustomerInvoiceDetails> GetCustomerInvoiceDetailsRDLCSchema()
         {
