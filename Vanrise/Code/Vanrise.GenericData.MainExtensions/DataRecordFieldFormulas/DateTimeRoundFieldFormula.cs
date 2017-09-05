@@ -45,7 +45,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                     int minuteNumber = dateTime.Value.Hour * 60 + dateTime.Value.Minute;
                     int roundedMinuteNumber = (((int)minuteNumber / timeRoundingIntervalInMinutes) * timeRoundingIntervalInMinutes);
                     TimeSpan ts = TimeSpan.FromMinutes(roundedMinuteNumber);
-                    return new Time() { Hour = ts.Hours, Minute = ts.Minutes };
+                    return new Time(ts.Hours, ts.Minutes, 0, 0);
 
                 default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", this.ComparisonPart));
             }
@@ -68,15 +68,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
 
                     case DateTimeRecordFilterComparisonPart.TimeOnly:
                         dateTimeRecordFilter.FieldName = this.DateTimeFieldName;
-                        dateTimeRecordFilter.CompareOperator = DateTimeRecordFilterOperator.Between;
-                        dateTimeRecordFilter.ExcludeValue2 = true;
-
-                        var valueAsTime = (Vanrise.Entities.Time)dateTimeRecordFilter.Value;
-                        int timeRoundingIntervalInMinutes = Vanrise.Common.Utilities.GetEnumAttribute<TimeRoundingInterval, TimeRoundingIntervalAttribute>(this.TimeRoundingInterval.Value).Value;
-                        TimeSpan value2AsTimeSpan = new TimeSpan(valueAsTime.Hour, valueAsTime.Minute + timeRoundingIntervalInMinutes, valueAsTime.Second);
-
-                        dateTimeRecordFilter.Value2 = new Time() { Hour = value2AsTimeSpan.Hours, Minute = value2AsTimeSpan.Minutes, Second = value2AsTimeSpan.Seconds, MilliSecond = value2AsTimeSpan.Milliseconds };
-                        return dateTimeRecordFilter;
+                        return BuildRecordFilter(dateTimeRecordFilter);
 
                     default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", this.ComparisonPart));
                 }
@@ -91,6 +83,89 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 return new NonEmptyRecordFilter { FieldName = this.DateTimeFieldName };
 
             throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
+        }
+
+        private RecordFilter BuildRecordFilter(DateTimeRecordFilter dateTimeRecordFilter)
+        {
+            int timeRoundingIntervalInMinutes = Vanrise.Common.Utilities.GetEnumAttribute<TimeRoundingInterval, TimeRoundingIntervalAttribute>(this.TimeRoundingInterval.Value).Value;
+
+            var valueAsTime = (Time)dateTimeRecordFilter.Value;
+            if (!IsTimeRoundingValid(valueAsTime, timeRoundingIntervalInMinutes))
+                return new AlwaysFalseRecordFilter();
+
+            Time value2AsTime = null;
+            bool hasSecondValue = Vanrise.Common.Utilities.GetEnumAttribute<DateTimeRecordFilterOperator, DateTimeRecordFilterOperatorAttribute>(dateTimeRecordFilter.CompareOperator).HasSecondValue;
+            if (hasSecondValue)
+            {
+                value2AsTime = (Time)dateTimeRecordFilter.Value2;
+                if (!IsTimeRoundingValid(value2AsTime, timeRoundingIntervalInMinutes))
+                    return new AlwaysFalseRecordFilter();
+            }
+
+            bool isAlwaysFalseRecordFilter = false;
+            switch (dateTimeRecordFilter.CompareOperator)
+            {
+                case DateTimeRecordFilterOperator.Equals: AdjustDateTimeRecordFilter(dateTimeRecordFilter, valueAsTime, DateTimeRecordFilterOperator.Between, timeRoundingIntervalInMinutes); break;
+                case DateTimeRecordFilterOperator.NotEquals: AdjustDateTimeRecordFilter(dateTimeRecordFilter, valueAsTime, DateTimeRecordFilterOperator.NotBetween, timeRoundingIntervalInMinutes); break;
+                case DateTimeRecordFilterOperator.Between: AdjustDateTimeRecordFilter(dateTimeRecordFilter, value2AsTime, DateTimeRecordFilterOperator.Between, timeRoundingIntervalInMinutes); break;
+                case DateTimeRecordFilterOperator.NotBetween: AdjustDateTimeRecordFilter(dateTimeRecordFilter, value2AsTime, DateTimeRecordFilterOperator.NotBetween, timeRoundingIntervalInMinutes); break;
+
+                case DateTimeRecordFilterOperator.Greater:
+                    TimeSpan greaterThanValueTimeSpan = new TimeSpan(0, valueAsTime.Hour, valueAsTime.Minute + timeRoundingIntervalInMinutes, valueAsTime.Second, valueAsTime.MilliSecond);
+                    if (greaterThanValueTimeSpan.Days > 0)
+                        isAlwaysFalseRecordFilter = true;
+                    else
+                        dateTimeRecordFilter.Value = new Time(greaterThanValueTimeSpan.Hours, greaterThanValueTimeSpan.Minutes, greaterThanValueTimeSpan.Seconds, greaterThanValueTimeSpan.Milliseconds);
+                    break;
+
+                case DateTimeRecordFilterOperator.GreaterOrEquals: break;
+
+                case DateTimeRecordFilterOperator.Less:
+                    TimeSpan greaterOrEqualValueTimeSpan = new TimeSpan(0, valueAsTime.Hour, valueAsTime.Minute, valueAsTime.Second, valueAsTime.MilliSecond);
+                    if (greaterOrEqualValueTimeSpan.TotalMilliseconds == 0)
+                        isAlwaysFalseRecordFilter = true;
+                    break;
+
+                case DateTimeRecordFilterOperator.LessOrEquals:
+                    TimeSpan lessOrEqualValueTimeSpan = new TimeSpan(0, valueAsTime.Hour, valueAsTime.Minute + timeRoundingIntervalInMinutes, valueAsTime.Second, valueAsTime.MilliSecond);
+                    if (lessOrEqualValueTimeSpan.Days > 0)
+                        lessOrEqualValueTimeSpan = new TimeSpan(0, 23, 59, 59, 998);
+                    dateTimeRecordFilter.Value = new Time(lessOrEqualValueTimeSpan.Hours, lessOrEqualValueTimeSpan.Minutes, lessOrEqualValueTimeSpan.Seconds, lessOrEqualValueTimeSpan.Milliseconds);
+                    break;
+
+                default: throw new NotSupportedException(string.Format("CompareOperator '{0}'", dateTimeRecordFilter.CompareOperator));
+            }
+
+            if (!isAlwaysFalseRecordFilter)
+                return dateTimeRecordFilter;
+            else
+                return new AlwaysFalseRecordFilter();
+        }
+
+        private bool IsTimeRoundingValid(Time time, int timeRoundingIntervalInMinutes)
+        {
+            TimeSpan timeSpan = new TimeSpan(0, time.Hour, time.Minute, time.Second, time.MilliSecond);
+            decimal valueInMinutes = Convert.ToDecimal(timeSpan.TotalMinutes);
+
+            if ((valueInMinutes % timeRoundingIntervalInMinutes) != 0)
+                return false;
+
+            return true;
+        }
+
+        private void AdjustDateTimeRecordFilter(DateTimeRecordFilter dateTimeRecordFilter, Time valueAsTime, DateTimeRecordFilterOperator compareOperator, int timeRoundingIntervalInMinutes)
+        {
+            dateTimeRecordFilter.CompareOperator = compareOperator;
+            dateTimeRecordFilter.ExcludeValue2 = true;
+
+            TimeSpan value2AsTimeSpan = new TimeSpan(0, valueAsTime.Hour, valueAsTime.Minute + timeRoundingIntervalInMinutes, valueAsTime.Second, valueAsTime.MilliSecond);
+            if (value2AsTimeSpan.Days > 0)
+            {
+                value2AsTimeSpan = new TimeSpan(0, 23, 59, 59, 998);
+                dateTimeRecordFilter.ExcludeValue2 = false;
+            }
+
+            dateTimeRecordFilter.Value2 = new Time(value2AsTimeSpan.Hours, value2AsTimeSpan.Minutes, value2AsTimeSpan.Seconds, value2AsTimeSpan.Milliseconds);
         }
     }
 

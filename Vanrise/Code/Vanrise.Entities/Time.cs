@@ -32,6 +32,14 @@ namespace Vanrise.Entities
             this.Second = time.Second;
             this.MilliSecond = time.Millisecond;
         }
+
+        public Time(int hour, int minute, int second, int millisecond)
+        {
+            this.Hour = hour;
+            this.Minute = minute;
+            this.Second = second;
+            this.MilliSecond = millisecond;
+        }
       
         #endregion
 

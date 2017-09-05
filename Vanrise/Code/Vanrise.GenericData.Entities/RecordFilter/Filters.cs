@@ -123,7 +123,9 @@ namespace Vanrise.GenericData.Entities
         [Description(" <= "), DateTimeRecordFilterOperatorAttribute(false)]
         LessOrEquals = 5,
         [Description(" Between "), DateTimeRecordFilterOperatorAttribute(true)]
-        Between = 6
+        Between = 6,
+        [Description(" Not Between "), DateTimeRecordFilterOperatorAttribute(true)]
+        NotBetween = 7
     }
     public class DateTimeRecordFilterOperatorAttribute : Attribute
     {

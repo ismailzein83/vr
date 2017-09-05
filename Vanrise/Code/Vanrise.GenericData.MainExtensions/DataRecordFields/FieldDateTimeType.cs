@@ -116,6 +116,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                         return valueAsDateTime >= filterValue && valueAsDateTime < filterValue2;
                     else
                         return valueAsDateTime >= filterValue && valueAsDateTime <= filterValue2;
+                case DateTimeRecordFilterOperator.NotBetween:
+                    if (dateTimeRecordFilter.ExcludeValue2)
+                        return valueAsDateTime < filterValue || valueAsDateTime >= filterValue2;
+                    else
+                        return valueAsDateTime < filterValue || valueAsDateTime > filterValue2;
             }
 
             return false;
@@ -208,7 +213,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 if (fieldValue is TimeSpan)
                 {
                     TimeSpan ts = TimeSpan.Parse(fieldValue.ToString());
-                    time = new Time() { Hour = ts.Hours, MilliSecond = ts.Milliseconds, Minute = ts.Minutes, Second = ts.Seconds };
+                    time = new Time(ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
                     return time.ToLongTimeString();
                 }
 

@@ -185,6 +185,7 @@ namespace Vanrise.GenericData.Data.SQL
             string parameterName = GenerateParameterName(ref parameterIndex);
             parameterValues.Add(parameterName, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value));
 
+            string parameter2Name = string.Empty;
             string secondDateTimeValue = string.Empty;
 
             switch (dateTimeFilter.CompareOperator)
@@ -197,15 +198,23 @@ namespace Vanrise.GenericData.Data.SQL
                 case DateTimeRecordFilterOperator.LessOrEquals: compareOperator = "<="; break;
 
                 case DateTimeRecordFilterOperator.Between:
-                    string parameter2Name = GenerateParameterName(ref parameterIndex);
+                    parameter2Name = GenerateParameterName(ref parameterIndex);
                     parameterValues.Add(parameter2Name, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2));
                     compareOperator = ">=";
                     secondDateTimeValue = string.Format(" and {0} <{1} {2}", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), dateTimeFilter.ExcludeValue2 ? "" : "=",
-                        CastAsComparisonPart(dateTimeFilter.ComparisonPart, parameter2Name));
+                                                                             CastAsComparisonPart(dateTimeFilter.ComparisonPart, parameter2Name));
+                    break;
+
+                case DateTimeRecordFilterOperator.NotBetween:
+                    parameter2Name = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(parameter2Name, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2));
+                    compareOperator = "<";
+                    secondDateTimeValue = string.Format(" or {0} >{1} {2}", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), dateTimeFilter.ExcludeValue2 ? "=" : "",
+                                                                         CastAsComparisonPart(dateTimeFilter.ComparisonPart, parameter2Name));
                     break;
             }
 
-            return string.Format("{0} {1} {2} {3}", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), compareOperator,
+            return string.Format("({0} {1} {2} {3})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), compareOperator,
                                                     CastAsComparisonPart(dateTimeFilter.ComparisonPart, parameterName), secondDateTimeValue);
         }
 
@@ -229,7 +238,7 @@ namespace Vanrise.GenericData.Data.SQL
             switch (comparisonPart)
             {
                 case DateTimeRecordFilterComparisonPart.DateTime: return columnName;
-                case DateTimeRecordFilterComparisonPart.TimeOnly: return string.Format("Cast({0} as time(0))", columnName);
+                case DateTimeRecordFilterComparisonPart.TimeOnly: return string.Format("Cast({0} as time)", columnName);
                 case DateTimeRecordFilterComparisonPart.DateOnly: return string.Format("Cast({0} as date)", columnName);
                 default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", comparisonPart));
             }
