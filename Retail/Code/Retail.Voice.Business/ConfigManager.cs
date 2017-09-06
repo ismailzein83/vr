@@ -1,13 +1,19 @@
 ﻿using Retail.Voice.Entities;
-using System;
-using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Retail.Voice.Business
 {
     public class ConfigManager
     {
         #region Public Methods
+
+        public AccountIdentification GetAccountIdentification()
+        {
+            VoiceTechnicalSettings voiceTechnicalSettings = GetVoiceTechnicalSettings();
+            voiceTechnicalSettings.AccountIdentification.ThrowIfNull("voiceTechnicalSettings.AccountIdentification");
+            return voiceTechnicalSettings.AccountIdentification;
+        }
 
         public InternationalIdentification GetInternationalIdentification()
         {
@@ -16,11 +22,10 @@ namespace Retail.Voice.Business
             return voiceTechnicalSettings.InternationalIdentification;
         }
 
-        public AccountIdentification GetAccountIdentification()
+        public InternationalNumberIdentification GetInternationalNumberIdentification()
         {
-            VoiceTechnicalSettings voiceTechnicalSettings = GetVoiceTechnicalSettings();
-            voiceTechnicalSettings.AccountIdentification.ThrowIfNull("voiceTechnicalSettings.AccountIdentification");
-            return voiceTechnicalSettings.AccountIdentification;
+            InternationalIdentification internationalIdentification = GetInternationalIdentification();
+            return internationalIdentification.InternationalNumberIdentification;
         }
 
         public int? GetSaleAmountPrecision()
@@ -30,7 +35,7 @@ namespace Retail.Voice.Business
         }
 
         #endregion
-        
+
         #region Private Methods
 
         private VoiceTechnicalSettings GetVoiceTechnicalSettings()

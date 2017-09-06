@@ -1,5 +1,10 @@
 ﻿<vr-row>
     <vr-columns colnum="{{internationalCtrl.normalColNum}}">
+        <vr-select datasource="scopeModel.internationalIdentificationNumber" datavaluefield="value" datatextfield="description"
+                   selectedvalues="scopeModel.selectedInternationalIdentificationNumber" label="International Number Identification" isrequired="true" hideremoveicon>
+        </vr-select>
+    </vr-columns>
+    <vr-columns colnum="{{internationalCtrl.normalColNum}}">
         <retail-voice-internationalidentification-selector on-ready="scopeModel.onInternationalIdentificationSelectorReady" selectedvalues="scopeModel.selectedInternationalIdentification"
                                                            isrequired="true" hideremoveicon>
         </retail-voice-internationalidentification-selector>

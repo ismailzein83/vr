@@ -3,6 +3,8 @@ using Vanrise.Entities;
 
 namespace Retail.Voice.Entities
 {
+    public enum InternationalNumberIdentification { NormalizedNumber = 0, NonNormalizedNumber = 1, } 
+
     public class VoiceTechnicalSettings : SettingData
     {
         public const string SETTING_TYPE = "Retail_Voice_VoiceTechnicalSettings";
@@ -11,7 +13,7 @@ namespace Retail.Voice.Entities
 
         public InternationalIdentification InternationalIdentification { get; set; }
 
-        public ImportCDRSettings ImportCDRSettings { get; set; } 
+        public ImportCDRSettings ImportCDRSettings { get; set; }
     }
 
     public abstract class AccountIdentification
@@ -24,6 +26,8 @@ namespace Retail.Voice.Entities
     public abstract class InternationalIdentification
     {
         public abstract Guid ConfigId { get; }
+
+        public InternationalNumberIdentification InternationalNumberIdentification { get; set; }
 
         public abstract void Execute(IInternationalIdentificationContext context);
     }

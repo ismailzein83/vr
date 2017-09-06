@@ -140,6 +140,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_Voice\Constant\InternationalNumberIdentificationEnum.js" />
     <Content Include="Retail_Voice\Constant\ModuleConfig.js" />
     <Content Include="Retail_Voice\Constant\ChargingPolicyRuleDefinitionTypesEnum.js" />
     <Content Include="Retail_Voice\Directives\AccountIdentification\retail-voice-accountidentification-selector.js" />

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailVoiceInternationalidentificationTemplate', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('retailVoiceInternationalidentificationTemplate', ['UtilsService', 'VRUIUtilsService', 'Retail_Voice_InternationalNumberIdentificationEnum', 
+    function (UtilsService, VRUIUtilsService, Retail_Voice_InternationalNumberIdentificationEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -21,7 +21,6 @@ app.directive('retailVoiceInternationalidentificationTemplate', ['UtilsService',
             },
             templateUrl: '/Client/Modules/Retail_Voice/Directives/InternationalIdentification/Templates/VoiceInternationalIdentificationTemplate.html'
         };
-
 
         function internationalIdentificationCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
@@ -57,6 +56,10 @@ app.directive('retailVoiceInternationalidentificationTemplate', ['UtilsService',
                 api.load = function (payload) {
                     var promises = [];
 
+                    $scope.scopeModel.internationalIdentificationNumber = UtilsService.getArrayEnum(Retail_Voice_InternationalNumberIdentificationEnum);
+                    $scope.scopeModel.selectedInternationalIdentificationNumber = payload != undefined ?
+                        UtilsService.getItemByVal($scope.scopeModel.internationalIdentificationNumber, payload.InternationalNumberIdentification, 'value') : undefined
+
                     var loadInternationalIdentificationPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     internationalIdentificationSelectorReadyPromiseDeferred.promise.then(function () {
@@ -86,7 +89,13 @@ app.directive('retailVoiceInternationalidentificationTemplate', ['UtilsService',
 
 
                 api.getData = function () {
-                    return directiveApi.getData();
+
+                    var directiveWrapperData = directiveApi.getData();
+                    if (directiveWrapperData == undefined)
+                        return;
+
+                    directiveWrapperData.InternationalNumberIdentification = $scope.scopeModel.selectedInternationalIdentificationNumber.value;
+                    return directiveWrapperData;
                 };
 
                 if (ctrl.onReady != null)
