@@ -98,19 +98,27 @@ namespace Vanrise.Invoice.Business
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
             invoiceType.ThrowIfNull("invoiceType",invoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
-            invoiceType.Settings.InvoiceFileSettings.ThrowIfNull("invoiceType.Settings.InvoiceFileSettings");
-            invoiceType.Settings.InvoiceFileSettings.InvoiceFileNameParts.ThrowIfNull("invoiceType.Settings.InvoiceFileSettings.InvoiceFileNameParts");
-            InvoiceFileNamePartContext invoiceFileNamePartContext = new InvoiceFileNamePartContext
+            if (invoiceType.Settings.InvoiceFileSettings != null)
             {
-                Invoice = invoice,
-                InvoiceTypeId = invoiceTypeId
-            };
-            foreach (var part in invoiceType.Settings.InvoiceFileSettings.InvoiceFileNameParts)
-            {
-                if (fileNamePattern != null && fileNamePattern.Contains(string.Format("#{0}#", part.VariableName)))
+                if(invoiceType.Settings.InvoiceFileSettings.InvoiceFileNameParts != null)
                 {
-                    fileNamePattern = fileNamePattern.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(invoiceFileNamePartContext));
+                    InvoiceFileNamePartContext invoiceFileNamePartContext = new InvoiceFileNamePartContext
+                    {
+                        Invoice = invoice,
+                        InvoiceTypeId = invoiceTypeId
+                    };
+                    foreach (var part in invoiceType.Settings.InvoiceFileSettings.InvoiceFileNameParts)
+                    {
+                        if (fileNamePattern != null && fileNamePattern.Contains(string.Format("#{0}#", part.VariableName)))
+                        {
+                            fileNamePattern = fileNamePattern.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(invoiceFileNamePartContext));
+                        }
+                    }
                 }
+            }
+            if (fileNamePattern == null)
+            {
+                return "Invoice";
             }
             return fileNamePattern;
         }

@@ -63,8 +63,8 @@ namespace Vanrise.Invoice.MainExtensions
                         reportViewer.LocalReport.ReportPath = Path.Combine(currentDir, openRDLCReportAction.ReportRuntimeURL);
 
                     }
-                  //  reportViewer.LocalReport.DisplayName = new PartnerManager().EvaluateInvoiceFileNamePattern(invoice.InvoiceTypeId, invoice.PartnerId, invoice);
-                    reportViewer.LocalReport.DisplayName = String.Format("Invoice");
+                    reportViewer.LocalReport.DisplayName = new PartnerManager().EvaluateInvoiceFileNamePattern(invoice.InvoiceTypeId, invoice.PartnerId, invoice);
+                   // reportViewer.LocalReport.DisplayName = String.Format("Invoice");
 
                     SetMainReportDataSources(reportViewer.LocalReport.DataSources, openRDLCReportAction.MainReportDataSources);
                     invoiceReportParameters = GetParameters(reportViewer.LocalReport.GetParameters(), openRDLCReportAction.MainReportParameters);

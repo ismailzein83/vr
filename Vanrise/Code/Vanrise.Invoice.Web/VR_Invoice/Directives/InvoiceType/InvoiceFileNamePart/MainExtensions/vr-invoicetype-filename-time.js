@@ -37,9 +37,14 @@ app.directive("vrInvoicetypeFilenameTime", ["UtilsService", "VRNotificationServi
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     if (payload != undefined) {
                         context = payload.context;
                         if (context != undefined) {
+                           
+                        }
+                        if (payload.concatenatedPartSettings != undefined) {
+                            $scope.dateTimeFormatValue = payload.concatenatedPartSettings.DateTimeFormat;
                         }
                         var promises = [];
                         return UtilsService.waitMultiplePromises(promises);
@@ -49,6 +54,7 @@ app.directive("vrInvoicetypeFilenameTime", ["UtilsService", "VRNotificationServi
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.InvoiceFileNamePart.TimeFileNamePart ,Vanrise.Invoice.MainExtensions",
+                        DateTimeFormat: $scope.dateTimeFormatValue
                     };
                 };
 
