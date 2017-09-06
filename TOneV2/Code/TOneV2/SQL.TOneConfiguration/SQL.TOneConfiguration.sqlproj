@@ -718,6 +718,9 @@
     <None Include="Retail_Cost.PostDeployment.sql" />
     <None Include="DataAnalysis.TOne.PostDeployment.sql" />
     <None Include="CarrierPortal.RetailPortal_MultiNet.PostDeployment.sql" />
+    <None Include="Mediation_Datasource_Multinet.PostDeployment.sql" />
+    <None Include="Mediation_Datasource_Namibia.PostDeployment.sql" />
+    <None Include="Mediation_Datasource_Iraq.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
