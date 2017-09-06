@@ -82,7 +82,7 @@
                 controller.boundDataSource = [];
                 $scope.effectiveDataSource = [];
 
-                var datasourceWatch =  $scope.$watchCollection('ctrl.datasource', function (newValue, oldValue) {
+                var datasourceWatch = $scope.$watchCollection('ctrl.datasource', function (newValue, oldValue) {
                     fillEffectiveDataSourceFromItems(getdatasource());
                 });
 
@@ -333,7 +333,7 @@
 
                 function isSelected(item) {
                     if (controller.selectedvalues != undefined)
-                       return item[controller.datavaluefield] == controller.selectedvalues[controller.datavaluefield];
+                        return item[controller.datavaluefield] == controller.selectedvalues[controller.datavaluefield];
                 }
                 function onViewHandler(obj) {
                     hideAllOtherDropDown();
@@ -511,8 +511,8 @@
                     };
                 };
                 function hideAllOtherDropDown(currentId) {
-                   $rootScope.$broadcast("hide-all-menu");                  
-                    var dropdowns = $('.dropdown-menu');                   
+                    $rootScope.$broadcast("hide-all-menu");
+                    var dropdowns = $('.dropdown-menu');
                     var len = dropdowns.length;
                     var i;
                     var self;
@@ -538,7 +538,7 @@
                 };
                 setTimeout(function () {
                     $('div[name=' + $attrs.id + ']').on('click', '.dropdown-toggle', function (event) {
-                        
+
                         hideAllOtherDropDown($attrs.id);
                         if ($('div[name=' + $attrs.id + ']').hasClass('changing-state'))
                             return;
@@ -585,7 +585,7 @@
                 }
                 $('div[name=' + $attrs.id + ']').parents('div').on('scroll', fixDropdownPosition);
                 $(window).on('scroll', fixDropdownPosition);
-                $(window).on('resize', fixDropdownPosition);               
+                $(window).on('resize', fixDropdownPosition);
                 $scope.$on('start-drag', function (event, args) {
                     fixDropdownPosition();
                 });
@@ -622,7 +622,7 @@
                 };
                 api.removeReadOnly = function (nameFilter) {
                     controller.readOnly = false;
-                };
+                };              
                 //api.openDropDown = function () {
                 //    var event = $(window.event);
                 //    if (event) {
@@ -717,7 +717,7 @@
                         var noborder = attrs.noborder != undefined;
                         var buttonTemplate = '<button ' + tabindex + ' class="btn btn-default dropdown-toggle vr-dropdown-select" style="' + (noborder ? 'border:none' : '') + '" type="button"  '
                                             + '   ' + validateButtonClass + '>'
-                                            + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px ); " ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'} " ng-class="ctrl.selectedvalues == undefined || ctrl.selectedvalues.length == 0 ? \'vr-select-watermark\' : \'\'">{{ctrl.getLabel()}}</span>'
+                                            + '<span class="vanrise-inpute" style="float: left; margin: 0px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: inline-block;width:calc(100% - 11px );" ng-style="!ctrl.isHideRemoveIcon() ? {\'width\':\'calc(100% - 11px)\'}:{\'width\':\'100%\'}" ng-class="ctrl.labelclass">{{ctrl.getLabel()}}</span>'
                                             + (noCaret === true ? '' : '<span ng-if="!ctrl.readOnly || ctrl.isMultiple()" class="caret vr-select-caret"></span>')
                                             + '</button><span ng-hide="ctrl.isHideRemoveIcon() || ctrl.readOnly"  ng-if="!ctrl.isMultiple() &&  ctrl.selectedvalues != undefined && ctrl.selectedvalues.length != 0  "  class="glyphicon glyphicon-remove hand-cursor vr-select-remove"  aria-hidden="true" ng-click="ctrl.clearAllSelected($event,true);"></span>';
                         divDropdown.prepend(buttonTemplate);
@@ -737,11 +737,12 @@
                     }
                 }
                 if (attrs.lookandfeeltype == undefined)
-                   onLoad();
+                    onLoad();
                 return {
                     pre: function ($scope, iElem, iAttrs) {
                         $scope.$on("$destroy", function () {
                             valueWatch();
+                            classCollectionWatch();
                         });
                         var ctrl = $scope.ctrl;
                         ctrl.id = iAttrs.id;
@@ -783,7 +784,7 @@
                                     return;
                                 }
 
-                                ctrl.selectedvalues = item;                               
+                                ctrl.selectedvalues = item;
 
                             }
                             else {
@@ -818,7 +819,7 @@
                             }
                         }
 
-                        ctrl.selectValue = function (e, item,removeselection) {
+                        ctrl.selectValue = function (e, item, removeselection) {
                             if (ctrl.getObjectDisabled(item) == true || ctrl.readOnly)
                                 return;
                             var onBeforeSelectionChanged = $scope.$parent.$eval(iAttrs.onbeforeselectionchanged);
@@ -861,7 +862,17 @@
                                 }
                             }
                         });
-
+                        var classCollectionWatch = $scope.$watchCollection('ctrl.selectedvalues', function (newValue, oldValue) {
+                            ctrl.labelclass = "vr-select-watermark";
+                            if (!ctrl.isMultiple() && newValue != undefined) {
+                                ctrl.labelclass = "";
+                                return;
+                            }
+                            if (ctrl.isMultiple() && newValue.length > 0) {
+                                ctrl.labelclass = "";
+                                return;
+                            }
+                        });
                         ctrl.search = function () {
                             ctrl.setdatasource([]);
                             if (!ctrl.isRemoteLoad()) return;
@@ -884,7 +895,7 @@
             },
             templateUrl: function (element, attrs) {
                 var temp = selectService.dTemplate;
-                if (attrs.lookandfeeltype != undefined && attrs.lookandfeeltype=="toolbox")
+                if (attrs.lookandfeeltype != undefined && attrs.lookandfeeltype == "toolbox")
                     temp = selectService.toolboxSelectTemplate;
                 return temp;
             }
@@ -894,7 +905,7 @@
 
     }
 
-    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout','$rootScope'];
+    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout', '$rootScope'];
 
     app.directive('vrSelect', vrSelectDirective);
 

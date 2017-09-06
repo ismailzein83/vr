@@ -690,7 +690,9 @@ add padding .left-addon input {
     color:#5cb85c;
 }
 .vr-select-watermark{
-     opacity:0.5;
+     opacity:0.9;
+     color:#777;
+     font-style:italic;
 }
 .vr-select-disabled-item{
     color: #c1c1c1 !important;
