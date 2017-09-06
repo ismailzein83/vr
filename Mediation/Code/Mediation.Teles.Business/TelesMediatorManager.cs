@@ -14,9 +14,16 @@ namespace Mediation.Teles.Business
     {
 
         static int _extensionMaxLength = 4;
-        public static ProcessCDREntity ProcessSingleLegCDRs(List<dynamic> cdrLegs, string cookedCDRRecordTypeName, OptionalParametersEntity opEntity)
+        public static ProcessCDREntity ProcessSingleLegCDRs(List<dynamic> cdrLegs, string cookedCDRRecordTypeName, OptionalParametersEntity opEntity, bool checkMoreMediationRecords)
         {
+
             ProcessCDREntity processCDREntity = new ProcessCDREntity();
+
+            if (checkMoreMediationRecords && AreLegsIncomplete(cdrLegs))
+            {
+                processCDREntity.NeedsMoreMediationRecords = true;
+                return processCDREntity;
+            }
 
             if (opEntity == null)
                 opEntity = new OptionalParametersEntity();
@@ -79,6 +86,41 @@ namespace Mediation.Teles.Business
 
             return processCDREntity;
         }
+
+        private static bool AreLegsIncomplete(List<dynamic> cdrLegs)
+        {
+            List<string> startCallIds = new List<string>();
+            List<string> stopCallIds = new List<string>();
+
+            foreach (dynamic cdr in cdrLegs)
+            {
+                if (string.IsNullOrEmpty(cdr.TC_DISCONNECTREASON) || cdr.TC_DISCONNECTREASON == "BYE")
+                {
+                    string callId = cdr.TC_CALLID;
+                    string cdrLogType = cdr.TC_LOGTYPE;
+                    switch (cdrLogType)
+                    {
+                        case "START":
+                            startCallIds.Add(callId); break;
+                        case "STOP":
+                            stopCallIds.Add(callId);
+                            break;
+                    }
+                }
+                else
+                    return false;
+            }
+
+            if (startCallIds.Count == 0 || stopCallIds.Count == 0)
+                return true;
+
+            foreach (var stopCallId in stopCallIds)
+            {
+                if (!startCallIds.Contains(stopCallId))
+                    return true;
+            }
+            return false;
+        }
         public static MultiLegProcessingOutput ProcessMultiLegCDRs(List<dynamic> cdrLegs, string cookedCDRRecordTypeName)
         {
             MultiLegProcessingOutput output = new MultiLegProcessingOutput();
@@ -105,7 +147,7 @@ namespace Mediation.Teles.Business
                     PrevTerminatorExtension = prevTerminatorExtension,
                     PrevTerminatorNumber = prevTerminationNumber
                 };
-                ProcessCDREntity ProcessCDREntity = ProcessSingleLegCDRs(group.ToList(), cookedCDRRecordTypeName, opEntity);
+                ProcessCDREntity ProcessCDREntity = ProcessSingleLegCDRs(group.ToList(), cookedCDRRecordTypeName, opEntity, false);
                 prevTerminationNumber = ProcessCDREntity.PreviousTerminator;
                 callType = ProcessCDREntity.CallType;
                 records.AddRange(ProcessCDREntity.CookedCDRs);
@@ -323,6 +365,7 @@ namespace Mediation.Teles.Business
 
     public class ProcessCDREntity
     {
+        public bool NeedsMoreMediationRecords { get; set; }
         public string PreviousTerminator { get; set; }
         public List<dynamic> CookedCDRs { get; set; }
         public string PrevTerminatorExtension { get; set; }
