@@ -82,7 +82,7 @@ namespace Mediation.Teles.Business
         public static MultiLegProcessingOutput ProcessMultiLegCDRs(List<dynamic> cdrLegs, string cookedCDRRecordTypeName)
         {
             MultiLegProcessingOutput output = new MultiLegProcessingOutput();
-            if(!AreAllLegsReady(cdrLegs))
+            if (!AreAllLegsReady(cdrLegs))
             {
                 output.NeedsMoreMediationRecords = true;
                 return output;
@@ -120,7 +120,7 @@ namespace Mediation.Teles.Business
             List<string> startCallIds = new List<string>();
             List<string> transferSentCallIds = new List<string>();
             List<string> transferReceivedCallIds = new List<string>();
-            foreach(var cdr in cdrLegs)
+            foreach (var cdr in cdrLegs)
             {
                 string callId = cdr.TC_CALLID;
                 string cdrLogType = cdr.TC_LOGTYPE;
@@ -137,9 +137,9 @@ namespace Mediation.Teles.Business
                         break;
                 }
             }
-            foreach(var startCallId in startCallIds)
+            foreach (var startCallId in startCallIds)
             {
-                if(!stopCallIds.Contains(startCallId))
+                if (!stopCallIds.Contains(startCallId))
                     return false;
             }
             foreach (var transferSentCallId in transferSentCallIds)
@@ -178,7 +178,7 @@ namespace Mediation.Teles.Business
         }
         static CentrixReceiveCallType GetRecieveCallType(bool? isLast, string[] terminatorNumbers, int i, CentrixReceiveCallType receiveCallType)
         {
-            if (receiveCallType == CentrixReceiveCallType.VoiceMail || receiveCallType == CentrixReceiveCallType.Conference || (i != terminatorNumbers.Length - 1))
+            if (receiveCallType == CentrixReceiveCallType.Replaced || receiveCallType == CentrixReceiveCallType.VoiceMail || receiveCallType == CentrixReceiveCallType.Conference || (i != terminatorNumbers.Length - 1))
                 return receiveCallType;
             return isLast.HasValue && !isLast.Value ? receiveCallType : CentrixReceiveCallType.Normal;
         }
