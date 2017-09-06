@@ -8,6 +8,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public abstract Guid ConfigId { get; }
 
+        public virtual CorrespondentType CorrespondentType { get { return Entities.CorrespondentType.Other; } }
+
         public virtual bool UseOrderedExecution { get { return false; } }
 
         public virtual List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
@@ -30,8 +32,6 @@ namespace TOne.WhS.Routing.Entities
         public abstract void CreateSupplierZoneOptionsForRP(IRPRouteRuleExecutionContext context, RouteRuleTarget target);
 
         public abstract void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options);
-
-        public virtual CorrespondentType CorrespondentType { get { return Entities.CorrespondentType.Other; } }
 
         public virtual int? GetMaxNumberOfOptions(ISaleEntityRouteRuleExecutionContext context)
         {
