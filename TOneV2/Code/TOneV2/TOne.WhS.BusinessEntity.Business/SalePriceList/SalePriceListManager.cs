@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
@@ -71,7 +72,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
                         VRFile file = GetPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, pricelistType);
-                        SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId,context.UserId);
+                        SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId, context.UserId);
 
                         var customerPriceListChange = context.CustomerPriceListChanges.First(r => r.CustomerId == customerId);
                         customerPriceListChange.PriceListId = priceList.PriceListId;
@@ -151,11 +152,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 if (input.Query.SalePricelistTypes != null && salePriceList.PriceListType == null)
                     return false;
-                if (input.Query.SalePricelistTypes != null && salePriceList.PriceListType != null &&!input.Query.SalePricelistTypes.Contains(salePriceList.PriceListType.Value))
+                if (input.Query.SalePricelistTypes != null && salePriceList.PriceListType != null && !input.Query.SalePricelistTypes.Contains(salePriceList.PriceListType.Value))
                     return false;
                 if (input.Query.UserIds != null && !input.Query.UserIds.Contains(salePriceList.UserId))
                     return false;
-                
+
                 return true;
             };
 
@@ -163,7 +164,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelHandler = new SalePriceListExportExcelHandler()
             };
-                
+
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceLists.ToBigResult(input, filterExpression, SalePricelistDetailMapper), resultProcessingHandler);
         }
         public SalePriceList GetPriceList(int priceListId)
@@ -227,22 +228,19 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCustomerCachedSalePriceLists().MapRecords(x => x.Value.PriceListId, x => x.Value.ProcessInstanceId == processInstanceId);
         }
-        public bool SendCustomerPriceLists(IEnumerable<int> customerPriceListIds)
+
+        public bool SendCustomerPriceLists(IEnumerable<int> customerPriceListIds, bool compressFile)
         {
-            if (customerPriceListIds == null || customerPriceListIds.Count() == 0)
-                throw new Vanrise.Entities.MissingArgumentValidationException("customerPriceListIds");
+            if (customerPriceListIds == null || !customerPriceListIds.Any())
+                throw new MissingArgumentValidationException("customerPriceListIds");
 
             IEnumerable<SalePriceList> customerPriceLists = GetCustomerCachedSalePriceLists().MapRecords(x => x.Value, x => customerPriceListIds.Contains(x.Value.PriceListId));
 
-            if (customerPriceLists == null || customerPriceLists.Count() < customerPriceListIds.Count())
-                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Some of the sale pricelists, with the following ids '{0}', were not found", string.Join(",", customerPriceListIds)));
-
-            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
-
-            var notificationManager = new TOne.WhS.BusinessEntity.Business.NotificationManager();
-            var fileManager = new Vanrise.Common.Business.VRFileManager();
-
-            var haveAllEmailsBeenSent = true;
+            var fileManager = new VRFileManager();
+            var salePriceListManager = new SalePriceListManager();
+            var vrMailManager = new VRMailManager();
+            List<VRMailAttachement> vrMailAttachements = new List<VRMailAttachement>();
+            var allEmailsHaveBeenSent = true;
 
             foreach (SalePriceList customerPriceList in customerPriceLists)
             {
@@ -250,14 +248,26 @@ namespace TOne.WhS.BusinessEntity.Business
                     continue;
 
                 VRFile customerPriceListFile = fileManager.GetFile(customerPriceList.FileId);
-                bool hasEmailBeenSent = notificationManager.SendSalePriceList(loggedInUserId, customerPriceList, customerPriceListFile);
+                var evaluatedObject = salePriceListManager.EvaluateEmail(customerPriceList.PriceListId, (SalePriceListType)customerPriceList.PriceListType);
 
-                if (!hasEmailBeenSent)
-                    haveAllEmailsBeenSent = false;
+                CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerPriceList.OwnerId);
+                vrMailAttachements.Add(ConvertToAttachement(customerPriceListFile, customer));
+
+                try
+                {
+                    bool isCompressed = compressFile || customer.CustomerSettings.CompressPriceListFile;
+                    vrMailManager.SendMail(evaluatedObject.To, evaluatedObject.CC, evaluatedObject.BCC, evaluatedObject.Subject, evaluatedObject.Body
+                        , vrMailAttachements, isCompressed);
+                    salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { customerPriceList.OwnerId }, customerPriceList.PriceListId);
+                }
+                catch (Exception)
+                {
+                    allEmailsHaveBeenSent = false;
+                }
             }
-
-            return haveAllEmailsBeenSent;
+            return allEmailsHaveBeenSent;
         }
+
         #endregion
 
         #region Generate Pricelist Methods
@@ -876,7 +886,20 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Private Members
+        private VRMailAttachement ConvertToAttachement(VRFile file, CarrierAccount customer)
+        {
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(customer.CarrierAccountId);
 
+            var customerName = _carrierAccountManager.GetCarrierAccountName(customer);
+            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today,
+                priceListExtensionFormat == PriceListExtensionFormat.XLSX ? ".xlsx" : ".xls");
+
+            return new VRMailAttachmentExcel
+            {
+                Name = fileName,
+                Content = file.Content
+            };
+        }
         private VRFile PreparePriceListVrFile(SalePriceList salePriceList, SalePriceListType salePriceListType)
         {
             VRFile file = null;
@@ -896,7 +919,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 EffectiveDate = salePriceList.CreatedTime,
                 SellingNumberPlanId = sellingNumberPlanId,
                 ProcessInstanceId = salePriceList.ProcessInstanceId,
-                UserId=salePriceList.UserId,
+                UserId = salePriceList.UserId,
                 SaleCodes = saleCodeSnapshot
             };
             SalePriceListOutputContext salePriceListOutput = PrepareSalePriceListContext(salePriceListContext);
@@ -1158,7 +1181,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Mappers
 
         private SalePriceListDetail SalePricelistDetailMapper(SalePriceList priceList)
-        {     
+        {
             SalePriceListDetail pricelistDetail = new SalePriceListDetail();
             pricelistDetail.Entity = priceList;
             pricelistDetail.OwnerType = Vanrise.Common.Utilities.GetEnumDescription(priceList.OwnerType);

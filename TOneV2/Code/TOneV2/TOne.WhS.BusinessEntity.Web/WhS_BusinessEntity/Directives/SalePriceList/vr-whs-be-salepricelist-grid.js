@@ -58,17 +58,34 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                                 $scope.hideSelectedColumn = payload.HideSelectedColumn;
                             }
                         }
-
                         return gridAPI.retrieveData(query);
+                    };
+                    directiveAPI.getSelectedPriceListIds = function () {
+                        var selectedPriceList = [];
+                        if ($scope.salepricelist != undefined) {
+                            for (var i = 0; i < $scope.salepricelist.length; i++) {
+                                var item = $scope.salepricelist[i];
+                                if (item.isSelected) {
+                                    selectedPriceList.push(item.Entity.PriceListId);
+                                }
+                            }
+                        }
+                        return selectedPriceList;
+                    };
+                    directiveAPI.toggleSelection = function (toggleValue) {
+                        for (var i = 0; i < $scope.salepricelist.length; i++) {
+                            var item = $scope.salepricelist[i];
+                            item.isSelected = toggleValue;
+                        }
                     };
 
                     return directiveAPI;
                 }
             };
-
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return whSBeSalePricelistApiService.GetFilteredSalePriceLists(dataRetrievalInput)
                     .then(function (response) {
+
                         onResponseReady(response);
                     })
                     .catch(function (error) {

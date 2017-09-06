@@ -13,6 +13,7 @@
         var salePriceListGridContext;
         var hideSelectedColumn;
         var customerPriceListIds;
+        var doCustomerPriceListsExistReturnValue;
 
         loadParameters();
         defineScope();
@@ -34,17 +35,29 @@
                 salePriceListGridAPI = api;
                 salePriceListGridReadyDeferred.resolve();
             };
+            $scope.scopeModel.selectAll = function () {
+                salePriceListGridAPI.toggleSelection(true);
+            };
+            $scope.scopeModel.deselectAll = function () {
+                salePriceListGridAPI.toggleSelection(false);
+                $scope.scopeModel.isSendAllButtonDisabled = true;
+            };
 
+            $scope.scopeModel.checkSendAllButtonDisabled = function () {
+                return salePriceListGridAPI != undefined ? (salePriceListGridAPI.getSelectedPriceListIds().length === 0 || !doCustomerPriceListsExistReturnValue) : false;
+            };
             $scope.scopeModel.sendAll = function () {
                 if (!doCustomerPriceListsExist())
                     return;
+
+                var selectedPriceList = salePriceListGridAPI.getSelectedPriceListIds();
 
                 $scope.scopeModel.isLoading = true;
                 var promises = [];
 
                 var haveAllEmailsBeenSent;
 
-                var sendCustomerPriceListsPromise = sendCustomerPriceLists();
+                var sendCustomerPriceListsPromise = sendCustomerPriceLists(selectedPriceList);
                 promises.push(sendCustomerPriceListsPromise);
 
                 var loadSalePriceListGridDeferred = UtilsService.createPromiseDeferred();
@@ -80,11 +93,8 @@
             $scope.scopeModel.isLoading = true;
 
             getSalePriceListIdsByProcessInstanceId().then(function () {
-                var doCustomerPriceListsExistReturnValue = doCustomerPriceListsExist();
-
+                doCustomerPriceListsExistReturnValue = doCustomerPriceListsExist();
                 $scope.scopeModel.doCustomerPriceListsExist = doCustomerPriceListsExistReturnValue;
-                $scope.scopeModel.isSendAllButtonDisabled = !doCustomerPriceListsExistReturnValue;
-
                 loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -130,8 +140,13 @@
             return salePriceListGridLoadDeferred.promise;
         }
 
-        function sendCustomerPriceLists() {
-            return WhS_BE_SalePricelistAPIService.SendCustomerPriceLists(customerPriceListIds);
+        function sendCustomerPriceLists(selectedPriceListIds) {
+            var customerPriceListEmailInput =
+            {
+                CompressAttachement: $scope.scopeModel.compressPriceListFile,
+                CustomerPriceListIds: selectedPriceListIds
+            };
+            return WhS_BE_SalePricelistAPIService.SendCustomerPriceLists(customerPriceListEmailInput);
         }
 
         function setSalePriceListGridContext() {

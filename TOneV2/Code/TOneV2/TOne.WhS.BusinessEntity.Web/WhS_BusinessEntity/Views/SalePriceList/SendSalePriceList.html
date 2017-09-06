@@ -1,20 +1,33 @@
 ﻿<div vr-modalcontent ng-controller="WhS_BE_SendSalePriceListController" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formSendPriceList">
-            <vr-row>
-                <vr-columns width="fullrow" ng-show="scopeModel.doCustomerPriceListsExist">
-                    <vr-whs-be-salepricelist-grid on-ready="scopeModel.onSalePriceListGridReady" default-sort-by-field-name="OwnerName" default-sort-direction="ASC"></vr-whs-be-salepricelist-grid>
-                </vr-columns>
-                <vr-columns width="fullrow" ng-hide="scopeModel.doCustomerPriceListsExist">
-                    <vr-label isvalue>No customer pricelists were found</vr-label>
-                </vr-columns>
-            </vr-row>
+            <vr-tabs>
+                <vr-tab header="'PriceList'">
+                    <vr-row>
+                        <vr-columns width="fullrow" ng-show="scopeModel.doCustomerPriceListsExist">
+                            <vr-whs-be-salepricelist-grid on-ready="scopeModel.onSalePriceListGridReady" default-sort-by-field-name="OwnerName" default-sort-direction="ASC"></vr-whs-be-salepricelist-grid>
+                        </vr-columns>
+                        <vr-columns width="fullrow" ng-hide="scopeModel.doCustomerPriceListsExist">
+                            <vr-label isvalue>No customer pricelists were found</vr-label>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab showtab="scopeModel.doCustomerPriceListsExist" header="'Option'">
+                    <vr-row>
+                        <vr-columns>
+                            <vr-switch value="scopeModel.compressPriceListFile" label="Compress"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="SendAll" formname="formSendPriceList" data-onclick="scopeModel.sendAll" vr-disabled="scopeModel.isSendAllButtonDisabled"></vr-button>
+                <vr-button type="SelectAll" data-onclick="scopeModel.selectAll"></vr-button>
+                <vr-button type="DeselectAll" data-onclick="scopeModel.deselectAll"></vr-button>
+                <vr-button type="SendAll" formname="formSendPriceList" data-onclick="scopeModel.sendAll" vr-disabled="scopeModel.checkSendAllButtonDisabled()"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>

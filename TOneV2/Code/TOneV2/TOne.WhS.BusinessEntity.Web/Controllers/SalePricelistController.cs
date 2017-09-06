@@ -40,9 +40,9 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("SendCustomerPriceLists")]
-        public bool SendCustomerPriceLists(IEnumerable<int> customerPriceListIds)
+        public bool SendCustomerPriceLists(CustomerPriceListEmailInput customerPriceListEmailInput)
         {
-            return new SalePriceListManager().SendCustomerPriceLists(customerPriceListIds);
+            return new SalePriceListManager().SendCustomerPriceLists(customerPriceListEmailInput.CustomerPriceListIds, customerPriceListEmailInput.CompressAttachement);
         }
 
         [HttpGet]
@@ -50,6 +50,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public bool CheckIfAnyPriceListExists(SalePriceListOwnerType ownerType, int ownerId)
         {
             return new SalePriceListManager().CheckIfAnyPriceListExists(ownerType, ownerId);
+        }
+
+        public class CustomerPriceListEmailInput
+        {
+            public bool CompressAttachement { get; set; }
+
+            public IEnumerable<int> CustomerPriceListIds { get; set; }
         }
     }
 }

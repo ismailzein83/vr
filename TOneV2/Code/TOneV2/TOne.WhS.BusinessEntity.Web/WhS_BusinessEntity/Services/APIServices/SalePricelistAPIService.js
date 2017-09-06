@@ -27,8 +27,8 @@
                 ownerId: ownerId
             });
         }
-        function SendCustomerPriceLists(customerPriceListIds) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "SendCustomerPriceLists"), customerPriceListIds);
+        function SendCustomerPriceLists(customerPriceListEmailInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "SendCustomerPriceLists"), customerPriceListEmailInput);
         }
 
         return {
