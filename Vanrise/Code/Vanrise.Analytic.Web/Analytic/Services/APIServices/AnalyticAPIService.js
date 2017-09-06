@@ -12,9 +12,13 @@
         function GetRecordSearchFilterGroup(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetRecordSearchFilterGroup"), input);
         }
+        function GetRecordSearchFieldFilter(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetRecordSearchFieldFilter"), input);
+        }
         return ({
             GetFilteredRecords: GetFilteredRecords,
-            GetRecordSearchFilterGroup: GetRecordSearchFilterGroup
+            GetRecordSearchFilterGroup: GetRecordSearchFilterGroup,
+            GetRecordSearchFieldFilter: GetRecordSearchFieldFilter
         });
     }
 

@@ -8,7 +8,8 @@
         return ({
             addItemAction: addItemAction,
             editItemAction: editItemAction,
-            excuteItemAction: excuteItemAction
+            excuteItemAction: excuteItemAction,
+            openRecordSearch: openRecordSearch
         });
 
         function addItemAction(onItemActionAdded) {
@@ -50,10 +51,11 @@
               }
             });
         }
-        function loadOpenRecordSearch(itemAction,settings) {
+        function loadOpenRecordSearch(itemAction, settings) {
             var modalParameters = {
                 analyticReportId: itemAction.ReportId,
-                settings: {
+                analyticFilter: {
+                    AnalyticReportId: itemAction.ReportId,
                     SourceName: itemAction.SourceName,
                     DimensionFilters: settings.DimensionFilters,
                     FilterGroup: settings.FilterGroup,
@@ -68,6 +70,29 @@
                 useModalTemplate: true,
                 width: "80%",
                 title: itemAction.Title
+            };
+            modalSettings.onScopeReady = function (modalScope) {
+            };
+
+            VRModalService.showModal('/Client/Modules/Analytic/Views/GenericAnalytic/Runtime/GenericAnalyticReport.html', modalParameters, modalSettings);
+        }
+        function openRecordSearch(reportId, title, sourceName, fromDate, toDate, period, fieldFilters) {
+            var modalParameters = {
+                analyticReportId: reportId,
+                preDefinedFilter: {
+                    SourceName: sourceName,
+                    FieldFilters: fieldFilters,
+                    FromDate: fromDate,
+                    ToDate: toDate,
+                    AnalyticReportId:reportId,
+                    Period: period
+                },
+                autoSearch: true
+            };
+            var modalSettings = {
+                useModalTemplate: true,
+                width: "80%",
+                title: title
             };
             modalSettings.onScopeReady = function (modalScope) {
             };

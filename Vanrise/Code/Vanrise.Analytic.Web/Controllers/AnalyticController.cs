@@ -34,5 +34,12 @@ namespace Vanrise.Analytic.Web.Controllers
             AnalyticManager manager = new AnalyticManager();
             return manager.BuildRecordSearchFilterGroup(input);
         }
+        [HttpPost]
+        [Route("GetRecordSearchFieldFilter")]
+        public RecordFilterGroup GetRecordSearchFieldFilter(RecordSearchFieldFilterInput input)
+        {
+            AnalyticManager manager = new AnalyticManager();
+            return manager.BuildRecordSearchFieldFilter(input);
+        }
     }
 }

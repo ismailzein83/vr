@@ -81,44 +81,47 @@ namespace Vanrise.Analytic.Business
             RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
             recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
             recordFilterGroup.Filters = new List<RecordFilter>();
-
-            foreach (var dimensionFilter in input.DimensionFilters)
+            if (input.DimensionFilters != null)
             {
-                AnalyticDimension dimension;
-                if (analyticDimensions.TryGetValue(dimensionFilter.Dimension, out dimension))
+                foreach (var dimensionFilter in input.DimensionFilters)
                 {
-                    var dimensionFieldMapping = dimension.Config.DimensionFieldMappings.Find(x => x.DataRecordTypeId == dataRecordTypeId);
-                    if (dimensionFieldMapping == null)
-                        throw new ArgumentNullException(string.Format("Dimension {0} is not mapped to record type {1}.", dimension.Name, recordType.Name));
-
-                    var record = recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
-                    if (record == null)
-                        throw new ArgumentNullException(string.Format("Record field mapping for dimension {0} not found.", dimension.Name));
-
-                    List<object> notNullFilterValues = dimensionFilter.FilterValues.Where(itm => itm != null).ToList();
-                    RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? record.Type.ConvertToRecordFilter(record.Name, notNullFilterValues) : null;
-                    EmptyRecordFilter emptyRecordFilter = notNullFilterValues.Count != dimensionFilter.FilterValues.Count ? new EmptyRecordFilter { FieldName = record.Name } : null;
-
-                    if (notNullValuesRecordFilter != null && emptyRecordFilter != null)
+                    AnalyticDimension dimension;
+                    if (analyticDimensions.TryGetValue(dimensionFilter.Dimension, out dimension))
                     {
-                        RecordFilterGroup dimensionsRecordFilterGroup = new RecordFilterGroup();
-                        dimensionsRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
-                        dimensionsRecordFilterGroup.Filters = new List<RecordFilter>();
-                        dimensionsRecordFilterGroup.Filters.Add(emptyRecordFilter);
-                        dimensionsRecordFilterGroup.Filters.Add(notNullValuesRecordFilter);
+                        var dimensionFieldMapping = dimension.Config.DimensionFieldMappings.Find(x => x.DataRecordTypeId == dataRecordTypeId);
+                        if (dimensionFieldMapping == null)
+                            throw new ArgumentNullException(string.Format("Dimension {0} is not mapped to record type {1}.", dimension.Name, recordType.Name));
 
-                        recordFilterGroup.Filters.Add(dimensionsRecordFilterGroup);
-                    }
-                    else if (notNullValuesRecordFilter != null)
-                    {
-                        recordFilterGroup.Filters.Add(notNullValuesRecordFilter);
-                    }
-                    else if (emptyRecordFilter != null)
-                    {
-                        recordFilterGroup.Filters.Add(emptyRecordFilter);
+                        var record = recordType.Fields.FindRecord(x => x.Name == dimensionFieldMapping.FieldName);
+                        if (record == null)
+                            throw new ArgumentNullException(string.Format("Record field mapping for dimension {0} not found.", dimension.Name));
+
+                        List<object> notNullFilterValues = dimensionFilter.FilterValues.Where(itm => itm != null).ToList();
+                        RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? record.Type.ConvertToRecordFilter(record.Name, notNullFilterValues) : null;
+                        EmptyRecordFilter emptyRecordFilter = notNullFilterValues.Count != dimensionFilter.FilterValues.Count ? new EmptyRecordFilter { FieldName = record.Name } : null;
+
+                        if (notNullValuesRecordFilter != null && emptyRecordFilter != null)
+                        {
+                            RecordFilterGroup dimensionsRecordFilterGroup = new RecordFilterGroup();
+                            dimensionsRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
+                            dimensionsRecordFilterGroup.Filters = new List<RecordFilter>();
+                            dimensionsRecordFilterGroup.Filters.Add(emptyRecordFilter);
+                            dimensionsRecordFilterGroup.Filters.Add(notNullValuesRecordFilter);
+
+                            recordFilterGroup.Filters.Add(dimensionsRecordFilterGroup);
+                        }
+                        else if (notNullValuesRecordFilter != null)
+                        {
+                            recordFilterGroup.Filters.Add(notNullValuesRecordFilter);
+                        }
+                        else if (emptyRecordFilter != null)
+                        {
+                            recordFilterGroup.Filters.Add(emptyRecordFilter);
+                        }
                     }
                 }
             }
+           
 
             if (input.FilterGroup != null)
             {
@@ -139,6 +142,49 @@ namespace Vanrise.Analytic.Business
 
             return recordFilterGroup;
         }
+
+
+        public RecordFilterGroup BuildRecordSearchFieldFilter(RecordSearchFieldFilterInput input)
+        {
+            Guid dataRecordTypeId = GetDataRecordTypeForReportBySourceName(input.ReportId, input.SourceName);
+            DataRecordTypeManager dataRecordTypeManager = new GenericData.Business.DataRecordTypeManager();
+            var recordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
+        
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+            recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
+            recordFilterGroup.Filters = new List<RecordFilter>();
+            if (input.FieldFilters != null)
+            {
+                foreach (var fieldFilter in input.FieldFilters)
+                {
+                    var field = recordTypeFields.FindRecord(x => x.Name == fieldFilter.FieldName);
+                    List<object> notNullFilterValues = fieldFilter.FilterValues.Where(itm => itm != null).ToList();
+                    RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? field.Type.ConvertToRecordFilter(field.Name, notNullFilterValues) : null;
+                    EmptyRecordFilter emptyRecordFilter = notNullFilterValues.Count != fieldFilter.FilterValues.Count ? new EmptyRecordFilter { FieldName = field.Name } : null;
+
+                    if (notNullValuesRecordFilter != null && emptyRecordFilter != null)
+                    {
+                        RecordFilterGroup dimensionsRecordFilterGroup = new RecordFilterGroup();
+                        dimensionsRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
+                        dimensionsRecordFilterGroup.Filters = new List<RecordFilter>();
+                        dimensionsRecordFilterGroup.Filters.Add(emptyRecordFilter);
+                        dimensionsRecordFilterGroup.Filters.Add(notNullValuesRecordFilter);
+                        recordFilterGroup.Filters.Add(dimensionsRecordFilterGroup);
+                    }
+                    else if (notNullValuesRecordFilter != null)
+                    {
+                        recordFilterGroup.Filters.Add(notNullValuesRecordFilter);
+                    }
+                    else if (emptyRecordFilter != null)
+                    {
+                        recordFilterGroup.Filters.Add(emptyRecordFilter);
+                    }
+                }
+            }
+            return recordFilterGroup;
+        }
+        
+        
         public Guid GetDataRecordTypeForReportBySourceName(Guid reportId, string sourceName)
         {
             AnalyticReportManager analyticReportManager = new Business.AnalyticReportManager();

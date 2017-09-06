@@ -28,6 +28,7 @@
             var gridQuery;
             var autoSearch;
             var itemActionSettings;
+            var preDefinedFilter;
             var fields = [];
 
             var gridAPI;
@@ -35,6 +36,10 @@
             var timeRangeDirectiveAPI;
             var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var fromDate;
+            var toDate;
+            var period;
+            var sourceName;
             function initializeController() {
                 $scope.showSourceSelector = false;
 
@@ -106,6 +111,23 @@
                         settings = payload.settings;
                         autoSearch = payload.autoSearch;
                         itemActionSettings = payload.itemActionSettings;
+                        if (itemActionSettings != undefined)
+                        {
+                            fromDate = itemActionSettings.FromDate;
+                            toDate = itemActionSettings.ToDate;
+                            period = itemActionSettings.Period;
+                            sourceName = itemActionSettings.SourceName;
+                        }
+                        else
+                        {
+                            preDefinedFilter = payload.preDefinedFilter;
+                            if (preDefinedFilter != undefined) {
+                                fromDate = preDefinedFilter.FromDate;
+                                toDate = preDefinedFilter.ToDate;
+                                period = preDefinedFilter.Period;
+                                sourceName = preDefinedFilter.SourceName;
+                            }
+                        }
                     }
 
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
@@ -122,26 +144,48 @@
                                 };
                                 VR_Analytic_AnalyticAPIService.GetRecordSearchFilterGroup(input).then(function (response) {
                                     filterObj = response;
-
-                                    var buildRecordFilterGroupExpressionInput = {
-                                        RecordFilterFieldInfosByFieldName: buildRecordFilterFieldInfosByFieldName(fields),
-                                        FilterGroup: filterObj
-                                    };
-
-                                    VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression(buildRecordFilterGroupExpressionInput).then(function (response) {
-                                        $scope.expression = response;
-                                        loadPromiseDeffer.resolve();
-                                    }).catch(function (error) {
-                                        loadPromiseDeffer.reject(error);
-                                    });
+                                    buildRecordFilterGroupExpression();
                                 }).catch(function (error) {
                                     loadPromiseDeffer.reject(error);
                                 });
                             })
+                        } else if (preDefinedFilter != undefined) {
+
+                            var input = {
+                                FieldFilters: preDefinedFilter.FieldFilters,
+                                ReportId: preDefinedFilter.AnalyticReportId,
+                                SourceName: preDefinedFilter.SourceName,
+                            };
+                            VR_Analytic_AnalyticAPIService.GetRecordSearchFieldFilter(input).then(function (response) {
+                                filterObj = response;
+                                buildRecordFilterGroupExpression();
+                            }).catch(function (error) {
+                                loadPromiseDeffer.reject(error);
+                            });
+
                         } else {
                             loadPromiseDeffer.resolve();
                         }
 
+                        function buildRecordFilterGroupExpression()
+                        {
+                            if (filterObj != undefined)
+                            {
+                                var buildRecordFilterGroupExpressionInput = {
+                                    RecordFilterFieldInfosByFieldName: buildRecordFilterFieldInfosByFieldName(fields),
+                                    FilterGroup: filterObj
+                                };
+                                VR_GenericData_RecordFilterAPIService.BuildRecordFilterGroupExpression(buildRecordFilterGroupExpressionInput).then(function (response) {
+                                    $scope.expression = response;
+                                    loadPromiseDeffer.resolve();
+                                }).catch(function (error) {
+                                    loadPromiseDeffer.reject(error);
+                                });
+                            }else
+                            {
+                                loadPromiseDeffer.resolve();
+                            }
+                        }
                         
                     }).catch(function (error) {
                         loadPromiseDeffer.reject(error);
@@ -181,8 +225,8 @@
                                 $scope.drSearchPageStorageSources[$scope.drSearchPageStorageSources.length] = settings.Sources[i]
                         }
 
-                        if (itemActionSettings != undefined) {
-                            $scope.selectedDRSearchPageStorageSource = UtilsService.getItemByVal($scope.drSearchPageStorageSources, itemActionSettings.SourceName, "Name");
+                        if (sourceName != undefined) {
+                            $scope.selectedDRSearchPageStorageSource = UtilsService.getItemByVal($scope.drSearchPageStorageSources, sourceName, "Name");
                         } else if ($scope.drSearchPageStorageSources.length > 0) {
                             $scope.selectedDRSearchPageStorageSource = $scope.drSearchPageStorageSources[0];
                         }
@@ -207,9 +251,9 @@
                 var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 timeRangeReadyPromiseDeferred.promise.then(function () {
                     var timeRangePeriod = {
-                        period: itemActionSettings!=undefined && itemActionSettings.Period != undefined ? itemActionSettings.Period : PeriodEnum.Today.value,
-                        fromDate: itemActionSettings != undefined ? itemActionSettings.FromDate : undefined,
-                        toDate: itemActionSettings != undefined ? itemActionSettings.ToDate : undefined
+                        period: period != undefined ? period : PeriodEnum.Today.value,
+                        fromDate: fromDate,
+                        toDate: toDate
                     };
 
                     VRUIUtilsService.callDirectiveLoad(timeRangeDirectiveAPI, timeRangePeriod, loadTimeDimentionPromiseDeferred);

@@ -149,6 +149,7 @@
     <Compile Include="DimensionValue.cs" />
     <Compile Include="MeasureStyleRuleTemplate.cs" />
     <Compile Include="DataAnalysis\Common\TimeRangeFilter.cs" />
+    <Compile Include="RecordSearchFieldFilterInput.cs" />
     <Compile Include="RecordSearchFilterGroupInput.cs" />
     <Compile Include="StyleRule.cs" />
     <Compile Include="MeasureValues.cs" />

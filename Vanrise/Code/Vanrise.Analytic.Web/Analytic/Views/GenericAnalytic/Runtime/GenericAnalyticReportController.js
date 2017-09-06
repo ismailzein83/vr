@@ -7,6 +7,7 @@
         var analyticReportId;
         var viewEntity;
         var itemActionSettings;
+        var preDefinedFilter;
         var autoSearch;
         var templates = [];
         var directiveAPI;
@@ -21,10 +22,9 @@
 
             if (parameters != null) {
                 analyticReportId = parameters.analyticReportId;
-                itemActionSettings = parameters.settings;
+                itemActionSettings = parameters.analyticFilter;
+                preDefinedFilter = parameters.preDefinedFilter;
                 autoSearch = parameters.autoSearch;
-                if (itemActionSettings != undefined )
-                  itemActionSettings.AnalyticReportId = analyticReportId;
             }
         }
 
@@ -60,6 +60,7 @@
                 var payLoad = {
                     settings: viewEntity.Settings,
                     itemActionSettings: itemActionSettings,
+                    preDefinedFilter:preDefinedFilter,
                     autoSearch: autoSearch
                 };
                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payLoad, loadDirectivePromiseDeferred);
