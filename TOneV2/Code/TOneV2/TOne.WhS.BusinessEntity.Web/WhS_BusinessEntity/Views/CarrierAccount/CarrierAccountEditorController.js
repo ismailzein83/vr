@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_RoutingStatusEnum'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService) {
+    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService, WhS_BE_RoutingStatusEnum) {
 
         // Definition
         var carrierProfileSelectorAPI;
@@ -107,7 +107,8 @@
                         if (sellingNumberPlanSelectorAPI != undefined) {
                             var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value; };
                             var payload = {
-                                selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined
+                                selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined,
+                                selectifsingleitem: true
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanSelectorAPI, payload, setLoader);
                         }
@@ -133,7 +134,8 @@
                         if (zoneServiceConfigSelectorAPI != undefined) {
                             var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value; };
                             var payload = {
-                                selectedIds: getDefaultServices()
+                                selectedIds: getDefaultServices(),
+                                selectminweight: true
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, payload, setLoader);
                         }
@@ -178,7 +180,7 @@
             $scope.scopeModel.onSellingNumberPlanSelectorReady = function (api) {
                 sellingNumberPlanSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlanSelector = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanSelectorAPI, undefined, setLoader, sellingNumberPlanSelectorReadyDeferred);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanSelectorAPI, { selectifsingleitem: true }, setLoader, sellingNumberPlanSelectorReadyDeferred);
             };
             $scope.scopeModel.onSellingNumberPlanChanged = function (selectedSellingNumberPlan) {
                 if (selectedSellingNumberPlan == undefined)
@@ -189,7 +191,8 @@
                     var sellingProductSelectorPayload = {
                         filter: {
                             SellingNumberPlanId: selectedSellingNumberPlan.SellingNumberPlanId
-                        }
+                        },
+                        selectifsingleitem: true
                     };
                     var setLoader = function (value) { $scope.scopeModel.isLoadingSellingProductSelector = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductSelectorAPI, sellingProductSelectorPayload, setLoader, sellingProductSelectorReadyDeferred);
@@ -203,7 +206,7 @@
             $scope.scopeModel.onCustomerRoutingStatusSelectorReady = function (api) {
                 customerRoutingStatusSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerRoutingStatusSelector = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerRoutingStatusSelectorAPI, undefined, setLoader, customerRoutingStatusSelectorReadyDeferred);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerRoutingStatusSelectorAPI, { selectedIds: WhS_BE_RoutingStatusEnum.Enabled.value }, setLoader, customerRoutingStatusSelectorReadyDeferred);
             };
             $scope.scopeModel.onPriceListExtensionFormatSelectorReady = function (api) {
                 priceListExtensionFormatSelectorAPI = api;
@@ -225,12 +228,12 @@
             $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
                 zoneServiceConfigSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, undefined, setLoader, zoneServiceConfigSelectorReadyDeferred);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, { selectminweight: true }, setLoader, zoneServiceConfigSelectorReadyDeferred);
             };
             $scope.scopeModel.onSupplierRoutingStatusSelectorReady = function (api) {
                 supplierRoutingStatusSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSupplierRoutingStatusSelector = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierRoutingStatusSelectorAPI, undefined, setLoader, supplierRoutingStatusSelectorReadyDeferred);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierRoutingStatusSelectorAPI, { selectedIds: WhS_BE_RoutingStatusEnum.Enabled.value }, setLoader, supplierRoutingStatusSelectorReadyDeferred);
             };
 
             $scope.hasSaveCarrierAccountPermission = function () {
@@ -399,6 +402,10 @@
             return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCarrierProfileSelector, loadCarrierActivationStatusSelector, loadCarrierAccountTypeSelector, loadCurrencySelector, loadCompanySettingSelector]);
         }
         function loadStaticData() {
+            if (!isEditMode) {
+                $scope.scopeModel.nominalCapacity = 1;
+                return;
+            }
             if (carrierAccountEntity != undefined) {
                 $scope.scopeModel.name = carrierAccountEntity.NameSuffix;
                 for (var i = 0; i < $scope.scopeModel.carrierAccountTypes.length; i++)
@@ -449,7 +456,7 @@
             var loadActivationStatusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             activationStatusSelectorReadyPromiseDeferred.promise.then(function () {
                 var payload = {
-                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.ActivationStatus : WhS_BE_CarrierAccountActivationStatusEnum.Inactive.value)
+                    selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.CarrierAccountSettings != undefined ? carrierAccountEntity.CarrierAccountSettings.ActivationStatus : WhS_BE_CarrierAccountActivationStatusEnum.Active.value)
                 };
 
                 VRUIUtilsService.callDirectiveLoad(activationStatusSelectorAPI, payload, loadActivationStatusSelectorPromiseDeferred);
@@ -554,7 +561,8 @@
             sellingNumberPlanSelectorReadyDeferred.promise.then(function () {
                 sellingNumberPlanSelectorReadyDeferred = undefined;
                 var sellingNumberPlanSelectorPayload = {
-                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.SellingNumberPlanId : undefined
+                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.SellingNumberPlanId : undefined,
+                    selectifsingleitem: true
                 };
                 VRUIUtilsService.callDirectiveLoad(sellingNumberPlanSelectorAPI, sellingNumberPlanSelectorPayload, sellingNumberPlanSelectorLoadDeferred);
             });
@@ -567,7 +575,9 @@
             UtilsService.waitMultiplePromises([sellingProductSelectorReadyDeferred.promise, sellingNumberPlanSelectedDeferred.promise]).then(function () {
                 sellingProductSelectorReadyDeferred = undefined;
                 sellingNumberPlanSelectedDeferred = undefined;
-                var sellingProductSelectorPayload = {};
+                var sellingProductSelectorPayload = {
+                    selectifsingleitem: true
+                };
                 if (carrierAccountEntity != undefined) {
                     sellingProductSelectorPayload.filter = {
                         SellingNumberPlanId: carrierAccountEntity.SellingNumberPlanId
@@ -590,7 +600,7 @@
             customerRoutingStatusSelectorReadyDeferred.promise.then(function () {
                 customerRoutingStatusSelectorReadyDeferred = undefined;
                 var customerRoutingStatusSelectorPayload = {
-                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.CustomerSettings.RoutingStatus : undefined
+                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.CustomerSettings.RoutingStatus : WhS_BE_RoutingStatusEnum.Enabled.value
                 };
                 VRUIUtilsService.callDirectiveLoad(customerRoutingStatusSelectorAPI, customerRoutingStatusSelectorPayload, customerRoutingStatusSelectorLoadDeferred);
             });
@@ -645,7 +655,8 @@
             zoneServiceConfigSelectorReadyDeferred.promise.then(function () {
                 zoneServiceConfigSelectorReadyDeferred = undefined;
                 var zoneServiceConfigSelectorPayload = {
-                    selectedIds: getDefaultServices()
+                    selectedIds: getDefaultServices(),
+                    selectminweight: true
                 };
                 VRUIUtilsService.callDirectiveLoad(zoneServiceConfigSelectorAPI, zoneServiceConfigSelectorPayload, zoneServiceConfigSelectorLoadDeferred);
             });
@@ -658,7 +669,7 @@
             supplierRoutingStatusSelectorReadyDeferred.promise.then(function () {
                 supplierRoutingStatusSelectorReadyDeferred = undefined;
                 var supplierRoutingStatusSelectorPayload = {
-                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.SupplierSettings.RoutingStatus : undefined
+                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.SupplierSettings.RoutingStatus : WhS_BE_RoutingStatusEnum.Enabled.value
                 };
                 VRUIUtilsService.callDirectiveLoad(supplierRoutingStatusSelectorAPI, supplierRoutingStatusSelectorPayload, supplierRoutingStatusSelectorLoadDeferred);
             });

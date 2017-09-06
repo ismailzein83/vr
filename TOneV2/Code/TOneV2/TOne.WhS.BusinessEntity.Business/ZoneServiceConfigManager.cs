@@ -421,7 +421,8 @@ namespace TOne.WhS.BusinessEntity.Business
             return new ZoneServiceConfigInfo()
             {
                 ZoneServiceConfigId = zoneServiceConfig.ZoneServiceConfigId,
-                Symbol = zoneServiceConfig.Symbol
+                Symbol = zoneServiceConfig.Symbol,
+                Weight = zoneServiceConfig.Settings.Weight
             };
         }
 

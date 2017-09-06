@@ -93,10 +93,11 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-
+                    var selectIfSingleItem;
                     var selectedIds;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        selectIfSingleItem = payload.selectifsingleitem;
                     }
 
                     return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
@@ -107,6 +108,10 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'SellingNumberPlanId', attrs, ctrl);
+                        }
+
+                        if (selectedIds == undefined && selectIfSingleItem == true) {
+                            selectorAPI.selectIfSingleItem();
                         }
                     });
                 };

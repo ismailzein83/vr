@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public int ZoneServiceConfigId { get; set; }
         public string Symbol { get; set; }
+        public int Weight { get; set; }
     }
 
 }

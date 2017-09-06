@@ -52,7 +52,7 @@ app.directive('vrWhsBeActivationstatusSelector', ['UtilsService', '$compile', 'V
                 disabled = "vr-disabled='true'";
 
             var hideremoveicon = "";
-            if (attrs.hideremoveicon)
+            if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
             var required = "";
             if (attrs.isrequired != undefined)
