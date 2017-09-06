@@ -133,7 +133,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             {
                 base.LogVerbose("Renaming file {0} after import", fileObj.Name);
 
-                sftp.Rename(filePath, string.Format(@"{0}_{1}.processed", filePath.ToLower().Replace(SFTPAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
+                sftp.Rename(filePath, string.Format(@"{0}.processed", filePath.Replace(SFTPAdapterArgument.Extension, "")));
             }
             else if (SFTPAdapterArgument.ActionAfterImport == (int)SFTPAdapterArgument.Actions.Delete)
             {
@@ -148,7 +148,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                 if (!sftp.DirectoryExists(SFTPAdapterArgument.DirectorytoMoveFile))
                     sftp.CreateDirectory(SFTPAdapterArgument.DirectorytoMoveFile);
 
-                sftp.Rename(filePath, SFTPAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}_{1}.processed", fileObj.Name.Replace(SFTPAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
+                sftp.Rename(filePath, SFTPAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}.processed", fileObj.Name.Replace(SFTPAdapterArgument.Extension, "")));
 
             }
         }

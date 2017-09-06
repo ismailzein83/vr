@@ -133,7 +133,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 {
                     base.LogVerbose("Renaming file {0} after import", fileObj.Name);
 
-                    ftp.Rename(filePath, string.Format(@"{0}_{1}.processed", filePath.ToLower().Replace(ftpAdapterArgument.Extension.ToLower(), ""), Guid.NewGuid()));
+                    ftp.Rename(filePath, string.Format(@"{0}.processed", filePath.Replace(ftpAdapterArgument.Extension, "")));
                 }
                 else if (ftpAdapterArgument.ActionAfterImport == (int)Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.Actions.Delete)
                 {
@@ -149,6 +149,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                     ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}.processed", fileObj.Name));
                 }
         }
+
         #endregion
 
     }
