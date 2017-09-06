@@ -168,28 +168,13 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadAccountTypeSelector, loadRootAccountTypeSelector, loadRecordFilterDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRootAccountTypeSelector, loadRecordFilterDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
-        function loadAccountTypeSelector() {
-            var accountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-            accountTypeSelectorReadyDeferred.promise.then(function () {
-
-                var payload = {
-                    filter: {
-                        AccountBEDefinitionId: accountBEDefinitionId,
-                        RootAccountTypeOnly: $scope.scopeModel.onlyRootAccount
-                    }
-                };
-                VRUIUtilsService.callDirectiveLoad(accountTypeSelectorAPI, payload, accountTypeSelectorLoadDeferred);
-            });
-
-            return accountTypeSelectorLoadDeferred.promise;
-        }
+        
         function loadRootAccountTypeSelector() {
             var rootAccountTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 

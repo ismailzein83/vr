@@ -39,7 +39,7 @@ app.directive('retailBeAccountRoottypeSelector', ['Retail_BE_RootSelectorTypeEnu
             }
            
             return '<vr-select ' + multipleselection + ' hideremoveicon datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" '
-                + ' label=" " hidefilterbox="true" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>';
+                + ' label=" " hidefilterbox="true" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady"  onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>';
 
         }
 
