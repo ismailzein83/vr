@@ -36,7 +36,7 @@ app.directive('vrWhsBeActivationstatusSelector', ['UtilsService', '$compile', 'V
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
