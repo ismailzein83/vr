@@ -109,8 +109,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'SellingNumberPlanId', attrs, ctrl);
                         }
-
-                        if (selectedIds == undefined && selectIfSingleItem == true) {
+                        else if (selectedIds == undefined && selectIfSingleItem == true) {
                             selectorAPI.selectIfSingleItem();
                         }
                     });

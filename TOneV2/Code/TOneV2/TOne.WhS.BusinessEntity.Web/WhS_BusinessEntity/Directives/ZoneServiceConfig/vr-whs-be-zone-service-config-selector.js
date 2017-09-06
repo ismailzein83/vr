@@ -135,7 +135,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'ZoneServiceConfigId', attrs, ctrl);
                     }
-                    if (selectedIds == undefined && selectMinWeight == true && minWeigthItem != undefined) {
+                    else if (selectedIds == undefined && selectMinWeight == true && minWeigthItem != undefined) {
                         selectorAPI.selectItem(minWeigthItem);
                     }
                 });

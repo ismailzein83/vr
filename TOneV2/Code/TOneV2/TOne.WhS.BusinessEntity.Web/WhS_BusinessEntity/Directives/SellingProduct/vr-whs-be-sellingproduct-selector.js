@@ -123,7 +123,7 @@ function (WhS_BE_SellingProductAPIService, UtilsService, $compile, VRUIUtilsServ
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'SellingProductId', $attrs, ctrl);
                     }
-                    if (selectedIds == undefined && selectIfSingleItem == true) {
+                    else if (selectedIds == undefined && selectIfSingleItem == true) {
                         selectorApi.selectIfSingleItem();
                     }
                 });
