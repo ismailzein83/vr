@@ -11,5 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public abstract Guid ConfigId { get; }
 
         public int UserId { get; set; }
+        public long? OnRestoreStateBackupId { get; set; }
     }
 }

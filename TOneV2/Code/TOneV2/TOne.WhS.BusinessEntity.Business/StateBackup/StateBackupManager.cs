@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         #region Public Methods
 
- 
+
         public Vanrise.Entities.IDataRetrievalResult<StateBackupDetail> GetFilteredStateBackups(Vanrise.Entities.DataRetrievalInput<StateBackupQuery> input)
         {
             ExtensionConfigurationManager extensionConfigurationManager = new ExtensionConfigurationManager();
@@ -46,13 +46,23 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public UpdateOperationOutput<StateBackup> RestoreData(long stateBackupId)
         {
-            UpdateOperationOutput<StateBackup> updateOperationOutput = new UpdateOperationOutput<StateBackup>();
+            UpdateOperationOutput<StateBackup> updateOperationOutput = new UpdateOperationOutput<StateBackup>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+            IStateBackupDataManager dataManager = BEDataManagerFactory.GetDataManager<IStateBackupDataManager>();
+            StateBackup recentStateBackup = dataManager.GetStateBackup(stateBackupId);
 
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
+            // on each restore we have to backup the data (to handle failure cases)
+            //in case this backup is a backup from restore, we don't back it up again
+            if (recentStateBackup.Info.OnRestoreStateBackupId == null)
+            {
+                recentStateBackup.Info.OnRestoreStateBackupId = stateBackupId;
+                BackupData(recentStateBackup.Info);
+            }
 
             SecurityContext securityContext = new SecurityContext();
-            IStateBackupDataManager dataManager = BEDataManagerFactory.GetDataManager<IStateBackupDataManager>();
             bool updateActionSucc = dataManager.RestoreData(stateBackupId, securityContext.GetLoggedInUserId());
             if (updateActionSucc)
             {
@@ -66,8 +76,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 updateOperationOutput.Message = "An Error Occured";
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             }
-                
-
             return updateOperationOutput;
         }
 
@@ -95,7 +103,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     Description = config.Behavior.GetDescription(context),
                     Type = config.Title,
                     BackupByUsername = UserManager.GetUserName(entity.BackupByUserId),
-                    RestoredByUsername = entity.RestoredByByUserId.HasValue ?  UserManager.GetUserName(entity.RestoredByByUserId.Value) : null
+                    RestoredByUsername = entity.RestoredByByUserId.HasValue ? UserManager.GetUserName(entity.RestoredByByUserId.Value) : null
                 };
             }
 
