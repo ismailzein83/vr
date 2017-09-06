@@ -12,7 +12,7 @@ using Vanrise.Common.Business;
 
 namespace Mediation.Generic.Business
 {
-    public class MediationDefinitionManager
+    public class MediationDefinitionManager : IMediationDefinitionManager
     {
         public MediationDefinition GetMediationDefinition(Guid mediationDefinitionId)
         {

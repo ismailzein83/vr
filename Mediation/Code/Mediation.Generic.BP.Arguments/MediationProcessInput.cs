@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mediation.Generic.Entities;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 
 namespace Mediation.Generic.BP.Arguments
 {
@@ -13,7 +15,10 @@ namespace Mediation.Generic.BP.Arguments
 
         public override string GetTitle()
         {
-            return "Mediation Process";
+            IMediationDefinitionManager mediationManager = MediationManagerFactory.GetManager<IMediationDefinitionManager>();
+            MediationDefinition mediationDefinition = mediationManager.GetMediationDefinition(MediationDefinitionId);
+            mediationDefinition.ThrowIfNull("mediationDefinition");
+            return mediationDefinition.Name;
         }
     }
 }
