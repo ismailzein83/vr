@@ -8,13 +8,7 @@ namespace TOne.WhS.Routing.Entities
     {
         public abstract Guid ConfigId { get; }
 
-        public virtual bool UseOrderedExecution
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public virtual bool UseOrderedExecution { get { return false; } }
 
         public virtual List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {

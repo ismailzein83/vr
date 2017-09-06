@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business
@@ -34,8 +30,6 @@ namespace TOne.WhS.Routing.Business
         }
     }
 
-
-
     public class RoutingOptimizationOptionPercentage : RouteOptionPercentageSettings
     {
         public override Guid ConfigId { get { return new Guid("fa264705-917a-4a55-ac12-0a3418b9c7d7"); } }
@@ -45,7 +39,6 @@ namespace TOne.WhS.Routing.Business
             throw new NotImplementedException();
         }
     }
-
 
     public class RoutingOptimizationOptionPercentageItem
     {

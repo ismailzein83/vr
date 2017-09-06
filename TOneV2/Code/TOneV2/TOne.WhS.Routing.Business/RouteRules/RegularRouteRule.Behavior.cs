@@ -12,15 +12,9 @@ namespace TOne.WhS.Routing.Business
     {
         #region Central Execution
 
-        public override bool UseOrderedExecution
-        {
-            get
-            {
-                return true;
-            }
-        }
-        #endregion
+        public override bool UseOrderedExecution { get { return true; } }
 
+        #endregion
 
         #region SaleEntity Execution
         public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
@@ -38,7 +32,7 @@ namespace TOne.WhS.Routing.Business
                 List<RouteOptionSettings> options = new List<RouteOptionSettings>();
                 foreach (RouteOption routeOption in context.RouteOptions)
                 {
-                    RouteOptionSettings optionSettings = new RouteOptionSettings() 
+                    RouteOptionSettings optionSettings = new RouteOptionSettings()
                     {
                         SupplierId = routeOption.SupplierId
                     };
@@ -80,7 +74,6 @@ namespace TOne.WhS.Routing.Business
         }
 
         #endregion
-
 
         #region Routing Product Execution
 
@@ -141,7 +134,6 @@ namespace TOne.WhS.Routing.Business
         }
 
         #endregion
-
 
         #region Private Methods
 
@@ -388,6 +380,8 @@ namespace TOne.WhS.Routing.Business
 
         #endregion
 
+        #region Private Classes
+
         private class WeightResult
         {
             public WeightResult()
@@ -396,5 +390,7 @@ namespace TOne.WhS.Routing.Business
             }
             public decimal Result { get; set; }
         }
+
+        #endregion
     }
 }

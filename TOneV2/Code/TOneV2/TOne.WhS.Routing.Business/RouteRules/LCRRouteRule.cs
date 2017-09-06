@@ -11,20 +11,14 @@ namespace TOne.WhS.Routing.Business
 
         public override Guid ConfigId { get { return new Guid("31B3226E-A2B2-40D5-8C33-83C6601E8730"); } }
 
-        public override bool UseOrderedExecution
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         public override CorrespondentType CorrespondentType { get { return Entities.CorrespondentType.LCR; } }
+
+        public override bool UseOrderedExecution { get { return true; } }
 
         #endregion
 
-
         #region SaleEntity Execution
+
         public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
         {
             SpecialRequestRouteRule specialRequestRouteRule = new SpecialRequestRouteRule();
@@ -70,7 +64,6 @@ namespace TOne.WhS.Routing.Business
 
         #endregion
 
-
         #region RoutingProduct Execution
 
         public override void CreateSupplierZoneOptionsForRP(IRPRouteRuleExecutionContext context, RouteRuleTarget target)
@@ -94,7 +87,6 @@ namespace TOne.WhS.Routing.Business
         }
 
         #endregion
-
 
         #region Private Methods
 

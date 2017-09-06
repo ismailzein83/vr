@@ -12,28 +12,16 @@ namespace TOne.WhS.Routing.Business
 
         public override Guid ConfigId { get { return new Guid("0166E5C4-0F13-4741-BD77-2C771BCAFA24"); } }
 
+        public override CorrespondentType CorrespondentType { get { return Entities.CorrespondentType.SpecialRequest; } }
+
+        public override bool UseOrderedExecution { get { return true; } }
+
         public Dictionary<int, SpecialRequestRouteOptionSettings> Options { get; set; }
-
-        public override bool UseOrderedExecution
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public override CorrespondentType CorrespondentType
-        {
-            get
-            {
-                return Entities.CorrespondentType.SpecialRequest;
-            }
-        }
 
         #endregion
 
-
         #region SaleEntity Execution
+
         public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
         {
             SpecialRequestRouteRule specialRequestRouteRule = new SpecialRequestRouteRule();
@@ -164,8 +152,8 @@ namespace TOne.WhS.Routing.Business
             addedSupplierIds.Add(optionToAdd.SupplierId);
             return newIndex;
         }
-        #endregion
 
+        #endregion
 
         #region RoutingProduct Execution
 
@@ -190,7 +178,6 @@ namespace TOne.WhS.Routing.Business
         }
 
         #endregion
-
 
         #region Private Methods
 
