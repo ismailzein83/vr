@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsAnalyticsReleasecodeGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_ReleaseCodeAPIService",
-function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIService) {
+app.directive("vrWhsAnalyticsReleasecodeGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_ReleaseCodeAPIService","VR_Analytic_AnalyticItemActionService","WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum",
+function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIService, VR_Analytic_AnalyticItemActionService, WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum) {
 
     var directiveDefinitionObject = {
 
@@ -28,13 +28,20 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
 
         var gridAPI;
         this.initializeController = initializeController;
-        ctrl.showDimessionCol = function (d) {
-
-            return ctrl.dimenssion != undefined && ctrl.dimenssion.indexOf(d) > -1;
-        };
-
+       
+        var fromDate;
+        var toDate;
+        var dimensionIds;
+        var customerIds;
+        var codeGroupIds;
+        var masterSaleZoneIds;
+        var supplierIds;
+        var switchIds;
         function initializeController() {
+            ctrl.showDimessionCol = function (d) {
 
+                return ctrl.dimenssion != undefined && ctrl.dimenssion.indexOf(d) > -1;
+            };
             $scope.blockedAttempts = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -46,7 +53,20 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-
+                        if (query != undefined)
+                        {
+                            fromDate = query.From;
+                            toDate = query.To;
+                            if (query.Filter != undefined)
+                            {
+                                dimensionIds = query.Filter.Dimession;
+                                customerIds = query.Filter.CustomerIds;
+                                codeGroupIds = query.Filter.CodeGroupIds;
+                                masterSaleZoneIds = query.Filter.MasterSaleZoneIds;
+                                supplierIds = query.Filter.SupplierIds;
+                                switchIds = query.Filter.SwitchIds;
+                            }
+                        }
                         return gridAPI.retrieveData(query);
                     };
 
@@ -63,6 +83,85 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
                     VRNotificationService.notifyException(error, $scope);
                 });
             };
+            defineMenuActions();
+        }
+
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "CDRs",
+                clicked: openRecordSearch,
+            }];
+        }
+        function openRecordSearch(dataItem)
+        {
+            var reportId = "c82daa2a-3fd8-432d-8811-7ba3e4cb3c58";
+            var sourceName = "AllCDRs";
+            var title= "CDRs";
+            var period = -1;
+          
+            var fieldFilters = [];
+
+            fieldFilters.push({
+                FieldName: "ReleaseCode",
+                FilterValues: [dataItem.Entity.ReleaseCode]
+            }, {
+                FieldName: "ReleaseSource",
+                FilterValues: [dataItem.Entity.ReleaseSource]
+            });
+
+            var switchValues = switchIds;
+            if (switchValues == undefined)
+                switchValues = [];
+            if (!UtilsService.contains(switchValues, dataItem.Entity.SwitchId))
+                switchValues.push(dataItem.Entity.SwitchId);
+            fieldFilters.push({
+                FieldName: "SwitchId",
+                FilterValues: switchValues
+            });
+
+
+            if (customerIds != undefined) {
+                fieldFilters.push({
+                    FieldName: "CustomerId",
+                    FilterValues: customerIds
+                });
+            }
+            if (masterSaleZoneIds != undefined) {
+                fieldFilters.push({
+                    FieldName: "MasterPlanZoneId",
+                    FilterValues: masterSaleZoneIds
+                });
+            }
+            if (supplierIds != undefined) {
+
+
+                fieldFilters.push({
+                    FieldName: "SupplierId",
+                    FilterValues: supplierIds
+                });
+            }
+
+            if (dimensionIds != undefined)
+            {
+                for(var i=0;i<dimensionIds.length;i++)
+                {
+                    var dimension = UtilsService.getEnum(WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum, "value", dimensionIds[i]);
+                    var entityValue = dataItem.Entity[dimension.entityValueName];
+                    if (entityValue == "" || entityValue == " ")
+                        entityValue = undefined;
+                  
+                    var fieldFilter = UtilsService.getItemByVal(fieldFilters, dimension.fieldName, "FieldName");
+                    if (fieldFilter == undefined) {
+                        fieldFilters.push({
+                            FieldName: dimension.fieldName,
+                            FilterValues: [entityValue]
+                        });
+                    }
+                    
+                }
+            }
+          
+            return VR_Analytic_AnalyticItemActionService.openRecordSearch(reportId, title, sourceName, fromDate, toDate, period, fieldFilters);
         }
     }
     return directiveDefinitionObject;
