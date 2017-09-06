@@ -5,8 +5,6 @@
 	@SerialNumber nvarchar(255),
 	@FromDate datetime,
 	@ToDate datetime,
-	@TimeZoneId int,
-	@TimeZoneOffset varchar(50),
 	@IssueDate datetime,
 	@DueDate datetime,
 	@Details nvarchar(MAX),
@@ -23,8 +21,6 @@ BEGIN
       ,[SerialNumber] = @SerialNumber
       ,[FromDate] = @FromDate
       ,[ToDate] = @ToDate
-      ,[TimeZoneId] = @TimeZoneId
-      ,[TimeZoneOffset] = @TimeZoneOffset
       ,[IssueDate] = @IssueDate
       ,[DueDate] = @DueDate
       ,[Details] = @Details

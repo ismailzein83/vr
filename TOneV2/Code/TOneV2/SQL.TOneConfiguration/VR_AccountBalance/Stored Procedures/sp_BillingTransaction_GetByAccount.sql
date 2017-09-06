@@ -19,7 +19,7 @@ BEGIN
 		   vrlb.AccountID = bt.AccountID and 
 	       ISNULL(vrlb.IsDeleted, 0) = 0 and
 	       (@Status IS NULL OR vrlb.[Status] = @Status) AND
-	       (@EffectiveDate IS NULL OR (vrlb.BED <= @EffectiveDate AND (vrlb.EED > @EffectiveDate OR vrlb.EED IS NULL))) AND
+	       (@EffectiveDate IS NULL OR ((vrlb.BED <= @EffectiveDate OR vrlb.BED IS NULL) AND (vrlb.EED > @EffectiveDate OR vrlb.EED IS NULL))) AND
 	       (@IsEffectiveInFuture IS NUll OR (@IsEffectiveInFuture = 1 and (vrlb.EED IS NULL or vrlb.EED >=  GETDATE()))  OR  (@IsEffectiveInFuture = 0 and  vrlb.EED <=  GETDATE()))
 
 	where isnull(bt.IsDeleted, 0) = 0

@@ -20,8 +20,6 @@ BEGIN
 			inv.UserId,
 			inv.CreatedTime,
 			inv.LockDate,Notes,
-			inv.TimeZoneId,
-			inv.TimeZoneOffset,
 			SourceId,
 			IsAutomatic
 	FROM	VR_Invoice.Invoice inv with(nolock)

@@ -23,8 +23,6 @@ BEGIN
 			CreatedTime,
 			LockDate,
 			Notes,
-			TimeZoneId,
-			TimeZoneOffset,
 			SourceId,
 			IsAutomatic
 	FROM	VR_Invoice.Invoice with(nolock)

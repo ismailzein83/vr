@@ -5,8 +5,6 @@
 	@SerialNumber nvarchar(255),
 	@FromDate datetime,
 	@ToDate datetime,
-	@TimeZoneId int,
-	@TimeZoneOffset varchar(50),
 	@IssueDate datetime,
 	@DueDate datetime,
 	@Details nvarchar(MAX),
@@ -17,7 +15,7 @@
 	@ID bigint out
 AS
 BEGIN
-	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,TimeZoneId,TimeZoneOffset,IssueDate,DueDate,Details,Notes, SourceId,IsDraft,IsAutomatic)
-	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@TimeZoneId,@TimeZoneOffset,@IssueDate,@DueDate,@Details,@Notes, @SourceID,@IsDraft,@IsAutomatic)
+	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,Notes, SourceId,IsDraft,IsAutomatic)
+	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details,@Notes, @SourceID,@IsDraft,@IsAutomatic)
 	SET @ID = @@Identity
 END

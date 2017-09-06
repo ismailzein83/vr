@@ -32,8 +32,6 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			vrIn.CreatedTime,
 			vrIn.LockDate,
 			vrIn.Notes,
-			vrIn.TimeZoneId,
-			vrIn.TimeZoneOffset, 
 			vrIn.SourceId,
 			vrIn.IsAutomatic
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
@@ -42,7 +40,7 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 	   vrIn.PartnerID = vrInAcc.PartnerID and 
 	   ISNULL(vrInAcc.IsDeleted, 0) = 0 and
 	   (@Status IS NULL OR vrInAcc.[Status] = @Status) AND
-	   (@EffectiveDate IS NULL OR (vrInAcc.BED <= @EffectiveDate AND (vrInAcc.EED > @EffectiveDate OR vrInAcc.EED IS NULL))) AND
+	   (@EffectiveDate IS NULL OR ((vrInAcc.BED <= @EffectiveDate OR vrInAcc.BED IS NULL) AND (vrInAcc.EED > @EffectiveDate OR vrInAcc.EED IS NULL))) AND
 	   (@IsEffectiveInFuture IS NUll OR (@IsEffectiveInFuture = 1 and (vrInAcc.EED IS NULL or vrInAcc.EED >=  GETDATE()))  OR  (@IsEffectiveInFuture = 0 and  vrInAcc.EED <=  GETDATE()))
 	where	(vrIn.InvoiceTypeId = @InvoiceTypeId) AND  
 			(@PartnerIds is Null or vrIn.PartnerID IN (SELECT PartnerId FROM @PartnerIdsTable)) AND 
