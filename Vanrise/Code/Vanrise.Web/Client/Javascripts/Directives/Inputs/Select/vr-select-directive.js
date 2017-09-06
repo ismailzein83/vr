@@ -622,7 +622,18 @@
                 };
                 api.removeReadOnly = function (nameFilter) {
                     controller.readOnly = false;
-                };              
+                };
+                api.selectItem = function (item) {
+                    var value = $attrs.ismultipleselection != undefined ? [item] : item;
+                    controller.selectedvalues = value;
+                };
+                api.selectFirstItem = function () {
+                    api.selectItem(controller.datasource[0]);
+                };
+                api.selectIfSingleItem = function () {
+                    if (controller.datasource.length == 1)
+                        api.selectItem(controller.datasource[0]);
+                };
                 //api.openDropDown = function () {
                 //    var event = $(window.event);
                 //    if (event) {
