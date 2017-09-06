@@ -101,7 +101,7 @@ app.directive('vrWhsBeZoneServiceConfigSelector', [
 
                     var selectedIds;
                     var filter;
-                    var selectMinWeight
+                    var selectMinWeight;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
