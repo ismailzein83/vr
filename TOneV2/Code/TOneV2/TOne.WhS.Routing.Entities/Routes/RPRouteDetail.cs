@@ -16,6 +16,8 @@ namespace TOne.WhS.Routing.Entities
 
         public string RoutingProductName { get; set; }
 
+        public string SellingNumberPlan { get; set; }
+
         public string SaleZoneName { get; set; }
 
         public bool IsBlocked { get; set; }
