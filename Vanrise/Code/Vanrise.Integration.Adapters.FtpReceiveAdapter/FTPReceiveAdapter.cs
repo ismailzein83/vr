@@ -146,7 +146,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                     if (!ftp.DirectoryExists(ftpAdapterArgument.DirectorytoMoveFile))
                         ftp.CreateDirectory(ftpAdapterArgument.DirectorytoMoveFile);
 
-                    ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}.processed", fileObj.Name));
+                    ftp.Rename(filePath, ftpAdapterArgument.DirectorytoMoveFile + "/" + string.Format(@"{0}.processed", fileObj.Name.Replace(ftpAdapterArgument.Extension, "")));
                 }
         }
 
