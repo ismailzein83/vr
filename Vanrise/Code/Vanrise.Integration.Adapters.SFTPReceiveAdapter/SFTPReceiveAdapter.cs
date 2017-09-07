@@ -56,14 +56,15 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                             if (!string.IsNullOrEmpty(SFTPAdapterArgument.LastImportedFile) && SFTPAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
                                 continue;
 
-                            String filePath = SFTPAdapterArgument.Directory + "/" + fileObj.Name;
-                            CreateStreamReader(context.OnDataReceived, sftp, fileObj, filePath);
-                            AfterImport(sftp, fileObj, filePath, SFTPAdapterArgument);
+                            String filePath = SFTPAdapterArgument.Directory + "/" + fileObj.Name;                            
                             if (SFTPAdapterState.LastRetrievedFileTime != fileObj.Modified)
                             {
                                 SFTPAdapterState = SaveOrGetAdapterState(context, SFTPAdapterArgument, fileObj.Modified);
                                 localLastRetrievedFileTime = fileObj.Modified;
                             }
+
+                            CreateStreamReader(context.OnDataReceived, sftp, fileObj, filePath);
+                            AfterImport(sftp, fileObj, filePath, SFTPAdapterArgument);
                         }
                     }
                 }

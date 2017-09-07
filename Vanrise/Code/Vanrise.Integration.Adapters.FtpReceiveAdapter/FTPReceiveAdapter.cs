@@ -55,13 +55,14 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                                 continue;
 
                             String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
-                            CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath);
-                            AfterImport(ftp, fileObj, filePath, ftpAdapterArgument);
                             if (ftpAdapterState.LastRetrievedFileTime != fileObj.Modified)
                             {
                                 ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument, fileObj.Modified);
                                 localLastRetrievedFileTime = fileObj.Modified;
                             }
+                            CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath);
+                            AfterImport(ftp, fileObj, filePath, ftpAdapterArgument);
+
                         }
                     }
                 }
