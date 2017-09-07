@@ -181,7 +181,7 @@
             }
             function loadAccountBalanceInvoicesByAccountParameter()
             {
-                if(accountId != undefined)
+                if (accountId != undefined && $scope.scopeModel.useAccountInvoicesGrid)
                 {
                   return  loadAccountBalanceInvoices(accountId);
                 }
