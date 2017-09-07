@@ -25,7 +25,6 @@
 
             var filterObj;
             var settings;
-            var gridQuery;
             var autoSearch;
             var itemActionSettings;
             var preDefinedFilter;
@@ -37,6 +36,7 @@
             var timeRangeDirectiveAPI;
             var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var selectedDRSearchPageStorageSource = UtilsService.createPromiseDeferred();
             var fromDate;
             var toDate;
             var period;
@@ -59,19 +59,24 @@
                     filterObj = null;
                     $scope.expression = undefined;
                     if ($scope.selectedDRSearchPageStorageSource != undefined) {
-                        $scope.isloadingFilter = true;
-                        loadFields().then(function () {
-                            loadFilters().finally(function () {
-                                $scope.isloadingFilter = false;
+                        if (selectedDRSearchPageStorageSource != undefined)
+                            selectedDRSearchPageStorageSource.resolve();
+                        else
+                        {
+                            $scope.isloadingFilter = true;
+                            loadFields().then(function () {
+                                loadFilters().then(function () {
+                                    $scope.isloadingFilter = false;
+                                });
                             });
-                        });
+                        }
+                       
                     }
 
                 };
 
                 $scope.search = function () {
-                    setGridQuery();
-                    return gridAPI.loadGrid(gridQuery);
+                    return gridAPI.loadGrid(getGridQuery());
                 };
 
                 $scope.addFilter = function () {
@@ -115,6 +120,7 @@
                         settings = payload.settings;
                         autoSearch = payload.autoSearch;
                         itemActionSettings = payload.itemActionSettings;
+
                         if (itemActionSettings != undefined)
                         {
                             fromDate = itemActionSettings.FromDate;
@@ -196,11 +202,11 @@
                     }).catch(function (error) {
                         loadPromiseDeffer.reject(error);
                     });
-                    loadPromiseDeffer.promise.finally(function () {
+                    loadPromiseDeffer.promise.then(function () {
                         if (autoSearch) {
-                            setGridQuery();
-                            gridAPI.loadGrid(gridQuery);
+                            gridAPI.loadGrid(getGridQuery());
                         }
+                        selectedDRSearchPageStorageSource = undefined;
                     });
                     return loadPromiseDeffer.promise;
                 };
@@ -350,7 +356,7 @@
                 }
                 return true;
             }
-            function setGridQuery() {
+            function getGridQuery() {
                 var filters = [];
                 if ($scope.filters != undefined) {
                     for (var i = 0; i < $scope.filters.length; i++) {
@@ -363,7 +369,7 @@
                         }
                     }
                 }
-                gridQuery = {
+               return {
                     DataRecordStorageIds: $scope.selectedDRSearchPageStorageSource.RecordStorageIds,
                     FromTime: $scope.fromDate,
                     ToTime: $scope.toDate,
