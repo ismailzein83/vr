@@ -114,5 +114,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             return Vanrise.Common.Serializer.Deserialize<Dictionary<string, string>>(context.Value);
         }
+
+        public override string DetailViewerEditor { get { return "vr-genericdata-datarecordfield-dictionarydetailviewer"; } }
     }
 }

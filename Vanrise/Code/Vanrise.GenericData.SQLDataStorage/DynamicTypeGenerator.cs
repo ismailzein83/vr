@@ -209,7 +209,8 @@ namespace Vanrise.GenericData.SQLDataStorage
                 else
                 {
                     builder.AppendLine(String.Format(@"var {0}Context = new Vanrise.GenericData.Entities.DeserializeDataRecordFieldValueContext() {{ Value = reader[""{1}""]  as string }}; ", column.ValueExpression, column.ColumnName));
-                    builder.AppendLine(String.Format(@"dataRecord.{0} = s_{0}FieldType.DeserializeValue({0}Context);", matchField.Name));
+                    builder.AppendLine(String.Format(@"var {0}DeserializedValue = s_{0}FieldType.DeserializeValue({0}Context);", matchField.Name));
+                    builder.AppendLine(String.Format(@"dataRecord.{0} = {0}DeserializedValue!=null? ({1}){0}DeserializedValue : null;", matchField.Name, CSharpCompiler.TypeToString(matchField.Type.GetNonNullableRuntimeType())));
                 }
             }
             return builder.ToString();

@@ -450,7 +450,9 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\vr-genericdata-datatransformation-rulestep-common.js" />
     <Content Include="VR_GenericData\Directives\RecordField\Templates\DataRecordFieldManagement.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Templates\FieldTypeSelectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\RecordField\Templates\DictionaryDetailViewer.html" />
     <Content Include="VR_GenericData\Directives\RecordField\Templates\DefaultDetailViewer.html" />
+    <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-dictionarydetailviewer.js" />
     <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-management.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationRecordTypeManagement.html" />
     <Content Include="VR_GenericData\Directives\ExpressionBuilder\vr-genericdata-datatransformation-expressionbuilder.js" />
