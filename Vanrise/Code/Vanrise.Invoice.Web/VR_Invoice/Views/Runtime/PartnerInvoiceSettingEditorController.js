@@ -154,8 +154,9 @@
                         var runtimeEditorPayload = {
                             sections: invoiceSettingDefinition,
                             invoiceTypeId: invoiceSettingEntity != undefined ? invoiceSettingEntity.InvoiceTypeId : undefined,
-                            selectedValues: partnerInvoiceSettingEntity != undefined && partnerInvoiceSettingEntity.Details != undefined ? partnerInvoiceSettingEntity.Details.InvoiceSettingParts : undefined,
-                             context: getContext()
+                            selectedValues: partnerInvoiceSettingEntity != undefined && partnerInvoiceSettingEntity.Details != undefined ? partnerInvoiceSettingEntity.Details.InvoiceSettingParts :
+                                invoiceSettingEntity != undefined && invoiceSettingEntity.Details != undefined ? invoiceSettingEntity.Details.InvoiceSettingParts : undefined,
+                            context: getContext(),
                         };
                         VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
                     });
