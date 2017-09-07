@@ -16,6 +16,9 @@ namespace Vanrise.GenericData.Entities
     public class DataRecordGridColumnAttribute
     {
         public GridColumnAttribute Attribute { get; set; }
+ 
         public string Name { get; set; }
+        
+        public string DetailViewerEditor { get; set; }
     }
 }

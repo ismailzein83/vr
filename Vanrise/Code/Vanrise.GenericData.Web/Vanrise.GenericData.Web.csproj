@@ -291,6 +291,12 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-restapi.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\RestAPITemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-restapi.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\Templates\DictionaryFieldTypeRuleFilterEditor.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\Templates\DictionaryFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\vr-genericdata-fieldtype-dictionary-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\vr-genericdata-fieldtype-dictionary-rulefiltereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\vr-genericdata-fieldtype-dictionary-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\vr-genericdata-fieldtype-dictionary.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\Templates\EmptyDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-tax.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-extracharge.js" />
@@ -444,6 +450,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\RuleSteps\Common\vr-genericdata-datatransformation-rulestep-common.js" />
     <Content Include="VR_GenericData\Directives\RecordField\Templates\DataRecordFieldManagement.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Templates\FieldTypeSelectiveTemplate.html" />
+    <Content Include="VR_GenericData\Directives\RecordField\Templates\DefaultDetailViewer.html" />
     <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-management.js" />
     <Content Include="VR_GenericData\Directives\DataTransformationDefinition\Templates\DataTransformationRecordTypeManagement.html" />
     <Content Include="VR_GenericData\Directives\ExpressionBuilder\vr-genericdata-datatransformation-expressionbuilder.js" />
@@ -454,6 +461,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\Templates\DateTimeFieldTypeRuleFilterEditor.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\Templates\NumberFieldTypeRuleFilterEditor.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\Templates\TextFieldTypeRuleFilterEditor.html" />
+    <Content Include="VR_GenericData\Directives\RecordField\vr-genericdata-datarecordfield-defaultdetailviewer.js" />
     <Content Include="VR_GenericData\Directives\RecordFilter\Templates\RecordFilterTemplate.html" />
     <Content Include="VR_GenericData\Directives\RecordFilter\vr-genericdata-recordfilter.js" />
     <Content Include="VR_GenericData\Directives\RecordTypeFieldFilter\Templates\DataRecordTypeFieldEmptyFilter.html" />

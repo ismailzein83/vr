@@ -9,10 +9,9 @@
                            field="column.Field"
                            tag="column" columnindex="$index" widthfactor="column.Widthfactor" fixedwidth="column.ColumnSettings.FixedWidth"></vr-datagridcolumn>
         <vr-datagridexpandablerow>
-            <vr-columns ng-repeat="detail in dataItem.details" colnum="{{detail.colnum}}">
-                <vr-label>{{detail.FieldTitle}}:</vr-label>
-                <vr-label isvalue>{{dataItem.FieldValues[detail.FieldName].Description}}</vr-label>
-            </vr-columns>
+            <span ng-repeat="detail in dataItem.details">
+                <vr-directivewrapper directive="detail.editor" on-ready="detail.onDetailViewerReady"></vr-directivewrapper>
+            </span>
         </vr-datagridexpandablerow>
     </vr-datagrid>
 </div>

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum'];
+    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VRUIUtilsService'];
 
-    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum) {
+    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -63,7 +63,22 @@
                     return VR_GenericData_DataRecordStorageLogAPIService.GetFilteredDataRecordStorageLogs(dataRetrievalInput).then(function (response) {
                         if (response && response.Data) {
                             for (var z = 0; z < response.Data.length; z++) {
-                                response.Data[z].details = itemDetails;
+                                var currentData = response.Data[z];
+                                currentData.details = itemDetails;
+                                if (currentData.details != undefined) {
+                                    for (var x = 0; x < currentData.details.length; x++) {
+                                        var currentDetail = currentData.details[x];
+
+                                        for (var y = 0; y <= dataRecordTypeAttributes.length; y++) {
+                                            var currentAttribute = dataRecordTypeAttributes[y];
+                                            if (currentDetail.FieldName == currentAttribute.Name) {
+                                                currentDetail.editor = currentAttribute.DetailViewerEditor;
+                                                break;
+                                            }
+                                        }
+                                        extendDetailItemObject(currentDetail, currentData);
+                                    }
+                                }
                             }
                         }
 
@@ -147,9 +162,6 @@
                         if (gridWidth != undefined)
                             column.Widthfactor = gridWidth.widthFactor;
 
-                        //var gridWidth = UtilsService.getItemByVal(gridWidths, column.Width, "value");
-                        //if (gridWidth != undefined)
-                        //    column.Widthfactor = gridWidth.widthFactor;
                         ctrl.columns.push(column);
                     });
 
@@ -212,6 +224,16 @@
                 }
                 return itemDetails;
             }
+
+            function extendDetailItemObject(detailItem, data) {
+                detailItem.detailViewerLoadDeferred = UtilsService.createPromiseDeferred();
+                detailItem.onDetailViewerReady = function (api) {
+                    detailItem.detailViewerAPI = api;
+                    var payload = { detailItem: detailItem, fieldValue: data.FieldValues[detailItem.FieldName] };
+                    VRUIUtilsService.callDirectiveLoad(detailItem.detailViewerAPI, payload, detailItem.detailViewerLoadDeferred);
+                };
+                return detailItem.detailViewerLoadDeferred.promise;
+            };
         }
     }
 

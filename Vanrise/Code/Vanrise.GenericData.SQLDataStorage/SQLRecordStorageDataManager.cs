@@ -126,7 +126,7 @@ namespace Vanrise.GenericData.SQLDataStorage
         {
             string tableName = string.Format("{0}_Temp_{1}", _dataRecordStorageSettings.TableName, processId);
             ExecuteNonQueryText(GetRecordStorageCreateTableQuery(tableName), null);
-            
+
             return new SQLTempStorageInformation()
             {
                 Schema = _dataRecordStorageSettings.TableSchema != null ? _dataRecordStorageSettings.TableSchema : "dbo",
@@ -553,6 +553,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         private DataRecord DataRecordMapper(IDataReader reader)
         {
+
             DateTime recordTime = default(DateTime);
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
 
@@ -561,6 +562,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 if (Columns.Contains(column.ColumnName))
                 {
+                    DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == column.ValueExpression);
                     var value = reader[column.ColumnName];
                     if (value == DBNull.Value)
                         value = null;
@@ -568,6 +570,12 @@ namespace Vanrise.GenericData.SQLDataStorage
                     {
                         recordTime = value != null ? (DateTime)value : default(DateTime);
                     }
+
+                    if (value != null && matchingField.Type.StoreValueSerialized)
+                    {
+                        value = matchingField.Type.DeserializeValue(new DeserializeDataRecordFieldValueContext() { Value = value as string });
+                    }
+
                     fieldValues.Add(column.ValueExpression, value);
                 }
             }

@@ -114,7 +114,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             ObjectListRecordFilter objectListRecordFilter = recordFilter as ObjectListRecordFilter;
             if (objectListRecordFilter == null)
-                throw new NullReferenceException("stringListRecordFilter");
+                throw new NullReferenceException("objectListRecordFilter");
             if (fieldValue == null)
                 return objectListRecordFilter.CompareOperator == ListRecordFilterOperator.NotIn;
 

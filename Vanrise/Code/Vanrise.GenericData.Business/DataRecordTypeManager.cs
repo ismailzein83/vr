@@ -77,7 +77,7 @@ namespace Vanrise.GenericData.Business
             DataRecordType dataRecordType = GetDataRecordType(dataRecordTypeId);
             foreach (DataRecordField field in dataRecordType.Fields)
             {
-                DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute() { Attribute = field.Type.GetGridColumnAttribute(null), Name = field.Name };
+                DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute() { Attribute = field.Type.GetGridColumnAttribute(null), Name = field.Name, DetailViewerEditor = field.Type.DetailViewerEditor };
                 fields.Add(attribute);
             }
             return fields;
@@ -423,7 +423,7 @@ namespace Vanrise.GenericData.Business
                 string fieldRuntimTypeAsString = CSharpCompiler.TypeToString(field.Type.GetRuntimeType());
                 globalMembersBuilder.AppendFormat("public {0} {1} {{ get; set; }}", fieldRuntimTypeAsString, field.Name);
                 propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
-                setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, field.Type.GetNonNullableRuntimeType(), fieldRuntimTypeAsString);
+                setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimTypeAsString);
                 getFieldValueBuilder.AppendFormat(@"case ""{0}"" : return {0};", field.Name);
                 cloneRecordMembersBuilder.AppendFormat("record.{0} = this.{0};", field.Name);
                 fieldNames.Add(field.Name);

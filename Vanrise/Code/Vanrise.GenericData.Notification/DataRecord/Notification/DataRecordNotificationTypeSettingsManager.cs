@@ -29,7 +29,8 @@ namespace Vanrise.GenericData.Notification
                 DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute()
                 {
                     Attribute = dataRecordField.Type.GetGridColumnAttribute(context),
-                    Name = gridColumnDefinition.FieldName
+                    Name = gridColumnDefinition.FieldName,
+                    DetailViewerEditor = dataRecordField.Type.DetailViewerEditor
                 };
                 attribute.Attribute.HeaderText = gridColumnDefinition.Header;
 

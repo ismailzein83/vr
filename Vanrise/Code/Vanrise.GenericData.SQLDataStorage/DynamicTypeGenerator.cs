@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
-using Vanrise.Data.SQL;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.SQLDataStorage
 {
-
     internal class DynamicTypeGenerator
     {
         public IDynamicManager GetDynamicManager(DataRecordStorage dataRecordStorage, SQLDataRecordStorageSettings dataRecordStorageSettings)
@@ -30,16 +25,25 @@ namespace Vanrise.GenericData.SQLDataStorage
                     StringBuilder classDefinitionBuilder = new StringBuilder(@"
                 using System;                
                 using System.Data;
+                using System.Linq;
                 using System.Collections.Generic;
 
                 namespace #NAMESPACE#
                 {
                     public class #CLASSNAME# : Vanrise.Data.BaseDataManager, Vanrise.GenericData.SQLDataStorage.IDynamicManager
-                    {      
+                    {   
+                        static Guid s_recordTypeId = new Guid(""#RECORDTYPEID#"");
+                        #RECORDTYPEFIELDTYPES#
+
+                        static #CLASSNAME#()
+                        {
+                            LoadRecordTypeFieldTypes();
+                        }
+
                         public  #CLASSNAME#() : base("" "", false)
                         {
                         }
-
+                        
                         string[] _columnNames = {#COLUMNNAMES#};
 
                         public string[] ColumnNames 
@@ -59,6 +63,11 @@ namespace Vanrise.GenericData.SQLDataStorage
                             }
                         }
                   
+                        static void LoadRecordTypeFieldTypes()
+                        {
+                            #FillRECORDTYPEFIELDTYPES#
+                        }
+
                         public void WriteRecordToStream(dynamic record, Vanrise.Data.SQL.StreamForBulkInsert streamForBulkInsert)
                         {
                             #COLUMNSVALUES#
@@ -77,7 +86,18 @@ namespace Vanrise.GenericData.SQLDataStorage
                     }
                 }");
 
-                    //StringBuilder recordFormatBuilder = new StringBuilder();
+                    StringBuilder recordFieldTypesBuilder = new StringBuilder();
+                    StringBuilder fillRecordTypeFieldTypesBuilder = new StringBuilder();
+
+                    fillRecordTypeFieldTypesBuilder.AppendLine("var recordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();");
+                    fillRecordTypeFieldTypesBuilder.AppendLine("var recordType = recordTypeManager.GetDataRecordType(s_recordTypeId);");
+
+                    foreach (DataRecordField dataRecordField in recordType.Fields)
+                    {
+                        recordFieldTypesBuilder.AppendLine(string.Format("static Vanrise.GenericData.Entities.DataRecordFieldType s_{0}FieldType;", dataRecordField.Name));
+                        fillRecordTypeFieldTypesBuilder.AppendLine(string.Format(@"s_{0}FieldType = recordType.Fields.First(itm => itm.Name == ""{0}"").Type;", dataRecordField.Name));
+                    }
+
                     StringBuilder columnsValuesBuilder = new StringBuilder("System.Text.StringBuilder valuesBuilder = new System.Text.StringBuilder();");
                     StringBuilder columnNamesBuilder = new StringBuilder();
                     int columnIndex = 0;
@@ -85,30 +105,41 @@ namespace Vanrise.GenericData.SQLDataStorage
 
                     foreach (var columnSettings in dataRecordStorageSettings.Columns)
                     {
+                        var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == columnSettings.ValueExpression);
+                        matchField.ThrowIfNull("matchField", columnSettings.ValueExpression);
+
                         if (columnIndex > 0)
                             columnsValuesBuilder.AppendLine("valuesBuilder.Append(\"^\");");
-                        //recordFormatBuilder.Append("{" + columnIndex.ToString() + "}");
-                        string sqlDataType = columnSettings.SQLDataType.ToLower();
-                        if (sqlDataType.Contains("decimal"))
+
+                        if (matchField.Type.StoreValueSerialized)
                         {
-                            int precision = 0;
-                            if (sqlDataType.Contains(","))
-                            {
-                                string[] parts = sqlDataType.Split(',');
-                                if (parts.Length == 2)
-                                {
-                                    string precisionPart = parts[1].Replace(")", "").Trim();
-                                    int.TryParse(precisionPart, out precision);
-                                }
-                            }
-                            columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? Decimal.Round(record.{0}, {1}) : String.Empty);", columnSettings.ValueExpression, precision));
+                            columnsValuesBuilder.AppendLine(String.Format("var {0}Context = new Vanrise.GenericData.Entities.SerializeDataRecordFieldValueContext() {{ Object = record.{0} }}; ", columnSettings.ValueExpression));
+                            columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(s_{0}FieldType.SerializeValue({0}Context));", columnSettings.ValueExpression));
                         }
-                        else if (sqlDataType == "bit")
-                            columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? record.{0} == true ? \"1\" : \"0\" : String.Empty);", columnSettings.ValueExpression));
-                        else if (sqlDataType == "datetime")
-                            columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null && record.{0} != default(DateTime) ? Vanrise.Data.BaseDataManager.GetDateTimeForBCP(record.{0}) : String.Empty);", columnSettings.ValueExpression));
                         else
-                            columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? record.{0} : String.Empty);", columnSettings.ValueExpression));
+                        {
+                            string sqlDataType = columnSettings.SQLDataType.ToLower();
+                            if (sqlDataType.Contains("decimal"))
+                            {
+                                int precision = 0;
+                                if (sqlDataType.Contains(","))
+                                {
+                                    string[] parts = sqlDataType.Split(',');
+                                    if (parts.Length == 2)
+                                    {
+                                        string precisionPart = parts[1].Replace(")", "").Trim();
+                                        int.TryParse(precisionPart, out precision);
+                                    }
+                                }
+                                columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? Decimal.Round(record.{0}, {1}) : String.Empty);", columnSettings.ValueExpression, precision));
+                            }
+                            else if (sqlDataType == "bit")
+                                columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? record.{0} == true ? \"1\" : \"0\" : String.Empty);", columnSettings.ValueExpression));
+                            else if (sqlDataType == "datetime")
+                                columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null && record.{0} != default(DateTime) ? Vanrise.Data.BaseDataManager.GetDateTimeForBCP(record.{0}) : String.Empty);", columnSettings.ValueExpression));
+                            else
+                                columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? record.{0} : String.Empty);", columnSettings.ValueExpression));
+                        }
                         columnIndex++;
                         if (columnNamesBuilder.Length > 0)
                             columnNamesBuilder.Append(", ");
@@ -119,7 +150,6 @@ namespace Vanrise.GenericData.SQLDataStorage
                     {
                         if (columnIndex > 0)
                             columnsValuesBuilder.AppendLine("valuesBuilder.Append(\"^\");");
-                        //recordFormatBuilder.Append("{" + dataRecordStorageSettings.Columns.Count.ToString() + "}");
 
                         if (columnNamesBuilder.Length > 0)
                             columnNamesBuilder.Append(", ");
@@ -128,12 +158,15 @@ namespace Vanrise.GenericData.SQLDataStorage
                         columnsValuesBuilder.AppendLine("valuesBuilder.Append(record.QueueItemId != null && record.QueueItemId != default(long) ? record.QueueItemId : String.Empty);");
                     }
 
-                    //classDefinitionBuilder.Replace("#RECORDFORMAT#", recordFormatBuilder.ToString());
                     classDefinitionBuilder.Replace("#COLUMNSVALUES#", columnsValuesBuilder.ToString());
                     classDefinitionBuilder.Replace("#COLUMNNAMES#", columnNamesBuilder.ToString());
                     classDefinitionBuilder.Replace("#COLUMNNAMESCOMMADELIMITED#", String.Join(",", dataRecordStorageSettings.Columns.Select(itm => itm.ColumnName)));
                     classDefinitionBuilder.Replace("#FillDataRecordFromReaderImplementation#", BuildFillDataRecordFromReaderImpl(dataRecordStorageSettings, recordType));
                     classDefinitionBuilder.Replace("#ConvertDataRecordsToTableImplementation#", BuildConvertDataRecordsToTableImpl(dataRecordStorageSettings, recordType));
+
+                    classDefinitionBuilder.Replace("#RECORDTYPEID#", recordType.DataRecordTypeId.ToString());
+                    classDefinitionBuilder.Replace("#RECORDTYPEFIELDTYPES#", recordFieldTypesBuilder.ToString());
+                    classDefinitionBuilder.Replace("#FillRECORDTYPEFIELDTYPES#", fillRecordTypeFieldTypesBuilder.ToString());
 
                     string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.SQLDataStorage");
                     string className = "DynamicManager";
@@ -158,7 +191,6 @@ namespace Vanrise.GenericData.SQLDataStorage
                     else
                         return Activator.CreateInstance(compilationOutput.OutputAssembly.GetType(fullTypeName)) as IDynamicManager;
                 });
-
         }
 
         private string BuildFillDataRecordFromReaderImpl(SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordType recordType)
@@ -169,10 +201,20 @@ namespace Vanrise.GenericData.SQLDataStorage
                 var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == column.ValueExpression);
                 if (matchField == null)
                     throw new NullReferenceException("matchField");
-                builder.AppendLine(String.Format(@"dataRecord.{0} = GetReaderValue<{1}>(reader, ""{2}"");", matchField.Name, CSharpCompiler.TypeToString(matchField.Type.GetRuntimeType()), column.ColumnName));
+
+                if (!matchField.Type.StoreValueSerialized)
+                {
+                    builder.AppendLine(String.Format(@"dataRecord.{0} = GetReaderValue<{1}>(reader, ""{2}"");", matchField.Name, CSharpCompiler.TypeToString(matchField.Type.GetRuntimeType()), column.ColumnName));
+                }
+                else
+                {
+                    builder.AppendLine(String.Format(@"var {0}Context = new Vanrise.GenericData.Entities.DeserializeDataRecordFieldValueContext() {{ Value = reader[""{1}""]  as string }}; ", column.ValueExpression, column.ColumnName));
+                    builder.AppendLine(String.Format(@"dataRecord.{0} = s_{0}FieldType.DeserializeValue({0}Context);", matchField.Name));
+                }
             }
             return builder.ToString();
         }
+
         private string BuildConvertDataRecordsToTableImpl(SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordType recordType)
         {
             StringBuilder builder = new StringBuilder(@"DataTable dt = new DataTable();
@@ -193,8 +235,19 @@ namespace Vanrise.GenericData.SQLDataStorage
                 var matchField = recordType.Fields.FirstOrDefault(itm => itm.Name == column.ValueExpression);
                 if (matchField == null)
                     throw new NullReferenceException("matchField");
-                dtSchemaBuilder.AppendLine(String.Format(@"dt.Columns.Add(""{0}"", typeof({1}));", column.ColumnName, CSharpCompiler.TypeToString(matchField.Type.GetNonNullableRuntimeType())));
-                dtRowsBuilder.AppendLine(String.Format(@"dr[""{0}""] = record.{1} != null ? record.{1} : DBNull.Value;", column.ColumnName, column.ValueExpression));
+
+                if (matchField.Type.StoreValueSerialized)
+                {
+                    dtSchemaBuilder.AppendLine(String.Format(@"dt.Columns.Add(""{0}"", typeof(string));", column.ColumnName));
+
+                    dtRowsBuilder.AppendLine(String.Format("var {0}Context = new Vanrise.GenericData.Entities.SerializeDataRecordFieldValueContext() {{ Object = record.{0} }}; ", column.ValueExpression));
+                    dtRowsBuilder.AppendLine(String.Format(@"if( record.{1} != null) dr[""{0}""] = s_{0}FieldType.SerializeValue({0}Context); else dr[""{0}""] = DBNull.Value;", column.ColumnName, column.ValueExpression));
+                }
+                else
+                {
+                    dtSchemaBuilder.AppendLine(String.Format(@"dt.Columns.Add(""{0}"", typeof({1}));", column.ColumnName, CSharpCompiler.TypeToString(matchField.Type.GetNonNullableRuntimeType())));
+                    dtRowsBuilder.AppendLine(String.Format(@"dr[""{0}""] = record.{1} != null ? record.{1} : DBNull.Value;", column.ColumnName, column.ValueExpression));
+                }
             }
 
             if (dataRecordStorageSettings.IncludeQueueItemId)
@@ -208,8 +261,5 @@ namespace Vanrise.GenericData.SQLDataStorage
 
             return builder.ToString();
         }
-
     }
-
-
 }
