@@ -108,7 +108,7 @@
                             var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlan = value; };
                             var payload = {
                                 selectedIds: (carrierAccountEntity != undefined && carrierAccountEntity.SellingNumberPlanId != null) ? carrierAccountEntity.SellingNumberPlanId : undefined,
-                                selectifsingleitem: true
+                                selectifsingleitem: (!isEditMode) ? true : false
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanSelectorAPI, payload, setLoader);
                         }
@@ -135,7 +135,7 @@
                             var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value; };
                             var payload = {
                                 selectedIds: getDefaultServices(),
-                                selectminweight: true
+                                selectminweight: (!isEditMode) ? true : false
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, payload, setLoader);
                         }
@@ -180,7 +180,7 @@
             $scope.scopeModel.onSellingNumberPlanSelectorReady = function (api) {
                 sellingNumberPlanSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingSellingNumberPlanSelector = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanSelectorAPI, { selectifsingleitem: true }, setLoader, sellingNumberPlanSelectorReadyDeferred);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanSelectorAPI, { selectifsingleitem: (!isEditMode) ? true : false }, setLoader, sellingNumberPlanSelectorReadyDeferred);
             };
             $scope.scopeModel.onSellingNumberPlanChanged = function (selectedSellingNumberPlan) {
                 if (selectedSellingNumberPlan == undefined)
@@ -192,7 +192,7 @@
                         filter: {
                             SellingNumberPlanId: selectedSellingNumberPlan.SellingNumberPlanId
                         },
-                        selectifsingleitem: true
+                        selectifsingleitem: (!isEditMode) ? true : false
                     };
                     var setLoader = function (value) { $scope.scopeModel.isLoadingSellingProductSelector = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductSelectorAPI, sellingProductSelectorPayload, setLoader, sellingProductSelectorReadyDeferred);
@@ -228,7 +228,7 @@
             $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
                 zoneServiceConfigSelectorAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingZoneServiceConfigSelector = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, { selectminweight: true }, setLoader, zoneServiceConfigSelectorReadyDeferred);
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, zoneServiceConfigSelectorAPI, { selectminweight: (!isEditMode) ? true : false }, setLoader, zoneServiceConfigSelectorReadyDeferred);
             };
             $scope.scopeModel.onSupplierRoutingStatusSelectorReady = function (api) {
                 supplierRoutingStatusSelectorAPI = api;
@@ -562,7 +562,7 @@
                 sellingNumberPlanSelectorReadyDeferred = undefined;
                 var sellingNumberPlanSelectorPayload = {
                     selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.SellingNumberPlanId : undefined,
-                    selectifsingleitem: true
+                    selectifsingleitem: (!isEditMode) ? true : false
                 };
                 VRUIUtilsService.callDirectiveLoad(sellingNumberPlanSelectorAPI, sellingNumberPlanSelectorPayload, sellingNumberPlanSelectorLoadDeferred);
             });
@@ -576,7 +576,7 @@
                 sellingProductSelectorReadyDeferred = undefined;
                 sellingNumberPlanSelectedDeferred = undefined;
                 var sellingProductSelectorPayload = {
-                    selectifsingleitem: true
+                    selectifsingleitem: (!isEditMode) ? true : false
                 };
                 if (carrierAccountEntity != undefined) {
                     sellingProductSelectorPayload.filter = {
@@ -656,7 +656,7 @@
                 zoneServiceConfigSelectorReadyDeferred = undefined;
                 var zoneServiceConfigSelectorPayload = {
                     selectedIds: getDefaultServices(),
-                    selectminweight: true
+                    selectminweight: (!isEditMode) ? true : false
                 };
                 VRUIUtilsService.callDirectiveLoad(zoneServiceConfigSelectorAPI, zoneServiceConfigSelectorPayload, zoneServiceConfigSelectorLoadDeferred);
             });
