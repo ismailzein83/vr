@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonBankDetailSelector', ['VRCommon_BankDetailAPIService', 'UtilsService', 'VRUIUtilsService','VRCommon_BankDetailService',
-function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService,VRCommon_BankDetailService) {
+app.directive('vrCommonBankDetailSelector', ['VRCommon_BankDetailAPIService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_BankDetailService',
+function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService, VRCommon_BankDetailService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -74,15 +74,17 @@ function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService,VRCommon
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
             + '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="Bank" datavaluefield="BankDetailId" '
-        + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
+        + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" on-ready="onSelectorReady"></vr-select>'
            + '</vr-columns>';
     }
 
     function bankDetailCtor(ctrl, $scope, $attrs) {
-
+        var selectorAPI;
         function initializeController() {
-
-            defineAPI();
+            $scope.onSelectorReady = function (api) {
+                selectorAPI = api;
+                defineAPI();
+            };
         }
 
         function defineAPI() {
@@ -91,18 +93,21 @@ function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService,VRCommon
                 return VRUIUtilsService.getIdSelectedIds('BankDetailId', $attrs, ctrl);
             };
             api.load = function (payload) {
-
+                selectorAPI.clearDataSource();
                 var selectedIds;
+                var selectIfSingleItem;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
+                    selectIfSingleItem = payload.selectifsingleitem;
                 }
-
                 return VRCommon_BankDetailAPIService.GetBankDetailsInfo().then(function (response) {
                     angular.forEach(response, function (item) {
-                        ctrl.datasource.push(item);
+                            ctrl.datasource.push(item);
                     });
                     if (selectedIds != undefined)
                         VRUIUtilsService.setSelectedValues(selectedIds, 'BankDetailId', $attrs, ctrl);
+                    else if (selectedIds == undefined && selectIfSingleItem)
+                        selectorAPI.selectIfSingleItem();
 
                 });
             };

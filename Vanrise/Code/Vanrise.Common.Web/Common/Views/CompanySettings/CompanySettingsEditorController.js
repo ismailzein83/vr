@@ -73,14 +73,14 @@
 
         function loadBankDetail() {
             var loadBankPromiseDeferred = UtilsService.createPromiseDeferred();
-            
+
             bankReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload;
+                    var directivePayload = {
+                        selectifsingleitem: (!isEditMode) ? true : false
+                    };
                     if (companySettingEntity != undefined && companySettingEntity.BankDetails != undefined) {
-                        directivePayload = {
-                            selectedIds: companySettingEntity.BankDetails
-                        };
+                        directivePayload.selectedIds = companySettingEntity.BankDetails;
                     }
 
                     VRUIUtilsService.callDirectiveLoad(bankDirectiveApi, directivePayload, loadBankPromiseDeferred);
@@ -94,7 +94,7 @@
                 $scope.scopeModel.isDefault = setDefault == true;
                 return;
             }
-               
+
             $scope.scopeModel.companyName = companySettingEntity.CompanyName;
             $scope.scopeModel.profileName = companySettingEntity.ProfileName;
             $scope.scopeModel.registrationNumber = companySettingEntity.RegistrationNumber;
@@ -115,7 +115,7 @@
 
         function buildCompanySettingsObjFromScope() {
             var obj = {
-                CompanySettingId: companySettingEntity != undefined? companySettingEntity.CompanySettingId : UtilsService.guid(),
+                CompanySettingId: companySettingEntity != undefined ? companySettingEntity.CompanySettingId : UtilsService.guid(),
                 CompanyName: $scope.scopeModel.companyName,
                 ProfileName: $scope.scopeModel.profileName,
                 RegistrationNumber: $scope.scopeModel.registrationNumber,
