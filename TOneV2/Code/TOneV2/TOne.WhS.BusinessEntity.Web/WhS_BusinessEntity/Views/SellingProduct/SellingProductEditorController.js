@@ -166,7 +166,8 @@
             sellingNumberPlanReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds: sellingProductEntity != undefined ? sellingProductEntity.SellingNumberPlanId : undefined
+                        selectedIds: sellingProductEntity != undefined ? sellingProductEntity.SellingNumberPlanId : undefined,
+                        selectifsingleitem: (!isEditMode) ? true : false
                     };
                     if (fixedSellingNumberPlanId != undefined)
                         directivePayload.selectedIds = fixedSellingNumberPlanId;

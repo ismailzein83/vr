@@ -32,7 +32,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             var offPeakRateTypeId;
             var weekendRateTypeId;
             var holidayRateTypeId;
-
+            var isEditMode;
 
             var sellingNumberPlanDirectiveAPI;
             var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -145,7 +145,9 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                             filter: {
                                 SellingNumberPlanId: selectedSellingNumberPlanId
                             },
-                            selectedIds: sellingProductId
+                            selectedIds: sellingProductId,
+                            selectifsingleitem: (!isEditMode) ? true : false
+
                         };
                         sellingProductId = undefined;
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductDirectiveAPI, sellingProductPayload, setLoader);
@@ -177,7 +179,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             function defineAPI() {
 
                 var api = {};
-
+               
                 api.getData = function () {
                     var schedulerTaskAction;
                     schedulerTaskAction = {};
@@ -210,7 +212,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     $scope.migratePriceListData = true;
 
                     if (payload != undefined && payload.data != undefined) {
-
+                        isEditMode = true;
                         $scope.connectionString = payload.data.ConnectionString;
                         $scope.useTempTables = payload.data.UseTempTables;
                         sellingNumberPlanId = payload.data.DefaultSellingNumberPlanId;
@@ -230,7 +232,6 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         })
 
                     }
-
                     return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector, loadOffPeakRateTypeSelector, loadWeekendRateTypeSelector, loadHolidayRateTypeSelector])
                          .catch(function (error) {
                              VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -248,7 +249,8 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
 
                 sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
                     var sellingNumberPlanPayload = {
-                        selectedIds: sellingNumberPlanId
+                        selectedIds: sellingNumberPlanId,
+                        selectifsingleitem: (!isEditMode) ? true : false
                     };
 
                     VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, sellingNumberPlanPayload, loadSellingNumberPlanPromiseDeferred);
