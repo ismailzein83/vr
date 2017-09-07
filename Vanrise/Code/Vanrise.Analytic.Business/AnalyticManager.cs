@@ -143,45 +143,10 @@ namespace Vanrise.Analytic.Business
             return recordFilterGroup;
         }
 
-
         public RecordFilterGroup BuildRecordSearchFieldFilter(RecordSearchFieldFilterInput input)
         {
             Guid dataRecordTypeId = GetDataRecordTypeForReportBySourceName(input.ReportId, input.SourceName);
-            DataRecordTypeManager dataRecordTypeManager = new GenericData.Business.DataRecordTypeManager();
-            var recordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
-        
-            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
-            recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
-            recordFilterGroup.Filters = new List<RecordFilter>();
-            if (input.FieldFilters != null)
-            {
-                foreach (var fieldFilter in input.FieldFilters)
-                {
-                    var field = recordTypeFields.FindRecord(x => x.Name == fieldFilter.FieldName);
-                    List<object> notNullFilterValues = fieldFilter.FilterValues.Where(itm => itm != null).ToList();
-                    RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? field.Type.ConvertToRecordFilter(field.Name, notNullFilterValues) : null;
-                    EmptyRecordFilter emptyRecordFilter = notNullFilterValues.Count != fieldFilter.FilterValues.Count ? new EmptyRecordFilter { FieldName = field.Name } : null;
-
-                    if (notNullValuesRecordFilter != null && emptyRecordFilter != null)
-                    {
-                        RecordFilterGroup dimensionsRecordFilterGroup = new RecordFilterGroup();
-                        dimensionsRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
-                        dimensionsRecordFilterGroup.Filters = new List<RecordFilter>();
-                        dimensionsRecordFilterGroup.Filters.Add(emptyRecordFilter);
-                        dimensionsRecordFilterGroup.Filters.Add(notNullValuesRecordFilter);
-                        recordFilterGroup.Filters.Add(dimensionsRecordFilterGroup);
-                    }
-                    else if (notNullValuesRecordFilter != null)
-                    {
-                        recordFilterGroup.Filters.Add(notNullValuesRecordFilter);
-                    }
-                    else if (emptyRecordFilter != null)
-                    {
-                        recordFilterGroup.Filters.Add(emptyRecordFilter);
-                    }
-                }
-            }
-            return recordFilterGroup;
+            return new RecordFilterManager().BuildRecordFilterGroup(dataRecordTypeId, input.FieldFilters, null);
         }
         
         

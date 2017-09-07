@@ -23,8 +23,13 @@ namespace Vanrise.GenericData.Entities
         public OrderDirection Direction { get; set; }
 
         public List<SortColumn> SortColumns { get; set; }
+        public List<DataRecordFilter> Filters { get; set; }
     }
-
+    public class DataRecordFilter
+    {
+        public string FieldName { get; set; }
+        public List<Object> FilterValues { get; set; }
+    }
     public class SortColumn
     {
         public string FieldName { get; set; }

@@ -110,7 +110,8 @@
                             ToTime: query.ToTime,
                             FilterGroup: query.FilterGroup,
                             LimitResult: query.LimitResult,
-                            Direction: query.Direction
+                            Direction: query.Direction,
+                            Filters:query.Filters
                         };
 
                         fillQueryColumns(searchQuery, query.GridColumns, query.ItemDetails);

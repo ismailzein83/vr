@@ -30,6 +30,9 @@
                            datavaluefield="value" datatextfield="description" isrequired="true" hideremoveicon>
                 </vr-select>
             </vr-columns>
+            <span ng-repeat="filter in filters">
+                <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2" isrequired="filter.isRequired"></vr-directivewrapper>
+            </span>
         </vr-row>
         <vr-row removeline ng-if="advancedSelected">
             <vr-columns width="fullrow" vr-loader="isloadingFilter">

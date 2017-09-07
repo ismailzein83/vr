@@ -84,6 +84,51 @@ namespace Vanrise.GenericData.Business
             filterGroup.SetValueFromParameters(context);
         }
 
+
+        public RecordFilterGroup BuildRecordFilterGroup(Guid dataRecordTypeId, List<DataRecordFilter> filters,RecordFilter filterGroup)
+        {
+            DataRecordTypeManager dataRecordTypeManager = new GenericData.Business.DataRecordTypeManager();
+            var recordType = dataRecordTypeManager.GetDataRecordType(dataRecordTypeId);
+
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+            recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
+            recordFilterGroup.Filters = new List<RecordFilter>();
+            if(filterGroup != null)
+            {
+               recordFilterGroup.Filters.Add(filterGroup);
+            }
+            if (filters != null)
+            {
+                foreach (var filter in filters)
+                {
+                    var record = recordType.Fields.FindRecord(x => x.Name == filter.FieldName);
+                    List<object> notNullFilterValues = filter.FilterValues.Where(itm => itm != null).ToList();
+                    RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? record.Type.ConvertToRecordFilter(record.Name, notNullFilterValues) : null;
+                    EmptyRecordFilter emptyRecordFilter = notNullFilterValues.Count != filter.FilterValues.Count ? new EmptyRecordFilter { FieldName = record.Name } : null;
+
+                    if (notNullValuesRecordFilter != null && emptyRecordFilter != null)
+                    {
+                        RecordFilterGroup dimensionsRecordFilterGroup = new RecordFilterGroup();
+                        dimensionsRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
+                        dimensionsRecordFilterGroup.Filters = new List<RecordFilter>();
+                        dimensionsRecordFilterGroup.Filters.Add(emptyRecordFilter);
+                        dimensionsRecordFilterGroup.Filters.Add(notNullValuesRecordFilter);
+
+                        recordFilterGroup.Filters.Add(dimensionsRecordFilterGroup);
+                    }
+                    else if (notNullValuesRecordFilter != null)
+                    {
+                        recordFilterGroup.Filters.Add(notNullValuesRecordFilter);
+                    }
+                    else if (emptyRecordFilter != null)
+                    {
+                        recordFilterGroup.Filters.Add(emptyRecordFilter);
+                    }
+                }
+            }
+            return recordFilterGroup;
+        }
+
         #region Private Classes
 
         private class SingleFieldRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext

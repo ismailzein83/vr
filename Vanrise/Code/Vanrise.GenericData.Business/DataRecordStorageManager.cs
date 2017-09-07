@@ -40,6 +40,9 @@ namespace Vanrise.GenericData.Business
             if (dataStore.Settings == null)
                 throw new NullReferenceException(String.Format("dataStore.Settings. Id '{0}'", dataRecordStorage.DataStoreId));
 
+            if (input.Query.Filters != null)
+                input.Query.FilterGroup = new RecordFilterManager().BuildRecordFilterGroup(dataRecordStorage.DataRecordTypeId, input.Query.Filters, input.Query.FilterGroup);
+
             var remoteRecordDataManager = dataStore.Settings.GetRemoteRecordDataManager(new GetRemoteRecordStorageDataManagerContext() { DataStore = dataStore, DataRecordStorage = dataRecordStorage });
             if (remoteRecordDataManager != null)
             {

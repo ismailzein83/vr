@@ -20,8 +20,12 @@
             <vr-columns colnum="6" haschildcolumns>
                 <vr-timerange on-ready="scopeModel.onTimeRangeDirectiveReady " width="1/3row" type="dateTime" from="scopeModel.fromdate" to="scopeModel.todate" period="selectedPeriod" isrequired="false"></vr-timerange>
             </vr-columns>
+            <span ng-repeat="filter in scopeModel.filters">
+                <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2" isrequired="filter.isRequired"></vr-directivewrapper>
+            </span>
         </vr-row>
         <vr-row removeline ng-if="advancedSelected">
+
             <vr-columns width="fullrow">
                 <vr-section title="Advanced Filter">
                     <vr-row ng-show="scopeModel.expression !=undefined" removeline>

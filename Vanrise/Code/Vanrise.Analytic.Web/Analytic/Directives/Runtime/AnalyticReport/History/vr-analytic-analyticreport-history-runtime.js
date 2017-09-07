@@ -328,7 +328,7 @@
                             dimensionFilters.push({
                                 Dimension: filter.dimesnionName,
                                 FilterValues: filter.directiveAPI.getValuesAsArray()
-                            })
+                            });
                         }
 
                     }

@@ -25,23 +25,12 @@
                 </vr-columns>
             </vr-row>
 
-            <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-choices-filter selectedindex="selectedFilternIndex">
-                        <vr-choice-filter isselected="gridColumnsSelected">Grid Columns</vr-choice-filter>
-                        <vr-choice-filter isselected="itemDetailsSelected">Item Details</vr-choice-filter>
-                        <vr-choice-filter isselected="sortColumnsSelected">Sort Columns</vr-choice-filter>
-                    </vr-choices-filter>
-                </vr-columns>
-            </vr-row>
-
-            <vr-row ng-show="gridColumnsSelected">
-                <vr-columns width="fullrow">
-
+            <vr-tabs>
+                <vr-tab header="'Grid Columns'">
                     <vr-row removeline>
                         <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
                             <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFields" onselectitem="onSelectedField" ondeselectitem="onDeSelectedField"
-                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection>
+                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
                             </vr-select>
                         </vr-columns>
                         <vr-columns width="fullrow">
@@ -59,17 +48,33 @@
                             </vr-validator>
                         </vr-columns>
                     </vr-row>
-                </vr-columns>
-            </vr-row>
-
-
-            <vr-row ng-show="itemDetailsSelected">
-                <vr-columns width="fullrow">
-
+                </vr-tab>
+                <vr-tab header="'Search Filters'">
+                    <vr-row removeline>
+                        <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
+                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFilters" onselectitem="onSelectedFilter" ondeselectitem="onDeSelectedFilter"
+                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
+                            </vr-select>
+                        </vr-columns>
+                        <vr-columns width="fullrow">
+                                <vr-datagrid datasource="selectedFiltersGrid" norowhighlightonclick="true"
+                                             ondeleterow="removeFilter" hidegridmenu enabledraggablerow="true">
+                                    <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
+                                        <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
+                                    </vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Required'" widthfactor="3" disablesorting="true">
+                                        <vr-switch value="dataItem.IsRequired"></vr-switch>
+                                    </vr-datagridcolumn>
+                                </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Item Details'">
                     <vr-row removeline>
                         <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
                             <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedDetails" onselectitem="onSelectedDetailItem" ondeselectitem="    onDeSelectedDetailItem"
-                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection>
+                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
                             </vr-select>
                         </vr-columns>
                         <vr-columns width="fullrow">
@@ -87,17 +92,12 @@
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>
-
-                </vr-columns>
-            </vr-row>
-
-            <vr-row ng-show="sortColumnsSelected">
-                <vr-columns width="fullrow">
-
+                </vr-tab>
+                <vr-tab header="'Sort Columns'">
                     <vr-row removeline>
                         <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
                             <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedSortColumns" onselectitem="onSelectedSortColumn" ondeselectitem="    onDeSelectedSortColumn"
-                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection>
+                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
                             </vr-select>
                         </vr-columns>
                         <vr-columns width="fullrow">
@@ -112,9 +112,8 @@
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>
-
-                </vr-columns>
-            </vr-row>
+                </vr-tab>
+            </vr-tabs>
 
         </vr-form>
     </vr-modalbody>

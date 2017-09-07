@@ -16,12 +16,17 @@
         var dataRecordStorageSelectorReadyDeferred;
 
         $scope.selectedFields = [];
+        $scope.selectedFilters = [];
         $scope.selectedDetails = [];
         $scope.selectedSortColumns = [];
 
+        $scope.selectedFiltersGrid = [];
         $scope.selectedFieldsGrid = [];
         $scope.selectedDetailsGrid = [];
         $scope.selectedSortColumnsGrid = [];
+
+      
+
 
         $scope.dataRecordTypeFields = [];
         $scope.scopeModel = {};
@@ -87,6 +92,13 @@
                 };
                 $scope.selectedFieldsGrid.push(dataItem);
             };
+            $scope.onSelectedFilter = function (selectedFilter) {
+                var dataItem = {
+                    FieldName: selectedFilter.Name,
+                    FieldTitle: selectedFilter.Title,
+                };
+                $scope.selectedFiltersGrid.push(dataItem);
+            };
             $scope.onSelectedDetailItem = function (detailItem) {
                 var dataItem = {
                     FieldName: detailItem.Name,
@@ -108,6 +120,10 @@
                 var index = UtilsService.getItemIndexByVal($scope.selectedFieldsGrid, selectedField.Name, "FieldName");
                 $scope.selectedFieldsGrid.splice(index, 1);
             };
+            $scope.onDeSelectedFilter = function (selectedFilter) {
+                var index = UtilsService.getItemIndexByVal($scope.selectedFiltersGrid, selectedFilter.Name, "FieldName");
+                $scope.selectedFiltersGrid.splice(index, 1);
+            };
             $scope.onDeSelectedDetailItem = function (detailItem) {
                 $scope.selectedDetailsGrid.splice(UtilsService.getItemIndexByVal($scope.selectedDetailsGrid, detailItem.Name, "FieldName"), 1);
             };
@@ -119,6 +135,11 @@
                 $scope.selectedFieldsGrid.splice($scope.selectedFieldsGrid.indexOf(field), 1);
                 $scope.selectedFields.splice(UtilsService.getItemIndexByVal($scope.selectedFields, field.FieldName, "Name"), 1);
 
+            };
+
+            $scope.removeFilter = function (filter) {
+                $scope.selectedFiltersGrid.splice($scope.selectedFiltersGrid.indexOf(filter), 1);
+                $scope.selectedFilters.splice(UtilsService.getItemIndexByVal($scope.selectedFilters, filter.FieldName, "Name"), 1);
             };
 
             $scope.removeDetail = function (detail) {
@@ -137,7 +158,6 @@
                 }
                 return null;
             };
-
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -248,7 +268,15 @@
                 var currentItem = $scope.selectedFieldsGrid[x];
                 columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, ColumnSettings: currentItem.gridWidthFactorAPI.getData() });
             }
-
+            var filters = [];
+            for (var x = 0; x < $scope.selectedFiltersGrid.length; x++) {
+                var currentFilter = $scope.selectedFiltersGrid[x];
+                filters.push({
+                    FieldName: currentFilter.FieldName,
+                    FieldTitle: currentFilter.FieldTitle,
+                    IsRequired: currentFilter.IsRequired
+                });
+            }
             var details = [];
             for (var y = 0; y < $scope.selectedDetailsGrid.length; y++) {
                 var currentDetail = $scope.selectedDetailsGrid[y];
@@ -268,7 +296,8 @@
                 RecordStorageIds: dataRecordStorageSelectorAPI.getSelectedIds(),
                 GridColumns: columns,
                 ItemDetails: details,
-                SortColumns: sortColumns
+                SortColumns: sortColumns,
+                Filters: filters
             };
             return obj;
         }
@@ -334,7 +363,18 @@
             }
             $scope.selectedSortColumnsGrid.push(dataItem);
         }
-
+        function addFilterAPI(filter, payload) {
+            var dataItem = {
+                FieldName: filter.payload.Name,
+                FieldTitle: filter.payload.Title,
+                IsRequired: filter.payload.IsRequired
+            };
+            if (payload) {
+                dataItem.FieldTitle = payload.FieldTitle;
+                dataItem.IsRequired = payload.IsRequired;
+            }
+            $scope.selectedFiltersGrid.push(dataItem);
+        }
         function loadDataRecordFields() {
             if (isEditMode) {
                 var promises = [];
@@ -383,6 +423,20 @@
                                     payload: selectedSortColumn,
                                 };
                                 addSortColumnAPI(sortColumn, currentSortColumn);
+                            }
+                        }
+                    }
+                    if (dataRecordSource != undefined && dataRecordSource.Filters) {
+                        for (var z = 0; z < dataRecordSource.Filters.length; z++) {
+                            var currentFilter = dataRecordSource.Filters[z];
+                            var selectedFilter = UtilsService.getItemByVal($scope.dataRecordTypeFields, currentFilter.FieldName, "Name");
+                            if (selectedFilter != undefined) {
+                                $scope.selectedFilters.push(selectedFilter);
+
+                                var filter = {
+                                    payload: selectedFilter,
+                                };
+                                addFilterAPI(filter, currentFilter);
                             }
                         }
                     }
