@@ -1,0 +1,57 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-label ng-if="ctrl.showDefaultRate">Default Rate ({{ctrl.systemCurrencySymbol}})</vr-label>
+        <vr-textbox value="ctrl.defaultRate" type="number" minvalue="0"
+                    decimalprecision="8" 
+                    ng-if="ctrl.showDefaultRate"
+                    isrequired="ctrl.isDefaultRateRequired"></vr-textbox>
+    </vr-columns>
+
+    <vr-columns width="1/2row">
+        <vr-textbox label="Max Sale Rate ({{ctrl.systemCurrencySymbol}})"
+                    value="ctrl.maximumRate" minvalue="0" type="number"
+                    ng-if="ctrl.showMaxSaleRate"
+                    isrequired="ctrl.isMaxSaleRateRequired"></vr-textbox>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox label="Effective Date Day Offset" type="number"
+                    value="ctrl.effectiveDateDayOffset" minvalue="0"
+                    ng-if="ctrl.showEffectiveDateDayOffset"
+                    isrequired="ctrl.isEffectiveDateDayOffset"></vr-textbox>
+    </vr-columns>
+
+    <vr-columns width="1/2row">
+        <vr-textbox label="Retroactive Day Offset" type="number"
+                    value="ctrl.retroactiveDayOffset" minvalue="0"
+                    ng-if="ctrl.showRetroactiveDayOffset"
+                    isrequired="ctrl.isRetroactiveDayOffset"></vr-textbox>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox label="New Rate Day Offset" type="number"
+                    value="ctrl.newRateDayOffset" minvalue="0"
+                    ng-if="ctrl.showNewRateDayOffset"
+                    isrequired="ctrl.isNewRateDayOffset"></vr-textbox>
+    </vr-columns>
+
+    <vr-columns width="1/2row">
+        <vr-textbox label="Increased Rate Day Offset" type="number"
+                    value="ctrl.increasedRateDayOffset" minvalue="0"
+                    ng-if="ctrl.showIncreasedRateDayOffset"
+                    isrequired="ctrl.isIncreasedRateDayOffset"></vr-textbox>
+    </vr-columns>
+    
+    <vr-columns width="1/2row">
+        <vr-textbox label="Decreased Rate Day Offset" type="number"
+                    value="ctrl.decreasedRateDayOffset" minvalue="0"
+                    ng-if="ctrl.showDecreasedRateDayOffset"
+                    isrequired="ctrl.isDecreasedRateDayOffset"></vr-textbox>
+    </vr-columns>
+</vr-row>
+
+

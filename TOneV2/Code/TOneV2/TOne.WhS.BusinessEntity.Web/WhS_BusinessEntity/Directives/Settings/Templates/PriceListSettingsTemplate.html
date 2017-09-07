@@ -1,0 +1,39 @@
+﻿<vr-row>
+    <vr-whs-be-salepricelisttemplate-selector on-ready="ctrl.onSalePLTemplateSelectorReady"
+                                              normal-col-num="6"
+                                              ng-if="ctrl.isPricelistTemplateRequired"
+                                              isrequired="false"
+                                              hideremoveicon="true" showaddbutton>
+    </vr-whs-be-salepricelisttemplate-selector>
+
+    <vr-columns width="1/2row">
+        <vr-common-mailmessagetemplate-selector on-ready="ctrl.onPriceListEmailTemplateSelectorReady"
+                                                customlabel="Sale PriceList Email Template"
+                                                ng-if="ctrl.showPricelistEmailTemplateSelector"
+                                                isrequired="ctrl.isPricelistEmailTemplateRequired"
+                                                showaddbutton>
+        </vr-common-mailmessagetemplate-selector>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-whs-be-pricelistextensionformat-selector on-ready="ctrl.onPriceListExtensionFormatSelectorReady"
+                                                 normal-col-num="6"
+                                                 ng-if="ctrl.showPricelistExtensionFormatSelector"
+                                                 isrequired="ctrl.isPricelistEmailTemplateRequired">
+    </vr-whs-be-pricelistextensionformat-selector>
+
+    <vr-whs-be-salepricelisttype-selector on-ready="ctrl.onPriceListTypeSelectorReady"
+                                          normal-col-num="6"
+                                          ng-if="ctrl.showPricelistTypeSelector"
+                                          isrequired="ctrl.isPricelistTypeRequired">
+    </vr-whs-be-salepricelisttype-selector>
+
+    <vr-columns width="1/2row">
+        <vr-switch value="ctrl.compressPriceListFile"
+                   label="Compressed Pricelist File"
+                   ng-if="ctrl.showCompressPriceListFile"
+                   isrequired="ctrl.isCompressPriceListFileRequired"></vr-switch>
+    </vr-columns>
+
+</vr-row>
