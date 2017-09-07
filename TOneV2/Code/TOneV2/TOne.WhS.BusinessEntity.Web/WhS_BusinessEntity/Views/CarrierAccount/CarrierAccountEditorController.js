@@ -268,7 +268,7 @@
                     return continueSaveCarrierAccountPromiseDeferred.promise;
                 }
 
-                var sellingProductId = sellingProductSelectorAPI.getSelectedIds()
+                var sellingProductId = sellingProductSelectorAPI.getSelectedIds();
                 var carrierAccountCurrencyId = currencySelectorAPI.getSelectedIds();
                 var sellingProductCurrencyId;
 
@@ -282,7 +282,7 @@
                         });
                     }
                 }).catch(function (error) {
-                    continueSaveCarrierAccountPromiseDeferred.reject(error);;
+                    continueSaveCarrierAccountPromiseDeferred.reject(error);
                 });
 
                 return continueSaveCarrierAccountPromiseDeferred.promise;
