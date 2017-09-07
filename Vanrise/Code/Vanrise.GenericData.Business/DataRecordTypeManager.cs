@@ -350,6 +350,7 @@ namespace Vanrise.GenericData.Business
                         static #CLASSNAME#()
                         {
                              Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(#CLASSNAME#) #PROPERTIESTOSETSERIALIZED#);
+                             var dummyTime = new Vanrise.Entities.Time(); //this is only to try declaring the ProtoBuf Serialization in the static constructor of the Time Type
                         }     
 
                         #GLOBALMEMBERS#

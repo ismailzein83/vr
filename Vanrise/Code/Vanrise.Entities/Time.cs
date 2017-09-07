@@ -9,7 +9,13 @@ namespace Vanrise.Entities
     public class Time
     {
         #region ctor/Local Variables
-       
+        static Time()
+        {
+            new Time();
+            string[] parameters = new string[] { "Hour", "Minute", "Second", "MilliSecond" };
+            ProtoBuf.Meta.RuntimeTypeModel.Default.Add(typeof(Time), false).Add(parameters);
+        }
+
         public Time() { }
         public Time(string time)
         {
@@ -40,7 +46,7 @@ namespace Vanrise.Entities
             this.Second = second;
             this.MilliSecond = millisecond;
         }
-      
+
         #endregion
 
         #region Public Methods
@@ -100,9 +106,9 @@ namespace Vanrise.Entities
             else
                 return false;
         }
-      
+
         #endregion
     }
 
-    
+
 }

@@ -119,13 +119,13 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         public void CreateSQLRecordStorageTable()
         {
-            ExecuteNonQueryText(GetRecordStorageCreateTableQuery(this._dataRecordStorageSettings.TableName), null);
+            ExecuteNonQueryText(GetRecordStorageCreateTableQuery(this._dataRecordStorageSettings.TableName, false), null);
         }
 
         internal SQLTempStorageInformation CreateTempSQLRecordStorageTable(long processId)
         {
             string tableName = string.Format("{0}_Temp_{1}", _dataRecordStorageSettings.TableName, processId);
-            ExecuteNonQueryText(GetRecordStorageCreateTableQuery(tableName), null);
+            ExecuteNonQueryText(GetRecordStorageCreateTableQuery(tableName, true), null);
 
             return new SQLTempStorageInformation()
             {
@@ -247,7 +247,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         #region Private Methods
 
-        string GetRecordStorageCreateTableQuery(string tableName)
+        string GetRecordStorageCreateTableQuery(string tableName, bool isTempTable)
         {
             StringBuilder query = new StringBuilder();
 
@@ -258,7 +258,9 @@ namespace Vanrise.GenericData.SQLDataStorage
             string tableNameWithSchema = (schema != null) ? String.Format("{0}.{1}", schema, tableName) : tableName;
             query.AppendLine(String.Format("CREATE TABLE {0}", tableNameWithSchema));
             query.AppendLine(BuildColumnDefinitionsScript());
-            query.AppendLine(BuildDropAndCreateTableTypeScript());
+
+            if (!isTempTable)
+                query.AppendLine(BuildDropAndCreateTableTypeScript());
 
             return query.ToString();
         }
@@ -397,14 +399,14 @@ namespace Vanrise.GenericData.SQLDataStorage
             queryBuilder.Replace("#COLUMNSUPDATE#", columnsUpdateBuilder.ToString());
 
             DataTable dt = this.DynamicManager.ConvertDataRecordsToTable(records);
-            ExecuteNonQueryText(queryBuilder.ToString(),
-                (cmd) =>
-                {
-                    SqlParameter prm = new SqlParameter("@UpdatedRecords", System.Data.SqlDbType.Structured);
-                    prm.TypeName = String.Format("{0}Type", GetTableNameWithSchema());
-                    prm.Value = dt;
-                    cmd.Parameters.Add(prm);
-                });
+                ExecuteNonQueryText(queryBuilder.ToString(),
+                    (cmd) =>
+                    {
+                        SqlParameter prm = new SqlParameter("@UpdatedRecords", System.Data.SqlDbType.Structured);
+                        prm.TypeName = String.Format("{0}Type", GetTableNameWithSchema());
+                        prm.Value = dt;
+                        cmd.Parameters.Add(prm);
+                    });
         }
 
         public IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart)
