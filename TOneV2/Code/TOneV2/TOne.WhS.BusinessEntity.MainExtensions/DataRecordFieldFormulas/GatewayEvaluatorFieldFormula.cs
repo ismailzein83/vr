@@ -33,62 +33,67 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
 
         public override RecordFilter ConvertFilter(IDataRecordFieldFormulaConvertFilterContext context)
         {
-            //if (context.InitialFilter == null)
-            //    throw new ArgumentNullException("context.InitialFilter");
+            if (context.InitialFilter == null)
+                throw new ArgumentNullException("context.InitialFilter");
 
-            //SwitchConnectivityManager switchConnectivityManager = new SwitchConnectivityManager();
+            SwitchConnectivityManager switchConnectivityManager = new SwitchConnectivityManager();
 
-            //ObjectListRecordFilter objectListFilter = context.InitialFilter as ObjectListRecordFilter;
-            //if (objectListFilter != null)
-            //{
-            //    List<string> portsToFilter = new List<string>();
+            ObjectListRecordFilter objectListFilter = context.InitialFilter as ObjectListRecordFilter;
+            if (objectListFilter != null)
+            {
+                List<string> portsToFilter = new List<string>();
 
-            //    foreach (var switchConnectivityId in objectListFilter.Values)
-            //    {
-            //        SwitchConnectivity switchConnectivity = switchConnectivityManager.GetSwitchConnectivity(Convert.ToInt32(switchConnectivityId));
-            //        if (switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
-            //            portsToFilter.AddRange(switchConnectivity.Settings.Trunks.Select(itm => itm.Name));
-            //    }
+                foreach (var switchConnectivityId in objectListFilter.Values)
+                {
+                    SwitchConnectivity switchConnectivity = switchConnectivityManager.GetSwitchConnectivity(Convert.ToInt32(switchConnectivityId));
+                    if (switchConnectivity != null && switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
+                        portsToFilter.AddRange(switchConnectivity.Settings.Trunks.Select(itm => itm.Name));
+                }
 
-            //    if (portsToFilter.Count == 0)
-            //        return null;
+                if (portsToFilter.Count == 0)
+                    return new AlwaysFalseRecordFilter();
 
-            //    objectListFilter.FieldName = this.PortFieldName;
-            //    objectListFilter.Values = portsToFilter.Cast<object>().ToList();
-            //    return objectListFilter;
-            //}
+                StringListRecordFilter stringListRecordFilter = new StringListRecordFilter();
+                stringListRecordFilter.FieldName = this.PortFieldName;
+                stringListRecordFilter.CompareOperator = objectListFilter.CompareOperator;
+                stringListRecordFilter.Values = portsToFilter;
+                return stringListRecordFilter;
+            }
 
-            //EmptyRecordFilter emptyFilter = context.InitialFilter as EmptyRecordFilter;
-            //if (emptyFilter != null)
-            //{
-            //    Dictionary<string, SwitchConnectivity> switchConnectivitiesByPort = switchConnectivityManager.GetSwitchConnectivitiesByPort();
-            //    if (switchConnectivitiesByPort == null || switchConnectivitiesByPort.Count == 0)
-            //        return null;
+            EmptyRecordFilter emptyFilter = context.InitialFilter as EmptyRecordFilter;
+            if (emptyFilter != null)
+            {
+                Dictionary<string, SwitchConnectivity> switchConnectivitiesByPort = switchConnectivityManager.GetSwitchConnectivitiesByPort();
+                if (switchConnectivitiesByPort == null || switchConnectivitiesByPort.Count == 0)
+                    return null;
 
-            //    ObjectListRecordFilter objectListRecordFilter = new ObjectListRecordFilter();
-            //    objectListRecordFilter.FieldName = this.PortFieldName;
-            //    objectListRecordFilter.CompareOperator = ListRecordFilterOperator.NotIn;
-            //    objectListRecordFilter.Values = switchConnectivitiesByPort.Keys.Cast<object>().ToList();
-            //    return objectListRecordFilter;
-            //}
+                StringListRecordFilter stringListRecordFilter = new StringListRecordFilter();
+                stringListRecordFilter.FieldName = this.PortFieldName;
+                stringListRecordFilter.CompareOperator = ListRecordFilterOperator.NotIn;
+                stringListRecordFilter.Values = switchConnectivitiesByPort.Keys.ToList();
 
-            //NonEmptyRecordFilter nonEmptyFilter = context.InitialFilter as NonEmptyRecordFilter;
-            //if (nonEmptyFilter != null)
-            //{
-            //    Dictionary<string, SwitchConnectivity> switchConnectivitiesByPort = switchConnectivityManager.GetSwitchConnectivitiesByPort();
-            //    if (switchConnectivitiesByPort == null || switchConnectivitiesByPort.Count == 0)
-            //        return new AlwaysFalseRecordFilter();
+                return new RecordFilterGroup()
+                {
+                    LogicalOperator = RecordQueryLogicalOperator.Or,
+                    Filters = new List<RecordFilter>() { stringListRecordFilter, new EmptyRecordFilter() { FieldName = this.PortFieldName } }
+                };
+            }
 
-            //    ObjectListRecordFilter objectListRecordFilter = new ObjectListRecordFilter();
-            //    objectListRecordFilter.FieldName = this.PortFieldName;
-            //    objectListRecordFilter.CompareOperator = ListRecordFilterOperator.In;
-            //    objectListRecordFilter.Values = switchConnectivitiesByPort.Keys.Cast<object>().ToList();
-            //    return objectListRecordFilter;
-            //}
+            NonEmptyRecordFilter nonEmptyFilter = context.InitialFilter as NonEmptyRecordFilter;
+            if (nonEmptyFilter != null)
+            {
+                Dictionary<string, SwitchConnectivity> switchConnectivitiesByPort = switchConnectivityManager.GetSwitchConnectivitiesByPort();
+                if (switchConnectivitiesByPort == null || switchConnectivitiesByPort.Count == 0)
+                    return new AlwaysFalseRecordFilter();
 
-            //throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
+                StringListRecordFilter stringListRecordFilter = new StringListRecordFilter();
+                stringListRecordFilter.FieldName = this.PortFieldName;
+                stringListRecordFilter.CompareOperator = ListRecordFilterOperator.In;
+                stringListRecordFilter.Values = switchConnectivitiesByPort.Keys.ToList();
+                return stringListRecordFilter;
+            }
 
-            return null;
+            throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
         }
     }
 }

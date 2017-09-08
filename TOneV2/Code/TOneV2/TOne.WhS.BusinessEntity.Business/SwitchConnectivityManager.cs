@@ -148,7 +148,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return connectivity != null ? connectivity.Name : null;
         }
 
-        private Dictionary<string, SwitchConnectivity> GetSwitchConnectivitiesByPort()
+        public Dictionary<string, SwitchConnectivity> GetSwitchConnectivitiesByPort()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchConnectivitiesByPort", () =>
             {
