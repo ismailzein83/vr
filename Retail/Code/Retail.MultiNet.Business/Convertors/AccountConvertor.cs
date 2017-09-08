@@ -25,7 +25,7 @@ namespace Retail.MultiNet.Business.Convertors
         {
             get
             {
-                return "MultiNet Branch Convertor";
+                return "MultiNet Account Convertor";
             }
         }
         public Guid AccountBEDefinitionId { get; set; }
