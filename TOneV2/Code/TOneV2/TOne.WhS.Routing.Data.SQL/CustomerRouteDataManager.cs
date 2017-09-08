@@ -13,16 +13,19 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
+        readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "Rate", "SaleZoneServiceIds", "IsBlocked", "ExecutedRuleId", "RouteOptions" };
+
         public int ParentWFRuntimeProcessId { get; set; }
 
         public long ParentBPInstanceId { get; set; }
+
+        public Vanrise.BusinessProcess.IBPContext BPContext { set; get; }
 
         static CustomerRouteDataManager()
         {
             RouteOption dummy = new RouteOption();
         }
 
-        readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "Rate", "SaleZoneServiceIds", "IsBlocked", "ExecutedRuleId", "RouteOptions" };
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
             var streamInfo = preparedCustomerRoute as StreamBulkInsertInfo;
@@ -67,27 +70,28 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public IEnumerable<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input)
         {
-           
-                query_GetFilteredCustomerRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
-                string customerIdsFilter = string.Empty;
+            query_GetFilteredCustomerRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
 
-                if (input.Query.CustomerIds != null && input.Query.CustomerIds.Count > 0)
-                    customerIdsFilter = string.Format("AND CustomerId In({0})", string.Join(",", input.Query.CustomerIds));
+            string customerIdsFilter = string.Empty;
+            if (input.Query.CustomerIds != null && input.Query.CustomerIds.Count > 0)
+                customerIdsFilter = string.Format("AND CustomerId In({0})", string.Join(",", input.Query.CustomerIds));
+            query_GetFilteredCustomerRoutes.Replace("#CUSTOMERIDS#", customerIdsFilter);
 
-                query_GetFilteredCustomerRoutes.Replace("#CUSTOMERIDS#", customerIdsFilter);
+            string saleZoneIdsFilter = string.Empty;
+            if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
+                saleZoneIdsFilter = string.Format("AND SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
+            query_GetFilteredCustomerRoutes.Replace("#SALEZONEIDS#", saleZoneIdsFilter);
 
-                bool? isBlocked = null;
-                if (input.Query.RouteStatus.HasValue)
-                    isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
-               
-                return GetItemsText(query_GetFilteredCustomerRoutes.ToString(), CustomerRouteMapper, (cmd) =>
-                {
-                    cmd.Parameters.Add(new SqlParameter("@Code", !string.IsNullOrEmpty(input.Query.Code) ? string.Format("{0}%", input.Query.Code) : (object)DBNull.Value));
-                    cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value));
+            bool? isBlocked = null;
+            if (input.Query.RouteStatus.HasValue)
+                isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
 
-                });
+            return GetItemsText(query_GetFilteredCustomerRoutes.ToString(), CustomerRouteMapper, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@Code", !string.IsNullOrEmpty(input.Query.Code) ? string.Format("{0}%", input.Query.Code) : (object)DBNull.Value));
+                cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value));
+            });
         }
-
 
         public void LoadRoutes(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
         {
@@ -141,20 +145,6 @@ namespace TOne.WhS.Routing.Data.SQL
             trackStep("Finished create Index on CustomerRoute table (SaleZoneId).");
         }
 
-        const string query_CreateIX_CustomerRoute_CustomerId = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_CustomerId] ON dbo.CustomerRoute
-                                                                (
-                                                                      CustomerID ASC
-                                                                )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
-
-        const string query_CreateIX_CustomerRoute_Code = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_Code] ON dbo.CustomerRoute
-                                                              (
-                                                                      Code ASC
-                                                              )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
-
-        const string query_CreateIX_CustomerRoute_SaleZone = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_SaleZone] ON dbo.CustomerRoute
-                                                                (
-                                                                      SaleZoneId ASC
-                                                                )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
         private string SerializeOptions(List<RouteOption> options)
         {
             StringBuilder str = new StringBuilder();
@@ -169,7 +159,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return str.ToString();
         }
 
-        List<RouteOption> DeserializeOptions(string serializedOptions)
+        private List<RouteOption> DeserializeOptions(string serializedOptions)
         {
             List<RouteOption> options = new List<RouteOption>();
 
@@ -236,8 +226,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 ,cr.[ExecutedRuleId]
                                                                 ,cr.[RouteOptions]
                                                             FROM [dbo].[CustomerRoute] cr with(nolock) JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId=sz.ID JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID=ca.ID
-                                                            Where (@Code is Null or Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked)
-                                                                #CUSTOMERIDS#");
+                                                            Where (@Code is null or Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) #CUSTOMERIDS# #SALEZONEIDS#");
 
         const string query_LoadCustomerRoutes = @"SELECT [CustomerID]
                                                                 ,[Code]
@@ -252,13 +241,21 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   FROM [dbo].[CustomerRoute] as cr with(nolock) JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId=sz.ID JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID=ca.ID
                                                     #FILTER#";
 
+        const string query_CreateIX_CustomerRoute_CustomerId = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_CustomerId] ON dbo.CustomerRoute
+                                                                (
+                                                                      CustomerID ASC
+                                                                )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
+
+        const string query_CreateIX_CustomerRoute_Code = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_Code] ON dbo.CustomerRoute
+                                                              (
+                                                                      Code ASC
+                                                              )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
+
+        const string query_CreateIX_CustomerRoute_SaleZone = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_SaleZone] ON dbo.CustomerRoute
+                                                                (
+                                                                      SaleZoneId ASC
+                                                                )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
+
         #endregion
-
-
-        public Vanrise.BusinessProcess.IBPContext BPContext
-        {
-            set;
-            get;
-        }
     }
 }

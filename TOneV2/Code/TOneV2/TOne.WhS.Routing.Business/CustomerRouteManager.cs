@@ -45,7 +45,7 @@ namespace TOne.WhS.Routing.Business
 
         #endregion
 
-        #region Private Classes
+        #region Private Methods
 
         private CustomerRouteDetail CustomerRouteDetailMapper(CustomerRoute customerRoute)
         {

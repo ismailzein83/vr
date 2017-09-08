@@ -5,10 +5,14 @@
     customerRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
     function customerRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
+
         var gridAPI;
 
         var routingDatabaseSelectorAPI;
         var routingDatabaseReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var saleZoneSelectorAPI;
+        var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -24,6 +28,11 @@
             $scope.onRoutingDatabaseSelectorReady = function (api) {
                 routingDatabaseSelectorAPI = api;
                 routingDatabaseReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onSaleZoneSelectorReady = function (api) {
+                saleZoneSelectorAPI = api;
+                saleZoneReadyPromiseDeferred.resolve();
             };
 
             $scope.onCarrierAccountDirectiveReady = function (api) {
@@ -46,9 +55,10 @@
             };
 
             function getFilterObject() {
-                
+
                 var query = {
                     RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
+                    SaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
                     Code: $scope.code,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
                     RouteStatus: routeStatusSelectorAPI.getSelectedIds(),
@@ -60,15 +70,15 @@
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.limit = 1000;
-            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadCustomersSection, loadRouteStatusSelector]).catch(function (error) {
+
+            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadSaleZoneSection, loadCustomersSection, loadRouteStatusSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
             });
         }
 
-        function loadRoutingDatabaseSelector()
-        {
+        function loadRoutingDatabaseSelector() {
             var loadRoutingDatabasePromiseDeferred = UtilsService.createPromiseDeferred();
 
             routingDatabaseReadyPromiseDeferred.promise.then(function () {
@@ -76,6 +86,15 @@
             });
 
             return loadRoutingDatabasePromiseDeferred.promise;
+        }
+        function loadSaleZoneSection() {
+            var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            saleZoneReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(saleZoneSelectorAPI, undefined, loadSaleZonePromiseDeferred);
+            });
+
+            return loadSaleZonePromiseDeferred.promise;
         }
         function loadCustomersSection() {
             var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -98,4 +117,5 @@
     }
 
     appControllers.controller('WhS_Routing_CustomerRouteManagementController', customerRouteManagementController);
+
 })(appControllers);
