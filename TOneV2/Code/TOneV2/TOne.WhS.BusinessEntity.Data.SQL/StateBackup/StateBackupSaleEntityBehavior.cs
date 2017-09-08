@@ -36,8 +36,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 var customerIds = backupSaleEntityData.SellingProductCustomerIds;
                 backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, customerIds));
-                backupCommand.AppendLine(salePriceListDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, customerIds, ownerType));
-                backupCommand.AppendLine(saleRateDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, customerIds, ownerType));
+                backupCommand.AppendLine(salePriceListDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer));
+                backupCommand.AppendLine(saleRateDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer));
             }
             else
                 backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, ownerIds));
@@ -69,8 +69,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 var customerIds = backupSaleEntityData.SellingProductCustomerIds;
                 restoreCommands.AppendLine(customerCountryDataManager.GetDeleteCommandsByOwner(customerIds));
-                restoreCommands.AppendLine(saleRateDataManager.GetDeleteCommandsByOwner(customerIds, ownerType));
-                restoreCommands.AppendLine(salePriceListDataManager.GetDeleteCommandsByOwner(customerIds, ownerType));
+                restoreCommands.AppendLine(saleRateDataManager.GetDeleteCommandsByOwner(customerIds, (int)SalePriceListOwnerType.Customer));
+                restoreCommands.AppendLine(salePriceListDataManager.GetDeleteCommandsByOwner(customerIds, (int)SalePriceListOwnerType.Customer));
             }
             else
                 restoreCommands.AppendLine(customerCountryDataManager.GetDeleteCommandsByOwner(ownerIds));
