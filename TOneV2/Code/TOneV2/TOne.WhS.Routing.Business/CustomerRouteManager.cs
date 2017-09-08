@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Entities;
-using Vanrise.Common;
-using TOne.WhS.BusinessEntity.Business;
-using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Business
 {
     public class CustomerRouteManager
     {
+        #region Properties/Ctor
+
         CarrierAccountManager _carrierAccountManager;
         SupplierZoneManager _supplierZoneManager;
 
@@ -24,17 +22,37 @@ namespace TOne.WhS.Routing.Business
             _supplierZoneManager = new SupplierZoneManager();
         }
 
+        #endregion
+
+        #region Public/Internal Methods
+
         public Vanrise.Entities.IDataRetrievalResult<CustomerRouteDetail> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new CustomerRouteRequestHandler());
         }
+
+        internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
+        {
+            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            var routingDatabase = routingDatabaseManager.GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
+            if (routingDatabase != null)
+            {
+                ICustomerRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+                dataManager.RoutingDatabase = routingDatabase;
+                dataManager.LoadRoutes(customerId, codePrefix, onRouteLoaded);
+            }
+        }
+
+        #endregion
+
+        #region Private Classes
 
         private CustomerRouteDetail CustomerRouteDetailMapper(CustomerRoute customerRoute)
         {
             DateTime now = DateTime.Now;
             RouteRuleManager routeRuleManager = new RouteRuleManager();
             var linkedRouteRules = routeRuleManager.GetEffectiveLinkedRouteRules(customerRoute.CustomerId, customerRoute.Code, now);
-            
+
             List<CustomerRouteOptionDetail> optionDetails = this.GetRouteOptionDetails(customerRoute);
 
             return new CustomerRouteDetail()
@@ -75,6 +93,10 @@ namespace TOne.WhS.Routing.Business
 
             return optionDetails;
         }
+
+        #endregion
+
+        #region Private Classes
 
         private class CustomerRouteExcelExportHandler : ExcelExportHandler<CustomerRouteDetail>
         {
@@ -133,23 +155,10 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
+        private class CustomerRouteRequestHandler : BigDataRequestHandler<CustomerRouteQuery, CustomerRoute, CustomerRouteDetail>
         {
-            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            var routingDatabase = routingDatabaseManager.GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
-            if (routingDatabase != null)
-            {
-                ICustomerRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
-                dataManager.RoutingDatabase = routingDatabase;
-                dataManager.LoadRoutes(customerId, codePrefix, onRouteLoaded);
-            }
-        }
+            CustomerRouteManager _manager = new CustomerRouteManager();
 
-
-        private class  CustomerRouteRequestHandler : BigDataRequestHandler<CustomerRouteQuery, CustomerRoute, CustomerRouteDetail>
-        {
-            CustomerRouteManager _manager =  new CustomerRouteManager();
-            
             public override CustomerRouteDetail EntityDetailMapper(CustomerRoute entity)
             {
                 return _manager.CustomerRouteDetailMapper(entity);
@@ -171,7 +180,7 @@ namespace TOne.WhS.Routing.Business
                 manager.RoutingDatabase = latestRoutingDatabase;
                 if (latestRoutingDatabase == null)
                     return null;
-                  return manager.GetFilteredCustomerRoutes(input);
+                return manager.GetFilteredCustomerRoutes(input);
 
             }
 
@@ -186,5 +195,6 @@ namespace TOne.WhS.Routing.Business
 
         }
 
+        #endregion
     }
 }
