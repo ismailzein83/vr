@@ -201,6 +201,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     CountryId = countryId,
                     ZoneName = zoneToAdd.ZoneName,
+                    ZoneId = zoneToAdd.ZoneId,
                     Rate = rateToSend.Rate.Rate,
                     ChangeType = RateChangeType.New,
                     BED = rateToSend.Rate.BED,
