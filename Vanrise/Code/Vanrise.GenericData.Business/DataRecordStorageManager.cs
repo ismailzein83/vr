@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -26,19 +24,14 @@ namespace Vanrise.GenericData.Business
 
         public Vanrise.Entities.IDataRetrievalResult<DataRecordDetail> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
-            if (input.Query.DataRecordStorageIds == null)
-                throw new NullReferenceException("input.Query.DataRecordStorageIds");
+            input.Query.DataRecordStorageIds.ThrowIfNull("input.Query.DataRecordStorageIds");
 
             var dataRecordStorage = GetDataRecordStorage(input.Query.DataRecordStorageIds.First());
-            if (dataRecordStorage == null)
-                throw new NullReferenceException(String.Format("dataRecordStorage. Id '{0}'", dataRecordStorage.DataRecordStorageId));
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorage.DataRecordStorageId);
 
             DataStore dataStore = new DataStoreManager().GetDataStore(dataRecordStorage.DataStoreId);
-            if (dataStore == null)
-                throw new NullReferenceException(String.Format("dataStore. Id '{0}'", dataRecordStorage.DataStoreId));
-
-            if (dataStore.Settings == null)
-                throw new NullReferenceException(String.Format("dataStore.Settings. Id '{0}'", dataRecordStorage.DataStoreId));
+            dataStore.ThrowIfNull("dataStore", dataRecordStorage.DataStoreId);
+            dataStore.Settings.ThrowIfNull("dataStore.Settings", dataRecordStorage.DataStoreId);
 
             if (input.Query.Filters != null)
                 input.Query.FilterGroup = new RecordFilterManager().BuildRecordFilterGroup(dataRecordStorage.DataRecordTypeId, input.Query.Filters, input.Query.FilterGroup);
@@ -765,6 +758,19 @@ namespace Vanrise.GenericData.Business
                 return GetFormulaDataRecordFieldNamesQueue(clonedDependentFieldsByFieldName, availableDataRecordFieldsValue, formulaDataRecordFieldNames);
             }
 
+            private List<DataRecord> GetDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, Guid dataRecordStorageId)
+            {
+                DataRecordStorageManager manager = new DataRecordStorageManager();
+                var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);
+                dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+                dataRecordStorage.Settings.ThrowIfNull("dataRecordStorage.Settings", dataRecordStorageId);
+
+                var dataManager = manager.GetStorageDataManager(dataRecordStorage);
+                dataManager.ThrowIfNull("dataManager", dataRecordStorageId);
+
+                return dataManager.GetFilteredDataRecords(input);
+            }
+
             private List<DataRecordDetail> DataRecordDetailMapperList(IEnumerable<DataRecord> dataRecords)
             {
                 if (dataRecords == null)
@@ -793,19 +799,6 @@ namespace Vanrise.GenericData.Business
                     }
                 }
                 return orderedRecords;
-            }
-
-            private List<DataRecord> GetDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, Guid dataRecordStorageId)
-            {
-                DataRecordStorageManager manager = new DataRecordStorageManager();
-                var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);
-                dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
-                dataRecordStorage.Settings.ThrowIfNull("dataRecordStorage.Settings", dataRecordStorageId);
-
-                var dataManager = manager.GetStorageDataManager(dataRecordStorage);
-                dataManager.ThrowIfNull("dataManager", dataRecordStorageId);
-
-                return dataManager.GetFilteredDataRecords(input);
             }
 
             #endregion
