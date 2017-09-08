@@ -58,7 +58,7 @@ app.directive('retailVoiceInternationalidentificationTemplate', ['UtilsService',
 
                     $scope.scopeModel.internationalIdentificationNumber = UtilsService.getArrayEnum(Retail_Voice_InternationalNumberIdentificationEnum);
                     $scope.scopeModel.selectedInternationalIdentificationNumber = payload != undefined ?
-                        UtilsService.getItemByVal($scope.scopeModel.internationalIdentificationNumber, payload.InternationalNumberIdentification, 'value') : undefined
+                        UtilsService.getItemByVal($scope.scopeModel.internationalIdentificationNumber, payload.InternationalNumberIdentification, 'value') : undefined;
 
                     var loadInternationalIdentificationPromiseDeferred = UtilsService.createPromiseDeferred();
 
