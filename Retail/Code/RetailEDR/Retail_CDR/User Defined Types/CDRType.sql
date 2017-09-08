@@ -25,7 +25,10 @@
     [FileName]             VARCHAR (255)    NULL,
     [OriginatorExtension]  VARCHAR (500)    NULL,
     [TerminatorExtension]  VARCHAR (500)    NULL,
+    [ExtraFields]          NVARCHAR (MAX)   NULL,
     [QueueItemId]          BIGINT           NULL);
+
+
 
 
 

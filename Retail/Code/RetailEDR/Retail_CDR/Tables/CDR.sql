@@ -26,8 +26,11 @@
     [QueueItemId]          BIGINT           NULL,
     [OriginatorExtension]  VARCHAR (500)    NULL,
     [TerminatorExtension]  VARCHAR (500)    NULL,
+    [ExtraFields]          NVARCHAR (MAX)   NULL,
     CONSTRAINT [IX_CDR_CDRId] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 
