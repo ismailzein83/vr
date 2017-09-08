@@ -40,6 +40,7 @@ namespace Retail.MultiNet.Business.Convertors
         public string AccountStatusColumnName { get; set; }
         public string RegistrationColumnName { get; set; }
         public string CNICColumnName { get; set; }
+        public string CNICExpiryDateColumnName { get; set; }
         public string CurrencyIdColumnName { get; set; }
         public string NTNColumnName { get; set; }
         public string DueDateColumnName { get; set; }
@@ -202,6 +203,7 @@ namespace Retail.MultiNet.Business.Convertors
                     Faxes = GetNumbersList(row[FaxColumnName] as string),
                     MobileNumbers = GetNumbersList(row[MobileColumnName] as string),
                     PhoneNumbers = GetNumbersList(row[PhoneColumnName] as string)
+
                 };
 
 
@@ -224,6 +226,7 @@ namespace Retail.MultiNet.Business.Convertors
             {
                 RegistrationNumber = row[RegistrationColumnName] as string,
                 CNIC = row[CNICColumnName] as string,
+                CNICExpiryDate = (DateTime)row[CNICExpiryDateColumnName],
                 NTN = row[NTNColumnName] as string
             };
 
