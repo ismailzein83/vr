@@ -30,13 +30,13 @@
             var label = "";
             if (label != undefined)
                 label = attrs.label;
-            return "<vr-row removeline> <vr-columns colnum='{{colnum * 2}}'><vr-textbox value='constantCtrl.value' " + label + " isrequired='{{!constantCtrl.useSapce}}'  vr-disabled='constantCtrl.useSapce'> </vr-textbox></vr-columns><vr-columns colnum='{{colnum}}'><vr-label>Use Sapce</vr-label></vr-columns><vr-columns colnum='{{colnum}}'><vr-switch  value='constantCtrl.useSapce'   onvaluechanged='constantCtrl.onUseSapceValueChanged()'> </vr-switch>   </vr-columns></vr-row>";
+            return "<vr-row removeline> <vr-columns colnum='{{colnum * 2}}'><vr-textbox value='constantCtrl.value' " + label + " isrequired='{{!constantCtrl.useSpace}}'  vr-disabled='constantCtrl.useSpace'> </vr-textbox></vr-columns><vr-columns colnum='{{colnum}}'><vr-label>Use Space</vr-label></vr-columns><vr-columns colnum='{{colnum}}'><vr-switch  value='constantCtrl.useSpace'   onvaluechanged='constantCtrl.onuseSpaceValueChanged()'> </vr-switch>   </vr-columns></vr-row>";
         }
         function ConcatenatedpartConstant($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            ctrl.useSapce = false;
-            ctrl.onUseSapceValueChanged = function () {
-                if (ctrl.useSapce == true)
+            ctrl.useSpace = false;
+            ctrl.onuseSpaceValueChanged = function () {
+                if (ctrl.useSpace == true)
                     ctrl.value = null;
             };
 
@@ -50,7 +50,7 @@
                 api.load = function (payload) {
                     if (payload != undefined && payload.concatenatedPart != undefined) {
                         if (payload.concatenatedPart.Constant == " ")
-                            ctrl.useSapce = true;
+                            ctrl.useSpace = true;
                         else
                             ctrl.value = payload.concatenatedPart.Constant;
                     }
@@ -66,7 +66,7 @@
                 function getData() {
                     var data = {
                         $type: "Vanrise.ExcelConversion.MainExtensions.ConcatenatedParts.ConstantConcatenatedPart, Vanrise.ExcelConversion.MainExtensions ",
-                        Constant: ctrl.useSapce ? " " : ctrl.value
+                        Constant: ctrl.useSpace ? " " : ctrl.value
                     };
                     return data;
                 }
