@@ -26,7 +26,10 @@
     [CDPNOut]                 VARCHAR (50)    NULL,
     [SIP]                     VARCHAR (100)   NULL,
     [CDPNIn]                  VARCHAR (50)    NULL,
+    [ExtraFields]             NVARCHAR (MAX)  NULL,
     [QueueItemId]             BIGINT          NULL);
+
+
 
 
 

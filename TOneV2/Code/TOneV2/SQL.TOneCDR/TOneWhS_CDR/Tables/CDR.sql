@@ -27,8 +27,11 @@
     [SwitchID]                INT             NULL,
     [CDPNIn]                  VARCHAR (50)    NULL,
     [QueueItemId]             BIGINT          NULL,
+    [ExtraFields]             NVARCHAR (MAX)  NULL,
     CONSTRAINT [IX_CDR_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
