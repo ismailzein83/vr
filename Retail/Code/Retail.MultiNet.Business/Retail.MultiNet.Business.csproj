@@ -112,10 +112,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Convertors\AccountConvertor.cs" />
     <Compile Include="Convertors\BranchConvertor.cs" />
     <Compile Include="Convertors\CompanyConvertor.cs" />
+    <Compile Include="Convertors\CustomerConvertor.cs" />
     <Compile Include="Convertors\DIDConvertor.cs" />
     <Compile Include="Convertors\SubscriberConvertor.cs" />
+    <Compile Include="Convertors\UserConvertor.cs" />
     <Compile Include="ExtendedInfo\MultiNetBranchExtendedInfo.cs" />
     <Compile Include="ExtendedInfo\MultiNetBranchExtendedInfoDefinition.cs" />
     <Compile Include="ExtendedInfo\MultiNetCompanyExtendedInfo.cs" />
