@@ -13,6 +13,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Name { get; set; }
         public List<CarrierAccountType> AccountsTypes { get; set; }
         public List<int?> SellingNumberPlanIds { get; set; }
+
+        public List<int?> SellingProductsIds { get; set; }
+
         public List<int> Services { get; set; }
         public List<int> ActivationStatusIds { get; set; }
     }

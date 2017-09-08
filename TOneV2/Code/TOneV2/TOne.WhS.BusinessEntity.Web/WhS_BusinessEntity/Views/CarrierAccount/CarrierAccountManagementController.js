@@ -10,7 +10,8 @@
         var carrierProfileReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var sellingNumberPlanDirectiveAPI;
-        var sellingNumberPlanReadyPromiseDeferred;
+
+        var sellingProductSelectorAPI;
 
         var serviceDirectiveAPI;
 
@@ -40,10 +41,14 @@
                 sellingNumberPlanDirectiveAPI = api;
             };
 
+            $scope.onSellingProductSelectorReady = function (api) {
+                sellingProductSelectorAPI = api;
+            };
+
             $scope.onZoneServiceConfigSelectorReady = function (api) {
                 serviceDirectiveAPI = api;
             };
-
+            
             $scope.onCarrierProfileDirectiveReady = function (api) {
                 carrierProfileDirectiveAPI = api;
                 carrierProfileReadyPromiseDeferred.resolve();
@@ -57,10 +62,19 @@
                         var setLoader = function (value) { $scope.isLoadingSellingNumberPlan = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingNumberPlanDirectiveAPI, undefined, setLoader);
                     }
+
+                    if (sellingProductSelectorAPI != undefined) {
+                        $scope.showSellingProduct = true;
+
+                        var setLoader = function (value) { $scope.isLoadingSellingProduct = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sellingProductSelectorAPI, undefined, setLoader);
+                    }
                 }
                 else {
                     $scope.showSellingNumberPlan = false;
+                    $scope.showSellingProduct = false;
                     $scope.selectedSellingNumberPlans.length = 0;
+                    $scope.selectedSellingProducts.length = 0;
                 }
 
                 if (UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Supplier) || UtilsService.contains($scope.selectedCarrierAccountTypes, WhS_BE_CarrierAccountTypeEnum.Exchange)) {
@@ -91,6 +105,7 @@
                     CarrierProfilesIds: carrierProfileDirectiveAPI.getSelectedIds(),
                     Name: $scope.name,
                     SellingNumberPlanIds: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                    SellingProductsIds: sellingProductSelectorAPI.getSelectedIds(),
                     ActivationStatusIds: activationStatusSelectorAPI.getSelectedIds(),
                     Services: serviceDirectiveAPI.getSelectedIds()
                 };

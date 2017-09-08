@@ -173,6 +173,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 &&
                 (input.Query.SellingNumberPlanIds == null || (item.AccountType == CarrierAccountType.Supplier || input.Query.SellingNumberPlanIds.Contains(item.SellingNumberPlanId)))
                  &&
+                (input.Query.SellingProductsIds == null || (item.AccountType == CarrierAccountType.Supplier || input.Query.SellingProductsIds.Contains(item.SellingProductId)))
+                 &&
                 (input.Query.Services == null || (item.AccountType == CarrierAccountType.Customer || input.Query.Services.All(x => item.SupplierSettings.DefaultServices.Select(y => y.ServiceId).Contains(x))));
 
             var resultProcessingHandler = new ResultProcessingHandler<CarrierAccountDetail>()
@@ -403,7 +405,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (carrierAccount == null)
                 throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} is not found", carrierAccountId));
 
-            if(!IsCustomer(carrierAccount.AccountType))
+            if (!IsCustomer(carrierAccount.AccountType))
                 throw new InvalidOperationException(string.Format("Getting selling product id only works with carrier accounts of type customer. Carrier Account Id {0}", carrierAccountId));
 
             if (!carrierAccount.SellingProductId.HasValue)
@@ -567,8 +569,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public bool IsCarrierAccountActive(CarrierAccount carrierAccount)
         {
-           carrierAccount.CarrierAccountSettings.ThrowIfNull("carrierAccount.CarrierAccountSettings", carrierAccount.CarrierAccountId);
-           return IsStatusActive(carrierAccount.CarrierAccountSettings.ActivationStatus);
+            carrierAccount.CarrierAccountSettings.ThrowIfNull("carrierAccount.CarrierAccountSettings", carrierAccount.CarrierAccountId);
+            return IsStatusActive(carrierAccount.CarrierAccountSettings.ActivationStatus);
         }
 
         public bool IsStatusActive(ActivationStatus status)
