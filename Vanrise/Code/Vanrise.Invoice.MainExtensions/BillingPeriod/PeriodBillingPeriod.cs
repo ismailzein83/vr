@@ -52,5 +52,9 @@ namespace Vanrise.Invoice.MainExtensions
             perviousBillingInterval.FromDate = perviousBillingInterval.ToDate.AddDays(-numberOfDays);
             return perviousBillingInterval;
         }
+        public override string GetDescription()
+        {
+            return string.Format("Period: {0} days",this.NumberOfDays);
+        }
     }
 }

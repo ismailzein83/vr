@@ -10,6 +10,7 @@ namespace Vanrise.Invoice.Entities
     {
         public abstract Guid ConfigId { get; }
         public abstract BillingInterval GetPeriod(IBillingPeriodContext context);
+        public abstract string GetDescription();
     }
     public interface IBillingPeriodContext
     {

@@ -75,7 +75,10 @@ namespace Vanrise.Invoice.MainExtensions
             perviousBillingInterval.FromDate = GetPreviousPeriodDate(toDate, toDate, false);
             return perviousBillingInterval;
         }
-
+        public override string GetDescription()
+        {
+            return "Monthly";
+        }
     }
     public class MonthlyPeriod
     {

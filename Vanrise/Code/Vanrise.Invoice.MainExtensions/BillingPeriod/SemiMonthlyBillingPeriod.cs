@@ -56,5 +56,9 @@ namespace Vanrise.Invoice.MainExtensions
             perviousBillingInterval.FromDate = new DateTime( perviousBillingInterval.ToDate.Year,perviousBillingInterval.ToDate.Month,fromDateDate);
             return perviousBillingInterval;
         }
+        public override string GetDescription()
+        {
+            return "Semi-Monthly";
+        }
     }
 }

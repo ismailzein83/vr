@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
@@ -66,6 +67,10 @@ namespace Vanrise.Invoice.MainExtensions
                 }
             }
             return perviousBillingInterval;
+        }
+        public override string GetDescription()
+        {
+            return String.Format("Bi-Weekly: {0}", Utilities.GetEnumDescription(this.DailyType));
         }
     }
 }

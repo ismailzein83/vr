@@ -6,9 +6,17 @@
              idfield="Entity.InvoiceSettingId">
     <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceSettingId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Automatic'" type="'Text'" field="'IsAutomatic'">
+        <vr-icon icontype="dataItem.IsAutomatic"></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Billing Period'" type="'Text'" field="'BillingPeriodDescription'"></vr-datagridcolumn>
+
     <vr-datagridcolumn headertext="'Default'" type="'Text'" field="'Entity.IsDefault'">
         <vr-icon icontype="dataItem.Entity.IsDefault"></vr-icon>
     </vr-datagridcolumn>
+
+
+    
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

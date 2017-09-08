@@ -52,5 +52,10 @@ namespace Vanrise.Invoice.MainExtensions
             perviousBillingInterval.ToDate = date.AddDays(-1);
             return perviousBillingInterval;
         }
+
+        public override string GetDescription()
+        {
+            return "Bi-Monthly";
+        }
     }
 }

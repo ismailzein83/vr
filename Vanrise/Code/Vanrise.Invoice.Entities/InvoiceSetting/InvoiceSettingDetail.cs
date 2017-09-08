@@ -9,5 +9,7 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceSettingDetail
     {
         public InvoiceSetting Entity { get; set; }
+        public bool IsAutomatic { get; set; }
+        public string BillingPeriodDescription { get; set; }
     }
 }

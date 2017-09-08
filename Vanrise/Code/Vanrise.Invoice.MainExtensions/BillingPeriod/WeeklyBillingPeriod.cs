@@ -78,5 +78,9 @@ namespace Vanrise.Invoice.MainExtensions
                     billingInterval.ToDate = billingInterval.FromDate.GetLastDayOfMonth();
             }
         }
+        public override string GetDescription()
+        {
+            return string.Format("Weekly: {0}", Utilities.GetEnumDescription(this.DailyType));
+        }
     }
 }

@@ -323,6 +323,16 @@ namespace Vanrise.Invoice.Business
         {
             InvoiceSettingDetail invoiceSettingDetail = new InvoiceSettingDetail();
             invoiceSettingDetail.Entity = invoiceSettingObject;
+            if (invoiceSettingObject.Details != null && invoiceSettingObject.Details.InvoiceSettingParts != null)
+            {
+
+                var automaticPartItem = GetInvoiceSettingDetailByType<AutomaticInvoiceSettingPart>(invoiceSettingObject.InvoiceSettingId);
+                if (automaticPartItem != null)
+                    invoiceSettingDetail.IsAutomatic = automaticPartItem.IsEnabled;
+                var billingPeriodPartItem = GetInvoiceSettingDetailByType<BillingPeriodInvoiceSettingPart>(invoiceSettingObject.InvoiceSettingId);
+                if (billingPeriodPartItem != null && billingPeriodPartItem.BillingPeriod != null)
+                    invoiceSettingDetail.BillingPeriodDescription = billingPeriodPartItem.BillingPeriod.GetDescription();
+            }
             return invoiceSettingDetail;
         }
         private InvoiceSettingInfo InvoiceSettingInfoMapper(InvoiceSetting invoiceSettingObject)
