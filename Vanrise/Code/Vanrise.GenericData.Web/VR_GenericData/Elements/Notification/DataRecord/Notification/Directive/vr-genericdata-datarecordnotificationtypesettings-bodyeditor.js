@@ -58,7 +58,7 @@ app.directive("vrGenericdataDatarecordnotificationtypesettingsBodyeditor", ["Uti
                         return gridLoadPromiseDeferred.promise;
                     }
 
-                    UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {

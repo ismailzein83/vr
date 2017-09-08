@@ -35,6 +35,7 @@ namespace Vanrise.AccountBalance.Business
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
 
+            UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
             Dictionary<AccountBalanceType, UpdateUsageBalancePayload> updateUsageBalanceItemsByType = new Dictionary<AccountBalanceType, UpdateUsageBalancePayload>();
 
             Action<BalanceUpdatePayload> submitBalanceUpdate = (balanceUpdatePayload) =>
@@ -81,7 +82,6 @@ namespace Vanrise.AccountBalance.Business
 
             foreach (var updateUsageBalanceItem in updateUsageBalanceItemsByType)
             {
-                UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
                 usageBalanceManager.UpdateUsageBalance(updateUsageBalanceItem.Key.AccountTypeId, updateUsageBalanceItem.Value);
             }
         }
