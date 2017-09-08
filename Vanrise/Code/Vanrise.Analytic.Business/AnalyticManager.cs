@@ -57,9 +57,9 @@ namespace Vanrise.Analytic.Business
                 dataProvider = Activator.CreateInstance(Type.GetType("Vanrise.Analytic.Data.SQL.SQLAnalyticDataProvider, Vanrise.Analytic.Data.SQL")) as AnalyticDataProvider;
             var dataManager = dataProvider.CreateDataManager(queryContext);
             HashSet<string> includeDBDimensions = null;
-            
+
             IEnumerable<DBAnalyticRecord> dbRecords = dataManager.GetAnalyticRecords(query, out includeDBDimensions);
-            
+
             if (dbRecords != null)
                 return ProcessSQLRecords(queryContext, query.DimensionFields, query.ParentDimensions, query.MeasureFields, query.MeasureStyleRules, query.Filters, query.FilterGroup,
                     dbRecords, includeDBDimensions, query.WithSummary, out summaryRecord);
@@ -121,7 +121,7 @@ namespace Vanrise.Analytic.Business
                     }
                 }
             }
-           
+
 
             if (input.FilterGroup != null)
             {
@@ -148,8 +148,8 @@ namespace Vanrise.Analytic.Business
             Guid dataRecordTypeId = GetDataRecordTypeForReportBySourceName(input.ReportId, input.SourceName);
             return new RecordFilterManager().BuildRecordFilterGroup(dataRecordTypeId, input.FieldFilters, null);
         }
-        
-        
+
+
         public Guid GetDataRecordTypeForReportBySourceName(Guid reportId, string sourceName)
         {
             AnalyticReportManager analyticReportManager = new Business.AnalyticReportManager();
@@ -296,8 +296,8 @@ namespace Vanrise.Analytic.Business
             }
         }
 
-        private List<AnalyticRecord> ApplyFinalGroupingAndFiltering(IAnalyticTableQueryContext analyticTableQueryContext, IEnumerable<DBAnalyticRecord> dbRecords, 
-            List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary, 
+        private List<AnalyticRecord> ApplyFinalGroupingAndFiltering(IAnalyticTableQueryContext analyticTableQueryContext, IEnumerable<DBAnalyticRecord> dbRecords,
+            List<string> requestedDimensionNames, HashSet<string> allDimensionNames, List<string> measureNames, Dictionary<string, MeasureStyleRule> measureStyleRulesDictionary,
             List<DimensionFilter> dimensionFilters, RecordFilterGroup filterGroup, bool withSummary, out AnalyticRecord summaryRecord)
         {
             Dictionary<string, DBAnalyticRecord> groupedRecordsByDimensionsKey = new Dictionary<string, DBAnalyticRecord>();
@@ -475,7 +475,10 @@ namespace Vanrise.Analytic.Business
                     if (!dbRecord.GroupingValuesByDimensionName.TryGetValue(dimFilter.Dimension, out dimensionValue))
                         throw new NullReferenceException(String.Format("dimensionValue. dimName '{0}'", dimFilter.Dimension));
                     if (dimensionValue.Value == null)
-                        return dimFilter.FilterValues.Contains(null);
+                    {
+                        if (!dimFilter.FilterValues.Contains(null))
+                            return false;
+                    }
                     else
                     {
                         var nonNullFilterValues = dimFilter.FilterValues.Where(itm => itm != null).ToList();
@@ -605,7 +608,7 @@ namespace Vanrise.Analytic.Business
 
             return analyticRecord;
         }
-       
+
         #endregion
 
         #region Private Classes
