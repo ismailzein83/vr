@@ -32,6 +32,8 @@ namespace Retail.MultiNet.Business
         public string TechnicalAddress { get; set; }
         public string OfficeAddress { get; set; }
         public string HomeAddress { get; set; }
+        public int BillingPeriod { get; set; }
+        public DateTime? DueDate { get; set; }
         public MultiNetAccountType? AccountType { get; set; }
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
@@ -52,6 +54,8 @@ namespace Retail.MultiNet.Business
                 case "RegistrationNumber": return this.RegistrationNumber;
                 case "AccountType": return this.AccountType;
                 case "CNICExpiryDate": return this.CNICExpiryDate;
+                case "BillingPeriod": return this.BillingPeriod;
+                case "DueDate": return this.DueDate;
 
                 default: return null;
             }

@@ -44,6 +44,7 @@ namespace Retail.MultiNet.Business.Convertors
         public string CurrencyIdColumnName { get; set; }
         public string NTNColumnName { get; set; }
         public string DueDateColumnName { get; set; }
+        public string BillingPeriodColumnName { get; set; }
 
         #endregion
 
@@ -227,7 +228,9 @@ namespace Retail.MultiNet.Business.Convertors
                 RegistrationNumber = row[RegistrationColumnName] as string,
                 CNIC = row[CNICColumnName] as string,
                 CNICExpiryDate = (DateTime)row[CNICExpiryDateColumnName],
-                NTN = row[NTNColumnName] as string
+                NTN = row[NTNColumnName] as string,
+                BillingPeriod = row[BillingPeriodColumnName] == DBNull.Value ? 0 : (int)row[BillingPeriodColumnName],
+                DueDate = row[DueDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[DueDateColumnName]
             };
 
             AccountPart part = new AccountPart
