@@ -168,7 +168,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
 
                 }
                 else {
-                    ctrl.file = null
+                    ctrl.file = null;
                 }
                 if ($attrs.onvaluechanged != undefined) {
                     var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
@@ -251,7 +251,11 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                         ctrl.value = null;
                         ctrl.file = null;
                     };
+                    var api = {};
+                    api.clearFileUploader = ctrl.remove;
 
+                    if (ctrl.onReady != null)
+                        ctrl.onReady(api);
                     //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
                 }

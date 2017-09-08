@@ -19,13 +19,8 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
-                        <vr-columns width="1/2row">
-                            <vr-fileupload extension="xls,xlsx" value="scopeModel.priceListSheet" label="Pricelist Sheet"> </vr-fileupload>
-                        </vr-columns>
-                    </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow" >
-                            <a href="" ng-click="scopeModel.downloadAttachement()">{{scopeModel.fileName}}</a>
+                        <vr-columns width="fullrow">
+                            <a href="" ng-click="scopeModel.downloadAttachement(scopeModel.fileId)">{{scopeModel.fileName}} </a>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -33,6 +28,16 @@
                             <vr-editor label="Body" value="scopeModel.body" isrequired="true"></vr-editor>
                         </vr-columns>
                     </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="1/3row">
+                            <vr-fileupload extension="all" value="scopeModel.uploadedAttachement" label="Upload Attachement"
+                                           on-ready="scopeModel.onUploadedAttachementFileReady" onvaluechanged="scopeModel.addUploadedAttachement">
+                            </vr-fileupload>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-datalist maxitemsperrow="3" datasource="scopeModel.uploadedAttachements" autoremoveitem="true">
+                        <a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.fileId)">{{dataItem.fileName}}</a>
+                    </vr-datalist>
                 </vr-tab>
             </vr-tabs>
         </vr-form>
