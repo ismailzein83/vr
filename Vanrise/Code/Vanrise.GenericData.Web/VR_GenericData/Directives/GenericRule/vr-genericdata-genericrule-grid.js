@@ -33,6 +33,7 @@
             function initializeController() {
                 ctrl.criteriaFields = [];
                 $scope.genericRules = [];
+                $scope.settingTitle = 'Settings';
 
                 $scope.onGridReady = function (api) {
                     var drillDownDefinitions = VR_GenericData_GenericRule.getDrillDownDefinition();
@@ -85,6 +86,9 @@
                                     ctrl.criteriaFields.push(criteriaFieldDefinition);
                                 }
                             }
+                        }
+                        if (response.SettingsDefinition != undefined && response.SettingsDefinition.GridSettingTitle != undefined) {
+                            $scope.settingTitle = response.SettingsDefinition.GridSettingTitle;
                         }
                         gridAPI.retrieveData(query).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
                     });
@@ -142,7 +146,7 @@
                 VR_GenericData_GenericRule.editGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, onGenericRuleUpdated, accessibility);
             }
 
-            function viewGenericRule(genericRule) {                
+            function viewGenericRule(genericRule) {
                 VR_GenericData_GenericRule.viewGenericRule(genericRule.Entity.RuleId, genericRule.Entity.DefinitionId, accessibility);
             }
 

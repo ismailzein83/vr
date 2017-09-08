@@ -60,7 +60,10 @@
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
-                    
+                    if (payload != undefined) {
+                        $scope.scopeModel.gridSettingTitle = payload.GridSettingTitle;
+                    }
+
                     return VR_GenericData_GenericRuleTypeConfigAPIService.GetGenericRuleTypes().then(function (response) {
                         if (response) {
                             for (var i = 0; i < response.length; i++) {
@@ -81,6 +84,7 @@
                 api.getData = function () {
                     var data = directiveAPI.getData();
                     data.ConfigId = $scope.scopeModel.selectedSettingsTemplate.ExtensionConfigurationId;
+                    data.GridSettingTitle = $scope.scopeModel.gridSettingTitle;
                     return data;
                 };
 

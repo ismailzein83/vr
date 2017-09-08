@@ -12,6 +12,9 @@
                        hideremoveicon vr-disabled="ctrl.disableType">
             </vr-select>
         </vr-columns>
+        <vr-columns width="1/3row">
+            <vr-textbox label="Grid Setting Title" value="scopeModel.gridSettingTitle" />
+        </vr-columns>
     </vr-row>
     <vr-row>
         <vr-columns width="fullrow" ng-if="scopeModel.selectedSettingsTemplate != undefined" vr-loader="scopeModel.isLoadingDirective">
