@@ -33,7 +33,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
         var toDate;
         var dimensionIds;
         var customerIds;
-        var codeGroupIds;
+        var countryIds;
         var masterSaleZoneIds;
         var supplierIds;
         var switchIds;
@@ -61,7 +61,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
                             {
                                 dimensionIds = query.Filter.Dimession;
                                 customerIds = query.Filter.CustomerIds;
-                                codeGroupIds = query.Filter.CodeGroupIds;
+                                countryIds = query.Filter.CountryIds;
                                 masterSaleZoneIds = query.Filter.MasterSaleZoneIds;
                                 supplierIds = query.Filter.SupplierIds;
                                 switchIds = query.Filter.SwitchIds;
@@ -119,7 +119,13 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
                 FilterValues: switchValues
             });
 
-
+            
+            if (countryIds != undefined) {
+                fieldFilters.push({
+                    FieldName: "CountryId",
+                    FilterValues: countryIds
+                });
+            }
             if (customerIds != undefined) {
                 fieldFilters.push({
                     FieldName: "CustomerId",

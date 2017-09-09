@@ -65,15 +65,15 @@ namespace TOne.WhS.Analytics.Business
             {
                 IReleaseCodeDataManager dataManager = AnalyticsDataManagerFactory.GetDataManager<IReleaseCodeDataManager>();
                 SaleCodeManager manager = new SaleCodeManager();
-                List<string> salecodesIds = null;
-                if (input.Query.Filter.CodeGroupIds != null && input.Query.Filter.CodeGroupIds.Count() > 0)
-                {
-                    List<SaleCode> salecodes = manager.GetSaleCodesByCodeGroups(input.Query.Filter.CodeGroupIds);
-                    salecodesIds = salecodes.Select(x => x.Code).ToList();
-                }
+               // List<string> salecodesIds = null;
+                //if (input.Query.Filter.CountryIds != null && input.Query.Filter.CountryIds.Count() > 0)
+                //{
+                //    List<SaleCode> salecodes = manager.GetSaleCodesByCodeGroups(input.Query.Filter.CountryIds);
+                //    salecodesIds = salecodes.Select(x => x.Code).ToList();
+                //}
                 
 
-                return dataManager.GetAllFilteredReleaseCodes(input, salecodesIds);
+                return dataManager.GetAllFilteredReleaseCodes(input);
             }
 
             protected override ResultProcessingHandler<ReleaseCodeStatDetail> GetResultProcessingHandler(DataRetrievalInput<ReleaseCodeQuery> input, BigResult<ReleaseCodeStatDetail> bigResult)

@@ -32,13 +32,13 @@ namespace TOne.WhS.Analytics.Data.SQL
         }
         #endregion
         private ReleaseCodeQuery query;
-        private List<string> codes;
+       // private List<string> codes;
         #region Public Methods
 
-        public List<ReleaseCodeStat> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<Entities.ReleaseCodeQuery> input, List<string> salecodesIds)
+        public List<ReleaseCodeStat> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<Entities.ReleaseCodeQuery> input)
         {
             query = input.Query;
-            codes = salecodesIds;
+            //codes = salecodesIds;
             List<ReleaseCodeStat> releaseCodes = new List<ReleaseCodeStat>();
             ExecuteReaderText(GetQuery(input.Query.Filter), (reader) =>
             {
@@ -242,8 +242,9 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddFilter(whereBuilder, filter.SupplierIds, "SupplierID");
             AddFilter(whereBuilder, filter.CustomerIds, "CustomerID");
             AddFilter(whereBuilder, filter.MasterSaleZoneIds, "MasterPlanZoneID");
+            AddFilter(whereBuilder, filter.CountryIds, "CountryID");
 
-            AddFilter(whereBuilder, codes, "SaleCode");
+          //  AddFilter(whereBuilder, codes, "SaleCode");
 
 
         }

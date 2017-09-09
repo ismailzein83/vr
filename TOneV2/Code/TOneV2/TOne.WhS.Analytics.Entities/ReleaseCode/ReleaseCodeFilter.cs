@@ -12,7 +12,7 @@ namespace TOne.WhS.Analytics.Entities
         public List<int> SwitchIds { get; set; }
         public List<int> CustomerIds { get; set; }
         public List<int> SupplierIds { get; set; }
-        public List<int> CodeGroupIds { get; set; }
+        public List<int> CountryIds { get; set; }
         public List<int> MasterSaleZoneIds { get; set; }
 
 

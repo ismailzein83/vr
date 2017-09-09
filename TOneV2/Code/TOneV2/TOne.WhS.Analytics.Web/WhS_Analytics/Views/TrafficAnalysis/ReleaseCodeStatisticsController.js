@@ -24,8 +24,8 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
-    var codeGroupDirectiveAPI;
-    var codeGroupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+    var countryDirectiveApi;
+    var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
     var saleZoneDirectiveAPI;
     var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -61,13 +61,13 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
             switchDirectiveAPI = api;
             switchReadyPromiseDeferred.resolve();
         };
-        $scope.onCountryDirectiveReady = function (api) {
-            countryDirectiveAPI = api;
+        //$scope.onCountryDirectiveReady = function (api) {
+        //    countryDirectiveAPI = api;
+        //    countryReadyPromiseDeferred.resolve();
+        //};
+        $scope.onCountryReady = function (api) {
+            countryDirectiveApi = api;
             countryReadyPromiseDeferred.resolve();
-        };
-        $scope.onCodeGroupDirectiveReady = function (api) {
-            codeGroupDirectiveAPI = api;
-            codeGroupReadyPromiseDeferred.resolve();
         };
         $scope.onSaleZoneDirectiveReady = function (api) {
             saleZoneDirectiveAPI = api;
@@ -100,7 +100,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     }
 
     function loadAllControls() {
-        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadReleaseCodeDimessionSection, loadCustomers, loadSuppliers, loadSwitches, /*loadCountries,*/ loadCodeGroups, loadSaleZoneSection])
+        return UtilsService.waitMultipleAsyncOperations([loadTimeRangeSelector, loadReleaseCodeDimessionSection, loadCustomers, loadSuppliers, loadSwitches,loadCountries, loadSaleZoneSection])
             .catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             })
@@ -116,7 +116,7 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
         filter.CustomerIds = customerDirectiveAPI.getSelectedIds();
         filter.SupplierIds = supplierDirectiveAPI.getSelectedIds();
         filter.SwitchIds = switchDirectiveAPI.getSelectedIds();
-        filter.CodeGroupIds = codeGroupDirectiveAPI.getSelectedIds();
+        filter.CountryIds = countryDirectiveApi.getSelectedIds();
         filter.MasterSaleZoneIds = saleZoneDirectiveAPI.getSelectedIds();
 
         return filter;
@@ -164,20 +164,20 @@ function ReleaseCodeStatisticsController($scope, UtilsService, VRNavigationServi
     function loadCountries() {
         var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
         countryReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, undefined, loadCountryPromiseDeferred);
+            VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, undefined, loadCountryPromiseDeferred);
         });
 
         return loadCountryPromiseDeferred.promise;
     }
 
-    function loadCodeGroups() {
-        var loadCodeGroupPromiseDeferred = UtilsService.createPromiseDeferred();
-        codeGroupReadyPromiseDeferred.promise.then(function () {
-            VRUIUtilsService.callDirectiveLoad(codeGroupDirectiveAPI, undefined, loadCodeGroupPromiseDeferred);
-        });
+    //function loadCodeGroups() {
+    //    var loadCodeGroupPromiseDeferred = UtilsService.createPromiseDeferred();
+    //    codeGroupReadyPromiseDeferred.promise.then(function () {
+    //        VRUIUtilsService.callDirectiveLoad(codeGroupDirectiveAPI, undefined, loadCodeGroupPromiseDeferred);
+    //    });
 
-        return loadCodeGroupPromiseDeferred.promise;
-    }
+    //    return loadCodeGroupPromiseDeferred.promise;
+    //}
 
 
     function loadSaleZoneSection() {
