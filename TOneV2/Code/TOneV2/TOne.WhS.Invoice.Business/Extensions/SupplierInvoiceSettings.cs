@@ -31,6 +31,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             return new CarrierPartnerSettings();
         }
+        public Guid InvoiceTransactionTypeId { get; set; }
+        public List<Guid> UsageTransactionTypeIds { get; set; }
         public override dynamic GetInfo(IInvoiceTypeExtendedSettingsInfoContext context)
         {
 

@@ -11,7 +11,7 @@ using Vanrise.Analytic.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
-
+using Vanrise.Common;
 namespace TOne.WhS.Invoice.Business.Extensions
 {
     public class SupplierInvoiceGenerator : InvoiceGenerator
@@ -96,7 +96,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     }
                 }
             }
-           
+            SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount);
             #endregion
 
             context.Invoice = new GeneratedInvoice
@@ -104,6 +104,40 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 InvoiceDetails = supplierInvoiceDetails,
                 InvoiceItemSets = generatedInvoiceItemSets,
             };
+        }
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, SupplierInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount)
+        {
+            var financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
+            var balanceAccountTypeId = financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId);
+            if (balanceAccountTypeId.HasValue)
+            {
+                Vanrise.Invoice.Entities.InvoiceType invoiceType = new Vanrise.Invoice.Business.InvoiceTypeManager().GetInvoiceType(context.InvoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType", context.InvoiceTypeId);
+                invoiceType.Settings.ThrowIfNull("invoiceType.Settings", context.InvoiceTypeId);
+                SupplierInvoiceSettings invoiceSettings = invoiceType.Settings.ExtendedSettings.CastWithValidate<SupplierInvoiceSettings>("invoiceType.Settings.ExtendedSettings");
+
+                var billingTransaction = new GeneratedInvoiceBillingTransaction()
+                {
+                    AccountTypeId = balanceAccountTypeId.Value,
+                    AccountId = context.PartnerId,
+                    TransactionTypeId = invoiceSettings.InvoiceTransactionTypeId,
+                    Amount = invoiceDetails.TotalAmount,
+                    CurrencyId = invoiceDetails.SupplierCurrencyId
+                };
+
+                billingTransaction.Settings = new GeneratedInvoiceBillingTransactionSettings();
+                billingTransaction.Settings.UsageOverrides = new List<GeneratedInvoiceBillingTransactionUsageOverride>();
+
+                foreach (Guid usageTransactionTypeId in invoiceSettings.UsageTransactionTypeIds)
+                {
+                    billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
+                    {
+                        TransactionTypeId = usageTransactionTypeId
+                    });
+                }
+                context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
+            }
+
         }
         private SupplierInvoiceDetails BuilSupplierInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType,DateTime fromDate,DateTime toDate)
         {
