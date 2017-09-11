@@ -96,7 +96,7 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
 
             $scope.scopeModel.validateRequiredMargin = function () {
                 if ($scope.scopeModel.margin == undefined && $scope.scopeModel.marginPercentage == undefined)
-                    return "at list one margin should be set.";
+                    return "at least one margin should be set";
                 return null;
 
             };
