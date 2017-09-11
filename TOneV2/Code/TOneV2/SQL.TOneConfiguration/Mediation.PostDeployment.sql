@@ -138,7 +138,7 @@ set identity_insert [queue].[QueueActivatorConfig] on;
 ;with cte_data([ID],[Name],[Details])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(501,'Mediation Staging Records Queue Activator', '{ "QueueActivatorConfigId": "501" , "Name": " Mediation Staging Records Queue Activator" ,"Title" : " Mediation Staging Records Queue Activator", "Editor" :"mediation-generic-queueactivator-storestagingrecords"}')
+('6309e517-3006-47bd-8eb4-8741feac673b','Mediation Staging Records Queue Activator', '{ "QueueActivatorConfigId": "6309e517-3006-47bd-8eb4-8741feac673b" , "Name": " Mediation Staging Records Queue Activator" ,"Title" : " Mediation Staging Records Queue Activator", "Editor" :"mediation-generic-queueactivator-storestagingrecords"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Details]))
 merge   [queue].[QueueActivatorConfig] as t
