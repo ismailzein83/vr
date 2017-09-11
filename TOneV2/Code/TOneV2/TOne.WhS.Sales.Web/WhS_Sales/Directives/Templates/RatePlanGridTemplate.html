@@ -11,6 +11,131 @@
     <vr-row removeline="true">
         <vr-columns width="fullrow">
             <div>
+                <div class="vr-datagrid">
+                    <div class="vr-datagrid-header" style="display: flex">
+                        <div style="display:inline-flex; width: 500px" >
+                            <div style="width: 100px; display:inline-block">
+                                <div class="vr-datagrid-header-cell">
+                                    <div col-index="renderIndex" style="width:100%">
+                                        <div class="vr-datagrid-celltext" style="overflow: hidden;" >
+                                           <span >Zone</span>                                           
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width: 100px; display:inline-block">
+                                <div class="vr-datagrid-header-cell">
+                                    <div col-index="renderIndex" style="width:100%">
+                                        <div class="vr-datagrid-celltext" style="overflow: hidden;">
+                                            <span>Product</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width: 50px; display:inline-block">
+                                <div class="vr-datagrid-header-cell">
+                                    <div col-index="renderIndex" style="width:100%">
+                                        <div class="vr-datagrid-celltext" style="overflow: hidden;">
+                                            <span>Services</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width: 50px; display:inline-block">
+                                <div class="vr-datagrid-header-cell">
+                                    <div col-index="renderIndex" style="width:100%">
+                                        <div class="vr-datagrid-celltext" style="overflow: hidden;">
+                                            <span>Services</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width: 25px; display:inline-block">
+                                <div class="vr-datagrid-header-cell">
+                                    <div col-index="renderIndex" style="width:100%">
+                                        <div class="vr-datagrid-celltext" style="overflow: hidden;">
+                                            <span>Services</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="gridBodyContainer" ng-style="{'max-height': ratePlanGridCtrl.maxHeight}" style="max-height:600px;overflow-y:auto;overflow-x:hidden">
+                        <div id="gridBody">                            
+                            <div >
+                                <div id="rowSection1" class="vr-datagrid-body" ng-repeat="dataItem in zoneItems">
+                                    <div id="rowTemplate">
+                                        <div style="white-space:nowrap" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0', 'display': 'flex'}">
+                                            <div ng-style="{'display':'inline-block', 'width': '500px'}" class="vr-datagrid-row">                                                
+
+                                                <div ng-style="{ 'width': '100px', 'display':'inline-flex', 'vertical-align':'top', 'border-left': '1px'}" class="vr-datagrid-cell-container">                                                    
+                                                    <div class="vr-datagrid-cell">
+                                                        <div class="vr-datagrid-celltext ">
+                                                            <vr-label isvalue="true" ellipsis>
+                                                                <a ng-if="dataItem.IsCountryNew === false" href="" ng-click="onZoneNameClicked(dataItem)" title="{{dataItem.ZoneName}}">{{dataItem.ZoneName}}</a>
+                                                                <span ng-if="dataItem.IsCountryNew === true">{{dataItem.ZoneName}}</span>
+                                                                <span ng-if="dataItem.IsFutureZone">*</span>
+                                                            </vr-label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            <div ng-style="{ 'width': '100px', 'display':'inline-flex', 'vertical-align':'top', 'border-left': '1px'}" class="vr-datagrid-cell-container">
+                                                <div class="vr-datagrid-cell">
+                                                    <div class="vr-datagrid-celltext ">
+                                                        <span ng-click="onEffectiveRPClicked(dataItem)">
+                                                            <vr-label isvalue="true" ellipsis><span title="{{dataItem.EffectiveRoutingProductName}}">{{dataItem.EffectiveRoutingProductName}}</span></vr-label>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                                <div ng-style="{ 'width': '50px', 'display':'inline-flex', 'vertical-align':'top', 'border-left': '1px'}" class="vr-datagrid-cell-container">
+                                                    <div class="vr-datagrid-cell">
+                                                        <div class="vr-datagrid-celltext ">
+                                                            <span ng-click="onEffectiveRPClicked(dataItem)">
+                                                                <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div ng-style="{ 'width': '50px', 'display':'inline-flex', 'vertical-align':'top', 'border-left': '1px'}" class="vr-datagrid-cell-container">
+                                                    <div class="vr-datagrid-cell">
+                                                        <div class="vr-datagrid-celltext ">
+                                                            <div style="text-align: right">
+                                                                <vr-label isvalue="true">{{dataItem.CurrentRate | number: viewScope.longPrecision }}</vr-label>
+                                                                <span ng-if="dataItem.FutureNormalRate != null"
+                                                                      style="cursor: pointer; text-decoration: underline"
+                                                                      ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div ng-style="{ 'width': '25px', 'display':'inline-flex', 'vertical-align':'top', 'border-left': '1px'}" class="vr-datagrid-cell-container">
+                                                    <div class="vr-datagrid-cell">
+                                                        <div class="vr-datagrid-celltext ">
+                                                            <vr-icon icontype="dataItem.iconType" tooltip="dataItem.iconTooltip"></vr-icon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                        <!--<div id="divExpandableRowContent_{{$index}}" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap">
+                                            <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
+                                            <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': $parent.ctrl.expandableSectionWidth, 'display':'inline-block', 'padding': '5px', 'background-color': '#F5F5F5', 'border-left':'1px solid #D0D0D0'}"></div>
+                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
                 <vr-datagrid on-ready="onGridReady"
                              datasource="zoneItems"
                              loadmoredata="loadMoreData"
