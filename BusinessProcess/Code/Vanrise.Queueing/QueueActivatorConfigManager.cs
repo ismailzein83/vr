@@ -24,7 +24,7 @@ namespace Vanrise.Queueing
 
 
         #region Private Methods
-        private Dictionary<int, QueueActivatorConfig> GetCachedQueueActivatorConfig()
+        private Dictionary<Guid, QueueActivatorConfig> GetCachedQueueActivatorConfig()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedQueueActivatorConfig",
                () =>

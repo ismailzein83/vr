@@ -8,7 +8,7 @@ namespace Vanrise.Queueing.Entities
 {
     public class QueueActivatorConfig
     {
-        public int QueueActivatorConfigId { get; set; }
+        public Guid QueueActivatorConfigId { get; set; }
 
         public string Name { get; set; }
 

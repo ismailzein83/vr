@@ -28,7 +28,7 @@ namespace Vanrise.Queueing.Entities
             }
         }
 
-        public int ConfigId { get; set; }
+        public Guid ConfigId { get; set; }
 
         /// <summary>
         /// to be removed

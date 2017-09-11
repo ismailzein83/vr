@@ -34,7 +34,7 @@ namespace Vanrise.Queueing.Data.SQL
             QueueActivatorConfig queueActivatorConfig = Vanrise.Common.Serializer.Deserialize<QueueActivatorConfig>(reader["Details"] as string);
             if (queueActivatorConfig != null)
             {
-                queueActivatorConfig.QueueActivatorConfigId = Convert.ToInt32(reader["ID"]);
+                queueActivatorConfig.QueueActivatorConfigId = (Guid)reader["ID"];
                 queueActivatorConfig.Name = reader["Name"] as string;
             }
             return queueActivatorConfig;
