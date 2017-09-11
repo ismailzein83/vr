@@ -57,8 +57,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         [Description("Decrease")]
         Decrease = 4,
 
-        [Description("Cost Not Available")]
-        CostNotAvailable = 5
+        [Description("Rate Not Available")]
+        RateNotAvailable = 5
     }
 
     public class OverlappedRatesByZone : Dictionary<long, ZoneOverlappedRates>
