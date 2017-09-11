@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -31,7 +32,11 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     if (importedCode.CodeGroup != null && firstCodeCountryId.HasValue && importedCode.CodeGroup.CountryId != firstCodeCountryId.Value)
                     {
-                        context.Message = string.Format("Can not add Zone {0} because it has the codes {1}, {2} belongs to different countries", zone.ZoneName, firstCode.Code, importedCode.Code);
+                        CountryManager countryManager = new CountryManager();
+                        string firstCountryName = countryManager.GetCountryName(firstCodeCountryId.Value);
+                        string importedCodeCountryName = countryManager.GetCountryName(importedCode.CodeGroup.CountryId);
+
+                        context.Message = string.Format("Can not add Zone {0} because it has the codes {1}, {2} belongs to different countries {3} and {4}", zone.ZoneName, firstCode.Code, importedCode.Code, firstCountryName, importedCodeCountryName);
                         return false;
                     }
                 }

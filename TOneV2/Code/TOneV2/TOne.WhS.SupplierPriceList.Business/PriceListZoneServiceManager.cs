@@ -26,7 +26,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             IEnumerable<SupplierDefaultService> supplierDefaultServices = supplierZoneServiceManager.GetSupplierDefaultServicesEffectiveAfter(supplierId, minimumBED);
 
-            if (supplierDefaultServices == null)
+            if (supplierDefaultServices == null || supplierDefaultServices.Count() == 0)
                 throw new DataIntegrityValidationException(string.Format("Supplier with Id {0} does not have a default service", supplierId));
 
             SupplierDefaultService effectiveSupplierDefaultService = GetEffectiveSupplierDefaultService(supplierDefaultServices, minimumBED);

@@ -443,8 +443,12 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         private CodeIterator<CodeGroup> GetCodeIterator()
         {
-            var cachedCodeGroups = GetCachedCodeGroups();
-            return new CodeIterator<CodeGroup>(cachedCodeGroups.Values);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCodeIterator",
+             () =>
+             {
+                 var cachedCodeGroups = GetCachedCodeGroups();
+                 return new CodeIterator<CodeGroup>(cachedCodeGroups.Values); 
+             });            
         }
         #endregion
         private class CodeGroupLoggableEntity : VRLoggableEntityBase
