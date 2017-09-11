@@ -696,7 +696,7 @@ namespace Retail.MultiNet.Business
                     {
                         DimensionFields = listDimensions,
                         MeasureFields = listMeasures,
-                        TableId = 9,
+                        TableId = Guid.Parse("4F4C1DC0-6024-4AB9-933D-20F456360112"),
                         FromTime = fromDate,
                         ToTime = toDate,
                         ParentDimensions = new List<string>(),

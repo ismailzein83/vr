@@ -27,7 +27,7 @@ namespace Retail.BusinessEntity.Business
                 {
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
-                    TableId = 6,
+                    TableId = Guid.Parse("C0F56F28-E0AF-4CBB-937A-0225CDF86E6A"),
                     FromTime = input.Query.FromDate,
                     ToTime = input.Query.ToDate,
                     ParentDimensions = new List<string>(),
