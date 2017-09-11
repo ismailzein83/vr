@@ -15,5 +15,6 @@ namespace TOne.WhS.Sales.Entities
         MarginType MarginType { get; }
         SupplierTargetMatchAnalyticOption GetSupplierAnalyticInfo(int supplierId);
         decimal EvaluateRate(decimal originalRate);
+        void ValidateAnalyticInfo(SupplierTargetMatchAnalyticOption option);
     }
 }

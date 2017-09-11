@@ -16,6 +16,7 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.loadClicked = function () {
+                $scope.showExportButton = true;
                 return gridAPI.load(getFilter());
             };
 

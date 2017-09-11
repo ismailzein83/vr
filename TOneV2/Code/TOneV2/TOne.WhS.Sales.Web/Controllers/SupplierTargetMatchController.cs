@@ -29,5 +29,14 @@ namespace TOne.WhS.Sales.Web.Controllers
             var manager = new SupplierTargetMatchManager();
             return manager.GetTargetMatchMethodConfigs();
         }
+
+
+        //[HttpGet]
+        //[Route("DownloadSupplierTargetMatches")]
+        //public object DownloadSupplierTargetMatches()
+        //{
+        //    byte[] fileContent = new SupplierTargetMatchManager().DownloadSupplierTargetMatches();
+        //    return GetExcelResponse(fileContent, "Supplier Target Match.xls");
+        //}
     }
 }

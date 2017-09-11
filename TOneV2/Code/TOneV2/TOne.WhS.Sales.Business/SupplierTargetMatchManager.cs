@@ -16,7 +16,6 @@ namespace TOne.WhS.Sales.Business
 {
     public class SupplierTargetMatchManager
     {
-
         public IDataRetrievalResult<SupplierTargetMatchDetail> GetFilteredSupplierTargetMatches(Vanrise.Entities.DataRetrievalInput<SupplierTargetMatchQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new SupplierTargetMatchRequestHandler());
@@ -62,7 +61,7 @@ namespace TOne.WhS.Sales.Business
                     {
                         if (zoneAnalyticDetails.TryGetValue(rpRouteDetail.SaleZoneId, out supplierAnalyticDetail))
                         {
-                            TargetMatchCalculationMethodContext context = new TargetMatchCalculationMethodContext(supplierAnalyticDetail)
+                            TargetMatchCalculationMethodContext context = new TargetMatchCalculationMethodContext(supplierAnalyticDetail, input.Query.Settings.DefaultACD, input.Query.Settings.DefaultASR)
                             {
                                 RPRouteDetail = rpRouteDetail,
                                 MarginType = input.Query.Settings.MarginType,
@@ -98,6 +97,16 @@ namespace TOne.WhS.Sales.Business
                 return result;
             }
 
+            protected override ResultProcessingHandler<SupplierTargetMatchDetail> GetResultProcessingHandler(DataRetrievalInput<SupplierTargetMatchQuery> input, BigResult<SupplierTargetMatchDetail> bigResult)
+            {
+                return new ResultProcessingHandler<SupplierTargetMatchDetail>
+                {
+                    ExportExcelHandler = new SupplierTargetMatchExportExcelHandler
+                    {
+
+                    }
+                };
+            }
             ZoneAnalyticDetail GetAnalyticZoneDetails(DataRetrievalInput<SupplierTargetMatchQuery> input, List<RPZone> rpZones)
             {
                 var analyticResult = GetFilteredRecords(rpZones, input.Query.Filter.From, input.Query.Filter.To);
@@ -196,14 +205,91 @@ namespace TOne.WhS.Sales.Business
                 return rpZones;
             }
         }
+
+        class SupplierTargetMatchExportExcelHandler : ExcelExportHandler<SupplierTargetMatchDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SupplierTargetMatchDetail> context)
+            {
+                DataRetrievalInput<SupplierTargetMatchQuery> input = context.Input as DataRetrievalInput<SupplierTargetMatchQuery>;
+                input.ThrowIfNull("input", "");
+
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Target Rates",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sale Zone" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Volume" });
+                //for (var i = 0; i < context.BigResult.Data.ElementAt(0).Entity.TargetOptions.Count(); i++)
+                for (var i = 0; i < 3; i++)
+                {
+                    var j = i + 1;
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "LCR " + j, Width = 30 });
+                }
+
+                if (input.Query.Settings.IncludeACD_ASR)
+                {
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ASR" });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ACD" });
+                }
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    decimal maxACD = 0;
+                    decimal maxASR = 0;
+
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.SaleZone });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.TargetVolume });
+                            if (record.Entity.TargetOptions != null)
+                            {
+                                for (var f = 0; f < record.Entity.TargetOptions.Count(); f++)
+                                {
+                                    var option = record.Entity.TargetOptions[f];
+                                    row.Cells.Add(new ExportExcelCell() { Value = option.Rate });
+                                    if (maxACD < option.ACD)
+                                        maxACD = option.ACD;
+                                    if (maxASR < option.ASR)
+                                        maxASR = option.ASR;
+                                }
+                            }
+                            if (input.Query.Settings.IncludeACD_ASR)
+                            {
+                                row.Cells.Add(new ExportExcelCell() { Value = maxASR });
+                                row.Cells.Add(new ExportExcelCell() { Value = maxACD });
+                            }
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
+        public object DownloadSupplierTargetMatches()
+        {
+            return new SupplierTargetMatchManager().GetFilteredSupplierTargetMatches(new DataRetrievalInput<SupplierTargetMatchQuery>
+            {
+                DataRetrievalResultType = DataRetrievalResultType.Excel
+            });
+        }
     }
 
     public class TargetMatchCalculationMethodContext : ITargetMatchCalculationMethodContext
     {
         Dictionary<int, SupplierTargetMatchAnalyticOption> _SupplierAnalyticOptions;
-        public TargetMatchCalculationMethodContext(Dictionary<int, SupplierTargetMatchAnalyticOption> supplierAnalyticOptions)
+        decimal _MinACD;
+        decimal _MinASR;
+        public TargetMatchCalculationMethodContext(Dictionary<int, SupplierTargetMatchAnalyticOption> supplierAnalyticOptions, decimal minACD, decimal minASR)
         {
             _SupplierAnalyticOptions = supplierAnalyticOptions;
+            _MinACD = minACD;
+            _MinASR = minASR;
         }
         public RPRouteDetail RPRouteDetail
         {
@@ -250,6 +336,15 @@ namespace TOne.WhS.Sales.Business
                     break;
             }
             return value;
+        }
+
+
+        public void ValidateAnalyticInfo(SupplierTargetMatchAnalyticOption option)
+        {
+            if (option.ACD < _MinACD)
+                option.ACD = _MinACD;
+            if (option.ASR < _MinASR)
+                option.ASR = _MinASR;
         }
     }
 }

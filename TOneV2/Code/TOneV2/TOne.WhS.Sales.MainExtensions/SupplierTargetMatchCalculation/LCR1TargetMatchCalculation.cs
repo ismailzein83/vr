@@ -12,7 +12,7 @@ namespace TOne.WhS.Sales.MainExtensions.SupplierTargetMatchCalculation
     {
         public override Guid ConfigId
         {
-            get { return new Guid("1BA9A5CA-BEB1-4071-B7D1-A8C19227CFBA"); }
+            get { return new Guid("745B15CA-4649-4780-AD5D-D24C4575D5EB"); }
         }
 
         public override void Evaluate(ITargetMatchCalculationMethodContext context)
@@ -20,20 +20,20 @@ namespace TOne.WhS.Sales.MainExtensions.SupplierTargetMatchCalculation
             RPRouteOptionDetail lcr = context.RPRouteDetail.RouteOptionsDetails.ElementAtOrDefault(0);
             if (lcr != null)
             {
+                SupplierTargetMatchAnalyticOption option = new SupplierTargetMatchAnalyticOption
+                {
+                    Rate = context.EvaluateRate(lcr.Entity.SupplierRate)
+                };
                 var supplierAnalyticInfo = context.GetSupplierAnalyticInfo(lcr.Entity.SupplierId);
                 if (supplierAnalyticInfo != null)
                 {
-                    SupplierTargetMatchAnalyticOption option = new SupplierTargetMatchAnalyticOption
-                    {
-                        Rate = context.EvaluateRate(lcr.Entity.SupplierRate),
-                        ACD = supplierAnalyticInfo.ACD,
-                        ASR = supplierAnalyticInfo.ACD,
-                        Duration = supplierAnalyticInfo.Duration
-                    };
-                    context.Options = new List<SupplierTargetMatchAnalyticOption> { option };
+                    option.ACD = supplierAnalyticInfo.ACD;
+                    option.ASR = supplierAnalyticInfo.ACD;
+                    option.Duration = supplierAnalyticInfo.Duration;
                 }
+                context.ValidateAnalyticInfo(option);
+                context.Options = new List<SupplierTargetMatchAnalyticOption> { option };
             }
-
         }
     }
 }

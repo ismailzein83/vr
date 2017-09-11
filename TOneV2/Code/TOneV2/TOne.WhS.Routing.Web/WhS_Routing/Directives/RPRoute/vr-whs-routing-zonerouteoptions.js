@@ -52,7 +52,7 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, WhS_BE_Zon
                     if (payload.RouteOptions) {
                         for (var i = 0; i < payload.RouteOptions.length; i++) {
                             var currentItem = payload.RouteOptions[i];
-                            currentItem.title = buildTitle(currentItem.SupplierName, currentItem.Entity.Percentage);
+                            currentItem.title = buildTitle(currentItem.SupplierName, currentItem.Entity.Percentage, currentItem.ACD, currentItem.ASR);
                             currentItem.titleToDisplay = buildTitleToDisplay(currentItem, display);
 
                             if (currentItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
@@ -68,10 +68,16 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, WhS_BE_Zon
                 ctrl.onReady(api);
         }
 
-        function buildTitle(supplierName, percentage) {
+        function buildTitle(supplierName, percentage, acd, asr) {
             var result = supplierName;
             if (percentage) {
                 result = result + ' ' + percentage + '%';
+            }
+            if (asr) {
+                result = result + ', ASR:' + asr;
+            }
+            if (acd) {
+                result = result + ', ACD:' + acd;
             }
             return result;
         }

@@ -87,7 +87,6 @@ app.directive('vrWhsSalesSuppliertargetmatchGrid', ['WhS_Sales_SupplierTargetMat
                 targetMatchItem.onRouteOptionsReady = function (api) {
                     targetMatchItem.RouteOptionsAPI = api;
                     var routeOptionsDirectivePayload = getRouteOptionsDirectivePayload(targetMatchItem.Entity);
-                    console.log(routeOptionsDirectivePayload);
                     VRUIUtilsService.callDirectiveLoad(targetMatchItem.RouteOptionsAPI, routeOptionsDirectivePayload, targetMatchItem.RouteOptionsLoadDeferred);
                 };
             }

@@ -12,27 +12,35 @@ namespace TOne.WhS.Sales.MainExtensions.SupplierTargetMatchCalculation
     {
         public override Guid ConfigId
         {
-            get { return new Guid("1BA9A5CA-BEB1-4071-B7D1-A8C19227CFBA"); }
+            get { return new Guid("2CB834AD-16BE-46C7-8B26-E65927C2388B"); }
         }
 
         public override void Evaluate(ITargetMatchCalculationMethodContext context)
         {
-            
-        }
-
-        private decimal EvaluateRate(decimal originalRate, ITargetMatchCalculationMethodContext context)
-        {
-            decimal value = 0;
-            switch (context.MarginType)
+            var options = new List<SupplierTargetMatchAnalyticOption>();
+            decimal rate = context.RPRouteDetail.RouteOptionsDetails.Average(o => o.ConvertedSupplierRate);
+            decimal totalACD = 0;
+            decimal totalASR = 0;
+            decimal totalDuration = 0;
+            foreach (var routeOption in context.RPRouteDetail.RouteOptionsDetails)
             {
-                case MarginType.Percentage:
-                    value = originalRate * (100 - context.MarginValue) / 100;
-                    break;
-                case MarginType.Fixed:
-                    value = context.MarginValue;
-                    break;
+                var supplierAnalyticInfo = context.GetSupplierAnalyticInfo(routeOption.Entity.SupplierId);
+                if (supplierAnalyticInfo != null)
+                {
+                    totalACD += supplierAnalyticInfo.ACD;
+                    totalASR += supplierAnalyticInfo.ASR;
+                    totalDuration += supplierAnalyticInfo.Duration;
+                }
             }
-            return value;
+
+            SupplierTargetMatchAnalyticOption option = new SupplierTargetMatchAnalyticOption {
+                Duration = totalDuration / context.RPRouteDetail.RouteOptionsDetails.Count(),
+                ACD = totalACD / context.RPRouteDetail.RouteOptionsDetails.Count(),
+                ASR = totalASR / context.RPRouteDetail.RouteOptionsDetails.Count(),
+                Rate = rate
+            };
+            context.ValidateAnalyticInfo(option);
+            options.Add(option);
         }
     }
 }
