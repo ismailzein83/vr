@@ -111,7 +111,7 @@ namespace NP.IVSwitch.Business
         }
 
         private void BuildTopCustomersResult(LiveDashboardResult liveDashboardResult, AnalyticSummaryBigResult<AnalyticRecord> topCustomersRecords)
-        {            
+        {
             if (topCustomersRecords.Data != null)
             {
                 ConvertAnalyticDataToTopCustomersResult(liveDashboardResult, topCustomersRecords.Data);
@@ -172,7 +172,7 @@ namespace NP.IVSwitch.Business
                     liveDashboardResult.TopCustomersResult.CustomerResults.Add(new CustomerResult
                     {
                         CustomerId = customer.Value is int ? (int)customer.Value : 0,
-                        CustomerName = customer.Name !=null?customer.Name:"Null",
+                        CustomerName = customer.Name != null ? customer.Name : "Null",
                         CountConnected = Convert.ToInt32(countConnected.Value),
                         Attempts = Convert.ToInt32(attempts.Value),
                         PercConnected = Convert.ToDecimal(percConnected == null ? 0.0 : percConnected.Value ?? 0.0),
@@ -317,9 +317,9 @@ namespace NP.IVSwitch.Business
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
 
-        private static int GetAnalyticTableId()
+        private static Guid GetAnalyticTableId()
         {
-            return 10;
+            return Guid.Parse("913411d7-2782-4ac9-a55c-27cd88a55ebf");
         }
         
         public List<Vanrise.GenericData.MainExtensions.DataRecordFields.Choice> GetDurationRangeChoices()
