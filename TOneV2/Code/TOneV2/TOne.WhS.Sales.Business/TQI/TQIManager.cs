@@ -112,7 +112,7 @@ namespace TOne.WhS.Sales.Business
                 {
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
-                    TableId = 4,
+                    TableId = Guid.Parse("58DD0497-498D-40F2-8687-08F8356C63CC"),
                     FromTime = fromDate,
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),

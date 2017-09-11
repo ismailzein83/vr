@@ -28,7 +28,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {
                     DimensionFields = listCustomerDimensions,
                     MeasureFields = new List<string> { "TotalSaleNet", "TotalCostNet", "TotalProfit" },
-                    TableId = 8,
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,
@@ -58,7 +58,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {
                     DimensionFields = listSupplierDimensions,
                     MeasureFields = new List<string> { "TotalSaleNet", "TotalCostNet", "TotalProfit" },
-                    TableId = 8,
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,

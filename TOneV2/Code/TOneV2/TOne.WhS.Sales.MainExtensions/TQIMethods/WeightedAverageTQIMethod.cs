@@ -115,7 +115,7 @@ namespace TOne.WhS.Sales.MainExtensions
                 {
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
-                    TableId = 4,
+                    TableId = Guid.Parse("58dd0497-498d-40f2-8687-08f8356c63cc"),
                     FromTime = fromDate,
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),

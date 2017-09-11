@@ -31,7 +31,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {
                     DimensionFields = new List<string> { "Customer", "Supplier" },
                     MeasureFields = new List<string> { "SaleDuration", "SaleNetNotNULL", "CostDuration", "CostNetNotNULL", "CostExtraCharges", "SaleExtraCharges", "ProfitNotNULL", "PercentageProfitNotNULL" },
-                    TableId = 8,
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,

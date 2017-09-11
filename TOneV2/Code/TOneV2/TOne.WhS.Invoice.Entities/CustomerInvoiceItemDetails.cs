@@ -12,7 +12,12 @@ namespace TOne.WhS.Invoice.Entities
         public decimal SaleAmount { get; set; }
         public decimal OriginalSaleAmount { get; set; }
         public decimal Duration { get; set; }
-        public int  CustomerId { get; set; }
+        public int CountryId { get; set; }
+        public int SupplierId { get; set; }
+        public int SupplierZoneId { get; set; }
+
+        
+        public int CustomerId { get; set; }
         public long SaleZoneId { get; set; }
         public long OriginalSaleCurrencyId { get; set; }
         public long SaleCurrencyId { get; set; }

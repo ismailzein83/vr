@@ -40,7 +40,7 @@ namespace TOne.WhS.Analytics.Business
                 {
                     DimensionFields = new List<string> { "Month" },
                     MeasureFields = new List<string>() {  },
-                    TableId = 8,
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = query.fromDate,
                     ToTime = query.toDate,
                     CurrencyId = query.currencyId,

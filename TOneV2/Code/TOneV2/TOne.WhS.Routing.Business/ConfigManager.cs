@@ -123,7 +123,7 @@ namespace TOne.WhS.Routing.Business
 
         public List<AnalyticMeasureInfo> GetQualityConfigurationFields()
         {
-            int qualityAnalyticTableId = GetQualityAnalyticTableId();
+            Guid qualityAnalyticTableId = GetQualityAnalyticTableId();
             AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
             Dictionary<string, AnalyticMeasure> analyticItemConfigs = analyticItemConfigManager.GetMeasures(qualityAnalyticTableId);
             List <AnalyticMeasureInfo> analyticMeasureInfos= new List<AnalyticMeasureInfo>();
@@ -137,7 +137,7 @@ namespace TOne.WhS.Routing.Business
 
             return analyticMeasureInfos;
         }
-        public int GetQualityAnalyticTableId()
+        public Guid GetQualityAnalyticTableId()
         {
             TechnicalQualityConfiguration technicalQualityConfiguration = GetTechnicalQualityConfiguration();
             return technicalQualityConfiguration.QualityAnalyticTableId;

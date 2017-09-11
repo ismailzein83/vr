@@ -236,7 +236,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
-                    TableId = 8,
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = fromDate,
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),

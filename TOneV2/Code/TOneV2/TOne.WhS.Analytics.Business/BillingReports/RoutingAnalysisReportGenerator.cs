@@ -30,7 +30,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {
                     DimensionFields = new List<string> { "SaleZone" },
                     MeasureFields = new List<string> { "DurationNet" },
-                    TableId = 8,
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,
@@ -90,7 +90,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     {
                         DimensionFields = new List<string> { "SaleZone", "Supplier" },
                         MeasureFields = new List<string> { "DurationNet", "TotalCostNet", "TotalSaleNet", "Profit" },
-                        TableId = 8,
+                        TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                         FromTime = parameters.FromTime,
                         ToTime = parameters.ToTime,
                         CurrencyId = parameters.CurrencyId,
@@ -135,7 +135,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     {
                         DimensionFields = new List<string> { "SaleZone", "Supplier" },
                         MeasureFields = new List<string> { "DurationInMinutes", "ASR", "ACD", "NER" },
-                        TableId = 4,
+                        TableId = Guid.Parse("58DD0497-498D-40F2-8687-08F8356C63CC"),
                         FromTime = parameters.FromTime,
                         ToTime = parameters.ToTime,
                         CurrencyId = parameters.CurrencyId,

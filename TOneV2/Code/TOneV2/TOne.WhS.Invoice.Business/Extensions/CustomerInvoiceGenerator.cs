@@ -19,7 +19,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
             List<string> listMeasures = new List<string> { "SaleNetNotNULL", "NumberOfCalls", "SaleDuration", "BillingPeriodTo", "BillingPeriodFrom", "SaleNet_OrigCurr" };
-            List<string> listDimensions = new List<string> {"Customer","SaleZone", "SaleCurrency", "SaleRate", "SaleRateType" };
+            List<string> listDimensions = new List<string> { "Customer", "SaleZone", "SaleCurrency", "SaleRate", "SaleRateType", "Supplier", "Country", "SupplierZone" };
             string dimentionName = null;
             int currencyId = -1;
             IEnumerable<VRTaxItemDetail> taxItemDetails = null;
@@ -27,20 +27,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
 
-            var customerGenerationCustomSectionPayload =context.CustomSectionPayload as CustomerGenerationCustomSectionPayload;
+            var customerGenerationCustomSectionPayload = context.CustomSectionPayload as CustomerGenerationCustomSectionPayload;
             int? timeZoneId = null;
             if (customerGenerationCustomSectionPayload != null && customerGenerationCustomSectionPayload.TimeZoneId.HasValue)
             {
-               timeZoneId = customerGenerationCustomSectionPayload.TimeZoneId;
+                timeZoneId = customerGenerationCustomSectionPayload.TimeZoneId;
             }
-            if(!timeZoneId.HasValue)
+            if (!timeZoneId.HasValue)
             {
                 timeZoneId = financialAccountManager.GetCustomerTimeZoneId(financialAccount.FinancialAccountId);
             }
             string offset = null;
             DateTime fromDate = context.FromDate;
             DateTime toDate = context.ToDate;
-            if(timeZoneId.HasValue)
+            if (timeZoneId.HasValue)
             {
                 VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(timeZoneId.Value);
                 if (timeZone != null)
@@ -50,7 +50,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     toDate = context.ToDate.Add(-timeZone.Settings.Offset);
                 }
             }
-           
+
 
             string partnerType = null;
             int dimensionValue;
@@ -107,11 +107,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
             };
 
         }
-        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, CustomerInvoiceDetails invoiceDetails,WHSFinancialAccount financialAccount)
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, CustomerInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount)
         {
             var financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
             var balanceAccountTypeId = financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId);
-            if(balanceAccountTypeId.HasValue)
+            if (balanceAccountTypeId.HasValue)
             {
                 Vanrise.Invoice.Entities.InvoiceType invoiceType = new Vanrise.Invoice.Business.InvoiceTypeManager().GetInvoiceType(context.InvoiceTypeId);
                 invoiceType.ThrowIfNull("invoiceType", context.InvoiceTypeId);
@@ -139,9 +139,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 }
                 context.BillingTransactions = new List<GeneratedInvoiceBillingTransaction>() { billingTransaction };
             }
-           
+
         }
-        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType,DateTime fromDate,DateTime toDate)
+        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType, DateTime fromDate, DateTime toDate)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             CustomerInvoiceDetails customerInvoiceDetails = null;
@@ -153,8 +153,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     List<InvoiceBillingRecord> invoiceBillingRecordList = null;
                     if (itemSetNamesDic.TryGetValue("GroupedBySaleZone", out invoiceBillingRecordList))
                     {
-                         customerInvoiceDetails = new CustomerInvoiceDetails();
-                         customerInvoiceDetails.PartnerType = partnerType;
+                        customerInvoiceDetails = new CustomerInvoiceDetails();
+                        customerInvoiceDetails.PartnerType = partnerType;
                         foreach (var invoiceBillingRecord in invoiceBillingRecordList)
                         {
 
@@ -164,6 +164,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             customerInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
                             customerInvoiceDetails.OriginalSaleCurrencyId = invoiceBillingRecord.OriginalSaleCurrencyId;
                             customerInvoiceDetails.SaleCurrencyId = invoiceBillingRecord.SaleCurrencyId;
+                            customerInvoiceDetails.CountryId = invoiceBillingRecord.CountryId;
+                            customerInvoiceDetails.SupplierId = invoiceBillingRecord.SupplierId;
+                            customerInvoiceDetails.SupplierZoneId = invoiceBillingRecord.SupplierZoneId;
+
                         }
                     };
                 }
@@ -201,6 +205,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SaleRateTypeId = item.SaleRateTypeId,
                             FromDate = item.InvoiceMeasures.BillingPeriodFrom,
                             ToDate = item.InvoiceMeasures.BillingPeriodTo,
+                            CountryId = item.CountryId,
+                            SupplierId = item.SupplierId,
+                            SupplierZoneId = item.SupplierZoneId
+
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -229,7 +237,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return generatedInvoiceItemSets;
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate,int currencyId)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate, int currencyId)
         {
             AnalyticManager analyticManager = new AnalyticManager();
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -238,7 +246,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     DimensionFields = listDimensions,
                     MeasureFields = listMeasures,
-                    TableId = 8,
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = fromDate,
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),
@@ -255,7 +263,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             analyticQuery.Query.Filters.Add(dimensionFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
-        private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord,string measureName)
+        private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
         {
             MeasureValue measureValue;
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
@@ -275,6 +283,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     DimensionValue saleCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
                     DimensionValue saleRate = analyticRecord.DimensionValues.ElementAtOrDefault(3);
                     DimensionValue saleRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(4);
+                    DimensionValue supplier = analyticRecord.DimensionValues.ElementAtOrDefault(5);
+                    DimensionValue country = analyticRecord.DimensionValues.ElementAtOrDefault(6);
+                    DimensionValue supplierZone = analyticRecord.DimensionValues.ElementAtOrDefault(7);
+
 
                     MeasureValue saleNet_OrigCurr = GetMeasureValue(analyticRecord, "SaleNet_OrigCurr");
                     MeasureValue saleDuration = GetMeasureValue(analyticRecord, "SaleDuration");
@@ -299,7 +311,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SaleNet = Convert.ToDecimal(saleNet == null ? 0.0 : saleNet.Value ?? 0.0),
                             NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
                             SaleNet_OrigCurr = Convert.ToDecimal(saleNet_OrigCurr == null ? 0.0 : saleNet_OrigCurr.Value ?? 0.0),
-                        }
+                        },
+                        CountryId = Convert.ToInt32(country.Value),
+                        SupplierId = Convert.ToInt32(supplier.Value),
+                        SupplierZoneId = Convert.ToInt32(supplierZone.Value),
 
                     };
                     AddItemToDictionary(itemSetNamesDic, "GroupedBySaleZone", invoiceBillingRecord);
@@ -355,7 +370,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 invoiceBillingRecordList = new List<InvoiceBillingRecord>();
                 invoiceBillingRecordList.Add(invoiceBillingRecord);
                 itemSetNamesDic.Add(key, invoiceBillingRecordList);
-            }else
+            }
+            else
             {
                 invoiceBillingRecordList.Add(invoiceBillingRecord);
                 itemSetNamesDic[key] = invoiceBillingRecordList;
@@ -371,8 +387,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             public DateTime BillingPeriodFrom { get; set; }
 
 
-        } 
-        public  class InvoiceBillingRecord
+        }
+        public class InvoiceBillingRecord
         {
             public InvoiceMeasures InvoiceMeasures { get; set; }
             public long SaleZoneId { get; set; }
@@ -381,7 +397,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
             public Decimal SaleRate { get; set; }
             public int? SaleRateTypeId { get; set; }
             public int SaleCurrencyId { get; set; }
-
+            public int CountryId { get; set; }
+            public int SupplierId { get; set; }
+            public int SupplierZoneId { get; set; }
         }
     }
 }

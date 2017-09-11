@@ -84,7 +84,7 @@ namespace TOne.WhS.Deal.Business
             {
                 Query = new AnalyticQuery()
                 {
-                    TableId = 8,
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     DimensionFields = new List<string> { propertyNames[PropertyName.HalfHour], propertyNames[PropertyName.OrigDeal], propertyNames[PropertyName.OrigDealZoneGroupNb], propertyNames[PropertyName.Deal], 
                                                          propertyNames[PropertyName.DealZoneGroupNb], propertyNames[PropertyName.DealTierNb], propertyNames[PropertyName.DealRateTierNb] },
                     MeasureFields = new List<string>() { propertyNames[PropertyName.DurationInSec], propertyNames[PropertyName.DealDurationInSec] },

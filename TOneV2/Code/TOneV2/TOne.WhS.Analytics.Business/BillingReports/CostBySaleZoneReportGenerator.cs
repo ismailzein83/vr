@@ -23,7 +23,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 {
                     DimensionFields = new List<string> { "SaleZone" },
                     MeasureFields = new List<string>() { "AverageCost", "SaleDuration" },
-                    TableId = 8,
+                    TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
                     CurrencyId = parameters.CurrencyId,
