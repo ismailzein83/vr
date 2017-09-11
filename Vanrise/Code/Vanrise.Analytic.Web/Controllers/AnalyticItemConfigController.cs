@@ -71,7 +71,7 @@ namespace Vanrise.Analytic.Web.Controllers
         }
         [HttpGet]
         [Route("GetAnalyticItemConfigsById")]
-        public Object GetAnalyticItemConfigsById(int tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
+        public Object GetAnalyticItemConfigsById(Guid tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
         {
             AnalyticItemConfigManager manager = new AnalyticItemConfigManager();
             return manager.GetAnalyticItemConfigsById(tableId, itemType, analyticItemConfigId);
@@ -140,7 +140,7 @@ namespace Vanrise.Analytic.Web.Controllers
     }
     public class AnalyticItemConfigFilterInput
     {
-        public List<int> TableIds { get; set; }
+        public List<Guid> TableIds { get; set; }
         public AnalyticItemType ItemType { get; set; }
     }
 }

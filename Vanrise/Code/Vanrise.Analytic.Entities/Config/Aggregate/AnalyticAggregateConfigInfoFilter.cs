@@ -8,6 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticAggregateConfigInfoFilter
     {
-        public List<int> TableIds { get; set; }
+        public List<Guid> TableIds { get; set; }
     }
 }

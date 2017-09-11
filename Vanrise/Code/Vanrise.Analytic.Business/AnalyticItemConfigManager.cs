@@ -34,7 +34,7 @@ namespace Vanrise.Analytic.Business
             }
             return analyticDimensionEditorRuntime;
         }
-        public Dictionary<string, AnalyticDimension> GetDimensions(int tableId)
+        public Dictionary<string, AnalyticDimension> GetDimensions(Guid tableId)
         {
             string cacheName = String.Format("GetDimensions_{0}", tableId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -60,7 +60,7 @@ namespace Vanrise.Analytic.Business
                 });
         }
 
-        public Dictionary<string, AnalyticAggregate> GetAggregates(int tableId)
+        public Dictionary<string, AnalyticAggregate> GetAggregates(Guid tableId)
         {
             string cacheName = String.Format("GetAggregates_{0}", tableId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -85,7 +85,7 @@ namespace Vanrise.Analytic.Business
 
         }
 
-        public Dictionary<string, AnalyticMeasure> GetMeasures(int tableId)
+        public Dictionary<string, AnalyticMeasure> GetMeasures(Guid tableId)
         {
             string cacheName = String.Format("GetMeasures_{0}", tableId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -112,7 +112,7 @@ namespace Vanrise.Analytic.Business
 
         }
 
-        public Dictionary<string, AnalyticJoin> GetJoins(int tableId)
+        public Dictionary<string, AnalyticJoin> GetJoins(Guid tableId)
         {
             var joinConfigs = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, AnalyticItemType.Join);
             Dictionary<string, AnalyticJoin> analyticJoins = new Dictionary<string, AnalyticJoin>();
@@ -130,7 +130,7 @@ namespace Vanrise.Analytic.Business
             return analyticJoins;
         }
 
-        public Dictionary<string, AnalyticMeasureExternalSource> GetMeasureExternalSources(int tableId)
+        public Dictionary<string, AnalyticMeasureExternalSource> GetMeasureExternalSources(Guid tableId)
         {
             string cacheName = String.Format("GetMeasureExternalSources_{0}", tableId);
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -232,7 +232,7 @@ namespace Vanrise.Analytic.Business
             return AggregateConfigs;
         }
 
-        public IEnumerable<Object> GetAnalyticItemConfigs(List<int> tableIds, AnalyticItemType itemType)
+        public IEnumerable<Object> GetAnalyticItemConfigs(List<Guid> tableIds, AnalyticItemType itemType)
         {
             return GetCachedAnalyticItemConfigsByItemType(tableIds, itemType);
         }
@@ -249,7 +249,7 @@ namespace Vanrise.Analytic.Business
             
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, itemConfigs.ToBigResult(input, filterExpression));
         }
-        public Object GetAnalyticItemConfigsById(int tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
+        public Object GetAnalyticItemConfigsById(Guid tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
         {
             return GetCachedAnalyticItemConfigByItemType(tableId, itemType, analyticItemConfigId);
         }
@@ -305,7 +305,7 @@ namespace Vanrise.Analytic.Business
         }
 
 
-        public bool DoesUserHaveAccess(int userId, int analyticTableId, List<string> measureNames)
+        public bool DoesUserHaveAccess(int userId, Guid analyticTableId, List<string> measureNames)
         {
             var filterdMeasures = this.GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(analyticTableId, AnalyticItemType.Measure).Where(measureConfig => measureNames.Contains(measureConfig.Name)).Select(measureConfig => measureConfig);
             SecurityManager secManager = new SecurityManager();
@@ -332,7 +332,7 @@ namespace Vanrise.Analytic.Business
 
         #region Private Methods
 
-        private Object GetCachedAnalyticItemConfigByItemType(int tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
+        private Object GetCachedAnalyticItemConfigByItemType(Guid tableId, AnalyticItemType itemType, Guid analyticItemConfigId)
         {
             Object data = null;
             switch (itemType)
@@ -345,7 +345,7 @@ namespace Vanrise.Analytic.Business
             return data;
         }
 
-        private IEnumerable<Object> GetCachedAnalyticItemConfigsByItemType(List<int> tableIds, AnalyticItemType itemType)
+        private IEnumerable<Object> GetCachedAnalyticItemConfigsByItemType(List<Guid> tableIds, AnalyticItemType itemType)
         {
             IEnumerable<Object> data = null;
             switch (itemType)
@@ -353,7 +353,7 @@ namespace Vanrise.Analytic.Business
                 case AnalyticItemType.Dimension:
                     List<AnalyticItemConfig<AnalyticDimensionConfig>> dimensions = new List<AnalyticItemConfig<AnalyticDimensionConfig>>();
 
-                    foreach (int tableId in tableIds)
+                    foreach (Guid tableId in tableIds)
                     {
                         var obj = GetCachedAnalyticItemConfigs<AnalyticDimensionConfig>(tableId, itemType).ToList();
                         RemoveCommonItemsInList(obj, dimensions);
@@ -363,7 +363,7 @@ namespace Vanrise.Analytic.Business
                     break;
                 case AnalyticItemType.Join:
                     List<AnalyticItemConfig<AnalyticJoinConfig>> joins = new List<AnalyticItemConfig<AnalyticJoinConfig>>();
-                    foreach (int tableId in tableIds)
+                    foreach (Guid tableId in tableIds)
                     {
                         var obj = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).ToList();
                         RemoveCommonItemsInList(obj, joins);
@@ -373,7 +373,7 @@ namespace Vanrise.Analytic.Business
                     break;
                 case AnalyticItemType.Measure:
                     List<AnalyticItemConfig<AnalyticMeasureConfig>> measures = new List<AnalyticItemConfig<AnalyticMeasureConfig>>();
-                    foreach (int tableId in tableIds)
+                    foreach (Guid tableId in tableIds)
                     {
                         var obj = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).ToList();
                         RemoveCommonItemsInList(obj, measures);
@@ -383,7 +383,7 @@ namespace Vanrise.Analytic.Business
                     break;
                 case AnalyticItemType.Aggregate:
                     List<AnalyticItemConfig<AnalyticAggregateConfig>> aggregates = new List<AnalyticItemConfig<AnalyticAggregateConfig>>();
-                    foreach (int tableId in tableIds)
+                    foreach (Guid tableId in tableIds)
                     {
                         var obj = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, itemType).ToList();
                         RemoveCommonItemsInList(obj, aggregates);
@@ -396,7 +396,7 @@ namespace Vanrise.Analytic.Business
             }
             return data;
         }
-        private IEnumerable<Object> GetCachedAnalyticItemConfigsDetailByItemType(int tableId, AnalyticItemType itemType)
+        private IEnumerable<Object> GetCachedAnalyticItemConfigsDetailByItemType(Guid tableId, AnalyticItemType itemType)
         {
             IEnumerable<Object> data = null;
             switch (itemType)
@@ -419,7 +419,7 @@ namespace Vanrise.Analytic.Business
                 Title = analyticItemConfig.Title
             };
         }
-        private IEnumerable<AnalyticItemConfig<T>> GetCachedAnalyticItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class
+        private IEnumerable<AnalyticItemConfig<T>> GetCachedAnalyticItemConfigs<T>(Guid tableId, AnalyticItemType itemType) where T : class
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetCachedAnalyticItemConfigs_{0}_{1}", tableId, itemType),
                () =>
@@ -460,8 +460,8 @@ namespace Vanrise.Analytic.Business
         {
 
             AnalyticItemType _analyticItemType;
-            int _tableId;
-            public AnalyticItemConfigLoggableEntity(AnalyticItemType analyticItemType,int tableId)
+            Guid _tableId;
+            public AnalyticItemConfigLoggableEntity(AnalyticItemType analyticItemType, Guid tableId)
             {
                 _analyticItemType = analyticItemType;
                 _tableId = tableId;

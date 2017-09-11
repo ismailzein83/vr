@@ -8,6 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticDimensionEditorInput
     {
-        public int TableId { get; set; }
+        public Guid TableId { get; set; }
     }
 }

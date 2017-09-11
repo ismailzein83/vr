@@ -8,6 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticTableInfoFilter
     {
-        public List<int> OnlySelectedIds { get; set; }
+        public List<Guid> OnlySelectedIds { get; set; }
     }
 }

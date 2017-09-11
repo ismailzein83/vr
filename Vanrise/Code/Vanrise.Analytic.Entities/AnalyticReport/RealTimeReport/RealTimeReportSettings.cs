@@ -13,7 +13,7 @@ namespace Vanrise.Analytic.Entities
             get { return new Guid("635B2CE2-F787-4F46-832E-69B78D422FD5"); }
         }
 
-        public List<int> AnalyticTableIds { get; set; }
+        public List<Guid> AnalyticTableIds { get; set; }
         public RealTimeReportSearchSettings SearchSettings { get; set; }
         public List<RealTimeReportWidget> Widgets { get; set; }
 
@@ -22,7 +22,7 @@ namespace Vanrise.Analytic.Entities
             var analyticTable = BEManagerFactory.GetManager<IAnalyticTableManager>();
             var analyticItem = BEManagerFactory.GetManager<IAnalyticItemConfigManager>();
 
-            foreach(int id in this.AnalyticTableIds){
+            foreach(Guid id in this.AnalyticTableIds){
                 if(analyticTable.DoesUserHaveAccess(context.UserId, id) == false)
                     return false;
             }

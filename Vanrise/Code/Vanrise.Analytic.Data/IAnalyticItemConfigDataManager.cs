@@ -9,7 +9,7 @@ namespace Vanrise.Analytic.Data
 {
     public interface IAnalyticItemConfigDataManager:IDataManager
     {
-        List<AnalyticItemConfig<T>> GetItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class;
+        List<AnalyticItemConfig<T>> GetItemConfigs<T>(Guid tableId, AnalyticItemType itemType) where T : class;
         bool AreAnalyticItemConfigUpdated(ref object updateHandle);
         bool AddAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class;
         bool UpdateAnalyticItemConfig<T>(AnalyticItemConfig<T> analyticItemConfig) where T : class;

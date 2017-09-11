@@ -28,13 +28,11 @@ namespace Vanrise.Analytic.Data.SQL
             return GetItemsSP("[Analytic].[sp_AnalyticTable_GetAll]", AnalyticTableReader);
         }
 
-        public bool AddAnalyticTable(Entities.AnalyticTable analyticTable, out int analyticTableId)
+        public bool AddAnalyticTable(Entities.AnalyticTable analyticTable)
         {
             object analyticTableID;
 
-            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_Insert", out analyticTableID, analyticTable.Name, Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
-            analyticTableId = (recordesEffected > 0) ? (int)analyticTableID : -1;
-
+            int recordesEffected = ExecuteNonQuerySP("Analytic.sp_AnalyticTable_Insert", analyticTable.AnalyticTableId, analyticTable.Name, Vanrise.Common.Serializer.Serialize(analyticTable.Settings));
             return (recordesEffected > 0);
         }
 
@@ -51,7 +49,7 @@ namespace Vanrise.Analytic.Data.SQL
         {
             return new AnalyticTable
             {
-                AnalyticTableId = (int)reader["ID"],
+                AnalyticTableId = (Guid)reader["ID"],
                 Name = reader["Name"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<AnalyticTableSettings>(reader["Settings"] as string),
             };

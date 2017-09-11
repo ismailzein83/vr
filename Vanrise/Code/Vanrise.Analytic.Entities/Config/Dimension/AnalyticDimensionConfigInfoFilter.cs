@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticDimensionConfigInfoFilter
     {
-        public List<int> TableIds { get; set; }
+        public List<Guid> TableIds { get; set; }
         public bool HideIsRequiredFromParent { get; set; }
     }
 }

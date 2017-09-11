@@ -39,7 +39,7 @@ namespace Vanrise.Analytic.Web.Controllers
         }
         [HttpGet]
         [Route("GetTableById")]
-        public AnalyticTable GetTableById(int tableId)
+        public AnalyticTable GetTableById(Guid tableId)
         {
             AnalyticTableManager manager = new AnalyticTableManager();
             return manager.GetAnalyticTableById(tableId);

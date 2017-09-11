@@ -43,7 +43,7 @@ namespace Vanrise.Analytic.Business
             return connectionSettings.Get<IEnumerable<AnalyticTableInfo>>(string.Format("/api/VR_Analytic/AnalyticTable/GetAnalyticTablesInfo?filter={0}", serializedFilter));
         }
 
-        public AnalyticTable GetAnalyticTableById(int analyticTableId)
+        public AnalyticTable GetAnalyticTableById(Guid analyticTableId)
         {
             var analyticTables = GetCachedAnalyticTables();
 
@@ -62,15 +62,13 @@ namespace Vanrise.Analytic.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            int analyticTableId = -1;
-
+            analyticTable.AnalyticTableId = Guid.NewGuid();
             IAnalyticTableDataManager dataManager = AnalyticDataManagerFactory.GetDataManager<IAnalyticTableDataManager>();
-            bool insertActionSucc = dataManager.AddAnalyticTable(analyticTable, out analyticTableId);
+            bool insertActionSucc = dataManager.AddAnalyticTable(analyticTable);
 
             if (insertActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                analyticTable.AnalyticTableId = analyticTableId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(AnalyticTableLoggableEntity.Instance, analyticTable);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = AnalyticTableDetailMapper(analyticTable);
@@ -106,7 +104,7 @@ namespace Vanrise.Analytic.Business
             return updateOperationOutput;
         }
 
-        public bool DoesUserHaveAccess(int userId, int analyticTableId)
+        public bool DoesUserHaveAccess(int userId, Guid analyticTableId)
         {
             AnalyticTable table = GetAnalyticTableById(analyticTableId); 
             SecurityManager secManager = new SecurityManager();
@@ -121,7 +119,7 @@ namespace Vanrise.Analytic.Business
        
         #region Private Methods
 
-        Dictionary<int, AnalyticTable> GetCachedAnalyticTables()
+        Dictionary<Guid, AnalyticTable> GetCachedAnalyticTables()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAnalyticTables",
                 () =>

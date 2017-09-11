@@ -11,7 +11,7 @@ namespace Vanrise.Analytic.Entities
     {
         public Guid AnalyticItemConfigId { get; set; }
 
-        public int TableId { get; set; }
+        public Guid TableId { get; set; }
 
         public string Name { get; set; }
 

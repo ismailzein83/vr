@@ -13,6 +13,6 @@ namespace Vanrise.Analytic.Entities
         public List<DimensionFilter> DimensionFilters { get; set; }
         public Guid ReportId { get; set; }
         public string SourceName { get; set; }
-        public int TableId { get; set; }
+        public Guid TableId { get; set; }
     }
 }

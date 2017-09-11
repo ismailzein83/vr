@@ -10,7 +10,7 @@ namespace Vanrise.Analytic.Business
 {
     internal static class DynamicTypeGenerator
     {
-        public static void BuildMeasureEvaluators(int analyticTableId, IEnumerable<AnalyticMeasure> measureConfigs)
+        public static void BuildMeasureEvaluators(Guid analyticTableId, IEnumerable<AnalyticMeasure> measureConfigs)
         {
             Dictionary<Guid, string> measureFullTypeById = new Dictionary<Guid, string>();
             StringBuilder codeBuilder = new StringBuilder(@"using System;
@@ -73,7 +73,7 @@ namespace Vanrise.Analytic.Business
             }
         }
 
-        public static void BuildDimensionEvaluators(int analyticTableId, IEnumerable<AnalyticDimension> dimensionConfigs)
+        public static void BuildDimensionEvaluators(Guid analyticTableId, IEnumerable<AnalyticDimension> dimensionConfigs)
         {
             Dictionary<Guid, string> dimensionFullTypeById = new Dictionary<Guid, string>();
             StringBuilder codeBuilder = new StringBuilder(@"using System;

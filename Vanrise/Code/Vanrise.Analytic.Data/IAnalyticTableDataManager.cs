@@ -11,7 +11,7 @@ namespace Vanrise.Analytic.Data
     {
         bool AreAnalyticTableUpdated(ref object updateHandle);
         List<AnalyticTable> GetAnalyticTables();
-        bool AddAnalyticTable(AnalyticTable analyticTable, out int analyticTableId);
+        bool AddAnalyticTable(AnalyticTable analyticTable);
         bool UpdateAnalyticTable(AnalyticTable analyticTable);
     }
 }

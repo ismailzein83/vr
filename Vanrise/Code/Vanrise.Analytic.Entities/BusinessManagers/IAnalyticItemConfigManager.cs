@@ -8,6 +8,6 @@ namespace Vanrise.Analytic.Entities
 {
     public interface IAnalyticItemConfigManager : IBEManager
     {
-        bool DoesUserHaveAccess(int userId, int analyticTableId, List<string> measureNames);
+        bool DoesUserHaveAccess(int userId, Guid analyticTableId, List<string> measureNames);
     }
 }

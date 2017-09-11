@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticItemConfigQuery
     {
-        public int TableId { get; set; }
+        public Guid TableId { get; set; }
         public AnalyticItemType ItemType { get; set; }
     }
 }

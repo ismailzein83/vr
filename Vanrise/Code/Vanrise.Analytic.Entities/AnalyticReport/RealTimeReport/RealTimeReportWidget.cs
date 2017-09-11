@@ -9,7 +9,7 @@ namespace Vanrise.Analytic.Entities
     public abstract class RealTimeReportWidget
     {
         public abstract Guid ConfigId { get; }
-        public int AnalyticTableId { get; set; }
+        public Guid AnalyticTableId { get; set; }
         public string WidgetTitle { get; set; }
         public int ColumnWidth { get; set; }
         public bool ShowTitle { get; set; }

@@ -22,7 +22,7 @@ namespace Vanrise.Analytic.Data.SQL
         {
             return base.IsDataUpdated("[Analytic].[AnalyticItemConfig]", ref updateHandle);
         }
-        public List<AnalyticItemConfig<T>> GetItemConfigs<T>(int tableId, AnalyticItemType itemType) where T : class
+        public List<AnalyticItemConfig<T>> GetItemConfigs<T>(Guid tableId, AnalyticItemType itemType) where T : class
         {
             return GetItemsSP("[Analytic].[sp_AnalyticItemConfig_GetByTableIdAndItemType]", AnalyticItemConfigReader<T>, tableId, (int)itemType);
         }
@@ -55,7 +55,7 @@ namespace Vanrise.Analytic.Data.SQL
                 Config = Vanrise.Common.Serializer.Deserialize<T>(reader["Config"] as string),
                 ItemType = (AnalyticItemType) reader["ItemType"],
                 Name = reader["Name"] as string,
-                TableId = GetReaderValue<int>(reader, "TableId"),
+                TableId = GetReaderValue<Guid>(reader, "TableId"),
                 Title = reader["Title"] as string,
             };
         }

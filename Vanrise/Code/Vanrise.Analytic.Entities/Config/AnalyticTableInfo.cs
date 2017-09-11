@@ -8,7 +8,7 @@ namespace Vanrise.Analytic.Entities
 {
     public class AnalyticTableInfo
     {
-        public int AnalyticTableId { get; set; }
+        public Guid AnalyticTableId { get; set; }
 
         public string Name { get; set; }
     }
