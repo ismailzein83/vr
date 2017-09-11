@@ -1,0 +1,156 @@
+﻿<vr-section header="Account Definition" collapsible>
+    <vr-columns width="1/3row" vr-loader="scopeModel.isAccountTypeSelectorLoading">
+        <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onAccountDefinitionSelectorReady"
+                                                          onselectionchanged="scopeModel.onAccountDefinitionSelectionChanged"
+                                                          selectedvalues="scopeModel.selectedAccountDefinition"
+                                                          customlabel="Account Definition"
+                                                          isrequired="true">
+        </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+    <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady"
+                                    normal-col-num="4"
+                                    customlabel="Account Type"
+                                    isrequired="true" vr-loader="scopeModel.isAccountTypeSelectorLoading">
+    </retail-be-accounttype-selector>
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onCompanyProfileDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Company Profile Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.onFinancialDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Financial Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+    <retail-be-accountpartdefinition-selector on-ready="scopeModel.oAccountPartDefinitionSelectorReady"
+                                              normal-col-num="4"
+                                              customlabel="Account Info Part"
+                                              isrequired="true">
+    </retail-be-accountpartdefinition-selector>
+</vr-section>
+<vr-section header="Account Columns" collapsible>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.accountIdColumnName" label="Account ID Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.customerIdColumnName" label="Customer Id Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.accountNameColumnName" label="Account Name Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.accountStatusColumnName" label="Account Status Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.registrationColumnName" label="Registration Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.cNICColumnName" label="CNIC Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.currencyIdColumnName" label="Currency Id Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.nTNColumnName" label="NTN Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.dueDateColumnName" label="Due Date Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.billingPeriodColumnName" label="Billing Period Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-section>
+<vr-section header="Address Columns" collapsible>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.countryColumnName" label="Country Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.cityColumnName" label="City Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.streetColumnName" label="Street Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.townColumnName" label="Town Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.websiteColumnName" label="Website Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.addressColumnName" label="Address Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.pOBoxColumnName" label="PO Box Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-section>
+<vr-section header="Contact Columns" collapsible>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.phoneColumnName" label="Phone Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.mobileColumnName" label="Mobile Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.faxColumnName" label="Fax Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-section>
+<vr-section header="Main Contact Columns" collapsible>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.mainContactSalutaionColumnName" label="Salutaion Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.mainContactNameTitleColumnName" label="Title Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.mainContactNameColumnName" label="Name Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.mainContactEmailColumnName" label="Email Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.mainContactPhoneColumnName" label="Phone Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.mainContactReligionColumnName" label="Religion Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-section>
+<vr-section header="Finance Columns" collapsible>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.financeContactSalutaionColumnName" label="Salutaion Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.financeContactNameTitleColumnName" label="Title Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.financeContactNameColumnName" label="Name Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.financeContactEmailColumnName" label="Email Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.financeContactPhoneColumnName" label="Phone Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.financeContactReligionColumnName" label="Religion Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-section>
+<vr-section header="Technical Columns" collapsible>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.technicalContactSalutaionColumnName" label="Salutaion Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.technicalContactNameTitleColumnName" label="Title Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.technicalContactNameColumnName" label="Name Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.technicalContactEmailColumnName" label="Email Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.technicalContactPhoneColumnName" label="Phone Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.technicalContactReligionColumnName" label="Religion Column Name" isrequired="true"></vr-textbox>
+    </vr-columns>
+</vr-section>

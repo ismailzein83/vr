@@ -143,8 +143,14 @@
     <Content Include="Retail_MultiNet\Directives\Account\Part\Definition\Templates\AccountTypePartBranchExtendedInfoDefinitionTemplate.html" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\retail-multinet-accounttype-part-runtime-branchextendedinfo.js" />
     <Content Include="Retail_MultiNet\Directives\Account\Part\Runtime\Templates\AccountTypePartBranchExtendedInfoRuntimeTemplate.html" />
+    <Content Include="Retail_MultiNet\Directives\Account\retail-multinet-account-convertor-editor.js" />
+    <Content Include="Retail_MultiNet\Directives\Account\Templates\AccountConvertorEditor.html" />
+    <Content Include="Retail_MultiNet\Directives\User\retail-multinet-user-convertor-editor.js" />
+    <Content Include="Retail_MultiNet\Directives\User\Templates\UserConvertorEditor.html" />
     <Content Include="Retail_MultiNet\Directives\Branche\retail-multinet-branche-convertor-editor.js" />
     <Content Include="Retail_MultiNet\Directives\Branche\Templates\BrancheConvertorEditor.html" />
+    <Content Include="Retail_MultiNet\Directives\Customer\retail-multinet-customer-convertor-editor.js" />
+    <Content Include="Retail_MultiNet\Directives\Customer\Templates\CustomerConvertorEditor.html" />
     <Content Include="Retail_MultiNet\Directives\DID\retail-multinet-did-convertor-editor.js" />
     <Content Include="Retail_MultiNet\Directives\DID\Templates\DIDConvertorEditor.html" />
     <Content Include="Retail_MultiNet\Directives\Subscriber\retail-multinet-subscriber-convertor-editor.js" />
