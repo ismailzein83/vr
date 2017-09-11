@@ -42,7 +42,7 @@ namespace TOne.WhS.Sales.Entities
 
         public BulkActionZoneFilter BulkActionFilter { get; set; }
 
-        public char? ZoneLetter { get; set; }
+        public char ZoneLetter { get; set; }
 
         public int FromRow { get; set; }
 
