@@ -85,6 +85,7 @@ namespace TOne.WhS.Sales.Entities
 
     public interface IApplyBulkActionToZoneItemContext
     {
+        int OwnerId { get; }
         SalePriceListOwnerType OwnerType { get; }
 
         ZoneItem ZoneItem { get; }
@@ -102,6 +103,7 @@ namespace TOne.WhS.Sales.Entities
 
     public interface IApplyBulkActionToZoneDraftContext
     {
+        int OwnerId { get; }
         SalePriceListOwnerType OwnerType { get; }
 
         ZoneChanges ZoneDraft { get; }

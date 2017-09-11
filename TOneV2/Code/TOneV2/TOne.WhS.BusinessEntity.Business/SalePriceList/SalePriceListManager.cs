@@ -60,7 +60,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (!sellingProductId.HasValue)
                         throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to a selling product", customerId));
 
-                    var customerPriceListType = _carrierAccountManager.GetPriceListType(customerId);
+                    var customerPriceListType = _carrierAccountManager.GetCustomerPricelistSettings(customerId).PriceListType.Value;
                     SalePriceListType pricelistType = GetSalePriceListType(customerPriceListType, context.ChangeType);
 
                     ZoneChangesByCountryId allChangesByCountryId = customerChange.ZoneChangesByCountryId;// MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,outputContext.NotSentChangesByCustomerId);
@@ -117,7 +117,7 @@ namespace TOne.WhS.BusinessEntity.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             int ownerId = clonedPriceList.OwnerId;
             var customer = carrierAccountManager.GetCarrierAccount(ownerId);
-            var salePlmailTemplateId = carrierAccountManager.GetSalePLMailTemplateId(ownerId);
+            var salePlmailTemplateId = carrierAccountManager.GetCustomerPricelistSettings(ownerId).DefaultSalePLMailTemplateId.Value;
 
             UserManager userManager = new UserManager();
             User initiator = userManager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
@@ -255,7 +255,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 try
                 {
-                    bool isCompressed = compressFile || customer.CustomerSettings.CompressPriceListFile;
+                    bool isCompressed = compressFile || _carrierAccountManager.GetCustomerPricelistSettings(customer.CarrierAccountId).CompressPriceListFile.Value;
                     vrMailManager.SendMail(evaluatedObject.To, evaluatedObject.CC, evaluatedObject.BCC, evaluatedObject.Subject, evaluatedObject.Body
                         , vrMailAttachements, isCompressed);
                     salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { customerPriceList.OwnerId }, customerPriceList.PriceListId);
@@ -581,13 +581,13 @@ namespace TOne.WhS.BusinessEntity.Business
         private VRFile GetPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications, DateTime effectiveDate, SalePriceListType salePriceListType)
         {
             var salePriceListTemplateManager = new SalePriceListTemplateManager();
-            int priceListTemplateId = _carrierAccountManager.GetSalePriceListTemplateId(carrierAccountId);
+            int priceListTemplateId = _carrierAccountManager.GetCustomerPricelistSettings(carrierAccountId).DefaultSalePLTemplateId.Value;
 
             SalePriceListTemplate template = salePriceListTemplateManager.GetSalePriceListTemplate(priceListTemplateId);
             if (template == null)
                 throw new DataIntegrityValidationException(string.Format("Customer with Id {0} does not have a Sale Price List Template", carrierAccountId));
 
-            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(carrierAccountId);
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPricelistSettings(carrierAccountId).PriceListExtensionFormat.Value;
             ISalePriceListTemplateSettingsContext salePlTemplateSettingsContext = new SalePriceListTemplateSettingsContext
             {
                 Zones = customerZonesNotifications,
@@ -888,7 +888,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region  Private Members
         private VRMailAttachement ConvertToAttachement(VRFile file, CarrierAccount customer)
         {
-            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(customer.CarrierAccountId);
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPricelistSettings(customer.CarrierAccountId).PriceListExtensionFormat.Value;
 
             var customerName = _carrierAccountManager.GetCarrierAccountName(customer);
             string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today,

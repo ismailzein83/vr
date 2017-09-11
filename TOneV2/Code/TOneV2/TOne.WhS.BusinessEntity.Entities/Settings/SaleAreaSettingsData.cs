@@ -9,26 +9,18 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SaleAreaSettingsData : SettingData
     {
-        public decimal DefaultRate { get; set; }
-
         public IEnumerable<string> FixedKeywords { get; set; }
 
         public IEnumerable<string> MobileKeywords { get; set; }
 
         public PrimarySaleEntity PrimarySaleEntity { get; set; }
 
-        public Guid DefaultSalePLMailTemplateId { get; set; }
+        public PricelistSettings PricelistSettings { get; set; }
 
-        public int DefaultSalePLTemplateId { get; set; }
-
-        public int EffectiveDateDayOffset { get; set; }
-
-        public int RetroactiveDayOffset { get; set; }
-        public PriceListExtensionFormat PriceListExtensionFormat { get; set; }
-        public SalePriceListType PriceListType { get; set; }
-
-        public decimal MaximumRate { get; set; }
+        public PricingSettings PricingSettings { get; set; }
     }
 
     public enum PrimarySaleEntity { SellingProduct = 0, Customer = 1 }
+
+    public enum SaleAreaSettingsContextEnum { System = 0, SellingProduct = 1, Customer = 2 }
 }

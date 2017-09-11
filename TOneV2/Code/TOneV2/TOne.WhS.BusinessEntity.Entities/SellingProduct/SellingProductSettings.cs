@@ -8,5 +8,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SellingProductSettings
     {
         public int CurrencyId { get; set; }
+
+        public PricingSettings PricingSettings { get; set; }
+
+        public PricelistSettings PricelistSettings { get; set; }
     }
 }

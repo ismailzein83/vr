@@ -112,36 +112,149 @@ namespace TOne.WhS.BusinessEntity.Business
         public decimal GetRoundedDefaultRate()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
-            var defaultRate = saleAreaSettings.DefaultRate;
+            var defaultRate = saleAreaSettings.PricingSettings.DefaultRate.Value;
             var longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
             return Decimal.Round(defaultRate, longPrecision);
         }
         public int GetSaleAreaEffectiveDateDayOffset()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
-            return saleAreaSettings.EffectiveDateDayOffset;
+            return saleAreaSettings.PricingSettings.EffectiveDateDayOffset.Value;
         }
         public decimal GetSaleAreaMaximumRate()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
-            return saleAreaSettings.MaximumRate;
+            return saleAreaSettings.PricingSettings.MaximumRate.Value;
         }
         public int GetSaleAreaRetroactiveDayOffset()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
-            return saleAreaSettings.RetroactiveDayOffset;
+            return saleAreaSettings.PricingSettings.RetroactiveDayOffset.Value;
         }
+        public int GetSaleAreaNewRateDayOffset()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricingSettings.NewRateDayOffset.Value;
+        }
+        public int GetSaleAreaIncreasedRateDayOffset()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricingSettings.IncreasedRateDayOffset.Value;
+        }
+        public int GetSaleAreaDecreasedRateDayOffset()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricingSettings.DecreasedRateDayOffset.Value;
+        }
+
+
         public PriceListExtensionFormat GetSaleAreaPriceListExtensionFormatId()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
-            return saleAreaSettings.PriceListExtensionFormat;
+            return saleAreaSettings.PricelistSettings.PriceListExtensionFormat.Value;
         }
-
         public SalePriceListType GetSaleAreaPriceListType()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
-            return saleAreaSettings.PriceListType;
+            return saleAreaSettings.PricelistSettings.PriceListType.Value;
         }
+        public int GetSaleAreaPriceListTemplateId()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricelistSettings.DefaultSalePLTemplateId.Value;
+        }
+        public Guid GetSaleAreaPriceListMailTemplateId()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricelistSettings.DefaultSalePLMailTemplateId.Value;
+        }
+        public bool GetSaleAreaCompressPriceListFileStatus()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricelistSettings.CompressPriceListFile.Value;
+        }
+
+
+        public PricingSettings GetSaleAreaPricingSettings()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricingSettings;
+        }
+        public PricelistSettings GetSaleAreaPricelistSettings()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricelistSettings;
+        }
+
+        public PricingSettings MergePricingSettings(PricingSettings pricingSettingsParent, PricingSettings pricingSettingsChild)
+        {
+            PricingSettings result = new PricingSettings();
+            result.DefaultRate = pricingSettingsParent.DefaultRate;
+            result.MaximumRate = pricingSettingsParent.MaximumRate;
+            result.EffectiveDateDayOffset = pricingSettingsParent.EffectiveDateDayOffset;
+            result.RetroactiveDayOffset = pricingSettingsParent.RetroactiveDayOffset;
+            result.NewRateDayOffset = pricingSettingsParent.NewRateDayOffset;
+            result.IncreasedRateDayOffset = pricingSettingsParent.IncreasedRateDayOffset;
+            result.DecreasedRateDayOffset = pricingSettingsParent.DecreasedRateDayOffset;
+
+            if (pricingSettingsChild == null)
+                return result;
+
+            if (pricingSettingsChild.DefaultRate.HasValue)
+                result.DefaultRate = pricingSettingsChild.DefaultRate;
+
+            if (pricingSettingsChild.MaximumRate.HasValue)
+                result.MaximumRate = pricingSettingsChild.MaximumRate;
+
+            if (pricingSettingsChild.EffectiveDateDayOffset.HasValue)
+                result.EffectiveDateDayOffset = pricingSettingsChild.EffectiveDateDayOffset;
+
+            if (pricingSettingsChild.RetroactiveDayOffset.HasValue)
+                result.RetroactiveDayOffset = pricingSettingsChild.RetroactiveDayOffset;
+
+            if (pricingSettingsChild.NewRateDayOffset.HasValue)
+                result.NewRateDayOffset = pricingSettingsChild.NewRateDayOffset;
+
+            if (pricingSettingsChild.IncreasedRateDayOffset.HasValue)
+                result.IncreasedRateDayOffset = pricingSettingsChild.IncreasedRateDayOffset;
+
+            if (pricingSettingsChild.DecreasedRateDayOffset.HasValue)
+                result.DecreasedRateDayOffset = pricingSettingsChild.DecreasedRateDayOffset;
+
+            return result;
+        }
+
+        public PricelistSettings MergePricelistSettings(PricelistSettings pricelistSettingsParent, PricelistSettings pricelistSettingsChild)
+        {
+            PricelistSettings result = new PricelistSettings();
+
+            result.DefaultSalePLTemplateId = pricelistSettingsParent.DefaultSalePLTemplateId;
+            result.DefaultSalePLMailTemplateId = pricelistSettingsParent.DefaultSalePLMailTemplateId;
+            result.PriceListType = pricelistSettingsParent.PriceListType;
+            result.PriceListExtensionFormat = pricelistSettingsParent.PriceListExtensionFormat;
+            result.CompressPriceListFile = pricelistSettingsParent.CompressPriceListFile;
+
+            if (pricelistSettingsChild == null)
+                return result;
+
+            if (pricelistSettingsChild.DefaultSalePLTemplateId.HasValue)
+                result.DefaultSalePLTemplateId = pricelistSettingsChild.DefaultSalePLTemplateId;
+
+            if (pricelistSettingsChild.DefaultSalePLMailTemplateId.HasValue)
+                result.DefaultSalePLMailTemplateId = pricelistSettingsChild.DefaultSalePLMailTemplateId;
+
+            if (pricelistSettingsChild.PriceListType.HasValue)
+                result.PriceListType = pricelistSettingsChild.PriceListType;
+
+            if (pricelistSettingsChild.PriceListExtensionFormat.HasValue)
+                result.PriceListExtensionFormat = pricelistSettingsChild.PriceListExtensionFormat;
+
+            if (pricelistSettingsChild.CompressPriceListFile.HasValue)
+                result.CompressPriceListFile = pricelistSettingsChild.CompressPriceListFile;
+
+            return result;
+        }
+
         public int GetPurchaseAreaEffectiveDateDayOffset()
         {
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();

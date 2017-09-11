@@ -179,12 +179,31 @@ namespace TOne.WhS.Sales.Business
             return false;
         }
 
-        public static void SetDraftRateBEDs(out DateTime newRateBED, out DateTime increasedRateBED, out DateTime decreasedRateBED)
+        public static void SetDraftRateBEDs(SalePriceListOwnerType ownerType, int ownerId, out DateTime newRateBED, out DateTime increasedRateBED, out DateTime decreasedRateBED)
         {
-            var configManager = new ConfigManager();
-            newRateBED = DateTime.Today.AddDays(configManager.GetNewRateDayOffset());
-            increasedRateBED = DateTime.Today.AddDays(configManager.GetIncreasedRateDayOffset());
-            decreasedRateBED = DateTime.Today.AddDays(configManager.GetDecreasedRateDayOffset());
+            var pricingSettings = GetPricingSettings(ownerType, ownerId);
+
+            newRateBED = DateTime.Today.AddDays(pricingSettings.NewRateDayOffset.Value);
+            increasedRateBED = DateTime.Today.AddDays(pricingSettings.IncreasedRateDayOffset.Value);
+            decreasedRateBED = DateTime.Today.AddDays(pricingSettings.DecreasedRateDayOffset.Value);
+        }
+
+        public static PricingSettings GetPricingSettings (SalePriceListOwnerType ownerType, int ownerId)
+        {
+            var pricingSettings = new PricingSettings();
+
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                var sellingProductManager = new TOne.WhS.BusinessEntity.Business.SellingProductManager();
+                pricingSettings = sellingProductManager.GetSellingProductPricingSettings(ownerId);
+            }
+
+            else
+            {
+                var carrierAccountManager = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager();
+                pricingSettings = carrierAccountManager.GetCustomerPricingSettings(ownerId);
+            }
+            return pricingSettings;
         }
 
         public static DateTime GetDraftRateBED(decimal? currentRateValue, decimal newRateValue, DateTime newRateBED, DateTime increasedRateBED, DateTime decreasedRateBED)

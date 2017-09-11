@@ -33,6 +33,8 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
+        public int OwnerId { get; set; }
+
         public SalePriceListOwnerType OwnerType { get; set; }
 
         public ZoneItem ZoneItem { get; set; }

@@ -24,7 +24,7 @@ namespace TOne.WhS.Sales.Business
                 context.CustomObject = new CustomObject(OwnerType, OwnerId, DateTime.Today);
 
             var customObject = context.CustomObject as CustomObject;
-            
+
             if (customObject.ClosedCountryIds.Contains(context.Country.CountryId))
                 return true;
 
@@ -64,7 +64,7 @@ namespace TOne.WhS.Sales.Business
                 _routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(today));
 
                 SetZoneDraftsByZoneId(ownerType, ownerId);
-                SetRateBEDs();
+                SetRateBEDs(ownerType, ownerId);
                 SetClosedCountryIds(ownerType, ownerId, effectiveOn);
             }
 
@@ -118,9 +118,9 @@ namespace TOne.WhS.Sales.Business
                 }
             }
 
-            private void SetRateBEDs()
+            private void SetRateBEDs(SalePriceListOwnerType ownerType, int ownerId)
             {
-                UtilitiesManager.SetDraftRateBEDs(out _newRateBED, out _increasedRateBED, out _decreasedRateBED);
+                UtilitiesManager.SetDraftRateBEDs(ownerType, ownerId, out _newRateBED, out _increasedRateBED, out _decreasedRateBED);
             }
 
             private void SetClosedCountryIds(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)

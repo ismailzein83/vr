@@ -160,13 +160,13 @@ namespace TOne.WhS.Sales.Business
             };
 
             var ratePlanManager = new RatePlanManager();
-            RatePlanSettingsData ratePlanSettings = ratePlanManager.GetRatePlanSettingsData();
 
             DateTime newRateBED;
 
             foreach (CalculatedZoneRate calculatedRate in calculatedRates)
             {
-                newRateBED = GetNewRateBED(calculatedRate.CurrentRate, calculatedRate.CalculatedRate, effectiveOn, ratePlanSettings);
+
+                newRateBED = GetNewRateBED(calculatedRate.CurrentRate, calculatedRate.CalculatedRate, effectiveOn, ownerType, ownerId);
 
                 DraftRateToChange newRate = new DraftRateToChange()
                 {
@@ -205,24 +205,26 @@ namespace TOne.WhS.Sales.Business
             return newDraft;
         }
 
-        private DateTime GetNewRateBED(decimal? currentRate, decimal calculatedRate, DateTime effectiveOn, RatePlanSettingsData ratePlanSettings)
+        private DateTime GetNewRateBED(decimal? currentRate, decimal calculatedRate, DateTime effectiveOn, SalePriceListOwnerType ownerType, int ownerId)
         {
             int dayOffset = 0;
-
+            PricingSettings ownerPricingSettings = TOne.WhS.Sales.Business.UtilitiesManager.GetPricingSettings(ownerType,ownerId);
             if (!currentRate.HasValue)
             {
-                dayOffset = ratePlanSettings.NewRateDayOffset;
+                dayOffset = ownerPricingSettings.NewRateDayOffset.Value;
             }
             else if (calculatedRate > currentRate.Value)
             {
-                dayOffset = ratePlanSettings.IncreasedRateDayOffset;
+                dayOffset = ownerPricingSettings.IncreasedRateDayOffset.Value;
             }
             else if (calculatedRate < currentRate.Value)
             {
-                dayOffset = ratePlanSettings.DecreasedRateDayOffset;
+                dayOffset = ownerPricingSettings.DecreasedRateDayOffset.Value;
             }
 
             return effectiveOn.AddDays(dayOffset);
         }
+
+
     }
 }

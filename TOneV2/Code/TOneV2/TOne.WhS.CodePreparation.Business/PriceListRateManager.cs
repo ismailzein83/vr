@@ -58,7 +58,6 @@ namespace TOne.WhS.CodePreparation.Business
 
             SettingManager settingManager = new SettingManager();
             SaleAreaSettingsData saleAreaSettingsData = settingManager.GetSetting<SaleAreaSettingsData>(BusinessEntity.Business.Constants.SaleAreaSettings);
-
             Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType = StructureZonesByType(existingZones, saleAreaSettingsData);
 
             IEnumerable<ExistingZone> fixedZones = zonesByType[SaleZoneTypeEnum.Fixed];

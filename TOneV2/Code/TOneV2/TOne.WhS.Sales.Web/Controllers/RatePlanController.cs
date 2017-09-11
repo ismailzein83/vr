@@ -187,6 +187,13 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetPricingSettings")]
+        public PricingSettings GetPricingSettings(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            return  TOne.WhS.Sales.Business.UtilitiesManager.GetPricingSettings(ownerType,ownerId);
+        }
+        
+        [HttpGet]
         [Route("GetDraftCurrencyId")]
         public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
         {

@@ -59,6 +59,8 @@ namespace TOne.WhS.CodePreparation.Business
                         if (!defaultRates.ContainsKey(pricelist.OwnerId))
                         {
                             int newRateCurrencyId = base.GetCurrencyForNewRate(pricelist.OwnerId, pricelist.OwnerType);
+                            var sellingProductManager = new SellingProductManager();
+                            var carrierAccountManager = new CarrierAccountManager();
                             NewZoneRateEntity rate = new NewZoneRateEntity
                             {
                                 OwnerId = pricelist.OwnerId,
@@ -66,8 +68,8 @@ namespace TOne.WhS.CodePreparation.Business
                                 CurrencyId = newRateCurrencyId,
                                 //TODO: make sure to convert from default rate currency to selling product currency later
                                 Rate = pricelist.OwnerType == SalePriceListOwnerType.SellingProduct
-                                        ? base.SaleAreaSettings.DefaultRate
-                                        : currencyExchangeRateManager.ConvertValueToCurrency(SaleAreaSettings.DefaultRate, systemCurrencyId, newRateCurrencyId, DateTime.Now)
+                                        ? sellingProductManager.GetSellingProductPricingSettings(pricelist.OwnerId).DefaultRate.Value
+                                        : currencyExchangeRateManager.ConvertValueToCurrency(carrierAccountManager.GetCustomerPricingSettings(pricelist.OwnerId).DefaultRate.Value, systemCurrencyId, newRateCurrencyId, DateTime.Now)
                             };
                             defaultRates.Add(pricelist.OwnerId, rate);
                         }

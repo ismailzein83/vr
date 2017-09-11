@@ -28,11 +28,18 @@
                                           ng-if="ctrl.showPricelistTypeSelector"
                                           isrequired="ctrl.isPricelistTypeRequired">
     </vr-whs-be-salepricelisttype-selector>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/2row" ng-if="ctrl.showCompressPriceListFile">
+        <vr-label>Compress Pricelist File</vr-label>
+        <span>
+            <vr-check value="ctrl.isCompressPriceListFileEditCheck"
+                      ng-if="ctrl.showCompressPriceListFileEditCheck">
+            </vr-check>
+        </span>
 
-    <vr-columns width="1/2row">
         <vr-switch value="ctrl.compressPriceListFile"
-                   label="Compressed Pricelist File"
-                   ng-if="ctrl.showCompressPriceListFile"
+                   ng-if="ctrl.isCompressPriceListFileEditCheck != false"
                    isrequired="ctrl.isCompressPriceListFileRequired"></vr-switch>
     </vr-columns>
 

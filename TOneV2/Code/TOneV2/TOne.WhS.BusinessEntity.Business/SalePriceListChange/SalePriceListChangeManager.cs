@@ -52,7 +52,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new SalePriceListOption
                 {
                     OwnerName = carrierAccountManager.GetCarrierAccountName(ownerId),
-                    CompressPriceListFile = carrierAccount.CustomerSettings.CompressPriceListFile
+                    CompressPriceListFile = carrierAccountManager.GetCustomerPricelistSettings(ownerId).CompressPriceListFile.Value,
                 };
             }
             return null;

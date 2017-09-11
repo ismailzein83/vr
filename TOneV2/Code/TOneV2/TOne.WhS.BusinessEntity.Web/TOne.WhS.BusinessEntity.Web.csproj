@@ -349,7 +349,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelisttype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\Templates\SaleRateHistoryGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\vr-whs-be-salerate-history-grid.js" />
-    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PriceListSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricingSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelistsettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricingsettings-editor.js" />

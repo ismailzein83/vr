@@ -93,6 +93,13 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRatePlanSettingsData"));
         }
 
+        function GetPricingSettings(ownerType, ownerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetPricingSettings"), {
+                ownerType: ownerType,
+                ownerId: ownerId
+            });
+        }
+
         function GetSaleAreaSettingsData() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetSaleAreaSettingsData"));
         }
@@ -200,7 +207,9 @@
             DownloadImportRatePlanTemplate: DownloadImportRatePlanTemplate,
             ValidateBulkActionZones: ValidateBulkActionZones,
             ValidateImportedData: ValidateImportedData,
-            GetOwnerInfo: GetOwnerInfo
+            GetOwnerInfo: GetOwnerInfo,
+            GetPricingSettings: GetPricingSettings
+
         };
 
     }

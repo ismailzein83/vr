@@ -40,7 +40,7 @@ namespace TOne.WhS.BusinessEntity.Business
             List<int> failedCustomerIdsToSendEmailFor = new List<int>();
             foreach (int customerId in customerIds)
             {
-                Guid salePLMailTemplateId = _carrierAccountManager.GetSalePLMailTemplateId(customerId);
+                Guid salePLMailTemplateId = _carrierAccountManager.GetCustomerPricelistSettings(customerId).DefaultSalePLMailTemplateId.Value;
                 this.SendMail(salePLMailTemplateId, customerId, initiatorId, processInstanceId, failedCustomerIdsToSendEmailFor);
             }
             return failedCustomerIdsToSendEmailFor;
@@ -48,11 +48,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public bool SendSalePriceList(int initiatorId, SalePriceList customerPricelist, VRFile file)
         {
             CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerPricelist.OwnerId);
-            Guid salePlmailTemplateId = _carrierAccountManager.GetSalePLMailTemplateId(customer.CarrierAccountId);
+            Guid salePlmailTemplateId = _carrierAccountManager.GetCustomerPricelistSettings(customer.CarrierAccountId).DefaultSalePLMailTemplateId.Value;
 
             MemoryStream memoryStream = new MemoryStream(file.Content) { Position = 0 };
 
-            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(customerPricelist.OwnerId);
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPricelistSettings(customerPricelist.OwnerId).PriceListExtensionFormat.Value;
 
             var customerName = _carrierAccountManager.GetCarrierAccountName(customer);
             PriceListSetting priceListSetting = GetPriceListSetting(priceListExtensionFormat, customerName);
@@ -132,7 +132,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             MemoryStream memoryStream = new MemoryStream(file.Content) { Position = 0 };
 
-            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetPriceListExtensionFormat(customerPricelist.OwnerId);
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPricelistSettings(customerPricelist.OwnerId).PriceListExtensionFormat.Value;
 
             var customerName = _carrierAccountManager.GetCarrierAccountName(customer);
             PriceListSetting priceListSetting = GetPriceListSetting(priceListExtensionFormat, customerName);

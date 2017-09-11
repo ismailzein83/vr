@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBePricelistsettingsEditor', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsBePricelistsettingsEditor', ['UtilsService', 'VRUIUtilsService','WhS_BE_SaleAreaSettingsContextEnum',
+function (UtilsService, VRUIUtilsService,WhS_BE_SaleAreaSettingsContextEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -94,7 +94,12 @@ app.directive('vrWhsBePricelistsettingsEditor', ['UtilsService', 'VRUIUtilsServi
                     }
 
                     if (ctrl.showCompressPriceListFile) {
-                        ctrl.compressPriceListFile = compressPriceListFile;
+
+                        if (compressPriceListFile != undefined) {
+                            ctrl.compressPriceListFile = compressPriceListFile;
+                            if (ctrl.showCompressPriceListFileEditCheck)
+                                ctrl.isCompressPriceListFileEditCheck = true;
+                        }
                     }
 
                     if (ctrl.showPricelistEmailTemplateSelector) {
@@ -123,7 +128,7 @@ app.directive('vrWhsBePricelistsettingsEditor', ['UtilsService', 'VRUIUtilsServi
                         DefaultSalePLTemplateId: (salePLTemplateSelectorAPI != undefined) ? salePLTemplateSelectorAPI.getSelectedIds() : undefined,
                         PriceListExtensionFormat: (priceListExtensionFormatSelectorAPI != undefined) ? priceListExtensionFormatSelectorAPI.getSelectedIds() : undefined,
                         PriceListType: (priceListTypeSelectorAPI != undefined) ? priceListTypeSelectorAPI.getSelectedIds() : undefined,
-                        CompressPriceListFile: ctrl.compressPriceListFile
+                        CompressPriceListFile: (ctrl.isCompressPriceListFileEditCheck == false) ? undefined : ctrl.compressPriceListFile
                     };
                 };
 
@@ -181,19 +186,22 @@ app.directive('vrWhsBePricelistsettingsEditor', ['UtilsService', 'VRUIUtilsServi
             }
 
             function prepareDirectivesViewForContext(directiveContext) {
-                ctrl.showPricelistTemplateSelector = (directiveContext == "System");
-                ctrl.showPricelistEmailTemplateSelector = (directiveContext == "System");
-                ctrl.showPricelistExtensionFormatSelector = (directiveContext == "System" || directiveContext == "Customer");
-                ctrl.showPricelistTypeSelector = (directiveContext == "System" || directiveContext == "Customer");
-                ctrl.showCompressPriceListFile = (directiveContext == "System" || directiveContext == "Customer");
+
+                ctrl.showPricelistTemplateSelector = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.showPricelistEmailTemplateSelector = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.showPricelistExtensionFormatSelector = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
+                ctrl.showPricelistTypeSelector = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
+                ctrl.showCompressPriceListFile = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
+                ctrl.showCompressPriceListFileEditCheck = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
             }
 
             function prepareDirectivesRequiredForContext(directiveContext) {
-                ctrl.isPricelistTemplateRequired = (directiveContext == "System");
-                ctrl.isPricelistEmailTemplateRequired = (directiveContext == "System");
-                ctrl.isPricelistEmailTemplateRequired = (directiveContext == "System");
-                ctrl.isPricelistTypeRequired = (directiveContext == "System");
-                ctrl.isCompressPriceListFileRequired = (directiveContext == "System");
+
+                ctrl.isPricelistTemplateRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isPricelistEmailTemplateRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isPricelistEmailTemplateRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isPricelistTypeRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isCompressPriceListFileRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
             }
 
         }

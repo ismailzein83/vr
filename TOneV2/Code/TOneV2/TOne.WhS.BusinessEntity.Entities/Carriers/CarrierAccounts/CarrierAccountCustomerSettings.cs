@@ -13,8 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public RoutingStatus RoutingStatus { get; set; }
         public int? TimeZoneId { get; set; }
         public bool InvoiceTimeZone { get; set; }
-        public PriceListExtensionFormat? PriceListExtensionFormat { get; set; }
-        public SalePriceListType? PriceListType { get; set; }
-        public bool CompressPriceListFile { get; set; }
+        public PricingSettings PricingSettings { get; set; }
+        public PricelistSettings PricelistSettings { get; set; }
     }
 }

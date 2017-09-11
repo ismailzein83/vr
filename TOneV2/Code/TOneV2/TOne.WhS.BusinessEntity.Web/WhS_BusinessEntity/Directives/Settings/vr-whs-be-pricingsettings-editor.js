@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_CurrencyAPIService',
-    function (UtilsService, VRCommon_CurrencyAPIService) {
+app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_CurrencyAPIService', 'WhS_BE_SaleAreaSettingsContextEnum',
+    function (UtilsService, VRCommon_CurrencyAPIService, WhS_BE_SaleAreaSettingsContextEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -92,23 +92,25 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
             }
 
             function prepareDirectivesViewForContext(directiveContext) {
-                ctrl.showDefaultRate = (directiveContext == "System");
-                ctrl.showMaxSaleRate = (directiveContext == "System");
-                ctrl.showEffectiveDateDayOffset = (directiveContext == "System");
-                ctrl.showRetroactiveDayOffset = (directiveContext == "System");
-                ctrl.showNewRateDayOffset = (directiveContext == "System" || directiveContext == "Customer" || directiveContext=="SellingProduct");
-                ctrl.showIncreasedRateDayOffset = (directiveContext == "System" || directiveContext == "Customer" || directiveContext == "SellingProduct");
-                ctrl.showDecreasedRateDayOffset = (directiveContext == "System" || directiveContext == "Customer" || directiveContext == "SellingProduct");
+
+                ctrl.showDefaultRate = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.showMaxSaleRate = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.showEffectiveDateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.showRetroactiveDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.showNewRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
+                ctrl.showIncreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
+                ctrl.showDecreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
             }
 
             function prepareDirectivesRequiredForContext(directiveContext) {
-                ctrl.isDefaultRateRequired = (directiveContext == "System");
-                ctrl.isMaxSaleRateRequired = (directiveContext == "System");
-                ctrl.isEffectiveDateDayOffset = (directiveContext == "System");
-                ctrl.isRetroactiveDayOffset = (directiveContext == "System");
-                ctrl.isNewRateDayOffset = (directiveContext == "System");
-                ctrl.isIncreasedRateDayOffset = (directiveContext == "System");
-                ctrl.isDecreasedRateDayOffset = (directiveContext == "System");
+
+                ctrl.isDefaultRateRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isMaxSaleRateRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isEffectiveDateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isRetroactiveDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isNewRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isIncreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isDecreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
             }
         }
 

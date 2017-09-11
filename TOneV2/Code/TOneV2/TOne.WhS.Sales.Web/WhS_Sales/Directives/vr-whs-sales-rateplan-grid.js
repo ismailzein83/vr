@@ -239,7 +239,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 if (query != undefined) {
                     ownerName = query.OwnerName;
                     setCostCalculationMethods(query.CostCalculationMethods, query.RateCalculationMethod);
-                    setDayOffsets(query.Settings);
                     $scope.scopeModel.longPrecision = query.longPrecision;
                 }
 
@@ -251,6 +250,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 var loadZoneItemsDeferred = UtilsService.createPromiseDeferred();
                 promises.push(loadZoneItemsDeferred.promise);
+
+                var setDayOffsetsDeferred = setDayOffsets();
+                promises.push(setDayOffsetsDeferred);
 
                 loadZoneLettersPromise.then(function () {
                     if ($scope.zoneLetters.length > 0) {
@@ -298,18 +300,20 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     }
                     $scope.rateCalculationMethod = rateCalculationMethod;
                 }
-                function setDayOffsets(settings) {
-                    if (settings == undefined)
-                        return;
-                    if (settings.NewRateDayOffset != null) {
-                        newRateDayOffset = Number(settings.NewRateDayOffset);
-                    }
-                    if (settings.IncreasedRateDayOffset != null) {
-                        increasedRateDayOffset = Number(settings.IncreasedRateDayOffset);
-                    }
-                    if (settings.DecreasedRateDayOffset != null) {
-                        decreasedRateDayOffset = Number(settings.DecreasedRateDayOffset);
-                    }
+                function setDayOffsets() {
+                    return WhS_Sales_RatePlanAPIService.GetPricingSettings(gridQuery.OwnerType, gridQuery.OwnerId).then(function (response) {
+                        if (response == undefined)
+                            return;
+                        if (response.NewRateDayOffset != null) {
+                            newRateDayOffset = Number(response.NewRateDayOffset);
+                        }
+                        if (response.IncreasedRateDayOffset != null) {
+                            increasedRateDayOffset = Number(response.IncreasedRateDayOffset);
+                        }
+                        if (response.DecreasedRateDayOffset != null) {
+                            decreasedRateDayOffset = Number(response.DecreasedRateDayOffset);
+                        }
+                    });
                 }
                 function loadZoneLetters() {
 

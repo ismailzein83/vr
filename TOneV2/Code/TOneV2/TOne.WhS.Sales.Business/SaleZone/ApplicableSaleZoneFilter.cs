@@ -70,7 +70,7 @@ namespace TOne.WhS.Sales.Business
                 _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
                 _routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Today));
                 Draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
-                SetRateBEDs();
+                SetRateBEDs(ownerType, ownerId);
                 SetRPRouteDetails();
                 SetClosedCountryIds(ownerType, ownerId, effectiveOn);
             }
@@ -114,12 +114,13 @@ namespace TOne.WhS.Sales.Business
                 return _rpRouteDetails.FindRecord(x => x.SaleZoneId == zoneId);
             }
 
-            private void SetRateBEDs()
+            private void SetRateBEDs(SalePriceListOwnerType ownerType, int ownerId)
             {
-                var configManager = new ConfigManager();
-                _newRateBED = DateTime.Today.AddDays(configManager.GetNewRateDayOffset());
-                _increasedRateBED = DateTime.Today.AddDays(configManager.GetIncreasedRateDayOffset());
-                _decreasedRateBED = DateTime.Today.AddDays(configManager.GetDecreasedRateDayOffset());
+                var pricingSettings = TOne.WhS.Sales.Business.UtilitiesManager.GetPricingSettings(ownerType,ownerId);
+
+                _newRateBED = DateTime.Today.AddDays(pricingSettings.NewRateDayOffset.Value);
+                _increasedRateBED = DateTime.Today.AddDays(pricingSettings.IncreasedRateDayOffset.Value);
+                _decreasedRateBED = DateTime.Today.AddDays(pricingSettings.DecreasedRateDayOffset.Value);
             }
 
             private void SetRPRouteDetails()

@@ -103,6 +103,37 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Settings of selling product '{0}' were not found", sellingProductId));
             return sellingProduct.Settings.CurrencyId;
         }
+
+        public PricingSettings GetSellingProductPricingSettings(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            var saleAreaPricingSettings = new PricingSettings();
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Setting.PricingSettings", sellingProductId);
+
+            saleAreaPricingSettings = configManager.GetSaleAreaPricingSettings();
+
+            return configManager.MergePricingSettings(saleAreaPricingSettings, sellingProduct.Settings.PricingSettings);
+        }
+
+        public PricelistSettings GetSellingProductPricelistSettings(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            var saleAreaPricelistSettings = new PricelistSettings();
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricelistSettings.ThrowIfNull("SellingProduct.Setting.PricelistSettings", sellingProductId);
+
+            saleAreaPricelistSettings = configManager.GetSaleAreaPricelistSettings();
+
+            return configManager.MergePricelistSettings(saleAreaPricelistSettings, sellingProduct.Settings.PricelistSettings);
+        }
+
         public string GetSellingProductName(int sellingProductId)
         {
             var sellingProduct = GetSellingProduct(sellingProductId);

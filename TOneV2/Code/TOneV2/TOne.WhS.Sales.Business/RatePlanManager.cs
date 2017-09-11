@@ -775,6 +775,7 @@ namespace TOne.WhS.Sales.Business
 
             var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods, getRoundedRate)
             {
+                OwnerId=input.OwnerId,
                 OwnerType = input.OwnerType
             };
 
@@ -992,6 +993,7 @@ namespace TOne.WhS.Sales.Business
                 {
                     var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext(getContextZoneItems, input.CostCalculationMethods, getSellingProductZoneRoutingProduct, getRoundedRate)
                     {
+                        OwnerId =input.OwnerId,
                         OwnerType = input.OwnerType,
                         ZoneItem = zoneItem,
                         ZoneDraft = zoneDraft

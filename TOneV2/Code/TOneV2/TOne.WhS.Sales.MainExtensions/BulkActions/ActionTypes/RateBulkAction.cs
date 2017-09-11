@@ -26,10 +26,6 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public RateBulkAction()
         {
-            var configManager = new TOne.WhS.Sales.Business.ConfigManager();
-            _newRateDayOffset = configManager.GetNewRateDayOffset();
-            _increasedRateDayOffset = configManager.GetIncreasedRateDayOffset();
-            _decreasedRateDayOffset = configManager.GetDecreasedRateDayOffset();
         }
 
         #endregion
@@ -50,7 +46,7 @@ namespace TOne.WhS.Sales.MainExtensions
         public override void ValidateZone(IZoneValidationContext context)
         {
             ZoneItem contextZoneItem = context.GetContextZoneItem(context.ZoneId);
-
+            
             if (contextZoneItem == null)
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("ZoneItem of Zone '{0}' was not found", context.ZoneId));
 
@@ -180,7 +176,7 @@ namespace TOne.WhS.Sales.MainExtensions
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             newNormalRate.Rate = context.GetRoundedRate(rateCalculationContext.Rate.Value);
-            newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, context.OwnerType, zoneItem.CountryId);
+            newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, context.OwnerType, zoneItem.CountryId,context.OwnerId);
 
             newRates.Add(newNormalRate);
             context.ZoneItem.NewRates = newRates;
@@ -208,7 +204,7 @@ namespace TOne.WhS.Sales.MainExtensions
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             newNormalRate.Rate = context.GetRoundedRate(rateCalculationContext.Rate.Value);
-            newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, context.OwnerType, zoneItem.CountryId);
+            newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, context.OwnerType, zoneItem.CountryId,context.OwnerId);
 
             newRates.Add(newNormalRate);
             context.ZoneDraft.NewRates = newRates;
@@ -223,13 +219,13 @@ namespace TOne.WhS.Sales.MainExtensions
 
         #region Private Methods
 
-        private DateTime GetNewNormalRateBED(decimal? currentRate, decimal newRate, DateTime zoneBED, SalePriceListOwnerType ownerType, int countryId)
+        private DateTime GetNewNormalRateBED(decimal? currentRate, decimal newRate, DateTime zoneBED, SalePriceListOwnerType ownerType, int countryId, int ownerId)
         {
             if (BED.HasValue)
                 return BED.Value;
 
             DateTime newNormalRateBED;
-
+            SetDayOffset(ownerType, ownerId);
             DateTime todayPlusOffset = GetTodayPlusOffset(currentRate, newRate);
             newNormalRateBED = Utilities.Max(todayPlusOffset, zoneBED);
 
@@ -257,6 +253,26 @@ namespace TOne.WhS.Sales.MainExtensions
             }
 
             return today;
+        }
+        public void SetDayOffset(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            var pricingSettings = new PricingSettings();
+
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                var sellingProductManager = new TOne.WhS.BusinessEntity.Business.SellingProductManager();
+                pricingSettings = sellingProductManager.GetSellingProductPricingSettings(ownerId);
+            }
+
+            else
+            {
+                var carrierAccountManager = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager();
+                pricingSettings = carrierAccountManager.GetCustomerPricingSettings(ownerId);
+            }
+
+            _newRateDayOffset = pricingSettings.NewRateDayOffset.Value;
+            _increasedRateDayOffset = pricingSettings.IncreasedRateDayOffset.Value;
+            _decreasedRateDayOffset = pricingSettings.DecreasedRateDayOffset.Value;
         }
 
         #endregion

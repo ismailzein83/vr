@@ -126,7 +126,6 @@
     <Compile Include="BusinessRules\Conditions\ZoneCountryIsEndedAndZoneIsChangedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneIsPendingClosedAndChangedCondition.cs" />
     <Compile Include="CodeCompareManager.cs" />
-    <Compile Include="ConfigManager.cs" />
     <Compile Include="Context\RatePlanContext.cs" />
     <Compile Include="Country\BulkActionApplicableToCountryContext.cs" />
     <Compile Include="Country\BulkActionApplicableToCountryFilter.cs" />

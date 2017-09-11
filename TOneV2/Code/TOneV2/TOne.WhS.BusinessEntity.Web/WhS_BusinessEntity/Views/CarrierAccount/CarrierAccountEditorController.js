@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_RoutingStatusEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_RoutingStatusEnum', 'WhS_BE_SaleAreaSettingsContextEnum'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService, WhS_BE_RoutingStatusEnum) {
+    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService, WhS_BE_RoutingStatusEnum, WhS_BE_SaleAreaSettingsContextEnum) {
 
         // Definition
         var carrierProfileSelectorAPI;
@@ -39,11 +39,11 @@
         var customerRoutingStatusSelectorAPI;
         var customerRoutingStatusSelectorReadyDeferred;
 
-        var priceListExtensionFormatSelectorAPI;
-        var priceListExtensionFormatSelectorReadyDeferred;
+        var priceListSettingsEditorAPI;
+        var priceListSettingsEditorReadyDeferred;
 
-        var priceLisTypeSelectorAPI;
-        var priceListTypeSelectorReadyDeferred;
+        var pricingSettingsEditorAPI;
+        var pricingSettingsEditorReadyDeferred;
 
         // Supplier Settings
         var supplierTimeZoneSelectorAPI;
@@ -208,16 +208,25 @@
                 var setLoader = function (value) { $scope.scopeModel.isLoadingCustomerRoutingStatusSelector = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerRoutingStatusSelectorAPI, { selectedIds: WhS_BE_RoutingStatusEnum.Enabled.value }, setLoader, customerRoutingStatusSelectorReadyDeferred);
             };
-            $scope.scopeModel.onPriceListExtensionFormatSelectorReady = function (api) {
-                priceListExtensionFormatSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingPRiceListExtensionFormatSelector = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceListExtensionFormatSelectorAPI, undefined, setLoader, priceListExtensionFormatSelectorReadyDeferred);
+
+            $scope.scopeModel.onPricingSettingsEditorReady = function (api) {
+                pricingSettingsEditorAPI = api;
+                var pricingSettingsPayload = {
+                    directiveContext: WhS_BE_SaleAreaSettingsContextEnum.Customer.value
+                };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingPricingSettingsEditor = value; };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, pricingSettingsEditorAPI, pricingSettingsPayload, setLoader, pricingSettingsEditorReadyDeferred);
             };
-            $scope.scopeModel.onPriceListTypeSelectorReady = function (api) {
-                priceLisTypeSelectorAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingPriceListTypeFormatSelector = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceLisTypeSelectorAPI, undefined, setLoader, priceListTypeSelectorReadyDeferred);
+
+            $scope.scopeModel.onPriceListSettingsEditorReady = function (api) {
+                priceListSettingsEditorAPI = api;
+                var priceListSettingsPayload = {
+                    directiveContext: WhS_BE_SaleAreaSettingsContextEnum.Customer.value
             };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingPriceListSettingsEditor = value; };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceListSettingsEditorAPI, priceListSettingsPayload, setLoader, priceListSettingsEditorReadyDeferred);
+            };
+
             // Supplier Settings
             $scope.scopeModel.onSupplierTimeSelectorReady = function (api) {
                 supplierTimeZoneSelectorAPI = api;
@@ -370,8 +379,8 @@
                     sellingNumberPlanSelectedDeferred = UtilsService.createPromiseDeferred();
                     sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
                     customerRoutingStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-                    priceListExtensionFormatSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-                    priceListTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+                    priceListSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
+                    pricingSettingsEditorReadyDeferred = UtilsService.createPromiseDeferred();
                 }
                 function setSupplierGlobalVars() {
                     supplierTimeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -432,7 +441,6 @@
                     if (carrierAccountEntity.CustomerSettings) {
                         //$scope.scopeModel.isAToZ = carrierAccountEntity.CustomerSettings.IsAToZ;
                         $scope.scopeModel.customerInvoiceTimeZone = carrierAccountEntity.CustomerSettings.InvoiceTimeZone;
-                        $scope.scopeModel.compressPriceListFile = carrierAccountEntity.CustomerSettings.CompressPriceListFile;
 
                     }
                 }
@@ -534,11 +542,11 @@
             var loadCustomerRoutingStatusSelectorPromise = loadCustomerRoutingStatusSelector();
             promises.push(loadCustomerRoutingStatusSelectorPromise);
 
-            var loadPriceListExtensionFormatSelectorPromise = loadPriceListExtensionFormatSelector();
-            promises.push(loadPriceListExtensionFormatSelectorPromise);
+            var loadPriceListSettingsPromise = loadPriceListSettings();
+            promises.push(loadPriceListSettingsPromise);
 
-            var loadPriceListTypeSelectorPromise = loadPriceListTypeSelector();
-            promises.push(loadPriceListTypeSelectorPromise);
+            var loadPricingSettingsPromise = loadPricingSettings();
+            promises.push(loadPricingSettingsPromise);
 
             return UtilsService.waitMultiplePromises(promises);
         }
@@ -607,29 +615,35 @@
 
             return customerRoutingStatusSelectorLoadDeferred.promise;
         }
-        function loadPriceListExtensionFormatSelector() {
-            var priceListExtensionFormatSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            priceListExtensionFormatSelectorReadyDeferred.promise.then(function () {
-                priceListExtensionFormatSelectorReadyDeferred = undefined;
-                var priceListExtensionFormatSelectorPayload = {
-                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.CustomerSettings.PriceListExtensionFormat : undefined
-                };
-                VRUIUtilsService.callDirectiveLoad(priceListExtensionFormatSelectorAPI, priceListExtensionFormatSelectorPayload, priceListExtensionFormatSelectorLoadDeferred);
+        function loadPriceListSettings() {
+            var priceListSettingsEditorLoadDeferred = UtilsService.createPromiseDeferred();
+            priceListSettingsEditorReadyDeferred.promise.then(function () {
+                priceListSettingsEditorReadyDeferred = undefined;
+                var priceListSettingsPayload = {
+                    directiveContext: WhS_BE_SaleAreaSettingsContextEnum.Customer.value
+            };
+                if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != undefined) {
+                    priceListSettingsPayload.data = carrierAccountEntity.CustomerSettings.PricelistSettings;
+            }
+                VRUIUtilsService.callDirectiveLoad(priceListSettingsEditorAPI, priceListSettingsPayload, priceListSettingsEditorLoadDeferred);
             });
-            return priceListExtensionFormatSelectorLoadDeferred.promise;
+            return priceListSettingsEditorLoadDeferred.promise;
         }
-        function loadPriceListTypeSelector() {
-            var priceListTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            priceListTypeSelectorReadyDeferred.promise.then(function () {
-                priceListTypeSelectorReadyDeferred = undefined;
-                var priceListTypeSelectorPayload = {
-                    selectedIds: (carrierAccountEntity != undefined) ? carrierAccountEntity.CustomerSettings.PriceListType : undefined
+        function loadPricingSettings() {
+            var pricingSettingsEditorLoadDeferred = UtilsService.createPromiseDeferred();
+            pricingSettingsEditorReadyDeferred.promise.then(function () {
+                pricingSettingsEditorReadyDeferred = undefined;
+                var pricingSettingsPayload = {
+                    directiveContext: WhS_BE_SaleAreaSettingsContextEnum.Customer.value
                 };
-                VRUIUtilsService.callDirectiveLoad(priceLisTypeSelectorAPI, priceListTypeSelectorPayload, priceListTypeSelectorLoadDeferred);
+                if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != undefined) {
+                    pricingSettingsPayload.data = carrierAccountEntity.CustomerSettings.PricingSettings;
+                }
+                VRUIUtilsService.callDirectiveLoad(pricingSettingsEditorAPI, pricingSettingsPayload, pricingSettingsEditorLoadDeferred);
             });
-            return priceListTypeSelectorLoadDeferred.promise;
+            return pricingSettingsEditorLoadDeferred.promise;
         }
 
 
@@ -760,9 +774,8 @@
                     RoutingStatus: customerRoutingStatusSelectorAPI != undefined ? customerRoutingStatusSelectorAPI.getSelectedIds() : undefined,
                     IsAToZ: $scope.scopeModel.isAToZ,
                     InvoiceTimeZone: $scope.scopeModel.customerInvoiceTimeZone,
-                    CompressPriceListFile: $scope.scopeModel.compressPriceListFile,
-                    PriceListExtensionFormat: priceListExtensionFormatSelectorAPI != undefined ? priceListExtensionFormatSelectorAPI.getSelectedIds() : undefined,
-                    PriceListType: priceLisTypeSelectorAPI != undefined ? priceLisTypeSelectorAPI.getSelectedIds() : undefined
+                    PricelistSettings: priceListSettingsEditorAPI != undefined ? priceListSettingsEditorAPI.getData() : undefined,
+                    PricingSettings: pricingSettingsEditorAPI != undefined ? pricingSettingsEditorAPI.getData() : undefined,
                 }
             };
             if (!isEditMode) {
