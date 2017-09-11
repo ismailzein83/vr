@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkActions\ApplyActionToDraftInput.cs" />
+    <Compile Include="BulkActions\BulkActionCorrectedData.cs" />
     <Compile Include="BulkActions\BulkActionTypeSettings.cs" />
     <Compile Include="BulkActions\BulkActionValidationResult.cs" />
     <Compile Include="BulkActions\BulkActionZoneFilter.cs" />

@@ -72,6 +72,7 @@
     <Compile Include="BulkActions\ActionTypes\RoutingProductBulkActionType.cs" />
     <Compile Include="BulkActions\ApplicationZoneFilters\AllApplicableZones.cs" />
     <Compile Include="BulkActions\ApplicationZoneFilters\SpecificApplicableZones.cs" />
+    <Compile Include="BulkActions\CorrectedData\RateBulkActionCorrectedData.cs" />
     <Compile Include="BulkActions\ValidationResult\ImportBulkActionValidationResult.cs" />
     <Compile Include="BulkActions\ValidationResult\RateBulkActionValidationResult.cs" />
     <Compile Include="CostCalculation\AvgCostCalculation.cs" />
