@@ -6,25 +6,29 @@
 
     function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService, VRTimerService, UtilsService, BPInstanceStatusEnum, BusinessProcess_BPDefinitionService) {
 
-        var bpInstanceID;
-        var bpDefinitionID;
-
         var filter;
         var instanceTrackingFilter;
 
-        var instanceMonitorGridAPI;
-        var instanceTrackingHistoryGridAPI;
-        var instanceTrackingMonitorGridAPI;
-        var taskTrackingMonitorGridAPI;
-        var validationMessageMonitorGridAPI;
-        var validationMessageHistoryGridAPI;
-
+        var bpInstanceID;
         var bpInstance;
-        var bpInstanceStatusValue;
+        var bpDefinitionID;
         var context;
+        var bpInstanceStatusValue;
 
         var completionViewURL;
         var defaultCompletionViewLinkText = 'View Result';
+
+        var instanceTrackingMonitorGridAPI;
+        var instanceTrackingMonitorGridReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var taskTrackingMonitorGridAPI;
+        var taskTrackingMonitorGridReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var instanceMonitorGridAPI;
+        var instanceMonitorGridReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var validationMessageMonitorGridAPI;
+        var validationMessageMonitorGridReadyDeferrred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -32,61 +36,58 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+
             if (parameters !== undefined && parameters !== null) {
                 bpInstanceID = parameters.BPInstanceID;
                 context = parameters.context;
             }
         }
         function defineScope() {
+            $scope.scopeModel = {};
 
-            $scope.onInstanceMonitorGridReady = function (api) {
-                if ($scope.process.HasChildProcesses) {
-                    instanceMonitorGridAPI = api;
-                    getFilterObject();
-                    instanceMonitorGridAPI.loadGrid(filter);
-                }
-            };
-
-            $scope.onInstanceTrackingHistoryGridReady = function (api) {
-                instanceTrackingHistoryGridAPI = api;
-                getFilterObject();
-                instanceTrackingHistoryGridAPI.loadGrid(filter);
-            };
-
-            $scope.onInstanceTrackingMonitorGridReady = function (api) {
+            $scope.scopeModel.onInstanceTrackingMonitorGridReady = function (api) {
                 instanceTrackingMonitorGridAPI = api;
-                getInstanceTrackingFilter();
-                instanceTrackingMonitorGridAPI.loadGrid(instanceTrackingFilter);
+                instanceTrackingMonitorGridReadyDeferred.resolve();
             };
 
-            $scope.onTaskMonitorGridReady = function (api) {
+            $scope.scopeModel.onTaskMonitorGridReady = function (api) {
                 taskTrackingMonitorGridAPI = api;
-                getFilterObject();
-                taskTrackingMonitorGridAPI.loadGrid(filter);
+                taskTrackingMonitorGridReadyDeferred.resolve();
             };
 
-            $scope.onValidationMessageMonitorGridReady = function (api) {
+            $scope.scopeModel.onInstanceMonitorGridReady = function (api) {
+                instanceMonitorGridAPI = api;
+                instanceMonitorGridReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onValidationMessageMonitorGridReady = function (api) {
                 validationMessageMonitorGridAPI = api;
-                getFilterObject();
-                validationMessageMonitorGridAPI.loadGrid(filter);
+                validationMessageMonitorGridReadyDeferrred.resolve();
             };
 
-            $scope.onValidationMessageHistoryGridReady = function (api) {
-                validationMessageHistoryGridAPI = api;
-                getFilterObject();
-                validationMessageHistoryGridAPI.load(filter);
+            $scope.scopeModel.getStatusColor = function () {
+                if (bpInstance) {
+                    return 'control-label vr-control-label ' + BusinessProcess_BPInstanceService.getStatusColor(bpInstance.Status);
+                }
+                return "";
+            };
+
+            $scope.scopeModel.openCompletionView = function () {
+                var onCompletionViewClosed = function () { };
+                var hideSelectedColumn = false;
+                BusinessProcess_BPDefinitionService.openCompletionView(completionViewURL, bpInstanceID, hideSelectedColumn, onCompletionViewClosed);
             };
 
             $scope.modalContext.onModalHide = function () {
                 instanceTrackingMonitorGridAPI.clearTimer();
 
-                if ($scope.process.HasChildProcesses) {
+                if ($scope.scopeModel.process.HasChildProcesses) {
                     instanceMonitorGridAPI.clearTimer();
                 }
 
                 taskTrackingMonitorGridAPI.clearTimer();
 
-                if ($scope.process.HasBusinessRules) {
+                if ($scope.scopeModel.process.HasBusinessRules) {
                     validationMessageMonitorGridAPI.clearTimer();
                 }
 
@@ -101,96 +102,142 @@
                     }
                 }
             };
-            $scope.getStatusColor = function () {
-                if (bpInstance) {
-                    return 'control-label vr-control-label ' + BusinessProcess_BPInstanceService.getStatusColor(bpInstance.Status);
-                }
-                return "";
-            };
-
-            $scope.openCompletionView = function () {
-                var onCompletionViewClosed = function () { };
-                var hideSelectedColumn = false;
-                BusinessProcess_BPDefinitionService.openCompletionView(completionViewURL, bpInstanceID, hideSelectedColumn, onCompletionViewClosed);
-            };
         }
         function load() {
-            var promises = [];
-            $scope.isLoading = true;
+            $scope.scopeModel.isLoading = true;
 
-            var getBPInstancePromise = getBPInstance();
-            promises.push(getBPInstancePromise);
+            var loadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var getBPDefinitionDeferred = UtilsService.createPromiseDeferred();
-            promises.push(getBPDefinitionDeferred.promise);
-
-            getBPInstancePromise.then(function () {
+            getBPInstance().then(function () {
                 getBPDefinition().then(function () {
-                    getBPDefinitionDeferred.resolve();
+                    var promises = [];
+
+                    var instanceTrackingMonitorGridLoadPromise = getInstanceTrackingMonitorGridLoadPromise();
+                    promises.push(instanceTrackingMonitorGridLoadPromise);
+
+                    var taskMonitorGridLoadPromise = getTaskMonitorGridLoadPromise();
+                    promises.push(taskMonitorGridLoadPromise);
+
+                    if ($scope.scopeModel.process.HasChildProcesses) {
+                        var instanceMonitorGridLoadPromise = getInstanceMonitorGridLoadPromise();
+                        promises.push(instanceMonitorGridLoadPromise);
+                    }
+
+                    if ($scope.scopeModel.process.HasBusinessRules) {
+                        var validationMessageMonitorGridLoadPromise = getValidationMessageMonitorGridLoadPromise();
+                        promises.push(validationMessageMonitorGridLoadPromise);
+                    }
+
+                    UtilsService.waitMultiplePromises(promises).then(function () {
+                        loadPromiseDeferred.resolve();
+                    }).catch(function (error) {
+                        loadPromiseDeferred.reject(error);
+                    });
+
                 }).catch(function (error) {
-                    getBPDefinitionDeferred.reject(error);
+                    loadPromiseDeferred.reject(error);
                 });
+            }).catch(function (error) {
+                loadPromiseDeferred.reject(error);
             });
 
             createTimer();
 
-            return UtilsService.waitMultiplePromises(promises).finally(function () {
-                $scope.isLoading = false;
+            return loadPromiseDeferred.promise.finally(function () {
+                $scope.scopeModel.isLoading = false;
             });
         }
 
         function getBPInstance() {
             return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
-                bpDefinitionID = response.DefinitionID;
                 bpInstance = response;
-                $scope.process = {
-                    InstanceStatus: response.InstanceStatus,
-                    Title: response.Title,
-                    CreatedTime: response.CreatedTime,
-                    StatusUpdatedTime: response.StatusUpdatedTime,
-                    Status: response.StatusDescription,
+                bpDefinitionID = response.DefinitionID;
+
+                $scope.scopeModel.process = {
+                    InstanceStatus: bpInstance.InstanceStatus,
+                    Title: bpInstance.Title,
+                    CreatedTime: bpInstance.CreatedTime,
+                    StatusUpdatedTime: bpInstance.StatusUpdatedTime,
+                    Status: bpInstance.StatusDescription,
                     HasChildProcesses: false,
                     HasBusinessRules: false
                 };
-                $scope.title += $scope.process.Title;
+                $scope.title += $scope.scopeModel.process.Title;
             });
         }
         function getBPDefinition() {
             return BusinessProcess_BPDefinitionAPIService.GetBPDefintion(bpDefinitionID).then(function (response) {
-                $scope.process.HasChildProcesses = response.Configuration.HasChildProcesses;
-                $scope.process.HasBusinessRules = response.Configuration.HasBusinessRules;
+                $scope.scopeModel.process.HasChildProcesses = response.Configuration.HasChildProcesses;
+                $scope.scopeModel.process.HasBusinessRules = response.Configuration.HasBusinessRules;
 
                 completionViewURL = response.Configuration.CompletionViewURL;
-                $scope.completionViewLinkText = (response.Configuration.CompletionViewLinkText != null) ? response.Configuration.CompletionViewLinkText : defaultCompletionViewLinkText;
+                $scope.scopeModel.completionViewLinkText = (response.Configuration.CompletionViewLinkText != null) ? response.Configuration.CompletionViewLinkText : defaultCompletionViewLinkText;
             });
         }
 
-        function createTimer() {
-            if ($scope.job) {
-                VRTimerService.unregisterJob($scope.job);
-            }
-            VRTimerService.registerJob(onTimerElapsed, $scope);
+        function getInstanceTrackingMonitorGridLoadPromise() {
+            var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            instanceTrackingMonitorGridReadyDeferred.promise.then(function () {
+
+                UtilsService.convertToPromiseIfUndefined(instanceTrackingMonitorGridAPI.loadGrid(getInstanceTrackingFilter())).then(function () {
+                    loadPromiseDeferred.resolve();
+                }).catch(function (error) {
+                    loadPromiseDeferred.reject(error);
+                });
+            });
+
+            return loadPromiseDeferred.promise;
         }
-        function onTimerElapsed() {
-            return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
-                $scope.process.Status = response.StatusDescription;
-                bpInstanceStatusValue = response.Status;
+        function getTaskMonitorGridLoadPromise() {
+            var loadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                if (response.Status == BPInstanceStatusEnum.Completed.value && completionViewURL != undefined)
-                    $scope.showCompletionViewLink = true;
+            taskTrackingMonitorGridReadyDeferred.promise.then(function () {
 
-                $scope.process.StatusUpdatedTime = response.StatusUpdatedTime;
-                bpInstance = response;
-            },
-             function (exception) {
-                 $scope.isLoading = false;
-             });
+                UtilsService.convertToPromiseIfUndefined(taskTrackingMonitorGridAPI.loadGrid(getFilterObject())).then(function () {
+                    loadPromiseDeferred.resolve();
+                })
+                .catch(function (error) {
+                    loadPromiseDeferred.reject(error);
+                });
+            });
+
+            return loadPromiseDeferred.promise;
+        }
+        function getInstanceMonitorGridLoadPromise() {
+            var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            instanceMonitorGridReadyDeferred.promise.then(function () {
+
+                UtilsService.convertToPromiseIfUndefined(instanceMonitorGridAPI.loadGrid(getFilterObject())).then(function () {
+                    loadPromiseDeferred.resolve();
+                }).catch(function (error) {
+                    loadPromiseDeferred.reject(error);
+                });
+            });
+
+            return loadPromiseDeferred.promise;
+        }
+        function getValidationMessageMonitorGridLoadPromise() {
+            var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            validationMessageMonitorGridReadyDeferrred.promise.then(function () {
+
+                UtilsService.convertToPromiseIfUndefined(validationMessageMonitorGridAPI.loadGrid(getFilterObject())).then(function () {
+                    loadPromiseDeferred.resolve();
+                }).catch(function (error) {
+                    loadPromiseDeferred.reject(error);
+                });
+            });
+
+            return loadPromiseDeferred.promise;
         }
 
         function getFilterObject() {
             filter = {
                 BPInstanceID: bpInstanceID,
             };
+            return filter;
         }
         function getInstanceTrackingFilter() {
             var data = UtilsService.getLogEntryType();
@@ -205,6 +252,28 @@
                 BPInstanceID: bpInstanceID,
                 Severities: severities
             };
+            return instanceTrackingFilter;
+        }
+
+        function createTimer() {
+            if ($scope.job) {
+                VRTimerService.unregisterJob($scope.job);
+            }
+            VRTimerService.registerJob(onTimerElapsed, $scope);
+        }
+        function onTimerElapsed() {
+            return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
+                $scope.scopeModel.process.Status = response.StatusDescription;
+                bpInstanceStatusValue = response.Status;
+
+                if (response.Status == BPInstanceStatusEnum.Completed.value && completionViewURL != undefined)
+                    $scope.scopeModel.showCompletionViewLink = true;
+
+                $scope.scopeModel.process.StatusUpdatedTime = response.StatusUpdatedTime;
+                bpInstance = response;
+            }, function (exception) {
+                $scope.scopeModel.isLoading = false;
+            });
         }
     }
 

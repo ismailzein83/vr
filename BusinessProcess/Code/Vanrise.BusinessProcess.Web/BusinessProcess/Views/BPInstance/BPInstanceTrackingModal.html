@@ -1,74 +1,52 @@
-﻿<div vr-modalcontent size="large" ng-controller="BusinessProcess_BP_TrackingModalController" vr-loader="isLoading">
+﻿<div vr-modalcontent size="large" ng-controller="BusinessProcess_BP_TrackingModalController" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formBPTrackingModal">
-
             <vr-row>
                 <vr-columns colnum="1"><vr-label>Process Title:</vr-label></vr-columns>
-                <vr-columns colnum="7"><vr-label isvalue breakline>{{process.Title}}</vr-label></vr-columns>
-
+                <vr-columns colnum="7"><vr-label isvalue breakline>{{scopeModel.process.Title}}</vr-label></vr-columns>
                 <vr-columns colnum="1"></vr-columns>
-                <vr-columns colnum="3" ng-show="showCompletionViewLink">
-                    <vr-label isvalue><a ng-click="openCompletionView()" href="">{{completionViewLinkText}}</a></vr-label>
+                <vr-columns colnum="3" ng-show="scopeModel.showCompletionViewLink">
+                    <vr-label isvalue><a ng-click="scopeModel.openCompletionView()" href="">{{scopeModel.completionViewLinkText}}</a></vr-label>
                 </vr-columns>
             </vr-row>
-
             <vr-row>
                 <vr-columns colnum="1"><vr-label>Created On:</vr-label></vr-columns>
-                <vr-columns colnum="3"><vr-label isvalue>{{process.CreatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
-
+                <vr-columns colnum="3"><vr-label isvalue>{{scopeModel.process.CreatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
                 <vr-columns colnum="1"><vr-label>Updated On:</vr-label></vr-columns>
-                <vr-columns colnum="3"><vr-label isvalue>{{process.StatusUpdatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
-
+                <vr-columns colnum="3"><vr-label isvalue>{{scopeModel.process.StatusUpdatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
                 <vr-columns colnum="1"><vr-label>Status:</vr-label></vr-columns>
-                <vr-columns colnum="3"><span ng-class="getStatusColor()"><vr-label isvalue hasbackgroundcolor>{{process.Status}}</vr-label></span></vr-columns>
+                <vr-columns colnum="3"><span ng-class="scopeModel.getStatusColor()"><vr-label isvalue hasbackgroundcolor>{{scopeModel.process.Status}}</vr-label></span></vr-columns>
             </vr-row>
 
             <vr-tabs>
                 <vr-tab header="'Live Progress'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
-                            <businessprocess-bp-instance-tracking-monitor on-ready="onInstanceTrackingMonitorGridReady"></businessprocess-bp-instance-tracking-monitor>
+                            <businessprocess-bp-instance-tracking-monitor on-ready="scopeModel.onInstanceTrackingMonitorGridReady"></businessprocess-bp-instance-tracking-monitor>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <!--<vr-tab header="'Log Search'">
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <businessprocess-bp-instance-tracking-history on-ready="onInstanceTrackingHistoryGridReady"></businessprocess-bp-instance-tracking-history>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>-->
-                <vr-tab header="'Child Processes'" ng-if="process.HasChildProcesses">
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <businessprocess-bp-instance-monitor-grid on-ready="onInstanceMonitorGridReady"></businessprocess-bp-instance-monitor-grid>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-
                 <vr-tab header="'Tasks'">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
-                            <businessprocess-bp-task-monitor-grid on-ready="onTaskMonitorGridReady" enable-auto-open-task="true"></businessprocess-bp-task-monitor-grid>
+                            <businessprocess-bp-task-monitor-grid on-ready="scopeModel.onTaskMonitorGridReady" enable-auto-open-task="true"></businessprocess-bp-task-monitor-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-
-                <vr-tab header="'Rules Violated'" ng-if="process.HasBusinessRules">
+                <vr-tab header="'Child Processes'" ng-if="scopeModel.process.HasChildProcesses">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
-                            <businessprocess-bp-validation-message-monitor-grid on-ready="onValidationMessageMonitorGridReady"></businessprocess-bp-validation-message-monitor-grid>
+                            <businessprocess-bp-instance-monitor-grid on-ready="scopeModel.onInstanceMonitorGridReady"></businessprocess-bp-instance-monitor-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-
-                <!--<vr-tab header="'Rules Search'">
+                <vr-tab header="'Rules Violated'" ng-if="scopeModel.process.HasBusinessRules">
                     <vr-row removeline>
                         <vr-columns width="fullrow">
-                            <businessprocess-bp-validation-message-history on-ready="onValidationMessageHistoryGridReady"></businessprocess-bp-validation-message-history>
+                            <businessprocess-bp-validation-message-monitor-grid on-ready="scopeModel.onValidationMessageMonitorGridReady"></businessprocess-bp-validation-message-monitor-grid>
                         </vr-columns>
                     </vr-row>
-                </vr-tab>-->
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
