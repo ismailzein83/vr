@@ -104,7 +104,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     bool updateActionSucc = dataManager.Update(financialAccountToEdit);
                     if (updateActionSucc)
                     {
-                        if(financialAccountToEdit.InvoiceSettingId.HasValue)
+                        if (financialAccountToEdit.InvoiceSettingId.HasValue)
                         {
                             Guid partnerInvoiceSettingId = financialAccountToEdit.PartnerInvoiceSettingId.HasValue ? financialAccountToEdit.PartnerInvoiceSettingId.Value : Guid.NewGuid();
                             LinkPartnerToInvoiceSetting(partnerInvoiceSettingId, financialAccountToEdit.InvoiceSettingId.Value, financialAccountToEdit.FinancialAccountId.ToString());
@@ -131,19 +131,20 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public WHSFinancialAccountRuntimeEditor GetFinancialAccountRuntimeEditor(int financialAccountId)
         {
-            var financialAccount =  GetFinancialAccount(financialAccountId);
-            financialAccount.ThrowIfNull("financialAccount",financialAccountId);
-             WHSFinancialAccountRuntimeEditor financialAccountRuntimeEditor = new WHSFinancialAccountRuntimeEditor{
+            var financialAccount = GetFinancialAccount(financialAccountId);
+            financialAccount.ThrowIfNull("financialAccount", financialAccountId);
+            WHSFinancialAccountRuntimeEditor financialAccountRuntimeEditor = new WHSFinancialAccountRuntimeEditor
+            {
                 FinancialAccount = financialAccount
             };
 
             WHSFinancialAccountDefinitionManager financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
             var financialAccountDefinitionSetting = financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
-           
-            if(financialAccountDefinitionSetting.InvoiceTypeId.HasValue)
+
+            if (financialAccountDefinitionSetting.InvoiceTypeId.HasValue)
             {
                 var partnerInvoiceSetting = new PartnerInvoiceSettingManager().GetPartnerInvoiceSettingByPartnerId(financialAccountId.ToString());
-                if(partnerInvoiceSetting != null)
+                if (partnerInvoiceSetting != null)
                 {
                     financialAccountRuntimeEditor.InvoiceSettingId = partnerInvoiceSetting.InvoiceSettingID;
                     financialAccountRuntimeEditor.PartnerInvoiceSettingId = partnerInvoiceSetting.PartnerInvoiceSettingId;
@@ -211,8 +212,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 filterFunc = (financialAccount) =>
                 {
                     if (filter.FinancialAccountDefinitionId.HasValue && financialAccount.FinancialAccountDefinitionId != filter.FinancialAccountDefinitionId.Value)
-                            return false;
-                    if(filter.InvoiceTypeId.HasValue)
+                        return false;
+                    if (filter.InvoiceTypeId.HasValue)
                     {
                         var invoiceTypeId = s_financialAccountDefinitionManager.GetInvoiceTypeId(financialAccount.FinancialAccountDefinitionId);
                         if (invoiceTypeId != filter.InvoiceTypeId)
@@ -321,7 +322,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public bool CanSelectFinAccDefInAddOrUpdate(int? financialAccountId, Guid financialAccountDefinitionId, int? carrierAccountId, int? carrierProfileId,
             List<WHSCarrierFinancialAccountData> matchExistingCustomerFinancialAccounts, List<WHSCarrierFinancialAccountData> matchExistingSupplierFinancialAccounts)
         {
-            if(financialAccountId.HasValue)//In Update, only same definition could be selected
+            if (financialAccountId.HasValue)//In Update, only same definition could be selected
             {
                 var existingFinancialAccount = GetFinancialAccount(financialAccountId.Value);
                 existingFinancialAccount.ThrowIfNull("existingFinancialAccount", financialAccountId.Value);
@@ -330,7 +331,7 @@ namespace TOne.WhS.BusinessEntity.Business
             else
             {
                 string message;
-                return CanAddUpdateFinancialAccount(null, financialAccountDefinitionId, carrierAccountId, carrierProfileId, true, null, null, 
+                return CanAddUpdateFinancialAccount(null, financialAccountDefinitionId, carrierAccountId, carrierProfileId, true, null, null,
                     matchExistingCustomerFinancialAccounts, matchExistingSupplierFinancialAccounts, out message);
             }
         }
@@ -393,7 +394,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             EED = eedToSet
                         };
                         UpdateFinancialAccount(financialAccountToEdit);
-                    }                    
+                    }
                 }
             }
         }
@@ -411,7 +412,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (!s_invoiceAccountManager.TryUpdateInvoiceAccountEffectiveDate(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountIdAsString, financialAccountToEdit.BED, financialAccountToEdit.EED, out errorMessage))
                     return false;
             }
-            if(financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
+            if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
             {
                 if (!s_liveBalanceManager.TryUpdateLiveBalanceEffectiveDate(financialAccountIdAsString, financialAccountDefinitionSettings.BalanceAccountTypeId.Value, financialAccountToEdit.BED, financialAccountToEdit.EED))
                     return false;
@@ -435,10 +436,11 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var financialAccount = GetFinancialAccount(financialAccountId);
             financialAccount.ThrowIfNull("financialAccount", financialAccountId);
-            if(financialAccount.CarrierAccountId.HasValue)
+            if (financialAccount.CarrierAccountId.HasValue)
             {
                 return s_carrierAccountManager.GetSupplierTimeZoneId(financialAccount.CarrierAccountId.Value);
-            }else
+            }
+            else
             {
                 return s_carrierProfileManager.GetSupplierTimeZoneId(financialAccount.CarrierProfileId.Value);
             }
@@ -455,6 +457,36 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 return s_carrierProfileManager.GetCustomerTimeZoneId(financialAccount.CarrierProfileId.Value);
             }
+        }
+
+        /// <summary>
+        /// Used In DataTransformation
+        /// </summary>
+        /// <param name="customerAccountId"></param>
+        /// <param name="effectiveOn"></param>
+        /// <returns></returns>
+        public int? GetCustAccFinancialAccountId(int customerAccountId, DateTime effectiveOn)
+        {
+            WHSCarrierFinancialAccountData whsCarrierFinancialAccountData;
+            if (!TryGetCustAccFinancialAccountData(customerAccountId, effectiveOn, out whsCarrierFinancialAccountData))
+                return null;
+
+            return whsCarrierFinancialAccountData.FinancialAccount.FinancialAccountId;
+        }
+
+        /// <summary>
+        /// Used In DataTransformation
+        /// </summary>
+        /// <param name="supplierAccountId"></param>
+        /// <param name="effectiveOn"></param>
+        /// <returns></returns>
+        public int? GetSuppAccFinancialAccountId(int supplierAccountId, DateTime effectiveOn)
+        {
+            WHSCarrierFinancialAccountData whsCarrierFinancialAccountData;
+            if (!TryGetSuppAccFinancialAccountData(supplierAccountId, effectiveOn, out whsCarrierFinancialAccountData))
+                return null;
+
+            return whsCarrierFinancialAccountData.FinancialAccount.FinancialAccountId;
         }
 
         #endregion
@@ -757,13 +789,13 @@ namespace TOne.WhS.BusinessEntity.Business
         private bool LinkPartnerToInvoiceSetting(Guid partnerInvoiceSettingId, Guid invoiceSettingId, string partnerId)
         {
             PartnerInvoiceSettingManager partnerInvoiceSettingManager = new Vanrise.Invoice.Business.PartnerInvoiceSettingManager();
-            return  partnerInvoiceSettingManager.LinkPartnerToInvoiceSetting(partnerInvoiceSettingId,partnerId, invoiceSettingId);
+            return partnerInvoiceSettingManager.LinkPartnerToInvoiceSetting(partnerInvoiceSettingId, partnerId, invoiceSettingId);
         }
 
         #endregion
 
         #region Private Validation Methods
-        
+
         private bool CanAddUpdateFinancialAccount(int? financialAccountId, Guid financialAccountDefinitionId, int? carrierAccountId, int? carrierProfileId, bool beforeAddingNewFinancialAccount, DateTime? bed, DateTime? eed,
             List<WHSCarrierFinancialAccountData> matchExistingCustomerFinancialAccounts, List<WHSCarrierFinancialAccountData> matchExistingSupplierFinancialAccounts, out string message)
         {
@@ -920,8 +952,8 @@ namespace TOne.WhS.BusinessEntity.Business
         #region Mappers
 
         private WHSFinancialAccountInfo FinancialAccountInfoMapper(WHSFinancialAccount financialAccount)
-        {           
-            
+        {
+
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             var financialAccountInfo = new WHSFinancialAccountInfo()
             {
@@ -974,7 +1006,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Entity = financialAccount,
                 AccountTypeDescription = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionName(financialAccount.FinancialAccountDefinitionId),
                 IsActive = IsFinancialAccountActive(financialAccount),
-                BalanceAccountTypeId =financialAccountDefinitionSettings.BalanceAccountTypeId ,
+                BalanceAccountTypeId = financialAccountDefinitionSettings.BalanceAccountTypeId,
                 InvoiceTypeId = financialAccountDefinitionSettings.InvoiceTypeId,
             };
         }

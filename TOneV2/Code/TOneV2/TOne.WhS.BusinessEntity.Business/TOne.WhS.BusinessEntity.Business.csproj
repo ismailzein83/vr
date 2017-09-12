@@ -143,6 +143,7 @@
     <Compile Include="FinancialAccount\WHSFinancialAccountBESettings.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionManager.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountManager.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountStaticBEManager.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="ReleaseCodeManager.cs" />
