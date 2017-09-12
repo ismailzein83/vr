@@ -238,7 +238,7 @@
             var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
             sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
 
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSNPPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, {selectifsingleitem:true}, loadSNPPromiseDeferred);
             });
 
             return loadSNPPromiseDeferred.promise;
