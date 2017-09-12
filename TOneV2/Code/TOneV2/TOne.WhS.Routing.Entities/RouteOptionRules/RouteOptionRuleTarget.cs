@@ -35,6 +35,10 @@ namespace TOne.WhS.Routing.Entities
 
         public int NumberOfTries { get; set; }
 
+        public DateTime? SupplierRateEED { get; set; }
+
+        public long SupplierRateId { get; set; }
+
         #region Interfaces
 
         string IRuleCodeTarget.Code
@@ -67,7 +71,7 @@ namespace TOne.WhS.Routing.Entities
         }
 
         public decimal OptionWeight { get; set; }
-        
+
         #endregion
 
 

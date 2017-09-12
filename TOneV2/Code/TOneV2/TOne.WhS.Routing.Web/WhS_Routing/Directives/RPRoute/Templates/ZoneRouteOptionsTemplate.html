@@ -4,7 +4,7 @@
        title="{{routeOption.title}}"
        ng-click="ctrl.viewSupplier(routeOption)">
 
-        {{routeOption.titleToDisplay | vrtextOrNumber:4 }}
+        {{routeOption.titleToDisplay | vrtextOrNumber:4 }}<span style="color:#FFA500; font-weight:bold;" ng-if="routeOption.Entity.SupplierZoneMatchHasClosedRate">*</span>
     </a>
 </div>
 

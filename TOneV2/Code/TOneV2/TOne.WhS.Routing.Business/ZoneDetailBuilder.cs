@@ -203,10 +203,12 @@ namespace TOne.WhS.Routing.Business
                             context.SetRecordValue("IncludedRulesConfiguration", includedRulesConfiguration);
                         });
 
-                        decimal rateValue = output.GetRecordValue("EffectiveRate");
+                        SupplierRate supplierRate = output.GetRecordValue("SupplierRate");
+                        supplierRate.ThrowIfNull("supplierRate", supplierZone.SupplierZoneId);
+
                         int currencyId = output.GetRecordValue("SupplierCurrencyId");
                         //rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
-                        rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate);
+                        decimal rateValue = currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, systemCurrencyId, currencyEffectiveDate);
 
                         SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                         {
@@ -215,6 +217,8 @@ namespace TOne.WhS.Routing.Business
                             EffectiveRateValue = rateValue,
                             SupplierServiceIds = supplierZoneServicesWithChildren != null ? new HashSet<int>(supplierZoneServicesWithChildren.Select(itm => itm.ZoneServiceConfigId)) : null,
                             ExactSupplierServiceIds = exactSupplierZoneServices != null ? new HashSet<int>(exactSupplierZoneServices.Select(itm => itm.ServiceId)) : null,
+                            SupplierRateId = supplierRate.SupplierRateId,
+                            SupplierRateEED = supplierRate.EED
                         };
                         if (supplierZoneDetail.ExactSupplierServiceIds != null)
                             supplierZoneDetail.SupplierServiceWeight = exactSupplierZoneServices != null ? zoneServiceConfigManager.GetAllZoneServicesByIds(supplierZoneDetail.ExactSupplierServiceIds).Sum(itm => itm.Settings.Weight) : 0;

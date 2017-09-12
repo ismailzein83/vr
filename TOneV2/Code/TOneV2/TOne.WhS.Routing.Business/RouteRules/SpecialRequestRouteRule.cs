@@ -222,7 +222,9 @@ namespace TOne.WhS.Routing.Business
                 ExactSupplierServiceIds = supplierCodeMatchWithRate.ExactSupplierServiceIds,
                 SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight,
                 Percentage = percentage,
-                NumberOfTries = numberOfTries.HasValue ? numberOfTries.Value : 1
+                NumberOfTries = numberOfTries.HasValue ? numberOfTries.Value : 1,
+                SupplierRateId = supplierCodeMatchWithRate.SupplierRateId,
+                SupplierRateEED = supplierCodeMatchWithRate.SupplierRateEED
             };
 
             return option;

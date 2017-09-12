@@ -91,6 +91,8 @@ namespace TOne.WhS.Routing.Business
             if (dicRouteOptionSuppliers == null || !dicRouteOptionSuppliers.ContainsKey(supplierId))
                 return null;
 
+            RPRouteOptionSupplier rpRouteOptionSupplier = dicRouteOptionSuppliers[supplierId];
+            Dictionary<long, SupplierRate> supplierRateByIds = new SupplierRateManager().GetSupplierRates(rpRouteOptionSupplier.SupplierZones.Select(itm => itm.SupplierRateId).ToHashSet());
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
@@ -98,10 +100,19 @@ namespace TOne.WhS.Routing.Business
             if (toCurrencyId.HasValue)
                 systemCurrencyId = GetSystemCurrencyId();
 
+
+            SupplierZoneRateLocator futureSupplierZoneRateLocator = null;
+
+            if (latestRoutingDatabase.Type != RoutingDatabaseType.Future)
+            {
+                List<RoutingSupplierInfo> routingSupplierInfoList = new List<RoutingSupplierInfo>() { new RoutingSupplierInfo() { SupplierId = supplierId } };
+                futureSupplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadAllNoCache(routingSupplierInfoList, null, true));
+            }
+
             return new RPRouteOptionSupplierDetail()
             {
                 SupplierName = carrierAccountManager.GetCarrierAccountName(supplierId),
-                SupplierZones = dicRouteOptionSuppliers[supplierId].SupplierZones.MapRecords(x => RPRouteOptionSupplierZoneDetailMapper(x, systemCurrencyId, toCurrencyId))
+                SupplierZones = rpRouteOptionSupplier.SupplierZones.MapRecords(x => RPRouteOptionSupplierZoneDetailMapper(futureSupplierZoneRateLocator, supplierRateByIds, x, systemCurrencyId, toCurrencyId))
             };
         }
 
@@ -351,26 +362,53 @@ namespace TOne.WhS.Routing.Business
             return routeOptionDetail;
         }
 
-        private RPRouteOptionSupplierZoneDetail RPRouteOptionSupplierZoneDetailMapper(RPRouteOptionSupplierZone rpRouteOptionSupplierZone, int? systemCurrencyId, int? toCurrencyId)
+        private RPRouteOptionSupplierZoneDetail RPRouteOptionSupplierZoneDetailMapper(SupplierZoneRateLocator futureSupplierZoneRateLocator, Dictionary<long, SupplierRate> supplierRateByIds,
+            RPRouteOptionSupplierZone rpRouteOptionSupplierZone, int? systemCurrencyId, int? toCurrencyId)
         {
             SupplierZoneManager manager = new SupplierZoneManager();
             SupplierZone supplierZone = manager.GetSupplierZone(rpRouteOptionSupplierZone.SupplierZoneId);
+
+            SupplierRate supplierRate = supplierRateByIds != null ? supplierRateByIds.GetRecord(rpRouteOptionSupplierZone.SupplierRateId) : null;
 
             var detailEntity = new RPRouteOptionSupplierZoneDetail()
             {
                 Entity = rpRouteOptionSupplierZone,
                 SupplierZoneName = supplierZone != null ? supplierZone.Name : null,
-                ConvertedSupplierRate = rpRouteOptionSupplierZone.SupplierRate
+                ConvertedSupplierRate = rpRouteOptionSupplierZone.SupplierRate,
+                FutureRate = supplierRate != null ? GetFutureRate(supplierRate, futureSupplierZoneRateLocator, supplierZone.SupplierId, supplierZone.SupplierZoneId) : null,
+                RateEED = supplierRate != null ? supplierRate.EED : null
             };
 
             if (toCurrencyId.HasValue)
             {
                 if (!systemCurrencyId.HasValue)
                     throw new ArgumentNullException("systemCurrencyId");
-                detailEntity.ConvertedSupplierRate = GetRateConvertedToCurrency(rpRouteOptionSupplierZone.SupplierRate, systemCurrencyId.Value, toCurrencyId.Value, DateTime.Now);
+
+                DateTime now = DateTime.Now;
+                detailEntity.ConvertedSupplierRate = GetRateConvertedToCurrency(rpRouteOptionSupplierZone.SupplierRate, systemCurrencyId.Value, toCurrencyId.Value, now);
+                if (detailEntity.FutureRate.HasValue)
+                    detailEntity.FutureRate = GetRateConvertedToCurrency(detailEntity.FutureRate.Value, systemCurrencyId.Value, toCurrencyId.Value, now);
             }
 
             return detailEntity;
+        }
+
+        private decimal? GetFutureRate(SupplierRate supplierRate, SupplierZoneRateLocator futureSupplierZoneRateLocator, int supplierId, long supplierZoneId)
+        {
+            SupplierZoneRate futureSupplierZoneRate = futureSupplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId, null);
+            if (futureSupplierZoneRate == null)
+                return null;
+
+            decimal? normalRate = futureSupplierZoneRate.Rate != null ? futureSupplierZoneRate.Rate.Rate : default(decimal?);
+
+            if (!supplierRate.RateTypeId.HasValue)
+                return normalRate;
+
+            if (futureSupplierZoneRate.RatesByRateType == null)
+                return null;
+
+            SupplierRate supplierRateByRateType = futureSupplierZoneRate.RatesByRateType.GetRecord(supplierRate.RateTypeId.Value);
+            return supplierRateByRateType != null ? supplierRateByRateType.Rate : default(decimal?);
         }
 
         private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<Guid, IEnumerable<RPRouteOption>> dicRouteOptions, Guid policyConfigId, int numberOfOptions, int? systemCurrencyId, int? toCurrencyId, bool includeBlockedSupplierZones, int? customerProfileId)

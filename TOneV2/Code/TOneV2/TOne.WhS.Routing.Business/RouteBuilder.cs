@@ -329,8 +329,13 @@ namespace TOne.WhS.Routing.Business
             {
                 RPRouteOptionSupplier optionSupplierDetails = null;
 
+                Dictionary<int, List<DateTime?>> supplierZoneEEDsBySupplier = new Dictionary<int, List<DateTime?>>();
+
                 foreach (var routeOptionRuleTarget in routeOptionRuleTargets)
                 {
+                    List<DateTime?> supplierZoneEEDs = supplierZoneEEDsBySupplier.GetOrCreateItem(routeOptionRuleTarget.SupplierId);
+                    supplierZoneEEDs.Add(routeOptionRuleTarget.SupplierRateEED);
+
                     if (!route.OptionsDetailsBySupplier.TryGetValue(routeOptionRuleTarget.SupplierId, out optionSupplierDetails))
                     {
                         optionSupplierDetails = new RPRouteOptionSupplier
@@ -358,7 +363,8 @@ namespace TOne.WhS.Routing.Business
                         SupplierRate = routeOptionRuleTarget.SupplierRate,
                         IsBlocked = routeOptionRuleTarget.BlockOption,
                         ExecutedRuleId = routeOptionRuleTarget.ExecutedRuleId,
-                        ExactSupplierServiceIds = routeOptionRuleTarget.ExactSupplierServiceIds
+                        ExactSupplierServiceIds = routeOptionRuleTarget.ExactSupplierServiceIds,
+                        SupplierRateId = routeOptionRuleTarget.SupplierRateId
                     };
 
                     optionSupplierDetails.SupplierZones.Add(optionSupplierZone);
@@ -369,6 +375,9 @@ namespace TOne.WhS.Routing.Business
                     List<RPRouteOption> rpRouteOptions = new List<RPRouteOption>();
                     foreach (var item in route.OptionsDetailsBySupplier.Values)
                     {
+                        List<DateTime?> supplierZoneEEDs = supplierZoneEEDsBySupplier.GetOrCreateItem(item.SupplierId);
+                        bool supplierZoneMatchHasClosedRate = supplierZoneEEDs != null && supplierZoneEEDs.FirstOrDefault(itm => itm.HasValue) != null;
+
                         SupplierZoneToRPOptionPolicyExecutionContext supplierZoneToRPOptionPolicyExecutionContext = new SupplierZoneToRPOptionPolicyExecutionContext
                         {
                             SupplierOptionDetail = item,
@@ -382,7 +391,8 @@ namespace TOne.WhS.Routing.Business
                                 SaleZoneId = saleZoneId,
                                 SupplierStatus = item.SupplierStatus,
                                 Percentage = item.Percentage,
-                                SupplierServiceWeight = item.SupplierServiceWeight
+                                SupplierServiceWeight = item.SupplierServiceWeight,
+                                SupplierZoneMatchHasClosedRate = supplierZoneMatchHasClosedRate
                             });
                     }
                     IEnumerable<RPRouteOption> rpRouteOptionsAsEnumerable = rpRouteOptions;

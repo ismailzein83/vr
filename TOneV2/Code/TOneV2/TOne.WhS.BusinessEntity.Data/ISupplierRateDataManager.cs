@@ -22,5 +22,7 @@ namespace TOne.WhS.BusinessEntity.Data
         bool AreSupplierRatesUpdated(ref object updateHandle);
 
         SupplierRate GetSupplierRateById(long rateId);
+
+        List<SupplierRate> GetSupplierRates(HashSet<long> supplierRateIds);
     }
 }

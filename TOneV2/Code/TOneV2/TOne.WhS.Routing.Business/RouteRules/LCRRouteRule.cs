@@ -15,7 +15,7 @@ namespace TOne.WhS.Routing.Business
 
         public override bool UseOrderedExecution { get { return true; } }
 
-        public List<ExcludedOption> ExcludedOptions { get; set; } 
+        public List<ExcludedOption> ExcludedOptions { get; set; }
 
         #endregion
 
@@ -122,7 +122,9 @@ namespace TOne.WhS.Routing.Business
                 IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture,
                 ExactSupplierServiceIds = supplierCodeMatchWithRate.ExactSupplierServiceIds,
                 SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight,
-                NumberOfTries = 1
+                NumberOfTries = 1,
+                SupplierRateId = supplierCodeMatchWithRate.SupplierRateId,
+                SupplierRateEED = supplierCodeMatchWithRate.SupplierRateEED
             };
 
             return option;
@@ -130,7 +132,7 @@ namespace TOne.WhS.Routing.Business
 
         private bool FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, RouteOptionRuleTarget option)
         {
-            if (this.ExcludedOptions != null && this.ExcludedOptions.Any(itm => itm.SupplierId == option.SupplierId)) 
+            if (this.ExcludedOptions != null && this.ExcludedOptions.Any(itm => itm.SupplierId == option.SupplierId))
                 return true;
 
             if (ExecuteRateOptionFilter(target.SaleRate, option.SupplierRate))
@@ -173,10 +175,10 @@ namespace TOne.WhS.Routing.Business
 
         #region Private Classes
 
-        public class ExcludedOption  
+        public class ExcludedOption
         {
             public int SupplierId { get; set; }
-        } 
+        }
 
         #endregion
     }

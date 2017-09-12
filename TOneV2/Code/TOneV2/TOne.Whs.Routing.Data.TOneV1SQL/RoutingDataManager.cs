@@ -232,7 +232,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 	                                                            [ParentID] [int] NULL,
 	                                                            [OriginalExcluded] [varchar](max) NULL
                                                             ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]";
-        
+
 
         const string query_SupplierZoneDetailsTable = @"CREATE TABLE [dbo].[SupplierZoneDetail](
 	                                                    [SupplierId] [int] NOT NULL,
@@ -240,7 +240,9 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 	                                                    [EffectiveRateValue] [decimal](20, 8) NOT NULL,
                                                         [SupplierServiceIds] [nvarchar](max) NULL,
                                                         [ExactSupplierServiceIds] [nvarchar](max) NULL,
-                                                        [SupplierServiceWeight] int NOT NULL
+                                                        [SupplierServiceWeight] int NOT NULL,
+                                                        [SupplierRateId] bigint NOT NULL,
+                                                        [SupplierRateEED] datetime NULL
                                                         ) ON [PRIMARY];
                                                         
                                                         CREATE CLUSTERED INDEX [IX_SupplierZoneDetail_SupplierZoneId] ON [dbo].[SupplierZoneDetail] 

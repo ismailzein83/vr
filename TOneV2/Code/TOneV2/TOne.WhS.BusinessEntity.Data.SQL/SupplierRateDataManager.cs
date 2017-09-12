@@ -93,6 +93,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 zoneIdsStr, countryIdsStr);
         }
 
+        public List<SupplierRate> GetSupplierRates(HashSet<long> supplierRateIds)
+        {
+            string supplierRateIdsAsString = string.Join<long>(",", supplierRateIds);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetByIds]", SupplierRateMapper, supplierRateIdsAsString);
+        }
+
         #endregion
 
         #region Private Methods

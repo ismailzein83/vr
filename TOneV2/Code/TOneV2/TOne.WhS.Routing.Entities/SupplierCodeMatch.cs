@@ -26,8 +26,12 @@ namespace TOne.WhS.Routing.Entities
         public HashSet<int> SupplierServiceIds { get; set; }
 
         public HashSet<int> ExactSupplierServiceIds { get; set; }
-        
+
         public int SupplierServiceWeight { get; set; }
+
+        public long SupplierRateId { get; set; }
+
+        public DateTime? SupplierRateEED { get; set; }
     }
 
     public class SupplierCodeMatches

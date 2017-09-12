@@ -52,6 +52,19 @@ namespace TOne.WhS.BusinessEntity.Business
             throw new ArgumentNullException(String.Format("CostRate: {0}", rateId));
         }
 
+        public Dictionary<long, SupplierRate> GetSupplierRates(HashSet<long> supplierRateIds)
+        {
+            if (supplierRateIds == null || supplierRateIds.Count == 0)
+                return null;
+
+            ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+            List<SupplierRate> supplierRates = dataManager.GetSupplierRates(supplierRateIds);
+            if (supplierRates == null)
+                return null;
+
+            return supplierRates.ToDictionary(itm => itm.SupplierRateId, itm => itm);
+        }
+
         private SupplierRate GetSupplierRateByRateId(long rateId)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
@@ -185,7 +198,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Supplier Rates",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Normal Rate" });

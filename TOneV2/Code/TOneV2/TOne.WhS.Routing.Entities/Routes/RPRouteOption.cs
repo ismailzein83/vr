@@ -11,7 +11,7 @@ namespace TOne.WhS.Routing.Entities
         static RPRouteOption()
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RPRouteOption),
-                "SupplierId", "SupplierRate", "Percentage", "OptionWeight", "SaleZoneId");
+                "SupplierId", "SupplierRate", "Percentage", "OptionWeight", "SaleZoneId", "SupplierZoneMatchHasClosedRate");
         }
 
         public int SupplierId { get; set; }
@@ -37,5 +37,7 @@ namespace TOne.WhS.Routing.Entities
         {
             get { return null; }
         }
+
+        public bool SupplierZoneMatchHasClosedRate { get; set; }
     }
 }
