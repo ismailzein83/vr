@@ -52,8 +52,21 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new SalePriceListOption
                 {
                     OwnerName = carrierAccountManager.GetCarrierAccountName(ownerId),
-                    CompressPriceListFile = carrierAccountManager.GetCustomerPricelistSettings(ownerId).CompressPriceListFile.Value,
+                    CompressPriceListFile = carrierAccountManager.GetCustomerCompressPriceListFileStatus(ownerId),
                 };
+            }
+            return null;
+        }
+
+        public int? GetOwnerPricelistTemplateId(int priceListId)
+        {
+            SalePriceListManager salePriceListManager = new SalePriceListManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var priceList = salePriceListManager.GetPriceList(priceListId);
+            if (priceList != null)
+            {
+                var ownerId = priceList.OwnerId;
+                return carrierAccountManager.GetCustomerPriceListTemplateId(ownerId);
             }
             return null;
         }

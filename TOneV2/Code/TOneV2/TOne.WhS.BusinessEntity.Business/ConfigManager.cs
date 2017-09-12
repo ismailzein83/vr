@@ -116,6 +116,11 @@ namespace TOne.WhS.BusinessEntity.Business
             var longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
             return Decimal.Round(defaultRate, longPrecision);
         }
+        public decimal GetSaleAreaDefaultRate()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricingSettings.DefaultRate.Value;
+        }
         public int GetSaleAreaEffectiveDateDayOffset()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
@@ -146,7 +151,6 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.PricingSettings.DecreasedRateDayOffset.Value;
         }
-
 
         public PriceListExtensionFormat GetSaleAreaPriceListExtensionFormatId()
         {

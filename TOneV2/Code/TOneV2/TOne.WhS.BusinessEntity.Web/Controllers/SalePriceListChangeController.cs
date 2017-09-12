@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Web.Http;
@@ -52,11 +53,22 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("DownloadSalePriceList")]
-        public object DownloadSalePriceList(long salepriceListId, SalePriceListType salePriceListType)
+        [Route("GetOwnerPricelistTemplateId")]
+        public int? GetOwnerPricelistTemplateId(int priceListId)
         {
+            var salePriceListManager = new SalePriceListChangeManager();
+            return salePriceListManager.GetOwnerPricelistTemplateId(priceListId);
+        }
+
+        [HttpGet]
+        [Route("DownloadSalePriceList")]
+        public object DownloadSalePriceList(int salepriceListId, SalePriceListType salePriceListType, int salePriceListTemplateId)
+        {
+            SalePriceListInput salePriceListInput = new SalePriceListInput() 
+            { PriceListId = salepriceListId, PriceListTypeId = (int)salePriceListType,PricelistTemplateId = salePriceListTemplateId };
+
             SalePriceListManager salePriceListManager = new SalePriceListManager();
-            VRFile file = salePriceListManager.GenerateSalePriceListFile(salepriceListId, salePriceListType);
+            VRFile file = salePriceListManager.GenerateSalePriceListFile(salePriceListInput);
             return GetExcelResponse(file.Content, file.Name);
         }
         [HttpGet]
@@ -74,7 +86,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SalePriceListEvaluatedEmail GenerateAndEvaluateSalePriceListEmail(SalePriceListInput salePriceListInput)
         {
             SalePriceListManager salePriceListManager = new SalePriceListManager();
-            VRFile file = salePriceListManager.GenerateSalePriceListFile(salePriceListInput.PriceListId, (SalePriceListType)salePriceListInput.PriceListTypeId);
+            VRFile file = salePriceListManager.GenerateSalePriceListFile(salePriceListInput);
             VRFileManager fileManager = new VRFileManager();
             long fileId = fileManager.AddFile(file);
             var evaluatedObject = salePriceListManager.EvaluateEmail(salePriceListInput.PriceListId, (SalePriceListType)salePriceListInput.PriceListTypeId);

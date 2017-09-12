@@ -91,6 +91,259 @@ namespace TOne.WhS.BusinessEntity.Business
             return configManager.GetPurchaseAreaEffectiveDateDayOffset();
         }
 
+        public decimal GetCustomerRoundedDefaultRate(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricingSettings.ThrowIfNull("Customer.CustomerSettings.PricingSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricingSettings != null)
+            {
+                if (customer.CustomerSettings.PricingSettings.DefaultRate != null)
+                {
+                    var longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+                    var defaultRate = customer.CustomerSettings.PricingSettings.DefaultRate.Value;
+                    return Decimal.Round(defaultRate, longPrecision);
+                }
+            }
+
+            return sellingProductManager.GetSellingProductRoundedDefaultRate(sellingProductId);
+        }
+        public decimal GetCustomerDefaultRate(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricingSettings.ThrowIfNull("Customer.CustomerSettings.PricingSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricingSettings != null)
+            {
+                if (customer.CustomerSettings.PricingSettings.DefaultRate != null)
+                    return customer.CustomerSettings.PricingSettings.DefaultRate.Value;
+            }
+
+            return sellingProductManager.GetSellingProductDefaultRate(sellingProductId);
+        }
+        public decimal GetCustomerMaximumRate(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricingSettings.ThrowIfNull("Customer.CustomerSettings.PricingSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricingSettings != null)
+            {
+                if (customer.CustomerSettings.PricingSettings.MaximumRate != null)
+                    return customer.CustomerSettings.PricingSettings.MaximumRate.Value;
+            }
+
+            return sellingProductManager.GetSellingProductMaximumRate(sellingProductId);
+        }
+        public int GetCustomerEffectiveDateDayOffset(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricingSettings.ThrowIfNull("Customer.CustomerSettings.PricingSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricingSettings != null)
+            {
+                if (customer.CustomerSettings.PricingSettings.EffectiveDateDayOffset != null)
+                    return customer.CustomerSettings.PricingSettings.EffectiveDateDayOffset.Value;
+            }
+
+            return sellingProductManager.GetSellingProductEffectiveDateDayOffset(sellingProductId);
+        }
+        public int GetCustomerRetroactiveDayOffset(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricingSettings.ThrowIfNull("Customer.CustomerSettings.PricingSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricingSettings != null)
+            {
+                if (customer.CustomerSettings.PricingSettings.RetroactiveDayOffset != null)
+                    return customer.CustomerSettings.PricingSettings.RetroactiveDayOffset.Value;
+            }
+
+            return sellingProductManager.GetSellingProductRetroactiveDayOffset(sellingProductId);
+        }
+        public int GetCustomerNewRateDayOffset(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricingSettings.ThrowIfNull("Customer.CustomerSettings.PricingSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricingSettings != null)
+            {
+                if (customer.CustomerSettings.PricingSettings.NewRateDayOffset != null)
+                    return customer.CustomerSettings.PricingSettings.NewRateDayOffset.Value;
+            }
+
+            return sellingProductManager.GetSellingProductNewRateDayOffset(sellingProductId);
+        }
+        public int GetCustomerIncreasedRateDayOffset(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricingSettings.ThrowIfNull("Customer.CustomerSettings.PricingSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricingSettings != null)
+            {
+                if (customer.CustomerSettings.PricingSettings.IncreasedRateDayOffset != null)
+                    return customer.CustomerSettings.PricingSettings.IncreasedRateDayOffset.Value;
+            }
+
+            return sellingProductManager.GetSellingProductIncreasedRateDayOffset(sellingProductId);
+        }
+        public int GetCustomerDecreasedRateDayOffset(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricingSettings.ThrowIfNull("Customer.CustomerSettings.PricingSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricingSettings != null)
+            {
+                if (customer.CustomerSettings.PricingSettings.DecreasedRateDayOffset != null)
+                    return customer.CustomerSettings.PricingSettings.DecreasedRateDayOffset.Value;
+            }
+
+            return sellingProductManager.GetSellingProductDecreasedRateDayOffset(sellingProductId);
+        }
+
+        public PriceListExtensionFormat GetCustomerPriceListExtensionFormatId(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricelistSettings.ThrowIfNull("Customer.CustomerSettings.PricelistSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricelistSettings != null)
+            {
+                if (customer.CustomerSettings.PricelistSettings.PriceListExtensionFormat != null)
+                    return customer.CustomerSettings.PricelistSettings.PriceListExtensionFormat.Value;
+            }
+
+            return sellingProductManager.GetSellingProductPriceListExtensionFormatId(sellingProductId);
+        }
+        public SalePriceListType GetCustomerPriceListType(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricelistSettings.ThrowIfNull("Customer.CustomerSettings.PricelistSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricelistSettings != null)
+            {
+                if (customer.CustomerSettings.PricelistSettings.PriceListType != null)
+                    return customer.CustomerSettings.PricelistSettings.PriceListType.Value;
+            }
+
+            return sellingProductManager.GetSellingProductPriceListType(sellingProductId);
+        }
+        public int GetCustomerPriceListTemplateId(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricelistSettings.ThrowIfNull("Customer.CustomerSettings.PricelistSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricelistSettings != null)
+            {
+                if (customer.CustomerSettings.PricelistSettings.DefaultSalePLTemplateId != null)
+                    return customer.CustomerSettings.PricelistSettings.DefaultSalePLTemplateId.Value;
+            }
+
+            return sellingProductManager.GetSellingProductPriceListTemplateId(sellingProductId);
+        }
+        public Guid GetCustomerPriceListMailTemplateId(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricelistSettings.ThrowIfNull("Customer.CustomerSettings.PricelistSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricelistSettings != null)
+            {
+                if (customer.CustomerSettings.PricelistSettings.DefaultSalePLMailTemplateId != null)
+                    return customer.CustomerSettings.PricelistSettings.DefaultSalePLMailTemplateId.Value;
+            }
+
+            return sellingProductManager.GetSellingProductPriceListMailTemplateId(sellingProductId);
+        }
+        public bool GetCustomerCompressPriceListFileStatus(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
+
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricelistSettings.ThrowIfNull("Customer.CustomerSettings.PricelistSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricelistSettings != null)
+            {
+                if (customer.CustomerSettings.PricelistSettings.CompressPriceListFile != null)
+                    return customer.CustomerSettings.PricelistSettings.CompressPriceListFile.Value;
+            }
+
+            return sellingProductManager.GetSellingProductCompressPriceListFileStatus(sellingProductId);
+        }
+
         public PricingSettings GetCustomerPricingSettings(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);

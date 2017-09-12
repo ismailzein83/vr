@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SalePriceListInput
     {
         public int PriceListTypeId { get; set; }
+        public int PricelistTemplateId { get; set; }
         public int PriceListId { get; set; }
     }
 }

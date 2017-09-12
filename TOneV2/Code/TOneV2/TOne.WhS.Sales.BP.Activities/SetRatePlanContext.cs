@@ -40,6 +40,9 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             SalePriceListOwnerType ownerType = OwnerType.Get(context);
             int ownerId = OwnerId.Get(context);
+
+            PricingSettings pricingSettings = UtilitiesManager.GetPricingSettings(ownerType, ownerId);
+
             int currencyId = CurrencyId.Get(context);
             DateTime effectiveDate = EffectiveDate.Get(context);
             CurrencyManager currencyManager = new CurrencyManager();
@@ -52,6 +55,7 @@ namespace TOne.WhS.Sales.BP.Activities
             ratePlanContext.OwnerId = ownerId;
             ratePlanContext.OwnerSellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
             ratePlanContext.CurrencyId = currencyId;
+            ratePlanContext.setRatePlanContextPricingSettings(pricingSettings);
 
             int sellingProductId = (ownerType == SalePriceListOwnerType.SellingProduct) ? ownerId : new CarrierAccountManager().GetSellingProductId(ownerId);
             ratePlanContext.SellingProductCurrencyId = new SellingProductManager().GetSellingProductCurrencyId(sellingProductId);

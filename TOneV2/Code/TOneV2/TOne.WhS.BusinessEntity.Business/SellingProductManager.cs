@@ -104,6 +104,233 @@ namespace TOne.WhS.BusinessEntity.Business
             return sellingProduct.Settings.CurrencyId;
         }
 
+        public decimal GetSellingProductRoundedDefaultRate(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricingSettings!=null)
+            {
+                if (sellingProduct.Settings.PricingSettings.DefaultRate != null)
+                {
+                    var longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+                    var defaultRate = sellingProduct.Settings.PricingSettings.DefaultRate.Value;
+                    return Decimal.Round(defaultRate, longPrecision);
+                }
+            }
+            return configManager.GetRoundedDefaultRate();
+        }
+        public decimal GetSellingProductDefaultRate(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricingSettings!=null)
+            {
+                if (sellingProduct.Settings.PricingSettings.DefaultRate != null)
+                    return sellingProduct.Settings.PricingSettings.DefaultRate.Value;
+            }
+            return configManager.GetSaleAreaDefaultRate();
+        }
+        public decimal GetSellingProductMaximumRate(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricingSettings != null)
+            {
+                if (sellingProduct.Settings.PricingSettings.MaximumRate != null)
+                    return sellingProduct.Settings.PricingSettings.MaximumRate.Value;
+            }
+            return configManager.GetSaleAreaMaximumRate();
+        }
+        public int GetSellingProductEffectiveDateDayOffset(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricingSettings != null)
+            {
+                if (sellingProduct.Settings.PricingSettings.EffectiveDateDayOffset != null)
+                    return sellingProduct.Settings.PricingSettings.EffectiveDateDayOffset.Value;
+            }
+            return configManager.GetSaleAreaEffectiveDateDayOffset();
+        }
+        public int GetSellingProductRetroactiveDayOffset(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricingSettings != null)
+            {
+                if (sellingProduct.Settings.PricingSettings.RetroactiveDayOffset != null)
+                    return sellingProduct.Settings.PricingSettings.RetroactiveDayOffset.Value;
+            }
+            return configManager.GetSaleAreaRetroactiveDayOffset();
+        }
+        public int GetSellingProductNewRateDayOffset(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricingSettings != null)
+            {
+                if (sellingProduct.Settings.PricingSettings.NewRateDayOffset != null)
+                    return sellingProduct.Settings.PricingSettings.NewRateDayOffset.Value;
+            }
+            return configManager.GetSaleAreaNewRateDayOffset();
+        }
+        public int GetSellingProductIncreasedRateDayOffset(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricingSettings != null)
+            {
+                if (sellingProduct.Settings.PricingSettings.IncreasedRateDayOffset != null)
+                    return sellingProduct.Settings.PricingSettings.IncreasedRateDayOffset.Value;
+            }
+            return configManager.GetSaleAreaIncreasedRateDayOffset();
+        }
+        public int GetSellingProductDecreasedRateDayOffset(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Settings.PricingSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricingSettings != null)
+            {
+                if (sellingProduct.Settings.PricingSettings.DecreasedRateDayOffset != null)
+                    return sellingProduct.Settings.PricingSettings.DecreasedRateDayOffset.Value;
+            }
+            return configManager.GetSaleAreaDecreasedRateDayOffset();
+        }
+
+        public PriceListExtensionFormat GetSellingProductPriceListExtensionFormatId(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricelistSettings.ThrowIfNull("SellingProduct.Settings.PricelistSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricelistSettings != null)
+            {
+                if (sellingProduct.Settings.PricelistSettings.PriceListExtensionFormat != null)
+                    return sellingProduct.Settings.PricelistSettings.PriceListExtensionFormat.Value;
+            }
+            return configManager.GetSaleAreaPriceListExtensionFormatId();
+        }
+        public SalePriceListType GetSellingProductPriceListType(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricelistSettings.ThrowIfNull("SellingProduct.Settings.PricelistSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricelistSettings != null)
+            {
+                if (sellingProduct.Settings.PricelistSettings.PriceListType != null)
+                    return sellingProduct.Settings.PricelistSettings.PriceListType.Value;
+            }
+            return configManager.GetSaleAreaPriceListType();
+        }
+        public int GetSellingProductPriceListTemplateId(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricelistSettings.ThrowIfNull("SellingProduct.Settings.PricelistSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricelistSettings != null)
+            {
+                if (sellingProduct.Settings.PricelistSettings.DefaultSalePLTemplateId != null)
+                    return sellingProduct.Settings.PricelistSettings.DefaultSalePLTemplateId.Value;
+            }
+            return configManager.GetSaleAreaPriceListTemplateId();
+        }
+        public Guid GetSellingProductPriceListMailTemplateId(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricelistSettings.ThrowIfNull("SellingProduct.Settings.PricelistSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricelistSettings != null)
+            {
+                if (sellingProduct.Settings.PricelistSettings.DefaultSalePLMailTemplateId != null)
+                    return sellingProduct.Settings.PricelistSettings.DefaultSalePLMailTemplateId.Value;
+            }
+            return configManager.GetSaleAreaPriceListMailTemplateId();
+        }
+        public bool GetSellingProductCompressPriceListFileStatus(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricelistSettings.ThrowIfNull("SellingProduct.Settings.PricelistSettings", sellingProductId);
+
+            if (sellingProduct.Settings.PricelistSettings != null)
+            {
+                if (sellingProduct.Settings.PricelistSettings.CompressPriceListFile != null)
+                    return sellingProduct.Settings.PricelistSettings.CompressPriceListFile.Value;
+            }
+            return configManager.GetSaleAreaCompressPriceListFileStatus();
+        }
+
         public PricingSettings GetSellingProductPricingSettings(int sellingProductId)
         {
             var configManager = new ConfigManager();
@@ -118,7 +345,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return configManager.MergePricingSettings(saleAreaPricingSettings, sellingProduct.Settings.PricingSettings);
         }
-
         public PricelistSettings GetSellingProductPricelistSettings(int sellingProductId)
         {
             var configManager = new ConfigManager();

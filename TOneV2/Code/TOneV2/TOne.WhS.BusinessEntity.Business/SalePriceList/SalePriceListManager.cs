@@ -60,7 +60,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (!sellingProductId.HasValue)
                         throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to a selling product", customerId));
 
-                    var customerPriceListType = _carrierAccountManager.GetCustomerPricelistSettings(customerId).PriceListType.Value;
+                    var customerPriceListType = _carrierAccountManager.GetCustomerPriceListType(customerId);
                     SalePriceListType pricelistType = GetSalePriceListType(customerPriceListType, context.ChangeType);
 
                     ZoneChangesByCountryId allChangesByCountryId = customerChange.ZoneChangesByCountryId;// MergeCurrentWithNotSentChanges(customerId, customerChange.ZoneChangesByCountryId,outputContext.NotSentChangesByCustomerId);
@@ -70,8 +70,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (customerZoneNotifications.Count > 0)
                     {
+                        int salePricelistTemplateId = _carrierAccountManager.GetCustomerPriceListTemplateId(customerId);
                         AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
-                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, pricelistType);
+                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, pricelistType, salePricelistTemplateId);
                         SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId, context.UserId);
 
                         var customerPriceListChange = context.CustomerPriceListChanges.First(r => r.CustomerId == customerId);
@@ -88,11 +89,12 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var salePriceListManager = new SalePriceListManager();
             SalePriceList customerPriceList = salePriceListManager.GetPriceList((int)salePriceListId);
+            int salePricelistTemplateId = _carrierAccountManager.GetCustomerPriceListTemplateId(customerPriceList.OwnerId);
 
             if (!customerPriceList.PriceListType.HasValue)
                 throw new VRBusinessException(string.Format("Customer Pricelist with id {0} has its type as null", customerPriceList.PriceListId));
 
-            VRFile file = PreparePriceListVrFile(customerPriceList, customerPriceList.PriceListType.Value);
+            VRFile file = PreparePriceListVrFile(customerPriceList, customerPriceList.PriceListType.Value, salePricelistTemplateId);
             var notificationManager = new NotificationManager();
             int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
 
@@ -117,7 +119,7 @@ namespace TOne.WhS.BusinessEntity.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             int ownerId = clonedPriceList.OwnerId;
             var customer = carrierAccountManager.GetCarrierAccount(ownerId);
-            var salePlmailTemplateId = carrierAccountManager.GetCustomerPricelistSettings(ownerId).DefaultSalePLMailTemplateId.Value;
+            var salePlmailTemplateId = carrierAccountManager.GetCustomerPriceListMailTemplateId(ownerId);
 
             UserManager userManager = new UserManager();
             User initiator = userManager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
@@ -131,12 +133,12 @@ namespace TOne.WhS.BusinessEntity.Business
             VRMailManager vrMailManager = new VRMailManager();
             return vrMailManager.EvaluateMailTemplate(salePlmailTemplateId, objects);
         }
-        public VRFile GenerateSalePriceListFile(long salePriceListId, SalePriceListType salePriceListType)
+        public VRFile GenerateSalePriceListFile(SalePriceListInput pricelisInput)
         {
             var salePriceListManager = new SalePriceListManager();
-            SalePriceList customerPriceList = salePriceListManager.GetPriceList((int)salePriceListId);
+            SalePriceList customerPriceList = salePriceListManager.GetPriceList(pricelisInput.PriceListId);
 
-            return PreparePriceListVrFile(customerPriceList, salePriceListType);
+            return PreparePriceListVrFile(customerPriceList, (SalePriceListType)pricelisInput.PriceListTypeId, pricelisInput.PricelistTemplateId);
 
         }
         public IDataRetrievalResult<SalePriceListDetail> GetFilteredPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
@@ -255,7 +257,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 try
                 {
-                    bool isCompressed = compressFile || _carrierAccountManager.GetCustomerPricelistSettings(customer.CarrierAccountId).CompressPriceListFile.Value;
+                    bool isCompressed = compressFile || _carrierAccountManager.GetCustomerCompressPriceListFileStatus(customer.CarrierAccountId);
                     vrMailManager.SendMail(evaluatedObject.To, evaluatedObject.CC, evaluatedObject.BCC, evaluatedObject.Subject, evaluatedObject.Body
                         , vrMailAttachements, isCompressed);
                     salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { customerPriceList.OwnerId }, customerPriceList.PriceListId);
@@ -578,16 +580,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return priceListStringBuilder.ToString();
         }
-        private VRFile GetPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications, DateTime effectiveDate, SalePriceListType salePriceListType)
+        private VRFile GetPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications, DateTime effectiveDate, SalePriceListType salePriceListType, int salePriceListTemplateId)
         {
             var salePriceListTemplateManager = new SalePriceListTemplateManager();
-            int priceListTemplateId = _carrierAccountManager.GetCustomerPricelistSettings(carrierAccountId).DefaultSalePLTemplateId.Value;
 
-            SalePriceListTemplate template = salePriceListTemplateManager.GetSalePriceListTemplate(priceListTemplateId);
+            SalePriceListTemplate template = salePriceListTemplateManager.GetSalePriceListTemplate(salePriceListTemplateId);
             if (template == null)
                 throw new DataIntegrityValidationException(string.Format("Customer with Id {0} does not have a Sale Price List Template", carrierAccountId));
 
-            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPricelistSettings(carrierAccountId).PriceListExtensionFormat.Value;
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPriceListExtensionFormatId(carrierAccountId);
             ISalePriceListTemplateSettingsContext salePlTemplateSettingsContext = new SalePriceListTemplateSettingsContext
             {
                 Zones = customerZonesNotifications,
@@ -888,7 +889,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #region  Private Members
         private VRMailAttachement ConvertToAttachement(VRFile file, CarrierAccount customer)
         {
-            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPricelistSettings(customer.CarrierAccountId).PriceListExtensionFormat.Value;
+            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPriceListExtensionFormatId(customer.CarrierAccountId);
 
             var customerName = _carrierAccountManager.GetCarrierAccountName(customer);
             string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today,
@@ -900,7 +901,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Content = file.Content
             };
         }
-        private VRFile PreparePriceListVrFile(SalePriceList salePriceList, SalePriceListType salePriceListType)
+        private VRFile PreparePriceListVrFile(SalePriceList salePriceList, SalePriceListType salePriceListType, int salePricelistTemplateId)
         {
             VRFile file = null;
 
@@ -944,7 +945,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (customerZoneNotifications.Count > 0)
             {
                 AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
-                file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications, salePriceListContext.EffectiveDate, salePriceListType);
+                file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications, salePriceListContext.EffectiveDate, salePriceListType, salePricelistTemplateId);
             }
 
             return file;

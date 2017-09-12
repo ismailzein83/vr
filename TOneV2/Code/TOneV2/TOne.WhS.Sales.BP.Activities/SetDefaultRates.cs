@@ -26,7 +26,17 @@ namespace TOne.WhS.Sales.BP.Activities
             var zoneIdsWithMissingRates = ZoneIdsWithMissingRates.Get(context);
                     IRatePlanContext ratePlanContext = context.GetRatePlanContext();
                     TOne.WhS.BusinessEntity.Business.ConfigManager configManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
-                    var roundDefaultRate = configManager.GetRoundedDefaultRate();
+                    decimal roundDefaultRate;// = configManager.GetRoundedDefaultRate();
+                    if(ratePlanContext.OwnerType==TOne.WhS.BusinessEntity.Entities.SalePriceListOwnerType.SellingProduct)
+                    {
+                        var sellingProductManager = new SellingProductManager();
+                        roundDefaultRate=sellingProductManager.GetSellingProductRoundedDefaultRate(ratePlanContext.OwnerId);
+                    }
+                    else
+                    {
+                        var customerManager = new CarrierAccountManager();
+                        roundDefaultRate=customerManager.GetCustomerRoundedDefaultRate(ratePlanContext.OwnerId);
+                    }
                     var systemCurrency = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
                     CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
                     var convertedDefaultRate = currencyExchangeRateManager.ConvertValueToCurrency(roundDefaultRate,systemCurrency, ratePlanContext.SellingProductCurrencyId,DateTime.Today);

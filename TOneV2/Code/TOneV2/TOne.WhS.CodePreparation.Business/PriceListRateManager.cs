@@ -271,7 +271,6 @@ namespace TOne.WhS.CodePreparation.Business
             BusinessEntity.Business.ConfigManager businessConfigmanager = new BusinessEntity.Business.ConfigManager();
 
             int systemCurrencyId = configManager.GetSystemCurrencyId();
-            decimal defaultRate = businessConfigmanager.GetRoundedDefaultRate();
 
             foreach (string zoneName in zoneNames)
             {
@@ -281,6 +280,8 @@ namespace TOne.WhS.CodePreparation.Business
                     foreach (ExistingRate effectiveRate in effectiveExistingRates)
                     {
                         SalePriceList pricelist = priceListManager.GetPriceList(effectiveRate.RateEntity.PriceListId);
+                        decimal defaultRate = getRoundedDefaultRateForPriceListOwner(pricelist.OwnerType, pricelist.OwnerId);
+
                         if (!defaultRates.ContainsKey(pricelist.OwnerId))
                         {
                             int newRateCurrencyId = (pricelist.OwnerType == SalePriceListOwnerType.SellingProduct)?sellingProductManager.GetSellingProductCurrencyId(pricelist.OwnerId):carrierAccountManager.GetCarrierAccountCurrencyId(pricelist.OwnerId);
@@ -300,6 +301,17 @@ namespace TOne.WhS.CodePreparation.Business
             return defaultRates.Values.ToList();
         }
 
+        private decimal getRoundedDefaultRateForPriceListOwner (SalePriceListOwnerType ownerType,int ownerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            SellingProductManager sellingProductManager = new SellingProductManager();
+
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+                return sellingProductManager.GetSellingProductRoundedDefaultRate(ownerId);
+
+            return carrierAccountManager.GetCustomerRoundedDefaultRate(ownerId);
+        }
+        
         #endregion
         private ExistingRatesByZoneName StructureEffectiveExistingRatesByZoneName(IEnumerable<ExistingRate> effectiveExistingRates)
         {

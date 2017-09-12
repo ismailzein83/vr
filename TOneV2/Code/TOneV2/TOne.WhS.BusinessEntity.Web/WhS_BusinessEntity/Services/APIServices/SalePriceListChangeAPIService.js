@@ -21,17 +21,26 @@
             });
         }
 
-        function DownloadSalePriceList(pricelistId, priceListType) {
-            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "DownloadSalePriceList"), { salepriceListId: pricelistId, salePriceListType: priceListType }, {
+        function DownloadSalePriceList(pricelistInput) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "DownloadSalePriceList"), {
+                salepriceListId: pricelistInput.PriceListId,
+                salePriceListType: pricelistInput.PriceListTypeId,
+                salePriceListTemplateId: pricelistInput.PricelistTemplateId
+            }, {
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
             });
         }
-        function GenerateAndEvaluateSalePriceListEmail(pricelisInput) {
-            return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GenerateAndEvaluateSalePriceListEmail"), pricelisInput);
+        function GenerateAndEvaluateSalePriceListEmail(pricelistInput) {
+            return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GenerateAndEvaluateSalePriceListEmail"), pricelistInput);
         }
         function GetOwnerPriceListType(priceListId) {
             return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetOwnerPriceListType"), {
+                priceListId: priceListId
+            });
+        }
+        function GetOwnerPricelistTemplateId(priceListId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetOwnerPricelistTemplateId"), {
                 priceListId: priceListId
             });
         }
@@ -48,7 +57,8 @@
             DownloadSalePriceList: DownloadSalePriceList,
             GenerateAndEvaluateSalePriceListEmail: GenerateAndEvaluateSalePriceListEmail,
             GetOwnerPriceListType: GetOwnerPriceListType,
-            SetPriceListAsSent: SetPriceListAsSent
+            SetPriceListAsSent: SetPriceListAsSent,
+            GetOwnerPricelistTemplateId: GetOwnerPricelistTemplateId
         });
     }
 

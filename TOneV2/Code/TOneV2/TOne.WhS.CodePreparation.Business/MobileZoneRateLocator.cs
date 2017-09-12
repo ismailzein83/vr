@@ -68,8 +68,8 @@ namespace TOne.WhS.CodePreparation.Business
                                 CurrencyId = newRateCurrencyId,
                                 //TODO: make sure to convert from default rate currency to selling product currency later
                                 Rate = pricelist.OwnerType == SalePriceListOwnerType.SellingProduct
-                                        ? sellingProductManager.GetSellingProductPricingSettings(pricelist.OwnerId).DefaultRate.Value
-                                        : currencyExchangeRateManager.ConvertValueToCurrency(carrierAccountManager.GetCustomerPricingSettings(pricelist.OwnerId).DefaultRate.Value, systemCurrencyId, newRateCurrencyId, DateTime.Now)
+                                        ? sellingProductManager.GetSellingProductDefaultRate(pricelist.OwnerId)
+                                        : currencyExchangeRateManager.ConvertValueToCurrency(carrierAccountManager.GetCustomerDefaultRate(pricelist.OwnerId), systemCurrencyId, newRateCurrencyId, DateTime.Now)
                             };
                             defaultRates.Add(pricelist.OwnerId, rate);
                         }

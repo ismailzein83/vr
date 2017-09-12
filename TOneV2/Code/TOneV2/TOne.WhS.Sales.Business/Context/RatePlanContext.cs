@@ -24,17 +24,12 @@ namespace TOne.WhS.Sales.Business
         private Dictionary<int, decimal> _maximumRateConvertedByCurrency = new Dictionary<int, decimal>();
         public RatePlanContext()
         {
-            int retroactiveDayOffset = new TOne.WhS.BusinessEntity.Business.ConfigManager().GetSaleAreaRetroactiveDayOffset();
-            _retroactiveDate = DateTime.Now.Date.AddDays(-retroactiveDayOffset);
-
             CurrencyManager currencyManager = new CurrencyManager();
             var systemCurrency = currencyManager.GetSystemCurrency();
             if (systemCurrency == null)
                 throw new DataIntegrityValidationException("System Currency was not found");
             _systemCurrencyId = systemCurrency.CurrencyId;
-
-            MaximumRate = new BusinessEntity.Business.ConfigManager().GetSaleAreaMaximumRate();
-            LongPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+        LongPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
         }
 
         #endregion
@@ -85,6 +80,12 @@ namespace TOne.WhS.Sales.Business
         #endregion
 
         #region Methods
+
+        public void setRatePlanContextPricingSettings(PricingSettings pricingSettings)
+        {
+            MaximumRate = pricingSettings.MaximumRate.Value;
+            _retroactiveDate = DateTime.Now.Date.AddDays(pricingSettings.RetroactiveDayOffset.Value);
+        }
 
         public void SetProcessHasChangesToTrueWithLock()
         {
