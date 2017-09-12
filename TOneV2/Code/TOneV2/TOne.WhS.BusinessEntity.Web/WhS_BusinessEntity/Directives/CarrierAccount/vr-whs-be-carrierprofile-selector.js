@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsBeCarrierprofileSelector', ['WhS_BE_CarrierProfileAPIService', 'UtilsService', '$compile', 'VRUIUtilsService',
-function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsService) {
+app.directive('vrWhsBeCarrierprofileSelector', ['WhS_BE_CarrierProfileAPIService', 'UtilsService', '$compile', 'VRUIUtilsService','WhS_BE_CarrierProfileService',
+function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsService, WhS_BE_CarrierProfileService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -22,6 +22,20 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
                 ctrl.selectedvalues = [];
 
             ctrl.datasource = [];
+
+            $scope.addNewCarrierProfile = function () {
+                var onCarrierProfileAdded = function (carrierProfileObj) {
+                    ctrl.datasource.push(carrierProfileObj.Entity);
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(carrierProfileObj.Entity);
+                    else
+                        ctrl.selectedvalues = carrierProfileObj.Entity;
+                };
+                WhS_BE_CarrierProfileService.addCarrierProfile(onCarrierProfileAdded);
+            };
+            ctrl.haspermission = function () {
+                return WhS_BE_CarrierProfileAPIService.HasAddCarrierProfilePermission();
+            }; 
             var ctor = new carrierProfileCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
@@ -50,8 +64,12 @@ function (WhS_BE_CarrierProfileAPIService, UtilsService, $compile, VRUIUtilsServ
         if (attrs.isrequired != undefined)
             required = "isrequired";
 
+        var addCliked = '';
+        if (attrs.showaddbutton != undefined)
+            addCliked = 'onaddclicked="addNewCarrierProfile"';
+
         return '<vr-columns colnum="{{ctrl.normalColNum}}"    > <vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="CarrierProfileId" '
-        + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" ></vr-select></vr-columns>'
+        + required + ' label="Carrier Profile" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" haspermission="ctrl.haspermission"  onselectionchanged="ctrl.onselectionchanged" ' + addCliked + ' ></vr-select></vr-columns>'
 
     }
 
