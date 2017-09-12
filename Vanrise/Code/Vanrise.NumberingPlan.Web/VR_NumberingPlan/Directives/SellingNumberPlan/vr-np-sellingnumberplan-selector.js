@@ -57,14 +57,17 @@ app.directive('vrNpSellingnumberplanSelector', ['Vr_NP_SellingNumberPlanAPIServi
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
                + '<vr-select ' + multipleselection + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId" '
-               + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
+               + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" on-ready="ctrl.onSelectorReady" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                + '</vr-columns>';
         }
 
         function sellingNumberPlanCtor(ctrl, $scope, attrs) {
-
+            var selectorAPI;
             function initializeController() {
-                defineAPI();
+                ctrl.onSelectorReady = function(api){
+                    selectorAPI =  api;
+                    defineAPI();
+                };
             }
 
             function defineAPI() {
@@ -73,18 +76,25 @@ app.directive('vrNpSellingnumberplanSelector', ['Vr_NP_SellingNumberPlanAPIServi
                 api.load = function (payload) {
 
                     var selectedIds;
+                    var selectIfSingleItem;
+
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        selectIfSingleItem = payload.selectifsingleitem;
+
                     }
 
                     return Vr_NP_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
-                        ctrl.datasource.length = 0;
+                        selectorAPI.clearDataSource();
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });
 
                         if (selectedIds != undefined) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'SellingNumberPlanId', attrs, ctrl);
+                        }
+                        else if (selectedIds == undefined && selectIfSingleItem == true) {
+                            selectorAPI.selectIfSingleItem();
                         }
                     });
                 };

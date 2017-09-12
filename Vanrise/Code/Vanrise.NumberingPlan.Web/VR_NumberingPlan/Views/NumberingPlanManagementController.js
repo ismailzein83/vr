@@ -30,7 +30,7 @@
 
         function defineScope() {
             $scope.nodes = [];
-            $scope.sellingNumberPlans = [];            
+            $scope.sellingNumberPlans = [];
             $scope.selectedSellingNumberPlan;
             $scope.currentNode;
 
@@ -215,7 +215,7 @@
             var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
             sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
 
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSNPPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, { selectifsingleitem: true }, loadSNPPromiseDeferred);
             });
 
             return loadSNPPromiseDeferred.promise;
@@ -329,20 +329,18 @@
         }
 
         function onCodesClosed(closedCodes) {
-        	if (closedCodes != undefined)
-        	{
-            	hideShowStateAndClearSelection(true);
+            if (closedCodes != undefined) {
+                hideShowStateAndClearSelection(true);
 
-            	for (var i = 0; i < closedCodes.length; i++)
+                for (var i = 0; i < closedCodes.length; i++)
                     codesGridAPI.onCodeClosed(closedCodes[i]);
 
                 if ($scope.currentNode != undefined) {
                     if ($scope.currentNode.type == 'Zone') {
-                    	return codesGridAPI.loadGrid(getCodesFilterObject()).then(function ()
-                    	{
-                    		if (codesGridAPI.isZoneClosed())
-                    			$scope.showRenameZone = false;
-                    	});
+                        return codesGridAPI.loadGrid(getCodesFilterObject()).then(function () {
+                            if (codesGridAPI.isZoneClosed())
+                                $scope.showRenameZone = false;
+                        });
                     }
                 }
             }
@@ -439,20 +437,20 @@
 
         function hideShowRenameZone(draftStatus, status) {
             if (status != null)
-                $scope.showRenameZone = false; 
+                $scope.showRenameZone = false;
             else
                 $scope.showRenameZone = draftStatus == Vr_NP_ZoneItemDraftStatusEnum.ExistingClosed.value ? false : codesGridAPI.hideShowRenameZone();
         }
 
         function hideShowEnd(draftStatus, status) {
-            if(status != null)
+            if (status != null)
                 $scope.showEnd = false;
             else
                 $scope.showEnd = draftStatus != Vr_NP_ZoneItemDraftStatusEnum.ExistingClosed.value && draftStatus != Vr_NP_ZoneItemDraftStatusEnum.New.value && draftStatus != Vr_NP_ZoneItemDraftStatusEnum.Renamed.value;
         }
 
         function hideShowAddCode(draftStatus, status) {
-            if(status != null)
+            if (status != null)
                 $scope.showAddNewCode = false;
             else
                 $scope.showAddNewCode = draftStatus != Vr_NP_ZoneItemDraftStatusEnum.ExistingClosed.value;
@@ -507,7 +505,7 @@
 
         function getCountries() {
             countries.length = 0;
-            return VRCommon_CountryAPIService.GetCountriesInfo().then(function(response) {
+            return VRCommon_CountryAPIService.GetCountriesInfo().then(function (response) {
                 angular.forEach(response, function (itm) {
                     countries.push(itm);
                 });
@@ -516,7 +514,7 @@
 
         function checkState() {
             countries.length = 0;
-            return Vr_NP_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function(response) {
+            return Vr_NP_CodePrepAPIService.CheckCodePreparationState(filter.sellingNumberPlanId).then(function (response) {
                 $scope.hasState = response;
             });
         }
@@ -556,7 +554,7 @@
                     case Vr_NP_ZoneItemDraftStatusEnum.Renamed.value:
                         icon = Vr_NP_ZoneItemDraftStatusEnum.Renamed.icon;
                         break;
-                    }
+                }
             }
 
             if (zoneInfo.Status != null) {
@@ -567,7 +565,7 @@
                     case Vr_NP_ZoneItemStatusEnum.PendingEffective.value:
                         icon = Vr_NP_ZoneItemStatusEnum.PendingEffective.icon;
                         break;
-                    }
+                }
             }
 
             return {
