@@ -86,8 +86,50 @@ app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsS
             VRModalService.showModal('/Client/Modules/Retail_Teles/Directives/AccountAction/MappingTelesAccountAction/Templates/MappingTelesSiteEditor.html', parameters, modalSettings);
         }
 
+        function registerMappingTelesUser() {
+
+            var actionType = {
+                ActionTypeName: "MappingTelesUser",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var accountActionId = payload.accountActionDefinition.AccountActionDefinitionId;
+                    var onItemUpdated = payload.onItemUpdated;
+                    var account = payload.account;
+                    var userAccountMappingInfo = account.ExtendedSettings != undefined ? account.ExtendedSettings["Retail.Teles.Entities.UserAccountMappingInfo"] : undefined;
+
+                    var onAccountUpdated = function (updatedAccount) {
+                        if (onItemUpdated != undefined)
+                            onItemUpdated(updatedAccount);
+                    };
+                    mapTelesUserEditor(accountBEDefinitionId, accountActionId, account.AccountId, userAccountMappingInfo, onAccountUpdated);
+                }
+            };
+            Retail_BE_AccountActionService.registerActionType(actionType);
+        }
+
+        function mapTelesUserEditor(accountBEDefinitionId, accountActionId, accountId, telesInfoEntity, onMappingUser) {
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
+                actionDefinitionId: accountActionId,
+                accountId: accountId,
+                telesInfoEntity: telesInfoEntity
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onMappingUser = onMappingUser;
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_Teles/Directives/AccountAction/MappingTelesAccountAction/Templates/MappingTelesUserEditor.html', parameters, modalSettings);
+        }
+
         return ({
             registerMappingTelesAccount: registerMappingTelesAccount,
-            registerMappingTelesSite: registerMappingTelesSite
+            registerMappingTelesSite: registerMappingTelesSite,
+            registerMappingTelesUser: registerMappingTelesUser
         });
     }]);

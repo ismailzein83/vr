@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_Teles_SiteAPIService, UtilsService, VRUIUtilsService) {
+app.directive('retailTelesDomainsSelector', ['Retail_Teles_DomainAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_Teles_DomainAPIService, UtilsService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -24,8 +24,8 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
             if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
 
-            var enterpriseSelector = new SitesSelector(ctrl, $scope, $attrs);
-            enterpriseSelector.initializeController();
+            var domainsSelector = new DomainsSelector(ctrl, $scope, $attrs);
+            domainsSelector.initializeController();
 
         },
         controllerAs: 'ctrl',
@@ -35,7 +35,7 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
         }
     };
 
-    function SitesSelector(ctrl, $scope, attrs) {
+    function DomainsSelector(ctrl, $scope, attrs) {
 
         this.initializeController = initializeController;
 
@@ -62,17 +62,16 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                     vrConnectionId = payload.vrConnectionId;
-                    var enterpriseId = payload.enterpriseId;
                     if (payload.filter != undefined)
                         filter = payload.filter;
 
-                    return Retail_Teles_SiteAPIService.GetEnterpriseSitesInfo(vrConnectionId, enterpriseId, UtilsService.serializetoJson(filter)).then(function (response) {
+                    return Retail_Teles_DomainAPIService.GetDomainsInfo(vrConnectionId, UtilsService.serializetoJson(filter)).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
                             }
                             if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'TelesSiteId', attrs, ctrl);
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'TelesDomainId', attrs, ctrl);
                             }
                         }
                     });
@@ -80,12 +79,9 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
             };
 
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('TelesSiteId', attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('TelesDomainId', attrs, ctrl);
             };
-            api.clearDataSource = function () {
-                selectorAPI.clearDataSource();
-                ctrl.datasource.length = 0;
-            };
+
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
@@ -94,14 +90,14 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
     function getTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Site";
+        var label = "Domain";
 
         if (attrs.ismultipleselection != undefined) {
-            label = "Sites";
+            label = "Domains";
             multipleselection = "ismultipleselection";
         }
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="TelesSiteId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate"></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="TelesDomainId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate"></vr-select></vr-columns>';
     }
 
 }]);

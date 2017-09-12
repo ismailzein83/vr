@@ -16,7 +16,7 @@ namespace Retail.Teles.Business
         public string Authorization { get; set; }
         public string URL { get; set; }
         public string ActionPrefix { get; set; }
-        public int DefaultDomainId { get; set; }
+        public int? DefaultDomainId { get; set; }
 
         public Q Post<T, Q>(string actionPath, T request)
         {

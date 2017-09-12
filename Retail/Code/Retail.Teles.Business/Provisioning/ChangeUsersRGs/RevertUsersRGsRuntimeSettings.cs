@@ -13,6 +13,9 @@ namespace Retail.Teles.Business
     public class RevertUsersRGsRuntimeSettings : AccountProvisioner
     {
         TelesEnterpriseManager telesEnterpriseManager = new TelesEnterpriseManager();
+
+        TelesUserManager telesUserManager = new TelesUserManager();
+
         AccountBEManager accountBEManager = new AccountBEManager();
         public override void Execute(IAccountProvisioningContext context)
         {
@@ -144,11 +147,11 @@ namespace Retail.Teles.Business
 
         dynamic GetUser(Guid vrConnectionId, string userId)
         {
-            return telesEnterpriseManager.GetUser(vrConnectionId, userId);
+            return telesUserManager.GetUser(vrConnectionId, userId);
         }
         void UpdateUser(Guid vrConnectionId, dynamic user)
         {
-            telesEnterpriseManager.UpdateUser(vrConnectionId, user);
+            telesUserManager.UpdateUser(vrConnectionId, user);
         }
         private void WriteUsersProccessedTrackingMessage(IAccountProvisioningContext context, List<string> usersNames)
         {

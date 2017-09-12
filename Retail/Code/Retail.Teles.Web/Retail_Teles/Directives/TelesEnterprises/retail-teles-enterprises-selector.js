@@ -93,7 +93,10 @@ app.directive('retailTelesEnterprisesSelector', ['Retail_Teles_EnterpriseAPIServ
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('TelesEnterpriseId', attrs, ctrl);
             };
-
+            api.clearDataSource = function () {
+                selectorAPI.clearDataSource();
+                ctrl.datasource.length = 0;
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }

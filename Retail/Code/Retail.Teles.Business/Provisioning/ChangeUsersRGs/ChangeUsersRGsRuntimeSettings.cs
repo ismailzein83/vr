@@ -18,11 +18,13 @@ namespace Retail.Teles.Business
         TelesEnterpriseManager telesEnterpriseManager = new TelesEnterpriseManager();
         AccountBEManager accountBEManager = new AccountBEManager();
         TelesSiteManager telesSiteManager = new TelesSiteManager();
+        TelesUserManager telesUserManager = new TelesUserManager();
+
         public override void Execute(IAccountProvisioningContext context)
         {
             var definitionSettings = context.DefinitionSettings as ChangeUsersRGsDefinitionSettings;
             var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
-            if (!TelesAccountCondition.AllowChangeUserRGs(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId, definitionSettings.ActionType))
+            if (!TelesAccountCondition.AllowChangeUserRGs(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId, definitionSettings.UserTypeId,definitionSettings.ActionType))
             {
                 throw new Exception("Not Allow to Change User Routing Groups");
             }
@@ -251,7 +253,7 @@ namespace Retail.Teles.Business
         }
         IEnumerable<dynamic> GetUsers(Guid vrConnectionId, string siteId)
         {
-            return telesEnterpriseManager.GetUsers(vrConnectionId, siteId);
+            return telesUserManager.GetUsers(vrConnectionId, siteId);
         }
         Dictionary<string, dynamic> GetSiteRoutingGroups(Guid vrConnectionId, string siteId)
         {
@@ -259,7 +261,7 @@ namespace Retail.Teles.Business
         }
         void UpdateUser(Guid vrConnectionId, dynamic user)
         {
-            telesEnterpriseManager.UpdateUser(vrConnectionId, user);
+            telesUserManager.UpdateUser(vrConnectionId, user);
         }
 
         private void WriteUsersProccessedTrackingMessage(IAccountProvisioningContext context, List<string> usersNames)

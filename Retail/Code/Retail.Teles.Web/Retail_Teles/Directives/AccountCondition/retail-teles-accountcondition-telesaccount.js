@@ -33,6 +33,9 @@
             var siteTypeAPI;
             var siteTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var userTypeAPI;
+            var userTypeReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.conditionTypes = UtilsService.getArrayEnum(Retail_Teles_ConditionTypeEnum);
@@ -46,7 +49,14 @@
                     siteTypeAPI = api;
                     siteTypeReadyDeferred.resolve();
                 };
-                defineAPI();
+                $scope.scopeModel.onUserAccountTypeSelectorReady = function (api) {
+                    userTypeAPI = api;
+                    userTypeReadyDeferred.resolve();
+                };
+                UtilsService.waitMultiplePromises([companyTypeReadyDeferred.promise, siteTypeReadyDeferred.promise, userTypeReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
+
             }
             function defineAPI() {
                 var api = {};
@@ -68,31 +78,31 @@
                     promises.push(loadCompanyTypes());
 
                     function loadCompanyTypes() {
-                        var companyTypeLoadDeferred = UtilsService.createPromiseDeferred();
-
-                        companyTypeReadyDeferred.promise.then(function () {
-                            var companyTypePayload;
-                            if (accountCondition != undefined) {
-                                companyTypePayload = { selectedIds: accountCondition.CompanyTypeId };
-                            }
-                            VRUIUtilsService.callDirectiveLoad(companyTypeAPI, companyTypePayload, companyTypeLoadDeferred);
-                        });
-                        return companyTypeLoadDeferred.promise
+                        var companyTypePayload;
+                        if (accountCondition != undefined) {
+                            companyTypePayload = { selectedIds: accountCondition.CompanyTypeId };
+                        }
+                        return companyTypeAPI.load(companyTypePayload);
                     }
 
                     promises.push(loadSiteTypes());
 
                     function loadSiteTypes() {
-                        var siteTypeLoadDeferred = UtilsService.createPromiseDeferred();
+                        var siteTypePayload;
+                        if (accountCondition != undefined) {
+                            siteTypePayload = { selectedIds: accountCondition.SiteTypeId };
+                        }
+                        return siteTypeAPI.load(siteTypePayload);
+                    }
 
-                        siteTypeReadyDeferred.promise.then(function () {
-                            var siteTypePayload;
-                            if (accountCondition != undefined) {
-                                siteTypePayload = { selectedIds: accountCondition.SiteTypeId };
-                            }
-                            VRUIUtilsService.callDirectiveLoad(siteTypeAPI, siteTypePayload, siteTypeLoadDeferred);
-                        });
-                        return siteTypeLoadDeferred.promise
+                    promises.push(loadUserTypes());
+
+                    function loadUserTypes() {
+                        var userTypePayload;
+                        if (accountCondition != undefined) {
+                            userTypePayload = { selectedIds: accountCondition.UserTypeId };
+                        }
+                        return userTypeAPI.load(userTypePayload);
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -104,6 +114,7 @@
                         ConditionType: $scope.scopeModel.selectedConditionType.value,
                         CompanyTypeId: companyTypeAPI.getSelectedIds(),
                         SiteTypeId: siteTypeAPI.getSelectedIds(),
+                        UserTypeId: userTypeAPI.getSelectedIds(),
                         ActionType: $scope.scopeModel.actionType
                     };
                 };

@@ -41,7 +41,7 @@ namespace Retail.Teles.Business.Provisioning
             EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(parentAccount);
             if (enterpriseAccountMappingInfo != null)
             {
-                var enterpriseName = _telesEnterpriseManager.GetEnterpriseName(definitionSettings.VRConnectionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
+                var enterpriseName = _telesEnterpriseManager.GetEnterpriseName(definitionSettings.VRConnectionId, enterpriseAccountMappingInfo.TelesEnterpriseId,null);
                 _provisionAccountManager.CreateSiteWithScreenedNumbers(context, definitionSettings.VRConnectionId, definitionSettings.CountryCode, enterpriseAccountMappingInfo.TelesEnterpriseId, context.AccountBEDefinitionId, account, enterpriseName, Settings.SiteAccountSetting, Settings.CentrexFeatSet);
             }
         }

@@ -21,6 +21,7 @@ namespace Retail.Teles.Business
         public Guid VRConnectionId { get; set; }
         public Guid CompanyTypeId { get; set; }
         public Guid SiteTypeId { get; set; }
+        public Guid UserTypeId { get; set; }
         public bool SaveChangesToAccountState { get; set; }
 
         /// <summary>

@@ -50,17 +50,24 @@
     <Compile Include="EnterpriseAccountMappingInfo.cs" />
     <Compile Include="ITelesEnterpriseFilter.cs" />
     <Compile Include="ITelesEnterpriseSiteFilter.cs" />
+    <Compile Include="ITelesUserFilter.cs" />
     <Compile Include="MapEnterpriseToAccountInput.cs" />
     <Compile Include="MapSiteToAccountInput.cs" />
+    <Compile Include="MapUserToAccountInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsAccountState.cs" />
     <Compile Include="RoutingGroupCondition.cs" />
     <Compile Include="RoutingGroupConditionConfig.cs" />
     <Compile Include="SiteAccountMappingInfo.cs" />
+    <Compile Include="TelesDomainFilter.cs" />
+    <Compile Include="TelesDomainInfo.cs" />
     <Compile Include="TelesEnterpriseFilter.cs" />
     <Compile Include="TelesEnterpriseInfo.cs" />
     <Compile Include="TelesEnterpriseSiteFilter.cs" />
     <Compile Include="TelesEnterpriseSiteInfo.cs" />
+    <Compile Include="TelesUserFilter.cs" />
+    <Compile Include="TelesUserInfo.cs" />
+    <Compile Include="UserAccountMappingInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">

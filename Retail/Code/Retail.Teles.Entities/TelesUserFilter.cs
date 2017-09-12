@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Retail.Teles.Entities
 {
-    public class TelesEnterpriseFilter
+    public class TelesUserFilter
     {
         public Guid AccountBEDefinitionId { get; set; }
-        public string TelesDomainId { get; set; }
-        public List<ITelesEnterpriseFilter> Filters { get; set; }
+        public List<ITelesUserFilter> Filters { get; set; }
+
     }
 }

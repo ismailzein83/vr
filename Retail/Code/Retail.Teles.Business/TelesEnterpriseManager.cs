@@ -24,7 +24,7 @@ namespace Retail.Teles.Business
 
         public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(Guid vrConnectionId, TelesEnterpriseFilter filter)
         {
-            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, false);
+            var cachedEnterprises = GetCachedEnterprises(vrConnectionId,filter.TelesDomainId, false);
 
             Func<TelesEnterpriseInfo, bool> filterFunc = null;
             if (filter != null)
@@ -46,9 +46,9 @@ namespace Retail.Teles.Business
 
             return cachedEnterprises.Values.OrderBy(x => x.Name);
         }
-        public TelesEnterpriseInfo GetEnterprise(Guid vrConnectionId, string enterpriseId)
+        public TelesEnterpriseInfo GetEnterprise(Guid vrConnectionId, string enterpriseId,string telesDomainId)
         {
-            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, false);
+            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, telesDomainId,false);
             TelesEnterpriseInfo enterpriseInfo;
             cachedEnterprises.TryGetValue(enterpriseId, out enterpriseInfo);
             return enterpriseInfo;
@@ -65,9 +65,9 @@ namespace Retail.Teles.Business
             return Convert.ToString(enterpriseId);
         }
      
-        public string GetEnterpriseName(Guid vrConnectionId, string enterpriseId)
+        public string GetEnterpriseName(Guid vrConnectionId, string enterpriseId,string telesDomainId)
         {
-            var cachedEnterprises = GetCachedEnterprises(vrConnectionId, true);
+            var cachedEnterprises = GetCachedEnterprises(vrConnectionId,telesDomainId, true);
             if (cachedEnterprises != null)
             {
                 TelesEnterpriseInfo enterpriseInfo;
@@ -80,27 +80,6 @@ namespace Retail.Teles.Business
             {
                 return string.Format("{0} (Name unavailable)", enterpriseId);
             }
-        }
-        public IEnumerable<dynamic> GetUsers(Guid vrConnectionId, string siteId)
-        {
-            var actionPath = string.Format("/domain/{0}/user", siteId);
-            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
-            List<dynamic> sites = telesRestConnection.Get<List<dynamic>>(actionPath);
-            return sites;
-        }
-        public dynamic UpdateUser(Guid vrConnectionId, dynamic user)
-        {
-            var actionPath = string.Format("/user/{0}", user.id);
-            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
-
-            return telesRestConnection.Put<dynamic, dynamic>(actionPath, user);
-        }
-        public dynamic GetUser(Guid vrConnectionId, string userId)
-        {
-            var actionPath = string.Format("/user/{0}", userId);
-            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
-
-            return telesRestConnection.Get<dynamic>(actionPath);
         }
 
         public Vanrise.Entities.UpdateOperationOutput<AccountDetail> MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
@@ -257,16 +236,32 @@ namespace Retail.Teles.Business
         #endregion
 
         #region Private Methods
-        private Dictionary<string, TelesEnterpriseInfo> GetCachedEnterprises(Guid vrConnectionId, bool handleTelesNotAvailable)
+        private struct GetEnterpriseCacheName
         {
-            CachedEnterprisesInfo enterpriseInfos = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("GetCachedEnterprisesInfo_{0}", vrConnectionId),
+            public Guid VRConnectionId { get; set; }
+            public string TelesDomainId { get; set; }
+        }
+        private Dictionary<string, TelesEnterpriseInfo> GetCachedEnterprises(Guid vrConnectionId,string telesDomainId, bool handleTelesNotAvailable)
+        {
+            CachedEnterprisesInfo enterpriseInfos = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(new GetEnterpriseCacheName
+            {
+                TelesDomainId = telesDomainId,
+                VRConnectionId = vrConnectionId
+            },
                () =>
                {
                    try
                    {
                        TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
-
-                       var actionPath = string.Format("/domain/{0}/sub", telesRestConnection.DefaultDomainId);
+                       string actionPath = null;
+                       if (telesDomainId != null)
+                       {
+                           actionPath = string.Format("/domain/{0}/sub", telesDomainId);
+                       }
+                       else
+                       {
+                           actionPath = string.Format("/domain/{0}/sub", telesRestConnection.DefaultDomainId.Value);
+                       }
                        List<dynamic> enterprises = telesRestConnection.Get<List<dynamic>>(actionPath);
                        List<TelesEnterpriseInfo> telesEnterpriseInfo = new List<TelesEnterpriseInfo>();
                        if (enterprises != null)
@@ -322,7 +317,7 @@ namespace Retail.Teles.Business
         {
             var telesBEDefinitionSettings = context.EntityDefinition.Settings.CastWithValidate<TelesEnterpriseBEDefinitionSettings>("context.EntityDefinition.Settings");
 
-            var cachedEnterprises = GetCachedEnterprises(telesBEDefinitionSettings.VRConnectionId, false);
+            var cachedEnterprises = GetCachedEnterprises(telesBEDefinitionSettings.VRConnectionId,null, false);
 
             return cachedEnterprises.Values.Select(itm => itm as dynamic).ToList();
         }
@@ -330,13 +325,13 @@ namespace Retail.Teles.Business
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             var telesBEDefinitionSettings = context.EntityDefinition.Settings as TelesEnterpriseBEDefinitionSettings;
-            return GetEnterprise(telesBEDefinitionSettings.VRConnectionId, context.EntityId);
+            return GetEnterprise(telesBEDefinitionSettings.VRConnectionId,null, context.EntityId);
         }
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             var telesBEDefinitionSettings = context.EntityDefinition.Settings as TelesEnterpriseBEDefinitionSettings;
-            return GetEnterpriseName(telesBEDefinitionSettings.VRConnectionId, context.EntityId.ToString());
+            return GetEnterpriseName(telesBEDefinitionSettings.VRConnectionId, context.EntityId.ToString(),null);
         }
 
         public dynamic GetEntityId(IBusinessEntityIdContext context)
