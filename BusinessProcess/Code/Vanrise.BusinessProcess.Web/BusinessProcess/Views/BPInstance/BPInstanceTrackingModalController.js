@@ -80,26 +80,21 @@
 
             $scope.modalContext.onModalHide = function () {
                 instanceTrackingMonitorGridAPI.clearTimer();
-
-                if ($scope.scopeModel.process.HasChildProcesses) {
-                    instanceMonitorGridAPI.clearTimer();
-                }
-
                 taskTrackingMonitorGridAPI.clearTimer();
 
-                if ($scope.scopeModel.process.HasBusinessRules) {
+                if ($scope.scopeModel.process.HasChildProcesses)
+                    instanceMonitorGridAPI.clearTimer();
+
+                if ($scope.scopeModel.process.HasBusinessRules)
                     validationMessageMonitorGridAPI.clearTimer();
-                }
 
                 if ($scope.job) {
                     VRTimerService.unregisterJob($scope.job);
                 }
 
-                if (context != undefined) {
-                    if (context.onClose != undefined) {
-                        var bpInstanceClosureContext = { bpInstanceStatusValue: bpInstanceStatusValue };
-                        context.onClose(bpInstanceClosureContext);
-                    }
+                if (context != undefined && context.onClose != undefined) {
+                    var bpInstanceClosureContext = { bpInstanceStatusValue: bpInstanceStatusValue };
+                    context.onClose(bpInstanceClosureContext);
                 }
             };
         }
