@@ -7,10 +7,11 @@ using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Idb;
 using Vanrise.Data.Postgres;
 using System.Linq;
-//using Vanrise.Common;
-//using Vanrise.Entities;
+using TOne.WhS.RouteSync.TelesIdb;
+using Vanrise.Common;
+using Vanrise.Entities;
 
-namespace TOne.WhS.RouteSync.MVTSRadius.SQL
+namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 {
     public class IdbPostgresDataManager : BasePostgresDataManager, IIdbDataManager
     {
@@ -23,6 +24,8 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 
         IdbConnectionString _connectionString;
         List<IdbConnectionString> _redundantConnectionStrings;
+        
+        Dictionary<int, TelesIdbPostgresDataManager> _telesIdbPostgresDataManagers;
 
         public IdbConnectionString ConnectionString
         {
@@ -38,7 +41,12 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
 
         public void PrepareTables(ISwitchRouteSynchronizerInitializeContext context)
         {
-            throw new NotImplementedException();
+            SwitchSyncOutput switchSyncOutput;
+            ExecMVTSRadiusSQLDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
+            {
+                telesIdbPostgresDataManager.PrepareTables();
+            }, context.SwitchName, context.SwitchId, null, context.WriteBusinessHandledException, true, "initializing", out switchSyncOutput);
+            context.SwitchSyncOutput = switchSyncOutput;
         }
 
         public object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
@@ -55,6 +63,74 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         {
             throw new NotImplementedException();
         }
+
+        private void ExecMVTSRadiusSQLDataManagerAction(Action<TelesIdbPostgresDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
+            Action<Exception, bool> writeBusinessHandledException, bool isBusinessException, string businessExceptionMessage, out SwitchSyncOutput switchSyncOutput)
+        {
+            PrepareDataManagers();
+            HashSet<int> failedNodeIndexes = null;
+            if (previousSwitchSyncOutput != null && previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList != null)
+            {
+                failedNodeIndexes = previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList.Select(itm => (itm as TelesIdbSWSyncOutput).ItemIndex).ToHashSet();
+                if (failedNodeIndexes != null && failedNodeIndexes.Count == _telesIdbPostgresDataManagers.Count)
+                {
+                    switchSyncOutput = new SwitchSyncOutput()
+                    {
+                        SwitchId = switchId,
+                        SwitchSyncResult = SwitchSyncResult.Failed
+                    };
+                    return;
+                }
+            }
+
+            ConcurrentDictionary<int, SwitchRouteSynchroniserOutput> exceptions = new ConcurrentDictionary<int, SwitchRouteSynchroniserOutput>();
+
+            Parallel.For(0, _telesIdbPostgresDataManagers.Count, (i) =>
+            {
+                if (failedNodeIndexes == null || !failedNodeIndexes.Contains(i))
+                {
+                    try
+                    {
+                        action(_telesIdbPostgresDataManagers[i], i);
+                    }
+                    catch (Exception ex)
+                    {
+                        string errorBusinessMessage = Utilities.GetExceptionBusinessMessage(ex);
+                        string exceptionDetail = ex.ToString();
+                        exceptions.TryAdd(i, new TelesIdbSWSyncOutput() { ItemIndex = i, ErrorBusinessMessage = errorBusinessMessage, ExceptionDetail = exceptionDetail });
+                        Exception exception = isBusinessException ? new VRBusinessException(string.Format("Error occured while {0} Database {1} for Switch '{2}'", businessExceptionMessage, i + 1, switchName), ex) : ex;
+                        writeBusinessHandledException(exception, false);
+                    }
+                }
+            });
+            switchSyncOutput = exceptions.Count > 0 ? new SwitchSyncOutput()
+            {
+                SwitchId = switchId,
+                SwitchRouteSynchroniserOutputList = exceptions.Values.ToList(),
+                SwitchSyncResult = exceptions.Count == _telesIdbPostgresDataManagers.Count ? SwitchSyncResult.Failed : SwitchSyncResult.PartialFailed
+            } : null;
+        }
+
+        private void PrepareDataManagers()
+        {
+            if (_telesIdbPostgresDataManagers == null)
+            {
+                int counter = 0;
+                _telesIdbPostgresDataManagers = new Dictionary<int, TelesIdbPostgresDataManager>();
+                _telesIdbPostgresDataManagers.Add(counter, new TelesIdbPostgresDataManager(_connectionString));
+                counter++;
+
+                if (_redundantConnectionStrings != null)
+                {
+                    foreach (IdbConnectionString idbConnectionString in _redundantConnectionStrings)
+                    {
+                        _telesIdbPostgresDataManagers.Add(counter, new TelesIdbPostgresDataManager(idbConnectionString));
+                        counter++;
+                    }
+                }
+            }
+        }
+
     }
 
     public class TelesIdbPostgresDataManager : BasePostgresDataManager
@@ -74,5 +150,10 @@ namespace TOne.WhS.RouteSync.MVTSRadius.SQL
         #region Constants
 
         #endregion
+
+        internal void PrepareTables()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

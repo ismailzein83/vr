@@ -41,11 +41,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data.Postgres">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.Postgres.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +68,10 @@
     <ProjectReference Include="..\TOne.WhS.RouteSync.Idb\TOne.WhS.RouteSync.Idb.csproj">
       <Project>{d961eebd-058d-4419-b6ca-e1d53412c159}</Project>
       <Name>TOne.WhS.RouteSync.Idb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.TelesIdb\TOne.WhS.RouteSync.TelesIdb.csproj">
+      <Project>{2a18b2c2-13a4-4598-8d7a-be977bc200a8}</Project>
+      <Name>TOne.WhS.RouteSync.TelesIdb</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
