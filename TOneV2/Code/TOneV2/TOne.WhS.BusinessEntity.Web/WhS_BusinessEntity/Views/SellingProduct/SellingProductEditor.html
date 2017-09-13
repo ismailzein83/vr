@@ -8,7 +8,7 @@
                             <vr-textbox value="scopeModal.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
                         <span vr-disabled="scopeModal.isEditMode || scopeModal.fixedSellingNumberPlanID">
-                            <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="scopeModal.onSellingNumberPlansDirectiveReady" isrequired="true">
+                            <vr-whs-be-sellingnumberplan-selector normal-col-num="6" on-ready="scopeModal.onSellingNumberPlansDirectiveReady" isrequired="true" showaddbutton>
                             </vr-whs-be-sellingnumberplan-selector>
                         </span>
                         <span vr-disabled="!scopeModal.canEditCurrency">
