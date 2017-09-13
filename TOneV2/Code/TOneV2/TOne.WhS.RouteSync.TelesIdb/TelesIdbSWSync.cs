@@ -16,9 +16,10 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
         public string MappingSeparator { get; set; }
 
+        public int NumberOfOptions { get; set; }
+
         public bool UseTwoMappingFormat { get; set; }
 
-        public int NumberOfOptions { get; set; }
 
         /// <summary>
         /// Key = Carrier Account Id
