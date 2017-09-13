@@ -17,7 +17,7 @@
                 var ctrl = this;
                 ctrl.id = BaseDirService.generateHTMLElementName();
                 ctrl.menuid = BaseDirService.generateHTMLElementName();
-                ctrl.initializeSection = function () {                   
+                ctrl.initializeSection = function () {
                     $timeout(function () {
                         $timeout(function () {
                             scope.$apply(function () {
@@ -42,7 +42,7 @@
                             fixDropdownSectionPosition();
                         });
                         var ft;
-                        ctrl.expandSection = function (e) {                          
+                        ctrl.expandSection = function (e) {
                             var expandSectionDeferred = UtilsService.createPromiseDeferred();
                             $timeout(function () {
 
@@ -59,13 +59,14 @@
                                     addBackDrop();
                                     expandSectionDeferred.resolve();
                                     checkOnExpandMethode();
-                                    }, ft ? 0: 1500);
-                                   
-                            },0);
+                                }, ft ? 0 : 1500);
+
+                            }, 0);
                             return expandSectionDeferred.promise;
                         };
 
                         ctrl.collapseSection = function () {
+                            if (ctrl.showmenu == false) return;
                             checkOnCollapseMethode();
                             $('#' + ctrl.menuid).slideUp("slow", function () {
                                 fixDropdownSectionPosition();
@@ -114,15 +115,15 @@
                         }
 
                         function addBackDrop() {
-                            if (elem.parents().find('.modal-dialog').length > 0){
-                                $('vr-modalbody').last().prepend("<div class='vr-backdrop-modal'></div>");                                                         
+                            if (elem.parents().find('.modal-dialog').length > 0) {
+                                $('vr-modalbody').last().prepend("<div class='vr-backdrop-modal'></div>");
                                 var style = {
                                     overflow: 'inherit',
                                     height: 'calc(100% - 25px)',
                                     width: '100%'
                                 };
                                 $('.vr-backdrop-modal').css(style);
-                            }                              
+                            }
                             else {
                                 $(elem.parents().find("vr-form")).prepend("<div class='vr-backdrop'></div>");
                             }
