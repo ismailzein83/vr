@@ -53,7 +53,7 @@
 
             countryReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = { selectifsingleitem: true };
+                    var directivePayload;
                     VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
                 });
             return countryLoadPromiseDeferred.promise;
@@ -63,7 +63,7 @@
 
             sellingReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = {};
+                    var directivePayload = { selectifsingleitem: true };
                     VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, directivePayload, sellingLoadPromiseDeferred);
                 });
             return sellingLoadPromiseDeferred.promise;
