@@ -106,6 +106,10 @@ namespace TOne.WhS.Sales.MainExtensions
             }
         }
 
+        public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
+        {
+        }
+
         #endregion
     }
 }

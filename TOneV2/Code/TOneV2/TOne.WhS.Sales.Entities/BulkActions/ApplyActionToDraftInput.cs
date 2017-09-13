@@ -30,5 +30,7 @@ namespace TOne.WhS.Sales.Entities
         public DateTime EffectiveOn { get; set; }
 
         public IEnumerable<long> ExcludedZoneIds { get; set; }
+
+        public BulkActionCorrectedData BulkActionCorrectedData { get; set; }
     }
 }

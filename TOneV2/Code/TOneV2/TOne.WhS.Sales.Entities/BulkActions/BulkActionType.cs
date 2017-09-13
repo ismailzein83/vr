@@ -24,6 +24,8 @@ namespace TOne.WhS.Sales.Entities
         public abstract void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context);
 
         public abstract void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context);
+
+        public abstract void ApplyCorrectedData(IApplyCorrectedDataContext context);
     }
 
     public interface IBulkActionApplicableToCountryContext
@@ -119,5 +121,15 @@ namespace TOne.WhS.Sales.Entities
     {
         SaleEntityZoneRoutingProduct GetCustomerDefaultRoutingProduct();
         DefaultChanges DefaultDraft { get; }
+    }
+
+    public interface IApplyCorrectedDataContext
+    {
+        SalePriceListOwnerType OwnerType { get; }
+        int OwnerId { get; }
+        BulkActionCorrectedData CorrectedData { get; }
+        ZoneChanges GetZoneDraft(long zoneId);
+        ZoneItem GetContextZoneItem(long zoneId);
+        decimal GetRoundedRate(decimal rateValue);
     }
 }

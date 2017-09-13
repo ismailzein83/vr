@@ -9,5 +9,6 @@ namespace TOne.WhS.Sales.MainExtensions
 {
     public class RateBulkActionCorrectedData : BulkActionCorrectedData
     {
+        public Dictionary<long, decimal> CorrectedRatesByZoneId { get; set; }
     }
 }

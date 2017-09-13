@@ -99,6 +99,8 @@
     <Compile Include="BulkAction\ApplyBulkActionToDefaultDraftContext.cs" />
     <Compile Include="BulkAction\ApplyBulkActionToZoneDraftContext.cs" />
     <Compile Include="BulkAction\ApplyBulkActionToZoneItemContext.cs" />
+    <Compile Include="BulkAction\ApplyCorrectedDataContext.cs" />
+    <Compile Include="BulkAction\BulkActionUtilities.cs" />
     <Compile Include="BulkAction\Input\ContextZoneItemInput.cs" />
     <Compile Include="BusinessRules\BusinessRuleUtilities.cs" />
     <Compile Include="BusinessRules\Conditions\ConflictingRateCurrenciesCondition.cs" />

@@ -69,6 +69,17 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
                 loadMoreGridData($scope.scopeModel.duplicateRates, duplicateRates);
             };
 
+            $scope.scopeModel.validateCorrectedRate = function (dataItem) {
+                if (!isCorrectedRateSet(dataItem))
+                    return null;
+                var correctedRate = parseFloat(dataItem.correctedRate);
+                if (correctedRate < 0)
+                    return 'Fixed rate must be greater than zero';
+                if (dataItem.Entity.CurrentRate != null && dataItem.Entity.CurrentRate == correctedRate)
+                    return 'Fixed rate must be different than the current one';
+                return null;
+            };
+
             defineAPI();
         }
         function defineAPI() {
@@ -80,6 +91,7 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
 
                 if (payload != undefined) {
                     bulkActionValidationResult = payload.bulkActionValidationResult;
+                    $scope.scopeModel.longPrecision = payload.longPrecision;
                 }
 
                 if (bulkActionValidationResult != undefined) {
@@ -118,6 +130,22 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
                 return UtilsService.waitMultiplePromises(gridReadyPromises);
             };
 
+            api.getData = function () {
+                var correctedRatesByZoneId = {};
+                addCorrectedRatesByZoneId(correctedRatesByZoneId, $scope.scopeModel.emptyRates);
+                addCorrectedRatesByZoneId(correctedRatesByZoneId, $scope.scopeModel.zeroRates);
+                addCorrectedRatesByZoneId(correctedRatesByZoneId, $scope.scopeModel.negativeRates);
+                addCorrectedRatesByZoneId(correctedRatesByZoneId, $scope.scopeModel.duplicateRates);
+                console.log({
+                    $type: 'TOne.WhS.Sales.MainExtensions.RateBulkActionCorrectedData, TOne.WhS.Sales.MainExtensions',
+                    CorrectedRatesByZoneId: correctedRatesByZoneId
+                });
+                return {
+                    $type: 'TOne.WhS.Sales.MainExtensions.RateBulkActionCorrectedData, TOne.WhS.Sales.MainExtensions',
+                    CorrectedRatesByZoneId: correctedRatesByZoneId
+                };
+            };
+
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }
@@ -132,6 +160,15 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
                         Entity: sourceArray[i]
                     });
                 }
+            }
+        }
+        function isCorrectedRateSet(dataItem) {
+            return (dataItem.correctedRate !== undefined && dataItem.correctedRate !== null && dataItem.correctedRate !== '');
+        }
+        function addCorrectedRatesByZoneId(correctedRatesByZoneId, sourceArray) {
+            for (var i = 0; i < sourceArray.length; i++) {
+                if (isCorrectedRateSet(sourceArray[i]))
+                    correctedRatesByZoneId[sourceArray[i].Entity.ZoneId] = sourceArray[i].correctedRate;
             }
         }
     }

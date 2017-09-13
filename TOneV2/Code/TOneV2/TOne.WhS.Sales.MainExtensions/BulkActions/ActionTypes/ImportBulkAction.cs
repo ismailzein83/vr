@@ -28,6 +28,8 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public bool HeaderRowExists { get; set; }
 
+        public string DateTimeFormat { get; set; }
+
         public SalePriceListOwnerType OwnerType { get; set; }
 
         public int OwnerId { get; set; }
@@ -107,6 +109,10 @@ namespace TOne.WhS.Sales.MainExtensions
 
         }
 
+        public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
+        {
+        }
+
         #endregion
 
         #region Private Methods
@@ -147,6 +153,7 @@ namespace TOne.WhS.Sales.MainExtensions
                 {
                     FileId = FileId,
                     HeaderRowExists = HeaderRowExists,
+                    //DateTimeFormat = DateTimeFormat,
                     OwnerType = OwnerType,
                     OwnerId = OwnerId
                 });

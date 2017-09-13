@@ -424,7 +424,7 @@ namespace TOne.WhS.Sales.Business
                 if (!sellingProductId.HasValue)
                     throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Customer '{0}' is not assigned to a Selling Product on '{1}'", ownerId, effectiveOn));
                 ownerInfo.AssignedToSellingProductName = new SellingProductManager().GetSellingProductName(sellingProductId.Value);
-                int currencyId=new SellingProductManager().GetSellingProductCurrencyId(sellingProductId.Value);
+                int currencyId = new SellingProductManager().GetSellingProductCurrencyId(sellingProductId.Value);
                 ownerInfo.AssignedToSellingProductCurrencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId);
                 defaultRoutingProduct = routingProductLocator.GetCustomerDefaultRoutingProduct(ownerId, sellingProductId.Value);
             }
@@ -723,9 +723,6 @@ namespace TOne.WhS.Sales.Business
 
             Func<SaleZone, bool> filterFunc = (saleZone) =>
             {
-                if (input.ExcludedZoneIds != null && input.ExcludedZoneIds.Contains(saleZone.SaleZoneId))
-                    return false;
-
                 if (applicableZoneIds != null && !applicableZoneIds.Contains(saleZone.SaleZoneId))
                     return false;
 
@@ -775,7 +772,7 @@ namespace TOne.WhS.Sales.Business
 
             var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods, getRoundedRate)
             {
-                OwnerId=input.OwnerId,
+                OwnerId = input.OwnerId,
                 OwnerType = input.OwnerType
             };
 
@@ -794,20 +791,30 @@ namespace TOne.WhS.Sales.Business
                     newDraft.CountryChanges = draft.CountryChanges;
             }
 
-            foreach (SaleZone zone in filteredSaleZones)
+            var saleZoneManager = new SaleZoneManager();
+
+            Func<long, ZoneChanges> getZoneDraft = (zoneId) =>
             {
-                ZoneChanges zoneDraft = existingZoneDrafts.FindRecord(x => x.ZoneId == zone.SaleZoneId);
+                ZoneChanges zoneDraft = existingZoneDrafts.FindRecord(x => x.ZoneId == zoneId);
                 if (zoneDraft == null)
                 {
+                    SaleZone zone = saleZoneManager.GetSaleZone(zoneId);
                     zoneDraft = new ZoneChanges()
                     {
-                        ZoneId = zone.SaleZoneId,
+                        ZoneId = zoneId,
                         ZoneName = zone.Name,
                         CountryId = zone.CountryId
                     };
                 }
                 newDraft.ZoneChanges.Add(zoneDraft);
-                applyBulkActionToDraftContext.ZoneDraft = zoneDraft;
+                return zoneDraft;
+            };
+
+            foreach (SaleZone zone in filteredSaleZones)
+            {
+                if (input.ExcludedZoneIds != null && input.ExcludedZoneIds.Contains(zone.SaleZoneId))
+                    continue;
+                applyBulkActionToDraftContext.ZoneDraft = getZoneDraft(zone.SaleZoneId);
                 input.BulkAction.ApplyBulkActionToZoneDraft(applyBulkActionToDraftContext);
             }
 
@@ -821,6 +828,17 @@ namespace TOne.WhS.Sales.Business
 
                 return routingProductLocator.GetCustomerDefaultRoutingProduct(input.OwnerId, sellingProductId);
             };
+
+            if (input.BulkActionCorrectedData != null)
+            {
+                var applyCorrectedDataContext = new ApplyCorrectedDataContext(getZoneDraft, buildZoneItems, getRoundedRate)
+                {
+                    OwnerType = input.OwnerType,
+                    OwnerId = input.OwnerId,
+                    CorrectedData = input.BulkActionCorrectedData
+                };
+                input.BulkAction.ApplyCorrectedData(applyCorrectedDataContext);
+            }
 
             var applyBulkActionToDefaultDraftContext = new ApplyBulkActionToDefaultDraftContext(getCustomerDefaultRoutingProduct) { DefaultDraft = newDraft.DefaultChanges };
             input.BulkAction.ApplyBulkActionToDefaultDraft(applyBulkActionToDefaultDraftContext);
@@ -993,7 +1011,7 @@ namespace TOne.WhS.Sales.Business
                 {
                     var applyBulkActionToZoneItemContext = new ApplyBulkActionToZoneItemContext(getContextZoneItems, input.CostCalculationMethods, getSellingProductZoneRoutingProduct, getRoundedRate)
                     {
-                        OwnerId =input.OwnerId,
+                        OwnerId = input.OwnerId,
                         OwnerType = input.OwnerType,
                         ZoneItem = zoneItem,
                         ZoneDraft = zoneDraft

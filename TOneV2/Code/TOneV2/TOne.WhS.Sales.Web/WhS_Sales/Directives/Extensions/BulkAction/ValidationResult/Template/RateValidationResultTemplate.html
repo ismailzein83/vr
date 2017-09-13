@@ -10,6 +10,14 @@
                              maxheight="100px"
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Fixed Rate'" disablesorting>
+                        <vr-textbox type="number"
+                                    value="dataItem.correctedRate"
+                                    decimalprecision="{{viewScope.scopeModel.longPrecision}}"
+                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)">
+                        </vr-textbox>
+                    </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
@@ -25,6 +33,14 @@
                              maxheight="100px"
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Fixed Rate'" disablesorting>
+                        <vr-textbox type="number"
+                                    value="dataItem.correctedRate"
+                                    decimalprecision="{{viewScope.scopeModel.longPrecision}}"
+                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)">
+                        </vr-textbox>
+                    </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
@@ -40,8 +56,16 @@
                              maxheight="100px"
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Current Rate'" field="'Entity.CurrentRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Calculated Rate'" field="'Entity.CalculatedRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn widthfactor="5" disablesorting></vr-datagridcolumn><!-- Added to create padding between the Rate column and the edge of the grid -->
+                    <vr-datagridcolumn headertext="'Fixed Rate'" disablesorting>
+                        <vr-textbox type="number"
+                                    value="dataItem.correctedRate"
+                                    decimalprecision="{{viewScope.scopeModel.longPrecision}}"
+                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)">
+                        </vr-textbox>
+                    </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>
@@ -57,8 +81,15 @@
                              maxheight="100px"
                              hidegridmenu>
                     <vr-datagridcolumn headertext="'Zone'" field="'Entity.ZoneName'" type="'Text'" disablesorting></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Rate'" field="'Entity.CalculatedRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Calculated Rate'" field="'Entity.CalculatedRate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
                     <vr-datagridcolumn widthfactor="5" disablesorting></vr-datagridcolumn><!-- Added to create padding between the Rate column and the edge of the grid -->
+                    <vr-datagridcolumn headertext="'Fixed Rate'" disablesorting>
+                        <vr-textbox type="number"
+                                    value="dataItem.correctedRate"
+                                    decimalprecision="{{viewScope.scopeModel.longPrecision}}"
+                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)">
+                        </vr-textbox>
+                    </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
         </vr-row>

@@ -240,7 +240,8 @@
                 validationDirectiveReadyDeferred.promise.then(function () {
                     validationDirectiveReadyDeferred = undefined;
                     var validationDirectivePayload = {
-                        bulkActionValidationResult: bulkActionValidationResult
+                        bulkActionValidationResult: bulkActionValidationResult,
+                        longPrecision: longPrecision
                     };
                     VRUIUtilsService.callDirectiveLoad(validationDirectiveAPI, validationDirectivePayload, validationDirectiveLoadDeferred);
                 });
@@ -301,7 +302,8 @@
                     CostCalculationMethods: gridQuery.CostCalculationMethods,
                     BulkAction: gridQuery.BulkAction,
                     EffectiveOn: gridQuery.EffectiveOn,
-                    ExcludedZoneIds: excludedZoneIds
+                    ExcludedZoneIds: excludedZoneIds,
+                    BulkActionCorrectedData: (validationDirectiveAPI != undefined) ? validationDirectiveAPI.getData() : null
                 };
             if (gridQuery.Filter != null) {
                 bulkActionApplicationInput.BulkActionFilter = gridQuery.Filter.BulkActionFilter;

@@ -42,18 +42,9 @@ namespace TOne.WhS.Sales.Business
             {
                 if (_buildZoneItems == null)
                     throw new MissingMemberException("_buildZoneItems");
-
-                IEnumerable<ZoneItem> zoneItems = this._buildZoneItems();
-                if (zoneItems == null || zoneItems.Count() == 0)
-                    throw new NullReferenceException("zoneItems");
-
-                StructureZoneItemsByZoneId(zoneItems);
+                _zoneItemsByZoneId = BulkActionUtilities.StructureContextZoneItemsByZoneId(_buildZoneItems);
             }
-
-            ZoneItem zoneItem = null;
-            if (!this._zoneItemsByZoneId.TryGetValue(zoneId, out zoneItem))
-                throw new DataIntegrityValidationException(string.Format("Missing sale zone with Id {0}", zoneId));
-            return zoneItem;
+            return BulkActionUtilities.GetContextZoneItem(zoneId, _zoneItemsByZoneId);
         }
 
         public int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId)
@@ -73,20 +64,5 @@ namespace TOne.WhS.Sales.Business
         {
             return _getRoundedRate(rate);
         }
-
-        #region Private Methods
-
-        private void StructureZoneItemsByZoneId(IEnumerable<ZoneItem> zoneItems)
-        {
-            _zoneItemsByZoneId = new Dictionary<long, ZoneItem>();
-
-            foreach (ZoneItem zoneItem in zoneItems)
-            {
-                if (!_zoneItemsByZoneId.ContainsKey(zoneItem.ZoneId))
-                    _zoneItemsByZoneId.Add(zoneItem.ZoneId, zoneItem);
-            }
-        }
-
-        #endregion
     }
 }
