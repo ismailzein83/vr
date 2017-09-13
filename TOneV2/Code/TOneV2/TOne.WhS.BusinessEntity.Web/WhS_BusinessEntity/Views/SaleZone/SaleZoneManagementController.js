@@ -63,7 +63,7 @@
 
             sellingReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = {};
+                    var directivePayload = { selectifsingleitem: true };
                     VRUIUtilsService.callDirectiveLoad(sellingDirectiveApi, directivePayload, sellingLoadPromiseDeferred);
                 });
             return sellingLoadPromiseDeferred.promise;

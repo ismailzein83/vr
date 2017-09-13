@@ -141,7 +141,7 @@
             var sellingProductSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             sellingProductSelectorReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, undefined, sellingProductSelectorLoadDeferred);
+                VRUIUtilsService.callDirectiveLoad(sellingProductSelectorAPI, { selectifsingleitem: true }, sellingProductSelectorLoadDeferred);
             });
             return sellingProductSelectorLoadDeferred.promise;
         }
