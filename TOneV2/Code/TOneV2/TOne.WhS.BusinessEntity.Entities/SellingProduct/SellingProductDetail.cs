@@ -11,6 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public SellingProduct Entity { get; set; }
         public string SellingNumberPlanName { get; set; }
-        public string SellingProductCurrencyName { get; set; }
+        public string SellingProductCurrencySymbol { get; set; }
     }
 }
