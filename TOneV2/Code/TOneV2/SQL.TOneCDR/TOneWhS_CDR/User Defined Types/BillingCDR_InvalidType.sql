@@ -36,7 +36,11 @@
     [CountryId]                   INT             NULL,
     [SaleTariffRuleId]            INT             NULL,
     [CostTariffRuleId]            INT             NULL,
+    [SaleFinancialAccountId]      INT             NULL,
+    [CostFinancialAccountId]      INT             NULL,
     [QueueItemId]                 BIGINT          NULL);
+
+
 
 
 

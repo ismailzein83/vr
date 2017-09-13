@@ -1,34 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class WHSFinancialAccountStaticBEManager : IBusinessEntityManager
     {
+        WHSFinancialAccountManager whsFinancialAccountManager = new WHSFinancialAccountManager();
+
+
         #region IBusinessEntityManager
 
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
-            throw new NotImplementedException();
+            Dictionary<int, WHSFinancialAccount> cachedWHSFinancialAccounts = whsFinancialAccountManager.GetCachedFinancialAccounts();
+            return cachedWHSFinancialAccounts.Values.Select(itm => itm as dynamic).ToList();
         }
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
-            throw new NotImplementedException();
+            return whsFinancialAccountManager.GetFinancialAccount(context.EntityId);
         }
 
         public string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
-            throw new NotImplementedException();
+            WHSFinancialAccount whsFinancialAccount = whsFinancialAccountManager.GetFinancialAccount(Convert.ToInt32(context.EntityId));
+            return whsFinancialAccountManager.GetDescription(whsFinancialAccount);
         }
 
         public dynamic GetEntityId(IBusinessEntityIdContext context)
         {
-            throw new NotImplementedException();
+            var whsFinancialAccount = context.Entity as WHSFinancialAccount;
+            return whsFinancialAccount.FinancialAccountId;
         }
 
         public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)

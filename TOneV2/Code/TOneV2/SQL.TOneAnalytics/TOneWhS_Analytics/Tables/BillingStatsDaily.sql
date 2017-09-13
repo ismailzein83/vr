@@ -42,8 +42,12 @@
     [CostDealTierNb]           INT              NULL,
     [CostDealRateTierNb]       INT              NULL,
     [CostDealDurInSec]         DECIMAL (20, 4)  NULL,
+    [SaleFinancialAccountId]   INT              NULL,
+    [CostFinancialAccountId]   INT              NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

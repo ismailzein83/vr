@@ -88,8 +88,12 @@
     [SecondaryCostDealTierNb]      INT             NULL,
     [SecondaryCostDealRateTierNb]  INT             NULL,
     [SecondaryCostDealDurInSec]    DECIMAL (20, 4) NULL,
-    [QueueItemId]                  BIGINT          NULL
+    [QueueItemId]                  BIGINT          NULL,
+    [SaleFinancialAccountId]       INT             NULL,
+    [CostFinancialAccountId]       INT             NULL
 );
+
+
 
 
 

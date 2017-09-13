@@ -88,7 +88,11 @@
     [OrigCostDurationInSeconds]    DECIMAL (20, 4) NULL,
     [OrigSaleCurrencyId]           INT             NULL,
     [OrigCostCurrencyId]           INT             NULL,
+    [SaleFinancialAccountId]       INT             NULL,
+    [CostFinancialAccountId]       INT             NULL,
     [QueueItemId]                  BIGINT          NULL);
+
+
 
 
 

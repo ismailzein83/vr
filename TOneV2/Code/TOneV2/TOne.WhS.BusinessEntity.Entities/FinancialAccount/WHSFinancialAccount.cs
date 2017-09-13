@@ -8,6 +8,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class WHSFinancialAccount : Vanrise.Entities.IDateEffectiveSettings
     {
+        public const string STATICBUSINESSENTITY_DEFINITION_NAME = "WhS_BE_FinancialAccount";
+        public static Guid STATICBUSINESSENTITY_DEFINITION_ID = new Guid("2A148F4E-8A99-481A-875B-3221C24C5977");
+
         public int FinancialAccountId { get; set; }
 
         public int? CarrierProfileId { get; set; }

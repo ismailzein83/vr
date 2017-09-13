@@ -129,6 +129,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var allFinancialAccounts = GetCachedFinancialAccounts();
             return allFinancialAccounts.GetRecord(financialAccountId);
         }
+
         public WHSFinancialAccountRuntimeEditor GetFinancialAccountRuntimeEditor(int financialAccountId)
         {
             var financialAccount = GetFinancialAccount(financialAccountId);
@@ -152,6 +153,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return financialAccountRuntimeEditor;
         }
+
         public WHSCarrierFinancialAccountData GetCustCarrierFinancialByFinAccId(int financialAccountId)
         {
             WHSCarrierFinancialAccountData carrierFinancialAccountData = GetCachedCustCarrierFinancialsByFinAccId().GetRecord(financialAccountId);
@@ -183,6 +185,7 @@ namespace TOne.WhS.BusinessEntity.Business
             financialAccountData = null;
             return false;
         }
+
         public bool TryGetSuppAccFinancialAccountData(int supplierAccountId, DateTime effectiveOn, out WHSCarrierFinancialAccountData financialAccountData)
         {
             IOrderedEnumerable<WHSCarrierFinancialAccountData> carrierFinancialAccounts = GetCachedSuppCarrierFinancialsByCarrAccId().GetRecord(supplierAccountId);
@@ -211,20 +214,24 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 filterFunc = (financialAccount) =>
                 {
-                    if (filter.FinancialAccountDefinitionId.HasValue && financialAccount.FinancialAccountDefinitionId != filter.FinancialAccountDefinitionId.Value)
+                    if (filter.FinancialAccountDefinitionId.HasValue && filter.FinancialAccountDefinitionId.Value != WHSFinancialAccount.STATICBUSINESSENTITY_DEFINITION_ID &&
+                        financialAccount.FinancialAccountDefinitionId != filter.FinancialAccountDefinitionId.Value)
                         return false;
+
                     if (filter.InvoiceTypeId.HasValue)
                     {
                         var invoiceTypeId = s_financialAccountDefinitionManager.GetInvoiceTypeId(financialAccount.FinancialAccountDefinitionId);
                         if (invoiceTypeId != filter.InvoiceTypeId)
                             return false;
                     }
+
                     if (filter.BalanceAccountTypeId.HasValue)
                     {
                         var balanceAccountTypeId = s_financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId);
                         if (balanceAccountTypeId != filter.BalanceAccountTypeId)
                             return false;
                     }
+
                     if (filter.CarrierType.HasValue)
                     {
                         switch (filter.CarrierType.Value)
@@ -234,6 +241,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                         }
                     }
+
                     if (filter.Status.HasValue)
                     {
                         switch (filter.Status.Value)
@@ -242,8 +250,10 @@ namespace TOne.WhS.BusinessEntity.Business
                             case VRAccountStatus.InActive: if (IsFinancialAccountActive(financialAccount)) return false; break;
                         }
                     }
+
                     if (filter.EffectiveDate.HasValue && !financialAccount.IsEffective(filter.EffectiveDate.Value))
                         return false;
+
                     if (filter.IsEffectiveInFuture.HasValue && filter.IsEffectiveInFuture.Value)
                     {
                         DateTime today = DateTime.Today;
@@ -431,7 +441,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return currencyManager.GetCurrencySymbol(currencyId);
         }
 
-
         public int GetSupplierTimeZoneId(int financialAccountId)
         {
             var financialAccount = GetFinancialAccount(financialAccountId);
@@ -445,6 +454,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return s_carrierProfileManager.GetSupplierTimeZoneId(financialAccount.CarrierProfileId.Value);
             }
         }
+
         public int GetCustomerTimeZoneId(int financialAccountId)
         {
             var financialAccount = GetFinancialAccount(financialAccountId);
@@ -471,6 +481,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (!TryGetCustAccFinancialAccountData(customerAccountId, effectiveOn, out whsCarrierFinancialAccountData))
                 return null;
 
+            whsCarrierFinancialAccountData.FinancialAccount.ThrowIfNull("whsCarrierFinancialAccountData.FinancialAccount", customerAccountId);
             return whsCarrierFinancialAccountData.FinancialAccount.FinancialAccountId;
         }
 
@@ -486,47 +497,11 @@ namespace TOne.WhS.BusinessEntity.Business
             if (!TryGetSuppAccFinancialAccountData(supplierAccountId, effectiveOn, out whsCarrierFinancialAccountData))
                 return null;
 
+            whsCarrierFinancialAccountData.FinancialAccount.ThrowIfNull("whsCarrierFinancialAccountData.FinancialAccount", supplierAccountId);
             return whsCarrierFinancialAccountData.FinancialAccount.FinancialAccountId;
         }
 
-        #endregion
-
-        #region Private Classes
-
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IWHSFinancialAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreFinancialAccountsUpdated(ref _updateHandle);
-            }
-        }
-
-        private class WHSFinancialAccountFillCustomerExtraDataContext : IWHSFinancialAccountFillCustomerExtraDataContext
-        {
-            public WHSCarrierFinancialAccountData FinancialAccountData
-            {
-                get;
-                set;
-            }
-        }
-
-        private class WHSFinancialAccountFillSupplierExtraDataContext : IWHSFinancialAccountFillSupplierExtraDataContext
-        {
-            public WHSCarrierFinancialAccountData FinancialAccountData
-            {
-                get;
-                set;
-            }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        Dictionary<int, WHSFinancialAccount> GetCachedFinancialAccounts()
+        public Dictionary<int, WHSFinancialAccount> GetCachedFinancialAccounts()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccounts",
                () =>
@@ -537,7 +512,11 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
-        Dictionary<Guid, List<WHSFinancialAccount>> GetCachedFinancialAccountsByDefinitionId()
+        #endregion
+
+        #region Private Methods
+
+        private Dictionary<Guid, List<WHSFinancialAccount>> GetCachedFinancialAccountsByDefinitionId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedFinancialAccountsByDefinitionId",
                  () =>
@@ -558,7 +537,7 @@ namespace TOne.WhS.BusinessEntity.Business
                  });
         }
 
-        Dictionary<int, WHSCarrierFinancialAccountData> GetCachedCustCarrierFinancialsByFinAccId()
+        private Dictionary<int, WHSCarrierFinancialAccountData> GetCachedCustCarrierFinancialsByFinAccId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustCarrierFinancialsByFinAccId",
              () =>
@@ -581,7 +560,7 @@ namespace TOne.WhS.BusinessEntity.Business
              });
         }
 
-        Dictionary<int, WHSCarrierFinancialAccountData> GetCachedSuppCarrierFinancialsByFinAccId()
+        private Dictionary<int, WHSCarrierFinancialAccountData> GetCachedSuppCarrierFinancialsByFinAccId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSuppCarrierFinancialsByFinAccId",
              () =>
@@ -604,7 +583,7 @@ namespace TOne.WhS.BusinessEntity.Business
              });
         }
 
-        Dictionary<int, IOrderedEnumerable<WHSCarrierFinancialAccountData>> GetCachedCustCarrierFinancialsByCarrAccId()
+        private Dictionary<int, IOrderedEnumerable<WHSCarrierFinancialAccountData>> GetCachedCustCarrierFinancialsByCarrAccId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustCarrierFinancialsByCarrAccId",
             () =>
@@ -638,7 +617,7 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
-        Dictionary<int, IOrderedEnumerable<WHSCarrierFinancialAccountData>> GetCachedSuppCarrierFinancialsByCarrAccId()
+        private Dictionary<int, IOrderedEnumerable<WHSCarrierFinancialAccountData>> GetCachedSuppCarrierFinancialsByCarrAccId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedSuppCarrierFinancialsByCarrAccId",
             () =>
@@ -790,6 +769,31 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             PartnerInvoiceSettingManager partnerInvoiceSettingManager = new Vanrise.Invoice.Business.PartnerInvoiceSettingManager();
             return partnerInvoiceSettingManager.LinkPartnerToInvoiceSetting(partnerInvoiceSettingId, partnerId, invoiceSettingId);
+        }
+
+        public string GetDescription(WHSFinancialAccount financialAccount)
+        {
+            if (financialAccount == null)
+                return null;
+
+            if (!financialAccount.CarrierAccountId.HasValue && !financialAccount.CarrierProfileId.HasValue)
+                throw new NullReferenceException(string.Format("financialAccount.CarrierAccountId & financialAccount.CarrierProfileId for financial Account Id: {0}", financialAccount.FinancialAccountId));
+
+            string name;
+            //string prefix;
+
+            if (financialAccount.CarrierProfileId.HasValue)
+            {
+                name = s_carrierProfileManager.GetCarrierProfileName(financialAccount.CarrierProfileId.Value);
+                //prefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Profile);
+            }
+            else 
+            {
+                name = s_carrierAccountManager.GetCarrierAccountName(financialAccount.CarrierAccountId.Value);
+                //prefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Account);
+            }
+
+            return name;
         }
 
         #endregion
@@ -944,6 +948,39 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (isApplicableToSupplier && !anyActiveSupplier)
                     return false;
                 return true;
+            }
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IWHSFinancialAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreFinancialAccountsUpdated(ref _updateHandle);
+            }
+        }
+
+        private class WHSFinancialAccountFillCustomerExtraDataContext : IWHSFinancialAccountFillCustomerExtraDataContext
+        {
+            public WHSCarrierFinancialAccountData FinancialAccountData
+            {
+                get;
+                set;
+            }
+        }
+
+        private class WHSFinancialAccountFillSupplierExtraDataContext : IWHSFinancialAccountFillSupplierExtraDataContext
+        {
+            public WHSCarrierFinancialAccountData FinancialAccountData
+            {
+                get;
+                set;
             }
         }
 

@@ -40,8 +40,12 @@
     [CostExtraCharges]            DECIMAL (26, 10) NULL,
     [CustomerInterconnectSwitch]  BIT              NULL,
     [SupplierInterconnectSwitch]  BIT              NULL,
+    [SaleFinancialAccountId]      INT              NULL,
+    [CostFinancialAccountId]      INT              NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

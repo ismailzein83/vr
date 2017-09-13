@@ -18,27 +18,29 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
         public UpdateAccountBalanceSettings UpdateAccountBalanceSettings { get; set; }
         public Guid CustomerUsageTransactionTypeId { get; set; }
         public Guid SupplierUsageTransactionTypeId { get; set; }
+
         protected override void ConvertToBalanceUpdate(IConvertToBalanceUpdateContext context)
         {
             dynamic mainCDR = context.Record;
 
             DateTime attemptTime = mainCDR.AttemptDateTime;
 
-            int? customerId = mainCDR.CustomerId;
-            if (customerId.HasValue)
+            int? saleFinancialAccountId = mainCDR.SaleFinancialAccount;
+            if (saleFinancialAccountId.HasValue)
             {
                 Decimal? saleAmount = mainCDR.SaleNet;
                 if (saleAmount.HasValue && saleAmount.Value > 0)
                 {
                     int? saleCurrencyId = mainCDR.SaleCurrencyId;
-                    WHSCarrierFinancialAccountData customerFinancialAccountData = null;
-                    if (saleCurrencyId.HasValue && s_financialAccountManager.TryGetCustAccFinancialAccountData(customerId.Value, attemptTime, out customerFinancialAccountData) && customerFinancialAccountData.AccountBalanceData != null)
+                    WHSCarrierFinancialAccountData saleFinancialAccountData = s_financialAccountManager.GetCustCarrierFinancialByFinAccId(saleFinancialAccountId.Value);
+
+                    if (saleCurrencyId.HasValue && saleFinancialAccountData.AccountBalanceData != null)
                     {
                         context.SubmitBalanceUpdate(new BalanceUpdatePayload
                         {
-                            AccountTypeId = customerFinancialAccountData.AccountBalanceData.AccountTypeId,
+                            AccountTypeId = saleFinancialAccountData.AccountBalanceData.AccountTypeId,
                             TransactionTypeId = this.CustomerUsageTransactionTypeId,
-                            AccountId = customerFinancialAccountData.FinancialAccount.FinancialAccountId.ToString(),
+                            AccountId = saleFinancialAccountId.Value.ToString(),
                             Amount = saleAmount.Value,
                             EffectiveOn = attemptTime,
                             CurrencyId = saleCurrencyId.Value
@@ -47,21 +49,22 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
                 }
             }
 
-            int? supplierId = mainCDR.SupplierId;
-            if (supplierId.HasValue)
+            int? costFinancialAccountId = mainCDR.CostFinancialAccount;
+            if (costFinancialAccountId.HasValue)
             {
                 Decimal? costAmount = mainCDR.CostNet;
                 if (costAmount.HasValue && costAmount.Value > 0)
                 {
                     int? costCurrencyId = mainCDR.CostCurrencyId;
-                    WHSCarrierFinancialAccountData supplierFinancialAccountData = null;
-                    if (costCurrencyId.HasValue && s_financialAccountManager.TryGetSuppAccFinancialAccountData(supplierId.Value, attemptTime, out supplierFinancialAccountData) && supplierFinancialAccountData.AccountBalanceData != null)
+                    WHSCarrierFinancialAccountData costFinancialAccountData = s_financialAccountManager.GetSuppCarrierFinancialByFinAccId(costFinancialAccountId.Value);
+
+                    if (costCurrencyId.HasValue && costFinancialAccountData.AccountBalanceData != null)
                     {
                         context.SubmitBalanceUpdate(new BalanceUpdatePayload
                         {
-                            AccountTypeId = supplierFinancialAccountData.AccountBalanceData.AccountTypeId,
+                            AccountTypeId = costFinancialAccountData.AccountBalanceData.AccountTypeId,
                             TransactionTypeId = this.SupplierUsageTransactionTypeId,
-                            AccountId = supplierFinancialAccountData.FinancialAccount.FinancialAccountId.ToString(),
+                            AccountId = costFinancialAccountId.Value.ToString(),
                             Amount = costAmount.Value,
                             EffectiveOn = attemptTime,
                             CurrencyId = costCurrencyId.Value
