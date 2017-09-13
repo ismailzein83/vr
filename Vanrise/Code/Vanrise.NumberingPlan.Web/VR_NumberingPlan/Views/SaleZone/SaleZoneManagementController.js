@@ -2,9 +2,9 @@
 
     "use strict";
 
-    saleZoneManagementController.$inject = ['$scope' ,'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    saleZoneManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
 
-    function saleZoneManagementController($scope,UtilsService, VRNotificationService, VRUIUtilsService) {
+    function saleZoneManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService) {
         var gridAPI;
         var sellingDirectiveApi;
         var sellingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -32,7 +32,7 @@
                 gridAPI = api;
 
             };
-          
+
         }
         function load() {
             $scope.isGettingData = true;
@@ -53,7 +53,7 @@
 
             countryReadyPromiseDeferred.promise
                 .then(function () {
-                    var directivePayload = {};
+                    var directivePayload = { selectifsingleitem: true };
                     VRUIUtilsService.callDirectiveLoad(countryDirectiveApi, directivePayload, countryLoadPromiseDeferred);
                 });
             return countryLoadPromiseDeferred.promise;
@@ -76,7 +76,7 @@
                 EffectiveOn: $scope.effectiveOn,
                 Countries: countryDirectiveApi.getSelectedIds()
             };
-           
+
         }
 
     }
