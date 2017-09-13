@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Idb;
 
-
 namespace TOne.WhS.RouteSync.TelesIdb
 {
     public class TelesIdbSWSync : SwitchRouteSynchronizer
@@ -14,13 +13,18 @@ namespace TOne.WhS.RouteSync.TelesIdb
         public override Guid ConfigId { get { return new Guid("29135479-8150-4E23-9A0D-A42AF69A13AE"); } }
 
         public IIdbDataManager DataManager { get; set; }
-        
+
+        public string MappingSeparator { get; set; }
+
+        public bool UseTwoMappingFormat { get; set; }
+
+        public int NumberOfOptions { get; set; }
+
         /// <summary>
         /// Key = Carrier Account Id
         /// </summary>
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
-        public string MappingSeparator { get; set; }
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
@@ -28,7 +32,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
         {
-            
+
         }
 
         public override Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
