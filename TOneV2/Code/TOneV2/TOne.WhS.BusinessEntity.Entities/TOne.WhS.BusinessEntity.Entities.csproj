@@ -149,6 +149,7 @@
     <Compile Include="SalePricelistChanges\SalePricelistRPChange.cs" />
     <Compile Include="SalePricelistChanges\SalePricelistRPChangeDetail.cs" />
     <Compile Include="SalePricelistChanges\SalePriceListSnapshot.cs" />
+    <Compile Include="SalePriceListTemplate\MappedSheet\IMappedCellContext.cs" />
     <Compile Include="SalePriceList\SalePriceListInput.cs" />
     <Compile Include="SalePriceList\SalePriceListOption.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRates.cs" />

@@ -94,6 +94,8 @@
     <Compile Include="MappingSteps\GetCDPNsForZoneMatchStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\BasicSalePriceListTemplateSettings.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedCell\HeaderMappedCell.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedCell\MappedCell.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedColumn\CodeOnEachRowMappedColumn.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedColumn\CodesByZoneMappedColumn.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedColumn\MappedColumn.cs" />
