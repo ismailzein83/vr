@@ -171,7 +171,7 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
 
                 var summary = 'Rate Calculation Method: ' + rateCalculationMethodTitle + ' | ' + rateCalculationMethodDescription;
                 if ($scope.scopeModel.showRateSource == true)
-                    summary += ' | Rate Source: ' + rateSourcesText;
+                    summary += ' |  Apply on Rates: ' + rateSourcesText;
                 return summary;
             };
 

@@ -44,7 +44,8 @@ function (UtilsService, VRUIUtilsService, WhS_Sales_RateSourceEnum) {
             label = "Rate Sources";
             multipleselection = "ismultipleselection";
         }
-
+        if (attrs.customelabel != undefined)
+            label = attrs.customelabel;
         var hideselectedvaluessection = "";
         if (attrs.hideselectedvaluessection != undefined)
             hideselectedvaluessection = "hideselectedvaluessection";

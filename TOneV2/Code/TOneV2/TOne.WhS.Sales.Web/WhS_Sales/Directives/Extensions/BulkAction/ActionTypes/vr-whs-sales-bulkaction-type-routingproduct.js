@@ -118,7 +118,7 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 
                 var summary = 'Routing Product: ' + routingProductName + ' | ' + followsRateDateAsString;
                 if ($scope.scopeModel.showRateSource == true)
-                    summary += ' | Rate Source: ' + rateSourcesText;
+                    summary += ' | Apply on Rates: ' + rateSourcesText;
                 return summary;
             };
 
@@ -138,7 +138,7 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 					</vr-whs-be-routingproduct-selector>\
 				</vr-columns>\
 				<vr-columns colnum="{{ctrl.normalColNum}}"  ng-show="scopeModel.showRateSource">\
-                    <vr-whs-sales-ratesource-selector ismultipleselection on-ready="scopeModel.onRateSourceSelectorReady"></vr-whs-sales-ratesource-selector>\
+                    <vr-whs-sales-ratesource-selector customelabel="Apply on Rates" ismultipleselection on-ready="scopeModel.onRateSourceSelectorReady"></vr-whs-sales-ratesource-selector>\
 				</vr-columns>\
 		        <vr-columns colnum="{{ctrl.normalColNum}}">\
 					<vr-switch label="Follow Rate Date" value="scopeModel.followRateDate" isrequired="ctrl.isrequired"></vr-switch>\
