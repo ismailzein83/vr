@@ -31,7 +31,8 @@
             var filter;
 
             var directiveAPI;
-            var directiveReadyDeferred;
+            var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             var invoiceTypeEntity;
             var partnerInvoiceFilters;
             function initializeController() {
@@ -39,15 +40,16 @@
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
-                    var setLoader = function (value) {
-                        $scope.scopeModel.isLoadingDirective = value;
-                    };
-                    var directivePayload = {
-                        filter: filter,
-                        extendedSettings: invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined? invoiceTypeEntity.Settings.ExtendedSettings:undefined,
-                        invoiceTypeId: invoiceTypeId
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
+                    directiveReadyDeferred.resolve();
+                    //var setLoader = function (value) {
+                    //    $scope.scopeModel.isLoadingDirective = value;
+                    //};
+                    //var directivePayload = {
+                    //    filter: filter,
+                    //    extendedSettings: invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined? invoiceTypeEntity.Settings.ExtendedSettings:undefined,
+                    //    invoiceTypeId: invoiceTypeId
+                    //};
+                    //VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
 
                 defineAPI();
@@ -86,18 +88,20 @@
 
                     var invoiceTypePromise = getInvoiceType(invoiceTypeId);
                     promises.push(invoiceTypePromise);
-                    if (selectedIds != undefined) {
+                    
 
-                        var loadDirectivePromise = UtilsService.createPromiseDeferred();
-                        UtilsService.waitMultiplePromises([invoiceTypeSelectorPromise, invoiceTypePromise]).then(function () {
-                            loadDirective().then(function () {
-                                loadDirectivePromise.resolve();
-                            }).catch(function (error) {
-                                loadDirectivePromise.reject(error);
-                            });
+                    var loadDirectivePromise = UtilsService.createPromiseDeferred();
+                    UtilsService.waitMultiplePromises([invoiceTypeSelectorPromise, invoiceTypePromise]).then(function () {
+
+
+                        loadDirective().then(function () {
+                            loadDirectivePromise.resolve();
+                        }).catch(function (error) {
+                            loadDirectivePromise.reject(error);
                         });
-                        promises.push(loadDirectivePromise.promise);
-                    }
+                    });
+                    promises.push(loadDirectivePromise.promise);
+                 
 
                     function getInvoiceTypeSelector(invoiceTypeId) {
                         return VR_Invoice_InvoiceTypeAPIService.GetInvoicePartnerSelector(invoiceTypeId).then(function (response) {
@@ -110,15 +114,13 @@
                         });
                     }
                     function loadDirective() {
-                        directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                         directiveReadyDeferred.promise.then(function () {
-                            directiveReadyDeferred = undefined;
                             var directivePayload = {
                                 selectedIds: selectedIds,
-                                extendedSettings: invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined? invoiceTypeEntity.Settings.ExtendedSettings:undefined,
+                                extendedSettings: invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined ? invoiceTypeEntity.Settings.ExtendedSettings : undefined,
                                 filter: filter,
                                 invoiceTypeId: invoiceTypeId
                             };
