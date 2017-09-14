@@ -78,7 +78,9 @@ namespace TOne.WhS.Routing.Business.Extensions
                     {
                         SupplierId = customerRouteOption.SupplierId.ToString(),
                         SupplierRate = customerRouteOption.SupplierRate,
-                        Percentage = customerRouteOption.Percentage
+                        Percentage = customerRouteOption.Percentage,
+                        IsBlocked = customerRouteOption.IsBlocked,
+                        NumberOfTries = customerRouteOption.NumberOfTries
                     });
                 }
             }
@@ -101,6 +103,6 @@ namespace TOne.WhS.Routing.Business.Extensions
                 }
                 codePrefix = rangeInfo.CodePrefix;
             }
-        }       
+        }
     }
 }

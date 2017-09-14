@@ -12,7 +12,7 @@ namespace TOne.WhS.RouteSync.Idb
     {
         Guid ConfigId { get; }
         void PrepareTables(ISwitchRouteSynchronizerInitializeContext context);
-        Object PrepareDataForApply(List<ConvertedRoute> radiusRoutes);
+        Object PrepareDataForApply(List<ConvertedRoute> idbRoutes);
         void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
         void SwapTables(ISwapTableContext context);
     }

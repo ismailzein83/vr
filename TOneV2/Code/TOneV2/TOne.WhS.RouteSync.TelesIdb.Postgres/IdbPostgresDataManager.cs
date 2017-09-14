@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.WhS.RouteSync.Entities;
-using TOne.WhS.RouteSync.Idb;
-using Vanrise.Data.Postgres;
 using System.Linq;
-using TOne.WhS.RouteSync.TelesIdb;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.Data.Postgres;
+using TOne.WhS.RouteSync.Idb;
+using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 {
@@ -24,7 +22,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 
         IdbConnectionString _connectionString;
         List<IdbConnectionString> _redundantConnectionStrings;
-        
+
         Dictionary<int, TelesIdbPostgresDataManager> _telesIdbPostgresDataManagers;
 
         public IdbConnectionString ConnectionString
@@ -49,19 +47,40 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             context.SwitchSyncOutput = switchSyncOutput;
         }
 
-        public object PrepareDataForApply(List<ConvertedRoute> radiusRoutes)
+        public object PrepareDataForApply(List<ConvertedRoute> idbRoutes)
         {
-            throw new NotImplementedException();
+            return idbRoutes;
         }
 
         public void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            throw new NotImplementedException();
+            List<ConvertedRoute> idbRoutes = context.PreparedItemsForApply as List<ConvertedRoute>;
+
+            SwitchSyncOutput switchSyncOutput;
+            ExecMVTSRadiusSQLDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
+            {
+                telesIdbPostgresDataManager.ApplyRadiusRoutesForDB(idbRoutes);
+            }, context.SwitchName, context.SwitchId, context.PreviousSwitchSyncOutput, context.WriteBusinessHandledException, false, null, out switchSyncOutput);
+
+            context.SwitchSyncOutput = switchSyncOutput;
         }
 
         public void SwapTables(ISwapTableContext context)
         {
-            throw new NotImplementedException();
+            SwitchSyncOutput switchSyncOutput;
+            ExecMVTSRadiusSQLDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
+            {
+                string[] args = new string[] { (dataManagerIndex + 1).ToString(), context.SwitchName };
+
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finalizing Database {0} for Switch '{1}'...", args);
+
+                telesIdbPostgresDataManager.SwapTables(context.IndexesCommandTimeoutInSeconds);
+
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Database {0} for Switch '{1}' is finalized", args);
+
+            }, context.SwitchName, context.SwitchId, context.PreviousSwitchSyncOutput, context.WriteBusinessHandledException, true, "finalizing", out switchSyncOutput);
+
+            context.SwitchSyncOutput = switchSyncOutput;
         }
 
         private void ExecMVTSRadiusSQLDataManagerAction(Action<TelesIdbPostgresDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
@@ -130,11 +149,14 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
                 }
             }
         }
-
     }
 
     public class TelesIdbPostgresDataManager : BasePostgresDataManager
     {
+        const string tableName = "route";
+        const string tempTableName = "route_temp";
+        const string oldTableName = "route_old";
+
         public string ConnectionString { get { return GetConnectionString(); } }
 
         IdbConnectionString _idbConnectionString;
@@ -151,9 +173,32 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 
         #endregion
 
-        internal void PrepareTables()
+        public void PrepareTables()
         {
-            throw new NotImplementedException();
+            BuildRouteTempTable(tableName);
+        }
+
+        public void ApplyRadiusRoutesForDB(List<ConvertedRoute> idbRoutes)
+        {
+            base.Bulk(idbRoutes, tempTableName);
+        }
+
+        public void SwapTables(int indexesCommandTimeoutInSeconds)
+        {
+            string createindexScript = string.Format("ALTER TABLE {0} ADD constraint route_pkey_{1} PRIMARY KEY (pref)", tempTableName, Guid.NewGuid().ToString("N"));
+            string swapTableScript = string.Format("ALTER TABLE {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {0}; ", tableName, oldTableName, tempTableName);
+            ExecuteNonQuery(new string[] { createindexScript, swapTableScript }, indexesCommandTimeoutInSeconds);
+        }
+
+        void BuildRouteTempTable(string routeTableName)
+        {
+            string dropTempTableScript = string.Format("DROP TABLE IF EXISTS {0};", tempTableName);
+            string dropOldTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", oldTableName);
+            string createTempTableScript = string.Format(@"CREATE TABLE {0} (       
+                                                           pref character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying,
+                                                           route character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying);", tempTableName);
+
+            ExecuteNonQuery(new string[] { dropTempTableScript, dropOldTableScript, createTempTableScript });
         }
     }
 }
