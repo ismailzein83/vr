@@ -11,10 +11,10 @@
             scope: {
                 value: '=',
                 hint: '@',
-                minvalue:'@',
+                minvalue: '@',
                 maxvalue: '@',
                 decimalprecision: '@',
-                maxlength:'@',
+                maxlength: '@',
                 placeholder: '@',
                 type: '@',
                 label: '@'
@@ -39,7 +39,7 @@
                         ctrl.tabindex = "-1"
                     }
                 }, 10);
-               
+
                 var $quan = $('.next-input').filter(function () {
                     return !$(this).parents('.divDisabled').length;
                 });
@@ -47,12 +47,12 @@
                     $('.vr-datagrid-row').removeClass('vr-datagrid-datacells-click');
                     var ind = $quan.index(this);
                     var textbox;
-                    if (e.which === 40 || e.which === 13 ) {
+                    if (e.which === 40 || e.which === 13) {
                         textbox = $quan.eq(ind + 1);
-                      
+
                     }
                     if (e.which === 38) {
-                        var  el = $quan.eq(ind - 1);
+                        var el = $quan.eq(ind - 1);
                         if (el) {
                             textbox = $quan.eq(ind - 1);
                         }
@@ -62,7 +62,7 @@
                         $(textbox).closest('.vr-datagrid-row').addClass('vr-datagrid-datacells-click');
                     }
                 });
-                ctrl.validate = function () {                    
+                ctrl.validate = function () {
                     return VRValidationService.validate(ctrl.value, $scope, $attrs, validationOptions);
                 };
 
@@ -155,7 +155,7 @@
                                 var charArray = String(newValue).split("");
                                 if (charArray.length > ctrl.maxlength)
                                     ctrl.value = oldValue;
-                                    return;
+                                return;
                             }
 
                             if (iAttrs.onvaluechanged != undefined) {
@@ -201,7 +201,7 @@
                                 var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
                                 if (iAttrs.largehint != undefined)
                                     $(innerTooltip).addClass('large-hint');
-                                var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);                              
+                                var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
                                 $(innerTooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth });
                                 $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left });
 
@@ -234,15 +234,15 @@
                 //var format = "";
                 //if (attrs.type === TextboxTypeEnum.Number.name)
                 //    format = 'format="number"'; '+format+'
-                var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
+                var textboxTemplate = '<div ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)">'
                             + '<vr-validator validate="ctrl.validate()" vr-input>'
-                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="ctrl.readOnly" id="mainInput"  placeholder="{{ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="ctrl.onKeyUp($event)" ng-blur="ctrl.onBlurDirective($event)">'
+                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="::ctrl.readOnly" id="mainInput"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)">'
                             + '</vr-validator>'
-                            + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
+                            + '<span ng-if="(ctrl.hint!=undefined)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="::ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
-                
 
-                    //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
+
+                //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
 
                 return startTemplate + labelTemplate + textboxTemplate + endTemplate;
             }
@@ -255,7 +255,7 @@
 
     app.constant('TextboxTypeEnum', {
         Email: { name: "email" },
-        Ip:{name:"ip"},
+        Ip: { name: "ip" },
         Number: { name: "number" },
         Password: { name: "password" }
     });
