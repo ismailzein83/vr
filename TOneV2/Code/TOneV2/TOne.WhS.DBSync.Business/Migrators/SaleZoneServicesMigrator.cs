@@ -30,7 +30,7 @@ namespace TOne.WhS.DBSync.Business
 
             var dbTableZoneServicesConfig = Context.DBTables[DBTableName.ZoneServiceConfig];
             allZoneServicesConfig = (Dictionary<string, ZoneServiceConfig>)dbTableZoneServicesConfig.Records;
-            
+
             var dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
             allSalePriceLists = (Dictionary<string, SalePriceList>)dbTableSalePriceList.Records;
 
@@ -93,6 +93,7 @@ namespace TOne.WhS.DBSync.Business
             else
             {
                 TotalRowsFailed++;
+                Context.WriteWarning(string.Format("Failed migrating Sale Zone Service, Source Id: {0}", sourceItem.SourceId));
                 return null;
             }
         }

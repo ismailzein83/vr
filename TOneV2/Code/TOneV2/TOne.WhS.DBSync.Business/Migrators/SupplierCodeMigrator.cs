@@ -72,6 +72,8 @@ namespace TOne.WhS.DBSync.Business
             else
             {
                 TotalRowsFailed++;
+                Context.WriteWarning(string.Format("Failed migrating Supplier Code {0}, Source Id: {1}", sourceItem.Code, sourceItem.SourceId));
+
                 return null;
             }
         }

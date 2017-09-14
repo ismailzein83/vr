@@ -34,7 +34,7 @@ namespace TOne.WhS.DBSync.Business
         public MarketPriceRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
-           
+
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
 
@@ -62,6 +62,7 @@ namespace TOne.WhS.DBSync.Business
                 var marketRule = GetSourceRuleFromZones(rule);
                 if (marketRule != null)
                     routeRules.Add(marketRule);
+
             }
             return routeRules;
         }
@@ -107,7 +108,10 @@ namespace TOne.WhS.DBSync.Business
 
             foreach (var rule in rules)
                 if (!_allSaleZones.ContainsKey(rule.SaleZoneID.ToString()))
+                {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating Market Price, Source Id: {0}", rule.SaleZoneMarketPriceID));
                     this.TotalRowsFailed++;
+                }
                 else
                     lstZoneIds.Add(_allSaleZones[rule.SaleZoneID.ToString()].SaleZoneId);
             if (lstZoneIds.Count > 0)

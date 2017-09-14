@@ -81,13 +81,9 @@ namespace TOne.WhS.DBSync.Business
                 if (sourceRule == null)
                     continue;
                 var rule = GetSourceRuleFromZones(rules);
-                if (rule == null)
+                if (rule != null)
                 {
-                    this.TotalRowsFailed++;
-                }
-                else
-                {
-                    routeRules.Add(rule);
+                   routeRules.Add(rule);
                 }
             }
             return routeRules;
@@ -100,7 +96,10 @@ namespace TOne.WhS.DBSync.Business
 
             foreach (var rule in rules)
                 if (!_allSaleZones.ContainsKey(rule.SaleZoneId.ToString()))
+                {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Block, Source Id: {0}, Sale Zone Id {1} does not exist", rule.SourceId, rule.SaleZoneId));
                     this.TotalRowsFailed++;
+                }
                 else
                     lstZoneIds.Add(_allSaleZones[rule.SaleZoneId.ToString()].SaleZoneId);
 
@@ -145,6 +144,8 @@ namespace TOne.WhS.DBSync.Business
             CarrierAccount customer;
             if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
             {
+                Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Block, Source Id: {0}, Customer Id {1} does not exist", sourceRule.SourceId, sourceRule.CustomerId));
+                TotalRowsFailed++;
                 return null;
             }
             else
@@ -173,9 +174,7 @@ namespace TOne.WhS.DBSync.Business
                 if (sourceRule == null)
                     continue;
                 var rule = GetSourceRuleFromCodes(rules);
-                if (rule == null)
-                    this.TotalRowsFailed++;
-                else
+                if (rule != null)
                     routeRules.Add(rule);
             }
             return routeRules;
@@ -243,6 +242,8 @@ namespace TOne.WhS.DBSync.Business
             CarrierAccount customer;
             if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
             {
+                Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Block, Source Id: {0}, Customer Id {1} does not exist", sourceRule.SourceId, sourceRule.CustomerId));
+                TotalRowsFailed++;
                 return null;
             }
             else

@@ -91,6 +91,8 @@ namespace TOne.WhS.DBSync.Business
                 };
             else {
                 TotalRowsFailed++;
+                Context.WriteWarning(string.Format("Failed migrating Supplier Pricelist, Source Id: {0}", sourceItem.SourceId));
+
                 return null;
             }
             

@@ -16,8 +16,8 @@ namespace TOne.WhS.DBSync.Business
         Dictionary<string, SaleZone> allSaleZones;
         TOne.WhS.BusinessEntity.Business.CodeIterator<CodeGroup> _codeGroupIterator;
         bool _onlyEffective;
-      
-        
+
+
         public SaleCodeMigrator(MigrationContext context)
             : base(context)
         {
@@ -57,7 +57,7 @@ namespace TOne.WhS.DBSync.Business
                 allSaleZones.TryGetValue(sourceItem.ZoneId.ToString(), out saleZone);
 
             CodeGroup codeGroup = _codeGroupIterator.GetLongestMatch(sourceItem.Code);
-           
+
             if (codeGroup != null & saleZone != null)
                 return new SaleCode
                     {
@@ -72,6 +72,7 @@ namespace TOne.WhS.DBSync.Business
             else
             {
                 TotalRowsFailed++;
+                Context.WriteWarning(string.Format("Failed migrating Sale Code {0}, Source Id: {1}", sourceItem.Code, sourceItem.SourceId));
                 return null;
             }
         }
@@ -93,6 +94,6 @@ namespace TOne.WhS.DBSync.Business
                 return true;
             }
         }
-       
+
     }
 }

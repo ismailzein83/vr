@@ -151,11 +151,7 @@ namespace TOne.WhS.DBSync.Business
                 if (sourceRule == null)
                     continue;
                 var rule = GetSourceRuleFromZones(rules);
-                if (rule == null)
-                {
-                    this.TotalRowsFailed++;
-                }
-                else
+                if (rule != null)
                 {
                     routeRules.Add(rule);
                 }
@@ -171,7 +167,10 @@ namespace TOne.WhS.DBSync.Business
 
             foreach (var rule in rules)
                 if (!_allSaleZones.ContainsKey(rule.SaleZoneId.ToString()))
+                {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Override, Source Id: {0}, Sale Zone Id {1}", sourceRule.SourceId, sourceRule.SaleZoneId));
                     this.TotalRowsFailed++;
+                }
                 else
                     lstZoneIds.Add(_allSaleZones[rule.SaleZoneId.ToString()].SaleZoneId);
 
@@ -216,6 +215,8 @@ namespace TOne.WhS.DBSync.Business
             CarrierAccount customer;
             if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
             {
+                Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Override, Source Id: {0}, Customer Id {1}", sourceRule.SourceId, sourceRule.CustomerId));
+                TotalRowsFailed++;
                 return null;
             }
             else
@@ -312,6 +313,8 @@ namespace TOne.WhS.DBSync.Business
             CarrierAccount customer;
             if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
             {
+                Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Option Block, Source Id: {0}, Carrier Account {1}", sourceRule.SourceId, sourceRule.CustomerId));
+
                 return null;
             }
             else

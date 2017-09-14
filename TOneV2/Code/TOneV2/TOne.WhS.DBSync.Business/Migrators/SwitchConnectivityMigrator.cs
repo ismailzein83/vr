@@ -81,7 +81,7 @@ namespace TOne.WhS.DBSync.Business
                 };
             }
 
-
+            Context.WriteWarning(string.Format("Failed migrating Switch Connectivity, Source Id: {0}", sourceItem.SourceId));
             TotalRowsFailed++;
             return null;
 

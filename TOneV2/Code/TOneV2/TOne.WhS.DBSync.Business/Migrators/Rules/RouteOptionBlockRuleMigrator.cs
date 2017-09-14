@@ -61,12 +61,11 @@ namespace TOne.WhS.DBSync.Business
                 if (sourceRule == null)
                     continue;
                 SourceRule rule = BuildSourceRule(rules);
-                if (rule == null)
+                if (rule != null)
                 {
-                    TotalRowsFailed++;
-                    continue;
+                    routeRules.Add(rule);
                 }
-                routeRules.Add(rule);
+                
             }
             return routeRules;
 
@@ -96,7 +95,10 @@ namespace TOne.WhS.DBSync.Business
             {
                 foreach (var rule in rules)
                     if (!_allSupplierZones.ContainsKey(rule.SupplierZoneId.ToString()))
+                    {
+                        Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Option Block, Source Id: {0}, Supplier Zone Id {1}", sourceRule.SourceId, sourceRule.SupplierZoneId));
                         this.TotalRowsFailed++;
+                    }
                     else
                         lstZoneIds.Add(_allSupplierZones[rule.SupplierZoneId.ToString()].SupplierZoneId);
             }
@@ -152,6 +154,8 @@ namespace TOne.WhS.DBSync.Business
                 CarrierAccount customer;
                 if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
                 {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Option Block, Source Id: {0}, Customer Id {1}", sourceRule.SourceId, sourceRule.CustomerId));
+                    TotalRowsFailed++;
                     return null;
                 }
                 settings.Criteria.CustomerGroupSettings = new SelectiveCustomerGroup

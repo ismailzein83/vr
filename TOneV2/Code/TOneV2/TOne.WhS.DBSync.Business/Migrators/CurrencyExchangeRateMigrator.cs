@@ -54,6 +54,7 @@ namespace TOne.WhS.DBSync.Business
                 };
             else
             {
+                Context.WriteWarning(string.Format("Failed migrating Currency Exchange Rate, Source Id: {0}", sourceItem.SourceId));
                 TotalRowsFailed++;
                 return null;
             }

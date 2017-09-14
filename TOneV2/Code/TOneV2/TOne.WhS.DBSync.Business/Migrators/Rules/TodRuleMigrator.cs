@@ -100,7 +100,10 @@ namespace TOne.WhS.DBSync.Business.Migrators
             foreach (SourceTod sourceTod in todRules)
             {
                 if (!_allSupplierZones.ContainsKey(sourceTod.ZoneId.ToString()))
+                {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating TOD, Source Id: {0}, Sale Zone Id {1}", sourceTod.TodId, sourceTod.ZoneId));
                     this.TotalRowsFailed++;
+                }
                 else
                     zoneIds.Add(_allSupplierZones[sourceTod.ZoneId.ToString()].SupplierZoneId);
             }
@@ -153,7 +156,10 @@ namespace TOne.WhS.DBSync.Business.Migrators
             foreach (SourceTod sourceTod in todRules)
             {
                 if (!_allCarrierAccounts.ContainsKey(sourceTod.CustomerId))
+                {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating TOD, Source Id: {0}, Carrier Account Id {1}", sourceTod.TodId, sourceTod.CustomerId));
                     this.TotalRowsFailed++;
+                }
                 else
                     customers.Add(_allCarrierAccounts[defaultTod.CustomerId].CarrierAccountId);
 

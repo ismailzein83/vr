@@ -157,6 +157,7 @@ namespace TOne.WhS.DBSync.Business
             else
             {
                 TotalRowsFailed++;
+                Context.WriteWarning(string.Format("Failed migrating Carrier Account {0}, Source Id: {1}", sourceItem.NameSuffix, sourceItem.SourceId));
                 return null;
             }
 

@@ -79,12 +79,11 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 if (sourceRule == null)
                     continue;
                 var rule = GetSourceRule(rules, type);
-                if (rule == null)
+                if (rule != null)
                 {
-                    this.TotalRowsFailed++;
-                    continue;
+                    routeRules.Add(rule);
                 }
-                routeRules.Add(rule);
+                
             }
             return routeRules;
         }
@@ -182,7 +181,10 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     foreach (SourceTariffRule sourcetariff in rules)
                     {
                         if (!_allSaleZones.ContainsKey(sourcetariff.ZoneId.ToString()))
+                        {
+                            Context.MigrationContext.WriteWarning(string.Format("Failed migrating Tariff Rule, Source Id: {0}, Sale Zone Id {1}", sourcetariff.SourceId, sourcetariff.ZoneId));
                             this.TotalRowsFailed++;
+                        }
                         else
                             zoneIds.Add(_allSaleZones[sourcetariff.ZoneId.ToString()].SaleZoneId);
                     }
@@ -191,7 +193,10 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     foreach (SourceTariffRule sourcetariff in rules)
                     {
                         if (!_allSupplierZones.ContainsKey(sourcetariff.ZoneId.ToString()))
+                        {
+                            Context.MigrationContext.WriteWarning(string.Format("Failed migrating Tariff Rule, Source Id: {0}, Supplier Zone Id {1}", sourcetariff.SourceId, sourcetariff.ZoneId));
                             this.TotalRowsFailed++;
+                        }
                         else
                             zoneIds.Add(_allSupplierZones[sourcetariff.ZoneId.ToString()].SupplierZoneId);
                     }

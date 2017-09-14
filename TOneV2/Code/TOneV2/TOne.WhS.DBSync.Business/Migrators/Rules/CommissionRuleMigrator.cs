@@ -92,12 +92,16 @@ namespace TOne.WhS.DBSync.Business.Migrators
             if (!_allCarrierAccounts.TryGetValue(defaultCommission.SupplierId, out supplier))
             {
                 this.TotalRowsFailed += commissionRules.Count;
+                Context.MigrationContext.WriteWarning(string.Format("Failed migrating Commission, Source Id: {0}", defaultCommission.CommissionId));
                 return null;
             }
             foreach (SourceCommission sourceCommission in commissionRules)
             {
                 if (!_allSupplierZones.ContainsKey(sourceCommission.ZoneId.ToString()))
+                {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating Commission, Source Id: {0}", sourceCommission.CommissionId));
                     this.TotalRowsFailed++;
+                }
                 else
                     zoneIds.Add(_allSupplierZones[sourceCommission.ZoneId.ToString()].SupplierZoneId);
             }
