@@ -20,8 +20,10 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
         function StyleDefinitionGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var gridAPI;
             var gridDrillDownTabsObj;
+
+            var gridAPI;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.styleDefinition = [];
@@ -84,6 +86,5 @@ app.directive('vrCommonStyledefinitionGrid', ['VRCommon_StyleDefinitionAPIServic
             function hasEditStyleDefinitionPermission() {
                 return VRCommon_StyleDefinitionAPIService.HasEditStyleDefinitionPermission();
             }
-
         }
     }]);
