@@ -13,9 +13,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             if ($attrs.ispreview != undefined) {
                 UtilsService.setContextReadOnly($scope);
                 ctrl.maxHeight = (window.innerHeight - 337) + 'px';
+            } else {
+                var sh = innerHeight;
+                var h = 28;
+                h += sh - 332;
+
+                ctrl.maxHeight = (h < 30 ? 30 : h) + 'px';
             }
 
-            var ratePlanGrid = new RatePlanGrid($scope, ctrl, $attrs);
+            var ratePlanGrid = new RatePlanGrid($scope, ctrl, $attrs, $element);
             ratePlanGrid.initializeController();
         },
         controllerAs: "ratePlanGridCtrl",
@@ -23,12 +29,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         templateUrl: "/Client/Modules/WhS_Sales/Directives/Templates/RatePlanGridTemplate.html"
     };
 
-    function RatePlanGrid($scope, ctrl, attrs) {
+    function RatePlanGrid($scope, ctrl, attrs, $element) {
         this.initializeController = initializeController;
 
         var gridAPI;
         var gridQuery;
-        var gridDrillDownTabs;
+        var gridDrillDownDefinitions;
+
+        var isLoadingMoreData;
+        var stopPagingOnScroll;
 
         var routingProductTab;
         var otherRatesTab;
@@ -39,6 +48,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
         var ownerName;
 
+        var columnsConfig;
+        var allZoneItems = [];
+        var filteredZoneItems = [];
+
+        var allZonesLetter = "ALL ZONES";
+
         function initializeController() {
 
             $scope.scopeModel = {};
@@ -46,6 +61,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             $scope.scopeModel.selectedZoneLetterIndex = 0;
             $scope.scopeModel.isPreview = (attrs.ispreview != undefined);
 
+            $scope.normalPrecision = UISettingsService.getNormalPrecision();
             $scope.longPrecision = UISettingsService.getLongPrecision();
             $scope.onZoneLetterSelectionChanged = function () {
 
@@ -69,7 +85,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 promises.push(loadZoneItemsDeferred.promise);
 
                 saveDraftDeferred.promise.then(function () {
-                    gridAPI.clearDataAndContinuePaging();
+                    //gridAPI.clearDataAndContinuePaging();
+                    stopPagingOnScroll = false;
+                    allZoneItems.length = 0;
+                    filteredZoneItems.length = 0;
+                    $scope.zoneItems.length = 0;
                     loadZoneItems().then(function () {
                         loadZoneItemsDeferred.resolve();
                     }).catch(function (error) {
@@ -84,18 +104,21 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             $scope.zoneItems = [];
             $scope.costCalculationMethods = [];
+            gridDrillDownDefinitions = getGridDrillDownDefinitions();
+            //$scope.onGridReady = function (api) {
+            //    gridAPI = api;
+            //    gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, null);
+            //    defineAPI();
+            //};
+            defineScrollEvent();
+            defineAPI();
 
-            $scope.onGridReady = function (api) {
-                gridAPI = api;
-                gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, null);
-                defineAPI();
-            };
-            $scope.loadMoreData = function () {
-                $scope.isLoading = true;
-                return loadZoneItems().finally(function () {
-                    $scope.isLoading = false;
-                });
-            };
+            //$scope.loadMoreData = function () {
+            //    $scope.isLoading = true;
+            //    return loadZoneItems().finally(function () {
+            //        $scope.isLoading = false;
+            //    });
+            //};
 
             $scope.onZoneNameClicked = function (dataItem) {
                 var primarySaleEntity = (gridQuery.SaleAreaSettings != undefined) ? gridQuery.SaleAreaSettings.PrimarySaleEntity : undefined;
@@ -148,6 +171,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     routingProductTab.setTabSelected(dataItem);
             };
 
+            $scope.onRowClicked = function (evnt) {
+                $('.vr-datagrid-row').removeClass('vr-datagrid-datacells-click');
+                $(evnt.target).closest('.vr-datagrid-row').addClass('vr-datagrid-datacells-click');
+            };
+
             $scope.getRowStyle = function (dataItem) {
                 var rowStyle;
                 var rate; // The rate to validate
@@ -194,6 +222,61 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 return rowStyle;
             };
+
+
+            $scope.expandRow = function (dataItem) {
+                //if (expandableRowTemplate != undefined) {
+                //dataItem.expandableRowTemplate = expandableRowTemplate;
+                dataItem.loadDrilldownTemplate = true;
+                dataItem.isRowExpanded = true;
+                //}
+            };
+
+            $scope.collapseRow = function (dataItem) {
+                dataItem.isRowExpanded = false;
+            };
+
+            //$scope.getColumnWidth = function (colName, widthFactor) {
+            //    var allocatedWidth = ;
+            //};
+
+            columnsConfig = {};
+            $scope.columnsConfig = columnsConfig;
+            $scope.addColumnFixedAndRecalculate = function (colName, width) {
+                var column = {
+                    widthAsNb: width,
+                    width: width + "px"
+                };
+                columnsConfig[colName] = column;
+                recalculateColumnWidthes();
+            };
+            $scope.addColumnWidthFactorAndRecalculate = function (colName, width) {
+                var column = {
+                    widthFactor: width
+                };
+                columnsConfig[colName] = column;
+                recalculateColumnWidthes();
+            };
+
+            function recalculateColumnWidthes() {
+                var sumFixedWidthes = 0;
+                var sumWidthFactors = 0;
+                for (var colName in columnsConfig) {
+                    var column = columnsConfig[colName];
+                    if (column.widthFactor != undefined)
+                        sumWidthFactors += column.widthFactor;
+                    else
+                        sumFixedWidthes += column.widthAsNb;
+                }
+
+                for (var colName in columnsConfig) {
+                    var column = columnsConfig[colName];
+                    if (column.widthFactor != undefined) {
+                        column.width = "calc(" + (100 * column.widthFactor / sumWidthFactors) + "% - " + (sumFixedWidthes * (100 * column.widthFactor / sumWidthFactors) / 100) + "px)";
+                    }
+                }
+            }
+
             function setColorOfRouteOptions(routeOptions, colorValue) {
                 if (routeOptions != null)
                     for (var i = 0; i < routeOptions.length; i++)
@@ -260,7 +343,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         gridQuery.context.onZoneLettersLoaded();
                         showBulkActionTabs(true);
 
-                        gridAPI.clearDataAndContinuePaging();
+                        allZoneItems.length = 0;
+                        filteredZoneItems.length = 0;
+                        $scope.zoneItems.length = 0;
+                        //gridAPI.clearDataAndContinuePaging();
+                        stopPagingOnScroll = false;
                         loadZoneItems().then(function () {
                             loadZoneItemsDeferred.resolve();
                         }).catch(function (error) {
@@ -341,8 +428,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     return WhS_Sales_RatePlanAPIService.GetZoneLetters(getZoneLettersInput).then(function (response) {
                         if (response != undefined) {
                             $scope.showZoneLetters = true;
-                            for (var i = 0; i < response.length; i++)
+                            for (var i = 0; i < response.length; i++) {
                                 $scope.zoneLetters.push(response[i]);
+                            }
+                            //this line will be added after optimizing grid performance
+                            //$scope.zoneLetters.push(allZonesLetter);
                         }
                     });
                 }
@@ -355,8 +445,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             api.getZoneDrafts = function () {
                 var zoneDrafts = [];
 
-                for (var i = 0; i < $scope.zoneItems.length; i++) {
-                    var item = $scope.zoneItems[i];
+                for (var i = 0; i < allZoneItems.length; i++) {
+                    var item = allZoneItems[i];
 
                     if (item.IsDirty)
                         applyChanges(zoneDrafts, item);
@@ -366,7 +456,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
 
             api.clearDataSource = function () {
+                allZoneItems.length = 0;
+                filteredZoneItems.length = 0;
                 $scope.zoneItems.length = 0;
+                stopPagingOnScroll = false;
             };
 
             if (ctrl.onReady != null)
@@ -385,23 +478,23 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             promises.push(loadDirectivesDeferred.promise);
 
             getZoneItemsPromise.then(function (response) {
-                var directivePromises = [];
+                
                 if (response != undefined) {
-                    var zoneItems = [];
                     for (var i = 0; i < response.length; i++) {
                         var zoneItem = response[i];
+                        zoneItem.isRowExpanded = false;
+                        zoneItem.loadDrilldownTemplate = false;
                         extendZoneItem(zoneItem);
-                        gridDrillDownTabs.setDrillDownExtensionObject(zoneItem);
-                        directivePromises.push(zoneItem.RouteOptionsLoadDeferred.promise);
-                        directivePromises.push(zoneItem.serviceViewerLoadDeferred.promise);
+                        setDrillDownExtensionObject(zoneItem);
 
                         WhS_Sales_RatePlanUtilsService.onNewRateChanged(zoneItem);
 
-                        zoneItems.push(zoneItem);
-                    }
-                    gridAPI.addItemsToSource(zoneItems);
+                        allZoneItems.push(zoneItem);
+                        filteredZoneItems.push(zoneItem);
+                    }                   
+                    
                 }
-                UtilsService.waitMultiplePromises(directivePromises).then(function () {
+                displayNextZoneItemsPage().then(function () {
                     loadDirectivesDeferred.resolve();
                 }).catch(function (error) {
                     loadDirectivesDeferred.reject(error);
@@ -409,16 +502,36 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             });
 
             function setGridQueryProperties() {
-                var pageInfo = gridAPI.getPageInfo();
+                //var pageInfo = gridAPI.getPageInfo();
                 if (gridQuery.Filter == undefined)
                     gridQuery.Filter = {};
-                gridQuery.Filter.FromRow = pageInfo.fromRow;
-                gridQuery.Filter.ToRow = pageInfo.toRow;
-                gridQuery.Filter.ZoneLetter = $scope.zoneLetters[$scope.scopeModel.selectedZoneLetterIndex];
+                gridQuery.Filter.FromRow = 1; //pageInfo.fromRow;
+                gridQuery.Filter.ToRow = 30000;//pageInfo.toRow;
+                var zoneLetter = $scope.zoneLetters[$scope.scopeModel.selectedZoneLetterIndex];
+                gridQuery.Filter.ZoneLetter = zoneLetter != allZonesLetter ? zoneLetter : null;
             }
 
             return UtilsService.waitMultiplePromises(promises);
         }
+        var pageSize = 50;
+        function displayNextZoneItemsPage() {
+            var addedItems = 0;
+            var promises = [];
+            for (var i = $scope.zoneItems.length; i < filteredZoneItems.length && addedItems < pageSize; i++) {
+                var zoneItem = filteredZoneItems[i];
+                promises.push(zoneItem.RouteOptionsLoadDeferred.promise);
+                promises.push(zoneItem.serviceViewerLoadDeferred.promise);
+
+                $scope.zoneItems.push(zoneItem);
+                addedItems++;
+            }
+            setTimeout(function () {
+                refreshHeaderWidth();
+                UtilsService.safeApply($scope);
+            });
+            return UtilsService.waitMultiplePromises(promises);
+        }
+
         function extendZoneItem(zoneItem) {
             zoneItem.IsDirty = isRatePlanZoneDirty();
             zoneItem.OwnerType = gridQuery.OwnerType;
@@ -483,7 +596,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                         getZoneItemDeferred.resolve();
 
-                        var gridZoneItem = UtilsService.getItemByVal($scope.zoneItems, response.ZoneId, "ZoneId");
+                        var gridZoneItem = UtilsService.getItemByVal(allZoneItems, response.ZoneId, "ZoneId");
 
                         gridZoneItem.EffectiveRoutingProductId = response.EffectiveRoutingProductId;
                         gridZoneItem.EffectiveRoutingProductName = response.EffectiveRoutingProductName;
@@ -656,6 +769,25 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }
         }
 
+        function setDrillDownExtensionObject(zoneItem) {
+            zoneItem.drillDownExtensionObject = {};
+            zoneItem.drillDownExtensionObject.drillDownDirectiveTabs = [];
+            for (var i = 0; i < gridDrillDownDefinitions.length; i++) {
+                addDrillDownTab(gridDrillDownDefinitions[i], zoneItem);
+            }
+        }
+
+        function addDrillDownTab(drillDownDefinition, zoneItem) {
+            var drillDownDirectiveTab = {};
+
+            drillDownDirectiveTab.title = drillDownDefinition.title;
+            drillDownDirectiveTab.directive = drillDownDefinition.directive;
+            drillDownDirectiveTab.loadDirective = function (directiveAPI) {
+                return drillDownDefinition.loadDirective(directiveAPI, zoneItem);
+            };
+            zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.push(drillDownDirectiveTab);
+        }
+
         function getRouteOptionsDirectivePayload(dataItem) {
             return {
                 RoutingDatabaseId: gridQuery.RoutingDatabaseId,
@@ -665,6 +797,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 CurrencyId: gridQuery.CurrencyId
             };
         }
+
         function getRouteOptions(rpRouteDetail) {
             return (rpRouteDetail != undefined) ? rpRouteDetail.RouteOptionsDetails : null;
         }
@@ -757,6 +890,102 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         function showBulkActionTabs(value) {
             if (gridQuery.context != undefined && gridQuery.context.showBulkActionTabs != undefined)
                 gridQuery.context.showBulkActionTabs(value);
+        }
+
+        function refreshHeaderWidth() {
+            var div = $($element).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
+            var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
+            if (hasVerticalScrollbar) {
+                $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
+                $scope.headerStyle = {
+                    "padding-right": getScrollbarWidth() + "px"
+                };
+
+            }
+
+            else {
+                $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
+                $scope.headerStyle = {
+                    "padding-right": "0px"
+                };
+            }
+            for (var colName in columnsConfig) {
+                var column = columnsConfig[colName];
+                if (column.widthFactor != undefined)
+                    $('.rpcolumn_' + colName).css({ width: column.width }); 
+            }
+            
+        }
+
+        function getScrollbarWidth() {
+            var outer = document.createElement("div");
+            outer.style.visibility = "hidden";
+            outer.style.width = "100px";
+            outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+
+            document.body.appendChild(outer);
+
+            var widthNoScroll = outer.offsetWidth;
+            // force scrollbars
+            outer.style.overflow = "scroll";
+
+            // add innerdiv
+            var inner = document.createElement("div");
+            inner.style.width = "100%";
+            outer.appendChild(inner);
+
+            var widthWithScroll = inner.offsetWidth;
+
+            // remove divs
+            outer.parentNode.removeChild(outer);
+
+            return widthNoScroll - widthWithScroll;
+        }
+
+        var lastScrollTop;
+        var gridBodyElement = $element.find("#gridBody");
+
+        function defineScrollEvent() {            
+            $($element.find("#gridBodyContainer")).on('scroll', scrollGrid);
+            function scrollGrid() {
+
+                var scrollTop = $($element.find("#gridBodyContainer")).scrollTop();
+                var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $($element.find("#gridBodyContainer")).height());
+
+                if (scrollTop > lastScrollTop) {
+                    if (scrollPercentage > 80)
+                        onScrolling();
+                }
+                lastScrollTop = scrollTop;
+            }
+            $element.on('$destroy', function () {
+                $($element.find("#gridBodyContainer")).unbind('scroll', scrollGrid);
+                $scope.$destroy();
+            });
+        }
+
+        function onScrolling() {
+            if (isLoadingMoreData)
+                return;
+            if (stopPagingOnScroll)
+                return;
+            $scope.$apply(function () {
+                var initialLength = $scope.zoneItems.length;
+                $scope.isLoading = true;
+                var promise = displayNextZoneItemsPage();
+                if (promise != undefined && promise != null) {
+                    isLoadingMoreData = true;
+                    promise.finally(function () {
+                        if ($scope.zoneItems.length - initialLength < pageSize)
+                            stopPagingOnScroll = true;
+                        isLoadingMoreData = false;
+                        setTimeout(function () {
+                            $scope.isLoading = false;
+                            $scope.$apply();
+                        });
+                    });
+                }
+            });
         }
     }
 }]);

@@ -552,8 +552,11 @@ namespace TOne.WhS.Sales.Business
                 if (!SaleZoneFilter(saleZone, input.Filter.CountryIds, input.Filter.ZoneNameFilterType, input.Filter.ZoneNameFilter))
                     return false;
 
-                if (char.ToLower(saleZone.Name.ElementAt(0)) != char.ToLower(input.Filter.ZoneLetter))
-                    return false;
+                if (input.Filter.ZoneLetter.HasValue)
+                {
+                    if (char.ToLower(saleZone.Name.ElementAt(0)) != char.ToLower(input.Filter.ZoneLetter.Value))
+                        return false;
+                }
 
                 return true;
             };
