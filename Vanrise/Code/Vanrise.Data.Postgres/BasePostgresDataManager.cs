@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Npgsql;
-using NpgsqlTypes;
 
 namespace Vanrise.Data.Postgres
 {
@@ -38,12 +33,12 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region ExecuteReader
-        protected void ExecuteReaderText(string cmdText, Action<IDataReader> onReaderReady, Action<NpgsqlCommand> prepareCommand)
+        protected void ExecuteReaderText(string cmdText, Action<IDataReader> onReaderReady, Action<NpgsqlCommand> prepareCommand, int? commandTimeout = null)
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
-                using (var cmd = CreateCommand(conn, cmdText))
+                using (var cmd = CreateCommand(conn, cmdText, commandTimeout))
                 {
                     if (prepareCommand != null)
                         prepareCommand(cmd);
@@ -94,14 +89,14 @@ namespace Vanrise.Data.Postgres
 
         #region ExecuteScalar
 
-        protected object ExecuteScalarText(string cmdText, Action<NpgsqlCommand> prepareCommand)
+        protected object ExecuteScalarText(string cmdText, Action<NpgsqlCommand> prepareCommand, int? commandTimeout = null)
         {
             object result;
             using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
             {
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
-                using (var cmd = CreateCommand(conn, cmdText))
+                using (var cmd = CreateCommand(conn, cmdText, commandTimeout))
                 {
                     if (prepareCommand != null)
                         prepareCommand(cmd);
@@ -116,31 +111,29 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region ExecuteNonQuery
-        public void ExecuteNonQuery(string[] sqlStrings)
+        public void ExecuteNonQuery(string[] sqlStrings, int? commandTimeout = null)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(GetConnectionString()))
             {
                 if (connection.State == ConnectionState.Closed) connection.Open();
-                using (NpgsqlCommand command = connection.CreateCommand())
+                foreach (string sql in sqlStrings)
                 {
-                    command.CommandType = CommandType.Text;
-                    foreach (string sql in sqlStrings)
+                    using (NpgsqlCommand command = CreateCommand(connection, sql, commandTimeout))
                     {
-                        command.CommandText = sql;
                         command.ExecuteNonQuery();
                     }
                 }
                 connection.Close();
             }
         }
-        protected int ExecuteNonQueryText(string cmdText, Action<NpgsqlCommand> prepareCommand)
+        protected int ExecuteNonQueryText(string cmdText, Action<NpgsqlCommand> prepareCommand, int? commandTimeout = null)
         {
             int rowsAffected;
             using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
             {
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
-                using (var cmd = CreateCommand(conn, cmdText))
+                using (var cmd = CreateCommand(conn, cmdText, commandTimeout))
                 {
                     if (prepareCommand != null)
                         prepareCommand(cmd);
@@ -155,20 +148,31 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region Private Functions
-        private NpgsqlCommand CreateCommand(NpgsqlConnection conn, string sql)
+        private NpgsqlCommand CreateCommand(NpgsqlConnection conn, string sql, int? commandTimeout)
         {
             var cmd = conn.CreateCommand();
             cmd.CommandText = sql;
-            cmd.CommandTimeout = 600;
+            cmd.CommandTimeout = commandTimeout.HasValue ? commandTimeout.Value : 600;
             return cmd;
         }
 
         #endregion
+
         #region BulkCopy
-
-        public void Bulk(byte[] data, string tableName)
+        public void Bulk(IEnumerable<object> objectList, string tableName)
         {
+            if (objectList == null)
+                return;
 
+            using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                using (var inStream = conn.BeginTextImport(string.Format("COPY {0} FROM STDIN", tableName)))
+                {
+                    foreach (var objectItem in objectList)
+                        inStream.WriteLine(objectItem);
+                }
+            }
         }
 
         #endregion
