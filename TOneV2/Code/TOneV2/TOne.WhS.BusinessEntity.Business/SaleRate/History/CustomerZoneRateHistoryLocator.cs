@@ -159,11 +159,13 @@ namespace TOne.WhS.BusinessEntity.Business
         private void PrepareSaleRateHistoryRecords(List<SaleRateHistoryRecord> records, int currencyId)
         {
             var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+            int longPrecisionValue = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
 
             for (int i = 0; i < records.Count; i++)
             {
                 SaleRateHistoryRecord record = records.ElementAt(i);
                 record.ConvertedRate = currencyExchangeRateManager.ConvertValueToCurrency(record.Rate, record.CurrencyId, currencyId, record.BED);
+                record.ConvertedRate = decimal.Round(record.ConvertedRate, longPrecisionValue);
 
                 SaleRateHistoryRecord previousRecord = null;
                 decimal? previousConvertedRateValue = null;
