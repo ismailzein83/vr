@@ -226,6 +226,7 @@
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSaleZoneRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSupplierRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListOwnerTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\SalePriceListTemplateMappedCellHeaderEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListTemplateSettingsCodesByZoneBEFieldEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SupplierEntityServiceSourceEnum.js" />
