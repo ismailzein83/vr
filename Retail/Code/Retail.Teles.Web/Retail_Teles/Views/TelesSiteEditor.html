@@ -4,13 +4,19 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-textbox label="Centrex FeatSet" value="scopeModel.centrexFeatSet" isrequired="true"></vr-textbox>
-                        <vr-switch label="Use Template" value="scopeModel.useTemplate"></vr-switch>
-                    </vr-row>
-                    <vr-row ng-if="scopeModel.useTemplate">
-                        <vr-textbox label="Template Name" value="scopeModel.templateName" isrequired="true"></vr-textbox>
-                    </vr-row>
-                    <vr-section title="Site Settings" ng-if="!scopeModel.useTemplate">
+                        <vr-columns width="1/3row">
+                            <vr-switch label="Use Template" value="scopeModel.useTemplate"></vr-switch>
+                        </vr-columns>
+
+                        <vr-columns width="1/3row" ng-if="!scopeModel.useTemplate">
+                            <vr-textbox label="Centrex FeatSet" value="scopeModel.centrexFeatSet" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row" ng-if="scopeModel.useTemplate">
+                            <vr-textbox label="Template Name" value="scopeModel.templateName" isrequired="true"></vr-textbox>
+                        </vr-columns>
+
+</vr-row>
+                    <vr-section title="Site Settings" >
                         <vr-row>
                             <vr-columns width="1/3row">
                                 <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
@@ -19,25 +25,25 @@
                                 <vr-textbox value="scopeModel.description" label="Description" isrequired="true"></vr-textbox>
                             </vr-columns>
                             <vr-columns width="1/3row">
-                                <vr-textbox value="scopeModel.siteMaxCalls" label="Max Calls" isrequired="true" type="number"></vr-textbox>
+                                <vr-textbox value="scopeModel.siteMaxCalls" label="Max Calls" isrequired="true" type="number" minvalue="0" maxvalue="10" ng-if="!scopeModel.useTemplate"></vr-textbox>
                             </vr-columns>
                             <vr-columns width="1/3row">
-                                <vr-textbox value="scopeModel.siteMaxCallsPerUser" label="Max Calls Per User" isrequired="true" type="number"></vr-textbox>
+                                <vr-textbox value="scopeModel.siteMaxCallsPerUser" label="Max Calls Per User" isrequired="true" type="number" minvalue="0" maxvalue="10" ng-if="!scopeModel.useTemplate"></vr-textbox>
                             </vr-columns>
                             <vr-columns width="1/3row">
-                                <vr-textbox value="scopeModel.siteMaxRegistrations" label="Max Registrations" isrequired="true" type="number"></vr-textbox>
+                                <vr-textbox value="scopeModel.siteMaxRegistrations" label="Max Registrations" isrequired="true" type="number" minvalue="0" maxvalue="10" ng-if="!scopeModel.useTemplate"></vr-textbox>
                             </vr-columns>
                             <vr-columns width="1/3row">
-                                <vr-textbox value="scopeModel.siteMaxRegsPerUser" label="Max Regs Per User" isrequired="true" type="number"></vr-textbox>
+                                <vr-textbox value="scopeModel.siteMaxRegsPerUser" label="Max Regs Per User" isrequired="true" type="number" minvalue="0" maxvalue="10" ng-if="!scopeModel.useTemplate"></vr-textbox>
                             </vr-columns>
                             <vr-columns width="1/3row">
-                                <vr-textbox value="scopeModel.siteMaxSubsPerUser" label="Max Subs Per User" isrequired="true" type="number"></vr-textbox>
+                                <vr-textbox value="scopeModel.siteMaxSubsPerUser" label="Max Subs Per User" isrequired="true" type="number" minvalue="0" maxvalue="3" ng-if="!scopeModel.useTemplate"></vr-textbox>
                             </vr-columns>
                             <vr-columns width="1/3row">
-                                <vr-textbox value="scopeModel.siteMaxBusinessTrunkCalls" label="Max Business Trunk Calls" isrequired="true" type="number"></vr-textbox>
+                                <vr-textbox value="scopeModel.siteMaxBusinessTrunkCalls" label="Max Business Trunk Calls" isrequired="true" type="number" minvalue="0" maxvalue="10" ng-if="!scopeModel.useTemplate"></vr-textbox>
                             </vr-columns>
                             <vr-columns width="1/3row">
-                                <vr-textbox value="scopeModel.siteMaxUsers" label="Max Users" isrequired="true" type="number"></vr-textbox>
+                                <vr-textbox value="scopeModel.siteMaxUsers" label="Max Users" isrequired="true" type="number" minvalue="0" maxvalue="21" ng-if="!scopeModel.useTemplate"></vr-textbox>
                             </vr-columns>
                         </vr-row>
                     </vr-section>

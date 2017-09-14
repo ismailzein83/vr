@@ -57,10 +57,14 @@ namespace Retail.Teles.Business
         public string CreateSite(Guid vrConnectionId, dynamic enterpriseId, string centrexFeatSet, Site request, string templateName)
         {
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
-            var actionPath = string.Format("/domain/{0}?centrexFeatSet={1}", enterpriseId, centrexFeatSet);
+            var actionPath = string.Format("/domain/{0}?", enterpriseId);
+            if (centrexFeatSet != null)
+            {
+                actionPath += string.Format("centrexFeatSet={0}", centrexFeatSet);
+            }
             if(templateName != null)
             {
-                actionPath += string.Format("&template={0}", templateName);
+                actionPath += string.Format("template={0}", templateName);
             }
             VRWebAPIResponse<string> response = telesRestConnection.Post<Site, string>(actionPath, request, true);
             response.Headers.Location.ThrowIfNull("response.Headers", response.Headers);

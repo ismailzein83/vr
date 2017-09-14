@@ -52,7 +52,7 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
                 {
                     var onSiteAdded = function (siteObj) {
                         ctrl.datasource.push(siteObj);
-                        if ($attrs.ismultipleselection != undefined)
+                        if (attrs.ismultipleselection != undefined)
                             ctrl.selectedvalues.push(siteObj);
                         else
                             ctrl.selectedvalues = siteObj;

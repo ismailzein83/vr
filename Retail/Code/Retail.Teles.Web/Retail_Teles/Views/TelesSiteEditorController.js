@@ -54,8 +54,8 @@
             $scope.scopeModel.isLoading = true;
             return Retail_Teles_SiteAPIService.AddTelesSite(buildSiteObjFromScope()).then(function (response) {
                 if (response) {
-                    if ($scope.onMappingAccount != undefined) {
-                        $scope.onMappingAccount(response.InsertedObject);
+                    if ($scope.onSiteAdded != undefined) {
+                        $scope.onSiteAdded(response.InsertedObject);
                     }
                     $scope.modalContext.closeModal();
                 }
