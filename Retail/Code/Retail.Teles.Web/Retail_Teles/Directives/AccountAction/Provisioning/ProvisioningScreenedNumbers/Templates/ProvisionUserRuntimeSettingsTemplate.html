@@ -1,0 +1,15 @@
+﻿<vr-row>
+    <retail-teles-domains-selector on-ready="scopeModel.onDomainsDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onDomainsSelectionChanged"></retail-teles-domains-selector>
+    <span vr-loader="scopeModel.isEnterprisesSelectorLoading">
+        <retail-teles-enterprises-selector on-ready="scopeModel.onEnterprisesDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onEnterprisesSelectionChanged"></retail-teles-enterprises-selector>
+    </span>
+    <span vr-loader="scopeModel.isSitesSelectorLoading">
+        <retail-teles-sites-selector showaddbutton on-ready="scopeModel.onSitesDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onSitesSelectionChanged"></retail-teles-sites-selector>
+    </span>
+    <span vr-loader="scopeModel.isGatewaysSelectorLoading">
+        <retail-teles-gateways-selector on-ready="scopeModel.onGatewaysDirectiveReady" normal-col-num="4" isrequired="true"></retail-teles-gateways-selector>
+    </span>
+</vr-row>
+<retail-teles-provisioner-provisionuser-settings on-ready="scopeModel.onProvisionUserSettingsReady"></retail-teles-provisioner-provisionuser-settings>
+
+

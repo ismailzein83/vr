@@ -17,6 +17,28 @@ namespace Retail.Teles.Business
         DIDManager _didManager = new DIDManager();
         AccountBEManager _accountBEManager = new AccountBEManager();
         TelesSiteManager _telesSiteManager = new TelesSiteManager();
+        TelesUserManager _telesUserManager = new TelesUserManager();
+
+        public void CreateUserWithScreenedNumbers(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, string telesDomainId, string telesEnterpriseId, string telesSiteId, Guid accountBEDefinitionId, Account user, string siteName, UserAccountSetting userAccountSetting, string gateway)
+        {
+
+            User newuser = new User
+            {
+                firstName = userAccountSetting.FirstName,
+                lastName = userAccountSetting.LastName,
+                loginName = userAccountSetting.LoginName,
+                loginPassword = userAccountSetting.LoginPassword,
+                role = "END_USER",
+                auth = "FULL",
+                pin = userAccountSetting.Pin,
+            };
+            string telesUserId = _telesUserManager.CreateUser(vrConnectionId, siteName, gateway, newuser);
+            _telesUserManager.TryMapUserToAccount(accountBEDefinitionId, user.AccountId, telesDomainId, telesEnterpriseId, telesSiteId, telesUserId, ProvisionStatus.Started);
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("User {0} created.", user.Name));
+            CreateScreendedNumbers(context, vrConnectionId, countryCode, user.AccountId, telesUserId);
+            _telesUserManager.TryMapUserToAccount(accountBEDefinitionId, user.AccountId, telesDomainId, telesEnterpriseId, telesSiteId, telesUserId, ProvisionStatus.Completed);
+            context.TrackActionExecuted(user.AccountId, string.Format("Teles site {0}", user.Name), null);
+        }
         public void CreateSiteWithScreenedNumbers(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, string enterpriseId, Guid accountBEDefinitionId, Account site, string enterpriseName, SiteAccountSetting siteAccountSetting, string centrexFeatSet)
         {
 
@@ -36,7 +58,7 @@ namespace Retail.Teles.Business
                 registrarEnabled = true,
                 ringBackUri = "ringback",
             };
-            string siteId = _telesSiteManager.CreateSite(vrConnectionId, enterpriseId, centrexFeatSet, newsite);
+            string siteId = _telesSiteManager.CreateSite(vrConnectionId, enterpriseId, centrexFeatSet, newsite,null);
             _telesSiteManager.TryMapSiteToAccount(accountBEDefinitionId, site.AccountId, siteId, ProvisionStatus.Started);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Site {0} created.", site.Name));
             CreateScreendedNumbers(context, vrConnectionId, countryCode, site.AccountId, siteId);
@@ -44,9 +66,9 @@ namespace Retail.Teles.Business
             context.TrackActionExecuted(site.AccountId, string.Format("Teles site {0}", site.Name), null);
         }
 
-        private void CreateScreendedNumbers(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, long siteAccountId, string siteId)
+        private void CreateScreendedNumbers(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, long accountId, string telesAccountId)
         {
-            var dids = _didManager.GetDIDsByParentId(siteAccountId.ToString(), DateTime.Now);
+            var dids = _didManager.GetDIDsByParentId(accountId.ToString(), DateTime.Now);
 
             if (dids != null)
             {
@@ -64,7 +86,7 @@ namespace Retail.Teles.Business
                                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("Numbers Created: {0}", string.Join(",", trackingNumbers)));
                                 trackingNumbers = new List<string>();
                             }
-                            CreateScreenedNumber(context, vrConnectionId, countryCode, siteId, number);
+                            CreateScreenedNumber(context, vrConnectionId, countryCode, telesAccountId, number);
                         }
                     }
                 }
@@ -75,7 +97,7 @@ namespace Retail.Teles.Business
             }
         }
 
-        private void CreateScreenedNumber(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, string siteId, string number)
+        private void CreateScreenedNumber(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, string telesAccountId, string number)
         {
             ScreenedNumber screenedNumber = new ScreenedNumber
             {
@@ -87,8 +109,19 @@ namespace Retail.Teles.Business
                 netNumber = true,
                 type = "FIXED_NETWORK",
             };
-            _telesSiteManager.CreateScreenedNumber(vrConnectionId, siteId, screenedNumber);
+            _telesSiteManager.CreateScreenedNumber(vrConnectionId, telesAccountId, screenedNumber);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Screened Number {0} created.", number));
         }
+    }
+    public class User
+    {
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string loginName { get; set; }
+        public string loginPassword { get; set; }
+        public string role { get; set; }
+        public string auth { get; set; }
+        public string pin { get; set; }
+
     }
 }

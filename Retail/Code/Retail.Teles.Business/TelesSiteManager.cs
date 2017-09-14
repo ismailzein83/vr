@@ -54,17 +54,20 @@ namespace Retail.Teles.Business
             screenedNumberId.ThrowIfNull("screenedNumberId", screenedNumberId);
             return screenedNumberId;
         }
-        public string CreateSite(Guid vrConnectionId, dynamic enterpriseId, string centrexFeatSet, Site request)
+        public string CreateSite(Guid vrConnectionId, dynamic enterpriseId, string centrexFeatSet, Site request, string templateName)
         {
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
             var actionPath = string.Format("/domain/{0}?centrexFeatSet={1}", enterpriseId, centrexFeatSet);
+            if(templateName != null)
+            {
+                actionPath += string.Format("&template={0}", templateName);
+            }
             VRWebAPIResponse<string> response = telesRestConnection.Post<Site, string>(actionPath, request, true);
             response.Headers.Location.ThrowIfNull("response.Headers", response.Headers);
             var siteId = response.Headers.Location.Segments.Last();
-            siteId.ThrowIfNull("siteId", siteId);
             TelesSiteManager.SetCacheExpired();
             return Convert.ToString(siteId);
-        }
+        } 
         public IEnumerable<dynamic> GetSites(Guid vrConnectionId, dynamic telesEnterpriseId)
         {
             var actionPath = string.Format("/domain/{0}/sub", telesEnterpriseId);
@@ -109,6 +112,33 @@ namespace Retail.Teles.Business
             }
             return updateOperationOutput;
 
+        }
+        public Vanrise.Entities.InsertOperationOutput<TelesEnterpriseSiteInfo> AddTelesSite(TelesSiteInput input)
+        {
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<TelesEnterpriseSiteInfo>();
+
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertOperationOutput.InsertedObject = null;
+            if(input.Site != null)
+            {
+                input.Site.ringBackUri = "ringback";
+                input.Site.registrarEnabled = true;
+                input.Site.registrarAuthRequired = true;
+                input.Site.presenceEnabled = true;
+
+            }
+            string siteId = CreateSite(input.VRConnectionId, input.TelesEnterpriseId, input.CentrexFeatSet, input.Site, input.TemplateName);
+            if (siteId != null)
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                var site = GetSite(input.VRConnectionId, siteId);
+                insertOperationOutput.InsertedObject = new TelesEnterpriseSiteInfo
+                {
+                    Name = site.name,
+                    TelesSiteId = siteId
+                };
+            }
+            return insertOperationOutput;
         }
         public bool IsMapSiteToAccountValid(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId)
         {

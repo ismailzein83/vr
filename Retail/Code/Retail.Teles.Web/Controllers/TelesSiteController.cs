@@ -30,5 +30,14 @@ namespace Retail.Teles.Web.Controllers
                 return GetUnauthorizedResponse();
             return _manager.MapSiteToAccount(input);
         }
+         [HttpPost]
+         [Route("AddTelesSite")]
+        public Vanrise.Entities.InsertOperationOutput<TelesEnterpriseSiteInfo> AddTelesSite(TelesSiteInput input)
+        {
+            return _manager.AddTelesSite(input);
+        }
+
+
+        
     }
 }

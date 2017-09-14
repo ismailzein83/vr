@@ -65,6 +65,9 @@
     <Compile Include="TelesEnterpriseInfo.cs" />
     <Compile Include="TelesEnterpriseSiteFilter.cs" />
     <Compile Include="TelesEnterpriseSiteInfo.cs" />
+    <Compile Include="TelesGatewayFilter.cs" />
+    <Compile Include="TelesGatewayInfo.cs" />
+    <Compile Include="TelesSiteInput.cs" />
     <Compile Include="TelesUserFilter.cs" />
     <Compile Include="TelesUserInfo.cs" />
     <Compile Include="UserAccountMappingInfo.cs" />

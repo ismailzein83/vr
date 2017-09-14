@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\TelesGatewayController.cs" />
     <Compile Include="Controllers\TelesUserController.cs" />
     <Compile Include="Controllers\TelesEnterpriseController.cs" />
     <Compile Include="Controllers\TelesRoutingGroupController.cs" />
@@ -185,11 +186,17 @@
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\ChangeUsersRGsProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\retail-teles-accountextrafield-internationalcallsblocked.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\Templates\InternationalCallsBlockedExtraFieldTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-definitionsettings-provisionuser.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-definitionsettings-provisionsite.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-provisionuser-settings.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-provisionaccount-settings.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-definitionsettings-provisionaccount.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-runtimesettings-provisionuser.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-runtimesettings-provisionsite.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-runtimesettings-provisionaccount.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisionUserSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisionUserDefinitionSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisionUserRuntimeSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisionSiteRuntimeSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisionSiteDefinitionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\Templates\ProvisionAccountDefinitionSettingsTemplate.html" />
@@ -210,19 +217,23 @@
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-enterprisebedefinition-editor.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-sites-selector.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-enterprises-selector.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-gateways-selector.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-users-selector.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\TelesEnterpriseBEDefinitionEditorTemplate.html" />
     <Content Include="Retail_Teles\ModuleInitialization.js" />
     <Content Include="Retail_Teles\Services\APIServices\DomainAPIService.js" />
+    <Content Include="Retail_Teles\Services\APIServices\GatewayAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\UserAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\SiteAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\EnterpriseAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\TelesRoutingGroupAPIService.js" />
+    <Content Include="Retail_Teles\Services\SiteService.js" />
     <Content Include="Retail_Teles\Services\TelesAccountActionService.js" />
+    <Content Include="Retail_Teles\Views\TelesSiteEditor.html" />
+    <Content Include="Retail_Teles\Views\TelesSiteEditorController.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Retail_Teles\APIServices\" />
-    <Folder Include="Retail_Teles\Views\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

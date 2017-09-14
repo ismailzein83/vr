@@ -84,23 +84,7 @@ namespace Retail.Teles.Business.Provisioning
         public int maxBusinessTrunkCalls { get; set; }
         public int maxUsers { get; set; }
     }
-    public class Site
-    {
-        public string name { get; set; }
-        public string description { get; set; }
-        public int maxCalls { get; set; }
-        public int maxCallsPerUser { get; set; }
-        public int maxRegistrations { get; set; }
-        public int maxRegsPerUser { get; set; }
-        public int maxSubsPerUser { get; set; }
-        public int maxBusinessTrunkCalls { get; set; }
-        public int maxUsers { get; set; }
-        public string ringBackUri { get; set; }
-        public bool registrarEnabled { get; set; }
-        public bool registrarAuthRequired { get; set; }
-        public bool presenceEnabled { get; set; }
-
-    }
+    
     public class ScreenedNumber
     {
         public string cc { get; set; }

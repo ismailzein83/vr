@@ -25,7 +25,7 @@ namespace Retail.Teles.Business
         public ConditionType ConditionType { get; set; }
         public Guid CompanyTypeId { get; set; }
         public Guid SiteTypeId { get; set; }
-        public Guid UserTypeId { get; set; }
+        public Guid? UserTypeId { get; set; }
         public string ActionType { get; set; }
 
         static AccountBEManager _accountBEManager = new AccountBEManager();
@@ -40,7 +40,7 @@ namespace Retail.Teles.Business
                 case Business.ConditionType.AllowChangeUserRGs:
                     return AllowChangeUserRGs(context.Account, this.CompanyTypeId, this.SiteTypeId,this.UserTypeId, this.ActionType);
                 case Business.ConditionType.AllowRevertUserRGs:
-                    return AllowRevertUserRGs(context.Account, this.CompanyTypeId, this.SiteTypeId,this.ActionType);
+                    return AllowRevertUserRGs(context.Account, this.CompanyTypeId, this.SiteTypeId, this.UserTypeId, this.ActionType);
                 case Business.ConditionType.AllowEnterpriseMap:
                     return AllowEnterpriseMap(context.Account, this.CompanyTypeId, this.SiteTypeId);
                 case Business.ConditionType.AllowSiteMap:
@@ -149,7 +149,7 @@ namespace Retail.Teles.Business
             }
             return false;
         }
-        public static bool AllowChangeUserRGs(Account account, Guid companyTypeId, Guid siteTypeId,Guid userTypeId, string actionType)
+        public static bool AllowChangeUserRGs(Account account, Guid companyTypeId, Guid siteTypeId,Guid? userTypeId, string actionType)
         {
             if (account.TypeId == companyTypeId)
             {
@@ -164,7 +164,7 @@ namespace Retail.Teles.Business
 
                 return !IsChangedUserRGs(account,true, actionType);
             }
-            else if (account.TypeId == userTypeId)
+            else if (userTypeId.HasValue && account.TypeId == userTypeId.Value)
             {
                 if (!IsUserMapped(account))
                     return false;
@@ -172,7 +172,7 @@ namespace Retail.Teles.Business
             }
             return false;
         }
-        public static bool AllowRevertUserRGs(Account account, Guid companyTypeId, Guid siteTypeId,string actionType)
+        public static bool AllowRevertUserRGs(Account account, Guid companyTypeId, Guid siteTypeId,Guid? userTypeId, string actionType)
         {
             if (account.TypeId == companyTypeId)
             {
@@ -181,6 +181,10 @@ namespace Retail.Teles.Business
             else if (account.TypeId == siteTypeId)
             {
                 return IsChangedUserRGs(account,true, actionType);
+            }
+            else if (userTypeId.HasValue && account.TypeId == userTypeId.Value)
+            {
+                return IsChangedUserRGs(account, true, actionType);
             }
             return false;
         }
@@ -205,9 +209,9 @@ namespace Retail.Teles.Business
             return false;
         }
 
-        public static bool CanChangeUserMapping(Account account, Guid userTypeId)
+        public static bool CanChangeUserMapping(Account account, Guid? userTypeId)
         {
-            if (account.TypeId == userTypeId)
+            if (userTypeId.HasValue && account.TypeId == userTypeId)
             {
                 if (IsUserNotMappedOrProvisioned(account))
                     return false;
@@ -215,9 +219,9 @@ namespace Retail.Teles.Business
             }
             return false;
         }
-        public static bool AllowUserMap(Account account, Guid userTypeId)
+        public static bool AllowUserMap(Account account, Guid? userTypeId)
         {
-            if (account.TypeId == userTypeId)
+            if (userTypeId.HasValue && account.TypeId == userTypeId)
             {
                 return !IsUserMapped(account);
             }

@@ -17,10 +17,13 @@
         function MapSiteToAccount(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "MapSiteToAccount"), input);
         }
-
+        function AddTelesSite(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "AddTelesSite"), input);
+        }
         return ({
             GetEnterpriseSitesInfo: GetEnterpriseSitesInfo,
-            MapSiteToAccount: MapSiteToAccount
+            MapSiteToAccount: MapSiteToAccount,
+            AddTelesSite: AddTelesSite
         });
     }
 

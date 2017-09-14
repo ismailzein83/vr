@@ -33,6 +33,10 @@
             var siteTypeAPI;
             var siteTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var userTypeAPI;
+            var userTypeReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -48,6 +52,10 @@
                 $scope.scopeModel.onSiteAccountTypeSelectorReady = function (api) {
                     siteTypeAPI = api;
                     siteTypeReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onUserAccountTypeSelectorReady = function (api) {
+                    userTypeAPI = api;
+                    userTypeReadyDeferred.resolve();
                 };
                 defineAPI();
             }
@@ -113,6 +121,20 @@
                         return siteTypeLoadDeferred.promise
                     }
 
+                    promises.push(loadUserTypes());
+
+                    function loadUserTypes() {
+                        var userTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        userTypeReadyDeferred.promise.then(function () {
+                            var userTypePayload;
+                            if (provisionerDefinitionSettings != undefined) {
+                                userTypePayload = { selectedIds: provisionerDefinitionSettings.UserTypeId };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(userTypeAPI, userTypePayload, userTypeLoadDeferred);
+                        });
+                        return userTypeLoadDeferred.promise
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -128,7 +150,8 @@
                         ActionType: $scope.scopeModel.actionType,
                         VRConnectionId: conectionTypeAPI.getSelectedIds(),
                         CompanyTypeId: companyTypeAPI.getSelectedIds(),
-                        SiteTypeId: siteTypeAPI.getSelectedIds()
+                        SiteTypeId: siteTypeAPI.getSelectedIds(),
+                        UserTypeId: userTypeAPI.getSelectedIds()
                     };
                     return data;
                 }

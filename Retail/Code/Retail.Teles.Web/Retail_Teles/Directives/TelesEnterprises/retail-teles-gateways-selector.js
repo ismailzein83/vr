@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'UtilsService', 'VRUIUtilsService', 'Retail_Teles_SiteService', function (Retail_Teles_SiteAPIService, UtilsService, VRUIUtilsService, Retail_Teles_SiteService) {
+app.directive('retailTelesGatewaysSelector', ['Retail_Teles_GatewayAPIService', 'UtilsService', 'VRUIUtilsService', function (Retail_Teles_GatewayAPIService, UtilsService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {
@@ -24,8 +24,8 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
             if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
 
-            var enterpriseSelector = new SitesSelector(ctrl, $scope, $attrs);
-            enterpriseSelector.initializeController();
+            var usersSelector = new GatewaysSelector(ctrl, $scope, $attrs);
+            usersSelector.initializeController();
 
         },
         controllerAs: 'ctrl',
@@ -35,31 +35,16 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
         }
     };
 
-    function SitesSelector(ctrl, $scope, attrs) {
+    function GatewaysSelector(ctrl, $scope, attrs) {
 
         this.initializeController = initializeController;
 
         var selectorAPI;
-        var vrConnectionId;
-        var enterpriseId
+
         function initializeController() {
             ctrl.onSelectorReady = function (api) {
                 selectorAPI = api;
                 defineAPI();
-            };
-            $scope.addNewSite = function () {
-                if (enterpriseId != undefined)
-                {
-                    var onSiteAdded = function (siteObj) {
-                        ctrl.datasource.push(siteObj);
-                        if ($attrs.ismultipleselection != undefined)
-                            ctrl.selectedvalues.push(siteObj);
-                        else
-                            ctrl.selectedvalues = siteObj;
-                    };
-                    Retail_Teles_SiteService.addTelesSite(onSiteAdded, enterpriseId, vrConnectionId);
-                }
-                
             };
         }
 
@@ -73,20 +58,21 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
 
                 var selectedIds;
                 var filter;
+                var vrConnectionId;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                     vrConnectionId = payload.vrConnectionId;
-                    enterpriseId = payload.enterpriseId;
+                    var siteId = payload.siteId;
                     if (payload.filter != undefined)
                         filter = payload.filter;
 
-                    return Retail_Teles_SiteAPIService.GetEnterpriseSitesInfo(vrConnectionId, enterpriseId, UtilsService.serializetoJson(filter)).then(function (response) {
+                    return Retail_Teles_GatewayAPIService.GetGatewaysInfo(vrConnectionId, siteId, UtilsService.serializetoJson(filter)).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
                             }
                             if (selectedIds != undefined) {
-                                VRUIUtilsService.setSelectedValues(selectedIds, 'TelesSiteId', attrs, ctrl);
+                                VRUIUtilsService.setSelectedValues(selectedIds, 'TelesGatewayId', attrs, ctrl);
                             }
                         }
                     });
@@ -94,7 +80,7 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
             };
 
             api.getSelectedIds = function () {
-                return VRUIUtilsService.getIdSelectedIds('TelesSiteId', attrs, ctrl);
+                return VRUIUtilsService.getIdSelectedIds('TelesGatewayId', attrs, ctrl);
             };
             api.clearDataSource = function () {
                 selectorAPI.clearDataSource();
@@ -108,17 +94,14 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
     function getTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Site";
+        var label = "Gateway";
 
         if (attrs.ismultipleselection != undefined) {
-            label = "Sites";
+            label = "Gateways";
             multipleselection = "ismultipleselection";
         }
-        var addCliked = '';
-        if (attrs.showaddbutton != undefined)
-            addCliked = 'onaddclicked="addNewSite"';
 
-        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Name" ' + addCliked + ' datavaluefield="TelesSiteId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate"></vr-select></vr-columns>';
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="TelesGatewayId" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate"></vr-select></vr-columns>';
     }
 
 }]);

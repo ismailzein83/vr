@@ -80,6 +80,8 @@
     <Compile Include="InternationalCallsBlockedFieldDefinition.cs" />
     <Compile Include="InternationalCallsBlockedGenericField.cs" />
     <Compile Include="ProvisioningAccount\ProvisionAccountManager.cs" />
+    <Compile Include="ProvisioningAccount\ProvisionUserRuntimeSettings.cs" />
+    <Compile Include="ProvisioningAccount\ProvisionUserDefinitionSettings.cs" />
     <Compile Include="ProvisioningAccount\ProvisionSiteRuntimeSettings.cs" />
     <Compile Include="ProvisioningAccount\ProvisionSiteDefinitionSettings.cs" />
     <Compile Include="Provisioning\ChangeUsersRGs\ChangeUsersRGsDefinitionSettings.cs" />
@@ -91,6 +93,7 @@
     <Compile Include="ProvisioningAccount\ProvisionAccountRuntimeSettings.cs" />
     <Compile Include="Provisioning\RoutingGroupConditionContext.cs" />
     <Compile Include="RoutingGroupCondition\RoutingGroupFilter.cs" />
+    <Compile Include="TelesGatewayManager.cs" />
     <Compile Include="UsersNotMappedToAccountFilter.cs" />
     <Compile Include="SitesNotMappedToAccountFilter.cs" />
     <Compile Include="TelesAccountCondition.cs" />

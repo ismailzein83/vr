@@ -15,93 +15,201 @@ namespace Retail.Teles.Business
 {
     public class ChangeUsersRGsRuntimeSettings : AccountProvisioner
     {
-        TelesEnterpriseManager telesEnterpriseManager = new TelesEnterpriseManager();
-        AccountBEManager accountBEManager = new AccountBEManager();
-        TelesSiteManager telesSiteManager = new TelesSiteManager();
-        TelesUserManager telesUserManager = new TelesUserManager();
+
+        TelesEnterpriseManager _telesEnterpriseManager = new TelesEnterpriseManager();
+        AccountBEManager _accountBEManager = new AccountBEManager();
+        TelesSiteManager _telesSiteManager = new TelesSiteManager();
+        TelesUserManager _telesUserManager = new TelesUserManager();
 
         public override void Execute(IAccountProvisioningContext context)
         {
             var definitionSettings = context.DefinitionSettings as ChangeUsersRGsDefinitionSettings;
-            var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
-            if (!TelesAccountCondition.AllowChangeUserRGs(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId, definitionSettings.UserTypeId,definitionSettings.ActionType))
+            var account = _accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
+            account.ThrowIfNull("account", context.AccountId);
+            if (!TelesAccountCondition.AllowChangeUserRGs(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId,definitionSettings.UserTypeId, definitionSettings.ActionType))
             {
                 throw new Exception("Not Allow to Change User Routing Groups");
             }
-            account.ThrowIfNull("account", context.AccountId);
-            if(account.TypeId == definitionSettings.CompanyTypeId) // Process if company
-            {
-                var enterpriseAccountMappingInfo = new AccountBEManager().GetExtendedSettings<EnterpriseAccountMappingInfo>(account);
-                if (enterpriseAccountMappingInfo != null)
-                {
-                   
-                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Loading all sites for enterpriseId {0}.", enterpriseAccountMappingInfo.TelesEnterpriseId));
-                    var mappedSites = telesSiteManager.GetCachedAccountsBySites(context.AccountBEDefinitionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
-                    var sites = GetSites(definitionSettings.VRConnectionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
-                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("All sites for enterpriseId {0} loaded.", enterpriseAccountMappingInfo.TelesEnterpriseId));
-                    if (sites != null)
-                    {
-                        Dictionary<string, ChURGsUserCh> changesByUser = new Dictionary<string, ChURGsUserCh>();
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start loading users to {0}.", context.ActionDefinitionName));
+            List<UsersToChangeRG> usersToChangeRG = GetUsersToChangeRG(context, account, definitionSettings);
+            context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start {0} users.", context.ActionDefinitionName));
+            ChangeRGsAndUpdateState(context, usersToChangeRG, definitionSettings);
+        }
 
-                        List<dynamic> usersToBeChangedByCompany;
-                        ChangeUsersRGForeachSite(context, definitionSettings, sites, mappedSites, changesByUser, out usersToBeChangedByCompany);
-                        UpdateChangedUsers(definitionSettings, usersToBeChangedByCompany);
-                        if (changesByUser != null)
-                            UpdateChangedUsersState(context, definitionSettings, context.AccountId, changesByUser);
+        private List<UsersToChangeRG> GetUsersToChangeRG(IAccountProvisioningContext context, Account account, ChangeUsersRGsDefinitionSettings definitionSettings)
+        {
+            List<UsersToChangeRG> usersToChangeRG = new List<UsersToChangeRG>();
+            if (account.TypeId == definitionSettings.CompanyTypeId)
+            {
+                AddUsersToChangeRGfromCompany(context, account, usersToChangeRG, definitionSettings);
+            }
+
+            else if (account.TypeId == definitionSettings.SiteTypeId)
+            {
+                EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = null;
+                if (account.ParentAccountId.HasValue)
+                {
+                    var parentCompanyAccount = _accountBEManager.GetSelfOrParentAccountOfType(context.AccountBEDefinitionId, account.ParentAccountId.Value, definitionSettings.CompanyTypeId);
+                    if (parentCompanyAccount != null)
+                        enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(parentCompanyAccount);
+                }
+                string mappedTelesSiteId;
+                AddUsersToChangeRGfromSite(context, account, enterpriseAccountMappingInfo, usersToChangeRG, definitionSettings, out mappedTelesSiteId);
+            }
+            else if (definitionSettings.UserTypeId.HasValue && definitionSettings.UserTypeId.Value == account.TypeId)
+            {
+                SiteAccountMappingInfo siteAccountMappingInfo = null;
+                if (account.ParentAccountId.HasValue)
+                {
+                    var parentSiteAccount = _accountBEManager.GetSelfOrParentAccountOfType(context.AccountBEDefinitionId, account.ParentAccountId.Value, definitionSettings.SiteTypeId);
+                    if (parentSiteAccount != null)
+                        siteAccountMappingInfo = _accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(parentSiteAccount);
+                }
+                string mappedTelesUserId;
+                AddUsersToChangeRGfromUser(context, account, siteAccountMappingInfo, usersToChangeRG, definitionSettings, out mappedTelesUserId);
+            }
+            return usersToChangeRG;
+        }
+
+        private void AddUsersToChangeRGfromCompany(IAccountProvisioningContext context, Account companyAccount, List<UsersToChangeRG> usersToChangeRG, ChangeUsersRGsDefinitionSettings definitionSettings)
+        {
+            EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = _accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(companyAccount);
+            Dictionary<string, dynamic> telesSites = null;
+            if (enterpriseAccountMappingInfo != null)
+                telesSites = GetTelesSites(definitionSettings.VRConnectionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
+            List<Account> childAccounts = _accountBEManager.GetChildAccounts(context.AccountBEDefinitionId, companyAccount.AccountId, true);
+            List<string> mappedTelesSiteIds = new List<string>();
+            if (childAccounts != null)
+            {
+                foreach (var child in childAccounts)
+                {
+                    if (child.TypeId == definitionSettings.SiteTypeId)
+                    {
+                        string telesSiteId;
+                        AddUsersToChangeRGfromSite(context, child, enterpriseAccountMappingInfo, usersToChangeRG, definitionSettings, out telesSiteId);
+                        if (telesSiteId != null)
+                            mappedTelesSiteIds.Add(telesSiteId);
                     }
                 }
             }
-            else if (account.TypeId == definitionSettings.SiteTypeId) // Process if site
+            if (telesSites != null)
             {
-                var siteAccountMappingInfo = new AccountBEManager().GetExtendedSettings<SiteAccountMappingInfo>(context.AccountBEDefinitionId, context.AccountId);
-                if (siteAccountMappingInfo != null)
+                var telesUsersToChangeRG = new List<TelesUser>();
+                foreach (var telesSiteEntry in telesSites)
                 {
-                    var siteName = telesSiteManager.GetSiteName(definitionSettings.VRConnectionId, siteAccountMappingInfo.TelesSiteId);
-                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Begin processing site {0}.", siteName));
-                    Dictionary<string, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.VRConnectionId, siteAccountMappingInfo.TelesSiteId);
-                    ChangeUsersRoutingGroupForMappedSite(context, definitionSettings, siteRoutingGroups, siteAccountMappingInfo.TelesSiteId, context.AccountId);
-                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("End processing site {0}.", siteName));
+                    if (mappedTelesSiteIds.Contains(telesSiteEntry.Key))//teles site is mapped to Retail Account of type site and should be already executed in previous block of code
+                        continue;
+                    var siteTelesUsersToChangeRG = GetTelesUsersToChangeRGFromTelesSite(context, telesSiteEntry.Key, null, definitionSettings);
+                    if (siteTelesUsersToChangeRG != null && siteTelesUsersToChangeRG.Count > 0)
+                        telesUsersToChangeRG.AddRange(siteTelesUsersToChangeRG);
+                }
+                if (telesUsersToChangeRG.Count > 0)
+                {
+                    usersToChangeRG.Add(new UsersToChangeRG(companyAccount)
+                    {
+                        TelesUsers = telesUsersToChangeRG
+                    });
                 }
             }
         }
-        void ChangeUsersRGForeachSite(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, IEnumerable<dynamic> sites, Dictionary<string, long> mappedSites, Dictionary<string, ChURGsUserCh> changesByUser, out List<dynamic> usersToBeChangedByCompany)
-        {
-            usersToBeChangedByCompany = new List<dynamic>();
-            foreach (var site in sites)
-            {
-                string siteId = site.id.ToString();
-                Dictionary<string, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.VRConnectionId, siteId);
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Routing groups for site {0} loaded.", site.name));
-                if (siteRoutingGroups != null)
-                {
-                    long accountId = -1;
 
-                    if (mappedSites != null && mappedSites.TryGetValue(siteId, out accountId))
+        private void AddUsersToChangeRGfromSite(IAccountProvisioningContext context, Account siteAccount, EnterpriseAccountMappingInfo enterpriseAccountMappingInfo, List<UsersToChangeRG> usersToChangeRG, ChangeUsersRGsDefinitionSettings definitionSettings, out string telesSiteId)
+        {
+            SiteAccountMappingInfo siteAccountMappingInfo = _accountBEManager.GetExtendedSettings<SiteAccountMappingInfo>(siteAccount);
+
+            List<string> mappedTelesUserIds = new List<string>();
+            if (definitionSettings.UserTypeId.HasValue)
+            {
+                List<Account> childAccounts = _accountBEManager.GetChildAccounts(context.AccountBEDefinitionId, siteAccount.AccountId, true);
+                if (childAccounts != null)
+                {
+                    foreach (var child in childAccounts)
                     {
-                        ChangeUsersRoutingGroupForMappedSite(context, definitionSettings, siteRoutingGroups, siteId, accountId);
-                    }else
-                    {
-                        ChangeUsersRoutingGroup(context, definitionSettings, siteRoutingGroups, siteId, changesByUser, usersToBeChangedByCompany);
+                        if (child.TypeId == definitionSettings.UserTypeId.Value)
+                        {
+                            string mappedTelesUserId;
+                            AddUsersToChangeRGfromUser(context, child, siteAccountMappingInfo, usersToChangeRG, definitionSettings, out mappedTelesUserId);
+                            if (mappedTelesUserId != null)
+                                mappedTelesUserIds.Add(mappedTelesUserId);
+                        }
                     }
-
                 }
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Site {0} processed successfully.", site.name));
+            }
+
+            if (siteAccountMappingInfo != null)
+            {
+                telesSiteId = siteAccountMappingInfo.TelesSiteId;
+                var siteTelesUsersToChangeRG = GetTelesUsersToChangeRGFromTelesSite(context, telesSiteId, mappedTelesUserIds, definitionSettings);
+                if (siteTelesUsersToChangeRG != null && siteTelesUsersToChangeRG.Count > 0)
+                {
+                    usersToChangeRG.Add(new UsersToChangeRG(siteAccount)
+                    {
+                        TelesUsers = siteTelesUsersToChangeRG
+                    });
+                }
+            }
+            else
+            {
+                telesSiteId = null;
             }
         }
-        void ChangeUsersRoutingGroupForMappedSite(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, Dictionary<string, dynamic> siteRoutingGroups, string siteId, long accountId)
+
+        private void AddUsersToChangeRGfromUser(IAccountProvisioningContext context, Account userAccount, SiteAccountMappingInfo siteAccountMappingInfo, List<UsersToChangeRG> usersToChangeRG, ChangeUsersRGsDefinitionSettings definitionSettings, out string mappedTelesUserId)
         {
-            List<dynamic> usersToBeChangedByCompany = new List<dynamic>();
-        
-            Dictionary<string, ChURGsUserCh> changesByUser = new Dictionary<string, ChURGsUserCh>();
-            ChangeUsersRoutingGroup(context, definitionSettings, siteRoutingGroups, siteId, changesByUser, usersToBeChangedByCompany);
-            UpdateChangedUsers(definitionSettings, usersToBeChangedByCompany);
-            if (changesByUser != null)
-                UpdateChangedUsersState(context, definitionSettings, accountId, changesByUser);
+            string telesSiteId = null;
+            if (siteAccountMappingInfo != null)
+                telesSiteId = siteAccountMappingInfo.TelesSiteId;
+            
+            UserAccountMappingInfo userAccountMappingInfo = _accountBEManager.GetExtendedSettings<UserAccountMappingInfo>(userAccount);
+            userAccountMappingInfo.ThrowIfNull("userAccountMappingInfo");
+            mappedTelesUserId = userAccountMappingInfo.TelesUserId;
+            if (userAccountMappingInfo.TelesSiteId != null)
+              telesSiteId = userAccountMappingInfo.TelesSiteId;
+           
+            List<string> existingRoutingGroups;
+            string newRoutingGroup;
+            GetTelesSiteRoutingGroups(context, telesSiteId, definitionSettings, out existingRoutingGroups, out newRoutingGroup);
+            var currentTelesUser = GetTelesUser(definitionSettings.VRConnectionId, mappedTelesUserId);
+
+            TelesUser telesUser;
+            if (ShouldChangeTelesUserRG(context, mappedTelesUserId, currentTelesUser, telesSiteId, existingRoutingGroups, newRoutingGroup, definitionSettings, out telesUser))
+            {
+                usersToChangeRG.Add(new UsersToChangeRG(userAccount)
+                {
+                    TelesUsers = new List<TelesUser>{
+                    telesUser
+                    },
+                });
+            }
         }
-        void ChangeUsersRoutingGroup(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, Dictionary<string, dynamic> siteRoutingGroups, string siteId, Dictionary<string, ChURGsUserCh> changesByUser, List<dynamic> usersToBeChangedByCompany)
+
+        private List<TelesUser> GetTelesUsersToChangeRGFromTelesSite(IAccountProvisioningContext context, string telesSiteId, List<string> excludedUserIds, ChangeUsersRGsDefinitionSettings definitionSettings)
         {
-            List<string> existingRoutingGroups = null;
-            string newRoutingGroup = null;
+            List<TelesUser> telesUsersToChangeRG = new List<TelesUser>();
+            Dictionary<string, dynamic> telesSiteUsers = GetTelesSiteUsers(definitionSettings.VRConnectionId, telesSiteId);
+            if (telesSiteUsers != null && telesSiteUsers.Count > 0)
+            {
+                List<string> existingRoutingGroups;
+                string newRoutingGroup;
+                GetTelesSiteRoutingGroups(context, telesSiteId, definitionSettings, out existingRoutingGroups, out newRoutingGroup);
+                foreach (var telesUserEntry in telesSiteUsers)
+                {
+                    if (excludedUserIds != null && excludedUserIds.Contains(telesUserEntry.Key))
+                        continue;
+                    TelesUser telesUser;
+                    if (ShouldChangeTelesUserRG(context, telesUserEntry.Key, telesUserEntry.Value,telesSiteId, existingRoutingGroups, newRoutingGroup, definitionSettings, out telesUser))
+                        telesUsersToChangeRG.Add(telesUser);
+                }
+            }
+            return telesUsersToChangeRG;
+        }
+
+        private void GetTelesSiteRoutingGroups(IAccountProvisioningContext context, string telesSiteId, ChangeUsersRGsDefinitionSettings definitionSettings, out  List<string> existingRoutingGroups, out string newRoutingGroup)
+        {
+
+            Dictionary<string, dynamic> siteRoutingGroups = GetSiteRoutingGroups(definitionSettings.VRConnectionId, telesSiteId);
+            existingRoutingGroups = null;
+            newRoutingGroup = null;
             foreach (dynamic siteRoutingGroup in siteRoutingGroups.Values)
             {
                 string siteRoutingGroupId = siteRoutingGroup.id.ToString();
@@ -135,133 +243,207 @@ namespace Retail.Teles.Business
                     newRoutingGroup = siteRoutingGroupId;
                 }
             }
+        }
+
+        private bool ShouldChangeTelesUserRG(IAccountProvisioningContext context, string telesUserId, dynamic telesUserObject, string telesSiteId, List<string> existingRoutingGroups, string newRoutingGroup, ChangeUsersRGsDefinitionSettings definitionSettings, out TelesUser telesUser)
+        {
             if (newRoutingGroup == null)
             {
-                switch(definitionSettings.NewRGNoMatchHandling)
+                switch (definitionSettings.NewRGNoMatchHandling)
                 {
-                    case NewRGNoMatchHandling.Skip: return;
+                    case NewRGNoMatchHandling.Skip:
+                        telesUser = null;
+                        return false;
                     case NewRGNoMatchHandling.Stop: throw new Exception("No routing group available for new routing group condition.");
                 }
             }
             if (definitionSettings.ExistingRoutingGroupCondition == null)
             {
-                ChangeUsersRoutingGroup(context, definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, changesByUser, true, usersToBeChangedByCompany);
-            }else if (existingRoutingGroups == null)
+                return IsRoutingGroupUserChanged(context, definitionSettings, telesSiteId, existingRoutingGroups, newRoutingGroup, telesUserId, telesUserObject, out telesUser);
+            }
+            else if (existingRoutingGroups == null)
             {
                 switch (definitionSettings.ExistingRGNoMatchHandling)
                 {
-                    case ExistingRGNoMatchHandling.Skip: return;
+                    case ExistingRGNoMatchHandling.Skip:
+                         telesUser = null;
+                        return false;
                     case ExistingRGNoMatchHandling.UpdateAll:
-                        ChangeUsersRoutingGroup(context, definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, changesByUser, true, usersToBeChangedByCompany);
-                        break;
+                        return IsRoutingGroupUserChanged(context, definitionSettings, telesSiteId, existingRoutingGroups, newRoutingGroup, telesUserId, telesUserObject, out telesUser);
                     case ExistingRGNoMatchHandling.Stop:
                         if (existingRoutingGroups == null)
                             throw new Exception("No routing group available for existing routing group condition.");
                         break;
                 }
             }
-            else
-            {
-                ChangeUsersRoutingGroup(context, definitionSettings, siteId, existingRoutingGroups, newRoutingGroup, changesByUser, false, usersToBeChangedByCompany);
-            }
+            return IsRoutingGroupUserChanged(context, definitionSettings, telesSiteId, existingRoutingGroups, newRoutingGroup, telesUserId, telesUserObject, out telesUser);
         }
-        void ChangeUsersRoutingGroup(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, string siteId, List<string> existingRoutingGroups, string newRoutingGroup, Dictionary<string, ChURGsUserCh> changesByUser, bool updateAll, List<dynamic> usersToBeChangedByCompany)
+        bool IsRoutingGroupUserChanged(IAccountProvisioningContext context, ChangeUsersRGsDefinitionSettings definitionSettings, string siteId, List<string> existingRoutingGroups, string newRoutingGroup, string telesUserId, dynamic telesUserObject, out TelesUser telesUser)
         {
-            var users = GetUsers(definitionSettings.VRConnectionId, siteId);
-            if(users != null)
+            telesUser = null;
+            if (telesUserObject != null)
             {
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start processing {0} users.", users.Count()));
-                List<string> usersNames = new List<string>();
-                foreach (var user in users)
+
+                if (telesUserObject.routingGroupId != newRoutingGroup && existingRoutingGroups.Contains(telesUserObject.routingGroupId.ToString()))
                 {
-                    if (user.routingGroupId != newRoutingGroup && (updateAll || existingRoutingGroups.Contains(user.routingGroupId.ToString())))
+                    telesUser = new TelesUser
                     {
-                        usersNames.Add(user.loginName.Value);
-                        if (definitionSettings.SaveChangesToAccountState)
+                        UserId = telesUserId,
+                        SiteId = siteId,
+                        NewRoutingGroupId = newRoutingGroup,
+                        OldRoutingGroupId = telesUserObject.routingGroupId
+                    };
+                    telesUserObject.routingGroupId = newRoutingGroup;
+                    telesUser.User = telesUserObject;
+                    return true;
+                }
+            }
+            return false;
+        }
+        private void ChangeRGsAndUpdateState(IAccountProvisioningContext context, List<UsersToChangeRG> usersToChangeRG, ChangeUsersRGsDefinitionSettings definitionSettings)
+        {
+            if (usersToChangeRG != null && usersToChangeRG.Count > 0)
+            {
+                foreach (var userToChange in usersToChangeRG)
+                {
+                    if (userToChange.TelesUsers != null)
+                    {
+                        context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start processing account: {0}.", _accountBEManager.GetAccountName(userToChange.Account)));
+
+                        ChangeUsersRGsAccountState existingAccountState = null;
+                        if (userToChange.ExistingAccountState != null)
+                            existingAccountState = userToChange.ExistingAccountState.VRDeepCopy();
+                        else
                         {
-                            if (changesByUser == null)
-                            {
-                                changesByUser = new Dictionary<string, ChURGsUserCh>();
-                            }
-                          
-                            ChURGsUserCh chURGsUserCh;
-                            string userId = user.id.ToString();
-                            if (!changesByUser.TryGetValue(userId, out chURGsUserCh))
-                            {
-                                chURGsUserCh = new ChURGsUserCh { OriginalRGId = user.routingGroupId.ToString(), ChangedRGId = newRoutingGroup, SiteId = siteId };
-                                changesByUser.Add(userId, chURGsUserCh);
-                            }
+                            existingAccountState = new ChangeUsersRGsAccountState();
                         }
-                        user.routingGroupId = newRoutingGroup;
-                        usersToBeChangedByCompany.Add(user);
-                    }
-                    if (usersNames.Count == 10)
-                    {
+                        if (existingAccountState.ChangesByActionType == null)
+                            existingAccountState.ChangesByActionType = new Dictionary<string, ChURGsActionCh>();
+                        ChURGsActionCh chURGsActionCh = existingAccountState.ChangesByActionType.GetOrCreateItem(definitionSettings.ActionType);
+                        if (chURGsActionCh.ChangesByUser == null)
+                            chURGsActionCh.ChangesByUser = new Dictionary<string, ChURGsUserCh>();
+
+                        List<string> usersNames = new List<string>();
+                        foreach (var user in userToChange.TelesUsers)
+                        {
+                            UpdateUser(definitionSettings.VRConnectionId, user.User);
+                            usersNames.Add(user.User.loginName.Value);
+                            if (usersNames.Count == 10)
+                            {
+                                WriteUsersProccessedTrackingMessage(context, usersNames);
+                                usersNames = new List<string>();
+                            }
+                            if (definitionSettings.SaveChangesToAccountState)
+                            {
+                                ChURGsUserCh chURGsUserCh = chURGsActionCh.ChangesByUser.GetOrCreateItem(user.UserId);
+                                chURGsUserCh.ChangedRGId = user.NewRoutingGroupId;
+                                chURGsUserCh.OriginalRGId = user.OldRoutingGroupId;
+                                chURGsUserCh.SiteId = user.SiteId;
+                                if (_accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, context.AccountId, existingAccountState))
+                                {
+                                    context.TrackActionExecuted(context.AccountId, null, existingAccountState);
+                                };
+                            }
+
+                        }
                         WriteUsersProccessedTrackingMessage(context, usersNames);
-                        usersNames = new List<string>();
+                        context.WriteTrackingMessage(LogEntryType.Information, string.Format("Finish processing account: {0}.", _accountBEManager.GetAccountName(userToChange.Account)));
                     }
-                }
-                WriteUsersProccessedTrackingMessage(context, usersNames);
-                context.WriteTrackingMessage(LogEntryType.Information, string.Format("End processing {0} users.", users.Count()));
-            }
-            
-        }
-        void UpdateChangedUsers(ChangeUsersRGsDefinitionSettings definitionSettings,List<dynamic> changedUsersRoutingRG)
-        {
-            if (changedUsersRoutingRG != null)
-            {
-                foreach (var user in changedUsersRoutingRG)
-                {
-                    UpdateUser(definitionSettings.VRConnectionId, user);
+
                 }
             }
         }
-        void UpdateChangedUsersState(IAccountProvisioningContext context,ChangeUsersRGsDefinitionSettings definitionSettings, long accountId,Dictionary<string, ChURGsUserCh> changesByUser)
+
+        #region Private Classes
+
+        private class UsersToChangeRG
         {
-            ChangeUsersRGsAccountState changeUsersRGsAccountState = new AccountBEManager().GetExtendedSettings<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId);
-            if (changeUsersRGsAccountState == null)
-                changeUsersRGsAccountState = new ChangeUsersRGsAccountState();
-            if (changeUsersRGsAccountState.ChangesByActionType == null)
-                changeUsersRGsAccountState.ChangesByActionType = new Dictionary<string, ChURGsActionCh>();
-            ChURGsActionCh chUSiteRGsActionCh;
-            if (!changeUsersRGsAccountState.ChangesByActionType.TryGetValue(definitionSettings.ActionType, out chUSiteRGsActionCh))
+            Account _account;
+            ChangeUsersRGsAccountState _existingAccountState;
+            static AccountBEManager s_accountBEManager = new AccountBEManager();
+            public UsersToChangeRG(Account account)
             {
-                chUSiteRGsActionCh = new ChURGsActionCh();
-                changeUsersRGsAccountState.ChangesByActionType.Add(definitionSettings.ActionType, chUSiteRGsActionCh);
+                _account = account;
+                _existingAccountState = s_accountBEManager.GetExtendedSettings<ChangeUsersRGsAccountState>(account);
             }
-            if (chUSiteRGsActionCh.ChangesByUser == null)
-                chUSiteRGsActionCh.ChangesByUser = new Dictionary<string, ChURGsUserCh>();
+            public List<TelesUser> TelesUsers { get; set; }
 
-            foreach (var user in changesByUser)
+            public Account Account
             {
-                if (!chUSiteRGsActionCh.ChangesByUser.ContainsKey(user.Key))
-                  chUSiteRGsActionCh.ChangesByUser.Add(user.Key, user.Value);
-            }
-
-            if (changeUsersRGsAccountState != null)
-            {
-                if (accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, accountId, changeUsersRGsAccountState))
+                get
                 {
-                    context.TrackActionExecuted(accountId,null, changesByUser);
-                };
+                    return _account;
+                }
             }
 
+            public ChangeUsersRGsAccountState ExistingAccountState
+            {
+                get
+                {
+                    return _existingAccountState;
+                }
+            }
         }
-        IEnumerable<dynamic> GetSites(Guid vrConnectionId, string telesEnterpriseId)
+
+        private class TelesUser
         {
-            return telesSiteManager.GetSites(vrConnectionId, telesEnterpriseId);
+            public string UserId { get; set; }
+
+            public dynamic User { get; set; }
+
+            public string SiteId { get; set; }
+
+            public string OldRoutingGroupId { get; set; }
+
+            public string NewRoutingGroupId { get; set; }
         }
-        IEnumerable<dynamic> GetUsers(Guid vrConnectionId, string siteId)
+
+        #endregion
+
+        Dictionary<string, dynamic> GetTelesSites(Guid vrConnectionId, string telesEnterpriseId)
         {
-            return telesUserManager.GetUsers(vrConnectionId, siteId);
+            IEnumerable<dynamic> sites = _telesSiteManager.GetSites(vrConnectionId, telesEnterpriseId);
+            Dictionary<string, dynamic> dict = new Dictionary<string, dynamic>();
+            if (sites != null)
+            {
+                foreach (var s in sites)
+                {
+                    string siteId = s.id.Value.ToString();
+                    if (dict.ContainsKey(siteId))
+                        throw new Exception(String.Format("Site Id '{0}' already exists for enterprise Id '{1}'", siteId, telesEnterpriseId));
+                    dict.Add(siteId, s);
+                }
+            }
+            return dict;
+        }
+        dynamic GetTelesUser(Guid vrConnectionId, string telesSiteId)
+        {
+            return _telesUserManager.GetUser(vrConnectionId, telesSiteId);
+        }
+
+        Dictionary<string, dynamic> GetTelesSiteUsers(Guid vrConnectionId, string siteId)
+        {
+            IEnumerable<dynamic> users = _telesUserManager.GetUsers(vrConnectionId, siteId);
+            Dictionary<string, dynamic> dict = new Dictionary<string, dynamic>();
+            if (users != null)
+            {
+                foreach (var u in users)
+                {
+                    string userId = u.id.Value.ToString();
+                    if (dict.ContainsKey(userId))
+                        throw new Exception(String.Format("User Id '{0}' already exists for site Id '{1}'", userId, siteId));
+                    dict.Add(userId, u);
+                }
+            }
+            return dict;
         }
         Dictionary<string, dynamic> GetSiteRoutingGroups(Guid vrConnectionId, string siteId)
         {
-            return telesSiteManager.GetSiteRoutingGroups(vrConnectionId, siteId);
+            return _telesSiteManager.GetSiteRoutingGroups(vrConnectionId, siteId);
         }
         void UpdateUser(Guid vrConnectionId, dynamic user)
         {
-            telesUserManager.UpdateUser(vrConnectionId, user);
+            _telesUserManager.UpdateUser(vrConnectionId, user);
         }
 
         private void WriteUsersProccessedTrackingMessage(IAccountProvisioningContext context, List<string> usersNames)
@@ -271,5 +453,6 @@ namespace Retail.Teles.Business
                 context.WriteTrackingMessage(LogEntryType.Information, string.Format("Users processed: {0}. ", String.Join<string>(",", usersNames)));
             }
         }
+
     }
 }

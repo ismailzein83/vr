@@ -17,12 +17,22 @@ namespace Retail.Teles.Business
     {
         #region Public Methods
         AccountBEManager _accountBEManager = new AccountBEManager();
-
+        public string CreateUser(Guid vrConnectionId, string siteName, string gateway, User request)
+        {
+            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            var actionPath = string.Format("/domain/{0}/user?gateway={1}", siteName, gateway);
+            VRWebAPIResponse<string> response = telesRestConnection.Post<User, string>(actionPath, request, true);
+            response.Headers.Location.ThrowIfNull("response.Headers", response.Headers);
+            var userId = response.Headers.Location.Segments.Last();
+            userId.ThrowIfNull("userId", userId);
+            TelesUserManager.SetCacheExpired();
+            return Convert.ToString(userId);
+        }
         public IEnumerable<TelesUserInfo> GetUsersInfo(Guid vrConnectionId, string siteId, TelesUserFilter filter)
         {
             var cachedSites = GetUsersInfoBySiteId(vrConnectionId, siteId);
 
-            Func<TelesUserInfo, bool> filterFunc = (telesEnterpriseInfo) =>
+            Func<TelesUserInfo, bool> filterFunc = (telesUserInfo) =>
             {
                 if (filter != null)
                 {
@@ -33,7 +43,7 @@ namespace Retail.Teles.Business
                             TelesUserFilterContext context = new TelesUserFilterContext
                             {
                                 AccountBEDefinitionId = filter.AccountBEDefinitionId,
-                                UserId = telesEnterpriseInfo.TelesUserId
+                                UserId = telesUserInfo.TelesUserId
                             };
                             if (item.IsExcluded(context))
                                 return false;
@@ -190,19 +200,19 @@ namespace Retail.Teles.Business
         private Dictionary<string, TelesUserInfo> GetUsersInfoBySiteId(Guid vrConnectionId, string siteId)
         {
             var users = GetUsers(vrConnectionId, siteId);
-            List<TelesUserInfo> telesEnterpriseSitesInfo = new List<TelesUserInfo>();
+            List<TelesUserInfo> telesUsersInfo = new List<TelesUserInfo>();
             if (users != null)
             {
                 foreach (var user in users)
                 {
-                    telesEnterpriseSitesInfo.Add(new TelesUserInfo
+                    telesUsersInfo.Add(new TelesUserInfo
                     {
                         Name = user.loginName,
                         TelesUserId = user.id.Value.ToString()
                     });
                 }
             }
-            return telesEnterpriseSitesInfo.ToDictionary(x => x.TelesUserId, x => x);
+            return telesUsersInfo.ToDictionary(x => x.TelesUserId, x => x);
         }
 
         private TelesRestConnection GetTelesRestConnection(Guid vrConnectionId)

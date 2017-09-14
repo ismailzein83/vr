@@ -36,6 +36,9 @@
             var siteTypeAPI;
             var siteTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var userTypeAPI;
+            var userTypeReadyDeferred = UtilsService.createPromiseDeferred();
+
             var conectionTypeAPI;
             var conectionTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -58,6 +61,10 @@
                 $scope.scopeModel.onSiteAccountTypeSelectorReady = function (api) {
                     siteTypeAPI = api;
                     siteTypeReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onUserAccountTypeSelectorReady = function (api) {
+                    userTypeAPI = api;
+                    userTypeReadyDeferred.resolve();
                 };
                 $scope.scopeModel.onNewRoutingGroupConditionReady = function (api) {
                     newRoutingGroupConditionAPI = api;
@@ -166,6 +173,20 @@
                         return siteTypeLoadDeferred.promise
                     }
 
+                    promises.push(loadUserTypes());
+
+                    function loadUserTypes() {
+                        var userTypeLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        userTypeReadyDeferred.promise.then(function () {
+                            var userTypePayload;
+                            if (provisionerDefinitionSettings != undefined) {
+                                userTypePayload = { selectedIds: provisionerDefinitionSettings.UserTypeId };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(userTypeAPI, userTypePayload, userTypeLoadDeferred);
+                        });
+                        return userTypeLoadDeferred.promise
+                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -187,7 +208,8 @@
                         NewRGMultiMatchHandling:$scope.scopeModel.selectedNewRGMultiMatchHandling.value,
                         ExistingRGNoMatchHandling: $scope.scopeModel.selectedExistingRGNoMatchHandling.value,
                         CompanyTypeId: companyTypeAPI.getSelectedIds(),
-                        SiteTypeId :siteTypeAPI.getSelectedIds()
+                        SiteTypeId: siteTypeAPI.getSelectedIds(),
+                        UserTypeId: userTypeAPI.getSelectedIds()
                     };
                     return data;
                 }
