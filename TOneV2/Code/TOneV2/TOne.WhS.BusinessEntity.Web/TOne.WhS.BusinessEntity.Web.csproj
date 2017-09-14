@@ -301,6 +301,7 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesByZoneMappedValue\vr-whs-be-codesbyzone-mappedvalue-constant.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesOnEachRowMappedValue\vr-whs-be-codesoneachrow-mappedvalue-befield.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesOnEachRowMappedValue\vr-whs-be-codesoneachrow-mappedvalue-constant.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\MappedCell\vr-whs-be-mappedcell-header.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\Templates\BasicSalePriceListTemplateSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-settings-basic.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SaleZoneGroup\Templates\SaleZoneTemplate.html" />
@@ -346,6 +347,10 @@
     <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\SalePriceListRoutingProductChangeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-salepricelistroutingproductchange-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\Templates\MappedCellsGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\Templates\SalePriceListMappedCellsSelectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\vr-whs-be-pricelisttemplate-mappedcells-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\vr-whs-be-salepricelisttemplate-mappedcells-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelisttype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\Templates\SaleRateHistoryGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\vr-whs-be-salerate-history-grid.js" />

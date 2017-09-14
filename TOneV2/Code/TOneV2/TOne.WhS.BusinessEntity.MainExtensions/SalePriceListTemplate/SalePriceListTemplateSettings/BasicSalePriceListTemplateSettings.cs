@@ -21,6 +21,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public List<MappedTable> MappedTables { get; set; }
 
+        public List<MappedCell> MappedCells { get; set; }
+
         public string DateTimeFormat { get; set; }
 
         public override byte[] Execute(ISalePriceListTemplateSettingsContext context)
