@@ -7,7 +7,7 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.RouteSync.Idb
 {
-    public class RadiusDataManagersConfigManager
+    public class IdbDataManagersConfigManager 
     {
         public IEnumerable<IdbDataManagerConfig> GetIdbDataManagerExtensionConfigs()
         {

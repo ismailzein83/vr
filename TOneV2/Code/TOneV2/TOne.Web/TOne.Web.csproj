@@ -965,6 +965,10 @@
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Idb\TOne.WhS.RouteSync.Idb.csproj">
+      <Project>{d961eebd-058d-4419-b6ca-e1d53412c159}</Project>
+      <Name>TOne.WhS.RouteSync.Idb</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.IVSwitch\TOne.WhS.RouteSync.IVSwitch.csproj">
       <Project>{c0da1a40-bf0e-4657-941e-e245bb82269f}</Project>
       <Name>TOne.WhS.RouteSync.IVSwitch</Name>
@@ -980,6 +984,14 @@
     <ProjectReference Include="..\TOne.WhS.RouteSync.Radius\TOne.WhS.RouteSync.Radius.csproj">
       <Project>{0f005ef5-f26b-4f30-ae68-ce841d744e68}</Project>
       <Name>TOne.WhS.RouteSync.Radius</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.TelesIdb.Postgres\TOne.WhS.RouteSync.TelesIdb.Postgres.csproj">
+      <Project>{1ba64324-8371-4689-8168-83f03e3ccbcf}</Project>
+      <Name>TOne.WhS.RouteSync.TelesIdb.Postgres</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.TelesIdb\TOne.WhS.RouteSync.TelesIdb.csproj">
+      <Project>{2a18b2c2-13a4-4598-8d7a-be977bc200a8}</Project>
+      <Name>TOne.WhS.RouteSync.TelesIdb</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.TelesRadius.SQL\TOne.WhS.RouteSync.TelesRadius.SQL.csproj">
       <Project>{b730cf12-3175-4afd-b693-604f2b441e4d}</Project>

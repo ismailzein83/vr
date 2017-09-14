@@ -19,9 +19,10 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
         public int NumberOfOptions { get; set; }
 
+        public string SupplierOptionsSeparator { get; set; }
+
         public bool UseTwoMappingFormat { get; set; }
 
-        public string SupplierOptionsSeparator { get; set; }
         /// <summary>
         /// Key = Carrier Account Id
         /// </summary>
@@ -171,6 +172,6 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
         public List<string> CustomerMapping { get; set; }
 
-        public string SupplierMapping { get; set; }
+        public List<string> SupplierMapping { get; set; }
     }
 }

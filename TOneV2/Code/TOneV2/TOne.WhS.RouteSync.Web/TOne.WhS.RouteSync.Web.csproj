@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\IdbDataManagerSettingsController.cs" />
     <Compile Include="Controllers\RouteSyncDefinitionController.cs" />
     <Compile Include="Controllers\RadiusDataManagerSettingsController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
@@ -144,7 +145,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_RouteSync\Constant\ModuleConfig.js" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingTelesIdbGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telesidb-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\Templates\TelesPostgresIdbSWDataManagerTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\whs-routesync-telesidb-postgresdatamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\Templates\BuiltInIVSwitchSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\Templates\IVSwitchSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\whs-routesync-builtinivswitch-swsync.js" />
@@ -155,7 +160,9 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\RadiusDataManagers\whs-routesync-mvtsradius-sqldatamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\MVTSSynchronizer\Templates\MVTSRadiusSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\MVTSSynchronizer\whs-routesync-mvtsradius-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\Templates\TelesIdbSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\Templates\TelesRadiusSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesidb-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesradius-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\Templates\RouteSyncProcessManualTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\ProcessInput\Normal\whs-routesync-process-manual.js" />
@@ -174,7 +181,10 @@
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\Templates\SwitchRouteSynchronizerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\whs-routesync-switchroutesynchronizer-settings.js" />
     <Content Include="WhS_RouteSync\Directives\Switch\whs-routesync-switch-selector.js" />
+    <Content Include="WhS_RouteSync\Directives\IdbDataManagers\Templates\IdbDataManagersTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\IdbDataManagers\whs-routesync-idbdatamanagers-settings.js" />
     <Content Include="WhS_RouteSync\ModuleInitailization.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\IdbDataManagerSettingAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RouteSyncDefinitionAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RadiusDataManagerSettingAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\SwitchAPIService.js" />
@@ -197,6 +207,10 @@
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Idb\TOne.WhS.RouteSync.Idb.csproj">
+      <Project>{d961eebd-058d-4419-b6ca-e1d53412c159}</Project>
+      <Name>TOne.WhS.RouteSync.Idb</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Radius\TOne.WhS.RouteSync.Radius.csproj">
       <Project>{0f005ef5-f26b-4f30-ae68-ce841d744e68}</Project>
