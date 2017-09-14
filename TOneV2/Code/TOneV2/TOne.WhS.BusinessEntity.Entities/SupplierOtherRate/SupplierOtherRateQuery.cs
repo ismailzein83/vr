@@ -11,5 +11,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime EffectiveOn { get; set; }
 
         public int ZoneId { get; set; }
+
+        public bool IsSystemCurrency { get; set; }
+
     }
 }

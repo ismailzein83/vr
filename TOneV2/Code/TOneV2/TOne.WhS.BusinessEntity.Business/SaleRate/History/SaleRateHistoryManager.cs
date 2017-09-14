@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -13,62 +14,63 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<SaleRateHistoryRecordDetail> GetFilteredSaleRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<SaleRateHistoryQuery> input)
         {
-            var saleRateHistoryRequestHandler = new SaleRateHistoryRequestHandler()
-            {
-                CurrencyId = input.Query.CurrencyId,
-                CurrencySymbol = new Vanrise.Common.Business.CurrencyManager().GetCurrencySymbol(input.Query.CurrencyId)
-            };
-            return Vanrise.Common.Business.BigDataManager.Instance.RetrieveData(input, saleRateHistoryRequestHandler);
+          
+            return Vanrise.Common.Business.BigDataManager.Instance.RetrieveData(input, new SaleRateHistoryRequestHandler());
         }
 
         private class SaleRateHistoryRequestHandler : Vanrise.Common.Business.BigDataRequestHandler<SaleRateHistoryQuery, SaleRateHistoryRecord, SaleRateHistoryRecordDetail>
         {
             #region Fields / Constructors
-
-            private SaleRateManager _saleRateManager;
-            private Vanrise.Common.Business.CurrencyExchangeRateManager _currencyExchangeRateManager;
             private SellingProductManager _sellingProductManager;
             private CurrencyManager _currencyManager;
+            private Vanrise.Common.Business.ConfigManager _configManager;
 
             public SaleRateHistoryRequestHandler()
             {
-                _saleRateManager = new SaleRateManager();
-                _currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
                 _sellingProductManager = new SellingProductManager();
                 _currencyManager = new CurrencyManager();
+                _configManager = new Vanrise.Common.Business.ConfigManager();
             }
 
             #endregion
 
-            public int CurrencyId { get; set; }
-
-            public string CurrencySymbol { get; set; }
-
             public override IEnumerable<SaleRateHistoryRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleRateHistoryQuery> input)
             {
                 IEnumerable<long> zoneIds = GetZoneIds(input.Query.OwnerType, input.Query.OwnerId, input.Query.SellingNumberPlanId, input.Query.CountryId, input.Query.ZoneName);
-
+                int currencyId = (input.Query.IsSystemCurrency) ? _configManager.GetSystemCurrencyId() : input.Query.CurrencyId;
                 if (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct)
                 {
                     var spZoneRateHistoryLocator = new SellingProductZoneRateHistoryLocator(new SellingProductZoneRateHistoryReader(input.Query.OwnerId, zoneIds, true, false));
-                    return spZoneRateHistoryLocator.GetSaleRateHistory(input.Query.ZoneName, null, CurrencyId);
+                    return spZoneRateHistoryLocator.GetSaleRateHistory(input.Query.ZoneName, null, currencyId);
                 }
                 else
                 {
                     var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(input.Query.OwnerId, zoneIds, true, false));
-                    return customerZoneRateHistoryLocator.GetSaleRateHistory(input.Query.ZoneName, input.Query.CountryId, null, CurrencyId);
+                    return customerZoneRateHistoryLocator.GetSaleRateHistory(input.Query.ZoneName, input.Query.CountryId, null, currencyId);
                 }
             }
 
-            public override SaleRateHistoryRecordDetail EntityDetailMapper(SaleRateHistoryRecord entity)
+
+            protected override BigResult<SaleRateHistoryRecordDetail> AllRecordsToBigResult(DataRetrievalInput<SaleRateHistoryQuery> input, IEnumerable<SaleRateHistoryRecord> allRecords)
             {
+                int? systemCurrencyId = (input.Query.IsSystemCurrency) ? (int?) _configManager.GetSystemCurrencyId() : null;
+                return allRecords.ToBigResult(input, null, (entity) => SaleRateHistoryEntityDetailMapper(entity, systemCurrencyId));
+            }
+
+            private SaleRateHistoryRecordDetail SaleRateHistoryEntityDetailMapper(SaleRateHistoryRecord entity, int? systemCurrencyId)
+            {
+                int currencyValueId = systemCurrencyId.HasValue ? systemCurrencyId.Value : entity.CurrencyId;
                 return new SaleRateHistoryRecordDetail
                 {
                     Entity = entity,
-                    CurrencySymbol = _currencyManager.GetCurrencySymbol(entity.CurrencyId),
-                    ConvertedToCurrencySymbol = CurrencySymbol,
+                    DisplayedCurrency = _currencyManager.GetCurrencySymbol(currencyValueId),
+                    DisplayedRate = (systemCurrencyId.HasValue) ?entity.ConvertedRate : entity.Rate,                    
                     SellingProductName = (entity.SellingProductId.HasValue) ? _sellingProductManager.GetSellingProductName(entity.SellingProductId.Value) : null
                 };
+            }
+            public override SaleRateHistoryRecordDetail EntityDetailMapper(SaleRateHistoryRecord entity)
+            {
+                throw new NotImplementedException();
             }
 
             #region Private Methods

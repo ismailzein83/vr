@@ -10,8 +10,11 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public SupplierOtherRate Entity { get; set; }
 
-        public string CurrencyName { get; set; }
         public string RateTypeDescription { get; set; }
+
+        public string DisplayedCurrency { get; set; }
+
+        public decimal DisplayedRate { get; set; }
 
     }
 }

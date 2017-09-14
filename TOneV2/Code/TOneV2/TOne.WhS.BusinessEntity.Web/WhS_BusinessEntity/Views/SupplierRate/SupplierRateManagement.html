@@ -16,6 +16,9 @@
                 <vr-columns width="normal">
                     <vr-datetimepicker type="dateTime" label="Effective On" value="effectiveOn" isrequired="!IsPending" vr-disabled="IsPending"></vr-datetimepicker>
                 </vr-columns>
+                <vr-columns width="normal">
+                    <vr-switch label="Show In System Currency" value="isSystemCurrency"></vr-switch>
+                </vr-columns>
                 <vr-columns>
                     <vr-switch value="IsPending" label="Show Pending Rates" onvaluechanged="resetDate"></vr-switch>
                 </vr-columns>

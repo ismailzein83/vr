@@ -175,7 +175,8 @@
                     EffectiveOn: $scope.effectiveOn,
                     ZonesIds: saleZoneDirectiveAPI.getSelectedIds(),
                     OwnerType: $scope.selectedOwnerType.value,
-                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds()
+                    SellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
+                    IsSystemCurrency: $scope.isSystemCurrency
                 }
             };
             if ($scope.selectedOwnerType.value == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {

@@ -29,6 +29,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
         var drillDownManager;
         var effectiveOn;
         var supplierId;
+        var isSystemCurrency;
         var isExpandable;
         this.initializeController = initializeController;
         var hideHistory;
@@ -49,6 +50,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                         isExpandable = input.Query.IsChild;
                         effectiveOn = input.Query.EffectiveOn;
                         supplierId = input.Query.SupplierId;
+                        isSystemCurrency = input.IsSystemCurrency;
                         drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(getDirectiveTabs(), gridAPI);
                         return gridAPI.retrieveData(input);
                     };
@@ -129,7 +131,8 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
 
                     var otherRateGridPayload = {
                         ZoneId: rateDataItem.Entity.ZoneId,
-                        EffectiveOn: effectiveOn
+                        EffectiveOn: effectiveOn,
+                        IsSystemCurrency: isSystemCurrency
                     };
                     return rateDataItem.otherRateGridAPI.loadGrid(otherRateGridPayload);
                 }
@@ -144,6 +147,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                         rateDataItem.historygRateGridAPI = directiveApi;
                         var historyRateGridPayload = {
                             $type: "TOne.WhS.BusinessEntity.Business.SupplierRateHistoryQueryHandler,TOne.WhS.BusinessEntity.Business",
+                            IsSystemCurrency:isSystemCurrency,
                             Query: {
                                 SupplierZoneName: rateDataItem.SupplierZoneName,
                                 SupplierId: supplierId,

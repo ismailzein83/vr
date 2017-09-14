@@ -86,6 +86,7 @@
         function setFilterObject() {
             payload = {
                 $type: "TOne.WhS.BusinessEntity.Business.SupplierRateQueryHandler,TOne.WhS.BusinessEntity.Business",
+                IsSystemCurrency:$scope.isSystemCurrency,
                 Query: {
                     SupplierId: supplierDirectiveApi.getSelectedIds(),
                     EffectiveOn: $scope.effectiveOn,

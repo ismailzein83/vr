@@ -19,5 +19,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int CountryId { get; set; }
 
         public int CurrencyId { get; set; }
+
+        public bool IsSystemCurrency { get; set; }
     }
 }

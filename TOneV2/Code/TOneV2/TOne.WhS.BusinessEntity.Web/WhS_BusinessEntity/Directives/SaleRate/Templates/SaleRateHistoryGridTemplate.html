@@ -5,11 +5,11 @@
              defaultsortdirection="'DESC'"
              pagingtype="'PagingOnScroll'"
              hidegridmenu>
-    <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rate'" field="'DisplayedRate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="5"></vr-datagridcolumn>
     <vr-datagridcolumn widthfactor="3">
         <vr-icon icontype="dataItem.changeTypeIconType" iconurl="dataItem.changeTypeIconUrl" tooltip="dataItem.changeTypeIconDescription" inline></vr-icon>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'DisplayedCurrency'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-show="scopeModel.isOwnerCustomer" widthfactor="3">
         <vr-icon icontype="dataItem.sourceIconType" inline></vr-icon>
     </vr-datagridcolumn>

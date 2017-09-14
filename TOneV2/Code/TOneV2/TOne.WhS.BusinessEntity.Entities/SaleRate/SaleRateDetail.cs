@@ -16,9 +16,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string RateTypeName { get; set; }
 
-        public string CurrencyName { get; set; }
+        public string DisplayedCurrency { get; set; }
 
-        public decimal ConvertedRate { get; set; }
+        public decimal DisplayedRate { get; set; }
 
         public bool IsRateInherited { get; set; }
 

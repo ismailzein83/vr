@@ -118,7 +118,8 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
                             SellingNumberPlanId: gridQuery.SellingNumberPlanId,
                             ZoneName: saleRate.ZoneName,
                             CountryId: saleRate.CountryId,
-                            CurrencyId: gridQuery.CurrencyId
+                            CurrencyId: gridQuery.CurrencyId,
+                            IsSystemCurrency: gridQuery.IsSystemCurrency
                         }
                     };
                     directivePayload.primarySaleEntity = primarySaleEntity;
@@ -146,8 +147,8 @@ function (utilsService, vrNotificationService, whSBeSaleRateApiService, vruiUtil
                         otherSaleRateGridPayload.query.OwnerId = gridQuery.OwnerId;
                         otherSaleRateGridPayload.query.CurrencyId = gridQuery.CurrencyId;
                         otherSaleRateGridPayload.query.EffectiveOn = gridQuery.EffectiveOn;
+                        otherSaleRateGridPayload.query.IsSystemCurrency = gridQuery.IsSystemCurrency;
                     }
-
                     return directiveAPI.load(otherSaleRateGridPayload);
                 }
             });

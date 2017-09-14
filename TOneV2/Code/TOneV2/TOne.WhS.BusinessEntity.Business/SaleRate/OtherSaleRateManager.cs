@@ -20,7 +20,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<SaleRateDetail> GetOtherSaleRates(OtherSaleRateQuery query)
         {
             IEnumerable<RateTypeInfo> allRateTypes = new Vanrise.Common.Business.RateTypeManager().GetAllRateTypes();
-
             if (allRateTypes == null || allRateTypes.Count() == 0)
                 return null;
 
@@ -33,17 +32,16 @@ namespace TOne.WhS.BusinessEntity.Business
         private IEnumerable<SaleRateDetail> GetSellingProductZoneOtherRates(OtherSaleRateQuery query, IEnumerable<long> zoneIds, IEnumerable<RateTypeInfo> allRateTypes)
         {
             var sellingProductZoneRateHistoryLocator = new SellingProductZoneRateHistoryLocator(new SellingProductZoneRateHistoryReader(query.OwnerId, zoneIds, false, true));
-
             var saleRates = new List<SaleRateDetail>();
-
+            int currencyId = query.IsSystemCurrency ? new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId() : query.CurrencyId;
             foreach (RateTypeInfo rateType in allRateTypes)
             {
-                SaleRateHistoryRecord saleRateHistoryRecord = sellingProductZoneRateHistoryLocator.GetSaleRateHistoryRecord(query.ZoneName, rateType.RateTypeId, query.CurrencyId, query.EffectiveOn);
+                SaleRateHistoryRecord saleRateHistoryRecord = sellingProductZoneRateHistoryLocator.GetSaleRateHistoryRecord(query.ZoneName, rateType.RateTypeId, currencyId, query.EffectiveOn);
 
                 if (saleRateHistoryRecord == null)
                     continue;
 
-                AddSaleRate(saleRates, saleRateHistoryRecord, rateType, query.ZoneName, query.ZoneId, query.CountryId);
+                AddSaleRate(saleRates, saleRateHistoryRecord, rateType, query.ZoneName, query.ZoneId, query.CountryId, currencyId, query.IsSystemCurrency);
             }
 
             return saleRates;
@@ -53,6 +51,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(query.OwnerId, zoneIds, false, true));
             IEnumerable<RateTypeInfo> customerZoneRateTypes = GetCustomerZoneRateTypes(query.OwnerId, zoneId, allRateTypes);
+            int currencyId = query.IsSystemCurrency ? new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId() : query.CurrencyId;
 
             if (customerZoneRateTypes == null || customerZoneRateTypes.Count() == 0)
                 return null;
@@ -61,12 +60,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (RateTypeInfo rateType in customerZoneRateTypes)
             {
-                SaleRateHistoryRecord saleRateHistoryRecord = customerZoneRateHistoryLocator.GetSaleRateHistoryRecord(query.ZoneName, query.CountryId, rateType.RateTypeId, query.CurrencyId, query.EffectiveOn);
+                SaleRateHistoryRecord saleRateHistoryRecord = customerZoneRateHistoryLocator.GetSaleRateHistoryRecord(query.ZoneName, query.CountryId, rateType.RateTypeId, currencyId, query.EffectiveOn);
 
                 if (saleRateHistoryRecord == null)
                     continue;
 
-                AddSaleRate(saleRates, saleRateHistoryRecord, rateType, query.ZoneName, query.ZoneId, query.CountryId);
+                AddSaleRate(saleRates, saleRateHistoryRecord, rateType, query.ZoneName, query.ZoneId, query.CountryId, currencyId, query.IsSystemCurrency);
             }
 
             return saleRates;
@@ -89,7 +88,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return (rateTypeIds != null && rateTypeIds.Count() > 0) ? allRateTypes.FindAllRecords(x => rateTypeIds.Contains(x.RateTypeId)) : null;
         }
 
-        private void AddSaleRate(List<SaleRateDetail> saleRates, SaleRateHistoryRecord saleRateHistoryRecord, RateTypeInfo rateType, string zoneName, long zoneId, int countryId)
+        private void AddSaleRate(List<SaleRateDetail> saleRates, SaleRateHistoryRecord saleRateHistoryRecord, RateTypeInfo rateType, string zoneName, long zoneId, int countryId, int currencyId, bool isSystemCurrency)
         {
             var saleRate = new SaleRateDetail();
 
@@ -106,12 +105,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 SourceId = saleRateHistoryRecord.SourceId,
                 RateChange = saleRateHistoryRecord.ChangeType
             };
-
             saleRate.ZoneName = zoneName;
             saleRate.CountryId = countryId;
             saleRate.RateTypeName = rateType.Name;
-            saleRate.CurrencyName = _currencyManager.GetCurrencySymbol(saleRateHistoryRecord.CurrencyId);
-            saleRate.ConvertedRate = saleRateHistoryRecord.ConvertedRate;
+            saleRate.DisplayedCurrency = _currencyManager.GetCurrencySymbol(currencyId);
+            saleRate.DisplayedRate = isSystemCurrency ? saleRateHistoryRecord.ConvertedRate : saleRateHistoryRecord.Rate;
             saleRate.IsRateInherited = saleRateHistoryRecord.SellingProductId.HasValue;
 
             saleRates.Add(saleRate);
@@ -137,5 +135,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public DateTime EffectiveOn { get; set; }
 
         public int CurrencyId { get; set; }
+
+        public bool IsSystemCurrency { get; set; }
+
     }
 }

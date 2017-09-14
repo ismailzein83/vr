@@ -148,37 +148,59 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Mappers
-        private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate)
-        {
-            CurrencyManager currencyManager = new CurrencyManager();
-            SupplierPriceListManager manager = new SupplierPriceListManager();
-            SupplierPriceList priceList = manager.GetPriceList(supplierRate.PriceListId);
-            supplierRate.PriceListFileId = priceList.FileId;
-
-            int currencyId = supplierRate.CurrencyId ?? priceList.CurrencyId;
-
-            return new SupplierRateDetail
-            {
-                Entity = supplierRate,
-                CurrencyName = currencyManager.GetCurrencySymbol(currencyId),
-                SupplierZoneName = this.GetSupplierZoneName(supplierRate.ZoneId),
-            };
-        }
+       
         #endregion
 
         #region Private Classes
 
         private class SupplierRateRequestHandler : BigDataRequestHandler<BaseSupplierRateQueryHandler, SupplierRate, SupplierRateDetail>
         {
+            private SupplierPriceListManager _supplierPriceListManager;
+
+            private SupplierRateManager _supplierRateManager; 
+            private RateTypeManager _rateTypeManager;
+            private CurrencyExchangeRateManager _currencyExchangeRateManager;
+            private CurrencyManager _currencyManager;
+
+
+            public SupplierRateRequestHandler()
+            {
+                _supplierPriceListManager = new SupplierPriceListManager();
+                _supplierRateManager = new SupplierRateManager();
+                _rateTypeManager = new RateTypeManager();
+                _currencyExchangeRateManager = new CurrencyExchangeRateManager();
+                _currencyManager = new CurrencyManager();
+            }
             public override SupplierRateDetail EntityDetailMapper(SupplierRate entity)
             {
-                SupplierRateManager manager = new SupplierRateManager();
-                return manager.SupplierRateDetailMapper(entity);
+                throw new NotImplementedException();
             }
+            private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate, int? systemCurrencyId)
+            {
+                SupplierPriceList priceList = _supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
+                supplierRate.PriceListFileId = priceList.FileId;
 
+                int currencyId = supplierRate.CurrencyId ?? priceList.CurrencyId;
+                int currencyValueId = systemCurrencyId != null ? systemCurrencyId.Value : currencyId;
+
+                return new SupplierRateDetail
+                {
+                    Entity = supplierRate,
+                    SupplierZoneName = _supplierRateManager.GetSupplierZoneName(supplierRate.ZoneId),
+                    DisplayedCurrency = _currencyManager.GetCurrencySymbol(currencyValueId),
+                    DisplayedRate = (systemCurrencyId != null) ? _currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, currencyValueId, supplierRate.BED) : supplierRate.Rate,
+                };
+            }
             public override IEnumerable<SupplierRate> RetrieveAllData(DataRetrievalInput<BaseSupplierRateQueryHandler> input)
             {
                 return input.Query.GetFilteredSupplierRates();
+            }
+
+
+            protected override BigResult<SupplierRateDetail> AllRecordsToBigResult(DataRetrievalInput<BaseSupplierRateQueryHandler> input, IEnumerable<SupplierRate> allRecords)
+            {
+                int? systemCurrencyId = (input.Query.IsSystemCurrency) ? (int?)new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId() : null;
+                return allRecords.ToBigResult(input, null, (entity) => SupplierRateDetailMapper(entity, systemCurrencyId));
             }
             protected override ResultProcessingHandler<SupplierRateDetail> GetResultProcessingHandler(DataRetrievalInput<BaseSupplierRateQueryHandler> input, BigResult<SupplierRateDetail> bigResult)
             {
@@ -218,9 +240,9 @@ namespace TOne.WhS.BusinessEntity.Business
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.SupplierRateId });
                             row.Cells.Add(new ExportExcelCell { Value = record.SupplierZoneName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Rate });
+                            row.Cells.Add(new ExportExcelCell { Value = record.DisplayedRate });
                             row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
-                            row.Cells.Add(new ExportExcelCell { Value = record.CurrencyName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.DisplayedCurrency });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
                         }

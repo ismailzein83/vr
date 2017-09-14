@@ -308,13 +308,24 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             #region Fields
 
-            private SaleZoneManager _saleZoneManager = new SaleZoneManager();
-            private CurrencyManager _currencyManager = new CurrencyManager();
-            private Vanrise.Common.Business.RateTypeManager _rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
-            private CurrencyExchangeRateManager _currencyExchangeRateManager = new CurrencyExchangeRateManager();
-            private SaleRateManager _saleRateManager = new SaleRateManager();
+            private SaleZoneManager _saleZoneManager;
+            private CurrencyManager _currencyManager;
+            private Vanrise.Common.Business.RateTypeManager _rateTypeManager;
+            private CurrencyExchangeRateManager _currencyExchangeRateManager;
+            private SaleRateManager _saleRateManager;
+            private Vanrise.Common.Business.ConfigManager _configManager;
 
             #endregion
+
+            public SaleRateRequestHandler()
+            {
+                _saleZoneManager = new SaleZoneManager();
+                _currencyManager = new CurrencyManager();
+                _rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
+                _currencyExchangeRateManager = new CurrencyExchangeRateManager();
+                _saleRateManager = new SaleRateManager();
+                _configManager = new Vanrise.Common.Business.ConfigManager();
+            }
 
             public override IEnumerable<SaleRateDetail> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
             {
@@ -326,11 +337,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 if (!input.Query.CurrencyId.HasValue)
                     throw new Vanrise.Entities.MissingArgumentValidationException("input.Query.CurrencyId");
+                int currencyId = input.Query.IsSystemCurrency ? new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId() : input.Query.CurrencyId.Value;
 
                 if (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct)
-                    return GetSellingProductZoneRates(input.Query.OwnerId, saleZones, saleZoneIds, input.Query.EffectiveOn, input.Query.CurrencyId.Value);
+                    return GetSellingProductZoneRates(input.Query.OwnerId, saleZones, saleZoneIds, input.Query.EffectiveOn, currencyId, input.Query.IsSystemCurrency);
                 else
-                    return GetCustomerSaleZoneRates(input.Query.OwnerId, saleZones, saleZoneIds, input.Query.EffectiveOn, input.Query.CurrencyId.Value);
+                    return GetCustomerSaleZoneRates(input.Query.OwnerId, saleZones, saleZoneIds, input.Query.EffectiveOn, currencyId, input.Query.IsSystemCurrency);
             }
 
             public override SaleRateDetail EntityDetailMapper(SaleRateDetail entity)
@@ -360,7 +372,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return filteredSaleZones;
             }
 
-            private IEnumerable<SaleRateDetail> GetSellingProductZoneRates(int sellingProductId, IEnumerable<SaleZone> saleZones, IEnumerable<long> saleZoneIds, DateTime effectiveOn, int currencyId)
+            private IEnumerable<SaleRateDetail> GetSellingProductZoneRates(int sellingProductId, IEnumerable<SaleZone> saleZones, IEnumerable<long> saleZoneIds, DateTime effectiveOn, int currencyId, bool isSystemCurrency)
             {
                 var saleRates = new List<SaleRateDetail>();
                 var sellingProductZoneRateHistoryLocator = new SellingProductZoneRateHistoryLocator(new SellingProductZoneRateHistoryReader(sellingProductId, saleZoneIds, true, false));
@@ -371,7 +383,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (saleRateHistoryRecord != null)
                     {
-                        SaleRateDetail saleRate = GetSaleRateDetail(SalePriceListOwnerType.SellingProduct, saleZone, saleRateHistoryRecord, null);
+                        SaleRateDetail saleRate = GetSaleRateDetail(SalePriceListOwnerType.SellingProduct, saleZone, saleRateHistoryRecord, null, isSystemCurrency);
                         saleRates.Add(saleRate);
                     }
                 }
@@ -379,7 +391,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleRates;
             }
 
-            private IEnumerable<SaleRateDetail> GetCustomerSaleZoneRates(int customerId, IEnumerable<SaleZone> saleZones, IEnumerable<long> saleZoneIds, DateTime effectiveOn, int currencyId)
+            private IEnumerable<SaleRateDetail> GetCustomerSaleZoneRates(int customerId, IEnumerable<SaleZone> saleZones, IEnumerable<long> saleZoneIds, DateTime effectiveOn, int currencyId, bool isSystemCurrency)
             {
                 var saleRates = new List<SaleRateDetail>();
                 var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(customerId, saleZoneIds, true, false));
@@ -394,7 +406,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (saleRateHistoryRecord != null)
                     {
-                        SaleRateDetail saleRate = GetSaleRateDetail(SalePriceListOwnerType.Customer, saleZone, saleRateHistoryRecord, salePriceListManager);
+                        SaleRateDetail saleRate = GetSaleRateDetail(SalePriceListOwnerType.Customer, saleZone, saleRateHistoryRecord, salePriceListManager, isSystemCurrency);
                         saleRates.Add(saleRate);
                     }
                 }
@@ -402,7 +414,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleRates;
             }
 
-            private SaleRateDetail GetSaleRateDetail(SalePriceListOwnerType ownerType, SaleZone saleZone, SaleRateHistoryRecord saleRateHistoryRecord, SalePriceListManager salePriceListManager)
+            private SaleRateDetail GetSaleRateDetail(SalePriceListOwnerType ownerType, SaleZone saleZone, SaleRateHistoryRecord saleRateHistoryRecord, SalePriceListManager salePriceListManager, bool isSystemCurrency)
             {
                 var saleRateDetail = new SaleRateDetail();
 
@@ -423,8 +435,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 saleRateDetail.ZoneName = saleZone.Name;
                 saleRateDetail.CountryId = saleZone.CountryId;
                 saleRateDetail.RateTypeName = null;
-                saleRateDetail.CurrencyName = _currencyManager.GetCurrencySymbol(saleRateHistoryRecord.CurrencyId);
-                saleRateDetail.ConvertedRate = saleRateHistoryRecord.ConvertedRate;
+                int displayedCurrencyId = (isSystemCurrency) ? _configManager.GetSystemCurrencyId() : saleRateHistoryRecord.CurrencyId;
+                saleRateDetail.DisplayedCurrency = _currencyManager.GetCurrencySymbol(displayedCurrencyId);
+                saleRateDetail.DisplayedRate = (isSystemCurrency) ? saleRateHistoryRecord.ConvertedRate : saleRateHistoryRecord.Rate;
                 saleRateDetail.IsRateInherited = saleRateHistoryRecord.SellingProductId.HasValue;
 
                 if (ownerType == SalePriceListOwnerType.Customer && !saleRateDetail.IsRateInherited)
@@ -539,10 +552,10 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
                             row.Cells.Add(new ExportExcelCell() { Value = record.ZoneName });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Rate });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedRate });
                             row.Cells.Add(new ExportExcelCell() { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.RateChange) });
                             row.Cells.Add(new ExportExcelCell() { Value = string.Format("{0}", record.IsRateInherited == true ? "Inherited" : "Explicit") });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.DisplayedCurrency });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.BED });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Entity.EED });
                             sheet.Rows.Add(row);
