@@ -47,6 +47,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TelesTemplateEntity\TelesTemplateEntityDefinitionSettings.cs" />
+    <Compile Include="TelesTemplateEntity\TelesTemplateEntitySettings.cs" />
     <Compile Include="EnterpriseAccountMappingInfo.cs" />
     <Compile Include="ITelesEnterpriseFilter.cs" />
     <Compile Include="ITelesEnterpriseSiteFilter.cs" />
