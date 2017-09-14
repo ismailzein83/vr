@@ -144,11 +144,13 @@ as (select * from (values
 ('61D047D6-DF3D-4D74-9C2C-7CEA2907C2B3','WhS_Sales_BulkActionZoneFilterType_Specific','Specific','WhS_Sales_BulkActionZoneFilterType'			,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-specific"}'),
 ('BDC22FEB-14E1-4F0D-8C3E-EF54A5A36312','WhS_Sales_BulkActionZoneFilterType_All','All','WhS_Sales_BulkActionZoneFilterType'						,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-all"}'),
 
-('6D6EB5E6-E1F6-49FF-A78F-E3A255FBC320','WhS_RouteSync_SwitchRouteSynchronizer_MVTSRadius','MVTS Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-mvtsradius-swsync"}'),
-('64152327-5DB5-47AE-9569-23D38BCB18CC','WhS_RouteSync_SwitchRouteSynchronizer_IVSwitch','IVSwitch Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-ivswitch-swsync"}'),
-('366AB5D3-5083-420D-B5CE-5313DA025106','Whs_RouteSync_RadiusDataManager_SQL','MVTS SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'			,'{"Editor":"whs-routesync-mvtsradius-sqldatamanager"}'),
-('09ED9252-AF87-447D-9C40-738CF222C64E','Whs_RouteSync_RadiusDataManager_SQL','Teles SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'			,'{"Editor":"whs-routesync-telesradius-sqldatamanager"}'),
-('423064C2-ACE8-4D70-8CFF-CDAA1461DBBE','WhS_RouteSync_SwitchRouteSynchronizer_TelesRadius','Teles Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-telesradius-swsync"}'),
+('6D6EB5E6-E1F6-49FF-A78F-E3A255FBC320','WhS_RouteSync_SwitchRouteSynchronizer_MVTSRadius','MVTS Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-mvtsradius-swsync"}'),
+('64152327-5DB5-47AE-9569-23D38BCB18CC','WhS_RouteSync_SwitchRouteSynchronizer_IVSwitch','IVSwitch Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-ivswitch-swsync"}'),
+('423064C2-ACE8-4D70-8CFF-CDAA1461DBBE','WhS_RouteSync_SwitchRouteSynchronizer_TelesRadius','Teles Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-telesradius-swsync"}'),
+('29135479-8150-4E23-9A0D-A42AF69A13AE','WhS_RouteSync_SwitchRouteSynchronizer_TelesIdb','Teles Idb Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'	,'{"Editor":"whs-routesync-telesidb-swsync"}'),
+('366AB5D3-5083-420D-B5CE-5313DA025106','Whs_RouteSync_RadiusDataManager_SQL','MVTS SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-mvtsradius-sqldatamanager"}'),
+('09ED9252-AF87-447D-9C40-738CF222C64E','Whs_RouteSync_RadiusDataManager_SQL','Teles SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-telesradius-sqldatamanager"}'),
+('34F3483D-2572-4349-A6ED-3504B2D9E714','Whs_RouteSync_IdbDataManager_Postgres','Teles Postgres Idb Data Manager','WhS_RouteSync_IdbDataManagerSettings'			,'{"Editor":"whs-routesync-telesidb-postgresdatamanager"}'),
 
 ('6B36007E-3333-40D3-B574-510C8338E6C0','WhS_SupPL_SupplierPriceListConfiguration_Basic','Basic','WhS_SupPL_SupplierPriceListConfiguration','{"Editor":"whs-spl-supplierpricelistconfiguration-basic"}'),
 ('63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65','Swap Deal','Swap Deal','WhS_Deal_DealSettings','{}'),
