@@ -348,8 +348,10 @@
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\SalePriceListRoutingProductChangeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-salepricelistroutingproductchange-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\Templates\MappedCellsGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\Templates\MappedCellsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\Templates\SalePriceListMappedCellsSelectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\vr-whs-be-pricelisttemplate-mappedcells-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\vr-whs-be-pricelisttemplate-mappedcells.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\vr-whs-be-salepricelisttemplate-mappedcells-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelisttype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\Templates\SaleRateHistoryGridTemplate.html" />
