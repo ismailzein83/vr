@@ -32,6 +32,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             };
         }
 
-        const string query_getSourceZones = @"SELECT  ZoneID, CodeGroup, Name, SupplierID, BeginEffectiveDate, EndEffectiveDate  FROM [dbo].[Zone] WITH (NOLOCK) ";
+        const string query_getSourceZones = @"SELECT  ZoneID, CodeGroup, Name, SupplierID, BeginEffectiveDate, EndEffectiveDate  FROM [dbo].[Zone] WITH (NOLOCK) where ZoneID <> -1";
     }
 }
