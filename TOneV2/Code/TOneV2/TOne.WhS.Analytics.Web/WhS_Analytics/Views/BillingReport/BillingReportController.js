@@ -156,8 +156,12 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             paramsurl += "&currencyDesc=" + (($scope.params.selectedCurrency == null) ? "United States Dollars" : encodeURIComponent($scope.params.selectedCurrency.Name));
             paramsurl += "&pageBreak=" + $scope.params.pageBreak;
             paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
+            var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+
+            var left = ((screenWidth / 2) - (1000 / 2));
+
             if (!$scope.reporttype.ParameterSettings.CustomerIdNotOptional)
-                window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1");
+                window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no,width=1000, height=600,scrollbars=1 , top = 40, left = "+ left+"");
             else
                 return $scope.export();
         };
