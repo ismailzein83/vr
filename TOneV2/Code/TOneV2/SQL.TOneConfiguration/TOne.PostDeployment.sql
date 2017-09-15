@@ -1159,7 +1159,6 @@ end
 --[Analytic].[AnalyticTable]----------------------------------------------------------------------------
 begin
 set nocount on;
-set identity_insert [Analytic].[AnalyticTable] on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1177,7 +1176,6 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
-set identity_insert [Analytic].[AnalyticTable] off;
 ----------------------------------------------------------------------------------------------------
 end
 
