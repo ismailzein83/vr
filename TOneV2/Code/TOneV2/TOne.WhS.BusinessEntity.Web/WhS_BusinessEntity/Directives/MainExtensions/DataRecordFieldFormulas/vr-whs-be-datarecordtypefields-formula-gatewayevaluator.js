@@ -6,7 +6,7 @@ app.directive('vrWhsBeDatarecordtypefieldsFormulaGatewayevaluator', ['UtilsServi
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -51,7 +51,8 @@ app.directive('vrWhsBeDatarecordtypefieldsFormulaGatewayevaluator', ['UtilsServi
                             $scope.fields = context.getFields();
 
                         if (payload.formula != undefined) {
-                            $scope.selectedFieldName = UtilsService.getItemByVal($scope.fields, payload.formula.PortFieldName, "fieldName")
+                            $scope.selectedSwitchFieldName = UtilsService.getItemByVal($scope.fields, payload.formula.SwitchFieldName, "fieldName");
+                            $scope.selectedPortFieldName = UtilsService.getItemByVal($scope.fields, payload.formula.PortFieldName, "fieldName");
                         }
                     }
                 };
@@ -59,7 +60,8 @@ app.directive('vrWhsBeDatarecordtypefieldsFormulaGatewayevaluator', ['UtilsServi
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas.GatewayEvaluatorFieldFormula, TOne.WhS.BusinessEntity.MainExtensions",
-                        PortFieldName: $scope.selectedFieldName != undefined ? $scope.selectedFieldName.fieldName : undefined
+                        SwitchFieldName: $scope.selectedSwitchFieldName != undefined ? $scope.selectedSwitchFieldName.fieldName : undefined,
+                        PortFieldName: $scope.selectedPortFieldName != undefined ? $scope.selectedPortFieldName.fieldName : undefined
                     };
                 };
 

@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
         public override Guid ConfigId { get { return new Guid("395B97B4-E304-4040-A53D-16A145B4C42E"); } }
 
         public string SwitchFieldName { get; set; }
-        
+
         public string PortFieldName { get; set; }
 
 
@@ -43,6 +43,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
 
             SwitchConnectivityManager switchConnectivityManager = new SwitchConnectivityManager();
 
+            #region ObjectListRecordFilter
+
             ObjectListRecordFilter objectListFilter = context.InitialFilter as ObjectListRecordFilter;
             if (objectListFilter != null)
             {
@@ -60,23 +62,16 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
                     }
                 }
 
-                List<RecordFilterGroup> recordFilterGroups = BuildRecordFilterGroups(portsBySwitchId, objectListFilter.CompareOperator);
-                if (recordFilterGroups == null)
+                RecordFilter recordFilter = BuildRecordFilter(portsBySwitchId, objectListFilter.CompareOperator);
+                if (recordFilter == null)
                     return new AlwaysFalseRecordFilter();
 
-                if (recordFilterGroups.Count == 1)
-                {
-                    return recordFilterGroups.First();
-                }
-                else
-                {
-                    return new RecordFilterGroup()
-                    {
-                        LogicalOperator = RecordQueryLogicalOperator.Or,
-                        Filters = recordFilterGroups.Select(itm => itm as RecordFilter).ToList()
-                    };
-                }
+                return recordFilter;
             }
+
+            #endregion
+
+            #region EmptyRecordFilter
 
             EmptyRecordFilter emptyFilter = context.InitialFilter as EmptyRecordFilter;
             if (emptyFilter != null)
@@ -95,31 +90,19 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
                         ports.AddRange(switchConnectivity.Settings.Trunks.Select(itm => itm.Name));
                 }
 
-                List<RecordFilterGroup> recordFilterGroups = BuildRecordFilterGroups(portsBySwitchId, ListRecordFilterOperator.NotIn);
-                if (recordFilterGroups == null)
+                RecordFilter recordFilter = BuildRecordFilter(portsBySwitchId, ListRecordFilterOperator.NotIn);
+                if (recordFilter == null)
                     return null;
 
-                RecordFilterGroup recordFilterGroup = null;
-
-                if (recordFilterGroups.Count == 1)
-                {
-                    recordFilterGroup = recordFilterGroups.First();
-                }
-                else
-                {
-                    recordFilterGroup = new RecordFilterGroup()
-                    {
-                        LogicalOperator = RecordQueryLogicalOperator.Or,
-                        Filters = recordFilterGroups.Select(itm => itm as RecordFilter).ToList()
-                    };
-                }
-
-                return new RecordFilterGroup()
-                {
-                    LogicalOperator = RecordQueryLogicalOperator.Or,
-                    Filters = new List<RecordFilter>() { recordFilterGroup, new EmptyRecordFilter() { FieldName = this.PortFieldName } }
-                };
+                RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+                recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
+                recordFilterGroup.Filters = new List<RecordFilter>() { recordFilter, new EmptyRecordFilter() { FieldName = this.PortFieldName } };
+                return recordFilterGroup;
             }
+
+            #endregion
+
+            #region NonEmptyRecordFilter
 
             NonEmptyRecordFilter nonEmptyFilter = context.InitialFilter as NonEmptyRecordFilter;
             if (nonEmptyFilter != null)
@@ -138,34 +121,45 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
                         ports.AddRange(switchConnectivity.Settings.Trunks.Select(itm => itm.Name));
                 }
 
-                List<RecordFilterGroup> recordFilterGroups = BuildRecordFilterGroups(portsBySwitchId, ListRecordFilterOperator.In);
-                if (recordFilterGroups == null)
-                {
+                RecordFilter recordFilter = BuildRecordFilter(portsBySwitchId, ListRecordFilterOperator.In);
+                if (recordFilter == null)
                     return new AlwaysFalseRecordFilter();
-                }
-                else if (recordFilterGroups.Count == 1)
-                {
-                    return recordFilterGroups.First();
-                }
-                else
-                {
-                    return new RecordFilterGroup()
-                    {
-                        LogicalOperator = RecordQueryLogicalOperator.Or,
-                        Filters = recordFilterGroups.Select(itm => itm as RecordFilter).ToList()
-                    };
-                }
+
+                return recordFilter;
             }
+
+            #endregion
 
             throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
         }
 
-        private List<RecordFilterGroup> BuildRecordFilterGroups(Dictionary<int, List<string>> portsBySwitchId, ListRecordFilterOperator compareOperator)
+        private RecordFilter BuildRecordFilter(Dictionary<int, List<string>> portsBySwitchId, ListRecordFilterOperator compareOperator)
         {
             if (portsBySwitchId == null || portsBySwitchId.Count == 0)
                 return null;
 
-            List<RecordFilterGroup> recordFilterGroups = new List<RecordFilterGroup>();
+            List<RecordFilter> recordFilterGroups = new List<RecordFilter>();
+
+            NumberRecordFilterOperator switchRecordFilterOperator;
+            RecordQueryLogicalOperator switchPortQueryLogicalOperator;
+            RecordQueryLogicalOperator resultQueryLogicalOperator;
+
+            switch (compareOperator)
+            {
+                case ListRecordFilterOperator.In:
+                    switchRecordFilterOperator = NumberRecordFilterOperator.Equals;
+                    switchPortQueryLogicalOperator = RecordQueryLogicalOperator.And;
+                    resultQueryLogicalOperator = RecordQueryLogicalOperator.Or;
+                    break;
+
+                case ListRecordFilterOperator.NotIn:
+                    switchRecordFilterOperator = NumberRecordFilterOperator.NotEquals;
+                    switchPortQueryLogicalOperator = RecordQueryLogicalOperator.Or;
+                    resultQueryLogicalOperator = RecordQueryLogicalOperator.And;
+                    break;
+
+                default: throw new NotSupportedException(string.Format("ListRecordFilte rOperator '{0}'", compareOperator));
+            }
 
             foreach (var kvp in portsBySwitchId)
             {
@@ -174,7 +168,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
 
                 NumberRecordFilter numberRecordFilter = new NumberRecordFilter();
                 numberRecordFilter.FieldName = this.SwitchFieldName;
-                numberRecordFilter.CompareOperator = NumberRecordFilterOperator.Equals;
+                numberRecordFilter.CompareOperator = switchRecordFilterOperator;
                 numberRecordFilter.Value = kvp.Key;
 
                 StringListRecordFilter stringListRecordFilter = new StringListRecordFilter();
@@ -184,12 +178,27 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
 
                 recordFilterGroups.Add(new RecordFilterGroup()
                 {
-                    LogicalOperator = RecordQueryLogicalOperator.And,
+                    LogicalOperator = switchPortQueryLogicalOperator,
                     Filters = new List<RecordFilter>() { numberRecordFilter, stringListRecordFilter }
                 });
             }
 
-            return recordFilterGroups.Count > 0 ? recordFilterGroups : null;
+            if (recordFilterGroups.Count == 0)
+            {
+                return null;
+            }
+            else if (recordFilterGroups.Count == 1)
+            {
+                return recordFilterGroups.First();
+            }
+            else
+            {
+                return new RecordFilterGroup()
+                {
+                    LogicalOperator = resultQueryLogicalOperator,
+                    Filters = recordFilterGroups.Select(itm => itm as RecordFilter).ToList()
+                };
+            }
         }
     }
 }

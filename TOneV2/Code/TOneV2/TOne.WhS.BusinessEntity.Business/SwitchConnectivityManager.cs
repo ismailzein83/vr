@@ -177,30 +177,6 @@ namespace TOne.WhS.BusinessEntity.Business
             });
         }
 
-        //public Dictionary<string, SwitchConnectivity> GetSwitchConnectivitiesByPort()
-        //{
-        //    return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchConnectivitiesByPort", () =>
-        //    {
-        //        Dictionary<string, SwitchConnectivity> switchConnectivitiesByPort = new Dictionary<string, SwitchConnectivity>();
-        //        var switchConnectivitiesById = GetCachedSwitchConnectivities();
-        //        if (switchConnectivitiesById != null)
-        //        {
-        //            foreach (var switchConnectivity in switchConnectivitiesById.Values)
-        //            {
-        //                if (switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
-        //                {
-        //                    foreach (var trunk in switchConnectivity.Settings.Trunks)
-        //                    {
-        //                        if (!switchConnectivitiesByPort.ContainsKey(trunk.Name))
-        //                            switchConnectivitiesByPort.Add(trunk.Name, switchConnectivity);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        return switchConnectivitiesByPort;
-        //    });
-        //}
-
         #endregion
 
         #region Validation Methods
