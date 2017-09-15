@@ -17,7 +17,8 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             hideremoveicon: "@",
             onselectitem: "=",
             ondeselectitem: "=",
-            normalColNum:'@'
+            normalColNum: '@',
+            customlabel: '@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -46,6 +47,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
     };
 
     function getTemplate(attrs) {
+
         var label;
         if (attrs.ismultipleselection != undefined) {
         	if ((attrs.getcustomers != undefined && attrs.getsuppliers != undefined) || attrs.getexchangecarriers != undefined) {
@@ -65,6 +67,9 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         	else
         		label = 'Supplier';
         }
+
+        if (attrs.customlabel != undefined)
+            label = attrs.customlabel;
 
         var hideselectedvaluessection = "";
         if (attrs.hideselectedvaluessection != undefined)
