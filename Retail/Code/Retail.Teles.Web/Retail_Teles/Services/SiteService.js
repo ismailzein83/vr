@@ -16,8 +16,12 @@ app.service('Retail_Teles_SiteService', ['VRModalService', 'UtilsService', 'VRNo
 
             VRModalService.showModal('/Client/Modules/Retail_Teles/Views/TelesSiteEditor.html', parameters, modalSettings);
         }
-
+        function getTelesTemplateBEDefinitionId()
+        {
+            return "fd8fac54-db90-4da2-b92f-d81070ea52ec";
+        }
         return ({
             addTelesSite: addTelesSite,
+            getTelesTemplateBEDefinitionId: getTelesTemplateBEDefinitionId
         });
     }]);

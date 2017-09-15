@@ -2,11 +2,15 @@
 
     "use strict";
 
-    TelesSiteEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','Retail_Teles_SiteAPIService'];
+    TelesSiteEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService','Retail_Teles_SiteAPIService','Retail_Teles_SiteService'];
 
-    function TelesSiteEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_Teles_SiteAPIService) {
+    function TelesSiteEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_Teles_SiteAPIService, Retail_Teles_SiteService) {
         var enterpriseId;
-        var vrConnectionId
+        var vrConnectionId;
+
+        var telesTemplateSelectorApi;
+        var telesTemplateSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -21,7 +25,19 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            $scope.scopeModel.useTemplate = false;
+            $scope.scopeModel.useTemplate = true;
+            $scope.scopeModel.onTelesTemplateSelectorReady = function (api) {
+                telesTemplateSelectorApi = api;
+                var payload = {
+                    filter: {
+                        BusinessEntityDefinitionId: Retail_Teles_SiteService.getTelesTemplateBEDefinitionId()
+                    }
+                };
+                var setLoader = function (value) {
+                    $scope.scopeModel.isTelesTemplateLoading = value;
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, telesTemplateSelectorApi, payload, setLoader, telesTemplateSelectorPromiseDeferred);
+            };
             $scope.scopeModel.save = function () {
                 return insert();
             };
@@ -41,7 +57,7 @@
             }
             function loadStaticData() {
             }
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTelesTemplateSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -49,7 +65,25 @@
 
            
         }
-
+        function loadTelesTemplateSelector() {
+            if ($scope.scopeModel.useTemplate)
+            {
+                var telesTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                telesTemplateSelectorPromiseDeferred.promise.then(function () {
+                    telesTemplateSelectorPromiseDeferred = undefined;
+                    var selectorPayload = {
+                        filter: {
+                            BusinessEntityDefinitionId: Retail_Teles_SiteService.getTelesTemplateBEDefinitionId()
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(telesTemplateSelectorApi, selectorPayload, telesTemplateSelectorLoadDeferred);
+                });
+                return telesTemplateSelectorLoadDeferred.promise;
+            }else
+            {
+                telesTemplateSelectorPromiseDeferred = undefined;
+            }
+        }
         function insert() {
             $scope.scopeModel.isLoading = true;
             return Retail_Teles_SiteAPIService.AddTelesSite(buildSiteObjFromScope()).then(function (response) {
@@ -69,7 +103,7 @@
         function buildSiteObjFromScope() {
             return {
                 CentrexFeatSet: $scope.scopeModel.centrexFeatSet,
-                TemplateName: $scope.scopeModel.templateName,
+                TemplateName: $scope.scopeModel.selectedTelesTemplate != undefined?$scope.scopeModel.selectedTelesTemplate.Name:undefined,
                 TelesEnterpriseId:enterpriseId,
                 VRConnectionId:vrConnectionId,
                 Site: {

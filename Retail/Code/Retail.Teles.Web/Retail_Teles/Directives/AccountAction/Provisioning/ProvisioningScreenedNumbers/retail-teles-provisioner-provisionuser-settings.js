@@ -41,7 +41,6 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
 
                     var provisionUserSettings;
                     if (payload != undefined) {

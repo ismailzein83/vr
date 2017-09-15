@@ -5,15 +5,9 @@
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <retail-teles-domains-selector on-ready="scopeModel.onDomainsDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onDomainsSelectionChanged"></retail-teles-domains-selector>
-                        <span vr-loader="scopeModel.isEnterprisesSelectorLoading">
-                            <retail-teles-enterprises-selector on-ready="scopeModel.onEnterprisesDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onEnterprisesSelectionChanged"></retail-teles-enterprises-selector>
-                        </span>
-                        <span vr-loader="scopeModel.isSitesSelectorLoading">
-                            <retail-teles-sites-selector on-ready="scopeModel.onSitesDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onSitesSelectionChanged"></retail-teles-sites-selector>
-                        </span>
-                        <span vr-loader="scopeModel.isUsersSelectorLoading">
-                            <retail-teles-users-selector on-ready="scopeModel.onUsersDirectiveReady" normal-col-num="4" isrequired="true"></retail-teles-users-selector>
-                        </span>
+                        <retail-teles-enterprises-selector vr-loader="scopeModel.isEnterprisesSelectorLoading" on-ready="scopeModel.onEnterprisesDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onEnterprisesSelectionChanged"></retail-teles-enterprises-selector>
+                        <retail-teles-sites-selector vr-loader="scopeModel.isSitesSelectorLoading" on-ready="scopeModel.onSitesDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onSitesSelectionChanged"></retail-teles-sites-selector>
+                        <retail-teles-users-selector vr-loader="scopeModel.isUsersSelectorLoading" on-ready="scopeModel.onUsersDirectiveReady" normal-col-num="4" isrequired="true"></retail-teles-users-selector>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
