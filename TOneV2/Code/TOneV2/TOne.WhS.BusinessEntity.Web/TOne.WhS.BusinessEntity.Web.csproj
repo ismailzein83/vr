@@ -356,6 +356,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\vr-whs-be-pricelisttemplate-mappedcells.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\vr-whs-be-salepricelisttemplate-mappedcells-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelisttype-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-salepricelisl-compressfile-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\Templates\SaleRateHistoryGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\vr-whs-be-salerate-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricelistSettingsTemplate.html" />
