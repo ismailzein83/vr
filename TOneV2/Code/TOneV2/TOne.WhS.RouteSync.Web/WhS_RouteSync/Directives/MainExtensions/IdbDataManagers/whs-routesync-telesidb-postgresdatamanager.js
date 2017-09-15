@@ -57,7 +57,7 @@
                         RedundantConnectionStrings: redundantConnectionStrings
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

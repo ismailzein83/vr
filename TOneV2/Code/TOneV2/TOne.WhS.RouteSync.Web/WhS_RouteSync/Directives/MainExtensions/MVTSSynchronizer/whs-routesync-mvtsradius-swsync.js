@@ -116,7 +116,7 @@
                 radiusDataManagerSettingsDirectiveReadyDeferred.promise.then(function () {
                     var settingsDirectivePayload;
                     if (radiusDataManager != undefined) {
-                        settingsDirectivePayload = { radiusDataManagersSettings: radiusDataManager }
+                        settingsDirectivePayload = { radiusDataManagersSettings: radiusDataManager };
                     }
                     VRUIUtilsService.callDirectiveLoad(radiusDataManagerSettingsDirectiveAPI, settingsDirectivePayload, radiusDataManagerSettingsDirectiveReadyDeferred);
                 });

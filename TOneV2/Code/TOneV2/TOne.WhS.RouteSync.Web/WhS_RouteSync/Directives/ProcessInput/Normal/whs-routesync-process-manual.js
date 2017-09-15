@@ -20,7 +20,7 @@ app.directive("whsRoutesyncProcessManual", ["VRUIUtilsService", "UtilsService",
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/ProcessInput/Normal/Templates/RouteSyncProcessManualTemplate.html"
         };

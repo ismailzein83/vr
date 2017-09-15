@@ -11,10 +11,10 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onRouteSyncDefinitionAdded = onRouteSyncDefinitionAdded
+                modalScope.onRouteSyncDefinitionAdded = onRouteSyncDefinitionAdded;
             };
             VRModalService.showModal('/Client/Modules/WhS_RouteSync/Views/RouteSyncDefinition/RouteSyncDefinitionEditor.html', null, settings);
-        };
+        }
 
         function editRouteSyncDefinition(routeSyncDefinitionId, onRouteSyncDefinitionUpdated) {
             var settings = {};

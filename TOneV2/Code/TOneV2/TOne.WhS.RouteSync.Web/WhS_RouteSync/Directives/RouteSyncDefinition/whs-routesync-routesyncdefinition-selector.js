@@ -28,7 +28,7 @@ app.directive('whsRoutesyncRoutesyncdefinitionSelector', ['WhS_RouteSync_RouteSy
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getRouteSyncDefinitionTemplate(attrs);

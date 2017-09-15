@@ -91,7 +91,7 @@
                         CarrierMappings: telesIdbCarrierAccountMappingGridAPI.getData(),
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
@@ -105,7 +105,7 @@
 
                     var settingsDirectivePayload;
                     if (idbDataManager != undefined) {
-                        settingsDirectivePayload = { idbDataManagersSettings: idbDataManager }
+                        settingsDirectivePayload = { idbDataManagersSettings: idbDataManager };
                     }
                     VRUIUtilsService.callDirectiveLoad(idbDataManagerSettingsDirectiveAPI, settingsDirectivePayload, settingsDirectiveLoadDeferred);
                 });
@@ -117,7 +117,7 @@
 
                 telesIdbCarrierAccountMappingGridReadyDeferred.promise.then(function () {
 
-                    var payload = { carrierMappings: carrierMappings }
+                    var payload = { carrierMappings: carrierMappings };
                     VRUIUtilsService.callDirectiveLoad(telesIdbCarrierAccountMappingGridAPI, payload, carrierAccountMappingGridLoadDeferred);
                 });
 
@@ -132,7 +132,7 @@
                     getMappingSeparator: function () {
                         return $scope.scopeModel.separator;
                     }
-                }
+                };
                 return context;
             }
         }
