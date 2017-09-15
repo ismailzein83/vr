@@ -23,9 +23,15 @@ namespace TOne.WhS.Sales.Entities
 
         public abstract void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context);
 
-        public abstract void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context);
+        public virtual void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
+        {
 
-        public abstract void ApplyCorrectedData(IApplyCorrectedDataContext context);
+        }
+
+        public virtual void ApplyCorrectedData(IApplyCorrectedDataContext context)
+        {
+
+        }
     }
 
     public interface IBulkActionApplicableToCountryContext

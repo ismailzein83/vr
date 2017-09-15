@@ -129,15 +129,6 @@ namespace TOne.WhS.Sales.MainExtensions
             }
         }
 
-        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
-        {
-
-        }
-
-        public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
-        {
-        }
-
         #endregion
 
         #region Private Methods

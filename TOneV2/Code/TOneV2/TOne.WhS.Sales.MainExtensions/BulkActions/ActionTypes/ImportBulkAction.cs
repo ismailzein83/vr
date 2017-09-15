@@ -104,15 +104,6 @@ namespace TOne.WhS.Sales.MainExtensions
             context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate);
         }
 
-        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
-        {
-
-        }
-
-        public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
-        {
-        }
-
         #endregion
 
         #region Private Methods

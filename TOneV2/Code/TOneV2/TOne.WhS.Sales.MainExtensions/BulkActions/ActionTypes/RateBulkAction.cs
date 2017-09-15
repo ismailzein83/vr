@@ -197,29 +197,16 @@ namespace TOne.WhS.Sales.MainExtensions
             AddNewNormalRate(context.OwnerType, context.OwnerId, contextZoneItem, roundedNewNormalRateValue, context.ZoneDraft);
         }
 
-        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
-        {
-
-        }
-
         public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
         {
-            var correctedData = context.CorrectedData as RateBulkActionCorrectedData;
+            var correctedData = context.CorrectedData.CastWithValidate<RateBulkActionCorrectedData>("RateBulkActionCorrectedData");
+            correctedData.ZoneCorrectedRates.ThrowIfNull("RateBulkActionCorrectedData.ZoneCorrectedRates");
 
-            foreach (KeyValuePair<long, decimal> kvp in correctedData.CorrectedRatesByZoneId)
+            foreach (ZoneCorrectedRate zoneCorrectedRate in correctedData.ZoneCorrectedRates)
             {
-                ZoneChanges zoneDraft = context.GetZoneDraft(kvp.Key);
-
-                ZoneItem contextZoneItem = context.GetContextZoneItem(kvp.Key);
-                decimal roundedCorrectedRateValue = context.GetRoundedRate(kvp.Value);
-
-                if (contextZoneItem.CurrentRate.HasValue)
-                {
-                    decimal roundedCurrentRate = context.GetRoundedRate(contextZoneItem.CurrentRate.Value);
-                    if (roundedCurrentRate == roundedCorrectedRateValue)
-                        throw new DataIntegrityValidationException(string.Format("The fixed rate of zone '{0}' is equal to that of its current one '{1}'", contextZoneItem.ZoneName, roundedCurrentRate));
-                }
-
+                ZoneChanges zoneDraft = context.GetZoneDraft(zoneCorrectedRate.ZoneId);
+                ZoneItem contextZoneItem = context.GetContextZoneItem(zoneCorrectedRate.ZoneId);
+                decimal roundedCorrectedRateValue = context.GetRoundedRate(zoneCorrectedRate.CorrectedRate);
                 AddNewNormalRate(context.OwnerType, context.OwnerId, contextZoneItem, roundedCorrectedRateValue, zoneDraft);
             }
         }

@@ -739,32 +739,38 @@ namespace TOne.WhS.Sales.Business
                 existingZoneDrafts = draft.ZoneChanges.FindAllRecords(x => applicableZoneIds.Contains(x.ZoneId));
 
             SaleEntityZoneRoutingProductLocator routingProductLocator = null;
+            IEnumerable<ZoneItem> zoneItems = null;
 
             Func<IEnumerable<ZoneItem>> buildZoneItems = () =>
             {
-                if (routingProductLocator == null)
-                    routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(input.EffectiveOn));
-
-                var ratePlanZoneCreationInput = new RatePlanZoneCreationInput()
+                if (zoneItems == null)
                 {
-                    SaleZones = filteredSaleZones,
-                    OwnerType = input.OwnerType,
-                    OwnerId = input.OwnerId,
-                    SellingProductId = sellingProductId,
-                    EffectiveOn = input.EffectiveOn,
-                    CurrencyId = input.CurrencyId,
-                    RoutingDatabaseId = input.RoutingDatabaseId,
-                    PolicyConfigId = input.PolicyConfigId,
-                    NumberOfOptions = input.NumberOfOptions,
-                    CostCalculationMethods = input.CostCalculationMethods,
-                    BulkAction = null,
-                    Draft = draft,
-                    CountryBEDsByCountryId = countryBEDsByCountryId,
-                    RoutingProductLocator = routingProductLocator,
-                    CurrentRateLocator = currentRateLocator
-                };
+                    if (routingProductLocator == null)
+                        routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(input.EffectiveOn));
 
-                return BuildZoneItems(ratePlanZoneCreationInput);
+                    var ratePlanZoneCreationInput = new RatePlanZoneCreationInput()
+                    {
+                        SaleZones = filteredSaleZones,
+                        OwnerType = input.OwnerType,
+                        OwnerId = input.OwnerId,
+                        SellingProductId = sellingProductId,
+                        EffectiveOn = input.EffectiveOn,
+                        CurrencyId = input.CurrencyId,
+                        RoutingDatabaseId = input.RoutingDatabaseId,
+                        PolicyConfigId = input.PolicyConfigId,
+                        NumberOfOptions = input.NumberOfOptions,
+                        CostCalculationMethods = input.CostCalculationMethods,
+                        BulkAction = null,
+                        Draft = draft,
+                        CountryBEDsByCountryId = countryBEDsByCountryId,
+                        RoutingProductLocator = routingProductLocator,
+                        CurrentRateLocator = currentRateLocator
+                    };
+
+                    zoneItems = BuildZoneItems(ratePlanZoneCreationInput);
+                }
+
+                return zoneItems;
             };
 
             int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();

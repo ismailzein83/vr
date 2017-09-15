@@ -97,15 +97,6 @@ namespace TOne.WhS.Sales.MainExtensions
             newNormalRate.BED = BED;
         }
 
-        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
-        {
-
-        }
-
-        public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
-        {
-        }
-
         #endregion
 
         #region Private Methods

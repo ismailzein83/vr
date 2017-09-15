@@ -140,15 +140,6 @@ namespace TOne.WhS.Sales.MainExtensions
             context.ZoneDraft.ClosedRates = closedRates;
         }
 
-        public override void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
-        {
-
-        }
-
-        public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
-        {
-        }
-
         #endregion
     }
 }
