@@ -10,6 +10,6 @@ namespace TOne.WhS.Routing.Entities
     {
         public int SupplierId { get; set; }
 
-        public Decimal? Percentage { get; set; }
+        public int? Percentage { get; set; }
     }
 }

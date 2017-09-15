@@ -8,7 +8,7 @@ namespace TOne.WhS.Routing.Entities
 {
     public interface IRouteOptionPercentageTarget
     {
-        Decimal? Percentage { get; set; }
+        int? Percentage { get; set; }
     }
 
     public interface IRouteOptionPercentageExecutionContext

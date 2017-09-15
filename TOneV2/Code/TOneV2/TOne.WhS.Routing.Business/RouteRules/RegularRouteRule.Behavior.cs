@@ -178,7 +178,7 @@ namespace TOne.WhS.Routing.Business
             return options;
         }
 
-        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, Decimal? percentage)
+        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, int? percentage)
         {
             var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
             var option = new RouteOptionRuleTarget

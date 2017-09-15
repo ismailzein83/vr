@@ -178,8 +178,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 int ruleId;
                 if (int.TryParse(parts[2], out ruleId))
                     option.ExecutedRuleId = ruleId;
-                decimal percentage;
-                if (decimal.TryParse(parts[3], out percentage))
+                int percentage;
+                if (int.TryParse(parts[3], out percentage))
                     option.Percentage = percentage;
                 bool isBlocked;
                 if (bool.TryParse(parts[7], out isBlocked))

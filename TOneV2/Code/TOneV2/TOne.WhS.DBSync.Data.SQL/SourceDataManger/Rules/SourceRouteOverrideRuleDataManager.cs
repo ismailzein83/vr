@@ -88,10 +88,10 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 
                 string[] supplierOptionEntries = optionString.Split(',');
                 string percentage = supplierOptionEntries.Length == 3 ? supplierOptionEntries[2] : null;
-                decimal? calculatedPercentage = null;
+                int? calculatedPercentage = null;
                 if (!string.IsNullOrEmpty(percentage))
                 {
-                    decimal tempPercentage = Convert.ToDecimal(percentage);
+                    int tempPercentage = Convert.ToInt32(percentage);
                     if (tempPercentage > 0)
                         calculatedPercentage = tempPercentage;
                 }

@@ -43,7 +43,7 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
 
         private class RouteOptionPercentageTarget : IRouteOptionPercentageTarget
         {
-            public decimal? Percentage
+            public int? Percentage
             {
                 get;
                 set;

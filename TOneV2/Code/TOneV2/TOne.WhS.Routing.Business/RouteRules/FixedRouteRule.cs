@@ -71,7 +71,7 @@ namespace TOne.WhS.Routing.Business
             if (options == null)
                 return;
 
-            decimal? totalAssignedPercentage = null;
+            int? totalAssignedPercentage = null;
 
             var unblockedOptions = options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered);
             if (unblockedOptions != null)
@@ -84,15 +84,30 @@ namespace TOne.WhS.Routing.Business
             if (!totalAssignedPercentage.HasValue || totalAssignedPercentage == 100 || totalAssignedPercentage == 0)
                 return;
 
-            decimal unassignedPercentages = 100 - totalAssignedPercentage.Value;
+            int unassignedPercentages = 100 - totalAssignedPercentage.Value;
+            int newTotalAssignedPercentage = 0;
+            RouteOption routeOptionWithHighestPercentage = null;
 
             foreach (var option in options)
             {
                 if (!option.Percentage.HasValue)
                     continue;
 
-                option.Percentage = option.IsBlocked || option.IsFiltered ? 0 : decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value, 2);
+                if (option.IsBlocked || option.IsFiltered)
+                {
+                    option.Percentage = 0;
+                    continue;
+                }
+
+                option.Percentage = option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value;
+                newTotalAssignedPercentage += option.Percentage.Value;
+
+                if (routeOptionWithHighestPercentage == null || routeOptionWithHighestPercentage.Percentage < option.Percentage)
+                    routeOptionWithHighestPercentage = option;
             }
+
+            if (newTotalAssignedPercentage != 100)
+                routeOptionWithHighestPercentage.Percentage = routeOptionWithHighestPercentage.Percentage.Value + (100 - newTotalAssignedPercentage);
         }
 
         public override void ExecuteForSaleEntity(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
@@ -146,7 +161,7 @@ namespace TOne.WhS.Routing.Business
             if (options == null)
                 return;
 
-            decimal? totalAssignedPercentage = null;
+            int? totalAssignedPercentage = null;
 
             var unblockedOptions = options.FindAllRecords(itm => itm.SupplierStatus != SupplierStatus.Block);
             if (unblockedOptions != null)
@@ -159,15 +174,31 @@ namespace TOne.WhS.Routing.Business
             if (!totalAssignedPercentage.HasValue || totalAssignedPercentage == 100 || totalAssignedPercentage == 0)
                 return;
 
-            decimal unassignedPercentages = 100 - totalAssignedPercentage.Value;
+            int unassignedPercentages = 100 - totalAssignedPercentage.Value;
+
+            int newTotalAssignedPercentage = 0;
+            RPRouteOption rpRouteOptionWithHighestPercentage = null;
 
             foreach (var option in options)
             {
                 if (!option.Percentage.HasValue)
                     continue;
 
-                option.Percentage = option.SupplierStatus == SupplierStatus.Block ? 0 : decimal.Round(option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value, 2);
+                if (option.SupplierStatus == SupplierStatus.Block)
+                {
+                    option.Percentage = 0;
+                    continue;
+                }
+
+                option.Percentage = option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value;
+                newTotalAssignedPercentage += option.Percentage.Value;
+
+                if (rpRouteOptionWithHighestPercentage == null || rpRouteOptionWithHighestPercentage.Percentage < option.Percentage)
+                    rpRouteOptionWithHighestPercentage = option;
             }
+
+            if (newTotalAssignedPercentage != 100)
+                rpRouteOptionWithHighestPercentage.Percentage = rpRouteOptionWithHighestPercentage.Percentage.Value + (100 - newTotalAssignedPercentage);
         }
 
         #endregion
@@ -207,7 +238,7 @@ namespace TOne.WhS.Routing.Business
             return options;
         }
 
-        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, Decimal? percentage)
+        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, int? percentage)
         {
             var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
             var option = new RouteOptionRuleTarget
