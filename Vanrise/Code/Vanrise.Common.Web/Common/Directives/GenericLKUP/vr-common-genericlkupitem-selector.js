@@ -74,6 +74,7 @@
 
                 directiveAPI.load = function (payload) {
                     selectorAPI.clearDataSource();
+                    ctrl.datasource.length = 0;
                     var selectedIds;
                     var filter;
                     if (payload) {
@@ -124,6 +125,7 @@
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '<vr-label>{{ctrl.fieldTitle}}</vr-label>'
+                +'<span vr-disabled="ctrl.isdisabled">'
                 + '<vr-select on-ready="ctrl.onSelectorReady"'
                     + ' datasource="ctrl.datasource"'
 
@@ -134,10 +136,11 @@
                     + ' datavaluefield="GenericLKUPItemId"'
                     + ' datatextfield="Name"'
                     + ismultipleselection
-                    + ' vr-disabled="ctrl.isdisabled"'
+              
                     + ' isrequired="ctrl.isrequired">'
 
                 + '</vr-select>'
+                +'</span>'
             + '</vr-columns>';
         }
 
