@@ -22,10 +22,6 @@ namespace Retail.Teles.Business
 
             var account = _accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
             account.ThrowIfNull("account", context.AccountId);
-            if (!TelesAccountCondition.AllowRevertUserRGs(account, definitionSettings.CompanyTypeId, definitionSettings.SiteTypeId, definitionSettings.UserTypeId, definitionSettings.ActionType))
-            {
-                throw new Exception(string.Format("Not Allow to {0} User Routing Groups", context.ActionDefinitionName));
-            }
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start loading users to {0}.",context.ActionDefinitionName));
             List<UsersToRevertRG> usersToRevertRG = GetUsersToRevertRG(context, account, definitionSettings);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start {0} users.", context.ActionDefinitionName));
@@ -53,12 +49,12 @@ namespace Retail.Teles.Business
                 ChURGsActionCh chURGsActionCh;
                 if (changeUsersRGsAccountState.ChangesByActionType.TryGetValue(definitionSettings.ActionType, out chURGsActionCh))
                 {
+                    UsersToRevertRG currentUsersToRevertRG = new UsersToRevertRG(account)
+                    {
+                        TelesUsers = new List<TelesUser>()
+                    };
                     if (chURGsActionCh.ChangesByUser != null)
                     {
-                        UsersToRevertRG currentUsersToRevertRG = new UsersToRevertRG(account)
-                        {
-                            TelesUsers = new List<TelesUser>()
-                        };
                         foreach (var user in chURGsActionCh.ChangesByUser)
                         {
                             var telesUser = GetTelesUser(definitionSettings.VRConnectionId, user.Key);
@@ -74,9 +70,9 @@ namespace Retail.Teles.Business
                                     });
                                 }
                             }
-                        }
-                        usersToRevertRG.Add(currentUsersToRevertRG);
+                        } 
                     }
+                    usersToRevertRG.Add(currentUsersToRevertRG);
                 }
             }
         }
@@ -86,13 +82,16 @@ namespace Retail.Teles.Business
             {
                 foreach (var userToRevert in usersToRevertRG)
                 {
+                    ChURGsActionCh oldChURGsActionCh = userToRevert.ExistingAccountState.ChangesByActionType.GetRecord(definitionSettings.ActionType);
+                    ChangeUsersRGsAccountState existingAccountState = userToRevert.ExistingAccountState.VRDeepCopy();
+                    ChURGsActionCh chURGsActionCh = existingAccountState.ChangesByActionType.GetRecord(definitionSettings.ActionType);
+                    if (chURGsActionCh == null)
+                        continue;
                     if (userToRevert.TelesUsers != null)
                     {
-                        ChURGsActionCh oldChURGsActionCh = userToRevert.ExistingAccountState.ChangesByActionType.GetRecord(definitionSettings.ActionType);
-                        ChangeUsersRGsAccountState existingAccountState = userToRevert.ExistingAccountState.VRDeepCopy();
-                        ChURGsActionCh chURGsActionCh = existingAccountState.ChangesByActionType.GetRecord(definitionSettings.ActionType);
+                       
                         List<string> usersNames = new List<string>();
-
+                       
                         foreach (var user in userToRevert.TelesUsers)
                         {
 
@@ -106,27 +105,27 @@ namespace Retail.Teles.Business
                             WriteUsersProccessedTrackingMessage(context, usersNames);
                             chURGsActionCh.ChangesByUser.Remove(user.UserId);
                         }
-                        if (chURGsActionCh.ChangesByUser.Count == 0)
-                            existingAccountState.ChangesByActionType.Remove(definitionSettings.ActionType);
-                        if (existingAccountState.ChangesByActionType.Count == 0)
-                        {
-                            if (_accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, userToRevert.Account.AccountId))
-                            {
-                                context.TrackActionExecuted(null, oldChURGsActionCh);
-                            };
-                        }
-                        else
-                        {
-                            if (_accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, userToRevert.Account.AccountId, existingAccountState))
-                            {
-                               context.TrackActionExecuted(null, oldChURGsActionCh);
-                            };
-                        }
-                        if (userToRevert.TelesUsers.Count > 0)
-                            context.WriteTrackingMessage(LogEntryType.Information, "Users {0} successfully for account: {1}.", context.ActionDefinitionName, _accountBEManager.GetAccountName(userToRevert.Account));
-                        else
-                            context.WriteTrackingMessage(LogEntryType.Information, "Account: {0} has no users to {1}.", _accountBEManager.GetAccountName(userToRevert.Account), context.ActionDefinitionName);
                     }
+                    if (chURGsActionCh.ChangesByUser == null || chURGsActionCh.ChangesByUser.Count == 0)
+                        existingAccountState.ChangesByActionType.Remove(definitionSettings.ActionType);
+                    if (existingAccountState.ChangesByActionType.Count == 0)
+                    {
+                        if (_accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, userToRevert.Account.AccountId))
+                        {
+                            context.TrackActionExecuted(null, oldChURGsActionCh);
+                        };
+                    }
+                    else
+                    {
+                        if (_accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, userToRevert.Account.AccountId, existingAccountState))
+                        {
+                            context.TrackActionExecuted(null, oldChURGsActionCh);
+                        };
+                    }
+                    if (userToRevert.TelesUsers.Count > 0)
+                        context.WriteTrackingMessage(LogEntryType.Information, "Users {0} successfully for account: {1}.", context.ActionDefinitionName, _accountBEManager.GetAccountName(userToRevert.Account));
+                    else
+                        context.WriteTrackingMessage(LogEntryType.Information, "Account: {0} has no users to {1}.", _accountBEManager.GetAccountName(userToRevert.Account), context.ActionDefinitionName);
                 }
             }
         }

@@ -32,12 +32,12 @@ namespace Retail.Teles.Business
                 auth = "FULL",
                 pin = userAccountSetting.Pin,
             };
-            string telesUserId = _telesUserManager.CreateUser(vrConnectionId, siteName, gateway, newuser);
+            string telesUserId = _telesUserManager.CreateUser(vrConnectionId, telesSiteId, gateway, newuser);
             _telesUserManager.TryMapUserToAccount(accountBEDefinitionId, user.AccountId, telesDomainId, telesEnterpriseId, telesSiteId, telesUserId, ProvisionStatus.Started);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("User {0} created.", user.Name));
-            CreateScreendedNumbers(context, vrConnectionId, countryCode, user.AccountId, telesUserId);
+          //  CreateScreendedNumbers(context, vrConnectionId, countryCode, user.AccountId, telesUserId);
             _telesUserManager.TryMapUserToAccount(accountBEDefinitionId, user.AccountId, telesDomainId, telesEnterpriseId, telesSiteId, telesUserId, ProvisionStatus.Completed);
-            context.TrackActionExecuted(user.AccountId, string.Format("Teles site {0}", user.Name), null);
+            context.TrackActionExecuted(user.AccountId, string.Format("Teles User {0}", user.Name), null);
         }
         public void CreateSiteWithScreenedNumbers(IAccountProvisioningContext context, Guid vrConnectionId, string countryCode, string enterpriseId, Guid accountBEDefinitionId, Account site, string enterpriseName, SiteAccountSetting siteAccountSetting, string centrexFeatSet)
         {

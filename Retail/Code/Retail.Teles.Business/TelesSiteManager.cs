@@ -57,6 +57,21 @@ namespace Retail.Teles.Business
         public string CreateSite(Guid vrConnectionId, dynamic enterpriseId, string centrexFeatSet, Site request, string templateName)
         {
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
+
+            if(templateName != null)
+            {
+                dynamic template = GetSite(vrConnectionId, templateName);
+                if (request != null && template != null)
+                {
+                    request.maxUsers = template.maxUsers;
+                    request.maxSubsPerUser = template.maxSubsPerUser;
+                    request.maxBusinessTrunkCalls = template.maxBusinessTrunkCalls;
+                    request.maxCalls = template.maxCalls;
+                    request.maxCallsPerUser = template.maxCallsPerUser;
+                    request.maxRegistrations = template.maxRegistrations;
+                    request.maxRegsPerUser = template.maxRegsPerUser;
+                }
+            }
             var actionPath = string.Format("/domain/{0}?", enterpriseId);
             if (centrexFeatSet != null)
             {

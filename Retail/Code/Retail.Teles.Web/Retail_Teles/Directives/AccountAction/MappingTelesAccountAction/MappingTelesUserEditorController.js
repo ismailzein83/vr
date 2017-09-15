@@ -277,8 +277,8 @@
                     switch (response.Result) {
                         case InsertOperationResultEnum.Succeeded.value:
                             VRNotificationService.showSuccess("User mapped successfully");
-                            if ($scope.onMappingAccount != undefined) {
-                                $scope.onMappingAccount(response.UpdatedObject);
+                            if ($scope.onMappingUser != undefined) {
+                                $scope.onMappingUser(response.UpdatedObject);
                             }
                             $scope.modalContext.closeModal();
                             break;

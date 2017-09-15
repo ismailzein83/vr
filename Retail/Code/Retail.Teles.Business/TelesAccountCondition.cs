@@ -151,42 +151,56 @@ namespace Retail.Teles.Business
         }
         public static bool AllowChangeUserRGs(Account account, Guid companyTypeId, Guid siteTypeId,Guid? userTypeId, string actionType)
         {
-            if (account.TypeId == companyTypeId)
+            bool result = false;
+            if (IsEnterpriseMapped(account) || IsSiteMapped(account) || IsUserMapped(account))
             {
-                if (!IsEnterpriseMapped(account))
-                    return false;
-                return !IsChangedUserRGs(account, true,actionType);
+                if (!IsChangedUserRGs(account, true, actionType))
+                    result = true;
             }
-            else if (account.TypeId == siteTypeId)
-            {
-                if (!IsSiteMapped(account))
-                    return false;
+           var childAccounts = _accountBEManager.GetChildAccounts(account, true);
+           if (childAccounts != null)
+           {
+               foreach(var child in childAccounts)
+               {
+                   if (IsEnterpriseMapped(child) || IsSiteMapped(child) || IsUserMapped(child))
+                   {
+                       if (!IsChangedUserRGs(child, true, actionType))
+                       {
+                           result = true;
+                           break;
+                       }
+                   }
+               }
+           }
 
-                return !IsChangedUserRGs(account,true, actionType);
-            }
-            else if (userTypeId.HasValue && account.TypeId == userTypeId.Value)
-            {
-                if (!IsUserMapped(account))
-                    return false;
-                return !IsChangedUserRGs(account, true, actionType);
-            }
-            return false;
+           return result;
+           
         }
         public static bool AllowRevertUserRGs(Account account, Guid companyTypeId, Guid siteTypeId,Guid? userTypeId, string actionType)
         {
-            if (account.TypeId == companyTypeId)
+            bool result = false;
+            if (IsEnterpriseMapped(account) || IsSiteMapped(account) || IsUserMapped(account))
             {
-                return IsChangedUserRGs(account,true, actionType);
+                if (IsChangedUserRGs(account, true, actionType))
+                    result = true;
             }
-            else if (account.TypeId == siteTypeId)
+            var childAccounts = _accountBEManager.GetChildAccounts(account, true);
+            if (childAccounts != null)
             {
-                return IsChangedUserRGs(account,true, actionType);
+                foreach (var child in childAccounts)
+                {
+                    if (IsEnterpriseMapped(child) || IsSiteMapped(child) || IsUserMapped(child))
+                    {
+                        if (IsChangedUserRGs(child, true, actionType))
+                        {
+                            result = true;
+                            break;
+                        }
+                    }
+                }
             }
-            else if (userTypeId.HasValue && account.TypeId == userTypeId.Value)
-            {
-                return IsChangedUserRGs(account, true, actionType);
-            }
-            return false;
+            return result;
+           
         }
         public static bool AllowEnterpriseMap(Account account, Guid companyTypeId, Guid siteTypeId)
         {
