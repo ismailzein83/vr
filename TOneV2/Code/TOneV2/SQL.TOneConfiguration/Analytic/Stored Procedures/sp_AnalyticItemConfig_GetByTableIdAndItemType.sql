@@ -6,7 +6,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [Analytic].[sp_AnalyticItemConfig_GetByTableIdAndItemType]
-@TableId INT,
+@TableId uniqueidentifier,
 @TtemType INT
 AS
 BEGIN

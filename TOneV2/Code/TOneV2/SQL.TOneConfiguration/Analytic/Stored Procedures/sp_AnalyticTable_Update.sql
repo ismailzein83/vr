@@ -1,5 +1,5 @@
-﻿create PROCEDURE Analytic.sp_AnalyticTable_Update
-	@ID int,
+﻿CREATE PROCEDURE [Analytic].[sp_AnalyticTable_Update]
+	@ID uniqueidentifier,
 	@Name nvarchar(255), 
 	@Settings nvarchar(MAX)
 AS

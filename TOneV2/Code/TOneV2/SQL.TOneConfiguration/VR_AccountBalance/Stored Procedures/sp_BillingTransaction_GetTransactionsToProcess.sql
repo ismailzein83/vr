@@ -20,6 +20,12 @@ BEGIN
       ,[IsSubtractedFromBalance]
       ,[SourceID]
 	from [VR_AccountBalance].BillingTransaction with(nolock)
-	where AccountTypeID = @AccountTypeID and (isnull(IsBalanceUpdated, 0) = 0 or (IsBalanceUpdated = 1 and IsDeleted = 1 and isnull(IsSubtractedFromBalance, 0) = 0))
+	where AccountTypeID = @AccountTypeID 
+	and 
+	(
+		(isnull(IsDeleted, 0) = 0 AND isnull(IsBalanceUpdated, 0) = 0)
+		or 
+		(isnull(IsDeleted, 0) = 1 AND isnull(IsBalanceUpdated, 0) = 1 and isnull(IsSubtractedFromBalance, 0) = 0)
+	)
 	order by AccountID
 END

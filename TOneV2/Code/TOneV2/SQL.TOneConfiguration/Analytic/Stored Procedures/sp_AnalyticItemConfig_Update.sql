@@ -2,7 +2,7 @@
 	@ID uniqueidentifier,
 	@Name nvarchar(255),
 	@Title nvarchar(255),
-	@TableId int,
+	@TableId uniqueidentifier,
 	@ItemType int,
 	@Config nvarchar(MAX)
 AS

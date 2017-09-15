@@ -135,6 +135,8 @@
     <Folder Include="dataparser\Tables\" />
     <Folder Include="dataparser\Stored Procedures\" />
     <Folder Include="genericdata\User Defined Types\" />
+    <Folder Include="VR_AccountManager\" />
+    <Folder Include="VR_AccountManager\Tables\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -655,6 +657,9 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceAccount_GetByPartnerIds.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_CheckIfHasInvoices.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_PartnerInvoiceSetting_InsertOrUpdate.sql" />
+    <Build Include="VR_AccountManager\Tables\AccountManagerAssignment.sql" />
+    <Build Include="VR_AccountManager\Tables\AccountManager.sql" />
+    <Build Include="Security\VR_AccountManager.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
