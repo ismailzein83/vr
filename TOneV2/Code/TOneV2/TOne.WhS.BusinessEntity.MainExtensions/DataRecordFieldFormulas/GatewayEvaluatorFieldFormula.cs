@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
 {
