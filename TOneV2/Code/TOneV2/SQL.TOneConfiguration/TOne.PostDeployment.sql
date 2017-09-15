@@ -1743,7 +1743,6 @@ when not matched by target then
 --[queue].[QueueActivatorConfig]--------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
-set identity_insert [queue].[QueueActivatorConfig] on;
 ;with cte_data([ID],[Name],[Details])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1760,7 +1759,6 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Details])
 	values(s.[ID],s.[Name],s.[Details]);
-set identity_insert [queue].[QueueActivatorConfig] off;
 
 --[logging].[LoggableEntity]------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
