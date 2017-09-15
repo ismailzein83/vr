@@ -21,6 +21,8 @@ namespace Vanrise.Common.MainExtensions.TextManipulationAction
 
         public override void Execute(ITextManipulationActionContext context, TextManipulationTarget target)
         {
+            if (string.IsNullOrEmpty(target.TextValue))
+                return;
             if (this.StartIndex >= 1 && this.StartIndex <= target.TextValue.Length)
             {
                 int maxValidSubStringLength = target.TextValue.Length - this.StartIndex + 1; // +1 to include the first number in the max valid length

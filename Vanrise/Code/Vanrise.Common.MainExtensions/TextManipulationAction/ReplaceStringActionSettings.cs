@@ -25,9 +25,14 @@ namespace Vanrise.Common.MainExtensions.TextManipulationAction
         public override void Execute(ITextManipulationActionContext context, TextManipulationTarget target)
         {
             if (String.IsNullOrEmpty(this.StringToReplace))
-                throw new NullReferenceException("this.StringToReplace");
+                return;
+                //throw new NullReferenceException("this.StringToReplace");
+
             if (this.NewString == null)
                 this.NewString = String.Empty;
+
+            if (string.IsNullOrEmpty(target.TextValue))
+                return;
 
             target.TextValue = (this.IgnoreCase) ?
                 Regex.Replace(target.TextValue, this.StringToReplace, this.NewString, RegexOptions.IgnoreCase) :

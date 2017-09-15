@@ -42,7 +42,8 @@ namespace Vanrise.Rules.Normalization.MainExtensions
                 return;
 
             if (string.IsNullOrEmpty(TextToRemove))
-                throw new NullReferenceException("TextToRemove");
+                return;
+            //throw new NullReferenceException("TextToRemove");
 
             int index = -1;
 

@@ -25,9 +25,14 @@ namespace Vanrise.Rules.Normalization.MainExtensions
         public override void Execute(INormalizeNumberActionContext context, NormalizeNumberTarget target)
         {
             if (String.IsNullOrEmpty(this.StringToReplace))
-                throw new NullReferenceException("this.StringToReplace");
+                return;
+                //throw new NullReferenceException("this.StringToReplace");
+
             if (this.NewString == null)
                 this.NewString = String.Empty;
+
+            if (string.IsNullOrEmpty(target.PhoneNumber))
+                return;
 
             target.PhoneNumber = (this.IgnoreCase) ?
                 Utilities.ReplaceString(target.PhoneNumber, this.StringToReplace, this.NewString, StringComparison.OrdinalIgnoreCase) :
