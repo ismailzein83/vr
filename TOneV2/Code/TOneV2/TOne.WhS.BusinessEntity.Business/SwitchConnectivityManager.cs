@@ -50,16 +50,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SwitchConnectivity GetSwitchConnectivity(int switchConnectivityId)
         {
-          return GetSwitchConnectivity(switchConnectivityId,false);
+            return GetSwitchConnectivity(switchConnectivityId, false);
         }
 
         public SwitchConnectivity GetSwitchConnectivity(int switchConnectivityId, bool isViewedFromUI)
         {
             Dictionary<int, SwitchConnectivity> cachedEntities = this.GetCachedSwitchConnectivities();
-          var switchConnectivity =cachedEntities.GetRecord(switchConnectivityId);
-          if (switchConnectivity != null && isViewedFromUI)
-              VRActionLogger.Current.LogObjectViewed(SwitchConnectivityLoggableEntity.Instance, switchConnectivity);
-          return switchConnectivity;
+            var switchConnectivity = cachedEntities.GetRecord(switchConnectivityId);
+            if (switchConnectivity != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(SwitchConnectivityLoggableEntity.Instance, switchConnectivity);
+            return switchConnectivity;
         }
 
         public string GetSwitchConnectivityName(int switchConnectivityId)
@@ -130,29 +130,33 @@ namespace TOne.WhS.BusinessEntity.Business
             return updateOperationOutput;
         }
 
-        public SwitchConnectivity GetMatchConnectivity(string port)
+        public SwitchConnectivity GetMatchConnectivity(int switchId, string port)
         {
-            Dictionary<string, SwitchConnectivity> switchConnectivityByPort = GetSwitchConnectivitiesByPort();
-            if (switchConnectivityByPort == null)
+            Dictionary<SwitchPortKey, SwitchConnectivity> switchConnectivityBySwitchPortKey = GetSwitchConnectivitiesBySwitchPortKey();
+            if (switchConnectivityBySwitchPortKey == null)
                 return null;
+
+            SwitchPortKey switchPortKey = new SwitchPortKey() { SwitchId = switchId, Port = port };
+
             SwitchConnectivity connectivity;
-            if (switchConnectivityByPort.TryGetValue(port, out connectivity))
+            if (switchConnectivityBySwitchPortKey.TryGetValue(switchPortKey, out connectivity))
                 return connectivity;
             else
                 return null;
         }
 
-        public string GetMatchConnectivityName(string port)
+        public string GetMatchConnectivityName(int switchId, string port)
         {
-            var connectivity = GetMatchConnectivity(port);
+            var connectivity = GetMatchConnectivity(switchId, port);
             return connectivity != null ? connectivity.Name : null;
         }
 
-        public Dictionary<string, SwitchConnectivity> GetSwitchConnectivitiesByPort()
+        public Dictionary<SwitchPortKey, SwitchConnectivity> GetSwitchConnectivitiesBySwitchPortKey()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchConnectivitiesByPort", () =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchConnectivitiesBySwitchPort", () =>
             {
-                Dictionary<string, SwitchConnectivity> switchConnectivitiesByPort = new Dictionary<string, SwitchConnectivity>();
+                Dictionary<SwitchPortKey, SwitchConnectivity> switchConnectivitiesByPort = new Dictionary<SwitchPortKey, SwitchConnectivity>();
+
                 var switchConnectivitiesById = GetCachedSwitchConnectivities();
                 if (switchConnectivitiesById != null)
                 {
@@ -162,8 +166,9 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             foreach (var trunk in switchConnectivity.Settings.Trunks)
                             {
-                                if (!switchConnectivitiesByPort.ContainsKey(trunk.Name))
-                                    switchConnectivitiesByPort.Add(trunk.Name, switchConnectivity);
+                                SwitchPortKey switchPortKey = new SwitchPortKey() { SwitchId = switchConnectivity.SwitchId, Port = trunk.Name };
+                                if (!switchConnectivitiesByPort.ContainsKey(switchPortKey))
+                                    switchConnectivitiesByPort.Add(switchPortKey, switchConnectivity);
                             }
                         }
                     }
@@ -171,6 +176,30 @@ namespace TOne.WhS.BusinessEntity.Business
                 return switchConnectivitiesByPort;
             });
         }
+
+        //public Dictionary<string, SwitchConnectivity> GetSwitchConnectivitiesByPort()
+        //{
+        //    return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchConnectivitiesByPort", () =>
+        //    {
+        //        Dictionary<string, SwitchConnectivity> switchConnectivitiesByPort = new Dictionary<string, SwitchConnectivity>();
+        //        var switchConnectivitiesById = GetCachedSwitchConnectivities();
+        //        if (switchConnectivitiesById != null)
+        //        {
+        //            foreach (var switchConnectivity in switchConnectivitiesById.Values)
+        //            {
+        //                if (switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
+        //                {
+        //                    foreach (var trunk in switchConnectivity.Settings.Trunks)
+        //                    {
+        //                        if (!switchConnectivitiesByPort.ContainsKey(trunk.Name))
+        //                            switchConnectivitiesByPort.Add(trunk.Name, switchConnectivity);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        return switchConnectivitiesByPort;
+        //    });
+        //}
 
         #endregion
 
@@ -328,7 +357,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Private Methods
 
-        Dictionary<int, SwitchConnectivity> GetCachedSwitchConnectivities()
+        private Dictionary<int, SwitchConnectivity> GetCachedSwitchConnectivities()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitchConnectivities", () =>
             {
@@ -418,6 +447,12 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+    }
 
+    public struct SwitchPortKey
+    {
+        public int SwitchId { get; set; }
+
+        public string Port { get; set; }
     }
 }
