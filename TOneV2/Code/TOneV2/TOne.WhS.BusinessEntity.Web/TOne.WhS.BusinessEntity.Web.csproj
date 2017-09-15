@@ -216,6 +216,7 @@
     <Content Include="WhS_BusinessEntity\Constant\PeriodTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ProfilePropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SaleEntityZoneRoutingProductSourceTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\SalePricelistCompressFileEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CustomerPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PrimarySaleEntityEnum.js" />
