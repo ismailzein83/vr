@@ -29,7 +29,7 @@ namespace TOne.WhS.Sales.Business
             if (systemCurrency == null)
                 throw new DataIntegrityValidationException("System Currency was not found");
             _systemCurrencyId = systemCurrency.CurrencyId;
-        LongPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+            LongPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
         }
 
         #endregion
@@ -84,7 +84,7 @@ namespace TOne.WhS.Sales.Business
         public void setRatePlanContextPricingSettings(PricingSettings pricingSettings)
         {
             MaximumRate = pricingSettings.MaximumRate.Value;
-            _retroactiveDate = DateTime.Now.Date.AddDays(pricingSettings.RetroactiveDayOffset.Value);
+            _retroactiveDate = DateTime.Now.Date.AddDays(-pricingSettings.RetroactiveDayOffset.Value);
         }
 
         public void SetProcessHasChangesToTrueWithLock()
