@@ -17,9 +17,7 @@ namespace Retail.Teles.Business
         public override void Execute(IAccountProvisioningContext context)
         {
             var definitionSettings = context.DefinitionSettings as RevertUsersRGsDefinitionSettings;
-            if (definitionSettings == null)
-                throw new NullReferenceException("definitionSettings");
-
+            definitionSettings.ThrowIfNull("definitionSettings");
             var account = _accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
             account.ThrowIfNull("account", context.AccountId);
             context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start loading users to {0}.",context.ActionDefinitionName));
