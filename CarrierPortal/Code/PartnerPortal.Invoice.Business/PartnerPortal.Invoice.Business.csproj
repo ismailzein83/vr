@@ -79,6 +79,10 @@
       <Project>{c4ac9650-72a5-4470-a2d4-2d22c504bf0f}</Project>
       <Name>PartnerPortal.CustomerAccess.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PartnerPortal.CustomerAccess.Entities\PartnerPortal.CustomerAccess.Entities.csproj">
+      <Project>{3f63f33b-1977-4593-8d79-f5bfbf84cb19}</Project>
+      <Name>PartnerPortal.CustomerAccess.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PartnerPortal.Invoice.Entities\PartnerPortal.Invoice.Entities.csproj">
       <Project>{50261e8c-7f79-437b-9eb2-8423d8eb7080}</Project>
       <Name>PartnerPortal.Invoice.Entities</Name>

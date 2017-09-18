@@ -65,8 +65,10 @@
     <Compile Include="AccountStatement\PortalBalanceAccount.cs" />
     <Compile Include="AnalyticTileInfo.cs" />
     <Compile Include="CurrentAccountBalanceTile.cs" />
+    <Compile Include="DID\DIDAppQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RetailAccount.cs" />
+    <Compile Include="RetailAccountInfo\RetailAccountInfo.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

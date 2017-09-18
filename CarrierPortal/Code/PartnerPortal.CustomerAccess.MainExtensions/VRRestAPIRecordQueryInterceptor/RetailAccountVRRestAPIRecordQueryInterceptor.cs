@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Security.Business;
 using Vanrise.GenericData.Entities;
-
+using Vanrise.Common;
 namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterceptor
 {
     public class RetailAccountVRRestAPIRecordQueryInterceptor : Vanrise.GenericData.Entities.VRRestAPIRecordQueryInterceptor
@@ -21,12 +21,13 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterc
 
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
-
+            var accountInfo = manager.GetRetailAccountInfo(userId);
+            accountInfo.ThrowIfNull("accountInfo", userId);
             NumberRecordFilter numberRecordFilter = new NumberRecordFilter()
             {
                 FieldName = AccountFieldName,
                 CompareOperator = NumberRecordFilterOperator.Equals,
-                Value = manager.GetRetailAccountId(userId)
+                Value = accountInfo.AccountId
             };
 
             if (vrRestAPIRecordQueryInterceptorContext.Query == null)

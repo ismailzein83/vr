@@ -49,6 +49,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Retail.BusinessEntity.APIEntities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Retail\Code\Output\Retail.BusinessEntity.APIEntities.dll</HintPath>
+    </Reference>
+    <Reference Include="Retail.BusinessEntity.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Retail\Code\Output\Retail.BusinessEntity.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -138,7 +146,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountStatementController.cs" />
     <Compile Include="Controllers\CPAnalyticController.cs" />
+    <Compile Include="Controllers\CPDIDController.cs" />
     <Compile Include="Controllers\LiveBalanceController.cs" />
+    <Compile Include="Controllers\RetailAccountInfoController.cs" />
     <Compile Include="Controllers\RetailAccountUserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -168,6 +178,11 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Directives\Templates\QueriesAnalyticTileDefinitionSettings.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Services\AnalyticService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\Analytic\Services\APIService\AnalyticAPIService.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\DID\Directives\partnerportal-customeraccess-didtiledefinitionsettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\DID\Directives\partnerportal-customeraccess-didtileruntimesettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\DID\Directives\Templates\DIDTileDefinitionSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\DID\Directives\Templates\DIDTileRuntimeSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\DID\Services\APIService\DIDAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\partnerportal-customeraccess-livebalancetiledefinitionsettings.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\partnerportal-customeraccess-livebalancetileruntimesettings.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\LiveBalance\Directives\Templates\LiveBalanceTileDefinitionSettings.html" />
@@ -185,6 +200,11 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Services\AccountStatementAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagement.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagementController.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\partnerportal-customeraccess-retailaccountinfotiledefinitionsettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\partnerportal-customeraccess-retailaccountinfotileruntimesettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\RetailAccountInfoTileDefinitionSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\RetailAccountInfoTileRuntimeSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Services\APIService\RetailAccountInfoAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountqueryinterceptor.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIRecordQueryInterceptorTemplate.html" />
   </ItemGroup>

@@ -138,8 +138,10 @@ namespace PartnerPortal.Invoice.Business
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
-           
-            string partnerId = manager.GetRetailAccountId(userId).ToString();
+            var accountInfo = manager.GetRetailAccountInfo(userId);
+            accountInfo.ThrowIfNull("accountInfo", userId);
+
+            string partnerId = accountInfo.ToString();
 
 
             VRInterAppRestConnection connectionSettings = new InvoiceTypeManager().GetVRInterAppRestConnection(connectionId);

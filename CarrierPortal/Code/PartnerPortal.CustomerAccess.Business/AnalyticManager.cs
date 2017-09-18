@@ -8,7 +8,7 @@ using Vanrise.Analytic.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
-
+using Vanrise.Common;
 namespace PartnerPortal.CustomerAccess.Business
 {
     public class AnalyticManager
@@ -17,7 +17,9 @@ namespace PartnerPortal.CustomerAccess.Business
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
-            var accountId = manager.GetRetailAccountId(userId);
+            var accountInfo = manager.GetRetailAccountInfo(userId);
+            accountInfo.ThrowIfNull("accountInfo", userId);
+            var accountId = accountInfo.AccountId;
            
             Dictionary<Guid, AnalyticTileField> fieldsDic = new Dictionary<Guid, AnalyticTileField>();
             VRTimePeriodManager vrTimeManager = new VRTimePeriodManager();
@@ -50,7 +52,7 @@ namespace PartnerPortal.CustomerAccess.Business
             }
             return analyticTileInfo;
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(Guid connectionId, int tableId, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(Guid connectionId, Guid tableId, List<string> listMeasures, string dimensionFilterName, object dimensionFilterValue, DateTime fromDate, DateTime toDate)
         {
             Vanrise.Entities.DataRetrievalInput<Vanrise.Analytic.Entities.AnalyticQuery> analyticQuery = new DataRetrievalInput<Vanrise.Analytic.Entities.AnalyticQuery>()
             {

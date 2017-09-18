@@ -309,6 +309,14 @@
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CP.MultiNet.Business\CP.MultiNet.Business.csproj">
+      <Project>{fee825e7-59cc-45c6-9bd8-5658c99caee7}</Project>
+      <Name>CP.MultiNet.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CP.MultiNet.Web\CP.MultiNet.Web.csproj">
+      <Project>{f5867fa3-8cc6-4caf-8376-5dc2d5f799e3}</Project>
+      <Name>CP.MultiNet.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CP.Ringo.Business\CP.Ringo.Business.csproj">
       <Project>{2689b7ef-655c-428e-aaa6-3a15085527d6}</Project>
       <Name>CP.Ringo.Business</Name>

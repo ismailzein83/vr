@@ -9,15 +9,18 @@ namespace PartnerPortal.CustomerAccess.Business
 {
     public class RetailAccountUserManager
     {
-        public long GetRetailAccountId(int userId)
+        public RetailAccountInfo GetRetailAccountInfo(int userId)
         {
             UserManager userManager = new UserManager();
             var retailAccountSettings = userManager.GetUserExtendedSettings<RetailAccountSettings>(userId);
 
             if (retailAccountSettings == null)
                 throw new NullReferenceException(string.Format("retailAccountSettings for userId: {0}", userId));
-
-            return retailAccountSettings.AccountId;
+            return new RetailAccountInfo
+            {
+                AccountBEDefinitionId =retailAccountSettings.AccountBEDefinitionId ,
+                AccountId = retailAccountSettings.AccountId
+            };
         }
 
         public InsertOperationOutput<Vanrise.Security.Entities.UserDetail> AddRetailAccountUser(RetailAccount retailAccount)
@@ -32,10 +35,12 @@ namespace PartnerPortal.CustomerAccess.Business
                 Description = retailAccount.Description,
                 EnabledTill = retailAccount.EnabledTill,
                 TenantId = retailAccount.TenantId,
-                ExtendedSettings = new Dictionary<string, object>()
+                ExtendedSettings = new Dictionary<string, object>(),
             };
             string retailAccountSettingsFullName = typeof(RetailAccountSettings).FullName;
-            user.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId });
+            user.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId,
+                AccountBEDefinitionId = retailAccount.AccountBEDefinitionId
+            });
 
             Vanrise.Entities.InsertOperationOutput<Vanrise.Security.Entities.UserDetail> insertOperationOutput = userManager.AddUser(user);
 
@@ -55,9 +60,10 @@ namespace PartnerPortal.CustomerAccess.Business
                             EnabledTill = retailAccount.EnabledTill,
                             TenantId = retailAccount.TenantId,
                             ExtendedSettings = new Dictionary<string, object>()
-
+                            
                         };
-                        userToUpdate.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId });
+                        userToUpdate.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId,
+                        AccountBEDefinitionId = retailAccount.AccountBEDefinitionId});
                         Vanrise.Entities.UpdateOperationOutput<Vanrise.Security.Entities.UserDetail> updateOperationOutput = userManager.UpdateUser(userToUpdate);
                         if (updateOperationOutput.Result == Vanrise.Entities.UpdateOperationResult.Succeeded)
                         {

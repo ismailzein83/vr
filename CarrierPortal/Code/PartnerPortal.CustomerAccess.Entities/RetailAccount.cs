@@ -9,6 +9,8 @@ namespace PartnerPortal.CustomerAccess.Entities
     public class RetailAccountSettings
     {
         public long AccountId { get; set; }
+        public Guid AccountBEDefinitionId { get; set; }
+
     }
 
     public class RetailAccount
@@ -24,5 +26,6 @@ namespace PartnerPortal.CustomerAccess.Entities
         public string Description { get; set; }
 
         public DateTime? EnabledTill { get; set; }
+        public Guid AccountBEDefinitionId { get; set; }
     }
 }

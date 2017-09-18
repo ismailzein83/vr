@@ -15,13 +15,15 @@ namespace PartnerPortal.Invoice.MainExtensions
         public override IEnumerable<PortalInvoiceAccount> GetInvoiceAccounts(IInvoiceViewerTypeExtendedSettingsContext context)
         {
             context.InvoiceViewerTypeSettings.ThrowIfNull("context.InvoiceViewerTypeSettings");
-            var accountId = new RetailAccountUserManager().GetRetailAccountId(context.UserId);
 
+            RetailAccountUserManager manager = new RetailAccountUserManager();
+            var accountInfo = manager.GetRetailAccountInfo(context.UserId);
+            accountInfo.ThrowIfNull("accountInfo", context.UserId);
 
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(context.InvoiceViewerTypeSettings.VRConnectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-            List<ClientInvoiceAccountInfo> result = connectionSettings.Get<List<ClientInvoiceAccountInfo>>(string.Format("/api/Retail_BE/FinancialAccount/GetClientInvoiceAccounts?invoiceTypeId={0}&accountId={1}", context.InvoiceViewerTypeSettings.InvoiceTypeId, accountId));
+            List<ClientInvoiceAccountInfo> result = connectionSettings.Get<List<ClientInvoiceAccountInfo>>(string.Format("/api/Retail_BE/FinancialAccount/GetClientInvoiceAccounts?invoiceTypeId={0}&accountId={1}", context.InvoiceViewerTypeSettings.InvoiceTypeId, accountInfo.AccountId));
             List<PortalInvoiceAccount> returnedResult = null; 
             if(result != null)
             {

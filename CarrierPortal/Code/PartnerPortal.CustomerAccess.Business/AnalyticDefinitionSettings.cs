@@ -27,7 +27,7 @@ namespace PartnerPortal.CustomerAccess.Business
         public string Name { get; set; }
         public string UserDimensionName { get; set; }
         public Guid VRConnectionId { get; set; }
-        public int TableId { get; set; }
+        public Guid TableId { get; set; }
         public List<MeasureItem> Measures { get; set; }
         public VRTimePeriod TimePeriod { get; set; }
     }

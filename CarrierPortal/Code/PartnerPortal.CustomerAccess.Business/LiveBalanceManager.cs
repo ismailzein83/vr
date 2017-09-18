@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Security.Business;
-
+using Vanrise.Common;
 namespace PartnerPortal.CustomerAccess.Business
 {
     public class LiveBalanceManager
@@ -16,7 +16,9 @@ namespace PartnerPortal.CustomerAccess.Business
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             RetailAccountUserManager manager = new RetailAccountUserManager();
-            string accountId = manager.GetRetailAccountId(userId).ToString();
+            var accountInfo = manager.GetRetailAccountInfo(userId);
+            accountInfo.ThrowIfNull("accountInfo", userId);
+            string accountId = accountInfo.AccountId.ToString();
           
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(connectionId);

@@ -15,8 +15,10 @@ namespace PartnerPortal.CustomerAccess.MainExtensions
         public override IEnumerable<PortalBalanceAccount> GetBalanceAccounts(IAccountStatementExtendedSettingsContext context)
         {
             context.AccountStatementViewData.ThrowIfNull("context.AccountStatementViewData");
-        
-            var accountId = new RetailAccountUserManager().GetRetailAccountId(context.UserId);
+            RetailAccountUserManager manager = new RetailAccountUserManager();
+            var accountInfo = manager.GetRetailAccountInfo(context.UserId);
+            accountInfo.ThrowIfNull("accountInfo", context.UserId);
+            var accountId = accountInfo.AccountId;
 
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(context.AccountStatementViewData.VRConnectionId);
