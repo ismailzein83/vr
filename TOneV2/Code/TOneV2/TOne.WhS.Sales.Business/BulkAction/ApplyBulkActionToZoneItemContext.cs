@@ -41,6 +41,10 @@ namespace TOne.WhS.Sales.Business
 
         public ZoneChanges ZoneDraft { get; set; }
 
+        public int NewRateDayOffset { get; set; }
+        public int IncreasedRateDayOffset { get; set; }
+        public int DecreasedRateDayOffset { get; set; }
+
         public ZoneItem GetContextZoneItem(long zoneId)
         {
             Dictionary<long, ZoneItem> zoneItemsByZone = _getContextZoneItems();

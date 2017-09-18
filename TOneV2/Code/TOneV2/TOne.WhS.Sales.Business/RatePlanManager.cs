@@ -712,6 +712,8 @@ namespace TOne.WhS.Sales.Business
             Func<int, int, long, SaleEntityZoneRate> getCustomerZoneRate;
             UtilitiesManager.SetBulkActionContextCurrentRateHelpers(currentRateReader, out currentRateLocator, out getSellingProductZoneRate, out getCustomerZoneRate);
 
+            var pricingSettings = UtilitiesManager.GetPricingSettings(input.OwnerType, input.OwnerId);
+
             // Filter the sale zones by applicable zones
             var applicableZoneIdsContext = new ApplicableZoneIdsContext(getSellingProductZoneRate, getCustomerZoneRate)
             {
@@ -782,7 +784,10 @@ namespace TOne.WhS.Sales.Business
             var applyBulkActionToDraftContext = new ApplyBulkActionToZoneDraftContext(buildZoneItems, input.CostCalculationMethods, getRoundedRate)
             {
                 OwnerId = input.OwnerId,
-                OwnerType = input.OwnerType
+                OwnerType = input.OwnerType,
+                NewRateDayOffset = pricingSettings.NewRateDayOffset.Value,
+                IncreasedRateDayOffset = pricingSettings.IncreasedRateDayOffset.Value,
+                DecreasedRateDayOffset = pricingSettings.DecreasedRateDayOffset.Value
             };
 
             var newDraft = new Changes()
@@ -844,7 +849,10 @@ namespace TOne.WhS.Sales.Business
                 {
                     OwnerType = input.OwnerType,
                     OwnerId = input.OwnerId,
-                    CorrectedData = input.BulkActionCorrectedData
+                    CorrectedData = input.BulkActionCorrectedData,
+                    NewRateDayOffset = pricingSettings.NewRateDayOffset.Value,
+                    IncreasedRateDayOffset = pricingSettings.IncreasedRateDayOffset.Value,
+                    DecreasedRateDayOffset = pricingSettings.DecreasedRateDayOffset.Value
                 };
                 input.BulkAction.ApplyCorrectedData(applyCorrectedDataContext);
             }
@@ -956,6 +964,9 @@ namespace TOne.WhS.Sales.Business
 
             var rateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, input.SellingProductId, input.EffectiveOn, input.Draft, input.CurrencyId, longPrecision, input.CurrentRateLocator);
             var rpManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, input.Draft, input.RoutingProductLocator);
+
+            var pricingSettings = UtilitiesManager.GetPricingSettings(input.OwnerType, input.OwnerId);
+
             ZoneRouteOptionManager routeOptionManager;
 
             Dictionary<long, ZoneItem> contextZoneItemsByZoneId = null;
@@ -1023,7 +1034,10 @@ namespace TOne.WhS.Sales.Business
                         OwnerId = input.OwnerId,
                         OwnerType = input.OwnerType,
                         ZoneItem = zoneItem,
-                        ZoneDraft = zoneDraft
+                        ZoneDraft = zoneDraft,
+                        NewRateDayOffset = pricingSettings.NewRateDayOffset.Value,
+                        IncreasedRateDayOffset = pricingSettings.IncreasedRateDayOffset.Value,
+                        DecreasedRateDayOffset = pricingSettings.DecreasedRateDayOffset.Value
                     };
                     input.BulkAction.ApplyBulkActionToZoneItem(applyBulkActionToZoneItemContext);
                 }

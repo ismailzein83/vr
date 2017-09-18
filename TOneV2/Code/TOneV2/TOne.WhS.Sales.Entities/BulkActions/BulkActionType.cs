@@ -93,6 +93,10 @@ namespace TOne.WhS.Sales.Entities
 
     public interface IApplyBulkActionToZoneItemContext
     {
+        int NewRateDayOffset { get; }
+        int IncreasedRateDayOffset { get; }
+        int DecreasedRateDayOffset { get; }
+
         int OwnerId { get; }
         SalePriceListOwnerType OwnerType { get; }
 
@@ -111,6 +115,10 @@ namespace TOne.WhS.Sales.Entities
 
     public interface IApplyBulkActionToZoneDraftContext
     {
+        int NewRateDayOffset { get; }
+        int IncreasedRateDayOffset { get; }
+        int DecreasedRateDayOffset { get; }
+
         int OwnerId { get; }
         SalePriceListOwnerType OwnerType { get; }
 
@@ -131,6 +139,10 @@ namespace TOne.WhS.Sales.Entities
 
     public interface IApplyCorrectedDataContext
     {
+        int NewRateDayOffset { get; }
+        int IncreasedRateDayOffset { get; }
+        int DecreasedRateDayOffset { get; }
+
         SalePriceListOwnerType OwnerType { get; }
         int OwnerId { get; }
         BulkActionCorrectedData CorrectedData { get; }

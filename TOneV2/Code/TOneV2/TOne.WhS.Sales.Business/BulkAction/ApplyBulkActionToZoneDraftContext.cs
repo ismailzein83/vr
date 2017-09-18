@@ -36,6 +36,10 @@ namespace TOne.WhS.Sales.Business
 
         public ZoneChanges ZoneDraft { get; set; }
 
+        public int NewRateDayOffset { get; set; }
+        public int IncreasedRateDayOffset { get; set; }
+        public int DecreasedRateDayOffset { get; set; }
+
         public ZoneItem GetZoneItem(long zoneId)
         {
             if (_zoneItemsByZoneId == null)
