@@ -25,7 +25,28 @@ namespace Retail.BusinessEntity.Business
         #endregion
 
         #region Public Methods
+        public Vanrise.Entities.IDataRetrievalResult<DIDClientDetail> GetFilteredClientDIDs(Vanrise.Entities.DataRetrievalInput<DIDQuery> input)
+        {
+            var allDIDs = GetCachedDIDs();
+            Func<DID, bool> filterExpression = (did) =>
+            {
+                if (!string.IsNullOrEmpty(input.Query.Number) && !IsDIDContainNumber(did, input.Query.Number))
+                    return false;
+                if (input.Query.DIDNumberTypes != null && !input.Query.DIDNumberTypes.Contains(GetDIDNumberType(did)))
+                    return false;
 
+                if (!IsDIDAssignedToAccount(input.Query.AccountIds, did.DIDId, input.Query.WithSubAccounts))
+                    return false;
+                return true;
+            };
+            ResultProcessingHandler<DIDClientDetail> handler = new ResultProcessingHandler<DIDClientDetail>()
+            {
+                ExportExcelHandler = new DIDClientExcelExportHandler()
+            };
+            VRActionLogger.Current.LogGetFilteredAction(DIDLoggableEntity.Instance, input);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allDIDs.ToBigResult(input, filterExpression, DIDClientDetailMapper), handler);
+        }
         public Vanrise.Entities.IDataRetrievalResult<DIDDetail> GetFilteredDIDs(Vanrise.Entities.DataRetrievalInput<DIDQuery> input)
         {
             var allDIDs = GetCachedDIDs();
@@ -38,7 +59,7 @@ namespace Retail.BusinessEntity.Business
                     if (input.Query.DIDNumberTypes != null && !input.Query.DIDNumberTypes.Contains(GetDIDNumberType(did)))
                         return false;
 
-                    if (!IsDIDAssignedToAccount(input.Query.AccountIds, did.DIDId))
+                    if (!IsDIDAssignedToAccount(input.Query.AccountIds, did.DIDId, input.Query.WithSubAccounts))
                         return false;
 
                     return true;
@@ -431,7 +452,7 @@ namespace Retail.BusinessEntity.Business
             return true;
         }
 
-        private bool IsDIDAssignedToAccount(List<long> accountIds, int didId)
+        private bool IsDIDAssignedToAccount(List<long> accountIds, int didId, bool withSubAccounts)
         {
             if (accountIds == null || accountIds.Count == 0)
                 return true;
@@ -439,8 +460,25 @@ namespace Retail.BusinessEntity.Business
             BEParentChildRelation beParentChildRelation = new BEParentChildRelationManager().GetParent(_accountDIDRelationDefinitionId, didId.ToString(), DateTime.Now);
             if (beParentChildRelation == null)
                 return false;
-
-            return accountIds.Contains(long.Parse(beParentChildRelation.ParentBEId));
+            List<long> filteredAccountIds = new List<long>();
+            if(withSubAccounts)
+            {
+                var beParentChildRelationDefinitionManager = new BEParentChildRelationDefinitionManager();
+                var definition = beParentChildRelationDefinitionManager.GetBEParentChildRelationDefinition(_accountDIDRelationDefinitionId);
+                var accountBEDefinitionId = definition.Settings.ParentBEDefinitionId;
+                AccountBEManager accountBEManager = new AccountBEManager();
+                foreach(var accountId in accountIds)
+                {
+                    filteredAccountIds.Add(accountId);
+                    var childAccountIds = accountBEManager.GetChildAccountIds(accountBEDefinitionId, accountId, true);
+                    if (childAccountIds != null)
+                        filteredAccountIds.AddRange(childAccountIds);
+                }
+            }else
+            {
+                filteredAccountIds = accountIds;
+            }
+            return filteredAccountIds.Contains(long.Parse(beParentChildRelation.ParentBEId));
         }
 
         private List<DID> CreateRangeAsSeparateDIDs(DID didToInsert)
@@ -569,7 +607,34 @@ namespace Retail.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
+        private class DIDClientExcelExportHandler : ExcelExportHandler<DIDClientDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DIDClientDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "DIDs",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
 
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Account" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Number" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    DIDManager didManager = new DIDManager();
+                    foreach (var record in context.BigResult.Data)
+                    {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.AccountName });
+                            row.Cells.Add(new ExportExcelCell { Value =record.Description });
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
         #endregion
 
         #region  Mappers
@@ -588,7 +653,18 @@ namespace Retail.BusinessEntity.Business
             }
             return didDetail;
         }
-
+        private DIDClientDetail DIDClientDetailMapper(DID did)
+        {
+            DIDClientDetail didClientDetail = new DIDClientDetail();
+            didClientDetail.Description = GetDIDDescription(did);
+            BEParentChildRelation beParentChildRelation = new BEParentChildRelationManager().GetParent(_accountDIDRelationDefinitionId, did.DIDId.ToString(), DateTime.Now);
+            if (beParentChildRelation != null)
+            {
+                BEParentChildRelationDefinition beParentChildRelationDefinition = new BEParentChildRelationDefinitionManager().GetBEParentChildRelationDefinition(_accountDIDRelationDefinitionId);
+                didClientDetail.AccountName = new BusinessEntityManager().GetEntityDescription(beParentChildRelationDefinition.Settings.ParentBEDefinitionId, long.Parse(beParentChildRelation.ParentBEId));
+            }
+            return didClientDetail;
+        }
         private DIDInfo DIDInfoMapper(DID did)
         {
             return new DIDInfo()

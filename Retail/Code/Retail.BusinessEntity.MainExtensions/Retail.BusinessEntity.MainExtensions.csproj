@@ -209,6 +209,8 @@
     <Compile Include="RecurringChargeEvaluators\PeriodicRecurringChargeEvaluatorDefinitionSettings.cs" />
     <Compile Include="RecurringPeriods\MonthlyRecurringPeriodSettings.cs" />
     <Compile Include="RecurringPeriods\WeeklyRecurringPeriodSettings.cs" />
+    <Compile Include="RetailClientAccount\RetailClientAccountController.cs" />
+    <Compile Include="RetailClientAccount\RetailClientAccountManager.cs" />
     <Compile Include="ServicePackageItem\ServicePackageChargingPolicyItem.cs" />
     <Compile Include="ServicePackageItem\ServicePackageVolumeItem.cs" />
     <Compile Include="AccountParts\AccountPartActivation.cs" />
@@ -228,6 +230,10 @@
     <Compile Include="VRObjectTypes\RetailAccountObjectType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.APIEntities\Retail.BusinessEntity.APIEntities.csproj">
+      <Project>{bc95dcad-b0aa-4e3e-9ea0-3963f0d54d23}</Project>
+      <Name>Retail.BusinessEntity.APIEntities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
       <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
       <Name>Retail.BusinessEntity.Business</Name>

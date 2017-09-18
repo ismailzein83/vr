@@ -750,6 +750,10 @@
       <Project>{30dce0ef-eea6-456a-9778-469c46f737ea}</Project>
       <Name>Retail.Invoice.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.MultiNet.APIEntities\Retail.MultiNet.APIEntities.csproj">
+      <Project>{bb188405-2bcb-410c-918b-6187cbebf857}</Project>
+      <Name>Retail.MultiNet.APIEntities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.MultiNet.Business\Retail.MultiNet.Business.csproj">
       <Project>{b72910b9-b085-4a14-8bb7-816d0a28a6b9}</Project>
       <Name>Retail.MultiNet.Business</Name>

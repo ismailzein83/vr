@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BC95DCAD-B0AA-4E3E-9EA0-3963F0D54D23}</ProjectGuid>
+    <ProjectGuid>{BB188405-2BCB-410C-918B-6187CBEBF857}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Retail.BusinessEntity.APIEntities</RootNamespace>
-    <AssemblyName>Retail.BusinessEntity.APIEntities</AssemblyName>
+    <RootNamespace>Retail.MultiNet.APIEntities</RootNamespace>
+    <AssemblyName>Retail.MultiNet.APIEntities</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -41,15 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientBalanceAccountInfo.cs" />
-    <Compile Include="ClientInvoiceAccountInfo.cs" />
-    <Compile Include="ClientRetailProfileAccountInfo.cs" />
-    <Compile Include="DIDClientDetail.cs" />
+    <Compile Include="ClientAccountAdditionalInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

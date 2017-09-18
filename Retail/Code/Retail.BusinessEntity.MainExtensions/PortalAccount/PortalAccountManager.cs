@@ -32,7 +32,8 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
                 AccountId = accountId,
                 Name = name,
                 Email = email,
-                TenantId = portalAccount.TenantId
+                TenantId = portalAccount.TenantId,
+                AccountBEDefinitionId = accountBEDefinitionId
             };
 
             VRConnectionManager connectionManager = new VRConnectionManager();

@@ -13,5 +13,6 @@ namespace Retail.BusinessEntity.Entities
         public List<DIDNumberType> DIDNumberTypes { get; set; }
 
         public List<long> AccountIds { get; set; }
+        public Boolean WithSubAccounts { get; set; }
     }
 }

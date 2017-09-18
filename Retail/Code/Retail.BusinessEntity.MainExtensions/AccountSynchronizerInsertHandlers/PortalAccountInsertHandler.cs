@@ -56,6 +56,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountSynchronizerInsertHandlers
                 var retailAccount = new PartnerPortal.CustomerAccess.Entities.RetailAccount()
                 {
                     AccountId = account.AccountId,
+                    AccountBEDefinitionId = accountBEDefinitionId,
                     Name = name,
                     Email = email,
                     TenantId = this.TenantId
