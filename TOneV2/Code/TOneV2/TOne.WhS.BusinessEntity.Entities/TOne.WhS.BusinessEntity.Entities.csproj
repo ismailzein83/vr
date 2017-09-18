@@ -158,8 +158,10 @@
     <Compile Include="SaleRate\History\SaleRateHistoryQuery.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryRecord.cs" />
     <Compile Include="SaleRate\History\SellingProductZoneRates.cs" />
+    <Compile Include="Settings\CodeChangeTypeDescriptions.cs" />
     <Compile Include="Settings\PricelistSettings.cs" />
     <Compile Include="Settings\PricingSettings.cs" />
+    <Compile Include="Settings\RateChangeTypeDescriptions.cs" />
     <Compile Include="SupplierRate\Query\SupplierRateForZoneQuery.cs" />
     <Compile Include="SupplierZone\SupplierZoneServiceToClose.cs" />
     <Compile Include="SupplierZone\SupplierZoneServiceToEdit.cs" />
