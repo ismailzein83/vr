@@ -27,6 +27,7 @@
     <x:Property Name="PreviewRatesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twce:RatePreview)))" />
     <x:Property Name="ChangedZonesServicesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twcep:ChangedZoneServices)))" />
     <x:Property Name="ChangedZonesRoutingProductsQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twcep:ChangedZoneRoutingProducts)))" />
+    <x:Property Name="ChangedCustomerCountriesQueue" Type="InArgument(vq:BaseQueue(scg:IEnumerable(twcep:ChangedCustomerCountry)))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -69,6 +70,7 @@
       <AssemblyReference>TOne.WhS.CodePreparation.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.Business</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Sales.BP.Activities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.CodePreparation.BP</AssemblyReference>
     </sco:Collection>
@@ -97,6 +99,8 @@
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedChangedZonesServicesStatus" />
       <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedChangedZonesRoutingProductsQueue" />
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PreparedChangedZonesRoutingProductsStatus" />
+      <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedChangedCustomerCountriesQueue" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="preparedCustomerCountriesStatus" />
     </Parallel.Variables>
     <twcba:PrepareNewZonesForApply sap2010:WorkflowViewState.IdRef="PrepareNewZonesForApply_1">
       <twcba:PrepareNewZonesForApply.InputQueue>
@@ -482,7 +486,41 @@
         </InArgument>
       </twcba:ApplyPreviewRatesToDB.PreviousActivityStatus>
     </twcba:ApplyPreviewRatesToDB>
-    <sads:DebugSymbol.Symbol>d15DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxTdWJQcm9jZXNzXEFwcGx5RW50aXRpZXNUb0RCUHJvY2Vzcy54YW1sW0wD5gMOAgEBZQV/JQMB8xGAAQWQAR8DAYYRkQEFpgElAwH1D6cBBbIBHwMBrA+zAQXIASUDAZsOyQEF1AEfAwHSDdUBBeoBKQMBwQzrAQX2ASMDAfgL9wEFjAIpAwHnCo0CBZgCIwMBngqZAgWuAikDAY0JrwIFugIjAwHECLsCBdACMQMBswfRAgXcAisDAeoG3QIF8gI4AwHZBfMCBf4CMgMBkAX/AgWUAysDAf8DlQMFoAMjAwG2A6EDBbYDKwMBpQK3AwXCAyMDAdwBwwMF2AMrAgFL2QMF5AMjAgECcgtydwMBhBNoC2h8AwHgEncLd1sDAbwSfAt8dAMBmBJtC210AwH0EYgBC4gBbAMBzxGDAQuDAWwDAasRjQELjQFbAwGHEZ4BC54BdwMB4hCUAQuUAXwDAb4QowELowF0AwGaEJkBC5kBdAMB9g+vAQuvAWwDAdEPqgELqgFsAwGtD8ABC8ABdwMBiA+2AQu2AXsDAeQOxQELxQF1AwHADrsBC7sBdAMBnA7RAQvRAW0DAfcNzAELzAFsAwHTDeIBC+IBdwMBrg3YAQvYAYIBAwGKDecBC+cBeAMB5gzdAQvdAXgDAcIM8wEL8wFwAwGdDO4BC+4BcAMB+QuEAguEAncDAdQL+gEL+gGCAQMBsAuJAguJAngDAYwL/wEL/wF4AwHoCpUCC5UCcAMBwwqQAguQAnADAZ8KpgILpgJ3AwH6CZwCC5wCggEDAdYJqwILqwJ5AwGyCaECC6ECeAMBjgm3Agu3AnEDAekIsgILsgJwAwHFCMgCC8gCdwMBoAi+Agu+ApIBAwH8B80CC80CgQEDAdgHwwILwwKAAQMBtAfZAgvZAnkDAY8H1AIL1AJ4AwHrBuoCC+oCdwMBxgbgAgvgAqABAwGiBu8CC+8CiAEDAf4F5QIL5QKHAQMB2gX7Agv7AoABAwG1BfYCC/YCfwMBkQWMAwuMA3cDAewEggMLggOBAQMByASRAwuRA3kDAaQEhwMLhwN4AwGABJ0DC50DcQMB2wOYAwuYA3ADAbcDrgMLrgN3AwGSA6QDC6QDgQEDAe4CswMLswN5AwHKAqkDC6kDeAMBpgK/Awu/A3EDAYECugMLugNwAwHdAdADC9ADdwMBuAHGAwvGA4EBAwGUAdUDC9UDeQIBcMsDC8sDeAIBTOEDC+EDcQIBJ9wDC9wDcAIBAw==</sads:DebugSymbol.Symbol>
+    <twcba:PrepareChangedCustomerCountriesForApply sap2010:WorkflowViewState.IdRef="PrepareChangedCustomerCountriesForApply_1">
+      <twcba:PrepareChangedCustomerCountriesForApply.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedCustomerCountry))">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:IEnumerable(twcep:ChangedCustomerCountry))">ChangedCustomerCountriesQueue</mca:CSharpValue>
+        </InArgument>
+      </twcba:PrepareChangedCustomerCountriesForApply.InputQueue>
+      <twcba:PrepareChangedCustomerCountriesForApply.OutputQueue>
+        <InOutArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpReference x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedCustomerCountriesQueue</mca:CSharpReference>
+        </InOutArgument>
+      </twcba:PrepareChangedCustomerCountriesForApply.OutputQueue>
+      <twcba:PrepareChangedCustomerCountriesForApply.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">CodePreparationMainProcessStatus</mca:CSharpValue>
+        </InArgument>
+      </twcba:PrepareChangedCustomerCountriesForApply.PreviousActivityStatus>
+      <twcba:PrepareChangedCustomerCountriesForApply.Status>
+        <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">preparedCustomerCountriesStatus</mca:CSharpReference>
+        </OutArgument>
+      </twcba:PrepareChangedCustomerCountriesForApply.Status>
+    </twcba:PrepareChangedCustomerCountriesForApply>
+    <twcba:ApplyChangedCountriesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedCountriesToDB_1">
+      <twcba:ApplyChangedCountriesToDB.InputQueue>
+        <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedChangedCustomerCountriesQueue</mca:CSharpValue>
+        </InArgument>
+      </twcba:ApplyChangedCountriesToDB.InputQueue>
+      <twcba:ApplyChangedCountriesToDB.PreviousActivityStatus>
+        <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+          <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">preparedCustomerCountriesStatus</mca:CSharpValue>
+        </InArgument>
+      </twcba:ApplyChangedCountriesToDB.PreviousActivityStatus>
+    </twcba:ApplyChangedCountriesToDB>
+    <sads:DebugSymbol.Symbol>d15DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkNvZGVQcmVwYXJhdGlvbi5CUFxTdWJQcm9jZXNzXEFwcGx5RW50aXRpZXNUb0RCUHJvY2Vzcy54YW1sY04DjAQOAgEBaQWDASUDAZwVhAEFlAEfAwGmFJUBBaoBJQMBiROrAQW2AR8DAboStwEFzAElAwGdEc0BBdgBHwMBzhDZAQXuASkDAbEP7wEF+gEjAwHiDvsBBZACKQMBxQ2RAgWcAiMDAfYMnQIFsgIpAwHZC7MCBb4CIwMBigu/AgXUAjEDAe0J1QIF4AIrAwGeCeECBfYCOAMBgQj3AgWCAzIDAbIHgwMFmAMrAwGVBpkDBaQDIwMBxgWlAwW6AysDAakEuwMFxgMjAwHaA8cDBdwDKwMBvQLdAwXoAyMDAe4B6QMF/gM1AgFR/wMFigQnAgECdgt2dwMBuRZsC2x8AwGSFnsLe1sDAesVgAELgAF0AwHEFXELcXQDAZ0VjAELjAFsAwH1FIcBC4cBbAMBzhSRAQuRAVsDAacUogELogF3AwH/E5gBC5gBfAMB2BOnAQunAXQDAbETnQELnQF0AwGKE7MBC7MBbAMB4hKuAQuuAWwDAbsSxAELxAF3AwGTEroBC7oBewMB7BHJAQvJAXUDAcURvwELvwF0AwGeEdUBC9UBbQMB9hDQAQvQAWwDAc8Q5gEL5gF3AwGnENwBC9wBggEDAYAQ6wEL6wF4AwHZD+EBC+EBeAMBsg/3AQv3AXADAYoP8gEL8gFwAwHjDogCC4gCdwMBuw7+AQv+AYIBAwGUDo0CC40CeAMB7Q2DAguDAngDAcYNmQILmQJwAwGeDZQCC5QCcAMB9wyqAguqAncDAc8MoAILoAKCAQMBqAyvAguvAnkDAYEMpQILpQJ4AwHaC7sCC7sCcQMBsgu2Agu2AnADAYsLzAILzAJ3AwHjCsICC8ICkgEDAbwK0QIL0QKBAQMBlQrHAgvHAoABAwHuCd0CC90CeQMBxgnYAgvYAngDAZ8J7gIL7gJ3AwH3COQCC+QCoAEDAdAI8wIL8wKIAQMBqQjpAgvpAocBAwGCCP8CC/8CgAEDAdoH+gIL+gJ/AwGzB5ADC5ADdwMBiweGAwuGA4EBAwHkBpUDC5UDeQMBvQaLAwuLA3gDAZYGoQMLoQNxAwHuBZwDC5wDcAMBxwWyAwuyA3cDAZ8FqAMLqAOBAQMB+AS3Awu3A3kDAdEErQMLrQN4AwGqBMMDC8MDcQMBggS+Awu+A3ADAdsD1AML1AN3AwGzA8oDC8oDgQEDAYwD2QML2QN5AwHlAs8DC88DeAMBvgLlAwvlA3EDAZYC4AML4ANwAwHvAfYDC/YDdwMBxwHsAwvsA5kBAwGgAfsDC/sDfgIBefEDC/EDhAECAVKHBAuHBHYCASqCBAuCBHwCAQM=</sads:DebugSymbol.Symbol>
   </Parallel>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -508,8 +546,10 @@
       <sap2010:ViewStateData Id="ApplyPreviewCodesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PreparePreviewRatesForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyPreviewRatesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="5354,86" />
-      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="5394,166" />
+      <sap2010:ViewStateData Id="PrepareChangedCustomerCountriesForApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedCountriesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="5834,86" />
+      <sap2010:ViewStateData Id="TOne.WhS.CodePreparation.BP.ApplyEntitiesToDBProcess_1" sap:VirtualizedContainerService.HintSize="5874,166" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

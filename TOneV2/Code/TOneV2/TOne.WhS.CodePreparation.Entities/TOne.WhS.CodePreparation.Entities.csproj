@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AddedRate.cs" />
     <Compile Include="AddedZone.cs" />
+    <Compile Include="ChangedData\ChangedCustomerCountry.cs" />
     <Compile Include="ChangedData\ChangedCode.cs" />
     <Compile Include="ChangedData\ChangedZoneRoutingProducts.cs" />
     <Compile Include="ChangedData\ChangedZoneServices.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="ExistingZone.cs" />
     <Compile Include="ICPParametersContext.cs" />
     <Compile Include="ImportedData\ImportedCode.cs" />
+    <Compile Include="IProcessCountriesContext.cs" />
     <Compile Include="IProcessCountryZonesRoutingProductsContext.cs" />
     <Compile Include="IProcessCountryZonesServicesContext.cs" />
     <Compile Include="IProcessCountryRatesContext.cs" />

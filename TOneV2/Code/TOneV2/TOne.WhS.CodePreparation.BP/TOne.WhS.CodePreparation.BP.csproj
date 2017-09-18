@@ -103,6 +103,10 @@
       <Project>{38ea7d60-7221-43ba-80a8-af46b874f819}</Project>
       <Name>TOne.WhS.CodePreparation.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.BP.Activities\TOne.WhS.Sales.BP.Activities.csproj">
+      <Project>{BA3E1017-95E3-4036-B941-D3F60586064E}</Project>
+      <Name>TOne.WhS.Sales.BP.Activities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="CodePreparation.xaml">

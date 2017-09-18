@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyChangedCountriesToDB.cs" />
     <Compile Include="ApplyChangedZonesRoutingProductsToDB.cs" />
     <Compile Include="ApplyChangedZonesServicesToDB.cs" />
     <Compile Include="ApplyChangedRatesToDB.cs" />
@@ -99,7 +100,9 @@
     <Compile Include="ApplyPreviewZonesToDB.cs" />
     <Compile Include="BackupData.cs" />
     <Compile Include="LogCustomersToNotify.cs" />
+    <Compile Include="PrepareChangedCustomerCountriesForApply.cs" />
     <Compile Include="PrepareExistingEffectiveRates.cs" />
+    <Compile Include="ProcessCountries.cs" />
     <Compile Include="SavePricelistFiles.cs" />
     <Compile Include="SendSalePLNotifications.cs" />
     <Compile Include="GenerateRatesPreview.cs" />
