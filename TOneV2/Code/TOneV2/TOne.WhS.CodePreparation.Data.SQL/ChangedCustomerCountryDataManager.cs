@@ -23,6 +23,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
                 _processInstanceID = value;
             }
         }
+        readonly string[] _columns = { "ID", "ProcessInstanceID","EED" };
         long _processInstanceID;
       
         public object InitialiazeStreamForDBApply()
@@ -45,6 +46,7 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
+                ColumnNames = _columns,
                 TableName = "TOneWhS_BE.CP_CustomerCountry_Changed",
                 Stream = streamForBulkInsert,
                 TabLock = false,
