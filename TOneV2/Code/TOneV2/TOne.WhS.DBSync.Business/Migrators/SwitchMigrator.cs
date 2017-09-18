@@ -57,8 +57,8 @@ namespace TOne.WhS.DBSync.Business
             switch (switchManager)
             {
                 case "TABS.Addons.MvtsProSwitchLibraryMultipleQueue.SwitchManager": parser = new MVTSSwitchMigrationParser(sourceItem.Configuration); break;
-                case "TABS.Addons.FIKARSwitchLibrary.SwitchManager": parser = new IVSwitchMigrationParser(sourceItem.Configuration);
-                    break;
+                case "TABS.Addons.FIKARSwitchLibrary.SwitchManager": parser = new IVSwitchMigrationParser(sourceItem.Configuration); break;
+                case "TABS.Addons.TelesSwitchLibrary.SwitchManager": parser = new TelesSwitchMigrationParser(sourceItem.Configuration); break;
                 default: break;
             }
             return new Switch
