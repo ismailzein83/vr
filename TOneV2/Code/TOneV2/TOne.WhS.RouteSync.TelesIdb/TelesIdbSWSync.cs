@@ -113,21 +113,22 @@ namespace TOne.WhS.RouteSync.TelesIdb
                 RouteOption nextRouteOption = null;
                 for (var x = 0; x < routeOptions.Count; x++)
                 {
-                    RouteOption routeOption = routeOptions[x];
                     if (numberOfAddedOptions == NumberOfOptions)
                         break;
 
-                    if (!routeOption.Percentage.HasValue || routeOption.Percentage.Value == 0 || !routeOption.IsValid)// routeOption is a backUp option
-                    {
-                        continue;
-                    }
-                    else// routeOption is not a backUp option
-                    {
-                        nextRouteOption = x < routeOptions.Count - 1 ? routeOptions[x + 1] : null;
-                        bool nextOptionIsBackUp = nextRouteOption != null && (!nextRouteOption.Percentage.HasValue || nextRouteOption.Percentage.Value == 0);
-                        bool shouldTakeNextRouteOption = nextOptionIsBackUp && !nextRouteOption.IsBlocked;
+                    RouteOption routeOption = routeOptions[x];
 
-                        CarrierMapping backUpRouteOptionMapping = null;
+                    if (!routeOption.Percentage.HasValue || routeOption.Percentage.Value == 0 || !routeOption.IsValid)// routeOption is a backUp option
+                        continue;
+
+                    // routeOption is not a backUp option and valid
+                    nextRouteOption = x < routeOptions.Count - 1 ? routeOptions[x + 1] : null;
+                    bool nextOptionIsBackUp = nextRouteOption != null && (!nextRouteOption.Percentage.HasValue || nextRouteOption.Percentage.Value == 0);
+                    bool shouldTakeNextRouteOption = nextOptionIsBackUp && !nextRouteOption.IsBlocked;
+
+                    CarrierMapping backUpRouteOptionMapping = null;
+                    if (nextOptionIsBackUp)
+                    {
                         if (!shouldTakeNextRouteOption)
                         {
                             backUpRouteOptionMapping = CarrierMappings.GetRecord(routeOption.SupplierId);
@@ -144,61 +145,54 @@ namespace TOne.WhS.RouteSync.TelesIdb
                                     continue;
                             }
                         }
+                    }
 
-                        CarrierMapping routeOptionMapping = null;
-                        if (routeOption.IsBlocked)
+                    CarrierMapping routeOptionMapping = null;
+                    if (routeOption.IsBlocked)
+                    {
+                        if (!shouldTakeNextRouteOption)
+                            continue;
+
+                        routeOptionMapping = CarrierMappings.GetRecord(nextRouteOption.SupplierId);
+                        if (routeOptionMapping == null || routeOptionMapping.SupplierMapping == null || routeOptionMapping.SupplierMapping.Count == 0)
+                            continue;
+                    }
+                    else
+                    {
+                        routeOptionMapping = CarrierMappings.GetRecord(routeOption.SupplierId);
+                        if (routeOptionMapping == null || routeOptionMapping.SupplierMapping == null || routeOptionMapping.SupplierMapping.Count == 0)
                         {
                             if (!shouldTakeNextRouteOption)
-                            {
                                 continue;
-                            }
-                            else
-                            {
-                                routeOptionMapping = CarrierMappings.GetRecord(nextRouteOption.SupplierId);
-                                if (routeOptionMapping == null || routeOptionMapping.SupplierMapping == null || routeOptionMapping.SupplierMapping.Count == 0)
-                                    continue;
-                            }
-                        }
-                        else
-                        {
-                            routeOptionMapping = CarrierMappings.GetRecord(routeOption.SupplierId);
+
+                            routeOptionMapping = CarrierMappings.GetRecord(nextRouteOption.SupplierId);
                             if (routeOptionMapping == null || routeOptionMapping.SupplierMapping == null || routeOptionMapping.SupplierMapping.Count == 0)
-                            {
-                                if (!shouldTakeNextRouteOption)
-                                {
-                                    continue;
-                                }
-                                else
-                                {
-                                    routeOptionMapping = CarrierMappings.GetRecord(nextRouteOption.SupplierId);
-                                    if (routeOptionMapping == null || routeOptionMapping.SupplierMapping == null || routeOptionMapping.SupplierMapping.Count == 0)
-                                        continue;
-                                }
-                            }
+                                continue;
                         }
+                    }
 
-                        string concatSupplierMapping = string.Join(string.Empty, routeOptionMapping.SupplierMapping);
-                        if (UseTwoSuppliersMapping && concatSupplierMapping.Length == 4)
-                            concatSupplierMapping = concatSupplierMapping + "XXXX";
-                        concatSupplierMapping = GetPercentage(routeOption.Percentage) + concatSupplierMapping;
+                    string concatSupplierMapping = string.Join(string.Empty, routeOptionMapping.SupplierMapping);
+                    if (UseTwoSuppliersMapping && concatSupplierMapping.Length == 4)
+                        concatSupplierMapping = concatSupplierMapping + "XXXX";
+                    concatSupplierMapping = GetPercentage(routeOption.Percentage) + concatSupplierMapping;
 
-                        string concatBackUpSupplierMapping = string.Empty;
-                        if (nextOptionIsBackUp)
-                        {
-                            concatBackUpSupplierMapping = string.Join(string.Empty, backUpRouteOptionMapping.SupplierMapping);
-                            if (UseTwoSuppliersMapping && concatBackUpSupplierMapping.Length == 4)
-                                concatBackUpSupplierMapping = concatBackUpSupplierMapping + "XXXX";
-                            concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
-                        }
+                    string concatBackUpSupplierMapping = string.Empty;
+                    
+                    if (backUpRouteOptionMapping != null)
+                    {
+                        concatBackUpSupplierMapping = string.Join(string.Empty, backUpRouteOptionMapping.SupplierMapping);
+                        if (UseTwoSuppliersMapping && concatBackUpSupplierMapping.Length == 4)
+                            concatBackUpSupplierMapping = concatBackUpSupplierMapping + "XXXX";
+                        concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
+                    }
 
-                        for (int i = 1; i <= routeOption.NumberOfTries; i++)
-                        {
-                            if (numberOfAddedOptions == NumberOfOptions)
-                                break;
+                    for (int i = 1; i <= routeOption.NumberOfTries; i++)
+                    {
+                        if (numberOfAddedOptions == NumberOfOptions)
+                            break;
 
-                            numberOfAddedOptions++;
-                            strBuilder.AppendFormat("{0}{1}{2}", strBuilder.Length > 0 ? supplierOptionsSeparator : string.Empty, concatSupplierMapping, concatBackUpSupplierMapping);
-                        }
+                        numberOfAddedOptions++;
+                        strBuilder.AppendFormat("{0}{1}{2}", strBuilder.Length > 0 ? supplierOptionsSeparator : string.Empty, concatSupplierMapping, concatBackUpSupplierMapping);
                     }
                 }
             }
