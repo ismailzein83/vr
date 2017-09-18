@@ -5,8 +5,7 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
         return {
             restrict: 'E',
             scope: {
-                onReady: '=',
-                context: '='
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -33,8 +32,6 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
             var gridAPI;
 
             function initializeController() {
-                context = ctrl.context;
-
                 $scope.scopeModel = {};
                 $scope.scopeModel.carrierAccountMappings = [];
                 $scope.scopeModel.carrierAccountMappingsGridDS = [];
@@ -57,11 +54,11 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
                     if (mappingSeparator == undefined || mappingSeparator == '')
                         return null;
 
-                    var useTwoMappingFormat = context.getUseTwoMappingFormat();
-                    if (!useTwoMappingFormat && supplierMappingValue.length == oneSupplierMappingLength)
+                    if (supplierMappingValue.length == oneSupplierMappingLength)
                         return null;
 
-                    if (useTwoMappingFormat && supplierMappingValue.length == (2 * oneSupplierMappingLength + mappingSeparator.length)) {
+                    var useTwoSuppliersMapping = context.getUseTwoSuppliersMapping();
+                    if (useTwoSuppliersMapping && supplierMappingValue.length == (2 * oneSupplierMappingLength + mappingSeparator.length)) {
                         var supplierMappingValues = supplierMappingValue.split(mappingSeparator);
                         if (supplierMappingValues.length == 2) {
 
@@ -103,6 +100,7 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
 
                     if (payload != undefined) {
                         carrierMappings = payload.carrierMappings;
+                        context = payload.context;
                     }
 
                     var promises = [];
@@ -122,8 +120,8 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
                         var carrierMapping = $scope.scopeModel.carrierAccountMappings[i];
                         results[carrierMapping.CarrierAccountId] = {
                             CarrierId: carrierMapping.CarrierAccountId,
-                            CustomerMapping: carrierMapping.CustomerMapping != undefined ? carrierMapping.CustomerMapping.split(mappingSeparator) : undefined,
-                            SupplierMapping: carrierMapping.SupplierMapping != undefined ? carrierMapping.SupplierMapping.split(mappingSeparator) : undefined
+                            CustomerMapping: (carrierMapping.CustomerMapping != undefined && carrierMapping.CustomerMapping != '') ? carrierMapping.CustomerMapping.split(mappingSeparator) : undefined,
+                            SupplierMapping: (carrierMapping.SupplierMapping != undefined && carrierMapping.SupplierMapping != '') ? carrierMapping.SupplierMapping.split(mappingSeparator) : undefined
                         };
                     }
                     return results;

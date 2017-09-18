@@ -35,7 +35,6 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.mappingSeparator = ';';
-                $scope.scopeModel.context = buildContext();
 
                 $scope.scopeModel.onIdbDataManagerSettingsDirectiveReady = function (api) {
                     idbDataManagerSettingsDirectiveAPI = api;
@@ -117,7 +116,10 @@
 
                 telesIdbCarrierAccountMappingGridReadyDeferred.promise.then(function () {
 
-                    var payload = { carrierMappings: carrierMappings };
+                    var payload = {
+                        context: buildContext(),
+                        carrierMappings: carrierMappings
+                    };
                     VRUIUtilsService.callDirectiveLoad(telesIdbCarrierAccountMappingGridAPI, payload, carrierAccountMappingGridLoadDeferred);
                 });
 
@@ -126,7 +128,7 @@
 
             function buildContext() {
                 var context = {
-                    getUseTwoMappingFormat: function () {
+                    getUseTwoSuppliersMapping: function () {
                         return $scope.scopeModel.useTwoSuppliersMapping;
                     },
                     getMappingSeparator: function () {
