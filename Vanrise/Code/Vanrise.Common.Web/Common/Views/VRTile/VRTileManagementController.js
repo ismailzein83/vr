@@ -1,7 +1,7 @@
 ﻿"use strict";
-VRTileManagementController.$inject = ['$scope', 'VRUIUtilsService', 'VRNavigationService','VR_Sec_ViewAPIService','UtilsService','VRNotificationService'];
+VRTileManagementController.$inject = ['$scope', 'VRUIUtilsService', 'VRNavigationService','VR_Sec_ViewAPIService','UtilsService','VRNotificationService','ColumnWidthEnum'];
 
-function VRTileManagementController($scope, VRUIUtilsService, VRNavigationService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService) {
+function VRTileManagementController($scope, VRUIUtilsService, VRNavigationService, VR_Sec_ViewAPIService, UtilsService, VRNotificationService, ColumnWidthEnum) {
     var viewId;
 
     var viewEntity;
@@ -49,9 +49,11 @@ function VRTileManagementController($scope, VRUIUtilsService, VRNavigationServic
             }
             function addTile(tileEntity)
             {
+                var columnWidthObj =  UtilsService.getEnum(ColumnWidthEnum, "value", tileEntity.Settings.NumberOfColumns);
                 var tile = {
                     name: tileEntity.Name,
                     runtimeEditor: tileEntity.Settings.ExtendedSettings.RuntimeEditor,
+                    columnWidth: columnWidthObj!= undefined?columnWidthObj.numberOfColumns:undefined
                 };
                 tile.onVRTileDirectiveReady = function (api) {
                     tile.tileAPI = api;

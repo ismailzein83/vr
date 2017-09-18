@@ -2,9 +2,9 @@
 
     "use strict";
 
-    VRTileEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    VRTileEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'ColumnWidthEnum'];
 
-    function VRTileEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function VRTileEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, ColumnWidthEnum) {
 
         var isEditMode;
         var vrTileEntity;
@@ -31,7 +31,8 @@
                 extendedSettingsDirectiveApi = api;
                 extendedSettingsReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.columnWidth = UtilsService.getArrayEnum(ColumnWidthEnum);
+            $scope.scopeModel.selectedColumnWidth = ColumnWidthEnum.FullRow;
             $scope.scopeModel.saveVRTile = function () {
                 if (isEditMode)
                     return updateVRTile();
@@ -65,6 +66,10 @@
                 if (vrTileEntity == undefined)
                     return;
                 $scope.scopeModel.tileName = vrTileEntity.Name;
+                if(vrTileEntity.Settings != undefined)
+                {
+                    $scope.scopeModel.selectedColumnWidth = UtilsService.getEnum(ColumnWidthEnum, "value", vrTileEntity.Settings.NumberOfColumns);
+                }
             }
 
             function loadExtendedSettingsDirective() {
@@ -95,7 +100,8 @@
                 VRTileId: vrTileEntity != undefined ? vrTileEntity.VRTileId : UtilsService.guid(),
                 Name: $scope.scopeModel.tileName,
                 Settings: {
-                    ExtendedSettings: extendedSettingsDirectiveApi.getData()
+                    ExtendedSettings: extendedSettingsDirectiveApi.getData(),
+                    NumberOfColumns : $scope.scopeModel.selectedColumnWidth.value,
                 }
             };
             return obj;

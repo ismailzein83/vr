@@ -1,9 +1,9 @@
 ﻿<vr-panel ng-controller="VRCommon_VRTileManagementController">
     <vr-form name="formFilter">
         <vr-row ng-if="scopeModel.vrTiles.length > 0">
-                <vr-columns ng-repeat="vrTile in scopeModel.vrTiles" colnum="4" tileitem>
-                    <vr-directivewrapper directive="vrTile.runtimeEditor" title="vrTile.name" index="$index" on-ready="vrTile.onVRTileDirectiveReady"></vr-directivewrapper>
-                </vr-columns>
+            <vr-columns ng-repeat="vrTile in scopeModel.vrTiles" colnum="{{vrTile.columnWidth}}" tileitem>
+                <vr-directivewrapper directive="vrTile.runtimeEditor" title="vrTile.name" index="$index" on-ready="vrTile.onVRTileDirectiveReady"></vr-directivewrapper>
+            </vr-columns>
         </vr-row>
     </vr-form>
 </vr-panel>
