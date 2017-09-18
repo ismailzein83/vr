@@ -16,7 +16,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         public List<SourceZone> GetSourceZones(bool isSaleZone, bool onlyEffective)
         {
             string queryOnlyEffective = onlyEffective ? "and Zone.IsEffective = 'Y'" : string.Empty;
-            return GetItemsText(query_getSourceZones + (isSaleZone ? "where SupplierID = 'SYS'" : "where SupplierID <> 'SYS'") + queryOnlyEffective, SourceZoneMapper, null);
+            return GetItemsText(query_getSourceZones + (isSaleZone ? " and SupplierID = 'SYS'" : " and SupplierID <> 'SYS'") + queryOnlyEffective, SourceZoneMapper, null);
         }
 
         private SourceZone SourceZoneMapper(IDataReader arg)
