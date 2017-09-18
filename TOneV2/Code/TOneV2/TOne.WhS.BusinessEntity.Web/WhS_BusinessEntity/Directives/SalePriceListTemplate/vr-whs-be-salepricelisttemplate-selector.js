@@ -10,7 +10,7 @@ app.directive('vrWhsBeSalepricelisttemplateSelector', ['WhS_BE_SalePriceListTemp
 			onselectionchanged: '=',
 			onselectitem: "=",
 			ondeselectitem: "=",
-			isrequired: "@",
+			isrequired: "=",
 			hideremoveicon: "@",
 			hideselectedvaluessection: "@",
 			normalColNum: '@'
@@ -107,8 +107,8 @@ app.directive('vrWhsBeSalepricelisttemplateSelector', ['WhS_BE_SalePriceListTemp
 		}
 
 		var required = "";
-		if (attrs.isrequired != undefined)
-			required = ' isrequired="true"';
+		if (attrs.isrequired == true)
+		    required = ' isrequired="true" ';
 
 		var hideremoveicon = "";
 		if (attrs.hideremoveicon != undefined)
@@ -123,6 +123,6 @@ app.directive('vrWhsBeSalepricelisttemplateSelector', ['WhS_BE_SalePriceListTemp
 		    addCliked = 'onaddclicked="addNewSalePriceListTemplate"';
 
 
-		return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" label="' + label + '" entityName="' + label + '" selectedvalues="ctrl.selectedvalues" datavaluefield="SalePriceListTemplateId" datatextfield="Name"' + multipleselection + ' ' + addCliked + ' onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem" haspermission="ctrl.haspermission" ondeselectitem="ctrl.ondeselectitem"' + required + hideremoveicon + hideselectedvaluessection + '></vr-select></vr-columns>';
+		return ' <vr-columns colnum="{{ctrl.normalColNum}}"><vr-select on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" isrequired="{{ctrl.isrequired}}" label="' + label + '" entityName="' + label + '" selectedvalues="ctrl.selectedvalues" datavaluefield="SalePriceListTemplateId" datatextfield="Name"' + multipleselection + ' ' + addCliked + ' onselectionchanged="ctrl.onselectionchanged" onselectitem="ctrl.onselectitem" haspermission="ctrl.haspermission" ondeselectitem="ctrl.ondeselectitem"'  + hideremoveicon + hideselectedvaluessection + '></vr-select></vr-columns>';
 	}
 }]);

@@ -1,9 +1,9 @@
 ﻿<vr-row>
     <vr-whs-be-salepricelisttemplate-selector on-ready="ctrl.onSalePLTemplateSelectorReady"
                                               normal-col-num="6"
-                                              ng-if="ctrl.isPricelistTemplateRequired"
-                                              isrequired="false"
-                                              hideremoveicon="true" showaddbutton>
+                                              ng-if="ctrl.showPricelistTemplateSelector"
+                                              isrequired="ctrl.isPricelistTemplateRequired"
+                                              showaddbutton>
     </vr-whs-be-salepricelisttemplate-selector>
 
     <vr-columns width="1/2row">
@@ -14,13 +14,11 @@
                                                 showaddbutton>
         </vr-common-mailmessagetemplate-selector>
     </vr-columns>
-</vr-row>
 
-<vr-row>
     <vr-whs-be-pricelistextensionformat-selector on-ready="ctrl.onPriceListExtensionFormatSelectorReady"
                                                  normal-col-num="6"
                                                  ng-if="ctrl.showPricelistExtensionFormatSelector"
-                                                 isrequired="ctrl.isPricelistEmailTemplateRequired">
+                                                 isrequired="ctrl.isPricelistExtensionFormatRequired">
     </vr-whs-be-pricelistextensionformat-selector>
 
     <vr-whs-be-salepricelisttype-selector on-ready="ctrl.onPriceListTypeSelectorReady"
@@ -28,19 +26,10 @@
                                           ng-if="ctrl.showPricelistTypeSelector"
                                           isrequired="ctrl.isPricelistTypeRequired">
     </vr-whs-be-salepricelisttype-selector>
-</vr-row>
-<vr-row>
-    <vr-columns width="1/2row" ng-if="ctrl.showCompressPriceListFile">
-        <vr-label>Compress Pricelist File</vr-label>
-        <span>
-            <vr-check value="ctrl.isCompressPriceListFileEditCheck"
-                      ng-if="ctrl.showCompressPriceListFileEditCheck">
-            </vr-check>
-        </span>
 
-        <vr-switch value="ctrl.compressPriceListFile"
-                   ng-if="ctrl.isCompressPriceListFileEditCheck != false"
-                   isrequired="ctrl.isCompressPriceListFileRequired"></vr-switch>
-    </vr-columns>
-
+    <vr-whs-salepricelist-compressfile-selector on-ready="ctrl.onCompressFileSelectorReady"
+                                                normal-col-num="6"
+                                                ng-if="ctrl.showCompressPriceListFile"
+                                                isrequired="ctrl.isCompressPriceListFileRequired">
+    </vr-whs-salepricelist-compressfile-selector>
 </vr-row>
