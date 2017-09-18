@@ -94,17 +94,20 @@ namespace Retail.BusinessEntity.BP.Activities
 
                     foreach (RecurringChargeEvaluatorOutput recurringChargeEvaluatorOutput in recurringChargeEvaluatorOutputs)
                     {
-                        ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(recurringChargeEvaluatorOutput.ChargeableEntityId);
-                        chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", recurringChargeEvaluatorOutput.ChargeableEntityId);
+                        if (recurringChargeEvaluatorOutput.AmountPerDay > 0)
+                        {
+                            ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(recurringChargeEvaluatorOutput.ChargeableEntityId);
+                            chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", recurringChargeEvaluatorOutput.ChargeableEntityId);
 
-                        FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, chargeDay);
-                        AccountPackageRecurCharge accountPackageRecurCharge = BuildAccountPackageRecurCharge(accountPackageRecurChargeData, accountBEDefinitionId, chargeDay, recurringChargeEvaluatorOutput, chargeableEntitySettings, financialAccountRuntimeData);
+                            FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, chargeDay);
+                            AccountPackageRecurCharge accountPackageRecurCharge = BuildAccountPackageRecurCharge(accountPackageRecurChargeData, accountBEDefinitionId, chargeDay, recurringChargeEvaluatorOutput, chargeableEntitySettings, financialAccountRuntimeData);
 
-                        List<AccountPackageRecurCharge> dateAccountPackageRecurChargeList = accountPackageRecurChargesByDate.GetOrCreateItem(accountPackageRecurCharge.ChargeDay);
-                        List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargesByAccountPackage.GetOrCreateItem(accountPackageRecurCharge.AccountPackageID);
+                            List<AccountPackageRecurCharge> dateAccountPackageRecurChargeList = accountPackageRecurChargesByDate.GetOrCreateItem(accountPackageRecurCharge.ChargeDay);
+                            List<AccountPackageRecurCharge> accountPackageRecurChargeList = accountPackageRecurChargesByAccountPackage.GetOrCreateItem(accountPackageRecurCharge.AccountPackageID);
 
-                        dateAccountPackageRecurChargeList.Add(accountPackageRecurCharge);
-                        accountPackageRecurChargeList.Add(accountPackageRecurCharge);
+                            dateAccountPackageRecurChargeList.Add(accountPackageRecurCharge);
+                            accountPackageRecurChargeList.Add(accountPackageRecurCharge);
+                        }
                         chargeDay = chargeDay.AddDays(1);
                     }
                 }
