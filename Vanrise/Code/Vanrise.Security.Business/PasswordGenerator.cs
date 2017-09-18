@@ -7,8 +7,10 @@ namespace Vanrise.Security.Business
     {
         public PasswordGenerator()
         {
-            this.Minimum = Math.Max( new ConfigManager().GetPasswordLength(), DefaultMinimum);
-            this.Maximum = this.Minimum + 2; 
+            ConfigManager _configManager = new ConfigManager();
+            int maxConfigLength = _configManager.GetMaxPasswordLength();
+            this.Minimum = Math.Max(_configManager.GetPasswordLength(), DefaultMinimum);
+            this.Maximum = maxConfigLength > this.Minimum ? maxConfigLength : this.Minimum + 2;  
             this.ConsecutiveCharacters = false;
             this.RepeatCharacters = true;
             this.ExcludeSymbols = false;

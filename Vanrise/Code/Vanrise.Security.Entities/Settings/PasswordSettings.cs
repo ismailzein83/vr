@@ -10,6 +10,8 @@ namespace Vanrise.Security.Entities
     {
         public int PasswordLength { get; set; }
 
+        public int MaxPasswordLength { get; set; }
+
         public PasswordComplexity? PasswordComplexity { get; set; }
     }
 

@@ -22,7 +22,8 @@ namespace Vanrise.Security.Entities
                 {
                     _passwordSettings = new PasswordSettings
                     {
-                        PasswordLength = 6
+                        PasswordLength = 6,
+                        MaxPasswordLength = 8
                     };
                 }
                 return _passwordSettings;

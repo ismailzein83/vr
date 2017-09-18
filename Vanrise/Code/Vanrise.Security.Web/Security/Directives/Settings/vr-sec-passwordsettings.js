@@ -34,7 +34,12 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
                 passwordComplexityAPI = api;
                 passwordComplexityReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.passwordValueCustomValidation = function () {
+                if ($scope.scopeModel.passwordLength >= $scope.scopeModel.maxPasswordLength)
+                    return "Min password length should be less then Max password length.";
+                return null;
+            };
+            
 
             function initializeController() {
                 passwordComplexityReadyPromiseDeferred.promise.then(function () {
@@ -45,8 +50,10 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined)
-                        $scope.scopeModel.passwordLength = payload.PasswordLength; 
+                    if (payload != undefined) {
+                        $scope.scopeModel.passwordLength = payload.PasswordLength;
+                        $scope.scopeModel.maxPasswordLength = payload.MaxPasswordLength;
+                    }
 
                     var passwordComplexityLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     var passwordComplexityPayload = {
@@ -59,7 +66,8 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
 
                 api.getData = function () {
                     return {
-                        PasswordLength:$scope.scopeModel.passwordLength,
+                        PasswordLength: $scope.scopeModel.passwordLength,
+                        MaxPasswordLength:$scope.scopeModel.maxPasswordLength,
                         PasswordComplexity: passwordComplexityAPI.getSelectedIds()
                     };
                 };

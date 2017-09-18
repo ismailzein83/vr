@@ -271,10 +271,16 @@ namespace Vanrise.Security.Business
             }
             ConfigManager configManager = new ConfigManager();
             int passwordLength = configManager.GetPasswordLength();
+            int maxPasswordLength = configManager.GetMaxPasswordLength();
             var complexity = configManager.GetPasswordComplexity();
             if (password.Trim().Length < passwordLength)
             {
                 errorMessage = string.Format("Password must be at least {0} characters.", passwordLength);
+                return false;
+            }
+            if (password.Trim().Length > maxPasswordLength)
+            {
+                errorMessage = string.Format("Password must be at most {0} characters.", maxPasswordLength);
                 return false;
             }
             if (complexity.HasValue && GetPasswordComplexityScore(password) < (int)complexity.Value)
@@ -292,8 +298,11 @@ namespace Vanrise.Security.Business
             msg.Append("Password must meet complexity requirements:");
             ConfigManager cManager = new ConfigManager();
             int passwordLength = cManager.GetPasswordLength();
+            int maxPasswordLength = cManager.GetMaxPasswordLength();
             var complexity = cManager.GetPasswordComplexity();
             msg.Append(string.Format("<br> - Length must be at least {0} characters.", passwordLength));
+            msg.Append(string.Format("<br> - Length must be at most {0} characters.", maxPasswordLength));
+
             if (complexity.HasValue)
             {
                 msg.Append(string.Format("<br> - Passwords must contain characters from {0} of the following four categories:", complexity.Value == PasswordComplexity.Medium ? "two" : "three"));

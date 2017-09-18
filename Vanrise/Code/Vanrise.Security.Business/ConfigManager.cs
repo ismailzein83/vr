@@ -57,6 +57,11 @@ namespace Vanrise.Security.Business
             return GetPasswordSettings().PasswordLength;
         }
 
+        public int GetMaxPasswordLength()
+        {
+            return GetPasswordSettings().MaxPasswordLength;
+        }
+
         public PasswordComplexity? GetPasswordComplexity()
         {
             return GetPasswordSettings().PasswordComplexity;
