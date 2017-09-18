@@ -88,7 +88,7 @@ namespace TOne.WhS.Sales.Data.SQL
                 NumberOfNewSaleZoneServices = (int)reader["NumberOfNewSaleZoneServices"],
                 NumberOfClosedSaleZoneServices = (int)reader["NumberOfClosedSaleZoneServices"],
                 NumberOfChangedCountries = (int)reader["NumberOfChangedCountries"],
-                NumberOfNewCountries = (int)reader["NumberOfNewCountries"]
+                NumberOfNewCountries = GetReaderValue<int>(reader, "NumberOfNewCountries")
             };
         }
         
