@@ -34,7 +34,7 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.separator = ';';
+                $scope.scopeModel.mappingSeparator = ';';
                 $scope.scopeModel.context = buildContext();
 
                 $scope.scopeModel.onIdbDataManagerSettingsDirectiveReady = function (api) {
@@ -61,9 +61,9 @@
                         telesIdbSWSync = payload.switchSynchronizerSettings;
 
                         if (telesIdbSWSync != undefined) {
-                            $scope.scopeModel.separator = telesIdbSWSync.MappingSeparator;
+                            $scope.scopeModel.mappingSeparator = telesIdbSWSync.MappingSeparator;
                             $scope.scopeModel.numberOfOptions = telesIdbSWSync.NumberOfOptions;
-                            $scope.scopeModel.useTwoMappingFormat = telesIdbSWSync.UseTwoMappingFormat;
+                            $scope.scopeModel.useTwoSuppliersMapping = telesIdbSWSync.UseTwoSuppliersMapping;
                             $scope.scopeModel.supplierOptionsSeparator = telesIdbSWSync.SupplierOptionsSeparator;
                             idbDataManager = telesIdbSWSync.DataManager;
                             carrierMappings = telesIdbSWSync.CarrierMappings;
@@ -84,9 +84,9 @@
                     var data = {
                         $type: "TOne.WhS.RouteSync.TelesIdb.TelesIdbSWSync, TOne.WhS.RouteSync.TelesIdb",
                         DataManager: idbDataManagerSettingsDirectiveAPI.getData(),
-                        MappingSeparator: $scope.scopeModel.separator,
+                        MappingSeparator: $scope.scopeModel.mappingSeparator,
                         NumberOfOptions: $scope.scopeModel.numberOfOptions,
-                        UseTwoMappingFormat: $scope.scopeModel.useTwoMappingFormat,
+                        UseTwoSuppliersMapping: $scope.scopeModel.useTwoSuppliersMapping,
                         SupplierOptionsSeparator: $scope.scopeModel.supplierOptionsSeparator,
                         CarrierMappings: telesIdbCarrierAccountMappingGridAPI.getData(),
                     };
@@ -127,10 +127,10 @@
             function buildContext() {
                 var context = {
                     getUseTwoMappingFormat: function () {
-                        return $scope.scopeModel.useTwoMappingFormat;
+                        return $scope.scopeModel.useTwoSuppliersMapping;
                     },
                     getMappingSeparator: function () {
-                        return $scope.scopeModel.separator;
+                        return $scope.scopeModel.mappingSeparator;
                     }
                 };
                 return context;

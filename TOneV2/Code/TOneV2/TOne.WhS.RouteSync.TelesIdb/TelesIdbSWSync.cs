@@ -22,7 +22,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
         public string SupplierOptionsSeparator { get; set; }
 
-        public bool UseTwoMappingFormat { get; set; }
+        public bool UseTwoSuppliersMapping { get; set; }
 
         /// <summary>
         /// Key = Carrier Account Id
@@ -178,7 +178,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
                         }
 
                         string concatSupplierMapping = string.Join(string.Empty, routeOptionMapping.SupplierMapping);
-                        if (UseTwoMappingFormat && concatSupplierMapping.Length == 4)
+                        if (UseTwoSuppliersMapping && concatSupplierMapping.Length == 4)
                             concatSupplierMapping = concatSupplierMapping + "XXXX";
                         concatSupplierMapping = GetPercentage(routeOption.Percentage) + concatSupplierMapping;
 
@@ -186,7 +186,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
                         if (nextOptionIsBackUp)
                         {
                             concatBackUpSupplierMapping = string.Join(string.Empty, backUpRouteOptionMapping.SupplierMapping);
-                            if (UseTwoMappingFormat && concatBackUpSupplierMapping.Length == 4)
+                            if (UseTwoSuppliersMapping && concatBackUpSupplierMapping.Length == 4)
                                 concatBackUpSupplierMapping = concatBackUpSupplierMapping + "XXXX";
                             concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
                         }
