@@ -32,29 +32,33 @@ namespace TOne.WhS.CodePreparation.Business
                }
            }
 
-           if (zonesToProcess.Count() == numberOfClosedZones)
-               context.ChangedCustomerCountries = CloseCustomerCountries(lastEED, context.SellingNumberPlanId, context.CountryId);
+           
+               context.ChangedCustomerCountries = CloseCustomerCountries(lastEED, context.SellingNumberPlanId, context.CountryId, zonesToProcess.Count(), numberOfClosedZones);
        }
 
-       private List<ChangedCustomerCountry> CloseCustomerCountries(DateTime lastEED, int SellingNumberPlanId, int CountryId)
+       private List<ChangedCustomerCountry> CloseCustomerCountries(DateTime lastEED, int SellingNumberPlanId, int CountryId,int zonesToProcesscount,int numberOfClosedZones)
        {
            List<ChangedCustomerCountry> changedCustomerCountries = new List<ChangedCustomerCountry>();
-           CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-           IEnumerable<CarrierAccountInfo> customersBySellingNumberPlanId = carrierAccountManager.GetCustomersBySellingNumberPlanId(SellingNumberPlanId, false);
-           CustomerCountryManager customerCountryManager = new CustomerCountryManager();
-           foreach (var customer in customersBySellingNumberPlanId)
+           if (zonesToProcesscount == numberOfClosedZones)
            {
-               var customerCountry = customerCountryManager.GetCustomerCountry(customer.CarrierAccountId, CountryId, DateTime.Today, true);
-               if (customerCountry.EED.VRGreaterThan(lastEED))
+               CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+               IEnumerable<CarrierAccountInfo> customersBySellingNumberPlanId = carrierAccountManager.GetCustomersBySellingNumberPlanId(SellingNumberPlanId, false);
+               CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+               foreach (var customer in customersBySellingNumberPlanId)
                {
-                   ChangedCustomerCountry changedCustomerCountry = new ChangedCustomerCountry()
+                   var customerCountry = customerCountryManager.GetCustomerCountry(customer.CarrierAccountId, CountryId, DateTime.Today, true);
+                   if (customerCountry.EED.VRGreaterThan(lastEED))
                    {
-                       CustomerCountryId = customerCountry.CustomerCountryId,
-                       EED = lastEED
-                   };
-                   changedCustomerCountries.Add(changedCustomerCountry);
+                       ChangedCustomerCountry changedCustomerCountry = new ChangedCustomerCountry()
+                       {
+                           CustomerCountryId = customerCountry.CustomerCountryId,
+                           EED = lastEED
+                       };
+                       changedCustomerCountries.Add(changedCustomerCountry);
+                   }
                }
            }
+          
            return changedCustomerCountries;
        }
     }
