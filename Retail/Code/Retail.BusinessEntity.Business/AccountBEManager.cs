@@ -502,7 +502,11 @@ namespace Retail.BusinessEntity.Business
         {
             return GetCachedAccounts(accountBEDefinitionId);
         }
-
+        public List<Account> GetChildAccounts(Account account, bool withSubChildren)
+        {
+            var accountBEDefinitionId = s_accountTypeManager.GetAccountBEDefinitionId(account.TypeId);
+            return GetChildAccounts( accountBEDefinitionId, account.AccountId,  withSubChildren);
+        }
         public List<Account> GetChildAccounts(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
         {
             var accountTreeNode = GetCacheAccountTreeNodes(accountBEDefinitionId).GetRecord(accountId);
