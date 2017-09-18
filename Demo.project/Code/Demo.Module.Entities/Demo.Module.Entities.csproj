@@ -52,6 +52,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisputeCase\DisputeCaseQuery.cs" />
+    <Compile Include="DisputeCase\DisputeCase.cs" />
+    <Compile Include="DisputeCase\DisputeCaseDetails.cs" />
     <Compile Include="Building\Building.cs" />
     <Compile Include="Building\BuildingDetails.cs" />
     <Compile Include="Building\BuildingInfo.cs" />

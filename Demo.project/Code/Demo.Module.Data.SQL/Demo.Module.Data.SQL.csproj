@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisputeCaseDataManager.cs" />
     <Compile Include="BuildingDataManager.cs" />
     <Compile Include="CityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -81,6 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DisputeCaseManager.cs" />
     <Compile Include="BuildingManager.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
