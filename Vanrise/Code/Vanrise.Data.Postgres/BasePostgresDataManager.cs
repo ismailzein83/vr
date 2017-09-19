@@ -159,7 +159,7 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region BulkCopy
-        public void Bulk(IEnumerable<object> objectList, string tableName)
+        public void Bulk(IEnumerable<INpgBulkCopy> objectList, string tableName)
         {
             if (objectList == null)
                 return;
@@ -170,7 +170,7 @@ namespace Vanrise.Data.Postgres
                 using (var inStream = conn.BeginTextImport(string.Format("COPY {0} FROM STDIN", tableName)))
                 {
                     foreach (var objectItem in objectList)
-                        inStream.WriteLine(objectItem);
+                        inStream.WriteLine(objectItem.ConvertToString());
                 }
             }
         }
