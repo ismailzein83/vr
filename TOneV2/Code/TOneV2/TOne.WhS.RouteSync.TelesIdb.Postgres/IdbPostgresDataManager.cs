@@ -54,7 +54,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 
         public void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
-            List<ConvertedRoute> idbRoutes = context.PreparedItemsForApply as List<ConvertedRoute>;
+            List<IdbConvertedRoute> idbRoutes = (context.PreparedItemsForApply as List<ConvertedRoute>).Select(itm => itm as IdbConvertedRoute).ToList();
 
             SwitchSyncOutput switchSyncOutput;
             ExecMVTSRadiusSQLDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
@@ -178,7 +178,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             BuildRouteTempTable(tableName);
         }
 
-        public void ApplyRadiusRoutesForDB(List<ConvertedRoute> idbRoutes)
+        public void ApplyRadiusRoutesForDB(List<IdbConvertedRoute> idbRoutes)
         {
             base.Bulk(idbRoutes, tempTableName);
         }
