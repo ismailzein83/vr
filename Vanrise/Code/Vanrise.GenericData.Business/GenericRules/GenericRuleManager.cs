@@ -27,21 +27,100 @@ namespace Vanrise.GenericData.Business
         {
             var ruleDefinition = GetRuleDefinition(input.Query.RuleDefinitionId);
 
-
             Func<T, bool> filterExpression = (rule) => rule.DefinitionId == input.Query.RuleDefinitionId
                 && (string.IsNullOrEmpty(input.Query.Description) || (!string.IsNullOrEmpty(rule.Description) && rule.Description.IndexOf(input.Query.Description, StringComparison.OrdinalIgnoreCase) >= 0))
                 && (!input.Query.EffectiveDate.HasValue || (rule.BeginEffectiveTime <= input.Query.EffectiveDate.Value && (!rule.EndEffectiveTime.HasValue || input.Query.EffectiveDate.Value < rule.EndEffectiveTime)))
                 && (input.Query.CriteriaFieldValues == null || RuleCriteriaFilter(rule, ruleDefinition, input.Query.CriteriaFieldValues))
                 && (input.Query.SettingsFilterValue == null || RuleSettingsFilter(rule, ruleDefinition, input.Query.SettingsFilterValue));
 
-            var allRules = GetAllRules();
-
             ResultProcessingHandler<GenericRuleDetail> handler = new ResultProcessingHandler<GenericRuleDetail>()
             {
                 ExportExcelHandler = new GenericRuleExcelExportHandler(input.Query)
             };
             VRActionLogger.Current.LogGetFilteredAction(new GenericRuleLoggableEntity(input.Query.RuleDefinitionId), input);
-            return DataRetrievalManager.Instance.ProcessResult(input, allRules.ToBigResult(input, filterExpression, (rule) => MapToDetails(rule)), handler);
+
+            List<T> filteredRules = GetAllRules().Values.FindAllRecords(filterExpression).ToList();
+            filteredRules = FilterOverridenRules(filteredRules, ruleDefinition, input.Query.CriteriaFieldValues);
+
+            return DataRetrievalManager.Instance.ProcessResult(input, filteredRules.ToBigResult(input, null, (rule) => MapToDetails(rule)), handler);
+        }
+
+        List<T> FilterOverridenRules(List<T> rules, GenericRuleDefinition ruleDefinition, Dictionary<string, object> criterias)
+        {
+            if (criterias == null || criterias.Count == 0)
+                return rules;
+
+            List<T> result = new List<T>();
+
+            List<T> overridenRules = new List<T>();
+
+            criterias = criterias.OrderBy(itm => ruleDefinition.CriteriaDefinition.Fields.First(item => item.FieldName == itm.Key).Priority).ToDictionary(itm => itm.Key, itm => itm.Value);
+            string lastCriteriaName = criterias.Last().Key;
+
+            foreach (T rule in rules)
+            {
+                bool isRuleOverriden = false;
+
+                foreach (T targetRule in rules)
+                {
+                    if (rule == targetRule || overridenRules.Contains(targetRule))
+                        continue;
+
+                    foreach (GenericRuleDefinitionCriteriaField genericRuleDefinitionCriteriaField in ruleDefinition.CriteriaDefinition.Fields)
+                    {
+                        var ruleFieldValues = rule.Criteria.FieldsValues;
+                        var targetRuleFieldValues = targetRule.Criteria.FieldsValues;
+                        var criteriaFieldName = genericRuleDefinitionCriteriaField.FieldName;
+
+                        var ruleFieldValue = ruleFieldValues.GetRecord(criteriaFieldName);
+                        var targetRuleFieldValue = targetRuleFieldValues.GetRecord(criteriaFieldName);
+
+                        if (!criterias.ContainsKey(criteriaFieldName))
+                        {
+                            if ((ruleFieldValue == null && targetRuleFieldValue == null)
+                                || (ruleFieldValue != null && targetRuleFieldValue != null && SameCriteriaValues(ruleFieldValue.GetValues(), targetRuleFieldValue.GetValues())))
+                                continue;
+                            else
+                                break;
+                        }
+
+                        if (ruleFieldValue != null && targetRuleFieldValue == null)
+                            break;
+
+                        if (ruleFieldValue == null && targetRuleFieldValue != null)
+                        {
+                            isRuleOverriden = true;
+                            break;
+                        }
+
+                        if (criteriaFieldName == lastCriteriaName)
+                            break;
+                    }
+
+                    if (isRuleOverriden)
+                        break;
+                }
+                if (!isRuleOverriden)
+                    result.Add(rule);
+                else
+                    overridenRules.Add(rule);
+            }
+
+            return result;
+        }
+
+        private bool SameCriteriaValues(IEnumerable<object> firstRuleCriteriaValue, IEnumerable<object> secondRuleCriteriaValue)
+        {
+            if (firstRuleCriteriaValue == null && secondRuleCriteriaValue == null)
+                return true;
+
+            if (firstRuleCriteriaValue == null && secondRuleCriteriaValue != null)
+                return false;
+
+            if (firstRuleCriteriaValue != null && secondRuleCriteriaValue == null)
+                return false;
+
+            return firstRuleCriteriaValue.All(secondRuleCriteriaValue.Contains) && firstRuleCriteriaValue.Count() == secondRuleCriteriaValue.Count();
         }
 
         public GenericRule GetGenericRule(int ruleId, bool isViewedFromUI)
@@ -259,7 +338,7 @@ namespace Vanrise.GenericData.Business
 
         bool RuleCriteriaFilter(GenericRule rule, GenericRuleDefinition ruleDefinition, Dictionary<string, object> filterValues)
         {
-            if (rule.Criteria == null) return false;
+            if (rule.Criteria == null) return true;
 
             foreach (KeyValuePair<string, object> filter in filterValues)
             {
@@ -277,13 +356,13 @@ namespace Vanrise.GenericData.Business
                 {
                     IEnumerable<object> values = criteriaFieldValue.GetValues();
                     if (values == null)
-                        return false;
+                        return true;
 
                     if (!criteriaFieldType.IsMatched(values, filter.Value))
                         return false;
                 }
                 else
-                    return false;
+                    return true;
             }
 
             return true;
@@ -488,7 +567,7 @@ namespace Vanrise.GenericData.Business
 
             public override string EntityDisplayName
             {
-                get { return  s_ruleDefinitionManager.GetGenericRuleDefinitionName(_ruleDefinitionId); }
+                get { return s_ruleDefinitionManager.GetGenericRuleDefinitionName(_ruleDefinitionId); }
             }
 
             public override string ViewHistoryItemClientActionName
