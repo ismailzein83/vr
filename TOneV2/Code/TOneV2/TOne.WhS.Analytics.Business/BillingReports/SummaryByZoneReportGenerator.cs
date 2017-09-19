@@ -43,16 +43,22 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 if (parameters.IsCost)
                 {
-                    
-                    listDimensions.Add("Supplier");
-                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile");
+
+
+                    if (parameters.GroupByProfile)
+                        listDimensions.Add("SupplierProfile");
+                    else
+                        listDimensions.Add("Supplier");
 
                 }
 
                 else
                 {
-                    listDimensions.Add("Customer");
-                    if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile");
+
+                    if (parameters.GroupByProfile)
+                        listDimensions.Add("CustomerProfile");
+                    else
+                        listDimensions.Add("Customer");
                 }
 
             }
@@ -122,10 +128,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     var rateTypeValue = analyticRecord.DimensionValues[1];
                     if (rateTypeValue != null)
-                        if (rateTypeValue.Value != null){
+                        if (rateTypeValue.Value != null)
+                        {
                             summaryByZone.RateType = (int)rateTypeValue.Value;
                             summaryByZone.RateTypeFormatted = rateTypeManager.GetRateTypeName(summaryByZone.RateType);
-                        }                           
+                        }
                         else
                             summaryByZone.RateTypeFormatted = "Normal";
 
@@ -152,7 +159,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     summaryByZone.DurationNet = (durationNet == null) ? 0 : Convert.ToDecimal(durationNet.Value ?? 0.0);
                     summaryByZone.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(summaryByZone.DurationNet);
 
-                    
+
                     MeasureValue durationInMinutes;
                     if (parameters.IsCost)
                         analyticRecord.MeasureValues.TryGetValue("CostDuration", out durationInMinutes);
