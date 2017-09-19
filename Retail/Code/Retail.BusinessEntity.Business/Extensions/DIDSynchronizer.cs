@@ -93,7 +93,7 @@ namespace Retail.BusinessEntity.Business
                         if (existingRelatedAccount.EED.VRGreaterThan(dateToCloseExistingAccounts))
                         {
                             string accountName = new AccountBEManager().GetAccountName(AccountBEDefinitionId, long.Parse(existingRelatedAccount.ParentBEId.ToString()));
-                            existingRelatedAccount.EED = Utilities.Min(existingRelatedAccount.BED, dateToCloseExistingAccounts);
+                            existingRelatedAccount.EED = Utilities.Max(existingRelatedAccount.BED, dateToCloseExistingAccounts);
                             parentChildRelationManager.UpdateBEParentChildRelation(existingRelatedAccount);
                             context.WriteBusinessTrackingMsg(LogEntryType.Information, "DID Number {0} link to Account {1} is closed at EED {2}.", accountData.DID.Settings.Numbers.First(), accountName, existingRelatedAccount.EED.Value.ToShortDateString());
                         }
