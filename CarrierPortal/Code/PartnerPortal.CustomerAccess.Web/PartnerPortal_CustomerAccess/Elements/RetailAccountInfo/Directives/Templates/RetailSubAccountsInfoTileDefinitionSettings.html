@@ -1,0 +1,21 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.accountBEDefinitionId" label="Account BE Definition Id" isrequired="true"></vr-textbox>
+    </vr-columns>
+    <vr-common-connection-selector on-ready="scopeModel.onConnectionSelectorReady" isrequired="true" normal-col-num="6" onselectionchanged=" scopeModel.onConnectionSelectionChanged"></vr-common-connection-selector>
+    <partnerportal-cutomeraccess-retailaccount-genericfielddefinition-remoteselector vr-loader="scopeModel.isLoadingGenericFieldDefinitionDirective" onselectitem="scopeModel.onSelectGenericFieldItem" ondeselectitem="    scopeModel.onDeselectGenericFieldItem" selectedvalues="scopeModel.selectedGenericFields" on-ready="    scopeModel.onGenericFieldDefinitionSelectorReady" isrequired="true" normal-col-num="6" ismultipleselection></partnerportal-cutomeraccess-retailaccount-genericfielddefinition-remoteselector>
+    <vr-columns width="fullrow">
+        <vr-validator validate="scopeModel.isValidDimensions()">
+            <vr-datagrid datasource="scopeModel.genericFieldDefinitions" enabledraggablerow="true"
+                         on-ready="onGridReady" ondeleterow="    scopeModel.removeGenericField" hidegridmenu norowhighlightonclick="'true'">
+                <vr-datagridcolumn headertext="'Field Name'" field="'FieldName'" widthfactor="5" disablesorting="true"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Title'" widthfactor="8" disablesorting="true">
+                    <vr-textbox value="dataItem.Title" isrequired="true"></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Width'" widthfactor="9" disablesorting="true">
+                    <vr-common-gridcolumnwidth-editor on-ready="dataItem.onGridWidthFactorEditorReady" hidelabel></vr-common-gridcolumnwidth-editor>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-row>

@@ -122,6 +122,10 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
@@ -200,10 +204,17 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Services\AccountStatementAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagement.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\AccountStatement\Views\AccountStatementManagementController.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\partnerportal-customeraccess-retailsubaccountsgrid.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\partnerportal-customeraccess-retailsubaccountsinfotiledefinitionsettings.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\partnerportal-customeraccess-retailaccountinfotiledefinitionsettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\partnerportal-customeraccess-retailsubaccountsinfotileruntimesettings.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\partnerportal-customeraccess-retailaccountinfotileruntimesettings.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\partnerportal-cutomeraccess-retailaccount-genericfielddefinition-remoteselector.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\RetailSubAccountsInfoTileDefinitionSettings.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\RetailAccountInfoTileDefinitionSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\RetailSubAccountsInfoTileRuntimeSettings.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\RetailAccountInfoTileRuntimeSettings.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\SubAccountsGridTemplate.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Services\APIService\RetailAccountInfoAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountqueryinterceptor.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIRecordQueryInterceptorTemplate.html" />

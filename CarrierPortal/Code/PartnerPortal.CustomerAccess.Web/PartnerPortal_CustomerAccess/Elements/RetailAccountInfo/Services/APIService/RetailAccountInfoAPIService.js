@@ -12,8 +12,23 @@
                 vrConnectionId: vrConnectionId
             });
         };
+        function GetRemoteGenericFieldDefinitionsInfo(vrConnectionId, accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_CustomerAccess_ModuleConfig.moduleName, controllerName, 'GetRemoteGenericFieldDefinitionsInfo'), {
+                vrConnectionId: vrConnectionId,
+                accountBEDefinitionId: accountBEDefinitionId
+            });
+        }
+        function GetSubAccountsGridColumnAttributes(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PartnerPortal_CustomerAccess_ModuleConfig.moduleName, controllerName, 'GetSubAccountsGridColumnAttributes'), input);
+        }
+        function GetFilteredSubAccounts(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(PartnerPortal_CustomerAccess_ModuleConfig.moduleName, controllerName, 'GetFilteredSubAccounts'), input);
+        }
         return {
             GetClientProfileAccountInfo: GetClientProfileAccountInfo,
+            GetRemoteGenericFieldDefinitionsInfo: GetRemoteGenericFieldDefinitionsInfo,
+            GetSubAccountsGridColumnAttributes: GetSubAccountsGridColumnAttributes,
+            GetFilteredSubAccounts: GetFilteredSubAccounts
         };
     }
 
