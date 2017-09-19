@@ -9,6 +9,7 @@ namespace Retail.BusinessEntity.APIEntities
 {
     public class ClientRetailProfileAccountInfo
     {
+        public string AccountName { get; set; }
         public int? CountryId { get; set; }
         public string CountryName { get; set; }
 
@@ -24,6 +25,15 @@ namespace Retail.BusinessEntity.APIEntities
         public string CurrencyName { get; set; }
         public int ProductId { get; set; }
         public string ProductName { get; set; }
+
+        public List<string> PhoneNumbers { get; set; }
+        public string PhoneNumbersDescription { get; set; }
+        public List<string> MobileNumbers { get; set; }
+        public string MobileNumbersDescription { get; set; }
+        public List<string> Faxes { get; set; }
+        public string FaxesDescription { get; set; }
+        public string Address { get; set; }
+
 
         public List<AccountCompanyContact> Contacts { get; set; }
     }

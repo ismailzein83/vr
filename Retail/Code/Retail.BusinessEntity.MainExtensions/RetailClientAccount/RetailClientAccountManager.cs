@@ -29,8 +29,18 @@ namespace Retail.BusinessEntity.MainExtensions
                 foreach(var part in account.Settings.Parts )
                 {
                     AccountPartCompanyProfile accountPartCompanyProfile =  part.Value.Settings as AccountPartCompanyProfile;
+
                     if(accountPartCompanyProfile != null)
                     {
+                        clientRetailProfileAccountInfo.PhoneNumbers = accountPartCompanyProfile.PhoneNumbers;
+                        clientRetailProfileAccountInfo.PhoneNumbersDescription = accountPartCompanyProfile.PhoneNumbers != null ? string.Join(",", accountPartCompanyProfile.PhoneNumbers) : null;
+                        clientRetailProfileAccountInfo.MobileNumbers = accountPartCompanyProfile.MobileNumbers;
+                        clientRetailProfileAccountInfo.MobileNumbersDescription = accountPartCompanyProfile.MobileNumbers != null ? string.Join(",", accountPartCompanyProfile.MobileNumbers) : null;
+                        clientRetailProfileAccountInfo.Faxes = accountPartCompanyProfile.Faxes;
+                        clientRetailProfileAccountInfo.FaxesDescription = accountPartCompanyProfile.Faxes != null ? string.Join(",", accountPartCompanyProfile.Faxes) : null;
+                        clientRetailProfileAccountInfo.Address = accountPartCompanyProfile.Address;
+
+
                         clientRetailProfileAccountInfo.ArabicName = accountPartCompanyProfile.ArabicName;
                         clientRetailProfileAccountInfo.CityId = accountPartCompanyProfile.CityId;
                         if (clientRetailProfileAccountInfo.CityId.HasValue)
@@ -44,6 +54,7 @@ namespace Retail.BusinessEntity.MainExtensions
                         clientRetailProfileAccountInfo.Street = accountPartCompanyProfile.Street;
                         clientRetailProfileAccountInfo.Town = accountPartCompanyProfile.Town;
                         clientRetailProfileAccountInfo.Website = accountPartCompanyProfile.Website;
+                        clientRetailProfileAccountInfo.AccountName = accountBEManager.GetAccountName(account);
                         if (accountPartCompanyProfile.Contacts != null)
                         {
                             clientRetailProfileAccountInfo.Contacts = new List<APIEntities.AccountCompanyContact>();
@@ -66,7 +77,7 @@ namespace Retail.BusinessEntity.MainExtensions
                                     PhoneNumbers = contact.Value.PhoneNumbers,
                                     PhoneNumbersDescription = contact.Value.PhoneNumbers != null?string.Join(",",contact.Value.PhoneNumbers):null,
                                     MobileNumbersDescription = contact.Value.MobileNumbers != null ? string.Join(",", contact.Value.MobileNumbers) : null,
-                                    SalutationDescription =contact.Value.Salutation.HasValue? Utilities.GetEnumDescription(contact.Value.Salutation.Value):null
+                                    SalutationDescription =contact.Value.Salutation.HasValue? Utilities.GetEnumDescription(contact.Value.Salutation.Value):null,
                                 });
                             }
                         }
