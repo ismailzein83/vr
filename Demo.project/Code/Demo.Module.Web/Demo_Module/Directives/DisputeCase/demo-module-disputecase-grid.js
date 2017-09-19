@@ -73,7 +73,8 @@ function (VRNotificationService, Demo_Module_DisputeCaseAPIService, LabelColorsE
             if (dataItem.Entity.StatusCode === 1) return LabelColorsEnum.New.color;
             if (dataItem.Entity.StatusCode === 2) return LabelColorsEnum.WarningLevel1.color;
             if (dataItem.Entity.StatusCode === 3) return LabelColorsEnum.Processing.color;
-
+            if (dataItem.Entity.StatusCode === 4) return LabelColorsEnum.Success.color;
+            if (dataItem.Entity.StatusCode === 5) return LabelColorsEnum.Error.color;
             else  return LabelColorsEnum.Info.color;
 
         };
