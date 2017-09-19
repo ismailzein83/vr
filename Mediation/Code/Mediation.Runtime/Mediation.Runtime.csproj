@@ -62,6 +62,9 @@
     <Reference Include="Aspose.Cells">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=4.1.0.0, Culture=neutral, PublicKeyToken=e44a2bc38ed2c13c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>

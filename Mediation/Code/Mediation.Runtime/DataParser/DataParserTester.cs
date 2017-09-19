@@ -3697,50 +3697,50 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A3", new HexTLVRecordParser
-            {
-                Settings = new CreateRecordRecordParser
-                {
-                    FieldParsers = new HexTLVFieldParserCollection
-                    {
-                        FieldParsersByTag = Get_A3_FieldParsers_Huawei_Iraq()
-                    },
-                    RecordType = "MobileCDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
-                            new ParsedRecordFieldConstantValue
-                            {
-                             FieldName = "RecordTypeName",
-                             Value = "IncomingGateway"
-                            }
-                    }
-                    ,
-                    CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
-                }
-            });
+            //parsers.Add("A3", new HexTLVRecordParser
+            //{
+            //    Settings = new CreateRecordRecordParser
+            //    {
+            //        FieldParsers = new HexTLVFieldParserCollection
+            //        {
+            //            FieldParsersByTag = Get_A3_FieldParsers_Huawei_Iraq()
+            //        },
+            //        RecordType = "MobileCDR",
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+            //         new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+            //                new ParsedRecordFieldConstantValue
+            //                {
+            //                 FieldName = "RecordTypeName",
+            //                 Value = "IncomingGateway"
+            //                }
+            //        }
+            //        ,
+            //        CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
+            //    }
+            //});
 
 
-            parsers.Add("A4", new HexTLVRecordParser
-            {
-                Settings = new CreateRecordRecordParser
-                {
-                    FieldParsers = new HexTLVFieldParserCollection
-                    {
-                        FieldParsersByTag = Get_A4_FieldParsers_Huawei_Iraq()
-                    },
-                    RecordType = "MobileCDR",
-                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
-                     new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
-                            new ParsedRecordFieldConstantValue
-                            {
-                             FieldName = "RecordTypeName",
-                             Value = "OutgoingGateway"
-                            }
-                    }
-                    ,
-                    CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
-                }
-            });
+            //parsers.Add("A4", new HexTLVRecordParser
+            //{
+            //    Settings = new CreateRecordRecordParser
+            //    {
+            //        FieldParsers = new HexTLVFieldParserCollection
+            //        {
+            //            FieldParsersByTag = Get_A4_FieldParsers_Huawei_Iraq()
+            //        },
+            //        RecordType = "MobileCDR",
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+            //         new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 5},
+            //                new ParsedRecordFieldConstantValue
+            //                {
+            //                 FieldName = "RecordTypeName",
+            //                 Value = "OutgoingGateway"
+            //                }
+            //        }
+            //        ,
+            //        CompositeFieldsParsers = GetHuaweiIraqCompositeFieldsParser()
+            //    }
+            //});
 
             parsers.Add("A5", new HexTLVRecordParser
             {
@@ -3922,7 +3922,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new TBCDNumberParser
                 {
-                    FieldName = "ServedIMSI",
+                    FieldName = "CallingIMSI",
                     RemoveHexa = true
                 }
             });
@@ -3931,7 +3931,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new TBCDNumberParser
                 {
-                    FieldName = "ServedIMEI",
+                    FieldName = "CallingIMEI",
                     RemoveHexa = true
                 }
             });
@@ -4174,6 +4174,24 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("9F26", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "GlobalCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("9F20", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
             return parsers;
         }
         private Dictionary<string, HexTLVFieldParser> Get_A1_FieldParsers_Huawei_Iraq()
@@ -4193,7 +4211,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new TBCDNumberParser
                 {
-                    FieldName = "ServedIMSI",
+                    FieldName = "CalledIMSI",
                     RemoveHexa = true
                 }
             });
@@ -4202,7 +4220,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Settings = new TBCDNumberParser
                 {
-                    FieldName = "ServedIMEI",
+                    FieldName = "CalledIMEI",
                     RemoveHexa = true
                 }
             });
@@ -4408,6 +4426,24 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "ServedMSISDN",
                     RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F21", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "GlobalCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("9D", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallReference",
+                    NumberType = NumberType.BigInt
                 }
             });
 
@@ -4887,6 +4923,25 @@ namespace Mediation.Runtime.DataParser
                     RemoveHexa = true
                 }
             });
+
+            parsers.Add("9F8148", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "GlobalCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("8E", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
             return parsers;
         }
         private Dictionary<string, HexTLVFieldParser> Get_A6_FieldParsers_Huawei_Iraq()
@@ -5518,6 +5573,24 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "OriginalCalledNumber",
                     RemoveHexa = true
+                }
+            });
+
+            parsers.Add("9F26", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "GlobalCallReference",
+                    NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("9F20", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CallReference",
+                    NumberType = NumberType.BigInt
                 }
             });
 
