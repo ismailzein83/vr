@@ -30,20 +30,30 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 if (parameters.GroupBySupplier)
                 {
-                    listDimensions.Add("Supplier");
-                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile");
+                   
+                    if (parameters.GroupByProfile)
+                        listDimensions.Add("SupplierProfile");
+                    else
+                        listDimensions.Add("Supplier");
                 }
             }
             else
             {
                 if (parameters.GroupBySupplier)
                 {
-                    listDimensions.Add("Supplier");
-                    if (parameters.GroupByProfile) listDimensions.Add("SupplierProfile");
+
+                    if (parameters.GroupByProfile)
+                        listDimensions.Add("SupplierProfile");
+                    else
+                        listDimensions.Add("Supplier");
                 }
-                else{ 
-                    listDimensions.Add("Customer");
-                    if (parameters.GroupByProfile) listDimensions.Add("CustomerProfile");
+                else
+                {
+
+                    if (parameters.GroupByProfile)
+                        listDimensions.Add("CustomerProfile");
+                    else
+                        listDimensions.Add("Customer");
                 }
             }
 
