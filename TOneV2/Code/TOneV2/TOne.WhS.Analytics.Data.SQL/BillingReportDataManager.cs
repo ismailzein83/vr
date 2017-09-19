@@ -43,24 +43,25 @@ namespace TOne.WhS.Analytics.Data.SQL
                 LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3} , @FromDate, @ToDate)) AS ERS ON BS.SaleCurrencyId = ERS.CurrencyID 
                 WHERE BS.BatchStart >= @FromDate AND BS.BatchStart < @ToDate AND {1} = @CustomerId 
                 GROUP BY {2} , Year(BS.BatchStart), MONTH(BS.BatchStart) ORDER BY Year(BS.BatchStart) asc, MONTH(BS.BatchStart) asc,
-                    (cast( (SUM({0} )/60 ) as decimal(13,4) )) desc
+                    (cast( (SUM({0} )/{4} ) as decimal(13,4) )) desc
 
                 SELECT {2} AS ZoneId ,Year(BS.BatchStart) AS YearDuration, 
                 MONTH(BS.BatchStart) AS MonthDuration, 
-                cast( (SUM({0} )/60 ) as decimal(13,4) ) AS SaleDuration 
+                cast( (SUM({0} )/{4} ) as decimal(13,4) ) AS SaleDuration 
                 From [TOneWhS_Analytics].[BillingStatsDaily] BS WITH(NOLOCK,INDEX(IX_BillingStatsDaily_BatchStart,IX_BillingStatsDaily_Id)) 
                     JOIN #BillingStatsDailyTemp t on {2} = t.ZoneId
-                LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency(4 , @FromDate, @ToDate)) AS ERC 
+                LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3}, @FromDate, @ToDate)) AS ERC 
                 ON BS.CostCurrencyId = ERC.CurrencyID 
-                LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency(4 , @FromDate, @ToDate)) AS ERS 
+                LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3} , @FromDate, @ToDate)) AS ERS 
                 ON BS.SaleCurrencyId = ERS.CurrencyID
                 WHERE BS.BatchStart >= @FromDate AND BS.BatchStart < @ToDate AND {1} = @CustomerId 
                 GROUP BY {2} , Year(BS.BatchStart), MONTH(BS.BatchStart) ORDER BY Year(BS.BatchStart) asc, MONTH(BS.BatchStart) asc,
-                    (cast( (SUM({0} )/60 ) as decimal(13,4) )) desc drop table #BillingStatsDailyTemp",
+                    (cast( (SUM({0} )/{4} ) as decimal(13,4) )) desc drop table #BillingStatsDailyTemp",
             amountDuration,
             carrierId,
             zone,
-            currencyId
+            currencyId,
+            isAmount?"1":"60"
             );
 
             return GetItemsText(query, BusinessCaseStatusMapper,
