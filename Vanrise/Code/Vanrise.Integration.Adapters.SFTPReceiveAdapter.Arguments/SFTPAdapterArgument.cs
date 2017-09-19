@@ -9,6 +9,11 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
 {
     public class SFTPAdapterArgument : BaseAdapterArgument
     {
+        public enum CompressionTypes
+        {
+            GZip,
+            Zip
+        }
         public enum Actions
         {
             Rename = 0,
@@ -28,6 +33,8 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         public int? ActionAfterImport { get; set; }
         public bool BasedOnLastModifiedTime { get; set; }
         public string LastImportedFile { get; set; }
+        public bool CompressedFiles { get; set; }
+        public CompressionTypes CompressionType { get; set; }
 
         # endregion
     }

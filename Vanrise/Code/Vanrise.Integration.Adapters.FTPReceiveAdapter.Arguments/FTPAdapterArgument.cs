@@ -17,6 +17,12 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
             Copy = 3 // Copy To Folder and Keep the original file,
         }
 
+        public enum CompressionTypes
+        {
+            GZip,
+            Zip
+        }
+
         #region Properties
         public string Extension { get; set; }
         public string Mask { get; set; }
@@ -28,6 +34,8 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments
         public int? ActionAfterImport { get; set; }
         public bool BasedOnLastModifiedTime { get; set; }
         public string LastImportedFile { get; set; }
+        public bool CompressedFiles { get; set; }
+        public CompressionTypes CompressionType { get; set; }
 
         # endregion
     }

@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Integration\Constants\CompressionTypeEnum.js" />
     <Content Include="Integration\Constants\MappingResultEnum.js" />
     <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
     <Content Include="Integration\Constants\ModuleConfig.js" />

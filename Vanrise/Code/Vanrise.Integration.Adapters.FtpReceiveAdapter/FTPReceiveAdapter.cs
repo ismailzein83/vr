@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Rebex.Net;
+using Vanrise.Common;
 using Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 
@@ -60,7 +62,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                                 ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument, fileObj.Modified);
                                 localLastRetrievedFileTime = fileObj.Modified;
                             }
-                            CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath);
+                            CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath, ftpAdapterArgument);
                             AfterImport(ftp, fileObj, filePath, ftpAdapterArgument);
 
                         }
@@ -97,13 +99,14 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 
         #region Private Functions
 
-        private void CreateStreamReader(Action<IImportedData> receiveData, Ftp ftp, FtpItem fileObj, String filePath)
+        private void CreateStreamReader(Action<IImportedData> receiveData, Ftp ftp, FtpItem fileObj, String filePath, FTPAdapterArgument argument)
         {
             base.LogVerbose("Creating stream reader for file with name {0}", fileObj.Name);
             var stream = new MemoryStream();
             ftp.GetFile(filePath, stream);
-            byte[] data = stream.ToArray();
-            using (var ms = stream)
+            stream.Seek(0, SeekOrigin.Begin);
+
+            using (var ms = GetStream(stream, argument.CompressedFiles, argument.CompressionType))
             {
                 ms.Position = 0;
                 receiveData(new StreamReaderImportedData()
@@ -114,6 +117,24 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                     Size = fileObj.Size
                 });
             }
+            stream.Close();
+
+        }
+
+        MemoryStream GetStream(MemoryStream stream, bool isCompressed, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.CompressionTypes compressionType)
+        {
+            if (isCompressed)
+            {
+                switch (compressionType)
+                {
+                    case Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.CompressionTypes.GZip:
+                        return new MemoryStream(ZipUtility.DecompressGZ(stream));
+                    case Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument.CompressionTypes.Zip:
+                        return new MemoryStream(ZipUtility.UnZip(stream.ToArray()));
+                }
+            }
+
+            return stream;
         }
 
         private static void CloseConnection(Ftp ftp)

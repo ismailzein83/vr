@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Rebex.Net;
+using Vanrise.Common;
 using Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 
@@ -56,14 +57,14 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                             if (!string.IsNullOrEmpty(SFTPAdapterArgument.LastImportedFile) && SFTPAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
                                 continue;
 
-                            String filePath = SFTPAdapterArgument.Directory + "/" + fileObj.Name;                            
+                            String filePath = SFTPAdapterArgument.Directory + "/" + fileObj.Name;
                             if (SFTPAdapterState.LastRetrievedFileTime != fileObj.Modified)
                             {
                                 SFTPAdapterState = SaveOrGetAdapterState(context, SFTPAdapterArgument, fileObj.Modified);
                                 localLastRetrievedFileTime = fileObj.Modified;
                             }
 
-                            CreateStreamReader(context.OnDataReceived, sftp, fileObj, filePath);
+                            CreateStreamReader(context.OnDataReceived, sftp, fileObj, filePath, SFTPAdapterArgument);
                             AfterImport(sftp, fileObj, filePath, SFTPAdapterArgument);
                         }
                     }
@@ -98,13 +99,15 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
             return adapterState;
         }
-        private void CreateStreamReader(Action<IImportedData> receiveData, Sftp sftp, SftpItem fileObj, String filePath)
+        private void CreateStreamReader(Action<IImportedData> receiveData, Sftp sftp, SftpItem fileObj, String filePath, SFTPAdapterArgument argument)
         {
             base.LogVerbose("Creating stream reader for file with name {0}", fileObj.Name);
             var stream = new MemoryStream();
             sftp.GetFile(filePath, stream);
-            byte[] data = stream.ToArray();
-            using (var ms = stream)
+
+            stream.Seek(0, SeekOrigin.Begin);
+
+            using (var ms = GetStream(stream, argument.CompressedFiles, argument.CompressionType))
             {
                 ms.Position = 0;
                 receiveData(new StreamReaderImportedData()
@@ -117,6 +120,21 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
             }
         }
 
+        MemoryStream GetStream(MemoryStream stream, bool isCompressed, Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.SFTPAdapterArgument.CompressionTypes compressionType)
+        {
+            if (isCompressed)
+            {
+                switch (compressionType)
+                {
+                    case Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.SFTPAdapterArgument.CompressionTypes.GZip:
+                        return new MemoryStream(ZipUtility.DecompressGZ(stream));
+                    case Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments.SFTPAdapterArgument.CompressionTypes.Zip:
+                        return new MemoryStream(ZipUtility.UnZip(stream.ToArray()));
+                }
+            }
+
+            return stream;
+        }
         private static void CloseConnection(Sftp sftp)
         {
             sftp.Dispose();

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationAdapterSftp", ['UtilsService',
-function (UtilsService) {
+app.directive("vrIntegrationAdapterSftp", ['UtilsService', 'VR_Integration_CompressionTypeEnum',
+function (UtilsService, VR_Integration_CompressionTypeEnum) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -30,6 +30,8 @@ function (UtilsService) {
 
 
         function initializeController() {
+            $scope.compressionTypes = UtilsService.getArrayEnum(VR_Integration_CompressionTypeEnum);
+
             $scope.actionsAfterImport = [{ value: 0, name: 'Rename' }, { value: 1, name: 'Delete' }, { value: 2, name: 'Move' }];
 
             $scope.actionIsRequired = function () {
@@ -63,7 +65,9 @@ function (UtilsService) {
                     DirectorytoMoveFile: $scope.directorytoMoveFile,
                     ActionAfterImport: $scope.selectedAction ? $scope.selectedAction.value : undefined,
                     BasedOnLastModifiedTime: $scope.basedOnTime,
-                    LastImportedFile: $scope.lastImportedFile
+                    LastImportedFile: $scope.lastImportedFile,
+                    CompressedFiles: $scope.compressed,
+                    CompressionType: $scope.selectedCompressionType != undefined ? $scope.selectedCompressionType.value : undefined
                 };
             };
             api.getStateData = function () {
@@ -88,6 +92,8 @@ function (UtilsService) {
                         $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, argumentData.ActionAfterImport, "value");
                         $scope.basedOnTime = argumentData.BasedOnLastModifiedTime;
                         $scope.lastImportedFile = argumentData.LastImportedFile;
+                        $scope.compressed = argumentData.CompressedFiles;
+                        $scope.selectedCompressionType = UtilsService.getEnum(VR_Integration_CompressionTypeEnum, "value", argumentData.CompressionType);
                     }
 
                 }
