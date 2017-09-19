@@ -17,6 +17,16 @@ namespace Retail.BusinessEntity.Web.Controllers
         AccountBEDefinitionManager _beManager = new AccountBEDefinitionManager();
 
         [HttpPost]
+        [Route("GetFilteredClientAccounts")]
+        public object GetFilteredClientAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
+        {
+
+            if (!_beManager.DoesUserHaveViewAccess(input.Query.AccountBEDefinitionId))
+                return GetUnauthorizedResponse();
+            return GetWebResponse(input, _manager.GetFilteredClientAccounts(input));
+        }
+
+        [HttpPost]
         [Route("GetFilteredAccounts")]
         public object GetFilteredAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
         {

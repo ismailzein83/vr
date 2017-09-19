@@ -44,9 +44,14 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountClientDetail.cs" />
     <Compile Include="ClientBalanceAccountInfo.cs" />
+    <Compile Include="ClientGenericFieldDefinitionInfo.cs" />
     <Compile Include="ClientInvoiceAccountInfo.cs" />
     <Compile Include="ClientRetailProfileAccountInfo.cs" />
     <Compile Include="DIDClientDetail.cs" />

@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Data;
+﻿using Retail.BusinessEntity.APIEntities;
+using Retail.BusinessEntity.Data;
 using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
@@ -272,7 +273,36 @@ namespace Retail.BusinessEntity.Business
                 return null;
             return accountGenericFields.Values.Select(itm => new GenericFieldDefinitionInfo() { Name = itm.Name, Title = itm.Title, FieldType = itm.FieldType });
         }
-
+        public IEnumerable<DataRecordGridColumnAttribute> GetGenericFieldGridColumnAttribute(Guid accountBEDefinitionId)
+        {
+            Dictionary<string, AccountGenericField> accountGenericFields = GetAccountGenericFields(accountBEDefinitionId);
+            if (accountGenericFields == null || accountGenericFields.Values.Count() == 0)
+                return null;
+            List<DataRecordGridColumnAttribute> results = new List<DataRecordGridColumnAttribute>();
+            foreach (var itm in accountGenericFields)
+            {
+           
+                FieldTypeGetGridColumnAttributeContext context = new FieldTypeGetGridColumnAttributeContext();
+                context.ValueFieldPath = "FieldValues." + itm.Value.Name + ".Value";
+                context.DescriptionFieldPath = "FieldValues." + itm.Value.Name + ".Description";
+                DataRecordGridColumnAttribute attribute = new DataRecordGridColumnAttribute()
+                {
+                    Attribute = itm.Value.FieldType.GetGridColumnAttribute(context),
+                    Name = itm.Value.Name
+                };
+                attribute.Attribute.ThrowIfNull("attribute");             
+                attribute.Attribute.HeaderText = itm.Value.Title;
+                results.Add(attribute);
+            }
+            return results;
+        }
+        public IEnumerable<ClientGenericFieldDefinitionInfo> GetClientGenericFieldDefinitionsInfo(Guid accountBEDefinitionId)
+        {
+            Dictionary<string, AccountGenericField> accountGenericFields = GetAccountGenericFields(accountBEDefinitionId);
+            if (accountGenericFields == null || accountGenericFields.Values.Count() == 0)
+                return null;
+            return accountGenericFields.Values.Select(itm => new ClientGenericFieldDefinitionInfo() { Name = itm.Name, Title = itm.Title });
+        }
         public bool CanHaveSubAccounts(Account account)
         {
             if (account != null)

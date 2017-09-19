@@ -1,10 +1,13 @@
-﻿using Retail.BusinessEntity.Business;
+﻿using Retail.BusinessEntity.APIEntities;
+using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Web.Base;
 
 namespace Retail.BusinessEntity.Web.Controllers
@@ -64,13 +67,25 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetGenericFieldDefinitionsInfo(accountBEDefinitionId);
         }
-
+        [HttpGet]
+        [Route("GetClientGenericFieldDefinitionsInfo")]
+        public IEnumerable<ClientGenericFieldDefinitionInfo> GetClientGenericFieldDefinitionsInfo(Guid accountBEDefinitionId)
+        {
+            return _manager.GetClientGenericFieldDefinitionsInfo(accountBEDefinitionId);
+        }
         [HttpGet]
         [Route("GetAccountGenericFieldValues")]
         public object GetAccountGenericFieldValues(Guid accountBEDefinitionId, long accountId, string serializedAccountGenericFieldNames)
         {
             List<string> deserializedAccountGenericFieldNames = (serializedAccountGenericFieldNames != null) ? Vanrise.Common.Serializer.Deserialize<List<string>>(serializedAccountGenericFieldNames) : null;
             return _manager.GetAccountGenericFieldValues(accountBEDefinitionId, accountId, deserializedAccountGenericFieldNames);
+        }
+        [HttpGet]
+        [Route("GetGenericFieldGridColumnAttribute")]
+        public IEnumerable<DataRecordGridColumnAttribute> GetGenericFieldGridColumnAttribute(Guid accountBEDefinitionId)
+        {
+            return _manager.GetGenericFieldGridColumnAttribute(accountBEDefinitionId);
+
         }
     }
 }

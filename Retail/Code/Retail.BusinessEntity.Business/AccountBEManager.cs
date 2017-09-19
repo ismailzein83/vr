@@ -13,6 +13,7 @@ using Vanrise.Caching;
 using Vanrise.Common.Business;
 using System.Collections.Concurrent;
 using Vanrise.Security.Business;
+using Retail.BusinessEntity.APIEntities;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -33,6 +34,50 @@ namespace Retail.BusinessEntity.Business
 
         #region Public Methods
 
+        public Vanrise.Entities.IDataRetrievalResult<AccountClientDetail> GetFilteredClientAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
+        {
+            Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(input.Query.AccountBEDefinitionId);
+
+            Func<Account, bool> filterExpression = (account) =>
+            {
+                if (input.Query.ParentAccountId.HasValue && (!account.ParentAccountId.HasValue || (account.ParentAccountId.HasValue && input.Query.ParentAccountId.Value != account.ParentAccountId.Value)))
+                    return false;
+                return true;
+            };
+            if (input.SortByColumnName != null && input.SortByColumnName.Contains("FieldValues"))
+            {
+                string[] fieldProperty = input.SortByColumnName.Split('.');
+                input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", fieldProperty[0], fieldProperty[1]);
+            }
+
+            var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(input.Query.AccountBEDefinitionId, account, input.Query.Columns));
+            BigResult<AccountClientDetail> finalResult = new BigResult<AccountClientDetail>
+            {
+                ResultKey = bigResult.ResultKey,
+                TotalCount = bigResult.TotalCount
+            };
+            List<AccountClientDetail> accountClientDetails = null;
+            if (bigResult != null && bigResult.Data != null)
+            {
+                 accountClientDetails = new List<AccountClientDetail>();
+                foreach (var accountDetail in bigResult.Data)
+                {
+                    accountClientDetails.Add(new AccountClientDetail
+                    {
+                        AccountId = accountDetail.AccountId,
+                        FieldValues = accountDetail.FieldValues,
+                        HasSubAccounts = accountDetail.TotalSubAccountCount != 0
+                    });
+                }
+                finalResult.Data = accountClientDetails;
+            }
+
+            ResultProcessingHandler<AccountClientDetail> handler = new ResultProcessingHandler<AccountClientDetail>()
+            {
+                ExportExcelHandler = new AccountClientExcelExportHandler(input.Query)
+            };
+            return DataRetrievalManager.Instance.ProcessResult(input, finalResult, handler);
+        }
         public IDataRetrievalResult<AccountDetail> GetFilteredAccounts(DataRetrievalInput<AccountQuery> input)
         {
             var recordFilterManager = new Vanrise.GenericData.Business.RecordFilterManager();
@@ -933,6 +978,57 @@ namespace Retail.BusinessEntity.Business
                     throw new NullReferenceException(String.Format("accountGenericField '{0}'", fieldName));
                 fieldType = accountGenericField.FieldType;
                 return accountGenericField.GetValue(new AccountGenericFieldContext(_account));
+            }
+        }
+        private class AccountClientExcelExportHandler : ExcelExportHandler<AccountClientDetail>
+        {
+            private AccountQuery _query;
+            public AccountClientExcelExportHandler(AccountQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountClientDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                var fieldDefinitions = new AccountTypeManager().GetGenericFieldDefinitionsInfo(_query.AccountBEDefinitionId);
+                if (fieldDefinitions != null && _query.Columns  != null)
+                {
+                    foreach (var exportColumn in _query.Columns)
+                    {
+                        var fieldDefinition = fieldDefinitions.FindRecord(x=>x.Name == exportColumn);
+                        if (fieldDefinition != null)
+                            sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = fieldDefinition.Title });
+                    }
+                    sheet.Rows = new List<ExportExcelRow>();
+
+                    if (context.BigResult != null && context.BigResult.Data != null)
+                    {
+                        foreach (AccountClientDetail accountDetail in context.BigResult.Data)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+
+                            foreach (var exportColumn in _query.Columns)
+                            {
+                                DataRecordFieldValue dataRecordFieldValue;
+                                if (accountDetail.FieldValues.TryGetValue(exportColumn, out dataRecordFieldValue))
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = dataRecordFieldValue.Description });
+                                }
+                                else
+                                {
+                                    row.Cells.Add(new ExportExcelCell { Value = "" });
+                                }
+                            }
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
             }
         }
         private class AccountExcelExportHandler : ExcelExportHandler<AccountDetail>

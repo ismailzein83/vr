@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 namespace Retail.MultiNet.Business
 {
     public class MultiNetAccountManager
@@ -23,10 +24,18 @@ namespace Retail.MultiNet.Business
                     MultiNetCompanyExtendedInfo companyInfo = part.Value.Settings as MultiNetCompanyExtendedInfo;
                     if(companyInfo != null)
                     {
+                        string formatedCNICExpiryDate = null;
+                        if (companyInfo.CNICExpiryDate.HasValue)
+                        {
+                            GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
+                            string formatForDate = generalSettingsManager.GetDateFormat();
+                            formatedCNICExpiryDate = companyInfo.CNICExpiryDate.Value.ToString(formatForDate);
+                        }
                         clientAccountAdditionalInfo.MultiNetCompanyInfo = new MultiNetCompanyInfo
                         {
                             AccountType = companyInfo.AccountType.HasValue ? Utilities.GetEnumDescription(companyInfo.AccountType.Value) : null,
                             CNIC = companyInfo.CNIC,
+                            FormatedCNICExpiryDate = formatedCNICExpiryDate,
                             GPSiteID = companyInfo.GPSiteID,
                             CNICExpiryDate = companyInfo.CNICExpiryDate,
                             CustomerLogo = companyInfo.CustomerLogo,
@@ -38,11 +47,19 @@ namespace Retail.MultiNet.Business
                     MultiNetBranchExtendedInfo branchInfo = part.Value.Settings as MultiNetBranchExtendedInfo;
                     if (branchInfo != null)
                     {
+                        string formatedCNICExpiryDate = null;
+                        if (branchInfo.CNICExpiryDate.HasValue)
+                        {
+                            GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
+                            string formatForDate = generalSettingsManager.GetDateFormat();
+                            formatedCNICExpiryDate = branchInfo.CNICExpiryDate.Value.ToString(formatForDate);
+                        }
                         clientAccountAdditionalInfo.MultiNetBranchInfo = new MultiNetBranchInfo
                         {
                             AccountType = branchInfo.AccountType.HasValue? Utilities.GetEnumDescription(branchInfo.AccountType.Value):null,
                             AssignedNumber = branchInfo.AssignedNumber,
                             BillingAddress = branchInfo.BillingAddress,
+                            FormatedCNICExpiryDate = formatedCNICExpiryDate,
                             BranchCode = branchInfo.BranchCode,
                             CNIC = branchInfo.CNIC,
                             CNICExpiryDate = branchInfo.CNICExpiryDate,

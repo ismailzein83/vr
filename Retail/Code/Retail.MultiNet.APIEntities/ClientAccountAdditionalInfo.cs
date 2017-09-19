@@ -28,7 +28,7 @@ namespace Retail.MultiNet.APIEntities
         public string CNIC { get; set; }
 
         public DateTime? CNICExpiryDate { get; set; }
-
+        public string FormatedCNICExpiryDate { get; set; }
         public string NTN { get; set; }
         public string GPSiteID { get; set; }
         public bool ExcludeTaxes { get; set; }
@@ -42,6 +42,7 @@ namespace Retail.MultiNet.APIEntities
 
         public string CNIC { get; set; }
         public DateTime? CNICExpiryDate { get; set; }
+        public string FormatedCNICExpiryDate { get; set; }
         public string NTN { get; set; }
         public string RegistrationNumber { get; set; }
         public string RefNumber { get; set; }
