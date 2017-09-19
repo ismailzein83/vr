@@ -1,58 +1,83 @@
 ﻿<vr-section title="{{scopeModel.tileTitle}}">
     <vr-row>
-        <vr-columns width="1/3row">
-            <vr-label>City:</vr-label>
-            <vr-label isvalue>{{scopeModel.accountInfo.CityName}}</vr-label>
+        <vr-columns width="1/4row">
+            <vr-label>Name:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.AccountName}}</vr-label>
         </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-label>Country:</vr-label>
-            <vr-label isvalue>{{scopeModel.accountInfo.CountryName}}</vr-label>
-        </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-label>Street:</vr-label>
-            <vr-label isvalue>{{scopeModel.accountInfo.Street}}</vr-label>
-        </vr-columns>
-    </vr-row>
-    <vr-row>
-        <vr-columns width="1/3row">
-            <vr-label>Town:</vr-label>
-            <vr-label isvalue>{{scopeModel.accountInfo.Town}}</vr-label>
-        </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-label>Website:</vr-label>
-            <vr-label isvalue>{{scopeModel.accountInfo.Website}}</vr-label>
-        </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-label>POBox:</vr-label>
-            <vr-label isvalue>{{scopeModel.accountInfo.POBox}}</vr-label>
-        </vr-columns>
-    </vr-row>
-    <vr-row>
-        <vr-columns width="1/3row">
-            <vr-label>Currency:</vr-label>
-            <vr-label isvalue>{{scopeModel.accountInfo.CurrencyName}}</vr-label>
-        </vr-columns>
-        <vr-columns width="1/3row">
-            <vr-label>Product:</vr-label>
-            <vr-label isvalue>{{scopeModel.accountInfo.ProductName}}</vr-label>
-        </vr-columns>
-       
-        <vr-columns width="1/3row">
+        <vr-columns width="1/4row">
             <vr-label>Arabic Name:</vr-label>
-            <vr-label isvalue>{{scopeModel.accountInfo.ArabicName}}</vr-label>
-            
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.ArabicName}}</vr-label>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-label>Country:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.CountryName}}</vr-label>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-label>City:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.CityName}}</vr-label>
         </vr-columns>
     </vr-row>
     <vr-row>
-        <vr-columns width="fullrow" ng-if="scopeModel.accountInfo.Contacts != undefined">
-            <vr-datagrid datasource="scopeModel.accountInfo.Contacts" hidegridmenu="true" normalcell>
-                <vr-datagridcolumn headertext="'Contact'" type="'Text'" field="'ContactName'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Title'" type="'Text'" field="'Title'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Email'" type="'Text'" field="'Email'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Mobile'" type="'Text'" field="'MobileNumbersDescription'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Phone'" type="'Text'" field="'PhoneNumbersDescription'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Notes'" type="'Text'" field="'Notes'"></vr-datagridcolumn>
-            </vr-datagrid>
+        <vr-columns width="1/4row">
+            <vr-label>Town:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.Town}}</vr-label>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-label>Street:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.Street}}</vr-label>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-label>Address:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.Address}}</vr-label>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-label>Website:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.Website}}</vr-label>
         </vr-columns>
     </vr-row>
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-label>POBox:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.POBox}}</vr-label>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-label>Currency:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.CurrencyName}}</vr-label>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-label>Product:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.ProductName}}</vr-label>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-label>PhoneNumbers:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.PhoneNumbersDescription}}</vr-label>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-label>MobileNumbers:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.MobileNumbersDescription}}</vr-label>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-label>Faxes:</vr-label>
+            <vr-label isvalue breakline>{{scopeModel.accountInfo.FaxesDescription}}</vr-label>
+        </vr-columns>
+    </vr-row>
+    <vr-section title="Contacts" level="2">
+        <vr-row>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow" ng-if="scopeModel.accountInfo.Contacts != undefined">
+                <vr-datagrid datasource="scopeModel.accountInfo.Contacts" hidegridmenu="true" normalcell>
+                    <vr-datagridcolumn headertext="'Contact'" type="'Text'" field="'ContactName'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Title'" type="'Text'" field="'Title'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Email'" type="'Text'" field="'Email'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Mobile'" type="'Text'" field="'MobileNumbersDescription'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Phone'" type="'Text'" field="'PhoneNumbersDescription'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Notes'" type="'Text'" field="'Notes'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-section>
+
 </vr-section>
