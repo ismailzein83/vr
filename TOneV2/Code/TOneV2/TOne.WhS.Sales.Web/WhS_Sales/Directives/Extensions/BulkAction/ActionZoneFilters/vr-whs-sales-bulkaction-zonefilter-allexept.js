@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionZonefilterAllexept', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -10,28 +10,23 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var specificBulkActionZoneFilter = new SpecificBulkActionZoneFilter($scope, ctrl, $attrs);
-            specificBulkActionZoneFilter.initializeController();
+            var allExeptBulkActionZoneFilter = new AllExeptBulkActionZoneFilter($scope, ctrl, $attrs);
+            allExeptBulkActionZoneFilter.initializeController();
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ActionZoneFilters/Templates/SpecificBulkActionZoneFilterTemplate.html'
+        templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ActionZoneFilters/Templates/AllExeptBulkActionZoneFilterTemplate.html'
     };
-
-    function SpecificBulkActionZoneFilter($scope, ctrl, $attrs) {
-
-        this.initializeController = initializeController;
-
+    function AllExeptBulkActionZoneFilter($scope, ctrl, $attrs) {
         var zoneFilter;
         var bulkActionContext;
-
+        this.initializeController = initializeController;
         var bulkActionZoneFilterAPI;
         var bulkActionZoneFilterReadyDeferred = UtilsService.createPromiseDeferred();
-
         function initializeController() {
-            $scope.scopeModel = {};
 
-            $scope.scopeModel.onBulkActionZoneFilterReady = function (api) {
+            $scope.scopeModel = {};
+            $scope.scopeModel.bulkactionzoneFilterOnReady = function (api) {
                 bulkActionZoneFilterAPI = api;
                 bulkActionZoneFilterReadyDeferred.resolve();
             };
@@ -41,15 +36,14 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
             });
         }
         function defineAPI() {
+
             var api = {};
 
             api.load = function (payload) {
-
                 if (payload != undefined) {
                     zoneFilter = payload.zoneFilter;
                     bulkActionContext = payload.bulkActionContext;
                 }
-
                 var promises = [];
 
                 var loadBulkActionZoneFilterPromise = loadBulkActionZoneFilter();
@@ -58,14 +52,17 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
                 return UtilsService.waitMultiplePromises(promises);
             };
             api.getData = function () {
+
                 var data = {
-                    $type: 'TOne.WhS.Sales.MainExtensions.SpecificApplicableZones, TOne.WhS.Sales.MainExtensions',
-                    CountryZonesByCountry:bulkActionZoneFilterAPI.getData().CountryZonesByCountry,
-                    IncludedZoneIds: bulkActionZoneFilterAPI.getData().IncludedZoneIds
+                    $type: 'TOne.WhS.Sales.MainExtensions.AllExeptApplicableZones, TOne.WhS.Sales.MainExtensions',
+                    ExceptCountryZones: bulkActionZoneFilterAPI.getData().CountryZonesByCountry,
+                    ExceptZoneIds: bulkActionZoneFilterAPI.getData().IncludedZoneIds
                 }
                 return data;
             };
             api.getSummary = function () {
+
+
                 return bulkActionZoneFilterAPI.getSummary();
             };
 
@@ -73,14 +70,15 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
                 ctrl.onReady(api);
             }
         }
-
         function loadBulkActionZoneFilter() {
             var bulkActionZoneFilterLoadDeferred = UtilsService.createPromiseDeferred();
+
             var bulkActionZoneFilterPayload = {
                 zoneFilter: zoneFilter,
                 bulkActionContext: bulkActionContext
             };
             VRUIUtilsService.callDirectiveLoad(bulkActionZoneFilterAPI, bulkActionZoneFilterPayload, bulkActionZoneFilterLoadDeferred);
+
             return bulkActionZoneFilterLoadDeferred.promise;
         }
     }

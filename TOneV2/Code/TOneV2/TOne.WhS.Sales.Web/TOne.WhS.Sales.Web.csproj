@@ -197,9 +197,13 @@
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-import.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-rate.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionTypes\vr-whs-sales-bulkaction-type-routingproduct.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\Templates\AllExeptBulkActionZoneFilterTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\Templates\BulkActionZoneFilterTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\Templates\SpecificBulkActionZoneFilterTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter-all.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter-allexept.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter-specific.js" />
+    <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ActionZoneFilters\vr-whs-sales-bulkaction-zonefilter.js" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\Template\ImportValidationResultTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\Template\RateValidationResultTemplate.html" />
     <Content Include="WhS_Sales\Directives\Extensions\BulkAction\ValidationResult\vr-whs-sales-bulkaction-validationresult-import.js" />
