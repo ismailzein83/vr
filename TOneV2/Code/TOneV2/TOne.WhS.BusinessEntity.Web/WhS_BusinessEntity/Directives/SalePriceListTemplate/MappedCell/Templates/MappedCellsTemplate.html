@@ -1,1 +1,15 @@
-﻿
+﻿<vr-row vr-loader="isLoadingMappedCellsGrid">
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-button type="Add" data-onclick="addMappedCell" standalone="true"></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-whs-be-pricelisttemplate-mappedcells-grid on-ready="onMappedCellsGridReady">
+
+            </vr-whs-be-pricelisttemplate-mappedcells-grid>
+
+        </vr-columns>
+    </vr-row>
+</vr-row>

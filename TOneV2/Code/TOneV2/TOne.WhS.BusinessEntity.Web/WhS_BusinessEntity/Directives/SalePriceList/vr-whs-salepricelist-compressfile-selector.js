@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalepricelistCompressfileSelector', ['WhS_BE_SalePriceistCompressFileEnum', 'UtilsService', function (WhS_BE_SalePriceistCompressFileEnum, UtilsService) {
+app.directive('vrWhsSalepricelistCompressfileSelector', ['WhS_BE_SalePricelistCompressFileEnum', 'UtilsService', function (WhS_BE_SalePricelistCompressFileEnum, UtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -29,7 +29,7 @@ app.directive('vrWhsSalepricelistCompressfileSelector', ['WhS_BE_SalePriceistCom
         function initializeController() {
 
             $scope.scopeModel = {};
-            $scope.scopeModel.datasource = UtilsService.getArrayEnum(WhS_BE_SalePriceistCompressFileEnum);
+            $scope.scopeModel.datasource = UtilsService.getArrayEnum(WhS_BE_SalePricelistCompressFileEnum);
 
             $scope.scopeModel.onSelectorReady = function (api) {
                 selectorAPI = api;

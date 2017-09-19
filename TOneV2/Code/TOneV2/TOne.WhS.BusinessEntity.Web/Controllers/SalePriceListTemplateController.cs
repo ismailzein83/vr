@@ -39,10 +39,18 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetSalePriceListTemplateSettingsExtensionConfigs")]
-        public IEnumerable<SalePriceListTemplateSettingsExtensionConfig> GetSalePriceListTemplateSettingsExtensionConfigs()
+        public IEnumerable<SalePricelistTemplateSettingsExtensionConfig> GetSalePriceListTemplateSettingsExtensionConfigs()
         {
             var manager = new SalePriceListTemplateManager();
-            return manager.GetSalePriceListTemplateSettingsExtensionConfigs();
+            return manager.GetSalePricelistTemplateSettingsExtensionConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetMappedCellsExtensionConfigs")]
+        public IEnumerable<SalePricelistTemplateSettingsMappedCellExtensionConfig> GetMappedCellsExtensionConfigs()
+        {
+            var manager = new SalePriceListTemplateManager();
+            return manager.GetMappedCellsExtensionConfigs();
         }
 
         [HttpGet]

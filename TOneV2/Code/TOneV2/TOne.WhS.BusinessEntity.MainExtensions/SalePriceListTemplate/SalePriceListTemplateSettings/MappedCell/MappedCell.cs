@@ -9,6 +9,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 {
     public abstract class MappedCell
     {
+        public abstract Guid ConfigId { get; }
+
         public int SheetIndex { get; set; }
 
         public int RowIndex { get; set; }

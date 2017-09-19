@@ -28,6 +28,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSalePriceListTemplateSettingsExtensionConfigs'));
         }
 
+        function GetMappedCellsExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetMappedCellsExtensionConfigs'));
+        }
+
         function GetMappedTablesExtensionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetMappedTablesExtensionConfigs'));
         }
@@ -78,7 +82,8 @@
             DownloadSalePriceListTemplate: DownloadSalePriceListTemplate,
             HasAddSalePriceListTemplatePermission: HasAddSalePriceListTemplatePermission,
             HasEditSalePriceListTemplatePermission: HasEditSalePriceListTemplatePermission,
-            GetSalePriceListTemplateHistoryDetailbyHistoryId: GetSalePriceListTemplateHistoryDetailbyHistoryId
+            GetSalePriceListTemplateHistoryDetailbyHistoryId: GetSalePriceListTemplateHistoryDetailbyHistoryId,
+            GetMappedCellsExtensionConfigs: GetMappedCellsExtensionConfigs
         });
     }
 

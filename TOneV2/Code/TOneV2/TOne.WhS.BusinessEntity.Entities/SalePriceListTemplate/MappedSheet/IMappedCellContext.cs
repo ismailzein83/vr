@@ -9,7 +9,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     public interface IMappedCellContext
     {
         int CustomerId { get; set; }
-
+        DateTime PricelistDate { get; set; }
+        int PricelistCurrencyId { get; set; }
+        SalePriceListType PricelistType { get; set; }
         object Value { get; set; }
 
     }

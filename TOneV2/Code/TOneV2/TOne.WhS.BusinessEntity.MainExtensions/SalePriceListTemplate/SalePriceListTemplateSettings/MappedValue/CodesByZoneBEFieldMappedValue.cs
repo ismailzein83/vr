@@ -41,7 +41,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     context.Value = GetCodesValue(context);
                     break;
                 case CodesByZoneBEFieldType.EffectiveDate:
-                    context.Value = GetEffectiveDate(context.ZoneNotification.Codes);
+                    context.Value = GetEffectiveDate(context.ZoneNotification.Codes,context.ZoneNotification.Rate);
                     break;
                 case CodesByZoneBEFieldType.Rate:
                     if (context.ZoneNotification.Rate != null)
@@ -112,9 +112,10 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             return string.Join(context.Delimiter.ToString(), codes);
         }
 
-        private DateTime GetEffectiveDate(IEnumerable<SalePLCodeNotification> codesNotificatons)
+        private DateTime GetEffectiveDate(IEnumerable<SalePLCodeNotification> codesNotificatons,SalePLRateNotification rate)
         {
-            return codesNotificatons.Select(item => item.BED).Min();
+            DateTime maxCodeBED=codesNotificatons.Select(item => item.BED).Max();
+            return maxCodeBED > rate.BED ? maxCodeBED : rate.BED;
         }
 
     }

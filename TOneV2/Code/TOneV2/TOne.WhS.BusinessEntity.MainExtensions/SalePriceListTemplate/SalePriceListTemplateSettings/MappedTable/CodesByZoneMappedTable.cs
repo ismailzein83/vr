@@ -18,21 +18,26 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public char Delimiter { get; set; }
 
-        public override IEnumerable<SalePriceListTemplateTableCell> FillSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat)
+        public override IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat)
         {
-            List<SalePriceListTemplateTableCell> sheets = new List<SalePriceListTemplateTableCell>();
+            List<SalePricelistTemplateTableRow> sheet = new List<SalePricelistTemplateTableRow>();
             int currentRowIndex = this.FirstRowIndex;
 
             foreach (SalePLZoneNotification zone in zoneNotificationList)
             {
                 IEnumerable<CodesByZoneMappedColumn> mappedCols = this.MappedColumns.Select(item => item as CodesByZoneMappedColumn);
-                SetRecordData(sheets, mappedCols, zone, ref currentRowIndex, dateTimeFormat);
+                sheet.Add(GetRowData(mappedCols, zone, currentRowIndex++, dateTimeFormat));
             }
-            return sheets;
+            return sheet;
         }
 
-        private void SetRecordData(List<SalePriceListTemplateTableCell> sheets, IEnumerable<CodesByZoneMappedColumn> mappedCols, SalePLZoneNotification zone, ref int rowIndex, string dateTimeFormat)
+        private SalePricelistTemplateTableRow GetRowData(IEnumerable<CodesByZoneMappedColumn> mappedCols, SalePLZoneNotification zone, int rowIndex, string dateTimeFormat)
         {
+            var row = new SalePricelistTemplateTableRow
+            {
+                RowCells = new List<SalePriceListTemplateTableCell>(),
+            };
+
             //if (zone.Codes.All(x => x.EED.HasValue))
             //    return;//No need to mention the zone if all codes are closed for it (this happens when renaming a zone also)
 
@@ -58,21 +63,20 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                             Rate = zone.Rate
                         };
                         currentZone.Codes.AddRange(codes);
-                        SetCellData(sheets, mappedCol, currentZone, rowIndex, dateTimeFormat);
+                        row.RowCells.Add(GetCellData( mappedCol, currentZone, rowIndex, dateTimeFormat));
                     }
-                    rowIndex++;
                 }
             }
             else
             {
                 foreach (CodesByZoneMappedColumn mappedCol in mappedCols)
-                    SetCellData(sheets, mappedCol, zone, rowIndex, dateTimeFormat);
-                rowIndex++;
+                    row.RowCells.Add(GetCellData( mappedCol, zone, rowIndex, dateTimeFormat));
             }
+            return row;
 
         }
 
-        private void SetCellData(List<SalePriceListTemplateTableCell> sheets, CodesByZoneMappedColumn mappedCol, SalePLZoneNotification zone, int rowIndex, string dateTimeFormat)
+        private SalePriceListTemplateTableCell GetCellData( CodesByZoneMappedColumn mappedCol, SalePLZoneNotification zone, int rowIndex, string dateTimeFormat)
         {
             if (zone == null)
                 throw new ArgumentNullException("zone");
@@ -85,18 +89,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             mappedCol.MappedValue.Execute(mappedValueContext);
 
-            if (mappedValueContext.Value != null)
-            {
                 if (mappedValueContext.Value is DateTime)
                     mappedValueContext.Value = ((DateTime)mappedValueContext.Value).ToString(dateTimeFormat);
 
-                sheets.Add(new SalePriceListTemplateTableCell()
+                return(new SalePriceListTemplateTableCell()
                 {
                     ColumnIndex = mappedCol.ColumnIndex,
-                    RowIndex = rowIndex,
                     Value = mappedValueContext.Value
                 });
-            }
 
         }
 

@@ -15,7 +15,7 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsSelective', ['WhS_BE_SalePric
 		},
 		controllerAs: "selectiveCtrl",
 		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListTemplate/Templates/SalePriceListTemplateSettingsSelectiveTemplate.html'
+		templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListTemplate/Templates/SalePricelistTemplateSettingsSelectiveTemplate.html'
 	};
 
 	function SalePriceListTemplateSettingsSelective($scope, ctrl, $attrs) {

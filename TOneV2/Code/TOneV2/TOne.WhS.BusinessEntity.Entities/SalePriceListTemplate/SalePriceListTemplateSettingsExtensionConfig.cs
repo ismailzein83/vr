@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-	public class SalePriceListTemplateSettingsExtensionConfig : Vanrise.Entities.ExtensionConfiguration
+	public class SalePricelistTemplateSettingsExtensionConfig : Vanrise.Entities.ExtensionConfiguration
 	{
 		public const string EXTENSION_TYPE = "WhS_BE_SalePriceListTemplateSettings";
 

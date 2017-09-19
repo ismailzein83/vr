@@ -41,7 +41,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             Vanrise.Common.Utilities.ActivateAspose();
 
-            SetWorkbookData(orderedListofZones, workbook);
+            SetWorkbookData(orderedListofZones, workbook, context.CustomerId, context.PricelistDate, context.PricelistType, context.PricelistCurrencyId);
 
             byte[] array;
 
@@ -65,29 +65,75 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         #region Private Methods
 
-        private void SetWorkbookData(IEnumerable<SalePLZoneNotification> zoneNotificationList, Workbook workbook)
+        private void SetWorkbookData(IEnumerable<SalePLZoneNotification> zoneNotificationList, Workbook workbook, int customerId, DateTime pricelistDate, SalePriceListType pricelistType, int pricelistCurrencyId)
         {
+            if (MappedCells != null)
+                SetWorkbookMappedCells(workbook, customerId, pricelistDate, pricelistType, pricelistCurrencyId);
+
             if (MappedTables != null)
-            {
-                foreach (MappedTable mappedSheet in MappedTables)
-                {
-                    IEnumerable<SalePriceListTemplateTableCell> sheets = mappedSheet.FillSheet(zoneNotificationList, DateTimeFormat);
-                    Worksheet worksheet = workbook.Worksheets[mappedSheet.SheetIndex];
-                    SetCellData(worksheet, sheets);
-                }
-            }
+                SetWorkbookMappedTables(zoneNotificationList, workbook);
         }
-        private void SetCellData(Worksheet worksheet, IEnumerable<SalePriceListTemplateTableCell> sheets)
+        private void SetWorkbookMappedCells(Workbook workbook, int customerId, DateTime pricelistDate, SalePriceListType pricelistType, int pricelistCurrencyId)
         {
-            if (sheets != null)
+            IMappedCellContext mappedCellContext = new MappedCellContext
             {
-                foreach (SalePriceListTemplateTableCell sheet in sheets)
-                {
-                    worksheet.Cells[sheet.RowIndex, sheet.ColumnIndex].PutValue(sheet.Value);
-                }
+                CustomerId = customerId,
+                PricelistDate = pricelistDate,
+                PricelistType = pricelistType,
+                PricelistCurrencyId = pricelistCurrencyId,
+            };
+
+            foreach (MappedCell mappedCell in MappedCells)
+            {
+                Worksheet worksheet = workbook.Worksheets[mappedCell.SheetIndex];
+                object cellValue = getValueOfMappedCell(mappedCell, mappedCellContext);
+                if (cellValue != null)
+                    worksheet.Cells[mappedCell.RowIndex, mappedCell.CellIndex].PutValue(cellValue);
             }
         }
 
+        private void SetWorkbookMappedTables(IEnumerable<SalePLZoneNotification> zoneNotificationList, Workbook workbook)
+        {
+            foreach (MappedTable mappedSheet in MappedTables)
+            {
+                int firstRow=mappedSheet.FirstRowIndex;
+                IEnumerable<SalePricelistTemplateTableRow> sheet = mappedSheet.BuildSheet(zoneNotificationList, DateTimeFormat);
+                Worksheet worksheet = workbook.Worksheets[mappedSheet.SheetIndex];
+                SetSheetData(worksheet, sheet, firstRow);
+            }
+        }
+
+        private void SetSheetData(Worksheet worksheet, IEnumerable<SalePricelistTemplateTableRow> sheet, int currentRow)
+        {
+                foreach (SalePricelistTemplateTableRow row in sheet)
+                {
+                    SetRowData(worksheet, row, currentRow);
+                    worksheet.Cells.InsertRow(++currentRow);
+                }
+        }
+        private void SetRowData(Worksheet worksheet, SalePricelistTemplateTableRow row,int currentRow)
+        {
+            if (row != null)
+            {
+                foreach (SalePriceListTemplateTableCell cell in row.RowCells)
+                {
+                    worksheet.Cells[currentRow, cell.ColumnIndex].PutValue(cell.Value);
+                }
+            }
+            else
+            throw new ArgumentNullException("row");
+        }
+
+
+        private object getValueOfMappedCell(MappedCell mappedCell, IMappedCellContext mappedCellContext)
+        {
+            mappedCell.Execute(mappedCellContext);
+            
+            if (mappedCellContext.Value is DateTime)
+                mappedCellContext.Value = ((DateTime)mappedCellContext.Value).ToString(DateTimeFormat);
+
+            return mappedCellContext.Value;
+        }
         #endregion
     }
 }

@@ -13,7 +13,7 @@ app.directive('vrWhsBeSalepricelisttemplateGrid', ['WhS_BE_SalePriceListTemplate
 		},
 		controllerAs: 'ctrl',
 		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListTemplate/Templates/SalePriceListTemplateGridTemplate.html'
+		templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListTemplate/Templates/SalePricelistTemplateGridTemplate.html'
 	};
 
 	function SalePriceListTemplateGrid($scope, ctrl, $attrs) {

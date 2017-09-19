@@ -1,1 +1,17 @@
-﻿
+﻿<span>
+    <vr-columns colnum="{{mappedCellCtrl.normalColNum}}">
+        <vr-select on-ready="onSelectorReady"
+                   datasource="extensionConfigs"
+                   selectedvalues="selectedExtensionConfig"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   isrequired="mappedCellCtrl.isrequired"
+                   hideremoveicon="mappedCellCtrl.isrequired">
+        </vr-select>
+    </vr-columns>
+    <vr-directivewrapper on-ready="onDirectiveReady"
+                         directive="selectedExtensionConfig.Editor"
+                         normal-col-num="{{mappedCellCtrl.normalColNum}}"
+                         isrequired="mappedCellCtrl.isrequired">
+    </vr-directivewrapper>
+</span>

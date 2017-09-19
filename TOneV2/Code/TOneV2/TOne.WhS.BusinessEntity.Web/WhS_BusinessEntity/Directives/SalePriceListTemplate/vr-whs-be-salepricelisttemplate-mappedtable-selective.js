@@ -15,7 +15,7 @@ app.directive('vrWhsBeSalepricelisttemplateMappedtableSelective', ['WhS_BE_SaleP
 		},
 		controllerAs: "mappedTableCtrl",
 		bindToController: true,
-		templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListTemplate/Templates/SalePriceListMappedTableSelectiveTemplate.html'
+		templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListTemplate/Templates/SalePricelistMappedTableSelectiveTemplate.html'
 	};
 
 	function MappedTableSelective($scope, ctrl, $attrs) {

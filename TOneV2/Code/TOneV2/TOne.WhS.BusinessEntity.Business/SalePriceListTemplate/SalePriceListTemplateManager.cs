@@ -53,11 +53,17 @@ namespace TOne.WhS.BusinessEntity.Business
 			return GetCachedSalePriceListTemplates().MapRecords(SalePriceListTemplateInfoMapper).OrderBy(x => x.Name);
 		}
 
-		public IEnumerable<SalePriceListTemplateSettingsExtensionConfig> GetSalePriceListTemplateSettingsExtensionConfigs()
-		{
-			var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
-			return extensionConfigManager.GetExtensionConfigurations<SalePriceListTemplateSettingsExtensionConfig>(SalePriceListTemplateSettingsExtensionConfig.EXTENSION_TYPE);
-		}
+        public IEnumerable<SalePricelistTemplateSettingsMappedCellExtensionConfig> GetMappedCellsExtensionConfigs()
+        {
+            var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
+            return extensionConfigManager.GetExtensionConfigurations<SalePricelistTemplateSettingsMappedCellExtensionConfig>(SalePricelistTemplateSettingsMappedCellExtensionConfig.EXTENSION_TYPE);
+        }
+
+        public IEnumerable<SalePricelistTemplateSettingsExtensionConfig> GetSalePricelistTemplateSettingsExtensionConfigs()
+        {
+            var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
+            return extensionConfigManager.GetExtensionConfigurations<SalePricelistTemplateSettingsExtensionConfig>(SalePricelistTemplateSettingsExtensionConfig.EXTENSION_TYPE);
+        }
 
         public string GetSalePriceListTemplateName(SalePriceListTemplate salePriceListTemplate)
         {

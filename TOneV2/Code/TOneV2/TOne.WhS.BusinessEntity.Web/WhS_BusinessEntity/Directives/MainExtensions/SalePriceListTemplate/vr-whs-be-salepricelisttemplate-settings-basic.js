@@ -29,7 +29,11 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
         var mappedTableDirectiveAPI;
         var mappedTableDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var mappedCellsAPI;
+        var mappedCellsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var mappedTables = [];
+        var mappedCells = [];
         var mappedTablesSelective;
 
         var tableIndex = 0;
@@ -75,6 +79,11 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
                 tabsAPI = api;
             };
 
+            $scope.scopeModel.onMappedCellsReady = function (api) {
+                mappedCellsAPI = api;
+                mappedCellsReadyPromiseDeferred.resolve();
+            };
+
             $scope.scopeModel.removeTable = function (obj) {
                 var index = UtilsService.getItemIndexByVal($scope.scopeModel.tables, obj.data.tableTabIndex, 'tableTabIndex');
                 $scope.scopeModel.tables.splice(index, 1);
@@ -107,6 +116,9 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
                         mappedTables = settings.MappedTables;
                        // tableIndex = mappedTables.length -1 ;
                     }
+                    if (settings.MappedCells != null && settings.MappedCells.length > 0) {
+                        mappedCells = settings.MappedCells;
+                    }
                 }
 
                 var promiseDeffered = UtilsService.createPromiseDeferred();
@@ -126,6 +138,9 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
 
                 var loadMappedTableDirectivePromise = loadMappedTableDirective();
                 promises.push(loadMappedTableDirectivePromise);
+
+                var loadMappedCellsPromise = loadMappedCells();
+                promises.push(loadMappedCellsPromise);
 
                 return UtilsService.waitMultiplePromises(promises);
             };
@@ -149,11 +164,27 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasic', ['UtilsService', 'VRU
 
                 data.MappedTables = mappedTables;
 
+                data.mappedCells = mappedCellsAPI.getData();
+
                 return data;
             };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
+        }
+
+        function loadMappedCells()
+        {
+            var mappedCellsLoadDeferred = UtilsService.createPromiseDeferred();
+            var mappedCellsPayload = {
+                mappedCells: mappedCells,
+                context: getContext(),
+            };
+            mappedCellsReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(mappedCellsAPI, mappedCellsPayload, mappedCellsLoadDeferred);
+            });
+
+            return mappedCellsLoadDeferred.promise;
         }
 
         function loadMappedTables() {

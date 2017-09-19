@@ -11,5 +11,10 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public IEnumerable<SalePLZoneNotification> Zones { get; set; }
         public PriceListExtensionFormat PriceListExtensionFormat { get; set; }
+
+        public int CustomerId { get; set; }
+        public SalePriceListType PricelistType { get; set; }
+        public int PricelistCurrencyId { get; set; }
+        public DateTime PricelistDate { get; set; }
     }
 }

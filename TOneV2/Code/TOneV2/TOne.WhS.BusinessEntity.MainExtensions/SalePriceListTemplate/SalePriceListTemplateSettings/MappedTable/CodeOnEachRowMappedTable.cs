@@ -15,9 +15,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             get { return new Guid("4EBE3013-2A48-41BD-97D6-57286759B907"); }
         }
 
-        public override IEnumerable<SalePriceListTemplateTableCell> FillSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat)
+        public override IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat)
         {
-            List<SalePriceListTemplateTableCell> sheets = new List<SalePriceListTemplateTableCell>();
+            List<SalePricelistTemplateTableRow> sheet = new List<SalePricelistTemplateTableRow>();
             int currentRowIndex = this.FirstRowIndex;
 
             foreach (SalePLZoneNotification zone in zoneNotificationList)
@@ -25,21 +25,29 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 foreach (var code in zone.Codes)
                 {
                     IEnumerable<CodeOnEachRowMappedColumn> concreteMappedColumns = this.MappedColumns.Select(item => item as CodeOnEachRowMappedColumn);
-                    SetRecordData(sheets, concreteMappedColumns, zone, code, zone.Rate, currentRowIndex++, dateTimeFormat);
+                    sheet.Add(GetRowData(concreteMappedColumns, zone, code, zone.Rate, currentRowIndex++, dateTimeFormat));
                 }
 
             }
-            return sheets;
+            return sheet;
         }
 
-        private void SetRecordData(List<SalePriceListTemplateTableCell> sheets, IEnumerable<CodeOnEachRowMappedColumn> mappedCols, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat)
+        private SalePricelistTemplateTableRow GetRowData(IEnumerable<CodeOnEachRowMappedColumn> mappedCols, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat)
         {
+            var row = new SalePricelistTemplateTableRow
+            {
+                RowCells = new List<SalePriceListTemplateTableCell>(),
+            };
+
             foreach (CodeOnEachRowMappedColumn mappedCol in mappedCols)
-                SetCellData(sheets, mappedCol, zone, code, rate, rowIndex, dateTimeFormat);
+            {
+                row.RowCells.Add( GetCellData(mappedCol, zone, code, rate, rowIndex, dateTimeFormat));
+            }
+            return row;
         }
 
 
-        private void SetCellData(List<SalePriceListTemplateTableCell> sheets, CodeOnEachRowMappedColumn mappedCol, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat)
+        private SalePriceListTemplateTableCell GetCellData(CodeOnEachRowMappedColumn mappedCol, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat)
         {
             if (zone == null)
                 throw new ArgumentNullException("zone");
@@ -68,18 +76,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             mappedCol.MappedValue.Execute(mappedValueContext);
 
-            if (mappedValueContext.Value != null)
-            {
-                if (mappedValueContext.Value is DateTime)
-                    mappedValueContext.Value = ((DateTime)mappedValueContext.Value).ToString(dateTimeFormat);
+            if (mappedValueContext.Value is DateTime)
+                mappedValueContext.Value = ((DateTime)mappedValueContext.Value).ToString(dateTimeFormat);
 
-                sheets.Add(new SalePriceListTemplateTableCell
-                {
-                    ColumnIndex = mappedCol.ColumnIndex,
-                    RowIndex = rowIndex,
-                    Value = mappedValueContext.Value
-                });
-            }
+            return (new SalePriceListTemplateTableCell
+            {
+                ColumnIndex = mappedCol.ColumnIndex,
+                Value = mappedValueContext.Value
+            });
         }
     }
 }

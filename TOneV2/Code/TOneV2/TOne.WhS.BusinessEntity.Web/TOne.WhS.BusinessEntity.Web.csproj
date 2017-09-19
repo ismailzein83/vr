@@ -227,7 +227,7 @@
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSaleZoneRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\RoutingProductSupplierRelationTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListOwnerTypeEnum.js" />
-    <Content Include="WhS_BusinessEntity\Constant\SalePriceListTemplateMappedCellHeaderEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\SalePricelistTemplateMappedCellHeaderEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListTemplateSettingsCodesByZoneBEFieldEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SupplierEntityServiceSourceEnum.js" />
@@ -385,9 +385,9 @@
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedColumns\vr-whs-be-pricelisttemplate-codesbyzone-mappedcolumns-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedValue\Templates\BasicSalePriceListTemplateSettingsMappedValueSelectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedValue\vr-whs-be-pricelisttemplate-settings-basic-mappedvalue-selective.js" />
-    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePriceListMappedTableSelectiveTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePriceListTemplateGridTemplate.html" />
-    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePriceListTemplateSettingsSelectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePricelistMappedTableSelectiveTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePricelistTemplateGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\Templates\SalePricelistTemplateSettingsSelectiveTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-mappedtable-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-selector.js" />
