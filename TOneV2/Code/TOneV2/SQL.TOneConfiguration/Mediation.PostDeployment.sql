@@ -168,3 +168,12 @@ when matched then
 when not matched by target then
 	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+
+
+--[common].[Type]--------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------
+declare @MediationRecordType varchar(250) = 'Mediation.Generic.Entities.MediationRecord, Mediation.Generic.Entities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null'
+
+INSERT INTO [common].[Type] ([Type])
+SELECT @MediationRecordType WHERE NOT EXISTS (SELECT NULL FROM [common].[Type] WHERE [Type] = @MediationRecordType)
+
