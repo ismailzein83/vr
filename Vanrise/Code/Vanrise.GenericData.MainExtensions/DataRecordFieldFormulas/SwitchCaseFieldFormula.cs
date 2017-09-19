@@ -1,0 +1,156 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
+
+namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
+{
+    public class SwitchCaseFieldFormula : DataRecordFieldFormula
+    {
+        public override Guid ConfigId { get { return new Guid("93DD84F4-A750-4577-8173-36E7A653B920"); } }
+
+        public string TargetFieldName { get; set; }
+
+        public Dictionary<string, SwitchCaseMapping> SwitchCaseMappings { get; set; }
+
+
+        public override List<string> GetDependentFields(IDataRecordFieldFormulaGetDependentFieldsContext context)
+        {
+            if (SwitchCaseMappings == null || SwitchCaseMappings.Count == 0)
+                throw new NullReferenceException("SwitchCaseMappings");
+
+            List<string> dependentFields = new List<string>() { this.TargetFieldName };
+            dependentFields.AddRange(SwitchCaseMappings.Values.Select(itm => itm.MappingFieldName));
+
+            return dependentFields;
+        }
+
+        public override dynamic CalculateValue(IDataRecordFieldFormulaCalculateValueContext context)
+        {
+            if (SwitchCaseMappings == null || SwitchCaseMappings.Count == 0)
+                throw new NullReferenceException("SwitchCaseMappings");
+
+            dynamic switchTargetFieldName = context.GetFieldValue(this.TargetFieldName);
+            if (switchTargetFieldName == null)
+                return null;
+
+            SwitchCaseMapping switchCaseMapping;
+            if (!this.SwitchCaseMappings.TryGetValue(switchTargetFieldName, out switchCaseMapping))
+                return null;
+
+            return context.GetFieldValue(switchCaseMapping.MappingFieldName);
+        }
+
+        public override RecordFilter ConvertFilter(IDataRecordFieldFormulaConvertFilterContext context)
+        {
+            if (SwitchCaseMappings == null || SwitchCaseMappings.Count == 0)
+                throw new NullReferenceException("SwitchCaseMappings");
+
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
+            recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
+            recordFilterGroup.Filters = new List<RecordFilter>();
+
+            FieldBusinessEntityType targetFieldBEFieldType;
+            GetFieldType(context, this.TargetFieldName, out targetFieldBEFieldType);
+
+            ObjectListRecordFilter objectListFilter = context.InitialFilter as ObjectListRecordFilter;
+            if (objectListFilter != null)
+            {
+                foreach (var kvp in SwitchCaseMappings)
+                {
+                    ObjectListRecordFilter targetFieldObjectListRecordFilter = BuildObjectListRecordFilter(ListRecordFilterOperator.In, new List<object>() { kvp.Key });
+                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetFieldBEFieldType, targetFieldObjectListRecordFilter);
+
+                    FieldBusinessEntityType mappedFieldBEFieldType;
+                    GetFieldType(context, kvp.Value.MappingFieldName, out mappedFieldBEFieldType);
+                    ObjectListRecordFilter mappedFieldObjectListRecordFilter = BuildObjectListRecordFilter(objectListFilter.CompareOperator, objectListFilter.Values);
+                    RecordFilter mappedFieldRecordFilter = ConvertToRecordFilter(kvp.Value.MappingFieldName, mappedFieldBEFieldType, mappedFieldObjectListRecordFilter);
+
+                    RecordFilterGroup currentRecordFilterGroup = new RecordFilterGroup();
+                    currentRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
+                    currentRecordFilterGroup.Filters = new List<RecordFilter>() { targetFieldRecordFilter, mappedFieldRecordFilter };
+
+                    recordFilterGroup.Filters.Add(currentRecordFilterGroup);
+                }
+
+                return recordFilterGroup;
+            }
+
+            EmptyRecordFilter emptyFilter = context.InitialFilter as EmptyRecordFilter;
+            if (emptyFilter != null)
+            {
+                foreach (var kvp in SwitchCaseMappings)
+                {
+                    ObjectListRecordFilter targetFieldObjectListRecordFilter = BuildObjectListRecordFilter(ListRecordFilterOperator.In, new List<object>() { kvp.Key });
+                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetFieldBEFieldType, targetFieldObjectListRecordFilter);
+
+                    EmptyRecordFilter mappedFieldEmptyRecordFilter = new EmptyRecordFilter { FieldName = kvp.Value.MappingFieldName };
+
+                    RecordFilterGroup currentRecordFilterGroup = new RecordFilterGroup();
+                    currentRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
+                    currentRecordFilterGroup.Filters = new List<RecordFilter>() { targetFieldRecordFilter, mappedFieldEmptyRecordFilter };
+
+                    recordFilterGroup.Filters.Add(currentRecordFilterGroup);
+                }
+
+                return recordFilterGroup;
+            }
+
+            NonEmptyRecordFilter nonEmptyFilter = context.InitialFilter as NonEmptyRecordFilter;
+            if (nonEmptyFilter != null)
+            {
+                foreach (var kvp in SwitchCaseMappings)
+                {
+                    ObjectListRecordFilter targetFieldObjectListRecordFilter = BuildObjectListRecordFilter(ListRecordFilterOperator.In, new List<object>() { kvp.Key });
+                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetFieldBEFieldType, targetFieldObjectListRecordFilter);
+
+                    NonEmptyRecordFilter mappedFieldNonEmptyRecordFilter = new NonEmptyRecordFilter { FieldName = kvp.Value.MappingFieldName };
+
+                    RecordFilterGroup currentRecordFilterGroup = new RecordFilterGroup();
+                    currentRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
+                    currentRecordFilterGroup.Filters = new List<RecordFilter>() { targetFieldRecordFilter, mappedFieldNonEmptyRecordFilter };
+
+                    recordFilterGroup.Filters.Add(currentRecordFilterGroup);
+                }
+
+                return recordFilterGroup;
+            }
+
+            throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
+        }
+
+        private void GetFieldType(IDataRecordFieldFormulaConvertFilterContext context, string fieldName, out FieldBusinessEntityType fieldBusinessEntityType)
+        {
+            fieldBusinessEntityType = context.GetFieldType(fieldName) as FieldBusinessEntityType;
+            if (fieldBusinessEntityType == null)
+                throw new NullReferenceException(String.Format("inputZoneBEFieldType '{0}'", fieldName));
+
+
+        }
+
+        private RecordFilter ConvertToRecordFilter(string fieldName, FieldBusinessEntityType fieldBusinessEntityType, ObjectListRecordFilter objectListRecordFilter)
+        {
+            var zoneFilter = fieldBusinessEntityType.ConvertToRecordFilter(fieldName, objectListRecordFilter.Values);
+            if (zoneFilter is ObjectListRecordFilter)
+                ((ObjectListRecordFilter)zoneFilter).CompareOperator = objectListRecordFilter.CompareOperator;
+            return zoneFilter;
+        }
+
+        private ObjectListRecordFilter BuildObjectListRecordFilter(ListRecordFilterOperator listRecordFilterOperator, List<object> values)
+        {
+            return new ObjectListRecordFilter()
+            {
+                CompareOperator = listRecordFilterOperator,
+                Values = values
+            };
+        }
+    }
+
+    public  class SwitchCaseMapping
+    {
+        public string MappingFieldName { get; set; }
+    }
+}

@@ -1,0 +1,34 @@
+﻿<vr-row>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.fields"
+                   datatextfield="fieldTitle"
+                   datavaluefield="fieldName"
+                   selectedvalues="scopeModel.selectedTargetFieldName"
+                   entityname="Target Field Name"
+                   label="Target Field Name" isrequired="true" hideremoveicon>
+        </vr-select>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="3/4row">
+        <vr-datagrid datasource="scopeModel.switchCaseMappings"
+                     ondeleterow="scopeModel.onDeleteRow"
+                     disablesorting="true" enabledraggablerow="true"
+                     hidegridmenu disabledraggablecolumns>
+
+            <vr-datagridcolumn headertext="'Target Field Value'" field="'TargetFieldValue'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Mapping Field Name'">
+                <vr-select datasource="scopeModel.fields"
+                           datatextfield="fieldTitle"
+                           datavaluefield="fieldName"
+                           selectedvalues="dataItem.MappingFieldName"
+                           entityname="Target Field Name" isrequired="true" hideremoveicon>
+                </vr-select>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
+
+
+

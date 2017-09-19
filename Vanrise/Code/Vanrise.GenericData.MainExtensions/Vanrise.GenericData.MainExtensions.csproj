@@ -47,6 +47,7 @@
     <Compile Include="DataRecordFieldFormulas\NullToBooleanFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\ParentBusinessEntityFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\SingleMathOperationFieldFormula.cs" />
+    <Compile Include="DataRecordFieldFormulas\SwitchCaseFieldFormula.cs" />
     <Compile Include="DataRecordFields\FieldArrayType.cs" />
     <Compile Include="DataRecordFields\FieldDictionaryType.cs" />
     <Compile Include="DataRecordFields\FieldTypeHelper.cs" />
