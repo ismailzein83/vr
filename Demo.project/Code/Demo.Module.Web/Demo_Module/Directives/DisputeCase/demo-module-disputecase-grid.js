@@ -1,4 +1,4 @@
-﻿"use strict"
+﻿"use strict";
 app.directive("demoModuleDisputecaseGrid", ["VRNotificationService", "Demo_Module_DisputeCaseAPIService", "LabelColorsEnum",
 function (VRNotificationService, Demo_Module_DisputeCaseAPIService, LabelColorsEnum) {
     var directiveDefinitionObject = {

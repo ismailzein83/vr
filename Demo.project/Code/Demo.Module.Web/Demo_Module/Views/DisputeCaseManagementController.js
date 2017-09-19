@@ -13,7 +13,7 @@
         load();
         function defineScope() {
             $scope.searchClicked = function () {
-                setfilterdobject()
+                setfilterdobject();
                 return gridAPI.loadGrid(filter);
             };
 
