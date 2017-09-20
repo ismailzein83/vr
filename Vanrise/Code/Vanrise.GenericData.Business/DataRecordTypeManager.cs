@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Vanrise.Caching;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Entities;
-using Vanrise.Common;
-using Vanrise.Entities;
-using Vanrise.Common.Business;
-using System.Collections.Concurrent;
 
 namespace Vanrise.GenericData.Business
 {
@@ -41,6 +39,7 @@ namespace Vanrise.GenericData.Business
             VRActionLogger.Current.LogGetFilteredAction(DataRecordTypeLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, DataRecordTypeDetailMapper));
         }
+
         public DataRecordType GetDataRecordTypeToEdit(Guid dataRecordTypeId)
         {
             var dataRecordTypes = GetCachedDataRecordTypeDefinitions();
@@ -82,6 +81,7 @@ namespace Vanrise.GenericData.Business
             }
             return fields;
         }
+
         public Dictionary<string, DataRecordField> GetDataRecordTypeFields(Guid dataRecordTypeId)
         {
             string cacheName = String.Format("GetDataRecordTypeFields_{0}", dataRecordTypeId);
@@ -96,6 +96,7 @@ namespace Vanrise.GenericData.Business
                    return dataRecordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
                });
         }
+
         public DataRecordField GetDataRecordField(Guid dataRecordTypeId, string fieldName)
         {
             var dataRecordFields = GetDataRecordTypeFields(dataRecordTypeId);
@@ -106,6 +107,7 @@ namespace Vanrise.GenericData.Business
             }
             return dataRecordField;
         }
+
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypeInfo(DataRecordTypeInfoFilter filter)
         {
             var dataRecordTypes = GetCachedDataRecordTypes();
@@ -154,6 +156,7 @@ namespace Vanrise.GenericData.Business
 
             return insertOperationOutput;
         }
+
         public Vanrise.Entities.UpdateOperationOutput<DataRecordTypeDetail> UpdateDataRecordType(DataRecordType dataRecordType)
         {
             IDataRecordTypeDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IDataRecordTypeDataManager>();
@@ -185,6 +188,7 @@ namespace Vanrise.GenericData.Business
                 return Activator.CreateInstance(dataRecordRuntimeType);
             return null;
         }
+
         public Type GetDataRecordRuntimeType(Guid dataRecordTypeId)
         {
             string cacheName = String.Format("GetDataRecordRuntimeTypeById_{0}", dataRecordTypeId);
@@ -201,6 +205,7 @@ namespace Vanrise.GenericData.Business
                 throw new ArgumentException(String.Format("Cannot create runtime type from Data Record Type Id '{0}'", dataRecordTypeId));
             return runtimeType;
         }
+
         public Type GetDataRecordRuntimeType(string dataRecordTypeName)
         {
             string cacheName = String.Format("GetDataRecordRuntimeTypeByName_{0}", dataRecordTypeName);
@@ -217,14 +222,17 @@ namespace Vanrise.GenericData.Business
                 throw new ArgumentException(String.Format("Cannot create runtime type from Data Record Type Name '{0}'", dataRecordTypeName));
             return runtimeType;
         }
+
         public dynamic ConvertDynamicToDataRecord(dynamic dynamicObject, Guid dataRecordTypeId)
         {
             return Serializer.Deserialize(SerializeRecord(dynamicObject, dataRecordTypeId), GetDataRecordRuntimeType(dataRecordTypeId));
         }
+
         public string SerializeRecord(dynamic record, Guid dataRecordTypeId)
         {
             return Serializer.Serialize(record, true);
         }
+
         public dynamic DeserializeRecord(string serializedRecord, Guid dataRecordTypeId)
         {
             return Serializer.Deserialize(serializedRecord, GetDataRecordRuntimeType(dataRecordTypeId));
@@ -255,7 +263,6 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
-
 
         #region Private Methods
 
@@ -528,6 +535,7 @@ namespace Vanrise.GenericData.Business
                 dataRecordTypeDetail.ParentName = GetDataRecordTypeName((Guid)dataRecordTypeObject.ParentId);
             return dataRecordTypeDetail;
         }
+
         private DataRecordTypeInfo DataRecordTypeInfoMapper(DataRecordType dataRecordTypeObject)
         {
             DataRecordTypeInfo dataRecordTypeInfo = new DataRecordTypeInfo();
