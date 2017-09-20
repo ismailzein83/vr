@@ -60,9 +60,9 @@ app.directive('vrWhsSalesBulkactionZonefilterSpecific', ['UtilsService', 'VRUIUt
             api.getData = function () {
                 var data = {
                     $type: 'TOne.WhS.Sales.MainExtensions.SpecificApplicableZones, TOne.WhS.Sales.MainExtensions',
-                    CountryZonesByCountry:bulkActionZoneFilterAPI.getData().CountryZonesByCountry,
+                    CountryZonesByCountry: bulkActionZoneFilterAPI.getData().CountryZonesByCountry,
                     IncludedZoneIds: bulkActionZoneFilterAPI.getData().IncludedZoneIds
-                }
+                };
                 return data;
             };
             api.getSummary = function () {
