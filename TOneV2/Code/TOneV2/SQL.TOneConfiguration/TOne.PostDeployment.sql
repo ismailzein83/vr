@@ -1744,8 +1744,8 @@ set nocount on;
 ;with cte_data([ID],[Name],[Details])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('38ac5083-f3f4-48b5-a89b-528dd155a254','Update WhS Balances Queue Activator','{"QueueActivatorConfigId": "7" ,"Name": "Update WhS Balances Queue Activator","Title": "Update WhS Balances Queue Activator", "Editor" :"whs-accountbalance-queueactivator-updatewhsbalances"}'),
-('1cc49e27-3e66-4160-b55f-beab092a1be1','Evaluate Deal Queue Activator','{"QueueActivatorConfigId": "10" ,"Name": "Evaluate Deal Queue Activator","Title": "Evaluate Deal Queue Activator", "Editor":"vr-whs-deal-queueactivator-evaluatedeal"}')
+('38ac5083-f3f4-48b5-a89b-528dd155a254','Update WhS Balances Queue Activator','{"QueueActivatorConfigId": "38ac5083-f3f4-48b5-a89b-528dd155a254" ,"Name": "Update WhS Balances Queue Activator","Title": "Update WhS Balances Queue Activator", "Editor" :"whs-accountbalance-queueactivator-updatewhsbalances"}'),
+('1cc49e27-3e66-4160-b55f-beab092a1be1','Evaluate Deal Queue Activator','{"QueueActivatorConfigId": "1cc49e27-3e66-4160-b55f-beab092a1be1" ,"Name": "Evaluate Deal Queue Activator","Title": "Evaluate Deal Queue Activator", "Editor":"vr-whs-deal-queueactivator-evaluatedeal"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Details]))
 merge	[queue].[QueueActivatorConfig] as t
