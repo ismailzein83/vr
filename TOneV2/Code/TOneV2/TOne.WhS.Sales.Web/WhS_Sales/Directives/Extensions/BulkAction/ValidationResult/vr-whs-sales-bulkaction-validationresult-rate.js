@@ -28,6 +28,7 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
         var newRateDayOffset;
         var increasedRateDayOffset;
         var decreasedRateDayOffset;
+        var maximumRateValue;
 
         var pageSize = 10;
 
@@ -83,6 +84,8 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
                 var correctedRate = parseFloat(dataItem.correctedRate);
                 if (correctedRate <= 0)
                     return 'Fixed rate must be greater than zero';
+                if (maximumRateValue != null && correctedRate > maximumRateValue)
+                    return 'Maximum rate is ' + maximumRateValue;
                 if (dataItem.Entity.CurrentRate != null && dataItem.Entity.CurrentRate == correctedRate)
                     return 'Fixed rate must be different than the current one';
                 return null;
@@ -164,7 +167,8 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
                     if (pricingSettings != undefined) {
                         newRateDayOffset = (pricingSettings.NewRateDayOffset != null) ? pricingSettings.NewRateDayOffset : 0;
                         increasedRateDayOffset = (pricingSettings.IncreasedRateDayOffset != null) ? pricingSettings.IncreasedRateDayOffset : 0;
-                        decreasedRateDayOffset = (pricingSettings.DecreasedRateDayOffset != null) ? pricingSettings.DecreasedRateDayOffset : 0;
+                        decreasedRateDayOffset = (pricingSettings.DecreasedRateDayOffset != null) ? pricingSettings.DecreasedRateDayOffset: 0;
+                        maximumRateValue = (pricingSettings.MaximumRate != null) ? pricingSettings.MaximumRate: undefined;
                     }
                 }
 
