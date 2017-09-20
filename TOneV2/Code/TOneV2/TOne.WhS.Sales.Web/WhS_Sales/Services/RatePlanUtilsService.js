@@ -13,7 +13,8 @@
             getNowPlusDays: getNowPlusDays,
             getNowMinusDays: getNowMinusDays,
             isSameNewService: isSameNewService,
-            isStringEmpty: isStringEmpty
+            isStringEmpty: isStringEmpty,
+            getNewRateBED: getNewRateBED
         };
 
         function onNewRateChanged(dataItem) {
@@ -29,14 +30,9 @@
                 dataItem.CurrentRateNewEED = (dataItem.CurrentRateEED != null) ? dataItem.CurrentRateEED : dataItem.ZoneEED;
 
                 var zoneBED = UtilsService.createDateFromString(dataItem.ZoneBED);
-                var newRateBED = getNewRateBED(dataItem.CurrentRate, dataItem.NewRate, settings, dataItem.IsCountryNew);
-                dataItem.NewRateBED = (newRateBED > zoneBED) ? newRateBED : zoneBED;
+                var countryBED = UtilsService.createDateFromString(dataItem.CountryBED);
 
-                if (dataItem.CountryBED != null) {
-                    var countryBED = new Date(dataItem.CountryBED);
-                    if (countryBED > dataItem.NewRateBED)
-                        dataItem.NewRateBED = countryBED;
-                }
+                dataItem.NewRateBED = getNewRateBED(zoneBED, countryBED, dataItem.IsCountryNew, dataItem.CurrentRate, dataItem.NewRate, settings.newRateDayOffset, settings.increasedRateDayOffset, settings.decreasedRateDayOffset)
             }
             else {
                 dataItem.NewRateBED = null;
@@ -45,28 +41,6 @@
 
             if (dataItem.NewRateEED == null)
                 dataItem.NewRateEED = dataItem.ZoneEED;
-        }
-        function getNewRateBED(currentRate, newRate, settings,isCountryNew) {
-            var dayOffset = 0;
-
-            if (currentRate == undefined) {
-                dayOffset = settings.newRateDayOffset;
-            }
-            else {
-                var currentRateAsNumber = Number(currentRate);
-                var newRateAsNumber = Number(newRate);
-                if (isCountryNew) {
-                    dayOffset = 0;
-                }
-                else if (newRateAsNumber > currentRateAsNumber) {
-                    dayOffset = settings.increasedRateDayOffset;
-                }
-                else if (newRateAsNumber < currentRateAsNumber) {
-                    dayOffset = settings.decreasedRateDayOffset;
-                }
-            }
-
-            return getNowPlusDays(dayOffset);
         }
         function getNowPlusDays(daysToAdd) {
             var dayOfToday = new Date().getDate();
@@ -149,6 +123,40 @@
         }
         function isStringEmpty(string) {
             return (string === undefined || string === null || string === '');
+        }
+
+        function getNewRateBED(zoneBED, countryBED, isCountryNew, currentRateValue, newRateValue, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset) {
+            var dates = [];
+
+            dates.push(zoneBED);
+            dates.push(countryBED);
+
+            var calculatedRateBED = (isCountryNew) ? countryBED :
+                getCalculatedRateBED(currentRateValue, newRateValue, isCountryNew, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset);
+
+            dates.push(calculatedRateBED);
+            return getMaxDate(dates);
+        }
+        function getCalculatedRateBED(currentRateValue, newRateValue, isCountryNew, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset) {
+            var dayOffset = 0;
+            if (!isCountryNew) {
+                if (currentRateValue == undefined)
+                    dayOffset = newRateDayOffset;
+                else if (newRateValue > currentRateValue)
+                    dayOffset = increasedRateDayOffset;
+                else if (newRateValue < currentRateValue)
+                    dayOffset = decreasedRateDayOffset;
+            }
+            return getNowPlusDays(dayOffset);
+        }
+        function getMaxDate(dates) {
+            var maxDate;
+            for (var i = 0; i < dates.length; i++) {
+                var currentDate = dates[i];
+                if (maxDate == undefined || (currentDate != undefined && currentDate > maxDate))
+                    maxDate = currentDate;
+            }
+            return maxDate;
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUIUtilsService', function (UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUtilsService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -20,6 +20,14 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
     function RateValidationResult($scope, ctrl, $attrs) {
 
         this.initializeController = initializeController;
+
+        var rateBulkAction;
+        var rateBulkActionBED;
+
+        var pricingSettings;
+        var newRateDayOffset;
+        var increasedRateDayOffset;
+        var decreasedRateDayOffset;
 
         var pageSize = 10;
 
@@ -79,6 +87,22 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
                     return 'Fixed rate must be different than the current one';
                 return null;
             };
+            $scope.scopeModel.calculateCorrectedRateBED = function (dataItem) {
+
+                if (dataItem.correctedRate == undefined || dataItem.correctedRate == null || dataItem.correctedRate == '') {
+                    dataItem.correctedRateBED = undefined;
+                }
+                else if (rateBulkActionBED != undefined) {
+                    dataItem.correctedRateBED = rateBulkActionBED;
+                }
+                else {
+                    var zoneBED = UtilsService.createDateFromString(dataItem.Entity.ZoneBED);
+                    var countryBED = (dataItem.Entity.CountryBED != null) ? UtilsService.createDateFromString(dataItem.Entity.CountryBED) : undefined;
+                    var correctedRate = parseFloat(dataItem.correctedRate);
+                    dataItem.correctedRateBED =
+                        WhS_Sales_RatePlanUtilsService.getNewRateBED(zoneBED, countryBED, dataItem.Entity.IsCountryNew, dataItem.Entity.CurrentRate, correctedRate, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset);
+                }
+            };
 
             defineAPI();
         }
@@ -91,6 +115,8 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
 
                 if (payload != undefined) {
                     bulkActionValidationResult = payload.bulkActionValidationResult;
+                    rateBulkAction = payload.bulkAction;
+                    pricingSettings = payload.pricingSettings;
                     $scope.scopeModel.longPrecision = payload.longPrecision;
                 }
 
@@ -125,6 +151,21 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
                     $scope.scopeModel.showDuplicateRateGrid = true;
                     gridReadyPromises.push(duplicateRateGridReadyDeferred.promise);
                     loadMoreGridData($scope.scopeModel.duplicateRates, duplicateRates);
+                }
+
+                setRateBulkActionBED();
+                setDayOffsets();
+
+                function setRateBulkActionBED() {
+                    if (rateBulkAction != undefined && rateBulkAction.BED != null)
+                        rateBulkActionBED = UtilsService.createDateFromString(rateBulkAction.BED);
+                }
+                function setDayOffsets() {
+                    if (pricingSettings != undefined) {
+                        newRateDayOffset = (pricingSettings.NewRateDayOffset != null) ? pricingSettings.NewRateDayOffset : 0;
+                        increasedRateDayOffset = (pricingSettings.IncreasedRateDayOffset != null) ? pricingSettings.IncreasedRateDayOffset : 0;
+                        decreasedRateDayOffset = (pricingSettings.DecreasedRateDayOffset != null) ? pricingSettings.DecreasedRateDayOffset : 0;
+                    }
                 }
 
                 return UtilsService.waitMultiplePromises(gridReadyPromises);
@@ -167,7 +208,8 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['UtilsService', 'VRUI
                 if (isCorrectedRateSet(arrayElement)) {
                     zoneCorrectedRates.push({
                         ZoneId: arrayElement.Entity.ZoneId,
-                        CorrectedRate: arrayElement.correctedRate
+                        CorrectedRate: arrayElement.correctedRate,
+                        CorrectedRateBED: arrayElement.correctedRateBED
                     });
                 }
             }

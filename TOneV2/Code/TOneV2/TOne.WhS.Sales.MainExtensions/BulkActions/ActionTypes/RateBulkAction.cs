@@ -97,6 +97,9 @@ namespace TOne.WhS.Sales.MainExtensions
                 {
                     ZoneId = contextZoneItem.ZoneId,
                     ZoneName = contextZoneItem.ZoneName,
+                    ZoneBED = contextZoneItem.ZoneBED,
+                    CountryBED = contextZoneItem.CountryBED,
+                    IsCountryNew = contextZoneItem.IsCountryNew,
                     CurrentRate = contextZoneItem.CurrentRate,
                     CalculatedRate = roundedCalculatedRate,
                     ValidationResultType = validationResultType
@@ -183,14 +186,14 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
         {
-            ZoneItem contextZoneItem = context.GetZoneItem(context.ZoneDraft.ZoneId);
+            ZoneItem itm = context.GetZoneItem(context.ZoneDraft.ZoneId);
 
-            var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = contextZoneItem };
+            var rateCalculationContext = new RateCalculationMethodContext(context.GetCostCalculationMethodIndex) { ZoneItem = itm };
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             decimal roundedNewNormalRateValue = context.GetRoundedRate(rateCalculationContext.Rate.Value);
-
-            AddNewNormalRate(context.OwnerType, context.OwnerId, contextZoneItem, roundedNewNormalRateValue, context.ZoneDraft,context.NewRateDayOffset,context.IncreasedRateDayOffset,context.DecreasedRateDayOffset);
+            DateTime newNormalRateBED = GetNewNormalRateBED(itm.CurrentRate, roundedNewNormalRateValue, itm.ZoneBED, context.OwnerType, itm.CountryId, context.NewRateDayOffset, context.IncreasedRateDayOffset, context.DecreasedRateDayOffset);
+            AddNewNormalRate(context.ZoneDraft, roundedNewNormalRateValue, newNormalRateBED);
         }
 
         public override void ApplyCorrectedData(IApplyCorrectedDataContext context)
@@ -201,9 +204,7 @@ namespace TOne.WhS.Sales.MainExtensions
             foreach (ZoneCorrectedRate zoneCorrectedRate in correctedData.ZoneCorrectedRates)
             {
                 ZoneChanges zoneDraft = context.GetZoneDraft(zoneCorrectedRate.ZoneId);
-                ZoneItem contextZoneItem = context.GetContextZoneItem(zoneCorrectedRate.ZoneId);
-                decimal roundedCorrectedRateValue = context.GetRoundedRate(zoneCorrectedRate.CorrectedRate);
-                AddNewNormalRate(context.OwnerType, context.OwnerId, contextZoneItem, roundedCorrectedRateValue, zoneDraft,context.NewRateDayOffset,context.IncreasedRateDayOffset,context.DecreasedRateDayOffset);
+                AddNewNormalRate(zoneDraft, zoneCorrectedRate.CorrectedRate, zoneCorrectedRate.CorrectedRateBED);
             }
         }
 
@@ -211,31 +212,28 @@ namespace TOne.WhS.Sales.MainExtensions
 
         #region Private Methods
 
-        private void AddNewNormalRate(SalePriceListOwnerType ownerType, int ownerId, ZoneItem zoneItem, decimal roundedNewNormalRateValue, ZoneChanges zoneDraft, int newRateDayOffset, int increasedRateDayOffset, int decreasedRateDayOffset)
+        private void AddNewNormalRate(ZoneChanges zoneDraft, decimal newNormalRateValue, DateTime newNormalRateBED)
         {
             var newRates = new List<DraftRateToChange>();
 
-            if (zoneDraft.NewRates != null)
-            {
-                IEnumerable<DraftRateToChange> newOtherRates = zoneDraft.NewRates.FindAllRecords(x => x.RateTypeId.HasValue);
+            IEnumerable<DraftRateToChange> newOtherRates = (zoneDraft.NewRates != null) ? zoneDraft.NewRates.FindAllRecords(x => x.RateTypeId.HasValue) : null;
+            if (newOtherRates != null && newOtherRates.Count() > 0)
                 newRates.AddRange(newOtherRates);
-            }
 
             var newNormalRate = new DraftRateToChange()
             {
                 ZoneId = zoneDraft.ZoneId,
                 RateTypeId = null,
-                Rate = roundedNewNormalRateValue
+                Rate = newNormalRateValue,
+                BED = newNormalRateBED
             };
-
-            newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, ownerType, zoneItem.CountryId, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset);
 
             newRates.Add(newNormalRate);
             zoneDraft.NewRates = newRates;
         }
 
-       private DateTime GetNewNormalRateBED(decimal? currentRate, decimal newRate, DateTime zoneBED, SalePriceListOwnerType ownerType, int countryId, int newRateDayOffset,int increasedRateDayOffset,int decreasedRateDayOffset)
-       {
+        private DateTime GetNewNormalRateBED(decimal? currentRate, decimal newRate, DateTime zoneBED, SalePriceListOwnerType ownerType, int countryId, int newRateDayOffset, int increasedRateDayOffset, int decreasedRateDayOffset)
+        {
             if (BED.HasValue)
                 return BED.Value;
 
@@ -252,7 +250,7 @@ namespace TOne.WhS.Sales.MainExtensions
             return newNormalRateBED;
         }
 
-       private DateTime GetTodayPlusOffset(decimal? currentRate, decimal newRate, int newRateDayOffset, int increasedRateDayOffset, int decreasedRateDayOffset)
+        private DateTime GetTodayPlusOffset(decimal? currentRate, decimal newRate, int newRateDayOffset, int increasedRateDayOffset, int decreasedRateDayOffset)
         {
             DateTime today = DateTime.Today;
 

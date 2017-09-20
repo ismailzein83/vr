@@ -604,9 +604,10 @@ namespace TOne.WhS.Sales.Business
                 return null;
 
             Changes draft;
+            IEnumerable<int> newCountryIds;
             IEnumerable<int> changedCountryIds;
             Dictionary<long, ZoneChanges> zoneDraftsByZoneId;
-            SetDraftVariables(input.OwnerType, input.OwnerId, out draft, out zoneDraftsByZoneId, out changedCountryIds);
+            SetDraftVariables(input.OwnerType, input.OwnerId, out draft, out zoneDraftsByZoneId, out newCountryIds, out changedCountryIds);
 
             // Filter and page the sale zones
             IEnumerable<long> applicableZoneIds = null;
@@ -660,6 +661,7 @@ namespace TOne.WhS.Sales.Business
                         Draft = draft,
                         ZoneDraftsByZoneId = zoneDraftsByZoneId,
                         SellingProductId = sellingProductId,
+                        NewCountryIds = newCountryIds,
                         ChangedCountryIds = changedCountryIds,
                         EffectiveOn = input.EffectiveOn,
                         CountryBEDsByCountryId = countryBEDsByCountryId,
@@ -845,7 +847,7 @@ namespace TOne.WhS.Sales.Business
 
             if (input.BulkActionCorrectedData != null)
             {
-                var applyCorrectedDataContext = new ApplyCorrectedDataContext(getZoneDraft, buildZoneItems, getRoundedRate)
+                var applyCorrectedDataContext = new ApplyCorrectedDataContext(getZoneDraft)
                 {
                     OwnerType = input.OwnerType,
                     OwnerId = input.OwnerId,
@@ -983,6 +985,7 @@ namespace TOne.WhS.Sales.Business
                         Draft = input.Draft,
                         ZoneDraftsByZoneId = zoneDraftsByZone,
                         SellingProductId = input.SellingProductId.Value,
+                        NewCountryIds = newCountryIds,
                         ChangedCountryIds = closedCountryIds,
                         EffectiveOn = input.EffectiveOn,
                         CountryBEDsByCountryId = input.CountryBEDsByCountryId,
@@ -1112,7 +1115,9 @@ namespace TOne.WhS.Sales.Business
                     input.RoutingProductManager.SetCustomerZoneRP(contextZoneItem, input.OwnerId, input.SellingProductId, zoneDraft);
                 }
 
+                contextZoneItem.IsCountryNew = input.NewCountryIds.Contains(contextZoneItem.CountryId);
                 contextZoneItem.IsCountryEnded = input.ChangedCountryIds.Contains(contextZoneItem.CountryId);
+
                 contextZoneItems.Add(contextZoneItem.ZoneId, contextZoneItem);
             }
 
@@ -1127,18 +1132,25 @@ namespace TOne.WhS.Sales.Business
             ZoneRouteOptionManager routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, contextRPZones, input.CostCalculationMethods, null, null, input.CurrencyId);
             routeOptionManager.SetZoneRouteOptionProperties(contextZoneItems.Values);
         }
-        private void SetDraftVariables(SalePriceListOwnerType ownerType, int ownerId, out Changes draft, out Dictionary<long, ZoneChanges> zoneDraftsByZoneId, out IEnumerable<int> changedCountryIds)
+        private void SetDraftVariables(SalePriceListOwnerType ownerType, int ownerId, out Changes draft, out Dictionary<long, ZoneChanges> zoneDraftsByZoneId, out IEnumerable<int> newCountryIds, out IEnumerable<int> changedCountryIds)
         {
             draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
             zoneDraftsByZoneId = new Dictionary<long, ZoneChanges>();
+            newCountryIds = new List<int>();
             changedCountryIds = new List<int>();
 
             if (draft != null)
             {
                 zoneDraftsByZoneId = SturctureZoneDraftsByZone(draft.ZoneChanges);
 
-                if (draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
-                    changedCountryIds = draft.CountryChanges.ChangedCountries.CountryIds;
+                if (draft.CountryChanges != null)
+                {
+                    if (draft.CountryChanges.NewCountries != null)
+                        newCountryIds = draft.CountryChanges.NewCountries.MapRecords(x => x.CountryId);
+
+                    if (draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
+                        changedCountryIds = draft.CountryChanges.ChangedCountries.CountryIds;
+                }
             }
         }
         private Dictionary<long, ZoneChanges> SturctureZoneDraftsByZone(IEnumerable<ZoneChanges> zoneDrafts)

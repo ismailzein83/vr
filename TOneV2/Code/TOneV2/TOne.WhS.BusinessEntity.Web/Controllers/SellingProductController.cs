@@ -21,7 +21,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SellingProductManager manager = new SellingProductManager();
             return GetWebResponse(input, manager.GetFilteredSellingProducts(input));
         }
-        
+
         [HttpGet]
         [Route("GetSellingProductHistoryDetailbyHistoryId")]
         public SellingProduct GetSellingProductHistoryDetailbyHistoryId(int sellingProductHistoryId)
@@ -43,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SellingProduct GetSellingProduct(int sellingProductId)
         {
             SellingProductManager manager = new SellingProductManager();
-            return manager.GetSellingProduct(sellingProductId,true);
+            return manager.GetSellingProduct(sellingProductId, true);
         }
 
         [HttpPost]
@@ -75,6 +75,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             SellingProductManager manager = new SellingProductManager();
             return manager.GetSellingProductCurrencyId(sellingProductId);
+        }
+
+        [HttpGet]
+        [Route("GetSellingProductPricingSettings")]
+        public PricingSettings GetSellingProductPricingSettings(int sellingProductId)
+        {
+            return new SellingProductManager().GetSellingProductPricingSettings(sellingProductId);
         }
     }
 }

@@ -23,6 +23,8 @@ namespace TOne.WhS.Sales.Entities
 
         public int SellingProductId { get; set; }
 
+        public IEnumerable<int> NewCountryIds { get; set; }
+
         public IEnumerable<int> ChangedCountryIds { get; set; }
 
         public DateTime EffectiveOn { get; set; }

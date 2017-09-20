@@ -16,6 +16,7 @@
         var longPrecision;
 
         var bulkActionContext;
+        var pricingSettings;
 
         var dropdownSectionAPI;
         var dropdownSectionReadyDeferred = UtilsService.createPromiseDeferred();
@@ -51,6 +52,7 @@
                 numberOfOptions = parameters.numberOfOptions;
                 currencyId = parameters.currencyId;
                 longPrecision = parameters.longPrecision;
+                pricingSettings = parameters.pricingSettings;
             }
         }
         function defineScope() {
@@ -241,6 +243,8 @@
                     validationDirectiveReadyDeferred = undefined;
                     var validationDirectivePayload = {
                         bulkActionValidationResult: bulkActionValidationResult,
+                        bulkAction: bulkActionContext.getSelectedBulkAction(),
+                        pricingSettings: pricingSettings,
                         longPrecision: longPrecision
                     };
                     VRUIUtilsService.callDirectiveLoad(validationDirectiveAPI, validationDirectivePayload, validationDirectiveLoadDeferred);

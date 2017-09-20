@@ -99,7 +99,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.UpdateCarrierAccount(carrierAccount);
         }
-        
+
         [HttpGet]
         [Route("GetSuppliersWithZonesGroupsTemplates")]
         public IEnumerable<SuppliersWithZonesGroupSettingsConfig> GetSuppliersWithZonesGroupsTemplates()
@@ -120,6 +120,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             CarrierAccountManager manager = new CarrierAccountManager();
             return manager.GetCarrierAccountIdsAssignedToSellingProduct(sellingProductId);
+        }
+
+        [HttpGet]
+        [Route("GetCustomerPricingSettings")]
+        public PricingSettings GetCustomerPricingSettings(int customerId)
+        {
+            return new CarrierAccountManager().GetCustomerPricingSettings(customerId);
         }
     }
 }

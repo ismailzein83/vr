@@ -16,5 +16,6 @@ namespace TOne.WhS.Sales.MainExtensions
     {
         public long ZoneId { get; set; }
         public decimal CorrectedRate { get; set; }
+        public DateTime CorrectedRateBED { get; set; }
     }
 }

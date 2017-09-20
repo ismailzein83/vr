@@ -135,7 +135,8 @@
                 policyConfigId: input.policyConfigId,
                 numberOfOptions: input.numberOfOptions,
                 currencyId: input.currencyId,
-                longPrecision: input.longPrecision
+                longPrecision: input.longPrecision,
+                pricingSettings: input.pricingSettings
             };
 
             var modalSettings = {};

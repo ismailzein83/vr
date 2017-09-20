@@ -85,6 +85,13 @@
                 carrierAccountHistoryId: carrierAccountHistoryId
             });
         }
+
+        function GetCustomerPricingSettings(customerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetCustomerPricingSettings'), {
+                customerId: customerId
+            });
+        }
+
         return ({
             GetCarrierAccountInfo: GetCarrierAccountInfo,
             GetSupplierGroupTemplates: GetSupplierGroupTemplates,
@@ -102,7 +109,8 @@
             HasAddCarrierAccountPermission: HasAddCarrierAccountPermission,
             HasViewCarrierAccountPermission: HasViewCarrierAccountPermission,
             GetCarrierAccountHistoryDetailbyHistoryId: GetCarrierAccountHistoryDetailbyHistoryId,
-            GetCarrierAccountIdsAssignedToSellingProduct: GetCarrierAccountIdsAssignedToSellingProduct
+            GetCarrierAccountIdsAssignedToSellingProduct: GetCarrierAccountIdsAssignedToSellingProduct,
+            GetCustomerPricingSettings: GetCustomerPricingSettings
         });
     }
 

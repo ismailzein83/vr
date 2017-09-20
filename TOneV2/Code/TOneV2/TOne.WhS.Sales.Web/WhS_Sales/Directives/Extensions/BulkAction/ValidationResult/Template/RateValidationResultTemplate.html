@@ -14,9 +14,16 @@
                     <vr-datagridcolumn headertext="'Fixed Rate'" disablesorting>
                         <vr-textbox type="number"
                                     value="dataItem.correctedRate"
+                                    onblurtextbox="viewScope.scopeModel.calculateCorrectedRateBED(dataItem)"
                                     decimalprecision="{{viewScope.scopeModel.longPrecision}}"
-                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)">
+                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)"
+                                    tonextinput>
                         </vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'BED'" disablesorting>
+                        <vr-span vr-disabled="true">
+                            <vr-datetimepicker type="date" value="dataItem.correctedRateBED"></vr-datetimepicker>
+                        </vr-span>
                     </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
@@ -37,9 +44,16 @@
                     <vr-datagridcolumn headertext="'Fixed Rate'" disablesorting>
                         <vr-textbox type="number"
                                     value="dataItem.correctedRate"
+                                    onblurtextbox="viewScope.scopeModel.calculateCorrectedRateBED(dataItem)"
                                     decimalprecision="{{viewScope.scopeModel.longPrecision}}"
-                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)">
+                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)"
+                                    tonextinput>
                         </vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'BED'" disablesorting>
+                        <vr-span vr-disabled="true">
+                            <vr-datetimepicker type="date" value="dataItem.correctedRateBED"></vr-datetimepicker>
+                        </vr-span>
                     </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
@@ -62,9 +76,16 @@
                     <vr-datagridcolumn headertext="'Fixed Rate'" disablesorting>
                         <vr-textbox type="number"
                                     value="dataItem.correctedRate"
+                                    onblurtextbox="viewScope.scopeModel.calculateCorrectedRateBED(dataItem)"
                                     decimalprecision="{{viewScope.scopeModel.longPrecision}}"
-                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)">
+                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)"
+                                    tonextinput>
                         </vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'BED'" disablesorting>
+                        <vr-span vr-disabled="true">
+                            <vr-datetimepicker type="date" value="dataItem.correctedRateBED"></vr-datetimepicker>
+                        </vr-span>
                     </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>
@@ -86,9 +107,16 @@
                     <vr-datagridcolumn headertext="'Fixed Rate'" disablesorting>
                         <vr-textbox type="number"
                                     value="dataItem.correctedRate"
+                                    onblurtextbox="viewScope.scopeModel.calculateCorrectedRateBED(dataItem)"
                                     decimalprecision="{{viewScope.scopeModel.longPrecision}}"
-                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)">
+                                    customvalidate="viewScope.scopeModel.validateCorrectedRate(dataItem)"
+                                    tonextinput>
                         </vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'BED'" disablesorting>
+                        <vr-span vr-disabled="true">
+                            <vr-datetimepicker type="date" value="dataItem.correctedRateBED"></vr-datetimepicker>
+                        </vr-span>
                     </vr-datagridcolumn>
                 </vr-datagrid>
             </vr-columns>

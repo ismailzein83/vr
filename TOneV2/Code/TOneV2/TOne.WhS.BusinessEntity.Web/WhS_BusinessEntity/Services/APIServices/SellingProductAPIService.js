@@ -53,6 +53,12 @@
             });
         }
         
+        function GetSellingProductPricingSettings(sellingProductId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetSellingProductPricingSettings'), {
+                sellingProductId: sellingProductId
+            });
+        }
+
         return ({
             GetFilteredSellingProducts: GetFilteredSellingProducts,
             AddSellingProduct: AddSellingProduct,
@@ -63,7 +69,8 @@
             HasAddSellingProductPermission: HasAddSellingProductPermission,
             GetSellingProductHistoryDetailbyHistoryId: GetSellingProductHistoryDetailbyHistoryId,
             GetSellingProductName: GetSellingProductName,
-            GetSellingProductCurrencyId: GetSellingProductCurrencyId
+            GetSellingProductCurrencyId: GetSellingProductCurrencyId,
+            GetSellingProductPricingSettings: GetSellingProductPricingSettings
         });
     }
 

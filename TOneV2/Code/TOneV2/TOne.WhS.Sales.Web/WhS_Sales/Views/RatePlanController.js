@@ -5,8 +5,10 @@
     RatePlanController.$inject = ["$scope", "WhS_Sales_RatePlanService", "WhS_Sales_RatePlanAPIService", 'WhS_Sales_RatePlanConfigAPIService', "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_Sales_RatePlanStatusEnum", 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', 'BPInstanceStatusEnum', "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_BP_RatePlanDefinitionEnum", "WhS_BE_SellingProductAPIService"];
 
     function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_Sales_RatePlanConfigAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, BPInstanceStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BP_RatePlanDefinitionEnum, WhS_BE_SellingProductAPIService) {
+
         var ownerTypeSelectorAPI;
         var ownerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var ownerPricingSettings;
 
         var sellingProductSelectorAPI;
         var sellingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -64,6 +66,7 @@
                 showActionButtons(false);
 
                 draftCurrencyId = undefined;
+                ownerPricingSettings = undefined;
 
                 var selectedId = ownerTypeSelectorAPI.getSelectedIds();
 
@@ -90,23 +93,42 @@
                 showActionButtons(false);
                 if (selectedSellingProduct == undefined)
                     return;
-               
+
                 $scope.isLoadingFilterSection = true;
-                getEntityIds(WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value, selectedSellingProduct.SellingProductId).then(
-                    function (entityIds) {
-                        hasRunningProcessesForCustomerOrSellingProduct(entityIds, selectedSellingProduct.SellingProductId, WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value).then(function (response) {
-                            getSellingProductCurrencyId(selectedSellingProduct);
-                            buildRatePlanListForSellingProduct(selectedSellingProduct);
-                        }).catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
 
-                        });
+                var promises = [];
+
+                var getEntityIdsPromise = getEntityIds(WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value, selectedSellingProduct.SellingProductId);
+                promises.push(getEntityIdsPromise);
+
+                var doRunningProcessesExistDeferred = UtilsService.createPromiseDeferred();
+                promises.push(doRunningProcessesExistDeferred.promise);
+
+                var getSellingProductCurrencyIdDeferred = UtilsService.createPromiseDeferred();
+                promises.push(getSellingProductCurrencyIdDeferred.promise);
+
+                var loadOwnerInfoDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadOwnerInfoDeferred.promise);
+
+                var loadOwnerPricingSettingsDeferred = UtilsService.createPromiseDeferred();
+                promises.push(loadOwnerPricingSettingsDeferred.promise);
+
+                getEntityIdsPromise.then(function (entityIds) {
+                    hasRunningProcessesForCustomerOrSellingProduct(entityIds, selectedSellingProduct.SellingProductId, WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value).then(function (response) {
+                        doRunningProcessesExistDeferred.resolve();
+                        getSellingProductCurrencyId(selectedSellingProduct.SellingProductId).then(function () { getSellingProductCurrencyIdDeferred.resolve(); }).catch(function (error) { getSellingProductCurrencyIdDeferred.reject(error); });
+                        loadOwnerInfo().then(function () { loadOwnerInfoDeferred.resolve(); }).catch(function (error) { loadOwnerInfoDeferred.reject(error); });
+                        getOwnerPricingSettings().then(function () { loadOwnerPricingSettingsDeferred.resolve(); }).catch(function (error) { loadOwnerPricingSettingsDeferred.reject(error); });
                     }).catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    }).finally(function () {
-
+                        doRunningProcessesExistDeferred.reject(error);
                     });
+                });
+
+                UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoadingFilterSection = false;
+                });
             };
 
             $scope.onCarrierAccountSelectorReady = function (api) {
@@ -126,22 +148,32 @@
                     return;
 
                 $scope.isLoadingFilterSection = true;
-                getEntityIds(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, selectedCustomerId).then(
-                    function (entityIds) {
-                        hasRunningProcessesForCustomerOrSellingProduct(entityIds, selectedCustomerId, WhS_BE_SalePriceListOwnerTypeEnum.Customer.value).then(function (response) {
-                            onCustomerChanged(selectedCustomerId).catch(function (error) {
-                                VRNotificationService.notifyException(error, $scope);
-                            }).finally(function () { });
-                        }).catch(function (error) {
-                            VRNotificationService.notifyException(error, $scope);
-                        }).finally(function () {
 
-                        });
+                var promises = [];
+
+                var getEntityIdsPromise = getEntityIds(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, selectedCustomerId);
+                promises.push(getEntityIdsPromise);
+
+                var doRunningProcessesExistDeferred = UtilsService.createPromiseDeferred();
+                promises.push(doRunningProcessesExistDeferred.promise);
+
+                var onCustomerChangedDeferred = UtilsService.createPromiseDeferred();
+                promises.push(onCustomerChangedDeferred.promise);
+
+                getEntityIdsPromise.then(function (entityIds) {
+                    hasRunningProcessesForCustomerOrSellingProduct(entityIds, selectedCustomerId, WhS_BE_SalePriceListOwnerTypeEnum.Customer.value).then(function (response) {
+                        doRunningProcessesExistDeferred.resolve();
+                        onCustomerChanged(selectedCustomerId).then(function () { onCustomerChangedDeferred.resolve(); }).catch(function (error) { onCustomerChangedDeferred.reject(error); });
                     }).catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    }).finally(function () {
+                        doRunningProcessesExistDeferred.reject(error);
                     });
+                });
 
+                UtilsService.waitMultiplePromises(promises).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.isLoadingFilterSection = false;
+                });
             };
 
             $scope.numberOfOptions = 3;
@@ -588,7 +620,8 @@
                     costCalculationMethods: getCostCalculationMethods(),
                     currencyId: getCurrencyId(),
                     longPrecision: longPrecision,
-                    onBulkActionAppliedToDraft: onBulkActionAppliedToDraft
+                    onBulkActionAppliedToDraft: onBulkActionAppliedToDraft,
+                    pricingSettings: ownerPricingSettings
                 };
 
                 saveDraft().catch(function (error) {
@@ -708,6 +741,16 @@
             });
 
             return textFilterLoadDeferred.promise;
+        }
+        function getOwnerPricingSettings() {
+            var ownerType = ownerTypeSelectorAPI.getSelectedIds();
+            var ownerId = getOwnerId();
+            var pricingSettingsLoadPromise = (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) ?
+                WhS_BE_SellingProductAPIService.GetSellingProductPricingSettings(ownerId) : WhS_BE_CarrierAccountAPIService.GetCustomerPricingSettings(ownerId);
+            pricingSettingsLoadPromise.then(function (response) {
+                ownerPricingSettings = response;
+            });
+            return pricingSettingsLoadPromise;
         }
 
         function loadRatePlan() {
@@ -903,6 +946,9 @@
             var loadOwnerInfoPromise = loadOwnerInfo();
             promises.push(loadOwnerInfoPromise);
 
+            var loadOwnerPricingSettingsDeferred = UtilsService.createPromiseDeferred();
+            promises.push(loadOwnerPricingSettingsDeferred.promise);
+
             validateCustomerPromise.then(function () {
                 if (isCustomerValid) {
                     getCustomerCurrencyId().then(function () {
@@ -915,10 +961,16 @@
                     }).catch(function (error) {
                         getCountryChangesDeferred.reject(error, $scope);
                     });
+                    getOwnerPricingSettings().then(function () {
+                        loadOwnerPricingSettingsDeferred.resolve();
+                    }).catch(function (error) {
+                        loadOwnerPricingSettingsDeferred.reject(error);
+                    });
                 }
                 else {
                     getCustomerCurrencyIdDeferred.resolve();
                     getCountryChangesDeferred.resolve();
+                    loadOwnerPricingSettingsDeferred.resolve();
                     VRNotificationService.showInformation($scope.selectedCustomer.Name + " is not assigned to a selling product");
                     $scope.selectedCustomer = undefined;
                 }
@@ -1175,9 +1227,8 @@
             $scope.showSaveButton = showValue;
             $scope.showCancelButton = showValue;
         }
-        function getSellingProductCurrencyId(selectedSellingProduct)
-        {
-            return WhS_BE_SellingProductAPIService.GetSellingProductCurrencyId(selectedSellingProduct.SellingProductId).then(function (response) {
+        function getSellingProductCurrencyId(sellingProductId) {
+            return WhS_BE_SellingProductAPIService.GetSellingProductCurrencyId(sellingProductId).then(function (response) {
                 sellingProductCurrencyId = response;
                 currencySelectorAPI.selectedCurrency(response);
             });
@@ -1219,54 +1270,22 @@
             }
             return entityIdPromiseDeferred.promise;
         }
-        function buildRatePlanListForSellingProduct(selectedSellingProduct) {
-            var promises = [];
-
-            var loadOwnerInfoPromise = loadOwnerInfo();
-            promises.push(loadOwnerInfoPromise);
-            UtilsService.waitMultiplePromises(promises).catch(function (error) {
-                VRNotificationService.notifyException(error, $scope);
-            }).finally(function () {
-
-            });
-        }
         function hasRunningProcessesForCustomerOrSellingProduct(entityIds, ownerId, ownerType) {
-            var hasRunningProcessesPromiseDeferred = UtilsService.createPromiseDeferred();
-            switch (ownerType) {
-                case WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value:
-                    WhS_BE_SellingProductAPIService.GetSellingProductName(ownerId).then(function (sellingProductName) {
-                        var runningInstanceEditorSettings = {
 
-                            message: "Another processes of rate plan for the selling product or corresponding customers '" + sellingProductName + "' are still pending"
-                        };
-                        BusinessProcess_BPInstanceService.displayRunningInstancesIfExist(WhS_BP_RatePlanDefinitionEnum.BPDefinitionId.value, entityIds, runningInstanceEditorSettings).then(function (response) {
-                            hasRunningProcessesPromiseDeferred.resolve(response);
-                        });
-                    }).catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    }).finally(function () {
-                        $scope.isLoadingFilterSection = false;
-                    });
-                    break;
-                case WhS_BE_SalePriceListOwnerTypeEnum.Customer.value:
-                    WhS_BE_CarrierAccountAPIService.GetCarrierAccountName(ownerId).then(function (carrierAccountName) {
-                        var runningInstanceEditorSettings = {
+            var editorMessage;
 
-                            message: "Another processes of rate plan for the customer or corresponding selling product '" + carrierAccountName + "' is still pending"
-                        };
-                        BusinessProcess_BPInstanceService.displayRunningInstancesIfExist(WhS_BP_RatePlanDefinitionEnum.BPDefinitionId.value, entityIds, runningInstanceEditorSettings).then(function (response) {
-                            hasRunningProcessesPromiseDeferred.resolve(response);
-                        });
-                    }).catch(function (error) {
-                        VRNotificationService.notifyException(error, $scope);
-                    }).finally(function () {
-                        $scope.isLoadingFilterSection = false;
-                    });
-                    break;
+            if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
+                var sellingProductName = ($scope.selectedSellingProduct != undefined) ? $scope.selectedSellingProduct.Name : undefined;
+                editorMessage = "Other rate plan processes are still pending for selling product '" + sellingProductName + "' or some of its customers";
             }
-            return hasRunningProcessesPromiseDeferred.promise;
-        }
+            else {
+                var customerName = ($scope.selectedCustomer != undefined) ? $scope.selectedCustomer.Name : undefined;
+                editorMessage = "Other rate plan processes are still pending for customer '" + customerName + "' or its selling product";
+            }
 
+            var runningInstanceEditorSettings = { message: editorMessage };
+            return BusinessProcess_BPInstanceService.displayRunningInstancesIfExist(WhS_BP_RatePlanDefinitionEnum.BPDefinitionId.value, entityIds, runningInstanceEditorSettings);
+        }
     }
 
     appControllers.controller("WhS_Sales_RatePlanController", RatePlanController);

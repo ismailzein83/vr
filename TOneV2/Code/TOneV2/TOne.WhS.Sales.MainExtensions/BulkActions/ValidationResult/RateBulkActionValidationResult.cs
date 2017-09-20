@@ -33,6 +33,12 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public string ZoneName { get; set; }
 
+        public DateTime ZoneBED { get; set; }
+
+        public DateTime? CountryBED { get; set; }
+
+        public bool IsCountryNew { get; set; }
+
         public decimal? CurrentRate { get; set; }
 
         public decimal? CalculatedRate { get; set; }
