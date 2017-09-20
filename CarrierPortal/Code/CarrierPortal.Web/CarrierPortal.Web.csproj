@@ -466,6 +466,7 @@
     </None>
     <Content Include="Web.config.PartnerPortal.exclude" />
     <Content Include="Web.config.RingoPortal.exclude" />
+    <Content Include="Web.config.MultinetPortal.exclude" />
     <None Include="Web.config.Release.exclude">
       <DependentUpon>Web.config.exclude</DependentUpon>
     </None>
