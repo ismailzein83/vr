@@ -354,7 +354,7 @@
                     customerId: customerId,
                     countryChanges: countryChanges,
                     saleAreaSettings: saleAreaSettingsData,
-                    ratePlanSettings: ratePlanSettingsData,
+                    customerPricingSettings: ownerPricingSettings,
                     onCountryChangesUpdated: onCountryChangesUpdated
                 };
                 WhS_Sales_RatePlanService.sellNewCountries(sellNewCountriesInput);

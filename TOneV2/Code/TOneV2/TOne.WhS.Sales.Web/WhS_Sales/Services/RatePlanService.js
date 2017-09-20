@@ -25,7 +25,7 @@
                 customerId: input.customerId,
                 countryChanges: input.countryChanges,
                 saleAreaSettings: input.saleAreaSettings,
-                ratePlanSettings: input.ratePlanSettings
+                customerPricingSettings: input.customerPricingSettings
             };
 
             var settings = {};

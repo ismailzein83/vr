@@ -9,11 +9,11 @@
         var customerId;
         var countryChanges;
         var saleAreaSettings;
-        var ratePlanSettings;
+        var customerPricingSettings;
 
-        var retroactiveDayOffset;
-        var newRateDayOffset;
-        var effectiveDateDayOffset;
+        var retroactiveDayOffset = 0;
+        var newRateDayOffset = 0;
+        var effectiveDateDayOffset = 0;
 
         var retroactiveDate = UtilsService.getDateFromDateTime(new Date());
         var newRateDate = UtilsService.getDateFromDateTime(new Date());
@@ -35,7 +35,7 @@
                 customerId = parameters.customerId;
                 countryChanges = parameters.countryChanges;
                 saleAreaSettings = parameters.saleAreaSettings;
-                ratePlanSettings = parameters.ratePlanSettings;
+                customerPricingSettings = parameters.customerPricingSettings;
             }
         }
         function defineScope() {
@@ -116,7 +116,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadNewCountryGrid, loadSoldCountryGrid, setNewRateDayOffset]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadNewCountryGrid, loadSoldCountryGrid]).then(function () {
                 countryChanges = undefined;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -163,26 +163,6 @@
             return soldCountryGridLoadDeferred.promise;
         }
 
-        function setNewRateDayOffset() {
-            return WhS_Sales_RatePlanAPIService.GetPricingSettings(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, customerId).then(function (response) {
-                newRateDayOffset = response.NewRateDayOffset;
-                retroactiveDayOffset = response.RetroactiveDayOffset;
-                effectiveDateDayOffset = response.EffectiveDateDayOffset;
-
-                if (newRateDayOffset > 0) {
-                    var newRateDateValue = WhS_Sales_RatePlanUtilsService.getNowPlusDays(newRateDayOffset);
-                    newRateDate = UtilsService.getDateFromDateTime(newRateDateValue);
-                }
-                if (retroactiveDayOffset > 0) {
-                    var retroactiveDateValue = WhS_Sales_RatePlanUtilsService.getNowMinusDays(retroactiveDayOffset);
-                    retroactiveDate = UtilsService.getDateFromDateTime(retroactiveDateValue);
-                }
-                if (effectiveDateDayOffset > 0) {
-                    var effectiveDateValue = WhS_Sales_RatePlanUtilsService.getNowPlusDays(effectiveDateDayOffset);
-                    effectiveDate = UtilsService.getDateFromDateTime(effectiveDateValue);
-                }
-            });
-        }
         function buildCountryChanges() {
             var countryChanges = {
                 ChangedCountries: soldCountryGridAPI.getData()
@@ -215,7 +195,26 @@
         }
 
         function initGlobalVars() {
-            
+            if (customerPricingSettings != undefined) {
+                if (customerPricingSettings.NewRateDayOffset != null)
+                    newRateDayOffset = customerPricingSettings.NewRateDayOffset;
+                if (customerPricingSettings.RetroactiveDayOffset != null)
+                    retroactiveDayOffset = customerPricingSettings.RetroactiveDayOffset;
+                if (customerPricingSettings.EffectiveDateDayOffset != null)
+                    effectiveDateDayOffset = customerPricingSettings.EffectiveDateDayOffset;
+            }
+            if (newRateDayOffset > 0) {
+                var newRateDateValue = WhS_Sales_RatePlanUtilsService.getNowPlusDays(newRateDayOffset);
+                newRateDate = UtilsService.getDateFromDateTime(newRateDateValue);
+            }
+            if (retroactiveDayOffset > 0) {
+                var retroactiveDateValue = WhS_Sales_RatePlanUtilsService.getNowMinusDays(retroactiveDayOffset);
+                retroactiveDate = UtilsService.getDateFromDateTime(retroactiveDateValue);
+            }
+            if (effectiveDateDayOffset > 0) {
+                var effectiveDateValue = WhS_Sales_RatePlanUtilsService.getNowPlusDays(effectiveDateDayOffset);
+                effectiveDate = UtilsService.getDateFromDateTime(effectiveDateValue);
+            }
         }
         function getNumberIfValid(value) {
             if (value != undefined) {
