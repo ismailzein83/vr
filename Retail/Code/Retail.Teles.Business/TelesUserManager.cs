@@ -82,7 +82,7 @@ namespace Retail.Teles.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            if (IsMapUserToAccountValid(input.AccountBEDefinitionId, input.AccountId, input.ActionDefinitionId))
+            if (CanMapTelesUser(input.AccountBEDefinitionId, input.TelesUserId) && IsMapUserToAccountValid(input.AccountBEDefinitionId, input.AccountId, input.ActionDefinitionId))
             {
                 bool result = TryMapUserToAccount(input.AccountBEDefinitionId, input.AccountId,input.TelesDomainId,input.TelesEnterpriseId ,input.TelesSiteId,input.TelesUserId);
                 if (result)
@@ -125,6 +125,13 @@ namespace Retail.Teles.Business
                 Status = status 
             };
             return _accountBEManager.UpdateAccountExtendedSetting<UserAccountMappingInfo>(accountBEDefinitionId, accountId, userAccountMappingInfo);
+        }
+        public bool CanMapTelesUser(Guid accountBEDefinitionId, string userId)
+        {
+            var cachedAccountsByUsers = GetCachedAccountsByUsers(accountBEDefinitionId);
+            if (cachedAccountsByUsers != null && cachedAccountsByUsers.ContainsKey(userId))
+                return false;
+            return true;
         }
         public static void SetCacheExpired()
         {

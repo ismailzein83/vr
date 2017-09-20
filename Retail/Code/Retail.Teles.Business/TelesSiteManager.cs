@@ -115,7 +115,7 @@ namespace Retail.Teles.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            if (IsMapSiteToAccountValid(input.AccountBEDefinitionId, input.AccountId, input.ActionDefinitionId))
+            if (CanMapTelesSite(input.AccountBEDefinitionId,  input.AccountId, input.TelesSiteId) && IsMapSiteToAccountValid(input.AccountBEDefinitionId, input.AccountId, input.ActionDefinitionId))
             {
                 bool result = TryMapSiteToAccount(input.AccountBEDefinitionId, input.AccountId, input.TelesSiteId);
                 if (result)
@@ -131,6 +131,15 @@ namespace Retail.Teles.Business
             }
             return updateOperationOutput;
 
+        }
+        public bool CanMapTelesSite(Guid accountBEDefinitionId, long accountId, string enterpriseSiteId)
+        {
+            var telesEnterpriseId = new TelesEnterpriseManager().GetParentAccountEnterpriseId(accountBEDefinitionId, accountId);
+            telesEnterpriseId.ThrowIfNull("telesEnterpriseId");
+            var cachedAccountsBySites = GetCachedAccountsBySites(accountBEDefinitionId, telesEnterpriseId);
+            if (cachedAccountsBySites != null && cachedAccountsBySites.ContainsKey(enterpriseSiteId))
+                return false;
+            return true;
         }
         public Vanrise.Entities.InsertOperationOutput<TelesEnterpriseSiteInfo> AddTelesSite(TelesSiteInput input)
         {

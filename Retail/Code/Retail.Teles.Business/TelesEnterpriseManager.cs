@@ -89,7 +89,7 @@ namespace Retail.Teles.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            if (IsMapEnterpriseToAccountValid(input.AccountBEDefinitionId, input.AccountId, input.ActionDefinitionId))
+            if (CanMapTelesEnterprise(input.AccountBEDefinitionId, input.TelesEnterpriseId) && IsMapEnterpriseToAccountValid(input.AccountBEDefinitionId, input.AccountId, input.ActionDefinitionId))
             {
                 bool result = TryMapEnterpriseToAccount(input.AccountBEDefinitionId, input.AccountId, input.TelesEnterpriseId);
                 if (result)
@@ -106,6 +106,14 @@ namespace Retail.Teles.Business
             }
             return updateOperationOutput;
      
+        }
+
+        public bool CanMapTelesEnterprise(Guid accountBEDefinitionId, string telesEnterpriseId)
+        {
+            var cachedAccountsByEnterprises = GetCachedAccountsByEnterprises(accountBEDefinitionId);
+            if (cachedAccountsByEnterprises != null && cachedAccountsByEnterprises.ContainsKey(telesEnterpriseId))
+                return false;
+            return true;
         }
         public bool TryMapEnterpriseToAccount(Guid accountBEDefinitionId, long accountId, string telesEnterpriseId, ProvisionStatus? status = null)
         {
