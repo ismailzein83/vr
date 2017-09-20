@@ -54,6 +54,11 @@ namespace Vanrise.Common.Business
             return this.GetCachedCities().MapRecords(CityInfoMapper, city => city.CountryId == countryId).OrderBy(city => city.Name);
         }
 
+        public IEnumerable<City> GetCitiesByCountryId(int countryId)
+        {
+            return this.GetCachedCities().FindAllRecords(city => city.CountryId == countryId);
+        }
+
         public IEnumerable<int> GetDistinctCountryIdsByCityIds(IEnumerable<int> cityIds)
         {
             return this.GetCachedCities().MapRecords(city => city.CountryId, city => cityIds.Contains(city.CityId)).Distinct();
@@ -76,6 +81,13 @@ namespace Vanrise.Common.Business
         public City GetCityBySourceId(string sourceId)
         {
             return GetCachedCitiesBySourceId().GetRecord(sourceId);
+        }
+
+        public City GetCityByName(int countryId, string name)
+        {
+            IEnumerable<City> cities = GetCitiesByCountryId(countryId);
+            return cities.FindRecord(c => c.Name.ToLower() == name.ToLower());
+
         }
 
         public Vanrise.Entities.InsertOperationOutput<CityDetail> AddCity(City city)
