@@ -135,15 +135,13 @@ namespace Retail.Teles.Business
             if (siteAccountMappingInfo != null)
             {
                 telesSiteId = siteAccountMappingInfo.TelesSiteId;
-                if(telesSiteId != null)
+                telesSiteId.ThrowIfNull("telesSiteId");
+                var siteTelesUsersToChangeRG = GetTelesUsersToChangeRGFromTelesSite(context, telesSiteId, mappedTelesUserIds, definitionSettings);
+                usersToChangeRG.Add(new UsersToChangeRG(siteAccount)
                 {
-                    var siteTelesUsersToChangeRG = GetTelesUsersToChangeRGFromTelesSite(context, telesSiteId, mappedTelesUserIds, definitionSettings);
-
-                    usersToChangeRG.Add(new UsersToChangeRG(siteAccount)
-                    {
-                        TelesUsers = siteTelesUsersToChangeRG
-                    });
-                }
+                    TelesUsers = siteTelesUsersToChangeRG
+                });
+              
             }
             else
             {
@@ -164,26 +162,27 @@ namespace Retail.Teles.Business
                 mappedTelesUserId = userAccountMappingInfo.TelesUserId;
                 if (userAccountMappingInfo.TelesSiteId != null)
                     telesSiteId = userAccountMappingInfo.TelesSiteId;
-                if(telesSiteId != null)
-                {
-                    List<string> existingRoutingGroups;
-                    string newRoutingGroup;
-                    bool? shouldUpdate;
-                    GetTelesSiteRoutingGroups(context, telesSiteId, definitionSettings, out existingRoutingGroups, out newRoutingGroup, out shouldUpdate);
-                    var currentTelesUser = GetTelesUser(definitionSettings.VRConnectionId, mappedTelesUserId);
 
-                    TelesUser telesUser;
-                    if (ShouldChangeTelesUserRG(context, mappedTelesUserId, currentTelesUser, telesSiteId, existingRoutingGroups, newRoutingGroup, definitionSettings, shouldUpdate, out telesUser))
+                telesSiteId.ThrowIfNull("telesSiteId");
+               
+                List<string> existingRoutingGroups;
+                string newRoutingGroup;
+                bool? shouldUpdate;
+                GetTelesSiteRoutingGroups(context, telesSiteId, definitionSettings, out existingRoutingGroups, out newRoutingGroup, out shouldUpdate);
+                var currentTelesUser = GetTelesUser(definitionSettings.VRConnectionId, mappedTelesUserId);
+
+                TelesUser telesUser;
+                if (ShouldChangeTelesUserRG(context, mappedTelesUserId, currentTelesUser, telesSiteId, existingRoutingGroups, newRoutingGroup, definitionSettings, shouldUpdate, out telesUser))
+                {
+                    usersToChangeRG.Add(new UsersToChangeRG(userAccount)
                     {
-                        usersToChangeRG.Add(new UsersToChangeRG(userAccount)
-                        {
-                            TelesUsers = new List<TelesUser>{
-                    telesUser
-                    },
-                        });
-                    }
+                        TelesUsers = new List<TelesUser>{
+                telesUser
+                },
+                    });
+               
                 }
-              
+       
             }
           
         }
