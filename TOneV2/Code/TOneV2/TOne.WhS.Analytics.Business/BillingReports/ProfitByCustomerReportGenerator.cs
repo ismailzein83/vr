@@ -149,8 +149,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             totalSaleDuration = ReportHelpers.FormatNormalNumberDigit(totalSaleDur);
             totalSaleNet = ReportHelpers.FormatNormalNumberDigit(totalSaleNt);
             totalCostNet = ReportHelpers.FormatNormalNumberDigit(totalCostNt);
-            totalProfit = ReportHelpers.FormatNormalNumberDigit(totalProft);
-            totalProfitPerc = ReportHelpers.FormatLongNumberDigit(totalProftPerc);
+            totalProfit = ReportHelpers.FormatNormalNumberDigit(totalSaleNt - totalCostNt);
+            totalProfitPerc = ReportHelpers.FormatNormalNumberDigit(totalProftPerc);
             totalAvgMinutes = ReportHelpers.FormatLongNumberDigit(totalAvgMin);
             totalCostExtraCharge = ReportHelpers.FormatLongNumberDigit(totalCostExtraChrg);
             totalSaleExtraCharge = ReportHelpers.FormatLongNumberDigit(totalSaleExtraChrg);
