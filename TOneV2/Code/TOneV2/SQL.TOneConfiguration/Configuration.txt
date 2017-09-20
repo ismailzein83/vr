@@ -63,14 +63,20 @@ Retail_Ringo.PostDeployment.sql
 CarrierPortal
 CarrierPortal.PostDeployment.sql
 
+CarrierPortal_Retail
+CarrierPortal.RetailPortal.PostDeployment.sql
+
+CarrierPortal_Centrex
 CarrierPortal.RetailPortal_Centrex.PostDeployment.sql
 
 CarrierPortal_Zajil
 CarrierPortal.RetailPortal_Zajil.PostDeployment.sql
-CarrierPortal.RetailPortal.PostDeployment.sql
 
 CarrierPortal_Ringo
 CarrierPortal.RingoPortal.PostDeployment.sql
+
+CarrierPortal_Multinet
+CarrierPortal.RetailPortal_MultiNet.PostDeployment.sql
 
 CarrierPortal_SupplierPricelist
 CarrierPortal.SupplierPricelist.PostDeployment.sql
