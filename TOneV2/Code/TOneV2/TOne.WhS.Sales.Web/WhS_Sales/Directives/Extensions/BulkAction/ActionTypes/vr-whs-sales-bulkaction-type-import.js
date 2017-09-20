@@ -66,6 +66,7 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
                 var data = {
                     $type: 'TOne.WhS.Sales.MainExtensions.ImportBulkAction, TOne.WhS.Sales.MainExtensions',
                     HeaderRowExists: $scope.scopeModel.headerRowExists,
+                    DateTimeFormat: $scope.scopeModel.dateTimeFormat,
                     CacheObjectName: cacheObjectName
                 };
                 if ($scope.scopeModel.file != undefined) {
@@ -81,7 +82,8 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
             api.getSummary = function () {
                 var uploadedFileName = ($scope.scopeModel.file != undefined) ? $scope.scopeModel.file.fileName : 'None';
                 var headerRowExistsAsString = ($scope.scopeModel.headerRowExists === true) ? 'Header Exists' : 'Header Does Not Exist';
-                return 'Uploaded File: ' + uploadedFileName + ' | ' + headerRowExistsAsString;
+                var dateTimeFormatAsString = ($scope.scopeModel.dateTimeFormat != undefined) ? $scope.scopeModel.dateTimeFormat : 'None';
+                return 'Uploaded File: ' + uploadedFileName + ' | ' + headerRowExistsAsString + ' | Date Time Format: ' + dateTimeFormatAsString;
             };
 
             if (ctrl.onReady != null) {
@@ -92,10 +94,13 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
 
     function getTemplate(attrs) {
         return '<span vr-loader="scopeModel.isLoading">\
-                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum}}">\
+                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}">\
                         <vr-fileupload label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onFileChanged" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
                     </vr-columns>\
-                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 3}}">\
+                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}">\
+                        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="importBulkActionCtrl.isrequired"></vr-textbox>\
+                    </vr-columns>\
+                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}">\
                         <vr-switch label="Header" value="scopeModel.headerRowExists" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
                     </vr-columns>\
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}" withemptyline>\

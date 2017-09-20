@@ -24,6 +24,8 @@ namespace TOne.WhS.Sales.Business
 
         public ImportedRowStatus Status { get; set; }
 
+        public string DateTimeFormat { get; set; }
+
         public string ErrorMessage { get; set; }
     }
 
@@ -40,6 +42,8 @@ namespace TOne.WhS.Sales.Business
         public Dictionary<int, DateTime> CountryBEDsByCountry { get; set; }
 
         public IEnumerable<int> ClosedCountryIds { get; set; }
+
+        public string DateTimeFormat { get; set; }
 
         public string ErrorMessage { get; set; }
     }

@@ -23,6 +23,8 @@ namespace TOne.WhS.Sales.Entities
 
         ImportedRowStatus Status { set; }
 
+        string DateTimeFormat { get; }
+
         string ErrorMessage { set; }
     }
 }

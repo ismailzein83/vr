@@ -16,5 +16,7 @@ namespace TOne.WhS.Sales.Entities
         public long FileId { get; set; }
 
         public bool HeaderRowExists { get; set; }
+
+        public string DateTimeFormat { get; set; }
     }
 }

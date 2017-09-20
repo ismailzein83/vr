@@ -26,6 +26,8 @@ namespace TOne.WhS.Sales.Entities
 
         IEnumerable<int> ClosedCountryIds { get; }
 
+        string DateTimeFormat { get; }
+
         string ErrorMessage { set; }
     }
 }

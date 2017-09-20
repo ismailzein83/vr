@@ -99,7 +99,8 @@ namespace TOne.WhS.Sales.Business
                     ZoneDraft = context.ZoneDraft,
                     ExistingZone = context.ExistingZone,
                     CountryBEDsByCountry = context.CountryBEDsByCountry,
-                    ClosedCountryIds = context.ClosedCountryIds
+                    ClosedCountryIds = context.ClosedCountryIds,
+                    DateTimeFormat = context.DateTimeFormat
                 };
 
                 if (!validator.IsValid(isValidContext))
@@ -254,6 +255,9 @@ namespace TOne.WhS.Sales.Business
                 context.ErrorMessage = "Effective date is empty";
                 return false;
             }
+
+            string dateTimeFormat = context.DateTimeFormat;
+            DateTime myDate = DateTime.ParseExact(effectiveDate, dateTimeFormat, null);
 
             DateTime effectiveDateAsDateTime;
             if (!DateTime.TryParse(effectiveDate, out effectiveDateAsDateTime))
