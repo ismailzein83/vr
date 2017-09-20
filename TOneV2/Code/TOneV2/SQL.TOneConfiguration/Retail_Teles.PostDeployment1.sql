@@ -28,7 +28,11 @@ as (select * from (values
 ('FD6ED9B7-F870-4C6D-A51E-36FD2219F64B'	,'Provisioning Company Screened Numbers'	,'Provisioning Company Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionaccount", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionaccount"}'),
 ('91D8FBF2-A22E-46CB-A004-4966B5C1A87C'	,'Provisioning Site Screened Numbers'	,'Provisioning Site Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionsite", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionsite"}'),
 ('638C3DCC-F05A-4FA5-83BB-5E24CB2DA9C8'	,' MappingTelesSite'	,'Mapping Teles Site',	'Retail_BE_AccountActionDefinitionConfig',	'{"Editor":"retail-teles-accountactiondefinitionsettings-mappingtelessite"}'),
-('2C1CEA7E-96F1-4BB0-83DD-FE8BA4BA984C'	,' TelesAccountCondition'	,'Teles Account Condition',	'Retail_BE_AccountConditionConfig',	'{"Editor":"retail-teles-accountcondition-telesaccount"}')
+('2C1CEA7E-96F1-4BB0-83DD-FE8BA4BA984C'	,' TelesAccountCondition'	,'Teles Account Condition',	'Retail_BE_AccountConditionConfig',	'{"Editor":"retail-teles-accountcondition-telesaccount"}'),
+('8c4d41eb-c137-48b2-8eaa-b5428734831d','TelesTemplateEntity','Teles Template','VRCommon_GenericLKUPDefinition','{"DefinitionEditor":"retail-teles-telestemplateentitydefinitionsettings"}'),
+('74384112-0d3e-4677-8df3-2c16c32a84d4'	,'MappingTelesUser'	,'Mapping Teles User',	'Retail_BE_AccountActionDefinitionConfig',	'{"Editor":"retail-teles-accountactiondefinitionsettings-mappingtelesuser"}'),
+('9a63b2ed-a0b9-4364-ad6c-0977f410c1c4'	,'Provisioning User Screened Numbers'	,'Provisioning User Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionuser", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionuser"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t

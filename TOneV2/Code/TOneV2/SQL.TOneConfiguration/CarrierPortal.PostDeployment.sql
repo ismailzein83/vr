@@ -75,7 +75,10 @@ as (select * from (values
 ('3A02EEEA-6F38-4277-BAC4-9D8F88F71851','Invoice Viewer Type','Invoice Viewer Type','VR_Common_VRComponentType','{"Editor":"partnerportal-invoice-viewertypesettings"}'),
 ('06CD79C8-B1C0-4A33-A757-A36EBD96EA5B','Analytic','Analytic','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-analytictiledefinitionsettings"}'),
 ('A8A6C730-9EF7-41E3-B875-C9FF7B6696FC','InvoiceTileDefinition','Invoice Tile','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-invoice-invoicetiledefinitionsettings"}'),
-('12371BE0-CF2C-4CDD-9F4C-E809D912A716','Partner Invoice Query','Partner Invoice Query','PartnerPortal_Invoice_InvoiceQueryInterceptor','{"Editor":"partnerportal-invoice-partnerinvoicequeryinterceptor"}')
+('12371BE0-CF2C-4CDD-9F4C-E809D912A716','Partner Invoice Query','Partner Invoice Query','PartnerPortal_Invoice_InvoiceQueryInterceptor','{"Editor":"partnerportal-invoice-partnerinvoicequeryinterceptor"}'),
+('3efaf2e0-bcd2-4c98-890e-6ec5b4e4dd10','DIDTileDefinition','DID Tile','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-didtiledefinitionsettings"}'),
+('ff8e7752-9df7-4017-83ab-6fa8a9cdb30f','RetailAccountInfoTileDefinition','Retail Account InfoTile','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-retailaccountinfotiledefinitionsettings"}'),
+('138b9459-67a5-4031-aea7-d86093f731d5','RetailSubAccountsInfoTileDefinition','Retail Sub Accounts Info Tile','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-retailsubaccountsinfotiledefinitionsettings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
