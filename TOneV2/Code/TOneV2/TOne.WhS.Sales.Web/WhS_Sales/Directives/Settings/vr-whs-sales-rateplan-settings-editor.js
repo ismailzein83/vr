@@ -54,9 +54,6 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
                 var tqiPeriodType;
 
                 if (payload != undefined && payload.data != null) {
-                    $scope.scopeModel.newRateDayOffset = payload.data.NewRateDayOffset;
-                    $scope.scopeModel.increasedRateDayOffset = payload.data.IncreasedRateDayOffset;
-                    $scope.scopeModel.decreasedRateDayOffset = payload.data.DecreasedRateDayOffset;
                     costCalculationMethods = payload.data.CostCalculationsMethods;
                     tqiPeriodValue = payload.data.TQIPeriodValue;
                     tqiPeriodType = payload.data.TQIPeriodType;
@@ -100,9 +97,6 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
             api.getData = function () {
                 var data = {
                     $type: "TOne.WhS.Sales.Entities.RatePlanSettingsData, TOne.WhS.Sales.Entities",
-                    NewRateDayOffset: $scope.scopeModel.newRateDayOffset,
-                    IncreasedRateDayOffset: $scope.scopeModel.increasedRateDayOffset,
-                    DecreasedRateDayOffset: $scope.scopeModel.decreasedRateDayOffset,
                     CostCalculationsMethods: costColumnDirectiveAPI.getData()
                 };
                 var period = periodSelectorAPI.getData();
