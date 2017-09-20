@@ -52,6 +52,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         var allZoneItems = [];
         var filteredZoneItems = [];
 
+        var sumFixedWidthes;
+        var sumWidthFactors;
+
         var allZonesLetter = "ALL ZONES";
 
         function initializeController() {
@@ -105,20 +108,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             $scope.zoneItems = [];
             $scope.costCalculationMethods = [];
             gridDrillDownDefinitions = getGridDrillDownDefinitions();
-            //$scope.onGridReady = function (api) {
-            //    gridAPI = api;
-            //    gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(getGridDrillDownDefinitions(), gridAPI, null);
-            //    defineAPI();
-            //};
+            
             defineScrollEvent();
             defineAPI();
-
-            //$scope.loadMoreData = function () {
-            //    $scope.isLoading = true;
-            //    return loadZoneItems().finally(function () {
-            //        $scope.isLoading = false;
-            //    });
-            //};
 
             $scope.onZoneNameClicked = function (dataItem) {
                 var primarySaleEntity = (gridQuery.SaleAreaSettings != undefined) ? gridQuery.SaleAreaSettings.PrimarySaleEntity : undefined;
@@ -225,25 +217,19 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
 
             $scope.expandRow = function (dataItem) {
-                //if (expandableRowTemplate != undefined) {
-                //dataItem.expandableRowTemplate = expandableRowTemplate;
                 dataItem.loadDrilldownTemplate = true;
                 dataItem.isRowExpanded = true;
-                //}
             };
 
             $scope.collapseRow = function (dataItem) {
                 dataItem.isRowExpanded = false;
             };
 
-            //$scope.getColumnWidth = function (colName, widthFactor) {
-            //    var allocatedWidth = ;
-            //};
-
             columnsConfig = {};
             $scope.columnsConfig = columnsConfig;
             $scope.addColumnFixedAndRecalculate = function (colName, width) {
                 var column = {
+                    name: colName,
                     widthAsNb: width,
                     width: width + "px"
                 };
@@ -252,6 +238,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
             $scope.addColumnWidthFactorAndRecalculate = function (colName, width) {
                 var column = {
+                    name: colName,
                     widthFactor: width
                 };
                 columnsConfig[colName] = column;
@@ -259,8 +246,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             };
 
             function recalculateColumnWidthes() {
-                var sumFixedWidthes = 0;
-                var sumWidthFactors = 0;
+                sumFixedWidthes = 0;
+                sumWidthFactors = 0;
                 for (var colName in columnsConfig) {
                     var column = columnsConfig[colName];
                     if (column.widthFactor != undefined)
@@ -282,6 +269,55 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     for (var i = 0; i < routeOptions.length; i++)
                         routeOptions[i].Color = colorValue;
             }
+
+            $scope.filterZones = function () {
+                lastTriggerFilterZonesTime = new Date();
+                triggerfilterZones();
+            };
+
+            $scope.sortZones = function (col) {
+                sortZones(col);
+            };
+        }
+
+        var lastTriggerFilterZonesTime;
+
+        function triggerfilterZones() {
+            var diffInMilliseconds = (new Date()).getTime() - lastTriggerFilterZonesTime;
+            if (diffInMilliseconds < 1000) {
+                setTimeout(triggerfilterZones, 1000);
+            }
+            else {
+                filterZones();
+                lastTriggerFilterZonesTime = undefined;
+            }
+        }
+
+        function filterZones() {
+            filteredZoneItems.length = 0;
+            $scope.zoneItems.length = 0;
+            for (var i = 0; i < allZoneItems.length; i++) {
+                var zoneItem = allZoneItems[i];
+                if (!isZoneItemExcluded(zoneItem))
+                    filteredZoneItems.push(zoneItem);
+            }
+            return displayZoneItems();
+        }
+
+        function isZoneItemExcluded(zoneItem)
+        {
+            if ($scope.zoneFilter != undefined && zoneItem.ZoneName.toLowerCase().indexOf($scope.zoneFilter.toLowerCase()) < 0)
+                return true;
+            return false;
+        }
+
+        function setColumnsWidthesInCSS() {
+            //for (var colName in columnsConfig) {
+            //    var column = columnsConfig[colName];
+            //    if (column.widthFactor != undefined) {
+            //        column.width = "calc(" + (100 * column.widthFactor / sumWidthFactors) + "% - " + (sumFixedWidthes * (100 * column.widthFactor / sumWidthFactors) / 100) + "px)";
+            //    }
+            //}
         }
 
         function getGridDrillDownDefinitions() {
@@ -432,7 +468,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                 $scope.zoneLetters.push(response[i]);
                             }
                             //this line will be added after optimizing grid performance
-                            //$scope.zoneLetters.push(allZonesLetter);
+                            $scope.zoneLetters.push(allZonesLetter);
                         }
                     });
                 }
@@ -490,11 +526,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         WhS_Sales_RatePlanUtilsService.onNewRateChanged(zoneItem);
 
                         allZoneItems.push(zoneItem);
-                        filteredZoneItems.push(zoneItem);
                     }                   
                     
                 }
-                displayNextZoneItemsPage().then(function () {
+                clearSorting();
+                filterZones().then(function () {
                     loadDirectivesDeferred.resolve();
                 }).catch(function (error) {
                     loadDirectivesDeferred.reject(error);
@@ -513,17 +549,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             return UtilsService.waitMultiplePromises(promises);
         }
-        var pageSize = 50;
-        function displayNextZoneItemsPage() {
-            var addedItems = 0;
+        
+        function displayZoneItems() {            
             var promises = [];
-            for (var i = $scope.zoneItems.length; i < filteredZoneItems.length && addedItems < pageSize; i++) {
+            for (var i = $scope.zoneItems.length; i < filteredZoneItems.length; i++) {
                 var zoneItem = filteredZoneItems[i];
-                promises.push(zoneItem.RouteOptionsLoadDeferred.promise);
-                promises.push(zoneItem.serviceViewerLoadDeferred.promise);
+                zoneItem.displayRow = (i <= 30);
+                //promises.push(zoneItem.RouteOptionsLoadDeferred.promise);
+                //promises.push(zoneItem.serviceViewerLoadDeferred.promise);
 
                 $scope.zoneItems.push(zoneItem);
-                addedItems++;
             }
             setTimeout(function () {
                 refreshHeaderWidth();
@@ -802,6 +837,148 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             return (rpRouteDetail != undefined) ? rpRouteDetail.RouteOptionsDetails : null;
         }
 
+        function sortZones(col) {
+            var currentSortDirection = col.sortDirection;
+            var newSortDirection = currentSortDirection != "ASC" ? "ASC" : "DESC";
+
+            var sortFunction;
+            switch (col.name) {
+                case "zone": sortFunction = function (zoneItem1, zoneItem2) {
+                    if (zoneItem1.ZoneName > zoneItem2.ZoneName)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "product": sortFunction = function (zoneItem1, zoneItem2) {
+                    if (zoneItem1.EffectiveRoutingProductName > zoneItem2.EffectiveRoutingProductName)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "currentRate": sortFunction = function (zoneItem1, zoneItem2) {
+                    if (zoneItem1.CurrentRate > zoneItem2.CurrentRate)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "inherIcontype": sortFunction = function (zoneItem1, zoneItem2) {
+                    var zoneItem1Empty = zoneItem1.iconType == undefined;
+                    var zoneItem2Empty = zoneItem2.iconType == undefined;
+                    if (zoneItem1Empty && zoneItem2Empty)
+                        return 0;
+                    else if (zoneItem1Empty)
+                        return -1;
+                    else if (zoneItem2Empty)
+                        return 1;
+                    if (zoneItem1.iconType > zoneItem2.iconType)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "routeOptions": sortFunction = function (zoneItem1, zoneItem2) {
+                    var zoneItem1Empty = zoneItem1.RPRouteDetail == undefined || zoneItem1.RPRouteDetail.RouteOptionsDetails == undefined || zoneItem1.RPRouteDetail.RouteOptionsDetails.length < 1;
+                    var zoneItem2Empty = zoneItem2.RPRouteDetail == undefined || zoneItem2.RPRouteDetail.RouteOptionsDetails == undefined || zoneItem2.RPRouteDetail.RouteOptionsDetails.length < 1;
+                    if (zoneItem1Empty && zoneItem2Empty)
+                        return 0;
+                    else if (zoneItem1Empty)
+                        return -1;
+                    else if (zoneItem2Empty)
+                        return 1;
+                    else if (zoneItem1.RPRouteDetail.RouteOptionsDetails[0].ConvertedSupplierRate > zoneItem2.RPRouteDetail.RouteOptionsDetails[0].ConvertedSupplierRate)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "margin": sortFunction = function (zoneItem1, zoneItem2) {
+                    if (zoneItem1.Margin > zoneItem2.Margin)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "marginPerc": sortFunction = function (zoneItem1, zoneItem2) {
+                    if (zoneItem1.MarginPercentage > zoneItem2.MarginPercentage)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "newRate": sortFunction = function (zoneItem1, zoneItem2) {
+                    if (zoneItem1.NewRate > zoneItem2.NewRate)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "rateChangeIcon": sortFunction = function (zoneItem1, zoneItem2) {
+                    var zoneItem1Empty = zoneItem1.RateChangeTypeIconTooltip == undefined;
+                    var zoneItem2Empty = zoneItem2.RateChangeTypeIconTooltip == undefined;
+                    if (zoneItem1Empty && zoneItem2Empty)
+                        return 0;
+                    else if (zoneItem1Empty)
+                        return -1;
+                    else if (zoneItem2Empty)
+                        return 1;
+                    if (zoneItem1.RateChangeTypeIconTooltip > zoneItem2.RateChangeTypeIconTooltip)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "bed": sortFunction = function (zoneItem1, zoneItem2) {
+                    var date1 = zoneItem1.NewRate != null ? zoneItem1.NewRateBED : zoneItem1.CurrentRateBED;
+                    var date2 = zoneItem2.NewRate != null ? zoneItem2.NewRateBED : zoneItem2.CurrentRateBED;
+                    var zoneItem1Empty = date1 == undefined;
+                    var zoneItem2Empty = date2 == undefined;
+                    if (zoneItem1Empty && zoneItem2Empty)
+                        return 0;
+                    else if (zoneItem1Empty)
+                        return -1;
+                    else if (zoneItem2Empty)
+                        return 1;
+                    if (date1 > date2)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+                case "eed": sortFunction = function (zoneItem1, zoneItem2) {
+                    var date1 = zoneItem1.NewRate != null ? zoneItem1.NewRateEED : zoneItem1.CurrentRateEED;
+                    var date2 = zoneItem2.NewRate != null ? zoneItem2.NewRateEED : zoneItem2.CurrentRateEED;
+                    var zoneItem1Empty = date1 == undefined;
+                    var zoneItem2Empty = date2 == undefined;
+                    if (zoneItem1Empty && zoneItem2Empty)
+                        return 0;
+                    else if (zoneItem1Empty)
+                        return -1;
+                    else if (zoneItem2Empty)
+                        return 1;
+                    if (date1 > date2)
+                        return 1;
+                    else
+                        return -1;
+                }; break;
+            }
+            if (sortFunction == undefined) {
+                if (col.name.indexOf('costColumn_') >= 0) {
+                    var costColumnIndex = parseInt(col.name.substring('costColumn_'.length));
+                    sortFunction = function (zoneItem1, zoneItem2) {
+                        if (zoneItem1.Costs[costColumnIndex] > zoneItem2.Costs[costColumnIndex])
+                            return 1;
+                        else
+                            return -1;
+                    };
+                }
+            }
+
+            var finalSortFunction = newSortDirection == "ASC" ? sortFunction : function (zoneItem1, zoneItem2) { return -sortFunction(zoneItem1, zoneItem2); };
+            $scope.zoneItems.sort(finalSortFunction);
+            clearSorting();
+            col.sortDirection = newSortDirection;
+            scrollGrid();
+        }
+
+        function clearSorting() {
+            for (var colName in columnsConfig) {
+                columnsConfig[colName].sortDirection = undefined;
+            }
+}
+
         function applyChanges(zoneChanges, zoneItem) {
             if (zoneItem.IsDirty) {
                 var zoneItemChanges = {
@@ -813,14 +990,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 setDraftRateToChange(zoneItemChanges, zoneItem);
                 if (WhS_Sales_RatePlanUtilsService.isStringEmpty(zoneItem.NewRate)) {
                     setDraftRateToClose(zoneItemChanges, zoneItem);
-                }
+                }                
 
-                for (var i = 0; i < zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.length; i++) {
-                    var item = zoneItem.drillDownExtensionObject.drillDownDirectiveTabs[i];
-
-                    if (item.directiveAPI && item.directiveAPI.applyChanges)
-                        item.directiveAPI.applyChanges(zoneItemChanges);
-                }
+                finalizeZoneItemBeforeUnload(zoneItem);
 
                 applyRoutingProductChanges();
                 applyOtherRateChanges();
@@ -887,6 +1059,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 zoneItemChanges.ResetService = zoneItem.ResetService;
             }
         }
+
+        function finalizeZoneItemBeforeUnload(zoneItem) {
+            for (var i = 0; i < zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.length; i++) {
+                var item = zoneItem.drillDownExtensionObject.drillDownDirectiveTabs[i];
+
+                if (item.directiveAPI && item.directiveAPI.applyChanges)
+                    item.directiveAPI.applyChanges();
+            }
+        }
         function showBulkActionTabs(value) {
             if (gridQuery.context != undefined && gridQuery.context.showBulkActionTabs != undefined)
                 gridQuery.context.showBulkActionTabs(value);
@@ -944,48 +1125,86 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
         var lastScrollTop;
         var gridBodyElement = $element.find("#gridBody");
+        var gridBodyContainer = $($element.find("#gridBodyContainer"));
+
+        var lastScrollingTime;
+        var handleScrollingStarted = false;
+        var lastScrollTop;
 
         function defineScrollEvent() {            
-            $($element.find("#gridBodyContainer")).on('scroll', scrollGrid);
-            function scrollGrid() {
-
-                var scrollTop = $($element.find("#gridBodyContainer")).scrollTop();
-                var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - $($element.find("#gridBodyContainer")).height());
-
-                if (scrollTop > lastScrollTop) {
-                    if (scrollPercentage > 80)
-                        onScrolling();
-                }
-                lastScrollTop = scrollTop;
-            }
+            gridBodyContainer.on('scroll', scrollGrid);            
             $element.on('$destroy', function () {
                 $($element.find("#gridBodyContainer")).unbind('scroll', scrollGrid);
                 $scope.$destroy();
             });
         }
 
-        function onScrolling() {
-            if (isLoadingMoreData)
-                return;
-            if (stopPagingOnScroll)
-                return;
-            $scope.$apply(function () {
-                var initialLength = $scope.zoneItems.length;
-                $scope.isLoading = true;
-                var promise = displayNextZoneItemsPage();
-                if (promise != undefined && promise != null) {
-                    isLoadingMoreData = true;
-                    promise.finally(function () {
-                        if ($scope.zoneItems.length - initialLength < pageSize)
-                            stopPagingOnScroll = true;
-                        isLoadingMoreData = false;
-                        setTimeout(function () {
-                            $scope.isLoading = false;
-                            $scope.$apply();
-                        });
-                    });
-                }
-            });
+        function scrollGrid() {
+            lastScrollTop = gridBodyContainer.scrollTop();
+            lastScrollingTime = new Date();
+            if (!handleScrollingStarted)
+                handleScrolling();
         }
+
+        function handleScrolling() {
+            handleScrollingStarted = true;
+            var diffInMilliseconds = (new Date()).getTime() - lastScrollingTime;            
+            if (gridBodyContainer.scrollTop() != lastScrollTop || diffInMilliseconds < 150)
+                setTimeout(handleScrolling, 150);
+            else {
+                updateRowDisplays();
+                handleScrollingStarted = false;
+            }
+        }
+
+        function updateRowDisplays()
+        {
+            var diffInMilliseconds = (new Date()).getTime() - lastScrollingTime;            
+            if (gridBodyContainer.scrollTop() != lastScrollTop || diffInMilliseconds < 150)
+                return;
+            var scrollTop = gridBodyContainer.scrollTop();
+            var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - gridBodyContainer.height());
+            var middleElementIndex = Math.round(scrollPercentage * $scope.zoneItems.length / 100);
+            var nbOfItemsChanged = 0;
+            var maxItemsToRender = 10;
+
+            var startingIndex = ($scope.zoneItems.length - middleElementIndex) > 30 ? 10 : 0;
+
+            for (var i = startingIndex; i < $scope.zoneItems.length && nbOfItemsChanged < maxItemsToRender; i++) {
+                if (i >= 0)
+                    setItemsRowDisplay(i, true);
+            }
+
+            for (var i = 0; i < $scope.zoneItems.length && nbOfItemsChanged < maxItemsToRender; i++) {
+                setItemsRowDisplay(i, true);
+            }
+
+            for (var i = 0; i < $scope.zoneItems.length && nbOfItemsChanged < maxItemsToRender; i++) {
+                setItemsRowDisplay(i, false);
+            }
+
+            if (nbOfItemsChanged > 0)
+                $scope.$apply();
+            if (nbOfItemsChanged == maxItemsToRender)
+                setTimeout(updateRowDisplays, 200);
+
+            function setItemsRowDisplay(itemIndex, tryDisplay) {
+                var zoneItem = $scope.zoneItems[itemIndex];
+                var difference = Math.abs(itemIndex - middleElementIndex);
+                if (tryDisplay) {
+                    if (difference <= 30 && zoneItem.displayRow == false) {
+                        zoneItem.displayRow = true;
+                        nbOfItemsChanged++;
+                    }
+                }
+                else {
+                    if (difference > 200 && zoneItem.displayRow == true && zoneItem.validationContext.validate() == null) {//hide displayed row only if it's 200 rows away from the scroll position
+                        finalizeZoneItemBeforeUnload(zoneItem);
+                        zoneItem.displayRow = false;
+                        nbOfItemsChanged++;
+                    }
+                }
+            }
+        }        
     }
 }]);
