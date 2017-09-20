@@ -47,3 +47,51 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 ----------------------------------------------------------------------------------------------------
 end
+
+
+--[sec].[User]--------------------------------------------------------------------------------Beginset nocount on;;with cte_data([Name],[Password],[Email],[TenantId],[Description],[EnabledTill],[ExtendedSettings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('Retail Account','JO9ZxpU4iuZ4iNY8PxfFHI/yQtJo','retailsystemaccount@nodomain.com',1,'System Account used to connect from the Retail Application',null,null)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Name],[Password],[Email],[TenantId],[Description],[EnabledTill],[ExtendedSettings]))merge	[sec].[User] as tusing	cte_data as son		1=1 and t.[Email] = s.[Email]when matched then	update set	[Name] = s.[Name],[Password] = s.[Password],[TenantId] = s.[TenantId],[Description] = s.[Description],[EnabledTill] = s.[EnabledTill],[ExtendedSettings] = s.[ExtendedSettings]when not matched by target then	insert([Name],[Password],[Email],[TenantId],[Description],[EnabledTill],[ExtendedSettings])	values(s.[Name],s.[Password],s.[Email],s.[TenantId],s.[Description],s.[EnabledTill],s.[ExtendedSettings]);----------------------------------------------------------------------------------------------------ENDDECLARE @RetailAccountID int = (SELECT ID from [sec].[User] WHERE Email = 'retailsystemaccount@nodomain.com')--[sec].[Permission]--------------------------------------------------------------------------------BEGINset nocount on;;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////(0, CONVERT(varchar, @RetailAccountID),1,'b4158657-230e-40bf-b88c-f2b2ca8835de','[{"Name":"Add","Value":1},{"Name":"Reset Password","Value":1}]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags]))merge	[sec].[Permission] as tusing	cte_data as son		1=1 and t.[HolderType] = s.[HolderType] and t.[HolderId] = s.[HolderId] and t.[EntityType] = s.[EntityType] and t.[EntityId] = s.[EntityId]when matched then	update set	[PermissionFlags] = s.[PermissionFlags]when not matched by target then	insert([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])	values(s.[HolderType],s.[HolderId],s.[EntityType],s.[EntityId],s.[PermissionFlags]);----------------------------------------------------------------------------------------------------END	--[common].[Connection]-----------------------------------------------------------------------BEGINset nocount on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('7A2044F4-B42C-44AA-BFB8-6538904E8E4C','Retail Connection','{"$type":"Vanrise.Common.Business.VRInterAppRestConnection, Vanrise.Common.Business","ConfigId":"5cd2aac3-1c74-401f-8010-8b9b5fd9c011","BaseURL":"http://retailapplicationURL","Username":"portalsystemaccount@nodomain.com","Password":"portalaccount@nodomain.com"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[common].[Connection] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]--when matched then--	update set--	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);----------------------------------------------------------------------------------------------------END
+
+--[genericdata].[datastore]-------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('7403534B-628F-4114-B1C9-C9EDAB294219','VR Rest API','{"$type":"Vanrise.GenericData.MainExtensions.DataStorages.DataStore.VRRestAPIDataStoreSettings, Vanrise.GenericData.MainExtensions","ConfigId":"4829119d-f86f-4a6c-a6c0-cdb3fc8274c1","ConnectionId":"7a2044f4-b42c-44aa-bfb8-6538904e8e4c","IsRemoteDataStore":true}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[genericdata].[datastore] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+
+
+	
+
+--[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('56287CBB-376B-42F3-9BA0-04FFBE609A70','Remote_BE_ChargingPolicy','Charging Policy','{"$type":"Vanrise.GenericData.Business.VRRestAPIBEDefinitionSettings, Vanrise.GenericData.Business","ConfigId":"b4f22ffb-b663-4f5f-af53-acbef7224dfb","IdType":"System.Int32","DefinitionEditor":"vr-genericdata-restapibedefinitions-editor","SelectorUIControl":"vr-genericdata-businessentity-remoteselector","ManagerFQTN":"Vanrise.GenericData.Business.VRRestAPIBusinessEntityManager, Vanrise.GenericData.Business","ConnectionId":"7a2044f4-b42c-44aa-bfb8-6538904e8e4c","RemoteBEDefinitionId":"d0ee9bf8-385e-48ef-b989-a87666a00072","SingularTitle":"Charging Policy","PluralTitle":"Charging Policies"}'),
+('AEB7BDC9-8A66-4297-8A11-0865515DF4E6','Remote_BE_Currency','Currency','{"$type":"Vanrise.GenericData.Business.VRRestAPIBEDefinitionSettings, Vanrise.GenericData.Business","ConfigId":"b4f22ffb-b663-4f5f-af53-acbef7224dfb","IdType":"System.Int32","DefinitionEditor":"vr-genericdata-restapibedefinitions-editor","SelectorUIControl":"vr-genericdata-businessentity-remoteselector","ManagerFQTN":"Vanrise.GenericData.Business.VRRestAPIBusinessEntityManager, Vanrise.GenericData.Business","ConnectionId":"7a2044f4-b42c-44aa-bfb8-6538904e8e4c","RemoteBEDefinitionId":"d41ea344-c3c0-4203-8583-019b6b3edb76","SingularTitle":"Currency","PluralTitle":"Currencies"}'),
+('48181232-9B13-4F76-8BA6-19AC19753C64','Remote_BE_Zone','Zone','{"$type":"Vanrise.GenericData.Business.VRRestAPIBEDefinitionSettings, Vanrise.GenericData.Business","ConfigId":"b4f22ffb-b663-4f5f-af53-acbef7224dfb","IdType":"System.Int64","DefinitionEditor":"vr-genericdata-restapibedefinitions-editor","SelectorUIControl":"vr-genericdata-businessentity-remoteselector","ManagerFQTN":"Vanrise.GenericData.Business.VRRestAPIBusinessEntityManager, Vanrise.GenericData.Business","ConnectionId":"7a2044f4-b42c-44aa-bfb8-6538904e8e4c","RemoteBEDefinitionId":"10740f30-5a20-4718-b5af-0e2e160b21c2","SingularTitle":"Zone","PluralTitle":"Zones"}'),
+('8E5EAEDF-F4F0-49FA-AB46-306C8044317D','Remote_BE_ServiceType','Service Type','{"$type":"Vanrise.GenericData.Business.VRRestAPIBEDefinitionSettings, Vanrise.GenericData.Business","ConfigId":"b4f22ffb-b663-4f5f-af53-acbef7224dfb","IdType":"System.Guid","DefinitionEditor":"vr-genericdata-restapibedefinitions-editor","SelectorUIControl":"vr-genericdata-businessentity-remoteselector","ManagerFQTN":"Vanrise.GenericData.Business.VRRestAPIBusinessEntityManager, Vanrise.GenericData.Business","ConnectionId":"7a2044f4-b42c-44aa-bfb8-6538904e8e4c","RemoteBEDefinitionId":"bfad446f-7129-45b1-94bf-febd290f394d","SingularTitle":"Service Type","PluralTitle":"Service Types"}'),
+('5F3C5C17-2D17-46EB-B7F2-DD44E979DBF9','Remote_BE_Package','Package','{"$type":"Vanrise.GenericData.Business.VRRestAPIBEDefinitionSettings, Vanrise.GenericData.Business","ConfigId":"b4f22ffb-b663-4f5f-af53-acbef7224dfb","IdType":"System.Int32","DefinitionEditor":"vr-genericdata-restapibedefinitions-editor","SelectorUIControl":"vr-genericdata-businessentity-remoteselector","ManagerFQTN":"Vanrise.GenericData.Business.VRRestAPIBusinessEntityManager, Vanrise.GenericData.Business","ConnectionId":"7a2044f4-b42c-44aa-bfb8-6538904e8e4c","RemoteBEDefinitionId":"c0c76db1-4876-4e0d-9b59-ca89120e6be9","SingularTitle":"Package","PluralTitle":"Packages"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Settings]))
+merge	[genericdata].[BusinessEntityDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
