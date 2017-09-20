@@ -125,6 +125,7 @@
     <Compile Include="Convertors\CompanyConvertor.cs" />
     <Compile Include="Convertors\CustomerConvertor.cs" />
     <Compile Include="Convertors\DIDConvertor.cs" />
+    <Compile Include="Convertors\MultiNetUserConvertor.cs" />
     <Compile Include="Convertors\PaymentConvertor.cs" />
     <Compile Include="Convertors\SubscriberConvertor.cs" />
     <Compile Include="Convertors\UserConvertor.cs" />

@@ -24,7 +24,6 @@ namespace Retail.MultiNet.Business.Convertors
             }
         }
         public Guid TransactionTypeId { get; set; }
-        public Guid CompanyExtendedInfoId { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
         public string SourceAccountIdColumn { get; set; }
         public string AmountColumn { get; set; }
@@ -32,6 +31,8 @@ namespace Retail.MultiNet.Business.Convertors
         public string PaymentDateColumn { get; set; }
         public string ReferenceColumnName { get; set; }
         public string CurrencyColumnName { get; set; }
+        public string SourceIdColumnName { get; set; }
+
 
         public override void Initialize(ITargetBEConvertorInitializeContext context)
         {
@@ -39,24 +40,24 @@ namespace Retail.MultiNet.Business.Convertors
         }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
-            Dictionary<string, Account> accountsByGPInvoiceNumber = context.InitializationData as Dictionary<string, Account>;
+            Dictionary<string, Account> accountsBySourceId = context.InitializationData as Dictionary<string, Account>;
 
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             List<ITargetBE> transactionTargetBEs = new List<ITargetBE>();
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
-                string sourceId = row[this.ReferenceColumnName] as string;
+                long sourceId = (Int64)row[this.SourceIdColumnName];
                 try
                 {
-                    string currencySourceId = row[CurrencyColumnName] as string;
+                    string currencySourceId = (row[CurrencyColumnName] as string).Trim();
                     CurrencyManager currencyManager = new CurrencyManager();
                     Currency currency = currencyManager.GetCurrencyBySymbol(currencySourceId);
                     currency.ThrowIfNull("currency", currencySourceId);
 
-                    string accountId = string.Format("Customer_{0}", row[this.SourceAccountIdColumn] as string);
-                   
+                    string accountId = string.Format("Customer_{0}", (row[SourceAccountIdColumn] as string).Trim());
+
                     Account account = null;
-                    if (!accountsByGPInvoiceNumber.TryGetValue(accountId, out account))
+                    if (!accountsBySourceId.TryGetValue(accountId, out account))
                     {
                         context.WriteBusinessTrackingMsg(LogEntryType.Error, "Failed to import Payment (SourceId: '{0}', SourceAccountId: '{1}') due to unavailable account.", sourceId, accountId);
                         continue;
@@ -66,15 +67,15 @@ namespace Retail.MultiNet.Business.Convertors
                         BillingTransaction = new BillingTransaction
                         {
                             TransactionTypeId = TransactionTypeId,
-                            SourceId = sourceId,
+                            SourceId = sourceId.ToString(),
                             CurrencyId = currency.CurrencyId,
                             AccountId = account.AccountId.ToString(),
                             TransactionTime = (DateTime)row[this.PaymentDateColumn],
                             Amount = row[this.AmountColumn] != DBNull.Value ? (decimal)row[this.AmountColumn] : 0,
                             AccountTypeId = account.TypeId,
-                            Reference = row[ReferenceColumnName] as string
+                            Reference = (row[ReferenceColumnName] as string).Trim()
                         },
-                        InvoiceSourceId = row[InvoiceSourceIdColumn] as string
+                        InvoiceSourceId = (row[InvoiceSourceIdColumn] as string).Trim()
                     };
                     transactionTargetBEs.Add(sourceTransaction);
                 }

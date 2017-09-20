@@ -141,6 +141,7 @@ app.directive('retailMultinetAccountConvertorEditor', ['UtilsService', 'VRUIUtil
                         $scope.scopeModel.registrationColumnName = payload.RegistrationColumnName;
                         $scope.scopeModel.cNICColumnName = payload.CNICColumnName;
                         $scope.scopeModel.cNICExpiryDateColumnName = payload.CNICExpiryDateColumnName;
+                        $scope.scopeModel.accountContractID = payload.AccountContractID;
                         $scope.scopeModel.currencyIdColumnName = payload.CurrencyIdColumnName;
                         $scope.scopeModel.nTNColumnName = payload.NTNColumnName;
                         $scope.scopeModel.dueDateColumnName = payload.DueDateColumnName;
@@ -285,6 +286,7 @@ app.directive('retailMultinetAccountConvertorEditor', ['UtilsService', 'VRUIUtil
                         RegistrationColumnName: $scope.scopeModel.registrationColumnName,
                         CNICColumnName: $scope.scopeModel.cNICColumnName,
                         CNICExpiryDateColumnName: $scope.scopeModel.cNICExpiryDateColumnName,
+                        AccountContractID: $scope.scopeModel.accountContractID,
                         CurrencyIdColumnName: $scope.scopeModel.currencyIdColumnName,
                         NTNColumnName: $scope.scopeModel.nTNColumnName,
                         DueDateColumnName: $scope.scopeModel.dueDateColumnName,

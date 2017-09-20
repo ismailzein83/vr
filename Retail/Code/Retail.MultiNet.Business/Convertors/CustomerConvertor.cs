@@ -112,7 +112,7 @@ namespace Retail.MultiNet.Business.Convertors
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
-            Dictionary<Int64, ITargetBE> maultiNetAccounts = new Dictionary<Int64, ITargetBE>();
+            Dictionary<string, ITargetBE> maultiNetAccounts = new Dictionary<string, ITargetBE>();
             var accountsInitializationData = context.InitializationData as AccountsInitializationData;
             DataTable accountsDataTable = sourceBatch.Data;
 
@@ -121,9 +121,9 @@ namespace Retail.MultiNet.Business.Convertors
             foreach (DataRow row in accountsDataTable.Rows)
             {
                 ITargetBE targetMultiNetAccount;
-                var sourceId = (Int64)row[CustomerIdColumnName];
+                var sourceId = (row[CustomerIdColumnName] as string).Trim();
 
-                string accountName = row[AccountNameColumnName] as string;
+                string accountName = (row[AccountNameColumnName] as string).Trim();
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
                 {
                     try
@@ -181,23 +181,32 @@ namespace Retail.MultiNet.Business.Convertors
         #region Private Methods
         void FillBranchInfo(SourceAccountData accountData, DataRow row)
         {
-            CityManager cityManager = new CityManager();
-            //TODO Check City and Country
-            City city = null;// cityManager.GetCityByName(((int)row[CityColumnName]).ToString());
+
+            CountryManager countryManager = new CountryManager();
+            string countryName = (row[CountryColumnName] as string);
+
+            var country = string.IsNullOrEmpty(countryName) ? null : countryManager.GetCountry(countryName.Trim());
+            City city = null;
+            if (country != null)
+            {
+                CityManager cityManager = new CityManager();
+                string cityName = (row[CityColumnName] as string);
+                city = string.IsNullOrEmpty(cityName) ? null : cityManager.GetCityByName(country.CountryId, cityName);
+            }
+
             AccountPartCompanyProfile settings = new AccountPartCompanyProfile
                 {
                     Contacts = GetContactsList(row),
                     CityId = city != null ? city.CityId : (int?)null,
                     CountryId = city != null ? city.CountryId : (int?)null,
-                    POBox = row[POBoxColumnName] as string,
-                    Address = row[AddressColumnName] as string,
-                    Street = row[StreetColumnName] as string,
-                    Town = row[TownColumnName] as string,
-                    Website = row[WebsiteColumnName] as string,
+                    POBox = (row[POBoxColumnName] as string).Trim(),
+                    Address = (row[AddressColumnName] as string).Trim(),
+                    Street = (row[StreetColumnName] as string).Trim(),
+                    Town = (row[TownColumnName] as string).Trim(),
+                    Website = (row[WebsiteColumnName] as string).Trim(),
                     Faxes = GetNumbersList(row[FaxColumnName] as string),
                     MobileNumbers = GetNumbersList(row[MobileColumnName] as string),
                     PhoneNumbers = GetNumbersList(row[PhoneColumnName] as string)
-
                 };
 
 
@@ -212,15 +221,15 @@ namespace Retail.MultiNet.Business.Convertors
         {
             if (string.IsNullOrEmpty(numbers))
                 return null;
-            return numbers.Split(',').ToList();
+            return numbers.Trim().Split(',').ToList();
         }
         void FillExtendedInfo(SourceAccountData accountData, DataRow row)
         {
             MultiNetCompanyExtendedInfo settings = new MultiNetCompanyExtendedInfo
             {
-                CNIC = row[CNICColumnName] as string,
-                CNICExpiryDate = (DateTime)row[CNICExpiryDateColumnName],
-                NTN = row[NTNColumnName] as string,
+                CNIC = (row[CNICColumnName] as string).Trim(),
+                CNICExpiryDate = row[CNICExpiryDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[CNICExpiryDateColumnName],
+                NTN = (row[NTNColumnName] as string).Trim(),
                 BillingPeriod = row[BillingPeriodColumnName] == DBNull.Value ? 0 : (int)row[BillingPeriodColumnName],
                 DueDate = row[DueDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[BillingPeriodColumnName],
                 IsExcludedFromTax = row[IsExcludedFromTaxColumnName] == DBNull.Value ? false : (bool)row[IsExcludedFromTaxColumnName]
@@ -236,8 +245,10 @@ namespace Retail.MultiNet.Business.Convertors
         }
         void FillFinancialInfo(SourceAccountData accountData, DataRow row)
         {
+            string currencySourceId = (row[CustomerIdColumnName] as string).Trim();
             CurrencyManager currencyManager = new CurrencyManager();
-            Currency currency = currencyManager.GetCurrencyBySourceId(((int)row[CurrencyIdColumnName]).ToString());
+            Currency currency = currencyManager.GetCurrencyBySymbol(currencySourceId);
+            currency.ThrowIfNull("currency", currencySourceId);
 
             accountData.Account.Settings.Parts.Add(this.FinancialPartDefinitionId, new AccountPart
             {
@@ -253,38 +264,38 @@ namespace Retail.MultiNet.Business.Convertors
 
             contacts.Add("Main", new AccountCompanyContact
             {
-                Email = row[MainContactEmailColumnName] as string,
-                PhoneNumbers = new List<string> { row[MainContactPhoneColumnName] as string },
-                ContactName = row[MainContactNameColumnName] as string,
-                Notes = row[MainContactReligionColumnName] as string,
-                Title = row[MainContactNameTitleColumnName] as string,
+                Email = (row[MainContactEmailColumnName] as string).Trim(),
+                PhoneNumbers = new List<string> { (row[MainContactPhoneColumnName] as string).Trim() },
+                ContactName = (row[MainContactNameColumnName] as string).Trim(),
+                Notes = (row[MainContactReligionColumnName] as string).Trim(),
+                Title = (row[MainContactNameTitleColumnName] as string).Trim(),
                 Salutation = GetSalutation(row[MainContactSalutaionColumnName] as string)
             });
 
             contacts.Add("Technical", new AccountCompanyContact
             {
-                Email = row[TechnicalContactEmailColumnName] as string,
-                PhoneNumbers = new List<string> { row[TechnicalContactPhoneColumnName] as string },
-                ContactName = row[TechnicalContactNameColumnName] as string,
-                Notes = row[TechnicalContactReligionColumnName] as string,
-                Title = row[TechnicalContactNameTitleColumnName] as string,
+                Email = (row[TechnicalContactEmailColumnName] as string).Trim(),
+                PhoneNumbers = new List<string> { (row[TechnicalContactPhoneColumnName] as string).Trim() },
+                ContactName = (row[TechnicalContactNameColumnName] as string).Trim(),
+                Notes = (row[TechnicalContactReligionColumnName] as string).Trim(),
+                Title = (row[TechnicalContactNameTitleColumnName] as string).Trim(),
                 Salutation = GetSalutation(row[TechnicalContactSalutaionColumnName] as string)
             });
 
             contacts.Add("Financial", new AccountCompanyContact
             {
-                Email = row[FinanceContactEmailColumnName] as string,
-                PhoneNumbers = new List<string> { row[FinanceContactPhoneColumnName] as string },
-                ContactName = row[FinanceContactNameColumnName] as string,
-                Notes = row[FinanceContactReligionColumnName] as string,
-                Title = row[FinanceContactNameTitleColumnName] as string,
+                Email = (row[FinanceContactEmailColumnName] as string).Trim(),
+                PhoneNumbers = new List<string> { (row[FinanceContactPhoneColumnName] as string).Trim() },
+                ContactName = (row[FinanceContactNameColumnName] as string).Trim(),
+                Notes = (row[FinanceContactReligionColumnName] as string).Trim(),
+                Title = (row[FinanceContactNameTitleColumnName] as string).Trim(),
                 Salutation = GetSalutation(row[FinanceContactSalutaionColumnName] as string)
             });
             return contacts;
         }
         private SalutationType? GetSalutation(string salutation)
         {
-            switch (salutation)
+            switch (salutation.Trim())
             {
                 case "Mr":
                     return SalutationType.Mr;

@@ -45,6 +45,8 @@ namespace Retail.MultiNet.Business.Convertors
         public string NTNColumnName { get; set; }
         public string DueDateColumnName { get; set; }
         public string BillingPeriodColumnName { get; set; }
+        public string AccountContractID { get; set; }
+
 
         #endregion
 

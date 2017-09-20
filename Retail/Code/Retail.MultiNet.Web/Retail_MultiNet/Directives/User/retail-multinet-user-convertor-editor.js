@@ -132,7 +132,7 @@ app.directive('retailMultinetUserConvertorEditor', ['UtilsService', 'VRUIUtilsSe
                         accountBEDefinitionId = payload.AccountBEDefinitionId;
 
                         $scope.scopeModel.accountIdColumnName = payload.AccountIdColumnName;
-                        $scope.scopeModel.subscriberIdColumnName = payload.SubscriberIdColumnName;
+                        $scope.scopeModel.subscriberIdColumnName = payload.UserIdColumnName;
                         $scope.scopeModel.nameColumnName = payload.NameColumnName;
 
                         accountTypeSelectorPayload = {
@@ -205,14 +205,14 @@ app.directive('retailMultinetUserConvertorEditor', ['UtilsService', 'VRUIUtilsSe
 
                 api.getData = function () {
                     var data = {
-                        $type: "Retail.MultiNet.Business.Convertors.UserConvertor, Retail.MultiNet.Business",
-                        Name: "MultiNet User Convertor",
+                        $type: "Retail.MultiNet.Business.Convertors.MultiNetUserConvertor, Retail.MultiNet.Business",
+                        Name: "MultiNet New User Convertor",
                         AccountBEDefinitionId: accountDefinitionSelectorApi.getSelectedIds(),
                         InitialStatusId: statusDefinitionSelectorAPI.getSelectedIds(),
                         AccountTypeId: accountTypeSelectorAPI.getSelectedIds(),
                         UserProfilePartDefinitionId: userProfileDefinitionSelectorAPI.getSelectedIds(),
                         AccountIdColumnName: $scope.scopeModel.accountIdColumnName,
-                        SubscriberIdColumnName: $scope.scopeModel.subscriberIdColumnName,
+                        UserIdColumnName: $scope.scopeModel.subscriberIdColumnName,
                         NameColumnName: $scope.scopeModel.nameColumnName
                     };
                     return data;

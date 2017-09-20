@@ -21,7 +21,7 @@ namespace Retail.EntitiesMigrator.Data.SQL
         #endregion
         public IEnumerable<InternationalRate> GetInternationalRates()
         {
-            return GetItemsText(query_getInetrnationalRates, InternationalRateMapper, null);
+            return GetItemsText(query_getInetrnationalRates2, InternationalRateMapper2, null);
         }
 
         InternationalRate InternationalRateMapper(IDataReader reader)
@@ -34,8 +34,26 @@ namespace Retail.EntitiesMigrator.Data.SQL
             };
         }
 
+        InternationalRate InternationalRateMapper2(IDataReader reader)
+        {
+            return new InternationalRate
+            {
+                InternationalRateDetail = new RateDetails
+                {
+                    FractionUnit = (int)reader["Tariff"],
+                    Rate = (decimal)reader["Rate"]
+                },
+                ZoneName = reader["Zone"] as string,
+                ActivationDate = new DateTime(2010, 01, 01)
+            };
+        }
+
         const string query_getInetrnationalRates = @"SELECT     distinct [DES_DESTINATIONNAME]
                                                                     ,[DR_RATECONF]
                                                     FROM        [Multinet_Intl_Rates]";
+        const string query_getInetrnationalRates2 = @"SELECT    [Zone]
+                                                                ,[Tariff]
+                                                                ,[Rate]
+                                                      FROM      [MultiNet_International_Rates]";
     }
 }
