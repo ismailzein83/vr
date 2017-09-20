@@ -139,15 +139,11 @@ namespace TOne.WhS.Sales.Entities
 
     public interface IApplyCorrectedDataContext
     {
+        SalePriceListOwnerType OwnerType { get; }
+        BulkActionCorrectedData CorrectedData { get; }
         int NewRateDayOffset { get; }
         int IncreasedRateDayOffset { get; }
         int DecreasedRateDayOffset { get; }
-
-        SalePriceListOwnerType OwnerType { get; }
-        int OwnerId { get; }
-        BulkActionCorrectedData CorrectedData { get; }
         ZoneChanges GetZoneDraft(long zoneId);
-        ZoneItem GetContextZoneItem(long zoneId);
-        decimal GetRoundedRate(decimal rateValue);
     }
 }
