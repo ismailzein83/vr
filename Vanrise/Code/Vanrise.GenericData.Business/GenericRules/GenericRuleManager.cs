@@ -68,11 +68,15 @@ namespace Vanrise.GenericData.Business
 
                     foreach (GenericRuleDefinitionCriteriaField genericRuleDefinitionCriteriaField in ruleDefinition.CriteriaDefinition.Fields)
                     {
-                        var ruleFieldValues = rule.Criteria.FieldsValues;
-                        var targetRuleFieldValues = targetRule.Criteria.FieldsValues;
                         var criteriaFieldName = genericRuleDefinitionCriteriaField.FieldName;
 
-                        var ruleFieldValue = ruleFieldValues.GetRecord(criteriaFieldName);
+                        var ruleFieldValues = rule.Criteria != null ? rule.Criteria.FieldsValues : null;
+                        var ruleFieldValue = ruleFieldValues != null ? ruleFieldValues.GetRecord(criteriaFieldName) : null;
+
+                        var targetRuleFieldValues = targetRule.Criteria != null ? targetRule.Criteria.FieldsValues : null;
+                        if (targetRuleFieldValues == null) //target rule cannot override current rule
+                            break;
+
                         var targetRuleFieldValue = targetRuleFieldValues.GetRecord(criteriaFieldName);
 
                         if (!criterias.ContainsKey(criteriaFieldName))
