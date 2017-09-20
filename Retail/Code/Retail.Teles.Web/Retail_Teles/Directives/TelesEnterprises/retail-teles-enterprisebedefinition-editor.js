@@ -58,7 +58,7 @@ app.directive('retailTelesEnterprisebedefinitionEditor', ['UtilsService', 'VRUIU
                             }
                             VRUIUtilsService.callDirectiveLoad(conectionTypeAPI, conectionTypePayload, conectionTypeLoadDeferred);
                         });
-                        return conectionTypeLoadDeferred.promise
+                        return conectionTypeLoadDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };

@@ -111,7 +111,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(newRoutingGroupConditionAPI, newRoutingGroupConditionPayload, newRoutingGroupConditionLoadDeferred);
                         });
-                        return newRoutingGroupConditionLoadDeferred.promise
+                        return newRoutingGroupConditionLoadDeferred.promise;
                     }
                     function loadExistingRoutingGroupCondition() {
                         var existingRoutingGroupConditionLoadDeferred = UtilsService.createPromiseDeferred();
@@ -123,7 +123,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(existingRoutingGroupConditionAPI, existingRoutingGroupConditionPayload, existingRoutingGroupConditionLoadDeferred);
                         });
-                        return existingRoutingGroupConditionLoadDeferred.promise
+                        return existingRoutingGroupConditionLoadDeferred.promise;
                     }
 
                     promises.push(loadNewRoutingGroupCondition());
@@ -140,7 +140,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(conectionTypeAPI, conectionTypePayload, conectionTypeLoadDeferred);
                         });
-                        return conectionTypeLoadDeferred.promise
+                        return conectionTypeLoadDeferred.promise;
                     }
 
                     promises.push(loadCompanyTypes());
@@ -155,7 +155,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(companyTypeAPI, companyTypePayload, companyTypeLoadDeferred);
                         });
-                        return companyTypeLoadDeferred.promise
+                        return companyTypeLoadDeferred.promise;
                     }
 
                     promises.push(loadSiteTypes());
@@ -170,7 +170,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(siteTypeAPI, siteTypePayload, siteTypeLoadDeferred);
                         });
-                        return siteTypeLoadDeferred.promise
+                        return siteTypeLoadDeferred.promise;
                     }
 
                     promises.push(loadUserTypes());
@@ -185,7 +185,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(userTypeAPI, userTypePayload, userTypeLoadDeferred);
                         });
-                        return userTypeLoadDeferred.promise
+                        return userTypeLoadDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };

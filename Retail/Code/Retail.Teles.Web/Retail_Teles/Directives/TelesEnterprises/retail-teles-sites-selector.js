@@ -41,7 +41,7 @@ app.directive('retailTelesSitesSelector', ['Retail_Teles_SiteAPIService', 'Utils
 
         var selectorAPI;
         var vrConnectionId;
-        var enterpriseId
+        var enterpriseId;
         function initializeController() {
             ctrl.onSelectorReady = function (api) {
                 selectorAPI = api;

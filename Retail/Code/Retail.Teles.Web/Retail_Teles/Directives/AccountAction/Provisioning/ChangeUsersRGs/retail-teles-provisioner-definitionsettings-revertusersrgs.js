@@ -88,7 +88,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(conectionTypeAPI, conectionTypePayload, conectionTypeLoadDeferred);
                         });
-                        return conectionTypeLoadDeferred.promise
+                        return conectionTypeLoadDeferred.promise;
                     }
 
                     promises.push(loadCompanyTypes());
@@ -103,7 +103,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(companyTypeAPI, companyTypePayload, companyTypeLoadDeferred);
                         });
-                        return companyTypeLoadDeferred.promise
+                        return companyTypeLoadDeferred.promise;
                     }
 
                     promises.push(loadSiteTypes());
@@ -118,7 +118,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(siteTypeAPI, siteTypePayload, siteTypeLoadDeferred);
                         });
-                        return siteTypeLoadDeferred.promise
+                        return siteTypeLoadDeferred.promise;
                     }
 
                     promises.push(loadUserTypes());
@@ -133,7 +133,7 @@
                             }
                             VRUIUtilsService.callDirectiveLoad(userTypeAPI, userTypePayload, userTypeLoadDeferred);
                         });
-                        return userTypeLoadDeferred.promise
+                        return userTypeLoadDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
