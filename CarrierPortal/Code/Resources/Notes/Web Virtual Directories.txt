@@ -12,3 +12,4 @@ VR_GenericData					C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
 Analytic						C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
 PartnerPortal_Invoice			C:\TFS\CarrierPortal\Code\PartnerPortal.Invoice.Web\PartnerPortal_Invoice
 CP_Ringo						C:\TFS\CarrierPortal\Code\CP.Ringo.Web\CP_Ringo
+CP_MultiNet						C:\TFS\CarrierPortal\Code\CP.MultiNet.Web\CP_MultiNet
