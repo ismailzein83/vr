@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
+using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
@@ -62,6 +63,10 @@ namespace Retail.MultiNet.Business.Convertors
                         context.WriteBusinessTrackingMsg(LogEntryType.Error, "Failed to import Payment (SourceId: '{0}', SourceAccountId: '{1}') due to unavailable account.", sourceId, accountId);
                         continue;
                     }
+                    DateTime transactionTime = (DateTime)row[this.PaymentDateColumn];
+                    FinancialAccountData financialAccountData = null;
+                    new FinancialAccountManager().TryGetFinancialAccount(AccountBEDefinitionId, account.AccountId, true, transactionTime, out financialAccountData);
+                    financialAccountData.ThrowIfNull("financialAccountData");
                     SourceBillingTransaction sourceTransaction = new SourceBillingTransaction
                     {
                         BillingTransaction = new BillingTransaction
@@ -69,8 +74,8 @@ namespace Retail.MultiNet.Business.Convertors
                             TransactionTypeId = TransactionTypeId,
                             SourceId = sourceId.ToString(),
                             CurrencyId = currency.CurrencyId,
-                            AccountId = account.AccountId.ToString(),
-                            TransactionTime = (DateTime)row[this.PaymentDateColumn],
+                            AccountId = financialAccountData.FinancialAccountId,
+                            TransactionTime = transactionTime,
                             Amount = row[this.AmountColumn] != DBNull.Value ? (decimal)row[this.AmountColumn] : 0,
                             AccountTypeId = account.TypeId,
                             Reference = (row[ReferenceColumnName] as string).Trim()

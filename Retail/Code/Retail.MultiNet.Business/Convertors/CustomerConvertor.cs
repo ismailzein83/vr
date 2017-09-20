@@ -25,7 +25,7 @@ namespace Retail.MultiNet.Business.Convertors
         {
             get
             {
-                return "MultiNet Customer Convertor";
+                return "MultiNet GP Company Convertor";
             }
         }
         public Guid AccountBEDefinitionId { get; set; }
@@ -137,7 +137,7 @@ namespace Retail.MultiNet.Business.Convertors
                         accountData.Account.Name = accountName;
                         accountData.Account.SourceId = string.Format("Customer_{0}", sourceId);
                         accountData.Account.TypeId = this.AccountTypeId;
-                        Guid statusId = isActive ? new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd") : new Guid("80b7dc84-5c43-47fc-b921-2ea717c9bdbf");
+                        Guid statusId = new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd"); //isActive ? new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd") : new Guid("80b7dc84-5c43-47fc-b921-2ea717c9bdbf");
                         accountData.Account.StatusId = statusId;
 
                         accountData.Account.Settings = new AccountSettings
@@ -147,7 +147,7 @@ namespace Retail.MultiNet.Business.Convertors
 
 
                         FillBranchInfo(accountData, row);
-                        FillExtendedInfo(accountData, row);
+                        FillExtendedInfo(accountData, row, sourceId);
                         FillFinancialInfo(accountData, row);
 
                         CreateFinancialAccount(accountData.Account, row);
@@ -223,7 +223,7 @@ namespace Retail.MultiNet.Business.Convertors
                 return null;
             return numbers.Trim().Split(',').ToList();
         }
-        void FillExtendedInfo(SourceAccountData accountData, DataRow row)
+        void FillExtendedInfo(SourceAccountData accountData, DataRow row, string sourceId)
         {
             MultiNetCompanyExtendedInfo settings = new MultiNetCompanyExtendedInfo
             {
@@ -232,8 +232,8 @@ namespace Retail.MultiNet.Business.Convertors
                 NTN = (row[NTNColumnName] as string).Trim(),
                 BillingPeriod = row[BillingPeriodColumnName] == DBNull.Value ? 0 : (int)row[BillingPeriodColumnName],
                 DueDate = row[DueDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[BillingPeriodColumnName],
-                IsExcludedFromTax = row[IsExcludedFromTaxColumnName] == DBNull.Value ? false : (bool)row[IsExcludedFromTaxColumnName]
-
+                IsExcludedFromTax = row[IsExcludedFromTaxColumnName] == DBNull.Value ? false : (bool)row[IsExcludedFromTaxColumnName],
+                GPSiteID = sourceId
             };
 
             AccountPart part = new AccountPart
@@ -245,7 +245,7 @@ namespace Retail.MultiNet.Business.Convertors
         }
         void FillFinancialInfo(SourceAccountData accountData, DataRow row)
         {
-            string currencySourceId = (row[CustomerIdColumnName] as string).Trim();
+            string currencySourceId = (row[CurrencyIdColumnName] as string).Trim();
             CurrencyManager currencyManager = new CurrencyManager();
             Currency currency = currencyManager.GetCurrencyBySymbol(currencySourceId);
             currency.ThrowIfNull("currency", currencySourceId);

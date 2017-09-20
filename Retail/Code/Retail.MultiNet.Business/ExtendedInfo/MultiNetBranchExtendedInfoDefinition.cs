@@ -27,7 +27,13 @@ namespace Retail.MultiNet.Business
                         Name = "ContractReferenceNumber",
                         Title = "Contract Reference Number",
                         FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
-                    }                   
+                    },
+                    new GenericFieldDefinition()
+                    {
+                        Name = "GPSiteId",
+                        Title = "GP Site Id",
+                        FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+                    }  
                 };
         }
 

@@ -18,7 +18,7 @@ namespace Retail.MultiNet.Business.Convertors
         {
             get
             {
-                return "MultiNet New User Convertor";
+                return "MultiNet GP User Convertor";
             }
         }
         public Guid AccountBEDefinitionId { get; set; }
@@ -36,14 +36,14 @@ namespace Retail.MultiNet.Business.Convertors
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
-            Dictionary<Int64, ITargetBE> maultiNetAccounts = new Dictionary<Int64, ITargetBE>();
+            Dictionary<string, ITargetBE> maultiNetAccounts = new Dictionary<string, ITargetBE>();
             var accounts = context.InitializationData as Dictionary<string, Account>;
             sourceBatch.Data.DefaultView.Sort = AccountIdColumnName;
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
                 ITargetBE targetMultiNetAccount;
-                var sourceId = (Int64)row[UserIdColumnName];
-                var parentId = string.Format("Account_{0}", (Int64)row[AccountIdColumnName]);
+                var sourceId = (row[UserIdColumnName] as string);
+                var parentId = string.Format("Account_{0}", (row[AccountIdColumnName] as string).Trim());
                 string accountName = row[NameColumnName] as string;
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
                 {
@@ -61,7 +61,7 @@ namespace Retail.MultiNet.Business.Convertors
                         }
 
                         accountData.Account.Name = accountName;
-                        accountData.Account.SourceId = string.Format("MultinetUser_{0}", sourceId);
+                        accountData.Account.SourceId = string.Format("GPUser_{0}", sourceId);
                         accountData.Account.TypeId = this.AccountTypeId;
                         accountData.Account.StatusId = this.InitialStatusId;
 
@@ -103,7 +103,7 @@ namespace Retail.MultiNet.Business.Convertors
             {
                 Settings = new AccountPartPersonalInfo
                 {
-                    FirstName = row[NameColumnName] as string
+                    FirstName = (row[NameColumnName] as string).Trim()
                 }
             });
         }
