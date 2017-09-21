@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Retail.BusinessEntity.Entities;
 
 namespace Retail.Voice.Entities
 {
@@ -11,6 +12,41 @@ namespace Retail.Voice.Entities
         public abstract Guid ConfigId { get; }
 
         public abstract void ApplyChargingPolicyToVoiceEvent(IVoiceChargingPolicyEvaluatorContext context);
+
+        public virtual void ExportRates(IVoiceChargingPolicyEvaluatorExportRatesContext context)
+        {
+
+        }
+    }
+
+    public interface IVoiceChargingPolicyEvaluatorExportRatesContext
+    {
+        Guid ServiceTypeId { get; }
+
+        DateTime EffectiveDate { get; }
+
+        long AccountId { get; }
+
+        int ChargingPolicyId { get; }
+
+        ExportRuleData RateValueRuleData { set; }
+
+        ExportRuleData TariffRuleData { set; }
+    }
+
+    public class VoiceChargingPolicyEvaluatorExportRatesContext : IVoiceChargingPolicyEvaluatorExportRatesContext
+    {
+        public Guid ServiceTypeId { get; set; }
+
+        public DateTime EffectiveDate { get; set; }
+
+        public long AccountId { get; set; }
+
+        public int ChargingPolicyId { get; set; }
+
+        public ExportRuleData RateValueRuleData { get; set; }
+
+        public ExportRuleData TariffRuleData { get; set; }
     }
 
     public interface IServiceVoiceChargingPolicyEvaluator
@@ -53,7 +89,7 @@ namespace Retail.Voice.Entities
 
         public Decimal? SaleDurationInSeconds { get; set; }
 
-        public int? SaleRateValueRuleId {get; set;}
+        public int? SaleRateValueRuleId { get; set; }
 
         public int? SaleRateTypeRuleId { get; set; }
 

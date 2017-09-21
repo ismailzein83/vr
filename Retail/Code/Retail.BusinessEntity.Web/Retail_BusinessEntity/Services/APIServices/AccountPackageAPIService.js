@@ -4,8 +4,7 @@
 
     AccountPackageAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_BE_ModuleConfig', 'SecurityService'];
 
-    function AccountPackageAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService)
-    {
+    function AccountPackageAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
         var controllerName = 'AccountPackage';
 
         function GetFilteredAccountPackages(input) {
@@ -27,9 +26,18 @@
                 accountBEDefinitionId: accountBEDefinitionId
             });
         }
-        
+
         function UpdateAccountPackage(accountPackage) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAccountPackage'), accountPackage);
+        }
+
+
+        function ExportRates(accountBEDefinitionId, accountId) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'ExportRates'), { AccountBEDefinitionId: accountBEDefinitionId, AccountId: accountId },
+            {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
         }
 
         return {
@@ -37,7 +45,8 @@
             GetAccountPackage: GetAccountPackage,
             AddAccountPackage: AddAccountPackage,
             DoesUserHaveAddAccess: DoesUserHaveAddAccess,
-            UpdateAccountPackage: UpdateAccountPackage
+            UpdateAccountPackage: UpdateAccountPackage,
+            ExportRates: ExportRates
         };
     }
 

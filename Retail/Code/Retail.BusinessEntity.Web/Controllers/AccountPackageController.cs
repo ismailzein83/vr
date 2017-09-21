@@ -55,5 +55,12 @@ namespace Retail.BusinessEntity.Web.Controllers
                 return GetUnauthorizedResponse();
             return _manager.UpdateAccountPackage(accountPackageToEdit);
         }
+
+        [HttpPost]
+        [Route("ExportRates")]
+        public object ExportRates(AccountDefinition accountDefinition)
+        {
+            return GetExcelResponse(_manager.ExportRates(accountDefinition.AccountBEDefinitionId, accountDefinition.AccountId, DateTime.Now), "RatesReport.xls");
+        }
     }
 }

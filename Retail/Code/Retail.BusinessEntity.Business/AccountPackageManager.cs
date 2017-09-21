@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Data;
+﻿using Aspose.Cells;
+using Retail.BusinessEntity.Data;
 using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,110 @@ namespace Retail.BusinessEntity.Business
                 return accountInfo.AccountPackages.MapRecords(itm => itm.PackageId, filterPredicate);
 
             return null;
+        }
+
+
+        public System.IO.Stream ExportRates(Guid accountBEDefinitionId, long accountId, DateTime effectiveDate)
+        {
+            Vanrise.Common.Utilities.ActivateAspose();
+            Workbook wbk = new Workbook();
+            wbk.Worksheets.Clear();
+
+            List<ProcessedAccountPackage> processedAccountPackages = GetProcessedAccountPackagesByPriority(accountBEDefinitionId, accountId, effectiveDate, true);
+            if (processedAccountPackages == null || processedAccountPackages.Count == 0)
+                return wbk.SaveToStream();
+
+            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
+            List<ServiceType> serviceTypes = serviceTypeManager.GetServiceTypes(accountBEDefinitionId);
+
+            if (serviceTypes == null || serviceTypes.Count == 0)
+                return wbk.SaveToStream();
+
+            foreach (ServiceType serviceType in serviceTypes)
+            {
+                PackageSettingsExportRatesContext context = new PackageSettingsExportRatesContext()
+                {
+                    AccountId = accountId,
+                    EffectiveDate = effectiveDate,
+                    ServiceTypeId = serviceType.ServiceTypeId
+                };
+
+                foreach (ProcessedAccountPackage processedAccountPackage in processedAccountPackages)
+                {
+                    processedAccountPackage.Package.Settings.ExtendedSettings.ExportRates(context);
+                    if (context.IsFinalPricingPackage)
+                    {
+                        string rateSheetName = string.Format("{0} Rates", serviceType.Title);
+                        if (rateSheetName.Length > 31)
+                            rateSheetName = rateSheetName.Substring(0, 31);
+                        wbk.Worksheets.Add(rateSheetName);
+                        WriteToSheet(wbk.Worksheets[rateSheetName], context.RateValueRuleData);
+
+                        string tariffSheetName = string.Format("{0} Tariffs", serviceType.Title);
+                        if (tariffSheetName.Length > 31)
+                            tariffSheetName = tariffSheetName.Substring(0, 31);
+
+                        wbk.Worksheets.Add(tariffSheetName);
+                        WriteToSheet(wbk.Worksheets[tariffSheetName], context.TariffRuleData);
+                        break;
+                    }
+
+                }
+            }
+
+            return wbk.SaveToStream();
+        }
+
+        private void WriteToSheet(Worksheet sheet, ExportRuleData exportRuleData)
+        {
+            if (exportRuleData == null || exportRuleData.Headers == null || exportRuleData.Headers.Count == 0)
+                return;
+
+            int rowIndex = 0;
+            int colIndex = 0;
+            foreach (string header in exportRuleData.Headers)
+            {
+                sheet.Cells[rowIndex, colIndex].PutValue(header);
+                SetCellHeaderStyle(sheet.Cells.GetCell(rowIndex, colIndex));
+                colIndex++;
+            }
+
+            if (exportRuleData.Data != null)
+            {
+                foreach (var rowData in exportRuleData.Data)
+                {
+                    rowIndex++;
+                    colIndex = 0;
+                    foreach (var rowDataCell in rowData)
+                    {
+                        sheet.Cells[rowIndex, colIndex].PutValue(rowDataCell);
+                        colIndex++;
+                    }
+                }
+            }
+            sheet.AutoFitColumns();
+        }
+
+        private void SetCellHeaderStyle(Cell cell)
+        {
+            Style style = cell.GetStyle();
+            style.Font.Name = "Times New Roman";
+            style.Font.Color = System.Drawing.Color.FromArgb(255, 0, 0);
+            style.Font.Size = 14;
+            style.Font.IsBold = true;
+            cell.SetStyle(style);
+        }
+
+        private List<ProcessedAccountPackage> GetProcessedAccountPackagesByPriority(Guid accountBEDefinitionId, long accountId, DateTime effectiveTime, bool withInheritence)
+        {
+            List<ProcessedAccountPackage> processedAccountPackages = new List<ProcessedAccountPackage>();
+
+            LoadAccountPackagesByPriority(accountBEDefinitionId, accountId, effectiveTime, withInheritence, (processedAccountPackage, handle) =>
+            {
+                processedAccountPackages.Add(processedAccountPackage);
+            });
+
+            return processedAccountPackages;
         }
 
         public void LoadAccountPackagesByPriority(Guid accountBEDefinitionId, long accountId, DateTime effectiveTime, bool withInheritence, Action<ProcessedAccountPackage, LoadPackageHandle> OnPackageLoaded)
@@ -224,7 +329,7 @@ namespace Retail.BusinessEntity.Business
             account.ThrowIfNull("account", accountId);
 
 
-            if(!_accountBEManager.IsAccountAssignableToPackage(account))
+            if (!_accountBEManager.IsAccountAssignableToPackage(account))
             {
                 errorMessage = string.Format("Account: '{0}' connot be assigned to package: '{1}'", _accountBEManager.GetAccountName(account), package.Name);
                 return false;
@@ -299,13 +404,13 @@ namespace Retail.BusinessEntity.Business
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return new AccountBEDefinitionManager().DoesUserHaveViewAccountPackageAccess(userId, accountBEDefinitionId);
         }
-        
+
         public bool DoesUserHaveAddAccountPackageAccess(Guid accountBEDefinitionId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return new AccountBEDefinitionManager().DoesUserHaveAddAccountPackageAccess(userId, accountBEDefinitionId);
         }
-       
+
         public bool DoesUserHaveEditAccountPackageAccess(long accountPackageId)
         {
             var accountpackage = GetAccountPackage(accountPackageId);

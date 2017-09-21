@@ -20,5 +20,23 @@ namespace Retail.Voice.Entities
         {
             return this.VoiceChargingPolicyEvaluator;
         }
+
+        public override void ExportRates(IServiceTypeExtendedSettingsExportRatesContext context)
+        {
+            VoiceChargingPolicyEvaluator voiceChargingPolicyEvaluator = GetChargingPolicyEvaluator();
+
+            VoiceChargingPolicyEvaluatorExportRatesContext voiceChargingPolicyEvaluatorExportRatesContext = new VoiceChargingPolicyEvaluatorExportRatesContext()
+            {
+                AccountId = context.AccountId,
+                ChargingPolicyId = context.ChargingPolicyId,
+                EffectiveDate = context.EffectiveDate,
+                ServiceTypeId = context.ServiceTypeId
+            };
+
+            voiceChargingPolicyEvaluator.ExportRates(voiceChargingPolicyEvaluatorExportRatesContext);
+
+            context.RateValueRuleData = voiceChargingPolicyEvaluatorExportRatesContext.RateValueRuleData;
+            context.TariffRuleData = voiceChargingPolicyEvaluatorExportRatesContext.TariffRuleData;
+        }
     }
 }

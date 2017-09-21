@@ -30,11 +30,53 @@ namespace Retail.BusinessEntity.Entities
         {
             return true;
         }
+
+        public virtual void ExportRates(IPackageSettingsExportRatesContext context)
+        {
+
+        }
     }
 
     public abstract class PackageExtendedSettingsEditorRuntime
     {
 
+    }
+
+    public interface IPackageSettingsExportRatesContext
+    {
+        DateTime EffectiveDate { get; }
+
+        long AccountId { get; }
+
+        Guid ServiceTypeId { get; }
+
+        bool IsFinalPricingPackage { set; }
+
+        ExportRuleData RateValueRuleData { set; }
+
+        ExportRuleData TariffRuleData { set; }
+    }
+
+    public class PackageSettingsExportRatesContext : IPackageSettingsExportRatesContext
+    {
+        public DateTime EffectiveDate { get; set; }
+
+        public long AccountId { get; set; }
+
+        public Guid ServiceTypeId { get; set; }
+
+        public bool IsFinalPricingPackage { get; set; }
+
+        public ExportRuleData RateValueRuleData { get; set; }
+
+        public ExportRuleData TariffRuleData { get; set; }
+    }
+
+    public class ExportRuleData
+    {
+        public List<string> Headers { get; set; }
+        
+        public  List<string[]> Data { get; set; }
     }
 
     public interface IPackageSettingsCanAssignPackageContext
@@ -66,7 +108,7 @@ namespace Retail.BusinessEntity.Entities
         DateTime EED { get; }
     }
 
-     public interface IPackageSettingAssignementValidateContext
+    public interface IPackageSettingAssignementValidateContext
     {
         long AccountId { get; }
 

@@ -8,6 +8,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Pricing;
 using Vanrise.Common;
+using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
 
 namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 {
@@ -20,6 +21,103 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
         public Guid? ExtraChargeRuleDefinitionId { get; set; }
         public Guid? TariffRuleDefinitionId { get; set; }
 
+        public override void ExportRates(IVoiceChargingPolicyEvaluatorExportRatesContext context)
+        {
+            BusinessEntityFieldTypeFilter accountFieldFilter = new BusinessEntityFieldTypeFilter() { BusinessEntityIds = new List<object>() { context.AccountId } };
+            KeyValuePair<string, BusinessEntityFieldTypeFilter> accountFilter = new KeyValuePair<string, BusinessEntityFieldTypeFilter>("Account", accountFieldFilter);
+
+            BusinessEntityFieldTypeFilter serviceTypeFieldFilter = new BusinessEntityFieldTypeFilter() { BusinessEntityIds = new List<object>() { context.ServiceTypeId.ToString() } };
+            KeyValuePair<string, BusinessEntityFieldTypeFilter> serviceTypeFilter = new KeyValuePair<string, BusinessEntityFieldTypeFilter>("ServiceType", serviceTypeFieldFilter);
+
+            BusinessEntityFieldTypeFilter chargingPolicyFieldFilter = new BusinessEntityFieldTypeFilter() { BusinessEntityIds = new List<object>() { context.ChargingPolicyId } };
+            KeyValuePair<string, BusinessEntityFieldTypeFilter> chargingPolicyFilter = new KeyValuePair<string, BusinessEntityFieldTypeFilter>("ChargingPolicy", chargingPolicyFieldFilter);
+
+            Guid rateValueRuleDefinitionId = GetRateValueRuleDefinitionId(context.ServiceTypeId);
+            GenericRuleQuery rateValueRuleGenericRuleQuery = new GenericRuleQuery()
+            {
+                EffectiveDate = context.EffectiveDate,
+                RuleDefinitionId = rateValueRuleDefinitionId,
+                CriteriaFieldValues = new Dictionary<string, object>() { }
+            };
+            rateValueRuleGenericRuleQuery.CriteriaFieldValues.Add(accountFilter.Key, accountFilter.Value);
+            rateValueRuleGenericRuleQuery.CriteriaFieldValues.Add(chargingPolicyFilter.Key, chargingPolicyFilter.Value);
+            rateValueRuleGenericRuleQuery.CriteriaFieldValues.Add(serviceTypeFilter.Key, serviceTypeFilter.Value);
+
+            List<RateValueRule> rateValueRules = new RateValueRuleManager().GetApplicableFilteredRules(rateValueRuleDefinitionId, rateValueRuleGenericRuleQuery);
+            List<string> exportRateValueRuleDataHeaders;
+            List<string[]> exportRateValueRuleDataList;
+
+            ExtractDataFromRule(rateValueRuleDefinitionId, rateValueRules != null ? rateValueRules.Select(itm => itm as GenericRule).ToList() : null, out exportRateValueRuleDataHeaders, out exportRateValueRuleDataList);
+            context.RateValueRuleData = new ExportRuleData() { Headers = exportRateValueRuleDataHeaders, Data = exportRateValueRuleDataList };
+
+            Guid tariffRuleDefinitionId = GetTariffRuleDefinitionId(context.ServiceTypeId);
+            GenericRuleQuery tariffRuleGenericRuleQuery = new GenericRuleQuery()
+            {
+                EffectiveDate = context.EffectiveDate,
+                RuleDefinitionId = tariffRuleDefinitionId,
+                CriteriaFieldValues = new Dictionary<string, object>() { }
+            };
+            tariffRuleGenericRuleQuery.CriteriaFieldValues.Add(accountFilter.Key, accountFilter.Value);
+            tariffRuleGenericRuleQuery.CriteriaFieldValues.Add(chargingPolicyFilter.Key, chargingPolicyFilter.Value);
+            tariffRuleGenericRuleQuery.CriteriaFieldValues.Add(serviceTypeFilter.Key, serviceTypeFilter.Value);
+
+            List<TariffRule> tariffRules = new TariffRuleManager().GetApplicableFilteredRules(tariffRuleDefinitionId, tariffRuleGenericRuleQuery);
+            List<string> exportTariffRuleDataHeaders;
+            List<string[]> exportTariffRuleDataList;
+
+            ExtractDataFromRule(tariffRuleDefinitionId, tariffRules != null ? tariffRules.Select(itm => itm as GenericRule).ToList() : null, out exportTariffRuleDataHeaders, out exportTariffRuleDataList);
+            context.TariffRuleData = new ExportRuleData() { Headers = exportTariffRuleDataHeaders, Data = exportTariffRuleDataList };
+        }
+
+        private void ExtractDataFromRule(Guid genericRuleDefinitionId, List<GenericRule> genericRules, out List<string> ruleDataHeaders, out List<string[]> exportRuleDataList)
+        {
+            GenericRuleDefinition genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
+            int genericRuleDefinitionFieldsCount = genericRuleDefinition.CriteriaDefinition.Fields.Count;
+
+            ruleDataHeaders = genericRuleDefinition.CriteriaDefinition.Fields.Select(itm => itm.FieldName).ToList();
+            ruleDataHeaders.Add("Settings");
+            exportRuleDataList = null;
+
+            if (genericRules != null && genericRules.Count > 0)
+            {
+                exportRuleDataList = new List<string[]>();
+                foreach (GenericRule genericRule in genericRules)
+                {
+                    string[] rowData = new string[genericRuleDefinitionFieldsCount + 1];//+1 for settings column
+
+                    if (genericRule.Criteria != null && genericRule.Criteria.FieldsValues != null && genericRule.Criteria.FieldsValues.Count > 0)
+                    {
+                        int columnIndex = 0;
+                        foreach (GenericRuleDefinitionCriteriaField field in genericRuleDefinition.CriteriaDefinition.Fields)
+                        {
+                            GenericRuleCriteriaFieldValues fieldValue = genericRule.Criteria.FieldsValues.GetRecord(field.FieldName);
+                            if (fieldValue == null)
+                            {
+                                columnIndex++;
+                                continue;
+                            }
+
+                            string value = string.Empty;
+                            IEnumerable<object> objectValues = fieldValue.GetValues();
+                            if (objectValues != null)
+                            {
+                                List<string> objectDescriptionList = new List<string>();
+                                foreach (object objectValue in objectValues)
+                                {
+                                    objectDescriptionList.Add(field.FieldType.GetDescription(objectValue));
+                                }
+                                value = string.Join(",", objectDescriptionList);
+                            }
+                            rowData[columnIndex] = value;
+                            columnIndex++;
+                        }
+                    }
+
+                    rowData[genericRuleDefinitionFieldsCount] = genericRule.GetSettingsDescription(new GenericRuleSettingsDescriptionContext() { RuleDefinitionSettings = genericRuleDefinition.SettingsDefinition });
+                    exportRuleDataList.Add(rowData);
+                }
+            }
+        }
 
         public override void ApplyChargingPolicyToVoiceEvent(IVoiceChargingPolicyEvaluatorContext context)
         {
@@ -43,7 +141,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                 RateTypeRuleContext rateTypeRuleContext = new RateTypeRuleContext();
                 ApplyRateTypeRule(context, rateTypeRuleContext, genericRuleTarget, rateValueRuleContext.RatesByRateType);
 
-                if(rateTypeRuleContext.Rule != null)
+                if (rateTypeRuleContext.Rule != null)
                 {
                     RateTypeRule rateTypeRule = rateTypeRuleContext.Rule.CastWithValidate<RateTypeRule>("rateTypeRule", rateTypeRuleContext.Rule);
                     voiceEventPricingInfo.SaleRateTypeRuleId = rateTypeRule.RuleId;
@@ -88,16 +186,35 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
             return genericRuleTarget;
         }
 
+        private Guid GetRateValueRuleDefinitionId(Guid serviceTypeId)
+        {
+            Guid? rateValueRuleDefinitionId = RateValueRuleDefinitionId;
+            if (!rateValueRuleDefinitionId.HasValue)
+            {
+                ChargingPolicyRuleDefinition rateValueRuleDefinition = GetChargingPolicyRuleDefinition(serviceTypeId, RateValueRuleDefinitionSettings.CONFIG_ID);
+                rateValueRuleDefinitionId = rateValueRuleDefinition.RuleDefinitionId;
+            }
+            return rateValueRuleDefinitionId.Value;
+        }
+
         private void ApplyRateValueRule(IVoiceChargingPolicyEvaluatorContext context, RateValueRuleContext rateValueRuleContext, GenericRuleTarget genericRuleTarget)
         {
-            if (!RateValueRuleDefinitionId.HasValue)
-            {
-                ChargingPolicyRuleDefinition rateValueRuleDefinition = GetChargingPolicyRuleDefinition(context.ServiceTypeId, RateValueRuleDefinitionSettings.CONFIG_ID);
-                RateValueRuleDefinitionId = rateValueRuleDefinition.RuleDefinitionId;
-            }
+            Guid rateValueRuleDefinitionId = GetRateValueRuleDefinitionId(context.ServiceTypeId);
             var rateValueRuleManager = new Vanrise.GenericData.Pricing.RateValueRuleManager();
-            rateValueRuleManager.ApplyRateValueRule(rateValueRuleContext, RateValueRuleDefinitionId.Value, genericRuleTarget);
+            rateValueRuleManager.ApplyRateValueRule(rateValueRuleContext, rateValueRuleDefinitionId, genericRuleTarget);
         }
+
+        private Guid GetRateTypeRuleDefinitionId(Guid serviceTypeId)
+        {
+            Guid? rateTypeRuleDefinitionId = RateTypeRuleDefinitionId;
+            if (!rateTypeRuleDefinitionId.HasValue)
+            {
+                ChargingPolicyRuleDefinition rateValueRuleDefinition = GetChargingPolicyRuleDefinition(serviceTypeId, RateTypeRuleDefinitionSettings.CONFIG_ID);
+                RateTypeRuleDefinitionId = rateValueRuleDefinition.RuleDefinitionId;
+            }
+            return rateTypeRuleDefinitionId.Value;
+        }
+
         private void ApplyRateTypeRule(IVoiceChargingPolicyEvaluatorContext context, RateTypeRuleContext rateTypeRuleContext, GenericRuleTarget genericRuleTarget, Dictionary<int, decimal> ratesByRateType)
         {
             if (ratesByRateType == null)
@@ -106,14 +223,23 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
             rateTypeRuleContext.TargetTime = context.EventTime;
             rateTypeRuleContext.RateTypes = ratesByRateType.Keys.ToList();
 
-            if (!RateTypeRuleDefinitionId.HasValue)
-            {
-                ChargingPolicyRuleDefinition rateValueRuleDefinition = GetChargingPolicyRuleDefinition(context.ServiceTypeId, RateTypeRuleDefinitionSettings.CONFIG_ID);
-                RateTypeRuleDefinitionId = rateValueRuleDefinition.RuleDefinitionId;
-            }
+            Guid rateTypeRuleDefinitionId = GetRateTypeRuleDefinitionId(context.ServiceTypeId);
+
             var rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
-            rateTypeRuleManager.ApplyRateTypeRule(rateTypeRuleContext, RateTypeRuleDefinitionId.Value, genericRuleTarget);
+            rateTypeRuleManager.ApplyRateTypeRule(rateTypeRuleContext, rateTypeRuleDefinitionId, genericRuleTarget);
         }
+
+        private Guid GetTariffRuleDefinitionId(Guid serviceTypeId)
+        {
+            Guid? tariffRuleDefinitionId = TariffRuleDefinitionId;
+            if (!tariffRuleDefinitionId.HasValue)
+            {
+                ChargingPolicyRuleDefinition tariffRuleDefinition = GetChargingPolicyRuleDefinition(serviceTypeId, TariffRuleDefinitionSettings.CONFIG_ID);
+                tariffRuleDefinitionId = tariffRuleDefinition.RuleDefinitionId;
+            }
+            return tariffRuleDefinitionId.Value;
+        }
+
         private void ApplyTariffRule(IVoiceChargingPolicyEvaluatorContext context, TariffRuleContext tariffRuleContext, GenericRuleTarget genericRuleTarget, int? destinationCurrencyId, decimal rate)
         {
             tariffRuleContext.TargetTime = context.EventTime;
@@ -121,13 +247,10 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
             tariffRuleContext.DestinationCurrencyId = destinationCurrencyId;
             tariffRuleContext.Rate = rate;
 
-            if (!TariffRuleDefinitionId.HasValue)
-            {
-                ChargingPolicyRuleDefinition tariffRuleDefinition = GetChargingPolicyRuleDefinition(context.ServiceTypeId, TariffRuleDefinitionSettings.CONFIG_ID);
-                TariffRuleDefinitionId = tariffRuleDefinition.RuleDefinitionId;
-            }
+            Guid tariffRuleDefinitionId = GetTariffRuleDefinitionId(context.ServiceTypeId);
+
             var tariffRuleManager = new Vanrise.GenericData.Pricing.TariffRuleManager();
-            tariffRuleManager.ApplyTariffRule(tariffRuleContext, TariffRuleDefinitionId.Value, genericRuleTarget);
+            tariffRuleManager.ApplyTariffRule(tariffRuleContext, tariffRuleDefinitionId, genericRuleTarget);
         }
 
         private ChargingPolicyRuleDefinition GetChargingPolicyRuleDefinition(Guid serviceTypeId, Guid genericRuleDefinitionSettingsCongigId)

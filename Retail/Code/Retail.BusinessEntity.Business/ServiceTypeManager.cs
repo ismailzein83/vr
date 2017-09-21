@@ -31,6 +31,12 @@ namespace Retail.BusinessEntity.Business
             return cachedServiceTypes.GetRecord(serviceTypeId);
         }
 
+        public List<ServiceType> GetServiceTypes(Guid accountBEDefinitionId)
+        {
+            Dictionary<Guid, List<ServiceType>> cachedServiceTypes = this.GetCachedServiceTypesByAccountBEDefinitionId();
+            return cachedServiceTypes.GetRecord(accountBEDefinitionId);
+        }
+
         public string GetServiceTypeName(Guid serviceTypeId)
         {
             ServiceType serviceType = this.GetServiceType(serviceTypeId);
@@ -241,6 +247,21 @@ namespace Retail.BusinessEntity.Business
                 }
 
                 return includedServiceTypes.ToDictionary(kvp => kvp.ServiceTypeId, kvp => kvp);
+            });
+        }
+
+        Dictionary<Guid, List<ServiceType>> GetCachedServiceTypesByAccountBEDefinitionId()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedServiceTypesByAccountDefinitionId", () =>
+            {
+                Dictionary<Guid, List<ServiceType>> result = new Dictionary<Guid, List<ServiceType>>();
+                IEnumerable<ServiceType> allServiceTypes = this.GetCachedServiceTypes().Values;
+                foreach (ServiceType serviceType in allServiceTypes)
+                {
+                    List<ServiceType> serviceTypes = result.GetOrCreateItem(serviceType.AccountBEDefinitionId);
+                    serviceTypes.Add(serviceType);
+                }
+                return result;
             });
         }
 

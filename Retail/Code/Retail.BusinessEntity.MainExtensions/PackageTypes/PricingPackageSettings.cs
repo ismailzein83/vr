@@ -71,6 +71,31 @@ namespace Retail.BusinessEntity.MainExtensions.PackageTypes
         {
             return s_packageManager.IsPackageAvailableInAccountProduct(context.AccountDefinitionId, context.AccountId, context.Package.PackageId);
         }
+
+        public override void ExportRates(IPackageSettingsExportRatesContext context)
+        {
+            ServiceTypeUsageChargingPolicySettings serviceTypeUsageChargingPolicySettings;
+            if (!ServiceTypeUsageChargingPolicies.TryGetValue(context.ServiceTypeId, out serviceTypeUsageChargingPolicySettings))
+                return;
+
+            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
+            ServiceType serviceType = serviceTypeManager.GetServiceType(context.ServiceTypeId);
+
+            ServiceTypeExtendedSettingsExportRatesContext serviceTypeExtendedSettingsExportRatesContext = new Entities.ServiceTypeExtendedSettingsExportRatesContext()
+            {
+                AccountId = context.AccountId,
+                ChargingPolicyId = serviceTypeUsageChargingPolicySettings.UsageChargingPolicyId,
+                EffectiveDate = context.EffectiveDate,
+                ServiceTypeId = context.ServiceTypeId
+            };
+
+            serviceType.Settings.ExtendedSettings.ExportRates(serviceTypeExtendedSettingsExportRatesContext);
+
+            context.RateValueRuleData = serviceTypeExtendedSettingsExportRatesContext.RateValueRuleData;
+            context.TariffRuleData = serviceTypeExtendedSettingsExportRatesContext.TariffRuleData;
+
+            context.IsFinalPricingPackage = true;
+        }
     }
 
     public class ServiceTypeUsageChargingPolicySettings
