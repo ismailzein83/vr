@@ -34,7 +34,7 @@ namespace Vanrise.GenericData.Business
             return DataRetrievalManager.Instance.ProcessResult(input, filteredRules.ToBigResult(input, null, (rule) => MapToDetails(rule)), handler);
         }
 
-        public List<T> GetApplicableFilteredRules(Guid ruleDefinitionId, GenericRuleQuery query)
+        public List<T> GetApplicableFilteredRules(Guid ruleDefinitionId, GenericRuleQuery query, bool withOverridenRules = false)
         {
             var ruleDefinition = GetRuleDefinition(ruleDefinitionId);
 
@@ -45,7 +45,11 @@ namespace Vanrise.GenericData.Business
                 && (query.SettingsFilterValue == null || RuleSettingsFilter(rule, ruleDefinition, query.SettingsFilterValue));
 
             List<T> filteredRules = GetAllRules().Values.FindAllRecords(filterExpression).ToList();
-            return FilterOverridenRules(filteredRules, ruleDefinition, query.CriteriaFieldValues);
+            
+            if (withOverridenRules)
+                return filteredRules;
+            else
+                return FilterOverridenRules(filteredRules, ruleDefinition, query.CriteriaFieldValues);
         }
 
         List<T> FilterOverridenRules(List<T> rules, GenericRuleDefinition ruleDefinition, Dictionary<string, object> criterias)
