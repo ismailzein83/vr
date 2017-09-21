@@ -89,6 +89,14 @@
     <Reference Include="Vanrise.GenericData.Pricing">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Pricing.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Invoice.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
     </Reference>
@@ -117,6 +125,7 @@
     <Compile Include="BECacheExpirationChecker.cs" />
     <Compile Include="CarrierAccounts\BaseCarrierAccountEventPayload.cs" />
     <Compile Include="CarrierAccounts\CarrierAccountBE360DegreeNodeType.cs" />
+    <Compile Include="CarrierAccounts\ReevaluateRuleStatusChangedHandler.cs" />
     <Compile Include="CarrierProfiles\BaseCarrierProfileEventPayload.cs" />
     <Compile Include="CarrierProfiles\CarrierProfileAccountsBE360DegreeNodeType.cs" />
     <Compile Include="CarrierProfiles\CarrierProfileBE360DegreeNodeType.cs" />
