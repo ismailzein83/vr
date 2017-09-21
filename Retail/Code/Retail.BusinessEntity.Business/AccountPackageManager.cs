@@ -110,8 +110,7 @@ namespace Retail.BusinessEntity.Business
         {
             Vanrise.Common.Utilities.ActivateAspose();
             Workbook wbk = new Workbook();
-            wbk.Worksheets.Clear();
-
+           
             List<ProcessedAccountPackage> processedAccountPackages = GetProcessedAccountPackagesByPriority(accountBEDefinitionId, accountId, effectiveDate, true);
             if (processedAccountPackages == null || processedAccountPackages.Count == 0)
                 return wbk.SaveToStream();
@@ -121,6 +120,8 @@ namespace Retail.BusinessEntity.Business
 
             if (serviceTypes == null || serviceTypes.Count == 0)
                 return wbk.SaveToStream();
+
+            bool initSheetsCleared = false;
 
             foreach (ServiceType serviceType in serviceTypes)
             {
@@ -136,6 +137,12 @@ namespace Retail.BusinessEntity.Business
                     processedAccountPackage.Package.Settings.ExtendedSettings.ExportRates(context);
                     if (context.IsFinalPricingPackage)
                     {
+                        if(!initSheetsCleared)
+                        {
+                            wbk.Worksheets.Clear();
+                            initSheetsCleared = true;
+                        }
+
                         string rateSheetName = string.Format("{0} Rates", serviceType.Title);
                         if (rateSheetName.Length > 31)
                             rateSheetName = rateSheetName.Substring(0, 31);
@@ -153,7 +160,7 @@ namespace Retail.BusinessEntity.Business
 
                 }
             }
-
+            
             return wbk.SaveToStream();
         }
 
