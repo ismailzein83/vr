@@ -25,24 +25,27 @@ namespace Vanrise.GenericData.Business
 
         public IDataRetrievalResult<GenericRuleDetail> GetFilteredRules(DataRetrievalInput<GenericRuleQuery> input)
         {
-            var ruleDefinition = GetRuleDefinition(input.Query.RuleDefinitionId);
-
-            Func<T, bool> filterExpression = (rule) => rule.DefinitionId == input.Query.RuleDefinitionId
-                && (string.IsNullOrEmpty(input.Query.Description) || (!string.IsNullOrEmpty(rule.Description) && rule.Description.IndexOf(input.Query.Description, StringComparison.OrdinalIgnoreCase) >= 0))
-                && (!input.Query.EffectiveDate.HasValue || (rule.BeginEffectiveTime <= input.Query.EffectiveDate.Value && (!rule.EndEffectiveTime.HasValue || input.Query.EffectiveDate.Value < rule.EndEffectiveTime)))
-                && (input.Query.CriteriaFieldValues == null || RuleCriteriaFilter(rule, ruleDefinition, input.Query.CriteriaFieldValues))
-                && (input.Query.SettingsFilterValue == null || RuleSettingsFilter(rule, ruleDefinition, input.Query.SettingsFilterValue));
-
+            List<T> filteredRules = GetApplicableFilteredRules(input.Query.RuleDefinitionId, input.Query);
             ResultProcessingHandler<GenericRuleDetail> handler = new ResultProcessingHandler<GenericRuleDetail>()
             {
                 ExportExcelHandler = new GenericRuleExcelExportHandler(input.Query)
             };
             VRActionLogger.Current.LogGetFilteredAction(new GenericRuleLoggableEntity(input.Query.RuleDefinitionId), input);
+            return DataRetrievalManager.Instance.ProcessResult(input, filteredRules.ToBigResult(input, null, (rule) => MapToDetails(rule)), handler);
+        }
+
+        public List<T> GetApplicableFilteredRules(Guid ruleDefinitionId, GenericRuleQuery query)
+        {
+            var ruleDefinition = GetRuleDefinition(ruleDefinitionId);
+
+            Func<T, bool> filterExpression = (rule) => rule.DefinitionId == query.RuleDefinitionId
+                && (string.IsNullOrEmpty(query.Description) || (!string.IsNullOrEmpty(rule.Description) && rule.Description.IndexOf(query.Description, StringComparison.OrdinalIgnoreCase) >= 0))
+                && (!query.EffectiveDate.HasValue || (rule.BeginEffectiveTime <= query.EffectiveDate.Value && (!rule.EndEffectiveTime.HasValue || query.EffectiveDate.Value < rule.EndEffectiveTime)))
+                && (query.CriteriaFieldValues == null || RuleCriteriaFilter(rule, ruleDefinition, query.CriteriaFieldValues))
+                && (query.SettingsFilterValue == null || RuleSettingsFilter(rule, ruleDefinition, query.SettingsFilterValue));
 
             List<T> filteredRules = GetAllRules().Values.FindAllRecords(filterExpression).ToList();
-            filteredRules = FilterOverridenRules(filteredRules, ruleDefinition, input.Query.CriteriaFieldValues);
-
-            return DataRetrievalManager.Instance.ProcessResult(input, filteredRules.ToBigResult(input, null, (rule) => MapToDetails(rule)), handler);
+            return FilterOverridenRules(filteredRules, ruleDefinition, query.CriteriaFieldValues);
         }
 
         List<T> FilterOverridenRules(List<T> rules, GenericRuleDefinition ruleDefinition, Dictionary<string, object> criterias)
@@ -359,14 +362,9 @@ namespace Vanrise.GenericData.Business
                 if (criteriaFieldValue != null)
                 {
                     IEnumerable<object> values = criteriaFieldValue.GetValues();
-                    if (values == null)
-                        return true;
-
-                    if (!criteriaFieldType.IsMatched(values, filter.Value))
+                    if (values != null && !criteriaFieldType.IsMatched(values, filter.Value))
                         return false;
                 }
-                else
-                    return true;
             }
 
             return true;
