@@ -23,10 +23,11 @@ namespace Vanrise.Invoice.Data
         bool Update(Entities.Invoice invoice);
         Entities.Invoice GetInvoiceBySourceId(Guid invoiceTypeId, string sourceId);
         Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId);
-
         bool UpdateInvoicePaidDateBySourceId(Guid invoiceTypeId, string sourceId, DateTime paidDate);
         IEnumerable<Entities.Invoice> GetLasInvoices(Guid invoiceTypeId, string partnerId, DateTime? beforeDate, int lastInvoices);
         VRPopulatedPeriod GetInvoicesPopulatedPeriod(Guid invoiceTypeId, string partnerId);
         bool CheckPartnerIfHasInvoices(Guid invoiceTypeId, string partnerId);
+        List<Entities.Invoice> GetInvoicesBySerialNumbers(IEnumerable<string> serialNumbers);
+        bool UpdateInvoicePaidDateById(Guid invoiceTypeId, long invoiceId, DateTime paidDate);
     }
 }

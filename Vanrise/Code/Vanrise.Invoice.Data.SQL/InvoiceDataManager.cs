@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
@@ -36,6 +34,11 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoicePaidBySourceId", invoiceTypeId, sourceId, paidDate);
             return (affectedRows > -1);
         }
+        public bool UpdateInvoicePaidDateById(Guid invoiceTypeId, long invoiceId, DateTime paidDate)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoicePaidById", invoiceTypeId, invoiceId, paidDate);
+            return (affectedRows > -1);
+        }
         public bool UpdateInvoiceNote(long invoiceId, string invoiceNote)
         {
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceNote", invoiceId, invoiceNote);
@@ -50,8 +53,6 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return GetItemSP("VR_Invoice.sp_Invoice_Get", InvoiceMapper, invoiceId);
         }
-
-
         public Entities.Invoice GetInvoiceBySourceId(Guid invoiceTypeId, string sourceId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_GetBySourceId", InvoiceMapper, invoiceTypeId, sourceId);
@@ -209,7 +210,7 @@ namespace Vanrise.Invoice.Data.SQL
             return base.IsDataUpdated("VR_Invoice.Invoice", ref updateHandle);
         }
 
-        
+
         public Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_GetLast", InvoiceMapper, invoiceTypeId, partnerId);
@@ -227,6 +228,11 @@ namespace Vanrise.Invoice.Data.SQL
         public bool CheckPartnerIfHasInvoices(Guid invoiceTypeId, string partnerId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_CheckIfHasInvoices", (reader) => { return (bool)reader["HasInvoices"]; }, invoiceTypeId, partnerId);
+        }
+
+        public List<Entities.Invoice> GetInvoicesBySerialNumbers(IEnumerable<string> serialNumbers)
+        {
+            return GetItemsSP("[VR_Invoice].[sp_Invoice_GetBySerialNumbers]", InvoiceMapper, string.Join(",", serialNumbers));
         }
 
         #endregion
@@ -299,8 +305,6 @@ namespace Vanrise.Invoice.Data.SQL
         }
 
         #endregion
-
-
-      
+                
     }
 }

@@ -12,6 +12,7 @@ namespace Vanrise.AccountBalance.Entities
         public BillingTransaction BillingTransaction { get; set; }
 
         public string InvoiceSourceId { get; set; }
+        public long? InvoiceId { get; set; }
         public object TargetBEId
         {
             get { return this.BillingTransaction.AccountBillingTransactionId > 0 ? (object)this.BillingTransaction.AccountBillingTransactionId : null; }

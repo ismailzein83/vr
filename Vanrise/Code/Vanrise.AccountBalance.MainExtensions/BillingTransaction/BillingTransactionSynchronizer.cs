@@ -75,7 +75,14 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
                     if (this.UpdateInvoicePaidDate)
                     {
                         InvoiceManager invoiceManager = new InvoiceManager();
-                        if (invoiceManager.UpdateInvoicePaidDateBySourceId(InvoiceTypeId, sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime))
+                        bool updated = false;
+
+                        if (sourceTransaction.InvoiceId.HasValue)
+                            updated = invoiceManager.UpdateInvoicePaidDateById(InvoiceTypeId, sourceTransaction.InvoiceId.Value, billingTransaction.TransactionTime);
+                        else
+                            updated = invoiceManager.UpdateInvoicePaidDateBySourceId(InvoiceTypeId, sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime);
+
+                        if (updated)
                         {
                             context.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "Invoice Paid Date {1} with Source Id {0} is updated",
                                                     sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime);

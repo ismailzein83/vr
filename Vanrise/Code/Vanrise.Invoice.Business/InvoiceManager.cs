@@ -40,8 +40,8 @@ namespace Vanrise.Invoice.Business
             var result = BigDataManager.Instance.RetrieveData(input, new InvoiceRequestHandler());
             if (input.DataRetrievalResultType == DataRetrievalResultType.Normal)
             {
-               var  bigResult = result as Vanrise.Entities.BigResult<InvoiceDetail>;
-               if (!getClientInvoices && bigResult.Data != null)
+                var bigResult = result as Vanrise.Entities.BigResult<InvoiceDetail>;
+                if (!getClientInvoices && bigResult.Data != null)
                 {
 
                     var partnerIds = bigResult.Data.Select(x => x.Entity.PartnerId);
@@ -55,7 +55,7 @@ namespace Vanrise.Invoice.Business
                         InvoiceDetailMapper2(invoice, invoiceType, invoiceAccount);
                     }
                 }
-               return bigResult;
+                return bigResult;
             }
             return result;
         }
@@ -89,11 +89,11 @@ namespace Vanrise.Invoice.Business
                 {
                     InvoiceTypeManager manager = new InvoiceTypeManager();
                     var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
-                   
+
                     var duePeriod = _partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                     var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                     IEnumerable<GeneratedInvoiceBillingTransaction> billingTarnsactions;
-                    GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod,invoiceAccountData, out billingTarnsactions);
+                    GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTarnsactions);
 
                     Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic);
                     invoice.SerialNumber = currentInvocie.SerialNumber;
@@ -150,15 +150,15 @@ namespace Vanrise.Invoice.Business
                 var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
                 DateTime fromDate = createInvoiceInput.FromDate;
                 DateTime toDate = createInvoiceInput.ToDate;
-               
+
 
                 var duePeriod = _partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                 var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
-                if(invoiceAccountData.Status == VRAccountStatus.InActive)
+                if (invoiceAccountData.Status == VRAccountStatus.InActive)
                     throw new InvoiceGeneratorException("Cannot generate invoice for inactive account.");
 
                 IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions;
-                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod,invoiceAccountData, out billingTransactions);
+                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTransactions);
 
 
                 if (generatedInvoice.InvoiceDetails == null)
@@ -167,7 +167,7 @@ namespace Vanrise.Invoice.Business
                 }
 
 
-                var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate,  createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic);
+                var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic);
 
                 var serialNumber = _partnerManager.GetPartnerSerialNumberPattern(createInvoiceInput.InvoiceTypeId, createInvoiceInput.PartnerId); InvoiceSerialNumberConcatenatedPartContext serialNumberContext = new InvoiceSerialNumberConcatenatedPartContext
                 {
@@ -215,7 +215,7 @@ namespace Vanrise.Invoice.Business
                         NextPeriodStart = nextPeriodStart
                     };
                     billingPeriodInfoManager.InsertOrUpdateBillingPeriodInfo(billingPeriodInfo);
-                   
+
                 }
                 else
                 {
@@ -304,7 +304,7 @@ namespace Vanrise.Invoice.Business
 
         public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId, string partnerId)
         {
-            return  _partnerManager.CheckInvoiceFollowBillingPeriod(invoiceTypeId, partnerId);
+            return _partnerManager.CheckInvoiceFollowBillingPeriod(invoiceTypeId, partnerId);
         }
         public BillingInterval GetBillingInterval(Guid invoiceTypeId, string partnerId, DateTime issueDate)
         {
@@ -330,7 +330,7 @@ namespace Vanrise.Invoice.Business
             var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceTypeId, partnerId);
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
 
-            if(Utilities.AreTimePeriodsOverlapped(billingInterval.FromDate,billingInterval.ToDate,invoiceAccountData.BED,invoiceAccountData.EED))
+            if (Utilities.AreTimePeriodsOverlapped(billingInterval.FromDate, billingInterval.ToDate, invoiceAccountData.BED, invoiceAccountData.EED))
             {
                 if (invoiceAccountData.BED.HasValue && billingInterval.FromDate < invoiceAccountData.BED.Value)
                 {
@@ -341,7 +341,8 @@ namespace Vanrise.Invoice.Business
                     var toDate = invoiceAccountData.EED.Value.AddDays(-1);
                     billingInterval.ToDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
                 }
-            }else
+            }
+            else
             {
                 return null;
             }
@@ -457,6 +458,18 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.CheckPartnerIfHasInvoices(invoiceTypeId, partnerId);
         }
+
+        public List<Entities.Invoice> GetInvoicesBySerialNumbers(IEnumerable<string> serialNumbers)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.GetInvoicesBySerialNumbers(serialNumbers);
+        }
+        public bool UpdateInvoicePaidDateById(Guid invoiceTypeId, long invoiceId, DateTime paidDate)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.UpdateInvoicePaidDateById(invoiceTypeId, invoiceId, paidDate);
+        }
+
         #endregion
 
         #region Mappers
@@ -494,7 +507,7 @@ namespace Vanrise.Invoice.Business
                 UserName = userManager.GetUserName(invoice.UserId),
                 HasNote = invoice.Note != null,
             };
-           
+
             FillNeededDetailData(invoiceDetail, invoiceType);
 
 
@@ -541,7 +554,7 @@ namespace Vanrise.Invoice.Business
                     invoiceDetail.SectionsTitle.Add(section.SectionTitle);
                 }
             }
-            InvoiceGridActionFilterConditionContext invoiceFilterConditionContext = new InvoiceGridActionFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType ,InvoiceAccount = invoiceAccount};
+            InvoiceGridActionFilterConditionContext invoiceFilterConditionContext = new InvoiceGridActionFilterConditionContext { Invoice = invoiceDetail.Entity, InvoiceType = invoiceType, InvoiceAccount = invoiceAccount };
             foreach (var action in invoiceType.Settings.InvoiceGridSettings.InvoiceGridActions)
             {
                 if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(invoiceFilterConditionContext))
@@ -607,13 +620,14 @@ namespace Vanrise.Invoice.Business
                 };
                 InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                 var invoiceType = invoiceTypeManager.GetInvoiceType(_query.InvoiceTypeId);
-                invoiceType.ThrowIfNull("invoiceType",_query.InvoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType", _query.InvoiceTypeId);
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
                 invoiceType.Settings.InvoiceGridSettings.ThrowIfNull("invoiceType.Settings.InvoiceGridSettings");
                 invoiceType.Settings.InvoiceGridSettings.MainGridColumns.ThrowIfNull("invoiceType.Settings.InvoiceGridSettings.MainGridColumns");
                 var dataRecordType = new DataRecordTypeManager().GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell {
-                Title = "Invoice ID"
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell
+                {
+                    Title = "Invoice ID"
                 });
 
                 foreach (var gridColumn in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
@@ -663,7 +677,7 @@ namespace Vanrise.Invoice.Business
                     if (results != null && results.Data != null)
                     {
                         sheet.Rows = new List<ExportExcelRow>();
-                        foreach(var item in results.Data)
+                        foreach (var item in results.Data)
                         {
 
 
@@ -697,7 +711,7 @@ namespace Vanrise.Invoice.Business
                                         break;
                                     case InvoiceField.SerialNumber: value = item.Entity.SerialNumber;
                                         break;
-                                  
+
                                     case InvoiceField.ToDate: value = item.Entity.ToDate;
                                         break;
                                     case InvoiceField.UserId: value = item.UserName;
@@ -710,16 +724,16 @@ namespace Vanrise.Invoice.Business
                                                 var fieldValue = Utilities.GetPropValueReader(gridColumn.CustomFieldName).GetPropertyValue(item.Entity.Details);
                                                 string description = fieldValue != null ? field.Type.GetDescription(fieldValue) : null;
                                                 value = gridColumn.UseDescription ? description : fieldValue;
-                                                 
+
                                             }
                                         }
                                         break;
 
                                 }
                                 row.Cells.Add(new ExportExcelCell { Value = value });
-                            
+
                             }
-                             sheet.Rows.Add(row);
+                            sheet.Rows.Add(row);
                         }
                     }
                 }
@@ -731,7 +745,7 @@ namespace Vanrise.Invoice.Business
         #endregion
 
         #region Private Methods
-        private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic invoiceDetails, int duePeriod,bool isAutomatic)
+        private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic invoiceDetails, int duePeriod, bool isAutomatic)
         {
             Entities.Invoice invoice = new Entities.Invoice
             {
@@ -749,7 +763,7 @@ namespace Vanrise.Invoice.Business
             invoice.DueDate = issueDate.AddDays(duePeriod);
             return invoice;
         }
-        private GeneratedInvoice BuildGeneratedInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic customSectionPayload, long? invoiceId, int duePeriod,VRInvoiceAccountData invoiceAccountData, out IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions)
+        private GeneratedInvoice BuildGeneratedInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic customSectionPayload, long? invoiceId, int duePeriod, VRInvoiceAccountData invoiceAccountData, out IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions)
         {
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
             if ((invoiceAccountData.BED.HasValue && fromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && toDate > invoiceAccountData.EED.Value))
@@ -850,5 +864,7 @@ namespace Vanrise.Invoice.Business
         }
 
         #endregion
+
+
     }
 }
