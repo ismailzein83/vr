@@ -58,12 +58,9 @@ app.directive('vrPagination', ['UISettingsService', function (UISettingsService)
                             pagerCtrl.pagersettings.maxSize = 1;
                         }
                     }
-                    console.log(pagerCtrl.pagersettings.maxSize)
-                },100)
+                }, 100);
             }
             $(window).on('resize', setDefaultSetting);
-
-
         },
         controllerAs: 'pagerCtrl',
         bindToController: true,
