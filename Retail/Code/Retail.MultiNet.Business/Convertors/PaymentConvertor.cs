@@ -12,6 +12,8 @@ using Vanrise.BEBridge.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Invoice.Business;
+using Vanrise.Invoice.Entities;
 
 namespace Retail.MultiNet.Business.Convertors
 {
@@ -45,6 +47,7 @@ namespace Retail.MultiNet.Business.Convertors
 
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             List<ITargetBE> transactionTargetBEs = new List<ITargetBE>();
+            Dictionary<string, List<SourceBillingTransaction>> billingTransactionsBySerialNumber = new Dictionary<string, List<SourceBillingTransaction>>();
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
                 long sourceId = (Int64)row[this.SourceIdColumnName];
@@ -63,10 +66,10 @@ namespace Retail.MultiNet.Business.Convertors
                         context.WriteBusinessTrackingMsg(LogEntryType.Error, "Failed to import Payment (SourceId: '{0}', SourceAccountId: '{1}') due to unavailable account.", sourceId, accountId);
                         continue;
                     }
+
+                    string invoiceId = (row[InvoiceSourceIdColumn] as string).Trim();
                     DateTime transactionTime = (DateTime)row[this.PaymentDateColumn];
-                    FinancialAccountData financialAccountData = null;
-                    new FinancialAccountManager().TryGetFinancialAccount(AccountBEDefinitionId, account.AccountId, true, transactionTime, out financialAccountData);
-                    financialAccountData.ThrowIfNull("financialAccountData");
+
                     SourceBillingTransaction sourceTransaction = new SourceBillingTransaction
                     {
                         BillingTransaction = new BillingTransaction
@@ -74,15 +77,15 @@ namespace Retail.MultiNet.Business.Convertors
                             TransactionTypeId = TransactionTypeId,
                             SourceId = sourceId.ToString(),
                             CurrencyId = currency.CurrencyId,
-                            AccountId = financialAccountData.FinancialAccountId,
                             TransactionTime = transactionTime,
                             Amount = row[this.AmountColumn] != DBNull.Value ? (decimal)row[this.AmountColumn] : 0,
                             AccountTypeId = account.TypeId,
                             Reference = (row[ReferenceColumnName] as string).Trim()
-                        },
-                        InvoiceSourceId = (row[InvoiceSourceIdColumn] as string).Trim()
+                        }
                     };
-                    transactionTargetBEs.Add(sourceTransaction);
+
+                    List<SourceBillingTransaction> transactions = billingTransactionsBySerialNumber.GetOrCreateItem(invoiceId, () => { return new List<SourceBillingTransaction>(); });
+                    transactions.Add(sourceTransaction);
                 }
                 catch (Exception ex)
                 {
@@ -90,6 +93,29 @@ namespace Retail.MultiNet.Business.Convertors
                     context.WriteBusinessHandledException(finalException);
                 }
             }
+
+            List<Invoice> invoices = new InvoiceManager().GetInvoicesBySerialNumbers(billingTransactionsBySerialNumber.Keys);
+            foreach (var invoice in invoices)
+            {
+                try
+                {
+
+                    List<SourceBillingTransaction> transactions = billingTransactionsBySerialNumber[invoice.SerialNumber];
+                    foreach (var transaction in transactions)
+                    {
+                        transaction.BillingTransaction.AccountId = invoice.PartnerId;
+                        transaction.InvoiceId = invoice.InvoiceId;
+                        transactionTargetBEs.Add(transaction);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var finalException = Utilities.WrapException(ex, String.Format("Failed to update Payment Invoice (InvoiceId: '{0}') due to conversion error", invoice.InvoiceId));
+                    context.WriteBusinessHandledException(finalException);
+                }
+            }
+
+
             context.TargetBEs = transactionTargetBEs;
         }
 
