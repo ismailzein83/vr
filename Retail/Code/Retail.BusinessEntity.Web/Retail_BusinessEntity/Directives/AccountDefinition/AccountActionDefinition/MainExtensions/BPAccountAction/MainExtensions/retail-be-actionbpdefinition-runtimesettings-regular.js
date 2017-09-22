@@ -27,6 +27,9 @@
             var provisionerRuntimeAPI;
             var provisionerReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var provisionerPostActionRuntimeAPI;
+            var provisionerPostActionRuntimeReadyDeferred = UtilsService.createPromiseDeferred();
+
             var provisionerDefinitionSettings;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -34,6 +37,10 @@
                 $scope.scopeModel.onProvisionerRuntimeSettingReady = function (api) {
                     provisionerRuntimeAPI = api;
                     provisionerReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onProvisionerPostActionRuntimeReady = function (api) {
+                    provisionerPostActionRuntimeAPI = api;
+                    provisionerPostActionRuntimeReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -49,17 +56,21 @@
 
                     var promises = [];
                     var provisionerDefinitionSettings;
+                    var provisionPostAction;
                     var actionBPSettings;
                     if (payload != undefined )
                         if( payload.bpDefinitionSettings !=undefined) {
                             provisionerDefinitionSettings = payload.bpDefinitionSettings.ProvisionerDefinitionSettings;
-
+                            provisionPostAction = payload.bpDefinitionSettings.ProvisionDefinitionPostAction;
+                            if(provisionPostAction != undefined)
+                            {
+                                $scope.scopeModel.postActionRuntimeDirective = provisionPostAction.RuntimeDirective;
+                            }
                             if(payload.vrActionEntity !=undefined)
                             {
                                 actionBPSettings = payload.vrActionEntity.ActionBPSettings;
                             }
                     }
-
 
                     var loadProvisionerDefinitionExtensionConfigsPromise = loadProvisionerDefinitionExtensionConfigs();
                     promises.push(loadProvisionerDefinitionExtensionConfigsPromise);
@@ -95,6 +106,27 @@
                         });
                         return provisionerSettingLoadDeferred.promise;
                     }
+
+                    if ($scope.scopeModel.postActionRuntimeDirective != undefined) {
+                        promises.push(loadPostActionDirective());
+                    }
+
+                    function loadPostActionDirective() {
+                        if ($scope.scopeModel.postActionRuntimeDirective != undefined)
+                        {
+                            var provisionerPostActionRuntimeLoadDeferred = UtilsService.createPromiseDeferred();
+                            provisionerPostActionRuntimeReadyDeferred.promise.then(function () {
+
+                                var postActionPayload = { accountProvisionDefinitionPostAction: provisionPostAction };
+                                if (actionBPSettings != undefined) {
+                                    postActionPayload.provisionPostAction = actionBPSettings.ProvisionPostAction;
+                                }
+                                VRUIUtilsService.callDirectiveLoad(provisionerPostActionRuntimeAPI, postActionPayload, provisionerPostActionRuntimeLoadDeferred);
+                            });
+                            return provisionerPostActionRuntimeLoadDeferred.promise;
+                        }
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -108,7 +140,8 @@
                 function getData() {
                     var data = {
                         $type: "Retail.BusinessEntity.MainActionBPs.Entities.RegularActionBPSettings, Retail.BusinessEntity.MainActionBPs.Entities",
-                        AccountProvisioner: provisionerRuntimeAPI.getData()
+                        AccountProvisioner: provisionerRuntimeAPI.getData(),
+                        ProvisionPostAction: provisionerPostActionRuntimeAPI != undefined?provisionerPostActionRuntimeAPI.getData():undefined
                     };
                     return data;
                 }

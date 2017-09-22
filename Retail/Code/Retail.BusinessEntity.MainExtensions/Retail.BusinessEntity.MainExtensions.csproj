@@ -203,6 +203,10 @@
     <Compile Include="PackageTypes\PricingPackageSettings.cs" />
     <Compile Include="PackageTypes\VolumePackageSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provisioning\ChangeStatusDefinitionPostAction.cs" />
+    <Compile Include="Provisioning\ChangeStatusPostAction.cs" />
+    <Compile Include="Provisioning\RevertStatusDefinitionPostAction.cs" />
+    <Compile Include="Provisioning\RevertStatusPostAction.cs" />
     <Compile Include="RecurringChargeEvaluators\OneTimeRecurringChargeEvaluator.cs" />
     <Compile Include="RecurringChargeEvaluators\OneTimeRecurringChargeEvaluatorDefinitionSettings.cs" />
     <Compile Include="RecurringChargeEvaluators\PeriodicRecurringChargeEvaluator.cs" />

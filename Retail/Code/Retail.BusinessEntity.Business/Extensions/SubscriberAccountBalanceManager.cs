@@ -37,7 +37,7 @@ namespace Retail.BusinessEntity.Business
             Vanrise.AccountBalance.Entities.AccountInfo accountInfo = new Vanrise.AccountBalance.Entities.AccountInfo
             {
                 Name = account.Name,
-                StatusDescription = new StatusDefinitionManager().GetStatusDefinitionName(account.StatusId),
+                StatusDescription = new Vanrise.Common.Business.StatusDefinitionManager().GetStatusDefinitionName(account.StatusId),
                 CurrencyId = s_accountBEManager.GetCurrencyId(_accountBEDefinitionId, account),
                 BED  = null,
                 EED = null,

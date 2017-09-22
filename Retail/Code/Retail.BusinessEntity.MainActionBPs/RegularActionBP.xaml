@@ -46,6 +46,7 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Common.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
@@ -146,49 +147,37 @@
     <If sap2010:WorkflowViewState.IdRef="If_1">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
-          <mca:CSharpValue x:TypeArguments="x:Boolean">actionBPDefinitionSettings.NewStatusDefinitionId.HasValue</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:Boolean">actionBPSettings.ProvisionPostAction != null &amp;&amp; actionBPDefinitionSettings.ProvisionDefinitionPostAction != null</mca:CSharpValue>
         </InArgument>
       </If.Condition>
       <If.Then>
         <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
-          <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
-            <Assign.To>
-              <OutArgument x:TypeArguments="ve:StatusDefinition">
-                <mca:CSharpReference x:TypeArguments="ve:StatusDefinition">newStatusDefinition</mca:CSharpReference>
-              </OutArgument>
-            </Assign.To>
-            <Assign.Value>
-              <InArgument x:TypeArguments="ve:StatusDefinition">
-                <mca:CSharpValue x:TypeArguments="ve:StatusDefinition">(new Vanrise.Common.Business.StatusDefinitionManager()).GetStatusDefinition(actionBPDefinitionSettings.NewStatusDefinitionId.Value)</mca:CSharpValue>
-              </InArgument>
-            </Assign.Value>
-          </Assign>
-          <rbma1:UpdateEntityStatus sap2010:WorkflowViewState.IdRef="UpdateEntityStatus_4">
-            <rbma1:UpdateEntityStatus.AccountBEDefinitionId>
+          <rbma1:ExecuteAccountPorvisionPostAction sap2010:WorkflowViewState.IdRef="ExecuteAccountPorvisionPostAction_1">
+            <rbma1:ExecuteAccountPorvisionPostAction.AccountBEDefinitionId>
               <InArgument x:TypeArguments="s:Guid">
                 <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountBEDefinitionId</mca:CSharpValue>
               </InArgument>
-            </rbma1:UpdateEntityStatus.AccountBEDefinitionId>
-            <rbma1:UpdateEntityStatus.AccountId>
+            </rbma1:ExecuteAccountPorvisionPostAction.AccountBEDefinitionId>
+            <rbma1:ExecuteAccountPorvisionPostAction.AccountId>
               <InArgument x:TypeArguments="x:Int64">
                 <mca:CSharpValue x:TypeArguments="x:Int64">Input.AccountId</mca:CSharpValue>
               </InArgument>
-            </rbma1:UpdateEntityStatus.AccountId>
-            <rbma1:UpdateEntityStatus.ActionDefinitionId>
-              <InArgument x:TypeArguments="s:Guid">
-                <mca:CSharpValue x:TypeArguments="s:Guid">Input.ActionDefinitionId</mca:CSharpValue>
+            </rbma1:ExecuteAccountPorvisionPostAction.AccountId>
+            <rbma1:ExecuteAccountPorvisionPostAction.ProvisionDefinitionPostAction>
+              <InArgument x:TypeArguments="rbe:AccountProvisionDefinitionPostAction">
+                <mca:CSharpValue x:TypeArguments="rbe:AccountProvisionDefinitionPostAction">actionBPDefinitionSettings.ProvisionDefinitionPostAction</mca:CSharpValue>
               </InArgument>
-            </rbma1:UpdateEntityStatus.ActionDefinitionId>
-            <rbma1:UpdateEntityStatus.StatusDefinitionId>
-              <InArgument x:TypeArguments="s:Guid">
-                <mca:CSharpValue x:TypeArguments="s:Guid">actionBPDefinitionSettings.NewStatusDefinitionId.Value</mca:CSharpValue>
+            </rbma1:ExecuteAccountPorvisionPostAction.ProvisionDefinitionPostAction>
+            <rbma1:ExecuteAccountPorvisionPostAction.ProvisionPostAction>
+              <InArgument x:TypeArguments="rbe:AccountProvisionPostAction">
+                <mca:CSharpValue x:TypeArguments="rbe:AccountProvisionPostAction">actionBPSettings.ProvisionPostAction</mca:CSharpValue>
               </InArgument>
-            </rbma1:UpdateEntityStatus.StatusDefinitionId>
-          </rbma1:UpdateEntityStatus>
+            </rbma1:ExecuteAccountPorvisionPostAction.ProvisionPostAction>
+          </rbma1:ExecuteAccountPorvisionPostAction>
         </Sequence>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwePgPAAQ4CAQFHBVIOAwGaAVMFXg4DAYkBXwVqDgIBeGsFdg4CAWd3BZEBJwIBPpIBBb4BCgIBAk8LT7sBAwGjAUoLSnUDAZsBWwtbkgIDAZIBVgtWgAEDAYoBZwtn5wEDAYEBYgtiiQECAXlzC3PuAQIBcG4LbnsCAWiOAQuOAaEBAgFfhAELhAFXAgFXegt6cwIBT4kBC4kBegIBR38Lf2ICAT+VAQuVAYMBAgEDmQEJvAEUAgELmgELpQEUAgEtpgELuwEmAgEMogERogHdAQIBNp0BEZ0BdQIBLq4BEa4BXQIBJbgBEbgBgwECAR2zARGzAWUCARWpARGpAWgCAQ0=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5Lk1haW5BY3Rpb25CUHNcUmVndWxhckFjdGlvbkJQLnhhbWwbPwO1AQ4CAQFIBVMOAwGJAVQFXw4CAXhgBWsOAgFnbAV3DgIBVngFkgEnAgEtkwEFswEKAgECUAtQuwEDAZIBSwtLdQMBigFcC1ySAgMBgQFXC1eAAQIBeWgLaOcBAgFwYwtjiQECAWh0C3TuAQIBX28Lb3sCAVePAQuPAaEBAgFOhQELhQFXAgFGewt7cwIBPooBC4oBegIBNoABC4ABYgIBLpYBC5YBwgECAQOaAQmxARQCAQubAQuwATUCAQyjARGjAV0CASWoARGoAacBAgEdrQERrQGJAQIBFZ4BEZ4BaAIBDQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -197,16 +186,15 @@
       <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="464,62" />
       <sap2010:ViewStateData Id="ExecuteAccountProvisioner_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="UpdateEntityStatus_4" sap:VirtualizedContainerService.HintSize="242,22" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="264,248">
+      <sap2010:ViewStateData Id="ExecuteAccountPorvisionPostAction_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,146">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,398">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,296">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -214,14 +202,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,992">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,890">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Retail.BusinessEntity.MainActionBPs.RegularActionBP_1" sap:VirtualizedContainerService.HintSize="526,1072" />
+      <sap2010:ViewStateData Id="Retail.BusinessEntity.MainActionBPs.RegularActionBP_1" sap:VirtualizedContainerService.HintSize="526,970" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -54,6 +54,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetProvisionerDefinitionExtensionConfigs();
         }
+        [HttpGet]
+        [Route("GetAccountProvisionDefinitionPostActionConfigs")]
+        public IEnumerable<ProvisionDefinitionPostActionConfig> GetAccountProvisionDefinitionPostActionConfigs()
+        {
+            return _manager.GetAccountProvisionDefinitionPostActionConfigs();
+        }
         
          [HttpGet]
          [Route("GetActionDefinitionsInfo")]

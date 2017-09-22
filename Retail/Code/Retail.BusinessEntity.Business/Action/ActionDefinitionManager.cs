@@ -84,7 +84,11 @@ namespace Retail.BusinessEntity.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<ProvisionerDefinitionConfig>(ProvisionerDefinitionConfig.EXTENSION_TYPE);
         }
-
+        public IEnumerable<ProvisionDefinitionPostActionConfig> GetAccountProvisionDefinitionPostActionConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<ProvisionDefinitionPostActionConfig>(ProvisionDefinitionPostActionConfig.EXTENSION_TYPE);
+        }
         public IEnumerable<ActionDefinitionInfo> GetActionDefinitionInfoByEntityType(EntityType entityType, Guid statusId, Guid? serviceTypeId = null)
         {
             Dictionary<Guid, ActionDefinition> cachedActionDefinitiones = this.GetCachedActionDefinitions();

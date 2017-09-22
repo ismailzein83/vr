@@ -48,6 +48,10 @@
         function GetProvisionerDefinitionExtensionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetProvisionerDefinitionExtensionConfigs'));
         }
+        function GetAccountProvisionDefinitionPostActionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetAccountProvisionDefinitionPostActionConfigs'));
+        }
+        
         return ({
             GetFilteredActionDefinitions: GetFilteredActionDefinitions,
             GetActionDefinition: GetActionDefinition,
@@ -57,7 +61,8 @@
             HasUpdateActionDefinitionPermission:HasUpdateActionDefinitionPermission,
             GetActionBPDefinitionExtensionConfigs: GetActionBPDefinitionExtensionConfigs,
             GetProvisionerDefinitionExtensionConfigs: GetProvisionerDefinitionExtensionConfigs,
-            GetActionDefinitionsInfo: GetActionDefinitionsInfo
+            GetActionDefinitionsInfo: GetActionDefinitionsInfo,
+            GetAccountProvisionDefinitionPostActionConfigs: GetAccountProvisionDefinitionPostActionConfigs
         });
     }
 

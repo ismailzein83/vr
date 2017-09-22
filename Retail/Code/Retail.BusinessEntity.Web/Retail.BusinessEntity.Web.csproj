@@ -250,6 +250,15 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\MainExtensions\Templates\SubAccountConditionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\retail-be-accountcondition-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountCondition\Templates\AccountConditionSelectiveTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\ProvisionPostAction\retail-be-actionbpdefinition-definitionpostaction-revertstatus.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\ProvisionPostAction\retail-be-actionbpdefinition-definitionpostaction-changestatus.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\ProvisionPostAction\retail-be-actionbpdefinition-runtimepostaction-revertstatus.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\ProvisionPostAction\retail-be-actionbpdefinition-runtimepostaction-changestatus.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\ProvisionPostAction\Templates\RevertStatusDefinitionPostActionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\ProvisionPostAction\Templates\ChangeStatusDefinitionPostActionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\ProvisionPostAction\Templates\RevertStatusPostActionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\ProvisionPostAction\Templates\ChangeStatusPostActionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\MainExtensions\retail-be-actionbpdefinition-provisionpostaction.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-accountactiondefinitionsettings-bpaccountbackendexecutor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-bpaccountaction-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\Templates\BPAccountActionBackendExecutorSettingsTemplate.html" />

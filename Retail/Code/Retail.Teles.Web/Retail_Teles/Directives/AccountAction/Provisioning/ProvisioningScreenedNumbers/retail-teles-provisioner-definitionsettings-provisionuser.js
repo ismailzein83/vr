@@ -27,13 +27,18 @@
             var connectionTypeAPI;
             var connectionTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var provisionUserSettingsAPI;
-            var provisionUserSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+            var loginNameSelectorAPI;
+            var loginNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var firstNameSelectorAPI;
+            var firstNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var lastNameSelectorAPI;
+            var lastNameSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+
             var companyTypeAPI;
             var companyTypeReadyDeferred = UtilsService.createPromiseDeferred();
             var siteTypeAPI;
             var siteTypeReadyDeferred = UtilsService.createPromiseDeferred();
-
             var userTypeAPI;
             var userTypeReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -45,9 +50,17 @@
                     connectionTypeReadyDeferred.resolve();
                 };
             
-                $scope.scopeModel.onProvisionUserSettingsReady = function (api) {
-                    provisionUserSettingsAPI = api;
-                    provisionUserSettingsReadyDeferred.resolve();
+                $scope.scopeModel.onLoginNameSelectorReady = function (api) {
+                    loginNameSelectorAPI = api;
+                    loginNameSelectorReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onFirstNameSelectorReady = function (api) {
+                    firstNameSelectorAPI = api;
+                    firstNameSelectorReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onLastNameSelectorReady = function (api) {
+                    lastNameSelectorAPI = api;
+                    lastNameSelectorReadyDeferred.resolve();
                 };
                 $scope.scopeModel.onCompanyAccountTypeSelectorReady = function (api) {
                     companyTypeAPI = api;
@@ -61,7 +74,7 @@
                     userTypeAPI = api;
                     userTypeReadyDeferred.resolve();
                 };
-                UtilsService.waitMultiplePromises([provisionUserSettingsReadyDeferred.promise, connectionTypeReadyDeferred.promise, companyTypeReadyDeferred.promise,siteTypeReadyDeferred.promise, userTypeReadyDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([loginNameSelectorReadyDeferred.promise, firstNameSelectorReadyDeferred.promise, lastNameSelectorReadyDeferred.promise, connectionTypeReadyDeferred.promise, companyTypeReadyDeferred.promise, siteTypeReadyDeferred.promise, userTypeReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
 
@@ -71,6 +84,7 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     var provisionerDefinitionSettings;
                     if (payload != undefined) {
                         mainPayload = payload;
@@ -91,13 +105,29 @@
                         return connectionTypeAPI.load(connectionTypePayload);
                     }
 
-                    promises.push(loadProvisionUserSettings());
-                    function loadProvisionUserSettings() {
-                        var provisionUserSettingsPayload;
+                    promises.push(loadLoginNameSelector());
+                    function loadLoginNameSelector() {
+                        var loginNameSelectorPayload;
                         if (provisionerDefinitionSettings != undefined) {
-                            provisionUserSettingsPayload = { provisionUserSettings: provisionerDefinitionSettings.Settings };
+                            loginNameSelectorPayload = { provisionUserSettings: provisionerDefinitionSettings.LoginNameField };
                         }
-                        return provisionUserSettingsAPI.load(provisionUserSettingsPayload);
+                        return loginNameSelectorAPI.load(loginNameSelectorPayload);
+                    }
+                    promises.push(loadFirstNameSelector());
+                    function loadFirstNameSelector() {
+                        var firstNameSelectorPayload;
+                        if (provisionerDefinitionSettings != undefined) {
+                            firstNameSelectorPayload = { provisionUserSettings: provisionerDefinitionSettings.FirstNameField };
+                        }
+                        return firstNameSelectorAPI.load(firstNameSelectorPayload);
+                    }
+                    promises.push(loadLastNameSelector());
+                    function loadLastNameSelector() {
+                        var lastNameSelectorPayload;
+                        if (provisionerDefinitionSettings != undefined) {
+                            lastNameSelectorPayload = { provisionUserSettings: provisionerDefinitionSettings.LastNameField };
+                        }
+                        return lastNameSelectorAPI.load(lastNameSelectorPayload);
                     }
 
                     promises.push(loadCompanyTypes());
@@ -140,7 +170,9 @@
                     var data = {
                         $type: "Retail.Teles.Business.Provisioning.ProvisionUserDefinitionSettings,Retail.Teles.Business",
                         VRConnectionId: connectionTypeAPI.getSelectedIds(),
-                        Settings: provisionUserSettingsAPI.getData(),
+                        LastNameField: lastNameSelectorAPI.getSelectedIds(),
+                        FirstNameField:firstNameSelectorAPI.getSelectedIds(),
+                        LoginNameField:loginNameSelectorAPI.getSelectedIds(),
                         CountryCode: $scope.scopeModel.countryCode,
                         CompanyTypeId: companyTypeAPI.getSelectedIds(),
                         SiteTypeId: siteTypeAPI.getSelectedIds(),

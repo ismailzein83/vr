@@ -31,6 +31,7 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
             var startActionPermissionAPI;
             var startActionPermissionReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var accountBEDefinitionId;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -59,6 +60,7 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
                     if (payload != undefined)
                     {
                         accountActionDefinitionSettings = payload.accountActionDefinitionSettings;
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                     }
                     var promises = [];
                     promises.push(loadBusinessEntityDefinitionSelector());
@@ -69,7 +71,9 @@ app.directive('retailBeAccountactiondefinitionsettingsBpaccount', ['UtilsService
                         var bPDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
 
                         bPDefinitionSettingsPromiseDeferred.promise.then(function () {
-                            var payloadBPDefinition = accountActionDefinitionSettings != undefined ? { bpDefinitionSettings: accountActionDefinitionSettings.BPDefinitionSettings } : undefined;
+                            var payloadBPDefinition = { accountBEDefinitionId: accountBEDefinitionId };
+                            if(accountActionDefinitionSettings != undefined)
+                                payloadBPDefinition.bpDefinitionSettings = accountActionDefinitionSettings.BPDefinitionSettings;
                             VRUIUtilsService.callDirectiveLoad(bPDefinitionSettingsApi, payloadBPDefinition, bPDefinitionSettingsLoadDeferred);
                         });
 

@@ -10,5 +10,6 @@ namespace Retail.BusinessEntity.MainActionBPs.Entities
     public class RegularActionBPSettings : ActionBPSettings
     {
         public AccountProvisioner AccountProvisioner { get; set; }
+        public AccountProvisionPostAction ProvisionPostAction { get; set; }
     }
 }

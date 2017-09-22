@@ -458,7 +458,7 @@ namespace Retail.BusinessEntity.Business
                 }
                 else
                 {
-                    var status = new StatusDefinitionManager().GetStatusDefinition(statusId);
+                    var status = new Vanrise.Common.Business.StatusDefinitionManager().GetStatusDefinition(statusId);
                     VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), string.Format("Update Status"), true, GetAccount(accountBEDefinitionId, accountId), string.Format("Status Changed to {0}", status.Name));
                 }
 
@@ -1321,7 +1321,7 @@ namespace Retail.BusinessEntity.Business
         }
         private AccountDetail AccountDetailMapperStep1(Guid accountBEDefinitionId, Account account, List<string> columns)
         {
-            var statusDefinitionManager = new StatusDefinitionManager();
+            var statusDefinitionManager = new Vanrise.Common.Business.StatusDefinitionManager();
             var accountTypeManager = new AccountTypeManager();
             var accountServices = new AccountServiceManager();
             var accountPackages = new AccountPackageManager();
@@ -1458,7 +1458,7 @@ namespace Retail.BusinessEntity.Business
                 case Vanrise.AccountBalance.Entities.AccountInfo.BEInfoType:
                     {
                         var account = context.Entity as Account;
-                        StatusDefinitionManager statusDefinitionManager = new Business.StatusDefinitionManager();
+                        Vanrise.Common.Business.StatusDefinitionManager statusDefinitionManager = new Vanrise.Common.Business.StatusDefinitionManager();
                         var statusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId);
                         Vanrise.AccountBalance.Entities.AccountInfo accountInfo = new Vanrise.AccountBalance.Entities.AccountInfo
                         {

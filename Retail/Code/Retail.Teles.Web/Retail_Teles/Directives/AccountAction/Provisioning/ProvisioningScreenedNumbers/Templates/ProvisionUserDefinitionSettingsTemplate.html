@@ -19,5 +19,18 @@
                                     isrequired="true">
     </retail-be-accounttype-selector>
 </vr-row>
-<retail-teles-provisioner-provisionuser-settings on-ready="scopeModel.onProvisionUserSettingsReady"></retail-teles-provisioner-provisionuser-settings>
-
+<vr-row>
+    <vr-tabs>
+        <vr-tab header="'User Settings'">
+                <retail-be-account-genericfielddefinition-selector on-ready="scopeModel.onLoginNameSelectorReady" normal-col-num="4" customlabel="Login Name"></retail-be-account-genericfielddefinition-selector>
+            <retail-be-account-genericfielddefinition-selector on-ready="scopeModel.onFirstNameSelectorReady" normal-col-num="4" customlabel="First Name"></retail-be-account-genericfielddefinition-selector>
+                <retail-be-account-genericfielddefinition-selector on-ready="scopeModel.onLastNameSelectorReady" normal-col-num="4" customlabel="Last Name"></retail-be-account-genericfielddefinition-selector>
+            <vr-columns width="1/3row">
+                <vr-textbox value="scopeModel.loginPassword" label="Login Password" type="password"></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/3row">
+                <vr-textbox value="scopeModel.pin" label="Pin" type="number" customvalidate="scopeModel.validatePinNumber()"></vr-textbox>
+            </vr-columns>
+        </vr-tab>
+    </vr-tabs>
+</vr-row>

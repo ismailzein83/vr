@@ -27,59 +27,60 @@
             var provisionerdefinitionSettingAPI;
             var provisionerdefinitionSettingReadyDeferred = UtilsService.createPromiseDeferred();
 
-            var statusDefinitionSelectorAPI;
-            var statusDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
+            var postActionDirectiveAPI;
+            var postActionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var accountBEDefinitionId;
 
             function initializeController() {
                 $scope.scopeModel = {};
                 
-                $scope.scopeModel.onStatusDefinitionSelectorReady = function (api) {
-                    statusDefinitionSelectorAPI = api;
-                    statusDefinitionSelectorReadyDeferred.resolve();
+                $scope.scopeModel.onPostActionDirectiveReady = function (api) {
+                    postActionDirectiveAPI = api;
+                    postActionDirectiveReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onProvisionerDefinitionSettingReady = function (api) {
                     provisionerdefinitionSettingAPI = api;
                     provisionerdefinitionSettingReadyDeferred.resolve();
                 };
-
-                defineAPI();
+                UtilsService.waitMultiplePromises([provisionerdefinitionSettingReadyDeferred.promise, postActionDirectiveReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+
                     var promises = [];
+                    var bpDefinitionSettings;
 
                     if (payload != undefined) {
                         mainPayload = payload;
-                        if(payload.entityType !=undefined)
-                        {
-                            var statusDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                            statusDefinitionSelectorReadyDeferred.promise.then(function () {
-                                var statusDefinitionSelectorPayload = {
-                                    selectedIds: payload != undefined && payload.bpDefinitionSettings != undefined ? payload.bpDefinitionSettings.NewStatusDefinitionId : undefined,
-                                    filter:  { EntityType: payload.entityType }
-                                };
-                                VRUIUtilsService.callDirectiveLoad(statusDefinitionSelectorAPI, statusDefinitionSelectorPayload, statusDefinitionSelectorLoadDeferred);
-                            });
-                            promises.push(statusDefinitionSelectorLoadDeferred.promise);
-
-                        }
+                        bpDefinitionSettings = payload.bpDefinitionSettings;
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                     }
-               
-                    var provisionerdefinitionSettingLoadDeferred = UtilsService.createPromiseDeferred();
 
-                    provisionerdefinitionSettingReadyDeferred.promise.then(function () {
-                        var definitionSettingPayload = payload != undefined && payload.bpDefinitionSettings != undefined ? { provisionerDefinitionSettings: payload.bpDefinitionSettings.ProvisionerDefinitionSettings } : undefined;
-                        VRUIUtilsService.callDirectiveLoad(provisionerdefinitionSettingAPI, definitionSettingPayload, provisionerdefinitionSettingLoadDeferred);
-                    });
-                    promises.push(provisionerdefinitionSettingLoadDeferred.promise);
-                    
+                    function loadPostActionDirective() {
+                        var postActionDirectivePayload = { accountBEDefinitionId: accountBEDefinitionId };
+                        if (bpDefinitionSettings != undefined)
+                            postActionDirectivePayload.accountProvisionDefinitionPostAction = bpDefinitionSettings.ProvisionDefinitionPostAction;
+                        return postActionDirectiveAPI.load(postActionDirectivePayload);
+                    }
+
+                    promises.push(loadPostActionDirective());
+
+                    function loadProvisionerdefinitionSetting() {
+                        var definitionSettingPayload = { accountBEDefinitionId: accountBEDefinitionId };
+                        if (bpDefinitionSettings != undefined)
+                            definitionSettingPayload.provisionerDefinitionSettings =bpDefinitionSettings.ProvisionerDefinitionSettings;
+                        return provisionerdefinitionSettingAPI.load(definitionSettingPayload);
+                    }
+
+                    promises.push(loadProvisionerdefinitionSetting());
+
                     return UtilsService.waitMultiplePromises(promises);
-
                 };
 
                 api.getData = getData;
@@ -92,7 +93,7 @@
                     var data = {
                         $type: "Retail.BusinessEntity.MainActionBPs.Entities.RegularActionBPDefinitionSettings, Retail.BusinessEntity.MainActionBPs.Entities",
                         ProvisionerDefinitionSettings: provisionerdefinitionSettingAPI.getData(),
-                        NewStatusDefinitionId: statusDefinitionSelectorAPI.getSelectedIds()
+                        ProvisionDefinitionPostAction: postActionDirectiveAPI.getData()
                     };
                     return data;
                 }

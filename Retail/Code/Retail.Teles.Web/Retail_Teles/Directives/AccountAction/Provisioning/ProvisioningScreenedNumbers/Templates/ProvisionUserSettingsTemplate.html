@@ -2,19 +2,20 @@
     <vr-tabs>
         <vr-tab header="'User Settings'">
             <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.firstName" label="First Name" ></vr-textbox>
+                <vr-textbox value="scopeModel.loginName" label="Login Name" isrequired="true"></vr-textbox>
             </vr-columns>
             <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.lastName" label="Last Name" ></vr-textbox>
+                <vr-textbox value="scopeModel.firstName" label="First Name" isrequired="true"></vr-textbox>
             </vr-columns>
             <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.loginName" label="Login Name"></vr-textbox>
+                <vr-textbox value="scopeModel.lastName" label="Last Name" isrequired="true"></vr-textbox>
+            </vr-columns>
+           
+            <vr-columns width="1/3row">
+                <vr-textbox value="scopeModel.loginPassword" label="Login Password" type="password" isrequired="true"></vr-textbox>
             </vr-columns>
             <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.loginPassword" label="Login Password"></vr-textbox>
-            </vr-columns>
-            <vr-columns width="1/3row">
-                <vr-textbox value="scopeModel.pin" label="Pin" type="number" customvalidate="scopeModel.validatePinNumber()"></vr-textbox>
+                <vr-textbox value="scopeModel.pin" label="Pin" type="number" customvalidate="scopeModel.validatePinNumber()" isrequired="true"></vr-textbox>
             </vr-columns>
         </vr-tab>
     </vr-tabs>

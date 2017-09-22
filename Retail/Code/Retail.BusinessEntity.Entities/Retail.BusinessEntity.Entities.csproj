@@ -85,6 +85,8 @@
     <Compile Include="AccountProvisioner\AccountProvisioner.cs" />
     <Compile Include="AccountProvisioner\AccountProvisionerConfig.cs" />
     <Compile Include="AccountProvisioner\AccountProvisionerDefinitionSettings.cs" />
+    <Compile Include="AccountProvisioner\AccountProvisionPostAction.cs" />
+    <Compile Include="AccountProvisioner\ProvisionDefinitionPostActionConfig.cs" />
     <Compile Include="AccountStatusHistory\AccountStatusHistory.cs" />
     <Compile Include="AccountType\AccountTypeBESelectorFilter.cs" />
     <Compile Include="Account\AccountFilter.cs" />

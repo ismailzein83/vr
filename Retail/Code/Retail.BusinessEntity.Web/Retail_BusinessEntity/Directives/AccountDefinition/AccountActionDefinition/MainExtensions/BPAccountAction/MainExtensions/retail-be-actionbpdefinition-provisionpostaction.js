@@ -2,16 +2,17 @@
 
     'use strict';
 
-    BPAccountActionDirective.$inject = ['Retail_BE_ActionDefinitionAPIService', 'UtilsService', 'VRUIUtilsService','Retail_BE_EntityTypeEnum'];
+    ProvisionPostActionDirective.$inject = ['Retail_BE_ActionDefinitionAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function BPAccountActionDirective(Retail_BE_ActionDefinitionAPIService, UtilsService, VRUIUtilsService, Retail_BE_EntityTypeEnum) {
+    function ProvisionPostActionDirective(Retail_BE_ActionDefinitionAPIService, UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -50,8 +51,7 @@
                         $scope.scopeModel.isLoadingDirective = value;
                     };
                     var directivePayload = {
-                        accountBEDefinitionId:accountBEDefinitionId,
-                        entityType: Retail_BE_EntityTypeEnum.Account.value
+                        accountBEDefinitionId: accountBEDefinitionId
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
@@ -59,7 +59,7 @@
 
             function defineAPI() {
                 var api = {};
-                var bPDefinitionSettings;
+                var accountProvisionDefinitionPostAction;
 
                 api.load = function (payload) {
 
@@ -68,27 +68,27 @@
                     var promises = [];
 
                     if (payload != undefined) {
-                        bPDefinitionSettings = payload.bpDefinitionSettings;
+                        accountProvisionDefinitionPostAction = payload.accountProvisionDefinitionPostAction;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                     }
 
-                    if (bPDefinitionSettings != undefined) {
+                    if (accountProvisionDefinitionPostAction != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getActionBPDefinitionExtensionConfigsPromise = getActionBPDefinitionExtensionConfigs();
-                    promises.push(getActionBPDefinitionExtensionConfigsPromise);
+                    var getAccountProvisionDefinitionPostActionConfigsPromise = getAccountProvisionDefinitionPostActionConfigs();
+                    promises.push(getAccountProvisionDefinitionPostActionConfigsPromise);
 
-                    function getActionBPDefinitionExtensionConfigs() {
-                        return Retail_BE_ActionDefinitionAPIService.GetActionBPDefinitionExtensionConfigs().then(function (response) {
+                    function getAccountProvisionDefinitionPostActionConfigs() {
+                        return Retail_BE_ActionDefinitionAPIService.GetAccountProvisionDefinitionPostActionConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (bPDefinitionSettings != undefined) {
+                                if (accountProvisionDefinitionPostAction != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, bPDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, accountProvisionDefinitionPostAction.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -101,7 +101,7 @@
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var directivePayload = {
-                                bpDefinitionSettings: bPDefinitionSettings, entityType: Retail_BE_EntityTypeEnum.Account.value,
+                                accountProvisionDefinitionPostAction: accountProvisionDefinitionPostAction,
                                 accountBEDefinitionId: accountBEDefinitionId
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
@@ -133,7 +133,7 @@
 
         function getTamplate(attrs) {
             var withemptyline = 'withemptyline';
-            var label = "label='Business Process'";
+            var label = "label='Post Action'";
             if (attrs.hidelabel != undefined) {
                 label = "";
                 withemptyline = '';
@@ -147,8 +147,8 @@
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + label
-                            + ' isrequired="true"'
-                            + 'hideremoveicon>'
+                            + ' isrequired="ctrl.isrequired"'
+                            + '>'
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
@@ -158,6 +158,6 @@
         }
     }
 
-    app.directive('retailBeBpaccountactionSelective', BPAccountActionDirective);
+    app.directive('retailBeActionbpdefinitionProvisionpostaction', ProvisionPostActionDirective);
 
 })(app);

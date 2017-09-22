@@ -18,7 +18,11 @@ namespace Retail.Teles.Business.Provisioning
         public Guid SiteTypeId { get; set; }
         public Guid UserTypeId { get; set; }
         public string CountryCode { get; set; }
-        public ProvisionUserSetting Settings { get; set; }
+        public string LastNameField { get; set; }
+        public string FirstNameField { get; set; }
+        public string LoginNameField { get; set; }
+        public string LoginPassword { get; set; }
+        public string Pin { get; set; }
 
     }
     public class ProvisionUserSetting
