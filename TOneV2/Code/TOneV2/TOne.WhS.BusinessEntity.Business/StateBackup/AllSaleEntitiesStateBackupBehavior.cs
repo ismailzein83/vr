@@ -14,6 +14,11 @@ namespace TOne.WhS.BusinessEntity.Business
             if (context.Data == null)
                 return string.Empty;
 
+            string restoreText = base.GetDescription(context);
+
+            if (restoreText != null)
+                return restoreText;
+
             StateBackupAllSaleEntities backupData = context.Data as StateBackupAllSaleEntities;
             SellingNumberPlanManager sellingNumberPlanManager = new SellingNumberPlanManager();
 

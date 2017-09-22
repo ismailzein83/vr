@@ -14,6 +14,11 @@ namespace TOne.WhS.BusinessEntity.Business
             if (context.Data == null)
                 return string.Empty;
 
+            string restoreText = base.GetDescription(context);
+
+            if (restoreText != null)
+                return restoreText;
+
             StateBackupSupplier backupData = context.Data as StateBackupSupplier;
 
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
