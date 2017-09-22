@@ -1,9 +1,8 @@
 ﻿<vr-datagrid on-ready="scopeModel.onGridReady"
              datasource="scopeModel.gridData"
-             dataretrievalfunction="scopeModel.dataRetrievalFunction"
-             is-required="ture">
+             dataretrievalfunction="scopeModel.dataRetrievalFunction">
     <vr-datagridcolumn headertext="'Code Change Type'" field="'CodeChangeType.label'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Descriptions'" field="'CodeChangeTypeDescription'" is-required="ture">
-        <vr-textbox type="text" value="dataItem.CodeChangeTypeDescription" is-required="ture"></vr-textbox>
+    <vr-datagridcolumn headertext="'Descriptions'" field="'CodeChangeTypeDescription'">
+        <vr-textbox type="text" value="dataItem.CodeChangeTypeDescription" isrequired={{scopeModel.isrequired}}></vr-textbox>
     </vr-datagridcolumn>
 </vr-datagrid>

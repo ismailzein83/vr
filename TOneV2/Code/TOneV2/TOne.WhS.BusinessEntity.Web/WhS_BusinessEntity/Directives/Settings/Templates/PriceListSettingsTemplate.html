@@ -36,14 +36,15 @@
 <vr-row>
     <vr-columns width="1/2row">
         <vr-whs-be-ratechangetypesettings-grid on-ready="ctrl.onRateChangeTypeSettingsGridReady"
-                                               ng-if="ctrl.showRateChangeTypeSettingsGrid">
+                                               ng-if="ctrl.showRateChangeTypeSettingsGrid"
+                                               isrequired="ctrl.isRateChangeTypeSettingsRequired">
         </vr-whs-be-ratechangetypesettings-grid>
     </vr-columns>
 
     <vr-columns width="1/2row">
         <vr-whs-be-codechangetypesettings-grid on-ready="ctrl.onCodeChangeTypeSettingsGridReady"
                                                ng-if="ctrl.showCodeChangeTypeSettingsGrid"
-                                               is-required="ture">
+                                               isrequired=ctrl.isCodeChangeTypeSettingsRequired>
         </vr-whs-be-codechangetypesettings-grid>
     </vr-columns>
 </vr-row>

@@ -6,6 +6,7 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
             restrict: 'E',
             scope: {
                 onReady: '=',
+                isrequired:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -27,6 +28,7 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
 
                 $scope.scopeModel = {};
                 $scope.scopeModel.gridData = [];
+                $scope.scopeModel.isrequired = ctrl.isrequired;
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
