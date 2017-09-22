@@ -6,7 +6,7 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
             restrict: 'E',
             scope: {
                 onReady: '=',
-                isrequired:'='
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -28,7 +28,6 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
 
                 $scope.scopeModel = {};
                 $scope.scopeModel.gridData = [];
-                $scope.scopeModel.isrequired = ctrl.isrequired;
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -47,7 +46,8 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
                                 {
                                     var dataItem = {
                                         RateChangeType: rateChangeType,
-                                        RateChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.NotChanged : null
+                                        RateChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.NotChanged : null,
+                                        isrequired: ctrl.isrequired
                                     };
                                     rateChangeTypeList.push(dataItem);
                                     break;
@@ -56,7 +56,8 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
                                 {
                                     var dataItem = {
                                         RateChangeType: rateChangeType,
-                                        RateChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.NewRate : null
+                                        RateChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.NewRate : null,
+                                        isrequired: ctrl.isrequired
                                     };
                                     rateChangeTypeList.push(dataItem);
                                     break;
@@ -65,7 +66,8 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
                                 {
                                     var dataItem = {
                                         RateChangeType: rateChangeType,
-                                        RateChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.IncreasedRate : null
+                                        RateChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.IncreasedRate : null,
+                                        isrequired: ctrl.isrequired
                                     };
                                     rateChangeTypeList.push(dataItem);
                                     break;
@@ -74,7 +76,8 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
                                 {
                                     var dataItem = {
                                         RateChangeType: rateChangeType,
-                                        RateChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.DecreasedRate : null
+                                        RateChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.DecreasedRate : null,
+                                        isrequired: ctrl.isrequired
                                     };
                                     rateChangeTypeList.push(dataItem);
                                     break;

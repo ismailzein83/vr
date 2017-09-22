@@ -141,7 +141,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                     var loadCompressFileSelectorPromise = loadCompressFileSelector(compressPriceListFile);
                     promises.push(loadCompressFileSelectorPromise);
                 }
-                
+
                 var loadCodeChangeTypeSettingsGridPromise = loadCodeChangeTypeSettingsGrid(codeChangeTypeSettings);
                 promises.push(loadCodeChangeTypeSettingsGridPromise);
 
@@ -272,8 +272,8 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
             ctrl.isPricelistExtensionFormatRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
             ctrl.isPricelistTypeRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
             ctrl.isCompressPriceListFileRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.isRateChangeTypeSettingsRequired= (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.isRateChangeTypeSettingsRequired= (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+            ctrl.isRateChangeTypeSettingsRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+            ctrl.isCodeChangeTypeSettingsRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
         }
 
     }

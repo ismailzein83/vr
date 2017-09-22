@@ -6,7 +6,7 @@ app.directive('vrWhsBeCodechangetypesettingsGrid', ['WhS_BE_CodeChangeTypeEnum',
             restrict: 'E',
             scope: {
                 onReady: '=',
-                isrequired:'=',
+                isrequired: '=',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -28,8 +28,6 @@ app.directive('vrWhsBeCodechangetypesettingsGrid', ['WhS_BE_CodeChangeTypeEnum',
 
                 $scope.scopeModel = {};
                 $scope.scopeModel.gridData = [];
-                $scope.scopeModel.isrequired = ctrl.isrequired;
-
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -48,7 +46,8 @@ app.directive('vrWhsBeCodechangetypesettingsGrid', ['WhS_BE_CodeChangeTypeEnum',
                                 {
                                     var dataItem = {
                                         CodeChangeType: codeChangeType,
-                                        CodeChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.NewCode : null
+                                        CodeChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.NewCode : null,
+                                        isrequired: ctrl.isrequired
                                     };
                                     codeChangeTypeList.push(dataItem);
                                     break;
@@ -57,7 +56,8 @@ app.directive('vrWhsBeCodechangetypesettingsGrid', ['WhS_BE_CodeChangeTypeEnum',
                                 {
                                     var dataItem = {
                                         CodeChangeType: codeChangeType,
-                                        CodeChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.ClosedCode : null
+                                        CodeChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.ClosedCode : null,
+                                        isrequired: ctrl.isrequired
                                     };
                                     codeChangeTypeList.push(dataItem);
                                     break;
@@ -66,7 +66,8 @@ app.directive('vrWhsBeCodechangetypesettingsGrid', ['WhS_BE_CodeChangeTypeEnum',
                                 {
                                     var dataItem = {
                                         CodeChangeType: codeChangeType,
-                                        CodeChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.NotChangedCode : null
+                                        CodeChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.NotChangedCode : null,
+                                        isrequired: ctrl.isrequired
                                     };
                                     codeChangeTypeList.push(dataItem);
                                     break;
@@ -81,9 +82,7 @@ app.directive('vrWhsBeCodechangetypesettingsGrid', ['WhS_BE_CodeChangeTypeEnum',
             }
 
             function defineAPI() {
-
                 var api = {};
-
                 api.load = function (payload) {
                     return gridAPI.retrieveData(payload.codeChangeTypeSettings);
                 };

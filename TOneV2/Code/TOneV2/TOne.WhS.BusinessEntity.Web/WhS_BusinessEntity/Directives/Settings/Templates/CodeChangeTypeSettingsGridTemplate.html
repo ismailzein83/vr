@@ -3,6 +3,6 @@
              dataretrievalfunction="scopeModel.dataRetrievalFunction">
     <vr-datagridcolumn headertext="'Code Change Type'" field="'CodeChangeType.label'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Descriptions'" field="'CodeChangeTypeDescription'">
-        <vr-textbox type="text" value="dataItem.CodeChangeTypeDescription" isrequired={{scopeModel.isrequired}}></vr-textbox>
+        <vr-textbox type="text" value="dataItem.CodeChangeTypeDescription" isrequired="dataItem.isrequired"></vr-textbox>
     </vr-datagridcolumn>
 </vr-datagrid>
