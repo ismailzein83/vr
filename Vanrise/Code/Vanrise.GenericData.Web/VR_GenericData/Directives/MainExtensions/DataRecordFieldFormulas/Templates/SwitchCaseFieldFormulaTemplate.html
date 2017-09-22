@@ -1,34 +1,34 @@
-﻿<vr-row>
-    <vr-columns width="1/3row">
-        <vr-select datasource="scopeModel.fields"
-                   datatextfield="fieldTitle"
-                   datavaluefield="fieldName"
-                   selectedvalues="scopeModel.selectedTargetFieldName"
-                   entityname="Target Field Name"
-                   label="Target Field Name" isrequired="true" hideremoveicon>
-        </vr-select>
-    </vr-columns>
-</vr-row>
+﻿<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.fields"
+               datatextfield="fieldTitle"
+               datavaluefield="fieldName"
+               selectedvalues="scopeModel.selectedTargetFieldName"
+               entityname="Target Field Name"
+               label="Target Field Name" isrequired="true" hideremoveicon>
+    </vr-select>
+</vr-columns>
+<vr-columns width="2/3row" simplecol withemptyline>
+    <vr-button type="Add" data-onclick="scopeModel.onAddSwitchCaseMapping" standalone></vr-button>
+</vr-columns>
 
-<vr-row>
-    <vr-columns width="3/4row">
+<vr-columns width="fullrow">
+    <vr-row singleitemrow>
         <vr-datagrid datasource="scopeModel.switchCaseMappings"
                      ondeleterow="scopeModel.onDeleteRow"
                      disablesorting="true" enabledraggablerow="true"
                      hidegridmenu disabledraggablecolumns>
 
-            <vr-datagridcolumn headertext="'Target Field Value'" field="'TargetFieldValue'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Target Field Value'">
+                <vr-textbox value="dataItem.targetFieldValue" type="text" isrequired></vr-textbox>
+            </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Mapping Field Name'">
-                <vr-select datasource="scopeModel.fields"
+                <vr-select datasource="dataItem.fields"
                            datatextfield="fieldTitle"
                            datavaluefield="fieldName"
-                           selectedvalues="dataItem.MappingFieldName"
+                           selectedvalues="dataItem.selectedMappingField"
                            entityname="Target Field Name" isrequired="true" hideremoveicon>
                 </vr-select>
             </vr-datagridcolumn>
         </vr-datagrid>
-    </vr-columns>
-</vr-row>
-
-
-
+    </vr-row>
+</vr-columns>

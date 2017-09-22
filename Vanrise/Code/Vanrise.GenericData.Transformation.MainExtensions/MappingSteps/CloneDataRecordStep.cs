@@ -23,25 +23,25 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
             var sourceRecord = context.Records.FirstOrDefault(itm => itm.RecordName == this.SourceRecordName);
             if (sourceRecord == null)
                 throw new Exception(String.Format("Record '{0}' not found", this.SourceRecordName));
-            
+
             if (!sourceRecord.DataRecordTypeId.HasValue)
                 throw new NullReferenceException(String.Format("DataRecordTypeId: '{0}'", this.SourceRecordName));
 
             var targetRecord = context.Records.FirstOrDefault(itm => itm.RecordName == this.TargetRecordName);
             if (targetRecord == null)
                 throw new Exception(String.Format("Record '{0}' not found", this.TargetRecordName));
-            
+
             if (!targetRecord.DataRecordTypeId.HasValue)
                 throw new NullReferenceException(String.Format("DataRecordTypeId: '{0}'", this.TargetRecordName));
 
             if (sourceRecord.DataRecordTypeId.Value != targetRecord.DataRecordTypeId.Value)
                 throw new Exception(String.Format("'{0}' and '{1}' are of different dataRecordType", this.TargetRecordName));
-         
+
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             var runtimeType = dataRecordTypeManager.GetDataRecordRuntimeType(targetRecord.DataRecordTypeId.Value);
             if (runtimeType == null)
                 throw new NullReferenceException("runtimeType");
-            
+
             string fullTypeName = CSharpCompiler.TypeToString(runtimeType);
 
             Dictionary<string, DataRecordField> dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(sourceRecord.DataRecordTypeId.Value);
@@ -50,9 +50,10 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
 
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = new {1}();", this.TargetRecordName, fullTypeName);
 
-            foreach (var itm in dataRecordTypeFields.Keys)
+            foreach (var kvp in dataRecordTypeFields)
             {
-                context.AddCodeToCurrentInstanceExecutionBlock("{0}.{1} = {2}.{1};", this.TargetRecordName, itm, this.SourceRecordName);
+                if (kvp.Value.Formula == null)
+                    context.AddCodeToCurrentInstanceExecutionBlock("{0}.{1} = {2}.{1};", this.TargetRecordName, kvp.Key, this.SourceRecordName);
             }
         }
     }

@@ -38,7 +38,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 return null;
 
             SwitchCaseMapping switchCaseMapping;
-            if (!this.SwitchCaseMappings.TryGetValue(switchTargetFieldName, out switchCaseMapping))
+            if (!this.SwitchCaseMappings.TryGetValue(Convert.ToString(switchTargetFieldName), out switchCaseMapping))
                 return null;
 
             return context.GetFieldValue(switchCaseMapping.MappingFieldName);
@@ -53,8 +53,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.Or;
             recordFilterGroup.Filters = new List<RecordFilter>();
 
-            FieldBusinessEntityType targetFieldBEFieldType;
-            GetFieldType(context, this.TargetFieldName, out targetFieldBEFieldType);
+            DataRecordFieldType targetDataRecordFieldType;
+            GetFieldType(context, this.TargetFieldName, out targetDataRecordFieldType);
+
+            #region ObjectListRecordFilter
 
             ObjectListRecordFilter objectListFilter = context.InitialFilter as ObjectListRecordFilter;
             if (objectListFilter != null)
@@ -62,9 +64,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 foreach (var kvp in SwitchCaseMappings)
                 {
                     ObjectListRecordFilter targetFieldObjectListRecordFilter = BuildObjectListRecordFilter(ListRecordFilterOperator.In, new List<object>() { kvp.Key });
-                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetFieldBEFieldType, targetFieldObjectListRecordFilter);
+                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetDataRecordFieldType, targetFieldObjectListRecordFilter);
 
-                    FieldBusinessEntityType mappedFieldBEFieldType;
+                    DataRecordFieldType mappedFieldBEFieldType;
                     GetFieldType(context, kvp.Value.MappingFieldName, out mappedFieldBEFieldType);
                     ObjectListRecordFilter mappedFieldObjectListRecordFilter = BuildObjectListRecordFilter(objectListFilter.CompareOperator, objectListFilter.Values);
                     RecordFilter mappedFieldRecordFilter = ConvertToRecordFilter(kvp.Value.MappingFieldName, mappedFieldBEFieldType, mappedFieldObjectListRecordFilter);
@@ -79,13 +81,44 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 return recordFilterGroup;
             }
 
+            #endregion
+
+            #region StringRecordFilter
+
+            StringRecordFilter stringRecordFilter = context.InitialFilter as StringRecordFilter;
+            if (stringRecordFilter != null)
+            {
+                foreach (var kvp in SwitchCaseMappings)
+                {
+                    ObjectListRecordFilter targetFieldObjectListRecordFilter = BuildObjectListRecordFilter(ListRecordFilterOperator.In, new List<object>() { kvp.Key });
+                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetDataRecordFieldType, targetFieldObjectListRecordFilter);
+
+                    DataRecordFieldType mappedFieldBEFieldType;
+                    GetFieldType(context, kvp.Value.MappingFieldName, out mappedFieldBEFieldType);
+                    StringRecordFilter mappedFieldStringRecordFilter = BuildStringRecordFilter(stringRecordFilter.CompareOperator, stringRecordFilter.Value);
+                    RecordFilter mappedFieldRecordFilter = ConvertToRecordFilter(kvp.Value.MappingFieldName, mappedFieldBEFieldType, mappedFieldStringRecordFilter);
+
+                    RecordFilterGroup currentRecordFilterGroup = new RecordFilterGroup();
+                    currentRecordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
+                    currentRecordFilterGroup.Filters = new List<RecordFilter>() { targetFieldRecordFilter, mappedFieldRecordFilter };
+
+                    recordFilterGroup.Filters.Add(currentRecordFilterGroup);
+                }
+
+                return recordFilterGroup;
+            }
+
+            #endregion
+
+            #region EmptyRecordFilter
+
             EmptyRecordFilter emptyFilter = context.InitialFilter as EmptyRecordFilter;
             if (emptyFilter != null)
             {
                 foreach (var kvp in SwitchCaseMappings)
                 {
                     ObjectListRecordFilter targetFieldObjectListRecordFilter = BuildObjectListRecordFilter(ListRecordFilterOperator.In, new List<object>() { kvp.Key });
-                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetFieldBEFieldType, targetFieldObjectListRecordFilter);
+                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetDataRecordFieldType, targetFieldObjectListRecordFilter);
 
                     EmptyRecordFilter mappedFieldEmptyRecordFilter = new EmptyRecordFilter { FieldName = kvp.Value.MappingFieldName };
 
@@ -99,13 +132,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 return recordFilterGroup;
             }
 
+            #endregion
+
+            #region NonEmptyRecordFilter
+
             NonEmptyRecordFilter nonEmptyFilter = context.InitialFilter as NonEmptyRecordFilter;
             if (nonEmptyFilter != null)
             {
                 foreach (var kvp in SwitchCaseMappings)
                 {
                     ObjectListRecordFilter targetFieldObjectListRecordFilter = BuildObjectListRecordFilter(ListRecordFilterOperator.In, new List<object>() { kvp.Key });
-                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetFieldBEFieldType, targetFieldObjectListRecordFilter);
+                    RecordFilter targetFieldRecordFilter = ConvertToRecordFilter(this.TargetFieldName, targetDataRecordFieldType, targetFieldObjectListRecordFilter);
 
                     NonEmptyRecordFilter mappedFieldNonEmptyRecordFilter = new NonEmptyRecordFilter { FieldName = kvp.Value.MappingFieldName };
 
@@ -119,24 +156,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 return recordFilterGroup;
             }
 
+            #endregion
+
             throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
         }
 
-        private void GetFieldType(IDataRecordFieldFormulaConvertFilterContext context, string fieldName, out FieldBusinessEntityType fieldBusinessEntityType)
+
+        private void GetFieldType(IDataRecordFieldFormulaConvertFilterContext context, string fieldName, out DataRecordFieldType dataRecordFieldType)
         {
-            fieldBusinessEntityType = context.GetFieldType(fieldName) as FieldBusinessEntityType;
-            if (fieldBusinessEntityType == null)
-                throw new NullReferenceException(String.Format("inputZoneBEFieldType '{0}'", fieldName));
-
-
-        }
-
-        private RecordFilter ConvertToRecordFilter(string fieldName, FieldBusinessEntityType fieldBusinessEntityType, ObjectListRecordFilter objectListRecordFilter)
-        {
-            var zoneFilter = fieldBusinessEntityType.ConvertToRecordFilter(fieldName, objectListRecordFilter.Values);
-            if (zoneFilter is ObjectListRecordFilter)
-                ((ObjectListRecordFilter)zoneFilter).CompareOperator = objectListRecordFilter.CompareOperator;
-            return zoneFilter;
+            dataRecordFieldType = context.GetFieldType(fieldName) as DataRecordFieldType;
+            if (dataRecordFieldType == null)
+                throw new NullReferenceException(String.Format("dataRecordFieldType '{0}'", fieldName));
         }
 
         private ObjectListRecordFilter BuildObjectListRecordFilter(ListRecordFilterOperator listRecordFilterOperator, List<object> values)
@@ -147,9 +177,34 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 Values = values
             };
         }
+
+        private StringRecordFilter BuildStringRecordFilter(StringRecordFilterOperator stringRecordFilterOperator, string value)
+        {
+            return new StringRecordFilter()
+            {
+                CompareOperator = stringRecordFilterOperator,
+                Value = value
+            };
+        }
+
+        private RecordFilter ConvertToRecordFilter(string fieldName, DataRecordFieldType dataRecordFieldType, ObjectListRecordFilter objectListRecordFilter)
+        {
+            var recordFilter = dataRecordFieldType.ConvertToRecordFilter(fieldName, objectListRecordFilter.Values);
+            if (recordFilter is ObjectListRecordFilter)
+                ((ObjectListRecordFilter)recordFilter).CompareOperator = objectListRecordFilter.CompareOperator;
+            return recordFilter;
+        }
+
+        private RecordFilter ConvertToRecordFilter(string fieldName, DataRecordFieldType dataRecordFieldType, StringRecordFilter stringRecordFilter)
+        {
+            var recordFilter = dataRecordFieldType.ConvertToRecordFilter(fieldName, new List<object>() { stringRecordFilter.Value });
+            if (recordFilter is StringRecordFilter)
+                ((StringRecordFilter)recordFilter).CompareOperator = stringRecordFilter.CompareOperator;
+            return recordFilter;
+        }
     }
 
-    public  class SwitchCaseMapping
+    public class SwitchCaseMapping
     {
         public string MappingFieldName { get; set; }
     }

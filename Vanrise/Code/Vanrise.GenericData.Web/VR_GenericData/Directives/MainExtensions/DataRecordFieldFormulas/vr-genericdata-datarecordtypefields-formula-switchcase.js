@@ -28,10 +28,26 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaSwitchcase', ['UtilsServi
         };
 
         function switchCaseCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
 
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.fields = [];
+                $scope.scopeModel.switchCaseMappings = [];
+
+                $scope.scopeModel.onAddSwitchCaseMapping = function (selectedItem) {
+
+                    $scope.scopeModel.switchCaseMappings.push({
+                        fields: $scope.scopeModel.fields,
+                        targetFieldValue: undefined,
+                        selectedMappingField: undefined
+                    });
+                };
+
+                $scope.scopeModel.onDeleteRow = function (deletedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.switchCaseMappings, deletedItem.targetFieldValue, 'targetFieldValue');
+                    $scope.scopeModel.switchCaseMappings.splice(index, 1);
+                };
 
                 defineAPI();
             }
@@ -41,6 +57,8 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaSwitchcase', ['UtilsServi
 
                 api.load = function (payload) {
 
+                    var switchCaseMappings;
+
                     if (payload != undefined) {
                         var context = payload.context;
                         if (context != undefined && context.getFields != undefined) {
@@ -49,14 +67,29 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaSwitchcase', ['UtilsServi
 
                         if (payload.formula != undefined) {
                             $scope.scopeModel.selectedTargetFieldName = UtilsService.getItemByVal($scope.scopeModel.fields, payload.formula.TargetFieldName, "fieldName");
+                            switchCaseMappings = payload.formula.SwitchCaseMappings;
                         }
+                    }
+
+                    for (var key in switchCaseMappings) {
+                        if (key == '$type')
+                            continue;
+
+                        var switchCaseMapping = switchCaseMappings[key];
+
+                        $scope.scopeModel.switchCaseMappings.push({
+                            fields: $scope.scopeModel.fields,
+                            targetFieldValue: key,
+                            selectedMappingField: UtilsService.getItemByVal($scope.scopeModel.fields, switchCaseMapping.MappingFieldName, "fieldName")
+                        });
                     }
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas.SwitchCaseFieldFormula, Vanrise.GenericData.MainExtensions",
-                        TargetFieldName: $scope.scopeModel.selectedTargetFieldName.fieldName
+                        TargetFieldName: $scope.scopeModel.selectedTargetFieldName.fieldName,
+                        SwitchCaseMappings: getSwitchCaseMappings()
                     };
                 };
 
@@ -64,7 +97,19 @@ app.directive('vrGenericdataDatarecordtypefieldsFormulaSwitchcase', ['UtilsServi
                     ctrl.onReady(api);
             }
 
-            this.initializeController = initializeController;
+            function getSwitchCaseMappings() {
+                var switchCaseMappings = {};
+
+                for (var index = 0 ; index < $scope.scopeModel.switchCaseMappings.length; index++) {
+                    var switchCaseMapping = $scope.scopeModel.switchCaseMappings[index];
+                    switchCaseMappings[switchCaseMapping.targetFieldValue] = {
+                        MappingFieldName: switchCaseMapping.selectedMappingField.fieldName
+                    };
+                }
+
+                return switchCaseMappings;
+            }
+
         }
         return directiveDefinitionObject;
     }

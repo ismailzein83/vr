@@ -349,6 +349,10 @@ namespace Vanrise.GenericData.Business
                 using System.Collections.Generic;
                 using System.IO;
                 using System.Data;
+                using System.Linq;
+                using Vanrise.Common;
+                using Vanrise.GenericData.Business;
+                using Vanrise.GenericData.Entities;
 
                 namespace #NAMESPACE#
                 {
@@ -358,11 +362,41 @@ namespace Vanrise.GenericData.Business
                         {
                              Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(#CLASSNAME#) #PROPERTIESTOSETSERIALIZED#);
                              var dummyTime = new Vanrise.Entities.Time(); //this is only to try declaring the ProtoBuf Serialization in the static constructor of the Time Type
-                        }     
+                        }   
+  
+                        DataRecordType recordType = new DataRecordTypeManager().GetDataRecordType(new Guid(""#RECORDTYPEID#""));
+
+                        private Dictionary<string, DataRecordField> _dataRecordFieldDict;
+
+                        private Dictionary<string, DataRecordField> DataRecordFieldDict
+                        {
+                            get
+                            {
+                                if (_dataRecordFieldDict == null)
+                                {
+                                    _dataRecordFieldDict = recordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
+                                }
+                                return _dataRecordFieldDict;
+                            }
+                        }
+
+                        private Dictionary<string, DataRecordFieldType> _dataRecordFieldTypeDict;
+
+                        public Dictionary<string, DataRecordFieldType> DataRecordFieldTypeDict
+                        {
+                            get
+                            {
+                                if (_dataRecordFieldTypeDict == null)
+                                {   
+                                    _dataRecordFieldTypeDict = recordType.Fields.ToDictionary(itm => itm.Name, itm => itm.Type);
+                                }
+                                return _dataRecordFieldTypeDict;
+                            }
+                        }
+
+                        public long QueueItemId { get; set; }
 
                         #GLOBALMEMBERS#
-                            
-                        public long QueueItemId { get; set; }
 
                         public void SetFieldValue(string fieldName, dynamic fieldValue)
                         {
@@ -371,7 +405,7 @@ namespace Vanrise.GenericData.Business
                                 #SETFIELDMEMBERS#
                                 default : break;
                             }
-                        }
+                        } 
 
                         public dynamic GetFieldValue(string fieldName)
                         {
@@ -414,11 +448,10 @@ namespace Vanrise.GenericData.Business
                             return record;
                         }
                     }
-                }
-                ");
+                }");
 
             StringBuilder propertiesToSetSerializedBuilder = new StringBuilder();
-            StringBuilder globalMembersBuilder = new StringBuilder();
+            StringBuilder globalMembersDefinitionBuilder = new StringBuilder();
 
             StringBuilder setFieldValueBuilder = new StringBuilder();
             StringBuilder getFieldValueBuilder = new StringBuilder();
@@ -428,26 +461,31 @@ namespace Vanrise.GenericData.Business
             List<string> fieldNames = new List<string>();
             foreach (var field in dataRecordType.Fields)
             {
-                string fieldRuntimTypeAsString = CSharpCompiler.TypeToString(field.Type.GetRuntimeType());
-                globalMembersBuilder.AppendFormat("public {0} {1} {{ get; set; }}", fieldRuntimTypeAsString, field.Name);
-                propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
-                setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimTypeAsString);
+                string fieldRuntimeTypeAsString = CSharpCompiler.TypeToString(field.Type.GetRuntimeType());
+
+                globalMembersDefinitionBuilder.AppendLine(GetGlobalMemberDefinitionScript(fieldRuntimeTypeAsString, field));
                 getFieldValueBuilder.AppendFormat(@"case ""{0}"" : return {0};", field.Name);
-                cloneRecordMembersBuilder.AppendFormat("record.{0} = this.{0};", field.Name);
+
+                if (field.Formula == null)
+                {
+                    propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
+                    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimeTypeAsString);
+                    cloneRecordMembersBuilder.AppendFormat("record.{0} = this.{0};", field.Name);
+                }
+
                 fieldNames.Add(field.Name);
             }
 
-            string fieldNamesAsString = string.Format(@"""{0}""", string.Join<string>(@""",""", fieldNames));
-
-            classDefinitionBuilder.Replace("#GLOBALMEMBERS#", globalMembersBuilder.ToString());
+            classDefinitionBuilder.Replace("#GLOBALMEMBERS#", globalMembersDefinitionBuilder.ToString());
             classDefinitionBuilder.Replace("#PROPERTIESTOSETSERIALIZED#", propertiesToSetSerializedBuilder.ToString());
-
             classDefinitionBuilder.Replace("#SETFIELDMEMBERS#", setFieldValueBuilder.ToString());
             classDefinitionBuilder.Replace("#GETFIELDMEMBERS#", getFieldValueBuilder.ToString());
             classDefinitionBuilder.Replace("#CLONERECORDMEMBERS#", cloneRecordMembersBuilder.ToString());
 
+            string fieldNamesAsString = string.Format(@"""{0}""", string.Join<string>(@""",""", fieldNames));
             classDefinitionBuilder.Replace("#FIELDNAMES#", fieldNamesAsString);
 
+            classDefinitionBuilder.Replace("#RECORDTYPEID#", dataRecordType.DataRecordTypeId.ToString());
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.GenericData.Runtime");
             string className = "DataRecord";
@@ -456,6 +494,61 @@ namespace Vanrise.GenericData.Business
             fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
             return classDefinitionBuilder.ToString();
+        }
+
+        private string GetGlobalMemberDefinitionScript(string fieldRuntimeTypeAsString, DataRecordField dataRecordField)
+        {
+            if (dataRecordField.Formula == null)
+            {
+                return string.Format("public {0} {1} {{ get; set; }}", fieldRuntimeTypeAsString, dataRecordField.Name);
+            }
+            else
+            {
+                StringBuilder globalMemberDefinitionBuilder = new StringBuilder();
+
+                string isFieldFilled = string.Format("_is{0}Filled", dataRecordField.Name);
+                string _fieldName = string.Format("_{0}", this.ToLowerFirstChar(dataRecordField.Name));
+
+                globalMemberDefinitionBuilder.AppendLine();
+                globalMemberDefinitionBuilder.Append(string.Format("private bool {0}; \n", isFieldFilled));
+                globalMemberDefinitionBuilder.Append(string.Format("private {0} {1};", fieldRuntimeTypeAsString, _fieldName));
+
+                globalMemberDefinitionBuilder.Append(@"
+                        public #FIELDRUNTIMETYPE# #FIELDNAME#
+                        {
+                            get
+                            {
+                                if (#ISFIELDFILLED#)
+                                {
+                                    return #PRIVATEFIELDNAME#;
+                                }
+                                else
+                                {
+                                    var fieldFormulaCalculateValueContext = new DataRecordTypeFieldFormulaCalculateValueContext(DataRecordFieldTypeDict, this.GetFieldValue, DataRecordFieldTypeDict.GetRecord(""#FIELDNAME#""));
+                                    #PRIVATEFIELDNAME# = DataRecordFieldDict.GetRecord(""#FIELDNAME#"").Formula.CalculateValue(fieldFormulaCalculateValueContext);
+                                    #ISFIELDFILLED# = true;
+                                    return #PRIVATEFIELDNAME#;
+                                }
+                            }
+                        }");
+                globalMemberDefinitionBuilder.AppendLine();
+
+                globalMemberDefinitionBuilder.Replace("#FIELDRUNTIMETYPE#", fieldRuntimeTypeAsString);
+                globalMemberDefinitionBuilder.Replace("#FIELDNAME#", dataRecordField.Name);
+                globalMemberDefinitionBuilder.Replace("#ISFIELDFILLED#", isFieldFilled);
+                globalMemberDefinitionBuilder.Replace("#PRIVATEFIELDNAME#", _fieldName);
+                globalMemberDefinitionBuilder.Replace("#PRIVATEFIELDNAME#", _fieldName);
+
+                return globalMemberDefinitionBuilder.ToString();
+            }
+        }
+
+        private string ToLowerFirstChar(string input)
+        {
+            string newString = input;
+            if (!String.IsNullOrEmpty(newString) && Char.IsUpper(newString[0]))
+                newString = Char.ToLower(newString[0]) + newString.Substring(1);
+            return newString;
         }
 
         #endregion
