@@ -466,6 +466,41 @@ namespace Retail.BusinessEntity.Business
             }
             return updateStatus;
         }
+
+        public void UpdateStatuses(Guid accountBEDefinitionId, List<long> accountIds, Guid statusId, string actionName = null) // Should Be Used instead of above.
+        {
+            List<Account> accounts = new List<Account>();
+            foreach (var accountId in accountIds.Distinct())
+            {
+                var account = GetAccount(accountBEDefinitionId, accountId);
+                account.ThrowIfNull("account", accountId);
+                accounts.Add(account);
+            }
+            var accountStatusHistoryManager = new AccountStatusHistoryManager();
+            var statusDefinitionManager = new Vanrise.Common.Business.StatusDefinitionManager();
+            string statusName = statusDefinitionManager.GetStatusDefinitionName(statusId);
+            IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
+            foreach (var account in accounts)
+            {
+                long accountId = account.AccountId;
+                Guid previousStatusId = account.StatusId;
+                string previousStatusName = statusDefinitionManager.GetStatusDefinitionName(previousStatusId);
+                bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
+                if (updateStatus)
+                {
+                    accountStatusHistoryManager.AddAccountStatusHistory(accountBEDefinitionId, accountId, statusId, previousStatusId);
+                    if (actionName != null)
+                    {
+                        VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), actionName, true, account);
+                    }
+                    else
+                    {
+                        VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), string.Format("Update Status"), true, account, string.Format("Status Changed from '{0}' to '{1}'", previousStatusName, statusName));
+                    }
+                }
+            }
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
+        }
         public long? GetFinancialAccountId(Guid accountBEDefinitionId, long? accountId)
         {
             if (!accountId.HasValue)
