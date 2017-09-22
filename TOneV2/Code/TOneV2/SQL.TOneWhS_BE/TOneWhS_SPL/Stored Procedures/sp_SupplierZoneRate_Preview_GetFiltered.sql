@@ -24,7 +24,7 @@ group by sor.ZoneName
 )
 
 	select	Z.ZoneName,Z.RecentZoneName, Z.ZoneChangeType, Z.ZoneBED, Z.ZoneEED, Z.SystemRate, Z.SystemRateBED, Z.SystemRateEED, 
-			Z.ImportedRate, Z.ImportedRateBED, Z.RateChangeType, Z.ZoneServiceChangeType,
+			Z.ImportedRate, Z.ImportedRateBED, Z.RateChangeType, Z.ZoneServiceChangeType,Z.ImportedZoneServiceIds,
 			SUM(Case When C.ChangeType = 1 Then 1 else 0 END) as NewCodes,
 			SUM(Case When C.ChangeType = 2 Then 1 else 0 END) as DeletedCodes,
 			SUM(Case When C.ChangeType = 3 AND Z.ZoneChangeType != 2 AND C.ZoneName = Z.ZoneName Then 1 else 0 END) as CodesMovedTo,
@@ -41,7 +41,7 @@ group by sor.ZoneName
 			
 					
 
-	Group by Z.ZoneName,Z.RecentZoneName, Z.ZoneChangeType, Z.ZoneBED, Z.ZoneEED, Z.SystemRate, Z.SystemRateBED, Z.SystemRateEED,Z.ImportedRate, Z.ImportedRateBED, Z.RateChangeType, Z.ZoneServiceChangeType
+	Group by Z.ZoneName,Z.RecentZoneName, Z.ZoneChangeType, Z.ZoneBED, Z.ZoneEED, Z.SystemRate, Z.SystemRateBED, Z.SystemRateEED,Z.ImportedRate, Z.ImportedRateBED, Z.RateChangeType, Z.ZoneServiceChangeType,Z.ImportedZoneServiceIds
 		
 	SET NOCOUNT OFF
 END

@@ -55,6 +55,11 @@ Begin Try
 	from TOneWhs_BE.SaleCode sc join TOneWhS_BE.CP_SaleCode_Changed scchanged
 	on sc.ID = scchanged.ID Where scchanged.ProcessInstanceID = @ProcessInstanceID
 	
+	Update TOneWhs_BE.CustomerCountry
+	Set EED = scchanged.EED
+	from TOneWhs_BE.CustomerCountry sc join TOneWhS_BE.CP_CustomerCountry_Changed scchanged
+	on sc.ID = scchanged.ID Where scchanged.ProcessInstanceID = @ProcessInstanceID
+
 	Update TOneWhs_BE.SaleRate
 	Set EED = srchanged.EED
 	from TOneWhs_BE.SaleRate sr join TOneWhS_BE.CP_SaleRate_Changed srchanged

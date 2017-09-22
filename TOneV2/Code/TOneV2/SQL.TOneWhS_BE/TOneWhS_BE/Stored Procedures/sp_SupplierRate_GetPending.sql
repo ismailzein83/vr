@@ -1,17 +1,16 @@
-﻿CREATE PROCEDURE  [TOneWhS_BE].[sp_SupplierRate_GetPending]
+﻿
+CREATE PROCEDURE  [TOneWhS_BE].[sp_SupplierRate_GetPending]
 (
 	@SupplierId INT,
-	@ZonesIDs varchar(max), 
+	@CountriesIDs varchar(max), 
+	@ZoneName varchar(max),
 	@EffectiveOn DateTime
 )
 	AS
 	BEGIN
-		DECLARE @SupplierId_local INT = @SupplierId
-		DECLARE @EffectiveOn_local DateTime = @EffectiveOn
-
-		DECLARE @ZonesIDsTable TABLE (ZoneID int)
-		INSERT INTO @ZonesIDsTable (ZoneID)
-		SELECT Convert(int, ParsedString) FROM [TOneWhS_BE].[ParseStringList](@ZonesIDs)
+		DECLARE @CountriesIDsTable TABLE (CountryID int)
+		INSERT INTO @CountriesIDsTable (CountryID)
+		SELECT Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@CountriesIDs)
 
 		 SELECT  SR.[ID]
 				,SR.[PriceListID]
@@ -24,12 +23,13 @@
 				,SR.[timestamp]
 				,SR.Change
          FROM	[TOneWhS_BE].[SupplierRate] SR WITH(NOLOCK) 
-				INNER JOIN [TOneWhS_BE].[SupplierPriceList] SP WITH(NOLOCK) ON SR.PriceListID=SP.ID
+				INNER JOIN [TOneWhS_BE].[SupplierZone] SZ WITH(NOLOCK) ON SR.ZoneID=SZ.ID
 
-		 WHERE	 SP.SupplierID = @SupplierId_local
-				 AND (@ZonesIDs IS NULL OR SR.ZoneID IN (SELECT ZoneID FROM @ZonesIDsTable))
-				 AND SR.RateTypeID IS NULL
-				 AND SR.BED > @EffectiveOn_local
+		 WHERE	(SZ.SupplierID = @SupplierId)
+				 AND (@CountriesIDs  is null or SZ.CountryID in (select CountryID from @CountriesIDsTable))
+				 AND (@ZoneName  is null or LOWER(SZ.Name) like '%'+LOWER(@ZoneName)+'%')
+				 AND SR.RateTypeID is null
+				 AND SR.BED > @EffectiveOn
 					
 		SET NOCOUNT OFF
 	END

@@ -494,5 +494,14 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_FinancialAccount_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_FinancialAccount_GetAll.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRates_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_CustomerCountry_Changed.sql" />
+    <Build Include="TOneWhS_BE\Tables\CarrierAccountStatusHistory.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfZonesWithChangeType.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfZonesWithChangedSe.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfRatesWithChangeType.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierCode_Preview_GetNumberOfCodesWithChangeType.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetSupplierRatesForZone.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetByIds.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierAccountStatusHistory_Insert.sql" />
   </ItemGroup>
 </Project>

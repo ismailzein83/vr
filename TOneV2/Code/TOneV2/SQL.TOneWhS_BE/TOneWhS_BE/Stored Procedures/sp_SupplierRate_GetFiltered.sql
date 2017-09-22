@@ -1,27 +1,35 @@
-﻿CREATE PROCEDURE  [TOneWhS_BE].[sp_SupplierRate_GetFiltered]
+﻿
+CREATE PROCEDURE  [TOneWhS_BE].[sp_SupplierRate_GetFiltered]
 (
 	@SupplierId INT,
-	@ZonesIDs varchar(max), 
+	@CountriesIDs varchar(max), 
+	@ZoneName varchar(max),
 	@EffectiveOn DateTime
 )
 	AS
 	BEGIN
-		DECLARE @SupplierId_local INT = @SupplierId
-		DECLARE @EffectiveOn_local DateTime = @EffectiveOn
 
-		DECLARE @ZonesIDsTable TABLE (ZoneID int)
-		INSERT INTO @ZonesIDsTable (ZoneID)
-		select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@ZonesIDs)
+		DECLARE @CountriesIDsTable TABLE (CountryID int)
+		INSERT INTO @CountriesIDsTable (CountryID)
+		SELECT Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@CountriesIDs)
 
-		 SELECT rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[Rate],rate.RateTypeID, rate.[BED], rate.[EED], rate.[timestamp],rate.Change
-         FROM	[TOneWhS_BE].[SupplierRate] rate WITH(NOLOCK) 
-				inner join [TOneWhS_BE].[SupplierPriceList] priceList WITH(NOLOCK) on rate.PriceListID=priceList.ID
+		 SELECT SR.[ID]
+				,SR.[PriceListID]
+				,SR.[ZoneID]
+				,SR.[CurrencyID]
+				,SR.[Rate]
+				,SR.RateTypeID
+				,SR.[BED]
+				,SR.[EED]
+				,SR.[timestamp]
+				,SR.Change
+				FROM	[TOneWhS_BE].[SupplierRate] SR WITH(NOLOCK) 
+				INNER JOIN [TOneWhS_BE].[SupplierZone] SZ WITH(NOLOCK) ON SR.ZoneID=SZ.ID
 
-		 WHERE	(@SupplierId_local =0 OR priceList.SupplierID = @SupplierId_local)
-				 and (@ZonesIDs  is null or rate.ZoneID in (select ZoneID from @ZonesIDsTable))
-				 And rate.RateTypeID is null
-				 AND   (rate.BED < = @EffectiveOn_local   and (rate.EED is null or rate.EED  > @EffectiveOn_local) );			
-			
-		
+		 WHERE	(SZ.SupplierID = @SupplierId)
+				 AND (@CountriesIDs  is null or SZ.CountryID in (select CountryID from @CountriesIDsTable))
+				 AND (@ZoneName  is null or LOWER(SZ.Name) like '%'+LOWER(@ZoneName)+'%')
+				 AND SR.RateTypeID is null
+				 AND (SR.BED < = @EffectiveOn   and (SR.EED is null or SR.EED  > @EffectiveOn) );			
 		SET NOCOUNT OFF
 	END

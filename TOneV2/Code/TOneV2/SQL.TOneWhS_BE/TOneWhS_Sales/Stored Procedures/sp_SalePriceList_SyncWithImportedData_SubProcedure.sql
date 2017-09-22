@@ -66,8 +66,8 @@ BEGIN
 				select [BatchID],[PricelistID],[CountryID],[CustomerID]
 				from  [TOneWhS_BE].[SalePricelistCustomerChange_New] spcc where spcc.[BatchID]= @ProcessInstanceID
 
-				INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED],[RoutingProductID],[CurrencyID])
-				select sprc.[PricelistId],sprc.[Rate],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.BED,sprc.EED,sprc.RoutingProductID,CurrencyID
+				INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED],[RoutingProductID],[CurrencyID],ZoneID)
+				select sprc.[PricelistId],sprc.[Rate],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.BED,sprc.EED,sprc.RoutingProductID,CurrencyID,sprc.ZoneID
 				from [TOneWhS_BE].[SalePricelistRateChange_New] sprc
 				where sprc.ProcessInstanceID = @ProcessInstanceID
 
