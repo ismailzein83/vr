@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_BE_AccountActionService', 'Retail_BE_AccountPackageAPIService',
-function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_BE_AccountActionService, Retail_BE_AccountPackageAPIService) {
+app.directive('retailBeAccountGrid', ['VRNotificationService', 'UtilsService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountBEDefinitionAPIService', 'Retail_BE_AccountActionService',
+function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountBEDefinitionAPIService, Retail_BE_AccountActionService) {
     return {
         restrict: 'E',
         scope: {
@@ -63,17 +63,8 @@ function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retai
                     for (var i = 0; i < account.menuActions.length; i++)
                         menuActions.push(account.menuActions[i]);
                 }
-                menuActions.push({
-                    name: "Export Rates",
-                    clicked: exportRates,
-                })
-                return menuActions;
-            };
 
-            function exportRates(account) {
-                return Retail_BE_AccountPackageAPIService.ExportRates(accountBEDefinitionId, account.AccountId).then(function (response) {
-                    UtilsService.downloadFile(response.data, response.headers);
-                });
+                return menuActions;
             };
         }
         function defineAPI() {

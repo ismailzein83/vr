@@ -106,92 +106,97 @@ namespace Retail.BusinessEntity.Business
         }
 
 
-        public System.IO.Stream ExportRates(Guid accountBEDefinitionId, long accountId, DateTime effectiveDate)
+        public ExcelResult ExportRates(Guid accountBEDefinitionId, long accountId, DateTime effectiveDate)
         {
-            Vanrise.Common.Utilities.ActivateAspose();
-            Workbook wbk = new Workbook();
-           
+            List<ExportExcelSheet> excelSheets = new List<ExportExcelSheet>();
+
             List<ProcessedAccountPackage> processedAccountPackages = GetProcessedAccountPackagesByPriority(accountBEDefinitionId, accountId, effectiveDate, true);
-            if (processedAccountPackages == null || processedAccountPackages.Count == 0)
-                return wbk.SaveToStream();
-
-            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
-            List<ServiceType> serviceTypes = serviceTypeManager.GetServiceTypes(accountBEDefinitionId);
-
-            if (serviceTypes == null || serviceTypes.Count == 0)
-                return wbk.SaveToStream();
-
-            bool initSheetsCleared = false;
-
-            foreach (ServiceType serviceType in serviceTypes)
+            if (processedAccountPackages != null && processedAccountPackages.Count > 0)
             {
-                PackageSettingsExportRatesContext context = new PackageSettingsExportRatesContext()
-                {
-                    AccountId = accountId,
-                    EffectiveDate = effectiveDate,
-                    ServiceTypeId = serviceType.ServiceTypeId
-                };
+                ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
+                List<ServiceType> serviceTypes = serviceTypeManager.GetServiceTypes(accountBEDefinitionId);
 
-                foreach (ProcessedAccountPackage processedAccountPackage in processedAccountPackages)
+                if (serviceTypes != null && serviceTypes.Count > 0)
                 {
-                    processedAccountPackage.Package.Settings.ExtendedSettings.ExportRates(context);
-                    if (context.IsFinalPricingPackage)
+                    foreach (ServiceType serviceType in serviceTypes)
                     {
-                        if(!initSheetsCleared)
+                        PackageSettingsExportRatesContext context = new PackageSettingsExportRatesContext()
                         {
-                            wbk.Worksheets.Clear();
-                            initSheetsCleared = true;
+                            AccountId = accountId,
+                            EffectiveDate = effectiveDate,
+                            ServiceTypeId = serviceType.ServiceTypeId
+                        };
+
+                        foreach (ProcessedAccountPackage processedAccountPackage in processedAccountPackages)
+                        {
+                            processedAccountPackage.Package.Settings.ExtendedSettings.ExportRates(context);
+                            if (context.IsFinalPricingPackage)
+                            {
+                                string rateSheetName = string.Format("{0} Rates", serviceType.Title);
+                                if (rateSheetName.Length > 31)
+                                    rateSheetName = rateSheetName.Substring(0, 31);
+
+                                ExportExcelSheet rateSheet = BuildExcelSheet(rateSheetName, context.RateValueRuleData);
+                                if (rateSheet != null)
+                                    excelSheets.Add(rateSheet);
+
+                                string tariffSheetName = string.Format("{0} Tariffs", serviceType.Title);
+                                if (tariffSheetName.Length > 31)
+                                    tariffSheetName = tariffSheetName.Substring(0, 31);
+
+                                ExportExcelSheet tariffSheet = BuildExcelSheet(tariffSheetName, context.TariffRuleData);
+                                if (tariffSheet != null)
+                                    excelSheets.Add(tariffSheet);
+
+                                break;
+                            }
+
                         }
-
-                        string rateSheetName = string.Format("{0} Rates", serviceType.Title);
-                        if (rateSheetName.Length > 31)
-                            rateSheetName = rateSheetName.Substring(0, 31);
-                        wbk.Worksheets.Add(rateSheetName);
-                        WriteToSheet(wbk.Worksheets[rateSheetName], context.RateValueRuleData);
-
-                        string tariffSheetName = string.Format("{0} Tariffs", serviceType.Title);
-                        if (tariffSheetName.Length > 31)
-                            tariffSheetName = tariffSheetName.Substring(0, 31);
-
-                        wbk.Worksheets.Add(tariffSheetName);
-                        WriteToSheet(wbk.Worksheets[tariffSheetName], context.TariffRuleData);
-                        break;
                     }
-
                 }
             }
-            
-            return wbk.SaveToStream();
+            if (excelSheets.Count == 0)
+            {
+                ExportExcelSheet dummySheet = new ExportExcelSheet() { Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }, Rows = new List<ExportExcelRow>() };
+                excelSheets.Add(dummySheet);
+            }
+            return new ExcelManager().ExportExcel(excelSheets);
         }
 
-        private void WriteToSheet(Worksheet sheet, ExportRuleData exportRuleData)
+        private ExportExcelSheet BuildExcelSheet(string sheetName, ExportRuleData exportRuleData)
         {
             if (exportRuleData == null || exportRuleData.Headers == null || exportRuleData.Headers.Count == 0)
-                return;
+                return null;
 
-            int rowIndex = 0;
-            int colIndex = 0;
+            ExportExcelSheet exportExcelSheet = new ExportExcelSheet()
+            {
+                SheetName = sheetName,
+                Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() },
+                Rows = new List<ExportExcelRow>(),
+                AutoFitColumns = true
+            };
+
             foreach (string header in exportRuleData.Headers)
             {
-                sheet.Cells[rowIndex, colIndex].PutValue(header);
-                SetCellHeaderStyle(sheet.Cells.GetCell(rowIndex, colIndex));
-                colIndex++;
+                ExportExcelHeaderCell cellHeader = new ExportExcelHeaderCell() { Title = header };
+                exportExcelSheet.Header.Cells.Add(cellHeader);
             }
 
             if (exportRuleData.Data != null)
             {
                 foreach (var rowData in exportRuleData.Data)
                 {
-                    rowIndex++;
-                    colIndex = 0;
+                    ExportExcelRow excelRow = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+
                     foreach (var rowDataCell in rowData)
                     {
-                        sheet.Cells[rowIndex, colIndex].PutValue(rowDataCell);
-                        colIndex++;
+                        ExportExcelCell excelCell = new ExportExcelCell() { Value = rowDataCell };
+                        excelRow.Cells.Add(excelCell);
                     }
+                    exportExcelSheet.Rows.Add(excelRow);
                 }
             }
-            sheet.AutoFitColumns();
+            return exportExcelSheet;
         }
 
         private void SetCellHeaderStyle(Cell cell)

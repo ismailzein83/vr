@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_ActionRuntimeService', 'Retail_BE_AccountBEAPIService','Retail_BE_ChangeStatusActionAPIService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_ActionRuntimeService, Retail_BE_AccountBEAPIService, Retail_BE_ChangeStatusActionAPIService) {
+app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_ActionRuntimeService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_ChangeStatusActionAPIService', 'Retail_BE_AccountPackageAPIService',
+    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_ActionRuntimeService, Retail_BE_AccountBEAPIService, Retail_BE_ChangeStatusActionAPIService, Retail_BE_AccountPackageAPIService) {
 
         var actionTypes = [];
 
@@ -132,8 +132,29 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
             registerActionType(actionType);
         }
 
-        function openChangeStatusEditor(onItemUpdated, accountBEDefinitionId, accountId, accountActionDefinitionId)
-        {
+        function registerExportRatesAction() {
+            console.log(1);
+            var actionType = {
+                ActionTypeName: "ExportRatesAction",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var account = payload.account;
+                    Retail_BE_AccountPackageAPIService.ExportRates(accountBEDefinitionId, account.AccountId).then(function (response) {
+                        UtilsService.downloadFile(response.data, response.headers);
+                    });
+                }
+            };
+
+            registerActionType(actionType);
+        }
+
+
+
+
+        function openChangeStatusEditor(onItemUpdated, accountBEDefinitionId, accountId, accountActionDefinitionId) {
             var settings = {};
             settings.onScopeReady = function (modalScope) {
                 modalScope.onItemUpdated = onItemUpdated
@@ -153,6 +174,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
             registerEditAccount: registerEditAccount,
             registerOpen360DegreeAccount: registerOpen360DegreeAccount,
             registerBPActionAccount: registerBPActionAccount,
-            registerChangeStatusAction: registerChangeStatusAction
+            registerChangeStatusAction: registerChangeStatusAction,
+            registerExportRatesAction: registerExportRatesAction
         });
     }]);

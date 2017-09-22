@@ -262,6 +262,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-accountactiondefinitionsettings-bpaccountbackendexecutor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\retail-be-bpaccountaction-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\BPAccountAction\Templates\BPAccountActionBackendExecutorSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\ExportRatesAction\retail-be-accountactiondefinitionsettings-exportrates.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\ExportRatesAction\Templates\ExportRatesActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\ChangeStatusAction\retail-be-accountactiondefinitionsettings-changestatus.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\ChangeStatusAction\Templates\ChangeStatusActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\MainExtensions\EditAccountAction\retail-be-accountactiondefinitionsettings-editaccount.js" />
