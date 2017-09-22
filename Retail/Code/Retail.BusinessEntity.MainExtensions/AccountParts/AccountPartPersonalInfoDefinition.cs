@@ -15,6 +15,23 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
         static CountryManager s_countryManager = new CountryManager();
         static CityManager s_cityManager = new CityManager();
+        public override List<GenericFieldDefinition> GetFieldDefinitions()
+        {
+            var list = new List<GenericFieldDefinition>();
+            list.Add(new GenericFieldDefinition
+            {
+                Name = "FirstName",
+                Title = "First Name",
+                FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+            });
+            list.Add(new GenericFieldDefinition
+            {
+                Name = "LastName",
+                Title = "Last Name",
+                FieldType = new Vanrise.GenericData.MainExtensions.DataRecordFields.FieldTextType()
+            });
+            return list;
+        }
 
         public override bool IsPartValid(IAccountPartDefinitionIsPartValidContext context)
         {

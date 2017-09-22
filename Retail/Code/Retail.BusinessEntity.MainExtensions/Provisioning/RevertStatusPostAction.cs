@@ -20,8 +20,7 @@ namespace Retail.BusinessEntity.MainExtensions
             account.ThrowIfNull("account", context.AccountId);
             var childAccounts = accountBEManager.GetChildAccounts(context.AccountBEDefinitionId, context.AccountId, true);
             HashSet<AccountDefinition> accountDefinitions = new HashSet<AccountDefinition>();
-
-            if (account.StatusId == definitionSettings.RevertToStatusDefinitionId)
+            if (account.StatusId == definitionSettings.RevertFromStatusDefinitionId)
             {
                 accountDefinitions.Add(new AccountDefinition
                 {
@@ -33,7 +32,7 @@ namespace Retail.BusinessEntity.MainExtensions
             {
                 foreach (var childAccount in childAccounts)
                 {
-                    if (childAccount.StatusId == definitionSettings.RevertToStatusDefinitionId)
+                    if (childAccount.StatusId == definitionSettings.RevertFromStatusDefinitionId)
                     {
                         accountDefinitions.Add(new AccountDefinition
                         {
@@ -47,19 +46,27 @@ namespace Retail.BusinessEntity.MainExtensions
             var accountStatusHistoryList = new AccountStatusHistoryManager().GetAccountStatusHistoryListByAccountDefinition(accountDefinitions);
             if (accountStatusHistoryList != null)
             {
+                var accountIdsToUpdateStatus = new List<UpdateAccountStatusInput>();
                 foreach (var accountDefinition in accountDefinitions)
                 {
                     var accountStatusHistoryOrderedList = accountStatusHistoryList.GetRecord(accountDefinition);
                     if (accountStatusHistoryOrderedList != null)
                     {
                         var accountStatusHistory = accountStatusHistoryOrderedList.FirstOrDefault();
-                        if (accountStatusHistory != null)
+                        if (accountStatusHistory != null && accountStatusHistory.StatusId == definitionSettings.RevertFromStatusDefinitionId)
                         {
-                            Guid statusDefinitionId = accountStatusHistory.PreviousStatusId.HasValue ? accountStatusHistory.PreviousStatusId.Value : accountStatusHistory.StatusId;
-                            accountBEManager.UpdateStatus(context.AccountBEDefinitionId, accountDefinition.AccountId, statusDefinitionId);
+                            if (accountStatusHistory.PreviousStatusId.HasValue)
+                            {
+                                accountIdsToUpdateStatus.Add(new UpdateAccountStatusInput
+                                {
+                                    StatusId = accountStatusHistory.PreviousStatusId.Value,
+                                    AccountId = accountDefinition.AccountId
+                                });
+                            }
                         }
                     }
                 }
+                accountBEManager.UpdateStatuses(context.AccountBEDefinitionId, accountIdsToUpdateStatus);
             }
         }
     }

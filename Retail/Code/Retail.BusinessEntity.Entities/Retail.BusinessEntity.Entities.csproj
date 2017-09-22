@@ -92,6 +92,7 @@
     <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="AccountSynchronizerHandler\AccountSynchronizerInsertHandler.cs" />
     <Compile Include="AccountSynchronizerHandler\AccountSynchronizerInsertHandlerConfig.cs" />
+    <Compile Include="Account\UpdateAccountStatusInput.cs" />
     <Compile Include="Account\ExtendedSettings\PortalAccountSettings.cs" />
     <Compile Include="BusinessManagers\IAccountBEManager.cs" />
     <Compile Include="ChargeableEntity\ChargeableEntityDefinitionSettings.cs" />

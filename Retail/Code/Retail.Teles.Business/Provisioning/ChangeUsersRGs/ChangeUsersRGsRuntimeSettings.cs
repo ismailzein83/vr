@@ -89,9 +89,11 @@ namespace Retail.Teles.Business
                     }
                 }
             }
+            List<TelesUser> telesUsersToChangeRG = null;
+
             if (telesSites != null)
             {
-                var telesUsersToChangeRG = new List<TelesUser>();
+                 telesUsersToChangeRG = new List<TelesUser>();
                 foreach (var telesSiteEntry in telesSites)
                 {
                     if (mappedTelesSiteIds.Contains(telesSiteEntry.Key))//teles site is mapped to Retail Account of type site and should be already executed in previous block of code
@@ -100,13 +102,12 @@ namespace Retail.Teles.Business
                     if (siteTelesUsersToChangeRG != null && siteTelesUsersToChangeRG.Count > 0)
                         telesUsersToChangeRG.AddRange(siteTelesUsersToChangeRG);
                 }
-               
-                usersToChangeRG.Add(new UsersToChangeRG(companyAccount)
-                {
-                    TelesUsers = telesUsersToChangeRG
-                });
-                
             }
+            usersToChangeRG.Add(new UsersToChangeRG(companyAccount)
+            {
+                TelesUsers = telesUsersToChangeRG
+            });
+                
         }
 
         private void AddUsersToChangeRGfromSite(IAccountProvisioningContext context, Account siteAccount, EnterpriseAccountMappingInfo enterpriseAccountMappingInfo, List<UsersToChangeRG> usersToChangeRG, ChangeUsersRGsDefinitionSettings definitionSettings, out string telesSiteId)
@@ -131,22 +132,25 @@ namespace Retail.Teles.Business
                     }
                 }
             }
+            List<TelesUser> telesUsersToChangeRG = null;
 
             if (siteAccountMappingInfo != null)
             {
+                telesUsersToChangeRG = new List<TelesUser>();
+
                 telesSiteId = siteAccountMappingInfo.TelesSiteId;
                 telesSiteId.ThrowIfNull("telesSiteId");
                 var siteTelesUsersToChangeRG = GetTelesUsersToChangeRGFromTelesSite(context, telesSiteId, mappedTelesUserIds, definitionSettings);
-                usersToChangeRG.Add(new UsersToChangeRG(siteAccount)
-                {
-                    TelesUsers = siteTelesUsersToChangeRG
-                });
-              
             }
             else
             {
                 telesSiteId = null;
             }
+            usersToChangeRG.Add(new UsersToChangeRG(siteAccount)
+            {
+                TelesUsers = telesUsersToChangeRG
+            });
+              
         }
 
         private void AddUsersToChangeRGfromUser(IAccountProvisioningContext context, Account userAccount, SiteAccountMappingInfo siteAccountMappingInfo, List<UsersToChangeRG> usersToChangeRG, ChangeUsersRGsDefinitionSettings definitionSettings, out string mappedTelesUserId)

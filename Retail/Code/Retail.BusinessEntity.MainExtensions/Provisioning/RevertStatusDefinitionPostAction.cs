@@ -18,6 +18,6 @@ namespace Retail.BusinessEntity.MainExtensions
         {
             get { return "retail-be-actionbpdefinition-runtimepostaction-revertstatus"; }
         }
-        public Guid RevertToStatusDefinitionId { get; set; }
+        public Guid RevertFromStatusDefinitionId { get; set; }
     }
 }

@@ -110,14 +110,14 @@ namespace Retail.Teles.Business
                     {
                         if (_accountBEManager.DeleteAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, userToRevert.Account.AccountId))
                         {
-                            context.TrackActionExecuted(null, oldChURGsActionCh);
+                            context.TrackActionExecuted(userToRevert.Account.AccountId,null, oldChURGsActionCh);
                         };
                     }
                     else
                     {
                         if (_accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, userToRevert.Account.AccountId, existingAccountState))
                         {
-                            context.TrackActionExecuted(null, oldChURGsActionCh);
+                            context.TrackActionExecuted(userToRevert.Account.AccountId,null, oldChURGsActionCh);
                         };
                     }
                     if (userToRevert.TelesUsers.Count > 0)

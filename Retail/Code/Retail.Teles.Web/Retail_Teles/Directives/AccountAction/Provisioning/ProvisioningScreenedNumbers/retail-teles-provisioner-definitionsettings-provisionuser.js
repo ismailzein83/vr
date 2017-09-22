@@ -41,7 +41,7 @@
             var siteTypeReadyDeferred = UtilsService.createPromiseDeferred();
             var userTypeAPI;
             var userTypeReadyDeferred = UtilsService.createPromiseDeferred();
-
+            var accountBEDefinitionId;
             function initializeController() {
                 $scope.scopeModel = {};
                
@@ -84,10 +84,10 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     var provisionerDefinitionSettings;
                     if (payload != undefined) {
                         mainPayload = payload;
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         provisionerDefinitionSettings = payload.provisionerDefinitionSettings;
                         if (provisionerDefinitionSettings != undefined) {
                             $scope.scopeModel.countryCode = provisionerDefinitionSettings.CountryCode;
@@ -107,25 +107,25 @@
 
                     promises.push(loadLoginNameSelector());
                     function loadLoginNameSelector() {
-                        var loginNameSelectorPayload;
+                        var loginNameSelectorPayload = { accountBEDefinitionId: accountBEDefinitionId };
                         if (provisionerDefinitionSettings != undefined) {
-                            loginNameSelectorPayload = { provisionUserSettings: provisionerDefinitionSettings.LoginNameField };
+                            loginNameSelectorPayload.selectedIds = provisionerDefinitionSettings.LoginNameField;
                         }
                         return loginNameSelectorAPI.load(loginNameSelectorPayload);
                     }
                     promises.push(loadFirstNameSelector());
                     function loadFirstNameSelector() {
-                        var firstNameSelectorPayload;
+                        var firstNameSelectorPayload = { accountBEDefinitionId: accountBEDefinitionId };
                         if (provisionerDefinitionSettings != undefined) {
-                            firstNameSelectorPayload = { provisionUserSettings: provisionerDefinitionSettings.FirstNameField };
+                            firstNameSelectorPayload.selectedIds = provisionerDefinitionSettings.FirstNameField;
                         }
                         return firstNameSelectorAPI.load(firstNameSelectorPayload);
                     }
                     promises.push(loadLastNameSelector());
                     function loadLastNameSelector() {
-                        var lastNameSelectorPayload;
+                        var lastNameSelectorPayload = { accountBEDefinitionId: accountBEDefinitionId };
                         if (provisionerDefinitionSettings != undefined) {
-                            lastNameSelectorPayload = { provisionUserSettings: provisionerDefinitionSettings.LastNameField };
+                            lastNameSelectorPayload.selectedIds = provisionerDefinitionSettings.LastNameField;
                         }
                         return lastNameSelectorAPI.load(lastNameSelectorPayload);
                     }

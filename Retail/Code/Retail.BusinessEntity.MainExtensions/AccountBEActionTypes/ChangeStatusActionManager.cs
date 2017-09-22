@@ -22,25 +22,23 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
 
             var actionDefinitionSettings = actionDefinition.ActionDefinitionSettings as ChangeStatusActionSettings;
             actionDefinitionSettings.ThrowIfNull("actionDefinitionSettings");
-            if (accountBEManager.EvaluateAccountCondition(accountBEDefinitionId,accountId,actionDefinition.AvailabilityCondition))
+            if (accountBEManager.EvaluateAccountCondition(accountBEDefinitionId, accountId, actionDefinition.AvailabilityCondition))
             {
-                if (accountBEManager.UpdateStatus(accountBEDefinitionId, accountId, actionDefinitionSettings.StatusId, actionDefinition.Name))
-                {                    
-                    FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-                    financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, accountId);
-                    bool isSucceeded = true;
-                    if (actionDefinitionSettings.ApplyToChildren)
+                accountBEManager.UpdateStatuses(accountBEDefinitionId, new List<long> { accountId }, actionDefinitionSettings.StatusId, actionDefinition.Name);
+                FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+                financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, accountId);
+                bool isSucceeded = true;
+                if (actionDefinitionSettings.ApplyToChildren)
+                {
+                    if (!AppyChangeStatusToChilds(actionDefinitionSettings, actionDefinition.AvailabilityCondition, accountBEDefinitionId, accountId, actionDefinition.Name))
                     {
-                        if (!AppyChangeStatusToChilds(actionDefinitionSettings, actionDefinition.AvailabilityCondition, accountBEDefinitionId, accountId, actionDefinition.Name))
-                        {
-                            isSucceeded = false;
-                        };
-                    }
-                    if(isSucceeded)
-                    {
-                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                        updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(accountBEDefinitionId, accountId);
-                    }
+                        isSucceeded = false;
+                    };
+                }
+                if (isSucceeded)
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(accountBEDefinitionId, accountId);
                 }
                 else
                 {
@@ -60,14 +58,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
                 {
                     if (accountBEManager.EvaluateAccountCondition(childAccout, actionCondition))
                     {
-                        if (accountBEManager.UpdateStatus(accountBEDefinitionId, childAccout.AccountId, actionDefinitionSettings.StatusId,actionName))
-                        {                            
-                            financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, childAccout.AccountId);
-                        }
-                        else
-                        {
-                            return false;
-                        }
+                        accountBEManager.UpdateStatuses(accountBEDefinitionId, new List<long> { childAccout.AccountId }, actionDefinitionSettings.StatusId, actionName);
+                        financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, childAccout.AccountId);
                     }
                 }
             }

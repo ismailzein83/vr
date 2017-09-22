@@ -65,7 +65,7 @@
                         };
 
                         if (accountProvisionDefinitionPostAction != undefined) {
-                            statusDefinitionSelectorPayload.selectedIds = accountProvisionDefinitionPostAction.RevertToStatusDefinitionId;
+                            statusDefinitionSelectorPayload.selectedIds = accountProvisionDefinitionPostAction.RevertFromStatusDefinitionId;
                         }
                         return statusDefinitionSelectorAPI.load(statusDefinitionSelectorPayload);
                     }
@@ -83,7 +83,7 @@
                 function getData() {
                     var data = {
                         $type: "Retail.BusinessEntity.MainExtensions.RevertStatusDefinitionPostAction, Retail.BusinessEntity.MainExtensions",
-                        RevertToStatusDefinitionId: statusDefinitionSelectorAPI.getSelectedIds(),
+                        RevertFromStatusDefinitionId: statusDefinitionSelectorAPI.getSelectedIds(),
                     };
                     return data;
                 }

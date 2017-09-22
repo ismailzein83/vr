@@ -20,5 +20,15 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public DateTime BirthDate { get; set; }
         public int? CountryId { get; set; }
         public int? CityId { get; set; }
+        public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
+        {
+            switch (context.FieldName)
+            {
+                case "FirstName": return this.FirstName;
+                case "LastName": return this.LastName;
+                default: return null;
+            }
+        }
+
     }
 }

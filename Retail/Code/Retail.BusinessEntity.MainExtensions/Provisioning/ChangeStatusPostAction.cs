@@ -14,27 +14,26 @@ namespace Retail.BusinessEntity.MainExtensions
         {
             var definitionSettings = context.DefinitionPostAction as ChangeStatusDefinitionPostAction;
             definitionSettings.ThrowIfNull("definitionSettings");
-
             AccountBEManager accountBEManager = new AccountBEManager();
             var account = accountBEManager.GetAccount(context.AccountBEDefinitionId, context.AccountId);
             account.ThrowIfNull("account", context.AccountId);
             var childAccounts = accountBEManager.GetChildAccounts(account, true);
+            List<long> accountIdsToUpdateStatus = new List<long>();
             if (definitionSettings.ExistingStatusDefinitionIds == null || definitionSettings.ExistingStatusDefinitionIds.Contains(account.StatusId))
             {
-                accountBEManager.UpdateStatus(context.AccountBEDefinitionId, context.AccountId, definitionSettings.NewStatusDefinitionId);
+                accountIdsToUpdateStatus.Add(context.AccountId);
             }
-
             if (childAccounts != null)
             {
                 foreach (var childAccount in childAccounts)
                 {
                     if (definitionSettings.ExistingStatusDefinitionIds == null || definitionSettings.ExistingStatusDefinitionIds.Contains(childAccount.StatusId))
                     {
-                        accountBEManager.UpdateStatus(context.AccountBEDefinitionId, childAccount.AccountId, definitionSettings.NewStatusDefinitionId);
+                        accountIdsToUpdateStatus.Add(childAccount.AccountId);
                     }
                 }
             }
-           
+            accountBEManager.UpdateStatuses(context.AccountBEDefinitionId, accountIdsToUpdateStatus, definitionSettings.NewStatusDefinitionId);
         }
     }
 }
