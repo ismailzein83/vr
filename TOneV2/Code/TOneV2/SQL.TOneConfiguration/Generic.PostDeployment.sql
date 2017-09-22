@@ -267,8 +267,8 @@ Values	(1,	'F6CED9A6-86C4-4FB9-B706-6E91D8F02908',	'Store Batch Queue Activator'
        UPDATE  q
        SET    Settings = 
 			REPLACE(	q.Settings,
-						SUBSTRING ( q.Settings ,CHARINDEX('"ConfigId":',q.Settings) , CHARINDEX('}}',q.Settings)-CHARINDEX('"ConfigId":',q.Settings)),
-						(select '"ConfigId":"'+cast([NewID] as varchar(100))+'"' from #QueueActivatorConfig_temp where ID=SUBSTRING ( q.Settings ,CHARINDEX('"ConfigId":',q.Settings)+11 , CHARINDEX('}}',q.Settings)-CHARINDEX('"ConfigId":',q.Settings)-11))
+						SUBSTRING ( q.Settings ,CHARINDEX('"ConfigId":',q.Settings) , len(q.Settings)-1-CHARINDEX('"ConfigId":',q.Settings)),
+						(select '"ConfigId":"'+cast([NewID] as varchar(100))+'"' from #QueueActivatorConfig_temp where ID=SUBSTRING ( q.Settings ,CHARINDEX('"ConfigId":',q.Settings)+11 , len(q.Settings)-1-CHARINDEX('"ConfigId":',q.Settings)-11))
 						)
 from	[queue].QueueInstance q
 where	ISNUMERIC(SUBSTRING ( q.Settings ,CHARINDEX('"ConfigId":',q.Settings)+11 , 1))=1
