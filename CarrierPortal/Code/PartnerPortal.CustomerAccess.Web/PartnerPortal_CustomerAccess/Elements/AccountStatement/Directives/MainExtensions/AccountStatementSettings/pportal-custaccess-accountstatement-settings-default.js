@@ -1,6 +1,7 @@
 ﻿'use strict';
 
-app.directive('partnerportalCustomeraccessAccountstatementExtendedsettingsDefault', ['UtilsService',
+
+app.directive('pportalCustaccessAccountstatementSettingsDefault', ['UtilsService',
 function (UtilsService) {
 
     var directiveDefinitionObject = {
@@ -19,7 +20,7 @@ function (UtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Elements/AccountStatement/Directives/MainExtensions/AccountStatementExtendedSettings/Templates/DefaultAccountStatementExtendedSettings.html'
+        templateUrl: '/Client/Modules/PartnerPortal_CustomerAccess/Elements/AccountStatement/Directives/MainExtensions/AccountStatementSettings/Templates/DefaultAccountStatementExtendedSettings.html'
     };
 
 
