@@ -11,7 +11,7 @@ as (select * from (values
 ('12371BE0-CF2C-4CDD-9F4C-E809D912A716','Partner Invoice Query','Partner Invoice Query','PartnerPortal_Invoice_InvoiceQueryInterceptor','{"Editor":"partnerportal-invoice-partnerinvoicequeryinterceptor"}'),
 ('BBEF1C92-DCEC-441B-86A2-7FC0C67716F5','PartnerPortal_Invoice_InvoiceView','Portal Invoice','VR_Security_ViewTypeConfig','{"Editor":"/Client/Modules/Security/Views/View/GenericViewEditor.html","EnableAdd":true,"DirectiveEditor":"partnerportal-invoice-vieweditor"}'),
 ('609A37C4-466A-40A9-8140-F23F5D80D3C3','DownloadAttachmentAction','Download Attachment','PartnerPortal_Invoice_InvoiceGridActionSettings','{"Editor":"partnerportal-invoice-gridaction-downloadattachment"}'),
-('bb59e6be-a590-4142-a5b4-f65daaf02ff6','Default','Default','PartnerPortal_CustomerAccess_AccountStatementExtendedSettings','{"Editor":"partnerportal-customeraccess-accountstatement-extendedsettings-default"}'),
+('bb59e6be-a590-4142-a5b4-f65daaf02ff6','Default','Default','PartnerPortal_CustomerAccess_AccountStatementExtendedSettings','{"Editor":"pportal-custaccess-accountstatement-settings-default"}'),
 ('06377156-8265-4424-bd62-46fa5ab2ce41','Default','Default','PartnerPortal_Invoice_InvoiceViewerTypeExtendedSettings','{"Editor":"partnerportal-invoice-extendedsettings-default"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
