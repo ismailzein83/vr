@@ -2210,7 +2210,10 @@ vr-switch[class*="divDisabled"] .switch {
 .vr-choices-filter {
     margin: 0px 3px;
 }
-
+.vr-choices-disabled label{
+    color:#aaa;
+    cursor:not-allowed !important;
+}
 /**************END VR-TABS*********/
 
 

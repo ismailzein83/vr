@@ -8,7 +8,8 @@ app.directive('vrChoices', [function () {
         scope: {
             onReady: '=',
             selectedindex: '=?',
-            onselectionchanged: '&'
+            onselectionchanged: '&',
+            disabled: '='
 
         },
         controller: function ($scope, $element, $attrs) {
@@ -22,6 +23,7 @@ app.directive('vrChoices', [function () {
             };
             var triggerSelectionChanged = false;
             ctrl.selectChoice = function (choiceCtrl) {
+                if (ctrl.disabled != undefined && ctrl.disabled == true) return;
                 triggerSelectionChanged = true;
                 angular.forEach(choiceCtrls, function (t) {
                     if (t != choiceCtrl)
@@ -56,7 +58,7 @@ app.directive('vrChoices', [function () {
                 }
             };
 
-            $scope.$watch("ctrl.selectedindex", function (value) {
+            var selectedIndexWatch = $scope.$watch("ctrl.selectedindex", function (value) {
                 if (choiceCtrls[ctrl.selectedindex] != undefined && !choiceCtrls[ctrl.selectedindex].isSelected)
                     ctrl.selectChoice(choiceCtrls[ctrl.selectedindex]);
                 else {
@@ -68,6 +70,17 @@ app.directive('vrChoices', [function () {
                 }
             });
 
+            var disabledWatch = $scope.$watch("ctrl.disabled", function (value) {
+                if (ctrl.disabled != undefined && ctrl.disabled == true)
+                    $element.find('.vr-tabs').addClass('vr-choices-disabled');
+                else
+                    $element.find('.vr-tabs').removeClass('vr-choices-disabled');
+            });
+
+            $scope.$on("$destroy", function () {
+                selectedIndexWatch();
+                disabledWatch();
+            });
             var api = {};
             api.selectChoice = function (choiceIndex) {
                 var choiceCtrl = choiceCtrls[choiceIndex];
@@ -87,7 +100,7 @@ app.directive('vrChoices', [function () {
         compile: function (element, attrs) {
             var radioclass = (attrs.isradio != undefined) ? " radio-btn-groupe " : "";
             var switchclass = (attrs.islabelswitch != undefined) ? " switch-btn-groupe " : "";
-            element.html('<div class="btn-group btn-group-custom vr-tabs ' + radioclass + switchclass + '"   >' + element.html() + '</div>');
+            element.html('<div  class="btn-group btn-group-custom vr-tabs ' + radioclass + switchclass + '"   >' + element.html() + '</div>');
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
