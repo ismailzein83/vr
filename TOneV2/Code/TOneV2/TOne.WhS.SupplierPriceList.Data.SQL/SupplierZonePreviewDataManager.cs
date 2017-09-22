@@ -117,7 +117,8 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
                 DeletedCodes = GetReaderValue<int>(reader, "DeletedCodes"),
                 CodesMovedFrom = GetReaderValue<int>(reader, "CodesMovedFrom"),
                 CodesMovedTo = GetReaderValue<int>(reader, "CodesMovedTo"),
-                ZoneServicesChangeType = (ZoneServiceChangeType)GetReaderValue<int>(reader, "ZoneServiceChangeType")
+                ZoneServicesChangeType = (ZoneServiceChangeType)GetReaderValue<int>(reader, "ZoneServiceChangeType"),
+                ImportedServiceIds = Vanrise.Common.Serializer.Deserialize<List<int>>(reader["ImportedZoneServiceIds"] as string),
 
             };
             return zoneRatePreviewDetail;

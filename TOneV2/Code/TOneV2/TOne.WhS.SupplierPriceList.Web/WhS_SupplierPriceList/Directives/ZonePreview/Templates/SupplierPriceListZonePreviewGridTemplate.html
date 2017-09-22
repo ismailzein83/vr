@@ -17,10 +17,8 @@
     <vr-datagridcolumn headertext="'C.R.BED'" headerdescription="'Current Rate BED'" field="'SystemRateBED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'I.R.BED'" headerdescription="'Imported Rate BED'" field="'ImportedRateBED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'C.R.EED'" headerdescription="'Current Rate EED'" field="'SystemRateEED'" type="'Datetime'" fixedwidth="'105'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Services'" headerdescription="'Services Changed'" fixedwidth="'60'">
-        <span ng-show="dataItem.showServiceChanges">
-            <vr-icon icontype="dataItem.serviceChanges"></vr-icon>
-        </span>
+    <vr-datagridcolumn headertext="'Imported Services'" headerdescription="'Imported Services'" fixedwidth="'100'">
+        <vr-whs-be-services-viewer on-ready="dataItem.onImportedServicesReady"></vr-whs-be-services-viewer>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'N.C'" headerdescription="'New Codes'" field="'NewCodes'" type="'Text'" fixedwidth="'25'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'D.C'" headerdescription="'Deleted Codes'" field="'DeletedCodes'" type="'Text'" fixedwidth="'25'"></vr-datagridcolumn>

@@ -140,6 +140,11 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                 }
             }
 
+            dataItem.onImportedServicesReady = function (api) {
+                dataItem.ImportedServicesApi = api;
+                dataItem.ImportedServicesApi.load({ selectedIds: dataItem.ImportedServiceIds });
+            };
+
             var today = new Date();
             var importedRateBED = new Date(Date.parse(dataItem.ImportedRateBED));
             if (importedRateBED > today)
