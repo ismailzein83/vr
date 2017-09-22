@@ -222,7 +222,7 @@
                 priceListSettingsEditorAPI = api;
                 var priceListSettingsPayload = {
                     directiveContext: WhS_BE_SaleAreaSettingsContextEnum.Customer.value
-            };
+                };
                 var setLoader = function (value) { $scope.scopeModel.isLoadingPriceListSettingsEditor = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, priceListSettingsEditorAPI, priceListSettingsPayload, setLoader, priceListSettingsEditorReadyDeferred);
             };
@@ -272,29 +272,31 @@
             function validateCarrierAccountCurrency() {
                 var continueSaveCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                if (sellingProductSelectorAPI == undefined) {
+
+                if (isCustomer()) {
+                    var sellingProductId = sellingProductSelectorAPI.getSelectedIds();
+                    var carrierAccountCurrencyId = currencySelectorAPI.getSelectedIds();
+                    var sellingProductCurrencyId;
+
+                    WhS_BE_SellingProductAPIService.GetSellingProductCurrencyId(sellingProductId).then(function (response) {
+                        sellingProductCurrencyId = response;
+                        if (carrierAccountCurrencyId == sellingProductCurrencyId)
+                            continueSaveCarrierAccountPromiseDeferred.resolve(true);
+                        else {
+                            VRNotificationService.showConfirmation("Carrier account and selling product have different currency. Are you sure you want to continue ?").then(function (result) {
+                                continueSaveCarrierAccountPromiseDeferred.resolve(result);
+                            });
+                        }
+                    }).catch(function (error) {
+                        continueSaveCarrierAccountPromiseDeferred.reject(error);
+                    });
+
+                    return continueSaveCarrierAccountPromiseDeferred.promise;
+                }
+                else {
                     continueSaveCarrierAccountPromiseDeferred.resolve(true);
                     return continueSaveCarrierAccountPromiseDeferred.promise;
                 }
-
-                var sellingProductId = sellingProductSelectorAPI.getSelectedIds();
-                var carrierAccountCurrencyId = currencySelectorAPI.getSelectedIds();
-                var sellingProductCurrencyId;
-
-                WhS_BE_SellingProductAPIService.GetSellingProductCurrencyId(sellingProductId).then(function (response) {
-                    sellingProductCurrencyId = response;
-                    if (carrierAccountCurrencyId == sellingProductCurrencyId)
-                        continueSaveCarrierAccountPromiseDeferred.resolve(true);
-                    else {
-                        VRNotificationService.showConfirmation("Carrier account and selling product have different currency. Are you sure you want to continue ?").then(function (result) {
-                            continueSaveCarrierAccountPromiseDeferred.resolve(result);
-                        });
-                    }
-                }).catch(function (error) {
-                    continueSaveCarrierAccountPromiseDeferred.reject(error);
-                });
-
-                return continueSaveCarrierAccountPromiseDeferred.promise;
             }
 
         }
@@ -622,10 +624,10 @@
                 priceListSettingsEditorReadyDeferred = undefined;
                 var priceListSettingsPayload = {
                     directiveContext: WhS_BE_SaleAreaSettingsContextEnum.Customer.value
-            };
+                };
                 if (carrierAccountEntity != undefined && carrierAccountEntity.CustomerSettings != undefined) {
                     priceListSettingsPayload.data = carrierAccountEntity.CustomerSettings.PricelistSettings;
-            }
+                }
                 VRUIUtilsService.callDirectiveLoad(priceListSettingsEditorAPI, priceListSettingsPayload, priceListSettingsEditorLoadDeferred);
             });
             return priceListSettingsEditorLoadDeferred.promise;
@@ -747,7 +749,7 @@
             var obj = {
                 CarrierAccountId: (carrierAccountId != null) ? carrierAccountId : 0,
                 NameSuffix: $scope.scopeModel.name,
-                SellingProductId: (sellingProductSelectorAPI != undefined) ? sellingProductSelectorAPI.getSelectedIds() : null,
+                SellingProductId: (isCustomer()) ? sellingProductSelectorAPI.getSelectedIds() : null,
                 CarrierAccountSettings: {
                     ActivationStatus: activationStatusSelectorAPI.getSelectedIds(),
                     CurrencyId: currencySelectorAPI.getSelectedIds(),
@@ -772,7 +774,6 @@
                 CustomerSettings: {
                     TimeZoneId: customerTimeZoneSelectorAPI != undefined ? customerTimeZoneSelectorAPI.getSelectedIds() : undefined,
                     RoutingStatus: customerRoutingStatusSelectorAPI != undefined ? customerRoutingStatusSelectorAPI.getSelectedIds() : undefined,
-                    IsAToZ: $scope.scopeModel.isAToZ,
                     InvoiceTimeZone: $scope.scopeModel.customerInvoiceTimeZone,
                     PricelistSettings: priceListSettingsEditorAPI != undefined ? priceListSettingsEditorAPI.getData() : undefined,
                     PricingSettings: pricingSettingsEditorAPI != undefined ? pricingSettingsEditorAPI.getData() : undefined,
@@ -785,6 +786,14 @@
             }
 
             return obj;
+        }
+
+        function isCustomer() {
+            return ($scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Customer || $scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Exchange)
+        }
+
+        function isSupplier() {
+            return ($scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Supplier || $scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Exchange)
         }
     }
 
