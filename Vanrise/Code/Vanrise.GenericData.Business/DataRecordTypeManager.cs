@@ -537,7 +537,6 @@ namespace Vanrise.GenericData.Business
                 globalMemberDefinitionBuilder.Replace("#FIELDNAME#", dataRecordField.Name);
                 globalMemberDefinitionBuilder.Replace("#ISFIELDFILLED#", isFieldFilled);
                 globalMemberDefinitionBuilder.Replace("#PRIVATEFIELDNAME#", _fieldName);
-                globalMemberDefinitionBuilder.Replace("#PRIVATEFIELDNAME#", _fieldName);
 
                 return globalMemberDefinitionBuilder.ToString();
             }
