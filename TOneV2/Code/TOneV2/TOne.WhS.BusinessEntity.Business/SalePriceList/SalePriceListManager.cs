@@ -72,8 +72,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         int salePricelistTemplateId = _carrierAccountManager.GetCustomerPriceListTemplateId(customerId);
                         AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
-                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, pricelistType, salePricelistTemplateId, context.CurrencyId.Value);
-                        SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId, context.UserId);
+                        int pricelistCurrencyId = context.CurrencyId ?? customer.CarrierAccountSettings.CurrencyId;
+                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, pricelistType, salePricelistTemplateId, pricelistCurrencyId);
+                        SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId, context.UserId, pricelistCurrencyId);
 
                         var customerPriceListChange = context.CustomerPriceListChanges.First(r => r.CustomerId == customerId);
                         customerPriceListChange.PriceListId = priceList.PriceListId;
@@ -626,7 +627,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     return ".xls";
             }
         }
-        private SalePriceList AddOrUpdateSalePriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, long processInstanceId, VRFile file, int? currencyId, Dictionary<int, SalePriceList> currentSalePriceLists, int userId)
+        private SalePriceList AddOrUpdateSalePriceList(CarrierAccount customer, SalePriceListType customerSalePriceListType, long processInstanceId, 
+            VRFile file, int? currencyId, Dictionary<int, SalePriceList> currentSalePriceLists, int userId, int pricelistCurrencyId)
         {
             SalePriceList salePriceList;
             var salePriceListManager = new SalePriceListManager();
