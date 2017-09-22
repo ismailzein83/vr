@@ -82,5 +82,8 @@ namespace Retail.BusinessEntity.Data.SQL
             };
         }
         #endregion
+
+
+       
     }
 }

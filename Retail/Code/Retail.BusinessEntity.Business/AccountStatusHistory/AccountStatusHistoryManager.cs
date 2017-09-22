@@ -66,5 +66,22 @@ namespace Retail.BusinessEntity.Business
 
             return account.StatusId;
         }
+
+        public Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> GetAccountStatusHistoryListByAccountDefinition(Guid accountBEDefinition, List<long> accountIds)
+        {
+            HashSet<AccountDefinition> accountDefinitions = new HashSet<AccountDefinition>();
+            if(accountIds != null)
+            {
+                foreach(var accountId in accountIds)
+                {
+                    accountDefinitions.Add(new AccountDefinition
+                    {
+                        AccountBEDefinitionId = accountBEDefinition,
+                        AccountId = accountId
+                    });
+                }
+            }
+            return GetAccountStatusHistoryListByAccountDefinition(accountDefinitions);
+        }
     }
 }
