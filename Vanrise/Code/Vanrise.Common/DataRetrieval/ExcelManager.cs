@@ -203,6 +203,8 @@ namespace Vanrise.Common
                 rowIndex++;
             }
 
+            if (excelSheet.AutoFitColumns)
+                RateWorkSheet.AutoFitColumns();
 
             MemoryStream memoryStream = new MemoryStream();
 
@@ -225,7 +227,8 @@ namespace Vanrise.Common
                 BuildWorkBookSheet(wbk, excelSheet);
             }
             MemoryStream memoryStream = new MemoryStream();
-            memoryStream = wbk.SaveToStream();
+            wbk.Save(memoryStream, SaveFormat.Xlsx);
+            memoryStream.Seek(0, SeekOrigin.Begin);
 
             excelResult.ExcelFileStream = memoryStream;
             return excelResult;
@@ -240,6 +243,8 @@ namespace Vanrise.Common
             rowIndex++;
             colIndex = 0;
             BuildSheetRows(workSheet, excelSheet, excelSheet.Rows, rowIndex, colIndex);//filling result
+            if (excelSheet.AutoFitColumns)
+                workSheet.AutoFitColumns();
         }
         private void BuildHeaderCells(Worksheet workSheet, List<ExportExcelHeaderCell> exportExcelHeaderCells, int rowIndex, int colIndex)
         {

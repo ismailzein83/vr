@@ -27,6 +27,8 @@ namespace Vanrise.Entities
         public List<ExportExcelRow> SummaryRows { get; set; }
 
         public List<ExportExcelRow> Rows { get; set; }
+
+        public bool AutoFitColumns { get; set; }
     }
 
     public class ExportExcelRow
