@@ -67,7 +67,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             $scope.normalPrecision = UISettingsService.getNormalPrecision();
             $scope.longPrecision = UISettingsService.getLongPrecision();
             $scope.onZoneLetterSelectionChanged = function () {
-
                 var promises = [];
                 $scope.isLoading = true;
 
@@ -1123,24 +1122,21 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             return widthNoScroll - widthWithScroll;
         }
 
-        var lastScrollTop;
         var gridBodyElement = $element.find("#gridBody");
         var gridBodyContainer = $($element.find("#gridBodyContainer"));
 
         var lastScrollingTime;
         var handleScrollingStarted = false;
-        var lastScrollTop;
 
         function defineScrollEvent() {            
             gridBodyContainer.on('scroll', scrollGrid);            
             $element.on('$destroy', function () {
-                $($element.find("#gridBodyContainer")).unbind('scroll', scrollGrid);
+                gridBodyContainer.unbind('scroll', scrollGrid);
                 $scope.$destroy();
             });
         }
 
         function scrollGrid() {
-            lastScrollTop = gridBodyContainer.scrollTop();
             lastScrollingTime = new Date();
             if (!handleScrollingStarted)
                 handleScrolling();
@@ -1149,7 +1145,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         function handleScrolling() {
             handleScrollingStarted = true;
             var diffInMilliseconds = (new Date()).getTime() - lastScrollingTime;            
-            if (gridBodyContainer.scrollTop() != lastScrollTop || diffInMilliseconds < 150)
+            if (diffInMilliseconds < 150)
                 setTimeout(handleScrolling, 150);
             else {
                 updateRowDisplays();
@@ -1160,7 +1156,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
         function updateRowDisplays()
         {
             var diffInMilliseconds = (new Date()).getTime() - lastScrollingTime;            
-            if (gridBodyContainer.scrollTop() != lastScrollTop || diffInMilliseconds < 150)
+            if (diffInMilliseconds < 150)
                 return;
             var scrollTop = gridBodyContainer.scrollTop();
             var scrollPercentage = 100 * scrollTop / (gridBodyElement.height() - gridBodyContainer.height());
