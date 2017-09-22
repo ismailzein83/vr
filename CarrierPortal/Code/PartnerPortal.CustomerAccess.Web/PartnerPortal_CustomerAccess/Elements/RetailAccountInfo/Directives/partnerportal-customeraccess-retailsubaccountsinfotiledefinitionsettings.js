@@ -49,7 +49,7 @@ app.directive("partnerportalCustomeraccessRetailsubaccountsinfotiledefinitionset
                                 connectionId: connectionSelectorApi.getSelectedIds(),
                                 accountBEDefinitionId:$scope.scopeModel.accountBEDefinitionId
                             };
-                            var setLoader = function (value) { $scope.scopeModel.isLoadingGenericFieldDefinitionDirective = value };
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingGenericFieldDefinitionDirective = value; };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, genericFieldDefinitionSelectorApi, selectorPayload, setLoader);
                         }
                     }
@@ -67,7 +67,7 @@ app.directive("partnerportalCustomeraccessRetailsubaccountsinfotiledefinitionset
                                 Width: VRCommon_GridWidthFactorEnum.Normal.value
                             }
                         };
-                        var setLoader = function (value) { $scope.isLoadingDirective = value };
+                        var setLoader = function (value) { $scope.isLoadingDirective = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.gridWidthFactorAPI, dataItemPayload, setLoader);
                     };
                     $scope.scopeModel.genericFieldDefinitions.push(dataItem);
@@ -136,7 +136,7 @@ app.directive("partnerportalCustomeraccessRetailsubaccountsinfotiledefinitionset
                         });
                         if (tileExtendedSettings != undefined) {
                             payloadConnectionSelector.selectedIds = tileExtendedSettings.VRConnectionId;
-                        };
+                        }
                         return connectionSelectorApi.load(payloadConnectionSelector);
 
                     }
@@ -155,7 +155,7 @@ app.directive("partnerportalCustomeraccessRetailsubaccountsinfotiledefinitionset
                                     selectedIds: selectedGenericFieldsIds,
                                     accountBEDefinitionId: tileExtendedSettings.AccountBEDefinitionId
 
-                                }
+                                };
                                 VRUIUtilsService.callDirectiveLoad(genericFieldDefinitionSelectorApi, genericFieldDefinitionPayload, genericFieldDefinitionSelectorLoadDeferred);
                             });
                             return genericFieldDefinitionSelectorLoadDeferred.promise;
@@ -214,10 +214,10 @@ app.directive("partnerportalCustomeraccessRetailsubaccountsinfotiledefinitionset
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
 
 
-        };
+        }
 
         return directiveDefinitionObject;
     }
