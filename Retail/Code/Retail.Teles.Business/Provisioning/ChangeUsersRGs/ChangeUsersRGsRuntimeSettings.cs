@@ -172,17 +172,13 @@ namespace Retail.Teles.Business
                 var currentTelesUser = GetTelesUser(definitionSettings.VRConnectionId, mappedTelesUserId);
 
                 TelesUser telesUser;
+                var usersToChange = new UsersToChangeRG(userAccount);
                 if (ShouldChangeTelesUserRG(context, mappedTelesUserId, currentTelesUser, telesSiteId, existingRoutingGroups, newRoutingGroup, definitionSettings, shouldUpdate, out telesUser))
                 {
-                    usersToChangeRG.Add(new UsersToChangeRG(userAccount)
-                    {
-                        TelesUsers = new List<TelesUser>{
-                telesUser
-                },
-                    });
+                    usersToChange.TelesUsers = new List<TelesUser> { telesUser };
                
                 }
-       
+                usersToChangeRG.Add(usersToChange);
             }
           
         }
@@ -314,24 +310,23 @@ namespace Retail.Teles.Business
             {
                 foreach (var userToChange in usersToChangeRG)
                 {
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start processing account: {0}.", _accountBEManager.GetAccountName(userToChange.Account)));
+                    ChangeUsersRGsAccountState existingAccountState = null;
+                    if (userToChange.ExistingAccountState != null)
+                        existingAccountState = userToChange.ExistingAccountState.VRDeepCopy();
+                    else
+                    {
+                        existingAccountState = new ChangeUsersRGsAccountState();
+                    }
+                    if (existingAccountState.ChangesByActionType == null)
+                        existingAccountState.ChangesByActionType = new Dictionary<string, ChURGsActionCh>();
+                    ChURGsActionCh chURGsActionCh = existingAccountState.ChangesByActionType.GetOrCreateItem(definitionSettings.ActionType);
                     if (userToChange.TelesUsers != null)
                     {
-                        context.WriteTrackingMessage(LogEntryType.Information, string.Format("Start processing account: {0}.", _accountBEManager.GetAccountName(userToChange.Account)));
-
-                        ChangeUsersRGsAccountState existingAccountState = null;
-                        if (userToChange.ExistingAccountState != null)
-                            existingAccountState = userToChange.ExistingAccountState.VRDeepCopy();
-                        else
-                        {
-                            existingAccountState = new ChangeUsersRGsAccountState();
-                        }
-                        if (existingAccountState.ChangesByActionType == null)
-                            existingAccountState.ChangesByActionType = new Dictionary<string, ChURGsActionCh>();
-                        ChURGsActionCh chURGsActionCh = existingAccountState.ChangesByActionType.GetOrCreateItem(definitionSettings.ActionType);
+                        List<string> usersNames = new List<string>();
                         if (chURGsActionCh.ChangesByUser == null)
                             chURGsActionCh.ChangesByUser = new Dictionary<string, ChURGsUserCh>();
 
-                        List<string> usersNames = new List<string>();
                         foreach (var user in userToChange.TelesUsers)
                         {
                             UpdateUser(definitionSettings.VRConnectionId, user.User);
@@ -349,18 +344,18 @@ namespace Retail.Teles.Business
                                 chURGsUserCh.SiteId = user.SiteId;
                                 
                             }
-
-                        }
-                        if (definitionSettings.SaveChangesToAccountState)
-                        {
-                            if (_accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, userToChange.Account.AccountId, existingAccountState))
-                            {
-                                context.TrackActionExecuted(userToChange.Account.AccountId, null, existingAccountState);
-                            };
                         }
                         WriteUsersProccessedTrackingMessage(context, usersNames);
-                        context.WriteTrackingMessage(LogEntryType.Information, string.Format("Finish processing account: {0}.", _accountBEManager.GetAccountName(userToChange.Account)));
+
                     }
+                    if (definitionSettings.SaveChangesToAccountState)
+                    {
+                        if (_accountBEManager.UpdateAccountExtendedSetting<ChangeUsersRGsAccountState>(context.AccountBEDefinitionId, userToChange.Account.AccountId, existingAccountState))
+                        {
+                            context.TrackActionExecuted(userToChange.Account.AccountId, null, existingAccountState);
+                        };
+                    }
+                    context.WriteTrackingMessage(LogEntryType.Information, string.Format("Finish processing account: {0}.", _accountBEManager.GetAccountName(userToChange.Account)));
 
                 }
             }
