@@ -57,7 +57,7 @@ namespace TOne.WhS.DBSync.Business
         public override CarrierAccount BuildItemFromSource(SourceCarrierAccount sourceItem)
         {
             CarrierAccountSettings carrierAccountSettings = new CarrierAccountSettings();
-            CarrierAccountCustomerSettings carrierAccountCustomerSettings = new CarrierAccountCustomerSettings();
+            CarrierAccountCustomerSettings carrierAccountCustomerSettings = new CarrierAccountCustomerSettings { PricelistSettings = new PricelistSettings()};
             CarrierAccountSupplierSettings carrierAccountSupplierSettings = new CarrierAccountSupplierSettings();
 
             CarrierProfile carrierProfile = null;
