@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/MainExtensions/BPAccountAction/MainExtensions/ProvisionPostAction/Templates/ChangeStatusDefinitionPostActionTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/MainExtensions/ProvisionPostAction/Templates/ChangeStatusDefinitionPostActionTemplate.html"
 
         };
         function ChangeStatusDefinitionPostAction($scope, ctrl, $attrs) {

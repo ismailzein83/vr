@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/MainExtensions/BPAccountAction/MainExtensions/ProvisionPostAction/Templates/RevertStatusDefinitionPostActionTemplate.html"
+            templateUrl: "/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountActionDefinition/MainExtensions/ProvisionPostAction/Templates/RevertStatusDefinitionPostActionTemplate.html"
 
         };
         function RevertStatusDefinitionPostAction($scope, ctrl, $attrs) {
