@@ -6,7 +6,24 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    class PreviewSummary
+    public class PreviewSummary
     {
+        public int NumberOfNewRates { get; set; }
+        public int NumberOfIncreasedRates { get; set; }
+        public int NumberOfDecreasedRates { get; set; }
+
+        public int NumberOfNewZones { get; set; }
+
+        public int NumberOfClosedZones { get; set; }
+
+        public int NumberOfRenamedZones { get; set; }
+
+        public int NumberOfNewCodes { get; set; }
+
+        public int NumberOfClosedCodes { get; set; }
+
+        public int NumberOfMovedCodes { get; set; }
+
+        public int NumberOfZonesWithChangedServices { get; set; }
     }
 }

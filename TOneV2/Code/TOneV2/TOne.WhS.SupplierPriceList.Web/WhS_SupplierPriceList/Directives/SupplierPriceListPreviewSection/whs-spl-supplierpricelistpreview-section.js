@@ -37,11 +37,13 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
         var groupedBySelectorAPI;
         var groupedByReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var supplierPricelistPreviewSummaryAPI;
+        var supplierPricelistPreviewSummaryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         this.initializeController = initializeController;
 
         function initializeController() {
-            
+
             $scope.onViewChangeTypeSelectItem = function (dataItem) {
                 if (dataItem != undefined) {
                     directiveWrapperReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -64,6 +66,11 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
             $scope.onGroupedBySelectorReady = function (api) {
                 groupedBySelectorAPI = api;
                 groupedByReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onSupplierPricelistPreviewSummaryReady = function (api) {
+                supplierPricelistPreviewSummaryAPI = api;
+                supplierPricelistPreviewSummaryReadyPromiseDeferred.resolve();
             };
 
             $scope.onDirectiveWrapperReady = function (api) {
@@ -91,7 +98,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
                 if (payload != null)
                 processInstanceId = payload.processInstanceId;
-                return UtilsService.waitMultipleAsyncOperations([loadViewChangeTypeSelector, loadGroupedBySelector, loadPreviewDataSection, loadValidationMessageHistory])
+                return UtilsService.waitMultipleAsyncOperations([loadViewChangeTypeSelector, loadGroupedBySelector, loadPreviewDataSection, loadValidationMessageHistory,loadSupplierPricelistPreviewSummary])
                           .catch(function (error) {
                               VRNotificationService.notifyException(error);
                           });
@@ -142,6 +149,22 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
                 VRUIUtilsService.callDirectiveLoad(directiveWrapperAPI, payload, loadPreviewDataPromiseDeferred);
             });
             return loadPreviewDataPromiseDeferred.promise;
+        }
+
+
+        function loadSupplierPricelistPreviewSummary() {
+            var loadSupplierPricelistPreviewSummaryPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            supplierPricelistPreviewSummaryReadyPromiseDeferred.promise.then(function () {
+
+                var payload = {
+                    processInstanceId: processInstanceId,
+                };
+
+                VRUIUtilsService.callDirectiveLoad(supplierPricelistPreviewSummaryAPI, payload, loadSupplierPricelistPreviewSummaryPromiseDeferred);
+            });
+
+            return loadSupplierPricelistPreviewSummaryPromiseDeferred.promise;
         }
 
         function loadValidationMessageHistory() {

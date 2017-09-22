@@ -60,5 +60,14 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
           return GetWebResponse(input, manager.GetFilteredZoneServicesPreview(input));
        }
 
+       [HttpGet]
+       [Route("GetSupplierPricelistPreviewSummary")]
+       public PreviewSummary GetSupplierPricelistPreviewSummary(int processInstanceId)
+       {
+           SupplierPricelistPreviewSummaryManager manager = new SupplierPricelistPreviewSummaryManager();
+           return manager.GetSupplierPricelistPreviewSummary(processInstanceId);
+       }
+
+
     }
 }

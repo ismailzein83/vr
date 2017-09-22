@@ -28,14 +28,19 @@
         function GetFilteredZoneServicesPreview(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "GetFilteredZoneServicesPreview"), input);
         }
-        
+
+        function GetSupplierPricelistPreviewSummary(processInstanceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_SupPL_ModuleConfig.moduleName, controllerName, "GetSupplierPricelistPreviewSummary"), { processInstanceId: processInstanceId });
+        }
+
         return ({
             GetFilteredZonePreview: GetFilteredZonePreview,
             GetFilteredCodePreview: GetFilteredCodePreview,
             GetFilteredRatePreview: GetFilteredRatePreview,
             GetFilteredCountryPreview: GetFilteredCountryPreview,
             GetFilteredOtherRatePreview: GetFilteredOtherRatePreview,
-            GetFilteredZoneServicesPreview: GetFilteredZoneServicesPreview
+            GetFilteredZoneServicesPreview: GetFilteredZoneServicesPreview,
+            GetSupplierPricelistPreviewSummary: GetSupplierPricelistPreviewSummary
 
         });
     }
