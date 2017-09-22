@@ -402,6 +402,12 @@ inp .menu-to-top {
     padding-left: 0px !important;
     padding-right: 0px !important;
 }
+
+vr-row[singleitemrow]>.row{
+    margin: 0px !important;
+    padding: 10px 0px!important;
+}
+
 .dropdown-item {
     height: 37px !important;
     font-size: 20px;
