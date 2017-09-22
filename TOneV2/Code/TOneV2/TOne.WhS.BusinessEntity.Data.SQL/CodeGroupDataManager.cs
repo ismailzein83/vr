@@ -12,10 +12,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     public class CodeGroupDataManager : BaseSQLDataManager, ICodeGroupDataManager
     {
         #region ctor/Local Variables
-        public CodeGroupDataManager(): base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
+        public CodeGroupDataManager()
+            : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
         }
-        readonly string[] columns = {"CountryID", "Code"};
+        readonly string[] columns = { "CountryID", "Code" };
 
         #endregion
 
@@ -31,13 +32,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Update(CodeGroupToEdit codeGroup)
         {
+            codeGroup.Code = codeGroup.Code.Trim();
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Update", codeGroup.CodeGroupId, codeGroup.CountryId, codeGroup.Code);
             return (recordsEffected > 0);
         }
         public bool Insert(CodeGroup codeGroup, out int insertedId)
         {
             object codeGroupId;
-
+            codeGroup.Code = codeGroup.Code.Trim();
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Insert", out codeGroupId, codeGroup.Code, codeGroup.CountryId);
             insertedId = (int)codeGroupId;
             return (recordsEffected > 0);
@@ -50,14 +52,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             Object dbApplyStream = InitialiazeStreamForDBApply();
             foreach (CodeGroup codeGroup in codeGroups)
+            {
+                codeGroup.Code = codeGroup.Code.Trim();
                 WriteRecordToStream(codeGroup, dbApplyStream);
+            }
             Object preparedCodeGroups = FinishDBApplyStream(dbApplyStream);
             ApplyCodeGroupsToDB(preparedCodeGroups);
         }
         #endregion
-       
+
         #region Private Methods
-      
+
         private object InitialiazeStreamForDBApply()
         {
             return base.InitializeStreamForBulkInsert();
@@ -89,14 +94,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
         }
         #endregion
-     
+
         #region  Mappers
         private CodeGroup CodeGroupMapper(IDataReader reader)
         {
             CodeGroup codeGroup = new CodeGroup
             {
                 CodeGroupId = (int)reader["ID"],
-                Code = reader["Code"] as string,
+                Code = GetReaderValue<string>(reader, "Code").Trim(),
                 CountryId = (int)reader["CountryID"]
 
             };
