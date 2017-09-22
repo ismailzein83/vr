@@ -789,11 +789,11 @@
         }
 
         function isCustomer() {
-            return ($scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Customer || $scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Exchange)
+            return ($scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Customer || $scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Exchange);
         }
 
         function isSupplier() {
-            return ($scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Supplier || $scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Exchange)
+            return ($scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Supplier || $scope.scopeModel.selectedCarrierAccountType == WhS_BE_CarrierAccountTypeEnum.Exchange);
         }
     }
 
