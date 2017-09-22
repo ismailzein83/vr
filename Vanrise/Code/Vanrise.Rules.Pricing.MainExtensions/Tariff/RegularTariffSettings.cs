@@ -106,8 +106,28 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
             StringBuilder description = new StringBuilder();
             description.Append(String.Format("Call Fee: {0}; ", CallFee));
             description.Append(String.Format("First Period: {0}; ", FirstPeriod));
-            description.Append(String.Format("First Period Rate: {0}; ", FirstPeriodRate));
-            description.Append(String.Format("Fraction Unit: {0}", FractionUnit));
+
+
+            string firstPeriodRateDesc;
+            switch (FirstPeriodRateType)
+            {
+                case Tariff.FirstPeriodRateType.EffectiveRate:
+                    firstPeriodRateDesc = "Effective Rate";
+                    break;
+
+                case Tariff.FirstPeriodRateType.FixedRate:
+                    if (!FirstPeriodRate.HasValue)
+                        throw new NullReferenceException("FirstPeriodRate");
+
+                    firstPeriodRateDesc = FirstPeriodRate.Value.ToString();
+                    break;
+                default: throw new NotSupportedException(string.Format("FirstPeriodRateType has invalid value: {0}", FirstPeriodRateType));
+            }
+
+
+            description.Append(String.Format("First Period Rate: {0}; ", firstPeriodRateDesc));
+            description.Append(String.Format("Fraction Unit: {0}; ", FractionUnit));
+            description.Append(String.Format("Pricing Unit: {0}", PricingUnit));
             return description.ToString();
         }
     }
