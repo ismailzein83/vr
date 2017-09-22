@@ -178,6 +178,16 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleAreaSettings.PricelistSettings.CompressPriceListFile.Value;
         }
 
+        public CodeChangeTypeDescriptions GetSaleAreaCodeChangeTypeSettings()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricelistSettings.CodeChangeTypeDescriptions;
+        }
+        public RateChangeTypeDescriptions GetSaleAreaRateChangeTypeSettings()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricelistSettings.RateChangeTypeDescriptions;
+        }
 
         public PricingSettings GetSaleAreaPricingSettings()
         {
@@ -237,6 +247,8 @@ namespace TOne.WhS.BusinessEntity.Business
             result.PriceListType = pricelistSettingsParent.PriceListType;
             result.PriceListExtensionFormat = pricelistSettingsParent.PriceListExtensionFormat;
             result.CompressPriceListFile = pricelistSettingsParent.CompressPriceListFile;
+            result.CodeChangeTypeDescriptions = pricelistSettingsParent.CodeChangeTypeDescriptions;
+            result.RateChangeTypeDescriptions = pricelistSettingsParent.RateChangeTypeDescriptions;
 
             if (pricelistSettingsChild == null)
                 return result;
@@ -255,6 +267,52 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (pricelistSettingsChild.CompressPriceListFile.HasValue)
                 result.CompressPriceListFile = pricelistSettingsChild.CompressPriceListFile;
+
+            result.CodeChangeTypeDescriptions = MergeCodeChangeTypeDescriptions(pricelistSettingsParent.CodeChangeTypeDescriptions, pricelistSettingsChild.CodeChangeTypeDescriptions);
+            result.RateChangeTypeDescriptions = MergeRateChangeTypeDescriptions(pricelistSettingsParent.RateChangeTypeDescriptions, pricelistSettingsChild.RateChangeTypeDescriptions);
+
+            return result;
+        }
+
+        public CodeChangeTypeDescriptions MergeCodeChangeTypeDescriptions (CodeChangeTypeDescriptions parentCodeChangeTypeDescriptions , CodeChangeTypeDescriptions childCodeChangeTypeDescriptions)
+        {
+            CodeChangeTypeDescriptions result = new CodeChangeTypeDescriptions();
+            result.NewCode = parentCodeChangeTypeDescriptions.NewCode;
+            result.ClosedCode = parentCodeChangeTypeDescriptions.ClosedCode;
+            result.NotChangedCode = parentCodeChangeTypeDescriptions.NotChangedCode;
+
+            if (childCodeChangeTypeDescriptions == null)
+                return result;
+            if (!string.IsNullOrEmpty(childCodeChangeTypeDescriptions.NewCode))
+                result.NewCode = childCodeChangeTypeDescriptions.NewCode;
+            if (!string.IsNullOrEmpty(childCodeChangeTypeDescriptions.ClosedCode))
+                result.ClosedCode = childCodeChangeTypeDescriptions.ClosedCode;
+            if (!string.IsNullOrEmpty(childCodeChangeTypeDescriptions.NotChangedCode))
+                result.NotChangedCode = childCodeChangeTypeDescriptions.NotChangedCode;
+            
+            return result;
+        }
+
+        public RateChangeTypeDescriptions MergeRateChangeTypeDescriptions(RateChangeTypeDescriptions parentRateChangeTypeDescriptions, RateChangeTypeDescriptions childRateChangeTypeDescriptions)
+        {
+            RateChangeTypeDescriptions result = new RateChangeTypeDescriptions();
+            if (parentRateChangeTypeDescriptions != null)
+            {
+                result.NotChanged = parentRateChangeTypeDescriptions.NotChanged;
+                result.NewRate = parentRateChangeTypeDescriptions.NewRate;
+                result.IncreasedRate = parentRateChangeTypeDescriptions.IncreasedRate;
+                result.DecreasedRate = parentRateChangeTypeDescriptions.DecreasedRate;
+            }
+            if (childRateChangeTypeDescriptions == null)
+                return result;
+            if (!string.IsNullOrEmpty(childRateChangeTypeDescriptions.NotChanged))
+                result.NotChanged = childRateChangeTypeDescriptions.NotChanged;
+            if (!string.IsNullOrEmpty(childRateChangeTypeDescriptions.NewRate))
+                result.NewRate = childRateChangeTypeDescriptions.NewRate;
+            if (!string.IsNullOrEmpty(childRateChangeTypeDescriptions.IncreasedRate))
+                result.IncreasedRate = childRateChangeTypeDescriptions.IncreasedRate;
+            if (!string.IsNullOrEmpty(childRateChangeTypeDescriptions.DecreasedRate))
+                result.DecreasedRate = childRateChangeTypeDescriptions.DecreasedRate;
 
             return result;
         }

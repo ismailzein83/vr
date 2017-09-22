@@ -20,5 +20,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public object Value { get; set; }
         public RateChangeType RateChangeType { get; set; }
         public int? CurrencyId { get; set; }
+        public int CustomerId { get; set; }
     }
 }

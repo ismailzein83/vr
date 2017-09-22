@@ -19,5 +19,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         IEnumerable<int> ServicesIds { get; set; }
         object Value { get; set; }
         int? CurrencyId { get; set; }
+        int CustomerId { get; set; }
     }
 }

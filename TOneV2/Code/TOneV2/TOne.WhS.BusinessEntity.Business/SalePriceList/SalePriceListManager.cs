@@ -72,7 +72,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         int salePricelistTemplateId = _carrierAccountManager.GetCustomerPriceListTemplateId(customerId);
                         AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
-                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, pricelistType, salePricelistTemplateId);
+                        VRFile file = GetPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, pricelistType, salePricelistTemplateId, context.CurrencyId.Value);
                         SalePriceList priceList = AddOrUpdateSalePriceList(customer, pricelistType, context.ProcessInstanceId, file, context.CurrencyId, customerPriceListsByCustomerId, context.UserId);
 
                         var customerPriceListChange = context.CustomerPriceListChanges.First(r => r.CustomerId == customerId);
@@ -580,7 +580,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return priceListStringBuilder.ToString();
         }
-        private VRFile GetPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications, DateTime effectiveDate, SalePriceListType salePriceListType, int salePriceListTemplateId)
+        private VRFile GetPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications, DateTime effectiveDate, SalePriceListType salePriceListType, int salePriceListTemplateId, int currencyId)
         {
             var salePriceListTemplateManager = new SalePriceListTemplateManager();
 
@@ -592,7 +592,11 @@ namespace TOne.WhS.BusinessEntity.Business
             ISalePriceListTemplateSettingsContext salePlTemplateSettingsContext = new SalePriceListTemplateSettingsContext
             {
                 Zones = customerZonesNotifications,
-                PriceListExtensionFormat = priceListExtensionFormat
+                PriceListExtensionFormat = priceListExtensionFormat,
+                CustomerId = carrierAccountId,
+                PricelistType = salePriceListType,
+                PricelistCurrencyId =currencyId,
+                PricelistDate=effectiveDate
             };
 
             byte[] salePlTemplateBytes = template.Settings.Execute(salePlTemplateSettingsContext);
@@ -907,7 +911,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             var carrierAccountManager = new CarrierAccountManager();
             int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(salePriceList.OwnerId);
-
+            
             var salePriceListChangeManager = new SalePriceListChangeManager();
             var customerPriceListChange = salePriceListChangeManager.GetCustomerChangesByPriceListId(salePriceList.PriceListId);
             customerPriceListChange.CustomerId = salePriceList.OwnerId;
@@ -945,7 +949,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (customerZoneNotifications.Count > 0)
             {
                 AddRPChangesToSalePLNotification(customerZoneNotifications, customerChange.RoutingProductChanges, customerId, sellingProductId.Value);
-                file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications, salePriceListContext.EffectiveDate, salePriceListType, salePricelistTemplateId);
+                file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications, salePriceListContext.EffectiveDate, salePriceListType, salePricelistTemplateId, salePriceList.CurrencyId);
             }
 
             return file;

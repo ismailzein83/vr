@@ -331,6 +331,40 @@ namespace TOne.WhS.BusinessEntity.Business
             return configManager.GetSaleAreaCompressPriceListFileStatus();
         }
 
+        public CodeChangeTypeDescriptions GetSellingProductCodeChangeTypeSettings(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            CodeChangeTypeDescriptions saleAreaCodeChangeTypeSettings;
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+
+            saleAreaCodeChangeTypeSettings = configManager.GetSaleAreaCodeChangeTypeSettings();
+
+            if (sellingProduct.Settings.PricelistSettings == null)
+                return saleAreaCodeChangeTypeSettings;
+
+            return configManager.MergeCodeChangeTypeDescriptions(saleAreaCodeChangeTypeSettings, sellingProduct.Settings.PricelistSettings.CodeChangeTypeDescriptions);
+        }
+
+        public RateChangeTypeDescriptions GetSellingProductRateChangeTypeSettings(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            RateChangeTypeDescriptions saleAreaRateChangeTypeSettings;
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+
+            saleAreaRateChangeTypeSettings = configManager.GetSaleAreaRateChangeTypeSettings();
+
+            if (sellingProduct.Settings.PricelistSettings == null)
+                return saleAreaRateChangeTypeSettings;
+
+            return configManager.MergeRateChangeTypeDescriptions(saleAreaRateChangeTypeSettings, sellingProduct.Settings.PricelistSettings.RateChangeTypeDescriptions);
+        }
+
         public PricingSettings GetSellingProductPricingSettings(int sellingProductId)
         {
             var configManager = new ConfigManager();

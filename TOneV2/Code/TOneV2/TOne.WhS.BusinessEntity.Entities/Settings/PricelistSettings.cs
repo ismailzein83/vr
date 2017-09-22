@@ -13,5 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public PriceListExtensionFormat? PriceListExtensionFormat { get; set; }
         public SalePriceListType? PriceListType { get; set; }
         public bool? CompressPriceListFile { get; set; }
+        public CodeChangeTypeDescriptions CodeChangeTypeDescriptions { get; set; }
+        public RateChangeTypeDescriptions RateChangeTypeDescriptions { get; set; }
     }
 }

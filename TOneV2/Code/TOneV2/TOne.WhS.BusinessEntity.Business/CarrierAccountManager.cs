@@ -344,6 +344,45 @@ namespace TOne.WhS.BusinessEntity.Business
             return sellingProductManager.GetSellingProductCompressPriceListFileStatus(sellingProductId);
         }
 
+        public CodeChangeTypeDescriptions GetCustomerCodeChangeTypeSettings(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+
+            var sellingProductManager = new SellingProductManager();
+            int sellingProductId = GetSellingProductId(carrierAccountId);
+            var sellingProductCodeChangeTypeSettings = new CodeChangeTypeDescriptions();
+            var configManager = new ConfigManager();
+
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
+            carrierAccount.CustomerSettings.ThrowIfNull("carrierAccount.CustomerSettings", carrierAccountId);
+           
+            sellingProductCodeChangeTypeSettings = sellingProductManager.GetSellingProductCodeChangeTypeSettings(sellingProductId);
+
+            if (carrierAccount.CustomerSettings.PricelistSettings == null)
+                return sellingProductCodeChangeTypeSettings;
+
+            return configManager.MergeCodeChangeTypeDescriptions(sellingProductCodeChangeTypeSettings, carrierAccount.CustomerSettings.PricelistSettings.CodeChangeTypeDescriptions);
+        }
+        public RateChangeTypeDescriptions GetCustomerRateChangeTypeSettings(int carrierAccountId)
+        {
+            var carrierAccount = GetCarrierAccount(carrierAccountId);
+
+            var sellingProductManager = new SellingProductManager();
+            int sellingProductId = GetSellingProductId(carrierAccountId);
+            var sellingProductRateChangeTypeSettings = new RateChangeTypeDescriptions();
+            var configManager = new ConfigManager();
+
+            carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
+            carrierAccount.CustomerSettings.ThrowIfNull("carrierAccount.CustomerSettings", carrierAccountId);
+
+            sellingProductRateChangeTypeSettings = sellingProductManager.GetSellingProductRateChangeTypeSettings(sellingProductId);
+
+            if (carrierAccount.CustomerSettings.PricelistSettings == null)
+                return sellingProductRateChangeTypeSettings;
+
+            return configManager.MergeRateChangeTypeDescriptions(sellingProductRateChangeTypeSettings, carrierAccount.CustomerSettings.PricelistSettings.RateChangeTypeDescriptions);
+        }
+
         public PricingSettings GetCustomerPricingSettings(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);

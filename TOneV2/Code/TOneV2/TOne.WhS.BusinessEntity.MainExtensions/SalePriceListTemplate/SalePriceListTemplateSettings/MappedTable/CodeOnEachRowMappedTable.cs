@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             get { return new Guid("4EBE3013-2A48-41BD-97D6-57286759B907"); }
         }
 
-        public override IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat)
+        public override IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat, int customerId)
         {
             List<SalePricelistTemplateTableRow> sheet = new List<SalePricelistTemplateTableRow>();
             int currentRowIndex = this.FirstRowIndex;
@@ -25,14 +25,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 foreach (var code in zone.Codes)
                 {
                     IEnumerable<CodeOnEachRowMappedColumn> concreteMappedColumns = this.MappedColumns.Select(item => item as CodeOnEachRowMappedColumn);
-                    sheet.Add(GetRowData(concreteMappedColumns, zone, code, zone.Rate, currentRowIndex++, dateTimeFormat));
+                    sheet.Add(GetRowData(concreteMappedColumns, zone, code, zone.Rate, currentRowIndex++, dateTimeFormat, customerId));
                 }
 
             }
             return sheet;
         }
 
-        private SalePricelistTemplateTableRow GetRowData(IEnumerable<CodeOnEachRowMappedColumn> mappedCols, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat)
+        private SalePricelistTemplateTableRow GetRowData(IEnumerable<CodeOnEachRowMappedColumn> mappedCols, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat, int customerId)
         {
             var row = new SalePricelistTemplateTableRow
             {
@@ -41,20 +41,21 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             foreach (CodeOnEachRowMappedColumn mappedCol in mappedCols)
             {
-                row.RowCells.Add( GetCellData(mappedCol, zone, code, rate, rowIndex, dateTimeFormat));
+                row.RowCells.Add(GetCellData(mappedCol, zone, code, rate, rowIndex, dateTimeFormat, customerId));
             }
             return row;
         }
 
 
-        private SalePriceListTemplateTableCell GetCellData(CodeOnEachRowMappedColumn mappedCol, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat)
+        private SalePriceListTemplateTableCell GetCellData(CodeOnEachRowMappedColumn mappedCol, SalePLZoneNotification zone, SalePLCodeNotification code, SalePLRateNotification rate, int rowIndex, string dateTimeFormat, int customerId)
         {
             if (zone == null)
                 throw new ArgumentNullException("zone");
 
             var mappedValueContext = new CodeOnEachRowMappedValueContext()
             {
-                Zone = zone.ZoneName
+                Zone = zone.ZoneName,
+                CustomerId=customerId
             };
 
             if (code != null)

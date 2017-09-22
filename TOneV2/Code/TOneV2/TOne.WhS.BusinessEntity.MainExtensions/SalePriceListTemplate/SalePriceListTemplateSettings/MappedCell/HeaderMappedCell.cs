@@ -32,24 +32,19 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             switch (HeaderField)
             {
                 case HeaderFiledType.CompanyName:
-                    //context.Value = getCompanyName(context.CustomerId);
-                    context.Value = "companyName";
+                    context.Value = getCompanyName(context.CustomerId);
                     break;
                 case HeaderFiledType.CustomerName:
-                    //context.Value = getCustomerName(context.CustomerId);
-                    context.Value = "customerName";
+                    context.Value = getCustomerName(context.CustomerId);
                     break;
                 case HeaderFiledType.PricelistDate:
-                    //context.Value = context.PricelistDate;
-                    context.Value = "PricelistDate";
+                    context.Value = context.PricelistDate;
                     break;
                 case HeaderFiledType.PricelistCurrency:
-                    //context.Value = getPricelistCurrencyName(context.PricelistCurrencyId);
-                    context.Value = "currencyName";
+                    context.Value = getPricelistCurrencyName(context.PricelistCurrencyId);
                     break;
                 case HeaderFiledType.PricelistType:
-                    //context.Value = getPricelistType(context.PricelistType);
-                    context.Value = "PricelistType";
+                    context.Value = getPricelistType(context.PricelistType);
                     break;
                 default:
                     context.Value = null;

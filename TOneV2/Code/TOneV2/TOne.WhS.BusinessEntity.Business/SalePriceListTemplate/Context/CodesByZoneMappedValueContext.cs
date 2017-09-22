@@ -16,5 +16,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public char RangeSeparator { get; set; }
         public bool IsCommaDecimalSeparator { get; set; }
         public object Value { get; set; }
+        public int CustomerId { get; set; }
 	}
 }

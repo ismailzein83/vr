@@ -18,7 +18,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public char Delimiter { get; set; }
 
-        public override IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat)
+        public override IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat, int customerId)
         {
             List<SalePricelistTemplateTableRow> sheet = new List<SalePricelistTemplateTableRow>();
             int currentRowIndex = this.FirstRowIndex;
@@ -26,12 +26,12 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             foreach (SalePLZoneNotification zone in zoneNotificationList)
             {
                 IEnumerable<CodesByZoneMappedColumn> mappedCols = this.MappedColumns.Select(item => item as CodesByZoneMappedColumn);
-                sheet.Add(GetRowData(mappedCols, zone, currentRowIndex++, dateTimeFormat));
+                sheet.Add(GetRowData(mappedCols, zone, currentRowIndex++, dateTimeFormat, customerId));
             }
             return sheet;
         }
 
-        private SalePricelistTemplateTableRow GetRowData(IEnumerable<CodesByZoneMappedColumn> mappedCols, SalePLZoneNotification zone, int rowIndex, string dateTimeFormat)
+        private SalePricelistTemplateTableRow GetRowData(IEnumerable<CodesByZoneMappedColumn> mappedCols, SalePLZoneNotification zone, int rowIndex, string dateTimeFormat, int customerId)
         {
             var row = new SalePricelistTemplateTableRow
             {
@@ -63,20 +63,20 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                             Rate = zone.Rate
                         };
                         currentZone.Codes.AddRange(codes);
-                        row.RowCells.Add(GetCellData( mappedCol, currentZone, rowIndex, dateTimeFormat));
+                        row.RowCells.Add(GetCellData(mappedCol, currentZone, rowIndex, dateTimeFormat, customerId));
                     }
                 }
             }
             else
             {
                 foreach (CodesByZoneMappedColumn mappedCol in mappedCols)
-                    row.RowCells.Add(GetCellData( mappedCol, zone, rowIndex, dateTimeFormat));
+                    row.RowCells.Add(GetCellData(mappedCol, zone, rowIndex, dateTimeFormat, customerId));
             }
             return row;
 
         }
 
-        private SalePriceListTemplateTableCell GetCellData( CodesByZoneMappedColumn mappedCol, SalePLZoneNotification zone, int rowIndex, string dateTimeFormat)
+        private SalePriceListTemplateTableCell GetCellData( CodesByZoneMappedColumn mappedCol, SalePLZoneNotification zone, int rowIndex, string dateTimeFormat, int customerId)
         {
             if (zone == null)
                 throw new ArgumentNullException("zone");
@@ -84,7 +84,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             var mappedValueContext = new CodesByZoneMappedValueContext()
             {
                 ZoneNotification = zone,
-                Delimiter = this.Delimiter
+                Delimiter = this.Delimiter,
+                CustomerId=customerId
             };
 
             mappedCol.MappedValue.Execute(mappedValueContext);

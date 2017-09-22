@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 	{
         public abstract Guid ConfigId { get; }
 
-        public abstract IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat);
+        public abstract IEnumerable<SalePricelistTemplateTableRow> BuildSheet(IEnumerable<SalePLZoneNotification> zoneNotificationList, string dateTimeFormat, int customerId);
 
 		public int SheetIndex { get; set; }
 

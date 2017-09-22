@@ -63,7 +63,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     context.Value = servicesSymbol;
                     break;
                 case CodeOnEachRowBEFieldType.RateChangeType:
-                    context.Value = GetRateChange(context.RateChangeType);
+                    context.Value = GetRateChange(context.RateChangeType,context.CustomerId);
                     break;
                 case CodeOnEachRowBEFieldType.Currency:
                     if (context.CurrencyId.HasValue)
@@ -74,20 +74,22 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
             }
         }
-        private string GetRateChange(RateChangeType rateChangeType)
+        private string GetRateChange(RateChangeType rateChangeType, int customerId)
         {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var rateChangeTypeDescriptions = carrierAccountManager.GetCustomerRateChangeTypeSettings(customerId);
             switch (rateChangeType)
             {
                 case RateChangeType.Decrease:
-                    return "D";
+                    return rateChangeTypeDescriptions.DecreasedRate;
                 case RateChangeType.Increase:
-                    return "I";
+                    return rateChangeTypeDescriptions.IncreasedRate;
                 case RateChangeType.New:
-                    return "N";
+                    return rateChangeTypeDescriptions.NewRate;
                 case RateChangeType.NotChanged:
-                    return "S";
+                    return rateChangeTypeDescriptions.NotChanged;
             }
-            return "S";
+            return rateChangeTypeDescriptions.NotChanged;
         }
 
     }

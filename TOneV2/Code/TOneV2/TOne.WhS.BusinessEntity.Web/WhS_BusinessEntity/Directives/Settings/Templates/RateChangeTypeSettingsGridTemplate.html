@@ -1,1 +1,8 @@
-﻿
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.gridData"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction">
+    <vr-datagridcolumn headertext="'Rate Change Type'" field="'RateChangeType.description'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Descriptions'" field="'RateChangeTypeDescription'">
+        <vr-textbox type="text" value="dataItem.RateChangeTypeDescription"></vr-textbox>
+    </vr-datagridcolumn>
+</vr-datagrid>

@@ -66,7 +66,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
                 case CodesByZoneBEFieldType.RateChangeType:
                     if (context.ZoneNotification.Rate != null)
-                        context.Value = GetRateChange(context.ZoneNotification.Rate.RateChangeType);
+                        context.Value = GetRateChange(context.ZoneNotification.Rate.RateChangeType,context.CustomerId);
                     break;
                 case CodesByZoneBEFieldType.Currency:
                     if (context.ZoneNotification.Rate != null && context.ZoneNotification.Rate.CurrencyId.HasValue)
@@ -78,20 +78,22 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             }
         }
 
-        private string GetRateChange(RateChangeType rateChangeType)
+        private string GetRateChange(RateChangeType rateChangeType, int customerId)
         {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var rateChangeTypeDescriptions = carrierAccountManager.GetCustomerRateChangeTypeSettings(customerId);
             switch (rateChangeType)
             {
                 case RateChangeType.Decrease:
-                    return "D";
+                    return rateChangeTypeDescriptions.DecreasedRate;
                 case RateChangeType.Increase:
-                    return "I";
+                    return rateChangeTypeDescriptions.IncreasedRate;
                 case RateChangeType.New:
-                    return "N";
+                    return rateChangeTypeDescriptions.NewRate;
                 case RateChangeType.NotChanged:
-                    return "S";
+                    return rateChangeTypeDescriptions.NotChanged;
             }
-            return "S";
+            return rateChangeTypeDescriptions.NotChanged;
         }
         private string GetCodesValue(ICodesByZoneMappedValueContext context)
         {

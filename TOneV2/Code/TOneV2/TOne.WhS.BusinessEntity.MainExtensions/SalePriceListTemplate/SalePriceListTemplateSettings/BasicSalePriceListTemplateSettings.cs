@@ -71,7 +71,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 SetWorkbookMappedCells(workbook, customerId, pricelistDate, pricelistType, pricelistCurrencyId);
 
             if (MappedTables != null)
-                SetWorkbookMappedTables(zoneNotificationList, workbook);
+                SetWorkbookMappedTables(zoneNotificationList, workbook, customerId);
         }
         private void SetWorkbookMappedCells(Workbook workbook, int customerId, DateTime pricelistDate, SalePriceListType pricelistType, int pricelistCurrencyId)
         {
@@ -92,12 +92,12 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             }
         }
 
-        private void SetWorkbookMappedTables(IEnumerable<SalePLZoneNotification> zoneNotificationList, Workbook workbook)
+        private void SetWorkbookMappedTables(IEnumerable<SalePLZoneNotification> zoneNotificationList, Workbook workbook, int customerId)
         {
             foreach (MappedTable mappedSheet in MappedTables)
             {
                 int firstRow=mappedSheet.FirstRowIndex;
-                IEnumerable<SalePricelistTemplateTableRow> sheet = mappedSheet.BuildSheet(zoneNotificationList, DateTimeFormat);
+                IEnumerable<SalePricelistTemplateTableRow> sheet = mappedSheet.BuildSheet(zoneNotificationList, DateTimeFormat, customerId);
                 Worksheet worksheet = workbook.Worksheets[mappedSheet.SheetIndex];
                 SetSheetData(worksheet, sheet, firstRow);
             }
