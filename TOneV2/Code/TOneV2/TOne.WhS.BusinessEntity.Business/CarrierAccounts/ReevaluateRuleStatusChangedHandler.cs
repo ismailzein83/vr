@@ -52,25 +52,28 @@ namespace TOne.WhS.BusinessEntity.Business.EventHandler
                         break;
                 }
 
-                BusinessEntityFieldTypeFilter settingFilter = new BusinessEntityFieldTypeFilter() { BusinessEntityIds = new List<object>() { carrierAccount.CarrierAccountId } };
+                //BusinessEntityFieldTypeFilter settingFilter = new BusinessEntityFieldTypeFilter() { BusinessEntityIds = new List<object>() { carrierAccount.CarrierAccountId } };
 
                 foreach (Guid mappingRuleDefinitionId in mappingRuleDefinitionIds)
                 {
-                    GenericRuleQuery query = new GenericRuleQuery() { RuleDefinitionId = mappingRuleDefinitionId, SettingsFilterValue = settingFilter };
+                    GenericRuleQuery query = new GenericRuleQuery() { RuleDefinitionId = mappingRuleDefinitionId };//, SettingsFilterValue = settingFilter };
                     List<MappingRule> mappingRules = mappingRuleManager.GetApplicableFilteredRules(mappingRuleDefinitionId, query, true);
 
                     if (mappingRules != null)
                     {
                         foreach (MappingRule mappingRule in mappingRules)
                         {
-                            if (!mappingRule.EndEffectiveTime.HasValue || mappingRule.EndEffectiveTime.Value > now)
+                            if (Convert.ToInt32(mappingRule.Settings.Value) == carrierAccount.CarrierAccountId)
                             {
-                                if (mappingRule.BeginEffectiveTime < now)
-                                    mappingRule.EndEffectiveTime = now;
-                                else
-                                    mappingRule.EndEffectiveTime = mappingRule.BeginEffectiveTime;
+                                if (!mappingRule.EndEffectiveTime.HasValue || mappingRule.EndEffectiveTime.Value > now)
+                                {
+                                    if (mappingRule.BeginEffectiveTime < now)
+                                        mappingRule.EndEffectiveTime = now;
+                                    else
+                                        mappingRule.EndEffectiveTime = mappingRule.BeginEffectiveTime;
 
-                                mappingRuleManager.UpdateRule(mappingRule);
+                                    mappingRuleManager.UpdateRule(mappingRule);
+                                }
                             }
                         }
                     }
