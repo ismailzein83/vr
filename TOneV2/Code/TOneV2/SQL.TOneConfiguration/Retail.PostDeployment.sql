@@ -83,6 +83,7 @@ as (select * from (values
 ('2504A630-D16B-43DC-8505-F85E3DFD0568','EditAccount','Edit Account','Retail_BE_AccountActionDefinitionConfig'															,'{"Editor":"retail-be-accountactiondefinitionsettings-editaccount"}'),
 ('fa494842-57c6-4972-a85f-3d9aa11c695d','ChangeStatusAction','Change Status','Retail_BE_AccountActionDefinitionConfig'													,'{"Editor":"retail-be-accountactiondefinitionsettings-changestatus"}'),
 ('17817576-4DE9-4C00-9BEF-0505007B4F53','ExecuteBusinessProcess','Execute Business Process','Retail_BE_AccountActionDefinitionConfig'									,'{"Editor":"retail-be-accountactiondefinitionsettings-bpaccount"}'),
+('E7B4E2D1-1D81-4D11-9E8D-417BDD7A3C6E','ExportRatesAction','Export Rates','Retail_BE_AccountActionDefinitionConfig'													,'{"Editor":"retail-be-accountactiondefinitionsettings-exportrates"}'),
 
 ('385AB73F-D18D-4A1B-8552-FC4E6AC487DE','SubAccountCondition','Can Have Sub Accounts','Retail_BE_AccountConditionConfig'												,'{"Editor":"retail-be-accountcondition-subaccount"}'),
 ('EE17B999-5473-467F-A9BF-623EEF6CD409','FinancialAccountCondition','Is Financial','Retail_BE_AccountConditionConfig'													,'{"Editor":"retail-be-accountcondition-financialaccount"}'),
