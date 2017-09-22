@@ -17,7 +17,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
             get { return new Guid("56B17184-3E6C-4130-8E5A-329BB9720D8E"); }
         }
 
-        public int AnalyticTableId { get; set; }
+        public Guid AnalyticTableId { get; set; }
 
         public List<DimensionMappingRule> DimensionMappingRules { get; set; }
 
@@ -29,6 +29,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
             context.AnalyticQuery.ThrowIfNull("context.AnalyticQuery");
             var originalQuery = context.AnalyticQuery;
             var mappedQuery = originalQuery.VRDeepCopy();
+            mappedQuery.TableId = this.AnalyticTableId;
             var dimensionNames = GetAllDimensionNames(mappedQuery);
             Dictionary<string, string> mappedDimensionNames = new Dictionary<string, string>();
             if (dimensionNames != null)
