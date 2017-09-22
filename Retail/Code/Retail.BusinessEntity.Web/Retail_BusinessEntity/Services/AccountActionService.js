@@ -133,7 +133,6 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
         }
 
         function registerExportRatesAction() {
-            console.log(1);
             var actionType = {
                 ActionTypeName: "ExportRatesAction",
                 ExecuteAction: function (payload) {
