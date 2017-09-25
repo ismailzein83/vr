@@ -248,9 +248,15 @@ namespace Retail.MultiNet.Business
                     if (summaryItem.ChargeableEntityId == this._lineRentChargeableEntity)
                         branchSummary.LineRent += summaryItem.NetAmount;
                     if (summaryItem.ChargeableEntityId == this._inComingChargeableEntity)
+                    {
                         branchSummary.InComing += summaryItem.NetAmount;
+                        branchSummary.IncomingDurationInSec += summaryItem.DurationInSec;
+                    }
                     if (summaryItem.ChargeableEntityId == this._outGoingChargeableEntity)
+                    {
                         branchSummary.OutGoing += summaryItem.NetAmount;
+                        branchSummary.OutgoingDurationInSec += summaryItem.DurationInSec;
+                    }
                 }
                 if (!excludeTaxes)
                 {
@@ -302,7 +308,8 @@ namespace Retail.MultiNet.Business
                 Dictionary<string, UsageSummary> usagesSummariesBySubItemIdentifier = new Dictionary<string, UsageSummary>();
                 BranchSummaryItem callAggregationSummary = new BranchSummaryItem
                 {
-                    AccountId = account.AccountId
+                    AccountId = account.AccountId,
+
                 };
                 BranchSummaryItem outgoingCallsSummary = new BranchSummaryItem
                 {
@@ -456,7 +463,7 @@ namespace Retail.MultiNet.Business
         {
             if (multiNetInvoiceGeneratorContext.BillingCDRByBranch == null)
             {
-                var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "DurationInSeconds", "Calling", "Called", "SaleAmount", "TrafficDirection", "ServiceType", "SubscriberAccountId", "Zone", "InterconnectOperator", "SaleCurrencyId" };
+                var columns = new List<string> { "FinancialAccountId", "AttemptDateTime", "SaleDurationInSeconds", "Calling", "Called", "SaleAmount", "TrafficDirection", "ServiceType", "SubscriberAccountId", "Zone", "InterconnectOperator", "SaleCurrencyId" };
                 var cdrData = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
                 {
                     Query = new DataRecordQuery()
@@ -499,7 +506,7 @@ namespace Retail.MultiNet.Business
                         dataRecordDetail.FieldValues.TryGetValue("AttemptDateTime", out attemptDateTime);
 
                         DataRecordFieldValue durationInSeconds;
-                        dataRecordDetail.FieldValues.TryGetValue("DurationInSeconds", out durationInSeconds);
+                        dataRecordDetail.FieldValues.TryGetValue("SaleDurationInSeconds", out durationInSeconds);
 
                         DataRecordFieldValue calling;
                         dataRecordDetail.FieldValues.TryGetValue("Calling", out calling);
@@ -573,6 +580,7 @@ namespace Retail.MultiNet.Business
         private void ModifySummaryItem(BranchSummaryItem summary, int countCDRs, decimal netAmount, Decimal totalDuration, Guid chargeableEntityId)
         {
             summary.Quantity += countCDRs;
+            summary.DurationInSec += totalDuration;
             summary.NetAmount += netAmount;
             summary.ChargeableEntityId = chargeableEntityId;
             if (summary.UsageDescription == null)
@@ -682,7 +690,7 @@ namespace Retail.MultiNet.Business
         {
             if (multiNetInvoiceGeneratorContext.BillingSummariesByBranch == null)
             {
-                List<string> listMeasures = new List<string> { "Amount", "CountCDRs", "TotalDurationInSeconds" };
+                List<string> listMeasures = new List<string> { "Amount", "CountCDRs", "TotalSaleDurationInSeconds" };
                 List<string> listDimensions = new List<string> { "TrafficDirection", "ServiceType" };
                 if (multiNetInvoiceGeneratorContext.FinancialAccount.TypeId == this._companyTypeId)
                 {
@@ -739,7 +747,7 @@ namespace Retail.MultiNet.Business
                         {
                             MeasureValue amountMeasure = GetMeasureValue(analyticRecord, "Amount");
                             MeasureValue countCDRsMeasure = GetMeasureValue(analyticRecord, "CountCDRs");
-                            MeasureValue totalDurationMeasure = GetMeasureValue(analyticRecord, "TotalDurationInSeconds");
+                            MeasureValue totalDurationMeasure = GetMeasureValue(analyticRecord, "TotalSaleDurationInSeconds");
                             decimal amount = Convert.ToDecimal(amountMeasure.Value ?? 0.0);
                             int countCDRs = Convert.ToInt32(countCDRsMeasure.Value);
                             Decimal totalDuration = Convert.ToDecimal(totalDurationMeasure.Value);
@@ -861,7 +869,8 @@ namespace Retail.MultiNet.Business
                     retailSubscriberInvoiceDetails.LineRent += branchSummary.LineRent;
                     retailSubscriberInvoiceDetails.InComing += branchSummary.InComing;
                     retailSubscriberInvoiceDetails.OutGoing += branchSummary.OutGoing;
-
+                    retailSubscriberInvoiceDetails.IncomingDurationInSec += branchSummary.IncomingDurationInSec;
+                    retailSubscriberInvoiceDetails.OutgoingDurationInSec += branchSummary.OutgoingDurationInSec;
                     retailSubscriberInvoiceDetails.SalesTaxAmount += branchSummary.SalesTaxAmount;
                     retailSubscriberInvoiceDetails.WHTaxAmount += branchSummary.WHTaxAmount;
                     retailSubscriberInvoiceDetails.SalesTax += branchSummary.SalesTax;
@@ -966,7 +975,8 @@ namespace Retail.MultiNet.Business
         public decimal LineRent { get; set; }
         public decimal InComing { get; set; }
         public decimal OutGoing { get; set; }
-
+        public decimal IncomingDurationInSec { get; set; }
+        public decimal OutgoingDurationInSec { get; set; }
 
 
         static AccountBEManager s_accountBEManager = new AccountBEManager();
@@ -987,7 +997,7 @@ namespace Retail.MultiNet.Business
         public int Quantity { get; set; }
         public Decimal NetAmount { get; set; }
         public Guid ChargeableEntityId { get; set; }
-
+        public decimal DurationInSec { get; set; }
     }
 
     public class UsageSummary

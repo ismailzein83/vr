@@ -28,6 +28,9 @@ namespace Retail.MultiNet.Entities
         public long CompanyId { get; set; }
         public long? BranchId { get; set; }
         public string BranchCode { get; set; }
+        public decimal IncomingDurationInSec { get; set; }
+        public decimal OutgoingDurationInSec { get; set; }
+
 
     }
 }
