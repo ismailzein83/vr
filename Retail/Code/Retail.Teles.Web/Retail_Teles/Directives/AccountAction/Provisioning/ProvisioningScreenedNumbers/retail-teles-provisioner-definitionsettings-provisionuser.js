@@ -91,6 +91,9 @@
                         provisionerDefinitionSettings = payload.provisionerDefinitionSettings;
                         if (provisionerDefinitionSettings != undefined) {
                             $scope.scopeModel.countryCode = provisionerDefinitionSettings.CountryCode;
+                            $scope.scopeModel.loginPassword = provisionerDefinitionSettings.LoginPassword;
+                            $scope.scopeModel.pin = provisionerDefinitionSettings.Pin;
+
                         }
                     }
 
@@ -177,6 +180,8 @@
                         CompanyTypeId: companyTypeAPI.getSelectedIds(),
                         SiteTypeId: siteTypeAPI.getSelectedIds(),
                         UserTypeId: userTypeAPI.getSelectedIds(),
+                        LoginPassword: $scope.scopeModel.loginPassword,
+                        Pin: $scope.scopeModel.pin,
                     };
                     return data;
                 }

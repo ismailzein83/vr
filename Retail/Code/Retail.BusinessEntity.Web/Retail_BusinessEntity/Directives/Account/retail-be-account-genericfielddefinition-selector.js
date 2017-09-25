@@ -54,10 +54,11 @@
 
                     var accountBEDefinitionId;
                     var genericFieldDefinition;
-
+                    var selectedIds;
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         genericFieldDefinition = payload.genericFieldDefinition;
+                        selectedIds = payload.selectedIds;
                     }
 
                     var selectorLoadPromise = getSelectorLoadPromise();
@@ -74,7 +75,12 @@
                                 if (genericFieldDefinition != undefined) {
                                     ctrl.selectedGenericFieldDefinition =
                                         UtilsService.getItemByVal(ctrl.genericFieldDefinitions, genericFieldDefinition.Name, 'Name');
+                                }else if(selectedIds != undefined)
+                                {
+                                    ctrl.selectedGenericFieldDefinition =
+                                    UtilsService.getItemByVal(ctrl.genericFieldDefinitions, selectedIds, 'Name');
                                 }
+
                             }
                         });
                     }
@@ -93,6 +99,12 @@
                             Title: obj.Title,
                             FieldType: obj.FieldType
                         };
+                };
+
+                api.getSelectedIds = function () {
+                    if (ctrl.selectedGenericFieldDefinition == undefined)
+                        return;
+                    return ctrl.selectedGenericFieldDefinition.Name;
                 };
 
                 if (ctrl.onReady != null) {

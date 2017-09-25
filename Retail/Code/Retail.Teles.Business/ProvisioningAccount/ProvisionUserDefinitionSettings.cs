@@ -25,11 +25,6 @@ namespace Retail.Teles.Business.Provisioning
         public string Pin { get; set; }
 
     }
-    public class ProvisionUserSetting
-    {
-        public UserAccountSetting UserAccountSetting { get; set; }
-
-    }
     public class UserAccountSetting
     {
         public string FirstName { get; set; }

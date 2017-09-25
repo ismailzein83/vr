@@ -102,7 +102,9 @@
                 directiveReadyDeferred.promise.then(function () {
                     directiveReadyDeferred = undefined;
                     var directivePayload = {
-                        bpDefinitionSettings: accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings
+                        bpDefinitionSettings: accountActionDefinition.ActionDefinitionSettings.BPDefinitionSettings,
+                        accountBEDefinitionId: accountBEDefinitionId,
+                        accountId: accountId
                     }; 
                     VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                 });

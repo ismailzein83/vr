@@ -29,6 +29,8 @@
 
             var provisionerPostActionRuntimeAPI;
             var provisionerPostActionRuntimeReadyDeferred = UtilsService.createPromiseDeferred();
+            var accountId;
+            var accountBEDefinitionId;
 
             var provisionerDefinitionSettings;
             function initializeController() {
@@ -51,6 +53,8 @@
 
                 api.load = function (payload) {
                     if (payload != undefined) {
+                        accountId = payload.accountId;
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         mainPayload = payload;
                     }
 
@@ -97,7 +101,11 @@
 
                         provisionerReadyDeferred.promise.then(function () {
 
-                            var settingPayload = { provisionerDefinitionSettings: provisionerDefinitionSettings };
+                            var settingPayload = {
+                                provisionerDefinitionSettings: provisionerDefinitionSettings,
+                                accountId: accountId,
+                                accountBEDefinitionId: accountBEDefinitionId
+                            };
                             if (actionBPSettings != undefined)
                             {
                                 settingPayload.provisionerRuntimeEntity = actionBPSettings.AccountProvisioner;
@@ -117,7 +125,11 @@
                             var provisionerPostActionRuntimeLoadDeferred = UtilsService.createPromiseDeferred();
                             provisionerPostActionRuntimeReadyDeferred.promise.then(function () {
 
-                                var postActionPayload = { accountProvisionDefinitionPostAction: provisionPostAction };
+                                var postActionPayload = {
+                                    accountProvisionDefinitionPostAction: provisionPostAction,
+                                    accountId: accountId,
+                                    accountBEDefinitionId: accountBEDefinitionId
+                                };
                                 if (actionBPSettings != undefined) {
                                     postActionPayload.provisionPostAction = actionBPSettings.ProvisionPostAction;
                                 }

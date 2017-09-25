@@ -23,7 +23,7 @@ namespace Retail.Teles.Business.Provisioning
         public string TelesSiteId { get; set; }
         public string TelesGatewayId { get; set; }
 
-        public ProvisionUserSetting Settings { get; set; }
+        public UserAccountSetting Settings { get; set; }
         public override void Execute(IAccountProvisioningContext context)
         {
             var definitionSettings = context.DefinitionSettings as ProvisionUserDefinitionSettings;
@@ -46,7 +46,7 @@ namespace Retail.Teles.Business.Provisioning
             parentAccount.ThrowIfNull("account", account.ParentAccountId);
             var siteName = _telesSiteManager.GetSiteName(definitionSettings.VRConnectionId, TelesSiteId);
             string gatewayName = _telesGatewayManager.GetGatewayeName(definitionSettings.VRConnectionId, this.TelesGatewayId);
-            _provisionAccountManager.CreateUserWithScreenedNumbers(context, definitionSettings.VRConnectionId, definitionSettings.CountryCode, TelesDomainId, TelesEnterpriseId, TelesSiteId, context.AccountBEDefinitionId, account, siteName, Settings.UserAccountSetting, gatewayName);
+            _provisionAccountManager.CreateUserWithScreenedNumbers(context, definitionSettings.VRConnectionId, definitionSettings.CountryCode, TelesDomainId, TelesEnterpriseId, TelesSiteId, context.AccountBEDefinitionId, account, siteName, Settings, gatewayName);
         }
     }
 }

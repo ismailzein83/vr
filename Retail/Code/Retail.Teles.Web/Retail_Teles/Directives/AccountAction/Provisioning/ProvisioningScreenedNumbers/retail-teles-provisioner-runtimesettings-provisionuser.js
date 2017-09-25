@@ -43,6 +43,8 @@
             var provisionUserSettingsReadyDeferred = UtilsService.createPromiseDeferred();
             var provisionerDefinitionSettings;
 
+            var accountId;
+            var accountBEDefinitionId;
             var mainPayload;
             function initializeController() {
                 $scope.scopeModel = {};
@@ -141,6 +143,8 @@
                 api.load = function (payload) {
                     var provisionerRuntimeSettings;
                     if (payload != undefined) {
+                        accountId = payload.accountId;
+                        accountBEDefinitionId = payload.accountBEDefinitionId;
                         provisionerDefinitionSettings = payload.provisionerDefinitionSettings;
                         mainPayload = payload;
                         provisionerRuntimeSettings = payload.provisionerRuntimeSettings;
@@ -244,11 +248,14 @@
 
                     function loadProvisionUserSettings() {
 
-                        var provisionUserSettingsPayload = { showEnterpriseSettings: false };
+                        var provisionUserSettingsPayload = {
+                            accountId: accountId,
+                            accountBEDefinitionId: accountBEDefinitionId
+                        };
                         if (provisionerDefinitionSettings != undefined)
-                            provisionUserSettingsPayload.provisionUserSettings = provisionerDefinitionSettings.Settings;
+                            provisionUserSettingsPayload.provisionerDefinitionSettings = provisionerDefinitionSettings;
                         if (provisionerRuntimeSettings != undefined) {
-                            provisionUserSettingsPayload.provisionUserSettings = provisionerRuntimeSettings.Settings;
+                            provisionUserSettingsPayload.provisionerRuntimeSettings = provisionerRuntimeSettings.Settings;
                         }
                         return provisionUserSettingsAPI.load(provisionUserSettingsPayload);
                     }

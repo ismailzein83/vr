@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ProvisionerUsersettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService'];
+    ProvisionerUsersettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService','Retail_BE_AccountTypeAPIService'];
 
-    function ProvisionerUsersettingsDirective(UtilsService, VRUIUtilsService) {
+    function ProvisionerUsersettingsDirective(UtilsService, VRUIUtilsService, Retail_BE_AccountTypeAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -23,7 +23,6 @@
         function ProvisionerUsersettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var mainPayload;
-
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.pin = '0000';
@@ -41,28 +40,51 @@
                 var api = {};
 
                 api.load = function (payload) {
-
-                    var provisionUserSettings;
+                    var promises = [];
+                    var provisionerDefinitionSettings;
+                    var provisionerRuntimeSettings;
                     if (payload != undefined) {
                         mainPayload = payload;
-                        provisionUserSettings = payload.provisionUserSettings;
-                        if (provisionUserSettings != undefined) {
-                            $scope.scopeModel.centrexFeatSet = provisionUserSettings.CentrexFeatSet;
-                           
-                            if (provisionUserSettings.UserAccountSetting != undefined)
-                            {
-                                $scope.scopeModel.firstName = provisionUserSettings.UserAccountSetting.FirstName;
-                                $scope.scopeModel.lastName = provisionUserSettings.UserAccountSetting.LastName;
-                                $scope.scopeModel.loginName = provisionUserSettings.UserAccountSetting.LoginName;
-                                $scope.scopeModel.loginPassword = provisionUserSettings.UserAccountSetting.LoginPassword;
-                                $scope.scopeModel.pin = provisionUserSettings.UserAccountSetting.Pin;
-                            }
-                     
+                        var accountBEDefinitionId = payload.accountBEDefinitionId;
+                        var accountId = payload.accountId;
+                        provisionerDefinitionSettings = payload.provisionerDefinitionSettings;
+                        provisionerRuntimeSettings = payload.provisionerRuntimeSettings;
+                        if (provisionerDefinitionSettings != undefined) {
+                            $scope.scopeModel.loginPassword = provisionerDefinitionSettings.LoginPassword;
+                            $scope.scopeModel.pin = provisionerDefinitionSettings.Pin;
+                            promises.push(getAccountGenericFieldValues());
                         }
+                        if (provisionerRuntimeSettings != undefined)
+                        {
+                            $scope.scopeModel.loginPassword = provisionerRuntimeSettings.LoginPassword;
+                            $scope.scopeModel.pin = provisionerRuntimeSettings.Pin;
+                            $scope.scopeModel.firstName = provisionerRuntimeSettings.FirstName;
+                            $scope.scopeModel.lastName = provisionerRuntimeSettings.LastName;
+                            $scope.scopeModel.loginName = provisionerRuntimeSettings.LoginName;
+                        }
+                        function getAccountGenericFieldValues() {
+                            var accountGenericFieldNames = [];
+                            if (provisionerDefinitionSettings != undefined) {
+                                accountGenericFieldNames.push(provisionerDefinitionSettings.FirstNameField);
+                                accountGenericFieldNames.push(provisionerDefinitionSettings.LoginNameField);
+                                accountGenericFieldNames.push(provisionerDefinitionSettings.LastNameField);
+                            }
 
+                            return Retail_BE_AccountTypeAPIService.GetAccountGenericFieldValues(accountBEDefinitionId, accountId, UtilsService.serializetoJson(accountGenericFieldNames)).then(function (response) {
+                                if (provisionerDefinitionSettings != undefined && response != undefined) {
+                                    $scope.scopeModel.firstName = response[provisionerDefinitionSettings.FirstNameField];
+                                    $scope.scopeModel.lastName = response[provisionerDefinitionSettings.LastNameField];
+                                    $scope.scopeModel.loginName = response[provisionerDefinitionSettings.LoginNameField];
+                                    if ($scope.scopeModel.loginName != undefined)
+                                    {
+                                        $scope.scopeModel.loginName = $scope.scopeModel.loginName.toLowerCase();
+                                        $scope.scopeModel.loginName = UtilsService.trim($scope.scopeModel.loginName, ' ');
+                                        $scope.scopeModel.loginName =  UtilsService.replaceAll($scope.scopeModel.loginName,' ','');
+                                    }
+                                }
+                            });
+                        }
                     }
-
-                    var promises = [];
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -72,16 +94,14 @@
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
-
+              
                 function getData() {
                     var data = {
-                        UserAccountSetting:{
                             FirstName: $scope.scopeModel.firstName,
                             LastName: $scope.scopeModel.lastName,
                             LoginName: $scope.scopeModel.loginName,
                             LoginPassword: $scope.scopeModel.loginPassword,
                             Pin: $scope.scopeModel.pin,
-                        }
                     };
                     return data;
                 }
