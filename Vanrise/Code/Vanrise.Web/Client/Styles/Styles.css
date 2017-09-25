@@ -724,6 +724,9 @@ vr-section[contentbox] .panel-body {
 .modal-dialog vr-form .action-bar {
     border-radius: 15px !important;
 }
+vr-actionbar[formsubmitsection] .action-bar {
+    border-radius: 0px !important;
+}
 .leavecolor {
     background-color: transparent !important;
 }
