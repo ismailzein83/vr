@@ -331,21 +331,17 @@ namespace Retail.MultiNet.Business.Convertors
         }
         void CreateFinancialAccount(Account account, DataRow row)
         {
-            if (row[DueDateColumnName] != DBNull.Value)
+            FinancialAccount financialAccount = new FinancialAccount
             {
-                DateTime bed = (DateTime)row[DueDateColumnName];
-                FinancialAccount financialAccount = new FinancialAccount
-                {
-                    FinancialAccountDefinitionId = this.FinancialAccountDefinitionId,
-                    ExtendedSettings = new Retail.BusinessEntity.MainExtensions.FinancialAccount.PostpaidFinancialAccount { CreditClassId = this.CreditClassId },
-                    BED = DateTime.Today
-                };
-                AccountBEFinancialAccountsSettings accountFinancialAccountExtSettings = s_accountBEManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(account);
-                if (accountFinancialAccountExtSettings == null)
-                    accountFinancialAccountExtSettings = s_financialAccountManager.CreateAccountFinancialAccountExtSettings();
-                s_financialAccountManager.AddFinancialAccountToExtSettings(financialAccount, accountFinancialAccountExtSettings);
-                s_accountBEManager.SetExtendedSettings(accountFinancialAccountExtSettings, account);
-            }
+                FinancialAccountDefinitionId = this.FinancialAccountDefinitionId,
+                ExtendedSettings = new Retail.BusinessEntity.MainExtensions.FinancialAccount.PostpaidFinancialAccount { CreditClassId = this.CreditClassId },
+                BED = DateTime.Today
+            };
+            AccountBEFinancialAccountsSettings accountFinancialAccountExtSettings = s_accountBEManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(account);
+            if (accountFinancialAccountExtSettings == null)
+                accountFinancialAccountExtSettings = s_financialAccountManager.CreateAccountFinancialAccountExtSettings();
+            s_financialAccountManager.AddFinancialAccountToExtSettings(financialAccount, accountFinancialAccountExtSettings);
+            s_accountBEManager.SetExtendedSettings(accountFinancialAccountExtSettings, account);
         }
 
         private string GetStringRowValue(DataRow row, string fieldName)
