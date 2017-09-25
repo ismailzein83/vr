@@ -59,10 +59,10 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             var messageBuilder = new StringBuilder(string.Format("BED of the Other Rate of Zone '{0}' must be greater than", zone.ZoneName));
 
-            if (zone.SoldOn.HasValue)
+            if (zone.SoldOn.HasValue && zone.SoldOn > zone.BED)
             {
                 string soldOn = UtilitiesManager.GetDateTimeAsString(zone.SoldOn.Value);
-                messageBuilder.Append(string.Format(" the maximum between the BED '{0}' of the Zone and the date '{1}' when the Country was sold", zoneBED, soldOn));
+                messageBuilder.Append(string.Format(" the date '{1}' when the Country was sold", soldOn));
             }
             else
             {
