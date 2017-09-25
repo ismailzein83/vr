@@ -110,6 +110,7 @@
   <ItemGroup>
     <Compile Include="Common\IMigrator.cs" />
     <Compile Include="Common\Migrator.cs" />
+    <Compile Include="Migrators\CarrierAccountStatusHistoryMigrator.cs" />
     <Compile Include="Migrators\Rules\MarketPriceRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\CommissionRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\RouteOptionBlockFromOverrideRuleMigrator.cs" />

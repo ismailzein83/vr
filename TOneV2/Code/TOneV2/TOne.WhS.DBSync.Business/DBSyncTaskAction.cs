@@ -88,6 +88,9 @@ namespace TOne.WhS.DBSync.Business
                         iDBSyncDataManager = new CarrierAccountDBSyncDataManager(context.UseTempTables);
                         break;
 
+                    case DBTableName.CarrierAccountStatusHistory:
+                        iDBSyncDataManager = new CarrierAccountStatusHistoryDBSyncDataManager(context.UseTempTables);
+                        break;
 
                     case DBTableName.CarrierProfile:
                         iDBSyncDataManager = new CarrierProfileDBSyncDataManager(context.UseTempTables);
@@ -267,6 +270,10 @@ namespace TOne.WhS.DBSync.Business
 
                 case DBTableName.CarrierAccount:
                     migrator = new CarrierAccountMigrator(context);
+                    break;
+
+                case DBTableName.CarrierAccountStatusHistory:
+                    migrator = new CarrierAccountStatusHistoryMigrator(context);
                     break;
 
                 case DBTableName.Switch:

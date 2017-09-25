@@ -22,5 +22,6 @@
     SwitchConnectivity: { value: 19, description: "SwitchConnectivity", defaultMigrate: true },
     SupplierZoneServices: { value: 20, description: "Supplier Zone Services", defaultMigrate: true },
     SaleEntityServices: { value: 21, description: "Sale Entity Services", defaultMigrate: true },
-    Rule: { value: 22, description: "Rules", defaultMigrate: true }
+    Rule: { value: 22, description: "Rules", defaultMigrate: true },
+    CarrierAccountStatusHistory: { value: 23, description: "CarrierAccountStatusHistory ", defaultMigrate: false }
 });

@@ -156,7 +156,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         sellingProductDirectiveAPI.clearDataSource();
                         sellingProductDirectiveAPI.resetFilter();
                     }
-                };               
+                };
                 $scope.onSelectParameterDefinition = function (item) {
                     var gridItem = {
                         DisplayName: item.DisplayName,
@@ -179,7 +179,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             function defineAPI() {
 
                 var api = {};
-               
+
                 api.getData = function () {
                     var schedulerTaskAction;
                     schedulerTaskAction = {};
@@ -199,6 +199,8 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     $scope.migrationTablesSelectedValues;
                     angular.forEach($scope.migrationTablesSelectedValues, function (x) {
                         selectedTables.push(x.value);
+                        if (x == WhS_BE_DBTableNameEnum.CarrierAccount)
+                            selectedTables.push(WhS_BE_DBTableNameEnum.CarrierAccountStatusHistory.value);
                     });
                     selectedTables.push(WhS_BE_DBTableNameEnum.CustomerCountry.value);
                     selectedTables.push(WhS_BE_DBTableNameEnum.File.value);
@@ -227,7 +229,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         fillParameterDefinitions(payload.data.ParameterDefinitions);
 
                         angular.forEach(payload.data.MigrationRequestedTables, function (x) {
-                            if (x != WhS_BE_DBTableNameEnum.CustomerCountry.value && x != WhS_BE_DBTableNameEnum.File.value)
+                            if (x != WhS_BE_DBTableNameEnum.CustomerCountry.value && x != WhS_BE_DBTableNameEnum.File.value && x != WhS_BE_DBTableNameEnum.CarrierAccountStatusHistory.value)
                                 $scope.migrationTablesSelectedValues.push(UtilsService.getEnum(WhS_BE_DBTableNameEnum, 'value', x));
                         })
 
