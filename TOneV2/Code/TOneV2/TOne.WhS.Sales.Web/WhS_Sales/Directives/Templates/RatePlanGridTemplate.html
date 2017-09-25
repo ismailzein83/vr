@@ -12,8 +12,8 @@
         <vr-columns width="fullrow">
             <div>
                 <vr-validation-group validationcontext="allZonesValidationContext">
-                    <div class="vr-datagrid">
-                        <div class="vr-datagrid-header" style="display: flex" ng-style="headerStyle">
+                    <div class="vr-datagrid drill-down-level-0">
+                        <div class="vr-datagrid-header  drill-down-level-0" style="display: flex" ng-style="headerStyle">
                             <div style="display:inline-flex; width: 100%">
                                 <div style="margin: -2px; display:inline-block;width:20px" ng-init="addColumnFixedAndRecalculate('expanddrilldown', 20)">
 
@@ -137,15 +137,15 @@
                                     </div>
                                 </div>
                                 <!--<div ng-show="rateCalculationMethod" style="width: 50px; display:inline-block">
-                    <div class="vr-datagrid-header-cell">
-                        <div col-index="renderIndex" style="width:100%">
-                            <div class="vr-datagrid-celltext" style="overflow: hidden;text-align:right">
-                                <span>Calculated Rate</span>
-                            </div>
-
+                <div class="vr-datagrid-header-cell">
+                    <div col-index="renderIndex" style="width:100%">
+                        <div class="vr-datagrid-celltext" style="overflow: hidden;text-align:right">
+                            <span>Calculated Rate</span>
                         </div>
+
                     </div>
-                </div>-->
+                </div>
+            </div>-->
                                 <div style="display:inline-block;width:65px" ng-init="::addColumnFixedAndRecalculate('newRate', 65)">
                                     <div class="vr-datagrid-header-cell">
                                         <div col-index="renderIndex" style="width:100%">

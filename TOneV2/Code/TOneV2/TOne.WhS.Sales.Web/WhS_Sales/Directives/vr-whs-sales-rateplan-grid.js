@@ -103,7 +103,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     $scope.isLoading = false;
                 });
             };
-
+            $scope.isGridScope = true;
             $scope.zoneItems = [];
             $scope.costCalculationMethods = [];
             gridDrillDownDefinitions = getGridDrillDownDefinitions();
