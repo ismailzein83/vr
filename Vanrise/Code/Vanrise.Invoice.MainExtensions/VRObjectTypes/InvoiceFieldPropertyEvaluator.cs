@@ -64,8 +64,8 @@ namespace Vanrise.Invoice.MainExtensions
                     return invoice.IsAutomatic;
 
                 case InvoiceField.CustomField:
-                    return invoice.Details.GetType().GetProperty(this.FieldName).GetValue(invoice.Details, null);//Utilities.GetPropValue(this.FieldName, invoice.Details);
-                //    //Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
+                    //return invoice.Details.GetType().GetProperty(this.FieldName).GetValue(invoice.Details, null);//Utilities.GetPropValue(this.FieldName, invoice.Details);
+                return Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
                 case InvoiceField.Paid:
                     return invoice.PaidDate;
                 default: return null;
