@@ -355,7 +355,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
             carrierAccount.CustomerSettings.ThrowIfNull("carrierAccount.CustomerSettings", carrierAccountId);
-           
+
             sellingProductCodeChangeTypeSettings = sellingProductManager.GetSellingProductCodeChangeTypeSettings(sellingProductId);
 
             if (carrierAccount.CustomerSettings.PricelistSettings == null)
@@ -386,7 +386,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public PricingSettings GetCustomerPricingSettings(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);
-            
+
             var sellingProductManager = new SellingProductManager();
             int sellingProductId = GetSellingProductId(carrierAccountId);
             var sellingProductPricingSettings = new PricingSettings();
@@ -603,6 +603,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 isDefaultServiceInsertedSuccessfully = zoneServiceManager.Insert(carrierAccountId, carrierAccount.SupplierSettings.DefaultServices);
             }
 
+            if (insertActionSucc)
+                new CarrierAccountStatusHistoryManager().AddAccountStatusHistory(carrierAccountId, carrierAccount.CarrierAccountSettings.ActivationStatus, null);
+
             if (insertActionSucc && isDefaultServiceInsertedSuccessfully)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -645,8 +648,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ValidateCarrierAccountToEdit(carrierAccountToEdit, out carrierProfileId);
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-            bool updateActionSucc = dataManager.Update(carrierAccountToEdit, carrierProfileId);
             CarrierAccount cachedAccount = this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
+            
+            ActivationStatus previousActivationStatus = cachedAccount.CarrierAccountSettings.ActivationStatus;
+            ActivationStatus activationStatus = carrierAccountToEdit.CarrierAccountSettings.ActivationStatus;
+
+            bool updateActionSucc = dataManager.Update(carrierAccountToEdit, carrierProfileId);
+
             if (CarrierAccountManager.IsSupplier(cachedAccount.AccountType))
             {
                 SupplierZoneServiceManager zoneServiceManager = new SupplierZoneServiceManager();
@@ -660,8 +668,15 @@ namespace TOne.WhS.BusinessEntity.Business
                     var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
                     VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, cachedAccount);
                 }
-                if (cachedAccount.CarrierAccountSettings.ActivationStatus != carrierAccountToEdit.CarrierAccountSettings.ActivationStatus)
+                if (previousActivationStatus != activationStatus)
                 {
+                    new CarrierAccountStatusHistoryManager().AddAccountStatusHistory(carrierAccountToEdit.CarrierAccountId, activationStatus, previousActivationStatus);
+
+                    if (withTracking)
+                    {
+                        string actionDescription = string.Format("Status Changed from '{0}' to '{1}'", previousActivationStatus, activationStatus);
+                        VRActionLogger.Current.LogObjectCustomAction(CarrierAccountLoggableEntity.Instance, "Status Changed", true, cachedAccount, actionDescription);
+                    }
                     VREventManager vrEventManager = new VREventManager();
                     vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
                 }

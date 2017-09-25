@@ -81,6 +81,7 @@
     <Compile Include="BusinessManagers\IContext.cs" />
     <Compile Include="BusinessManagers\ISaleZoneManager.cs" />
     <Compile Include="BusinessManagers\ICarrierAccountManager.cs" />
+    <Compile Include="Carriers\CarrierAccountStatusHistory\CarrierAccountStatusHistory.cs" />
     <Compile Include="Carriers\CarrierAccounts\CarrierAccount.cs" />
     <Compile Include="Carriers\CarrierAccounts\CarrierAccountCustomerSettings.cs" />
     <Compile Include="Carriers\CarrierAccounts\CarrierAccountDetail.cs" />
