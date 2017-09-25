@@ -13,6 +13,7 @@ namespace Vanrise.Common.Web.Controllers
     [RoutePrefix(Constants.ROUTE_PREFIX + "UISettings")]
     public class VRCommon_UISettingsController : BaseAPIController
     {
+        [IsAnonymous]
         [HttpGet]
         [Route("GetUIParameters")]
         public UISettings GetUIParameters()
