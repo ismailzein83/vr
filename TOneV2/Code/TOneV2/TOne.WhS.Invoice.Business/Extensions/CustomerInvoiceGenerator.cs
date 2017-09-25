@@ -95,8 +95,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
+                SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount);
             }
-            SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount);
 
             #endregion
 
@@ -129,7 +129,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                 billingTransaction.Settings = new GeneratedInvoiceBillingTransactionSettings();
                 billingTransaction.Settings.UsageOverrides = new List<GeneratedInvoiceBillingTransactionUsageOverride>();
-
+                invoiceSettings.UsageTransactionTypeIds.ThrowIfNull("invoiceSettings.UsageTransactionTypeIds");
                 foreach (Guid usageTransactionTypeId in invoiceSettings.UsageTransactionTypeIds)
                 {
                     billingTransaction.Settings.UsageOverrides.Add(new GeneratedInvoiceBillingTransactionUsageOverride()
