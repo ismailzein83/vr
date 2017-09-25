@@ -28,7 +28,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                     var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
                     var left = ((screenWidth / 2) - (1000 / 2));
 
-                    window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1,top = 145, left = " + left + "");
+                    window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1,top = 125, left = " + left + "");
                 }
             };
             registerActionType(actionType);
