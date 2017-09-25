@@ -363,10 +363,14 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\PricingSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\RateChangeTypeSettingsGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SalePricelistFileNamePatternTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\SalePricelistFileNamePatternTemplateHelper.html" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-codechangetypesettings-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricelistsettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-pricingsettings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-ratechangetypesettings-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-salepricelistfilenamepattern-helper.js" />
+    <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-salepricelistfilenamepattern.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\Templates\SaleEntityZoneRoutingProductHistoryGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\vr-whs-be-saleentityzoneroutingproduct-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
