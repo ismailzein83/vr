@@ -41,44 +41,48 @@ namespace Retail.MultiNet.Business.Convertors
             sourceBatch.Data.DefaultView.Sort = AccountIdColumnName;
             foreach (DataRow row in sourceBatch.Data.Rows)
             {
-                ITargetBE targetMultiNetAccount;
                 var sourceId = (row[UserIdColumnName] as string);
-                var parentId = string.Format("Branch_GP_{0}", (row[AccountIdColumnName] as string).Trim());
+                var parentId = string.Format("Branch_GP_{0}", GetStringRowValue(row, AccountIdColumnName));
                 string accountName = row[NameColumnName] as string;
-                if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
+                Account parentAccount;
+                if (accounts.TryGetValue(parentId, out parentAccount))
                 {
-                    try
+                    if (!maultiNetAccounts.ContainsKey(sourceId))
                     {
-                        SourceAccountData accountData = new SourceAccountData
+                        try
                         {
-                            Account = new Account()
-                        };
+                            SourceAccountData accountData = new SourceAccountData
+                            {
+                                Account = new Account()
+                            };
 
-                        Account parentAccount;
-                        if (accounts.TryGetValue(parentId, out parentAccount))
-                        {
                             accountData.Account.ParentAccountId = parentAccount.AccountId;
+
+                            accountData.Account.Name = accountName;
+                            accountData.Account.SourceId = string.Format("User_GP_{0}", sourceId);
+                            accountData.Account.TypeId = this.AccountTypeId;
+                            //accountData.Account.StatusId = this.InitialStatusId;
+
+                            accountData.Account.Settings = new AccountSettings
+                            {
+                                Parts = new AccountPartCollection()
+                            };
+
+                            FillCompanyProfile(accountData, row);
+                            maultiNetAccounts.Add(sourceId, accountData);
                         }
-
-                        accountData.Account.Name = accountName;
-                        accountData.Account.SourceId = string.Format("User_GP_{0}", sourceId);
-                        accountData.Account.TypeId = this.AccountTypeId;
-                        accountData.Account.StatusId = this.InitialStatusId;
-
-                        accountData.Account.Settings = new AccountSettings
+                        catch (Exception ex)
                         {
-                            Parts = new AccountPartCollection()
-                        };
-
-                        FillCompanyProfile(accountData, row);
-                        maultiNetAccounts.Add(sourceId, accountData);
-                    }
-                    catch (Exception ex)
-                    {
-                        var finalException = Utilities.WrapException(ex, String.Format("Failed to import User (Id: '{0}' Name: '{1}') due to conversion error", sourceId, accountName));
-                        context.WriteBusinessHandledException(finalException);
+                            var finalException = Utilities.WrapException(ex, String.Format("Failed to import User (Id: '{0}' Name: '{1}') due to conversion error", sourceId, accountName));
+                            context.WriteBusinessHandledException(finalException);
+                        }
                     }
                 }
+                else
+                {
+                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Warning, "Failed to import User (Id: '{0}' Name: '{1}'). Parent Branch not found (Parent SourceId '{2}')", sourceId, accountName, parentId);
+                }
+
             }
             context.TargetBEs = maultiNetAccounts.Values.ToList();
         }
@@ -103,7 +107,7 @@ namespace Retail.MultiNet.Business.Convertors
             {
                 Settings = new AccountPartPersonalInfo
                 {
-                    FirstName = (row[NameColumnName] as string).Trim()
+                    FirstName = GetStringRowValue(row, NameColumnName)
                 }
             });
         }
@@ -115,5 +119,12 @@ namespace Retail.MultiNet.Business.Convertors
 
             return account;
         }
+
+        private string GetStringRowValue(DataRow row, string fieldName)
+        {
+            var value = row[fieldName] as string;
+            return value != null ? value.Trim() : null;
+        }
+
     }
 }

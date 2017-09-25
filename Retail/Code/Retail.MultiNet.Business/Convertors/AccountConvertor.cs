@@ -47,7 +47,6 @@ namespace Retail.MultiNet.Business.Convertors
         public string BillingPeriodColumnName { get; set; }
         public string AccountContractID { get; set; }
 
-
         #endregion
 
         #region Address Columns
@@ -124,51 +123,54 @@ namespace Retail.MultiNet.Business.Convertors
 
             foreach (DataRow row in accountsDataTable.Rows)
             {
-                ITargetBE targetMultiNetAccount;
-                var sourceId = (row[AccountIdColumnName] as string).Trim();
-                var parentId = string.Format("Company_GP_{0}", (row[CustomerIdColumnName] as string).Trim());
+                var sourceId = GetStringRowValue(row, AccountIdColumnName);
+                var parentId = string.Format("Company_GP_{0}", GetStringRowValue(row, CustomerIdColumnName));
                 string accountName = row[AccountNameColumnName] as string;
-                if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
+                Account parentAccount;
+                if (accountsInitializationData.Accounts.TryGetValue(parentId, out parentAccount))
                 {
-                    try
+                    if (!maultiNetAccounts.ContainsKey(sourceId))
                     {
-                        SourceAccountData accountData = new SourceAccountData
+                        try
                         {
-                            Account = new Account()
-                        };
+                            SourceAccountData accountData = new SourceAccountData
+                            {
+                                Account = new Account()
+                            };
 
-                        Account parentAccount;
-                        if (accountsInitializationData.Accounts.TryGetValue(parentId, out parentAccount))
-                        {
                             accountData.Account.ParentAccountId = parentAccount.AccountId;
+                            accountData.Account.Name = accountName;
+                            accountData.Account.SourceId = string.Format("Branch_GP_{0}", sourceId);
+                            accountData.Account.TypeId = this.AccountTypeId;
+                            //Guid statusId = new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd");// isActive ? new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd") : new Guid("80b7dc84-5c43-47fc-b921-2ea717c9bdbf");
+                            //accountData.Account.StatusId = statusId;
+
+                            accountData.Account.Settings = new AccountSettings
+                            {
+                                Parts = new AccountPartCollection()
+                            };
+
+
+                            FillProfileInfo(accountData, row);
+                            FillExtendedInfo(accountData, row, sourceId);
+                            FillFinancialInfo(accountData, row);
+
+                            CreateFinancialAccount(accountData.Account, row);
+
+                            maultiNetAccounts.Add(sourceId, accountData);
                         }
-                        bool isActive = (bool)row[AccountStatusColumnName];
-                        accountData.Account.Name = accountName;
-                        accountData.Account.SourceId = string.Format("Branch_GP_{0}", sourceId);
-                        accountData.Account.TypeId = this.AccountTypeId;
-                        Guid statusId = new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd");// isActive ? new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd") : new Guid("80b7dc84-5c43-47fc-b921-2ea717c9bdbf");
-                        accountData.Account.StatusId = statusId;
-
-                        accountData.Account.Settings = new AccountSettings
+                        catch (Exception ex)
                         {
-                            Parts = new AccountPartCollection()
-                        };
-
-
-                        FillBranchInfo(accountData, row);
-                        FillExtendedInfo(accountData, row);
-                        FillFinancialInfo(accountData, row);
-
-                        CreateFinancialAccount(accountData.Account, row);
-
-                        maultiNetAccounts.Add(sourceId, accountData);
-                    }
-                    catch (Exception ex)
-                    {
-                        var finalException = Utilities.WrapException(ex, String.Format("Failed to import Account (Id: '{0}' Name: '{1}') due to conversion error", sourceId, accountName));
-                        context.WriteBusinessHandledException(finalException);
+                            var finalException = Utilities.WrapException(ex, String.Format("Failed to import Account (Id: '{0}' Name: '{1}') due to conversion error", sourceId, accountName));
+                            context.WriteBusinessHandledException(finalException);
+                        }
                     }
                 }
+                else
+                {
+                    context.WriteBusinessTrackingMsg(LogEntryType.Warning, "Failed to import Account (Id: '{0}' Name: '{1}'). Parent Company not found (Parent SourceId '{2}')", sourceId, accountName, parentId);
+                }
+                
             }
             context.TargetBEs = maultiNetAccounts.Values.ToList();
         }
@@ -188,7 +190,7 @@ namespace Retail.MultiNet.Business.Convertors
         #endregion
 
         #region Private Methods
-        void FillBranchInfo(SourceAccountData accountData, DataRow row)
+        void FillProfileInfo(SourceAccountData accountData, DataRow row)
         {
             CountryManager countryManager = new CountryManager();
             string countryName = (row[CountryColumnName] as string);
@@ -206,11 +208,11 @@ namespace Retail.MultiNet.Business.Convertors
                     Contacts = GetContactsList(row),
                     CityId = city != null ? city.CityId : (int?)null,
                     CountryId = country != null ? (int?)country.CountryId : null,
-                    POBox = (row[POBoxColumnName] as string).Trim(),
-                    Address = (row[AddressColumnName] as string).Trim(),
-                    Street = (row[StreetColumnName] as string).Trim(),
-                    Town = (row[TownColumnName] as string).Trim(),
-                    Website = (row[WebsiteColumnName] as string).Trim(),
+                    POBox = GetStringRowValue(row, POBoxColumnName),
+                    Address = GetStringRowValue(row, AddressColumnName),
+                    Street = GetStringRowValue(row, StreetColumnName),
+                    Town = GetStringRowValue(row,TownColumnName),
+                    Website = GetStringRowValue(row,WebsiteColumnName),
                     Faxes = GetNumbersList(row[FaxColumnName] as string),
                     MobileNumbers = GetNumbersList(row[MobileColumnName] as string),
                     PhoneNumbers = GetNumbersList(row[PhoneColumnName] as string)
@@ -230,17 +232,18 @@ namespace Retail.MultiNet.Business.Convertors
                 return null;
             return numbers.Trim().Split(',').ToList();
         }
-        void FillExtendedInfo(SourceAccountData accountData, DataRow row)
+        void FillExtendedInfo(SourceAccountData accountData, DataRow row, string sourceId)
         {
             MultiNetBranchExtendedInfo settings = new MultiNetBranchExtendedInfo
             {
-                RegistrationNumber = (row[RegistrationColumnName] as string).Trim(),
-                CNIC = (row[CNICColumnName] as string).Trim(),
+                GPSiteId = sourceId,
+                RegistrationNumber = GetStringRowValue(row,RegistrationColumnName),
+                CNIC = GetStringRowValue(row,CNICColumnName),
                 CNICExpiryDate = (DateTime)row[CNICExpiryDateColumnName],
-                NTN = (row[NTNColumnName] as string).Trim(),
+                NTN = GetStringRowValue(row,NTNColumnName),
                 BillingPeriod = row[BillingPeriodColumnName] == DBNull.Value ? 0 : (int)row[BillingPeriodColumnName],
                 DueDate = row[DueDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[DueDateColumnName],
-                GPSiteId = (row[AccountContractID] as string).Trim()
+                ContractReferenceNumber = GetStringRowValue(row, AccountContractID)
             };
 
             AccountPart part = new AccountPart
@@ -252,7 +255,7 @@ namespace Retail.MultiNet.Business.Convertors
         }
         void FillFinancialInfo(SourceAccountData accountData, DataRow row)
         {
-            string currencySourceId = (row[CurrencyIdColumnName] as string).Trim();
+            string currencySourceId = GetStringRowValue(row,CurrencyIdColumnName);
             CurrencyManager currencyManager = new CurrencyManager();
             Currency currency = currencyManager.GetCurrencyBySymbol(currencySourceId);
             currency.ThrowIfNull("currency", currencySourceId);
@@ -271,38 +274,40 @@ namespace Retail.MultiNet.Business.Convertors
 
             contacts.Add("Main", new AccountCompanyContact
             {
-                Email = row[MainContactEmailColumnName] as string,
-                PhoneNumbers = new List<string> { row[MainContactPhoneColumnName] as string },
-                ContactName = row[MainContactNameColumnName] as string,
-                Notes = row[MainContactReligionColumnName] as string,
-                Title = row[MainContactNameTitleColumnName] as string,
+                Email = GetStringRowValue(row, MainContactEmailColumnName),
+                PhoneNumbers = new List<string> { GetStringRowValue(row, MainContactPhoneColumnName) },
+                ContactName = GetStringRowValue(row, MainContactNameColumnName),
+                Notes = GetStringRowValue(row, MainContactReligionColumnName),
+                Title = GetStringRowValue(row, MainContactNameTitleColumnName),
                 Salutation = GetSalutation(row[MainContactSalutaionColumnName] as string)
             });
 
             contacts.Add("Technical", new AccountCompanyContact
             {
-                Email = row[TechnicalContactEmailColumnName] as string,
-                PhoneNumbers = new List<string> { row[TechnicalContactPhoneColumnName] as string },
-                ContactName = row[TechnicalContactNameColumnName] as string,
-                Notes = row[TechnicalContactReligionColumnName] as string,
-                Title = row[TechnicalContactNameTitleColumnName] as string,
+                Email = GetStringRowValue(row, TechnicalContactEmailColumnName),
+                PhoneNumbers = new List<string> { GetStringRowValue(row, TechnicalContactPhoneColumnName) },
+                ContactName = GetStringRowValue(row, TechnicalContactNameColumnName),
+                Notes = GetStringRowValue(row, TechnicalContactReligionColumnName),
+                Title = GetStringRowValue(row, TechnicalContactNameTitleColumnName),
                 Salutation = GetSalutation(row[TechnicalContactSalutaionColumnName] as string)
             });
 
             contacts.Add("Financial", new AccountCompanyContact
             {
-                Email = row[FinanceContactEmailColumnName] as string,
-                PhoneNumbers = new List<string> { row[FinanceContactPhoneColumnName] as string },
-                ContactName = row[FinanceContactNameColumnName] as string,
-                Notes = row[FinanceContactReligionColumnName] as string,
-                Title = row[FinanceContactNameTitleColumnName] as string,
+                Email = GetStringRowValue(row, FinanceContactEmailColumnName),
+                PhoneNumbers = new List<string> { GetStringRowValue(row, FinanceContactPhoneColumnName) },
+                ContactName = GetStringRowValue(row, FinanceContactNameColumnName),
+                Notes = GetStringRowValue(row, FinanceContactReligionColumnName),
+                Title = GetStringRowValue(row, FinanceContactNameTitleColumnName),
                 Salutation = GetSalutation(row[FinanceContactSalutaionColumnName] as string)
             });
             return contacts;
         }
         private SalutationType? GetSalutation(string salutation)
         {
-            switch (salutation)
+            if (salutation == null)
+                return null;
+            switch (salutation.Trim())
             {
                 case "Mr":
                     return SalutationType.Mr;
@@ -333,7 +338,7 @@ namespace Retail.MultiNet.Business.Convertors
                 {
                     FinancialAccountDefinitionId = this.FinancialAccountDefinitionId,
                     ExtendedSettings = new Retail.BusinessEntity.MainExtensions.FinancialAccount.PostpaidFinancialAccount { CreditClassId = this.CreditClassId },
-                    BED = bed
+                    BED = DateTime.Today
                 };
                 AccountBEFinancialAccountsSettings accountFinancialAccountExtSettings = s_accountBEManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(account);
                 if (accountFinancialAccountExtSettings == null)
@@ -341,6 +346,12 @@ namespace Retail.MultiNet.Business.Convertors
                 s_financialAccountManager.AddFinancialAccountToExtSettings(financialAccount, accountFinancialAccountExtSettings);
                 s_accountBEManager.SetExtendedSettings(accountFinancialAccountExtSettings, account);
             }
+        }
+
+        private string GetStringRowValue(DataRow row, string fieldName)
+        {
+            var value = row[fieldName] as string;
+            return value != null ? value.Trim() : null;
         }
 
         #endregion

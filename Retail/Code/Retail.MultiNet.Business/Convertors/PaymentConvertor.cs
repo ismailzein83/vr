@@ -37,14 +37,8 @@ namespace Retail.MultiNet.Business.Convertors
         public string SourceIdColumnName { get; set; }
 
 
-        public override void Initialize(ITargetBEConvertorInitializeContext context)
-        {
-            context.InitializationData = new AccountBEManager().GetCachedAccountsBySourceId(this.AccountBEDefinitionId);
-        }
         public override void ConvertSourceBEs(ITargetBEConvertorConvertSourceBEsContext context)
         {
-            Dictionary<string, Account> accountsBySourceId = context.InitializationData as Dictionary<string, Account>;
-
             SqlSourceBatch sourceBatch = context.SourceBEBatch as SqlSourceBatch;
             List<ITargetBE> transactionTargetBEs = new List<ITargetBE>();
             Dictionary<string, List<SourceBillingTransaction>> billingTransactionsBySerialNumber = new Dictionary<string, List<SourceBillingTransaction>>();
@@ -53,12 +47,12 @@ namespace Retail.MultiNet.Business.Convertors
                 long sourceId = (Int64)row[this.SourceIdColumnName];
                 try
                 {
-                    string currencySourceId = (row[CurrencyColumnName] as string).Trim();
+                    string currencySourceId = GetStringRowValue(row, CurrencyColumnName);
                     CurrencyManager currencyManager = new CurrencyManager();
                     Currency currency = currencyManager.GetCurrencyBySymbol(currencySourceId);
                     currency.ThrowIfNull("currency", currencySourceId);
 
-                    string invoiceId = (row[InvoiceSourceIdColumn] as string).Trim();
+                    string invoiceId = GetStringRowValue(row,InvoiceSourceIdColumn);
                     DateTime transactionTime = (DateTime)row[this.PaymentDateColumn];
 
                     SourceBillingTransaction sourceTransaction = new SourceBillingTransaction
@@ -70,7 +64,7 @@ namespace Retail.MultiNet.Business.Convertors
                             CurrencyId = currency.CurrencyId,
                             TransactionTime = transactionTime,
                             Amount = row[this.AmountColumn] != DBNull.Value ? (decimal)row[this.AmountColumn] : 0,
-                            Reference = (row[ReferenceColumnName] as string).Trim()
+                            Reference = GetStringRowValue(row, ReferenceColumnName)
                         }
                     };
 
@@ -93,8 +87,10 @@ namespace Retail.MultiNet.Business.Convertors
                     financialAccountData.ThrowIfNull("financialAccountData");
 
                     if (!financialAccountData.BalanceAccountTypeId.HasValue)
+                    {
                         context.WriteTrackingMessage(LogEntryType.Warning, "Balance Account Type Id is not available, Invoice Serial Number {0}, Financial Account Id {1}", invoice.SerialNumber, invoice.PartnerId);
-
+                        continue;
+                    }
                     List<SourceBillingTransaction> transactions = billingTransactionsBySerialNumber[invoice.SerialNumber];
                     billingTransactionsBySerialNumber.Remove(invoice.SerialNumber);
 
@@ -138,6 +134,12 @@ namespace Retail.MultiNet.Business.Convertors
             };
 
             context.FinalBE = finalBe;
+        }
+
+        private string GetStringRowValue(DataRow row, string fieldName)
+        {
+            var value = row[fieldName] as string;
+            return value != null ? value.Trim() : null;
         }
     }
 
