@@ -8,7 +8,10 @@ CREATE  PROCEDURE [VR_AccountBalance].[sp_AccountUsage_GetForFilteredForBillingT
 	@TransactionTypeIds varchar(MAX),
 	@AccountIds varchar(MAX),
 	@FromTime Datetime,
-	@ToTime Datetime = NULL
+	@ToTime Datetime = NULL,
+	@Status int = null,
+	@EffectiveDate  datetime = null,
+	@IsEffectiveInFuture bit = null
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -32,11 +35,19 @@ BEGIN
 			au.OverriddenAmount,
 			au.CorrectionProcessID
 FROM	VR_AccountBalance.AccountUsage au WITH(NOLOCK) 
-WHERE	isnull(au.IsOverridden, 0) = 0
-		and (@AccountIds  IS NULL OR AccountID in (SELECT AccountId FROM @AccountIdsTable))
+		LEFT JOIN [VR_AccountBalance].LiveBalance vrlb
+	    on vrlb.AccountTypeID = au.AccountTypeID and 
+		   vrlb.AccountID = au.AccountID 
+WHERE	ISNULL(au.IsOverridden, 0) = 0
+		and (@AccountIds  IS NULL OR au.AccountID in (SELECT AccountId FROM @AccountIdsTable))
 		AND (@TransactionTypeIds  IS NULL OR TransactionTypeID in (SELECT TransactionTypeId FROM @TransactionTypeIdsTable))
-		AND AccountTypeID = @AccountTypeID 
+		AND au.AccountTypeID = @AccountTypeID 
 		AND PeriodStart >= @FromTime
 		AND (@ToTime IS NULL OR PeriodStart <= @ToTime)
-	
+	    AND (vrlb.AccountID IS NULL 
+		OR ((@Status IS NULL OR vrlb.[Status] = @Status) 
+		AND (@EffectiveDate IS NULL OR ((vrlb.BED <= @EffectiveDate OR vrlb.BED IS NULL) 
+		AND (vrlb.EED > @EffectiveDate OR vrlb.EED IS NULL))) 
+		AND (@IsEffectiveInFuture IS NUll OR (@IsEffectiveInFuture = 1 and (vrlb.EED IS NULL or vrlb.EED >=  GETDATE())) 
+		OR  (@IsEffectiveInFuture = 0 and  vrlb.EED <=  GETDATE()))))
 END
