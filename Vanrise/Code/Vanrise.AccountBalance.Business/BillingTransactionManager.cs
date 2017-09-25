@@ -198,7 +198,7 @@ namespace Vanrise.AccountBalance.Business
                 if (billingTransactions != null)
                     rslt.AddRange(billingTransactions.Select(itm => new BillingTransactionResultItem { BillingTransaction = itm, Source = BillingTransactionSource.Transaction }));
                 AccountUsageManager accountUsageManager = new AccountUsageManager();
-                var accountUsages = accountUsageManager.GetAccountUsageForBillingTransactions(input.Query.AccountTypeId, input.Query.TransactionTypeIds, input.Query.AccountsIds, input.Query.FromTime, input.Query.ToTime);
+                var accountUsages = accountUsageManager.GetAccountUsageForBillingTransactions(input.Query.AccountTypeId, input.Query.TransactionTypeIds, input.Query.AccountsIds, input.Query.FromTime, input.Query.ToTime, input.Query.Status, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture);
                 if (accountUsages != null && accountUsages.Count() > 0)
                 {
                     bool shouldGroupUsagesByTransactionType = new AccountTypeManager().ShouldGroupUsagesByTransactionType(input.Query.AccountTypeId);

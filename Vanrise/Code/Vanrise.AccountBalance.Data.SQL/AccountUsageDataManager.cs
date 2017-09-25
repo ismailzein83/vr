@@ -70,7 +70,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             }
             return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForSpecificPeriodByAccountIds]", AccountUsageMapper, accountTypeId, transactionTypeId, datePeriod, accountIdsString);
         }
-        public IEnumerable<AccountUsage> GetAccountUsageForBillingTransactions(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds, DateTime fromTime, DateTime? toTime)
+        public IEnumerable<AccountUsage> GetAccountUsageForBillingTransactions(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds, DateTime fromTime, DateTime? toTime, VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
             string accountIdsString = null;
             if (accountIds != null)
@@ -82,7 +82,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             {
                 transactionTypeIdsString = string.Join<Guid>(",", transactionTypeIds);
             }
-            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForFilteredForBillingTransaction]", AccountUsageMapper, accountTypeId, transactionTypeIdsString, accountIdsString, fromTime, toTime);
+            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetForFilteredForBillingTransaction]", AccountUsageMapper, accountTypeId, transactionTypeIdsString, accountIdsString, fromTime, toTime, status, effectiveDate, isEffectiveInFuture);
         }
         public IEnumerable<AccountUsage> GetAccountUsagesByAccount(Guid accountTypeId, String accountId, VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {

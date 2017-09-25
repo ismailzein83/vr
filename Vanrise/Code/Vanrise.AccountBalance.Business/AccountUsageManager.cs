@@ -27,10 +27,10 @@ namespace Vanrise.AccountBalance.Business
             IAccountUsageDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
             return dataManager.GetAccountUsageErrorData(accountTypeId, transactionTypeId, correctionProcessId, periodDate);
         }
-        public IEnumerable<AccountUsage> GetAccountUsageForBillingTransactions(Guid accountTypeId, List<Guid> transactionTypeIds, List<String> accountIds, DateTime fromTime, DateTime? toTime)
+        public IEnumerable<AccountUsage> GetAccountUsageForBillingTransactions(Guid accountTypeId, List<Guid> transactionTypeIds, List<String> accountIds, DateTime fromTime, DateTime? toTime, VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
             IAccountUsageDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IAccountUsageDataManager>();
-            return dataManager.GetAccountUsageForBillingTransactions(accountTypeId, transactionTypeIds, accountIds, fromTime, toTime);
+            return dataManager.GetAccountUsageForBillingTransactions(accountTypeId, transactionTypeIds, accountIds, fromTime, toTime, status, effectiveDate, isEffectiveInFuture);
         }
         public IEnumerable<AccountUsage> GetAccountUsagesByAccount(Guid accountTypeId, String accountId,VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture)
         {
