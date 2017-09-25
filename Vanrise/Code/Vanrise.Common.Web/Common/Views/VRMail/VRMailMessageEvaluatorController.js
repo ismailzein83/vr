@@ -88,7 +88,7 @@
         }
 
         function buildEmailObjFromScope() {
-            var attachementFileIds = $scope.scopeModel.uploadedPriceLists.map(function (a) { return a.fileId; });
+            var attachementFileIds = $scope.scopeModel.uploadedAttachements.map(function (a) { return a.fileId; });
             attachementFileIds.push(fileId);
             var obj = {
                 CC: $scope.scopeModel.cc,
