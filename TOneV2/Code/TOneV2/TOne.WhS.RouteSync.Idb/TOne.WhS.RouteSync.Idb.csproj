@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\IIdbDataManager.cs" />
+    <Compile Include="IIdbBlockCustomerContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IdbConnectionString.cs" />
     <Compile Include="IdbConvertedRoute.cs" />

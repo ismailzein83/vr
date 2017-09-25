@@ -177,7 +177,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
                     concatSupplierMapping = GetPercentage(routeOption.Percentage) + concatSupplierMapping;
 
                     string concatBackUpSupplierMapping = string.Empty;
-                    
+
                     if (backUpRouteOptionMapping != null)
                     {
                         concatBackUpSupplierMapping = string.Join(string.Empty, backUpRouteOptionMapping.SupplierMapping);
@@ -237,6 +237,19 @@ namespace TOne.WhS.RouteSync.TelesIdb
         public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
         {
             this.DataManager.ApplySwitchRouteSyncRoutes(context);
+        }
+
+        public override bool TryBlockCustomer(ITryBlockCustomerContext context)
+        {
+            CarrierMapping customerMapping;
+            if (!CarrierMappings.TryGetValue(context.CustomerId, out customerMapping))
+                return false;
+
+            if (customerMapping.CustomerMapping == null || customerMapping.CustomerMapping.Count == 0)
+                return false;
+
+            IdbBlockCustomerContext blockCustomerContext = new IdbBlockCustomerContext() { CustomerMappings = customerMapping.CustomerMapping };
+            return this.DataManager.BlockCustomer(blockCustomerContext);
         }
     }
 

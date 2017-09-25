@@ -83,6 +83,11 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             context.SwitchSyncOutput = switchSyncOutput;
         }
 
+        public bool BlockCustomer(IdbBlockCustomerContext context)
+        {
+            return false;
+        }
+
         private void ExecMVTSRadiusSQLDataManagerAction(Action<TelesIdbPostgresDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
             Action<Exception, bool> writeBusinessHandledException, bool isBusinessException, string businessExceptionMessage, out SwitchSyncOutput switchSyncOutput)
         {

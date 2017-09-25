@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Entities;
-using Vanrise.Data;
 
 namespace TOne.WhS.RouteSync.Idb
 {
@@ -15,5 +11,6 @@ namespace TOne.WhS.RouteSync.Idb
         Object PrepareDataForApply(List<ConvertedRoute> idbRoutes);
         void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
         void SwapTables(ISwapTableContext context);
+        bool BlockCustomer(IdbBlockCustomerContext context);
     }
 }
