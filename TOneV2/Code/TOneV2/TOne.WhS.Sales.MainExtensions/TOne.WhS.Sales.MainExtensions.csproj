@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkActions\ActionTypes\BEDBulkActionType.cs" />
+    <Compile Include="BulkActions\ActionTypes\CancelPendingRatesBulkAction.cs" />
     <Compile Include="BulkActions\ActionTypes\DefaultRoutingProductBulkActionType.cs" />
     <Compile Include="BulkActions\ActionTypes\EEDBulkActionType.cs" />
     <Compile Include="BulkActions\ActionTypes\ImportBulkAction.cs" />
