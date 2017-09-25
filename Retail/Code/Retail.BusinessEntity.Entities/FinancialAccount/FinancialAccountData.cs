@@ -18,5 +18,9 @@ namespace Retail.BusinessEntity.Entities
         public Decimal? CreditLimit { get; set; }
 
         public int? CreditLimitCurrencyId { get; set; }
+
+        public Guid? BalanceAccountTypeId { get; set; }
+
+        public Guid? InvoiceTypeId { get; set; }
     }
 }

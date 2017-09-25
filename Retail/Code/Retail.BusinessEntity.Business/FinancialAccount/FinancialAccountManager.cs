@@ -640,12 +640,16 @@ namespace Retail.BusinessEntity.Business
         
         private FinancialAccountData CreateFinancialAccountData(FinancialAccount financialAccount, Account account)
         {
+            var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
             var financialAccountData = new FinancialAccountData
             {
                 FinancialAccountId = GetFinancialAccountId(account.AccountId, financialAccount.SequenceNumber),
                 FinancialAccount = financialAccount,
-                Account = account
+                Account = account,
+                BalanceAccountTypeId = financialAccountDefinitionSettings.BalanceAccountTypeId,
+                InvoiceTypeId = financialAccountDefinitionSettings.InvoiceTypeId
             };
+            
             financialAccount.ExtendedSettings.ThrowIfNull("financialAccount.ExtendedSettings", financialAccountData.FinancialAccountId);
             var fillExtraDataContext = new FinancialAccountFillExtraDataContext
             {
@@ -679,6 +683,8 @@ namespace Retail.BusinessEntity.Business
                                 FinancialAccountId = itm.FinancialAccountId,
                                 CreditLimit = itm.CreditLimit,
                                 CreditLimitCurrencyId = itm.CreditLimitCurrencyId,
+                                BalanceAccountTypeId = itm.BalanceAccountTypeId,
+                                InvoiceTypeId = itm.InvoiceTypeId,
                                 IsInherited = true
                             }).ToList());
                     }
