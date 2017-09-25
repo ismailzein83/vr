@@ -29,12 +29,14 @@ app.directive("partnerportalCustomeraccessDidtileruntimesettings", ["UtilsServic
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.tileTitle = ctrl.title;
-
+                $scope.menuActions = [];
                 $scope.dataSource = [];
                 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
-                    defineAPI();
+                    setTimeout(function () {
+                        defineAPI();
+                    });
                 };
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return PartnerPortal_CustomerAccess_DIDAPIService.GetFilteredDIDs(dataRetrievalInput)
