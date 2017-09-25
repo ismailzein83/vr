@@ -126,7 +126,7 @@ namespace Retail.MultiNet.Business.Convertors
             {
                 ITargetBE targetMultiNetAccount;
                 var sourceId = (row[AccountIdColumnName] as string).Trim();
-                var parentId = string.Format("Customer_{0}", (row[CustomerIdColumnName] as string).Trim());
+                var parentId = string.Format("Company_GP_{0}", (row[CustomerIdColumnName] as string).Trim());
                 string accountName = row[AccountNameColumnName] as string;
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
                 {
@@ -144,7 +144,7 @@ namespace Retail.MultiNet.Business.Convertors
                         }
                         bool isActive = (bool)row[AccountStatusColumnName];
                         accountData.Account.Name = accountName;
-                        accountData.Account.SourceId = string.Format("Account_{0}", sourceId);
+                        accountData.Account.SourceId = string.Format("Branch_GP_{0}", sourceId);
                         accountData.Account.TypeId = this.AccountTypeId;
                         Guid statusId = new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd");// isActive ? new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd") : new Guid("80b7dc84-5c43-47fc-b921-2ea717c9bdbf");
                         accountData.Account.StatusId = statusId;
@@ -156,7 +156,7 @@ namespace Retail.MultiNet.Business.Convertors
 
 
                         FillBranchInfo(accountData, row);
-                        FillExtendedInfo(accountData, row, sourceId);
+                        FillExtendedInfo(accountData, row);
                         FillFinancialInfo(accountData, row);
 
                         CreateFinancialAccount(accountData.Account, row);
@@ -214,7 +214,6 @@ namespace Retail.MultiNet.Business.Convertors
                     Faxes = GetNumbersList(row[FaxColumnName] as string),
                     MobileNumbers = GetNumbersList(row[MobileColumnName] as string),
                     PhoneNumbers = GetNumbersList(row[PhoneColumnName] as string)
-
                 };
 
 
@@ -231,7 +230,7 @@ namespace Retail.MultiNet.Business.Convertors
                 return null;
             return numbers.Trim().Split(',').ToList();
         }
-        void FillExtendedInfo(SourceAccountData accountData, DataRow row, string sourceId)
+        void FillExtendedInfo(SourceAccountData accountData, DataRow row)
         {
             MultiNetBranchExtendedInfo settings = new MultiNetBranchExtendedInfo
             {
@@ -241,7 +240,7 @@ namespace Retail.MultiNet.Business.Convertors
                 NTN = (row[NTNColumnName] as string).Trim(),
                 BillingPeriod = row[BillingPeriodColumnName] == DBNull.Value ? 0 : (int)row[BillingPeriodColumnName],
                 DueDate = row[DueDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[DueDateColumnName],
-                GPSiteId = sourceId
+                GPSiteId = (row[AccountContractID] as string).Trim()
             };
 
             AccountPart part = new AccountPart

@@ -43,7 +43,7 @@ namespace Retail.MultiNet.Business.Convertors
             {
                 ITargetBE targetMultiNetAccount;
                 var sourceId = (row[UserIdColumnName] as string);
-                var parentId = string.Format("Account_{0}", (row[AccountIdColumnName] as string).Trim());
+                var parentId = string.Format("Branch_GP_{0}", (row[AccountIdColumnName] as string).Trim());
                 string accountName = row[NameColumnName] as string;
                 if (!maultiNetAccounts.TryGetValue(sourceId, out targetMultiNetAccount))
                 {
@@ -61,7 +61,7 @@ namespace Retail.MultiNet.Business.Convertors
                         }
 
                         accountData.Account.Name = accountName;
-                        accountData.Account.SourceId = string.Format("GPUser_{0}", sourceId);
+                        accountData.Account.SourceId = string.Format("User_GP_{0}", sourceId);
                         accountData.Account.TypeId = this.AccountTypeId;
                         accountData.Account.StatusId = this.InitialStatusId;
 

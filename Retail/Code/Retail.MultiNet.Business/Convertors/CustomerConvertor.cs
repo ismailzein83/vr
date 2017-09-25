@@ -135,7 +135,7 @@ namespace Retail.MultiNet.Business.Convertors
 
                         bool isActive = (bool)row[AccountStatusColumnName];
                         accountData.Account.Name = accountName;
-                        accountData.Account.SourceId = string.Format("Customer_{0}", sourceId);
+                        accountData.Account.SourceId = string.Format("Company_GP_{0}", sourceId);
                         accountData.Account.TypeId = this.AccountTypeId;
                         Guid statusId = new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd"); //isActive ? new Guid("dadc2977-a348-4504-89c9-c92f8f9008dd") : new Guid("80b7dc84-5c43-47fc-b921-2ea717c9bdbf");
                         accountData.Account.StatusId = statusId;

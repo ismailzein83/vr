@@ -58,15 +58,6 @@ namespace Retail.MultiNet.Business.Convertors
                     Currency currency = currencyManager.GetCurrencyBySymbol(currencySourceId);
                     currency.ThrowIfNull("currency", currencySourceId);
 
-                    string accountId = string.Format("Customer_{0}", (row[SourceAccountIdColumn] as string).Trim());
-
-                    Account account = null;
-                    if (!accountsBySourceId.TryGetValue(accountId, out account))
-                    {
-                        context.WriteBusinessTrackingMsg(LogEntryType.Error, "Failed to import Payment (SourceId: '{0}', SourceAccountId: '{1}') due to unavailable account.", sourceId, accountId);
-                        continue;
-                    }
-
                     string invoiceId = (row[InvoiceSourceIdColumn] as string).Trim();
                     DateTime transactionTime = (DateTime)row[this.PaymentDateColumn];
 
@@ -79,7 +70,6 @@ namespace Retail.MultiNet.Business.Convertors
                             CurrencyId = currency.CurrencyId,
                             TransactionTime = transactionTime,
                             Amount = row[this.AmountColumn] != DBNull.Value ? (decimal)row[this.AmountColumn] : 0,
-                            AccountTypeId = account.TypeId,
                             Reference = (row[ReferenceColumnName] as string).Trim()
                         }
                     };
@@ -99,11 +89,19 @@ namespace Retail.MultiNet.Business.Convertors
             {
                 try
                 {
+                    FinancialAccountData financialAccountData = new FinancialAccountManager().GetFinancialAccountData(AccountBEDefinitionId, invoice.PartnerId);
+                    financialAccountData.ThrowIfNull("financialAccountData");
+
+                    if (!financialAccountData.BalanceAccountTypeId.HasValue)
+                        context.WriteTrackingMessage(LogEntryType.Warning, "Balance Account Type Id is not available, Invoice Serial Number {0}, Financial Account Id {1}", invoice.SerialNumber, invoice.PartnerId);
 
                     List<SourceBillingTransaction> transactions = billingTransactionsBySerialNumber[invoice.SerialNumber];
+                    billingTransactionsBySerialNumber.Remove(invoice.SerialNumber);
+
                     foreach (var transaction in transactions)
                     {
                         transaction.BillingTransaction.AccountId = invoice.PartnerId;
+                        transaction.BillingTransaction.AccountTypeId = financialAccountData.BalanceAccountTypeId.Value;
                         transaction.InvoiceId = invoice.InvoiceId;
                         transactionTargetBEs.Add(transaction);
                     }
@@ -114,7 +112,17 @@ namespace Retail.MultiNet.Business.Convertors
                     context.WriteBusinessHandledException(finalException);
                 }
             }
-
+            if (billingTransactionsBySerialNumber.Count > 0)
+            {
+                foreach (var serialNumber in billingTransactionsBySerialNumber.Keys)
+                {
+                    var billingTransactions = billingTransactionsBySerialNumber[serialNumber];
+                    foreach (var bt in billingTransactions)
+                    {
+                        context.WriteTrackingMessage(LogEntryType.Warning, "Payment with source id {0} has no Invoice, Invoice Serial Number {1}", bt.BillingTransaction.SourceId, serialNumber);
+                    }
+                }
+            }
 
             context.TargetBEs = transactionTargetBEs;
         }
