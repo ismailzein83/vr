@@ -175,6 +175,10 @@
             });
         }
 
+        function GetSystemDateFormat() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetSystemDateFormat"));
+        }
+
         return {
             ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
@@ -208,7 +212,8 @@
             ValidateBulkActionZones: ValidateBulkActionZones,
             ValidateImportedData: ValidateImportedData,
             GetOwnerInfo: GetOwnerInfo,
-            GetPricingSettings: GetPricingSettings
+            GetPricingSettings: GetPricingSettings,
+            GetSystemDateFormat:GetSystemDateFormat
 
         };
 

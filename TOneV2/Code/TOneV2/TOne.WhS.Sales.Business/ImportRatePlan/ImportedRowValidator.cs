@@ -257,12 +257,11 @@ namespace TOne.WhS.Sales.Business
             }
 
             string dateTimeFormat = context.DateTimeFormat;
-            DateTime myDate = DateTime.ParseExact(effectiveDate, dateTimeFormat, null);
 
             DateTime effectiveDateAsDateTime;
-            if (!DateTime.TryParse(effectiveDate, out effectiveDateAsDateTime))
+            if (!DateTime.TryParseExact(effectiveDate, dateTimeFormat, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out effectiveDateAsDateTime))
             {
-                context.ErrorMessage = "Effective date is an invalid date (correct date format: MM/dd/yyyy)";
+                context.ErrorMessage = string.Format("Effective date has wrong format (correct date format: '{0}')", dateTimeFormat);
                 return false;
             }
 

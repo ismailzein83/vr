@@ -190,9 +190,9 @@ namespace TOne.WhS.Sales.Web.Controllers
         [Route("GetPricingSettings")]
         public PricingSettings GetPricingSettings(SalePriceListOwnerType ownerType, int ownerId)
         {
-            return  TOne.WhS.Sales.Business.UtilitiesManager.GetPricingSettings(ownerType,ownerId);
+            return TOne.WhS.Sales.Business.UtilitiesManager.GetPricingSettings(ownerType, ownerId);
         }
-        
+
         [HttpGet]
         [Route("GetDraftCurrencyId")]
         public int? GetDraftCurrencyId(SalePriceListOwnerType ownerType, int ownerId)
@@ -253,10 +253,10 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             string templateRelativePath = "~/Client/Modules/WhS_Sales/Templates/Import Rate Plan Template.xlsx";
             string templateAbsolutePath = HttpContext.Current.Server.MapPath(templateRelativePath);
-            byte[] bytes = File.ReadAllBytes(templateAbsolutePath);
-
+            byte[] templateBytes = File.ReadAllBytes(templateAbsolutePath);
+            byte[] templateWithDateFormatBytes = new RatePlanManager().GetImportTemplateFileWithSystemDateFormat(templateBytes);
             MemoryStream memoryStream = new System.IO.MemoryStream();
-            memoryStream.Write(bytes, 0, bytes.Length);
+            memoryStream.Write(templateWithDateFormatBytes, 0, templateWithDateFormatBytes.Length);
             memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
             return GetExcelResponse(memoryStream, "Import Rate Plan Template.xlsx");
         }
@@ -280,6 +280,13 @@ namespace TOne.WhS.Sales.Web.Controllers
         public OwnerInfo GetOwnerInfo(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
         {
             return new RatePlanManager().GetOwnerInfo(ownerType, ownerId, effectiveOn);
+        }
+
+        [HttpGet]
+        [Route("GetSystemDateFormat")]
+        public string GetSystemDateFormat()
+        {
+            return new RatePlanManager().GetSystemDateTimeFormat(Vanrise.Entities.DateTimeType.Date);
         }
     }
 }

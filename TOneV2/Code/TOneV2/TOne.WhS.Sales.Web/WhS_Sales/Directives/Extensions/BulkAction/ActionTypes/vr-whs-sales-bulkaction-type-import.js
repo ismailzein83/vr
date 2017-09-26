@@ -40,6 +40,9 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
             $scope.scopeModel.onSwitchValueChanged = function () {
                 cacheObjectName = UtilsService.guid();
             };
+            $scope.scopeModel.onDateTimeFormatChanged = function () {
+                cacheObjectName = UtilsService.guid();
+                };
 
             $scope.scopeModel.download = function () {
                 WhS_Sales_RatePlanAPIService.DownloadImportRatePlanTemplate().then(function (response) {
@@ -60,6 +63,9 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
                     bulkActionContext = payload.bulkActionContext;
                     bulkAction = payload.bulkAction;
                 }
+                return WhS_Sales_RatePlanAPIService.GetSystemDateFormat().then(function (response) {
+                    $scope.scopeModel.dateTimeFormat = response;
+                });
             };
 
             api.getData = function () {
@@ -98,7 +104,7 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
                         <vr-fileupload label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onFileChanged" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
                     </vr-columns>\
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}">\
-                        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="importBulkActionCtrl.isrequired"></vr-textbox>\
+                        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="importBulkActionCtrl.isrequired" onvaluechanged="scopeModel.onDateTimeFormatChanged"></vr-textbox>\
                     </vr-columns>\
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}">\
                         <vr-switch label="Header" value="scopeModel.headerRowExists" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\

@@ -144,7 +144,7 @@ namespace TOne.WhS.Sales.MainExtensions
                 {
                     FileId = FileId,
                     HeaderRowExists = HeaderRowExists,
-                    //DateTimeFormat = DateTimeFormat,
+                    DateTimeFormat = DateTimeFormat,
                     OwnerType = OwnerType,
                     OwnerId = OwnerId
                 });

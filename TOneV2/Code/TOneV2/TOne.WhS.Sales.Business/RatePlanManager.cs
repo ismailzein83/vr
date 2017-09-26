@@ -451,6 +451,31 @@ namespace TOne.WhS.Sales.Business
             return ownerInfo;
         }
 
+        public string GetSystemDateTimeFormat(Vanrise.Entities.DateTimeType dateTimeFormat)
+        {
+            return Vanrise.Common.Utilities.GetDateTimeFormat(dateTimeFormat);
+        }
+
+        public byte[] GetImportTemplateFileWithSystemDateFormat(byte[] buffer)
+        {
+            Vanrise.Common.Utilities.ActivateAspose();
+            MemoryStream stream = new MemoryStream(buffer);
+            Workbook workbook = new Workbook(stream);
+            Worksheet worksheet = workbook.Worksheets[0];
+            string cellValue = worksheet.Cells[0, 2].StringValue;
+            string systemDateFormat = Vanrise.Common.Utilities.GetDateTimeFormat(Vanrise.Entities.DateTimeType.Date);
+            worksheet.Cells[0, 2].PutValue(cellValue + " (" + systemDateFormat + ")");
+
+            byte[] array;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                workbook.Save(ms, SaveFormat.Xlsx);
+                array = ms.ToArray();
+            }
+            return array;
+        }
+
         #endregion
 
         #region Private Methods
@@ -916,7 +941,7 @@ namespace TOne.WhS.Sales.Business
                     ZoneDraft = zoneDraftsByZoneName.GetRecord(zoneName),
                     CountryBEDsByCountry = countryBEDsByCountry,
                     ClosedCountryIds = closedCountryIds,
-                    //DateTimeFormat = input.DateTimeFormat
+                    DateTimeFormat = input.DateTimeFormat
                 };
 
                 if (validator.IsImportedRowValid(context))

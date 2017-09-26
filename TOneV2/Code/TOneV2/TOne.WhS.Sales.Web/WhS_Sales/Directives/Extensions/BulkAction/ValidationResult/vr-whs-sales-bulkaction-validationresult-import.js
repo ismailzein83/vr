@@ -54,6 +54,10 @@ app.directive('vrWhsSalesBulkactionValidationresultImport', ['UtilsService', 'VR
                 loadMoreGridData($scope.scopeModel.invalidImportedRows, invalidImportedRows);
             };
 
+            api.getData = function () {
+                return null;
+            };
+
             if (ctrl.onReady != null) {
                 ctrl.onReady(api);
             }
