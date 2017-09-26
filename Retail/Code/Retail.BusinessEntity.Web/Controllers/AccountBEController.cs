@@ -102,6 +102,13 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountEditorRuntime(accountBEDefinitionId, accountTypeId, parentAccountId);
         }
+
+        [HttpGet]
+        [Route("GetChildAccountIds")]
+        public List<long> GetChildAccountIds(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
+        {
+            return _manager.GetChildAccountIds(accountBEDefinitionId, accountId, withSubChildren);
+        }
     }
 
     public class AccountInfoFilter
