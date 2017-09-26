@@ -2,9 +2,9 @@
 
     "use strict";
 
-    StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'CDRAnalysis_FA_KindEnum', 'CDRAnalysis_FA_StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService', "StrategyAPIService", "PeriodEnum"];
+    StrategyManagementController.$inject = ['$scope', 'CDRAnalysis_FA_StrategyService', 'CDRAnalysis_FA_KindEnum', 'CDRAnalysis_FA_StatusEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService', "StrategyAPIService", "PeriodEnum", "VRDateTimeService"];
 
-    function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, CDRAnalysis_FA_KindEnum, CDRAnalysis_FA_StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, StrategyAPIService, PeriodEnum) {
+    function StrategyManagementController($scope, CDRAnalysis_FA_StrategyService, CDRAnalysis_FA_KindEnum, CDRAnalysis_FA_StatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, StrategyAPIService, PeriodEnum, VRDateTimeService) {
         var periodSelectorAPI;
         var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -18,7 +18,7 @@
         load();
 
         function defineScope() {
-            $scope.fromDate = new Date(new Date().setHours(0, 0, 0, 0));
+            $scope.fromDate = new Date(VRDateTimeService.getNowDateTime().setHours(0, 0, 0, 0));
             $scope.toDate;
 
             $scope.hasAddStrategyPermission = function () {

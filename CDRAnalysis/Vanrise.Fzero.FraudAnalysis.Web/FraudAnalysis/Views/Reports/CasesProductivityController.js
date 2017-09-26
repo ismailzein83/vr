@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'VRUIUtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService'];
+CasesProductivityController.$inject = ['$scope', 'ReportingAPIService', 'VRUIUtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'VRDateTimeService'];
 
-function CasesProductivityController($scope, ReportingAPIService, VRUIUtilsService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService) {
+function CasesProductivityController($scope, ReportingAPIService, VRUIUtilsService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, VRDateTimeService) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -19,9 +19,9 @@ function CasesProductivityController($scope, ReportingAPIService, VRUIUtilsServi
             strategySelectorReadyDeferred.resolve();
         };
 
-        var Now = new Date();
+        var Now = VRDateTimeService.getNowDateTime();
 
-        var Yesterday = new Date();
+        var Yesterday = VRDateTimeService.getNowDateTime();
         Yesterday.setDate(Yesterday.getDate() - 1);
 
         $scope.fromDate = Yesterday;

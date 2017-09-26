@@ -1,10 +1,11 @@
 ﻿"use strict";
 
 StrategyExecutionManagementController.$inject = ['$scope', "VRUIUtilsService", 'CDRAnalysis_FA_StrategyExecutionAPIService', 'VR_Sec_UserAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService',
-    'BusinessProcess_BPInstanceAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'PeriodEnum'];
+    'BusinessProcess_BPInstanceAPIService', 'StrategyAPIService', 'CDRAnalysis_FA_StrategyExecutionFilterDateTypes', 'CDRAnalysis_FA_SuspicionOccuranceStatusEnum', 'LabelColorsEnum', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'PeriodEnum', 'VRDateTimeService'];
 
-function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnalysis_FA_StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService,
-    UtilsService, VRValidationService, BusinessProcess_BPInstanceAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, PeriodEnum) {
+function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnalysis_FA_StrategyExecutionAPIService, VR_Sec_UserAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService,
+    BusinessProcess_BPInstanceAPIService, StrategyAPIService, CDRAnalysis_FA_StrategyExecutionFilterDateTypes, CDRAnalysis_FA_SuspicionOccuranceStatusEnum, LabelColorsEnum, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, PeriodEnum, VRDateTimeService) {
+
     var timeRangeDirectiveAPI;
     var timeRangeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -25,7 +26,7 @@ function StrategyExecutionManagementController($scope, VRUIUtilsService, CDRAnal
 
     function defineScope() {
 
-        $scope.fromDate = new Date(new Date().setHours(0, 0, 0, 0));
+        $scope.fromDate = new Date(VRDateTimeService.getNowDateTime().setHours(0, 0, 0, 0));
         $scope.toDate;
 
         $scope.onTimeRangeDirectiveReady = function (api) {

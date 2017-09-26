@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCdrFraudanalysisExecutestrategyManual", ["VRUIUtilsService", "UtilsService", "StrategyAPIService", "VRValidationService", "CDRAnalysis_FA_PeriodEnum",
-function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationService, CDRAnalysis_FA_PeriodEnum) {
+app.directive("vrCdrFraudanalysisExecutestrategyManual", ["VRUIUtilsService", "UtilsService", "StrategyAPIService", "VRValidationService", "CDRAnalysis_FA_PeriodEnum", 'VRDateTimeService',
+function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationService, CDRAnalysis_FA_PeriodEnum, VRDateTimeService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -35,10 +35,10 @@ function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationServic
         var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
-            $scope.toDate = new Date();
-            $scope.fromDate = new Date();
-            $scope.toDateHour = new Date();
-            $scope.fromDateHour = new Date();
+            $scope.toDate = VRDateTimeService.getNowDateTime();
+            $scope.fromDate = VRDateTimeService.getNowDateTime();
+            $scope.toDateHour = VRDateTimeService.getNowDateTime();
+            $scope.fromDateHour = VRDateTimeService.getNowDateTime();
             $scope.showDateHour = false;
             $scope.onStrategySelectorReady = function (api) {
                 strategySelectorAPI = api;
@@ -64,10 +64,10 @@ function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationServic
                 if (selectedPeriod != undefined) {
                     $scope.isLoadingData = true;
                     $scope.showDateHour = (selectedPeriod.Id == CDRAnalysis_FA_PeriodEnum.Hourly.value);
-                    $scope.toDate = new Date();
-                    $scope.fromDate = new Date();
-                    $scope.toDateHour = new Date();
-                    $scope.fromDateHour = new Date();
+                    $scope.toDate = VRDateTimeService.getNowDateTime();
+                    $scope.fromDate = VRDateTimeService.getNowDateTime();
+                    $scope.toDateHour = VRDateTimeService.getNowDateTime();
+                    $scope.fromDateHour = VRDateTimeService.getNowDateTime();
                     loadStrategySelector(selectedPeriod.Id);
                 }
             };
@@ -130,7 +130,8 @@ function (VRUIUtilsService, UtilsService, StrategyAPIService, VRValidationServic
         function loadPeriodSelector() {
             var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             periodSelectorReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, undefined, periodSelectorLoadDeferred);
+                var selectorPayload = { selectedIds: CDRAnalysis_FA_PeriodEnum.Daily.value };
+                VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, selectorPayload, periodSelectorLoadDeferred);
             });
 
             return periodSelectorLoadDeferred.promise;

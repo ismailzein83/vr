@@ -1,18 +1,18 @@
 ﻿"use strict";
 
-StagingtoCDRProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService'];
+StagingtoCDRProcessInputController.$inject = ['$scope', '$http', '$routeParams', 'notify', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRDateTimeService'];
 
-function StagingtoCDRProcessInputController($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService) {
+function StagingtoCDRProcessInputController($scope, $http, $routeParams, notify, VRModalService, VRNotificationService, VRNavigationService, VRDateTimeService) {
 
     defineScope();
 
     function defineScope() {
 
-        var yesterday = new Date();
+        var yesterday = VRDateTimeService.getNowDateTime();
         yesterday.setDate(yesterday.getDate() - 1);
 
         $scope.fromDate = yesterday;
-        $scope.toDate = new Date();
+        $scope.toDate = VRDateTimeService.getNowDateTime();
 
         $scope.createProcessInputObjects = [];
 

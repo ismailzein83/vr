@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-SuspicionAnalysisController.$inject = ["$scope", "StrategyAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CDRAnalysis_FA_CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService", 'CDRAnalysis_FA_AccountCaseAPIService', 'VRUIUtilsService', 'PeriodEnum'];
+SuspicionAnalysisController.$inject = ["$scope", "StrategyAPIService", "CDRAnalysis_FA_SuspicionLevelEnum", "CDRAnalysis_FA_CaseStatusEnum", "LabelColorsEnum", "UtilsService", "VRNotificationService", "VRModalService", "VRNavigationService", "VRValidationService", 'CDRAnalysis_FA_AccountCaseAPIService', 'VRUIUtilsService', 'PeriodEnum', "VRDateTimeService"];
 
-function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CDRAnalysis_FA_CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, VRUIUtilsService, PeriodEnum) {
+function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_SuspicionLevelEnum, CDRAnalysis_FA_CaseStatusEnum, LabelColorsEnum, UtilsService, VRNotificationService, VRModalService, VRNavigationService, VRValidationService, CDRAnalysis_FA_AccountCaseAPIService, VRUIUtilsService, PeriodEnum, VRDateTimeService) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -16,7 +16,7 @@ function SuspicionAnalysisController($scope, StrategyAPIService, CDRAnalysis_FA_
     load();
 
     function defineScope() {
-        $scope.fromDate = new Date(new Date().setHours(0, 0, 0, 0));
+        $scope.fromDate = new Date(VRDateTimeService.getNowDateTime().setHours(0, 0, 0, 0));
         $scope.toDate;
 
         $scope.onTimeRangeDirectiveReady = function (api) {

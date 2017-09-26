@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'VRUIUtilsService'];
+BlockedLinesController.$inject = ['$scope', 'ReportingAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRValidationService', 'VRUIUtilsService', 'VRDateTimeService'];
 
-function BlockedLinesController($scope, ReportingAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, VRUIUtilsService) {
+function BlockedLinesController($scope, ReportingAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, VRValidationService, VRUIUtilsService, VRDateTimeService) {
 
     var strategySelectorAPI;
     var strategySelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -22,11 +22,11 @@ function BlockedLinesController($scope, ReportingAPIService, VRModalService, VRN
 
         $scope.gridMenuActions = [];
 
-        var Yesterday = new Date();
+        var Yesterday = VRDateTimeService.getNowDateTime();
         Yesterday.setDate(Yesterday.getDate() - 1);
 
         $scope.fromDate = Yesterday;
-        $scope.toDate = new Date();
+        $scope.toDate = VRDateTimeService.getNowDateTime();
 
         $scope.validateTimeRange = function () {
             return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_SuspicionLevelEnum', 'VRCommon_HourEnum', 'VRUIUtilsService', 'CDRAnalysis_FA_PeriodEnum', 'CDRAnalysis_FA_ParametersService'];
+    StrategyEditorController.$inject = ['$scope', 'StrategyAPIService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'CDRAnalysis_FA_SuspicionLevelEnum', 'VRCommon_HourEnum', 'VRUIUtilsService', 'CDRAnalysis_FA_PeriodEnum', 'CDRAnalysis_FA_ParametersService', 'VRDateTimeService'];
 
-    function StrategyEditorController($scope, StrategyAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CDRAnalysis_FA_SuspicionLevelEnum, VRCommon_HourEnum, VRUIUtilsService, CDRAnalysis_FA_PeriodEnum, CDRAnalysis_FA_ParametersService) {
+    function StrategyEditorController($scope, StrategyAPIService, VRModalService, VRNotificationService, VRNavigationService, UtilsService, CDRAnalysis_FA_SuspicionLevelEnum, VRCommon_HourEnum, VRUIUtilsService, CDRAnalysis_FA_PeriodEnum, CDRAnalysis_FA_ParametersService, VRDateTimeService) {
         var isEditMode;
 
         var periodSelectorAPI;
@@ -54,7 +54,7 @@
                 periodSelectorAPI = api;
                 periodSelectorReadyDeferred.resolve();
             };
-          
+
             $scope.scopeModel.onStrategyParametersReady = function (api) {
                 strategyParametersDirectiveAPI = api;
                 strategyParametersDirectiveReadyDeferred.resolve();
@@ -65,7 +65,7 @@
                     var setLoaderStrategyCriteria = function (value) { $scope.scopeModel.isLoadingStrategyCriteria = value };
                     var payloadStrategyCriteria = {
                         filter: { ExcludeHourly: selectedPeriod.Id == CDRAnalysis_FA_PeriodEnum.Hourly.value },
-                        context : getContext()
+                        context: getContext()
                     };
 
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, strategyCriteriaDirectiveAPI, payloadStrategyCriteria, setLoaderStrategyCriteria, strategyCriteriaDirectiveReadyDeferred);
@@ -126,8 +126,7 @@
                 if (strategyEntity) {
                     $scope.scopeModel.name = strategyEntity.Name;
                     $scope.scopeModel.description = strategyEntity.Description;
-                    if (strategyEntity.Settings != undefined)
-                    {
+                    if (strategyEntity.Settings != undefined) {
                         $scope.scopeModel.isDefault = strategyEntity.Settings.IsDefault;
                         $scope.scopeModel.isEnabled = strategyEntity.Settings.IsEnabled;
                     }
@@ -153,8 +152,8 @@
             strategyCriteriaDirectiveReadyDeferred.promise.then(function () {
                 strategyCriteriaDirectiveReadyDeferred = undefined;
                 var strategyCriteriaDirectivePayload = { context: getContext() };
-                
-                if (strategyEntity != undefined && strategyEntity.Settings !=undefined) {
+
+                if (strategyEntity != undefined && strategyEntity.Settings != undefined) {
                     strategyCriteriaDirectivePayload.strategyCriteria = strategyEntity.Settings.StrategySettingsCriteria;
                 }
                 VRUIUtilsService.callDirectiveLoad(strategyCriteriaDirectiveAPI, strategyCriteriaDirectivePayload, strategyCriteriaDirectiveLoadDeferred);
@@ -180,8 +179,7 @@
                 getFilterHint: function (parameter) {
                     return strategyCriteriaDirectiveAPI.getFilterHint(parameter);
                 },
-                setParameterVisibility: function (visibility, parameters)
-                {
+                setParameterVisibility: function (visibility, parameters) {
                     strategyParametersDirectiveAPI.setParameterVisibility(visibility, parameters);
                 }
 
@@ -226,15 +224,15 @@
                 Id: (strategyId != null) ? strategyId : 0,
                 Name: $scope.scopeModel.name,
                 Description: $scope.scopeModel.description,
-                LastUpdatedOn: new Date(),
-                Settings:{
+                LastUpdatedOn: VRDateTimeService.getNowDateTime(),
+                Settings: {
                     IsDefault: $scope.scopeModel.isDefault,
                     IsEnabled: $scope.scopeModel.isEnabled,
                     PeriodId: periodSelectorAPI.getSelectedIds(),
                     Parameters: strategyParametersDirectiveAPI.getData(),
-                    StrategySettingsCriteria:strategyCriteriaDirectiveAPI.getData()
+                    StrategySettingsCriteria: strategyCriteriaDirectiveAPI.getData()
                 }
-            };          
+            };
             return strategyObject;
         }
     }

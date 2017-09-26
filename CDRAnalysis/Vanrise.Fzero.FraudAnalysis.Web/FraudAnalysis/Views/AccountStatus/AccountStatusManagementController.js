@@ -2,24 +2,24 @@
 
     "use strict";
 
-    accountStatusManagementController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", "Fzero_FraudAnalysis_AccountStatusService", "CDRAnalysis_FA_CaseStatusEnum", "VRValidationService", "CDRAnalysis_FA_AccountStatusSourceEnum", "UtilsService", "VRUIUtilsService", "PeriodEnum"];
+    accountStatusManagementController.$inject = ['$scope', "Fzero_FraudAnalysis_AccountStatusAPIService", "Fzero_FraudAnalysis_AccountStatusService", "CDRAnalysis_FA_CaseStatusEnum", "VRValidationService", "CDRAnalysis_FA_AccountStatusSourceEnum", "UtilsService", "VRUIUtilsService", "PeriodEnum", "VRDateTimeService"];
 
-    function accountStatusManagementController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, Fzero_FraudAnalysis_AccountStatusService, CDRAnalysis_FA_CaseStatusEnum, VRValidationService, CDRAnalysis_FA_AccountStatusSourceEnum, UtilsService, VRUIUtilsService, PeriodEnum) {
+    function accountStatusManagementController($scope, Fzero_FraudAnalysis_AccountStatusAPIService, Fzero_FraudAnalysis_AccountStatusService, CDRAnalysis_FA_CaseStatusEnum, VRValidationService, CDRAnalysis_FA_AccountStatusSourceEnum, UtilsService, VRUIUtilsService, PeriodEnum, VRDateTimeService) {
         var gridAPI;
         var userSelectorAPI;
         var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        
+
 
         defineScope();
         load();
 
         function defineScope() {
             $scope.accountNumber;
-            $scope.fromDate = new Date(new Date().setHours(0, 0, 0, 0));
+            $scope.fromDate = new Date(VRDateTimeService.getNowDateTime().setHours(0, 0, 0, 0));
             $scope.toDate;
 
-           
+
 
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getQuery());
@@ -79,7 +79,7 @@
 
         }
 
-       
+
 
         function getQuery() {
             var query = {
