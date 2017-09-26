@@ -56,7 +56,7 @@ namespace Vanrise.Common.Business
 
         public IEnumerable<City> GetCitiesByCountryId(int countryId)
         {
-            return this.GetCachedCities().FindAllRecords(city => city.CountryId == countryId);
+            return this.GetCachedCitiesByCountryId().GetRecord(countryId);
         }
 
         public IEnumerable<int> GetDistinctCountryIdsByCityIds(IEnumerable<int> cityIds)
@@ -85,9 +85,11 @@ namespace Vanrise.Common.Business
 
         public City GetCityByName(int countryId, string name)
         {
+            if (name == null)
+                return null;
+            string nameLower = name.ToLower();
             IEnumerable<City> cities = GetCitiesByCountryId(countryId);
-            return cities.FindRecord(c => c.Name.ToLower() == name.ToLower());
-
+            return cities.FindRecord(c => c.Name.ToLower() == nameLower);
         }
 
         public Vanrise.Entities.InsertOperationOutput<CityDetail> AddCity(City city)
@@ -271,6 +273,24 @@ namespace Vanrise.Common.Business
               () =>
               {
                   return GetCachedCities().Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
+              });
+        }
+
+        private Dictionary<int, List<City>> GetCachedCitiesByCountryId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCitiesByCountryId",
+              () =>
+              {
+                  Dictionary<int, List<City>> citiesByCountryId = new Dictionary<int, List<City>>();
+                  var cities = GetCachedCities();
+                  if(cities != null)
+                  {
+                      foreach(var c in cities.Values)
+                      {
+                          citiesByCountryId.GetOrCreateItem(c.CountryId).Add(c);
+                      }
+                  }
+                  return citiesByCountryId;
               });
         }
 

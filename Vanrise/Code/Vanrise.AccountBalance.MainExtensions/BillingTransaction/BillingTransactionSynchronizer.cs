@@ -76,21 +76,28 @@ namespace Vanrise.AccountBalance.MainExtensions.BillingTransaction
                     {
                         InvoiceManager invoiceManager = new InvoiceManager();
                         bool updated = false;
+                        object invoiceId;
 
                         if (sourceTransaction.InvoiceId.HasValue)
-                            updated = invoiceManager.UpdateInvoicePaidDateById(InvoiceTypeId, sourceTransaction.InvoiceId.Value, billingTransaction.TransactionTime);
-                        else
-                            updated = invoiceManager.UpdateInvoicePaidDateBySourceId(InvoiceTypeId, sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime);
-
-                        if (updated)
                         {
-                            context.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "Invoice Paid Date {1} with Source Id {0} is updated",
-                                                    sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime);
+                            invoiceId = sourceTransaction.InvoiceId.Value;
+                            updated = invoiceManager.UpdateInvoicePaidDateById(InvoiceTypeId, sourceTransaction.InvoiceId.Value, billingTransaction.TransactionTime);
                         }
                         else
                         {
-                            context.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Warning, "Invoice Paid Date {1} with Source Id {0} was not updated",
-                                                 sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime);
+                            invoiceId = sourceTransaction.InvoiceSourceId;
+                            updated = invoiceManager.UpdateInvoicePaidDateBySourceId(InvoiceTypeId, sourceTransaction.InvoiceSourceId, billingTransaction.TransactionTime);
+                        }
+
+                        if (updated)
+                        {
+                            context.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "Invoice Paid Date {1} with Id {0} is updated",
+                                                    invoiceId, billingTransaction.TransactionTime);
+                        }
+                        else
+                        {
+                            context.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Warning, "Invoice Paid Date {1} with Id {0} was not updated",
+                                                 invoiceId, billingTransaction.TransactionTime);
                         }
                     }
                 }
