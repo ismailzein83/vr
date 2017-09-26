@@ -2,9 +2,9 @@
 
     'use strict';
 
-    NumberingPlanUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'Vr_NP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BusinessProcess_BPInstanceAPIService'];
+    NumberingPlanUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'Vr_NP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BusinessProcess_BPInstanceAPIService', 'VRDateTimeService'];
 
-    function NumberingPlanUploadEditorController($scope, VRUIUtilsService, UtilsService, Vr_NP_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BusinessProcess_BPInstanceAPIService) {
+    function NumberingPlanUploadEditorController($scope, VRUIUtilsService, UtilsService, Vr_NP_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BusinessProcess_BPInstanceAPIService, VRDateTimeService) {
         var fileID;
         var sellingNumberPlanId;
 
@@ -82,9 +82,8 @@
 
 
         function loadEffectiveDate() {
-
             return Vr_NP_CodePrepAPIService.GetCPSettings().then(function (response) {
-                var effectiveDate = new Date();
+                var effectiveDate = VRDateTimeService.getNowDateTime();
                 effectiveDate.setDate(effectiveDate.getDate() + response.EffectiveDateOffset);
                 $scope.effectiveDate = effectiveDate;
             });

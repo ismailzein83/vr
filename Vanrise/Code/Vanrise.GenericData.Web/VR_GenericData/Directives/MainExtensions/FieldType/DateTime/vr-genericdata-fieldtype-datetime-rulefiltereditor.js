@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData_DateTimeRecordFilterOperatorEnum', 'VR_GenericData_DateTimeRecordFilterComparisonPartEnum', 'UtilsService', 'VRUIUtilsService',
-    function (VR_GenericData_DateTimeRecordFilterOperatorEnum, VR_GenericData_DateTimeRecordFilterComparisonPartEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData_DateTimeRecordFilterOperatorEnum', 'VR_GenericData_DateTimeRecordFilterComparisonPartEnum', 'UtilsService', 'VRUIUtilsService', 'VRDateTimeService', 
+    function (VR_GenericData_DateTimeRecordFilterOperatorEnum, VR_GenericData_DateTimeRecordFilterComparisonPartEnum, UtilsService, VRUIUtilsService, VRDateTimeService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -132,7 +132,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                         return null;
 
                     if ($scope.selectedComparisonPart == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time) {
-                        var dummyDate = new Date();
+                        var dummyDate = VRDateTimeService.getNowDateTime();
                         var value = new Date(dummyDate.setHours(value.Hour, value.Minute, value.Second, value.Millisecond));
                         var value2 = new Date(dummyDate.setHours(value2.Hour, value2.Minute, value2.Second, value2.Millisecond));
                     }

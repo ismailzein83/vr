@@ -28,6 +28,7 @@ namespace Vanrise.Common.Business
             var generalTechnicalSettingData = GetGeneralTechnicalSettingData();
             return generalTechnicalSettingData != null && generalTechnicalSettingData.GAData != null && generalTechnicalSettingData.GAData.IsEnabled;
         }
+
         public CacheSettingData GetCacheSettingData()
         {
             var generalSettingData = GetGeneralSettingData();
@@ -35,15 +36,22 @@ namespace Vanrise.Common.Business
                 return generalSettingData.CacheData;
             return null;
         }
+
         public UISettings GetUIParameters()
         {
             UISettings uiSettings = new UISettings() { Parameters = new List<UIParameter>() };
             var generalSettingData = GetGeneralSettingData();
             var generalTechnicalSettingData = GetGeneralTechnicalSettingData();
 
+            TimeSpan serverUtcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
+            uiSettings.Parameters.Add(new UIParameter()
+            {
+                Name = "ServerUtcOffsetInMinutes",
+                Value = serverUtcOffset.TotalMinutes
+            });
+
             if (generalSettingData != null && generalSettingData.UIData != null)
             {
-                uiSettings.Parameters = new List<UIParameter>();
                 if (generalSettingData.UIData.DefaultViewId.HasValue)
                 {
                     string defaultURL;
@@ -98,7 +106,6 @@ namespace Vanrise.Common.Business
 
             if (generalTechnicalSettingData != null && generalTechnicalSettingData.GAData != null)
             {
-
                 uiSettings.Parameters.Add(new UIParameter()
                 {
                     Name = "GoogleAnalyticsEnabled",
@@ -119,6 +126,7 @@ namespace Vanrise.Common.Business
             return uiSettings;
         }
 
+
         public UIParameter GetParameter(string parameterName)
         {
             var uiSettings = GetUIParameters();
@@ -132,6 +140,7 @@ namespace Vanrise.Common.Business
                 return null;
             return parameter.Value.ToString();
         }
+
         public int GetNormalPrecisionValue()
         {
             var generalSettings = GetGeneralSettingData();
@@ -143,6 +152,7 @@ namespace Vanrise.Common.Business
                 throw new NullReferenceException("generalSettings.UIData.NormalPrecision");
             return generalSettings.UIData.NormalPrecision.Value;
         }
+
         public string GetLongPrecision()
         {
             var parameter = GetParameter("LongPrecision");
@@ -150,6 +160,7 @@ namespace Vanrise.Common.Business
                 return null;
             return parameter.Value.ToString();
         }
+
         public int GetLongPrecisionValue()
         {
             var generalSettings = GetGeneralSettingData();
@@ -161,14 +172,17 @@ namespace Vanrise.Common.Business
                 throw new NullReferenceException("generalSettings.UIData.LongPrecision");
             return generalSettings.UIData.LongPrecision.Value;
         }
+
         public string GetLongDateTimeFormat()
         {
             return "yyyy-MM-dd HH:mm:ss";
         }
+
         public string GetDateTimeFormat()
         {
             return "yyyy-MM-dd HH:mm";
         }
+
         public string GetDateFormat()
         {
             return "yyyy-MM-dd";

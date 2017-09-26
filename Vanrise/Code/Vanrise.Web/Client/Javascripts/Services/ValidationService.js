@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    VRValidationService.$inject = ['UtilsService', 'ValidationMessagesEnum'];
+    VRValidationService.$inject = ['UtilsService', 'ValidationMessagesEnum', 'VRDateTimeService'];
 
-    function VRValidationService(UtilsService, ValidationMessagesEnum) {
+    function VRValidationService(UtilsService, ValidationMessagesEnum, VRDateTimeService) {
 
         function validate(value, $scope, $attrs, validationOptions) {
             if ($attrs.isrequired != undefined && ($attrs.isrequired == "" || $scope.$parent.$eval($attrs.isrequired))) {
@@ -100,7 +100,7 @@
 
         function validateTimeEqualorGreaterthanToday(currentDate) {
             var errorMessage = "Date cannot be in the past";
-            var today = new Date();
+            var today = VRDateTimeService.getNowDateTime();
             today.setHours(0, 0, 0, 0);
 
             if (currentDate instanceof Date) {

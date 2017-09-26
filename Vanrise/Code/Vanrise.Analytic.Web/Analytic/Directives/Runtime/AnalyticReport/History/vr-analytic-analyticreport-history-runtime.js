@@ -2,9 +2,9 @@
 
     'use strict';
 
-    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_GenericData_DataRecordTypeService', 'ColumnWidthEnum', 'PeriodEnum'];
+    HistoryAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VR_GenericData_DataRecordTypeService', 'ColumnWidthEnum', 'PeriodEnum', 'VRDateTimeService'];
 
-    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum, PeriodEnum) {
+    function HistoryAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VR_GenericData_DataRecordTypeService, ColumnWidthEnum, PeriodEnum, VRDateTimeService) {
         return {
             restrict: "E",
             scope: {
@@ -43,7 +43,7 @@
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
-                $scope.scopeModel.fromdate = new Date();
+                $scope.scopeModel.fromdate = VRDateTimeService.getNowDateTime();
                 $scope.scopeModel.todate;
                 $scope.scopeModel.groupingDimentions = [];
                 $scope.scopeModel.selectedGroupingDimentions = [];

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    saleCodeManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    saleCodeManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','VRDateTimeService'];
 
-    function saleCodeManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function saleCodeManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRDateTimeService) {
 
 
         var gridAPI;
@@ -18,7 +18,7 @@
         load();
 
         function defineScope() {
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
             $scope.searchClicked = function () {
                 var queryHandler = {
                     $type: "Vanrise.NumberingPlan.Business.SaleCodeQueryHandler, Vanrise.NumberingPlan.Business"

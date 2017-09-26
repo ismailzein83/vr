@@ -2,13 +2,13 @@
 
     'use strict';
 
-    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRTimerService', 'VR_Analytic_TimeGroupingUnitEnum', 'VR_GenericData_DataRecordTypeService', 'VR_Analytic_SinceTimeEnum', 'ColumnWidthEnum', 'VR_Analytic_TimeUnitEnum'];
+    RealtimeAnalyticReportDirective.$inject = ["UtilsService", 'VRUIUtilsService', 'VR_Analytic_AnalyticConfigurationAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum', 'VRTimerService', 'VR_Analytic_TimeGroupingUnitEnum', 'VR_GenericData_DataRecordTypeService', 'VR_Analytic_SinceTimeEnum', 'ColumnWidthEnum', 'VR_Analytic_TimeUnitEnum', 'VRDateTimeService'];
 
-    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService, VR_Analytic_TimeGroupingUnitEnum, VR_GenericData_DataRecordTypeService, VR_Analytic_SinceTimeEnum, ColumnWidthEnum, VR_Analytic_TimeUnitEnum) {
+    function RealtimeAnalyticReportDirective(UtilsService, VRUIUtilsService, VR_Analytic_AnalyticConfigurationAPIService, VR_GenericData_DataRecordFieldAPIService, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum, VRTimerService, VR_Analytic_TimeGroupingUnitEnum, VR_GenericData_DataRecordTypeService, VR_Analytic_SinceTimeEnum, ColumnWidthEnum, VR_Analytic_TimeUnitEnum, VRDateTimeService) {
         return {
             restrict: "E",
             scope: {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -29,16 +29,16 @@
             var dimensions = [];
             var measures = [];
             var settings;
-            var currentFromDate = new Date();
+
+            var currentFromDate = VRDateTimeService.getNowDateTime();
             currentFromDate.setHours(0, 0, 0, 0);
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.timeGroupingUnits = UtilsService.getArrayEnum(VR_Analytic_TimeGroupingUnitEnum);
                 $scope.scopeModel.sinceTimes = UtilsService.getArrayEnum(VR_Analytic_SinceTimeEnum);
 
-
                 $scope.scopeModel.timeUnits = UtilsService.getArrayEnum(VR_Analytic_TimeUnitEnum);
-
                 
                 $scope.scopeModel.selectedSinceTime = VR_Analytic_SinceTimeEnum.Time;
                 $scope.scopeModel.showSinceTime = true;
@@ -55,7 +55,7 @@
                     }
                 };
                 $scope.scopeModel.validateDateTime = function () {
-                    if ($scope.scopeModel.fromdate > new Date())
+                    if ($scope.scopeModel.fromdate > VRDateTimeService.getNowDateTime())
                         return "The date should not be greater than date of today.";
                     return null;
                 };
@@ -82,11 +82,10 @@
                     filterObj = null;
                 };
 
-
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
-                $scope.scopeModel.fromdate = new Date();
+                $scope.scopeModel.fromdate = VRDateTimeService.getNowDateTime();
                 $scope.scopeModel.fromdate.setHours(0, 0, 0, 0);
                 $scope.scopeModel.search = function () {
                     if ($scope.scopeModel.selectedSinceTime != undefined) {
@@ -97,7 +96,7 @@
                             case VR_Analytic_SinceTimeEnum.Last.value:
 
                                 if ($scope.scopeModel.selectedTimeUnit != undefined) {
-                                    currentFromDate = new Date();
+                                    currentFromDate = VRDateTimeService.getNowDateTime();
                                     switch ($scope.scopeModel.selectedTimeUnit.value) {
                                         case VR_Analytic_TimeUnitEnum.Days.value:
                                             currentFromDate.setDate(currentFromDate.getDate() - $scope.scopeModel.last);
@@ -118,6 +117,7 @@
                 };
                
                 defineColumnWidth();
+
                 defineAPI();
             }
 
@@ -135,6 +135,7 @@
                 }
                 return UtilsService.waitMultiplePromises(promises);
             }
+
             function loadWidgetDirective(widget)
             {
                 var setLoader = function (value) { $scope.scopeModel.isLoadingDimensionDirective = value, !value ? widget.promiseDeffer.resolve() : undefined; };
@@ -306,12 +307,14 @@
 
 
             }
+
             function defineColumnWidth() {
                 $scope.scopeModel.columnWidth = [];
                 for (var td in ColumnWidthEnum)
                     $scope.scopeModel.columnWidth.push(ColumnWidthEnum[td]);
                 $scope.scopeModel.selectedColumnWidth = $scope.scopeModel.columnWidth[0];
             }
+
             function getQuery(widgetPayload) {
                 var dimensionFilters = [];
                 //if ($scope.scopeModel.filters != undefined) {
@@ -332,7 +335,7 @@
                     DimensionFilters: dimensionFilters,
                     TableId: widgetPayload.AnalyticTableId,
                     FromTime: currentFromDate,
-                    ToTime: new Date(),
+                    ToTime: VRDateTimeService.getNowDateTime(),
                     FilterGroup: filterObj,
                     TimeGroupingUnit: $scope.scopeModel.selectedTimeGroupingUnit != undefined ? $scope.scopeModel.selectedTimeGroupingUnit.value : undefined
                 };
@@ -341,5 +344,6 @@
         }
 
     }
+
     app.directive('vrAnalyticAnalyticreportRealtimeRuntime', RealtimeAnalyticReportDirective);
 })(app);

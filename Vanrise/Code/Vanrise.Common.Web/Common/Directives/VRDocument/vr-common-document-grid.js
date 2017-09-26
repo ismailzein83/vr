@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonDocumentGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrCommonDocumentGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRDateTimeService",
+function (UtilsService, VRNotificationService, VRUIUtilsService, VRDateTimeService) {
 
     var directiveDefinitionObject = {
 
@@ -154,7 +154,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 };
 
                 if (documentsPayload == undefined || document.createdOn == undefined)
-                    documentSetting.CreatedOn = new Date();
+                    documentSetting.CreatedOn = VRDateTimeService.getNowDateTime();
 
                 documents.push(documentSetting);
             }

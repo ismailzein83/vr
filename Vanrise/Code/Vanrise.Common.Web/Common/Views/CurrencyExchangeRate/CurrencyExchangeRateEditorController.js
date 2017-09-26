@@ -2,9 +2,9 @@
 
     "use strict";
 
-    currencyExchangeRateEditorController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    currencyExchangeRateEditorController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRDateTimeService'];
 
-    function currencyExchangeRateEditorController($scope, VRCommon_CurrencyExchangeRateAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function currencyExchangeRateEditorController($scope, VRCommon_CurrencyExchangeRateAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VRDateTimeService) {
 
         var currencySelectorAPI;
         var currencyReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -35,7 +35,7 @@
                 $scope.modalContext.closeModal();
             };
             $scope.validateTodayDateTime = function () {
-                if ($scope.exchangeDate > new Date())
+                if ($scope.exchangeDate > VRDateTimeService.getNowDateTime())
                     return "Date cannot be greater than today";
                 return null;
             };
@@ -86,7 +86,7 @@
 
         function loadStaticData() {
             if (currencyExchangeRateEntity == undefined) {
-                $scope.exchangeDate = new Date();
+                $scope.exchangeDate = VRDateTimeService.getNowDateTime();
                 return;
             }
             $scope.rate = currencyExchangeRateEntity.Rate;

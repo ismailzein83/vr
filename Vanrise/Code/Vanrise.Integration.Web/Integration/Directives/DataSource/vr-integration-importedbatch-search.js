@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationImportedbatchSearch", ['VR_Integration_MappingResultEnum', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService','VRValidationService',
-function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,VRUIUtilsService , VRValidationService) {
+app.directive("vrIntegrationImportedbatchSearch", ['VR_Integration_MappingResultEnum', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService',
+function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
     var directiveDefinitionObject = {
 
@@ -34,7 +34,7 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
 
         this.initializeController = initializeController;
         function initializeController() {
-            
+
             defineScope();
 
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -54,7 +54,7 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
             $scope.mappingResults = [];
             $scope.selectedMappingResults = [];
             $scope.importedBatches = [];
-            var fromDate = new Date();
+            var fromDate = VRDateTimeService.getNowDateTime();
             fromDate.setHours(0, 0, 0, 0);
             $scope.selectedFromDateTime = fromDate;
             $scope.showGrid = false;

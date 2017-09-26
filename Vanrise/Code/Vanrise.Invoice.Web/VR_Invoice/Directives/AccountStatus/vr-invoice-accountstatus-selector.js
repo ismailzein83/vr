@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountstatusSelector.$inject = ['UtilsService', 'VRUIUtilsService','VR_Invoice_InvoiceAccountStatusEnum'];
+    AccountstatusSelector.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceAccountStatusEnum', 'VRDateTimeService'];
 
-    function AccountstatusSelector(UtilsService, VRUIUtilsService,VR_Invoice_InvoiceAccountStatusEnum) {
+    function AccountstatusSelector(UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAccountStatusEnum, VRDateTimeService) {
         return {
             restrict: 'E',
             scope: {
@@ -96,7 +96,7 @@
                             case VR_Invoice_InvoiceAccountStatusEnum.Active.value:
                                 returnedObj.Status = selectedValue;
                                 returnedObj.IsEffectiveInFuture = true;
-                                returnedObj.EffectiveDate = new Date();
+                                returnedObj.EffectiveDate = VRDateTimeService.getNowDateTime();
                                 break;
                             case VR_Invoice_InvoiceAccountStatusEnum.All.value:
                                 returnedObj.Status = undefined;

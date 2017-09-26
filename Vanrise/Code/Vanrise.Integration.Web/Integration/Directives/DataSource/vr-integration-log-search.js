@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService","VRUIUtilsService","VRValidationService",
-function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService) {
+app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService","VRUIUtilsService","VRValidationService",'VRDateTimeService',
+function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
     var directiveDefinitionObject = {
 
@@ -55,7 +55,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
             $scope.dataSources = [];
             $scope.severities = [];
             $scope.selectedSeverities = [];
-            var fromDate = new Date();
+            var fromDate = VRDateTimeService.getNowDateTime();
 
             fromDate.setHours(0, 0, 0, 0);
             $scope.selectedFromDateTime = fromDate;

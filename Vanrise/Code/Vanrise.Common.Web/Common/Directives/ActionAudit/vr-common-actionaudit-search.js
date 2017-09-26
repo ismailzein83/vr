@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonActionauditSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VRCommon_ActionAuditLKUPEnum',
-function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VRCommon_ActionAuditLKUPEnum) {
+app.directive("vrCommonActionauditSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VRCommon_ActionAuditLKUPEnum', 'VRDateTimeService',
+function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VRCommon_ActionAuditLKUPEnum, VRDateTimeService) {
 
     var directiveDefinitionObject = {
 
@@ -45,7 +45,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
             $scope.scopeModel = {};
             $scope.scopeModel.top = 1000;
-            var fromTime = new Date();
+            var fromTime = VRDateTimeService.getNowDateTime();
             fromTime.setHours(0, 0, 0);
             $scope.scopeModel.fromTime = fromTime;
             $scope.scopeModel.searchClicked = function () {
@@ -157,15 +157,15 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         }
 
         function getFilterObject() {
-         
+
             var filter = {
                 UserIds: userSelectorApi.getSelectedIds(),
                 TopRecord: $scope.scopeModel.top,
                 ModuleIds: moduleDirectiveApi.getSelectedIds(),
                 EntityIds: entityDirectiveApi.getSelectedIds(),
                 ActionIds: actionDirectiveApi.getSelectedIds(),
-                ObjectId:$scope.scopeModel.objectId,
-                ObjectName:$scope.scopeModel.objectName,
+                ObjectId: $scope.scopeModel.objectId,
+                ObjectName: $scope.scopeModel.objectName,
                 FromTime: $scope.scopeModel.fromTime,
                 ToTime: $scope.scopeModel.toTime
             };

@@ -1,9 +1,9 @@
 ﻿'use strict';
 (function (app) {
 
-    UtilsService.$inject = ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum', 'PeriodEnum'];
+    UtilsService.$inject = ['$q', 'LogEntryTypeEnum', 'LabelColorsEnum'];
 
-    function UtilsService($q, LogEntryTypeEnum, LabelColorsEnum, PeriodEnum) {
+    function UtilsService($q, LogEntryTypeEnum, LabelColorsEnum) {
 
         "use strict";
 
@@ -533,22 +533,11 @@
             else
                 return date;
         }
+
         function cloneDateTime(date) {
             return new Date(date).toUTCString().replace(' GMT', '');
         }
 
-        function getPeriod(periodType) {
-            switch (periodType) {
-                case PeriodEnum.LastYear.value: return PeriodEnum.LastYear.getInterval();
-                case PeriodEnum.LastMonth.value: return PeriodEnum.LastMonth.getInterval();
-                case PeriodEnum.LastWeek.value: return PeriodEnum.LastWeek.getInterval();
-                case PeriodEnum.Yesterday.value: return PeriodEnum.Yesterday.getInterval();
-                case PeriodEnum.Today.value: return PeriodEnum.Today.getInterval();
-                case PeriodEnum.CurrentWeek.value: return PeriodEnum.CurrentWeek.getInterval();
-                case PeriodEnum.CurrentMonth.value: return PeriodEnum.CurrentMonth.getInterval();
-                case PeriodEnum.CurrentYear.value: return PeriodEnum.CurrentYear.getInterval();
-            }
-        }
         function getShortDate(date) {
             var dateString = '';
             if (date) {
@@ -567,6 +556,7 @@
             }
             return dateString;
         }
+
         function validateDates(fromDate, toDate) {
             if (fromDate == undefined || toDate == undefined)
                 return null;
@@ -827,12 +817,6 @@
             return date;
         }
 
-        function getCurrentDateWithoutMilliseconds() {
-            var date = new Date();
-            date.setHours(date.getHours(), date.getMinutes(), date.getSeconds(), 0);
-            return date;
-        }
-
         function parseDateToString(date) {
             var dateAsString = '';
             if (date) {
@@ -914,7 +898,6 @@
             getLogEntryType: getLogEntryType,
             getEnum: getEnum,
             dateToServerFormat: dateToServerFormat,
-            getPeriod: getPeriod,
             getPropMinValueFromArray: getPropMinValueFromArray,
             getShortDate: getShortDate,
             getArrayEnum: getArrayEnum,
@@ -961,7 +944,6 @@
             isIntegerValue: isIntegerValue,
             addFloats: addFloats,
             getBaseUrlPrefix: getBaseUrlPrefix,
-            getCurrentDateWithoutMilliseconds: getCurrentDateWithoutMilliseconds,
             areTimePeriodsOverlapped: areTimePeriodsOverlapped
         });
     }

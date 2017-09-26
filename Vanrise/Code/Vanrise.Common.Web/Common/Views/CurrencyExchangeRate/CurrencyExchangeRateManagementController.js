@@ -2,9 +2,9 @@
 
     "use strict";
 
-    currencyExchangeRateManagementController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateService', 'VRCommon_CurrencyExchangeRateAPIService', 'UtilsService', 'VRUIUtilsService'];
+    currencyExchangeRateManagementController.$inject = ['$scope', 'VRCommon_CurrencyExchangeRateService', 'VRCommon_CurrencyExchangeRateAPIService', 'UtilsService', 'VRUIUtilsService', 'VRDateTimeService'];
 
-    function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService, VRCommon_CurrencyExchangeRateAPIService, UtilsService, VRUIUtilsService) {
+    function currencyExchangeRateManagementController($scope, VRCommon_CurrencyExchangeRateService, VRCommon_CurrencyExchangeRateAPIService, UtilsService, VRUIUtilsService, VRDateTimeService) {
         var gridAPI;
 
         var currencySelectorAPI;
@@ -16,7 +16,7 @@
         var filter = {};
 
         function defineScope() {
-            $scope.exchangeDate = new Date();
+            $scope.exchangeDate = VRDateTimeService.getNowDateTime();
             $scope.searchClicked = function () {
                 getFilterObject();
                 return gridAPI.loadGrid(filter);

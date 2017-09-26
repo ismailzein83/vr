@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    genericRuleManagementController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    genericRuleManagementController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRDateTimeService'];
 
-    function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRDateTimeService) {
 
         var gridAPI;
 
@@ -140,7 +140,7 @@
             $scope.isLoading = true;
 
             function setStaticData() {
-                $scope.scopeModel.effectiveDate = new Date();
+                $scope.scopeModel.effectiveDate = VRDateTimeService.getNowDateTime();
             }
             function loadFilters() {
                 var promises = [];

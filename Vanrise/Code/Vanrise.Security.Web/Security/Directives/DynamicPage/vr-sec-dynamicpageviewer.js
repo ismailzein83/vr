@@ -180,7 +180,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                                 widgetPeriod.filter = GetFilter();
                                 bodyWidget.API.load(widgetPeriod);
                             } else {
-                                var widgetDate = UtilsService.getPeriod(bodyWidget.DefaultPeriod);
+                                var widgetDate = PeriodEnum.getPeriod(bodyWidget.DefaultPeriod);
                                 var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, bodyWidget.DefaultGrouping, 'value');
                                 filter = {
                                     timeDimensionType: timeDimention,
@@ -238,7 +238,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                                 widgetPeriod.filter = GetFilter();
                                 summaryWidget.API.load(widgetPeriod);
                             } else {
-                                var widgetDate = UtilsService.getPeriod(summaryWidget.DefaultPeriod);
+                                var widgetDate = PeriodEnum.getPeriod(summaryWidget.DefaultPeriod);
                                 var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, summaryWidget.DefaultGrouping, 'value');
                                 filter = {
                                     timeDimensionType: timeDimention,
@@ -254,7 +254,7 @@ app.directive('vrSecDynamicpageviewer', ['UtilsService', 'TimeDimensionTypeEnum'
                                     widgetPeriod.filter = GetFilter();
                                     return api.load(widgetPeriod);
                                 } else {
-                                    var widgetDate = UtilsService.getPeriod(summaryWidget.DefaultPeriod);
+                                    var widgetDate = PeriodEnum.getPeriod(summaryWidget.DefaultPeriod);
                                     var timeDimention = UtilsService.getItemByVal($scope.timeDimensionTypes, summaryWidget.DefaultGrouping, 'value');
                                     filter = {
                                         timeDimensionType: timeDimention,

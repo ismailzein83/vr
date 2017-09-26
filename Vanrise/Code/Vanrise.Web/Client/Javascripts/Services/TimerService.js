@@ -1,19 +1,22 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    TimerService.$inject = ['UtilsService'];
 
-    function TimerService(UtilsService) {
+    TimerService.$inject = ['UtilsService', 'VRDateTimeService'];
+
+    function TimerService(UtilsService, VRDateTimeService) {
+
         var registeredJobs = [];
         var isGettingData = false;
         var defaultJobIntervalInSeconds = 2;
         var currentIndex = 0;
+
         function registerJob(callToBeExecuted, scope, jobIntervalInSeconds) {
             var job = {
                 id: UtilsService.guid(),
                 onTimerElapsed: callToBeExecuted,
                 jobInterval: jobIntervalInSeconds != undefined ? jobIntervalInSeconds : defaultJobIntervalInSeconds,
-                lastRun: undefined//new Date()
+                lastRun: undefined
             };
 
             if (scope != undefined) {
@@ -53,10 +56,10 @@
         }, 1000);
 
         function executeJob(job) {
-            var secondsDiff = job.lastRun != undefined ? (new Date().getTime() - job.lastRun.getTime()) / 1000 : 0;
+            var secondsDiff = job.lastRun != undefined ? (VRDateTimeService.getNowDateTime().getTime() - job.lastRun.getTime()) / 1000 : 0;
             if (secondsDiff >= job.jobInterval || job.lastRun == undefined) {
                 job.onTimerElapsed(job.id).finally(function () {
-                    job.lastRun = new Date();
+                    job.lastRun = VRDateTimeService.getNowDateTime();
                     executeNextJob();
                 });
             }

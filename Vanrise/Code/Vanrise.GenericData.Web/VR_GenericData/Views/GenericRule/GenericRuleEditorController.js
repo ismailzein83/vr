@@ -1,13 +1,11 @@
 ﻿'use strict';
 (function (appControllers) {
 
-
-
     genericRuleEditorController.$inject = ['$scope', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldAPIService',
-        'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService'];
+        'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRNavigationService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService'];
 
     function genericRuleEditorController($scope, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldAPIService,
-        VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService, VRValidationService) {
+        VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRNavigationService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
         var isEditMode;
 
@@ -63,7 +61,8 @@
             };
 
 
-            $scope.scopeModel.beginEffectiveDate = UtilsService.getCurrentDateWithoutMilliseconds();
+            $scope.scopeModel.beginEffectiveDate = VRDateTimeService.getCurrentDateWithoutMilliseconds();
+
             $scope.scopeModel.endEffectiveDate = undefined;
 
             $scope.scopeModel.onSettingsDirectiveReady = function (api) {

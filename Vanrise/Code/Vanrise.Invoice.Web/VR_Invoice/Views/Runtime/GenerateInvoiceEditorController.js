@@ -2,9 +2,9 @@
 
     "use strict";
 
-    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService', 'VRButtonTypeEnum', 'VR_Invoice_InvoiceActionService','VR_Invoice_InvoiceAccountStatusEnum'];
+    genericInvoiceEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService', 'VRButtonTypeEnum', 'VR_Invoice_InvoiceActionService', 'VR_Invoice_InvoiceAccountStatusEnum', 'VRDateTimeService'];
 
-    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRButtonTypeEnum, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceAccountStatusEnum) {
+    function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRButtonTypeEnum, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceAccountStatusEnum, VRDateTimeService) {
         var invoiceTypeId;
         $scope.scopeModel = {};
         var invoiceId;
@@ -38,7 +38,8 @@
 
         function defineScope() {
             $scope.scopeModel.actions = [];
-            $scope.scopeModel.issueDate = new Date();
+            $scope.scopeModel.issueDate = VRDateTimeService.getNowDateTime();
+
             $scope.scopeModel.onAccountStatusSelectorReady = function (api) {
                 accountStatusSelectorAPI = api;
                 accountStatusSelectorReadyDeferred.resolve();
@@ -69,7 +70,7 @@
                 partnerSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.validateToDate = function () {
-                var date = new Date();
+                var date = VRDateTimeService.getNowDateTime();
                 if ($scope.scopeModel.toDate >= new Date(date.getFullYear(), date.getMonth(), date.getDate()))
                     return "Date must be less than date of today.";
                 return null;

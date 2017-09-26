@@ -314,12 +314,10 @@
             function setStaticData() {
                 $scope.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
                 $scope.selectedOrderDirection = $scope.orderDirectionList[1];
-                //   $scope.fromDate = new Date();
                 $scope.limit = settings != undefined ? settings.NumberOfRecords : 100;
                 $scope.maxNumberOfRecords = settings != undefined && settings.MaxNumberOfRecords != null ? settings.MaxNumberOfRecords : UISettingsService.getMaxSearchRecordCount();
-
-
             }
+
             function loadTimeRangeDirective() {
                 var loadTimeDimentionPromiseDeferred = UtilsService.createPromiseDeferred();
                 timeRangeReadyPromiseDeferred.promise.then(function () {

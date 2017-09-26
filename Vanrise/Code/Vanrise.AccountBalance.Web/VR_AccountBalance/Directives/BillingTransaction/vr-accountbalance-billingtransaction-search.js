@@ -42,13 +42,6 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function initializeController() {
             $scope.scopeModel = {};
 
-            //var fromTime = new Date();
-            //fromTime.setMonth(fromTime.getMonth() - 1);
-            //fromTime.setHours(0, 0, 0, 0);
-
-
-            //$scope.scopeModel.fromTime = fromTime;
-
             $scope.scopeModel.onTimeRangeDirectiveReady = function (api) {
                 timeRangeDirectiveAPI = api;
                 timeRangeReadyPromiseDeferred.resolve();

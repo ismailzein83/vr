@@ -2,9 +2,9 @@
 
     'use strict';
 
-    billingTransactionEditorController.$inject = ['$scope', 'VR_AccountBalance_BillingTransactionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_AccountBalance_AccountTypeAPIService', 'VR_AccountBalance_AccountAPIService'];
+    billingTransactionEditorController.$inject = ['$scope', 'VR_AccountBalance_BillingTransactionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_AccountBalance_AccountTypeAPIService', 'VR_AccountBalance_AccountAPIService', 'VRDateTimeService'];
 
-    function billingTransactionEditorController($scope, VR_AccountBalance_BillingTransactionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_AccountAPIService) {
+    function billingTransactionEditorController($scope, VR_AccountBalance_BillingTransactionAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_AccountAPIService, VRDateTimeService) {
 
         var accountId;
         var accountTypeId;
@@ -62,7 +62,7 @@
                 }
             };
             $scope.scopeModel.showAccountSelector = accountId == undefined;
-            $scope.scopeModel.date = new Date();
+            $scope.scopeModel.date = VRDateTimeService.getNowDateTime();
 
             $scope.scopeModel.onAccountSelectorReady = function (api) {
                 accountSelectorAPI = api;

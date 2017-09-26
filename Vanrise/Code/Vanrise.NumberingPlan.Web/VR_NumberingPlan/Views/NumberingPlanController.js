@@ -2,9 +2,9 @@
 
     'use strict';
 
-    NumberingPlanController.$inject = ['$scope', 'Vr_NP_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'VRUIUtilsService', 'UtilsService', 'BusinessProcess_BPInstanceAPIService'];
+    NumberingPlanController.$inject = ['$scope', 'Vr_NP_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'VRUIUtilsService', 'UtilsService', 'BusinessProcess_BPInstanceAPIService', 'VRDateTimeService'];
 
-    function NumberingPlanController($scope, Vr_NP_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, VRUIUtilsService, UtilsService, BusinessProcess_BPInstanceAPIService) {
+    function NumberingPlanController($scope, Vr_NP_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, VRUIUtilsService, UtilsService, BusinessProcess_BPInstanceAPIService, VRDateTimeService) {
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred;
 
@@ -20,7 +20,7 @@
         function defineScope() {
             $scope.sellingNumberPlans = [];
             $scope.selectedSellingNumberPlan;
-            $scope.effectiveDate = new Date();
+            $scope.effectiveDate = VRDateTimeService.getNowDateTime();
             $scope.zoneList;
             $scope.onSellingNumberPlanSelectorReady = function (api) {
                 sellingNumberPlanDirectiveAPI = api;

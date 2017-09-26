@@ -2,9 +2,9 @@
 
     'use strict';
 
-    NumberingPlanApplyStateEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'BusinessProcess_BPInstanceAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'Vr_NP_CodePrepAPIService'];
+    NumberingPlanApplyStateEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'BusinessProcess_BPInstanceAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'Vr_NP_CodePrepAPIService', 'VRDateTimeService'];
 
-    function NumberingPlanApplyStateEditorController($scope, VRUIUtilsService, UtilsService, BusinessProcess_BPInstanceAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, Vr_NP_CodePrepAPIService) {
+    function NumberingPlanApplyStateEditorController($scope, VRUIUtilsService, UtilsService, BusinessProcess_BPInstanceAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, Vr_NP_CodePrepAPIService, VRDateTimeService) {
         var sellingNumberPlanId;
 
         loadParameters();
@@ -18,7 +18,7 @@
 
         function defineScope() {
 
-            $scope.effectiveDate = new Date();
+            $scope.effectiveDate = VRDateTimeService.getNowDateTime();
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();
@@ -74,7 +74,7 @@
     function loadEffectiveDate() {
 
         return Vr_NP_CodePrepAPIService.GetCPSettings().then(function (response) {
-            var effectiveDate = new Date();
+            var effectiveDate = VRDateTimeService.getNowDateTime();
             effectiveDate.setDate(effectiveDate.getDate() + response.EffectiveDateOffset);
             $scope.effectiveDate = effectiveDate;
         });

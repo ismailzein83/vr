@@ -2,9 +2,9 @@
 
     "use strict";
 
-    saleZoneManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    saleZoneManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRDateTimeService'];
 
-    function saleZoneManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function saleZoneManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRDateTimeService) {
         var gridAPI;
         var sellingDirectiveApi;
         var sellingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -15,7 +15,7 @@
         var filter = {};
 
         function defineScope() {
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();;
             $scope.searchClicked = function () {
                 setFilterObject();
                 return gridAPI.loadGrid(filter);

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrLogEntrySearch", ['VRCommon_LogAttributeEnum', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService','VRValidationService',
-function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService) {
+app.directive("vrLogEntrySearch", ['VRCommon_LogAttributeEnum', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService','VRValidationService','VRDateTimeService',
+function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
     var directiveDefinitionObject = {
 
@@ -73,7 +73,7 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
 
         function defineScope() {
             $scope.showGrid = false;
-            $scope.fromDate = new Date();
+            $scope.fromDate = VRDateTimeService.getNowDateTime();
             $scope.fromDate.setHours(0, 0, 0);
             $scope.searchClicked = function () {
                 $scope.showGrid = true;

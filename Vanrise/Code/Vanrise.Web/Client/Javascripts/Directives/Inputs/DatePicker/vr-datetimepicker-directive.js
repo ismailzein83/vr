@@ -23,7 +23,7 @@ app.directive('vrValidationDatetime', function () {
 });
 
 
-app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'UtilsService', function (BaseDirService, VRValidationService, UtilsService) {
+app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'UtilsService', 'VRDateTimeService', function (BaseDirService, VRValidationService, UtilsService, VRDateTimeService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -40,8 +40,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 $(window).unbind('scroll', fixDateTimePickerPosition);
                 updatewatch();
             });
-            $element.on('$destroy', function() {
-                  $element.parents().unbind('scroll', fixDateTimePickerPosition);
+            $element.on('$destroy', function () {
+                $element.parents().unbind('scroll', fixDateTimePickerPosition);
             });
 
 
@@ -58,18 +58,18 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
 
             ctrl.validate = function () {
                 return VRValidationService.validate(ctrl.value, $scope, $attrs);
-        };
+            };
 
             var format;
             var isDate;
             var isTime;
             var isDateTime;
             switch ($attrs.type) {
-                case "date" : format = 'DD/MM/YYYY';
+                case "date": format = 'DD/MM/YYYY';
                     $scope.ctrl.isDate = true;
                     isDate = true;
                     break;
-                case "time" : format = 'HH:mm';
+                case "time": format = 'HH:mm';
                     $scope.ctrl.isTime = true;
                     break;
                 case "dateHour": format = 'DD/MM/YYYY HH';
@@ -78,16 +78,16 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 case "longDateTime": format = 'DD/MM/YYYY HH:mm:ss';
                     $scope.ctrl.isDateTime = true;
                     break;
-                default : format = 'DD/MM/YYYY HH:mm';
+                default: format = 'DD/MM/YYYY HH:mm';
                     $scope.ctrl.isDateTime = true;
                     break;
-        }
+            }
             divDatePicker.datetimepicker({
                 format: format,
                 showClose: true,
                 useCurrent: false,
-                    allowInputToggle: $attrs.disablefocus == undefined
-        });
+                allowInputToggle: $attrs.disablefocus == undefined
+            });
             divDatePicker
                 .on('dp.show', function (e) {
                     var istop = false;
@@ -96,18 +96,18 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     var selfHeight = $(this).height();
                     var selfOffset = $(self).offset();
                     var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
-                    var basetop = selfOffset.top -$(window).scrollTop() +$(this).height();
-                    var eltop = selfOffset.top -$(window).scrollTop();
-                    var elleft = selfOffset.left -$(window).scrollLeft();
+                    var basetop = selfOffset.top - $(window).scrollTop() + $(this).height();
+                    var eltop = selfOffset.top - $(window).scrollTop();
+                    var elleft = selfOffset.left - $(window).scrollLeft();
                     $(dropDown).removeClass('pull-right');
                     $(dropDown).removeClass('dropdown-menu.top');
-                    if (innerWidth -elleft < 228) {
-                        elleft = elleft -(228 -$(this).width());
+                    if (innerWidth - elleft < 228) {
+                        elleft = elleft - (228 - $(this).width());
                         $(dropDown).addClass('vr-datetime-pull-right');
-                }
+                    }
 
-                    if (innerHeight -eltop < 284) {
-                        basetop = eltop -(284 +$(this).height() / 2);
+                    if (innerHeight - eltop < 284) {
+                        basetop = eltop - (284 + $(this).height() / 2);
                         $(dropDown).addClass('vr-datetime-top');
                     }
                     else
@@ -115,29 +115,30 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     setTimeout(function () {
 
                         $(dropDown).slideDown();
-                }, 100);
+                    }, 100);
 
-                    $(dropDown).css({ position: 'fixed', top: basetop, left: elleft, bottom: 'unset'
+                    $(dropDown).css({
+                        position: 'fixed', top: basetop, left: elleft, bottom: 'unset'
+                    });
+
+
                 });
-
-
-        });
 
             $element.parents().on('scroll', fixDateTimePickerPosition);
             $(window).on('scroll', fixDateTimePickerPosition);
             $scope.$on('start-drag', function (event, args) {
                 fixDateTimePickerPosition();
-        });
+            });
             function fixDateTimePickerPosition() {
                 if (divDatePicker.data != undefined && divDatePicker.data("DateTimePicker"))
                     divDatePicker.data("DateTimePicker").hide();
-        }
+            }
             ctrl.tabindex = "";
             setTimeout(function () {
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                     ctrl.tabindex = "-1"
-            }
-        }, 10);
+                }
+            }, 10);
 
             var isUserChange = false;
             var selectedDate;
@@ -146,7 +147,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 if (!e.date) {
                     $scope.ctrl.value = null;
                     return;
-            }
+                }
                 var dt = e.date;
                 //selectedDate = convertUTCDateToLocalDate(new Date(dt));
                 selectedDate = new Date(dt);
@@ -168,15 +169,15 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         unspecifiedMinute = 59;
                         unspecifiedSecond = 59;
                         unspecifiedMillisecond = 998;
-                }
+                    }
                     if ($attrs.type == "time") {
                         $scope.ctrl.value = {
-                                $type: 'Vanrise.Entities.Time, Vanrise.Entities',
-                                Hour: selectedDate.getHours(),
-                                Minute: selectedDate.getMinutes(),
-                                Second: selectedDate.getSeconds(),
-                                Millisecond: selectedDate.getMilliseconds()
-                    };
+                            $type: 'Vanrise.Entities.Time, Vanrise.Entities',
+                            Hour: selectedDate.getHours(),
+                            Minute: selectedDate.getMinutes(),
+                            Second: selectedDate.getSeconds(),
+                            Millisecond: selectedDate.getMilliseconds()
+                        };
                     }
                     else if ($attrs.type == "date") {
                         var date = new Date(selectedDate.setHours(unspecifiedHour, unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
@@ -198,14 +199,14 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         //var date = moment.utc(selectedDate).format("L LT");
                         $scope.ctrl.value = date;
 
+                    }
                 }
-            }
 
-        });
+            });
 
             function cloneDateTime(date) {
                 return new Date(date).toUTCString().replace(' Z', '');
-        }
+            }
             function convertUTCDateToLocalDate(date) {
                 //var newDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
 
@@ -215,37 +216,32 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 //newDate.setHours(hours - offset);
 
                 //return newDate;
-        }
+            }
 
 
             var ctrl = $scope.ctrl;
-            ctrl.placelHolder = ($attrs.placeholder != undefined) ? ctrl.placeholder: '';
+            ctrl.placelHolder = ($attrs.placeholder != undefined) ? ctrl.placeholder : '';
             ctrl.updateModelOnKeyUp = function (e) {
                 var $this = angular.element(e.currentTarget);
                 setTimeout(function () {
-                    if(moment($this.val(), format, true).isValid() && divDatePicker.data("DateTimePicker")) {
+                    if (moment($this.val(), format, true).isValid() && divDatePicker.data("DateTimePicker")) {
                         divDatePicker.data("DateTimePicker").date($this.val());
-                }
-            }, 1);
+                    }
+                }, 1);
 
 
-        };
-
-            //ctrl.setDefaultDate = function () {
-            //    if (ctrl.value == null )
-            //        divDatePicker.data("DateTimePicker").date(new Date());
-            //}
-
+            };
 
             if ($attrs.hint != undefined)
                 ctrl.hint = $attrs.hint;
             var getInputeStyle = function () {
                 var div = $element.find('div[validator-section]')[0];
                 if ($attrs.hint != undefined) {
-                    $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px"
-                });
+                    $(div).css({
+                        "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px"
+                    });
+                };
             };
-        };
             getInputeStyle();
 
             ctrl.adjustTooltipPosition = function (e) {
@@ -254,28 +250,31 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     var selfHeight = $(self).height();
                     var selfOffset = $(self).offset();
                     var tooltip = self.parent().find('.tooltip-info')[0];
-                    $(tooltip).css({ display: 'block'
-                });
+                    $(tooltip).css({
+                        display: 'block'
+                    });
                     var innerTooltip = self.parent().find('.tooltip-inner')[0];
                     var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
-                    var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) +2.5);
-                    $(innerTooltip).css({ position: 'fixed', top: selfOffset.top -$(window).scrollTop() +selfHeight +15, left: selfOffset.left -innerTooltipWidth
-                });
-                    $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top -$(window).scrollTop() +selfHeight +10, left: selfOffset.left
-                });
+                    var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
+                    $(innerTooltip).css({
+                        position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth
+                    });
+                    $(innerTooltipArrow).css({
+                        position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left
+                    });
 
-            }, 1);
-        };
-            var updatewatch =  $scope.$watch('ctrl.value', function () {
+                }, 1);
+            };
+            var updatewatch = $scope.$watch('ctrl.value', function () {
                 if (ctrl.value == null)
                     $element.find('#divDatePicker').find('.vr-date-input').val('');
                 if (ctrl.value == undefined) {
                     selectedDate = undefined;
                     return;
-            }
+                }
                 var date;
                 if ($attrs.type == "time") {
-                    var initialDate = new Date();
+                    var initialDate = VRDateTimeService.getNowDateTime();
                     if (ctrl.value.Hour == undefined)
                         ctrl.value.Hour = 0;
                     if (ctrl.value.Minute == undefined)
@@ -291,9 +290,9 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     //date = convertedDate;
                 }
                 else {
-                    date = ctrl.value instanceof Date ? ctrl.value: (UtilsService.createDateFromString(ctrl.value));
+                    date = ctrl.value instanceof Date ? ctrl.value : (UtilsService.createDateFromString(ctrl.value));
 
-            }
+                }
                 if ((selectedDate == undefined || (date != undefined && selectedDate.toString() != date.toString())) && divDatePicker.data("DateTimePicker")) {
                     divDatePicker.data("DateTimePicker").date(date);
                 }
@@ -306,24 +305,24 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
                         if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
                             onvaluechangedMethod();
+                        }
                     }
                 }
-            }
 
-        });
+            });
             $scope.ctrl.onBlurDirective = function (e) {
                 var dateTab = new Date(ctrl.value).toDateString().split(" ");
                 var year = parseInt(dateTab[3]);
-                if ($attrs.type != "time" && (year < 1970 || isNaN(year)) && !ctrl.readOnly && ctrl.value!=undefined) {
-                    ctrl.value = new Date();
-            }
+                if ($attrs.type != "time" && (year < 1970 || isNaN(year)) && !ctrl.readOnly && ctrl.value != undefined) {
+                    ctrl.value = VRDateTimeService.getNowDateTime();
+                }
                 if ($attrs.onblurdatetime != undefined) {
                     var onblurdatetimeMethod = $scope.$parent.$eval($attrs.onblurdatetime);
                     if (onblurdatetimeMethod != undefined && onblurdatetimeMethod != null && typeof (onblurdatetimeMethod) == 'function') {
                         onblurdatetimeMethod();
+                    }
                 }
-            }
-        };
+            };
             $scope.ctrl.toggleDate = function (e) {
 
                 e.preventDefault();
@@ -335,7 +334,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 // switch icon to time
                 $('.btn-switcher').addClass("glyphicon-time");
                 $('.btn-switcher').removeClass("glyphicon-calendar");
-        };
+            };
             $scope.ctrl.toggleTime = function (e) {
 
                 e.preventDefault();
@@ -346,7 +345,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 // switch icon to date
                 $('.btn-switcher').removeClass("glyphicon-time");
                 $('.btn-switcher').addClass("glyphicon-calendar");
-        };
+            };
             //BaseDirService.addScopeValidationMethods(ctrl, elementName, this);
 
         },

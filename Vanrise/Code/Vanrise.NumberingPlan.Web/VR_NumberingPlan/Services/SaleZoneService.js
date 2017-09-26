@@ -2,14 +2,14 @@
 
     'use strict';
 
-    SaleZoneService.$inject = ['Vr_NP_SellingNumberPlanService', 'VRModalService'];
+    SaleZoneService.$inject = ['Vr_NP_SellingNumberPlanService', 'VRModalService', 'VRDateTimeService'];
 
-    function SaleZoneService(Vr_NP_SellingNumberPlanService, VRModalService) {
+    function SaleZoneService(Vr_NP_SellingNumberPlanService, VRModalService, VRDateTimeService) {
         return ({
             registerDrillDownToSellingNumberPlan: registerDrillDownToSellingNumberPlan
         });
 
-       
+
         function registerDrillDownToSellingNumberPlan() {
             var drillDownDefinition = {};
 
@@ -21,7 +21,7 @@
                 sellingNumberPlanItem.saleZoneGridAPI = directiveAPI;
                 var query = {
                     SellingNumberId: sellingNumberPlanItem.Entity.SellingNumberPlanId,
-                    EffectiveOn: new Date()
+                    EffectiveOn: VRDateTimeService.getNowDateTime()
                 };
 
                 return sellingNumberPlanItem.saleZoneGridAPI.loadGrid(query);

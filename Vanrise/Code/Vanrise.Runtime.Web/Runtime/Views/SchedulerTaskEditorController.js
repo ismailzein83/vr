@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    newSchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService'];
+    newSchedulerTaskEditorController.$inject = ['$scope', 'SchedulerTaskAPIService', 'UtilsService', 'VRModalService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService'];
 
-    function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService) {
+    function newSchedulerTaskEditorController($scope, SchedulerTaskAPIService, UtilsService, VRModalService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
         var editMode;
         var taskId;
@@ -63,8 +63,8 @@
             $scope.actionTypes = [];
             $scope.schedulerTaskAction = {};
 
-            $scope.startEffDate = new Date();
-            $scope.endEffDate = undefined;
+            $scope.scopeModel.startEffDate = VRDateTimeService.getNowDateTime();
+            $scope.scopeModel.endEffDate = undefined;
 
             $scope.onTaskTriggerDirectiveReady = function (api) {
                 taskTriggerDirectiveAPI = api;
@@ -189,11 +189,11 @@
             var taskTypeActionId;
 
             if (taskObject != undefined && taskObject.ActionTypeId) {
-                taskTypeActionId =  taskObject.ActionTypeId ;
+                taskTypeActionId = taskObject.ActionTypeId;
                 $scope.scopeModel.disableActionType = true;
             }
             else if (additionalParameter != undefined && additionalParameter.actionTypeId) {
-                taskTypeActionId =  additionalParameter.actionTypeId;
+                taskTypeActionId = additionalParameter.actionTypeId;
                 $scope.scopeModel.disableActionType = true;
             }
             taskActionTypeDirectiveReadyPromiseDeferred.promise.then(function () {

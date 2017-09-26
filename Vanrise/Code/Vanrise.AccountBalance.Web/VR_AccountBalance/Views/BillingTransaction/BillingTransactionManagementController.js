@@ -2,9 +2,9 @@
 
     "use strict";
 
-    billingTransactionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_AccountBalance_AccountTypeAPIService', 'VR_AccountBalance_BillingTransactionService', 'VR_AccountBalance_BillingTransactionAPIService', 'VRValidationService'];
+    billingTransactionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VR_AccountBalance_AccountTypeAPIService', 'VR_AccountBalance_BillingTransactionService', 'VR_AccountBalance_BillingTransactionAPIService', 'VRValidationService', 'VRDateTimeService'];
 
-    function billingTransactionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_BillingTransactionService, VR_AccountBalance_BillingTransactionAPIService, VRValidationService) {
+    function billingTransactionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VR_AccountBalance_AccountTypeAPIService, VR_AccountBalance_BillingTransactionService, VR_AccountBalance_BillingTransactionAPIService, VRValidationService, VRDateTimeService) {
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,7 +41,7 @@
             $scope.scopeModel = {};
             $scope.scopeModel.showAddButton = false;
 
-            var now = new Date();
+            var now = VRDateTimeService.getNowDateTime();
             $scope.scopeModel.fromTime = new Date(now.getFullYear(), now.getMonth(), 1);
 
             $scope.scopeModel.onAccountStatusSelectorReady = function (api) {
