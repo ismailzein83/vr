@@ -14,7 +14,8 @@ namespace Vanrise.GenericData.Entities
     }
 
     public interface IVRRestAPIRecordQueryInterceptorContext
-    { 
+    {
+        Guid VRConnectionId { get; }
         DataRecordQuery Query { get; set; }
     }
 }

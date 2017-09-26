@@ -33,7 +33,7 @@ namespace Vanrise.GenericData.MainExtensions.DataStorages.DataStore
             if (vrRestAPIRecordQueryInterceptor == null)
                 throw new NullReferenceException("restAPIDataRecordStorageSettings.DataRecordQueryInterceptor should be of type VRRestAPIRecordQueryInterceptor");
 
-            vrRestAPIRecordQueryInterceptor.PrepareQuery(new VRRestAPIRecordQueryInterceptorContext() { Query = input.Query });
+            vrRestAPIRecordQueryInterceptor.PrepareQuery(new VRRestAPIRecordQueryInterceptorContext() { Query = input.Query, VRConnectionId = _connectionId });
 
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(_connectionId);

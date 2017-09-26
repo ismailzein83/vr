@@ -10,5 +10,6 @@ namespace Vanrise.GenericData.Business
     public class VRRestAPIRecordQueryInterceptorContext : IVRRestAPIRecordQueryInterceptorContext
     {
         public DataRecordQuery Query { get; set; }
+        public Guid VRConnectionId { get; set; }
     }
 }
