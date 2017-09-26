@@ -13,6 +13,7 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterc
     {
         public override Guid ConfigId { get { return new Guid("B3A94A20-92ED-47BF-86D6-1034B720BE73"); } }
         public string AccountFieldName { get; set; }
+        public bool WithSubAccounts { get; set; }
         public override void PrepareQuery(Vanrise.GenericData.Entities.IVRRestAPIRecordQueryInterceptorContext context)
         {
             var vrRestAPIRecordQueryInterceptorContext = context as Vanrise.GenericData.Business.VRRestAPIRecordQueryInterceptorContext;
@@ -23,26 +24,45 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterc
             RetailAccountUserManager manager = new RetailAccountUserManager();
             var accountInfo = manager.GetRetailAccountInfo(userId);
             accountInfo.ThrowIfNull("accountInfo", userId);
-            NumberRecordFilter numberRecordFilter = new NumberRecordFilter()
+           
+            var filters = new List<RecordFilter>();
+            filters.Add(new NumberRecordFilter()
             {
                 FieldName = AccountFieldName,
                 CompareOperator = NumberRecordFilterOperator.Equals,
                 Value = accountInfo.AccountId
-            };
+            });
+            if (WithSubAccounts)
+            {
+                RetailAccountInfoManager retailAccountInfoManager = new RetailAccountInfoManager();
+                var childAccountsIds = retailAccountInfoManager.GetChildAccountIds(context.VRConnectionId, accountInfo.AccountBEDefinitionId, accountInfo.AccountId, true);
+                if(childAccountsIds != null)
+                {
+                    foreach(var childAccountId in childAccountsIds)
+                    {
+                        filters.Add(new NumberRecordFilter()
+                        {
+                            FieldName = AccountFieldName,
+                            CompareOperator = NumberRecordFilterOperator.Equals,
+                            Value = childAccountId
+                        });
+                    }
+                }
+            }
 
             if (vrRestAPIRecordQueryInterceptorContext.Query == null)
                 vrRestAPIRecordQueryInterceptorContext.Query = new DataRecordQuery();
 
             if (vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup == null)
             {
-                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup() { Filters = new List<RecordFilter>() { numberRecordFilter }, LogicalOperator = RecordQueryLogicalOperator.And };
+                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup() { Filters = filters , LogicalOperator = RecordQueryLogicalOperator.And };
             }
             else
             {
                 var existingFilterGroup = vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup;
-                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup() { Filters = new List<RecordFilter>(), LogicalOperator = RecordQueryLogicalOperator.And };
-                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup.Filters.Add(existingFilterGroup);
-                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup.Filters.Add(numberRecordFilter);
+                filters.Add(existingFilterGroup);
+                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup() { Filters = filters, LogicalOperator = RecordQueryLogicalOperator.And };
+              
             }
         }
     }

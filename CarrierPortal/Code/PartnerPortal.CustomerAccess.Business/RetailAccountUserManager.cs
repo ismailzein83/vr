@@ -22,7 +22,7 @@ namespace PartnerPortal.CustomerAccess.Business
                 AccountId = retailAccountSettings.AccountId
             };
         }
-
+      
         public InsertOperationOutput<Vanrise.Security.Entities.UserDetail> AddRetailAccountUser(RetailAccount retailAccount)
         {
             object userExtendedSettings;

@@ -116,5 +116,13 @@ namespace PartnerPortal.CustomerAccess.Business
             }
             return gridColumnAttributes;
         }
+        public List<long> GetChildAccountIds(Guid vrConnectionId, Guid accountBeDefinitionId, long accountId, bool withSubChildren)
+        {
+            VRConnectionManager connectionManager = new VRConnectionManager();
+            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(vrConnectionId);
+            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+            return connectionSettings.Get<List<long>>(string.Format("/api/Retail_BE/AccountBE/GetChildAccountIds?accountBEDefinitionId={0}&accountId={1}&withSubChildren={2}", accountBeDefinitionId, accountId, withSubChildren));
+        }
+
     }
 }

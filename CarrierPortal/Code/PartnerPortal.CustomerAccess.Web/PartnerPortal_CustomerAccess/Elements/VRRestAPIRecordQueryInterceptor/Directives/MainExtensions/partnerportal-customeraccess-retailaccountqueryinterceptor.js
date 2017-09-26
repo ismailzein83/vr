@@ -36,7 +36,10 @@
                 api.load = function (payload) {
                     if (payload != undefined) {
                         if (payload.vrRestAPIRecordQueryInterceptor != undefined)
+                        {
                             $scope.scopeModel.accountFieldName = payload.vrRestAPIRecordQueryInterceptor.AccountFieldName;
+                            $scope.scopeModel.withSubAccounts = payload.vrRestAPIRecordQueryInterceptor.WithSubAccounts;
+                        }
                     }
                 };
 
@@ -44,7 +47,8 @@
 
                     return {
                         $type: 'PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterceptor.RetailAccountVRRestAPIRecordQueryInterceptor, PartnerPortal.CustomerAccess.MainExtensions',
-                        AccountFieldName: $scope.scopeModel.accountFieldName
+                        AccountFieldName: $scope.scopeModel.accountFieldName,
+                        WithSubAccounts: $scope.scopeModel.withSubAccounts
                     };
                 };
 
