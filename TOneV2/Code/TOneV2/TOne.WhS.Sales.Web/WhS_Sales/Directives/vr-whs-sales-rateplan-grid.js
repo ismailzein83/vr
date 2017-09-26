@@ -1008,7 +1008,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         ZoneId: zoneItem.ZoneId,
                         Rate: zoneItem.NewRate,
                         BED: zoneItem.NewRateBED,
-                        EED: zoneItem.NewRateEED
+                        EED: zoneItem.NewRateEED,
+                        IsCancellingRate: zoneItem.IsNewRateCancelling
                     };
                     zoneChanges.NewRates = [newRate];
                 }

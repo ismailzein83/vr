@@ -21,6 +21,8 @@
             setRateChangeTypeIcon(dataItem);
         }
         function onNewRateBlurred(dataItem, settings) {
+            if (isStringEmpty(dataItem.NewRate))
+                dataItem.IsNewRateCancelling = null;
             formatNewRate(dataItem);
             setNewRateDates(dataItem, settings);
         }
@@ -88,9 +90,15 @@
             var newRate = parseFloat(dataItem.NewRate);
             if (newRate <= 0)
                 return 'New rate must be greater than 0';
-            if (dataItem.CurrentRate != null && dataItem.CurrentRateCurrencyId == ownerCurrencyId && parseFloat(dataItem.CurrentRate) == newRate)
-                return 'New rate must be different than the current rate';
-
+            if (dataItem.CurrentRate != null) {
+                var currentRate = parseFloat(dataItem.CurrentRate);
+                if (currentRate == newRate) {
+                    if (dataItem.IsNewRateCancelling)
+                        return null;
+                    if (dataItem.CurrentRateCurrencyId == ownerCurrencyId)
+                        return 'New rate must be different than the current rate';
+                }
+            }
             return null;
         }
         function validateNewRateDates(dataItem) {

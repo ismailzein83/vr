@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -23,13 +24,16 @@ namespace TOne.WhS.Sales.Business
 
         private Func<decimal?, decimal, DateTime> _getRateBED;
 
-        public ActionApplicableToZoneContext(Func<int, long, SaleEntityZoneRoutingProduct> getCurrentSellingProductZoneRP, Func<int, int, long, SaleEntityZoneRoutingProduct> getCurrentCustomerZoneRP, Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, Func<decimal?, decimal, DateTime> getRateBED)
+        private Dictionary<int, DateTime> _countryBEDsByCountryId;
+
+        public ActionApplicableToZoneContext(Func<int, long, SaleEntityZoneRoutingProduct> getCurrentSellingProductZoneRP, Func<int, int, long, SaleEntityZoneRoutingProduct> getCurrentCustomerZoneRP, Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, Func<decimal?, decimal, DateTime> getRateBED, Dictionary<int, DateTime> countryBEDsByCountryId)
         {
             _getCurrentSellingProductZoneRP = getCurrentSellingProductZoneRP;
             _getCurrentCustomerZoneRP = getCurrentCustomerZoneRP;
             _getSellingProductZoneRate = getSellingProductZoneRate;
             _getCustomerZoneRate = getCustomerZoneRate;
             _getRateBED = getRateBED;
+            _countryBEDsByCountryId = countryBEDsByCountryId;
         }
 
         #endregion
@@ -65,6 +69,14 @@ namespace TOne.WhS.Sales.Business
         public DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue)
         {
             return _getRateBED(currentRateValue, newRateValue);
+        }
+
+        public DateTime? GetCountryBED(int countryId)
+        {
+            DateTime? countryBED = null;
+            if (_countryBEDsByCountryId != null)
+                countryBED = _countryBEDsByCountryId.GetRecord(countryId);
+            return countryBED;
         }
     }
 }

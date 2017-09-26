@@ -23,8 +23,9 @@ namespace TOne.WhS.Sales.MainExtensions
             Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate;
             Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP;
             Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP;
+            Dictionary<int, DateTime> countryBEDsByCountryId;
 
-            UtilitiesManager.SetBulkActionContextHelpers(context.GetSellingProductZoneRate, context.GetCustomerZoneRate, out getSellingProductZoneRate, out getCustomerZoneRate, out getSellingProductZoneCurrentRP, out getCustomerZoneCurrentRP);
+            UtilitiesManager.SetBulkActionContextHelpers(context.OwnerType, context.OwnerId, context.GetSellingProductZoneRate, context.GetCustomerZoneRate, out getSellingProductZoneRate, out getCustomerZoneRate, out getSellingProductZoneCurrentRP, out getCustomerZoneCurrentRP, out countryBEDsByCountryId);
 
             List<long> applicableZoneIds = new List<long>();
 
@@ -40,7 +41,8 @@ namespace TOne.WhS.Sales.MainExtensions
                     GetCurrentSellingProductZoneRP = getSellingProductZoneCurrentRP,
                     GetCurrentCustomerZoneRP = getCustomerZoneCurrentRP,
                     GetSellingProductZoneRate = getSellingProductZoneRate,
-                    GetCustomerZoneRate = getCustomerZoneRate
+                    GetCustomerZoneRate = getCustomerZoneRate,
+                    CountryBEDsByCountryId = countryBEDsByCountryId
                 };
 
                 if (UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))

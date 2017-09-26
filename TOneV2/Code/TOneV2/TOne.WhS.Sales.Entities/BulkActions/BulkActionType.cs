@@ -46,6 +46,8 @@ namespace TOne.WhS.Sales.Entities
 
         Dictionary<long, ZoneChanges> ZoneDraftsByZoneId { get; }
 
+        Dictionary<int, DateTime> CountryBEDsByCountryId { get; }
+
         SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId);
 
         SaleEntityZoneRoutingProduct GetCurrentCustomerZoneRP(int customerId, int sellingProductId, long saleZoneId);
@@ -89,6 +91,8 @@ namespace TOne.WhS.Sales.Entities
         SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
 
         DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue);
+
+        DateTime? GetCountryBED(int countryId);
     }
 
     public interface IApplyBulkActionToZoneItemContext

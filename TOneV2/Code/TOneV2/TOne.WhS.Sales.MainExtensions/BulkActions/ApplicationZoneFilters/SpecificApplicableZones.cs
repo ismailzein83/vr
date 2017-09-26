@@ -34,8 +34,9 @@ namespace TOne.WhS.Sales.MainExtensions
                     Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate;
                     Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP;
                     Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP;
+                    Dictionary<int, DateTime> countryBEDsByCountryId;
 
-                    UtilitiesManager.SetBulkActionContextHelpers(context.GetSellingProductZoneRate, context.GetCustomerZoneRate, out getSellingProductZoneRate, out getCustomerZoneRate, out getSellingProductZoneCurrentRP, out getCustomerZoneCurrentRP);
+                    UtilitiesManager.SetBulkActionContextHelpers(context.OwnerType, context.OwnerId, context.GetSellingProductZoneRate, context.GetCustomerZoneRate, out getSellingProductZoneRate, out getCustomerZoneRate, out getSellingProductZoneCurrentRP, out getCustomerZoneCurrentRP, out countryBEDsByCountryId);
 
                     var excludedSaleZoneIds = new List<long>();
                     foreach (CountryZones countryZones in CountryZonesByCountry.Values)

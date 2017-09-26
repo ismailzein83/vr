@@ -44,7 +44,8 @@ namespace TOne.WhS.Sales.Business
                 GetCurrentCustomerZoneRP = customData.GetCurrentCustomerZoneRP,
                 GetSellingProductZoneRate = customData.GetSellingProductZoneRate,
                 GetCustomerZoneRate = customData.GetCustomerZoneRate,
-                GetRateBED = customData.GetRateBED
+                GetRateBED = customData.GetRateBED,
+                CountryBEDsByCountryId = customData.CountryBEDsByCountryId
             };
 
             return !UtilitiesManager.IsActionApplicableToZone(IsActionApplicableToZoneInput);
@@ -64,18 +65,21 @@ namespace TOne.WhS.Sales.Business
             private IEnumerable<RPRouteDetail> _rpRouteDetails;
 
             public Changes Draft { get; set; }
+            public IEnumerable<int> ClosedCountryIds { get; set; }
+            public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
 
             public CustomData(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
             {
                 _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
                 _routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Today));
+
                 Draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
+                CountryBEDsByCountryId = (ownerType == SalePriceListOwnerType.Customer) ? UtilitiesManager.GetDatesByCountry(ownerId, effectiveOn, true) : null;
+
                 SetRateBEDs(ownerType, ownerId);
                 SetRPRouteDetails();
                 SetClosedCountryIds(ownerType, ownerId, effectiveOn);
             }
-
-            public IEnumerable<int> ClosedCountryIds { get; set; }
 
             public SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId)
             {
@@ -116,7 +120,7 @@ namespace TOne.WhS.Sales.Business
 
             private void SetRateBEDs(SalePriceListOwnerType ownerType, int ownerId)
             {
-                var pricingSettings = TOne.WhS.Sales.Business.UtilitiesManager.GetPricingSettings(ownerType,ownerId);
+                var pricingSettings = TOne.WhS.Sales.Business.UtilitiesManager.GetPricingSettings(ownerType, ownerId);
 
                 _newRateBED = DateTime.Today.AddDays(pricingSettings.NewRateDayOffset.Value);
                 _increasedRateBED = DateTime.Today.AddDays(pricingSettings.IncreasedRateDayOffset.Value);

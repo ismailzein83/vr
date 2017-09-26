@@ -34,7 +34,8 @@ namespace TOne.WhS.Sales.Business
                 OwnerSellingNumberPlanId = customObject.OwnerSellingNumberPlanId,
                 OwnerType = OwnerType,
                 OwnerId = OwnerId,
-                ZoneDraftsByZoneId = customObject.ZoneDraftsByZoneId
+                ZoneDraftsByZoneId = customObject.ZoneDraftsByZoneId,
+                CountryBEDsByCountryId = customObject.CountryBEDsByCountryId
             };
 
             return !BulkAction.IsApplicableToCountry(bulkActionApplicableToCountryContext);
@@ -57,6 +58,7 @@ namespace TOne.WhS.Sales.Business
             public CustomObject(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
             {
                 OwnerSellingNumberPlanId = new RatePlanManager().GetOwnerSellingNumberPlanId(ownerType, ownerId);
+                CountryBEDsByCountryId = (ownerType == SalePriceListOwnerType.Customer) ? UtilitiesManager.GetDatesByCountry(ownerId, effectiveOn, true) : null;
 
                 DateTime today = DateTime.Today;
                 _currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(today));
@@ -75,6 +77,8 @@ namespace TOne.WhS.Sales.Business
             public Dictionary<long, ZoneChanges> ZoneDraftsByZoneId { get; set; }
 
             public IEnumerable<int> ClosedCountryIds { get; set; }
+
+            public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
 
             public SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId)
             {

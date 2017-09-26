@@ -49,6 +49,18 @@ namespace TOne.WhS.Sales.Entities
                 return null;
             }
         }
+        public bool? IsNewRateCancelling
+        {
+            get
+            {
+                if (NewRate.HasValue)
+                {
+                    DraftRateToChange newNormalRate = NewRates.FindRecord(x => !x.RateTypeId.HasValue);
+                    return newNormalRate.IsCancellingRate;
+                }
+                return null;
+            }
+        }
         public IEnumerable<DraftRateToChange> NewRates { get; set; }
         public DateTime? NewRateBED
         {

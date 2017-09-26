@@ -65,6 +65,24 @@ namespace TOne.WhS.Sales.Business
             return dateTime.ToShortDateString();
         }
 
+        public static bool IsActionApplicableToCountry(IBulkActionApplicableToCountryContext context, Func<IActionApplicableToZoneContext, bool> isActionApplicableToZone)
+        {
+            var bulkActionApplicableToAnyCountryZoneInput = new BulkActionApplicableToAnyCountryZoneInput()
+            {
+                CountryId = context.Country.CountryId,
+                OwnerSellingNumberPlanId = context.OwnerSellingNumberPlanId,
+                OwnerType = context.OwnerType,
+                OwnerId = context.OwnerId,
+                ZoneDraftsByZoneId = context.ZoneDraftsByZoneId,
+                CountryBEDsByCountryId = context.CountryBEDsByCountryId,
+                GetSellingProductZoneRate = context.GetSellingProductZoneRate,
+                GetCustomerZoneRate = context.GetCustomerZoneRate,
+                GetRateBED = context.GetRateBED,
+                IsBulkActionApplicableToZone = isActionApplicableToZone
+            };
+            return IsBulkActionApplicableToAnyCountryZone(bulkActionApplicableToAnyCountryZoneInput);
+        }
+
         public static bool IsActionApplicableToZone(BulkActionApplicableToZoneInput input)
         {
             ZoneChanges zoneDraft = null;
@@ -72,7 +90,7 @@ namespace TOne.WhS.Sales.Business
             if (input.Draft != null && input.Draft.ZoneChanges != null)
                 zoneDraft = input.Draft.ZoneChanges.FindRecord(x => x.ZoneId == input.SaleZone.SaleZoneId);
 
-            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED)
+            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId)
             {
                 OwnerType = input.OwnerType,
                 OwnerId = input.OwnerId,
@@ -164,7 +182,7 @@ namespace TOne.WhS.Sales.Business
 
             foreach (SaleZone saleZone in saleZones)
             {
-                var bulkActionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED)
+                var bulkActionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId)
                 {
                     OwnerType = input.OwnerType,
                     OwnerId = input.OwnerId,
@@ -188,7 +206,7 @@ namespace TOne.WhS.Sales.Business
             decreasedRateBED = DateTime.Today.AddDays(pricingSettings.DecreasedRateDayOffset.Value);
         }
 
-        public static PricingSettings GetPricingSettings (SalePriceListOwnerType ownerType, int ownerId)
+        public static PricingSettings GetPricingSettings(SalePriceListOwnerType ownerType, int ownerId)
         {
             var pricingSettings = new PricingSettings();
 
@@ -262,7 +280,7 @@ namespace TOne.WhS.Sales.Business
             getCustomerZoneRate = (customerId, sellingProductId, zoneId) => { return rateLocatorValue.GetCustomerZoneRate(customerId, sellingProductId, zoneId); };
         }
 
-        public static void SetBulkActionContextHelpers(Func<int, long, SaleEntityZoneRate> getSellingProductZoneCurrentRate, Func<int, int, long, SaleEntityZoneRate> getCustomerZoneCurrentRate, out Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, out Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, out Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP, out Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP)
+        public static void SetBulkActionContextHelpers(SalePriceListOwnerType ownerType, int ownerId, Func<int, long, SaleEntityZoneRate> getSellingProductZoneCurrentRate, Func<int, int, long, SaleEntityZoneRate> getCustomerZoneCurrentRate, out Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, out Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, out Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP, out Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP, out Dictionary<int, DateTime> countryBEDsByCountryId)
         {
             var futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
             var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Today));
@@ -286,6 +304,8 @@ namespace TOne.WhS.Sales.Business
             {
                 return routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneId);
             };
+
+            countryBEDsByCountryId = (ownerType == SalePriceListOwnerType.Customer) ? GetDatesByCountry(ownerId, DateTime.Today, true) : null;
         }
 
         public static decimal ConvertToCurrencyAndRound(decimal value, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
@@ -338,6 +358,8 @@ namespace TOne.WhS.Sales.Business
 
         public Dictionary<long, ZoneChanges> ZoneDraftsByZoneId { get; set; }
 
+        public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
+
         public Func<int, long, SaleEntityZoneRoutingProduct> GetCurrentSellingProductZoneRP { get; set; }
 
         public Func<int, int, long, SaleEntityZoneRoutingProduct> GetCurrentCustomerZoneRP { get; set; }
@@ -362,6 +384,8 @@ namespace TOne.WhS.Sales.Business
         public BulkActionType BulkAction { get; set; }
 
         public Changes Draft { get; set; }
+
+        public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
 
         public Func<int, long, SaleEntityZoneRoutingProduct> GetCurrentSellingProductZoneRP { get; set; }
 
