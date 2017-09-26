@@ -54,8 +54,8 @@ app.directive('partnerportalInvoiceSelector', [ 'PartnerPortal_Invoice_InvoiceAP
                 multipleselection = "ismultipleselection";
             }
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}" ng-show="ctrl.datasource.length > 1"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="PortalInvoiceAccountId"\
-                label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Account" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired"></vr-select></vr-columns>';
+            return  '<vr-columns colnum="{{ctrl.normalColNum}}" ng-show="ctrl.datasource.length > 1"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="PortalInvoiceAccountId" '+
+                    'label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Account" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired"></vr-select></vr-columns>';
         }
 
         function getInvoiceAccount(ctrl, $scope, attrs) {
