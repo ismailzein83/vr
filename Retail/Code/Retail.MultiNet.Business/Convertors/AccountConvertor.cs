@@ -20,7 +20,10 @@ namespace Retail.MultiNet.Business.Convertors
 
         static AccountBEManager s_accountBEManager = new AccountBEManager();
         static FinancialAccountManager s_financialAccountManager = new FinancialAccountManager();
-
+        static CountryManager s_countryManager = new CountryManager();
+        static CityManager s_cityManager = new CityManager();
+        static CurrencyManager s_currencyManager = new CurrencyManager();
+            
         public override string Name
         {
             get
@@ -192,22 +195,20 @@ namespace Retail.MultiNet.Business.Convertors
         #region Private Methods
         void FillProfileInfo(SourceAccountData accountData, DataRow row)
         {
-            CountryManager countryManager = new CountryManager();
-            string countryName = (row[CountryColumnName] as string);
+            string countryName = GetStringRowValue(row, CountryColumnName);
 
-            var country = string.IsNullOrEmpty(countryName) ? null : countryManager.GetCountry(countryName.Trim());
+            var country = string.IsNullOrEmpty(countryName) ? null : s_countryManager.GetCountry(countryName);
             City city = null;
             if (country != null)
             {
-                CityManager cityManager = new CityManager();
-                string cityName = (row[CityColumnName] as string);
-                city = string.IsNullOrEmpty(cityName) ? null : cityManager.GetCityByName(country.CountryId, cityName);
+                string cityName = GetStringRowValue(row, CityColumnName);
+                city = string.IsNullOrEmpty(cityName) ? null : s_cityManager.GetCityByName(country.CountryId, cityName);
             }
             AccountPartCompanyProfile settings = new AccountPartCompanyProfile
                 {
                     Contacts = GetContactsList(row),
                     CityId = city != null ? city.CityId : (int?)null,
-                    CountryId = country != null ? (int?)country.CountryId : null,
+                    CountryId = country != null ? country.CountryId : (int?)null,
                     POBox = GetStringRowValue(row, POBoxColumnName),
                     Address = GetStringRowValue(row, AddressColumnName),
                     Street = GetStringRowValue(row, StreetColumnName),
@@ -256,8 +257,7 @@ namespace Retail.MultiNet.Business.Convertors
         void FillFinancialInfo(SourceAccountData accountData, DataRow row)
         {
             string currencySourceId = GetStringRowValue(row,CurrencyIdColumnName);
-            CurrencyManager currencyManager = new CurrencyManager();
-            Currency currency = currencyManager.GetCurrencyBySymbol(currencySourceId);
+            Currency currency = s_currencyManager.GetCurrencyBySymbol(currencySourceId);
             currency.ThrowIfNull("currency", currencySourceId);
 
             accountData.Account.Settings.Parts.Add(this.FinancialPartDefinitionId, new AccountPart
