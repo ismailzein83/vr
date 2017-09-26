@@ -178,7 +178,7 @@ namespace TOne.WhS.Sales.MainExtensions
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             newNormalRate.Rate = context.GetRoundedRate(rateCalculationContext.Rate.Value);
-            newNormalRate.BED = GetNewNormalRateBED(zoneItem.CurrentRate, newNormalRate.Rate, zoneItem.ZoneBED, context.OwnerType, zoneItem.CountryId, context.NewRateDayOffset, context.IncreasedRateDayOffset, context.DecreasedRateDayOffset);
+            newNormalRate.BED = GetNewNormalRateBED(zoneItem, newNormalRate.Rate,context.OwnerType, context.NewRateDayOffset, context.IncreasedRateDayOffset, context.DecreasedRateDayOffset);
 
             newRates.Add(newNormalRate);
             context.ZoneItem.NewRates = newRates;
@@ -192,7 +192,7 @@ namespace TOne.WhS.Sales.MainExtensions
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             decimal roundedNewNormalRateValue = context.GetRoundedRate(rateCalculationContext.Rate.Value);
-            DateTime newNormalRateBED = GetNewNormalRateBED(itm.CurrentRate, roundedNewNormalRateValue, itm.ZoneBED, context.OwnerType, itm.CountryId, context.NewRateDayOffset, context.IncreasedRateDayOffset, context.DecreasedRateDayOffset);
+            DateTime newNormalRateBED = GetNewNormalRateBED(itm, roundedNewNormalRateValue, context.OwnerType, context.NewRateDayOffset, context.IncreasedRateDayOffset, context.DecreasedRateDayOffset);
             AddNewNormalRate(context.ZoneDraft, roundedNewNormalRateValue, newNormalRateBED);
         }
 
@@ -232,18 +232,20 @@ namespace TOne.WhS.Sales.MainExtensions
             zoneDraft.NewRates = newRates;
         }
 
-        private DateTime GetNewNormalRateBED(decimal? currentRate, decimal newRate, DateTime zoneBED, SalePriceListOwnerType ownerType, int countryId, int newRateDayOffset, int increasedRateDayOffset, int decreasedRateDayOffset)
+        private DateTime GetNewNormalRateBED(ZoneItem zoneItem, decimal newRate, SalePriceListOwnerType ownerType, int newRateDayOffset, int increasedRateDayOffset, int decreasedRateDayOffset)
         {
             if (BED.HasValue)
                 return BED.Value;
+            if (zoneItem.IsCountryNew)
+                return zoneItem.CountryBED.Value;
 
             DateTime newNormalRateBED;
-            DateTime todayPlusOffset = GetTodayPlusOffset(currentRate, newRate, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset);
-            newNormalRateBED = Utilities.Max(todayPlusOffset, zoneBED);
+            DateTime todayPlusOffset = GetTodayPlusOffset(zoneItem.CurrentRate, newRate, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset);
+            newNormalRateBED = Utilities.Max(todayPlusOffset, zoneItem.ZoneBED);
 
             if (ownerType == SalePriceListOwnerType.Customer)
             {
-                DateTime countryBED = _datesByCountry.GetRecord(countryId);
+                DateTime countryBED = zoneItem.CountryBED.Value;
                 newNormalRateBED = Utilities.Max(newNormalRateBED, countryBED);
             }
 
