@@ -2,27 +2,27 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline vr-loader="scopeModel.isLoadingFilters">
-                <partnerportal-invoice-invoiceviewertype-selector on-ready="onInvoiceViewerTypeSelectorReady" isrequired="true" normal-col-num="2" onselectionchanged=" onInvoiceViewerTypeSelectorSelectionChanged"></partnerportal-invoice-invoiceviewertype-selector>
-                <partnerportal-invoice-selector on-ready="onInvoiceAccountsSelectorReady" normal-col-num="2" ismultipleselection></partnerportal-invoice-selector>
+                <partnerportal-invoice-invoiceviewertype-selector on-ready="scopeModel.onInvoiceViewerTypeSelectorReady" isrequired="true" normal-col-num="2" onselectionchanged="    scopeModel.onInvoiceViewerTypeSelectorSelectionChanged"></partnerportal-invoice-invoiceviewertype-selector>
+                <partnerportal-invoice-selector on-ready="scopeModel.onInvoiceAccountsSelectorReady" normal-col-num="2" ismultipleselection></partnerportal-invoice-selector>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="From" value="fromDate" isrequired="true"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="From" value="scopeModel.fromDate" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="To" value="toDate"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="To" value="scopeModel.toDate"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <partnerportal-invoice-grid on-ready="onGridReady"></partnerportal-invoice-grid>
+                <partnerportal-invoice-grid on-ready="scopeModel.onGridReady"></partnerportal-invoice-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

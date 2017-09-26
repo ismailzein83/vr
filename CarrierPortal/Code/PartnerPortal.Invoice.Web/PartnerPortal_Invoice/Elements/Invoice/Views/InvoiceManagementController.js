@@ -30,19 +30,19 @@
         function defineScope() {
             $scope.scopeModel = {};
             var date = VRDateTimeService.getNowDateTime();
-            $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
-            $scope.onGridReady = function (api) {
+            $scope.scopeModel.fromDate = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
             };
-            $scope.onInvoiceViewerTypeSelectorReady = function (api) {
+            $scope.scopeModel.onInvoiceViewerTypeSelectorReady = function (api) {
                 invoiceViewerTypeSelectorAPI = api;
                 invoiceViewerTypeSelectorReadyDeferred.resolve();
             };
-            $scope.onInvoiceAccountsSelectorReady = function (api) {
+            $scope.scopeModel.onInvoiceAccountsSelectorReady = function (api) {
                 invoiceAccountsSelectorAPI = api;
                 invoiceAccountsSelectorReadyDeferred.resolve();
             };
-            $scope.onInvoiceViewerTypeSelectorSelectionChanged = function (value) {
+            $scope.scopeModel.onInvoiceViewerTypeSelectorSelectionChanged = function (value) {
 
                 var invoiceViewerTypeId = invoiceViewerTypeSelectorAPI.getSelectedIds();
                 if (invoiceViewerTypeId != undefined) {
@@ -59,7 +59,7 @@
                 }
             };
 
-            $scope.searchClicked = function () {
+            $scope.scopeModel.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());
 
             };
@@ -77,8 +77,8 @@
                 invoiceTypeId: invoiceViewerTypeRuntimeEntity.InvoiceTypeId,
                 invoiceViewerTypeId: invoiceViewerTypeId,
                 query: {
-                    FromTime: $scope.fromDate,
-                    ToTime: $scope.toDate,
+                    FromTime: $scope.scopeModel.fromDate,
+                    ToTime: $scope.scopeModel.toDate,
                     InvoiceViewerTypeId: invoiceViewerTypeId,
                     PartnerIds: invoiceAccountsSelectorAPI.getSelectedIds()
                 }
