@@ -3,10 +3,10 @@
     "use strict";
 
     Qm_CliTester_HistoryTestCallManagementController.$inject = ['$scope', 'UtilsService', 'Qm_CliTester_CallTestResultEnum', 'Qm_CliTester_CallTestStatusEnum',
-        'VR_Sec_UserAPIService', 'VRUIUtilsService', 'Qm_CliTester_TestCallAPIService'];
+        'VR_Sec_UserAPIService', 'VRUIUtilsService', 'Qm_CliTester_TestCallAPIService', 'VRDateTimeService'];
 
     function Qm_CliTester_HistoryTestCallManagementController($scope, UtilsService, Qm_CliTester_CallTestResultEnum, Qm_CliTester_CallTestStatusEnum,
-        VR_Sec_UserAPIService, VRUIUtilsService, Qm_CliTester_TestCallAPIService) {
+        VR_Sec_UserAPIService, VRUIUtilsService, Qm_CliTester_TestCallAPIService, VRDateTimeService) {
 
         var gridAPI;
 
@@ -31,7 +31,6 @@
         load();
 
         function defineScope() {
-
             $scope.countries = [];
             $scope.zones = [];
             $scope.suppliers = [];
@@ -40,7 +39,7 @@
             $scope.testStatus = [];
             $scope.testResult = [];
             $scope.users = [];
-            $scope.fromDate = new Date();
+            $scope.fromDate = VRDateTimeService.getNowDateTime();
             $scope.fromDate.setHours(0, 0, 0, 0);
 
             $scope.selectedSuppliers = [];
