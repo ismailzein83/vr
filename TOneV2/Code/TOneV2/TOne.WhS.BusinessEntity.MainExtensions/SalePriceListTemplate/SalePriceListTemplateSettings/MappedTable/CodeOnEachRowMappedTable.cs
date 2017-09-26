@@ -55,7 +55,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             var mappedValueContext = new CodeOnEachRowMappedValueContext()
             {
                 Zone = zone.ZoneName,
-                CustomerId=customerId
+                CustomerId = customerId
             };
 
             if (code != null)
@@ -63,6 +63,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 mappedValueContext.Code = code.Code;
                 mappedValueContext.CodeBED = code.BED;
                 mappedValueContext.CodeEED = code.EED;
+                mappedValueContext.CodeChangeType = code.CodeChange;
             }
 
             if (rate != null)
@@ -73,6 +74,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 mappedValueContext.ServicesIds = rate.ServicesIds;
                 mappedValueContext.RateChangeType = rate.RateChangeType;
                 mappedValueContext.CurrencyId = rate.CurrencyId;
+
             }
 
             mappedCol.MappedValue.Execute(mappedValueContext);

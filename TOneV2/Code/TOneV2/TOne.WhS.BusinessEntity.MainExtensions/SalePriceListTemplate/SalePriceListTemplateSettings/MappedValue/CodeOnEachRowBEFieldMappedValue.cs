@@ -20,7 +20,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         RateEED = 6,
         Services = 7,
         RateChangeType = 8,
-        Currency = 9
+        Currency = 9,
+        CodeChangeType=10
     }
 
     public class CodeOnEachRowBEFieldMappedValue : CodeOnEachRowMappedValue
@@ -65,6 +66,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 case CodeOnEachRowBEFieldType.RateChangeType:
                     context.Value = GetRateChange(context.RateChangeType,context.CustomerId);
                     break;
+                case CodeOnEachRowBEFieldType.CodeChangeType:
+                    context.Value = GetCodeChange(context.CodeChangeType, context.CustomerId);
+                    break;
                 case CodeOnEachRowBEFieldType.Currency:
                     if (context.CurrencyId.HasValue)
                     {
@@ -90,6 +94,24 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     return rateChangeTypeDescriptions.NotChanged;
             }
             return rateChangeTypeDescriptions.NotChanged;
+        }
+
+        private string GetCodeChange(CodeChange codeChangeType, int customerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var codeChangeTypeDescriptions = carrierAccountManager.GetCustomerCodeChangeTypeSettings(customerId);
+            switch (codeChangeType)
+            {
+                case CodeChange.NotChanged:
+                    return codeChangeTypeDescriptions.NotChangedCode;
+                case CodeChange.New:
+                    return codeChangeTypeDescriptions.NewCode;
+                case CodeChange.Moved:
+                    return codeChangeTypeDescriptions.NewCode;
+                case CodeChange.Closed:
+                    return codeChangeTypeDescriptions.ClosedCode;
+            }
+            return codeChangeTypeDescriptions.NotChangedCode;
         }
 
     }

@@ -21,5 +21,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public RateChangeType RateChangeType { get; set; }
         public int? CurrencyId { get; set; }
         public int CustomerId { get; set; }
+        public CodeChange CodeChangeType { get; set; }
     }
 }
