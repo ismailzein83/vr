@@ -581,6 +581,8 @@
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistFilePreview.html" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistFilePreviewController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePriceListChange.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePriceListChangeController.js" />
