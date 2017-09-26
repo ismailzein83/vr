@@ -16,6 +16,7 @@ namespace TOne.WhS.BusinessEntity.Data
         bool ArGetSalePriceListsUpdated(ref object updateHandle);
         bool SetCustomerPricelistsAsSent(IEnumerable<int> customerIds, int? priceListId);
         void SavePriceListsToDb(List<SalePriceList> salePriceLists);
+        void SavePriceListsToDb(IEnumerable<NewPriceList> salePriceLists);
 
     }
 }

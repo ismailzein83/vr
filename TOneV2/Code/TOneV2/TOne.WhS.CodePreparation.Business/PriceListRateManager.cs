@@ -134,7 +134,7 @@ namespace TOne.WhS.CodePreparation.Business
                     OwnerId = rate.OwnerId,
                     OwnerType = rate.OwnerType,
                     EffectiveOn = effectiveDate,
-                    CurrencyId = GetOwnerCurreny(rate.OwnerId, rate.OwnerType)
+                    CurrencyId = rate.CurrencyId ?? GetOwnerCurreny(rate.OwnerId, rate.OwnerType)
                 };
 
                 priceListToAdd = salePriceListsByOwner.TryAddValue(priceListToAdd);
@@ -284,13 +284,13 @@ namespace TOne.WhS.CodePreparation.Business
 
                         if (!defaultRates.ContainsKey(pricelist.OwnerId))
                         {
-                            int newRateCurrencyId = (pricelist.OwnerType == SalePriceListOwnerType.SellingProduct)?sellingProductManager.GetSellingProductCurrencyId(pricelist.OwnerId):carrierAccountManager.GetCarrierAccountCurrencyId(pricelist.OwnerId);
+                            int newRateCurrencyId = (pricelist.OwnerType == SalePriceListOwnerType.SellingProduct) ? sellingProductManager.GetSellingProductCurrencyId(pricelist.OwnerId) : carrierAccountManager.GetCarrierAccountCurrencyId(pricelist.OwnerId);
                             var defaultRateConverted = currencyExchangeRateManager.ConvertValueToCurrency(defaultRate, systemCurrencyId, newRateCurrencyId, DateTime.Now);
                             NewZoneRateEntity rate = new NewZoneRateEntity
                             {
                                 OwnerId = pricelist.OwnerId,
                                 OwnerType = pricelist.OwnerType,
-                                CurrencyId =  newRateCurrencyId,
+                                CurrencyId = newRateCurrencyId,
                                 Rate = defaultRateConverted
                             };
                             defaultRates.Add(pricelist.OwnerId, rate);
@@ -301,7 +301,7 @@ namespace TOne.WhS.CodePreparation.Business
             return defaultRates.Values.ToList();
         }
 
-        private decimal getRoundedDefaultRateForPriceListOwner (SalePriceListOwnerType ownerType,int ownerId)
+        private decimal getRoundedDefaultRateForPriceListOwner(SalePriceListOwnerType ownerType, int ownerId)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             SellingProductManager sellingProductManager = new SellingProductManager();
@@ -311,7 +311,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             return carrierAccountManager.GetCustomerRoundedDefaultRate(ownerId);
         }
-        
+
         #endregion
         private ExistingRatesByZoneName StructureEffectiveExistingRatesByZoneName(IEnumerable<ExistingRate> effectiveExistingRates)
         {

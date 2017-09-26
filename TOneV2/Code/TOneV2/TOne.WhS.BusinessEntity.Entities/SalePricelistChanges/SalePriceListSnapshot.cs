@@ -8,7 +8,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SalePriceListSnapShot
     {
-        public int PriceListId { get; set; }
+        public long PriceListId { get; set; }
         public SnapShotDetail SnapShotDetail { get; set; }
     }
     public class SnapShotDetail

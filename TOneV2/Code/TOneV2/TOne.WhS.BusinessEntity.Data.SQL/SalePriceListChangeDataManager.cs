@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
     {
         private readonly string[] _salePricelistCodeChangeColumns =
         {
-            "Code","RecentZoneName","ZoneName","Change","BatchID","BED","EED","CountryID"
+            "Code","RecentZoneName","ZoneName","ZoneID","Change","BatchID","BED","EED","CountryID"
         };
         private readonly string[] _salePricelistRateChangeColumns =
         {
@@ -142,10 +142,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             if (streamForBulkInsert != null)
-                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
                     record.Code,
                     record.RecentZoneName,
                     record.ZoneName,
+                    record.ZoneId,
                     (int)record.ChangeType,
                     record.BatchId,
                     GetDateTimeForBCP(record.BED),
@@ -230,7 +231,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ZoneName = GetReaderValue<string>(reader, "ZoneName"),
                 ChangeType = (CodeChange)GetReaderValue<byte>(reader, "Change"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime?>(reader, "EED")
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                ZoneId = GetReaderValue<long?>(reader, "ZoneID")
             };
             return salePricelistCodeChange;
         }

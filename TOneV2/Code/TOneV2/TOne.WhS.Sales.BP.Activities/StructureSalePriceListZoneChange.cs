@@ -11,12 +11,15 @@ using TOne.WhS.Sales.Business.Reader;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
     public class StructureSalePriceListZoneChange : CodeActivity
     {
+        public InArgument<int?> RerservedSalePriceListId { get; set; }
+        public InArgument<int> CurrencyId { get; set; }
         public InArgument<IEnumerable<SaleZone>> SaleZones { get; set; }
         public InArgument<IEnumerable<SaleRate>> SaleRates { get; set; }
         public InArgument<IEnumerable<DataByZone>> DataByZone { get; set; }
@@ -29,7 +32,8 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<DefaultRoutingProductToAdd> DefaultRoutingProductToAdd { get; set; }
         public InArgument<DefaultRoutingProductToClose> DefaultRoutingProductToClose { get; set; }
         public InArgument<DateTime> EffectiveOn { get; set; }
-        public OutArgument<IEnumerable<CustomerPriceListChange>> CustomerChange { get; set; }
+        public OutArgument<IEnumerable<NewCustomerPriceListChange>> CustomerChange { get; set; }
+        public OutArgument<IEnumerable<NewPriceList>> NewSalePriceList { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -46,6 +50,8 @@ namespace TOne.WhS.Sales.BP.Activities
             SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
             Changes draft = this.Draft.Get(context);
             DateTime effectiveOn = this.EffectiveOn.Get(context);
+            int? priceListId = RerservedSalePriceListId.Get(context);
+            int currencyId = CurrencyId.Get(context);
 
             #endregion
 
@@ -58,6 +64,7 @@ namespace TOne.WhS.Sales.BP.Activities
             SaleEntityZoneRoutingProductLocator currenRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerIds, effectiveOn, false));
 
             List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
+            var lastRateNoCachelocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(dataByCustomer, ratePlanContext.EffectiveDate));
 
             if (dataByCustomer != null)
             {
@@ -68,7 +75,6 @@ namespace TOne.WhS.Sales.BP.Activities
                     #region Selling Product
 
                     //var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, true));
-                    var lastRateNoCachelocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(dataByCustomer, ratePlanContext.EffectiveDate));
 
                     SellingProductChangesContext sellingProductContext = new SellingProductChangesContext
                     {
@@ -226,7 +232,16 @@ namespace TOne.WhS.Sales.BP.Activities
                 #endregion
             }
 
-            CustomerChange.Set(context, customerPriceListChanges);
+            var salePriceListManager = new SalePriceListManager();
+            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
+
+            var pricelistByCurrencyId = CreatePriceList(ownerId, ownerType, priceListId, currencyId, processInstanceId, userId);
+            var structuredCustomers = salePriceListManager.StructureCustomerPricelistChange(customerPriceListChanges);
+            var changes = salePriceListManager.CreateCustomerChanges(structuredCustomers, lastRateNoCachelocator, pricelistByCurrencyId, effectiveOn, processInstanceId, userId);
+
+            NewSalePriceList.Set(context, pricelistByCurrencyId.Values.SelectMany(p => p));
+            CustomerChange.Set(context, changes);
         }
 
         #region Get Pricelist Changes from Selling Product Methods
@@ -319,6 +334,28 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Get Pricelist Changes from Customer Methods
 
+        private Dictionary<int, List<NewPriceList>> CreatePriceList(int ownerId, SalePriceListOwnerType ownerType, int? reservedId, int currencyId, long processInstanceId
+            , int userId)
+        {
+            Dictionary<int, List<NewPriceList>> priceListByCurrencyId = new Dictionary<int, List<NewPriceList>>();
+            if (reservedId.HasValue)
+            {
+                NewPriceList newPricelist = new NewPriceList
+                 {
+                     OwnerId = ownerId,
+                     PriceListId = reservedId.Value,
+                     CurrencyId = currencyId,
+                     OwnerType = ownerType,
+                     //PriceListType = salePriceListType,
+                     EffectiveOn = DateTime.Now,
+                     ProcessInstanceId = processInstanceId,
+                     UserId = userId
+                 };
+                priceListByCurrencyId.Add(currencyId, new List<NewPriceList> { newPricelist });
+            }
+            return priceListByCurrencyId;
+        }
+
         private void GetChangesForNewCountries(CustomerNewCountriesChangesContext context)
         {
             context.RateChangesOutArgument = new List<SalePricelistRateChange>();
@@ -395,6 +432,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         {
                             CountryId = countryToAdd.CountryId,
                             ZoneName = zoneName,
+                            ZoneId = existingCode.ZoneId,
                             Code = existingCode.Code,
                             ChangeType = CodeChange.New,
                             BED = countryToAdd.BED
@@ -467,6 +505,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         {
                             CountryId = countryToClose.CountryId,
                             ZoneName = zoneName,
+                            ZoneId = existingCode.ZoneId,
                             Code = existingCode.Code,
                             ChangeType = CodeChange.Closed,
                             BED = existingCode.BED > soldCountry.BED ? existingCode.BED : soldCountry.BED,

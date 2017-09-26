@@ -9,7 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SalePriceListCustomerChange
     {
         public long BatchId { get; set; }
-        public int PriceListId { get; set; }
+        public long PriceListId { get; set; }
         public int CountryId { get; set; }
         public int CustomerId { get; set; }
     }

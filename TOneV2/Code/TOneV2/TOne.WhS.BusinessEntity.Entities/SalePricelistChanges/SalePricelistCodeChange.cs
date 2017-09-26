@@ -9,12 +9,13 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SalePricelistCodeChange
     {
+        public long? ZoneId { get; set; }
         public string ZoneName { get; set; }
         public string RecentZoneName { get; set; }
         public int CountryId { get; set; }
         public string Code { get; set; }
         public CodeChange ChangeType { get; set; }
-        public int PricelistId { get; set; }
+        public long PricelistId { get; set; }
         public long BatchId { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }

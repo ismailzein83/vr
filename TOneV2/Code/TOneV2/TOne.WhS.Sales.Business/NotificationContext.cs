@@ -14,9 +14,9 @@ namespace TOne.WhS.Sales.Business
         public SalePLChangeType ChangeType { get; set; }
         public IEnumerable<int> EndedCountryIds { get; set; }
         public DateTime? CountriesEndedOn { get; set; }
-        public IEnumerable<CustomerPriceListChange> CustomerPriceListChanges { get; set; }
-        public IEnumerable<SalePriceList> SalePriceLists { get; set; }
-        public int? CurrencyId { get; set; }
+        public IEnumerable<NewPriceList> SalePriceLists { get; set; }
+        public int CurrencyId { get; set; }
         public int UserId { get; set; }
+        public IEnumerable<NewCustomerPriceListChange> CustomerPriceListChanges { get; set; }
     }
 }

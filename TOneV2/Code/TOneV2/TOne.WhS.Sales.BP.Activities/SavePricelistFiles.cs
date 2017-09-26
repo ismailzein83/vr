@@ -16,11 +16,12 @@ namespace TOne.WhS.Sales.BP.Activities
     public class SavePricelistFiles : CodeActivity
     {
         #region Input Arguments
-        public InArgument<int?> RerservedSalePriceListId { get; set; }
         public InArgument<int> CurrencyId { get; set; }
         public InArgument<int> OwnerId { get; set; }
         public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
         public InArgument<IEnumerable<CustomerPriceListChange>> CustomerChanges { get; set; }
+        public InArgument<IEnumerable<NewCustomerPriceListChange>> NewCustomerChanges { get; set; }
+        public InArgument<IEnumerable<NewPriceList>> NewSalePriceList { get; set; }
 
         [RequiredArgument]
         public InArgument<IEnumerable<SalePLZoneChange>> SalePLZoneChanges { get; set; }
@@ -41,29 +42,24 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             IRatePlanContext ratePlanContext = context.GetRatePlanContext();
             IEnumerable<CustomerCountryToChange> countriesToChange = CustomerCountriesToChange.Get(context);
-            IEnumerable<CustomerPriceListChange> customerPriceListChanges = CustomerChanges.Get(context);
+            IEnumerable<NewCustomerPriceListChange> customerPriceListChanges = NewCustomerChanges.Get(context);
             IEnumerable<int> customerIdsWithPriceList;
             int currencyId = CurrencyId.Get(context);
-            int ownerId = OwnerId.Get(context);
-            SalePriceListOwnerType ownerType = OwnerType.Get(context);
-            int? priceListId = RerservedSalePriceListId.Get(context);
+            IEnumerable<NewPriceList> salePriceLists = NewSalePriceList.Get(context);
 
             SalePLChangeType plChangeType;
-            SalePriceListType salePriceListType;
 
             int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
-            
+
             if (countriesToChange != null && countriesToChange.Any())
             {
                 customerIdsWithPriceList = new List<int> { ratePlanContext.OwnerId };
                 plChangeType = SalePLChangeType.CountryAndRate;
-                salePriceListType = SalePriceListType.Country;
             }
             else
             {
                 customerIdsWithPriceList = customerPriceListChanges.Select(c => c.CustomerId);
                 plChangeType = SalePLChangeType.Rate;
-                salePriceListType = SalePriceListType.RateChange;
             }
             var salePricelistFileContext = new SalePricelistFileContext
             {
@@ -73,35 +69,16 @@ namespace TOne.WhS.Sales.BP.Activities
                 EffectiveDate = ratePlanContext.EffectiveDate,
                 ChangeType = plChangeType,
                 CurrencyId = currencyId,
-                UserId = userId
+                UserId = userId,
+                SalePriceLists = salePriceLists
             };
-            salePricelistFileContext.SalePriceLists = CreatePriceList(ownerId, ownerType, priceListId, currencyId,
-                salePriceListType, salePricelistFileContext.ProcessInstanceId);
             var salePricelistManager = new SalePriceListManager();
-            salePricelistManager.SavePricelistFiles(salePricelistFileContext);
+            salePricelistManager.SavePriceList(salePricelistFileContext);
             CustomerIdsWithPriceList.Set(context, customerIdsWithPriceList);
         }
 
         #region Private Methods
 
-        private IEnumerable<SalePriceList> CreatePriceList(int ownerId, SalePriceListOwnerType ownerType, int? reservedId, int currencyId, SalePriceListType salePriceListType, long processInstanceId)
-        {
-            if (!reservedId.HasValue) return new List<SalePriceList>();
-            return new List<SalePriceList>
-            {
-                new SalePriceList
-                {
-                    OwnerId = ownerId,
-                    PriceListId = reservedId.Value,
-                    CurrencyId = currencyId,
-                    OwnerType = ownerType,
-                    PriceListType = salePriceListType,
-                    EffectiveOn = DateTime.Now,
-                    CreatedTime = DateTime.Now,
-                    ProcessInstanceId = processInstanceId
-                }
-            };
-        }
         #endregion
     }
 }

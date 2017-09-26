@@ -20,9 +20,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         [RequiredArgument]
         public InArgument<SalePriceListsByOwner> SalePriceListsByOwner { get; set; }
-
-        [RequiredArgument]
-        public InArgument<IEnumerable<CustomerPriceListChange>> CustomerChanges { get; set; }
+        public InArgument<IEnumerable<NewCustomerPriceListChange>> CustomerPriceListChanges { get; set; }
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanId { get; set; }
 
@@ -32,33 +30,25 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<CarrierAccountInfo>> CustomersWithPriceListFile { get; set; }
 
+        public InArgument<IEnumerable<NewPriceList>> NewSalePriceList { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
             int sellingNumberPlanId = SellingNumberPlanId.Get(context);
-            SalePriceListsByOwner salePriceListByOwner = SalePriceListsByOwner.Get(context);
-            IEnumerable<CustomerPriceListChange> customerPriceListChanges = CustomerChanges.Get(context);
+
+            IEnumerable<NewCustomerPriceListChange> customerPriceListChanges = CustomerPriceListChanges.Get(context);
+            IEnumerable<NewPriceList> salePriceLists = NewSalePriceList.Get(context);
             DateTime minimumDate = MinimumDate.Get(context);
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-            IEnumerable<SalePriceList> salePriceLists = ConvertPriceList(salePriceListByOwner, processInstanceId);
-            SavePriceLists(sellingNumberPlanId, customerPriceListChanges, processInstanceId, minimumDate, salePriceLists, userId);
+
+            SavePriceLists(sellingNumberPlanId, customerPriceListChanges, processInstanceId, minimumDate, salePriceLists, userId, context);
             var customersToSave = GetCustomersToSavePriceListsFor(sellingNumberPlanId, customerPriceListChanges);
             CustomersWithPriceListFile.Set(context, customersToSave);
         }
-        private IEnumerable<SalePriceList> ConvertPriceList(SalePriceListsByOwner salePriceListsByOwner, long processInstanceId)
-        {
-            return salePriceListsByOwner.GetSalePriceLists().Select(priceListItem => new SalePriceList
-            {
-                OwnerId = priceListItem.OwnerId,
-                PriceListId = priceListItem.PriceListId,
-                CurrencyId = priceListItem.CurrencyId,
-                OwnerType = priceListItem.OwnerType,
-                PriceListType = SalePriceListType.Country,
-                EffectiveOn = priceListItem.EffectiveOn,
-                ProcessInstanceId = processInstanceId
-            });
-        }
-        private void SavePriceLists(int sellingNumberPlanId, IEnumerable<CustomerPriceListChange> customerPriceListChanges, long processInstanceId, DateTime effectiveOn, IEnumerable<SalePriceList> salePriceLists, int userId)
+
+        private void SavePriceLists(int sellingNumberPlanId, IEnumerable<NewCustomerPriceListChange> customerPriceListChanges, long processInstanceId, DateTime effectiveOn, IEnumerable<NewPriceList> newSalePriceLists, int userId
+            , CodeActivityContext activityContext)
         {
             ISalePricelistFileContext salePriceListFileContext = new SalePricelistFileContext
             {
@@ -67,13 +57,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 CustomerPriceListChanges = customerPriceListChanges,
                 EffectiveDate = effectiveOn,
                 ChangeType = SalePLChangeType.CodeAndRate,
-                SalePriceLists = salePriceLists,
+                SalePriceLists = newSalePriceLists,
                 UserId = userId
             };
             SalePriceListManager salePricelistManager = new SalePriceListManager();
-            salePricelistManager.SavePricelistFiles(salePriceListFileContext);
+            salePricelistManager.SavePriceList(salePriceListFileContext);
         }
-        private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(int sellingNumberPlanId, IEnumerable<CustomerPriceListChange> customerPriceListChanges)
+        private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(int sellingNumberPlanId, IEnumerable<NewCustomerPriceListChange> customerPriceListChanges)
         {
             var customersToSavePricelistsFor = new List<CarrierAccountInfo>();
             var carrierAccountManager = new CarrierAccountManager();

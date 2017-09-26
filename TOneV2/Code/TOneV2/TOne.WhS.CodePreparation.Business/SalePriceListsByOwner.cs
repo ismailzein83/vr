@@ -19,7 +19,7 @@ namespace TOne.WhS.CodePreparation.Business
         }
         public PriceListToAdd TryAddValue(PriceListToAdd salePriceList)
         {
-            string owner = string.Join<int>(",", new List<int>() { (int)salePriceList.OwnerType, salePriceList.OwnerId });
+            string owner = string.Join<int>(",", new List<int>() { (int)salePriceList.OwnerType, salePriceList.OwnerId, salePriceList.CurrencyId });
             PriceListToAdd priceList;
 
             if (this._salePriceListsByOwner.TryGetValue(owner, out priceList))
@@ -55,7 +55,7 @@ namespace TOne.WhS.CodePreparation.Business
                     foreach (PriceListToAdd priceList in salePriceLists)
                     {
                         priceList.PriceListId = salePriceListStartingId++;
-                    } 
+                    }
                 }
             }
         }

@@ -25,12 +25,12 @@ namespace TOne.WhS.CodePreparation.Business
 
         public DateTime? CountriesEndedOn { get; set; }
 
-        public IEnumerable<CustomerPriceListChange> CustomerPriceListChanges { get; set; }
+        public IEnumerable<NewCustomerPriceListChange> CustomerPriceListChanges { get; set; }
+        public IEnumerable<NewPriceList> SalePriceLists { get; set; }
 
-        public IEnumerable<SalePriceList> SalePriceLists { get; set; }
-
-        public int? CurrencyId { get; set; }
+        public int CurrencyId { get; set; }
 
         public int UserId { get; set; }
+        
     }
 }

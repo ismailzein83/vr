@@ -77,87 +77,17 @@ namespace TOne.WhS.BusinessEntity.Business
             dataManager.SaveSalePriceListSnapshotToDb(salePriceListSaleCodeSnapshots);
 
         }
-        public void SaveSalePriceListCustomerChanges(List<CustomerPriceListChange> customerPriceListChanges, long processInstanceId)
+
+        public void BulkCustomerSalePriceListChanges(IEnumerable<SalePriceListCustomerChange> customerChanges, IEnumerable<SalePricelistCodeChange> codeChanges, IEnumerable<SalePricelistRateChange> rateChanges
+            , IEnumerable<SalePricelistRPChange> rpChanges, long processInstanceId)
         {
             var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
-            var todbCustomerChanges = new List<SalePriceListCustomerChange>();
-            var todbCodeChanges = new List<SalePricelistCodeChange>();
-            var todbsaleRateChanges = new List<SalePricelistRateChange>();
-            var todbSaleRoutingProductchanges = new List<SalePricelistRPChange>();
-            var salePricelistCodeChanges = new Dictionary<string, SalePricelistCodeChange>();
-
-            foreach (var priceListChange in customerPriceListChanges)
-            {
-                Dictionary<string, SalePriceListCustomerChange> salePriceListCustomerChanges = new Dictionary<string, SalePriceListCustomerChange>();
-
-                foreach (var codeChange in priceListChange.CodeChanges)
-                {
-                    string key = string.Format("{0}|{1}", codeChange.CountryId, priceListChange.PriceListId);
-                    SalePriceListCustomerChange customer;
-                    if (!salePriceListCustomerChanges.TryGetValue(key, out customer))
-                    {
-                        customer = new SalePriceListCustomerChange
-                        {
-                            CountryId = codeChange.CountryId,
-                            PriceListId = priceListChange.PriceListId,
-                            CustomerId = priceListChange.CustomerId,
-                            BatchId = processInstanceId
-                        };
-                        salePriceListCustomerChanges.Add(key, customer);
-                        todbCustomerChanges.Add(customer);
-                    }
-                    string key1 = string.Format("{0}|{1}", codeChange.CountryId, codeChange.Code);
-                    if (!salePricelistCodeChanges.ContainsKey(key1))
-                    {
-                        SalePricelistCodeChange salePricelistCodeChange = new SalePricelistCodeChange
-                        {
-                            CountryId = codeChange.CountryId,
-                            PricelistId = customer.PriceListId,
-                            ZoneName = codeChange.ZoneName,
-                            RecentZoneName = codeChange.RecentZoneName,
-                            EED = codeChange.EED,
-                            BED = codeChange.BED,
-                            Code = codeChange.Code,
-                            ChangeType = codeChange.ChangeType,
-                            BatchId = processInstanceId
-                        };
-                        salePricelistCodeChanges.Add(key1, salePricelistCodeChange);
-                        todbCodeChanges.Add(salePricelistCodeChange);
-                    }
-                }
-                todbsaleRateChanges.AddRange(priceListChange.RateChanges.Select(rate => new SalePricelistRateChange
-                {
-                    CountryId = rate.CountryId,
-                    ZoneName = rate.ZoneName,
-                    ZoneId = rate.ZoneId,
-                    Rate = rate.Rate,
-                    PricelistId = priceListChange.PriceListId,
-                    ChangeType = rate.ChangeType,
-                    BED = rate.BED,
-                    RecentRate = rate.RecentRate,
-                    EED = rate.EED,
-                    RoutingProductId = rate.RoutingProductId,
-                    CurrencyId = rate.CurrencyId
-                }));
-                todbSaleRoutingProductchanges.AddRange(priceListChange.RoutingProductChanges.Select(
-                    routingProduct => new SalePricelistRPChange
-                    {
-                        CountryId = routingProduct.CountryId,
-                        ZoneName = routingProduct.ZoneName,
-                        ZoneId = routingProduct.ZoneId,
-                        BED = routingProduct.BED,
-                        EED = routingProduct.EED,
-                        PriceListId = priceListChange.PriceListId,
-                        RecentRoutingProductId = routingProduct.RecentRoutingProductId,
-                        RoutingProductId = routingProduct.RoutingProductId
-                    }));
-            }
-            dataManager.SaveCustomerChangesToDb(todbCustomerChanges);
-            dataManager.SaveCustomerCodeChangesToDb(todbCodeChanges);
-            dataManager.SaveCustomerRateChangesToDb(todbsaleRateChanges, processInstanceId);
-            dataManager.SaveCustomerRoutingProductChangesToDb(todbSaleRoutingProductchanges, processInstanceId);
+            dataManager.SaveCustomerChangesToDb(customerChanges);
+            dataManager.SaveCustomerCodeChangesToDb(codeChanges);
+            dataManager.SaveCustomerRateChangesToDb(rateChanges, processInstanceId);
+            dataManager.SaveCustomerRoutingProductChangesToDb(rpChanges, processInstanceId);
         }
-
+       
         public CustomerPriceListChange GetCustomerChangesByPriceListId(int pricelistId)
         {
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
@@ -171,55 +101,6 @@ namespace TOne.WhS.BusinessEntity.Business
             changes.PriceListId = pricelistId;
 
             return changes;
-        }
-        public Dictionary<int, List<CustomerPriceListChange>> GetNotSentChangesByCustomer(IEnumerable<int> customerIds)
-        {
-            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
-            List<SalePricelistCodeChange> codeChanges = dataManager.GetNotSentCodechanges(customerIds);
-            List<SalePricelistRateChange> rateChanges = dataManager.GetNotSentRatechanges(customerIds);
-
-            //TODO we need to include RP changes in not sent?
-
-            var customerPriceListChanges = new Dictionary<int, CustomerPriceListChange>();
-            foreach (var codeChange in codeChanges)
-            {
-                CustomerPriceListChange customerPriceList;
-                if (!customerPriceListChanges.TryGetValue(codeChange.PricelistId, out customerPriceList))
-                {
-                    customerPriceList = new CustomerPriceListChange();
-                    customerPriceListChanges.Add(codeChange.PricelistId, customerPriceList);
-                }
-                customerPriceList.CodeChanges.Add(codeChange);
-            }
-            foreach (var rateChange in rateChanges)
-            {
-                CustomerPriceListChange customerPriceList;
-                if (!customerPriceListChanges.TryGetValue(rateChange.PricelistId, out customerPriceList))
-                {
-                    customerPriceList = new CustomerPriceListChange();
-                    customerPriceListChanges.Add(rateChange.PricelistId, customerPriceList);
-                }
-                customerPriceList.RateChanges.Add(rateChange);
-            }
-
-            var priceListByCustomerId = new Dictionary<int, List<CustomerPriceListChange>>();
-            SalePriceListManager salePriceListManager = new SalePriceListManager();
-
-            foreach (var customerPriceList in customerPriceListChanges)
-            {
-                var priceList = salePriceListManager.GetPriceList(customerPriceList.Key);
-                List<CustomerPriceListChange> changes;
-                if (!priceListByCustomerId.TryGetValue(priceList.OwnerId, out changes))
-                {
-                    changes = new List<CustomerPriceListChange>();
-                    priceListByCustomerId.Add(priceList.OwnerId, changes);
-                }
-                var customerPriceListValue = customerPriceList.Value;
-                customerPriceListValue.CustomerId = priceList.OwnerId;
-                customerPriceListValue.PriceListId = priceList.PriceListId;
-                changes.Add(customerPriceListValue);
-            }
-            return priceListByCustomerId;
         }
         #region Mapper
         private SalePricelistRateChangeDetail SalePricelistRateChangeDetailMapper(SalePricelistRateChange salePricelistRateChange)

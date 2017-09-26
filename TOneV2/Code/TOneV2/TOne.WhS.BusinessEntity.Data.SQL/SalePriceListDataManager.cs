@@ -14,6 +14,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             "ID", "OwnerType", "OwnerID", "CurrencyID", "EffectiveOn", "PriceListType",
             "SourceID", "ProcessInstanceID", "FileID","UserID"
         };
+        private readonly string[] _newPricelistColumns =
+        {
+            "ID", "OwnerType", "OwnerID", "CurrencyID", "EffectiveOn", "PriceListType",
+             "ProcessInstanceID", "FileID","UserID"
+        };
         #region ctor/Local Variables
         public SalePriceListDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
@@ -57,7 +62,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             Object dbApplyStream = InitialiazeStreamForDBApply();
             foreach (SalePriceList salePriceList in salePriceLists)
                 WriteRecordToStream(salePriceList, dbApplyStream);
-            Object preparedSalePriceLists = FinishDBApplyStream(dbApplyStream, "TOneWhS_BE.SalePricelist_New");
+            Object preparedSalePriceLists = FinishDBApplyStream(dbApplyStream, "TOneWhS_BE.SalePricelist_New", _columns);
+            ApplySalePriceListsToDB(preparedSalePriceLists);
+        }
+        public void SavePriceListsToDb(IEnumerable<NewPriceList> salePriceLists)
+        {
+            Object dbApplyStream = InitialiazeStreamForDBApply();
+            foreach (NewPriceList salePriceList in salePriceLists)
+                WriteRecordToStream(salePriceList, dbApplyStream);
+            Object preparedSalePriceLists = FinishDBApplyStream(dbApplyStream, "TOneWhS_BE.SalePricelist_New", _newPricelistColumns);
             ApplySalePriceListsToDB(preparedSalePriceLists);
         }
         #endregion
@@ -80,6 +93,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                     record.FileId,
                     record.UserId);
         }
+        private void WriteRecordToStream(NewPriceList record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            if (streamForBulkInsert != null)
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
+                    record.PriceListId,
+                    (int)record.OwnerType,
+                    record.OwnerId,
+                    record.CurrencyId,
+                    GetDateTimeForBCP(record.EffectiveOn),
+                    (int?)record.PriceListType,
+                    record.ProcessInstanceId,
+                    record.FileId,
+                    record.UserId);
+        }
         private void ApplySalePriceListsToDB(object preparedSalePriceLists)
         {
             InsertBulkToTable(preparedSalePriceLists as BaseBulkInsertInfo);
@@ -88,7 +116,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return base.InitializeStreamForBulkInsert();
         }
-        private object FinishDBApplyStream(object dbApplyStream, string tableName)
+        private object FinishDBApplyStream(object dbApplyStream, string tableName, string[] columnNames)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.Close();
@@ -99,7 +127,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^',
-                ColumnNames = _columns
+                ColumnNames = columnNames
             };
 
         }
@@ -188,7 +216,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
 
-        public string BackupAllDataByOwner(long stateBackupId, string backupDatabase,IEnumerable<int> ownerIds, int ownerType)
+        public string BackupAllDataByOwner(long stateBackupId, string backupDatabase, IEnumerable<int> ownerIds, int ownerType)
         {
             string ownerIdsString = null;
             if (ownerIds != null && ownerIds.Any())
