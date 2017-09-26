@@ -461,7 +461,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     }
 
                     return WhS_Sales_RatePlanAPIService.GetZoneLetters(getZoneLettersInput).then(function (response) {
-                        if (response != undefined) {
+                        if (response != undefined && response.length > 0) {
                             $scope.showZoneLetters = true;
                             for (var i = 0; i < response.length; i++) {
                                 $scope.zoneLetters.push(response[i]);
