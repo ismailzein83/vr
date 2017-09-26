@@ -92,7 +92,8 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 
             SupplierZoneDetailBulkInsert supplierZoneDetailBulkInsert = dbApplyStream as SupplierZoneDetailBulkInsert;
             supplierZoneDetailBulkInsert.SupplierZoneDetailStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.SupplierId, record.SupplierZoneId,
-                decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight, record.SupplierRateId, record.SupplierRateEED);
+                decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight, record.SupplierRateId, 
+                record.SupplierRateEED.HasValue ? GetDateTimeForBCP(record.SupplierRateEED) : "");
 
             if (!IsFuture.HasValue)
                 throw new ArgumentNullException("IsFuture");

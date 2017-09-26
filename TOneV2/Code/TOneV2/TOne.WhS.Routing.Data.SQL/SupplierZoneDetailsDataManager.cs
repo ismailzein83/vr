@@ -42,7 +42,8 @@ namespace TOne.WhS.Routing.Data.SQL
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.SupplierId, record.SupplierZoneId,
-                decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight, record.SupplierRateId, record.SupplierRateEED);
+                decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight, record.SupplierRateId,
+                record.SupplierRateEED.HasValue ? GetDateTimeForBCP(record.SupplierRateEED) : "");
         }
         public void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails)
         {
