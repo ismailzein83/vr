@@ -96,6 +96,7 @@ namespace Vanrise.Invoice.MainExtensions
                         {
                             return dataRecordField.Type.GetDescription(fieldValue);
                         }
+                        throw new NullReferenceException(string.Format("Field: '{0}' not available in dataRecordType '{1}'.", this.FieldName, invoiceType.Settings.InvoiceDetailsRecordTypeId));
                     }
                     return fieldValue;
                 case InvoiceField.Paid:
