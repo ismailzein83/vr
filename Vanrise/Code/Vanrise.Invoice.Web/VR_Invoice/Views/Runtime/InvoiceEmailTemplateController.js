@@ -39,14 +39,27 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.onAttachmentItemClicked = function (dataItem) {
+                if (dataItem != undefined)
+                {
+                    return downloadAttachment(dataItem.AttachmentId);
+                }
+               
+            };
+
             $scope.scopeModel.onInvoiceMailTemplateSelectionChanged = function (value) {
                 $scope.scopeModel.isLoading = true;
                 if (value != undefined) {
                     getInvoiceEmail().then(function () {
-                        $scope.scopeModel.cc = invoiceTemplateEntity.CC;
-                        $scope.scopeModel.to = invoiceTemplateEntity.To;
-                        $scope.scopeModel.subject = invoiceTemplateEntity.Subject;
-                        $scope.scopeModel.body = invoiceTemplateEntity.Body;
+                        if (invoiceTemplateEntity != undefined && invoiceTemplateEntity.VRMailEvaluatedTemplate != undefined)
+                        {
+                            $scope.scopeModel.cc = invoiceTemplateEntity.VRMailEvaluatedTemplate.CC;
+                            $scope.scopeModel.to = invoiceTemplateEntity.VRMailEvaluatedTemplate.To;
+                            $scope.scopeModel.subject = invoiceTemplateEntity.VRMailEvaluatedTemplate.Subject;
+                            $scope.scopeModel.body = invoiceTemplateEntity.VRMailEvaluatedTemplate.Body;
+                        }
+                        $scope.scopeModel.attachments = invoiceTemplateEntity.EmailAttachments;
+
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                         $scope.scopeModel.isLoading = false;
@@ -133,7 +146,7 @@
         function getInvoiceEmail() {
             var invoiceMailTemplateId = invoiceMailTemplateReadyAPI.getSelectedIds();
             if (invoiceMailTemplateId != undefined) {
-                return VR_Invoice_InvoiceEmailActionAPIService.GetEmailTemplate(invoiceId, invoiceMailTemplateId).then(function (response) {
+                return VR_Invoice_InvoiceEmailActionAPIService.GetEmailTemplate(invoiceId, invoiceMailTemplateId, invoiceActionId).then(function (response) {
                     invoiceTemplateEntity = response;
                 });
             }
@@ -152,6 +165,13 @@
                
             };
             return obj;
+        }
+
+        function downloadAttachment(attachmentId)
+        {
+            return VR_Invoice_InvoiceEmailActionAPIService.DownloadAttachment(invoiceId, attachmentId).then(function (response) {
+                UtilsService.downloadFile(response.data, response.headers);
+            });
         }
     }
 

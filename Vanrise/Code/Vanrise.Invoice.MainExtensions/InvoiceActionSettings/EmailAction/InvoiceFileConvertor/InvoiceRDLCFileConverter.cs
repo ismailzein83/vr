@@ -30,16 +30,18 @@ namespace Vanrise.Invoice.MainExtensions
             string mimeType;
             string encoding;
             string filenameExtension;
-
+            var invoice = new InvoiceManager().GetInvoice(context.InvoiceId);
             switch (this.AttachmentType)
             {
                 case InvoiceAttachmentType.PDF:
                     invoiceFile = new PDFInvoiceFile();
-                   
                     invoiceFile.Content = reportViewer.LocalReport.Render("PDF", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);
+                    invoiceFile.Name = new PartnerManager().EvaluateInvoiceFileNamePattern(invoice.InvoiceTypeId, invoice.PartnerId, invoice);
+
                     break;
                 case InvoiceAttachmentType.Excel:
                     invoiceFile = new ExcelInvoiceFile();
+                    invoiceFile.Name = new PartnerManager().EvaluateInvoiceFileNamePattern(invoice.InvoiceTypeId, invoice.PartnerId, invoice);
                     invoiceFile.Content = reportViewer.LocalReport.Render("Excel", null, out mimeType, out encoding, out filenameExtension, out streamids, out warnings);
                     break;
             }

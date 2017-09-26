@@ -25,7 +25,7 @@ namespace Vanrise.Invoice.Entities
             return new VRMailAttachmentPDF
             {
                 Content = this.Content,
-                Name = "Invoice.pdf",
+                Name = string.Format("{0}.pdf", this.Name != null?this.Name:"Invoice"),
             };
         }
     }
@@ -36,7 +36,7 @@ namespace Vanrise.Invoice.Entities
             return new VRMailAttachmentExcel
             {
                 Content = this.Content,
-                Name = "Invoice.xls",
+                Name = string.Format("{0}.xls", this.Name != null ? this.Name : "Invoice"),
             };
         }
     }

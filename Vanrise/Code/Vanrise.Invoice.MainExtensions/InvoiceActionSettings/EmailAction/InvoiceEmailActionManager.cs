@@ -48,12 +48,39 @@ namespace Vanrise.Invoice.MainExtensions
             VRMailManager vrMailManager = new VRMailManager();
             vrMailManager.SendMail(input.EmailTemplate.To, input.EmailTemplate.CC,input.EmailTemplate.BCC, input.EmailTemplate.Subject, input.EmailTemplate.Body, vrMailAttachments);
         }
-         public VRMailEvaluatedTemplate GetEmailTemplate(long invoiceId, Guid invoiceMailTemplateId)
+         public EmailTemplateRuntimeEditor GetEmailTemplate(long invoiceId, Guid invoiceMailTemplateId, Guid invoiceActionId)
          {
+             EmailTemplateRuntimeEditor emailTemplateRuntimeEditor = new MainExtensions.EmailTemplateRuntimeEditor();
+
              InvoiceManager invoiceManager = new InvoiceManager();
              var invoice = invoiceManager.GetInvoice(invoiceId);
              invoice.ThrowIfNull("invoice", invoiceId);
-             return GetEmailTemplate( invoice,  invoiceMailTemplateId);
+             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+             var invoiceAction = invoiceTypeManager.GetInvoiceAction(invoice.InvoiceTypeId, invoiceActionId);
+             invoiceAction.ThrowIfNull("invoiceAction", invoiceActionId);
+             var emailInvoiceAction = invoiceAction.Settings as SendEmailAction;
+             emailInvoiceAction.ThrowIfNull("emailInvoiceAction");
+
+             PartnerManager partnerManager = new PartnerManager();
+             var invoiceSetting = partnerManager.GetInvoicePartnerSetting(invoice.InvoiceTypeId, invoice.PartnerId);
+
+             InvoiceSettingManager invoiceSettingManager = new Business.InvoiceSettingManager();
+
+             var attachmentName = new PartnerManager().EvaluateInvoiceFileNamePattern(invoice.InvoiceTypeId, invoice.PartnerId, invoice);
+             if (emailInvoiceAction.AttachmentsIds != null)
+             {
+                 emailTemplateRuntimeEditor.EmailAttachments = new List<EmailAttachment>();
+                 foreach(var emailattachment in emailInvoiceAction.AttachmentsIds)
+                 {
+                     emailTemplateRuntimeEditor.EmailAttachments.Add(new EmailAttachment
+                     {
+                         AttachmentId = emailattachment,
+                         AttachmentName = attachmentName
+                     });
+                 }
+             }
+             emailTemplateRuntimeEditor.VRMailEvaluatedTemplate = GetEmailTemplate( invoice,  invoiceMailTemplateId);
+             return emailTemplateRuntimeEditor;
          }
          public VRMailEvaluatedTemplate GetEmailTemplate(Entities.Invoice invoice, Guid invoiceMailTemplateId)
          {
@@ -67,6 +94,21 @@ namespace Vanrise.Invoice.MainExtensions
              VRMailManager vrMailManager = new VRMailManager();
              var objects = invoiceType.Settings.ExtendedSettings.GetInfo(context);
              return vrMailManager.EvaluateMailTemplate(invoiceMailTemplateId, objects);
+         }
+         public VRMailAttachement DownloadAttachment(long invoiceId, Guid attachmentId)
+         {
+             InvoiceManager invoiceManager = new InvoiceManager();
+             var invoice = invoiceManager.GetInvoice(invoiceId);
+             invoice.ThrowIfNull("invoice", invoiceId);
+             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+             var invoiceAttachment = invoiceTypeManager.GeInvoiceTypeAttachment(invoice.InvoiceTypeId, attachmentId);
+             invoiceAttachment.ThrowIfNull("invoiceAttachment", attachmentId);
+             InvoiceRDLCFileConverterContext context = new InvoiceRDLCFileConverterContext{
+                 InvoiceId = invoiceId
+             };
+             var invoiceFile = invoiceAttachment.InvoiceFileConverter.ConvertToInvoiceFile(context);
+             invoiceFile.ThrowIfNull("invoiceFile");
+             return invoiceFile.ConvertToAttachment();
          }
          public IEnumerable<SendEmailAttachmentTypeConfig> GetSendEmailAttachmentTypeConfigs()
         {
