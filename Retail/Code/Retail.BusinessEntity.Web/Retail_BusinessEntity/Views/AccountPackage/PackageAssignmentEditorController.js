@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PackageAssignmentEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VRValidationService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountBEAPIService'];
+    PackageAssignmentEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VRValidationService', 'Retail_BE_AccountPackageAPIService', 'Retail_BE_AccountBEAPIService', 'VRDateTimeService'];
 
-    function PackageAssignmentEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRValidationService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountBEAPIService)
+    function PackageAssignmentEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRValidationService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountBEAPIService, VRDateTimeService)
     {
         var isEditMode;
 
@@ -33,7 +33,7 @@
         function defineScope()
         {
             $scope.scopeModel = {};
-            var bed = new Date();
+            var bed = VRDateTimeService.getNowDateTime();
             bed.setHours(0, 0, 0, 0);
             $scope.scopeModel.bed = bed;
 

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBeRecurringchargeProcess", ['UtilsService',
-    function (UtilsService) {
+app.directive("retailBeRecurringchargeProcess", ['UtilsService', 'VRDateTimeService',
+    function (UtilsService, VRDateTimeService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -55,7 +55,7 @@ app.directive("retailBeRecurringchargeProcess", ['UtilsService',
 
                 api.load = function (payload) {
                     var promises = [];
-                    $scope.effectiveDate = UtilsService.getDateFromDateTime(new Date());
+                    $scope.effectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
                     lastDayOfMonth = new Date($scope.effectiveDate.getFullYear(), $scope.effectiveDate.getMonth() + 1, 0);
                     return UtilsService.waitMultiplePromises(promises);
                 };

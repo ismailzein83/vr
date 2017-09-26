@@ -2,9 +2,9 @@
 
     'use strict';
 
-    financialAccountEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService','Retail_BE_FinancialAccountAPIService','Retail_BE_FinancialAccountDefinitionAPIService'];
+    financialAccountEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'Retail_BE_FinancialAccountAPIService', 'Retail_BE_FinancialAccountDefinitionAPIService', 'VRDateTimeService'];
 
-    function financialAccountEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_FinancialAccountAPIService, Retail_BE_FinancialAccountDefinitionAPIService) {
+    function financialAccountEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, Retail_BE_FinancialAccountAPIService, Retail_BE_FinancialAccountDefinitionAPIService, VRDateTimeService) {
         var accountId;
         var accountBEDefinitionId;
 
@@ -34,7 +34,7 @@
         }
 
         function defineScope() {
-            $scope.scopeModel.beginEffectiveDate = UtilsService.getDateFromDateTime(new Date());
+            $scope.scopeModel.beginEffectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
 
             $scope.scopeModel.onFinancialAccountDefinitionSelectorReady = function (api) {
                 financialAccountDefinitionSelectorDirectiveAPI = api;
@@ -63,7 +63,7 @@
                 return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             };
             $scope.scopeModel.validateEEDDate = function (date) {
-                if (!$scope.scopeModel.disableEED && $scope.scopeModel.endEffectiveDate != undefined && UtilsService.getDateFromDateTime($scope.scopeModel.endEffectiveDate) < UtilsService.getDateFromDateTime(new Date())) {
+                if (!$scope.scopeModel.disableEED && $scope.scopeModel.endEffectiveDate != undefined && UtilsService.getDateFromDateTime($scope.scopeModel.endEffectiveDate) < UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())) {
                     return "EED must not be less than today.";
                 }
                 return UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
@@ -126,7 +126,7 @@
                     if (financialAccountEntity.FinancialAccount != undefined) {
                         $scope.scopeModel.beginEffectiveDate = financialAccountEntity.FinancialAccount.BED;
                         $scope.scopeModel.endEffectiveDate = financialAccountEntity.FinancialAccount.EED;
-                        $scope.scopeModel.disableEED = (financialAccountEntity.FinancialAccount.EED != undefined && UtilsService.getDateFromDateTime(financialAccountEntity.FinancialAccount.EED) < UtilsService.getDateFromDateTime(new Date()));
+                        $scope.scopeModel.disableEED = (financialAccountEntity.FinancialAccount.EED != undefined && UtilsService.getDateFromDateTime(financialAccountEntity.FinancialAccount.EED) < UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()));
                     }
                     if (financialAccountEntity.HasFinancialTransactions) {
                         $scope.scopeModel.disableAccountTypeAndBED = true;
