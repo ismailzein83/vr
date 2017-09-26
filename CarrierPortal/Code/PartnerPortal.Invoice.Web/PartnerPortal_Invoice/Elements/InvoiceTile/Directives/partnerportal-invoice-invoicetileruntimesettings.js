@@ -90,10 +90,10 @@ app.directive("partnerportalInvoiceInvoicetileruntimesettings", ["UtilsService",
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
 
 
-        };
+        }
 
         return directiveDefinitionObject;
     }

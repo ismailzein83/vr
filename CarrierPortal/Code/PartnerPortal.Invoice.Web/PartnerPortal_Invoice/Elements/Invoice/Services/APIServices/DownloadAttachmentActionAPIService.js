@@ -16,7 +16,7 @@
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
             });
-        };
+        }
 
         return {
             DownloadAttachment: DownloadAttachment

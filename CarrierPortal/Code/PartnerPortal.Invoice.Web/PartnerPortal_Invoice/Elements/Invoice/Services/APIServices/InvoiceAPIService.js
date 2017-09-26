@@ -9,19 +9,19 @@
 
         function GetFilteredInvoices(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetFilteredInvoices"), input);
-        };
+        }
         function GetRemoteLastInvoice(connectionId, invoiceTypeId, viewId) {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetRemoteLastInvoice"), {
                 connectionId: connectionId,
                 invoiceTypeId: invoiceTypeId,
                 viewId: viewId
             });
-        };
+        }
         function GetInvoiceAccounts(invoiceViewerTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceAccounts"), {
                 invoiceViewerTypeId: invoiceViewerTypeId,
             });
-        };
+        }
 
         return {
             GetFilteredInvoices: GetFilteredInvoices,

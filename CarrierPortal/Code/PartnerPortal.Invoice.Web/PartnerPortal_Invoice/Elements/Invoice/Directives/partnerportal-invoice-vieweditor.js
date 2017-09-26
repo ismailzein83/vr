@@ -62,7 +62,7 @@ app.directive("partnerportalInvoiceVieweditor", ["UtilsService", "VRUIUtilsServi
                         };
                         if (invoiceViewerTypeIds != undefined) {
                             payloadSelector.selectedIds = invoiceViewerTypeIds;
-                        };
+                        }
                         VRUIUtilsService.callDirectiveLoad(invoiceViewerTypeApi, payloadSelector, invoiceViewerTypeSelectorLoadDeferred);
                     });
                     promises.push(invoiceViewerTypeSelectorLoadDeferred.promise);
@@ -91,10 +91,10 @@ app.directive("partnerportalInvoiceVieweditor", ["UtilsService", "VRUIUtilsServi
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
 
 
-        };
+        }
 
         return directiveDefinitionObject;
     }

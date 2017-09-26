@@ -146,7 +146,7 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                             };
                             if (invoiceViewerTypeSettings != undefined && invoiceViewerTypeSettings.Settings != undefined) {
                                 payloadSelector.selectedIds = invoiceViewerTypeSettings.Settings.VRConnectionId;
-                            };
+                            }
                             VRUIUtilsService.callDirectiveLoad(connectionSelectorApi, payloadSelector, connectionSelectorLoadDeferred);
                         });
                         return connectionSelectorLoadDeferred.promise;
@@ -168,7 +168,7 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                             var invoiceQueryInterceptorPayload;
                             if (invoiceViewerTypeSettings != undefined && invoiceViewerTypeSettings.Settings != undefined) {
                                 invoiceQueryInterceptorPayload = { invoiceQueryInterceptorEntity: invoiceViewerTypeSettings.Settings.InvoiceQueryInterceptor };
-                            };
+                            }
                             VRUIUtilsService.callDirectiveLoad(invoiceQueryInterceptorApi, invoiceQueryInterceptorPayload, invoiceQueryInterceptorLoadDeferred);
                         });
                         return invoiceQueryInterceptorLoadDeferred.promise;
@@ -227,7 +227,7 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
             function getContext()
             {
                 var context = {
@@ -242,7 +242,7 @@ app.directive("partnerportalInvoiceViewertypesettings", ["UtilsService", "VRUIUt
                 return context;
             }
 
-        };
+        }
 
         return directiveDefinitionObject;
     }

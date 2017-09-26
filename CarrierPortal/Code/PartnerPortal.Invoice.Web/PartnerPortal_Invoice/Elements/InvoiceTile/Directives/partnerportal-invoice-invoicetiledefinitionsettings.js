@@ -101,7 +101,7 @@ app.directive("partnerportalInvoiceInvoicetiledefinitionsettings", ["UtilsServic
                         });
                         if (tileExtendedSettings != undefined) {
                             payloadConnectionSelector.selectedIds = tileExtendedSettings.VRConnectionId;
-                        };
+                        }
                         return connectionSelectorApi.load(payloadConnectionSelector);
 
                     }
@@ -136,10 +136,10 @@ app.directive("partnerportalInvoiceInvoicetiledefinitionsettings", ["UtilsServic
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
 
 
-        };
+        }
 
         return directiveDefinitionObject;
     }

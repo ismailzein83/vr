@@ -146,7 +146,7 @@
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                })
+                });
             }
 
         }

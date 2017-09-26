@@ -11,27 +11,27 @@
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceViewerTypeInfo"), {
                 serializedFilter: serializedFilter
             });
-        };
+        }
         function GetInvoiceViewerType(invoiceViewerTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceViewerType"), {
                 invoiceViewerTypeId: invoiceViewerTypeId
             });
-        };
+        }
         function GetInvoiceViewerTypeRuntime(invoiceViewerTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceViewerTypeRuntime"), {
                 invoiceViewerTypeId: invoiceViewerTypeId
             });
-        };
+        }
         function GetInvoiceQueryInterceptorTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceQueryInterceptorTemplates"));
-        };
+        }
         function GetInvoiceGridActionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceGridActionSettingsConfigs"));
-        };
+        }
 
         function GetInvoiceViewerTypeExtendedSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(PartnerPortal_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceViewerTypeExtendedSettingsConfigs"));
-        };
+        }
 
         return {
             GetInvoiceViewerTypeInfo: GetInvoiceViewerTypeInfo,
