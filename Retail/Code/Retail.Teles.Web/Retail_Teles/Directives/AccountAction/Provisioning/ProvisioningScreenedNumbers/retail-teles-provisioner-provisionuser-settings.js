@@ -70,26 +70,27 @@
                                 if (provisionerDefinitionSettings.LoginNameField != undefined)
                                     accountGenericFieldNames.push(provisionerDefinitionSettings.LoginNameField);
                                 if (provisionerDefinitionSettings.LastNameField != undefined)
-                                accountGenericFieldNames.push(provisionerDefinitionSettings.LastNameField);
+                                    accountGenericFieldNames.push(provisionerDefinitionSettings.LastNameField);
                             }
+                            if (accountGenericFieldNames.length > 0)
+                            {
+                                return Retail_BE_AccountTypeAPIService.GetAccountGenericFieldValues(accountBEDefinitionId, accountId, UtilsService.serializetoJson(accountGenericFieldNames)).then(function (response) {
+                                    if (provisionerDefinitionSettings != undefined && response != undefined) {
+                                        if (provisionerDefinitionSettings.FirstNameField != undefined)
+                                            $scope.scopeModel.firstName = response[provisionerDefinitionSettings.FirstNameField];
+                                        if (provisionerDefinitionSettings.LoginNameField != undefined)
+                                            $scope.scopeModel.loginName = response[provisionerDefinitionSettings.LoginNameField];
+                                        if (provisionerDefinitionSettings.LastNameField != undefined)
+                                            $scope.scopeModel.lastName = response[provisionerDefinitionSettings.LastNameField];
 
-                            return Retail_BE_AccountTypeAPIService.GetAccountGenericFieldValues(accountBEDefinitionId, accountId, UtilsService.serializetoJson(accountGenericFieldNames)).then(function (response) {
-                                if (provisionerDefinitionSettings != undefined && response != undefined) {
-                                    if (provisionerDefinitionSettings.FirstNameField != undefined)
-                                        $scope.scopeModel.firstName = response[provisionerDefinitionSettings.FirstNameField];
-                                    if (provisionerDefinitionSettings.LoginNameField != undefined)
-                                        $scope.scopeModel.loginName = response[provisionerDefinitionSettings.LoginNameField];
-                                    if (provisionerDefinitionSettings.LastNameField != undefined)
-                                        $scope.scopeModel.lastName = response[provisionerDefinitionSettings.LastNameField];
-
-                                    if ($scope.scopeModel.loginName != undefined)
-                                    {
-                                        $scope.scopeModel.loginName = $scope.scopeModel.loginName.toLowerCase();
-                                        $scope.scopeModel.loginName = UtilsService.trim($scope.scopeModel.loginName, ' ');
-                                        $scope.scopeModel.loginName =  UtilsService.replaceAll($scope.scopeModel.loginName,' ','');
+                                        if ($scope.scopeModel.loginName != undefined) {
+                                            $scope.scopeModel.loginName = $scope.scopeModel.loginName.toLowerCase();
+                                            $scope.scopeModel.loginName = UtilsService.trim($scope.scopeModel.loginName, ' ');
+                                            $scope.scopeModel.loginName = UtilsService.replaceAll($scope.scopeModel.loginName, ' ', '');
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
                         }
                     }
 
