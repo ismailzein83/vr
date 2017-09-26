@@ -57,6 +57,7 @@
                     if (payload != undefined) {
                         if (payload.objectPropertyEvaluator != undefined) {
                             $scope.scopeModel.selectedInvoiceField = UtilsService.getItemByVal($scope.scopeModel.invoiceFields, payload.objectPropertyEvaluator.InvoiceField, "value");
+                            $scope.scopeModel.useDescription = payload.objectPropertyEvaluator.UseDescription;
                         }
                         var objectType = payload.objectType;
                         if(objectType != undefined)
@@ -91,7 +92,8 @@
                     var data = {
                         $type: "Vanrise.Invoice.MainExtensions.InvoiceFieldPropertyEvaluator, Vanrise.Invoice.MainExtensions",
                         InvoiceField: $scope.scopeModel.selectedInvoiceField.value,
-                        FieldName: $scope.scopeModel.isCustomFieldRequired()  ? dataRecordFieldSelectorAPI.getSelectedIds() : undefined
+                        FieldName: $scope.scopeModel.isCustomFieldRequired() ? dataRecordFieldSelectorAPI.getSelectedIds() : undefined,
+                        UseDescription: $scope.scopeModel.useDescription
                     };
                     return data;
                 };
