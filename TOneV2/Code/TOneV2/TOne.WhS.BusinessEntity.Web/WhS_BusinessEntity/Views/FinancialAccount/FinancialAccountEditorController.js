@@ -2,9 +2,9 @@
 
     'use strict';
 
-    financialAccountEditorController.$inject = ['$scope', 'WhS_BE_FinancialAccountAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_FinancialAccountDefinitionAPIService'];
+    financialAccountEditorController.$inject = ['$scope', 'WhS_BE_FinancialAccountAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_FinancialAccountDefinitionAPIService', 'VRDateTimeService'];
 
-    function financialAccountEditorController($scope, WhS_BE_FinancialAccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_FinancialAccountDefinitionAPIService) {
+    function financialAccountEditorController($scope, WhS_BE_FinancialAccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_FinancialAccountDefinitionAPIService, VRDateTimeService) {
         var carrierAccountId;
         var carrierProfileId;
 
@@ -43,7 +43,7 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.beginEffectiveDate = UtilsService.getDateFromDateTime(new Date());
+            $scope.scopeModel.beginEffectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
 
             $scope.scopeModel.onFinancialAccountDefinitionSelectorReady = function (api) {
                 financialAccountDefinitionSelectorDirectiveAPI = api;

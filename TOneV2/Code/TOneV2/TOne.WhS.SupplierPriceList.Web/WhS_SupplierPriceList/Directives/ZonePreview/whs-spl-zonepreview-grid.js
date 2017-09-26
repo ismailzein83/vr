@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsSplZonepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_ZoneChangeTypeEnum", "WhS_SupPL_RateChangeTypeEnum", "WhS_SupPL_ZoneServiceChangeTypeEnum", "VRUIUtilsService", "VRNotificationService",
-function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeEnum, WhS_SupPL_RateChangeTypeEnum, WhS_SupPL_ZoneServiceChangeTypeEnum, VRUIUtilsService, VRNotificationService) {
+app.directive("whsSplZonepreviewGrid", ["WhS_SupPL_SupplierPriceListPreviewPIService", "WhS_SupPL_ZoneChangeTypeEnum", "WhS_SupPL_RateChangeTypeEnum", "WhS_SupPL_ZoneServiceChangeTypeEnum", "VRUIUtilsService", "VRNotificationService",'VRDateTimeService', 
+function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeEnum, WhS_SupPL_RateChangeTypeEnum, WhS_SupPL_ZoneServiceChangeTypeEnum, VRUIUtilsService, VRNotificationService, VRDateTimeService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -145,7 +145,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                 dataItem.ImportedServicesApi.load({ selectedIds: dataItem.ImportedServiceIds });
             };
 
-            var today = new Date();
+            var today = VRDateTimeService.getNowDateTime();
             var importedRateBED = new Date(Date.parse(dataItem.ImportedRateBED));
             if (importedRateBED > today)
                 dataItem.ImportedRate += ' ( Future )';

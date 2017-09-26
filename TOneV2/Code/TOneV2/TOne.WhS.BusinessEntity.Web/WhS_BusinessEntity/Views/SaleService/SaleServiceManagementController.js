@@ -2,9 +2,9 @@
 
     "use strict";
 
-    saleServiceManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum'];
+    saleServiceManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'VRDateTimeService'];
 
-    function saleServiceManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum) {
+    function saleServiceManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum, VRDateTimeService) {
 
 
         var gridAPI;
@@ -25,7 +25,7 @@
         var filter = {};
 
         function defineScope() {
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
             $scope.searchClicked = function () {
                 setFilterObject();
                 return gridAPI.loadGrid(filter);

@@ -3,10 +3,10 @@
     "use strict";
 
     routeOptionRuleEditorController.$inject = ['$scope', 'WhS_Routing_RouteOptionRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'WhS_BE_SaleZoneAPIService', 'WhS_BE_CarrierAccountAPIService',
-        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_Routing_RouteRuleCriteriaTypeEnum', 'WhS_Routing_RouteRuleAPIService'];
+        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_Routing_RouteRuleCriteriaTypeEnum', 'WhS_Routing_RouteRuleAPIService', 'VRDateTimeService'];
 
     function routeOptionRuleEditorController($scope, WhS_Routing_RouteOptionRuleAPIService, WhS_BE_RoutingProductAPIService, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccountAPIService,
-        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_Routing_RouteRuleCriteriaTypeEnum, WhS_Routing_RouteRuleAPIService) {
+        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, WhS_Routing_RouteRuleCriteriaTypeEnum, WhS_Routing_RouteRuleAPIService, VRDateTimeService) {
         var isLinkedRouteOptionRule;
         var linkedRouteOptionRuleInput;
         var linkedCode;
@@ -65,7 +65,7 @@
             $scope.scopeModel.disableCriteria = isLinkedRouteOptionRule;
             $scope.scopeModel.showCriteriaSection = false;
             $scope.scopeModel.showSettingsSection = false;
-            $scope.scopeModel.beginEffectiveDate = UtilsService.getCurrentDateWithoutMilliseconds();
+            $scope.scopeModel.beginEffectiveDate = VRDateTimeService.getCurrentDateWithoutMilliseconds();
             $scope.scopeModel.endEffectiveDate = undefined;
 
             $scope.scopeModel.saleZoneGroupTemplates = [];

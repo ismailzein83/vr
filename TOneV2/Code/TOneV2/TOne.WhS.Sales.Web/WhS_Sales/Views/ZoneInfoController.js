@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ZoneInfoController.$inject = ['$scope', 'WhS_BE_SalePriceListOwnerTypeEnum', 'UtilsService', 'VRNavigationService'];
+    ZoneInfoController.$inject = ['$scope', 'WhS_BE_SalePriceListOwnerTypeEnum', 'UtilsService', 'VRNavigationService', 'VRDateTimeService'];
 
-    function ZoneInfoController($scope, WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRNavigationService) {
+    function ZoneInfoController($scope, WhS_BE_SalePriceListOwnerTypeEnum, UtilsService, VRNavigationService, VRDateTimeService) {
         var ownerType;
         var ownerId;
         var zoneId;
@@ -69,7 +69,7 @@
                     queryHandler.Query = {
                         $type: 'TOne.WhS.BusinessEntity.Entities.SaleCodeQueryByZone, TOne.WhS.BusinessEntity.Entities',
                         ZoneId: zoneId,
-                        EffectiveOn: UtilsService.getDateFromDateTime(new Date())
+                        EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())
                     };
                     var codeGridPayload = {
                         queryHandler: queryHandler,

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    routeRuleManagementController.$inject = ['$scope', 'WhS_Routing_RouteRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteRuleAPIService'];
+    routeRuleManagementController.$inject = ['$scope', 'WhS_Routing_RouteRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteRuleAPIService', 'VRDateTimeService'];
 
-    function routeRuleManagementController($scope, WhS_Routing_RouteRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteRuleAPIService) {
+    function routeRuleManagementController($scope, WhS_Routing_RouteRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteRuleAPIService, VRDateTimeService) {
         var gridAPI;
 
         var carrierAccountDirectiveAPI;
@@ -69,7 +69,7 @@
         }
         function load() {
             $scope.isLoadingFilterData = true;
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
             return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadRouteRuleTypeSelector])
                     .catch(function (error) {

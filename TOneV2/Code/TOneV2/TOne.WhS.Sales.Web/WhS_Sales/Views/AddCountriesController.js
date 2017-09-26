@@ -2,9 +2,9 @@
 
     "use strict";
 
-    AddCountriesController.$inject = ['$scope', 'WhS_Sales_RatePlanUtilsService', 'WhS_Sales_CountrySelectionTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
+    AddCountriesController.$inject = ['$scope', 'WhS_Sales_RatePlanUtilsService', 'WhS_Sales_CountrySelectionTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRDateTimeService'];
 
-    function AddCountriesController($scope, WhS_Sales_RatePlanUtilsService, WhS_Sales_CountrySelectionTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService) {
+    function AddCountriesController($scope, WhS_Sales_RatePlanUtilsService, WhS_Sales_CountrySelectionTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRDateTimeService) {
 
         var customerId;
 
@@ -109,7 +109,7 @@
                 var filter = {
                     ExcludedCountryIds: excludedCountryIds
                 };
-                var effectiveOn = UtilsService.getDateFromDateTime(new Date());
+                var effectiveOn = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
 
                 filter.Filters = [];
 

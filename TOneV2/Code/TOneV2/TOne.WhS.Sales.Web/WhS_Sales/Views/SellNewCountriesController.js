@@ -2,9 +2,9 @@
 
     "use strict";
 
-    SellNewCountriesController.$inject = ["$scope", 'WhS_Sales_RatePlanService', 'WhS_Sales_RatePlanUtilsService', "UtilsService", 'VRUIUtilsService', 'VRValidationService', "VRNavigationService", "VRNotificationService", "WhS_Sales_RatePlanAPIService", "WhS_BE_SalePriceListOwnerTypeEnum"];
+    SellNewCountriesController.$inject = ["$scope", 'WhS_Sales_RatePlanService', 'WhS_Sales_RatePlanUtilsService', "UtilsService", 'VRUIUtilsService', 'VRValidationService', "VRNavigationService", "VRNotificationService", "WhS_Sales_RatePlanAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "VRDateTimeService"];
 
-    function SellNewCountriesController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, VRValidationService, VRNavigationService, VRNotificationService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum) {
+    function SellNewCountriesController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanUtilsService, UtilsService, VRUIUtilsService, VRValidationService, VRNavigationService, VRNotificationService, WhS_Sales_RatePlanAPIService, WhS_BE_SalePriceListOwnerTypeEnum, VRDateTimeService) {
 
         var customerId;
         var countryChanges;
@@ -15,9 +15,9 @@
         var newRateDayOffset = 0;
         var effectiveDateDayOffset = 0;
 
-        var retroactiveDate = UtilsService.getDateFromDateTime(new Date());
-        var newRateDate = UtilsService.getDateFromDateTime(new Date());
-        var effectiveDate = UtilsService.getDateFromDateTime(new Date());
+        var retroactiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+        var newRateDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+        var effectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
 
         var newCountryGridAPI;
         var newCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -150,7 +150,7 @@
                 var soldCountryGridPayload = {
                     query: {
                         CustomerId: customerId,
-                        EffectiveOn: UtilsService.getDateFromDateTime(new Date())
+                        EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())
                     },
                     settings: {
                         effectiveDate: effectiveDate

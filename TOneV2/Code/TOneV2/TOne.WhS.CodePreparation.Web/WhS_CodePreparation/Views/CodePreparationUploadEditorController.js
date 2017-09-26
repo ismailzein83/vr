@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodePrepartionUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'WhS_CP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BE_SellingNumberPlanAPIService', 'WhS_CP_NumberingPlanDefinitionEnum', 'WhS_CP_CodePrepService'];
+    CodePrepartionUploadEditorController.$inject = ['$scope', 'VRUIUtilsService', 'UtilsService', 'WhS_CP_CodePrepAPIService', 'VRNotificationService', 'VRNavigationService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BE_SellingNumberPlanAPIService', 'WhS_CP_NumberingPlanDefinitionEnum', 'WhS_CP_CodePrepService','VRDateTimeService'];
 
-    function CodePrepartionUploadEditorController($scope, VRUIUtilsService, UtilsService, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BusinessProcess_BPInstanceAPIService, WhS_BE_SellingNumberPlanAPIService, WhS_CP_NumberingPlanDefinitionEnum, WhS_CP_CodePrepService) {
+    function CodePrepartionUploadEditorController($scope, VRUIUtilsService, UtilsService, WhS_CP_CodePrepAPIService, VRNotificationService, VRNavigationService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BusinessProcess_BPInstanceAPIService, WhS_BE_SellingNumberPlanAPIService, WhS_CP_NumberingPlanDefinitionEnum, WhS_CP_CodePrepService, VRDateTimeService) {
         var fileID;
         var sellingNumberPlanId;
 
@@ -76,7 +76,7 @@
         function loadEffectiveDate() {
 
         	return WhS_CP_CodePrepAPIService.GetCPEffectiveDateDayOffset().then(function (effectiveDateDayOffset) {
-	            var effectiveDate = UtilsService.getDateFromDateTime(new Date());
+        	    var effectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
                 effectiveDate.setDate(effectiveDate.getDate() + effectiveDateDayOffset);
                 $scope.effectiveDate = effectiveDate;
             });

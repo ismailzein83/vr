@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierPricelistController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService'];
+    supplierPricelistController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService'];
 
-    function supplierPricelistController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService) {
+    function supplierPricelistController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
         var supplierDirectiveApi;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -18,7 +18,7 @@
         load();
 
         function defineScope() {
-            var date = new Date();
+            var date = VRDateTimeService.getNowDateTime();
             $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);

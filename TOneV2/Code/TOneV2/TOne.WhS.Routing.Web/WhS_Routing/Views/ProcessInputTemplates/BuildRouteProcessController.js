@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-BuildRouteProcessController.$inject = ['$scope', 'UtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum'];
+BuildRouteProcessController.$inject = ['$scope', 'UtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'VRDateTimeService'];
 
-function BuildRouteProcessController($scope, UtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum) {
+function BuildRouteProcessController($scope, UtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, VRDateTimeService) {
 
     defineScope();
     load();
@@ -30,7 +30,7 @@ function BuildRouteProcessController($scope, UtilsService, WhS_Routing_RoutingDa
         $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
 
         if (!$scope.isFuture)
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
     }
 }
 

@@ -1,7 +1,8 @@
 ﻿"use strict";
-CDRLogController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', '$q', 'WhS_BE_SaleZoneAPIService', 'VRNotificationService', 'WhS_Analytics_BillingCDROptionMeasureEnum', 'VRUIUtilsService', 'VRValidationService'];
 
-function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_SaleZoneAPIService, VRNotificationService, BillingCDROptionMeasureEnum, VRUIUtilsService, VRValidationService) {
+CDRLogController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', '$q', 'WhS_BE_SaleZoneAPIService', 'VRNotificationService', 'WhS_Analytics_BillingCDROptionMeasureEnum', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService'];
+
+function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_SaleZoneAPIService, VRNotificationService, BillingCDROptionMeasureEnum, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
     var receivedCustomerIds;
     var receivedSupplierIds;
@@ -120,7 +121,7 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
 
         $scope.nRecords = '100';
 
-        var date = new Date();
+        var date = VRDateTimeService.getNowDateTime();
         $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
 
         $scope.CDROption = [];
@@ -156,7 +157,7 @@ function CDRLogController($scope, UtilsService, VRNavigationService, $q, WhS_BE_
         if (isModalMode && (receivedSaleZoneIds != undefined) && receivedSaleZoneIds.length > 0) {
             return WhS_BE_SaleZoneAPIService.GetSaleZone(receivedSaleZoneIds[0])
                 .then(function (response) {
-                    if (response!=null)
+                    if (response != null)
                         sellingNumberPlanId = response.SellingNumberPlanId;
                     loadAllControls();
                 });

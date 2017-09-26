@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsRoutingRpbuildproduct", ['WhS_Routing_RPRouteAPIService', 'VRNotificationService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'WhS_Routing_SaleZoneRangeOptions', 'UtilsService', 'VRUIUtilsService',
-    function (WhS_Routing_RPRouteAPIService, VRNotificationService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, WhS_Routing_SaleZoneRangeOptions, UtilsService, VRUIUtilsService) {
+app.directive("vrWhsRoutingRpbuildproduct", ['WhS_Routing_RPRouteAPIService', 'VRNotificationService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'WhS_Routing_SaleZoneRangeOptions', 'UtilsService', 'VRUIUtilsService','VRDateTimeService', 
+    function (WhS_Routing_RPRouteAPIService, VRNotificationService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, WhS_Routing_SaleZoneRangeOptions, UtilsService, VRUIUtilsService, VRDateTimeService) {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -104,7 +104,7 @@ app.directive("vrWhsRoutingRpbuildproduct", ['WhS_Routing_RPRouteAPIService', 'V
                 $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[5];
 
                 if (!$scope.isFuture)
-                    $scope.effectiveOn = new Date();
+                    $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
                 var getRPSettingsAddBlockedOptionsPromise = getRPSettingsAddBlockedOptionsPromise();
                 promises.push(getRPSettingsAddBlockedOptionsPromise);

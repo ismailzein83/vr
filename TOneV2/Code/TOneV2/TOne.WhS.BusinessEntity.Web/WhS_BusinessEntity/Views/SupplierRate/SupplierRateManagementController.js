@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    supplierRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRDateTimeService'];
 
-    function supplierRateManagementController($scope, utilsService, vrNotificationService, vruiUtilsService) {
+    function supplierRateManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, VRDateTimeService) {
         var gridAPI;
         var supplierDirectiveApi;
         var supplierReadyPromiseDeferred = utilsService.createPromiseDeferred();
@@ -17,7 +17,7 @@
         var payload = {};
 
         function defineScope() {
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
             $scope.searchClicked = function () {
                 setFilterObject();
@@ -27,7 +27,7 @@
 
             $scope.resetDate = function () {
                 if ($scope.IsPending)
-                    $scope.effectiveOn = utilsService.getDateFromDateTime(new Date());
+                    $scope.effectiveOn = utilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             };
 
 
@@ -86,7 +86,7 @@
         function setFilterObject() {
             payload = {
                 $type: "TOne.WhS.BusinessEntity.Business.SupplierRateQueryHandler,TOne.WhS.BusinessEntity.Business",
-                IsSystemCurrency:$scope.isSystemCurrency,
+                IsSystemCurrency: $scope.isSystemCurrency,
                 Query: {
                     SupplierId: supplierDirectiveApi.getSelectedIds(),
                     EffectiveOn: $scope.effectiveOn,

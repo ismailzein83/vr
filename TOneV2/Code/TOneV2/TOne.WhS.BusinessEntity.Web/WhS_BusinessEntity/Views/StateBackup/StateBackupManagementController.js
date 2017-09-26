@@ -2,9 +2,9 @@
 
     "use strict";
 
-    StateBackupManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_StateBackupAPIService'];
+    StateBackupManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_StateBackupAPIService', 'VRDateTimeService'];
 
-    function StateBackupManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_StateBackupAPIService) {
+    function StateBackupManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_StateBackupAPIService, VRDateTimeService) {
         var gridAPI;
         var stateBackupTypesDirectiveAPI;
         var stateBackupTypesDirectiveReadyPromiseDeferred;
@@ -15,7 +15,7 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.stateBackupTypes = [];
-            $scope.scopeModel.fromBackupDate = UtilsService.getDateFromDateTime(new Date());
+            $scope.scopeModel.fromBackupDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
 
             $scope.searchClicked = function () {
                 return gridAPI.loadGrid(getFilterObject());

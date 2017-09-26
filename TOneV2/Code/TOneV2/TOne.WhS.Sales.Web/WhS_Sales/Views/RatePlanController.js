@@ -2,9 +2,9 @@
 
     "use strict";
 
-    RatePlanController.$inject = ["$scope", "WhS_Sales_RatePlanService", "WhS_Sales_RatePlanAPIService", 'WhS_Sales_RatePlanConfigAPIService', "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_Sales_RatePlanStatusEnum", 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', 'BPInstanceStatusEnum', "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_BP_RatePlanDefinitionEnum", "WhS_BE_SellingProductAPIService"];
+    RatePlanController.$inject = ["$scope", "WhS_Sales_RatePlanService", "WhS_Sales_RatePlanAPIService", 'WhS_Sales_RatePlanConfigAPIService', "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_Sales_RatePlanStatusEnum", 'BusinessProcess_BPInstanceAPIService', 'BusinessProcess_BPInstanceService', 'WhS_BP_CreateProcessResultEnum', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', 'BPInstanceStatusEnum', "UtilsService", "VRUIUtilsService", "VRNotificationService", "WhS_BP_RatePlanDefinitionEnum", "WhS_BE_SellingProductAPIService", "VRDateTimeService"];
 
-    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_Sales_RatePlanConfigAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, BPInstanceStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BP_RatePlanDefinitionEnum, WhS_BE_SellingProductAPIService) {
+    function RatePlanController($scope, WhS_Sales_RatePlanService, WhS_Sales_RatePlanAPIService, WhS_Sales_RatePlanConfigAPIService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_Sales_RatePlanStatusEnum, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, WhS_BP_CreateProcessResultEnum, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, BPInstanceStatusEnum, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BP_RatePlanDefinitionEnum, WhS_BE_SellingProductAPIService, VRDateTimeService) {
 
         var ownerTypeSelectorAPI;
         var ownerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -241,7 +241,7 @@
                             var defineNewRatesInput = {
                                 CustomerId: getOwnerId(),
                                 NewCurrencyId: selectedCurrency.CurrencyId,
-                                EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                                EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
                                 NewCountryIds: null
                             };
                             WhS_Sales_RatePlanAPIService.DefineNewRatesConvertedToCurrency(defineNewRatesInput).then(function () {
@@ -326,7 +326,7 @@
                             var defineNewRatesInput = {
                                 CustomerId: getOwnerId(),
                                 NewCurrencyId: customerCurrencyId,
-                                EffectiveOn: UtilsService.getDateFromDateTime(new Date())
+                                EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())
                             };
 
                             defineNewRatesInput.NewCountryIds = [];
@@ -482,7 +482,7 @@
                     var input = {
                         OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                         OwnerId: getOwnerId(),
-                        EffectiveOn: new Date(),
+                        EffectiveOn: VRDateTimeService.getNowDateTime(),
                         RoutingDatabaseId: databaseSelectorAPI ? databaseSelectorAPI.getSelectedIds() : null,
                         PolicyConfigId: policySelectorAPI ? policySelectorAPI.getSelectedIds() : null,
                         NumberOfOptions: $scope.numberOfOptions,
@@ -510,7 +510,7 @@
                         OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                         OwnerId: getOwnerId(),
                         CalculatedRates: validCalculatedRates,
-                        EffectiveOn: new Date(),
+                        EffectiveOn: VRDateTimeService.getNowDateTime(),
                         CurrencyId: getCurrencyId()
                     };
                 }
@@ -807,7 +807,7 @@
                 NumberOfOptions: $scope.numberOfOptions,
                 CostCalculationMethods: getCostCalculationMethods(),
                 BulkAction: null,
-                EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
                 OwnerName: getOwnerName(),
                 Settings: ratePlanSettingsData,
                 SaleAreaSettings: saleAreaSettingsData,
@@ -977,7 +977,7 @@
             });
 
             function validateCustomer() {
-                return WhS_Sales_RatePlanAPIService.ValidateCustomer(customerId, new Date()).then(function (response) {
+                return WhS_Sales_RatePlanAPIService.ValidateCustomer(customerId, VRDateTimeService.getNowDateTime()).then(function (response) {
                     isCustomerValid = response;
                 });
             }
@@ -1077,7 +1077,7 @@
                                 OwnerType: ownerTypeValue,
                                 OwnerId: ownerId,
                                 CurrencyId: getCurrencyId(),
-                                EffectiveDate: UtilsService.getDateFromDateTime(new Date())
+                                EffectiveDate: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())
                             };
 
                             var input = {
@@ -1199,7 +1199,7 @@
         function loadOwnerInfo() {
             var ownerType = ownerTypeSelectorAPI.getSelectedIds();
             var ownerId = getOwnerId();
-            var effectiveOn = UtilsService.getDateFromDateTime(new Date());
+            var effectiveOn = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
 
             return WhS_Sales_RatePlanAPIService.GetOwnerInfo(ownerType, ownerId, effectiveOn).then(function (response) {
                 if (response != undefined) {

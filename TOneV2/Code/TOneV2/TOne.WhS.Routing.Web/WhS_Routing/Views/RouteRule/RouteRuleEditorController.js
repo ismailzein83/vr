@@ -3,10 +3,10 @@
     "use strict";
 
     routeRuleEditorController.$inject = ['$scope', 'WhS_Routing_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService',
-        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRDateTimeService'];
 
     function routeRuleEditorController($scope, WhS_Routing_RouteRuleAPIService, WhS_BE_RoutingProductAPIService,
-        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRDateTimeService) {
         var isLinkedRouteRule;
         var linkedCode;
         var linkedRouteRuleInput;
@@ -75,7 +75,7 @@
             $scope.scopeModel.disableCriteria = isLinkedRouteRule;
             $scope.scopeModel.showCriteriaSection = false;
             $scope.scopeModel.showSettingsSection = false;
-            $scope.scopeModel.beginEffectiveDate = UtilsService.getCurrentDateWithoutMilliseconds();
+            $scope.scopeModel.beginEffectiveDate = VRDateTimeService.getCurrentDateWithoutMilliseconds();
             $scope.scopeModel.endEffectiveDate = undefined;
 
             $scope.scopeModel.routeRuleSettingsTemplates = [];

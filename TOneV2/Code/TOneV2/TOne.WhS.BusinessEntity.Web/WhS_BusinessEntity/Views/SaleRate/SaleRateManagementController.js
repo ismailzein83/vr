@@ -2,9 +2,9 @@
 
     "use strict";
 
-    saleRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_SaleRateAPIService', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService'];
+    saleRateManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_SaleRateAPIService', 'VRCommon_CurrencyAPIService', 'WhS_BE_CarrierAccountAPIService', 'VRDateTimeService'];
 
-    function saleRateManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum, whSBeSaleRateApiService, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService) {
+    function saleRateManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_SalePriceListOwnerTypeEnum, whSBeSaleRateApiService, VRCommon_CurrencyAPIService, WhS_BE_CarrierAccountAPIService, VRDateTimeService) {
 
         var gridAPI;
         var sellingNumberPlanDirectiveAPI;
@@ -29,7 +29,7 @@
         load();
 
         function defineScope() {
-            $scope.effectiveOn = UtilsService.getDateFromDateTime(new Date());
+            $scope.effectiveOn = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             $scope.searchClicked = function () {
                 setGridPayload();
                 return gridAPI.load(gridPayload);

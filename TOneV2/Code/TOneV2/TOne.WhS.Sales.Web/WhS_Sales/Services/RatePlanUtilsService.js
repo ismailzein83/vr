@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RatePlanUtilsService.$inject = ['UtilsService', 'VRValidationService'];
+    RatePlanUtilsService.$inject = ['UtilsService', 'VRValidationService', 'VRDateTimeService'];
 
-    function RatePlanUtilsService(UtilsService, VRValidationService) {
+    function RatePlanUtilsService(UtilsService, VRValidationService, VRDateTimeService) {
         return {
             onNewRateBlurred: onNewRateBlurred,
             onNewRateChanged: onNewRateChanged,
@@ -45,14 +45,14 @@
                 dataItem.NewRateEED = dataItem.ZoneEED;
         }
         function getNowPlusDays(daysToAdd) {
-            var dayOfToday = new Date().getDate();
+            var dayOfToday = VRDateTimeService.getNowDateTime().getDate();
             var totalDays = dayOfToday + daysToAdd;
-            var todayWithoutTime = UtilsService.getDateFromDateTime(new Date());
+            var todayWithoutTime = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             var todayPlusDays = todayWithoutTime.setDate(totalDays); // setDate returns the number of milliseconds between the date object and midnight January 1 1970
             return new Date(todayPlusDays);
         }
         function getNowMinusDays(days) {
-            return new Date(new Date().setDate(new Date().getDate() - days));
+            return new Date(VRDateTimeService.getNowDateTime().setDate(VRDateTimeService.getNowDateTime().getDate() - days));
         }
 
         function formatNewRate(dataItem) {

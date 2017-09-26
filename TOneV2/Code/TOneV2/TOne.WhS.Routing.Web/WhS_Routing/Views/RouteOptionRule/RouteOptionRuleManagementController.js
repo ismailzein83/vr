@@ -2,9 +2,9 @@
 
     "use strict";
 
-    routeOptionRuleManagementController.$inject = ['$scope', 'WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteOptionRuleAPIService'];
+    routeOptionRuleManagementController.$inject = ['$scope', 'WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteOptionRuleAPIService', 'VRDateTimeService'];
 
-    function routeOptionRuleManagementController($scope, WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteOptionRuleAPIService) {
+    function routeOptionRuleManagementController($scope, WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, VRDateTimeService) {
         var gridAPI;
 
         var carrierAccountDirectiveAPI;
@@ -36,7 +36,7 @@
                 routeOptionRuleTypeSelectorAPI = api;
                 routeOptionRuleTypeSelectorReadyPromiseDeferred.resolve();
             };
-            
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 api.loadGrid(getFilterObject());
@@ -68,7 +68,7 @@
         }
         function load() {
             $scope.isLoadingFilterData = true;
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
             return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadRouteOptionRuleTypeSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);

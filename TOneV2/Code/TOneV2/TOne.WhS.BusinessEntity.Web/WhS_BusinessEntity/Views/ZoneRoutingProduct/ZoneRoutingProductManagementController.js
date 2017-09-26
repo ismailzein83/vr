@@ -2,9 +2,9 @@
 
     "use strict";
 
-    zoneRoutingProductManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_SaleRateAPIService'];
+    zoneRoutingProductManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_SaleRateAPIService', 'VRDateTimeService'];
 
-    function zoneRoutingProductManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, whSBeSalePriceListOwnerTypeEnum, whSBeSaleRateApiService) {
+    function zoneRoutingProductManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, whSBeSalePriceListOwnerTypeEnum, whSBeSaleRateApiService, VRDateTimeService) {
 
         var gridApi;
         var sellingNumberPlanDirectiveApi;
@@ -25,7 +25,7 @@
         var filter = {};
 
         function defineScope() {
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
             $scope.searchClicked = function () {
                 setFilterObject();
                 return gridApi.load(filter);

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeCustomersellingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CustomerSellingProductAPIService", 'WhS_BE_CustomerSellingProductService',
-function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIService, WhS_BE_CustomerSellingProductService) {
+app.directive("vrWhsBeCustomersellingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_CustomerSellingProductAPIService", 'WhS_BE_CustomerSellingProductService','VRDateTimeService',
+function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIService, WhS_BE_CustomerSellingProductService, VRDateTimeService) {
 
     var directiveDefinitionObject = {
 
@@ -90,7 +90,7 @@ function (UtilsService, VRNotificationService, WhS_BE_CustomerSellingProductAPIS
 
             $scope.gridMenuActions = function (dataItem) {
 
-                var date = new Date();
+                var date = VRDateTimeService.getNowDateTime();
                 if (dataItem.Entity.BED > UtilsService.dateToServerFormat(date)) {
                     return defaultMenuActions;
                 }

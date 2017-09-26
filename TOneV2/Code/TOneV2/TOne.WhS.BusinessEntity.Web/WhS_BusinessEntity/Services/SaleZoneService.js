@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SaleZoneService.$inject = ['WhS_BE_SellingNumberPlanService', 'UtilsService', 'VRModalService'];
+    SaleZoneService.$inject = ['WhS_BE_SellingNumberPlanService', 'UtilsService', 'VRModalService','VRDateTimeService'];
 
-    function SaleZoneService(WhS_BE_SellingNumberPlanService, UtilsService, VRModalService) {
+    function SaleZoneService(WhS_BE_SellingNumberPlanService, UtilsService, VRModalService, VRDateTimeService) {
         return ({
             addSaleZone: addSaleZone,
             editSaleZone: editSaleZone,
@@ -51,7 +51,7 @@
                 sellingNumberPlanItem.saleZoneGridAPI = directiveAPI;
                 var query = {
                 	SellingNumberId: sellingNumberPlanItem.Entity.SellingNumberPlanId,
-                	EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                	EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
 					GetEffectiveAfter: true
                 };
 

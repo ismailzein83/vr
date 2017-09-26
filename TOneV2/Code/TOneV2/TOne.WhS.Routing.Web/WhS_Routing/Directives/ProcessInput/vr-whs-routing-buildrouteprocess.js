@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'VRUIUtilsService',
-    function (UtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, VRUIUtilsService) {
+app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'VRUIUtilsService', 'VRDateTimeService',
+    function (UtilsService, WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, VRUIUtilsService, VRDateTimeService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -81,7 +81,7 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
                     var promises = [];
 
                     if (!$scope.isFuture)
-                        $scope.effectiveOn = new Date();
+                        $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
                     promises.push(loadSwitchSelector());
                     return UtilsService.waitMultiplePromises(promises);

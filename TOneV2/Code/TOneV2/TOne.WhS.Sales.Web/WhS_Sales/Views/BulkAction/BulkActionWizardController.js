@@ -2,9 +2,9 @@
 
     "use strict";
 
-    BulkActionWizardController.$inject = ["$scope", 'WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    BulkActionWizardController.$inject = ["$scope", 'WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VRDateTimeService'];
 
-    function BulkActionWizardController($scope, WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function BulkActionWizardController($scope, WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VRDateTimeService) {
 
         var ownerType;
         var ownerId;
@@ -215,7 +215,7 @@
                 {
                     BulkAction: bulkAction,
                     BulkActionZoneFilter: bulkActionZoneFilter,
-                    EffectiveOn: UtilsService.getDateFromDateTime(new Date()),
+                    EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
                     RoutingDatabaseId: routingDatabaseId,
                     PolicyConfigId: policyConfigId,
                     NumberOfOptions: numberOfOptions,

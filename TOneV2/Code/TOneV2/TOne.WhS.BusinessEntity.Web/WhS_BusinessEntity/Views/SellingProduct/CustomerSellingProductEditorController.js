@@ -2,9 +2,9 @@
 
     "use strict";
 
-    customerSellingProductEditorController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService'];
+    customerSellingProductEditorController.$inject = ['$scope', 'WhS_BE_CustomerSellingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService'];
 
-    function customerSellingProductEditorController($scope, WhS_BE_CustomerSellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService) {
+    function customerSellingProductEditorController($scope, WhS_BE_CustomerSellingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
 
         var sellingProductDirectiveAPI;
         var sellingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -70,7 +70,7 @@
                 }
 
             };
-            $scope.beginEffectiveDate = UtilsService.getDateFromDateTime(new Date());
+            $scope.beginEffectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             $scope.validateEffectiveDate = function () {
                 return VRValidationService.validateTimeEqualorGreaterthanToday($scope.beginEffectiveDate);
             };

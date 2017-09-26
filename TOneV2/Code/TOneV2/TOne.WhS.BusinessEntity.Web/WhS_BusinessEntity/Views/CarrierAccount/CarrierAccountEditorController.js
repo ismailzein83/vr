@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_RoutingStatusEnum', 'WhS_BE_SaleAreaSettingsContextEnum'];
+    carrierAccountEditorController.$inject = ['$scope', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierProfileAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'WhS_BE_CarrierAccountTypeEnum', 'VRUIUtilsService', 'WhS_BE_CarrierAccountActivationStatusEnum', 'WhS_BE_CustomerCountryAPIService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_RoutingStatusEnum', 'WhS_BE_SaleAreaSettingsContextEnum', 'VRDateTimeService'];
 
-    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService, WhS_BE_RoutingStatusEnum, WhS_BE_SaleAreaSettingsContextEnum) {
+    function carrierAccountEditorController($scope, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierProfileAPIService, UtilsService, VRNotificationService, VRNavigationService, WhS_BE_CarrierAccountTypeEnum, VRUIUtilsService, WhS_BE_CarrierAccountActivationStatusEnum, WhS_BE_CustomerCountryAPIService, WhS_BE_SellingProductAPIService, WhS_BE_RoutingStatusEnum, WhS_BE_SaleAreaSettingsContextEnum, VRDateTimeService) {
 
         // Definition
         var carrierProfileSelectorAPI;
@@ -600,7 +600,7 @@
             return sellingProductSelectorLoadDeferred.promise;
         }
         function areEffectiveOrFutureCountriesSoldToCustomer() {
-            return WhS_BE_CustomerCountryAPIService.AreEffectiveOrFutureCountriesSoldToCustomer(carrierAccountEntity.CarrierAccountId, UtilsService.getDateFromDateTime(new Date())).then(function (response) {
+            return WhS_BE_CustomerCountryAPIService.AreEffectiveOrFutureCountriesSoldToCustomer(carrierAccountEntity.CarrierAccountId, UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())).then(function (response) {
                 $scope.scopeModel.isSellingProductSelectorDisabled = (response === true);
             });
         }

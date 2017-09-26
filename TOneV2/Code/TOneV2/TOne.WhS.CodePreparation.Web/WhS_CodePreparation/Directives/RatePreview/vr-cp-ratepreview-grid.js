@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCpRatepreviewGrid", ["WhS_CP_CodePreparationPreviewAPIService", "WhS_CP_CodeChangeTypeEnum", 'UtilsService', "VRNotificationService",
-function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, UtilsService, VRNotificationService) {
+app.directive("vrCpRatepreviewGrid", ["WhS_CP_CodePreparationPreviewAPIService", "WhS_CP_CodeChangeTypeEnum", 'UtilsService', "VRNotificationService", 'VRDateTimeService',
+function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, UtilsService, VRNotificationService, VRDateTimeService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -68,11 +68,11 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_CodeChangeTypeEnum, Ut
         }
 
         function mapDataNeeded(dataItem) {
-        	var today = UtilsService.getDateFromDateTime(new Date());
-        	var bed = UtilsService.createDateFromString(dataItem.Entity.BED);
+            var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+            var bed = UtilsService.createDateFromString(dataItem.Entity.BED);
             if (bed > today) {
-            	var roundedRate = UtilsService.round(dataItem.Entity.Rate, 4);
-            	dataItem.Entity.Rate = roundedRate + ' (Future)';
+                var roundedRate = UtilsService.round(dataItem.Entity.Rate, 4);
+                dataItem.Entity.Rate = roundedRate + ' (Future)';
             }
         }
 

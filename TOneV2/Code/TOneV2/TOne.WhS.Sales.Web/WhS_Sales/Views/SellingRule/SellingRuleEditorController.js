@@ -2,9 +2,9 @@
 
     "use strict";
 
-    sellingRuleEditorController.$inject = ["$scope", "WhS_Sales_SellingRuleAPIService", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService"];
+    sellingRuleEditorController.$inject = ["$scope", "WhS_Sales_SellingRuleAPIService", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService", "VRDateTimeService"];
 
-    function sellingRuleEditorController($scope, WhS_Sales_SellingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
+    function sellingRuleEditorController($scope, WhS_Sales_SellingRuleAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRDateTimeService) {
 
         var isEditMode;
 
@@ -53,7 +53,7 @@
             $scope.scopeModel.customerGroupTemplates = [];
             $scope.scopeModel.sellingRuleSettingsTemplates = [];
 
-            $scope.scopeModel.beginEffectiveDate = new Date();
+            $scope.scopeModel.beginEffectiveDate = VRDateTimeService.getNowDateTime();
             $scope.scopeModel.endEffectiveDate = undefined;
 
 

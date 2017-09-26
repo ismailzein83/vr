@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierServiceManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    supplierServiceManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRDateTimeService'];
 
-    function supplierServiceManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function supplierServiceManagementController($scope, UtilsService, VRNotificationService, VRUIUtilsService, VRDateTimeService) {
         var gridAPI;
         var supplierDirectiveApi;
         var supplierReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -17,7 +17,7 @@
         var filter = {};
 
         function defineScope() {
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
             $scope.searchClicked = function () {
                 setFilterObject();

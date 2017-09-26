@@ -1,10 +1,10 @@
 ﻿"use strict";
 
 RPBuildProductRoutesProcessController.$inject = ['$scope', 'WhS_Routing_RPRouteAPIService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService',
-    'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum',  'WhS_Routing_SaleZoneRangeOptions'];
+    'WhS_Routing_RoutingDatabaseTypeEnum', 'WhS_Routing_RoutingProcessTypeEnum', 'WhS_Routing_SaleZoneRangeOptions', 'VRDateTimeService'];
 
 function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPIService, VRNotificationService, UtilsService, VRUIUtilsService,
-    WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, WhS_Routing_SaleZoneRangeOptions) {
+    WhS_Routing_RoutingDatabaseTypeEnum, WhS_Routing_RoutingProcessTypeEnum, WhS_Routing_SaleZoneRangeOptions, VRDateTimeService) {
 
     var gridAPI;
 
@@ -55,7 +55,7 @@ function RPBuildProductRoutesProcessController($scope, WhS_Routing_RPRouteAPISer
         $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[5];
 
         if (!$scope.isFuture)
-            $scope.effectiveOn = new Date();
+            $scope.effectiveOn = VRDateTimeService.getNowDateTime();
     }
 
     function loadSupplierPolicies() {
