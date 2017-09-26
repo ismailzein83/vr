@@ -84,14 +84,14 @@ app.directive('vrWhsBeSalepricelisttemplateSettingsBasicMappedvalueSelective', [
         function getBasicSettingsMappedValueExtensionConfigs(selectedId, priceListType) {
             return WhS_BE_SalePriceListTemplateAPIService.GetBasicSettingsMappedValueExtensionConfigs(priceListType).then(function (response) {
                 if (response != null) {
-                    for (var i = 0; i < response.length; i++)
+                    for (var i = 0; i < response.length; i++) 
                         $scope.extensionConfigs.push(response[i]);
                 }
                 if (selectedId != undefined) {
                     $scope.selectedExtensionConfig = UtilsService.getItemByVal($scope.extensionConfigs, selectedId, 'ExtensionConfigurationId');
                 }
-                else if ($scope.extensionConfigs.length > 0) {
-                    $scope.selectedExtensionConfig = $scope.extensionConfigs[0];
+                else {
+                    $scope.selectedExtensionConfig = UtilsService.getItemByVal($scope.extensionConfigs, "WhS_BE_BasicSalePriceListTemplateSettingsMappedValue_BEField", 'Name');
                 }
             });
         }

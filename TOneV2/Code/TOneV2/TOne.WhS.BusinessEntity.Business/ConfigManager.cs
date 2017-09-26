@@ -177,6 +177,11 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.PricelistSettings.CompressPriceListFile.Value;
         }
+        public string GetSaleAreaPricelistFileNamePattern()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricelistSettings.SalePricelistFileNamePattern;
+        }
 
         public CodeChangeTypeDescriptions GetSaleAreaCodeChangeTypeSettings()
         {
@@ -249,6 +254,7 @@ namespace TOne.WhS.BusinessEntity.Business
             result.CompressPriceListFile = pricelistSettingsParent.CompressPriceListFile;
             result.CodeChangeTypeDescriptions = pricelistSettingsParent.CodeChangeTypeDescriptions;
             result.RateChangeTypeDescriptions = pricelistSettingsParent.RateChangeTypeDescriptions;
+            result.SalePricelistFileNamePattern = pricelistSettingsParent.SalePricelistFileNamePattern;
 
             if (pricelistSettingsChild == null)
                 return result;
@@ -267,6 +273,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (pricelistSettingsChild.CompressPriceListFile.HasValue)
                 result.CompressPriceListFile = pricelistSettingsChild.CompressPriceListFile;
+
+            if (!string.IsNullOrEmpty(pricelistSettingsChild.SalePricelistFileNamePattern))
+                result.SalePricelistFileNamePattern = pricelistSettingsChild.SalePricelistFileNamePattern;
 
             result.CodeChangeTypeDescriptions = MergeCodeChangeTypeDescriptions(pricelistSettingsParent.CodeChangeTypeDescriptions, pricelistSettingsChild.CodeChangeTypeDescriptions);
             result.RateChangeTypeDescriptions = MergeRateChangeTypeDescriptions(pricelistSettingsParent.RateChangeTypeDescriptions, pricelistSettingsChild.RateChangeTypeDescriptions);

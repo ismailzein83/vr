@@ -343,7 +343,26 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return sellingProductManager.GetSellingProductCompressPriceListFileStatus(sellingProductId);
         }
+        public string GetCustomerPricelistFileNamePattern(int carrierAccountId)
+        {
+            var sellingProductManager = new SellingProductManager();
+            var sellingProductId = GetSellingProductId(carrierAccountId);
 
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricelistSettings != null)
+            {
+                if (!string.IsNullOrEmpty(customer.CustomerSettings.PricelistSettings.SalePricelistFileNamePattern))
+                    return customer.CustomerSettings.PricelistSettings.SalePricelistFileNamePattern;
+            }
+            return sellingProductManager.GetSellingProductPricelistFileNamePattern(sellingProductId);
+        }
+
+        
+        
         public CodeChangeTypeDescriptions GetCustomerCodeChangeTypeSettings(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);

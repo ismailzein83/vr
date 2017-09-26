@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,5 +16,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public bool? CompressPriceListFile { get; set; }
         public CodeChangeTypeDescriptions CodeChangeTypeDescriptions { get; set; }
         public RateChangeTypeDescriptions RateChangeTypeDescriptions { get; set; }
+        public string SalePricelistFileNamePattern { get; set; }
     }
 }

@@ -46,6 +46,9 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
         var RateChangeTypeSettingsGridAPI;
         var RateChangeTypeSettingsGridReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var FileNamePatternAPI;
+        var FileNamePatternReadyDeferred = UtilsService.createPromiseDeferred();
+
         function initializeController() {
 
             ctrl.onPriceListEmailTemplateSelectorReady = function (api) {
@@ -83,6 +86,11 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                 RateChangeTypeSettingsGridReadyDeferred.resolve();
             };
 
+            ctrl.onFileNamePatternReady = function (api) {
+                FileNamePatternAPI = api;
+                FileNamePatternReadyDeferred.resolve();
+            };
+
             defineAPI();
         }
 
@@ -102,6 +110,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                 var compressPriceListFile;
                 var codeChangeTypeSettings;
                 var rateChangeTypeSettings;
+                var fileNamePattern;
 
                 if (payload != undefined) {
                     data = payload.data;
@@ -119,6 +128,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                     compressPriceListFile = data.CompressPriceListFile;
                     codeChangeTypeSettings = data.CodeChangeTypeDescriptions;
                     rateChangeTypeSettings = data.RateChangeTypeDescriptions;
+                    fileNamePattern = data.SalePricelistFileNamePattern;
                 }
 
                 if (ctrl.showPricelistEmailTemplateSelector) {
@@ -142,11 +152,21 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                     promises.push(loadCompressFileSelectorPromise);
                 }
 
-                var loadCodeChangeTypeSettingsGridPromise = loadCodeChangeTypeSettingsGrid(codeChangeTypeSettings);
-                promises.push(loadCodeChangeTypeSettingsGridPromise);
+                if (ctrl.showCodeChangeTypeSettingsGrid) {
+                    var loadCodeChangeTypeSettingsGridPromise = loadCodeChangeTypeSettingsGrid(codeChangeTypeSettings);
+                    promises.push(loadCodeChangeTypeSettingsGridPromise);
+                }
 
-                var loadRateChangeTypeSettingsGridPromise = loadRateChangeTypeSettingsGrid(rateChangeTypeSettings);
-                promises.push(loadRateChangeTypeSettingsGridPromise);
+                if (ctrl.showRateChangeTypeSettingsGrid) {
+                    var loadRateChangeTypeSettingsGridPromise = loadRateChangeTypeSettingsGrid(rateChangeTypeSettings);
+                    promises.push(loadRateChangeTypeSettingsGridPromise);
+                }
+
+
+                if (ctrl.showFileNamePattern) {
+                    var loadFileNamePatternPromise = loadFileNamePattern(fileNamePattern);
+                    promises.push(loadFileNamePatternPromise);
+                }
 
                 return UtilsService.waitMultiplePromises(promises);
             };
@@ -160,6 +180,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                     CompressPriceListFile: (CompressFileSelectorAPI != undefined) ? CompressFileSelectorAPI.getData() : undefined,
                     CodeChangeTypeDescriptions: (CodeChangeTypeSettingsGridAPI != undefined) ? CodeChangeTypeSettingsGridAPI.getData() : undefined,
                     RateChangeTypeDescriptions: (RateChangeTypeSettingsGridAPI != undefined) ? RateChangeTypeSettingsGridAPI.getData() : undefined,
+                    SalePricelistFileNamePattern: (FileNamePatternAPI != undefined) ? FileNamePatternAPI.getData() : undefined,
 
                 };
             };
@@ -253,6 +274,18 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
             return RateChangeTypeSettingsGridLoadDeferred.promise;
         }
 
+        function loadFileNamePattern(fileNamePattern) {
+            var FileNamePatternLoadDeferred = UtilsService.createPromiseDeferred();
+            FileNamePatternReadyDeferred.promise.then(function () {
+                FileNamePatternReadyDeferred = undefined;
+                var fileNamePatternPayload = {
+                    fileNamePattern: fileNamePattern
+                };
+                VRUIUtilsService.callDirectiveLoad(FileNamePatternAPI, fileNamePatternPayload, FileNamePatternLoadDeferred);
+            });
+            return FileNamePatternLoadDeferred.promise;
+        }
+
         function prepareDirectivesViewForContext(directiveContext) {
 
             ctrl.showPricelistTemplateSelector = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
@@ -262,7 +295,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
             ctrl.showCompressPriceListFile = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
             ctrl.showCodeChangeTypeSettingsGrid = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
             ctrl.showRateChangeTypeSettingsGrid = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
-
+            ctrl.showFileNamePattern = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
         }
 
         function prepareDirectivesRequiredForContext(directiveContext) {
@@ -274,6 +307,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
             ctrl.isCompressPriceListFileRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
             ctrl.isRateChangeTypeSettingsRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
             ctrl.isCodeChangeTypeSettingsRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+            ctrl.isFileNamePatternRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
         }
 
     }

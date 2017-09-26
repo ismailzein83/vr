@@ -330,7 +330,22 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return configManager.GetSaleAreaCompressPriceListFileStatus();
         }
+        public string GetSellingProductPricelistFileNamePattern (int sellingProductId)
+        {
+            var configManager = new ConfigManager();
 
+            var sellingProduct = GetSellingProduct(sellingProductId);
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+
+            if (sellingProduct.Settings.PricelistSettings != null)
+            {
+                if (!string.IsNullOrEmpty(sellingProduct.Settings.PricelistSettings.SalePricelistFileNamePattern))
+                    return sellingProduct.Settings.PricelistSettings.SalePricelistFileNamePattern;
+            }
+            return configManager.GetSaleAreaPricelistFileNamePattern();
+        }
         public CodeChangeTypeDescriptions GetSellingProductCodeChangeTypeSettings(int sellingProductId)
         {
             var configManager = new ConfigManager();

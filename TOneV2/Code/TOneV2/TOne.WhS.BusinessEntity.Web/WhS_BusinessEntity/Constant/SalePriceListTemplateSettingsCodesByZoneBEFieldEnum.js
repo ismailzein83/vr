@@ -3,9 +3,9 @@
     Codes: { value: 1, description: "Codes" },
     CodesEffectiveDate: { value: 2, description: "Effective Date" },
     Rate: { value: 3, description: "Rate" },
-    RateBED: { value: 4, description: "RateBED" },
-    RateEED: { value: 5, description: "RateEED" },
+    RateBED: { value: 4, description: "Rate BED" },
+    RateEED: { value: 5, description: "Rate EED" },
     Services: { value: 6, description: "Services" },
-    RateChangeType: { value: 7, description: "RateChangeType" },
+    RateChangeType: { value: 7, description: "Rate Change Type" },
     Currency: { value: 8, description: "Currency" }
 });

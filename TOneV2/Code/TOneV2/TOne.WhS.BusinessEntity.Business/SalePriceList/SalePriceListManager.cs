@@ -624,15 +624,21 @@ namespace TOne.WhS.BusinessEntity.Business
                 pricelist.PriceListId = startingReservedId++;
             }
         }
-        public string GetPriceListNameFormat(int carrierAccountId, DateTime priceListDate, SalePriceListType salePriceListType, string extension)
+        public string GetPriceListName(int carrierAccountId, DateTime priceListDate, SalePriceListType salePriceListType, string extension)
         {
-            StringBuilder priceListStringBuilder = new StringBuilder();
-            string customerName = _carrierAccountManager.GetCarrierAccountName(carrierAccountId);
+            var customerName = _carrierAccountManager.GetCarrierAccountName(carrierAccountId);
+            var carrierProfileManager = new CarrierProfileManager();
+            var carrierProfileId = _carrierAccountManager.GetCarrierProfileId(carrierAccountId).Value;
+            var profileName = carrierProfileManager.GetCarrierProfileName(carrierProfileId);
 
-            priceListStringBuilder.AppendFormat("Pricelist-{0}-{1}-{2}-{3}", customerName,
-                priceListDate.ToString("yyyy-MM-dd_HH-mm-ss"), salePriceListType, extension);
+            var priceListName = new StringBuilder(_carrierAccountManager.GetCustomerPricelistFileNamePattern(carrierAccountId));
+            priceListName.Replace("#CustomerName#", customerName);
+            priceListName.Replace("#ProfileName#", profileName);
+            priceListName.Replace("#PricelistDate#", priceListDate.ToString("yyyy-MM-dd_HH-mm-ss"));
+            priceListName.Replace("#PriclistType#", salePriceListType.ToString());
 
-            return priceListStringBuilder.ToString();
+            priceListName = priceListName.Append(extension);
+            return priceListName.ToString();
         }
         private VRFile GetPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications, DateTime effectiveDate, SalePriceListType salePriceListType, int salePriceListTemplateId, int pricelistCurrencyId)
         {
@@ -656,7 +662,7 @@ namespace TOne.WhS.BusinessEntity.Business
             byte[] salePlTemplateBytes = template.Settings.Execute(salePlTemplateSettingsContext);
 
             string extension = GetExtensionString(priceListExtensionFormat);
-            string fileName = GetPriceListNameFormat(carrierAccountId, effectiveDate, salePriceListType, extension);
+            string fileName = GetPriceListName(carrierAccountId, effectiveDate, salePriceListType, extension);
 
             return new VRFile
             {

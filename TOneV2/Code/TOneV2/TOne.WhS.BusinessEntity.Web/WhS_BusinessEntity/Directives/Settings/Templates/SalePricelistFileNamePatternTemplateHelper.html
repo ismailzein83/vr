@@ -1,1 +1,26 @@
-﻿
+﻿<div vr-modalcontent ng-controller="BE_Settings_SalePricelistFileNamePatternHelperController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody maxheight="'700px'">
+        <vr-form name="formFileNamePatternHelper">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-datagrid datasource="scopeModel.dataSource" norowhighlightonclick="true" maxheight="300px"
+                                         on-ready="onGridReady" hidegridmenu>
+                                <vr-datagridcolumn headertext="'Variable Name'" field="'variableName'" widthfactor="10" disablesorting isclickable="true" onclicked="scopeModel.save"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Description'" field="'description'" widthfactor="10" disablesorting isclickable="true" onclicked="scopeModel.save"></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
