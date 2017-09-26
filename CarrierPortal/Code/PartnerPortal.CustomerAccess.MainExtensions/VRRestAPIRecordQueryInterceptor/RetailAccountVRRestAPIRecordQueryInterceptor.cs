@@ -24,45 +24,40 @@ namespace PartnerPortal.CustomerAccess.MainExtensions.VRRestAPIRecordQueryInterc
             RetailAccountUserManager manager = new RetailAccountUserManager();
             var accountInfo = manager.GetRetailAccountInfo(userId);
             accountInfo.ThrowIfNull("accountInfo", userId);
-           
-            var filters = new List<RecordFilter>();
-            filters.Add(new NumberRecordFilter()
-            {
-                FieldName = AccountFieldName,
-                CompareOperator = NumberRecordFilterOperator.Equals,
-                Value = accountInfo.AccountId
-            });
+            List<long> accountIds = new List<long>();
+            accountIds.Add(accountInfo.AccountId);
             if (WithSubAccounts)
             {
                 RetailAccountInfoManager retailAccountInfoManager = new RetailAccountInfoManager();
                 var childAccountsIds = retailAccountInfoManager.GetChildAccountIds(context.VRConnectionId, accountInfo.AccountBEDefinitionId, accountInfo.AccountId, true);
-                if(childAccountsIds != null)
+                if (childAccountsIds != null)
                 {
-                    foreach(var childAccountId in childAccountsIds)
+                    foreach (var childAccountId in childAccountsIds)
                     {
-                        filters.Add(new NumberRecordFilter()
-                        {
-                            FieldName = AccountFieldName,
-                            CompareOperator = NumberRecordFilterOperator.Equals,
-                            Value = childAccountId
-                        });
+                        accountIds.Add(childAccountId);
                     }
                 }
             }
-
+            var filters = new List<RecordFilter>();
+            filters.Add(new NumberListRecordFilter
+            {
+                FieldName = AccountFieldName,
+                CompareOperator = ListRecordFilterOperator.In,
+                Values = accountIds.Select(itm => (Decimal)itm).ToList()
+            });
             if (vrRestAPIRecordQueryInterceptorContext.Query == null)
                 vrRestAPIRecordQueryInterceptorContext.Query = new DataRecordQuery();
 
             if (vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup == null)
             {
-                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup() { Filters = filters , LogicalOperator = RecordQueryLogicalOperator.And };
+                vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup() { Filters = filters, LogicalOperator = RecordQueryLogicalOperator.And };
             }
             else
             {
                 var existingFilterGroup = vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup;
                 filters.Add(existingFilterGroup);
                 vrRestAPIRecordQueryInterceptorContext.Query.FilterGroup = new RecordFilterGroup() { Filters = filters, LogicalOperator = RecordQueryLogicalOperator.And };
-              
+
             }
         }
     }
