@@ -296,7 +296,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var fileManager = new VRFileManager();
             var salePriceListManager = new SalePriceListManager();
             var vrMailManager = new VRMailManager();
-            List<VRMailAttachement> vrMailAttachements = new List<VRMailAttachement>();
+            List<VRMailAttachement> vrMailAttachements;
             var allEmailsHaveBeenSent = true;
 
             foreach (SalePriceList customerPriceList in customerPriceLists)
@@ -304,6 +304,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (customerPriceList.IsSent)
                     continue;
 
+                vrMailAttachements = new List<VRMailAttachement>();
                 VRFile customerPriceListFile = fileManager.GetFile(customerPriceList.FileId);
                 var evaluatedObject = salePriceListManager.EvaluateEmail(customerPriceList.PriceListId, (SalePriceListType)customerPriceList.PriceListType);
 
