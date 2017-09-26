@@ -2,9 +2,9 @@
 
     "use strict";
 
-    invoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService',  'VRNotificationService','PartnerPortal_Invoice_InvoiceViewerTypeAPIService'];
+    invoiceManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'PartnerPortal_Invoice_InvoiceViewerTypeAPIService', 'VRDateTimeService'];
 
-    function invoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, PartnerPortal_Invoice_InvoiceViewerTypeAPIService) {
+    function invoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, PartnerPortal_Invoice_InvoiceViewerTypeAPIService, VRDateTimeService) {
         var invoiceViewerTypeSelectorAPI;
         var invoiceViewerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var selectedViewerTypePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -28,7 +28,7 @@
         }
 
         function defineScope() {
-            var date = new Date();
+            var date = VRDateTimeService.getNowDateTime();
             $scope.fromDate = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0);
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -42,15 +42,12 @@
                 invoiceAccountsSelectorReadyDeferred.resolve();
             };
             $scope.onInvoiceViewerTypeSelectorSelectionChanged = function (value) {
-                
+
                 var invoiceViewerTypeId = invoiceViewerTypeSelectorAPI.getSelectedIds();
-                if (invoiceViewerTypeId != undefined)
-                {
-                    if (selectedViewerTypePromiseDeferred != undefined)
-                    {
+                if (invoiceViewerTypeId != undefined) {
+                    if (selectedViewerTypePromiseDeferred != undefined) {
                         selectedViewerTypePromiseDeferred.resolve();
-                    } else
-                    {
+                    } else {
                         var promises = [];
                         promises.push(getInvoiceViewerType(invoiceViewerTypeId));
                         promises.push(loadInvoiceAccountsSelectorDirective());
@@ -127,11 +124,11 @@
                 var invoiceViewerTypeSelectorPayload = {
                     filter: {
                         Filters: [{
-                            $type:"PartnerPortal.Invoice.Business.InvoiceViewerTypeViewFilter,PartnerPortal.Invoice.Business",
-                             ViewId:viewId
+                            $type: "PartnerPortal.Invoice.Business.InvoiceViewerTypeViewFilter,PartnerPortal.Invoice.Business",
+                            ViewId: viewId
                         }]
                     },
-                    selectFirstItem : true
+                    selectFirstItem: true
                 };
                 VRUIUtilsService.callDirectiveLoad(invoiceViewerTypeSelectorAPI, invoiceViewerTypeSelectorPayload, invoiceViewerTypeSelectorPayloadLoadDeferred);
             });

@@ -2,7 +2,7 @@
     function (appControllers) {
         "use strict";
 
-        function priceListsController($scope, utilsService, vrNotificationService, vruiUtilsService,vrValidationService) {
+        function priceListsController($scope, utilsService, vrNotificationService, vruiUtilsService, vrValidationService, VRDateTimeService) {
             var gridAPI;
 
             var customerDirectiveApi;
@@ -24,7 +24,7 @@
             defineScope();
             load();
             function defineScope() {
-                $scope.fromEffectiveDate = new Date();
+                $scope.fromEffectiveDate = VRDateTimeService.getNowDateTime();
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     gridAPI.loadGrid(getFilterObject())
@@ -44,10 +44,9 @@
                     carrierReadyPromiseDeferred.resolve();
                 }
                 $scope.onCustomerSelectionChanged = function () {
-                   var listCustomer = customerDirectiveApi.getSelectedIds();
+                    var listCustomer = customerDirectiveApi.getSelectedIds();
 
-                   if (listCustomer != undefined && listCustomer.length < 2)
-                   {
+                    if (listCustomer != undefined && listCustomer.length < 2) {
                         var obj = {
                             filter: {
                                 CustomerIdForCurrentSupplier: listCustomer[0]
@@ -71,14 +70,14 @@
                     groupedStatusReadyPromiseDeferred.resolve();
                 }
 
-               
+
             }
             function load() {
                 loadAllControls();
             }
             function loadAllControls() {
                 $scope.isLoadingFilters = true;
-                return utilsService.waitMultipleAsyncOperations([loadCustomer,  loadPriceListType, loadPriceListResult, loadPriceListGroupedStatus ])
+                return utilsService.waitMultipleAsyncOperations([loadCustomer, loadPriceListType, loadPriceListResult, loadPriceListGroupedStatus])
                    .catch(function (error) {
                        vrNotificationService.notifyExceptionWithClose(error, $scope);
                    })
@@ -86,7 +85,7 @@
                       $scope.isLoadingFilters = false;
                   });
             }
-            
+
             function loadCustomer() {
                 var customerLoadPromiseDeferred = utilsService.createPromiseDeferred();
                 customerReadyPromiseDeferred.promise.then(function () {
@@ -97,7 +96,7 @@
             function loadPriceListType() {
                 var pricelistTypeLoadPromiseDeferred = utilsService.createPromiseDeferred();
                 typeReadyPromiseDeferred.promise.then(function () {
-                    vruiUtilsService.callDirectiveLoad(typeDirectiveAPI, undefined,pricelistTypeLoadPromiseDeferred);
+                    vruiUtilsService.callDirectiveLoad(typeDirectiveAPI, undefined, pricelistTypeLoadPromiseDeferred);
                 });
                 return pricelistTypeLoadPromiseDeferred.promise;
             }
@@ -115,10 +114,10 @@
                 });
                 return pricelistGroupedStatusLoadPromiseDeferred.promise;
             }
-           
+
             function getFilterObject() {
                 var data = {
-                    CustomersIDs:  customerDirectiveApi.getSelectedIds(),
+                    CustomersIDs: customerDirectiveApi.getSelectedIds(),
                     PriceListTypes: typeDirectiveAPI.getSelectedIds(),
                     PriceListResults: resultDirectiveAPI.getSelectedIds(),
                     PriceListStatuses: groupedStatusDirectiveAPI.getSelectedIds(),
@@ -128,10 +127,10 @@
                 if ($scope.customers.length == 1)
                     data.CarrierAccounts = carrierDirectiveApi.getSelectedIds();
                 return data;
-            }    
+            }
         }
 
-        priceListsController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService'];
+        priceListsController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService'];
         appControllers.controller('CP_SupplierPriceList_PriceListsController', priceListsController);
     }
 )(appControllers);

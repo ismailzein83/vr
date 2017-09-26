@@ -2,7 +2,7 @@
     function (appControllers) {
         "use strict";
 
-        function supplierPriceListManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, priceListTypeEnum, supplierPriceListApiService) {
+        function supplierPriceListManagementController($scope, utilsService, vrNotificationService, vruiUtilsService, priceListTypeEnum, supplierPriceListApiService, VRDateTimeService) {
             var gridAPI;
             var customerDirectiveApi;
             var customerReadyPromiseDeferred = utilsService.createPromiseDeferred();
@@ -26,7 +26,7 @@
                 });
             }
             function defineScope() {
-                $scope.effectiveOn = new Date();
+                $scope.effectiveOn = VRDateTimeService.getNowDateTime();
                 $scope.priceListTypes = [];
                 $scope.importPriceList = function () {
                     importPriceList();
@@ -96,7 +96,7 @@
             }
         }
 
-        supplierPriceListManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'CP_SupplierPriceList_PriceListTypeEnum', 'CP_SupplierPricelist_SupplierPriceListAPIService'];
+        supplierPriceListManagementController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'CP_SupplierPriceList_PriceListTypeEnum', 'CP_SupplierPricelist_SupplierPriceListAPIService', 'VRDateTimeService'];
         appControllers.controller('CP_SupplierPriceList_SupplierPriceListManagementController', supplierPriceListManagementController);
     }
 )(appControllers);

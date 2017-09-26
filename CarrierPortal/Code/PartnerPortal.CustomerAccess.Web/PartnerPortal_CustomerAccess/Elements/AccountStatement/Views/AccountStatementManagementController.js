@@ -2,9 +2,9 @@
 
     "use strict";
 
-    accountStatementManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'PartnerPortal_CustomerAccess_AccountStatementAPIService', 'VRNotificationService'];
+    accountStatementManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'PartnerPortal_CustomerAccess_AccountStatementAPIService', 'VRNotificationService', 'VRDateTimeService'];
 
-    function accountStatementManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, PartnerPortal_CustomerAccess_AccountStatementAPIService, VRNotificationService) {
+    function accountStatementManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, PartnerPortal_CustomerAccess_AccountStatementAPIService, VRNotificationService, VRDateTimeService) {
         var viewId;
 
         var  accountStatementSelectorApi;
@@ -24,7 +24,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-            var date = new Date();
+            var date = VRDateTimeService.getNowDateTime();
 
             $scope.scopeModel.fromDate = new Date(date.getFullYear(), date.getMonth() - 1, 1, 0, 0, 0, 0);
 
