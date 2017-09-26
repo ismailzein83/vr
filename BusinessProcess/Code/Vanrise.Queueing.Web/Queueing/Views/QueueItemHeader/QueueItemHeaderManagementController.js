@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    QueueItemHeaderController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
+    QueueItemHeaderController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'VRDateTimeService'];
 
-    function QueueItemHeaderController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
+    function QueueItemHeaderController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, VRDateTimeService) {
 
         var gridAPI;
         var filter = {};
@@ -41,7 +41,7 @@
             $scope.selectedQueueInstance = [];
             $scope.selectedQueueStatus = [];
 
-            $scope.createdTimeFrom = new Date(new Date().setHours(0, 0, 0, 0));
+            $scope.createdTimeFrom = new Date(VRDateTimeService.getNowDateTime().setHours(0, 0, 0, 0));
 
             $scope.ShowGrid = false;
             $scope.isDisabledQueueInstanceSelect = false;

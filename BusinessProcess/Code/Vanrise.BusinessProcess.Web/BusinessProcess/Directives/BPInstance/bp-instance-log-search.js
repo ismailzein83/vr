@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("bpInstanceLogSearch", ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPInstanceService', 'VRValidationService', 'VRNotificationService',
-function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRValidationService, VRNotificationService) {
+app.directive("bpInstanceLogSearch", ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPInstanceService', 'VRValidationService', 'VRNotificationService', 'VRDateTimeService',
+function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRValidationService, VRNotificationService, VRDateTimeService) {
 
     var directiveDefinitionObject = {
 
@@ -41,7 +41,7 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
 
         this.initializeController = initializeController;
         function initializeController() {
-            
+
             defineScope();
 
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -78,7 +78,7 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
                 getFilterObject();
                 return gridAPI.loadGrid(filter);
             };
-            var fromDate = new Date();
+            var fromDate = VRDateTimeService.getNowDateTime();
             fromDate.setHours(0, 0, 0, 0);
             $scope.fromDate = fromDate;
 
