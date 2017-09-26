@@ -7,7 +7,7 @@
     function invoiceManagementController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, PartnerPortal_Invoice_InvoiceViewerTypeAPIService) {
         var invoiceViewerTypeSelectorAPI;
         var invoiceViewerTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var selectedViewerTypePromiseDeferred = UtilsService.createPromiseDeferred();
         var invoiceAccountsSelectorAPI;
         var invoiceAccountsSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,16 +41,23 @@
                 invoiceAccountsSelectorAPI = api;
                 invoiceAccountsSelectorReadyDeferred.resolve();
             };
-            $scope.onInvoiceViewerTypeSelectorSelectionChanged = function () {
+            $scope.onInvoiceViewerTypeSelectorSelectionChanged = function (value) {
+                
                 var invoiceViewerTypeId = invoiceViewerTypeSelectorAPI.getSelectedIds();
                 if (invoiceViewerTypeId != undefined)
                 {
-                    var promises = [];
-                    promises.push(getInvoiceViewerType(invoiceViewerTypeId));
-                    promises.push(loadInvoiceAccountsSelectorDirective());
-                    UtilsService.waitMultiplePromises(promises).then(function () {
-                        return gridAPI.loadGrid(getFilterObject());
-                    });
+                    if (selectedViewerTypePromiseDeferred != undefined)
+                    {
+                        selectedViewerTypePromiseDeferred.resolve();
+                    } else
+                    {
+                        var promises = [];
+                        promises.push(getInvoiceViewerType(invoiceViewerTypeId));
+                        promises.push(loadInvoiceAccountsSelectorDirective());
+                        UtilsService.waitMultiplePromises(promises).then(function () {
+                            return gridAPI.loadGrid(getFilterObject());
+                        });
+                    }
                 }
             };
 
@@ -81,13 +88,33 @@
             return filter;
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadInvoiceViewerTypeSelectorDirective])
+            return UtilsService.waitMultipleAsyncOperations([loadInvoiceViewerTypeSelectorDirective, loadAccountSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.isLoadingFilters = false;
               });
+        }
+
+        function loadAccountSelector() {
+            var loadAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            selectedViewerTypePromiseDeferred.promise.then(function () {
+                selectedViewerTypePromiseDeferred = undefined;
+                var promises = [];
+                var invoiceViewerTypeId = invoiceViewerTypeSelectorAPI.getSelectedIds();
+                promises.push(getInvoiceViewerType(invoiceViewerTypeId));
+                promises.push(loadInvoiceAccountsSelectorDirective());
+                UtilsService.waitMultiplePromises(promises).then(function () {
+                    loadAccountSelectorLoadDeferred.resolve();
+                    gridAPI.loadGrid(getFilterObject());
+                }).catch(function (error) {
+                    loadAccountSelectorLoadDeferred.reject(error);
+                });
+            }).catch(function (error) {
+                loadAccountSelectorLoadDeferred.reject(error);
+            });
+            return loadAccountSelectorLoadDeferred.promise;
         }
         function getInvoiceViewerType(invoiceViewerTypeId) {
             return PartnerPortal_Invoice_InvoiceViewerTypeAPIService.GetInvoiceViewerTypeRuntime(invoiceViewerTypeId).then(function (response) {
@@ -104,6 +131,7 @@
                              ViewId:viewId
                         }]
                     },
+                    selectFirstItem : true
                 };
                 VRUIUtilsService.callDirectiveLoad(invoiceViewerTypeSelectorAPI, invoiceViewerTypeSelectorPayload, invoiceViewerTypeSelectorPayloadLoadDeferred);
             });

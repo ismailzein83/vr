@@ -55,18 +55,18 @@ app.directive('partnerportalInvoiceInvoiceviewertypeSelector', ['UtilsService', 
 
                     var selectedIds;
                     var filter;
-
+                    var selectFirstItem;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        selectFirstItem = payload.selectFirstItem;
                     }
-
                     return PartnerPortal_Invoice_InvoiceViewerTypeAPIService.GetInvoiceViewerTypeInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
                             }
-                            if (ctrl.datasource.length == 1)
+                            if (ctrl.datasource.length == 1 || selectFirstItem)
                             {
                                 if (attrs.ismultipleselection != undefined) {
                                     selectedIds = [ctrl.datasource[0].InvoiceViewerTypeId];
@@ -75,7 +75,6 @@ app.directive('partnerportalInvoiceInvoiceviewertypeSelector', ['UtilsService', 
                                     selectedIds = ctrl.datasource[0].InvoiceViewerTypeId;
                                 }
                             }
-
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'InvoiceViewerTypeId', attrs, ctrl);
                             }
