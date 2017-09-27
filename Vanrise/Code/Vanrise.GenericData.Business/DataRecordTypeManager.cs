@@ -382,7 +382,7 @@ namespace Vanrise.GenericData.Business
 
                         private Dictionary<string, DataRecordFieldType> _dataRecordFieldTypeDict;
 
-                        public Dictionary<string, DataRecordFieldType> DataRecordFieldTypeDict
+                        private Dictionary<string, DataRecordFieldType> DataRecordFieldTypeDict
                         {
                             get
                             {
