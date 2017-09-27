@@ -264,7 +264,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
             }
 
-            return allFinancialAccounts.MapRecords(FinancialAccountInfoMapper, filterFunc);
+            return allFinancialAccounts.MapRecords(FinancialAccountInfoMapper, filterFunc).OrderBy(x=>x.Name);
         }
 
         public IEnumerable<WHSFinancialAccount> GetFinancialAccountsByCarrierAccountId(int carrierAccountId)
