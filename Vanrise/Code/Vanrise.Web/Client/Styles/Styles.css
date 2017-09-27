@@ -2370,7 +2370,8 @@ vr-label[hasbackgroundcolor] .vr-control-label {
 }
 
 label[vr-alert].alert {   
-   padding:5px
+   padding:5px;
+   margin:0px;
 }
 .permmesion-background {
     background: url("../../Client/Images/bichartpermission.jpg") center no-repeat;
