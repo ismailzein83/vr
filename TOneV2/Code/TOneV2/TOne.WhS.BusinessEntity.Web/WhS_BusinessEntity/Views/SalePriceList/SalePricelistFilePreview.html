@@ -1,1 +1,19 @@
-﻿
+﻿<div vr-modalcontent ng-controller="WhS_BE_SalePricelistFilePreviewController" vr-loader="isLoadingFilter" vr-modalcontent size="medium">
+    <vr-modalbody>
+        <vr-form name="formSalePriceListFilePreview">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-whs-be-salepricelistfilepreview-grid on-ready="onGridReady">
+                    </vr-whs-be-salepricelistfilepreview-grid>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

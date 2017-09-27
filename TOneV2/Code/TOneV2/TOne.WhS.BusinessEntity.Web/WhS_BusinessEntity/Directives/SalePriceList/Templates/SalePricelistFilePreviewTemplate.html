@@ -1,10 +1,9 @@
-﻿<vr-datagrid datasource="salepricelistFilePreview"
+﻿<vr-datagrid datasource="ctrl.datasource"
              on-ready="onGridReady"
-             dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
              enableautoexport="true" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.defaultSortDirection">
-
-    <vr-datagridcolumn headertext="'File Name'" field="'FileName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'Currency'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'FileId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'File Name'" field="'FileName'" type="'Text'" onclicked="downloadPricelist" isclickable="true"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" type="'Text'"></vr-datagridcolumn>
 </vr-datagrid>

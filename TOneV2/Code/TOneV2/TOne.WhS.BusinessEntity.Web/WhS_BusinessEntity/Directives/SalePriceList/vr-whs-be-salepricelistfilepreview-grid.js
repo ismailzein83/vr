@@ -1,8 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeSalepricelistfilepreviewGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePricelistAPIService", "FileAPIService"
-    ,  "WhS_BE_SalePriceListChangeService",
-function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fileApiService, whSBeSalePriceListPreviewService) {
+app.directive("vrWhsBeSalepricelistfilepreviewGrid", ["UtilsService", "VRNotificationService", "WhS_BE_SalePriceListChangeAPIService",
+function (utilsService, VRNotificationService, WhS_BE_SalePriceListChangeAPIService) {
 
     var directiveDefinitionObject = {
 
@@ -32,10 +31,14 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
         this.initializeController = initializeController;
 
         var gridAPI;
-        var context;
-
+        $scope.downloadPricelist = function (dataItem) {
+            console.log(dataItem);
+            WhS_BE_SalePriceListChangeAPIService.DownloadSalePriceList(dataItem.FileId).then(function (bufferArrayRespone) {
+                utilsService.downloadFile(bufferArrayRespone.data, bufferArrayRespone.headers);
+            });
+        };
         function initializeController() {
-            $scope.salepricelistFilePreview = [];
+            ctrl.datasource = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
 
@@ -44,13 +47,18 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
 
                 function getDirectiveAPI() {
                     var directiveAPI = {};
-                    directiveAPI.loadGrid = function (query) {
-                        return gridAPI.retrieveData(query);
+                    directiveAPI.loadGrid = function (data) {
+                        if (data != undefined) {
+                            for (var i = 0; i < data.length; i++) {
+                                ctrl.datasource.push(data[i]);
+                            }
+                        }
                     };
                     return directiveAPI;
                 }
             };
         }
+
     }
     return directiveDefinitionObject;
 }]);

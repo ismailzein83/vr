@@ -85,8 +85,15 @@
                 return rpChangeGridApi.loadGrid(filter);
             };
             $scope.DownloadPriceList = function () {
-                return whSBeSalePriceListChangeApiService.DownloadSalePriceList(BuildSalePriceListInput()).then(function (response) {
-                    utilsService.downloadFile(response.data, response.headers);
+                return whSBeSalePriceListChangeApiService.GetPricelistSalePricelistVRFile(BuildSalePriceListInput()).then(function (response) {
+                    if (response.length === 1) {
+                        whSBeSalePriceListChangeApiService.DownloadSalePriceList(response[0].FileId).then(function (bufferArrayRespone) {
+                            utilsService.downloadFile(bufferArrayRespone.data, bufferArrayRespone.headers);
+                        });
+                    } else {
+                        //show popup
+                        PreviewPriceListFileByCurrency(response);
+                    }
                 })
                 .catch(function (error) {
                     vrNotificationService.notifyException(error, $scope);
@@ -107,6 +114,9 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+        }
+        function PreviewPriceListFileByCurrency(vrFiles) {
+            WhS_BE_SalePriceListChangeService.salePricelistFilePreview(vrFiles);
         }
         function BuildSalePriceListInput() {
             return {

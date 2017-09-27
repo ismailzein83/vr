@@ -21,12 +21,16 @@
             });
         }
 
-        function DownloadSalePriceList(pricelistInput) {
-            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "DownloadSalePriceList"), {
+        function GetPricelistSalePricelistVRFile(pricelistInput) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetPricelistSalePricelistVRFile"), {
                 salepriceListId: pricelistInput.PriceListId,
                 salePriceListType: pricelistInput.PriceListTypeId,
                 salePriceListTemplateId: pricelistInput.PricelistTemplateId
-            }, {
+            });
+        }
+        function DownloadSalePriceList(fileId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "DownloadSalePriceList"), { fileId: fileId },
+            {
                 returnAllResponseParameters: true,
                 responseTypeAsBufferArray: true
             });
@@ -54,6 +58,7 @@
             GetFilteredSalePriceListRateChanges: GetFilteredSalePriceListRateChanges,
             GetFilteredSalePriceListRPChanges: GetFilteredSalePriceListRPChanges,
             GetOwnerOptions: GetOwnerOptions,
+            GetPricelistSalePricelistVRFile: GetPricelistSalePricelistVRFile,
             DownloadSalePriceList: DownloadSalePriceList,
             GenerateAndEvaluateSalePriceListEmail: GenerateAndEvaluateSalePriceListEmail,
             GetOwnerPriceListType: GetOwnerPriceListType,

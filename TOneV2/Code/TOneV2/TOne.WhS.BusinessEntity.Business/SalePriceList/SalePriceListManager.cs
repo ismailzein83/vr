@@ -149,7 +149,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (!customerPriceList.PriceListType.HasValue)
                 throw new VRBusinessException(string.Format("Customer Pricelist with id {0} has its type as null", customerPriceList.PriceListId));
 
-            VRFile file = PreparePriceListVrFile(customerPriceList, customerPriceList.PriceListType.Value, salePricelistTemplateId);
+            VRFile file = null;//PreparePriceListVrFile(customerPriceList, customerPriceList.PriceListType.Value, salePricelistTemplateId);
             var notificationManager = new NotificationManager();
             int userId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
 
@@ -188,13 +188,14 @@ namespace TOne.WhS.BusinessEntity.Business
             VRMailManager vrMailManager = new VRMailManager();
             return vrMailManager.EvaluateMailTemplate(salePlmailTemplateId, objects);
         }
-        public VRFile GenerateSalePriceListFile(SalePriceListInput pricelisInput)
+        public IEnumerable<SalePricelistVRFile> GenerateSalePriceListFiles(SalePriceListInput pricelisInput)
         {
             var salePriceListManager = new SalePriceListManager();
+
             SalePriceList customerPriceList = salePriceListManager.GetPriceList(pricelisInput.PriceListId);
+            IEnumerable<SalePricelistVRFile> files = PreparePriceListVrFiles(customerPriceList, (SalePriceListType)pricelisInput.PriceListTypeId, pricelisInput.PricelistTemplateId);
 
-            return PreparePriceListVrFile(customerPriceList, (SalePriceListType)pricelisInput.PriceListTypeId, pricelisInput.PricelistTemplateId);
-
+            return files;
         }
         public IDataRetrievalResult<SalePriceListDetail> GetFilteredPricelists(Vanrise.Entities.DataRetrievalInput<SalePriceListQuery> input)
         {
@@ -309,7 +310,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 var evaluatedObject = salePriceListManager.EvaluateEmail(customerPriceList.PriceListId, (SalePriceListType)customerPriceList.PriceListType);
 
                 CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerPriceList.OwnerId);
-                vrMailAttachements.Add(ConvertToAttachement(customerPriceListFile, customer));
+                vrMailAttachements.Add(new VRMailAttachmentExcel
+                {
+                    Name = customerPriceListFile.Name,
+                    Content = customerPriceListFile.Content
+                });
 
                 try
                 {
@@ -426,6 +431,36 @@ namespace TOne.WhS.BusinessEntity.Business
 
             //In this case the pricelist type is Full then we need to return all changed zones with their missing zones in their countries and the other sold countries
             return salePlZoneNotifications;
+        }
+
+        private Dictionary<int, List<SalePLZoneNotification>> CreateMultipleNotifications(int customerId, int sellingProductId, SalePriceListType pricelistType, List<CountryChange> countryChanges,
+      Dictionary<int, List<ExistingSaleZone>> existingDataByCountryId, SaleEntityZoneRateLocator futureLocator, out SalePriceListType overiddenPriceListType)
+        {
+            var saleZoneNotificarionByCurrencyId = new Dictionary<int, List<SalePLZoneNotification>>();
+            var salePlZoneNotifications = GetChangeOrCountryNotification(customerId, sellingProductId, pricelistType, existingDataByCountryId, futureLocator, countryChanges);
+            overiddenPriceListType = pricelistType;
+
+            int changesCurrency = salePlZoneNotifications.First().Rate.CurrencyId.Value;
+            saleZoneNotificarionByCurrencyId.Add(changesCurrency, salePlZoneNotifications);
+
+            if (pricelistType != SalePriceListType.Full)
+                return saleZoneNotificarionByCurrencyId;
+
+            List<SalePLZoneNotification> saleNotifications;
+            Dictionary<int, List<SalePLZoneNotification>> zoneNotifictionByCurrencyId = GetFullSalePlZoneNotification(customerId, sellingProductId, existingDataByCountryId, countryChanges, futureLocator);
+
+            if (!zoneNotifictionByCurrencyId.TryGetValue(changesCurrency, out saleNotifications))
+            {
+                overiddenPriceListType = SalePriceListType.Country;
+                zoneNotifictionByCurrencyId.Add(changesCurrency, salePlZoneNotifications);
+            }
+            else
+                salePlZoneNotifications.AddRange(salePlZoneNotifications);
+
+            var rpChanges = countryChanges.SelectMany(it => it.ZoneChanges.Where(r => r.RPChange != null).Select(rp => rp.RPChange)).ToList();
+            AddRPChangesToSalePLNotification(zoneNotifictionByCurrencyId.Values.SelectMany(z => z), rpChanges, customerId, sellingProductId);
+
+            return zoneNotifictionByCurrencyId;
         }
 
         private Dictionary<int, List<SalePLZoneNotification>> GetFullSalePlZoneNotification(int customerId, int sellingProductId, Dictionary<int, List<ExistingSaleZone>> existingDataByCountryId, List<CountryChange> countryChanges
@@ -1059,35 +1094,22 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Private Members
-
-        private VRMailAttachement ConvertToAttachement(VRFile file, CarrierAccount customer)
+        private IEnumerable<SalePricelistVRFile> PreparePriceListVrFiles(SalePriceList salePriceList, SalePriceListType salePriceListType, int salePricelistTemplateId)
         {
-            PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPriceListExtensionFormatId(customer.CarrierAccountId);
-
-            var customerName = _carrierAccountManager.GetCarrierAccountName(customer);
-            string fileName = string.Concat("Pricelist_", customerName, "_", DateTime.Today,
-                priceListExtensionFormat == PriceListExtensionFormat.XLSX ? ".xlsx" : ".xls");
-
-            return new VRMailAttachmentExcel
-            {
-                Name = fileName,
-                Content = file.Content
-            };
-        }
-        private VRFile PreparePriceListVrFile(SalePriceList salePriceList, SalePriceListType salePriceListType, int salePricelistTemplateId)
-        {
-            VRFile file = null;
-
             var carrierAccountManager = new CarrierAccountManager();
+            var salePriceListChangeManager = new SalePriceListChangeManager();
+            var vrFileManager = new VRFileManager();
+            var customerSellingProductManager = new CustomerSellingProductManager();
+
             int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(salePriceList.OwnerId);
 
-            var salePriceListChangeManager = new SalePriceListChangeManager();
             var customerPriceListChange = salePriceListChangeManager.GetCustomerChangesByPriceListId(salePriceList.PriceListId);
             var saleCodeSnapshot = salePriceListChangeManager.GetSalePriceListSaleCodeSnapShot(salePriceList.PriceListId);
 
             var customer = carrierAccountManager.GetCarrierAccount(salePriceList.OwnerId);
-            var customerSellingProductManager = new CustomerSellingProductManager();
             var sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(customer.CarrierAccountId, DateTime.Now, false);
+            var vrFiles = new List<SalePricelistVRFile>();
+
             if (!sellingProductId.HasValue)
                 throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to a selling product", customer.CarrierAccountId));
 
@@ -1106,14 +1128,25 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceListOutputContext salePriceListOutput = PrepareSalePriceListContext(salePriceListContext);
 
             SalePriceListType overriddenListType;
-            List<SalePLZoneNotification> customerZoneNotifications = CreateNotifications(salePriceList.OwnerId, sellingProductId.Value, salePriceListType, salePriceListOutput.CountryChanges,
+            Dictionary<int, List<SalePLZoneNotification>> customerZoneNotificationsByCurrencyId = CreateMultipleNotifications(salePriceList.OwnerId, sellingProductId.Value, salePriceListType, salePriceListOutput.CountryChanges,
                 salePriceListOutput.ZoneWrappersByCountry, salePriceListOutput.FutureLocator, out overriddenListType);
 
-            if (customerZoneNotifications.Count > 0)
+            var currencyManager = new CurrencyManager();
+
+            foreach (var zoneNotification in customerZoneNotificationsByCurrencyId)
             {
-                file = GetPriceListFile(customer.CarrierAccountId, customerZoneNotifications, salePriceListContext.EffectiveDate, salePriceListType, salePricelistTemplateId, salePriceList.CurrencyId);
+                VRFile vrFile = GetPriceListFile(customer.CarrierAccountId, zoneNotification.Value, salePriceListContext.EffectiveDate,
+                    salePriceListType, salePricelistTemplateId, salePriceList.CurrencyId);
+
+                vrFiles.Add(new SalePricelistVRFile
+                {
+                    CurrencySymbol =currencyManager.GetCurrencySymbol(zoneNotification.Key),
+                    FileId = vrFileManager.AddFile(vrFile),
+                    FileName = vrFile.Name,
+                    FileExtension = vrFile.Extension
+                });
             }
-            return file;
+            return vrFiles;
         }
         private void AddRPChangesToSalePLNotification(IEnumerable<SalePLZoneNotification> customerZoneNotifications, List<SalePricelistRPChange> routingProductChanges, int customerId, int sellingProductId)
         {
