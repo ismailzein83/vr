@@ -32,7 +32,6 @@ namespace Mediation.Generic.BP.Activities
 
         [RequiredArgument]
         public OutArgument<BaseQueue<SessionIdsBatch>> SessionIds { get; set; }
-
         protected override void DoWork(LoadMediationRecordsByStatusInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Start Loading Mediation Records By Status Activity");
@@ -40,22 +39,29 @@ namespace Mediation.Generic.BP.Activities
             dataManager.DataRecordTypeId = inputArgument.DataRecordTypeId;
             MediationRecordsManager manager = new MediationRecordsManager();
             SessionIdsBatch batch = new SessionIdsBatch();
-            manager.GetMediationRecordsByStatus(inputArgument.MediationDefinitionId, inputArgument.EventStatus, inputArgument.DataRecordTypeId, (sessionIdLoaded) =>
-            {
-                batch.SessionIds.Add(sessionIdLoaded);
-                if (batch.SessionIds.Count >= 50000)
-                {
-                    inputArgument.SessionIds.Enqueue(batch);
-                    batch = new SessionIdsBatch();
-                }
-            });
+            long? lastCommittedId = new MediationCommittedIdManager().GetLastCommittedId(inputArgument.MediationDefinitionId);
 
+            if (lastCommittedId.HasValue)
+            {
+                handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Last Committed Id: {0}", lastCommittedId);
+
+                manager.GetMediationRecordsByStatus(inputArgument.MediationDefinitionId, inputArgument.EventStatus, inputArgument.DataRecordTypeId, lastCommittedId.Value, (sessionIdLoaded) =>
+                {
+                    batch.SessionIds.Add(sessionIdLoaded);
+                    if (batch.SessionIds.Count >= 50000)
+                    {
+                        batch.LastCommittedId = lastCommittedId;
+                        inputArgument.SessionIds.Enqueue(batch);
+                        batch = new SessionIdsBatch();
+                    }
+                });
+            }
             if (batch.SessionIds.Count > 0)
             {
+                batch.LastCommittedId = lastCommittedId;
                 inputArgument.SessionIds.Enqueue(batch);
             }
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "End Loading Mediation Records By Status Activity");
-
         }
 
         protected override LoadMediationRecordsByStatusInput GetInputArgument2(AsyncCodeActivityContext context)

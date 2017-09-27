@@ -134,10 +134,11 @@ namespace Mediation.Generic.BP.Activities
                 }
                 if (batchProxy.NbOfExecutedHandlers == batchProxy.NbOfHandlersToExecute)
                 {
-                    WriteTrackingMessage(LogEntryType.Information, "Started deleting records of {0} sessions", batchProxy.SessionIdToDelete.Count);
+                    WriteTrackingMessage(LogEntryType.Information, "Started deleting records of {0} events", batchProxy.EventIdsToDelete.Count, batchProxy.LastCommittedId);
                     IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
-                    dataManager.DeleteMediationRecordsBySessionIds(MediationDefinition.MediationDefinitionId, batchProxy.SessionIdToDelete);
-                    WriteTrackingMessage(LogEntryType.Information, "Deleting records of {0} sessions completed", batchProxy.SessionIdToDelete.Count);
+                    //dataManager.DeleteMediationRecordsBySessionIds(MediationDefinition.MediationDefinitionId, batchProxy.SessionIdToDelete, batchProxy.LastCommittedId);
+                    dataManager.DeleteMediationRecordsByEventIds(batchProxy.EventIdsToDelete);
+                    WriteTrackingMessage(LogEntryType.Information, "Deleting records of {0} events completed", batchProxy.EventIdsToDelete.Count);
                 }
             }
         }

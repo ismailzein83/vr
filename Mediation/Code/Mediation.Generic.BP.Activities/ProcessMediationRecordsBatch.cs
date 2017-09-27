@@ -40,7 +40,7 @@ namespace Mediation.Generic.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Start Processing Mediation Records");
             MediationProcessWorkflowMainContext workflowMainContext = new MediationProcessWorkflowMainContext(inputArgument.MediationDefinition.MediationDefinitionId);
             List<ProcessHandlerItem> processHandlers = new List<ProcessHandlerItem>();
-            var batchProxy = new PreparedRecordsBatchProxy { SessionIdToDelete = new List<string>() };
+            var batchProxy = new PreparedRecordsBatchProxy { EventIdsToDelete = new List<long>() };
             foreach (var outputHandler in inputArgument.OutputHandlerExecutionEntities)
             {
                 ProcessHandlerItem item = new ProcessHandlerItem
@@ -64,6 +64,7 @@ namespace Mediation.Generic.BP.Activities
                 {
                     hasItems = inputArgument.MediationRecordsBatch.TryDequeue((sessionMediationRecordBatch) =>
                     {
+                        batchProxy.LastCommittedId = sessionMediationRecordBatch.LastCommittedId;
                         var processingContext = new MediationProcessContext(workflowMainContext);
                         var transformationOutput = dataTransformer.ExecuteDataTransformation(inputArgument.MediationDefinition.ParsedTransformationSettings.TransformationDefinitionId, (context) =>
                         {
@@ -81,15 +82,17 @@ namespace Mediation.Generic.BP.Activities
 
                         if (!processingContext.NeedsMoreMediationRecords)
                         {
-                            batchProxy.SessionIdToDelete.Add(sessionMediationRecordBatch.SessionId);
+                            //batchProxy.SessionIdToDelete.Add(sessionMediationRecordBatch.SessionId);
+                            batchProxy.EventIdsToDelete.AddRange(sessionMediationRecordBatch.MediationRecords.Select(m => m.EventId));
                             foreach (var processHandler in processHandlers)
                             {
                                 UpdateProcessHandlers(inputArgument, transformationOutput, processHandler);
                             }
-                            if (batchProxy.SessionIdToDelete.Count > 10000)
+                            //if (batchProxy.SessionIdToDelete.Count > 10000)
+                            if (batchProxy.EventIdsToDelete.Count > 20000)
                             {
                                 SetNbOfHandlersToExecute(inputArgument.MediationDefinition.MediationDefinitionId, processHandlers, batchProxy, handle);
-                                batchProxy = new PreparedRecordsBatchProxy { SessionIdToDelete = new List<string>() };
+                                batchProxy = new PreparedRecordsBatchProxy { EventIdsToDelete = new List<long>(), LastCommittedId = sessionMediationRecordBatch.LastCommittedId };
                                 foreach (var processHandler in processHandlers)
                                 {
                                     if (processHandler.CdrBatch.BatchRecords.Count > 0)
@@ -118,8 +121,9 @@ namespace Mediation.Generic.BP.Activities
             {
 
                 IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
-                dataManager.DeleteMediationRecordsBySessionIds(mediationDefinitionId, batchProxy.SessionIdToDelete);
-                handle.SharedInstanceData.WriteBusinessTrackingMsg(LogEntryType.Information, "{0} Session Ids are deleted", batchProxy.SessionIdToDelete.Count);
+                //dataManager.DeleteMediationRecordsBySessionIds(mediationDefinitionId, batchProxy.SessionIdToDelete, batchProxy.LastCommittedId);
+                dataManager.DeleteMediationRecordsByEventIds(batchProxy.EventIdsToDelete);
+                handle.SharedInstanceData.WriteBusinessTrackingMsg(LogEntryType.Information, "{0} Session Ids are deleted", batchProxy.EventIdsToDelete.Count);
             }
         }
 

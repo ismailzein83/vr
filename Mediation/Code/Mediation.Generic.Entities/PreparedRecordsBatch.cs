@@ -22,9 +22,9 @@ namespace Mediation.Generic.Entities
     public class PreparedRecordsBatchProxy
     {
         public List<string> SessionIdToDelete { get; set; }
-
+        public List<long> EventIdsToDelete { get; set; }
+        public long LastCommittedId { get; set; }
         public int NbOfHandlersToExecute { get; set; }
-
         public int NbOfExecutedHandlers
         {
             get;

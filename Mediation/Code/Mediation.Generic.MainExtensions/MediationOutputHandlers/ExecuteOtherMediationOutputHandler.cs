@@ -34,8 +34,8 @@ namespace Mediation.Generic.MainExtensions.MediationOutputHandlers
                     {
                         MediationRecordsManager mediationRecordsManager = new MediationRecordsManager();
                         List<MediationRecord> mediationRecords = mediationRecordsManager.GenerateMediationRecordsFromBatchRecords(mediationDefinition, mediationDefinition.ParsedRecordTypeId, preparedCdrBatch.BatchRecords);
-                       context.WriteTrackingMessage(LogEntryType.Information, "Started storing {0} mediation records", mediationRecords.Count);
-                        mediationRecordsManager.SaveMediationRecordsToDB(mediationRecords);
+                        context.WriteTrackingMessage(LogEntryType.Information, "Started storing {0} mediation records", mediationRecords.Count);
+                        mediationRecordsManager.SaveMediationRecordsToDB(MediationDefinitionId, mediationRecords);
                         context.WriteTrackingMessage(LogEntryType.Information, "Storing {0} mediation records is completed", mediationRecords.Count);
                         context.SetOutputHandlerExecutedOnBatch(preparedCdrBatch);
                     });

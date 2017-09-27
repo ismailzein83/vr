@@ -19,7 +19,6 @@ namespace Mediation.Generic.BP.Activities
         public MediationDefinition MediationDefinition { get; set; }
     }
 
-
     public sealed class LoadMediationRecordsByIds : DependentAsyncActivity<LoadMediationRecordsByIdsInput>
     {
         [RequiredArgument]
@@ -53,8 +52,7 @@ namespace Mediation.Generic.BP.Activities
                      hasItems = inputArgument.SessionIds.TryDequeue((sessionIdsBatch) =>
                       {
                           MediationRecordsManager manager = new MediationRecordsManager();
-
-                          var mediationRecords = manager.GetMediationRecordsByIds(inputArgument.MediationDefinition.MediationDefinitionId, sessionIdsBatch.SessionIds, inputArgument.MediationDefinition.ParsedRecordTypeId);
+                          var mediationRecords = manager.GetMediationRecordsByIds(inputArgument.MediationDefinition.MediationDefinitionId, sessionIdsBatch.SessionIds, inputArgument.MediationDefinition.ParsedRecordTypeId, sessionIdsBatch.LastCommittedId.Value);
                           handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "{0} Mediation Records are loaded", mediationRecords.Count());
 
                           Dictionary<string, SessionRecords> recordsBySessionId = new Dictionary<string, SessionRecords>();
@@ -68,7 +66,7 @@ namespace Mediation.Generic.BP.Activities
                           }
                           foreach (var sessionRecordsEntry in recordsBySessionId.OrderBy(itm => itm.Value.MinEventId))
                           {
-                              inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { SessionId = sessionRecordsEntry.Key, MediationRecords = sessionRecordsEntry.Value.Records });
+                              inputArgument.MediationRecords.Enqueue(new MediationRecordBatch() { LastCommittedId = sessionIdsBatch.LastCommittedId.Value, SessionId = sessionRecordsEntry.Key, MediationRecords = sessionRecordsEntry.Value.Records });
                           }
                       });
 

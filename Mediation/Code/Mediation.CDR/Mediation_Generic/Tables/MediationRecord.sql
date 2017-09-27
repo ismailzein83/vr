@@ -4,8 +4,7 @@
     [EventTime]             DATETIME         NULL,
     [EventStatus]           TINYINT          NULL,
     [MediationDefinitionId] UNIQUEIDENTIFIER NULL,
-    [EventDetails]          NVARCHAR (MAX)   NULL,
-    CONSTRAINT [IX_MediationRecord_EventId] UNIQUE NONCLUSTERED ([EventId] ASC)
+    [EventDetails]          NVARCHAR (MAX)   NULL
 );
 
 
@@ -17,9 +16,13 @@
 
 
 
+
+
 GO
-CREATE CLUSTERED INDEX [IX_MediationRecord_SessionId_MediationDefinition]
+CREATE NONCLUSTERED INDEX [IX_MediationRecord_SessionId_MediationDefinition]
     ON [Mediation_Generic].[MediationRecord]([MediationDefinitionId] ASC, [SessionId] ASC);
+
+
 
 
 
@@ -29,4 +32,9 @@ CREATE CLUSTERED INDEX [IX_MediationRecord_SessionId_MediationDefinition]
 GO
 CREATE NONCLUSTERED INDEX [IX_MediationRecord_DefId_Status]
     ON [Mediation_Generic].[MediationRecord]([MediationDefinitionId] ASC, [EventStatus] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_MediationRecord_EventId]
+    ON [Mediation_Generic].[MediationRecord]([EventId] ASC);
 

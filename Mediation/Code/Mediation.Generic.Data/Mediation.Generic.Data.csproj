@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IMediationCommittedIdDataManager.cs" />
     <Compile Include="IMediationDefinitionDataManager.cs" />
     <Compile Include="IMediationRecordsDataManager.cs" />
     <Compile Include="IMultiLegSessionIdDataManager.cs" />

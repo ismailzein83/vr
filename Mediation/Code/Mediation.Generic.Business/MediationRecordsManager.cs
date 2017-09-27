@@ -10,22 +10,22 @@ using Vanrise.GenericData.Business;
 namespace Mediation.Generic.Business
 {
     public class MediationRecordsManager
-    {      
+    {
 
-        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, Guid dataRecordTypeId, Action<string> onSessionIdLoaded)
+        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, Guid dataRecordTypeId, long lastCommittedId, Action<string> onSessionIdLoaded)
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
             dataManager.DataRecordTypeId = dataRecordTypeId;
-            dataManager.GetMediationRecordsByStatus(mediationDefinitionId, status, onSessionIdLoaded);
+            dataManager.GetMediationRecordsByStatus(mediationDefinitionId, status, lastCommittedId, onSessionIdLoaded);
         }
-        public IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds, Guid dataRecordTypeId)
+        public IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds, Guid dataRecordTypeId, long lastCommittedId)
         {
             IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
             dataManager.DataRecordTypeId = dataRecordTypeId;
-            return dataManager.GetMediationRecordsByIds(mediationDefinitionId, sessionIds);
+            return dataManager.GetMediationRecordsByIds(mediationDefinitionId, sessionIds, lastCommittedId);
         }
-        public void SaveMediationRecordsToDB(List<MediationRecord> mediationRecords)
+        public void SaveMediationRecordsToDB(Guid mediationDefinitionId, List<MediationRecord> mediationRecords)
         {
             long startingId;
             Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(typeof(Mediation.Generic.Entities.MediationRecord), mediationRecords.Count, out startingId);
@@ -35,6 +35,9 @@ namespace Mediation.Generic.Business
             }
             IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
             dataManager.SaveMediationRecordsToDB(mediationRecords);
+
+            MediationCommittedIdManager mediationCommittedIdManager = new MediationCommittedIdManager();
+            mediationCommittedIdManager.InsertOrUpdateLastCommitedId(mediationDefinitionId, startingId);
         }
         public List<MediationRecord> GenerateMediationRecordsFromBatchRecords(MediationDefinition mediationDefinition, Guid recordTypeId, List<dynamic> batchRecords)
         {

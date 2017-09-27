@@ -30,7 +30,7 @@ namespace Mediation.Generic.QueueActivators
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
             List<MediationRecord> mediationRecords = mediationRecordsManager.GenerateMediationRecordsFromBatchRecords(mediationDefinition, recordTypeId, batchRecords);
-            mediationRecordsManager.SaveMediationRecordsToDB(mediationRecords);
+            mediationRecordsManager.SaveMediationRecordsToDB(MediationDefinitionId, mediationRecords);
         }
     }
 }

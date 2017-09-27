@@ -101,7 +101,6 @@
     <Build Include="Mediation_Generic\Stored Procedures\sp_MultiLegSessionID_DeleteSessionId.sql" />
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetByIds.sql" />
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_DeleteBySessionIds.sql" />
-    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_DeleteBySessionId.sql" />
     <Build Include="dbo\User Defined Types\StringIDType.sql" />
     <Build Include="Security\Mediation_Generic.sql" />
     <Build Include="Mediation_Centrex\Tables\CookedCDR.sql" />
@@ -111,5 +110,10 @@
     <Build Include="Mobile_EDR\User Defined Types\MobileCDR_FullType.sql" />
     <Build Include="Mediation_WHS\Views\vw_CDRs.sql" />
     <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_GetSessionIdByStatus.sql" />
+    <Build Include="Mediation_Generic\Tables\MediationLastCommittedId.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationRecord_DeleteByEventIds.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationLastCommittedId_InsertOrUpdate.sql" />
+    <Build Include="Mediation_Generic\Stored Procedures\sp_MediationLastCommittedId_Get.sql" />
+    <Build Include="dbo\User Defined Types\IDType.sql" />
   </ItemGroup>
 </Project>

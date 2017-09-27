@@ -88,6 +88,7 @@
   <ItemGroup>
     <Compile Include="FileCustomParser.cs" />
     <Compile Include="MediationBPDefinitionSettings.cs" />
+    <Compile Include="MediationCommittedIdManager.cs" />
     <Compile Include="MediationDefinitionManager.cs" />
     <Compile Include="MediationProcessContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

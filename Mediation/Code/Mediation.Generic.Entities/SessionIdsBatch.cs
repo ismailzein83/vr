@@ -11,7 +11,9 @@ namespace Mediation.Generic.Entities
         public SessionIdsBatch()
         {
             SessionIds = new HashSet<string>();
+            LastCommittedId = null;
         }
         public HashSet<string> SessionIds { get; set; }
+        public long? LastCommittedId { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace Mediation.Generic.Data.SQL
             {
                 TableName = "[Mediation_Generic].[MediationRecord]",
                 Stream = streamForBulkInsert,
-                TabLock = true,
+                TabLock = false,
                 KeepIdentity = false,
                 FieldSeparator = '^',
                 ColumnNames = columns
@@ -57,7 +57,7 @@ namespace Mediation.Generic.Data.SQL
             ApplyMediationRecordToDB(preparedMediationRecords);
         }
 
-        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, Action<string> onSessionIdLoaded)
+        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, long lastCommittedId, Action<string> onSessionIdLoaded)
         {
             ExecuteReaderSP("[Mediation_Generic].[sp_MediationRecord_GetSessionIdByStatus]", (reader) =>
             {
@@ -65,39 +65,59 @@ namespace Mediation.Generic.Data.SQL
                 {
                     onSessionIdLoaded(MediationRecordSessionIdMapper(reader));
                 }
-            }, mediationDefinitionId, (short)status);
+            }, mediationDefinitionId, (short)status, lastCommittedId);
         }
 
         string MediationRecordSessionIdMapper(IDataReader reader)
         {
             return reader["SessionId"] as string;
         }
-        public IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds)
+        public IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds, long lastCommittedId)
         {
             return GetItemsSPCmd("[Mediation_Generic].[sp_MediationRecord_GetByIds]", MediationRecordMapper, (cmd) =>
             {
                 var dtPrm = new SqlParameter("@Ids", SqlDbType.Structured);
                 dtPrm.TypeName = "dbo.[StringIDType]";
-                dtPrm.Value = BuildEventIdsTable(sessionIds);
+                dtPrm.Value = BuildSessionIdsTable(sessionIds);
                 cmd.Parameters.Add(dtPrm);
 
                 dtPrm = new SqlParameter("@MediationDefinitionId", SqlDbType.UniqueIdentifier);
                 dtPrm.Value = mediationDefinitionId;
                 cmd.Parameters.Add(dtPrm);
+
+                dtPrm = new SqlParameter("@LastCommittedId", SqlDbType.BigInt);
+                dtPrm.Value = lastCommittedId;
+                cmd.Parameters.Add(dtPrm);
             });
         }
-        public bool DeleteMediationRecordsBySessionIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds)
+        public bool DeleteMediationRecordsBySessionIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds, long lastCommittedId)
         {
             return ExecuteNonQuerySPCmd("[Mediation_Generic].[sp_MediationRecord_DeleteBySessionIds]", (cmd) =>
             {
                 var dtPrm = new SqlParameter("@Ids", SqlDbType.Structured);
                 dtPrm.TypeName = "dbo.[StringIDType]";
-                dtPrm.Value = BuildEventIdsTable(sessionIds);
+                dtPrm.Value = BuildSessionIdsTable(sessionIds);
                 cmd.Parameters.Add(dtPrm);
 
                 dtPrm = new SqlParameter("@MediationDefinitionId", SqlDbType.UniqueIdentifier);
                 dtPrm.Value = mediationDefinitionId;
                 cmd.Parameters.Add(dtPrm);
+
+                dtPrm = new SqlParameter("@LastCommittedId", SqlDbType.BigInt);
+                dtPrm.Value = lastCommittedId;
+                cmd.Parameters.Add(dtPrm);
+            }) > 0;
+        }
+
+        public bool DeleteMediationRecordsByEventIds(IEnumerable<long> eventIds)
+        {
+            return ExecuteNonQuerySPCmd("[Mediation_Generic].[sp_MediationRecord_DeleteByEventIds]", (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@Ids", SqlDbType.Structured);
+                dtPrm.TypeName = "dbo.[IDType]";
+                dtPrm.Value = BuildEventIdsTable(eventIds);
+                cmd.Parameters.Add(dtPrm);
+
             }) > 0;
         }
 
@@ -113,15 +133,30 @@ namespace Mediation.Generic.Data.SQL
         {
             InsertBulkToTable(preparedMediationRecords as BaseBulkInsertInfo);
         }
-        private DataTable BuildEventIdsTable(IEnumerable<string> eventIds)
+        private DataTable BuildSessionIdsTable(IEnumerable<string> sessionIds)
         {
             DataTable dtEventIds = new DataTable();
             dtEventIds.Columns.Add("SessionId", typeof(string));
             dtEventIds.BeginLoadData();
-            foreach (var id in eventIds)
+            foreach (var id in sessionIds)
             {
                 DataRow dr = dtEventIds.NewRow();
                 dr["SessionId"] = id;
+                dtEventIds.Rows.Add(dr);
+            }
+            dtEventIds.EndLoadData();
+            return dtEventIds;
+        }
+
+        private DataTable BuildEventIdsTable(IEnumerable<long> eventIds)
+        {
+            DataTable dtEventIds = new DataTable();
+            dtEventIds.Columns.Add("ID", typeof(long));
+            dtEventIds.BeginLoadData();
+            foreach (var id in eventIds)
+            {
+                DataRow dr = dtEventIds.NewRow();
+                dr["ID"] = id;
                 dtEventIds.Rows.Add(dr);
             }
             dtEventIds.EndLoadData();
@@ -146,6 +181,5 @@ namespace Mediation.Generic.Data.SQL
         }
 
         #endregion
-
     }
 }

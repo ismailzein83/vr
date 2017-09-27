@@ -16,5 +16,6 @@ namespace Mediation.Generic.Entities
         public string SessionId { get; set; }
 
         public List<MediationRecord> MediationRecords { get; set; }
+        public long LastCommittedId { get; set; }
     }
 }
