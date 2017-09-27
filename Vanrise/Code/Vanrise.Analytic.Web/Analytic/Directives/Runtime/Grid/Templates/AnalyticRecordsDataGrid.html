@@ -1,6 +1,6 @@
 ﻿
 <div ng-show="analyticrecordsctrl.showGrid">
-    <vr-datagrid datasource="analyticrecordsctrl.datasource" defaultsortbyfieldname="analyticrecordsctrl.sortField"
+    <vr-datagrid datasource="analyticrecordsctrl.datasource" defaultsortbyfieldname="analyticrecordsctrl.sortField" normalcell
                  pagingtype="'Pager'" dataretrievalfunction="analyticrecordsctrl.dataRetrievalFunction" menuactions="gridMenuActions"
                  on-ready="analyticrecordsctrl.gridReady" enableautoexport="true" gridmenuactions="analyticrecordsctrl.gridLeftMenuActions" showexpand="isExpandable">
         <vr-datagridcolumn ng-if="analyticrecordsctrl.groupingDimensions.length>0" ng-repeat="dimension in analyticrecordsctrl.groupingDimensions" headertext="dimension.Title" type="dimension.Type" widthfactor="dimension.Widthfactor" fixedwidth="dimension.ColumnSettings.FixedWidth"
