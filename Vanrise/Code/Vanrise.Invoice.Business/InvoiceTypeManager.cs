@@ -97,70 +97,96 @@ namespace Vanrise.Invoice.Business
             var invoiceType =  GetInvoiceType(invoiceTypeId);
             List<InvoiceUIGridColumnRunTime> gridColumns = new List<InvoiceUIGridColumnRunTime>();
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var recordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
-            if (recordType == null)
-                throw new NullReferenceException(String.Format("Record Type {0} Not Found.", invoiceType.Settings.InvoiceDetailsRecordTypeId));
-            foreach (var gridColumn in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
-            {
-                GridColumnAttribute attribute = null;
+            var dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields");
 
-                switch(gridColumn.Field)
-                {
-                    case InvoiceField.CustomField: 
-                        if (gridColumn.CustomFieldName != null)
-                        {
-                            var fieldType = recordType.Fields.FirstOrDefault(x => x.Name == gridColumn.CustomFieldName);
-                            if (fieldType != null)
-                                attribute = fieldType.Type.GetGridColumnAttribute(null);
-                        }
-                        break;
-                    case InvoiceField.CreatedTime: 
-                        attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.DateTime }.GetGridColumnAttribute(null);
-                         break;
-                    case InvoiceField.DueDate: 
-                         attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.DateTime }.GetGridColumnAttribute(null);
-                         break;
-                    case InvoiceField.FromDate: 
-                        attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.DateTime }.GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.InvoiceId:
-                        attribute = new FieldNumberType() { DataType = FieldNumberDataType.BigInt }.GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.IssueDate:                      
-                        attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.DateTime }.GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.Lock:
-                        attribute = new FieldBooleanType().GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.Note:
-                        attribute = new FieldTextType().GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.Paid: 
-                        attribute = new FieldBooleanType().GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.Partner:
-                        attribute = new FieldTextType().GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.SerialNumber:
-                        attribute = new FieldTextType().GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.ToDate:
-                        attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.DateTime }.GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.UserId:
-                        attribute = new FieldTextType().GetGridColumnAttribute(null);
-                        break;
-                    case InvoiceField.IsAutomatic:
-                        attribute = new FieldBooleanType().GetGridColumnAttribute(null);
-                        break;
-                }
-              
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.DateTime }.GetGridColumnAttribute(null),
+                Field = InvoiceField.CustomField,
+                Header = "Created Time"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.Date }.GetGridColumnAttribute(null),
+                Field = InvoiceField.DueDate,
+                Header = "Due Date"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.Date }.GetGridColumnAttribute(null),
+                Field = InvoiceField.FromDate,
+                Header = "From Date"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.Date }.GetGridColumnAttribute(null),
+                Field = InvoiceField.IssueDate,
+                Header = "Issue Date"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldNumberType() { DataType = FieldNumberDataType.BigInt }.GetGridColumnAttribute(null),
+                Field = InvoiceField.InvoiceId,
+                Header = "Invoice Id"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldBooleanType().GetGridColumnAttribute(null),
+                Field = InvoiceField.Lock,
+                Header = "Lock"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldTextType().GetGridColumnAttribute(null),
+                Field = InvoiceField.Note,
+                Header = "Note"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldTextType().GetGridColumnAttribute(null),
+                Field = InvoiceField.Paid,
+                Header = "Paid"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldTextType().GetGridColumnAttribute(null),
+                Field = InvoiceField.Partner,
+                Header = "Partner"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldTextType().GetGridColumnAttribute(null),
+                Field = InvoiceField.SerialNumber,
+                Header = "Serial Number"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldDateTimeType() { DataType = FieldDateTimeDataType.Date }.GetGridColumnAttribute(null),
+                Field = InvoiceField.ToDate,
+                Header = "To Date"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldTextType().GetGridColumnAttribute(null),
+                Field = InvoiceField.UserId,
+                Header = "User Id"
+            });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldBooleanType().GetGridColumnAttribute(null),
+                Field = InvoiceField.IsAutomatic,
+                Header = "Is Automatic"
+            });
+            foreach (var dataRecordTypeField in dataRecordTypeFields)
+            {
+                GridColumnAttribute attribute = dataRecordTypeField.Value.Type.GetGridColumnAttribute(null);
                 gridColumns.Add(new InvoiceUIGridColumnRunTime
                 {
-                    CustomFieldName = gridColumn.CustomFieldName,
+                    CustomFieldName = dataRecordTypeField.Value.Name,
                     Attribute = attribute,
-                    Field = gridColumn.Field,
-                    Header = gridColumn.Header
+                    Field =  InvoiceField.CustomField,
+                    Header = dataRecordTypeField.Value.Title
                 });
             }
             return gridColumns;

@@ -106,7 +106,7 @@ namespace Vanrise.Invoice.Business
                         invoiceAccounts.ThrowIfNull("invoiceAccounts");
                         var invoiceAccount = invoiceAccounts.FirstOrDefault();
 
-                        var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType, invoiceAccount);
+                        var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType, invoiceAccount,false);
                         updateOperationOutput.UpdatedObject = invoiceDetail;
                         updateOperationOutput.Message = "Invoice Generated Successfully.";
                         updateOperationOutput.ShowExactMessage = true;
@@ -200,7 +200,7 @@ namespace Vanrise.Invoice.Business
                     };
                     invoiceAccountManager.TryAddInvoiceAccount(vrInvoiceAccount, out invoiceAccountId);
                     vrInvoiceAccount.InvoiceAccountId = invoiceAccountId;
-                    var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType, vrInvoiceAccount);
+                    var invoiceDetail = InvoiceDetailMapper(GetInvoice(insertedInvoiceId), invoiceType, vrInvoiceAccount,false);
                     insertOperationOutput.InsertedObject = invoiceDetail;
                     insertOperationOutput.Message = "Invoice Generated Successfully.";
                     insertOperationOutput.ShowExactMessage = true;
@@ -264,7 +264,7 @@ namespace Vanrise.Invoice.Business
                 invoiceAccounts.ThrowIfNull("invoiceAccounts");
                 var invoiceAccount = invoiceAccounts.FirstOrDefault();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = InvoiceDetailMapper(invoice, invoiceType, invoiceAccount);
+                updateOperationOutput.UpdatedObject = InvoiceDetailMapper(invoice, invoiceType, invoiceAccount,false);
             }
             else
             {
@@ -299,7 +299,7 @@ namespace Vanrise.Invoice.Business
             var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> { invoice.PartnerId });
             invoiceAccounts.ThrowIfNull("invoiceAccounts");
             var invoiceAccount = invoiceAccounts.FirstOrDefault();
-            return InvoiceDetailMapper(invoice, invoiceType, invoiceAccount);
+            return InvoiceDetailMapper(invoice, invoiceType, invoiceAccount,false);
         }
 
         public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId, string partnerId)
@@ -423,7 +423,7 @@ namespace Vanrise.Invoice.Business
             if (invoice == null)
                 return null;
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
-            return InvoiceDetailMapper1(invoice, invoiceType);
+            return InvoiceDetailMapper1(invoice, invoiceType,false);
         }
         public DateTime? GetLastInvoiceToDate(Guid invoiceTypeId, string partnerId)
         {
@@ -473,15 +473,15 @@ namespace Vanrise.Invoice.Business
         #endregion
 
         #region Mappers
-        private static InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice, InvoiceType invoiceType, VRInvoiceAccount invoiceAccount)
+        private static InvoiceDetail InvoiceDetailMapper(Entities.Invoice invoice, InvoiceType invoiceType, VRInvoiceAccount invoiceAccount, bool includeAllFields)
         {
 
-            var invoiceDetail = InvoiceDetailMapper1(invoice, invoiceType);
+            var invoiceDetail = InvoiceDetailMapper1(invoice, invoiceType, includeAllFields);
             InvoiceDetailMapper2(invoiceDetail, invoiceType, invoiceAccount);
             return invoiceDetail;
         }
 
-        private static InvoiceDetail InvoiceDetailMapper1(Entities.Invoice invoice, InvoiceType invoiceType)
+        private static InvoiceDetail InvoiceDetailMapper1(Entities.Invoice invoice, InvoiceType invoiceType,bool includeAllFields)
         {
 
 
@@ -508,38 +508,48 @@ namespace Vanrise.Invoice.Business
                 HasNote = invoice.Note != null,
             };
 
-            FillNeededDetailData(invoiceDetail, invoiceType);
+            FillNeededDetailData(invoiceDetail, invoiceType, includeAllFields);
 
 
             return invoiceDetail;
         }
-        private static void FillNeededDetailData(InvoiceDetail invoiceDetail, InvoiceType invoiceType)
+        private static void FillNeededDetailData(InvoiceDetail invoiceDetail, InvoiceType invoiceType, bool includeAllFields)
         {
 
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
-            var dataRecordType = dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            var dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(invoiceType.Settings.InvoiceDetailsRecordTypeId);
             invoiceDetail.Items = new List<InvoiceDetailObject>();
-
-            foreach (var item in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
+            if (includeAllFields)
             {
-                foreach (var field in dataRecordType.Fields)
+                foreach (var field in dataRecordTypeFields)
                 {
-                    if (item.Field == InvoiceField.CustomField && item.CustomFieldName == field.Name)
+                    invoiceDetail.Items.Add(GetInvoiceDetailObject(invoiceDetail, field.Value, true));
+                }
+            }
+            else
+            {
+                foreach (var item in invoiceType.Settings.InvoiceGridSettings.MainGridColumns)
+                {
+                    foreach (var field in dataRecordTypeFields)
                     {
-                        var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(field.Name).GetValue(invoiceDetail.Entity.Details, null);
-                        //Vanrise.Common.Utilities.GetPropValue(field.Name, invoiceDetail.Entity.Details);
-                        //Vanrise.Common.Utilities.GetPropValueReader(field.Name).GetPropertyValue(invoiceDetail.Entity.Details);
-                        string description = fieldValue != null ? field.Type.GetDescription(fieldValue) : null;
-                        invoiceDetail.Items.Add(new InvoiceDetailObject
+                        if (item.Field == InvoiceField.CustomField && item.CustomFieldName == field.Value.Name)
                         {
-                            FieldName = field.Name,
-                            Description = item.UseDescription ? description : fieldValue != null ? fieldValue.ToString() : null,
-                            Value = fieldValue
-                        });
+                            invoiceDetail.Items.Add(GetInvoiceDetailObject(invoiceDetail, field.Value, item.UseDescription));
+                        }
                     }
                 }
             }
-
+        }
+        private static InvoiceDetailObject GetInvoiceDetailObject(InvoiceDetail invoiceDetail, DataRecordField dataRecordField, bool useDescription)
+        {
+            var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(dataRecordField.Name).GetValue(invoiceDetail.Entity.Details, null);
+            string description = fieldValue != null ? dataRecordField.Type.GetDescription(fieldValue) : null;
+            return new InvoiceDetailObject
+            {
+                FieldName = dataRecordField.Name,
+                Description = useDescription ? description : fieldValue != null ? fieldValue.ToString() : null,
+                Value = fieldValue
+            };
         }
         private static InvoiceDetail InvoiceDetailMapper2(InvoiceDetail invoiceDetail, InvoiceType invoiceType, VRInvoiceAccount invoiceAccount)
         {
@@ -587,7 +597,7 @@ namespace Vanrise.Invoice.Business
             {
                 InvoiceType invoiceType = new InvoiceTypeManager().GetInvoiceType(input.Query.InvoiceTypeId);
 
-                return allRecords.ToBigResult(input, null, (entity) => InvoiceManager.InvoiceDetailMapper1(entity, invoiceType));
+                return allRecords.ToBigResult(input, null, (entity) => InvoiceManager.InvoiceDetailMapper1(entity, invoiceType, input.Query.IncludeAllFields));
             }
             public override IEnumerable<Entities.Invoice> RetrieveAllData(DataRetrievalInput<InvoiceQuery> input)
             {

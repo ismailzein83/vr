@@ -18,5 +18,6 @@ namespace Vanrise.Invoice.Entities
         public DateTime? EffectiveDate { get; set; }
         public bool? IsEffectiveInFuture { get; set; }
         public VRAccountStatus? Status { get; set; }
+        public bool IncludeAllFields { get; set; }
     }
 }
