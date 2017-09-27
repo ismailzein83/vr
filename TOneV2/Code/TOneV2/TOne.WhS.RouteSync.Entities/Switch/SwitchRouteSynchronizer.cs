@@ -151,7 +151,7 @@ namespace TOne.WhS.RouteSync.Entities
 
     public interface IIsSwitchRouteSynchronizerValidContext
     {
-        public string ValidationMessage { set; }
+        string ValidationMessage { set; }
     }
     public class IsSwitchRouteSynchronizerValidContext : IIsSwitchRouteSynchronizerValidContext
     {
