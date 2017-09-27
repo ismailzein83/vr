@@ -1136,7 +1136,7 @@ namespace TOne.WhS.BusinessEntity.Business
             foreach (var zoneNotification in customerZoneNotificationsByCurrencyId)
             {
                 VRFile vrFile = GetPriceListFile(customer.CarrierAccountId, zoneNotification.Value, salePriceListContext.EffectiveDate,
-                    salePriceListType, salePricelistTemplateId, salePriceList.CurrencyId);
+                    overriddenListType, salePricelistTemplateId, salePriceList.CurrencyId);
 
                 vrFiles.Add(new SalePricelistVRFile
                 {
