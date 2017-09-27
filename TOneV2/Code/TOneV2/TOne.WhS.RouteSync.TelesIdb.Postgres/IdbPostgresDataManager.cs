@@ -104,7 +104,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             {
                 StringBuilder strBuilder = new StringBuilder();
                 foreach (var exception in exceptions)
-                    strBuilder.AppendLine(string.Format("Database {0} for Switch '{1}': {2}.", exception.Key, context.SwitchName, exception.Value.Message));
+                    strBuilder.AppendLine(string.Format("Database {0} for Switch '{1}': {2}.", exception.Key + 1, context.SwitchName, exception.Value.Message));
 
                 context.ErrorMessage = strBuilder.ToString();
                 return false;
