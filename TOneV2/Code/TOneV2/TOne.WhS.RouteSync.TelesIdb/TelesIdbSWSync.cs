@@ -251,6 +251,74 @@ namespace TOne.WhS.RouteSync.TelesIdb
             IdbBlockCustomerContext blockCustomerContext = new IdbBlockCustomerContext() { CustomerMappings = customerMapping.CustomerMapping };
             return this.DataManager.BlockCustomer(blockCustomerContext);
         }
+
+        public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
+        {
+            //if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
+            //    return true;
+
+            //List<string> customerMappings = new List<string>();
+            //List<string> supplierMappings = new List<string>();
+
+            //List<string> duplicatedCustomerMappings = new List<string>();
+            //List<string> duplicatedSupplierMappings = new List<string>();
+            //List<string> invalidSupplierMappings = new List<string>();
+
+            //foreach (var mapping in this.CarrierMappings.Values)
+            //{
+            //    if (mapping.CustomerMapping != null)
+            //    {
+            //        foreach (var customerMapping in mapping.CustomerMapping)
+            //        {
+            //            if (customerMappings.Contains(customerMapping))
+            //            {
+            //                duplicatedCustomerMappings.Add(customerMapping);
+            //                continue;
+            //            }
+
+            //            customerMappings.Add(customerMapping);
+            //        }
+            //    }
+
+            //    if (mapping.SupplierMapping != null)
+            //    {
+            //        foreach (var supplierMapping in mapping.SupplierMapping)
+            //        {
+            //            if (supplierMapping.Length > 4)
+            //            {
+            //                invalidSupplierMappings.Add(supplierMapping);
+            //                continue;
+            //            }
+
+            //            else if (supplierMappings.Contains(supplierMapping))
+            //            {
+            //                duplicatedSupplierMappings.Add(supplierMapping);
+            //                continue;
+            //            }
+
+            //            supplierMappings.Add(supplierMapping);
+            //        }
+            //    }
+            //}
+
+            //if (duplicatedCustomerMappings.Count == 0 && duplicatedSupplierMappings.Count == 0 && invalidSupplierMappings.Count == 0)
+            //    return true;
+
+            //List<string> validationMessages = new List<string>();
+
+            //StringBuilder validationMessage = new StringBuilder();
+            //if (duplicatedCustomerMappings.Count > 0)
+            //    validationMessages.Add(string.Format("Duplicated Customer Mappings: {0}", string.Join(", ", duplicatedCustomerMappings)));
+
+            //if (duplicatedSupplierMappings.Count > 0)
+            //    validationMessages.Add(string.Format("Duplicated Supplier Mappings: {0}", string.Join(", ", duplicatedSupplierMappings)));
+
+            //if (invalidSupplierMappings.Count > 0)
+            //    validationMessages.Add(string.Format("Invalid Supplier Mappings: {0}", string.Join(", ", invalidSupplierMappings)));
+
+            //context.ValidationMessages = validationMessages;
+            return false;
+        }
     }
 
     public class CarrierMapping
