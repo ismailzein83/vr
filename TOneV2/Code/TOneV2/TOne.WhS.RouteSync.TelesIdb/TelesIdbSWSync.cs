@@ -250,7 +250,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
             IdbBlockCustomerContext blockCustomerContext = new IdbBlockCustomerContext() { CustomerMappings = customerMapping.CustomerMapping, SwitchName = context.SwitchName };
 
-            if (!this.DataManager.BlockCustomer(blockCustomerContext);)
+            if (!this.DataManager.BlockCustomer(blockCustomerContext))
                 throw new Exception(blockCustomerContext.ErrorMessage);
 
             return true;
