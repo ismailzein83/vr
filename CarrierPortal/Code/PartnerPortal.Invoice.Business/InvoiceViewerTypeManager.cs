@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 namespace PartnerPortal.Invoice.Business
 {
@@ -59,9 +60,16 @@ namespace PartnerPortal.Invoice.Business
                     if (gridColumn != null)
                     {
                         var field = fields.FirstOrDefault(x => x.InvoiceFieldId == item.Field);
+                        GridColumnAttribute attribute = gridColumn.Attribute;
+                        if (item.GridColumnSettings != null && attribute != null)
+                        {
+                            attribute.WidthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(item.GridColumnSettings);
+                            if (!attribute.WidthFactor.HasValue)
+                                attribute.FixedWidth = item.GridColumnSettings.FixedWidth;
+                        }
                         invoiceViewerTypeRuntime.RuntimeGridColumns.Add(new RuntimeGridColumn
                         {
-                            Attribute = gridColumn.Attribute,
+                            Attribute = attribute,
                             CustomFieldName = gridColumn.CustomFieldName,
                             Field = gridColumn.Field,
                             FieldName = field != null ?field.Name:null,

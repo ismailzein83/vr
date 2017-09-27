@@ -61,7 +61,8 @@ namespace PartnerPortal.Invoice.Business
                     {
                         FromTime = input.Query.FromTime,
                         ToTime = input.Query.ToTime,
-                        PartnerIds = partnerIds.ToList()
+                        PartnerIds = partnerIds.ToList(),
+                        IncludeAllFields = true
                     }
                 };
                 query.Query.InvoiceTypeId = invoiceViewerTypeSettings.InvoiceTypeId;
@@ -79,7 +80,7 @@ namespace PartnerPortal.Invoice.Business
                     List<InvoiceAppDetail> result = new List<InvoiceAppDetail>();
                     foreach (var invoiceItem in bigResult.Data)
                     {
-                        var invoiceAppDetail = ConvertInvoiceClientDetailToInoviceAppDetail(invoiceItem);
+                        var invoiceAppDetail = ConvertInvoiceClientDetailToInoviceAppDetail(invoiceItem, invoiceViewerTypeSettings.GridSettings.InvoiceGridFields);
                         FillClientInvoiceDataNeeded(invoiceAppDetail, invoiceViewerTypeSettings.GridSettings.InvoiceGridActions);
                         result.Add(invoiceAppDetail);
                     }
@@ -88,7 +89,7 @@ namespace PartnerPortal.Invoice.Business
             }
             return finalResult;
         }
-        private InvoiceAppDetail ConvertInvoiceClientDetailToInoviceAppDetail(InvoiceClientDetail invoiceClientDetail)
+        private InvoiceAppDetail ConvertInvoiceClientDetailToInoviceAppDetail(InvoiceClientDetail invoiceClientDetail, List<InvoiceViewerTypeGridField> invoiceGridFields)
         {
             InvoiceAppDetail invoiceAppDetail = null;
             if(invoiceClientDetail != null)
@@ -102,19 +103,31 @@ namespace PartnerPortal.Invoice.Business
                     PartnerName = invoiceClientDetail.PartnerName,
                     UserName = invoiceClientDetail.UserName,
                 };
-                if (invoiceClientDetail.Items != null && invoiceClientDetail.Items.Count > 0)
+                if(invoiceGridFields != null)
                 {
-                    invoiceAppDetail.Items = new List<Entities.InvoiceDetailObject>();
-                    foreach (var item in invoiceClientDetail.Items)
+                    if (invoiceClientDetail.Items != null && invoiceClientDetail.Items.Count > 0)
                     {
-                        invoiceAppDetail.Items.Add(new Entities.InvoiceDetailObject
+                        invoiceAppDetail.Items = new List<Entities.InvoiceDetailObject>();
+                        foreach (var invoiceGridField in invoiceGridFields)
                         {
-                            Description = item.Description,
-                            FieldName = item.FieldName,
-                            Value = item.Value
-                        });
+                            foreach (var item in invoiceClientDetail.Items)
+                            {
+                                if (item.FieldName == invoiceGridField.CustomFieldName)
+                                {
+                                    invoiceAppDetail.Items.Add(new Entities.InvoiceDetailObject
+                                    {
+                                        Description = item.Description,
+                                        FieldName = item.FieldName,
+                                        Value = item.Value
+                                    });
+                                    break;
+                                }
+
+                            }
+                        }
                     }
                 }
+               
             }
             return invoiceAppDetail;
         }

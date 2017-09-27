@@ -9,6 +9,8 @@
                 <span ng-if="scopeModel.isCustomFieldRequired()">
                     <partnerportal-invoice-invoicecustomfield-remoteselector isrequired="scopeModel.isCustomFieldRequired()" on-ready="scopeModel.onInvoiceCustomFieldSelectorReady" selectedvalues="scopeModel.selectedRecordField" normal-col-num="6"></partnerportal-invoice-invoicecustomfield-remoteselector>
                 </span>
+                <vr-common-gridcolumnwidth-editor on-ready="scopeModel.onGridWidthFactorEditorReady" normal-col-num="6"></vr-common-gridcolumnwidth-editor>
+
             </vr-row>
         </vr-form>
     </vr-modalbody>

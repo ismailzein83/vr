@@ -5,7 +5,7 @@
                  pagingtype="'Pager'"
                  menuactions="menuActions"
                  idfield="Entity.InvoiceId"
-                 defaultsortbyfieldname="'Entity.InvoiceId'">
+                 defaultsortbyfieldname="'Entity.InvoiceId'" normalcell>
         <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceId'"></vr-datagridcolumn>
         <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field">
         </vr-datagridcolumn>

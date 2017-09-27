@@ -111,7 +111,7 @@ app.directive("partnerportalInvoiceGrid", ["UtilsService", "VRNotificationServic
                             field = "Entity." + gridColumn.FieldName;
                             type = gridColumn.Attribute.Type;
                         }
-                        $scope.gridFields.push({ HeaderText: gridColumn.Header, Field: field, Type: type, NumberPrecision: numberprecision });
+                        $scope.gridFields.push({ HeaderText: gridColumn.Header, Field: field, Type: type, NumberPrecision: numberprecision, WidthFactor: gridColumn.Attribute.WidthFactor, FixedWidth: gridColumn.Attribute.FixedWidth });
 
                     }
                 }

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    gridColumnsEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService','VRUIUtilsService'];
+    gridColumnsEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService','VRUIUtilsService','VRCommon_GridWidthFactorEnum'];
 
-    function gridColumnsEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function gridColumnsEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_GridWidthFactorEnum) {
 
         var context;
         var columnEntity;
@@ -15,6 +15,8 @@
 
         var invoiceCustomFieldSelectorApi;
         var invoiceCustomFieldSelectorPromiseDeferred;
+        var gridWidthFactorEditorAPI;
+        var gridWidthFactorEditorPromiseReadyDeferred = UtilsService.createPromiseDeferred();
 
         var isEditMode;
         loadParameters();
@@ -32,7 +34,10 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.onGridWidthFactorEditorReady = function (api) {
+                gridWidthFactorEditorAPI = api;
+                gridWidthFactorEditorPromiseReadyDeferred.resolve();
+            };
             $scope.scopeModel.onInvoiceFieldSelectorReady = function (api) {
                 invoiceFieldSelectorApi = api;
                 invoiceFieldSelectorPromiseDeferred.resolve();
@@ -69,7 +74,8 @@
                 return {
                     Header: $scope.scopeModel.header,
                     Field: $scope.scopeModel.selectedInvoiceField.InvoiceFieldId,
-                    CustomFieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined
+                    CustomFieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined,
+                    GridColumnSettings: gridWidthFactorEditorAPI.getData(),
                 };
             }
 
@@ -134,13 +140,27 @@
                    
                 }
 
+                function loadGridWidthFactorEditor() {
+                    var gridWidthFactorEditorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    gridWidthFactorEditorPromiseReadyDeferred.promise.then(function () {
+                        var gridWidthFactorEditorPayload = {
+                            data: {
+                                Width: VRCommon_GridWidthFactorEnum.Normal.value
+                            }
+                        };
+                        if (columnEntity != undefined)
+                            gridWidthFactorEditorPayload.data = columnEntity.GridColumnSettings;
+                        VRUIUtilsService.callDirectiveLoad(gridWidthFactorEditorAPI, gridWidthFactorEditorPayload, gridWidthFactorEditorLoadPromiseDeferred);
+                    });
+                    return gridWidthFactorEditorLoadPromiseDeferred.promise;
+                }
                 function loadStaticData() {
                     if (columnEntity != undefined) {
                         $scope.scopeModel.header = columnEntity.Header;
                     }
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceFieldSelector, loadInvoiceCustomFieldSelector]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceFieldSelector, loadInvoiceCustomFieldSelector, loadGridWidthFactorEditor]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
