@@ -25,9 +25,15 @@ namespace TOne.WhS.RouteSync.Entities
         {
             return false;
         }
+
         public virtual bool TryUnBlockCustomer(ITryUnBlockCustomerContext context)
         {
             return false;
+        }
+
+        public virtual bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
+        {
+            return true;
         }
     }
 
@@ -116,13 +122,8 @@ namespace TOne.WhS.RouteSync.Entities
 
         Action<Exception, bool> WriteBusinessHandledException { get; }
     }
-    public interface ITryBlockCustomerContext
-    {
-        string CustomerId { get; }
 
-        object SwitchBlockingInfo { set; }
-    }
-    public interface ITryUnBlockCustomerContext
+    public interface ITryBlockCustomerContext
     {
         string CustomerId { get; }
 
@@ -134,10 +135,26 @@ namespace TOne.WhS.RouteSync.Entities
 
         public object SwitchBlockingInfo { get; set; }
     }
+
+    public interface ITryUnBlockCustomerContext
+    {
+        string CustomerId { get; }
+
+        object SwitchBlockingInfo { set; }
+    }
     public class TryUnBlockCustomerContext : ITryUnBlockCustomerContext
     {
         public string CustomerId { get; set; }
 
         public object SwitchBlockingInfo { get; set; }
+    }
+
+    public interface IIsSwitchRouteSynchronizerValidContext
+    {
+        public string ValidationMessage { set; }
+    }
+    public class IsSwitchRouteSynchronizerValidContext : IIsSwitchRouteSynchronizerValidContext
+    {
+        public string ValidationMessage { get; set; }
     }
 }
