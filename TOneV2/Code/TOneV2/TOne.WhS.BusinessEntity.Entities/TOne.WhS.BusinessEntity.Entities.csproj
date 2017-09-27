@@ -145,6 +145,9 @@
     <Compile Include="RoutingCarrierInfo\RoutingCarrierInfo.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingCustomerInfo.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingSupplierInfo.cs" />
+    <Compile Include="SalePricelistChanges\CustomerRatePreview.cs" />
+    <Compile Include="SalePricelistChanges\CustomerRatePreviewDetail.cs" />
+    <Compile Include="SalePricelistChanges\CustomerRatePreviewQuery.cs" />
     <Compile Include="SalePricelistChanges\SalePriceListEvaluatedEmail.cs" />
     <Compile Include="SalePricelistChanges\SalePricelistRateChangeDetail.cs" />
     <Compile Include="SalePricelistChanges\SalePricelistRPChange.cs" />
