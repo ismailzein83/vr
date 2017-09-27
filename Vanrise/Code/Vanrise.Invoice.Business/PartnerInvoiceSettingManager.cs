@@ -34,20 +34,25 @@ namespace Vanrise.Invoice.Business
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-
-            IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
-            partnerInvoiceSetting.PartnerInvoiceSettingId = Guid.NewGuid();
-            if (dataManager.InsertPartnerInvoiceSetting(partnerInvoiceSetting))
+            if (!CheckIfPartnerAssignedToInvoiceSetting(partnerInvoiceSetting.PartnerId, partnerInvoiceSetting.InvoiceSettingID))
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = PartnerInvoiceSettingDetailMapper(partnerInvoiceSetting);
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-            }
-            else
+                IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
+                partnerInvoiceSetting.PartnerInvoiceSettingId = Guid.NewGuid();
+                if (dataManager.InsertPartnerInvoiceSetting(partnerInvoiceSetting))
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    insertOperationOutput.InsertedObject = PartnerInvoiceSettingDetailMapper(partnerInvoiceSetting);
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                }
+                else
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                }
+            }else
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                insertOperationOutput.Message = "Partner already linked to another invoice setting.";
+                insertOperationOutput.ShowExactMessage = true;
             }
-
             return insertOperationOutput;
         }
         public Vanrise.Entities.UpdateOperationOutput<PartnerInvoiceSettingDetail> UpdatePartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
@@ -56,18 +61,25 @@ namespace Vanrise.Invoice.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-
-            IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
-
-            if (dataManager.UpdatePartnerInvoiceSetting(partnerInvoiceSetting))
+            if (!CheckIfPartnerAssignedToInvoiceSetting(partnerInvoiceSetting.PartnerId, partnerInvoiceSetting.InvoiceSettingID, partnerInvoiceSetting.PartnerInvoiceSettingId))
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = PartnerInvoiceSettingDetailMapper(partnerInvoiceSetting);
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
+
+                if (dataManager.UpdatePartnerInvoiceSetting(partnerInvoiceSetting))
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = PartnerInvoiceSettingDetailMapper(partnerInvoiceSetting);
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                }
+                else
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                }
             }
             else
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                updateOperationOutput.Message = "Partner already linked to another invoice setting.";
+                updateOperationOutput.ShowExactMessage = true;
             }
 
             return updateOperationOutput;
@@ -117,14 +129,20 @@ namespace Vanrise.Invoice.Business
             }
             return null;
         }
-        public bool CheckIfPartnerAssignedToInvoiceSetting(string partnerId)
+        public bool CheckIfPartnerAssignedToInvoiceSetting(string partnerId, Guid invoiceSettingId,  Guid? partnerInvoiceSettingId = null)
         {
-            var partnerInvoiceSettings = GetPartnerInvoiceSettings();
-            if (partnerInvoiceSettings != null && partnerInvoiceSettings.Any(x => x.PartnerId == partnerId))
+            InvoiceSettingManager invoiceSettingManager = new InvoiceSettingManager();
+            var invoiceTypeId = invoiceSettingManager.GetSettingInvoiceTypeId(invoiceSettingId);
+            var partnerInvoiceSettings = GetPartnerInvoiceSettingsByInvoiceTypeId(invoiceTypeId);
+            if (partnerInvoiceSettings != null && partnerInvoiceSettings.Any(x => x.PartnerId == partnerId && (!partnerInvoiceSettingId.HasValue || partnerInvoiceSettingId.Value != x.PartnerInvoiceSettingId)))
                 return true;
             return false;
         }
-
+        public List<PartnerInvoiceSetting> GetPartnerInvoiceSettingsByInvoiceTypeId(Guid invoiceTypeId)
+        {
+            var partnerInvoiceSettingsByInvoiceType = GetCachedPartnerInvoiceSettingsByInvoiceTypeId();
+            return partnerInvoiceSettingsByInvoiceType.GetRecord(invoiceTypeId);
+        }
         #endregion
 
         #region Private Classes
@@ -151,6 +169,23 @@ namespace Vanrise.Invoice.Business
                   IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
                   IEnumerable<PartnerInvoiceSetting> partnerInvoiceSettings = dataManager.GetPartnerInvoiceSettings();
                   return partnerInvoiceSettings.ToDictionary(c => c.PartnerInvoiceSettingId, c => c);
+              });
+        }
+        private Dictionary<Guid, List<PartnerInvoiceSetting>> GetCachedPartnerInvoiceSettingsByInvoiceTypeId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedPartnerInvoiceSettingsByInvoiceTypeId",
+              () =>
+              {
+                  Dictionary<Guid, List<PartnerInvoiceSetting>> partnerInvoiceSettingsByInvoiceType = new Dictionary<Guid, List<PartnerInvoiceSetting>>();
+                  InvoiceSettingManager invoiceSettingManager = new InvoiceSettingManager();
+                  var cachedPartnerInvoiceSettings = GetCachedPartnerInvoiceSettings();
+                  foreach (var cachedPartnerInvoiceSetting in cachedPartnerInvoiceSettings)
+                  {
+                      var settingInvoiceTypeId = invoiceSettingManager.GetSettingInvoiceTypeId(cachedPartnerInvoiceSetting.Value.InvoiceSettingID);
+                      var partnerInvoiceSettings = partnerInvoiceSettingsByInvoiceType.GetOrCreateItem(settingInvoiceTypeId);
+                      partnerInvoiceSettings.Add(cachedPartnerInvoiceSetting.Value);
+                  }
+                  return partnerInvoiceSettingsByInvoiceType;
               });
         }
         #endregion

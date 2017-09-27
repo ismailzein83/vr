@@ -12,8 +12,8 @@ namespace Vanrise.Invoice.Business.InvoicePartnerFilter
         public string EditablePartnerId { get; set; }
         public bool IsMatched(IInvoicePartnerFilterContext context)
         {
-            if ((EditablePartnerId != null && context.PartnerId == EditablePartnerId) || !new PartnerInvoiceSettingManager().CheckIfPartnerAssignedToInvoiceSetting(context.PartnerId))
-                return true;
+        //    if ((EditablePartnerId != null && context.PartnerId == EditablePartnerId) || !new PartnerInvoiceSettingManager().CheckIfPartnerAssignedToInvoiceSetting(context.PartnerId))
+        //        return true;
             return false;
         }
     }

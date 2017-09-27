@@ -105,7 +105,12 @@ namespace Vanrise.Invoice.Business
                 return invoiceSetting.Name;
             return null;
         }
-     
+        public Guid GetSettingInvoiceTypeId(Guid invoiceSettingId)
+        {
+            var invoiceSettings =GetInvoiceSetting( invoiceSettingId) ;
+            invoiceSettings.ThrowIfNull("invoiceSettings", invoiceSettingId);
+            return invoiceSettings.InvoiceTypeId;
+        }
         public IEnumerable<InvoiceSettingInfo> GetInvoiceSettingsInfo(InvoiceSettingFilter filter)
         {
             var invoiceSettings = GetCachedInvoiceSettings();
@@ -114,7 +119,7 @@ namespace Vanrise.Invoice.Business
                     return false;
                 return true;
             };
-            return invoiceSettings.MapRecords(InvoiceSettingInfoMapper, filterExpression);
+            return invoiceSettings.MapRecords(InvoiceSettingInfoMapper, filterExpression).OrderBy(x=>x.Name);
         }
         public IEnumerable<InvoiceSetting> GetInvoiceSettings(Guid invoiceTypeId)
         {
