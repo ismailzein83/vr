@@ -248,8 +248,12 @@ namespace TOne.WhS.RouteSync.TelesIdb
             if (customerMapping.CustomerMapping == null || customerMapping.CustomerMapping.Count == 0)
                 return false;
 
-            IdbBlockCustomerContext blockCustomerContext = new IdbBlockCustomerContext() { CustomerMappings = customerMapping.CustomerMapping };
-            return this.DataManager.BlockCustomer(blockCustomerContext);
+            IdbBlockCustomerContext blockCustomerContext = new IdbBlockCustomerContext() { CustomerMappings = customerMapping.CustomerMapping, SwitchName = context.SwitchName };
+
+            if (!this.DataManager.BlockCustomer(blockCustomerContext);)
+                throw new Exception(blockCustomerContext.ErrorMessage);
+
+            return true;
         }
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)

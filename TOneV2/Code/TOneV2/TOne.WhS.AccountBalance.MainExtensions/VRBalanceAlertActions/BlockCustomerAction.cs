@@ -74,7 +74,8 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
                 {
                     TryBlockCustomerContext context = new TryBlockCustomerContext
                     {
-                        CustomerId = carrierAccountId.ToString()
+                        CustomerId = carrierAccountId.ToString(),
+                        SwitchName = switchItem.Name
                     };
                     try
                     {

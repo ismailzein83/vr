@@ -8,6 +8,7 @@ using Vanrise.Entities;
 using Vanrise.Data.Postgres;
 using TOne.WhS.RouteSync.Idb;
 using TOne.WhS.RouteSync.Entities;
+using System.Text;
 
 namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 {
@@ -85,7 +86,31 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 
         public bool BlockCustomer(IdbBlockCustomerContext context)
         {
-            return false;
+            PrepareDataManagers();
+            ConcurrentDictionary<int, Exception> exceptions = new ConcurrentDictionary<int, Exception>();
+            Parallel.For(0, _telesIdbPostgresDataManagers.Count, (i) =>
+            {
+                try
+                {
+                    _telesIdbPostgresDataManagers[i].BlockCustomer(context.CustomerMappings);
+                }
+                catch (Exception ex)
+                {
+                    exceptions.TryAdd(i, ex);
+                }
+            });
+
+            if (exceptions.Count > 0)
+            {
+                StringBuilder strBuilder = new StringBuilder();
+                foreach (var exception in exceptions)
+                    strBuilder.AppendLine(string.Format("Database {0} for Switch '{1}': {2}.", exception.Key, context.SwitchName, exception.Value.Message));
+
+                context.ErrorMessage = strBuilder.ToString();
+                return false;
+            }
+
+            return true;
         }
 
         private void ExecMVTSRadiusSQLDataManagerAction(Action<TelesIdbPostgresDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
@@ -204,6 +229,15 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
                                                            route character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying);", tempTableName);
 
             ExecuteNonQuery(new string[] { dropTempTableScript, dropOldTableScript, createTempTableScript });
+        }
+
+        internal void BlockCustomer(List<string> customerMappings)
+        {
+            StringBuilder blockCustomerScript = new StringBuilder();
+            blockCustomerScript.AppendFormat("UPDATE {0} SET route = 'BLK' WHERE ", tableName);
+            blockCustomerScript.Append(string.Join(" or ", customerMappings.Select(itm => string.Format("pref LIKE '{0}%'", itm))));
+
+            ExecuteNonQuery(new string[] { blockCustomerScript.ToString() });
         }
     }
 }
