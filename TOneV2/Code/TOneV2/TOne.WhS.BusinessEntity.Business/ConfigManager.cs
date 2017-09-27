@@ -311,6 +311,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 result.NewRate = parentRateChangeTypeDescriptions.NewRate;
                 result.IncreasedRate = parentRateChangeTypeDescriptions.IncreasedRate;
                 result.DecreasedRate = parentRateChangeTypeDescriptions.DecreasedRate;
+                result.DeletedRate = parentRateChangeTypeDescriptions.DeletedRate;
             }
             if (childRateChangeTypeDescriptions == null)
                 return result;
@@ -322,6 +323,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 result.IncreasedRate = childRateChangeTypeDescriptions.IncreasedRate;
             if (!string.IsNullOrEmpty(childRateChangeTypeDescriptions.DecreasedRate))
                 result.DecreasedRate = childRateChangeTypeDescriptions.DecreasedRate;
+            if (!string.IsNullOrEmpty(childRateChangeTypeDescriptions.DeletedRate))
+                result.DeletedRate = childRateChangeTypeDescriptions.DeletedRate;
 
             return result;
         }

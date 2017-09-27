@@ -92,6 +92,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     return rateChangeTypeDescriptions.NewRate;
                 case RateChangeType.NotChanged:
                     return rateChangeTypeDescriptions.NotChanged;
+                case RateChangeType.Deleted:
+                    return rateChangeTypeDescriptions.DeletedRate;
             }
             return rateChangeTypeDescriptions.NotChanged;
         }

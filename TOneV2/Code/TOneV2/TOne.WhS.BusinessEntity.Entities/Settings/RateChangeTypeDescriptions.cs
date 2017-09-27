@@ -12,5 +12,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string NewRate { get; set; }
         public string IncreasedRate { get; set; }
         public string DecreasedRate { get; set; }
+        public string DeletedRate { get; set; }
     }
 }

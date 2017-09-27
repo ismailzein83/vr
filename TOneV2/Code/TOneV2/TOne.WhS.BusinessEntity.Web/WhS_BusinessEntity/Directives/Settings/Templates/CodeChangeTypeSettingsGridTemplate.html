@@ -1,6 +1,7 @@
 ﻿<vr-datagrid on-ready="scopeModel.onGridReady"
              datasource="scopeModel.gridData"
-             dataretrievalfunction="scopeModel.dataRetrievalFunction">
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             hidegridmenu>
     <vr-datagridcolumn headertext="'Code Change Type'" field="'CodeChangeType.label'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Descriptions'" field="'CodeChangeTypeDescription'">
         <vr-textbox type="text" value="dataItem.CodeChangeTypeDescription" isrequired="dataItem.isrequired"></vr-textbox>

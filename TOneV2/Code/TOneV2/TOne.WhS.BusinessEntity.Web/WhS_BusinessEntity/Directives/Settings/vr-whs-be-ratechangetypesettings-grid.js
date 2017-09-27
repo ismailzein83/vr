@@ -82,6 +82,16 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
                                     rateChangeTypeList.push(dataItem);
                                     break;
                                 }
+                            case (WhS_BE_RateChangeTypeEnum.Deleted):
+                                {
+                                    var dataItem = {
+                                        RateChangeType: rateChangeType,
+                                        RateChangeTypeDescription: (dataRetrievalInput.Query != undefined) ? dataRetrievalInput.Query.DeletedRate : null,
+                                        isrequired: ctrl.isrequired
+                                    };
+                                    rateChangeTypeList.push(dataItem);
+                                    break;
+                                }
                         }
                     }
 
@@ -125,6 +135,11 @@ app.directive('vrWhsBeRatechangetypesettingsGrid', ['WhS_BE_RateChangeTypeEnum',
                             case (WhS_BE_RateChangeTypeEnum.Decrease):
                                 {
                                     rateChangeTypeSettings.DecreasedRate = dataItem.RateChangeTypeDescription;
+                                    break;
+                                }
+                            case (WhS_BE_RateChangeTypeEnum.Deleted):
+                                {
+                                    rateChangeTypeSettings.DeletedRate = dataItem.RateChangeTypeDescription;
                                     break;
                                 }
                         }
