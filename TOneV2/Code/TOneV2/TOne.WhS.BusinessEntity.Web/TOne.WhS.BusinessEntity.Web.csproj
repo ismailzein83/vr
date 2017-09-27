@@ -597,6 +597,8 @@
     <Content Include="WhS_BusinessEntity\Views\SaleService\SaleServiceManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleRate\SaleRateManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleRate\SaleRateManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SaleZone\SaleZoneEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\SaleZone\SaleZoneEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SellingNumberPlan\SellingNumberPlanManagement.html" />
