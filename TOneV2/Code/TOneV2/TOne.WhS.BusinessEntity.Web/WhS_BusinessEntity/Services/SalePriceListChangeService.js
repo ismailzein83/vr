@@ -30,10 +30,11 @@
             vrModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SalePricelist/SalePricelistFilePreview.html', modalParameters, modalSettings);
         }
         function sendEmail(emailResponse, onSalePriceListSendingEmail) {
+
             var parametrs =
                     {
                         evaluatedEmail: emailResponse.EvaluatedTemplate,
-                        fileId: emailResponse.FileId
+                        saleVrFiles: emailResponse.SalePricelistVrFiles
                     };
             var modalSettings = {};
 

@@ -98,13 +98,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SalePriceListEvaluatedEmail GenerateAndEvaluateSalePriceListEmail(SalePriceListInput salePriceListInput)
         {
             SalePriceListManager salePriceListManager = new SalePriceListManager();
-            VRFile file = null;// salePriceListManager.GenerateSalePriceListFile(salePriceListInput);
-            VRFileManager fileManager = new VRFileManager();
-            long fileId = fileManager.AddFile(file);
+
+            IEnumerable<SalePricelistVRFile> vrFiles = salePriceListManager.GenerateSalePriceListFiles(salePriceListInput);
+
             var evaluatedObject = salePriceListManager.EvaluateEmail(salePriceListInput.PriceListId, (SalePriceListType)salePriceListInput.PriceListTypeId);
             return new SalePriceListEvaluatedEmail
             {
-                FileId = fileId,
+                SalePricelistVrFiles = vrFiles,
                 EvaluatedTemplate = evaluatedObject
             };
         }

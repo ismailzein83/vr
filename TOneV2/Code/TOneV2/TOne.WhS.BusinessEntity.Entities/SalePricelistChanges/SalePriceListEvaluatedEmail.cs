@@ -11,5 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public long FileId { get; set; }
         public VRMailEvaluatedTemplate EvaluatedTemplate { get; set; }
+        public IEnumerable<SalePricelistVRFile> SalePricelistVrFiles { get; set; }
     }
 }
