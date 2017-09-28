@@ -170,6 +170,8 @@
     <Compile Include="SupplierRate\Query\SupplierRateForZoneQuery.cs" />
     <Compile Include="SupplierZone\SupplierZoneServiceToClose.cs" />
     <Compile Include="SupplierZone\SupplierZoneServiceToEdit.cs" />
+    <Compile Include="Switch\InsertSwitchOperationOutput.cs" />
+    <Compile Include="Switch\UpdateSwitchOperationOutput.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryQuery.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryRecord.cs" />
     <Compile Include="RoutingProduct\SaleEntityZoneRoutingProduct.cs" />
