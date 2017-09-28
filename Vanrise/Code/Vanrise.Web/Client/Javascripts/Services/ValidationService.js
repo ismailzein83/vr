@@ -27,6 +27,10 @@
                         if (!validateIp(value, validationOptions))
                             return ValidationMessagesEnum.invalidIp;
                     }
+                    if (validationOptions.filenameValidation) {
+                        if (!validateFileName(value, validationOptions))
+                            return ValidationMessagesEnum.invalidFileName;
+                    }
                     if (validationOptions.numberValidation) {
                         if (!validateNumber(value, validationOptions))
                             return ValidationMessagesEnum.invalidNumber;
@@ -58,6 +62,12 @@
 
             return valid;
             // return String(value).search(isIp_re) != -1;
+        }
+        function validateFileName(value) {           
+            var rg1=/^[^\\/:\*\?"<>\|]+$/; // forbidden characters \ / : * ? " < > |
+            var rg2=/^\./; // cannot start with dot (.)
+            var rg3 =/^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i; // forbidden file names
+           return rg1.test(value) && !rg2.test(value) && !rg3.test(value);
         }
         function validateNumber(value, validationOptions) {
             var decimalArray = String(value).split(".");

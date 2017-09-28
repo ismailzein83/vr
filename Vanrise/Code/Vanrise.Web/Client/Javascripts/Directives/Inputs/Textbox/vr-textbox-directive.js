@@ -27,6 +27,8 @@
                     validationOptions.emailValidation = true;
                 if ($attrs.type === TextboxTypeEnum.Ip.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Ip.name)
                     validationOptions.ipValidation = true;
+                if ($attrs.type === TextboxTypeEnum.FileName.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.FileName.name)
+                    validationOptions.filenameValidation = true;
                 else if ($attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                     validationOptions.numberValidation = true;
                     validationOptions.maxNumber = ctrl.maxvalue;
@@ -255,7 +257,8 @@
 
     app.constant('TextboxTypeEnum', {
         Email: { name: "email" },
-        Ip: { name: "ip" },
+        Ip: { name: "ip" },        
+        FileName: { name: "filename" },
         Number: { name: "number" },
         Password: { name: "password" }
     });

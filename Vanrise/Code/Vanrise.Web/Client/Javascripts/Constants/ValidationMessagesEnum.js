@@ -3,5 +3,6 @@
     invalidFormat: "Invalid Format",
     invalidEmail: "Invalid Email",
     invalidNumber: "Invalid Number",
-    invalidIp: "Invalid IP Address"
+    invalidIp: "Invalid IP Address",
+    invalidFileName: "Invalid File Name that contains / \\ : * ? ; < > \" "
 });
