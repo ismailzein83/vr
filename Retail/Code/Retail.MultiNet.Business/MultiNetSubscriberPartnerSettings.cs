@@ -36,10 +36,12 @@ namespace Retail.MultiNet.Business
     {
         Guid _acountBEDefinitionId;
         Guid _companyTypeId;
-        public MultiNetSubscriberPartnerSettings(Guid acountBEDefinitionId,Guid companyTypeId)
+        Guid _branchTypeId;
+        public MultiNetSubscriberPartnerSettings(Guid acountBEDefinitionId,Guid companyTypeId,Guid branchTypeId)
         {
             this._acountBEDefinitionId = acountBEDefinitionId;
             this._companyTypeId = companyTypeId;
+            this._branchTypeId = branchTypeId;
         }
 
         public override string PartnerFilterSelector
@@ -87,34 +89,64 @@ namespace Retail.MultiNet.Business
                     accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountProfile);
                     var companyProfile = accountProfile.CastWithValidate<AccountPartCompanyProfile>("accountProfile", financialAccountData.Account.AccountId);
 
-                    var companyAccount = accountBEManager.GetSelfOrParentAccountOfType(this._acountBEDefinitionId, financialAccountData.Account.AccountId, _companyTypeId);
-                    companyAccount.ThrowIfNull("companyAccount");
-                    companyAccount.Settings.ThrowIfNull("companyAccount.Settings");
-                     companyAccount.Settings.Parts.ThrowIfNull(" companyAccount.Settings.Parts");
-                    foreach(var accountPart in companyAccount.Settings.Parts)
+                    if(financialAccountData.Account.TypeId ==_companyTypeId ) 
                     {
-                        var multiNetCompanyExtendedInfo = accountPart.Value.Settings as MultiNetCompanyExtendedInfo;
-                        if(multiNetCompanyExtendedInfo != null)
+                        foreach (var accountPart in financialAccountData.Account.Settings.Parts)
                         {
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.NTN, multiNetCompanyExtendedInfo.NTN, true);
-                            if(multiNetCompanyExtendedInfo.AccountType.HasValue)
+                            var multiNetCompanyExtendedInfo = accountPart.Value.Settings as MultiNetCompanyExtendedInfo;
+                            if (multiNetCompanyExtendedInfo != null)
                             {
-                                var accountType = Utilities.GetEnumDescription<MultiNetAccountType>(multiNetCompanyExtendedInfo.AccountType.Value);
-                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountType, accountType, true);
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.NTN, multiNetCompanyExtendedInfo.NTN, true);
+                                if (multiNetCompanyExtendedInfo.AccountType.HasValue)
+                                {
+                                    var accountType = Utilities.GetEnumDescription<MultiNetAccountType>(multiNetCompanyExtendedInfo.AccountType.Value);
+                                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountType, accountType, true);
+                                }
+                            }
+                        }
+                    }else if(financialAccountData.Account.TypeId ==_branchTypeId )
+                    {
+                        foreach (var accountPart in financialAccountData.Account.Settings.Parts)
+                        {
+                            var multiNetBranchExtendedInfo = accountPart.Value.Settings as MultiNetBranchExtendedInfo;
+                            if (multiNetBranchExtendedInfo != null)
+                            {
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.NTN, multiNetBranchExtendedInfo.NTN, true);
+                                if (multiNetBranchExtendedInfo.AccountType.HasValue)
+                                {
+                                    var accountType = Utilities.GetEnumDescription<MultiNetAccountType>(multiNetBranchExtendedInfo.AccountType.Value);
+                                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountType, accountType, true);
+                                }
                             }
                         }
                     }
+
+                 
                   
                     if (companyProfile != null)
                     {
+                        string address = companyProfile.Address;
 
-                        if (companyProfile.Address != null)
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, accountProfile.Address, true);
-                        if (companyProfile.PhoneNumbers != null)
+                        if (companyProfile.CityId.HasValue)
                         {
-                            string phoneNumbers = string.Join(",", companyProfile.PhoneNumbers);
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone, phoneNumbers, true);
+                            CityManager cityManager = new CityManager();
+                            address += string.Format("{0} {1}", address, cityManager.GetCityName(companyProfile.CityId.Value));
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, address, true);
+
                         }
+                        string phoneNumbers = null;
+                        if (companyProfile.PhoneNumbers != null && companyProfile.PhoneNumbers.Count > 0)
+                        {
+                            phoneNumbers = string.Join(",", companyProfile.PhoneNumbers);
+                        }
+                        if (companyProfile.MobileNumbers != null && companyProfile.MobileNumbers.Count > 0)
+                        {
+                            if (phoneNumbers != null)
+                                phoneNumbers += ",";
+                            phoneNumbers += string.Join(",", companyProfile.MobileNumbers);
+                        }
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone, phoneNumbers, true);
+
                         if (accountProfile.Faxes != null)
                         {
                             string faxes = string.Join(",", accountProfile.Faxes);

@@ -1891,7 +1891,8 @@
             <Value>=Parameters!Email.Value</Value>
           </Parameter>
         </Parameters>
-        <Top>8.52306in</Top>
+        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
+        <Top>8.77306in</Top>
         <Left>0.21833in</Left>
         <Height>0.4375in</Height>
         <Width>7.61648in</Width>
@@ -2469,6 +2470,74 @@
                 </TablixCell>
               </TablixCells>
             </TablixRow>
+            <TablixRow>
+              <Height>0.23622in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox14">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Cheque</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox14</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.5pt</Width>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox15">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Make your cheque to "Multinet Pakistan Pvt Ltd"</Value>
+                              <Style />
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox15</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.5pt</Width>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
@@ -2484,13 +2553,17 @@
             </TablixMember>
             <TablixMember>
               <Group Name="Details7" />
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
         <Top>6.78062in</Top>
         <Left>0.22834in</Left>
-        <Height>0.87188in</Height>
+        <Height>1.1081in</Height>
         <Width>7.60646in</Width>
         <ZIndex>9</ZIndex>
         <Style>
@@ -2912,7 +2985,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>7.75458in</Top>
+        <Top>8.00458in</Top>
         <Left>0.21833in</Left>
         <Height>0.68752in</Height>
         <Width>7.60646in</Width>
@@ -2932,7 +3005,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
     <Height>25.66142cm</Height>
     <Style />
   </Body>
-  <Width>20.40407cm</Width>
+  <Width>20.59783cm</Width>
   <Page>
     <PageFooter>
       <Height>0.91792cm</Height>
