@@ -225,6 +225,7 @@
                 return UtilsService.waitMultiplePromises(filterPromises);
 
                 function getFilter(filterConfiguration) {
+                    //console.log(filterConfiguration);
                     var dimension = UtilsService.getItemByVal(dimensions, filterConfiguration.DimensionName, 'Name');
                     var filter;
                     var filterEditor;
@@ -242,7 +243,7 @@
                     filter.isRequired = filterConfiguration.IsRequired;
                     filter.directiveEditor = filterEditor;
                     filter.directiveLoadDeferred = UtilsService.createPromiseDeferred();
-
+                    //filter.title = filterConfiguration.Title;
                     filter.onDirectiveReady = function (api) {
                         filter.directiveAPI = api;
                         var directivePayload = {
