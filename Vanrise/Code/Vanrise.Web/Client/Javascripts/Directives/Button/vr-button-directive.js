@@ -35,11 +35,20 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
                     
                 }                    
                 else {
-                    if (ctrl.onclick != undefined && typeof (ctrl.onclick) == 'function') {
+                    if (ctrl.onclick != undefined && typeof (ctrl.onclick) == 'function' && isSubmitting==false) {
+                        isSubmitting = true;
                         var promise = ctrl.onclick();//this function should return a promise in case it is performing asynchronous task
                         if (promise != undefined && promise != null) {
-                            isSubmitting = true;
                             promise.finally(function () {
+                                isSubmitting = false;
+                            });
+                        }
+                        else {
+                            var dummypromise = UtilsService.createPromiseDeferred();                           
+                            setTimeout(function () {
+                                dummypromise.resolve();
+                            },10);
+                            dummypromise.promise.finally(function () {
                                 isSubmitting = false;
                             });
                         }
