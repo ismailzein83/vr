@@ -1347,7 +1347,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 else {
                     retrieveDataInput.DataRetrievalResultType = DataRetrievalResultTypeEnum.Normal.value;
                     var pageInfo;
-                    if (ctrl.showPager)
+                    if (ctrl.showPager &&  ctrl.pagerSettings!=undefined)
                         pageInfo = ctrl.pagerSettings.getPageInfo();
                     else if (pagingOnScrollEnabled)
                         pageInfo = getPageInfo(clearBeforeRetrieve || isSorting);
