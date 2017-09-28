@@ -141,6 +141,7 @@
     <Compile Include="ICode.cs" />
     <Compile Include="IExistingEntity.cs" />
     <Compile Include="IRate.cs" />
+    <Compile Include="PricingTemplate\PricingTemplate.cs" />
     <Compile Include="RateType\RateTypeConfiguration.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingCarrierInfo.cs" />
     <Compile Include="RoutingCarrierInfo\RoutingCustomerInfo.cs" />
