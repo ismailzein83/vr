@@ -144,6 +144,7 @@ as (select * from (values
 
 ('61D047D6-DF3D-4D74-9C2C-7CEA2907C2B3','WhS_Sales_BulkActionZoneFilterType_Specific','Specific','WhS_Sales_BulkActionZoneFilterType'			,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-specific"}'),
 ('BDC22FEB-14E1-4F0D-8C3E-EF54A5A36312','WhS_Sales_BulkActionZoneFilterType_All','All','WhS_Sales_BulkActionZoneFilterType'						,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-all"}'),
+('06637B7A-D40A-43D2-9930-20031BBA2108','WhS_Sales_BulkActionZoneFilterType_Allexept','All Except','WhS_Sales_BulkActionZoneFilterType'			,'{"Editor":"vr-whs-sales-bulkaction-zonefilter-allexept"}'),
 
 ('6D6EB5E6-E1F6-49FF-A78F-E3A255FBC320','WhS_RouteSync_SwitchRouteSynchronizer_MVTSRadius','MVTS Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-mvtsradius-swsync"}'),
 ('64152327-5DB5-47AE-9569-23D38BCB18CC','WhS_RouteSync_SwitchRouteSynchronizer_IVSwitch','IVSwitch Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer'		,'{"Editor":"whs-routesync-ivswitch-swsync"}'),
