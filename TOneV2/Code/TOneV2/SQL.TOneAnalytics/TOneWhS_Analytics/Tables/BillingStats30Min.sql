@@ -4,6 +4,7 @@
     [CustomerId]               INT              NULL,
     [CustomerProfileId]        INT              NULL,
     [SaleZoneId]               BIGINT           NULL,
+    [MasterPlanZoneID]         BIGINT           NULL,
     [SupplierId]               INT              NULL,
     [SupplierProfileId]        INT              NULL,
     [SupplierZoneId]           BIGINT           NULL,
@@ -46,6 +47,8 @@
     [CostFinancialAccountId]   INT              NULL,
     CONSTRAINT [IX_BillingStats30Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

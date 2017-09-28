@@ -7,6 +7,7 @@
     [SupplierProfileId]        INT              NULL,
     [SupplierZoneId]           BIGINT           NULL,
     [SaleZoneId]               BIGINT           NULL,
+    [MasterPlanZoneID]         BIGINT           NULL,
     [CostCurrencyId]           INT              NULL,
     [SaleCurrencyId]           INT              NULL,
     [NumberOfCalls]            INT              NULL,
@@ -44,6 +45,8 @@
     [CostDealDurInSec]         DECIMAL (20, 4)  NULL,
     [SaleFinancialAccountId]   INT              NULL,
     [CostFinancialAccountId]   INT              NULL);
+
+
 
 
 
