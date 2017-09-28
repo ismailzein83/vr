@@ -13,47 +13,47 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
             validationcontext: '='
         },
         controller: function ($scope, $element, $attrs) {
-            var isSubmitting = false;
             var ctrl = this;
-            
-            ctrl.onInternalClick = function (evnt) {
-                if (ctrl.menuActions != undefined) {
-                    var self = angular.element(evnt.currentTarget);
-                    ctrl.showMenuActions = true;
-                 
-                    var selfHeight = $(self).height();
-                    var selfOffset = $(self).offset();
-                    var dropDown = self.parent().find('.dropdown-menu')[0];
-                    var basetop = selfOffset.top - $(window).scrollTop() + $(self).height();
-                    var eltop = selfOffset.top - $(window).scrollTop();
-                    var elleft = selfOffset.left - $(window).scrollLeft();
-                    if ($(self).parents('.section-menu').length > 0)
-                        elleft -=$(self).width() ;
-                   
-                    $(dropDown).css({ position: 'fixed', top: basetop, left: elleft, bottom: 'unset'});
+            ctrl.isSubmitting = false;
 
-                    
-                }                    
-                else {
-                    if (ctrl.onclick != undefined && typeof (ctrl.onclick) == 'function' && isSubmitting==false) {
-                        isSubmitting = true;
-                        var promise = ctrl.onclick();//this function should return a promise in case it is performing asynchronous task
-                        if (promise != undefined && promise != null) {
-                            promise.finally(function () {
-                                isSubmitting = false;
-                            });
-                        }
-                        else {
-                            var dummypromise = UtilsService.createPromiseDeferred();                           
-                            setTimeout(function () {
-                                dummypromise.resolve();
-                            },10);
-                            dummypromise.promise.finally(function () {
-                                isSubmitting = false;
-                            });
+            ctrl.onInternalClick = function (evnt) {
+                       
+                    if (ctrl.menuActions != undefined) {
+                        var self = angular.element(evnt.currentTarget);
+                        ctrl.showMenuActions = true;
+
+                        var selfHeight = $(self).height();
+                        var selfOffset = $(self).offset();
+                        var dropDown = self.parent().find('.dropdown-menu')[0];
+                        var basetop = selfOffset.top - $(window).scrollTop() + $(self).height();
+                        var eltop = selfOffset.top - $(window).scrollTop();
+                        var elleft = selfOffset.left - $(window).scrollLeft();
+                        if ($(self).parents('.section-menu').length > 0)
+                            elleft -= $(self).width();
+
+                        $(dropDown).css({ position: 'fixed', top: basetop, left: elleft, bottom: 'unset' });
+
+                    }
+                    else {
+                        if (ctrl.onclick != undefined && typeof (ctrl.onclick) == 'function' && ctrl.isSubmitting == false) {
+                            ctrl.isSubmitting = true;
+                            var promise = ctrl.onclick();//this function should return a promise in case it is performing asynchronous task
+                            if (promise != undefined && promise != null) {
+                                promise.finally(function () {
+                                    ctrl.isSubmitting = false;
+                                });
+                            }
+                            else {
+                                var dummypromise = UtilsService.createPromiseDeferred();
+                                setTimeout(function () {
+                                    dummypromise.resolve();
+                                }, 10);
+                                dummypromise.promise.finally(function () {
+                                    ctrl.isSubmitting = false;
+                                });
+                            }
                         }
                     }
-                }
             };
 
             ctrl.menuActionClicked = function (action) {
@@ -72,11 +72,11 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
                 }) ;
             }
             ctrl.showIcon = function () {
-                return !isSubmitting;
+                return !ctrl.isSubmitting;
             };
 
             ctrl.showLoader = function () {
-                return isSubmitting;
+                return ctrl.isSubmitting;
             };
 
             ctrl.isDisabled = function () {
@@ -86,7 +86,7 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
                 if (ctrl.formname != undefined && ctrl.formname.validate() != null)
                     return true;
                 var isDisabled;
-                if (isSubmitting == true)
+                if (ctrl.isSubmitting == true)
                     isDisabled = true;
                 else
                     isDisabled = false;
