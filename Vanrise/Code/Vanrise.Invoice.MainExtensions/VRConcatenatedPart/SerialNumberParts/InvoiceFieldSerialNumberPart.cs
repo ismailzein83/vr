@@ -30,7 +30,7 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
                     if (partnerId != null)
                         return partnerId.ToString();
                     return null;
-                case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber.ToString();
+                case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate.ToString();
                 case Entities.InvoiceField.CustomField: return context.Invoice.Details != null ? context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null)
                : null;

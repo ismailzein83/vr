@@ -26,7 +26,7 @@ namespace Vanrise.Invoice.MainExtensions.InvoiceFileNamePart
                 case Entities.InvoiceField.Partner:
                     var partnerManager = new PartnerManager();
                     return partnerManager.GetPartnerName(context.InvoiceTypeId, context.Invoice.PartnerId);
-                case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber.ToString();
+                case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate.ToString();
                 case Entities.InvoiceField.CustomField: return context.Invoice.Details != null ? context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null)
                : null;
