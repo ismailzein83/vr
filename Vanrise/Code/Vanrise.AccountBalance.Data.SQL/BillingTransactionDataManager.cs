@@ -72,7 +72,7 @@ namespace Vanrise.AccountBalance.Data.SQL
             dr["TransactionTime"] = billingTransactionByTime.TransactionTime;
         }
 
-        public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
+        public List<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
         {
             string accountsIDs = null;
             if (accountIds != null && accountIds.Count() > 0)

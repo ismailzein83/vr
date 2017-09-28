@@ -169,7 +169,16 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
         #endregion
 
+        public IEnumerable<AccountUsage> GetAccountUsagesByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
+        {
+            string accountsIDs = null;
+            if (accountIds != null && accountIds.Count() > 0)
+                accountsIDs = string.Join<String>(",", accountIds);
 
-       
+            string transactionTypeIDs = null;
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                transactionTypeIDs = string.Join<Guid>(",", transactionTypeIds);
+            return GetItemsSP("[VR_AccountBalance].[sp_AccountUsage_GetByAccountIds]", AccountUsageMapper, accountTypeId, accountsIDs, transactionTypeIDs);
+        }
     }
 }

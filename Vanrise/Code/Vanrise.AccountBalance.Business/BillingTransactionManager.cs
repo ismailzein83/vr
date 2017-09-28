@@ -65,7 +65,7 @@ namespace Vanrise.AccountBalance.Business
                 DisplayId = displayId
             };
         }
-        public IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
+        public List<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds)
         {
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetBillingTransactionsByAccountIds(accountTypeId, transactionTypeIds, accountIds);
@@ -147,6 +147,63 @@ namespace Vanrise.AccountBalance.Business
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetBillingTransactionsByAccountId(accountTypeId, accountId, status, effectiveDate, isEffectiveInFuture);
         }
+        public BillingTransactionMetaData ConvertAccountUsageToBillingTransactionMetaDeta(AccountUsage accountUsage)
+        {
+            return new BillingTransactionMetaData
+            {
+                AccountId = accountUsage.AccountId,
+                Amount = accountUsage.UsageBalance,
+                CurrencyId = accountUsage.CurrencyId,
+                TransactionTime = accountUsage.PeriodEnd <= DateTime.Now ? accountUsage.PeriodEnd : DateTime.Now,
+                TransactionTypeId = accountUsage.TransactionTypeId,
+            };
+        }
+        public IEnumerable<BillingTransactionMetaData> ConvertAccountUsagesToBillingTransactionsMetaDeta(IEnumerable<AccountUsage> accountUsages, bool shouldGroupUsagesByTransactionTypes)
+        {
+            if (accountUsages == null || accountUsages.Count() == 0)
+                return null;
+
+            if (shouldGroupUsagesByTransactionTypes)
+            {
+                var transactions = new Dictionary<string, Dictionary<Guid, BillingTransactionMetaData>>();
+
+                var transactionTypeManager = new BillingTransactionTypeManager();
+                var rateExchangeManager = new CurrencyExchangeRateManager();
+
+                foreach (AccountUsage accountUsage in accountUsages)
+                {
+                    Dictionary<Guid, BillingTransactionMetaData> accountTransactions = transactions.GetOrCreateItem(accountUsage.AccountId, () =>
+                    {
+                        return new Dictionary<Guid, BillingTransactionMetaData>();
+                    });
+
+                    BillingTransactionMetaData matchedTransaction = accountTransactions.GetOrCreateItem(accountUsage.TransactionTypeId, () =>
+                    {
+                        return new BillingTransactionMetaData()
+                        {
+                            TransactionTypeId = accountUsage.TransactionTypeId,
+                            AccountId = accountUsage.AccountId,
+                            Amount = 0,
+                            CurrencyId = accountUsage.CurrencyId,
+                            TransactionTime = DateTime.Now,
+                        };
+                    });
+
+                    decimal convertedAmount = rateExchangeManager.ConvertValueToCurrency(accountUsage.UsageBalance, accountUsage.CurrencyId, matchedTransaction.CurrencyId, accountUsage.PeriodEnd);
+                    matchedTransaction.Amount += convertedAmount;
+                }
+                return transactions.SelectMany(x => x.Value.Values);
+            }
+            else
+            {
+                var transactions = new List<BillingTransactionMetaData>();
+                foreach (AccountUsage accountUsage in accountUsages)
+                    transactions.Add(ConvertAccountUsageToBillingTransactionMetaDeta(accountUsage));
+                return transactions;
+            }
+        }
+
+        
         public IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypes, List<string> accountIds, List<Guid> transactionTypeIds, DateTime fromDate, DateTime? toDate)
         {
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();

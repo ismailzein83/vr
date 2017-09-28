@@ -14,7 +14,7 @@ namespace Vanrise.AccountBalance.Data
         bool Insert(BillingTransaction billingTransaction, out long billingTransactionId);
         void GetBillingTransactionsByBalanceUpdated(Guid accountTypeId, Action<BillingTransaction> onBillingTransactionReady);
         IEnumerable<BillingTransaction> GetBillingTransactionsForSynchronizerProcess(List<Guid> billingTransactionIds, Guid accountTypeId);
-        IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds);
+        List<BillingTransactionMetaData> GetBillingTransactionsByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds);
         IEnumerable<BillingTransactionMetaData> GetBillingTransactionsByTransactionTypes(Guid accountTypeId, List<BillingTransactionByTime> billingTransactionsByTime, List<Guid> transactionTypeIds);
         IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, String accountId, VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture);
         IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypeIds, List<string> accountIds, List<Guid> transactionTypeIds, DateTime fromDate, DateTime? toDate);

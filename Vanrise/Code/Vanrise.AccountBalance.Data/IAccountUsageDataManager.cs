@@ -20,5 +20,6 @@ namespace Vanrise.AccountBalance.Data
         IEnumerable<AccountUsage> GetAccountUsagesByTransactionAccountUsageQueries(IEnumerable<TransactionAccountUsageQuery> transactionAccountUsageQueries);
         IEnumerable<AccountUsage> GetOverridenAccountUsagesByDeletedTransactionIds(IEnumerable<long> deletedTransactionIds);
         AccountUsage GetLastAccountUsage(Guid accountTypeId, string accountId);
+        IEnumerable<AccountUsage> GetAccountUsagesByAccountIds(Guid accountTypeId, List<Guid> transactionTypeIds, List<string> accountIds);
     }
 }
