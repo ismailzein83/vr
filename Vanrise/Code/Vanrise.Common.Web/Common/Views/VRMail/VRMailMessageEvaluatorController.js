@@ -7,7 +7,7 @@
     function emailEditorContorller($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VRCommon_VRMailAPIService) {
 
         var emailObject;
-        var fileId;
+        var saleVrFiles;
         var fileAPI;
         defineScope();
         loadParameters();
@@ -17,14 +17,15 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
                 emailObject = parameters.evaluatedEmail;
-                fileId = parameters.fileId;
-                $scope.scopeModel.fileId = fileId;
+                saleVrFiles = parameters.saleVrFiles;
+                //$scope.scopeModel.fileId = fileId;
             }
         }
 
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.uploadedAttachements = [];
+            $scope.scopeModel.Attachements = [];
             $scope.scopeModel.confirmEmail = function () {
                 return confirmEmail();
             };
@@ -56,7 +57,7 @@
         }
 
         function loadAllControls() {
-
+            $scope.scopeModel.Attachements = saleVrFiles;
             function setTitle() {
                 $scope.title = "Email";
             }
@@ -70,26 +71,22 @@
                 }
                 $scope.scopeModel.UploadpriceListSheet = null;
             }
-            function loadFileName() {
-                if (fileId != undefined) {
-                    return VRCommon_VRMailAPIService.GetFileName(fileId)
-                        .then(function (response) {
-                            $scope.scopeModel.fileName = response;
-                        });
-                }
-            }
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFileName])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.scopeModel.isLoading = false;
-              });
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+                  .catch(function (error) {
+                      VRNotificationService.notifyExceptionWithClose(error, $scope);
+                  })
+                 .finally(function () {
+                     $scope.scopeModel.isLoading = false;
+                 });
         }
 
         function buildEmailObjFromScope() {
             var attachementFileIds = $scope.scopeModel.uploadedAttachements.map(function (a) { return a.fileId; });
-            attachementFileIds.push(fileId);
+
+            for (var i = 0; i < saleVrFiles.length; i++) {
+                attachementFileIds.push(saleVrFiles[i].FileId);
+            }
+
             var obj = {
                 CC: $scope.scopeModel.cc,
                 To: $scope.scopeModel.to,

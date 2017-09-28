@@ -18,11 +18,9 @@
                             <vr-textbox type="text" label="Subject" value="scopeModel.subject" isrequired="true"></vr-textbox>
                         </vr-columns>
                     </vr-row>
-                    <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <a href="" ng-click="scopeModel.downloadAttachement(scopeModel.fileId)">{{scopeModel.fileName}} </a>
-                        </vr-columns>
-                    </vr-row>
+                    <vr-datalist maxitemsperrow="3" datasource="scopeModel.Attachements">
+                        <a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.FileId)">{{dataItem.FileName}}</a>
+                    </vr-datalist>
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <vr-editor label="Body" value="scopeModel.body" isrequired="true"></vr-editor>
