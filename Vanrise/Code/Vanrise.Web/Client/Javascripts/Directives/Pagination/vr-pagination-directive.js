@@ -45,7 +45,7 @@ app.directive('vrPagination', ['UISettingsService', function (UISettingsService)
             };
             function setDefaultSetting() {
                 setTimeout(function () {
-                    var pagerwidth = $element.parents('vr-datagrid').find('.vr-datagrid').first().width();
+                    var pagerwidth = $element.parents('.panel-body').first().width();
                     if (pagerwidth > 0) {
                         if (pagerwidth - 250 < 300)
                             pagerCtrl.pagersettings.maxSize = 5;
