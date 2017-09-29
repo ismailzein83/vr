@@ -26,8 +26,7 @@ namespace Vanrise.Common.Web.Controllers
         {
             var vrMailManager = new VRMailManager();
             var vrFileManager = new VRFileManager();
-            var vrMailAttachements = emailSetting.AttachementFileIds.Select(fileId => vrFileManager.GetFile(fileId))
-                .Select(ConvertToAttachement);
+            var vrMailAttachements = emailSetting.AttachementFileIds.Select(fileId => vrMailManager.ConvertToGeneralAttachement(fileId));
             vrMailManager.SendMail(emailSetting.To, emailSetting.CC, emailSetting.BCC, emailSetting.Subject, emailSetting.Body
                 , vrMailAttachements.ToList(), emailSetting.CompressFile);
         }
@@ -46,14 +45,6 @@ namespace Vanrise.Common.Web.Controllers
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(fileId);
             return GetExcelResponse(file.Content, file.Name);
-        }
-        private VRMailAttachement ConvertToAttachement(VRFile file)
-        {
-            return new VRMailAttachmentExcel
-            {
-                Name = file.Name,
-                Content = file.Content
-            };
         }
     }
 }

@@ -160,6 +160,7 @@
     <Compile Include="VRMail\VRMail.cs" />
     <Compile Include="VRMail\VRMailAttachement.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentExcel.cs" />
+    <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentGeneral.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentPDF.cs" />
     <Compile Include="VRMail\VRMailEvaluatedTemplate.cs" />
     <Compile Include="VRActionAudit\VRObjectTrackingMetaData.cs" />

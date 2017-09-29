@@ -53,7 +53,16 @@ namespace Vanrise.Common.Business
             return client;
         }
 
-
+        public VRMailAttachement ConvertToGeneralAttachement( long fileId)
+        {
+            var vrFileManager = new VRFileManager();
+            var file = vrFileManager.GetFile(fileId);
+            return new VRMailAttachmentGeneral
+            {
+                Name = file.Name,
+                Content = file.Content
+            };
+        }
         #endregion
 
 

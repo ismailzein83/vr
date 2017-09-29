@@ -2,9 +2,9 @@
 
     "use strict";
 
-    invoiceTemplateEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceEmailActionAPIService','VR_Invoice_InvoiceTypeAPIService'];
+    invoiceTemplateEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceEmailActionAPIService','VR_Invoice_InvoiceTypeAPIService','VRCommon_VRMailAPIService'];
 
-    function invoiceTemplateEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceEmailActionAPIService, VR_Invoice_InvoiceTypeAPIService) {
+    function invoiceTemplateEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceEmailActionAPIService, VR_Invoice_InvoiceTypeAPIService, VRCommon_VRMailAPIService) {
         var invoiceId;
         var invoiceActionId;
         var invoiceTypeId;
@@ -14,6 +14,7 @@
         var invoiceMailTemplateReadyAPI;
         var invoiceMailTemplateReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var fileAPI;
         defineScope();
         loadParameters();
         load();
@@ -29,6 +30,23 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.uploadedAttachements = [];
+            $scope.scopeModel.onUploadedAttachementFileReady = function (api) {
+                fileAPI = api;
+            };
+            $scope.scopeModel.downloadAttachement = function (attachedfileId) {
+                $scope.scopeModel.isLoading = true;
+                return VRCommon_VRMailAPIService.DownloadAttachement(attachedfileId).then(function (response) {
+                    $scope.scopeModel.isLoading = false;
+                    UtilsService.downloadFile(response.data, response.headers);
+                });
+            };
+            $scope.scopeModel.addUploadedAttachement = function (obj) {
+                if (obj != undefined) {
+                    $scope.scopeModel.uploadedAttachements.push(obj);
+                    fileAPI.clearFileUploader();
+                }
+            };
             $scope.scopeModel.onInvoiceMailTemplateSelectorReady = function (api) {
                 invoiceMailTemplateReadyAPI = api;
                 invoiceMailTemplateReadyPromiseDeferred.resolve();
@@ -153,6 +171,8 @@
         }
 
         function buildInvoiceTemplateObjFromScope() {
+            var attachementFileIds = $scope.scopeModel.uploadedAttachements.map(function (a) { return a.fileId; });
+          
             var obj = {
                 InvoiceId:invoiceId,
                 InvoiceActionId: invoiceActionId,
@@ -161,15 +181,17 @@
                     To: $scope.scopeModel.to,
                     Subject: $scope.scopeModel.subject,
                     Body: $scope.scopeModel.body,
-                }
-               
+                },
+                AttachementFileIds: attachementFileIds
             };
             return obj;
         }
 
         function downloadAttachment(attachmentId)
         {
+            $scope.scopeModel.isLoading = true;
             return VR_Invoice_InvoiceEmailActionAPIService.DownloadAttachment(invoiceId, attachmentId).then(function (response) {
+                $scope.scopeModel.isLoading = false;
                 UtilsService.downloadFile(response.data, response.headers);
             });
         }

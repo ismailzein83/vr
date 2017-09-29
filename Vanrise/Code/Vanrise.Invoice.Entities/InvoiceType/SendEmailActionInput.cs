@@ -12,5 +12,6 @@ namespace Vanrise.Invoice.Entities
         public long InvoiceId { get; set; }
         public Guid InvoiceActionId { get; set; }    
         public VRMailEvaluatedTemplate EmailTemplate { get; set; }
+        public List<long> AttachementFileIds { get; set; }
     }
 }
