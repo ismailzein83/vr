@@ -135,6 +135,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CountryWithDefaultRateController.cs" />
+    <Compile Include="Controllers\PricingTemplateController.cs" />
     <Compile Include="Controllers\SupplierTargetMatchController.cs" />
     <Compile Include="Controllers\CodeCompareController.cs" />
     <Compile Include="Controllers\RatePlanConfigController.cs" />
