@@ -2421,7 +2421,18 @@ label[vr-alert].alert {
 .vr-select-height:empty {
     height: 0px;
 }
-
+.item-warning{
+    background-color:#ececec 
+}
+.item-warning a.mark-select{
+   color: #f53f3f; 
+}
+.item-future{
+    background-color:#ececec 
+}
+.item-future a.mark-select{
+   color:#5a5a5a 
+}
 .vr-disabled {
     pointer-events: none;
 }

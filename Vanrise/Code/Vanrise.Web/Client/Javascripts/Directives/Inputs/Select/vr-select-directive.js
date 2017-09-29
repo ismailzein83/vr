@@ -38,6 +38,8 @@
                 datavaluefield: '@',
                 datatextfield: '@',
                 datadisabledfield: '@',
+                datatooltipfield: '@',
+                datastylefield: '@',
                 hidefilterbox: '@',
                 datasource: '=',
                 selectedvalues: '=',
@@ -322,9 +324,19 @@
                     if (controller.datavaluefield) return getObjectProperty(item, controller.datavaluefield);
                     return item;
                 };
+
+                function getTooltipValue(item) {
+                    console.log(controller.datatooltipfield)
+                    if (controller.datatooltipfield)
+                        return getObjectProperty(item, controller.datatooltipfield);
+                };
                 function getObjectDisabled(item) {
                     if (controller.datadisabledfield) return getObjectProperty(item, controller.datadisabledfield);
                     return false;
+                };
+                function getObjectStyle(item) {
+                    if (controller.datastylefield)
+                        return getObjectProperty(item, controller.datastylefield);
                 };
 
                 function findExsite(item) {
@@ -420,6 +432,8 @@
                     getObjectText: getObjectText,
                     getObjectValue: getObjectValue,
                     getObjectDisabled: getObjectDisabled,
+                    getObjectStyle: getObjectStyle,
+                    getTooltipValue: getTooltipValue,
                     findExsite: findExsite,
                     clearFilter: clearFilter,
                     selectFirstItem: selectFirstItem,
