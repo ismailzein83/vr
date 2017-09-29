@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Idb;
-
+using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.TelesIdb
 {
     public class TelesIdbSWSync : SwitchRouteSynchronizer
     {
+        public const int SupplierMappingLength = 4;
+
         public override Guid ConfigId { get { return new Guid("29135479-8150-4E23-9A0D-A42AF69A13AE"); } }
 
         public IIdbDataManager DataManager { get; set; }
@@ -172,7 +173,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
                     }
 
                     string concatSupplierMapping = string.Join(string.Empty, routeOptionMapping.SupplierMapping);
-                    if (UseTwoSuppliersMapping && concatSupplierMapping.Length == 4)
+                    if (UseTwoSuppliersMapping && concatSupplierMapping.Length == SupplierMappingLength)
                         concatSupplierMapping = concatSupplierMapping + "XXXX";
                     concatSupplierMapping = GetPercentage(routeOption.Percentage) + concatSupplierMapping;
 
@@ -181,7 +182,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
                     if (backUpRouteOptionMapping != null)
                     {
                         concatBackUpSupplierMapping = string.Join(string.Empty, backUpRouteOptionMapping.SupplierMapping);
-                        if (UseTwoSuppliersMapping && concatBackUpSupplierMapping.Length == 4)
+                        if (UseTwoSuppliersMapping && concatBackUpSupplierMapping.Length == SupplierMappingLength)
                             concatBackUpSupplierMapping = concatBackUpSupplierMapping + "XXXX";
                         concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
                     }
@@ -258,69 +259,77 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
         {
-            //if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
-            //    return true;
+            if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
+                return true;
 
-            //List<string> customerMappings = new List<string>();
-            //List<string> supplierMappings = new List<string>();
+            HashSet<string> customerMappings = new HashSet<string>();
+            HashSet<string> supplierMappings = new HashSet<string>();
 
-            //List<string> duplicatedCustomerMappings = new List<string>();
-            //List<string> duplicatedSupplierMappings = new List<string>();
-            //List<string> invalidSupplierMappings = new List<string>();
+            HashSet<string> duplicateCustomerMappings = new HashSet<string>();
+            HashSet<string> duplicateSupplierMappings = new HashSet<string>();
+            HashSet<int> invalidMappingSupplierIds = new HashSet<int>();
 
-            //foreach (var mapping in this.CarrierMappings.Values)
-            //{
-            //    if (mapping.CustomerMapping != null)
-            //    {
-            //        foreach (var customerMapping in mapping.CustomerMapping)
-            //        {
-            //            if (customerMappings.Contains(customerMapping))
-            //            {
-            //                duplicatedCustomerMappings.Add(customerMapping);
-            //                continue;
-            //            }
+            foreach (var mapping in this.CarrierMappings.Values)
+            {
+                if (mapping.CustomerMapping != null)
+                {
+                    foreach (var customerMapping in mapping.CustomerMapping)
+                    {
+                        if (customerMappings.Contains(customerMapping))
+                        {
+                            duplicateCustomerMappings.Add(customerMapping);
+                            continue;
+                        }
 
-            //            customerMappings.Add(customerMapping);
-            //        }
-            //    }
+                        customerMappings.Add(customerMapping);
+                    }
+                }
 
-            //    if (mapping.SupplierMapping != null)
-            //    {
-            //        foreach (var supplierMapping in mapping.SupplierMapping)
-            //        {
-            //            if (supplierMapping.Length > 4)
-            //            {
-            //                invalidSupplierMappings.Add(supplierMapping);
-            //                continue;
-            //            }
+                if (mapping.SupplierMapping != null)
+                {
+                    foreach (var supplierMapping in mapping.SupplierMapping)
+                    {
+                        if (supplierMapping.Length != SupplierMappingLength)
+                        {
+                            invalidMappingSupplierIds.Add(mapping.CarrierId);
+                            continue;
+                        }
 
-            //            else if (supplierMappings.Contains(supplierMapping))
-            //            {
-            //                duplicatedSupplierMappings.Add(supplierMapping);
-            //                continue;
-            //            }
+                        if (supplierMappings.Contains(supplierMapping))
+                        {
+                            duplicateSupplierMappings.Add(supplierMapping);
+                            continue;
+                        }
 
-            //            supplierMappings.Add(supplierMapping);
-            //        }
-            //    }
-            //}
+                        supplierMappings.Add(supplierMapping);
+                    }
+                }
+            }
 
-            //if (duplicatedCustomerMappings.Count == 0 && duplicatedSupplierMappings.Count == 0 && invalidSupplierMappings.Count == 0)
-            //    return true;
+            if (duplicateCustomerMappings.Count == 0 && duplicateSupplierMappings.Count == 0 && invalidMappingSupplierIds.Count == 0)
+                return true;
 
-            //List<string> validationMessages = new List<string>();
+            List<string> validationMessages = new List<string>();
 
-            //StringBuilder validationMessage = new StringBuilder();
-            //if (duplicatedCustomerMappings.Count > 0)
-            //    validationMessages.Add(string.Format("Duplicated Customer Mappings: {0}", string.Join(", ", duplicatedCustomerMappings)));
+            StringBuilder validationMessage = new StringBuilder();
+            if (duplicateCustomerMappings.Count > 0)
+                validationMessages.Add(string.Format("Duplicate Customer Mappings: {0}", string.Join(", ", duplicateCustomerMappings)));
 
-            //if (duplicatedSupplierMappings.Count > 0)
-            //    validationMessages.Add(string.Format("Duplicated Supplier Mappings: {0}", string.Join(", ", duplicatedSupplierMappings)));
+            if (duplicateSupplierMappings.Count > 0)
+                validationMessages.Add(string.Format("Duplicate Supplier Mappings: {0}", string.Join(", ", duplicateSupplierMappings)));
 
-            //if (invalidSupplierMappings.Count > 0)
-            //    validationMessages.Add(string.Format("Invalid Supplier Mappings: {0}", string.Join(", ", invalidSupplierMappings)));
+            if (invalidMappingSupplierIds.Count > 0)
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                List<string> invalidMappingSupplierNames = new List<string>();
 
-            //context.ValidationMessages = validationMessages;
+                foreach (var supplierId in invalidMappingSupplierIds)
+                    invalidMappingSupplierNames.Add(carrierAccountManager.GetCarrierAccountName(supplierId));
+
+                validationMessages.Add(string.Format("Invalid Mappings for Suppliers: {0}", string.Join(", ", invalidMappingSupplierNames)));
+            }
+
+            context.ValidationMessages = validationMessages;
             return false;
         }
     }

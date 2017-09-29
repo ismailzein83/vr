@@ -149,31 +149,52 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
             }
 
             function insertSwitch() {
-                return WhS_BE_SwitchAPIService.AddSwitch(buildSwitchObjFromScope())
-                .then(function (response) {
+                $scope.validationMessages = undefined;
+
+                var insertSwitchPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                WhS_BE_SwitchAPIService.AddSwitch(buildSwitchObjFromScope()).then(function (response) {
                     if (VRNotificationService.notifyOnItemAdded("Switch", response, "Name")) {
                         if (ctrl.onswitchadded != undefined)
                             ctrl.onswitchadded(response.InsertedObject);
+
+                        insertSwitchPromiseDeferred.resolve();
+                    } else {
+                        $scope.validationMessages = response.ValidationMessages;
+                        insertSwitchPromiseDeferred.reject();
                     }
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
+                    insertSwitchPromiseDeferred.reject();
                 });
+
+                return insertSwitchPromiseDeferred.promise;
             }
             function updateSwitch() {
+                $scope.validationMessages = undefined;
 
-                return WhS_BE_SwitchAPIService.UpdateSwitch(buildSwitchObjFromScope())
-                .then(function (response) {
+                var updateSwitchPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                WhS_BE_SwitchAPIService.UpdateSwitch(buildSwitchObjFromScope()).then(function (response) {
+
+                    console.log(response);
+
                     if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                         if (ctrl.onswitchupdated != undefined) {
                             ctrl.onswitchupdated(response.UpdatedObject);
+
+                            updateSwitchPromiseDeferred.resolve();
                         }
+                    } else {
+                        $scope.validationMessages = response.ValidationMessages;
+                        updateSwitchPromiseDeferred.reject();
                     }
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-
+                    updateSwitchPromiseDeferred.reject();
                 });
+
+                return updateSwitchPromiseDeferred.promise;
             }
 
             function buildSwitchObjFromScope() {
@@ -188,7 +209,6 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
                 };
                 return obj;
             }
-
         }
 
         return directiveDefinitionObject;

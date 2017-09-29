@@ -182,7 +182,7 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
 
                 var items = [];
 
-                for (var i = pageInfo.fromRow; i < itemsLength; i++) {
+                for (var i = pageInfo.fromRow - 1; i < itemsLength; i++) {
                     items.push($scope.scopeModel.carrierAccountMappings[i]);
                 }
                 gridAPI.addItemsToSource(items);

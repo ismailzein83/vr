@@ -7,6 +7,7 @@ using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Idb;
 using TOne.WhS.RouteSync.TelesIdb;
 using TOne.WhS.RouteSync.TelesIdb.Postgres;
+using Vanrise.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -56,6 +57,11 @@ namespace TOne.WhS.DBSync.Business
                 };
             }
 
+            var isSwitchRouteSynchronizerValidContext = new TOne.WhS.RouteSync.Entities.IsSwitchRouteSynchronizerValidContext();
+            bool isSwitchValid = synchroniser.IsSwitchRouteSynchronizerValid(isSwitchRouteSynchronizerValidContext);
+            if (!isSwitchValid)
+                throw new VRBusinessException(string.Join(" - ", isSwitchRouteSynchronizerValidContext.ValidationMessages));
+
             return synchroniser;
         }
 
@@ -94,8 +100,8 @@ namespace TOne.WhS.DBSync.Business
                         CarrierMapping carrierMapping = new CarrierMapping()
                         {
                             CarrierId = carrier.CarrierAccountId,
-                            CustomerMapping = inTrunkList,
-                            SupplierMapping = outTrunkList
+                            CustomerMapping = (carrier.AccountType == CarrierAccountType.Customer || carrier.AccountType == CarrierAccountType.Exchange) ? inTrunkList : null,
+                            SupplierMapping = (carrier.AccountType == CarrierAccountType.Supplier || carrier.AccountType == CarrierAccountType.Exchange) ? outTrunkList : null
                         };
                         mappings.Add(carrierMapping.CarrierId.ToString(), carrierMapping);
                     }

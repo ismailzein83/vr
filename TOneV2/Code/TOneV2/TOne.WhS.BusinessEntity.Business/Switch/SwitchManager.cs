@@ -39,10 +39,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Switches",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Switch Name" });
-                
+
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {
@@ -62,11 +62,11 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public Switch GetSwitch(int switchId, bool isViewedFromUI)
         {
-            var switchs = GetCachedSwitches();
-           var swicth= switchs.GetRecord(switchId);
-           if (swicth != null && isViewedFromUI)
-               VRActionLogger.Current.LogObjectViewed(SwitchLoggableEntity.Instance, swicth);
-           return swicth;
+            var switches = GetCachedSwitches();
+            var switchItem = switches.GetRecord(switchId);
+            if (switchItem != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(SwitchLoggableEntity.Instance, switchItem);
+            return switchItem;
         }
         public Switch GetSwitch(int switchId)
         {
@@ -95,54 +95,69 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public Vanrise.Entities.InsertOperationOutput<SwitchDetail> AddSwitch(Switch whsSwitch)
         {
-            ValidateSwitchToAdd(whsSwitch);
-
-            Vanrise.Entities.InsertOperationOutput<SwitchDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SwitchDetail>();
-
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-            insertOperationOutput.InsertedObject = null;
+            InsertSwitchOperationOutput insertSwitchOperationOutput = new InsertSwitchOperationOutput();
+            insertSwitchOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+            insertSwitchOperationOutput.InsertedObject = null;
 
             int switchId = -1;
 
-            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            bool insertActionSucc = dataManager.Insert(whsSwitch, out switchId);
-            if (insertActionSucc)
+            List<string> validationMessages = null;
+            if (ValidateSwitchToAdd(whsSwitch, out validationMessages))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                whsSwitch.SwitchId = switchId;
-                VRActionLogger.Current.TrackAndLogObjectAdded(SwitchLoggableEntity.Instance, whsSwitch);
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = SwitchDetailMapper(whsSwitch);
+                ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+                bool insertActionSucc = dataManager.Insert(whsSwitch, out switchId);
+                if (insertActionSucc)
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    whsSwitch.SwitchId = switchId;
+                    VRActionLogger.Current.TrackAndLogObjectAdded(SwitchLoggableEntity.Instance, whsSwitch);
+                    insertSwitchOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    insertSwitchOperationOutput.InsertedObject = SwitchDetailMapper(whsSwitch);
+                }
+                else
+                {
+                    insertSwitchOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                }
             }
             else
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            {
+                insertSwitchOperationOutput.ValidationMessages = validationMessages;
+            }
 
-            return insertOperationOutput;
+            return insertSwitchOperationOutput;
         }
 
         public Vanrise.Entities.UpdateOperationOutput<SwitchDetail> UpdateSwitch(SwitchToEdit whsSwitch)
         {
-            ValidateSwitchToUpdate(whsSwitch);
+            UpdateSwitchOperationOutput updateSwitchOperationOutput = new UpdateSwitchOperationOutput();
+            updateSwitchOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateSwitchOperationOutput.UpdatedObject = null;
 
-            ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-
-            bool updateActionSucc = dataManager.Update(whsSwitch);
-            Vanrise.Entities.UpdateOperationOutput<SwitchDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SwitchDetail>();
-
-            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-
-            if (updateActionSucc)
+            List<string> validationMessages; ;
+            if (ValidateSwitchToUpdate(whsSwitch, out validationMessages))
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                var switchItem = GetSwitch(whsSwitch.SwitchId);
-                VRActionLogger.Current.TrackAndLogObjectUpdated(SwitchLoggableEntity.Instance, switchItem);
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = SwitchDetailMapper(this.GetSwitch(whsSwitch.SwitchId));
+                ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+                bool updateActionSucc = dataManager.Update(whsSwitch);
+
+                if (updateActionSucc)
+                {
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    var switchItem = GetSwitch(whsSwitch.SwitchId);
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(SwitchLoggableEntity.Instance, switchItem);
+                    updateSwitchOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    updateSwitchOperationOutput.UpdatedObject = SwitchDetailMapper(this.GetSwitch(whsSwitch.SwitchId));
+                }
+                else
+                {
+                    updateSwitchOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                }
             }
             else
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-            return updateOperationOutput;
+            {
+                updateSwitchOperationOutput.ValidationMessages = validationMessages;
+            }
+
+            return updateSwitchOperationOutput;
         }
 
         public Vanrise.Entities.DeleteOperationOutput<SwitchDetail> DeleteSwitch(int switchId)
@@ -226,20 +241,38 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Validation Methods
 
-        void ValidateSwitchToAdd(Switch whsSwitch)
+        private bool ValidateSwitchToAdd(Switch whsSwitch, out List<string> validationMessages)
         {
             ValidateSwitch(whsSwitch.Name);
+
+            return IsSwitchRouteSynchronizerValid(whsSwitch, out validationMessages);
         }
 
-        void ValidateSwitchToUpdate(SwitchToEdit whsSwitch)
+        private bool ValidateSwitchToUpdate(SwitchToEdit whsSwitch, out List<string> validationMessages)
         {
             ValidateSwitch(whsSwitch.Name);
+
+            return IsSwitchRouteSynchronizerValid(whsSwitch, out validationMessages);
         }
 
-        void ValidateSwitch(string sName)
+        private void ValidateSwitch(string sName)
         {
             if (String.IsNullOrWhiteSpace(sName))
                 throw new MissingArgumentValidationException("Switch.Name");
+        }
+
+        private bool IsSwitchRouteSynchronizerValid(BaseSwitch baseSwitch, out List<string> validationMessages)
+        {
+            validationMessages = null;
+
+            baseSwitch.ThrowIfNull("baseSwitch");
+            baseSwitch.Settings.ThrowIfNull("baseSwitch.Settings", baseSwitch.SwitchId);
+            baseSwitch.Settings.RouteSynchronizer.ThrowIfNull("baseSwitch.Settings.RouteSynchronizer", baseSwitch.SwitchId);
+
+            var context = new TOne.WhS.RouteSync.Entities.IsSwitchRouteSynchronizerValidContext();
+            bool isSwitchValid = baseSwitch.Settings.RouteSynchronizer.IsSwitchRouteSynchronizerValid(context);
+            validationMessages = context.ValidationMessages;
+            return isSwitchValid;
         }
 
         #endregion

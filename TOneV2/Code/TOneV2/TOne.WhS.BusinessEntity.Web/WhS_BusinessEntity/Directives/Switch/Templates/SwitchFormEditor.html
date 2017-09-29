@@ -1,4 +1,4 @@
-﻿<vr-tabs >
+﻿<vr-tabs>
     <vr-tab header="'Definition'">
         <vr-row>
             <vr-columns width="1/2row">
@@ -17,3 +17,13 @@
         </vr-section>
     </vr-tab>
 </vr-tabs>
+<vr-row ng-if="validationMessages != undefined && validationMessages.length > 0">
+    <vr-columns width="fullrow">
+        <label class="alert alert-danger" vr-alert>
+            <ul>
+                <li ng-repeat="message in validationMessages">{{message}}</li>
+            </ul>
+        </label>
+    </vr-columns>
+</vr-row>
+
