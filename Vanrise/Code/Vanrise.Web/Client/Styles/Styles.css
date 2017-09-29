@@ -2426,16 +2426,16 @@ label[vr-alert].alert {
     height: 0px;
 }
 .item-warning{
-    background-color:#ececec 
+    background-color:#f5e4e4 
 }
 .item-warning a.mark-select{
    color: #f53f3f; 
 }
 .item-future{
-    background-color:#ececec 
+    background-color:#e6e6e6
 }
 .item-future a.mark-select{
-   color:#5a5a5a 
+   color:#969e97
 }
 .vr-disabled {
     pointer-events: none;
