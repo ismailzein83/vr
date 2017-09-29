@@ -326,7 +326,6 @@
                 };
 
                 function getTooltipValue(item) {
-                    console.log(controller.datatooltipfield)
                     if (controller.datatooltipfield)
                         return getObjectProperty(item, controller.datatooltipfield);
                 };
