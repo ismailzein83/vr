@@ -23,8 +23,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
         };
 
         function GenericGrid($scope, ctrl, $attrs) {
-
             this.initializeController = initializeController;
+
             $scope.gridMenuActions = [];
             ctrl.datasource = [];
             ctrl.dimensions = [];
@@ -637,7 +637,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             $scope.gridMenuActions.push({
                                 name: itemAction.Title,
                                 clicked: function (dataItem) {
-                                    settings.DimensionFilters = getDimensionValues(parentDimensions, dataItem, dimensionFilters, selectedDimensions);
+                                    settings.DimensionFilters = getDimensionValues(dataItem, selectedDimensions, parentDimensions, groupingDimensions, dimensionFilters);
                                     return VR_Analytic_AnalyticItemActionService.excuteItemAction(itemAction, settings);
                                 },
                             });
@@ -645,7 +645,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     }
                 }
 
-                function getDimensionValues(parentDimensions, dataItem, dimensionFilters, selectedDimensions) {
+                function getDimensionValues(dataItem, selectedDimensions, parentDimensions, groupingDimensions, dimensionFilters) {
+
                     var dimensionValues = [];
 
                     for (var i = 0; i < selectedDimensions.length; i++) {
@@ -655,7 +656,6 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             FilterValues: [dataItem.DimensionValues[i].Value]
                         });
                     }
-
 
                     for (var i = 0; i < parentDimensions.length; i++) {
                         var parentDimension = parentDimensions[i];
@@ -667,12 +667,27 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 FilterValues: dimensionFilter.FilterValues
                             });
                         }
-
                     }
+
+                    //if parentDimensions.length > 0 all parentDimensions are already added to  dimensionValues
+                    if (parentDimensions.length == 0) {
+                        for (var i = 0; i < groupingDimensions.length; i++) {
+                            var groupingDimension = groupingDimensions[i];
+                            if (groupingDimension == undefined || groupingDimension.DimensionName == undefined || UtilsService.getItemByVal(dimensionValues, groupingDimension.DimensionName, "Dimension") != undefined)
+                                continue;
+
+                            dimensionValues.push({
+                                Dimension: groupingDimension.DimensionName,
+                                FilterValues: [dataItem.DimensionValues[i].Value]
+                            });
+                        }
+                    }
+
                     return dimensionValues;
                 }
             }
         }
+
         return directiveDefinitionObject;
     }
 ]);
