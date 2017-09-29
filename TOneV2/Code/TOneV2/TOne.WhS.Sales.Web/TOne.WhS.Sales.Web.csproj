@@ -249,6 +249,8 @@
     <Content Include="WhS_Sales\Directives\OtherRate\Templates\OtherRateGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\OtherRate\vr-whs-sales-otherrate-grid.js" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-salezoneservicepreview-grid.js" />
+    <Content Include="WhS_Sales\Directives\PricingTemplate\Templates\PricingTemplateGridTemplate.html" />
+    <Content Include="WhS_Sales\Directives\PricingTemplate\vr-whs-sales-pricingtemplate-grid.js" />
     <Content Include="WhS_Sales\Directives\SellingRules\Templates\SellingRulesGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\SellingRules\vr-whs-sales-sellingrules-grid.js" />
     <Content Include="WhS_Sales\Directives\Service\Templates\DefaultServiceTemplate.html" />
@@ -284,6 +286,7 @@
     <Content Include="WhS_Sales\Directives\Zone\vr-whs-sales-zonewithdefaultrate-grid.js" />
     <Content Include="WhS_Sales\Services\APIServices\CodeCompareAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\CountryWithDefaultRateAPIService.js" />
+    <Content Include="WhS_Sales\Services\APIServices\PricingTemplateAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanConfigAPIService.js" />
     <Content Include="WhS_Sales\Services\APIServices\RatePlanPreviewAPIService.js" />
@@ -292,6 +295,7 @@
     <Content Include="WhS_Sales\Services\APIServices\ZoneWithDefaultRateAPIService.js" />
     <Content Include="WhS_Sales\Services\BulkActionUtilsService.js" />
     <Content Include="WhS_Sales\Services\CodeCompareService.js" />
+    <Content Include="WhS_Sales\Services\PricingTemplateService.js" />
     <Content Include="WhS_Sales\Services\RatePlanUtilsService.js" />
     <Content Include="WhS_Sales\Services\RatePlanService.js" />
     <Content Include="WhS_Sales\Services\SellingRuleService.js" />
@@ -312,6 +316,10 @@
     <Content Include="WhS_Sales\Views\ImportRatePlan\ImportRatePlanController.js" />
     <Content Include="WhS_Sales\Views\InvalidRate.html" />
     <Content Include="WhS_Sales\Views\InvalidRateController.js" />
+    <Content Include="WhS_Sales\Views\PricingTemplate\PricingTemplateEditor.html" />
+    <Content Include="WhS_Sales\Views\PricingTemplate\PricingTemplateEditorController.js" />
+    <Content Include="WhS_Sales\Views\PricingTemplate\PricingTemplateManagement.html" />
+    <Content Include="WhS_Sales\Views\PricingTemplate\PricingTemplateManagementController.js" />
     <Content Include="WhS_Sales\Views\RatePlanPreview.html" />
     <Content Include="WhS_Sales\Views\RatePlanPreviewController.js" />
     <Content Include="WhS_Sales\Views\RatePlanPricingSettings.html" />
