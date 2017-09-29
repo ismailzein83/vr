@@ -130,7 +130,7 @@ namespace Retail.MultiNet.Business
                         if (companyProfile.CityId.HasValue)
                         {
                             CityManager cityManager = new CityManager();
-                            address += string.Format("{0} {1}", address, cityManager.GetCityName(companyProfile.CityId.Value));
+                            address += string.Format(" {1}",cityManager.GetCityName(companyProfile.CityId.Value));
                             AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, address, true);
 
                         }
