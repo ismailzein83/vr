@@ -11,8 +11,13 @@
     [Amount]            DECIMAL (22, 6) NULL,
     [IsReRate]          BIT             NULL,
     [IsDeleted]         BIT             NULL,
-    [FileName]          VARCHAR (255)   NULL
+    [FileName]          VARCHAR (255)   NULL,
+    [ExtraFields]       NVARCHAR (MAX)  NULL,
+    [ReceivedCGPN]      VARCHAR (100)   NULL,
+    [ReceivedCDPN]      VARCHAR (100)   NULL
 );
+
+
 
 
 
