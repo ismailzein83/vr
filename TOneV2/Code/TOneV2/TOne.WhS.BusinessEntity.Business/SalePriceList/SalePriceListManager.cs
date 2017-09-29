@@ -287,12 +287,37 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCustomerCachedSalePriceLists().MapRecords(x => x.Value.PriceListId, x => x.Value.ProcessInstanceId == processInstanceId);
         }
 
-        public bool SendCustomerPriceLists(IEnumerable<int> customerPriceListIds, bool compressFile)
+        public bool SendCustomerPriceLists(SendCustomerPriceListsInput input)
         {
-            if (customerPriceListIds == null || !customerPriceListIds.Any())
-                throw new MissingArgumentValidationException("customerPriceListIds");
+            Func<SalePriceList, bool> idFilterExpression = null;
 
-            IEnumerable<SalePriceList> customerPriceLists = GetCustomerCachedSalePriceLists().MapRecords(x => x.Value, x => customerPriceListIds.Contains(x.Value.PriceListId));
+            if (input.SelectAll)
+            {
+                if (input.NotSelectedPriceListIds != null && input.NotSelectedPriceListIds.Count() > 0)
+                    idFilterExpression = (salePriceList) => { return !input.NotSelectedPriceListIds.Contains(salePriceList.PriceListId); };
+            }
+            else
+            {
+                if (input.SelectedPriceListIds == null || input.SelectedPriceListIds.Count() == 0)
+                    throw new Vanrise.Entities.MissingArgumentValidationException("selectedPriceListIds");
+                idFilterExpression = (salePriceList) => { return input.SelectedPriceListIds.Contains(salePriceList.PriceListId); };
+            }
+
+            Func<SalePriceList, bool> filterExpression = (salePriceList) =>
+            {
+                if (salePriceList.ProcessInstanceId != input.ProcessInstanceId)
+                    return false;
+
+                if (salePriceList.IsSent)
+                    return false;
+
+                if (idFilterExpression != null && !idFilterExpression(salePriceList))
+                    return false;
+
+                return true;
+            };
+
+            IEnumerable<SalePriceList> customerPriceLists = GetCustomerCachedSalePriceLists().FindAllRecords(filterExpression);
 
             var fileManager = new VRFileManager();
             var salePriceListManager = new SalePriceListManager();
@@ -318,7 +343,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 try
                 {
-                    bool isCompressed = compressFile || _carrierAccountManager.GetCustomerCompressPriceListFileStatus(customer.CarrierAccountId);
+                    bool isCompressed = input.CompressAttachement || _carrierAccountManager.GetCustomerCompressPriceListFileStatus(customer.CarrierAccountId);
                     vrMailManager.SendMail(evaluatedObject.To, evaluatedObject.CC, evaluatedObject.BCC, evaluatedObject.Subject, evaluatedObject.Body
                         , vrMailAttachements, isCompressed);
                     salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { customerPriceList.OwnerId }, customerPriceList.PriceListId);
