@@ -15,6 +15,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Name { get; set; }
 
         public string Description { get; set; }
+        public string AdditionalInfo { get; set; }
+        public string ColorStyle { get; set; }
 
         public WHSFinancialAccountEffectiveStatus EffectiveStatus { get; set; }
         public Guid? BalanceAccountTypeId { get; set; }

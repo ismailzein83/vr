@@ -992,12 +992,30 @@ namespace TOne.WhS.BusinessEntity.Business
         {
 
             var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
+            string dateFormat = Utilities.GetDateTimeFormat(DateTimeType.Date); ;
+            string bedFormatedValueDescription = financialAccount.BED.ToString(dateFormat);
+            string eedFormatedValueDescription = "";
+            if(financialAccount.EED.HasValue)
+                eedFormatedValueDescription =financialAccount.EED.Value.ToString(dateFormat);
+
             var financialAccountInfo = new WHSFinancialAccountInfo()
             {
                 FinancialAccountId = financialAccount.FinancialAccountId,
                 EffectiveStatus = GetFinancialAccountEffectiveStatus(financialAccount.BED, financialAccount.EED),
                 BalanceAccountTypeId = financialAccountDefinitionSettings.BalanceAccountTypeId,
                 InvoiceTypeId = financialAccountDefinitionSettings.InvoiceTypeId
+            };
+            string statusDescription = Utilities.GetEnumDescription(financialAccountInfo.EffectiveStatus);
+            switch(financialAccountInfo.EffectiveStatus)
+            {
+                case WHSFinancialAccountEffectiveStatus.Recent:
+                    financialAccountInfo.ColorStyle = "item-warning";
+                    financialAccountInfo.AdditionalInfo = string.Format("({0}) from {1} to {2}", statusDescription, bedFormatedValueDescription, eedFormatedValueDescription);
+                    break;
+                case WHSFinancialAccountEffectiveStatus.Future:
+                    financialAccountInfo.ColorStyle = "item-future";
+                    financialAccountInfo.AdditionalInfo = string.Format("({0}) effective on {1}", statusDescription, bedFormatedValueDescription);
+                    break;
             };
             if (financialAccount.CarrierProfileId.HasValue)
             {

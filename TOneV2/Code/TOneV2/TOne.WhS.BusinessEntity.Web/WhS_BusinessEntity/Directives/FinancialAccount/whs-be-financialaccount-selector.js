@@ -151,29 +151,34 @@ app.directive('whsBeFinancialaccountSelector', ['WhS_BE_FinancialAccountAPIServi
         function getTemplate(attributes) {
             var isMultipleSelection = (attributes.ismultipleselection != undefined) ? 'ismultipleselection="accountSelectorCtrl.ismultipleselection"' : undefined;
             var label = (attributes.ismultipleselection != undefined) ? "Carriers" : "Carrier";
-            return '<vr-columns colnum="{{accountSelectorCtrl.normalColNum}}">\
-                    <vr-select on-ready="scopeModel.onAccountSelectorReady"  includeadvancedsearch onokhandler="scopeModel.onOKSearch" oncancelhandler="scopeModel.onCancelSearch" \
-				        label="' + label + '"\
-				        datasource="accountSelectorCtrl.datasource"\
-                        selectedvalues="accountSelectorCtrl.selectedvalues"\
-				        datavaluefield="FinancialAccountId"\
-				        datatextfield="{{scopeModel.accountDataTextField}}"\
-                        onselectionchanged="accountSelectorCtrl.onselectionchanged"\
-				        isrequired="accountSelectorCtrl.isrequired"\
-				        hideremoveicon="accountSelectorCtrl.isrequired"\
-                        ' + isMultipleSelection + '>\
-                            <vr-columns colnum="12">\
-                                <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"\
-				                    label="Carrier Type"\
-				                    datasource="scopeModel.carrierTypes"\
-                                    selectedvalues="scopeModel.selectedCarrierType"\
-                                    onselectionchanged="scopeModel.onCarrierTypeChanged"\
-				                    datavaluefield="value"\
-				                    datatextfield="description">\
-			                    </vr-select>\
-                            </vr-columns>\
-                    </vr-select>\
-                </vr-columns>';
+            return '<vr-columns colnum="{{accountSelectorCtrl.normalColNum}}"> '
+                     + '<vr-select  on-ready="scopeModel.onAccountSelectorReady" '  
+                                + ' includeadvancedsearch '
+                                + ' onokhandler="scopeModel.onOKSearch" '
+                                + ' oncancelhandler="scopeModel.onCancelSearch" '
+				                +'  label="' + label + '"'
+				                +' datasource="accountSelectorCtrl.datasource"'
+                                +' selectedvalues="accountSelectorCtrl.selectedvalues"'
+                                +' datavaluefield="FinancialAccountId"'
+                                + ' datatooltipfield="AdditionalInfo"'
+                                + 'datastylefield="ColorStyle" '
+				                +'datatextfield="{{scopeModel.accountDataTextField}}"'
+                                +'onselectionchanged="accountSelectorCtrl.onselectionchanged"'
+				                +'isrequired="accountSelectorCtrl.isrequired"'
+				                +'hideremoveicon="accountSelectorCtrl.isrequired"'
+                                + isMultipleSelection + '>'
+                                       +'   <vr-columns colnum="12">'
+                                         +'     <vr-select on-ready="scopeModel.onCarrierTypeSelectorReady"'
+				                                  +'       label="Carrier Type"'
+				                                  +'     datasource="scopeModel.carrierTypes"'
+                                                  +'   selectedvalues="scopeModel.selectedCarrierType"'
+                                                    +' onselectionchanged="scopeModel.onCarrierTypeChanged"'
+				                                 +' datavaluefield="value"'
+				                                 +' datatextfield="description">'
+			                                     +'</vr-select>'
+                                         +'</vr-columns>'
+                      +'</vr-select>'
+                   +'</vr-columns>';
         }
 
     }]);

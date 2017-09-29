@@ -7,7 +7,14 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public enum WHSFinancialAccountEffectiveStatus { Recent = 0, Current = 1, Future = 2 }
+    public enum WHSFinancialAccountEffectiveStatus {
+         [Description("Expired")]
+        Recent = 0,
+         [Description("Current")]
+        Current = 1,
+         [Description("Future")]
+        Future = 2 
+    }
 
     public enum WHSFinancialAccountCarrierType
     {
