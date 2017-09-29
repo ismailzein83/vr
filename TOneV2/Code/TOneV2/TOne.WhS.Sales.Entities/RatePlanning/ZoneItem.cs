@@ -31,6 +31,15 @@ namespace TOne.WhS.Sales.Entities
         #region Rate
         public long? CurrentRateId { get; set; }
         public Decimal? CurrentRate { get; set; }
+        
+        /// <summary>
+        /// CurrentRate currency
+        /// </summary>
+        public int TargetCurrencyId { get; set; }
+        
+        /// <summary>
+        /// Initial rate currency
+        /// </summary>
         public int? CurrentRateCurrencyId { get; set; }
         public string CurrentRateCurrencySymbol { get; set; }
         public DateTime? CurrentRateBED { get; set; }

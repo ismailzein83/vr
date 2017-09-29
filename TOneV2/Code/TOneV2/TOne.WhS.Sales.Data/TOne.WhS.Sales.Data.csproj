@@ -71,6 +71,7 @@
     <Compile Include="INewSaleZoneRoutingProductDataManager.cs" />
     <Compile Include="IChangedSaleZoneRoutingProduct.cs" />
     <Compile Include="INewSaleZoneServiceDataManager.cs" />
+    <Compile Include="IPricingTemplateDataManager.cs" />
     <Compile Include="IRateDataManager.cs" />
     <Compile Include="IRatePlanDataManager.cs" />
     <Compile Include="IRatePlanPreviewSummaryDataManager.cs" />

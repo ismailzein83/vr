@@ -1046,7 +1046,8 @@ namespace TOne.WhS.Sales.Business
                     ZoneName = saleZone.Name,
                     CountryId = saleZone.CountryId,
                     ZoneBED = saleZone.BED,
-                    ZoneEED = saleZone.EED
+                    ZoneEED = saleZone.EED,
+                    TargetCurrencyId = input.CurrencyId
                 };
 
                 DateTime countryBED;
@@ -1117,7 +1118,8 @@ namespace TOne.WhS.Sales.Business
                     ZoneName = saleZone.Name,
                     CountryId = saleZone.CountryId,
                     ZoneBED = saleZone.BED,
-                    ZoneEED = saleZone.EED
+                    ZoneEED = saleZone.EED,
+                    TargetCurrencyId = input.CurrencyId
                 };
 
                 DateTime countryBED;
