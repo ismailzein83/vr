@@ -15,6 +15,7 @@
                 maxvalue: '@',
                 decimalprecision: '@',
                 maxlength: '@',
+                minlength: '@',
                 placeholder: '@',
                 type: '@',
                 label: '@'
@@ -29,6 +30,10 @@
                     validationOptions.ipValidation = true;
                 if ($attrs.type === TextboxTypeEnum.FileName.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.FileName.name)
                     validationOptions.filenameValidation = true;
+                if ($attrs.minlength!=undefined ) {
+                    validationOptions.minlengthValidation = true;
+                    validationOptions.minLength = ctrl.minlength;
+                }
                 else if ($attrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                     validationOptions.numberValidation = true;
                     validationOptions.maxNumber = ctrl.maxvalue;
@@ -257,7 +262,7 @@
 
     app.constant('TextboxTypeEnum', {
         Email: { name: "email" },
-        Ip: { name: "ip" },        
+        Ip: { name: "ip" },
         FileName: { name: "filename" },
         Number: { name: "number" },
         Password: { name: "password" }

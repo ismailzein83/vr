@@ -4,5 +4,6 @@
     invalidEmail: "Invalid Email",
     invalidNumber: "Invalid Number",
     invalidIp: "Invalid IP Address",
-    invalidFileName: "Invalid File Name that contains / \\ : * ? ; < > \" "
+    invalidFileName: "Invalid File Name that contains / \\ : * ? ; < > \" ",
+    invalidMinLength: "Value must be at least "
 });

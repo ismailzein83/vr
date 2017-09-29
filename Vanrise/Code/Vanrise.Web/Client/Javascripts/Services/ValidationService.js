@@ -31,6 +31,10 @@
                         if (!validateFileName(value, validationOptions))
                             return ValidationMessagesEnum.invalidFileName;
                     }
+                    if (validationOptions.minlengthValidation) {
+                        if (validateMinLength(value, validationOptions))
+                            return ValidationMessagesEnum.invalidMinLength + " " + validationOptions.minLength +" characters.";
+                    }
                     if (validationOptions.numberValidation) {
                         if (!validateNumber(value, validationOptions))
                             return ValidationMessagesEnum.invalidNumber;
@@ -63,11 +67,15 @@
             return valid;
             // return String(value).search(isIp_re) != -1;
         }
-        function validateFileName(value) {           
-            var rg1=/^[^\\/:\*\?"<>\|]+$/; // forbidden characters \ / : * ? " < > |
-            var rg2=/^\./; // cannot start with dot (.)
-            var rg3 =/^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i; // forbidden file names
-           return rg1.test(value) && !rg2.test(value) && !rg3.test(value);
+        function validateFileName(value) {
+            var rg1 = /^[^\\/:\*\?"<>\|]+$/; // forbidden characters \ / : * ? " < > |
+            var rg2 = /^\./; // cannot start with dot (.)
+            var rg3 = /^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i; // forbidden file names
+            return rg1.test(value) && !rg2.test(value) && !rg3.test(value);
+        }
+        function validateMinLength(value, validationOptions) {
+            if (value == undefined || value == null || value == "") return false;
+            return validationOptions.minLength > value.length  ;
         }
         function validateNumber(value, validationOptions) {
             var decimalArray = String(value).split(".");
