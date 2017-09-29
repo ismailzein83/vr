@@ -2217,6 +2217,10 @@ vr-switch[class*="divDisabled"] .switch {
     color:#aaa;
     cursor:not-allowed !important;
 }
+.vr-choice-disabled{
+    color:#aaa;
+    cursor:not-allowed !important;
+}
 /**************END VR-TABS*********/
 
 
