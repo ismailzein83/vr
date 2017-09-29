@@ -81,7 +81,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 SaveChangesToDB(context.CustomerPriceListChanges, context.ProcessInstanceId);
                 BulkInsertSalePriceListSnapshot(saleCodes.Select(item => item.SaleCodeId).ToList(), pricelistIds);
             }
-            BulkInsertPriceList(context.SalePriceLists);
+            if (context.SalePriceLists != null) BulkInsertPriceList(context.SalePriceLists);
         }
 
         public List<StructuredCustomerPricelistChange> StructureCustomerPricelistChange(List<CustomerPriceListChange> customerPriceListChanges)
@@ -937,6 +937,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         };
                         zoneChanges.Add(zone.ZoneName, zone);
                     }
+                    else
+                        zone.RPChange = rp;
                 }
                 List<NewPriceList> newPriceLists;
                 NewPriceList customerPricelist = null;
@@ -1140,7 +1142,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 vrFiles.Add(new SalePricelistVRFile
                 {
-                    CurrencySymbol =currencyManager.GetCurrencySymbol(zoneNotification.Key),
+                    CurrencySymbol = currencyManager.GetCurrencySymbol(zoneNotification.Key),
                     FileId = vrFileManager.AddFile(vrFile),
                     FileName = vrFile.Name,
                     FileExtension = vrFile.Extension
