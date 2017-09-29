@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeFilenameTime", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrInvoicetypeGridactionsettingsDownloadfile", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeFilenameTime", ["UtilsService", "VRNotificationServi
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new TimeFileNamePart($scope, ctrl, $attrs);
+                var ctor = new DownloadFileAction($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,15 +21,17 @@ app.directive("vrInvoicetypeFilenameTime", ["UtilsService", "VRNotificationServi
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceFileNamePart/MainExtensions/Templates/TimeFileNamePartTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceActions/MainExtensions/Templates/DownloadFileActionTemplate.html"
 
         };
 
-        function TimeFileNamePart($scope, ctrl, $attrs) {
+        function DownloadFileAction($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             var context;
             function initializeController() {
                 $scope.scopeModel = {};
+
                 defineAPI();
             }
 
@@ -37,29 +39,30 @@ app.directive("vrInvoicetypeFilenameTime", ["UtilsService", "VRNotificationServi
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
+                    var invoiceActionEntity;
                     if (payload != undefined) {
+                        invoiceActionEntity = payload.invoiceActionEntity;
                         context = payload.context;
-                        if (context != undefined) {
-                           
-                        }
-                        if (payload.concatenatedPartSettings != undefined) {
-                            $scope.dateTimeFormatValue = payload.concatenatedPartSettings.DateTimeFormat;
-                        }
-                        var promises = [];
-                        return UtilsService.waitMultiplePromises(promises);
                     }
+                    var promises = [];
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.InvoiceFileNamePart.TimeFileNamePart ,Vanrise.Invoice.MainExtensions",
-                        DateTimeFormat: $scope.dateTimeFormatValue
+                        $type: "Vanrise.Invoice.MainExtensions.DownloadFileInvoiceAction ,Vanrise.Invoice.MainExtensions",
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
         }
 

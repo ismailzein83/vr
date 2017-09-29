@@ -38,6 +38,7 @@
                 $scope.scopeModel.isLoading = true;
                 return VRCommon_VRMailAPIService.DownloadAttachement(attachedfileId).then(function (response) {
                     $scope.scopeModel.isLoading = false;
+                    if (response != undefined)
                     UtilsService.downloadFile(response.data, response.headers);
                 });
             };
@@ -192,7 +193,8 @@
             $scope.scopeModel.isLoading = true;
             return VR_Invoice_InvoiceEmailActionAPIService.DownloadAttachment(invoiceId, attachmentId).then(function (response) {
                 $scope.scopeModel.isLoading = false;
-                UtilsService.downloadFile(response.data, response.headers);
+                if (response != undefined)
+                   UtilsService.downloadFile(response.data, response.headers);
             });
         }
     }

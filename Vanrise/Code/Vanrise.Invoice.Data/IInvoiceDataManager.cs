@@ -12,7 +12,7 @@ namespace Vanrise.Invoice.Data
     {
         IEnumerable<Entities.Invoice> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input);
         int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate);
-        bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions, out long insertedInvoiceId);
+        bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions,Func<long,bool> actionBeforeGenerateInvoice , out long insertedInvoiceId);
         Entities.Invoice GetInvoice(long invoiceId);
         bool CheckInvoiceOverlaping(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate, long? invoiceId);
         bool SetInvoicePaid(long invoiceId, DateTime? paidDate);
@@ -29,5 +29,6 @@ namespace Vanrise.Invoice.Data
         bool CheckPartnerIfHasInvoices(Guid invoiceTypeId, string partnerId);
         List<Entities.Invoice> GetInvoicesBySerialNumbers(IEnumerable<string> serialNumbers);
         bool UpdateInvoicePaidDateById(Guid invoiceTypeId, long invoiceId, DateTime paidDate);
+        bool UpdateInvoiceSettings(long invoiceId, InvoiceSettings invoiceSettings);
     }
 }

@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeFilenameInvoicefield", ["UtilsService", "VRNotificat
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceFileNamePart/MainExtensions/Templates/InvoiceFieldFileNamePartTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceFileNameSettings/MainExtensions/Templates/InvoiceFieldFileNamePartTemplate.html"
 
         };
 

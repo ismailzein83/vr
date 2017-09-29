@@ -16,6 +16,7 @@ namespace Vanrise.Invoice.Entities
     {
         public string Name { get; set; }
         public byte[] Content { get; set; }
+        public string ExtensionType { get; set; }
         public abstract VRMailAttachement ConvertToAttachment();
     }
     public class PDFInvoiceFile : InvoiceFile

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeFilenameparts", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceFileNameSettingsService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceFileNameSettingsService) {
+app.directive("vrInvoicetypeFilenameparts", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceFileSettingsService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceFileSettingsService) {
 
         var directiveDefinitionObject = {
 
@@ -21,7 +21,7 @@ app.directive("vrInvoicetypeFilenameparts", ["UtilsService", "VRNotificationServ
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceFileNamePart/Templates/FileNamePartsTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceFileNameSettings/Templates/FileNamePartsTemplate.html"
 
         };
 
@@ -44,7 +44,7 @@ app.directive("vrInvoicetypeFilenameparts", ["UtilsService", "VRNotificationServ
                         ctrl.datasource.push({ Entity: fileNamePart });
                     };
 
-                    VR_Invoice_InvoiceFileNameSettingsService.addFileNamePart(onFileNamePartAdded, getContext());
+                    VR_Invoice_InvoiceFileSettingsService.addFileNamePart(onFileNamePartAdded, getContext());
                 };
 
                 ctrl.removeFileNamePart = function (dataItem) {
@@ -104,7 +104,7 @@ app.directive("vrInvoicetypeFilenameparts", ["UtilsService", "VRNotificationServ
                     ctrl.datasource[index] = { Entity: fileNamePart };
                 };
 
-                VR_Invoice_InvoiceFileNameSettingsService.editFileNamePart(fileNamePartObj.Entity, onFileNamePartUpdated, getContext());
+                VR_Invoice_InvoiceFileSettingsService.editFileNamePart(fileNamePartObj.Entity, onFileNamePartUpdated, getContext());
             }
             function getContext() {
                 var currentContext = context;

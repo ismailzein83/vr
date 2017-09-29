@@ -86,6 +86,9 @@
         var fileNamePartsAPI;
         var fileNamePartsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var filesAttachmentsAPI;
+        var filesAttachmentsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var dataRecordTypeEntity;
 
         defineScope();
@@ -118,18 +121,14 @@
                 currencyFieldAPI = api;
                 currencyFieldReadyPromiseDeferred.resolve();
             };
-
-
             $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyPromiseDeferred.resolve();
             };
-
             $scope.scopeModel.onItemGroupingsDirectiveReady = function (api) {
                 itemGroupingsDirectiveAPI = api;
                 itemGroupingsReadyPromiseDeferred.resolve();
             };
-
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
                 $scope.scopeModel.isLoading = true;
                 var dataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
@@ -152,17 +151,14 @@
                    
                 }
             };
-
             $scope.scopeModel.onItemSetNameStorageRuleReady = function (api) {
                 itemSetNameStorageRuleAPI = api;
                 itemSetNameStorageRuleReadyPromiseDeferred.resolve();
             };
-
             $scope.scopeModel.onInvoiceSettingDefinitionReady = function (api) {
                 invoiceSettingDefinitionDirectiveAPI = api;
                 invoiceSettingDefinitionReadyPromiseDeferred.resolve();
             };
-
             $scope.scopeModel.onConcatenatedPartsReady = function (api) {
                 concatenatedPartsAPI = api;
                 concatenatedPartsReadyPromiseDeferred.resolve();
@@ -170,6 +166,10 @@
             $scope.scopeModel.onFileNamePartsReady = function (api) {
                 fileNamePartsAPI = api;
                 fileNamePartsReadyPromiseDeferred.resolve();
+            };
+            $scope.scopeModel.onFilesAttachmentsReady = function (api) {
+                filesAttachmentsAPI = api;
+                filesAttachmentsReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.onStartCalculationMethodDirectiveReady = function (api) {
                 startCalculationMethodAPI = api;
@@ -271,6 +271,7 @@
                         },
                         InvoiceFileSettings: {
                             InvoiceFileNameParts: fileNamePartsAPI.getData(),
+                            FilesAttachments: filesAttachmentsAPI.getData(),
                         },
                         SubSections: subSectionsAPI.getData(),
                         Security: {
@@ -670,8 +671,19 @@
                     return itemSetNameStorageRuleDeferredLoadPromiseDeferred.promise;
                 }
 
+                function loadFilesAttachments() {
+                    var filesAttachmentsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    filesAttachmentsReadyPromiseDeferred.promise.then(function () {
+                        var filesAttachmentsDirectivePayload = { context: getContext() };
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceFileSettings != undefined) {
+                            filesAttachmentsDirectivePayload.filesAttachments = invoiceTypeEntity.Settings.InvoiceFileSettings.FilesAttachments;
+                        }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection,loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector])
+                        VRUIUtilsService.callDirectiveLoad(filesAttachmentsAPI, filesAttachmentsDirectivePayload, filesAttachmentsDeferredLoadPromiseDeferred);
+                    });
+                    return filesAttachmentsDeferredLoadPromiseDeferred.promise;
+                }
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection,loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })

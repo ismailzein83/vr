@@ -29,10 +29,15 @@ namespace Vanrise.Invoice.Entities
         public string Note { get; set; }
         public string SourceId { get; set; }
         public Boolean IsAutomatic { get; set; }
+        public InvoiceSettings Settings { get; set; }
         public Invoice() { }
         public IEnumerable<Invoice> GetInvoiceRDLCSchema()
         {
             return null;
         }
-    }         
+    } 
+    public class InvoiceSettings
+    {
+        public long? FileId { get; set; }
+    }
 }

@@ -57,6 +57,11 @@
                 <vr-tab header="'Invoice File Settings'">
                     <vr-row>
                         <vr-columns width="1/2row">
+                            <vr-section title="Invoice File">
+                                <vr-invoicetype-filesattachments on-ready="scopeModel.onFilesAttachmentsReady"></vr-invoicetype-filesattachments>
+                             </vr-section>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
                             <vr-section title="File Name Parts">
                                 <vr-invoicetype-filenameparts on-ready="scopeModel.onFileNamePartsReady"></vr-invoicetype-filenameparts>
                             </vr-section>

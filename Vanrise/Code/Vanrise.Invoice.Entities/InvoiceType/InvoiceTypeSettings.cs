@@ -36,6 +36,12 @@ namespace Vanrise.Invoice.Entities
     public class InvoiceFileSettings
     {
         public List<InvoiceFileNamePart> InvoiceFileNameParts { get; set; }
+        public List<InvoiceFileAttachment> FilesAttachments { get; set; }
+    }
+    public class InvoiceFileAttachment
+    {
+        public string Name { get; set; }
+        public Guid AttachmentId { get; set; }
 
     }
     public class InvoiceFileNamePart

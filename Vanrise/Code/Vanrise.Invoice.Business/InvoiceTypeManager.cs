@@ -401,7 +401,20 @@ namespace Vanrise.Invoice.Business
                 throw new NullReferenceException("invoiceAction");
             return invoiceAction;
         }
-
+        public InvoiceAttachment GetInvoiceAttachment(Guid invoiceTypeId, Guid invoiceAttachmentId)
+        {
+            var invoiceType = GetInvoiceType(invoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
+            return GetInvoiceAttachment(invoiceType, invoiceAttachmentId);
+        }
+        public InvoiceAttachment GetInvoiceAttachment(InvoiceType invoiceType, Guid invoiceAttachmentId)
+        {
+            invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
+            invoiceType.Settings.InvoiceAttachments.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
+            var invoiceAttachment = invoiceType.Settings.InvoiceAttachments.FirstOrDefault(x => x.InvoiceAttachmentId == invoiceAttachmentId);
+            invoiceAttachment.ThrowIfNull("invoiceAttachment");
+            return invoiceAttachment;
+        }
         public IEnumerable<InvoiceFieldInfo> GetRemoteInvoiceFieldsInfo()
         {
             List<InvoiceFieldInfo> invoiceFields = new List<InvoiceFieldInfo>();

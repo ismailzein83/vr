@@ -104,7 +104,8 @@ namespace Vanrise.Invoice.Data.SQL
                                                                          invoice.PaidDate,
                                                                          invoice.LockDate,
                                                                          invoice.Note,
-                                                                         invoice.SourceId) > 0;
+                                                                         invoice.SourceId
+                                                                         ) > 0;
         }
         public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
         {
@@ -113,9 +114,14 @@ namespace Vanrise.Invoice.Data.SQL
                 return GetReaderValue<int>(reader, "Counter");
             }, InvoiceTypeId, partnerId, fromDate, toDate);
         }
-        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions, out long insertedInvoiceId)
+        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions, Func<long, bool> actionBeforeGenerateInvoice, out long insertedInvoiceId)
         {
             object invoiceId;
+            string serializedSettings = null;
+            if (invoiceEntity.Settings != null)
+            {
+                serializedSettings = Vanrise.Common.Serializer.Serialize(invoiceEntity.Settings);
+            }
 
             int affectedRows = ExecuteNonQuerySP
             (
@@ -133,11 +139,12 @@ namespace Vanrise.Invoice.Data.SQL
                 invoiceEntity.Note,
                 invoiceEntity.SourceId,
                 true,
-                invoiceEntity.IsAutomatic
+                invoiceEntity.IsAutomatic,
+                serializedSettings
             );
 
             insertedInvoiceId = Convert.ToInt64(invoiceId);
-
+           
             if (itemSetNameStorageDic != null && itemSetNameStorageDic.Count > 0)
             {
                 var remainingInvoiceItemSets = invoiceItemSets.FindAllRecords(x => !itemSetNameStorageDic.Values.Any(y => y.Contains(x.SetName)));
@@ -159,13 +166,14 @@ namespace Vanrise.Invoice.Data.SQL
                 InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
                 dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSets);
             }
-
+            if (actionBeforeGenerateInvoice != null)
+                actionBeforeGenerateInvoice(insertedInvoiceId);
             var transactionOptions = new TransactionOptions
             {
                 IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
                 Timeout = TransactionManager.DefaultTimeout
             };
-
+           
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
             {
                 var transactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
@@ -178,7 +186,7 @@ namespace Vanrise.Invoice.Data.SQL
                     DeleteInvoice(invoiceIdToDelete.Value);
                     transactionDataManager.SetBillingTransactionsAsDeleted(invoiceIdToDelete.Value);
                 }
-
+              
                 SetDraft(insertedInvoiceId, false);
                 transactionScope.Complete();
             }
@@ -210,7 +218,15 @@ namespace Vanrise.Invoice.Data.SQL
             return base.IsDataUpdated("VR_Invoice.Invoice", ref updateHandle);
         }
 
-
+        public bool UpdateInvoiceSettings(long invoiceId, InvoiceSettings invoiceSettings)
+        {
+            string serializedSettings = null;
+            if (invoiceSettings != null)
+            {
+                serializedSettings = Vanrise.Common.Serializer.Serialize(invoiceSettings);
+            }
+            return ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_UpdateSettings]", invoiceId, serializedSettings) > 0;
+        }
         public Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_GetLast", InvoiceMapper, invoiceTypeId, partnerId);
@@ -290,7 +306,8 @@ namespace Vanrise.Invoice.Data.SQL
                 LockDate = GetReaderValue<DateTime?>(reader, "LockDate"),
                 Note = reader["Notes"] as string,
                 SourceId = reader["SourceID"] as string,
-                IsAutomatic = GetReaderValue<Boolean>(reader, "IsAutomatic")
+                IsAutomatic = GetReaderValue<Boolean>(reader, "IsAutomatic"),
+                Settings = Vanrise.Common.Serializer.Deserialize<InvoiceSettings>(reader["Settings"] as string)
             };
             return invoice;
         }
@@ -305,6 +322,9 @@ namespace Vanrise.Invoice.Data.SQL
         }
 
         #endregion
-                
+
+
+
+      
     }
 }

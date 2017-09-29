@@ -1,6 +1,6 @@
 ﻿
-app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService','VR_Invoice_InvoiceAPIService','VRNotificationService','SecurityService',
-    function (VRModalService, UtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, SecurityService) {
+app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService','VR_Invoice_InvoiceAPIService','VRNotificationService','SecurityService','FileAPIService',
+    function (VRModalService, UtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, SecurityService, FileAPIService) {
 
         var actionTypes = [];
         function getActionTypeIfExist(actionTypeName) {
@@ -203,6 +203,19 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceActions/Templates/InvoiceActionEditor.html', parameters, settings);
         }
+        function registerDownloadFileInvoiceAction() {
+            var actionType = {
+                ActionTypeName: "DownloadFileInvoiceAction",
+                actionMethod: function (payload) {
+                    if (payload.invoice.Entity.Settings != undefined && payload.invoice.Entity.Settings.FileId != undefined)
+                        FileAPIService.DownloadFile(payload.invoice.Entity.Settings.FileId).then(function (response) {
+                            if (response != undefined)
+                                UtilsService.downloadFile(response.data, response.headers);
+                        });
+                }
+            };
+            registerActionType(actionType);
+        }
 
         function reGenerateInvoice(onGenerateInvoice, invoiceTypeId, invoiceId) {
             var settings = {
@@ -245,6 +258,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             getActionTypeIfExist: getActionTypeIfExist,
             generateInvoice: generateInvoice,
             reGenerateInvoice: reGenerateInvoice,
-            registerSendEmailAction: registerSendEmailAction
+            registerSendEmailAction: registerSendEmailAction,
+            registerDownloadFileInvoiceAction: registerDownloadFileInvoiceAction
         });
     }]);

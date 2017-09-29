@@ -755,6 +755,42 @@ namespace Vanrise.Invoice.Business
         #endregion
 
         #region Private Methods
+        private bool ActionBeforeGenerateInvoice(long invoiceId)
+        {
+            var invoice = GetInvoice(invoiceId);
+            var invoiceSettings = invoice.Settings;
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
+            if (invoiceType.Settings != null && invoiceType.Settings.InvoiceFileSettings != null && invoiceType.Settings.InvoiceFileSettings.FilesAttachments != null)
+            {
+                VRFileManager fileManager = new VRFileManager();
+                foreach (var fileAttachment in invoiceType.Settings.InvoiceFileSettings.FilesAttachments)
+                {
+
+                    var attachment = invoiceTypeManager.GetInvoiceAttachment(invoiceType, fileAttachment.AttachmentId);
+                    attachment.ThrowIfNull("attachment", fileAttachment.AttachmentId);
+                    InvoiceRDLCFileConverterContext context = new InvoiceRDLCFileConverterContext
+                    {
+                        InvoiceId = invoiceId
+                    };
+                    var invoiceFile = attachment.InvoiceFileConverter.ConvertToInvoiceFile(context);
+                    var fileId = fileManager.AddFile(new VRFile
+                    {
+                        Content = invoiceFile.Content,
+                        Name = string.Format("{0}.{1}",invoiceFile.Name,invoiceFile.ExtensionType),
+                        CreatedTime = DateTime.Now,
+                        Extension = invoiceFile.ExtensionType
+                    });
+                    IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+                    if (invoiceSettings == null)
+                        invoiceSettings = new InvoiceSettings();
+                    invoiceSettings.FileId = fileId;
+                    dataManager.UpdateInvoiceSettings(invoiceId, invoiceSettings);
+                    return true;
+                }
+            }
+            return false;
+        }
         private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic invoiceDetails, int duePeriod, bool isAutomatic)
         {
             Entities.Invoice invoice = new Entities.Invoice
@@ -768,7 +804,6 @@ namespace Vanrise.Invoice.Business
                 IssueDate = issueDate,
                 IsAutomatic = isAutomatic
             };
-
             var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
             invoice.DueDate = issueDate.AddDays(duePeriod);
             return invoice;
@@ -827,7 +862,7 @@ namespace Vanrise.Invoice.Business
             if (billingTransactions != null)
                 mappedTransactions = MapGeneratedInvoiceBillingTransactions(billingTransactions, invoice.SerialNumber, invoice.FromDate, invoice.ToDate, invoice.IssueDate);
 
-            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, mappedTransactions, out invoiceId);
+            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, mappedTransactions,ActionBeforeGenerateInvoice, out invoiceId);
         }
 
         private IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> MapGeneratedInvoiceBillingTransactions(IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, string serialNumber, DateTime fromDate, DateTime toDate, DateTime issueDate)

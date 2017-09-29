@@ -64,7 +64,7 @@ app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationSe
                     var parameter = {
                     context: getContext()
                     };
-                    VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceFileNamePart/Templates/FileNamePatternHelper.html', parameter, modalSettings);
+                    VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceFileNameSettings/Templates/FileNamePatternHelper.html', parameter, modalSettings);
                 };
             defineAPI();
         }
