@@ -369,13 +369,14 @@ namespace TOne.WhS.Routing.Business
             SupplierZone supplierZone = manager.GetSupplierZone(rpRouteOptionSupplierZone.SupplierZoneId);
 
             SupplierRate supplierRate = supplierRateByIds != null ? supplierRateByIds.GetRecord(rpRouteOptionSupplierZone.SupplierRateId) : null;
+            DateTime now = DateTime.Now;
 
             var detailEntity = new RPRouteOptionSupplierZoneDetail()
             {
                 Entity = rpRouteOptionSupplierZone,
                 SupplierZoneName = supplierZone != null ? supplierZone.Name : null,
                 ConvertedSupplierRate = rpRouteOptionSupplierZone.SupplierRate,
-                FutureRate = supplierRate != null ? GetFutureRate(supplierRate, futureSupplierZoneRateLocator, supplierZone.SupplierId, supplierZone.SupplierZoneId) : null,
+                FutureRate = supplierRate != null ? GetFutureRate(supplierRate, futureSupplierZoneRateLocator, supplierZone.SupplierId, supplierZone.SupplierZoneId, now) : null,
                 RateEED = supplierRate != null ? supplierRate.EED : null
             };
 
@@ -384,7 +385,6 @@ namespace TOne.WhS.Routing.Business
                 if (!systemCurrencyId.HasValue)
                     throw new ArgumentNullException("systemCurrencyId");
 
-                DateTime now = DateTime.Now;
                 detailEntity.ConvertedSupplierRate = GetRateConvertedToCurrency(rpRouteOptionSupplierZone.SupplierRate, systemCurrencyId.Value, toCurrencyId.Value, now);
                 if (detailEntity.FutureRate.HasValue)
                     detailEntity.FutureRate = GetRateConvertedToCurrency(detailEntity.FutureRate.Value, systemCurrencyId.Value, toCurrencyId.Value, now);
@@ -393,13 +393,23 @@ namespace TOne.WhS.Routing.Business
             return detailEntity;
         }
 
-        private decimal? GetFutureRate(SupplierRate supplierRate, SupplierZoneRateLocator futureSupplierZoneRateLocator, int supplierId, long supplierZoneId)
+        private decimal? GetFutureRate(SupplierRate supplierRate, SupplierZoneRateLocator futureSupplierZoneRateLocator, int supplierId, long supplierZoneId, DateTime effectiveDate)
         {
+            CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            int systemCurrencyId = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
+
             SupplierZoneRate futureSupplierZoneRate = futureSupplierZoneRateLocator.GetSupplierZoneRate(supplierId, supplierZoneId, null);
             if (futureSupplierZoneRate == null)
                 return null;
 
-            decimal? normalRate = futureSupplierZoneRate.Rate != null ? futureSupplierZoneRate.Rate.Rate : default(decimal?);
+            SupplierRateManager supplierRateManager = new SupplierRateManager();
+
+            decimal? normalRate = default(decimal?);
+            if (futureSupplierZoneRate.Rate != null)
+            {
+                int normalRateCurrencyId = supplierRateManager.GetCurrencyId(futureSupplierZoneRate.Rate);
+                normalRate = currencyExchangeRateManager.ConvertValueToCurrency(futureSupplierZoneRate.Rate.Rate, normalRateCurrencyId, systemCurrencyId, effectiveDate);
+            }
 
             if (!supplierRate.RateTypeId.HasValue)
                 return normalRate;
@@ -408,7 +418,11 @@ namespace TOne.WhS.Routing.Business
                 return null;
 
             SupplierRate supplierRateByRateType = futureSupplierZoneRate.RatesByRateType.GetRecord(supplierRate.RateTypeId.Value);
-            return supplierRateByRateType != null ? supplierRateByRateType.Rate : default(decimal?);
+            if (supplierRateByRateType == null)
+                return null;
+
+            int otherRateCurrencyId = supplierRateManager.GetCurrencyId(supplierRateByRateType);
+            return currencyExchangeRateManager.ConvertValueToCurrency(supplierRateByRateType.Rate, otherRateCurrencyId, systemCurrencyId, effectiveDate);
         }
 
         private IEnumerable<RPRouteOptionDetail> GetRouteOptionDetails(Dictionary<Guid, IEnumerable<RPRouteOption>> dicRouteOptions, Guid policyConfigId, int numberOfOptions, int? systemCurrencyId, int? toCurrencyId, bool includeBlockedSupplierZones, int? customerProfileId)
