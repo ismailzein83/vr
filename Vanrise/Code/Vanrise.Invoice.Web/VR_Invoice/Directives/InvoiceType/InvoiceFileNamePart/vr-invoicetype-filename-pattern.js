@@ -36,7 +36,7 @@ app.directive("vrInvoicetypeFilenamePattern", ["UtilsService", "VRNotificationSe
                 label = attrs.label;
             var template = '<vr-columns colnum="{{ctrl.normalColNum}}">'
                              + '<vr-label ng-if="ctrl.hidelabel ==undefined">' + label + '</vr-label>'
-                             + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired"></vr-textbox>'
+                             + '<vr-textbox value="ctrl.value" isrequired="ctrl.isrequired" type="filename"></vr-textbox>'
                          + '</vr-columns>'
                          + '<vr-columns width="normal" ' + withemptyline + '>'
                             + '<vr-button type="Help" data-onclick="scopeModel.openFileNamePatternHelper" standalone></vr-button>'
