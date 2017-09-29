@@ -33,6 +33,7 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			vrIn.LockDate,
 			vrIn.Notes,
 			vrIn.SourceId,
+			vrIn.Settings,
 			vrIn.IsAutomatic
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	Inner Join VR_Invoice.InvoiceAccount vrInAcc 

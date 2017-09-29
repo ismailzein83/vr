@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [VR_Invoice].[sp_Invoice_GetBySerialNumbers]
+CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetBySerialNumbers]
 	@SerialNumbers nvarchar(max)
 AS
 BEGIN
@@ -26,6 +26,7 @@ select  ParsedString from [VR_Invoice].ParseStringList(@SerialNumbers)
 			vrIn.LockDate,
 			vrIn.Notes,
 			vrIn.SourceId,
+			vrIn.Settings,
 			vrIn.IsAutomatic
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	where	

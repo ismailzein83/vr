@@ -24,6 +24,7 @@ BEGIN
 			LockDate,
 			Notes,
 			SourceId,
+			Settings,
 			IsAutomatic
 	FROM	VR_Invoice.Invoice with(nolock)
 	where	(InvoiceTypeId = @InvoiceTypeId) 
