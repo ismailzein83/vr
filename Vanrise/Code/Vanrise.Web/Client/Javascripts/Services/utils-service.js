@@ -355,7 +355,7 @@
         function getItemIndexByVal(array, value, attname) {
             for (var i = 0; i < array.length; i++) {
                 if (eval('array[' + i + '].' + attname) == value) {
-                    return i
+                    return i;
                 }
             }
             return -1;
@@ -366,7 +366,7 @@
             for (var i = 0; i < array.length; i++) {
                 var valueFromArray = eval('array[' + i + '].' + attname);
                 if ((ignoreCase == true && valueFromArray.toUpperCase() == value.toUpperCase()) || valueFromArray == value) {
-                    return i
+                    return i;
                 }
             }
             return -1;

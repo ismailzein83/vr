@@ -12,7 +12,7 @@
                 getGroupName: function () {
                     return groupName;
                 }
-            }
+            };
         }
         
 

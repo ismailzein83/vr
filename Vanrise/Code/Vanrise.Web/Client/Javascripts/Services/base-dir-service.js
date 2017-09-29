@@ -41,7 +41,7 @@ app.service('BaseDirService', ['ValidationMessagesEnum', function (ValidationMes
         var index = -1;
         for (var i = 0; i < arr.length; i++) {
             if (arr[i][attname] == value) {
-                index = i
+                index = i;
             }
         }
         return index;

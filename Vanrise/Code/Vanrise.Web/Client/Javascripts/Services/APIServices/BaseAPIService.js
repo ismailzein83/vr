@@ -62,7 +62,7 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
                         status: status,
                         headers: headers,
                         config: config
-                    }
+                    };
                 }
                 else
                     returnedResponse = response;
@@ -111,7 +111,7 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
                         status: status,
                         headers: headers,
                         config: config
-                    }
+                    };
                 }
                 else
                     returnedResponse = response;
@@ -170,7 +170,7 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
 
                 var exceptionMessage = headers("ExceptionMessage");
                 if (exceptionMessage != undefined) {
-                    showErrorMessage(exceptionMessage)
+                    showErrorMessage(exceptionMessage);
                 } else {
                     showErrorMessage('Error Occured while posting data!');
                 }
