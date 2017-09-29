@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRModalService', 'UtilsService', function (ChartDirService, VR_ChartDefinitionTypeEnum, VRModalService, UtilsService) {
+app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRModalService', 'UtilsService', 'UISettingsService', function (ChartDirService, VR_ChartDefinitionTypeEnum, VRModalService, UtilsService, UISettingsService) {
 
     var directiveDefinitionObject = {
 
@@ -557,7 +557,8 @@ app.directive('vrChart', ['ChartDirService', 'VR_ChartDefinitionTypeEnum', 'VRMo
         }
 
         function formatValue(value) {
-            return (UtilsService.isIntegerValue(value) ? Highcharts.numberFormat(value, 0) : (UtilsService.isNumericValue(value) ? Highcharts.numberFormat(value, 4) : value));
+            var numberPrecision = UISettingsService.getNormalPrecision() || 2;
+            return (UtilsService.isIntegerValue(value) ? Highcharts.numberFormat(value, 0) : (UtilsService.isNumericValue(value) ? Highcharts.numberFormat(value, numberPrecision) : value));
         }
 
         function defineAPI() {
