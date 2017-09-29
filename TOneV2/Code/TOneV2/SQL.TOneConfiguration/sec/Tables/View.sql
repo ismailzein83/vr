@@ -12,9 +12,12 @@
     [Rank]        INT              NULL,
     [timestamp]   ROWVERSION       NULL,
     [IsDeleted]   BIT              NULL,
+    [CreatedTime] DATETIME         CONSTRAINT [DF_View_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_View] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_View_Module] FOREIGN KEY ([Module]) REFERENCES [sec].[Module] ([ID])
 );
+
+
 
 
 

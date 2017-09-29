@@ -66,6 +66,7 @@
     <Folder Include="TOneWhS_CDR\Tables\" />
     <Folder Include="Security\" />
     <Folder Include="TOneWhS_CDR\User Defined Types\" />
+    <Folder Include="TOneWhS_CDR\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_CDR\Tables\CDRMain.sql" />
@@ -84,5 +85,7 @@
     <Build Include="TOneWhS_CDR\User Defined Types\BillingCDR_PartialPricedType.sql" />
     <Build Include="TOneWhS_CDR\Tables\BillingCDR_Interconnect.sql" />
     <Build Include="TOneWhS_CDR\User Defined Types\BillingCDR_InterconnectType.sql" />
+    <Build Include="TOneWhS_CDR\Views\vw_CDRProblems.sql" />
+    <Build Include="TOneWhS_CDR\Views\vw_CDRInvalidAndRaw.sql" />
   </ItemGroup>
 </Project>

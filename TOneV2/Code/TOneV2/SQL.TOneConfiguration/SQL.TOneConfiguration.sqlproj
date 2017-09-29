@@ -662,6 +662,7 @@
     <Build Include="Security\VR_AccountManager.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoicePaidById.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetBySerialNumbers.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByAccountIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
