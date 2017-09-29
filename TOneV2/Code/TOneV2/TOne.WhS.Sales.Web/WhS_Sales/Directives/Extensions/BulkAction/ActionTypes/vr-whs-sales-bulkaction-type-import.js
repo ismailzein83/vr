@@ -42,7 +42,7 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
             };
             $scope.scopeModel.onDateTimeFormatChanged = function () {
                 cacheObjectName = UtilsService.guid();
-                };
+            };
 
             $scope.scopeModel.download = function () {
                 WhS_Sales_RatePlanAPIService.DownloadImportRatePlanTemplate().then(function (response) {
@@ -103,13 +103,13 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}">\
                         <vr-fileupload label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onFileChanged" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
                     </vr-columns>\
-                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}">\
-                        <vr-textbox label="Date Time Format" value="scopeModel.dateTimeFormat" isrequired="importBulkActionCtrl.isrequired" onvaluechanged="scopeModel.onDateTimeFormatChanged"></vr-textbox>\
+                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum}}">\
+                        <vr-timeformat label="Date Time Format" value="scopeModel.dateTimeFormat" normal-col-num="{{importBulkActionCtrl.normalColNum}}" isrequired="importBulkActionCtrl.isrequired" onvaluechanged="scopeModel.onDateTimeFormatChanged"></vr-timeformat>\
                     </vr-columns>\
-                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}">\
+                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 6}}">\
                         <vr-switch label="Header" value="scopeModel.headerRowExists" onvaluechanged="scopeModel.onSwitchValueChanged"></vr-switch>\
                     </vr-columns>\
-                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}" withemptyline>\
+                    <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 6}}" withemptyline>\
                         <vr-button type="Download" data-onclick="scopeModel.download" standalone></vr-button>\
                     </vr-columns>\
                 </span>';
