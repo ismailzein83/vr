@@ -68,9 +68,9 @@
             // return String(value).search(isIp_re) != -1;
         }
         function validateFileName(value) {
-            var rg1 = /^[^\\/:\*\?"<>\|]+$/; // forbidden characters \ / : * ? " < > |
-            var rg2 = /^\./; // cannot start with dot (.)
-            var rg3 = /^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i; // forbidden file names
+            var rg1 = /^[^\\/:\*\?"<>\|]+$/ ;
+            var rg2 = /^\./ ; 
+            var rg3 = /^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i ;
             return rg1.test(value) && !rg2.test(value) && !rg3.test(value);
         }
         function validateMinLength(value, validationOptions) {
