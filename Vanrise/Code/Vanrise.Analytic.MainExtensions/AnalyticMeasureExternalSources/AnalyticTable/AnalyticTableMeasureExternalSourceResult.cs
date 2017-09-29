@@ -42,8 +42,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
         {
             AnalyticRecord matchRecord;
             if (context.IsSummaryRecord)
-            {
-                _summaryRecord.ThrowIfNull("_summaryRecord");
+            {                
                 matchRecord = _summaryRecord;
             }
             else
