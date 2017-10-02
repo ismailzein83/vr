@@ -251,7 +251,9 @@
     <Content Include="WhS_Sales\Directives\OtherRate\vr-whs-sales-otherrate-grid.js" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-salezoneservicepreview-grid.js" />
     <Content Include="WhS_Sales\Directives\PricingTemplate\Templates\PricingTemplateGridTemplate.html" />
+    <Content Include="WhS_Sales\Directives\PricingTemplate\Templates\PricingTemplateZoneFilterTemplate.html" />
     <Content Include="WhS_Sales\Directives\PricingTemplate\vr-whs-sales-pricingtemplate-grid.js" />
+    <Content Include="WhS_Sales\Directives\PricingTemplate\vr-whs-sales-pricingtemplate-zonefilter.js" />
     <Content Include="WhS_Sales\Directives\SellingRules\Templates\SellingRulesGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\SellingRules\vr-whs-sales-sellingrules-grid.js" />
     <Content Include="WhS_Sales\Directives\Service\Templates\DefaultServiceTemplate.html" />
