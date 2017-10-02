@@ -30,7 +30,7 @@ namespace Vanrise.BusinessProcess
         static BPDefinitionInitiator()
         {
             if (!int.TryParse(ConfigurationManager.AppSettings["BusinessProcess_MaxConcurrentWorkflowsPerDefinition"], out s_maxConcurrentWorkflowsPerDefinition))
-                s_maxConcurrentWorkflowsPerDefinition = 5;
+                s_maxConcurrentWorkflowsPerDefinition = 10;
         }
 
         BPDefinition _definition;
@@ -47,6 +47,7 @@ namespace Vanrise.BusinessProcess
 
         BPDefinitionManager _definitionManager = new BPDefinitionManager();
         Guid _definitionId;
+        int _maxNbOfThreads;
 
         static IEnumerable<BPInstanceStatus> s_acceptableBPStatusesToRun = new BPInstanceStatus[] { BPInstanceStatus.New, BPInstanceStatus.Postponed };
         public BPDefinitionInitiator(BusinessProcessRuntime runtime, BPDefinition definition)
@@ -65,6 +66,7 @@ namespace Vanrise.BusinessProcess
             }
             if (_workflowDefinition == null)
                 throw new Exception(String.Format("'{0}' is not of type Activity", definition.WorkflowType));
+            _maxNbOfThreads = _definition.Configuration != null && _definition.Configuration.MaxConcurrentWorkflows.HasValue ? _definition.Configuration.MaxConcurrentWorkflows.Value : s_maxConcurrentWorkflowsPerDefinition;
         }
 
         #endregion
@@ -86,15 +88,16 @@ namespace Vanrise.BusinessProcess
             try
             {
                 _definition = _definitionManager.GetBPDefinition(_definitionId);
-                int nbOfThreads = _definition.Configuration != null && _definition.Configuration.MaxConcurrentWorkflows.HasValue ? _definition.Configuration.MaxConcurrentWorkflows.Value : s_maxConcurrentWorkflowsPerDefinition;
-                if (_runningInstances.Where(itm => itm.Value.BPInstance.Status == BPInstanceStatus.Running && !itm.Value.IsIdle).Count() >= nbOfThreads)
+                int nbOfRunningInstances = GetNbOfRunningInstances();
+                if (nbOfRunningInstances >= _maxNbOfThreads)
                     return;
+                int nbOfThreads = _maxNbOfThreads - nbOfRunningInstances;
                 List<BPInstance> pendingInstances = s_instanceDataManager.GetPendingInstances(_definitionId, s_acceptableBPStatusesToRun, nbOfThreads, serviceInstanceId);
                 if (pendingInstances != null)
                 {
                     foreach (var instance in pendingInstances)
                     {
-                        TryRunProcess(instance);
+                        RunProcess(instance);
                     }
                 }
             }
@@ -105,6 +108,11 @@ namespace Vanrise.BusinessProcess
                     _isRunning = false;
                 }
             }
+        }
+
+        private int GetNbOfRunningInstances()
+        {
+            return _runningInstances.Where(itm => itm.Value.BPInstance.Status == BPInstanceStatus.Running && !itm.Value.IsIdle).Count();
         }
 
         bool _isTriggerPendingEventsRunning;
@@ -158,7 +166,7 @@ namespace Vanrise.BusinessProcess
 
         #region Private Methods
 
-        private void TryRunProcess(BPInstance bpInstance)
+        private void RunProcess(BPInstance bpInstance)
         {
             IDictionary<string, object> inputs = null;
             if (bpInstance.InputArgument != null)

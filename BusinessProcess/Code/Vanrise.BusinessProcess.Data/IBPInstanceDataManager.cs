@@ -19,7 +19,9 @@ namespace Vanrise.BusinessProcess.Data
 
         List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId);
 
-        List<BPInstance> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses, int nbOfInstancesToRetrieve);
+        List<BPInstance> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses);
+
+        List<long> GetInstanceIdsHavingChildren(IEnumerable<BPInstanceStatus> statuses);
 
         void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, Guid? workflowInstanceId);
 

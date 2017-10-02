@@ -49,10 +49,10 @@ namespace Vanrise.BusinessProcess
 
         private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances, out List<BPInstance> runningInstances)
         {
-            int nbOfInstancesToRetrieve = s_minimumPendingInstancesToRetrieve + (bpServiceInstances.Count * s_maxWorkflowsPerServiceInstance);
-            var pendingInstancesInfo = _bpInstanceDataManager.GetPendingInstancesInfo(s_pendingStatuses, nbOfInstancesToRetrieve);
+            var pendingInstancesInfo = _bpInstanceDataManager.GetPendingInstancesInfo(s_pendingStatuses);
             if (pendingInstancesInfo != null && pendingInstancesInfo.Count > 0)
-            {                
+            {
+                List<long> bpInstanceIdsHavingChildren = _bpInstanceDataManager.GetInstanceIdsHavingChildren(s_pendingStatuses);
                 var bpDefinitionsList = _bpDefinitionManager.GetBPDefinitions().ToList();
                 Dictionary<Guid, BPDefinition> bpDefinitions = bpDefinitionsList.ToDictionary(bpDefinition => bpDefinition.BPDefinitionID, bpDefinition => bpDefinition);
                 Dictionary<Guid, ServiceInstanceBPDefinitionInfo> serviceInstancesInfo
@@ -70,9 +70,12 @@ namespace Vanrise.BusinessProcess
                         ServiceInstanceBPDefinitionInfo serviceInstanceInfo;
                         if (serviceInstancesInfo.TryGetValue(pendingInstanceInfo.ServiceInstanceId.Value, out serviceInstanceInfo))
                         {
-                            serviceInstanceInfo.TotalItemsCount++;
                             var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.DefinitionID);
-                            bpDefinitionInfo.ItemsCount++;
+                            if (bpInstanceIdsHavingChildren == null || !bpInstanceIdsHavingChildren.Contains(pendingInstanceInfo.ProcessInstanceID))//if the BPInstance is waiting for a child, dont count it in running instances
+                            {
+                                serviceInstanceInfo.TotalItemsCount++;
+                                bpDefinitionInfo.ItemsCount++;
+                            }
                             if (pendingInstanceInfo.Status == BPInstanceStatus.New || pendingInstanceInfo.Status == BPInstanceStatus.Postponed)
                             {
                                 bpDefinitionInfo.HasAnyNewInstance = true;
@@ -202,6 +205,7 @@ namespace Vanrise.BusinessProcess
                 });
             var status = BPInstanceStatus.Suspended;
             BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceID, pendingInstanceInfo.ParentProcessID, status, errorMessage, null);
+            pendingInstanceInfo.Status = status;
             terminatedPendingInstances.Add(pendingInstanceInfo);
             if (pendingInstanceInfo.ParentProcessID.HasValue)
             {
