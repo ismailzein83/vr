@@ -31,8 +31,8 @@ as (select * from (values
 ('2C1CEA7E-96F1-4BB0-83DD-FE8BA4BA984C'	,' TelesAccountCondition'	,'Teles Account Condition',	'Retail_BE_AccountConditionConfig',	'{"Editor":"retail-teles-accountcondition-telesaccount"}'),
 ('8c4d41eb-c137-48b2-8eaa-b5428734831d','TelesTemplateEntity','Teles Template','VRCommon_GenericLKUPDefinition','{"DefinitionEditor":"retail-teles-telestemplateentitydefinitionsettings"}'),
 ('74384112-0d3e-4677-8df3-2c16c32a84d4'	,'MappingTelesUser'	,'Mapping Teles User',	'Retail_BE_AccountActionDefinitionConfig',	'{"Editor":"retail-teles-accountactiondefinitionsettings-mappingtelesuser"}'),
-('9a63b2ed-a0b9-4364-ad6c-0977f410c1c4'	,'Provisioning User Screened Numbers'	,'Provisioning User Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionuser", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionuser"}')
-
+('9a63b2ed-a0b9-4364-ad6c-0977f410c1c4'	,'Provisioning User Screened Numbers'	,'Provisioning User Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionuser", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionuser"}'),
+('f11db886-8893-441f-b5a4-3261d43e8c0f','RetailBE_AccountView_AccountTelesDIDsAndBusinessTrunks',	'Teles DIDs And Business Trunks',	'Retail_BE_AccountViewDefinitionConfig',	'{"Editor":"retail-teles-accountviewdefinitionsettings-telesdidsandbusinesstrunks"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
