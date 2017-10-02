@@ -3551,3 +3551,29 @@ vr-toolbox[large] .item{
 }
 
 /*end of vr-inline-select*/
+
+/*start of vr-legend */
+.legend-header{
+    color: #635F5F;
+    text-decoration: none;
+    font-size: 12px;
+    cursor:pointer;
+}
+.main-content{
+    display:none;
+    border-radius: 4px;
+    border: 1px solid rgb(204, 204, 204);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+.legend-container{
+    position:relative
+}
+.legend-close{
+    position: relative;
+    left: calc(100% - 10px);
+    font-weight: bold;
+    font-size: 11px;
+    cursor: pointer;
+    width:10px
+}
+/*end of vr-legend */

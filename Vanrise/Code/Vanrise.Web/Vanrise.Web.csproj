@@ -156,6 +156,7 @@
     <Compile Include="App_Start\Utils.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Client\Images\loadingbar.gif" />
+    <Content Include="Client\Javascripts\Directives\Containers\vr-legend-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-toolbox-select.html" />
     <Content Include="Client\Javascripts\Directives\Recompiler\vr-recompiler-ready.js" />
     <Content Include="Client\Javascripts\Services\vr-dragdrop-service.js" />
