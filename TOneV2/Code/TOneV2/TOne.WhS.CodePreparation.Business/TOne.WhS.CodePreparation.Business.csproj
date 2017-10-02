@@ -93,6 +93,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\InvalidStatusCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCountries\SameCodeInDifferentZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\SameCodeInSameZoneCondition.cs" />
+    <Compile Include="ClosedExistingZones.cs" />
     <Compile Include="CodePreperationProcessBPSettings.cs" />
     <Compile Include="FixedZoneRateLocator.cs" />
     <Compile Include="MobileZoneRateLocator.cs" />
