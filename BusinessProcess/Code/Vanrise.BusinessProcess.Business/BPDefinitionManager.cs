@@ -31,8 +31,6 @@ namespace Vanrise.BusinessProcess.Business
             {
                 filterExpression = (prod) =>
                 {
-                    if (prod.Configuration.ScheduledExecEditor == null)
-                        return false;
                     if (filter != null && filter.Filters != null && !CheckIfFilterIsMatch(prod, filter.Filters))
                         return false;
                     return true;
@@ -73,14 +71,13 @@ namespace Vanrise.BusinessProcess.Business
                 if (!DoesUserHaveViewAccess(SecurityContext.Current.GetLoggedInUserId(), prod))
                     return false;
 
-                if (prod.Configuration.ScheduledExecEditor == null)
+                if (filter != null && filter.Filters != null && !CheckIfFilterIsMatch(prod, filter.Filters))
                     return false;
 
                 return true;
             };
 
             return bpDefinitions.FindAllRecords(filterExpression).MapRecords(BPDefinitionInfoMapper);
-
         }
 
         public UpdateOperationOutput<BPDefinitionDetail> UpdateBPDefinition(BPDefinition bPDefinition)
