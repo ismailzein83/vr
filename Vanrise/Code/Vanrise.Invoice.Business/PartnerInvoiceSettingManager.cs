@@ -201,19 +201,28 @@ namespace Vanrise.Invoice.Business
             PartnerNameManagerContext context =new PartnerNameManagerContext{
                 PartnerId = partnerInvoiceSettingObject.PartnerId
             };
-            string partnerName = null;
+
+            PartnerInvoiceSettingDetail partnerInvoiceSettingDetail = new Entities.PartnerInvoiceSettingDetail {
+
+                Entity = partnerInvoiceSettingObject
+            };
             if(invoiceType != null && invoiceType.Settings !=null && invoiceType.Settings.ExtendedSettings != null)
             {
                 var invoicePartnerSettingManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
                 if(invoicePartnerSettingManager != null )
-                  partnerName = invoicePartnerSettingManager.GetPartnerName(context);
+                    partnerInvoiceSettingDetail.PartnerName = invoicePartnerSettingManager.GetPartnerName(context);
+                var invoiceAccountInfo = invoicePartnerSettingManager.GetInvoiceAccountData(new Context.InvoiceAccountDataContext
+                {
+                    PartnerId = partnerInvoiceSettingObject.PartnerId
+                });
+                if(invoiceAccountInfo != null)
+                {
+                    partnerInvoiceSettingDetail.BED = invoiceAccountInfo.BED;
+                    partnerInvoiceSettingDetail.EED = invoiceAccountInfo.EED;
+                    partnerInvoiceSettingDetail.StatusDescription = Utilities.GetEnumDescription(invoiceAccountInfo.Status);
+                }
             }
-
-            return new PartnerInvoiceSettingDetail
-            {
-                Entity = partnerInvoiceSettingObject,
-                PartnerName = partnerName
-            };
+            return partnerInvoiceSettingDetail;
         }
         #endregion
     }
