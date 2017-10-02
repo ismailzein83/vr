@@ -78,6 +78,8 @@
     <Compile Include="DraftTaskData.cs" />
     <Compile Include="PricingTemplate\CountryPricingTemplate.cs" />
     <Compile Include="PricingTemplate\PricingTemplate.cs" />
+    <Compile Include="PricingTemplate\PricingTemplateDetail.cs" />
+    <Compile Include="PricingTemplate\PricingTemplateQuery.cs" />
     <Compile Include="PricingTemplate\PricingTemplateRule.cs" />
     <Compile Include="PricingTemplate\RatePricingTemplate.cs" />
     <Compile Include="PricingTemplate\ZonePricingTemplate.cs" />

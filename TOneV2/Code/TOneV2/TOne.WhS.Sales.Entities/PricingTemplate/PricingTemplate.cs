@@ -9,7 +9,7 @@ namespace TOne.WhS.Sales.Entities
 
         public string Name { get; set; }
 
-        public PricingTemplateSettings Settinngs { get; set; }
+        public PricingTemplateSettings Settings { get; set; }
 
         public DateTime CreatedTime { get; set; }
     }
