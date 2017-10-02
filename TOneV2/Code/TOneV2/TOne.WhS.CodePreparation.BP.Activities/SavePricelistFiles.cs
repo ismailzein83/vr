@@ -66,14 +66,17 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         private IEnumerable<CarrierAccountInfo> GetCustomersToSavePriceListsFor(int sellingNumberPlanId, IEnumerable<NewCustomerPriceListChange> customerPriceListChanges)
         {
             var customersToSavePricelistsFor = new List<CarrierAccountInfo>();
-            var carrierAccountManager = new CarrierAccountManager();
-            var customers = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId, true).ToDictionary(c => c.CarrierAccountId, c => c);
-
-            foreach (var customer in customerPriceListChanges)
+            if (customerPriceListChanges != null)
             {
-                CarrierAccountInfo accountInfo;
-                if (customers.TryGetValue(customer.CustomerId, out accountInfo))
-                    customersToSavePricelistsFor.Add(accountInfo);
+                var carrierAccountManager = new CarrierAccountManager();
+                var customers = carrierAccountManager.GetCustomersBySellingNumberPlanId(sellingNumberPlanId, true).ToDictionary(c => c.CarrierAccountId, c => c);
+
+                foreach (var customer in customerPriceListChanges)
+                {
+                    CarrierAccountInfo accountInfo;
+                    if (customers.TryGetValue(customer.CustomerId, out accountInfo))
+                        customersToSavePricelistsFor.Add(accountInfo);
+                }
             }
             return customersToSavePricelistsFor;
         }
