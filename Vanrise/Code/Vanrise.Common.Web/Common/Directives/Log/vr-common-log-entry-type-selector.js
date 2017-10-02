@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonLogEntryTypeSelector', [ 'VRCommon_LogEntryTypeEnum', 'UtilsService', 'VRUIUtilsService',
-    function ( VRCommon_LogEntryTypeEnum, UtilsService, VRUIUtilsService) {
+app.directive('vrCommonLogEntryTypeSelector', [ 'VRCommon_LogEntryTypeEnum', 'UtilsService', 'VRUIUtilsService','$filter',
+    function (VRCommon_LogEntryTypeEnum, UtilsService, VRUIUtilsService, $filter) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -74,7 +74,10 @@ app.directive('vrCommonLogEntryTypeSelector', [ 'VRCommon_LogEntryTypeEnum', 'Ut
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                     }
-                    ctrl.datasource = UtilsService.getArrayEnum(VRCommon_LogEntryTypeEnum);
+                    var data = $filter('orderBy')(UtilsService.getArrayEnum(VRCommon_LogEntryTypeEnum), 'description');
+                    ctrl.datasource = data;
+                    
+
                     if (selectedIds != undefined) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                     }

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationImportedbatchSearch", ['VR_Integration_MappingResultEnum', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService',
-function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
+app.directive("vrIntegrationImportedbatchSearch", ['VR_Integration_MappingResultEnum', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService', '$filter',
+function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService, $filter) {
 
     var directiveDefinitionObject = {
 
@@ -68,7 +68,7 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
                 return gridApi.loadGrid(getGridQuery());
             };
 
-            $scope.mappingResults = UtilsService.getArrayEnum(VR_Integration_MappingResultEnum);
+            $scope.mappingResults = $filter('orderBy')(UtilsService.getArrayEnum(VR_Integration_MappingResultEnum), 'description');
 
             $scope.onDataSourceSelectorReady = function (api) {
                 dataSourceDirectiveAPI = api;

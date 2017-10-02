@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrIntegrationDatasourceSelector', ['VR_Integration_DataSourceAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', 'VR_Integration_DataSourceService',
-function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtilsService, VR_Integration_DataSourceService) {
+app.directive('vrIntegrationDatasourceSelector', ['VR_Integration_DataSourceAPIService', 'UtilsService', '$compile', 'VRUIUtilsService', 'VR_Integration_DataSourceService','$filter',
+function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtilsService, VR_Integration_DataSourceService, $filter) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -90,7 +90,9 @@ function (VR_Integration_DataSourceAPIService, UtilsService, $compile, VRUIUtils
                 }
                 ctrl.datasource.length = 0;
                 return VR_Integration_DataSourceAPIService.GetDataSources(UtilsService.serializetoJson(filter)).then(function (response) {
-                    angular.forEach(response, function (item) {
+                    var data = $filter('orderBy')(response, 'Name');
+
+                    angular.forEach(data, function (item) {
                         ctrl.datasource.push(item);
 
                     });

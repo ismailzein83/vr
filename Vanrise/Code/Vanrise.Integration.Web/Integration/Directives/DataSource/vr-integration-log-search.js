@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService","VRUIUtilsService","VRValidationService",'VRDateTimeService',
-function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
+app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService","VRUIUtilsService","VRValidationService",'VRDateTimeService','$filter',
+function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService, $filter) {
 
     var directiveDefinitionObject = {
 
@@ -114,7 +114,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
         }
 
         function loadSeverities() {
-            $scope.severities = UtilsService.getLogEntryType();
+
+            var data = $filter('orderBy')(UtilsService.getLogEntryType(), 'description');
+            $scope.severities = data;
         }
 
         function getMappedSelectedSeverities() {
