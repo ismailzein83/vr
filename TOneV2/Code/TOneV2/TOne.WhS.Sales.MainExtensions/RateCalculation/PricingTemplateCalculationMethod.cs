@@ -22,8 +22,8 @@ namespace TOne.WhS.Sales.MainExtensions.RateCalculation
 
             PricingTemplate pricingTemplate = new PricingTemplate();
             pricingTemplate.ThrowIfNull("pricingTemplate", PricingTemplateId);
-            pricingTemplate.Settinngs.ThrowIfNull("pricingTemplate.Settinngs", PricingTemplateId);
-            pricingTemplate.Settinngs.Rules.ThrowIfNull(" pricingTemplate.Settinngs.Rules", PricingTemplateId);
+            pricingTemplate.Settings.ThrowIfNull("pricingTemplate.Settinngs", PricingTemplateId);
+            pricingTemplate.Settings.Rules.ThrowIfNull(" pricingTemplate.Settinngs.Rules", PricingTemplateId);
 
             PricingTemplateRule matchingRule = GetPricingTemplateRule(context.ZoneItem.CountryId, context.ZoneItem.ZoneId, pricingTemplate);
             if (matchingRule == null)
@@ -32,14 +32,14 @@ namespace TOne.WhS.Sales.MainExtensions.RateCalculation
             DateTime now = DateTime.Now;
 
             decimal? convertedRate;
-            RatePricingTemplate ratePricingTemplate = GetRatePricingTemplate(context.ZoneItem, context.GetCostCalculationMethodIndex, matchingRule, pricingTemplate.Settinngs.CurrencyId, now, out convertedRate);
+            RatePricingTemplate ratePricingTemplate = GetRatePricingTemplate(context.ZoneItem, context.GetCostCalculationMethodIndex, matchingRule, pricingTemplate.Settings.CurrencyId, now, out convertedRate);
             if (ratePricingTemplate == null || !convertedRate.HasValue)
                 return;
 
             ApplyMarginRatePricingTemplateContext applyMarginRatePricingTemplateContext = new ApplyMarginRatePricingTemplateContext() { Rate = convertedRate.Value };
             decimal convertedRateWithMargin = ratePricingTemplate.ApplyMargin(applyMarginRatePricingTemplateContext);
 
-            context.Rate = new CurrencyExchangeRateManager().ConvertValueToCurrency(convertedRateWithMargin, pricingTemplate.Settinngs.CurrencyId, context.ZoneItem.TargetCurrencyId, now);
+            context.Rate = new CurrencyExchangeRateManager().ConvertValueToCurrency(convertedRateWithMargin, pricingTemplate.Settings.CurrencyId, context.ZoneItem.TargetCurrencyId, now);
         }
 
         #region Private Methods
@@ -77,7 +77,7 @@ namespace TOne.WhS.Sales.MainExtensions.RateCalculation
             PricingTemplateRuleContext pricingTemplateRuleContext = new PricingTemplateRuleContext() { CountryId = countryId, SaleZoneId = saleZoneId };
 
             PricingTemplateRule matchingRule = null;
-            foreach (PricingTemplateRule rule in pricingTemplate.Settinngs.Rules)
+            foreach (PricingTemplateRule rule in pricingTemplate.Settings.Rules)
             {
                 if (rule.IsZoneMatching(pricingTemplateRuleContext))
                 {
