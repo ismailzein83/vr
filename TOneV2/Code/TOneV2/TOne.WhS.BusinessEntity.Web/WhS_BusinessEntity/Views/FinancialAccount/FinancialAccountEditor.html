@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_FinancialAccountEditorController" width="small" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_BE_FinancialAccountEditorController" size="medium" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formFinancialAccountEditor">
             <vr-tabs>
@@ -12,11 +12,16 @@
                 </vr-tab>
                 <vr-tab header="'Settings'">
                     <vr-row removeline>
-                        <vr-columns width="1/2row">
+                        <vr-columns width="1/3row">
                             <vr-datetimepicker value="scopeModel.beginEffectiveDate" type="date" label="BED" isrequired customvalidate="scopeModel.validateDates()" vr-disabled="scopeModel.disableAccountTypeAndBED"></vr-datetimepicker>
                         </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-datetimepicker value="scopeModel.endEffectiveDate" type="date" label="EED" customvalidate="scopeModel.validateEEDDate()" vr-disabled="scopeModel.disableEED"></vr-datetimepicker>
+                        <vr-columns width="1/3row">
+                            <vr-datetimepicker value="scopeModel.endEffectiveDate" type="date" label="EED" customvalidate="scopeModel.validateEEDDate()" onvaluechanged="scopeModel.onDateValueChanged" vr-disabled="scopeModel.disableEED"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="1/3row" withemptyline ng-show="scopeModel.endEffectiveDate != undefined">
+                            <vr-label>Last invoice can end at:</vr-label>
+                            <vr-label>  {{scopeModel.periodEndsAt | date  :"yyyy-MM-dd HH:mm:ss"}}</vr-label>
+
                         </vr-columns>
                         <vr-invoice-invoicesetting-selector ng-if="scopeModel.showInvoiceSettingSelector" on-ready="scopeModel.onInvoiceSettingDirectiveReady" showviewbutton showaddbutton normal-col-num="6"></vr-invoice-invoicesetting-selector>
 

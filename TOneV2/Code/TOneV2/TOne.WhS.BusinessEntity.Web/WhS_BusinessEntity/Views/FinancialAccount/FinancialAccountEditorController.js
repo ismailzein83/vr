@@ -42,9 +42,22 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.periodEndsAt = undefined;
             $scope.scopeModel.beginEffectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
-
+            $scope.scopeModel.onDateValueChanged = function () {
+                if ($scope.scopeModel.endEffectiveDate != undefined)
+                {
+                    var date = $scope.scopeModel.endEffectiveDate;
+                    date.setDate(date.getDate() - 1);
+                    date.setHours(23);
+                    date.setMinutes(59);
+                    date.setSeconds(59);
+                    $scope.scopeModel.periodEndsAt = date;
+                } else
+                {
+                    $scope.scopeModel.periodEndsAt = undefined;
+                }
+            };
             $scope.scopeModel.onFinancialAccountDefinitionSelectorReady = function (api) {
                 financialAccountDefinitionSelectorDirectiveAPI = api;
                 financialAccountDefinitionSelectorDirectiveReadyDeferred.resolve();
