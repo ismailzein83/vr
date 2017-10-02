@@ -45,18 +45,7 @@
             $scope.scopeModel.periodEndsAt = undefined;
             $scope.scopeModel.beginEffectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             $scope.scopeModel.onDateValueChanged = function () {
-                if ($scope.scopeModel.endEffectiveDate != undefined)
-                {
-                    var date = $scope.scopeModel.endEffectiveDate;
-                    date.setDate(date.getDate() - 1);
-                    date.setHours(23);
-                    date.setMinutes(59);
-                    date.setSeconds(59);
-                    $scope.scopeModel.periodEndsAt = date;
-                } else
-                {
-                    $scope.scopeModel.periodEndsAt = undefined;
-                }
+                evaluatePeriodEndsAt($scope.scopeModel.endEffectiveDate);
             };
             $scope.scopeModel.onFinancialAccountDefinitionSelectorReady = function (api) {
                 financialAccountDefinitionSelectorDirectiveAPI = api;
@@ -179,6 +168,7 @@
                     {
                         $scope.scopeModel.beginEffectiveDate = financialAccountRuntimeEntity.FinancialAccount.BED;
                         $scope.scopeModel.endEffectiveDate = financialAccountRuntimeEntity.FinancialAccount.EED;
+                        evaluatePeriodEndsAt(UtilsService.createDateFromString(financialAccountRuntimeEntity.FinancialAccount.EED));
                     }
                     $scope.scopeModel.disableFinancialAccountDefinition = true;
                     selectedFinancialAccountDefinitionDeferred = UtilsService.createPromiseDeferred();
@@ -340,7 +330,19 @@
             };
             return financialAccount;
         }
-
+        function evaluatePeriodEndsAt(currentDate)
+        {
+            if (currentDate != undefined) {
+                var date = currentDate;
+                date.setDate(date.getDate() - 1);
+                date.setHours(23);
+                date.setMinutes(59);
+                date.setSeconds(59);
+                $scope.scopeModel.periodEndsAt = date;
+            } else {
+                $scope.scopeModel.periodEndsAt = undefined;
+            }
+        }
     }
 
     appControllers.controller('WhS_BE_FinancialAccountEditorController', financialAccountEditorController);
