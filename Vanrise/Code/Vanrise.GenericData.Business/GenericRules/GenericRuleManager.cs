@@ -45,7 +45,7 @@ namespace Vanrise.GenericData.Business
                 && (query.SettingsFilterValue == null || RuleSettingsFilter(rule, ruleDefinition, query.SettingsFilterValue));
 
             List<T> filteredRules = GetAllRules().Values.FindAllRecords(filterExpression).ToList();
-            
+
             if (withOverridenRules)
                 return filteredRules;
             else
@@ -73,8 +73,9 @@ namespace Vanrise.GenericData.Business
                     if (rule == targetRule || overridenRules.Contains(targetRule))
                         continue;
 
-                    foreach (GenericRuleDefinitionCriteriaField genericRuleDefinitionCriteriaField in ruleDefinition.CriteriaDefinition.Fields)
+                    for (var index = 0; index < ruleDefinition.CriteriaDefinition.Fields.Count; index++)
                     {
+                        var genericRuleDefinitionCriteriaField = ruleDefinition.CriteriaDefinition.Fields[index];
                         var criteriaFieldName = genericRuleDefinitionCriteriaField.FieldName;
 
                         var ruleFieldValues = rule.Criteria != null ? rule.Criteria.FieldsValues : null;
@@ -100,8 +101,40 @@ namespace Vanrise.GenericData.Business
 
                         if (ruleFieldValue == null && targetRuleFieldValue != null)
                         {
-                            isRuleOverriden = true;
-                            break;
+                            string tempLastCriteriaName = ruleDefinition.CriteriaDefinition.Fields.Last().FieldName;
+                            if (criteriaFieldName == tempLastCriteriaName)
+                            {
+                                isRuleOverriden = true;
+                                break;
+                            }
+                            bool isOverriden = true;
+                            for (var tempIndex = index + 1; tempIndex < ruleDefinition.CriteriaDefinition.Fields.Count; tempIndex++)
+                            {
+                                var tempGenericRuleDefinitionCriteriaField = ruleDefinition.CriteriaDefinition.Fields[tempIndex];
+                                var tempCriteriaFieldName = tempGenericRuleDefinitionCriteriaField.FieldName;
+                                if (criterias.ContainsKey(tempCriteriaFieldName))
+                                    continue;
+
+                                var tempCurrentRuleFieldValues = rule.Criteria != null ? rule.Criteria.FieldsValues.GetRecord(tempCriteriaFieldName) : null;
+                                var tempTargetRuleFieldValues = targetRule.Criteria != null ? targetRule.Criteria.FieldsValues.GetRecord(tempCriteriaFieldName) : null;
+
+                                if ((tempCurrentRuleFieldValues == null && tempTargetRuleFieldValues == null)
+                                || (tempCurrentRuleFieldValues != null && tempTargetRuleFieldValues != null && SameCriteriaValues(tempCurrentRuleFieldValues.GetValues(), tempTargetRuleFieldValues.GetValues())))
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    isOverriden = false;
+                                    break;
+                                }
+                            }
+
+                            if (isOverriden)
+                            {
+                                isRuleOverriden = true;
+                                break;
+                            }
                         }
 
                         if (criteriaFieldName == lastCriteriaName)
