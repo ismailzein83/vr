@@ -11,9 +11,10 @@
             sendEmail: sendEmail
         });
 
-        function previewPriceList(priceListId, onSalePriceListPreviewClosed) {
+        function previewPriceList(priceListId, onSalePriceListPreviewClosed, shouldOpenEmailPage) {
             var modalParameters = {
-                PriceListId: priceListId
+                PriceListId: priceListId,
+                shouldOpenEmailPage: shouldOpenEmailPage
             };
             var modalSettings = {};
 

@@ -13,7 +13,8 @@
         var salePriceListGridContext;
         var hideSelectedColumn;
         var customerPriceListIds;
-        var doCustomerPriceListsExistReturnValue;
+
+        var selectAll;
 
         loadParameters();
         defineScope();
@@ -28,36 +29,40 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.optionTab = { showTab: false };
 
             setSalePriceListGridContext();
-
             $scope.scopeModel.onSalePriceListGridReady = function (api) {
                 salePriceListGridAPI = api;
                 salePriceListGridReadyDeferred.resolve();
             };
             $scope.scopeModel.selectAll = function () {
-                salePriceListGridAPI.toggleSelection(true);
+                selectAll = true;
+                toggleSalePriceListGridSelection();
             };
             $scope.scopeModel.deselectAll = function () {
-                salePriceListGridAPI.toggleSelection(false);
-                $scope.scopeModel.isSendAllButtonDisabled = true;
+                selectAll = false;
+                toggleSalePriceListGridSelection();
             };
 
-            $scope.scopeModel.checkSendAllButtonDisabled = function () {
-                return salePriceListGridAPI != undefined ? (salePriceListGridAPI.getSelectedPriceListIds().length === 0 || !doCustomerPriceListsExistReturnValue) : false;
+            $scope.scopeModel.disableSendButton = function () {
+                if (customerPriceListIds.length == 1)
+                    return false;
+                if (salePriceListGridAPI == undefined)
+                    return true;
+                var salePriceListData = salePriceListGridAPI.getData();
+                return (salePriceListData == undefined || salePriceListData.selectedPriceListIds == undefined || salePriceListData.selectedPriceListIds.length == 0);
             };
-            $scope.scopeModel.sendAll = function () {
-                if (!doCustomerPriceListsExist())
+            $scope.scopeModel.send = function () {
+                if (salePriceListGridAPI.previewIfSinglePriceList())
                     return;
-
-                var selectedPriceList = salePriceListGridAPI.getSelectedPriceListIds();
 
                 $scope.scopeModel.isLoading = true;
                 var promises = [];
 
                 var haveAllEmailsBeenSent;
 
-                var sendCustomerPriceListsPromise = sendCustomerPriceLists(selectedPriceList);
+                var sendCustomerPriceListsPromise = sendCustomerPriceLists();
                 promises.push(sendCustomerPriceListsPromise);
 
                 var loadSalePriceListGridDeferred = UtilsService.createPromiseDeferred();
@@ -93,8 +98,9 @@
             $scope.scopeModel.isLoading = true;
 
             getSalePriceListIdsByProcessInstanceId().then(function () {
-                doCustomerPriceListsExistReturnValue = doCustomerPriceListsExist();
-                $scope.scopeModel.doCustomerPriceListsExist = doCustomerPriceListsExistReturnValue;
+                $scope.scopeModel.doCustomerPriceListsExist = doCustomerPriceListsExist();
+                if ($scope.scopeModel.doCustomerPriceListsExist)
+                    $scope.scopeModel.optionTab.showTab = true;
                 loadAllControls();
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -140,19 +146,27 @@
             return salePriceListGridLoadDeferred.promise;
         }
 
-        function sendCustomerPriceLists(selectedPriceListIds) {
-            var customerPriceListEmailInput =
-            {
-                CompressAttachement: $scope.scopeModel.compressPriceListFile,
-                CustomerPriceListIds: selectedPriceListIds
+        function sendCustomerPriceLists() {
+            var sendPriceListsInput = {
+                ProcessInstanceId: processInstanceId,
+                SelectAll: selectAll,
+                CompressAttachement: $scope.scopeModel.compressPriceListFile
             };
-            return WhS_BE_SalePricelistAPIService.SendCustomerPriceLists(customerPriceListEmailInput);
+
+            var salePriceListData = salePriceListGridAPI.getData();
+            if (salePriceListData != undefined) {
+                sendPriceListsInput.SelectedPriceListIds = salePriceListData.selectedPriceListIds;
+                sendPriceListsInput.NotSelectedPriceListIds = salePriceListData.notSelectedPriceListIds;
+            }
+
+            return WhS_BE_SalePricelistAPIService.SendCustomerPriceLists(sendPriceListsInput);
         }
 
         function setSalePriceListGridContext() {
             salePriceListGridContext = {
                 processInstanceId: processInstanceId,
-                onSalePriceListPreviewClosed: onSalePriceListPreviewClosed
+                onSalePriceListPreviewClosed: onSalePriceListPreviewClosed,
+                getSelectAllValue: getSelectAllValue
             };
         }
         function onSalePriceListPreviewClosed() {
@@ -164,9 +178,15 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+        function getSelectAllValue() {
+            return selectAll;
+        }
 
         function doCustomerPriceListsExist() {
             return (customerPriceListIds != undefined && customerPriceListIds.length > 0);
+        }
+        function toggleSalePriceListGridSelection() {
+            salePriceListGridAPI.toggleSelection(selectAll);
         }
     }
 

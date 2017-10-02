@@ -308,9 +308,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (salePriceList.ProcessInstanceId != input.ProcessInstanceId)
                     return false;
 
-                if (salePriceList.IsSent)
-                    return false;
-
                 if (idFilterExpression != null && !idFilterExpression(salePriceList))
                     return false;
 
@@ -904,7 +901,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var carrierAccountManager = new CarrierAccountManager();
             int sellingProductId = carrierAccountManager.GetSellingProductId(customerPricelistChange.CustomerId);
-            
+
             var saleRateManager = new SaleRateManager();
 
             Dictionary<int, PriceListChange> customerPricelistChangetByCurrencyId = new Dictionary<int, PriceListChange>();
@@ -928,7 +925,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 CountryChange countryChange = new CountryChange();
                 countryChange.CountryId = countryGroup.CountryId;
                 countryChange.ZoneChanges.AddRange(zoneChanges);
-                
+
                 pricelistChange.CountryChanges.Add(countryChange);
             }
 

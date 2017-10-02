@@ -35,7 +35,7 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
         var context;
 
         function initializeController() {
-            $scope.salepricelist = [];
+            $scope.salePriceLists = [];
             $scope.hideSelectedColumn = true;
             defineMenuActions();
 
@@ -47,7 +47,6 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
 
                 function getDirectiveAPI() {
                     var directiveAPI = {};
-
                     directiveAPI.load = function (payload) {
                         var query;
 
@@ -60,32 +59,62 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                         }
                         return gridAPI.retrieveData(query);
                     };
-                    directiveAPI.getSelectedPriceListIds = function () {
-                        var selectedPriceList = [];
-                        if ($scope.salepricelist != undefined) {
-                            for (var i = 0; i < $scope.salepricelist.length; i++) {
-                                var item = $scope.salepricelist[i];
-                                if (item.isSelected) {
-                                    selectedPriceList.push(item.Entity.PriceListId);
-                                }
-                            }
-                        }
-                        return selectedPriceList;
-                    };
                     directiveAPI.toggleSelection = function (toggleValue) {
-                        for (var i = 0; i < $scope.salepricelist.length; i++) {
-                            var item = $scope.salepricelist[i];
+                        for (var i = 0; i < $scope.salePriceLists.length; i++) {
+                            var item = $scope.salePriceLists[i];
                             item.isSelected = toggleValue;
                         }
                     };
+                    directiveAPI.getData = function () {
+                        var selectedPriceListIds = [];
+                        var notSelectedPriceListIds = [];
 
+                        for (var i = 0; i < $scope.salePriceLists.length; i++) {
+                            var salePriceList = $scope.salePriceLists[i];
+                            if (salePriceList.isSelected)
+                                selectedPriceListIds.push(salePriceList.Entity.PriceListId);
+                            else
+                                notSelectedPriceListIds.push(salePriceList.Entity.PriceListId);
+                        }
+
+                        return {
+                            selectedPriceListIds: selectedPriceListIds,
+                            notSelectedPriceListIds: notSelectedPriceListIds
+                        };
+                    };
+                    directiveAPI.previewIfSinglePriceList = function () {
+                        var priceListToPreview;
+                        if ($scope.salePriceLists.length == 1)
+                            priceListToPreview = $scope.salePriceLists[0];
+                        else {
+                            var numberOfSelectedPriceLists = 0;
+                            for (var i = 0; i < $scope.salePriceLists.length; i++) {
+                                if ($scope.salePriceLists[i].isSelected) {
+                                    priceListToPreview = $scope.salePriceLists[i];
+                                    numberOfSelectedPriceLists++;
+                                }
+                            }
+                            if (numberOfSelectedPriceLists > 1)
+                                return false;
+                        }
+                        if (priceListToPreview != undefined) {
+                            PreviewPriceList(priceListToPreview, true);
+                            return true;
+                        }
+                        return false;
+                    };
                     return directiveAPI;
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return whSBeSalePricelistApiService.GetFilteredSalePriceLists(dataRetrievalInput)
                     .then(function (response) {
-
+                        if (response != undefined && response.Data != null) {
+                            var selectAllValue = context.getSelectAllValue();
+                            for (var i = 0; i < response.Data.length; i++) {
+                                response.Data[i].isSelected = selectAllValue;
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -134,9 +163,9 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                     vrNotificationService.showSuccess('Email Sent Successfully');
                 });
         }
-        function PreviewPriceList(priceListObj) {
+        function PreviewPriceList(priceListObj, shouldOpenEmailPage) {
             var onSalePriceListPreviewClosed = (context != undefined) ? context.onSalePriceListPreviewClosed : undefined;
-            whSBeSalePriceListPreviewService.previewPriceList(priceListObj.Entity.PriceListId, onSalePriceListPreviewClosed);
+            whSBeSalePriceListPreviewService.previewPriceList(priceListObj.Entity.PriceListId, onSalePriceListPreviewClosed, shouldOpenEmailPage);
         }
         function downloadPriceList(priceListObj) {
             fileApiService.DownloadFile(priceListObj.Entity.FileId)

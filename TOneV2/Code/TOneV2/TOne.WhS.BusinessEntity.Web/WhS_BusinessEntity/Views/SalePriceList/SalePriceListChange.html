@@ -77,8 +77,9 @@
                         </vr-whs-be-salepricelisttype-selector>
                         <vr-switch value="scopeModel.compressPriceListFile" label="Compressed Pricelist File"></vr-switch>
                     </vr-row>
-                    <vr-row vr-loader="isLoadingPricelistTemplateSelector">
+                    <vr-row>
                         <vr-whs-be-salepricelisttemplate-selector on-ready="onPricelistTemplateSelectorReady"
+                                                                  onselectionchanged="onPriceListTemplateChanged"
                                                                   normal-col-num="6"
                                                                   isrequired="true"
                                                                   hideremoveicon="true">

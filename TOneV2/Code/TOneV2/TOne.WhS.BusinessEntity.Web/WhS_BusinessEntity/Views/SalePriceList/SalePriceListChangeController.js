@@ -23,6 +23,9 @@
 
         var pricelistTemplateSelectorAPI;
         var pricelistTemplateSelectorReadyDeferred = utilsService.createPromiseDeferred();
+        var priceListTemplateSelectedDeferred;
+
+        var shouldOpenEmailPage;
 
         loadParameters();
         defineScope();
@@ -67,10 +70,11 @@
             };
             $scope.onPricelistTemplateSelectorReady = function (api) {
                 pricelistTemplateSelectorAPI = api;
-                var payload = {
-                };
-                var setLoader = function (value) { $scope.isLoadingPricelistTemplateSelector = value };
-                vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, pricelistTemplateSelectorAPI, payload, setLoader, pricelistTemplateSelectorReadyDeferred);
+                pricelistTemplateSelectorReadyDeferred.resolve();
+            };
+            $scope.onPriceListTemplateChanged = function () {
+                if (priceListTemplateSelectedDeferred != undefined)
+                    priceListTemplateSelectedDeferred.resolve();
             };
             $scope.searchCodeClicked = function () {
                 SetFilteredCodeObject();
@@ -185,6 +189,7 @@
             if (parameters != undefined) {
                 priceListId = parameters.PriceListId;
                 filter.PriceListId = priceListId;
+                shouldOpenEmailPage = parameters.shouldOpenEmailPage;
             }
         }
         function loadCountryRateSelector() {
@@ -208,18 +213,7 @@
             });
             return priceListTypeSelectorLoadDeferred.promise;
         }
-        function loadPricelistTemplateSelector(ownerPricelistTemplateId) {
-            var pricelistTemplateSelectorLoadDeferred = utilsService.createPromiseDeferred();
 
-            pricelistTemplateSelectorReadyDeferred.promise.then(function () {
-                pricelistTemplateSelectorReadyDeferred = undefined;
-                var pricelistTemplateSelectorPayload = {
-                    selectedIds: ownerPricelistTemplateId
-                };
-                vruiUtilsService.callDirectiveLoad(pricelistTemplateSelectorAPI, pricelistTemplateSelectorPayload, pricelistTemplateSelectorLoadDeferred);
-            });
-            return pricelistTemplateSelectorLoadDeferred.promise;
-        }
         function setTitle() {
             $scope.title = 'Sale Pricelist for ' + ownerName;
         }
@@ -236,16 +230,10 @@
                     loadPriceListTypeSelector(priceListTypeId);
                 });
         }
-        function GetOwnerPricelistTemplateId() {
-            return whSBeSalePriceListChangeApiService.GetOwnerPricelistTemplateId(priceListId)
-                .then(function (pricelistTemplateId) {
-                    loadPricelistTemplateSelector(pricelistTemplateId);
-                });
-        }
 
         function loadAllControls() {
             $scope.isLoadingFilter = true;
-            return utilsService.waitMultipleAsyncOperations([loadCountryRateSelector, GetOwnerOptions, GetOwnerPriceListType, GetOwnerPricelistTemplateId])
+            return utilsService.waitMultipleAsyncOperations([loadCountryRateSelector, GetOwnerOptions, GetOwnerPriceListType, loadPriceListTemplateSection])
                 .then(function () {
                     setTitle();
                 })
@@ -254,7 +242,53 @@
               })
              .finally(function () {
                  $scope.isLoadingFilter = false;
+                 if (shouldOpenEmailPage === true)
+                     $scope.SendPriceListByEmail();
              });
+        }
+        function loadPriceListTemplateSection() {
+            var promises = [];
+
+            var priceListTemplateId;
+
+            var getOwnerPriceListTemplateIdPromise = getOwnerPricelistTemplateId();
+            promises.push(getOwnerPriceListTemplateIdPromise);
+
+            var loadPriceListTemplateSelectorDeferred = utilsService.createPromiseDeferred();
+            promises.push(loadPriceListTemplateSelectorDeferred.promise);
+
+            priceListTemplateSelectedDeferred = utilsService.createPromiseDeferred();
+            promises.push(priceListTemplateSelectedDeferred.promise);
+
+            getOwnerPriceListTemplateIdPromise.then(function () {
+                loadPriceListTemplateSelector().then(function () {
+                    loadPriceListTemplateSelectorDeferred.resolve();
+                }).catch(function (error) {
+                    loadPriceListTemplateSelectorDeferred.reject(error);
+                });
+            });
+
+            priceListTemplateSelectedDeferred.promise.then(function () {
+                priceListTemplateSelectedDeferred = undefined;
+            });
+
+            function getOwnerPricelistTemplateId() {
+                return whSBeSalePriceListChangeApiService.GetOwnerPricelistTemplateId(priceListId).then(function (response) {
+                    priceListTemplateId = response;
+                });
+            }
+            function loadPriceListTemplateSelector() {
+                var pricelistTemplateSelectorLoadDeferred = utilsService.createPromiseDeferred();
+                pricelistTemplateSelectorReadyDeferred.promise.then(function () {
+                    var pricelistTemplateSelectorPayload = {
+                        selectedIds: priceListTemplateId
+                    };
+                    vruiUtilsService.callDirectiveLoad(pricelistTemplateSelectorAPI, pricelistTemplateSelectorPayload, pricelistTemplateSelectorLoadDeferred);
+                });
+                return pricelistTemplateSelectorLoadDeferred.promise;
+            }
+
+            return utilsService.waitMultiplePromises(promises);
         }
     }
     appControllers.controller('WhS_BE_SalePriceListPreviewController', salePriceListPreviewController);
