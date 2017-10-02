@@ -36,6 +36,21 @@ namespace Retail.Teles.Web.Controllers
         {
             return _manager.GetParentAccountEnterpriseId(accountBEDefinitionId, accountId);
         }
-      
+
+        [HttpPost]
+        [Route("GetFilteredEnterpriseDIDs")]
+        public object GetFilteredEnterpriseDIDs(Vanrise.Entities.DataRetrievalInput<EnterpriseDIDsQuery> input)
+        {
+
+            return GetWebResponse(input, _manager.GetFilteredEnterpriseDIDs(input));
+        }
+
+        [HttpPost]
+        [Route("GetFilteredEnterpriseBusinessTrunks")]
+        public object GetFilteredEnterpriseBusinessTrunks(Vanrise.Entities.DataRetrievalInput<EnterpriseBusinessTrunksQuery> input)
+        {
+
+            return GetWebResponse(input, _manager.GetFilteredEnterpriseBusinessTrunks(input));
+        }
     }
 }

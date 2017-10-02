@@ -23,11 +23,18 @@
                 accountId: accountId,
             });
         }
-
+        function GetFilteredEnterpriseDIDs(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "GetFilteredEnterpriseDIDs"), input);
+        }
+        function GetFilteredEnterpriseBusinessTrunks(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "GetFilteredEnterpriseBusinessTrunks"), input);
+        }
         return ({
             GetEnterprisesInfo: GetEnterprisesInfo,
             MapEnterpriseToAccount: MapEnterpriseToAccount,
-            GetParentAccountEnterpriseId: GetParentAccountEnterpriseId
+            GetParentAccountEnterpriseId: GetParentAccountEnterpriseId,
+            GetFilteredEnterpriseDIDs: GetFilteredEnterpriseDIDs,
+            GetFilteredEnterpriseBusinessTrunks: GetFilteredEnterpriseBusinessTrunks
         });
     }
 

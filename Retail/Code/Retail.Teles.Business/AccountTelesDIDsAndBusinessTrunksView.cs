@@ -18,7 +18,7 @@ namespace Retail.Teles.Business
         {
             get
             {
-                return "retail-teles-accountTelesdidsandbusinesstrunks-view";
+                return "retail-teles-accounttelesdidsandbusinesstrunks-view";
             }
             set
             {

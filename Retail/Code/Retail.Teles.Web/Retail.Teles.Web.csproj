@@ -209,6 +209,10 @@
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\Templates\RoutingGroupConditionTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountCondition\retail-teles-accountcondition-telesaccount.js" />
     <Content Include="Retail_Teles\Directives\AccountCondition\Templates\TelesAccountConditionTemplate.html" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-accounttelesdidsandbusinesstrunks-view.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-accountviewdefinitionsettings-telesdidsandbusinesstrunks.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\AccountTelesDIDsAndBusinessTrunksView.html" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\AccountTelesDIDsAndBusinessTrunksViewSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\TelesTemplateEntity\Definition\retail-teles-telestemplateentitydefinitionsettings.js" />
     <Content Include="Retail_Teles\Directives\TelesTemplateEntity\Definition\Templates\TelesTemplateEntityEntityDefinitionSettingDirective.html" />
     <Content Include="Retail_Teles\Directives\TelesTemplateEntity\retail-teles-telestemplateentitysettings.js" />
@@ -224,6 +228,10 @@
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-gateways-selector.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-users-selector.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\TelesEnterpriseBEDefinitionEditorTemplate.html" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-telesbusinesstrunks-grid.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-telesdids-grid.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\TelesBusinessTrunksGridTemplate.html" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\TelesDIDsGridTemplate.html" />
     <Content Include="Retail_Teles\ModuleInitialization.js" />
     <Content Include="Retail_Teles\Services\APIServices\DomainAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\GatewayAPIService.js" />

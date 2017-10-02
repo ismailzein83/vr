@@ -47,6 +47,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnterpriseBusinessTrunk.cs" />
+    <Compile Include="EnterpriseBusinessTrunkDetail.cs" />
+    <Compile Include="EnterpriseBusinessTrunksQuery.cs" />
+    <Compile Include="EnterpriseDID.cs" />
+    <Compile Include="EnterpriseDIDDetail.cs" />
+    <Compile Include="EnterpriseDIDsQuery.cs" />
     <Compile Include="TelesTemplateEntity\TelesTemplateEntityDefinitionSettings.cs" />
     <Compile Include="TelesTemplateEntity\TelesTemplateEntitySettings.cs" />
     <Compile Include="EnterpriseAccountMappingInfo.cs" />

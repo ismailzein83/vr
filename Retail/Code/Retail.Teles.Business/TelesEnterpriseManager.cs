@@ -22,6 +22,15 @@ namespace Retail.Teles.Business
         #region Public Methods
         AccountBEManager _accountBEManager = new AccountBEManager();
 
+        public IDataRetrievalResult<EnterpriseDIDDetail> GetFilteredEnterpriseDIDs(DataRetrievalInput<EnterpriseDIDsQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new EnterpriseDIDsRequestHandler());
+        }
+        public IDataRetrievalResult<EnterpriseBusinessTrunkDetail> GetFilteredEnterpriseBusinessTrunks(DataRetrievalInput<EnterpriseBusinessTrunksQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new EnterpriseBusinessTrunksRequestHandler());
+        }
+
         public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(Guid vrConnectionId, TelesEnterpriseFilter filter)
         {
             var cachedEnterprises = GetCachedEnterprises(vrConnectionId,filter.TelesDomainId, false);
@@ -64,7 +73,6 @@ namespace Retail.Teles.Business
             TelesEnterpriseManager.SetCacheExpired();
             return Convert.ToString(enterpriseId);
         }
-     
         public string GetEnterpriseName(Guid vrConnectionId, string enterpriseId,string telesDomainId)
         {
             var cachedEnterprises = GetCachedEnterprises(vrConnectionId,telesDomainId, true);
@@ -81,7 +89,6 @@ namespace Retail.Teles.Business
                 return string.Format("{0} (Name unavailable)", enterpriseId);
             }
         }
-
         public Vanrise.Entities.UpdateOperationOutput<AccountDetail> MapEnterpriseToAccount(MapEnterpriseToAccountInput input)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
@@ -107,7 +114,6 @@ namespace Retail.Teles.Business
             return updateOperationOutput;
      
         }
-
         public bool CanMapTelesEnterprise(Guid accountBEDefinitionId, string telesEnterpriseId)
         {
             var cachedAccountsByEnterprises = GetCachedAccountsByEnterprises(accountBEDefinitionId);
@@ -129,7 +135,6 @@ namespace Retail.Teles.Business
             return _accountBEManager.UpdateAccountExtendedSetting<EnterpriseAccountMappingInfo>(accountBEDefinitionId, accountId,
                 enterpriseAccountMappingInfo);
         }
-
         public bool IsMapEnterpriseToAccountValid(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId)
         {
 
@@ -206,11 +211,11 @@ namespace Retail.Teles.Business
             }
             return false;
         }
-
         public static void SetCacheExpired()
         {
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
+
         #endregion
 
         #region Private Classes
@@ -241,6 +246,113 @@ namespace Retail.Teles.Business
             public Dictionary<string, TelesEnterpriseInfo> EnterpriseInfos { get; set; }
         }
 
+        private class EnterpriseDIDsRequestHandler : BigDataRequestHandler<EnterpriseDIDsQuery, EnterpriseDID, EnterpriseDIDDetail>
+        {
+            public EnterpriseDIDsRequestHandler()
+            {
+
+            }
+            public override EnterpriseDIDDetail EntityDetailMapper(EnterpriseDID entity)
+            {
+                return new EnterpriseDIDDetail
+                {
+                    ScreenNumber = entity.ScreenNumber
+                };
+            }
+            protected override Vanrise.Entities.BigResult<EnterpriseDIDDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<EnterpriseDIDsQuery> input, IEnumerable<EnterpriseDID> allRecords)
+            {
+                return allRecords.ToBigResult(input, null, EntityDetailMapper);
+            }
+            public override IEnumerable<EnterpriseDID> RetrieveAllData(DataRetrievalInput<EnterpriseDIDsQuery> input)
+            {
+                AccountBEManager accountBEManager = new AccountBEManager();
+                EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(input.Query.AccountBEDefinitionId,input.Query.AccountId);
+                List<EnterpriseDID> enterpriseDID = new List<EnterpriseDID>();
+                if (enterpriseAccountMappingInfo != null && enterpriseAccountMappingInfo.TelesEnterpriseId != null)
+                {
+                    string actionPath = string.Format("/screenNum/search?entId={0}", enterpriseAccountMappingInfo.TelesEnterpriseId);
+
+                    VRConnectionManager vrConnectionManager = new VRConnectionManager();
+                    VRConnection vrConnection = vrConnectionManager.GetVRConnection<TelesRestConnection>(input.Query.VRConnectionId);
+                    TelesRestConnection telesRestConnection = vrConnection.Settings.CastWithValidate<TelesRestConnection>("telesRestConnection", input.Query.VRConnectionId);
+                    List<dynamic> telesDids = telesRestConnection.Get<List<dynamic>>(actionPath);
+                    if (telesDids != null)
+                    {
+                        foreach (var item in telesDids)
+                        {
+                            enterpriseDID.Add(new EnterpriseDID
+                            {
+                                ScreenNumber = item.sn
+                            });
+                        }
+                    }
+                }
+                return enterpriseDID;
+            }
+        }
+        private class EnterpriseBusinessTrunksRequestHandler : BigDataRequestHandler<EnterpriseBusinessTrunksQuery, EnterpriseBusinessTrunk, EnterpriseBusinessTrunkDetail>
+        {
+            public EnterpriseBusinessTrunksRequestHandler()
+            {
+
+            }
+            public override EnterpriseBusinessTrunkDetail EntityDetailMapper(EnterpriseBusinessTrunk entity)
+            {
+                return new EnterpriseBusinessTrunkDetail
+                {
+                    StartSn = entity.StartSn
+                };
+            }
+            protected override Vanrise.Entities.BigResult<EnterpriseBusinessTrunkDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<EnterpriseBusinessTrunksQuery> input, IEnumerable<EnterpriseBusinessTrunk> allRecords)
+            {
+                return allRecords.ToBigResult(input, null, EntityDetailMapper);
+            }
+            public override IEnumerable<EnterpriseBusinessTrunk> RetrieveAllData(DataRetrievalInput<EnterpriseBusinessTrunksQuery> input)
+            {
+                AccountBEManager accountBEManager = new AccountBEManager();
+                EnterpriseAccountMappingInfo enterpriseAccountMappingInfo = accountBEManager.GetExtendedSettings<EnterpriseAccountMappingInfo>(input.Query.AccountBEDefinitionId, input.Query.AccountId);
+                List<EnterpriseBusinessTrunk> enterpriseBusinessTrunks = new List<EnterpriseBusinessTrunk>();
+
+                if (enterpriseAccountMappingInfo != null && enterpriseAccountMappingInfo.TelesEnterpriseId != null)
+                {
+                    var telesSites = new TelesSiteManager().GetSites(input.Query.VRConnectionId, enterpriseAccountMappingInfo.TelesEnterpriseId);
+                    if (telesSites != null)
+                    {
+                        VRConnectionManager vrConnectionManager = new VRConnectionManager();
+                        VRConnection vrConnection = vrConnectionManager.GetVRConnection<TelesRestConnection>(input.Query.VRConnectionId);
+                        TelesRestConnection telesRestConnection = vrConnection.Settings.CastWithValidate<TelesRestConnection>("telesRestConnection", input.Query.VRConnectionId);
+
+                        foreach (var site in telesSites)
+                        {
+                            string actionPath = string.Format("/domain/{0}/user", site.id);
+                            List<dynamic> teleUsers = telesRestConnection.Get<List<dynamic>>(actionPath);
+                            if (teleUsers != null)
+                            {
+                                foreach (var teleUser in teleUsers)
+                                {
+                                    if (teleUser.numberRanges != null)
+                                    {
+                                        foreach (var numberRange in teleUser.numberRanges)
+                                        {
+                                            enterpriseBusinessTrunks.Add(new EnterpriseBusinessTrunk
+                                            {
+                                                StartSn = numberRange.startSn
+                                            });
+                                        }
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+
+                return enterpriseBusinessTrunks;
+            }
+         
+        }
         #endregion
 
         #region Private Methods
