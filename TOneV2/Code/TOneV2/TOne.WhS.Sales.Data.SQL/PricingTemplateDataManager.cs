@@ -27,14 +27,14 @@ namespace TOne.WhS.Sales.Data.SQL
         public bool Insert(PricingTemplate pricingTemplate, out int pricingTemplateId)
         {
             object insertedId;
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_Sales.sp_PricingTemplate_Insert", out insertedId, pricingTemplate.Name, Vanrise.Common.Serializer.Serialize(pricingTemplate.Settings));
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_Sales.sp_PricingTemplate_Insert", out insertedId, pricingTemplate.Name, pricingTemplate.SellingNumberPlanId, Vanrise.Common.Serializer.Serialize(pricingTemplate.Settings));
             pricingTemplateId = (int)insertedId;
             return (recordsEffected > 0);
         }
 
-        public bool Update(PricingTemplate pricingTemplate)
+        public bool Update(PricingTemplateToEdit pricingTemplateToEdit)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_Sales.sp_PricingTemplate_Update", pricingTemplate.PricingTemplateID, pricingTemplate.Name, Vanrise.Common.Serializer.Serialize(pricingTemplate.Settings));
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_Sales.sp_PricingTemplate_Update", pricingTemplateToEdit.PricingTemplateId, pricingTemplateToEdit.Name, Vanrise.Common.Serializer.Serialize(pricingTemplateToEdit.Settings));
             return (recordsEffected > 0);
         }
 
@@ -51,8 +51,9 @@ namespace TOne.WhS.Sales.Data.SQL
         {
             PricingTemplate pricingTemplate = new PricingTemplate
             {
-                PricingTemplateID = (int)reader["ID"],
+                PricingTemplateId = (int)reader["ID"],
                 Name = reader["Name"] as string,
+                SellingNumberPlanId = (int)reader["SellingNumberPlanId"],
                 Settings = Vanrise.Common.Serializer.Deserialize<PricingTemplateSettings>(reader["Settings"] as string),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime")
             };

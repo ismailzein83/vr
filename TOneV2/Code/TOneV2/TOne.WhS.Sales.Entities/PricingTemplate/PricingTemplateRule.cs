@@ -9,7 +9,9 @@ namespace TOne.WhS.Sales.Entities
     {
         public List<CountryPricingTemplate> Countries { get; set; }
 
-        public List<ZonePricingTemplate> Zones { get; set; }
+        public List<long> ZoneIds { get; set; }
+        
+        //public List<ZonePricingTemplate> Zones { get; set; }
 
         public List<RatePricingTemplate> Rates { get; set; }
 
@@ -28,9 +30,9 @@ namespace TOne.WhS.Sales.Entities
                     return true;
             }
 
-            if (this.Zones != null)
+            if (this.ZoneIds != null)
             {
-                result = Zones.FindRecord(itm => itm.IncludedZoneIds != null && itm.IncludedZoneIds.Contains(context.SaleZoneId)) != null;
+                result = ZoneIds.Contains(context.SaleZoneId);
                 if (result)
                     return true;
             }

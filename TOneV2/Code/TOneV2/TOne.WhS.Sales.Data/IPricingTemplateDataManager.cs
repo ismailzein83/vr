@@ -9,7 +9,7 @@ namespace TOne.WhS.Sales.Data
 
         bool Insert(PricingTemplate pricingTemplate, out int pricingTemplateId);
 
-        bool Update(PricingTemplate pricingTemplate);
+        bool Update(PricingTemplateToEdit pricingTemplateToEdit); 
 
         bool ArePricingTemplatesUpdated(ref object updateHandle);
     }

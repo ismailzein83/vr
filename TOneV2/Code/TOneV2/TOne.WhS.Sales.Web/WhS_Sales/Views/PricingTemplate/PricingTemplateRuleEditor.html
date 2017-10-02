@@ -1,0 +1,19 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_PricingTemplateRuleEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formPricingTemplateRuleEditor">
+
+            <vr-row>
+                <vr-whs-sales-pricingtemplate-zonefilter on-ready="scopeModel.onPricingTemplateZoneFilterDirectiveReady" normal-col-num="3"></vr-whs-sales-pricingtemplate-zonefilter>
+            </vr-row>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPricingTemplateRuleEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

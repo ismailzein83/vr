@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.pricingTemplate"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.PricingTemplateId">
 
-</body>
-</html>
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.PricingTemplateId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
+</vr-datagrid>

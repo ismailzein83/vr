@@ -35,9 +35,9 @@ namespace TOne.WhS.Sales.Web.Controllers
 
         [HttpPost]
         [Route("UpdatePricingTemplate")]
-        public UpdateOperationOutput<PricingTemplateDetail> UpdatePricingTemplate(PricingTemplate pricingTemplate) 
+        public UpdateOperationOutput<PricingTemplateDetail> UpdatePricingTemplate(PricingTemplateToEdit pricingTemplateToEdit) 
         {
-            return manager.UpdatePricingTemplate(pricingTemplate);
+            return manager.UpdatePricingTemplate(pricingTemplateToEdit);
         }
     }
 }

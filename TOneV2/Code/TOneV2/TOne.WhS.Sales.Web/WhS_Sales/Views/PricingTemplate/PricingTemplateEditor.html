@@ -1,9 +1,38 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+﻿<div vr-modalcontent ng-controller="WhS_Sales_PricingTemplateEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formPricingTemplateEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" normal-col-num="4"></vr-common-currency-selector>
+                        <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberPlanSelectorReady"
+                                                              onselectionchanged="scopeModel.onSellingNumberPlanSelectorChanged"
+                                                              selectedvalues="scopeModel.selectedSellingNumberPlan" normal-col-num="4" isrequired="true">
+                        </vr-whs-be-sellingnumberplan-selector>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-textarea value="scopeModel.description" label="Description" rows="5"></vr-textarea>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Rules'">
+                    <vr-columns width="fullrow">
+                        <vr-whs-sales-pricingtemplaterule-management on-ready="scopeModel.onPricingTemplateRuleManagementDirectiveReady" normal-col-num="4"></vr-whs-sales-pricingtemplaterule-management>
+                    </vr-columns>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formPricingTemplateEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

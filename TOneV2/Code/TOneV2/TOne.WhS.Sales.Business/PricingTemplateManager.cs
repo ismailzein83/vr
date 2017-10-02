@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 
-namespace TOne.WhS.Sales.Business
+namespace TOne.WhS.Sales.Business 
 {
     public class PricingTemplateManager
     {
@@ -37,7 +38,7 @@ namespace TOne.WhS.Sales.Business
             return pricingTemplate != null ? pricingTemplate.Name : null;
         }
 
-        public Vanrise.Entities.InsertOperationOutput<PricingTemplateDetail> AddPricingTemplate(PricingTemplate pricingTemplateItem)
+        public Vanrise.Entities.InsertOperationOutput<PricingTemplateDetail> AddPricingTemplate(PricingTemplate pricingTemplate)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<PricingTemplateDetail>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
@@ -47,12 +48,12 @@ namespace TOne.WhS.Sales.Business
 
             int pricingTemplateId;
 
-            if (dataManager.Insert(pricingTemplateItem, out pricingTemplateId))
+            if (dataManager.Insert(pricingTemplate, out pricingTemplateId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                pricingTemplateItem.PricingTemplateID = pricingTemplateId;
-                insertOperationOutput.InsertedObject = PricingTemplateDetailMapper(pricingTemplateItem);
+                pricingTemplate.PricingTemplateId = pricingTemplateId;
+                insertOperationOutput.InsertedObject = PricingTemplateDetailMapper(pricingTemplate);
             }
             else
             {
@@ -62,7 +63,7 @@ namespace TOne.WhS.Sales.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<PricingTemplateDetail> UpdatePricingTemplate(PricingTemplate pricingTemplateItem)
+        public Vanrise.Entities.UpdateOperationOutput<PricingTemplateDetail> UpdatePricingTemplate(PricingTemplateToEdit pricingTemplateToEdit)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<PricingTemplateDetail>();
 
@@ -71,11 +72,11 @@ namespace TOne.WhS.Sales.Business
 
             IPricingTemplateDataManager dataManager = SalesDataManagerFactory.GetDataManager<IPricingTemplateDataManager>();
 
-            if (dataManager.Update(pricingTemplateItem))
+            if (dataManager.Update(pricingTemplateToEdit))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = PricingTemplateDetailMapper(pricingTemplateItem);
+                updateOperationOutput.UpdatedObject = PricingTemplateDetailMapper(this.GetPricingTemplate(pricingTemplateToEdit.PricingTemplateId));
             }
             else
             {
@@ -92,10 +93,11 @@ namespace TOne.WhS.Sales.Business
         Dictionary<int, PricingTemplate> GetCachedPricingTemplates()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetPricingTemplates",
-               () =>
-               {
-                   return new Dictionary<int, PricingTemplate>();
-               });
+                    () =>
+                    {
+                        IPricingTemplateDataManager dataManager = SalesDataManagerFactory.GetDataManager<IPricingTemplateDataManager>();
+                        return dataManager.GetPricingTemplates().ToDictionary(itm => itm.PricingTemplateId , itm => itm);
+                    });
         }
 
         #endregion 
