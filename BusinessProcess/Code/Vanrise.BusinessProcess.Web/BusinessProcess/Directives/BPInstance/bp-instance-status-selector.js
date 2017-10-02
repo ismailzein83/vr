@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('businessprocessBpInstanceStatusSelector', ['BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'BPInstanceStatusEnum',
-function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService, BPInstanceStatusEnum) {
+app.directive('businessprocessBpInstanceStatusSelector', ['BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'BPInstanceStatusEnum','$filter',
+function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService, BPInstanceStatusEnum, $filter) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -95,7 +95,7 @@ function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService
     }
 
     function getBPInstanceStatusInfo(attrs, ctrl, selectedIds, serializedFilter) {
-        var response = UtilsService.getArrayEnum(BPInstanceStatusEnum);
+        var response = $filter('orderBy')(UtilsService.getArrayEnum(BPInstanceStatusEnum), 'description');
 
         ctrl.datasource.length = 0;
         angular.forEach(response, function (itm) {

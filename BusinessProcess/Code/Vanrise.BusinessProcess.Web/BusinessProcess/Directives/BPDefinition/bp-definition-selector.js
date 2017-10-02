@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService) {
+app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinitionAPIService', 'UtilsService', 'VRUIUtilsService','$filter',
+    function (BusinessProcess_BPDefinitionAPIService, UtilsService, VRUIUtilsService, $filter) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -103,7 +103,8 @@ app.directive('businessprocessBpDefinitionSelector', ['BusinessProcess_BPDefinit
         function getBPDefinitionsInfo(attrs, ctrl, selectedIds, serializedFilter) {
             return BusinessProcess_BPDefinitionAPIService.GetBPDefinitionsInfo(serializedFilter).then(function (response) {
                 ctrl.datasource.length = 0;
-                angular.forEach(response, function (itm) {
+                var data = $filter('orderBy')(response, 'Name');
+                angular.forEach(data, function (itm) {
                     ctrl.datasource.push(itm);
                 });
 
