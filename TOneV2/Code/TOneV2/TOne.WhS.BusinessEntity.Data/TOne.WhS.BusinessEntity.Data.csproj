@@ -82,6 +82,7 @@
     <Compile Include="ISupplierZoneDataManager.cs" />
     <Compile Include="ISwitchConnectivityDataManager.cs" />
     <Compile Include="ISwitchDataManager.cs" />
+    <Compile Include="ISwitchReleaseCauseDataManager.cs" />
     <Compile Include="IWHSFinancialAccountDataManager.cs" />
     <Compile Include="IZoneServiceConfigDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

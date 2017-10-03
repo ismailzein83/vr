@@ -146,6 +146,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CustomerCountryController.cs" />
+    <Compile Include="Controllers\SwitchReleaseCauseController.cs" />
     <Compile Include="Controllers\WHSFinancialAccountController.cs" />
     <Compile Include="Controllers\WHSFinancialAccountDefinitionController.cs" />
     <Compile Include="Controllers\OtherSaleRateController.cs" />
@@ -634,6 +635,10 @@
     <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SwitchConnectivity\SwitchConnectivityManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchReleaseCause\SwitchReleaseCauseEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchReleaseCause\SwitchReleaseCauseEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchReleaseCause\SwitchReleaseCauseManagement.html" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchReleaseCause\SwitchReleaseCauseManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SingleSwitchManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SingleSwitchManagementController.js" />
@@ -653,7 +658,9 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Templates\Sale Pricelist Template.xlsx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WhS_BusinessEntity\Directives\SwitchReleaseCause\Templates\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
