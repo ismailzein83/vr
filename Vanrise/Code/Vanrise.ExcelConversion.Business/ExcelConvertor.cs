@@ -182,9 +182,7 @@ namespace Vanrise.ExcelConversion.Business
                         return result;
                     }
                     else
-                    {
-                        throw new VRBusinessException(string.Format("{0} is mapped to an invalid field.", fldMapping.FieldName));
-                    }
+                        throw new VRBusinessException(string.Format("{0} is not recognized as a valid DateTime",fldValue.ToString()));
                 }
             }
             else if(fldMapping.FieldType == FieldType.Decimal)
