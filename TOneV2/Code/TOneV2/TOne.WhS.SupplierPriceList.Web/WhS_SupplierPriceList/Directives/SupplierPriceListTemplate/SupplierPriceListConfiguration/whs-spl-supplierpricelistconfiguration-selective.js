@@ -132,7 +132,7 @@
                    var payload = {
                         context: context
                     };
-                    api.load(payload)
+                   api.load(payload);
                 };
                 api.getData = getData;
 

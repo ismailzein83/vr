@@ -1,9 +1,19 @@
-﻿<vr-tabs>
-    <vr-tab header="'Codes'" tabobject="scopeModel.codeTabObject">
-        <vr-excelconversion-listmapping on-ready="scopeModel.onCodeListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+﻿<vr-columns colnum="3">
+    <vr-select datatextfield="description" datavaluefield="value" label="Codes And Rates Mapping" datasource="scopeModel.codeRateMappings"
+               selectedvalues="scopeModel.selectedCodeRateMapping" on-ready="scopeModel.onCodeRateMappingReady" onselectionchanged="scopeModel.onCodeRateMappingSelectionChanged" hideremoveicon>
+    </vr-select>
+</vr-columns>
+
+<vr-tabs>
+    <vr-tab tabobject="scopeModel.codeTabObject">
+        <span vr-loader="scopeModel.isCodeListMappingLoading">
+            <vr-excelconversion-listmapping on-ready="scopeModel.onCodeListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+        </span>
     </vr-tab>
-    <vr-tab header="'Normal Rates'">
-        <vr-excelconversion-listmapping on-ready="scopeModel.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+    <vr-tab header="'Normal Rates'" tabobject="scopeModel.normalRateTabObject">
+        <span ng-if="scopeModel.selectedCodeRateMapping!=undefined && scopeModel.selectedCodeRateMapping.showRateMapping" vr-loader="scopeModel.isRateListMappingLoading">
+            <vr-excelconversion-listmapping on-ready="scopeModel.onRateListMappingReady" normal-col-num="6"></vr-excelconversion-listmapping>
+        </span>
     </vr-tab>
     <vr-tab header="'Other Rates'">
         <vr-row>

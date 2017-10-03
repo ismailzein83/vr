@@ -168,7 +168,7 @@
                 var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 carrierAccountReadyPromiseDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred)
+                    VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, undefined, loadCarrierAccountPromiseDeferred);
                 });
 
                 return loadCarrierAccountPromiseDeferred.promise;
@@ -179,9 +179,7 @@
                 var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 currencyReadyPromiseDeferred.promise.then(function () {
-
-                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, undefined, loadCurrencySelectorPromiseDeferred)
-
+                    VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, undefined, loadCurrencySelectorPromiseDeferred);
                 });
                 return loadCurrencySelectorPromiseDeferred.promise;
 

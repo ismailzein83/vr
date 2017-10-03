@@ -10,11 +10,14 @@ using Vanrise.ExcelConversion.Entities;
 namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
 {
     public enum CodeLayout { CodeOnEachRow = 0, Delimitedcode = 1 }
+
+    public enum CodeRateMapping { SeparateSheets = 0, SameSheet = 1 }
     public class BasicSupplierPriceListSettings : Entities.SupplierPriceListSettings
     {
         public override Guid ConfigId { get { return new Guid("6B36007E-3333-40D3-B574-510C8338E6C0"); } }
 
         #region Properties
+        public CodeRateMapping CodeRateMapping { get; set; }
         public ListMapping CodeListMapping { get; set; }
         public ListMapping NormalRateListMapping { get; set; }
         public string DateTimeFormat { get; set; }
@@ -38,7 +41,10 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
             excelConversionSettings.DateTimeFormat = this.DateTimeFormat;
             excelConversionSettings.ListMappings = new List<ListMapping>();
             excelConversionSettings.ListMappings.Add(this.CodeListMapping);
-            excelConversionSettings.ListMappings.Add(this.NormalRateListMapping);
+            
+            if (this.NormalRateListMapping != null)
+                excelConversionSettings.ListMappings.Add(this.NormalRateListMapping);
+            
             if (this.OtherRateListMapping != null)
             {
                 foreach (var list in this.OtherRateListMapping)
@@ -212,7 +218,15 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
         {
             List<PriceListRate> priceListRates = new List<PriceListRate>();
             ConvertedExcelList RateConvertedExcelList;
-            if (convertedExcel.Lists.TryGetValue("RateList", out RateConvertedExcelList))
+            string rateListName;
+            switch (this.CodeRateMapping)
+            {
+                case SupplierPriceListSettings.CodeRateMapping.SameSheet: rateListName = "CodeList"; break;
+                case SupplierPriceListSettings.CodeRateMapping.SeparateSheets: rateListName = "RateList"; break;
+                default: throw new NotSupportedException(string.Format("Unsupported CodeRateMapping: {0}", this.CodeRateMapping));
+            }
+
+            if (convertedExcel.Lists.TryGetValue(rateListName, out RateConvertedExcelList))
             {
                 foreach (var obj in RateConvertedExcelList.Records)
                 {

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SupplierpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService", 'WhS_SupPL_CodeLayoutEnum', 'VR_ExcelConversion_FieldTypeEnum'];
+    SupplierpricelistconfigurationBasic.$inject = ["UtilsService", "VRUIUtilsService", 'WhS_SupPL_CodeLayoutEnum', 'VR_ExcelConversion_FieldTypeEnum', 'WhS_SupPL_CodeRateMappingEnum'];
 
-    function SupplierpricelistconfigurationBasic(UtilsService, VRUIUtilsService, WhS_SupPL_CodeLayoutEnum, VR_ExcelConversion_FieldTypeEnum) {
+    function SupplierpricelistconfigurationBasic(UtilsService, VRUIUtilsService, WhS_SupPL_CodeLayoutEnum, VR_ExcelConversion_FieldTypeEnum, WhS_SupPL_CodeRateMappingEnum) {
         return {
             restrict: "E",
             scope: {
@@ -25,8 +25,12 @@
 
         function Supplierpricelistconfiguration($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
+            var codeRateMappingAPI;
+            var codeRateMappingSelectionChangedDeferred;
+
             var rateListAPI;
-            var rateListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+            var rateListMappingReadyPromiseDeferred;
 
             var codeListAPI;
             var codeListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -44,20 +48,68 @@
             var serviceTabsAPI;
 
             var isCodeLayoutSelected;
-
-            $scope.intPutFieldMappings;
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.normalRateTabObject = { showTab: false };
+                $scope.scopeModel.hideNormalRate = false;
+                $scope.scopeModel.code = false;
+                $scope.scopeModel.codeLayouts = UtilsService.getArrayEnum(WhS_SupPL_CodeLayoutEnum);
+                $scope.scopeModel.codeTabObject = { header: "Codes" };
 
+                $scope.scopeModel.dateTimeFormat = "yyyy/MM/dd";
+                $scope.scopeModel.rateTypesSelected = [];
+                $scope.scopeModel.servicesSelected = [];
+                $scope.scopeModel.codeRateMappings = [];
                 $scope.scopeModel.onRateTabsReady = function (api) {
                     rateTabsAPI = api;
                     rateTabsAPI.setTabSelected(0);
-
                 };
+
+                $scope.scopeModel.onCodeRateMappingReady = function (api) {
+                    codeRateMappingAPI = api;
+                    defineAPI();
+                };
+
+                $scope.scopeModel.onCodeRateMappingSelectionChanged = function (selectedObject) {
+                    if ($scope.scopeModel.selectedCodeRateMapping != undefined) {
+                        $scope.scopeModel.normalRateTabObject.showTab = $scope.scopeModel.selectedCodeRateMapping.showRateMapping;
+                        $scope.scopeModel.codeTabObject.header = $scope.scopeModel.selectedCodeRateMapping.showRateMapping ? "Codes" : "Codes And Rates";
+                        if (codeRateMappingSelectionChangedDeferred != undefined) {
+                            codeRateMappingSelectionChangedDeferred.resolve();
+                        }
+                        else {
+                            loadCodeListMapping();
+                        }
+                    }
+
+                    function loadCodeListMapping() {
+                        var codeListMappingPayload = {
+                            context: getContext(),
+                            fieldMappings: [],
+                            listName: "CodeList",
+                            listTitle: $scope.scopeModel.selectedCodeRateMapping.showRateMapping ? "Codes" : "Codes And Rates",
+                            showDateFormat: true
+                        };
+                        codeListMappingPayload.fieldMappings.push({ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value });
+                        codeListMappingPayload.fieldMappings.push({ FieldName: "CodeGroup", FieldTitle: "Code Group", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value });
+                        codeListMappingPayload.fieldMappings.push({ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value });
+                        if ($scope.scopeModel.selectedCodeRateMapping.value == WhS_SupPL_CodeRateMappingEnum.SameSheet.value) {
+                            codeListMappingPayload.fieldMappings.push({ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value });
+                        }
+                        codeListMappingPayload.fieldMappings.push({ FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value });
+
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isCodeListMappingLoading = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, codeListAPI, codeListMappingPayload, setLoader, undefined);
+                    }
+                };
+
                 $scope.scopeModel.onServiceTabsReady = function (api) {
                     serviceTabsAPI = api;
                     serviceTabsAPI.setTabSelected(0);
                 };
+
                 $scope.scopeModel.validate = function () {
                     if ($scope.scopeModel.delimiterValue == $scope.scopeModel.rangeSeparator) {
 
@@ -65,16 +117,17 @@
                     }
                     return null;
                 };
+
                 $scope.scopeModel.onRateTypeSelectorReady = function (api) {
                     rateTypeAPI = api;
                     rateTypeReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onFlaggedServiceSelectorReady = function (api) {
                     flaggedServiceAPI = api;
                     flaggedServiceReadyPromiseDeferred.resolve();
                 };
-                $scope.scopeModel.rateTypesSelected = [];
-                $scope.scopeModel.servicesSelected = [];
+
                 $scope.scopeModel.onSelectRateType = function (item) {
                     var rateTypeTabe = {
                         Name: item.Name,
@@ -96,6 +149,7 @@
                     rateTabsAPI.setTabSelected($scope.scopeModel.rateTypesSelected.length - 1);
 
                 };
+
                 $scope.scopeModel.onDeselectRateType = function (item) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.rateTypesSelected, item.RateTypeId, "RateTypeId");
                     $scope.scopeModel.rateTypesSelected.splice(index, 1);
@@ -123,6 +177,7 @@
                     serviceTabsAPI.setTabSelected($scope.scopeModel.servicesSelected.length - 1);
 
                 };
+
                 $scope.scopeModel.onDeselectFlaggedService = function (item) {
                     //  $scope.scopeModel.codeTabObject.isSelected = true;
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.servicesSelected, item.ZoneServiceConfigId, "ZoneServiceConfigId");
@@ -131,25 +186,22 @@
 
                 };
 
-
-                $scope.scopeModel.hideNormalRate = false;
-                $scope.scopeModel.codeLayouts = UtilsService.getArrayEnum(WhS_SupPL_CodeLayoutEnum);
-                $scope.scopeModel.dateTimeFormat = "yyyy/MM/dd";
                 $scope.scopeModel.onCodeListMappingReady = function (api) {
                     codeListAPI = api;
                     codeListMappingReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onCodeLayoutSelectionChanged = function () {
 
-                	var isDelimitedCodeLayout =
+                    var isDelimitedCodeLayout =
 						($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == WhS_SupPL_CodeLayoutEnum.Delimitedcode.value);
 
-                	if (isCodeLayoutSelected === false) {
-                	    isCodeLayoutSelected = true;
-                	    $scope.scopeModel.showDelimiter = isDelimitedCodeLayout;
-                		return;
-                	}
-                	if (isDelimitedCodeLayout) {
+                    if (isCodeLayoutSelected === false) {
+                        isCodeLayoutSelected = true;
+                        $scope.scopeModel.showDelimiter = isDelimitedCodeLayout;
+                        return;
+                    }
+                    if (isDelimitedCodeLayout) {
                         $scope.scopeModel.delimiterValue = ',';
                         $scope.scopeModel.showDelimiter = true;
                     }
@@ -157,13 +209,24 @@
                         $scope.scopeModel.hasCodeRange = false;
                         $scope.scopeModel.delimiterValue = undefined;
                         $scope.scopeModel.showDelimiter = false;
-                	}
+                    }
                 };
+
                 $scope.scopeModel.onRateListMappingReady = function (api) {
                     rateListAPI = api;
 
-                    rateListMappingReadyPromiseDeferred.resolve();
+                    var rateListMappingPayload = {
+                        context: getContext(),
+                        fieldMappings: [{ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
+                        listName: "RateList",
+                    };
+
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isRateListMappingLoading = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, rateListAPI, rateListMappingPayload, setLoader, rateListMappingReadyPromiseDeferred);
                 };
+
                 $scope.scopeModel.onCodeRangeValueChanged = function () {
                     if ($scope.scopeModel.hasCodeRange) {
                         $scope.scopeModel.rangeSeparator = '-';
@@ -171,6 +234,7 @@
                         $scope.scopeModel.rangeSeparator = undefined;
                     }
                 };
+
                 $scope.scopeModel.checkUsesOfEffectiveDate = function () {
                     if (codeListAPI != undefined) {
                         var codeListData = codeListAPI.getData();
@@ -197,18 +261,23 @@
                     }
                     return false;
                 };
-                defineAPI();
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    codeRateMappingAPI.clearDataSource();
+                    $scope.scopeModel.codeRateMappings.length = 0;
+                    var showRateMapping = false;
 
-                	isCodeLayoutSelected = undefined;
+                    codeRateMappingSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+                    isCodeLayoutSelected = undefined;
 
                     $scope.scopeModel.rateTypesSelected.length = 0;
                     $scope.scopeModel.servicesSelected.length = 0;
+
+                    $scope.scopeModel.codeRateMappings = UtilsService.getArrayEnum(WhS_SupPL_CodeRateMappingEnum);
 
                     var promises = [];
                     if (payload != undefined) {
@@ -225,34 +294,59 @@
                             $scope.scopeModel.selectedCodeLayout = UtilsService.getItemByVal($scope.scopeModel.codeLayouts, configDetails.CodeLayout, "value");
 
                             $scope.scopeModel.includeServices = configDetails.IncludeServices;
+
+                            showRateMapping = UtilsService.getEnum(WhS_SupPL_CodeRateMappingEnum, 'value', configDetails.CodeRateMapping).showRateMapping;
                             loadOtherRateListMapping(promises);
-                            loadFlaggedServiceListMapping(promises)
+                            loadFlaggedServiceListMapping(promises);
                         }
-                        else
+                        else {
+                            codeRateMappingSelectionChangedDeferred.resolve();
                             $scope.scopeModel.includeServices = true;
+                        }
                     }
+                    setTimeout(function () {
+                        if (configDetails != undefined) {
+                            $scope.scopeModel.selectedCodeRateMapping = UtilsService.getEnum(WhS_SupPL_CodeRateMappingEnum, 'value', configDetails.CodeRateMapping);
+                        }
+                        else {
+                            $scope.scopeModel.selectedCodeRateMapping = UtilsService.getEnum(WhS_SupPL_CodeRateMappingEnum, 'value', WhS_SupPL_CodeRateMappingEnum.SameSheet.value);
+                        }
+                    });
+
+
+                    var codeRateMappingPromises = [];
+
                     promises.push(loadRateTypeSelector());
                     promises.push(loadFlaggedServiceSelector());
-                    promises.push(loadRateListMapping());
-                    promises.push(loadCodeListMapping());
-                    if (rateTabsAPI != undefined)
-                    {
+
+                    if (showRateMapping) {
+                        rateListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var loadRateListMappingPromise = loadRateListMapping();
+
+                        promises.push(loadRateListMappingPromise);
+                        codeRateMappingPromises.push(loadRateListMappingPromise);
+                    }
+                    $scope.scopeModel.codeTabObject.header = showRateMapping ? "Codes" : "Codes And Rates";
+
+                    var loadCodeListMappingPromise = loadCodeListMapping(showRateMapping);
+                    promises.push(loadCodeListMappingPromise);
+                    codeRateMappingPromises.push(loadCodeListMappingPromise);
+
+                    if (rateTabsAPI != undefined) {
                         rateTabsAPI.setTabSelected(0);
                     }
+
                     if (serviceTabsAPI != undefined) {
                         serviceTabsAPI.setTabSelected(0);
                     }
-                    return UtilsService.waitMultiplePromises(promises);
 
                     function loadRateTypeSelector() {
                         var loadRateTypePromiseDeferred = UtilsService.createPromiseDeferred();
                         rateTypeReadyPromiseDeferred.promise.then(function () {
                             var payload;
-                            if (configDetails != undefined && configDetails.OtherRateListMapping != undefined)
-                            {
+                            if (configDetails != undefined && configDetails.OtherRateListMapping != undefined) {
                                 var rateTypeIds = [];
-                                for(var i=0;i<configDetails.OtherRateListMapping.length;i++)
-                                {
+                                for (var i = 0; i < configDetails.OtherRateListMapping.length; i++) {
                                     var otherRate = configDetails.OtherRateListMapping[i];
                                     rateTypeIds.push(otherRate.RateTypeId);
                                 }
@@ -288,7 +382,10 @@
 
                     function loadRateListMapping() {
                         var loadRateListMappingPromiseDeferred = UtilsService.createPromiseDeferred();
-                        rateListMappingReadyPromiseDeferred.promise.then(function () {
+
+                        UtilsService.waitMultiplePromises([rateListMappingReadyPromiseDeferred.promise, codeRateMappingSelectionChangedDeferred.promise]).then(function () {
+                            rateListMappingReadyPromiseDeferred = undefined;
+
                             var payload = {
                                 context: getContext(),
                                 fieldMappings: [{ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
@@ -303,16 +400,25 @@
                         return loadRateListMappingPromiseDeferred.promise;
                     }
 
-                    function loadCodeListMapping() {
+                    function loadCodeListMapping(showRateMapping) {
                         var loadCodeListMappingPromiseDeferred = UtilsService.createPromiseDeferred();
-                        codeListMappingReadyPromiseDeferred.promise.then(function () {
+
+                        UtilsService.waitMultiplePromises([codeListMappingReadyPromiseDeferred.promise, codeRateMappingSelectionChangedDeferred.promise]).then(function () {
                             var payload = {
                                 context: getContext(),
-                                fieldMappings: [{ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "CodeGroup", FieldTitle: "Code Group", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value }, { FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value }],
+                                fieldMappings: [],
                                 listName: "CodeList",
-                                listTitle:"Codes",
+                                listTitle: showRateMapping ? "Codes" : "Codes And Rates",
                                 showDateFormat: true
                             };
+                            payload.fieldMappings.push({ FieldName: "Code", FieldTitle: "Code", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value });
+                            payload.fieldMappings.push({ FieldName: "CodeGroup", FieldTitle: "Code Group", isRequired: false, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value });
+                            payload.fieldMappings.push({ FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value });
+                            if (!showRateMapping) {
+                                payload.fieldMappings.push({ FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value });
+                            }
+                            payload.fieldMappings.push({ FieldName: "EffectiveDate", FieldTitle: "Effective Date", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value });
+
                             if (configDetails != undefined && configDetails.CodeListMapping) {
                                 payload.listMappingData = configDetails.CodeListMapping;
                             }
@@ -322,12 +428,9 @@
                         return loadCodeListMappingPromiseDeferred.promise;
                     }
 
-                    function loadOtherRateListMapping(promises)
-                    {
-                        if(configDetails != undefined && configDetails.OtherRateListMapping != undefined)
-                        {
-                            for(var i=0;i<configDetails.OtherRateListMapping.length;i++)
-                            {
+                    function loadOtherRateListMapping(promises) {
+                        if (configDetails != undefined && configDetails.OtherRateListMapping != undefined) {
+                            for (var i = 0; i < configDetails.OtherRateListMapping.length; i++) {
                                 var otherRate = configDetails.OtherRateListMapping[i];
                                 var rateTypeTab = {
                                     readyPromiseDeferred: UtilsService.createPromiseDeferred(),
@@ -353,17 +456,19 @@
                         }
                     }
 
+                    UtilsService.waitMultiplePromises(codeRateMappingPromises).then(function () {
+                        codeRateMappingSelectionChangedDeferred = undefined;
+                    });
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
-                api.getData = getData;
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                    ctrl.onReady(api);
-                }
-                function getData() {
+
+                api.getData = function getData() {
                     var listCodeMapping = codeListAPI.getData();
-                    var listNormalRateMapping = rateListAPI.getData();
+                    var listNormalRateMapping = $scope.scopeModel.selectedCodeRateMapping.showRateMapping ? rateListAPI.getData() : undefined;
+
                     var otherRatesListMappings = [];
-                    if ($scope.scopeModel.rateTypesSelected.length > 0)
-                    {
+                    if ($scope.scopeModel.rateTypesSelected.length > 0) {
                         for (var i = 0; i < $scope.scopeModel.rateTypesSelected.length; i++) {
                             var rateTypeSelected = $scope.scopeModel.rateTypesSelected[i];
                             otherRatesListMappings.push(
@@ -375,8 +480,7 @@
                     }
 
                     var flaggedServiceListMapping = [];
-                    if ($scope.scopeModel.servicesSelected.length > 0)
-                    {
+                    if ($scope.scopeModel.servicesSelected.length > 0) {
                         for (var i = 0; i < $scope.scopeModel.servicesSelected.length; i++) {
                             var flaggedServiceSelected = $scope.scopeModel.servicesSelected[i];
                             flaggedServiceListMapping.push(
@@ -386,13 +490,15 @@
                                 });
                         }
                     }
+
                     var basicConfiguration = {
                         $type: "TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings.BasicSupplierPriceListSettings,TOne.WhS.SupplierPriceList.MainExtensions",
+                        CodeRateMapping: $scope.scopeModel.selectedCodeRateMapping.value,
                         CodeListMapping: listCodeMapping,
                         NormalRateListMapping: listNormalRateMapping,
                         OtherRateListMapping: otherRatesListMappings,
                         FlaggedServiceListMapping: flaggedServiceListMapping,
-                        IncludeServices : $scope.scopeModel.includeServices,
+                        IncludeServices: $scope.scopeModel.includeServices,
                         DateTimeFormat: $scope.scopeModel.dateTimeFormat,
                         CodeLayout: $scope.scopeModel.selectedCodeLayout != undefined ? $scope.scopeModel.selectedCodeLayout.value : undefined,
                         HasCodeRange: $scope.scopeModel.hasCodeRange,
@@ -402,13 +508,16 @@
                     if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == WhS_SupPL_CodeLayoutEnum.Delimitedcode.value) {
                         basicConfiguration.Delimiter = $scope.scopeModel.delimiterValue;
                     }
+
                     if ($scope.scopeModel.hasCodeRange) {
                         basicConfiguration.RangeSeparator = $scope.scopeModel.rangeSeparator;
                     }
                     return basicConfiguration;
+                };
+
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
+                    ctrl.onReady(api);
                 }
-
-
             }
 
             function addRateTypeAPIExtension(rateType, payloadRateType) {
@@ -418,6 +527,7 @@
                     rateType.rateListAPI = api;
                     rateType.readyPromiseDeferred.resolve();
                 };
+
                 rateType.readyPromiseDeferred.promise.then(function () {
                     var payload = {
                         context: getContext(),
@@ -427,8 +537,9 @@
                     if (payloadRateType != undefined && payloadRateType.RateListMapping) {
                         payload.listMappingData = payloadRateType.RateListMapping;
                     }
-                    VRUIUtilsService.callDirectiveLoad(rateType.rateListAPI, payload, rateType.loadPromiseDeferred)
+                    VRUIUtilsService.callDirectiveLoad(rateType.rateListAPI, payload, rateType.loadPromiseDeferred);
                 });
+
                 $scope.scopeModel.rateTypesSelected.push(rateType);
             }
 
@@ -439,6 +550,7 @@
                     flaggedService.flaggedServiceAPI = api;
                     flaggedService.readyPromiseDeferred.resolve();
                 };
+
                 flaggedService.readyPromiseDeferred.promise.then(function () {
                     var payload = {
                         context: getContext(),
@@ -448,12 +560,12 @@
                     if (payloadFlaggedService != undefined && payloadFlaggedService.ServiceListMapping) {
                         payload.listMappingData = payloadFlaggedService.ServiceListMapping;
                     }
-                    VRUIUtilsService.callDirectiveLoad(flaggedService.flaggedServiceAPI, payload, flaggedService.loadPromiseDeferred)
+                    VRUIUtilsService.callDirectiveLoad(flaggedService.flaggedServiceAPI, payload, flaggedService.loadPromiseDeferred);
                 });
                 $scope.scopeModel.servicesSelected.push(flaggedService);
             }
-            function getContext() {
 
+            function getContext() {
                 if (context != undefined) {
                     var currentContext = UtilsService.cloneObject(context);
                     return currentContext;
