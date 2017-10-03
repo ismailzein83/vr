@@ -169,9 +169,10 @@
         }
 
         function loadPasswordHint() {
+            if(isEditMode ==  true) return ;
             return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
                 $scope.passwordHint = response.RequirementsMessage;
-                $scope.requiredPassword = response.RequiredPassword;
+                $scope.requiredPassword = response.RequiredPassword  ;
             });
         }
 
