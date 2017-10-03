@@ -47,6 +47,15 @@
                 countryId: countryId
             });
         }
+
+        function UpdateSaleZoneName(zoneId, zoneName,sellingNumberPlanId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateSaleZoneName"), {
+                zoneId: zoneId,
+                zoneName: zoneName,
+                sellingNumberPlanId: sellingNumberPlanId
+            });
+        }
+
         return ({
             GetFilteredSaleZones: GetFilteredSaleZones,
             GetSaleZonesInfo: GetSaleZonesInfo,
@@ -55,7 +64,8 @@
             GetSaleZoneGroupTemplates: GetSaleZoneGroupTemplates,
             GetSaleZonesByName: GetSaleZonesByName,
             GetSaleZone: GetSaleZone,
-            GetSaleZoneInfoByCountryId: GetSaleZoneInfoByCountryId
+            GetSaleZoneInfoByCountryId: GetSaleZoneInfoByCountryId,
+            UpdateSaleZoneName: UpdateSaleZoneName
         });
     }
 

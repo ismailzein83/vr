@@ -21,6 +21,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
+
+        public bool UpdateSaleZoneName(long zoneId, string zoneName, int sellingNumberPlanId)
+        {
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SaleZone_UpdateName]", zoneId, zoneName, sellingNumberPlanId);
+            return (recordsEffected > 0);
+        }
         public IEnumerable<SaleZone> GetAllSaleZones()
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleZone_GetAll", SaleZoneMapper);

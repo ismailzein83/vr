@@ -109,7 +109,7 @@
                         onSellingNumberPlanSelectorChanged();
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
-                    })
+                    });
                 }
                 else
                     $scope.currentNode = undefined;
@@ -462,7 +462,7 @@
             if (status != null)
                 $scope.showRenameZone = false;
             else
-                $scope.showRenameZone = draftStatus == WhS_CP_ZoneItemDraftStatusEnum.ExistingClosed.value ? false : codesGridAPI.hideShowRenameZone();
+                $scope.showRenameZone = draftStatus == WhS_CP_ZoneItemDraftStatusEnum.New.value;
         }
 
         function hideShowEnd(draftStatus, status) {
@@ -629,7 +629,7 @@
 
         //#endregion
 
-    };
+    }
 
     appControllers.controller('WhS_CP_CodePreparationManagementController', CodePreparationManagementController);
 

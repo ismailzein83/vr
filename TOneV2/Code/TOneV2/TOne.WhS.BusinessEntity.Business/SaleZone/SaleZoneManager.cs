@@ -40,6 +40,36 @@ namespace TOne.WhS.BusinessEntity.Business
             return allZones.Values;
         }
 
+
+        public UpdateOperationOutput<SaleZoneDetail> UpdateSaleZoneName(long zoneId, string zoneName, int sellingNumberPlanId)
+        {
+            if (String.IsNullOrWhiteSpace(zoneName))
+                throw new MissingArgumentValidationException("SaleZone.Name");
+
+            ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
+
+            bool updateActionSucc = dataManager.UpdateSaleZoneName(zoneId, zoneName, sellingNumberPlanId);
+            UpdateOperationOutput<SaleZoneDetail> updateOperationOutput = new UpdateOperationOutput<SaleZoneDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            if (updateActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var saleZone = GetSaleZone(zoneId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SaleZoneLoggableEntity.Instance, saleZone);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = SaleZoneDetailMapper(saleZone);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+
+            return updateOperationOutput;
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
         {
             IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(input.Query.SellingNumberId);

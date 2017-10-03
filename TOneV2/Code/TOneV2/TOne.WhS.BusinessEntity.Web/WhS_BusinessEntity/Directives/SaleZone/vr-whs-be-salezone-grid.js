@@ -50,6 +50,8 @@ app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "
 					VRNotificationService.notifyException(error, $scope);
 				});
 			};
+
+			defineMenuActions();
 		}
 
 		function defineAPI() {
@@ -92,6 +94,23 @@ app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "
 
 			drillDownDefinitions.push(saleCodeDrillDownDefinition);
 			return drillDownDefinitions;
+		}
+
+		function defineMenuActions() {
+
+		    $scope.gridMenuActions = [{
+		        name: "Edit",
+		        clicked: editSaleZone,
+		    }];
+		}
+        
+		function editSaleZone(saleZoneObj) {
+		    var onSaleZoneUpdated = function (saleZoneObj) {
+		        gridDrillDownTabsObj.setDrillDownExtensionObject(saleZoneObj);
+		        gridAPI.itemUpdated(saleZoneObj);
+		    };
+
+		    WhS_BE_SaleZoneService.editSaleZone(saleZoneObj.Entity.SaleZoneId,saleZoneObj.Entity.Name,saleZoneObj.Entity.SellingNumberPlanId, onSaleZoneUpdated);
 		}
 	}
 }]);

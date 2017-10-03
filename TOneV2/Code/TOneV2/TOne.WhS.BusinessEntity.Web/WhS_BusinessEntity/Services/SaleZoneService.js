@@ -26,7 +26,7 @@
             VRModalService.showModal('/Client/Modules/Common/Views/SaleZone/SaleZoneEditor.html', parameters, settings);
         }
 
-        function editSaleZone(saleZoneId, onSaleZoneUpdated) {
+        function editSaleZone(saleZoneId,name,sellingNumberPlanId, onSaleZoneUpdated) {
             var settings = {
             };
 
@@ -34,33 +34,35 @@
                 modalScope.onSaleZoneUpdated = onSaleZoneUpdated;
             };
             var parameters = {
-                SaleZoneId: saleZoneId
-            };
+                    SaleZoneId: saleZoneId,
+                Name: name,
+                SellingNumberPlanId: sellingNumberPlanId
+        };
 
-            VRModalService.showModal('/Client/Modules/Common/Views/SaleZone/SaleZoneEditor.html', parameters, settings);
-        }
-
-        function registerDrillDownToSellingNumberPlan() {
-            var drillDownDefinition = {};
-
-            drillDownDefinition.title = "Sale Zones";
-            drillDownDefinition.directive = "vr-whs-be-salezone-grid";
-
-            drillDownDefinition.loadDirective = function (directiveAPI, sellingNumberPlanItem) {
-
-                sellingNumberPlanItem.saleZoneGridAPI = directiveAPI;
-                var query = {
-                	SellingNumberId: sellingNumberPlanItem.Entity.SellingNumberPlanId,
-                	EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
-					GetEffectiveAfter: true
-                };
-
-                return sellingNumberPlanItem.saleZoneGridAPI.loadGrid(query);
-            };
-
-            WhS_BE_SellingNumberPlanService.addDrillDownDefinition(drillDownDefinition);
-        }
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SaleZone/SaleZoneEditor.html', parameters, settings);
     }
+
+    function registerDrillDownToSellingNumberPlan() {
+        var drillDownDefinition = {};
+
+        drillDownDefinition.title = "Sale Zones";
+        drillDownDefinition.directive = "vr-whs-be-salezone-grid";
+
+        drillDownDefinition.loadDirective = function (directiveAPI, sellingNumberPlanItem) {
+
+            sellingNumberPlanItem.saleZoneGridAPI = directiveAPI;
+            var query = {
+                SellingNumberId: sellingNumberPlanItem.Entity.SellingNumberPlanId,
+                EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
+                GetEffectiveAfter: true
+            };
+
+            return sellingNumberPlanItem.saleZoneGridAPI.loadGrid(query);
+        };
+
+        WhS_BE_SellingNumberPlanService.addDrillDownDefinition(drillDownDefinition);
+    }
+}
 
     appControllers.service('WhS_BE_SaleZoneService', SaleZoneService);
 

@@ -20,5 +20,6 @@ namespace TOne.WhS.BusinessEntity.Data
 
         IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture);
 
+        bool UpdateSaleZoneName(long zoneId, string zoneName, int sellingNumberPlanId);
     }
 }
