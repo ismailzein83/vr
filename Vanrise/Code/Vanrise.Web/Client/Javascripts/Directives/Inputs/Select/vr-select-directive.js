@@ -46,6 +46,7 @@
                 onselectionchanged: '=',
                 onselectitem: '=',
                 ondeselectitem: '=',
+                ondeselectallitems: '=',
                 onaddclicked: "=",
                 hint: '@',
                 haspermission: '=',
@@ -789,6 +790,12 @@
                             if (isSingle != undefined) {
                                 //$('.dropdown-menu').hide();
                                 ctrl.selectedvalues = undefined;
+                            }
+
+                            else {
+                                if (ctrl.ondeselectallitems && typeof (ctrl.ondeselectallitems) == 'function') {
+                                    ctrl.ondeselectallitems();
+                                }
                             }
 
                         };
