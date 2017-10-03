@@ -59,6 +59,7 @@
     <Compile Include="ChangedData\ChangedRate.cs" />
     <Compile Include="ChangedData\ChangedZone.cs" />
     <Compile Include="AddedCode.cs" />
+    <Compile Include="ClosedExistingZones.cs" />
     <Compile Include="ExistingRate.cs" />
     <Compile Include="ExistingRateGroup.cs" />
     <Compile Include="ExistingRatesByZoneName.cs" />

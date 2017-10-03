@@ -40,7 +40,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         public IEnumerable<ChangedCode> ChangedCodes { get; set; }
 
-        public Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
+        public ClosedExistingZones ClosedExistingZones { get; set; }
 
         public IEnumerable<NotImportedCode> NotImportedCodes { get; set; }
     }
@@ -78,7 +78,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InOutArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
        
         [RequiredArgument]
-        public OutArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
+        public OutArgument<ClosedExistingZones> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<NotImportedCode>> NotImportedCodes { get; set; }

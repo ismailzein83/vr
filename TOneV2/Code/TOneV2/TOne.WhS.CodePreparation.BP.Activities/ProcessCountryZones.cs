@@ -25,7 +25,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         public IEnumerable<ExistingCode> ExistingCodes { get; set; }
 
-        public Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
+        public ClosedExistingZones ClosedExistingZones { get; set; }
 
     }
     public class ProcessCountryZonesOutput
@@ -48,7 +48,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<ExistingCode>> ExistingCodes { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
+        public InArgument<ClosedExistingZones> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
@@ -87,7 +87,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         #region Private Methods
 
         private void UpdateImportedZonesInfo(IEnumerable<ZoneToProcess> zonesToProcess, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones,
-            HashSet<string> zonesToProcessNamesHashSet, Dictionary<string, List<ExistingZone>> closedExistingZones)
+            HashSet<string> zonesToProcessNamesHashSet, ClosedExistingZones closedExistingZones)
         {
             foreach (ZoneToProcess zoneToProcess in zonesToProcess)
             {
@@ -108,7 +108,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             CheckForRenamedOrSplitZones(zonesToProcess.Where(z => z.ChangeType == ZoneChangeType.New), closedExistingZones);
         }
 
-        private void CheckForRenamedOrSplitZones(IEnumerable<ZoneToProcess> newZonesToProcess, Dictionary<string, List<ExistingZone>> closedExistingZones)
+        private void CheckForRenamedOrSplitZones(IEnumerable<ZoneToProcess> newZonesToProcess, ClosedExistingZones closedExistingZones)
         {
             foreach (var newZone in newZonesToProcess)
             {
@@ -122,13 +122,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         List<ExistingZone> matchedRenamedExistingZones;
                         if (closedExistingZones != null && closedExistingZones.TryGetValue(originalZoneName, out matchedRenamedExistingZones))
                         {
-                            //The last check is on the count of zones between original and new zone, in case they are not equal we cannot consider this zone as renamed
+                         /*   //The last check is on the count of zones between original and new zone, in case they are not equal we cannot consider this zone as renamed
                             HashSet<string> codesFromOriginalZone = NumberingPlanHelper.GetExistingCodes(matchedRenamedExistingZones);
                             if (newZone.CodesToMove.Count == codesFromOriginalZone.Count)
                             {
                                 newZone.RecentZoneName = originalZoneName;
                                 newZone.ChangeType = ZoneChangeType.Renamed;
-                            }
+                            }*/
                         }
                         else
                         {
@@ -200,7 +200,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return null;
         }
 
-        private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, Dictionary<string, List<ExistingZone>> closedExistingZones)
+        private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, ClosedExistingZones closedExistingZones)
         {
             List<ExistingZone> matchedExistingZones;
             if (closedExistingZones != null && closedExistingZones.TryGetValue(zoneToProcess.ZoneName, out matchedExistingZones))

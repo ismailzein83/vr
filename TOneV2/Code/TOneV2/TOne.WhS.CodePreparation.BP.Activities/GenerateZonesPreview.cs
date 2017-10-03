@@ -22,7 +22,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         [RequiredArgument]
-        public InArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
+        public InArgument<ClosedExistingZones> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<ZonePreview>>> PreviewZonesQueue { get; set; }
@@ -32,8 +32,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             BaseQueue<IEnumerable<ZonePreview>> previewZonesQueue = this.PreviewZonesQueue.Get(context);
             IEnumerable<ZoneToProcess> zonesToProcess = this.ZonesToProcess.Get(context);
             IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
-            Dictionary<string, List<ExistingZone>> closedExistingZones = ClosedExistingZones.Get(context);
-
+            ClosedExistingZones closedExistingZones = ClosedExistingZones.Get(context);
+            
             List<ZonePreview> zonesPreview = new List<ZonePreview>();
 
 
@@ -60,8 +60,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 foreach (NotImportedZone notImportedZone in notImportedZones)
                 {
                     //If a zone is renamed, do not show it in preview screen as an not imported zone
-                    if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
-                        continue;
+                    //if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+                    //    continue;
 
                     //If a zone is deleted by moving all its codes, do not show it as not changed
                     List<ExistingZone> matchedClosedZones;
@@ -83,11 +83,13 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             if (closedExistingZones != null)
             {
-                foreach (KeyValuePair<string, List<ExistingZone>> closedExistingZone in closedExistingZones)
+                Dictionary<string, List<ExistingZone>> closedExistingZonesDictionary = (closedExistingZones != null) ? closedExistingZones.GetClosedExistingZones() : new Dictionary<string, List<ExistingZone>>();
+
+                foreach (KeyValuePair<string, List<ExistingZone>> closedExistingZone in closedExistingZonesDictionary)
                 {
                     //If a zone is renamed, do not show it in preview screen as an not imported zone
-                    if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)) != null)
-                        continue;
+                    //if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)) != null)
+                     //   continue;
 
                     //avoid adding deleted zones from zonesToProcess to the list of deleted zones
                     if (!zonesToProcess.Any(item => item.ZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)))

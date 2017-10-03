@@ -16,7 +16,7 @@ namespace TOne.WhS.CodePreparation.Business
         public void ProcessCountryCodes(IProcessCountryCodesContext context)
         {
             ZonesByName newAndExistingZones = new ZonesByName();
-            Dictionary<string, List<ExistingZone>> closedExistingZones;
+            ClosedExistingZones closedExistingZones;
 
             ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
 
@@ -39,7 +39,7 @@ namespace TOne.WhS.CodePreparation.Business
         }
 
         private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones,
-            IEnumerable<ExistingZone> existingZones,ExistingCodesByCodeValue existingCodesByCodeValue, out Dictionary<string, List<ExistingZone>> closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
+            IEnumerable<ExistingZone> existingZones, ExistingCodesByCodeValue existingCodesByCodeValue, out ClosedExistingZones closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             StructureExistingCodesByCodeValue(existingCodesByCodeValue, existingCodes);
@@ -86,9 +86,9 @@ namespace TOne.WhS.CodePreparation.Business
             CloseZonesWithNoCodes(existingZones, out closedExistingZones);
 
         }
-        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones, out Dictionary<string, List<ExistingZone>> closedExistingZones)
+        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones, out ClosedExistingZones closedExistingZones)
         {
-            closedExistingZones = new Dictionary<string, List<ExistingZone>>();
+            closedExistingZones = new ClosedExistingZones();
             foreach (var existingZone in existingZones)
             {
                 DateTime? maxCodeEED = DateTime.MinValue;
@@ -146,7 +146,7 @@ namespace TOne.WhS.CodePreparation.Business
                         {
                             matchedExistingZones = new List<ExistingZone>();
                             matchedExistingZones.Add(existingZone);
-                            closedExistingZones.Add(existingZone.ZoneEntity.Name, matchedExistingZones);
+                            closedExistingZones.TryAddValue(existingZone.ZoneEntity.Name, matchedExistingZones);
                         }
 
                     }
