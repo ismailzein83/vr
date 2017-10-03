@@ -84,6 +84,7 @@
     <Compile Include="PricingTemplate\RatePricingTemplate.cs" />
     <Compile Include="PricingTemplate\ZonePricingTemplate.cs" />
     <Compile Include="RateManagement\Zone\ZoneDataByCountryIds.cs" />
+    <Compile Include="RatePlanning\CarrierAccount\AffectedCarrierAccountFilter.cs" />
     <Compile Include="SellingZonesWithDefaultRatesTaskData.cs" />
     <Compile Include="SupplierTargetMatch\ITargetMatchCalculationMethodContext.cs" />
     <Compile Include="SupplierTargetMatch\SupplierTargetMatch.cs" />
