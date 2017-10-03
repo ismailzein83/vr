@@ -516,6 +516,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchConnectivityAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchReleaseCauseAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\TechnicalSettingsAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneRoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />
@@ -526,6 +527,7 @@
     <Content Include="WhS_BusinessEntity\Services\SupplierPriceListService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierZoneService_Service.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchConnectivityService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SwitchReleaseCauseService.js" />
     <Content Include="WhS_BusinessEntity\Services\SwitchService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierCodeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierRateService.js" />
