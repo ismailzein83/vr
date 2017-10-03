@@ -33,7 +33,8 @@
             function initializeController() {
                 ctrl.criteriaFields = [];
                 $scope.genericRules = [];
-                $scope.settingTitle = 'Settings';
+                $scope.showSettingColum = false;
+
 
                 $scope.onGridReady = function (api) {
                     var drillDownDefinitions = VR_GenericData_GenericRule.getDrillDownDefinition();
@@ -90,6 +91,10 @@
                         if (response.SettingsDefinition != undefined && response.SettingsDefinition.GridSettingTitle != undefined) {
                             $scope.settingTitle = response.SettingsDefinition.GridSettingTitle;
                         }
+                        else {
+                            $scope.settingTitle = 'Settings';
+                        }
+                        $scope.showSettingColum = true;
                         gridAPI.retrieveData(query).then(function () { retrieveDataDeferred.resolve(); }).catch(function (error) { retrieveDataDeferred.reject(error); });
                     });
 
