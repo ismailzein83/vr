@@ -148,8 +148,8 @@
     <Compile Include="SalePricelistChanges\CustomerRatePreview.cs" />
     <Compile Include="SalePricelistChanges\CustomerRatePreviewDetail.cs" />
     <Compile Include="SalePricelistChanges\CustomerRatePreviewQuery.cs" />
-    <Compile Include="SalePricelistChanges\RountingProductPreview.cs" />
-    <Compile Include="SalePricelistChanges\RountingProductPreviewDetail.cs" />
+    <Compile Include="SalePricelistChanges\RoutingProductPreview.cs" />
+    <Compile Include="SalePricelistChanges\RoutingProductPreviewDetail.cs" />
     <Compile Include="SalePricelistChanges\RoutingProductPreviewQuery.cs" />
     <Compile Include="SalePricelistChanges\SalePriceListEvaluatedEmail.cs" />
     <Compile Include="SalePricelistChanges\SalePricelistRateChangeDetail.cs" />
