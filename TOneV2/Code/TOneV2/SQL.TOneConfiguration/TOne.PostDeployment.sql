@@ -491,7 +491,7 @@ as (select * from (values
 ('2A1AC701-43AE-4AD5-9459-331A394A8DC2','Whs_Sales_Rules','Sale Rules'									,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View","Add","Edit"]'),
 
 ('FB962789-B602-46DE-8B1B-A55F64D5AAF3','WhS_BE_SupplierZoneAndCode','Supplier Zone & Code'				,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View"]'),
-('437F2D7A-5F99-4DD2-834B-BA41E5217478','WhS_BE_SupplierService','Supplier Service'						,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View"]'),
+('437F2D7A-5F99-4DD2-834B-BA41E5217478','WhS_BE_SupplierService','Supplier Service'						,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View","Edit"]'),
 ('69A42A6E-DDA8-4396-A5A2-1F540D961739','WhS_BE_SupplierRate','Supplier Rate'							,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View"]'),
 ('F41DAD6A-EE43-4C4A-9F1D-A575F002DF20','WhS_BE_SupplierPricelist','Supplier PriceList'					,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View", "Start Process"]'),
 ('93DA33D5-4713-4784-99D2-5055C2468204','Whs_Purchase_Rules','Purchase Rules'							,'8EA9F81D-521F-4E84-A60D-5F5D4E45920A',0,'["View","Add","Edit"]'),
@@ -589,6 +589,7 @@ as (select * from (values
 
 ('WhS_BE/SaleZone/GetFilteredSaleZones','WhS_BE_SaleZoneAndCode: View'),
 ('WhS_BE/SaleZone/UpdateSaleZoneName','WhS_BE_SaleZoneAndCode: Edit'),
+
 ('WhS_BE/SaleZone/GetSaleZonesInfo',null),
 ('WhS_BE/SaleZone/GetSaleZonesInfoByIds',null),
 ('WhS_BE/SaleZone/GetSaleZone',null),
@@ -703,6 +704,7 @@ as (select * from (values
 ('WhS_Sales/RatePlan/GetRatePlanSettingsData','WhS_Sales_RatePlan: Start Process'),
 
 ('WhS_BE/SupplierZoneService/GetFilteredSupplierZoneServices','WhS_BE_SupplierService: View'),
+('WhS_BE/SupplierZoneService/UpdateSupplierZoneService','WhS_BE_SupplierService: Edit'),
 
 ('WhS_BE/StateBackup/GetFilteredStateBackups','WhS_BE_StateBackup: View'),
 ('WhS_BE/StateBackup/RestoreData','WhS_BE_StateBackup: Restore'),
