@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    saleZonesAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig"];
+    saleZonesAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig", "SecurityService"];
 
-    function saleZonesAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig) {
+    function saleZonesAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig, SecurityService) {
 
         var controllerName = "SaleZone";
 
@@ -56,6 +56,10 @@
             });
         }
 
+        function HasEditSaleZoneNamePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateSaleZoneName']));
+        }
+
         return ({
             GetFilteredSaleZones: GetFilteredSaleZones,
             GetSaleZonesInfo: GetSaleZonesInfo,
@@ -65,7 +69,8 @@
             GetSaleZonesByName: GetSaleZonesByName,
             GetSaleZone: GetSaleZone,
             GetSaleZoneInfoByCountryId: GetSaleZoneInfoByCountryId,
-            UpdateSaleZoneName: UpdateSaleZoneName
+            UpdateSaleZoneName: UpdateSaleZoneName,
+            HasEditSaleZoneNamePermission:HasEditSaleZoneNamePermission
         });
     }
 

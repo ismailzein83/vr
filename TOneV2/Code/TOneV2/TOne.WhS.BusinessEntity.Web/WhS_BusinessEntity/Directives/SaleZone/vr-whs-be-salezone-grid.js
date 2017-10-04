@@ -101,9 +101,12 @@ app.directive("vrWhsBeSalezoneGrid", ["UtilsService", "VRNotificationService", "
 		    $scope.gridMenuActions = [{
 		        name: "Edit",
 		        clicked: editSaleZone,
+                haspermission:hasEditZonePermission
 		    }];
 		}
-        
+		function hasEditZonePermission() {
+		    return WhS_BE_SaleZoneAPIService.HasEditSaleZoneNamePermission();
+		}
 		function editSaleZone(saleZoneObj) {
 		    var onSaleZoneUpdated = function (saleZoneObj) {
 		        gridDrillDownTabsObj.setDrillDownExtensionObject(saleZoneObj);
