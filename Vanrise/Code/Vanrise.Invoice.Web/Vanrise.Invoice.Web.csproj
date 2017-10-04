@@ -399,6 +399,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\vr-invoicetype-subsections.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoiceObjectTypeTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoicePropertyEvaluatorTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\ProcessInput\Normal\Templates\InvoiceGenerationProcessManualTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\ProcessInput\Normal\vr-invoice-invoicegenerationprocess-manual.js" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\GroupingSubSectionGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoicePartnerSelectorTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\SubSectionGridTemplate.html" />
@@ -512,6 +514,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\MainExtensions\Templates\" />
+    <Folder Include="VR_Invoice\Directives\Invoice\ProcessInput\Scheduled\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="JSLintNet.json" />

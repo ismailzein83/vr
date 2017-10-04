@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvoiceGenerationProcessInput.cs" />
     <Compile Include="AutomaticInvoiceProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
