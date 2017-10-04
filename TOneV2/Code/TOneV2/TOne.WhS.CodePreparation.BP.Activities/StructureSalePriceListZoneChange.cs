@@ -328,8 +328,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 {
                     CountryId = zoneToCloseRateChange.CountryId,
                     ZoneName = zoneToCloseRateChange.ZoneName,
+                    ZoneId = zoneToCloseRateChange.ZoneId,
                     BED = routingPRoduct.BED,//TODO the BED should be the assigned date of routing product on this zone
-                    EED = zoneToCloseRateChange.EED,
+                    EED = zoneToCloseRateChange.EED, 
                     RoutingProductId = routingPRoduct.RoutingProductId
                 });
             }
