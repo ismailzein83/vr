@@ -41,7 +41,7 @@ DELETE FROM [sec].[BusinessEntityModule] WHERE [ID] IN ('16419FE1-ED56-49BA-B609
 														'520558FA-CF2F-440B-9B58-09C23B6A2E9B',--'Billing'
 														'D9666AEA-9517-4DC5-A3D2-D074B2B99A1C',--'Business Entities'
 														'9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',--'Rules'
-														'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',--'Lookups'
+														--'8FAF6AA2-6C00-4C48-8EBF-68B87D2DC493',--'Lookups'
 														'B6B8F582-4759-43FB-9220-AA7662C366EA')--'System Processes'
 --[sec].[BusinessEntityModule]------------------------201 to 300----------------------------------------------
 begin
@@ -100,9 +100,9 @@ set nocount on;;with cte_data([ID],[Name],[Title],[FQTN],[Config])as (select *
 ----------------------------------------------------------------------------------------------------
 end
 
-Delete from [common].[Setting] where [ID] in (	'1CB20F2C-A835-4320-AEC7-E034C5A756E9',--'Bank Details'
-												'1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE',--'System Currency'
-												'81F62AC3-BAE4-4A2F-A60D-A655494625EA' )--'Company Setting'
+--Delete from [common].[Setting] where [ID] in (	'1CB20F2C-A835-4320-AEC7-E034C5A756E9',--'Bank Details'
+--												'1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE',--'System Currency'
+--												'81F62AC3-BAE4-4A2F-A60D-A655494625EA' )--'Company Setting'
 --[common].[Setting]---------------------------401 to 500-------------------------------------------
 begin
 set nocount on;;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('509E467B-4562-4CA6-A32E-E50473B74D2C','Product Info','VR_Common_ProductInfoTechnicalSettings','General','{"Editor" : "vr-common-productinfotechnicalsettings-editor"}','{"$type":"Vanrise.Entities.ProductInfoTechnicalSettings, Vanrise.Entities","ProductInfo":{"$type":"Vanrise.Entities.ProductInfo, Vanrise.Entities","ProductName":"XBooster","VersionNumber":"version #VersionNumber# ~ #VersionDate#"}}',1)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))merge	[common].[Setting] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]when not matched by target then	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);

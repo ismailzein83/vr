@@ -67,20 +67,20 @@ DELETE FROM [sec].[Module] WHERE ID IN('FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9',--
 									   '1C7569FA-43C9-4853-AE4C-1152746A34FD',--'Rules'					
 									   '6471DA6F-E4DD-4B2A-BFB6-F8EA498CD37C')--'Billing'
 
-DELETE FROM [common].[Setting] WHERE ID IN ('81F62AC3-BAE4-4A2F-A60D-A655494625EA',--'Company','VR_Common_Compan
-											'1CB20F2C-A835-4320-AEC7-E034C5A756E9')--'Bank Details','VR_Common_B
+--DELETE FROM [common].[Setting] WHERE ID IN ('81F62AC3-BAE4-4A2F-A60D-A655494625EA',--'Company','VR_Common_Compan
+--											'1CB20F2C-A835-4320-AEC7-E034C5A756E9')--'Bank Details','VR_Common_B
 
-Delete sa
-FROM [sec].[SystemAction] sa LEFT JOIN [sec].[BusinessEntity] be on be.Name like ''+substring(sa.RequiredPermissions,0,13)+'%'
-where  be.Name is null and sa.Name not like '%SEC%'
+--Delete sa
+--FROM [sec].[SystemAction] sa LEFT JOIN [sec].[BusinessEntity] be on be.Name like ''+substring(sa.RequiredPermissions,0,13)+'%'
+--where  be.Name is null and sa.Name not like '%SEC%'
 
-DELETE FROM [common].[Currency]
+--DELETE FROM [common].[Currency]
 INSERT INTO [common].[Currency]([Symbol],[Name])
 SELECT 'USD','USD'
 
 Declare @CurrencyID int
-select top 1 @CurrencyID = ID from [common].[Currency]
---[common].[Setting]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE','System Currency','VR_Common_BaseCurrency','General','{"Editor":"vr-common-currency-settings-editor"}','{"$type":"Vanrise.Entities.CurrencySettingData, Vanrise.Entities","CurrencyId":'+CONVERT(varchar(10),@CurrencyID)+'}',0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))merge	[common].[Setting] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]when not matched by target then	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
+select top 1 @CurrencyID = ID from [common].[Currency] where [Symbol]='USD'
+--[common].[Setting]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE','System Currency','VR_Common_BaseCurrency','General','{"Editor":"vr-common-currency-settings-editor"}','{"$type":"Vanrise.Entities.CurrencySettingData, Vanrise.Entities","CurrencyId":'+CONVERT(varchar(10),@CurrencyID)+'}',0)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))merge	[common].[Setting] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]--when matched then--	update set--	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]when not matched by target then	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
 
 /*
 --for testing TOne BI

@@ -37,9 +37,9 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
-Delete from [common].[Setting] where [ID] in (	'1CB20F2C-A835-4320-AEC7-E034C5A756E9',--'Bank Details'
-												'1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE',--'System Currency'
-												'81F62AC3-BAE4-4A2F-A60D-A655494625EA' )--'Company Setting'
+--Delete from [common].[Setting] where [ID] in (	'1CB20F2C-A835-4320-AEC7-E034C5A756E9',--'Bank Details'
+--												'1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE',--'System Currency'
+--												'81F62AC3-BAE4-4A2F-A60D-A655494625EA' )--'Company Setting'
 
 --[common].[Setting]---------------------------801 to 900-------------------------------------------
 begin
