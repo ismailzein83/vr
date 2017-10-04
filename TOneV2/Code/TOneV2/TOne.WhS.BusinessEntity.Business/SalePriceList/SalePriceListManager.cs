@@ -907,7 +907,7 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<int, PriceListChange> customerPricelistChangetByCurrencyId = new Dictionary<int, PriceListChange>();
             foreach (var countryGroup in customerPricelistChange.CountryGroups)
             {
-                int countryCurrencyId = GetCurrencyIdForThisCountry(customerPricelistChange.CustomerId, sellingProductId, countryGroup.RateChanges, countryGroup.CodeChanges, lastRateNoCacheLocator, saleRateManager);
+                int countryCurrencyId = GetCurrencyIdForThisCountry(customerPricelistChange.CustomerId, sellingProductId, countryGroup.RateChanges, countryGroup.CodeChanges, countryGroup.RPChanges, lastRateNoCacheLocator, saleRateManager);
 
                 IEnumerable<SalePricelistZoneChange> zoneChanges = this.GetZoneChanges(countryGroup);
 
@@ -1007,18 +1007,20 @@ namespace TOne.WhS.BusinessEntity.Business
             return zoneChanges.Values;
         }
 
-        private int GetCurrencyIdForThisCountry(int customerId, int sellingProductId, List<SalePricelistRateChange> rateChanges, List<SalePricelistCodeChange> codeChanges, SaleEntityZoneRateLocator lastRateNoCacheLocator, SaleRateManager saleRateManager)
+        private int GetCurrencyIdForThisCountry(int customerId, int sellingProductId, List<SalePricelistRateChange> rateChanges, List<SalePricelistCodeChange> codeChanges, List<SalePricelistRPChange> routingProductChanges
+            , SaleEntityZoneRateLocator lastRateNoCacheLocator, SaleRateManager saleRateManager)
         {
             if (rateChanges != null && rateChanges.Any())
                 return rateChanges.First().CurrencyId.Value;
 
             var codeChange = codeChanges.FirstOrDefault();
-            if (codeChange == null)
-                throw new Exception(string.Format("Could not find neither rate changes nor code changes for customer with Id {0}", customerId));
 
-            var rate = lastRateNoCacheLocator.GetCustomerZoneRate(customerId, sellingProductId, codeChange.ZoneId.Value);
+            long zoneId = codeChange != null ? codeChange.ZoneId.Value : routingProductChanges.First().ZoneId.Value;
+
+            var rate = lastRateNoCacheLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
             if (rate == null)
-                throw new DataIntegrityValidationException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product. Additional info: customer with id {1}", codeChange.ZoneName, customerId));
+                throw new DataIntegrityValidationException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product. Additional info: customer with id {1}",
+                        codeChange.ZoneName, customerId));
 
             return saleRateManager.GetCurrencyId(rate.Rate);
         }
