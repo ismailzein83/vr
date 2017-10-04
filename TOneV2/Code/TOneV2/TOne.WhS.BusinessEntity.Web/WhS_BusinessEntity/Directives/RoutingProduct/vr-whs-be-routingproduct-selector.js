@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService', 'UtilsService','VRUIUtilsService',
+app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService', 'UtilsService', 'VRUIUtilsService',
     function (WhS_BE_RoutingProductAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,8 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
                 hideremoveicon: "@",
                 onselectitem: "=",
                 ondeselectitem: "=",
-                hideselectedvaluessection: "@"
+                hideselectedvaluessection: "@",
+                label: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -44,12 +45,19 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
 
 
         function getTemplate(attrs) {
-            var multipleselection = "";
-            var label = "Routing Product";
-            if (attrs.ismultipleselection != undefined) {
-                label = "Routing Products";
-                multipleselection = "ismultipleselection";
+            var multipleselection = (attrs.ismultipleselection != undefined) ? 'ismultipleselection' : undefined;
+
+            var labelAttribute = '', labelAttributeValue = '';
+            if (attrs.label != undefined)
+                labelAttributeValue = attrs.label;
+            else {
+                labelAttributeValue = 'Routing Product';
+                if (attrs.ismultipleselection != undefined)
+                    labelAttributeValue += 's';
             }
+            if (labelAttributeValue != undefined && labelAttributeValue != null && labelAttributeValue != '')
+                labelAttribute = "label='" + labelAttributeValue + "'";
+
             var required = "";
             if (attrs.isrequired != undefined)
                 required = "isrequired";
@@ -64,7 +72,7 @@ app.directive('vrWhsBeRoutingproductSelector', ['WhS_BE_RoutingProductAPIService
 
             return '<div>'
                 + '<vr-select ' + multipleselection + '  datatextfield="Name" datavaluefield="RoutingProductId" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem"'
-            + required + ' label="' + label + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + label + '" ' + hideremoveicon + ' ' + hideselectedvaluessection + '></vr-select>'
+            + required + ' ' + labelAttribute + ' ' + '" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"  onselectionchanged="ctrl.onselectionchanged" entityName="' + labelAttributeValue + '" ' + hideremoveicon + ' ' + hideselectedvaluessection + '></vr-select>'
                + '</div>';
         }
 
