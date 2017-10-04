@@ -140,7 +140,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         routingDatabaseId: gridQuery.RoutingDatabaseId,
                         currencyId: gridQuery.CurrencyId,
                         ratePlanSettings: gridQuery.Settings,
-                        longPrecision: $scope.scopeModel.longPrecision
+                        longPrecision: $scope.longPrecision
                     };
                     if (dataItem.RPRouteDetail != undefined && dataItem.RPRouteDetail.RouteOptionsDetails != undefined && dataItem.RPRouteDetail.RouteOptionsDetails.length > 0)
                         WhS_Sales_RatePlanService.openTQIEditor(context, onTQIEvaluated);
@@ -280,6 +280,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 };
                 $scope.resetGridFilter = function () {
                     resetGridFilter();
+                    return $scope.filterZones();
                 };
                 $scope.sortZones = function (col) {
                     sortZones(col);
@@ -337,7 +338,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     if (query != undefined) {
                         ownerName = query.OwnerName;
                         setCostCalculationMethods(query.CostCalculationMethods, query.RateCalculationMethod);
-                        $scope.scopeModel.longPrecision = query.longPrecision;
                     }
 
                     defineRouteOptionNumbers();
