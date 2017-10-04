@@ -73,6 +73,9 @@
                     return VRValidationService.validate(ctrl.value, $scope, $attrs, validationOptions);
                 };
 
+                if ($attrs.setfocus != undefined)
+                    $element.find('#mainInput').focus();
+
                 $scope.ctrl.onBlurDirective = function (e) {
                     if ($attrs.onblurtextbox != undefined && !ctrl.readOnly) {
                         var onblurtextboxMethod = $scope.$parent.$eval($attrs.onblurtextbox);
