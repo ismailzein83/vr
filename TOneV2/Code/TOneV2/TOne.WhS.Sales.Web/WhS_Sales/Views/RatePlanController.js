@@ -801,6 +801,7 @@
             var query = {
                 OwnerType: ownerTypeSelectorAPI.getSelectedIds(),
                 OwnerId: getOwnerId(),
+                ownerSellingNumberPlanId: getOwnerSellingNumberPlanId(),
                 CurrencyId: getCurrencyId(),
                 RoutingDatabaseId: databaseSelectorAPI.getSelectedIds(),
                 PolicyConfigId: policySelectorAPI.getSelectedIds(),

@@ -1,4 +1,24 @@
-﻿<div vr-loader="isLoading" ng-show="showDirective">
+﻿<style type="text/css">
+    .vr-datagrid-header div {
+        text-transform: none;
+    }
+
+    .vr-datagrid-header {
+        background-color: #829EBF;
+        color: #FFF;
+        cursor: pointer;
+        height: auto;
+        overflow: hidden;
+        font-size: 10px;
+        text-transform: uppercase !important;
+        padding-top: 3px;
+    }
+
+        .vr-datagrid-header .vr-datagrid-celltext {
+            text-transform: uppercase !important;
+        }
+</style>
+<div vr-loader="isLoading" ng-show="showDirective">
     <div style="min-height: 42px;">
         <vr-row ng-show="showZoneLetters">
             <vr-columns width="fullrow" ng-if="showZoneLetters">
@@ -16,7 +36,9 @@
                         <div class="vr-datagrid-header  drill-down-level-0" style="display: flex" ng-style="headerStyle">
                             <div style="display:inline-flex; width: 100%">
                                 <div style="margin: -2px; display:inline-block;width:20px" ng-init="addColumnFixedAndRecalculate('expanddrilldown', 20)">
-
+                                    <span ng-click="resetGridFilter()">
+                                        <vr-icon icontype="'Disabled'"></vr-icon>
+                                    </span>
                                 </div>
                                 <div style="display:inline-block" ng-init="::addColumnWidthFactorAndRecalculate('zone', 19)" ng-style="{'width': columnsConfig.zone.width}" class="rpcolumn_zone">
                                     <div class="vr-datagrid-header-cell">
@@ -26,8 +48,8 @@
                                                 <span ng-show="columnsConfig.zone.sortDirection=='DESC'">&darr;</span>
                                                 <span>Zone</span>
                                             </div>
-                                            <div style="overflow: hidden;" ng-if="false">
-                                                <vr-textbox value="zoneFilter" onvaluechanged="filterZones()"></vr-textbox>
+                                            <div style="overflow: hidden;">
+                                                <vr-textbox value="zoneNameFilterValue" onvaluechanged="filterZones"></vr-textbox>
                                             </div>
                                         </div>
                                     </div>
@@ -40,7 +62,14 @@
                                                 <span ng-show="columnsConfig.product.sortDirection=='DESC'">&darr;</span>
                                                 <span>Product</span>
                                             </div>
-
+                                            <div style="overflow: hidden;">
+                                                <vr-whs-be-routingproduct-selector on-ready="onFilterRoutingProductSelectorReady"
+                                                                                   selectedvalues="filterRoutingProducts"
+                                                                                   onselectionchanged="filterZones"
+                                                                                   label
+                                                                                   ismultipleselection>
+                                                </vr-whs-be-routingproduct-selector>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -62,7 +91,21 @@
                                                 <span ng-show="columnsConfig.currentRate.sortDirection=='DESC'">&darr;</span>
                                                 <span>C.Rate</span>
                                             </div>
-
+                                            <div style="overflow: hidden;">
+                                                <vr-select datasource="comparisonOptions"
+                                                           datavaluefield="value"
+                                                           datatextfield="symbol"
+                                                           selectedvalues="currentRateComparisonOption"
+                                                           onselectionchanged="filterZones"
+                                                           hideremoveicon>
+                                                </vr-select>
+                                            </div>
+                                            <div style="overflow: hidden;">
+                                                <vr-textbox type="number"
+                                                            value="currentRateFilterValue"
+                                                            onvaluechanged="filterZones">
+                                                </vr-textbox>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +117,16 @@
                                                 <span ng-show="columnsConfig.inherIcontype.sortDirection=='DESC'">&darr;</span>
                                                 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                             </div>
-
+                                            <div style="overflow: hidden;" ng-hide="isCurrentRateSourceFilterHidden">
+                                                <vr-select datasource="rateSourceOptions"
+                                                           datavaluefield="value"
+                                                           datatextfield="symbol"
+                                                           selectedvalues="selectedRateSourceOptions"
+                                                           onselectionchanged="filterZones"
+                                                           ismultipleselection
+                                                           hideselectedvaluessection>
+                                                </vr-select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -86,7 +138,32 @@
                                                 <span ng-show="columnsConfig.routeOptions.sortDirection=='DESC'">&darr;</span>
                                                 <span>Route Options</span>
                                             </div>
-
+                                            <div style="overflow: hidden;">
+                                                <span style="display: inline-block;width: 33%;">
+                                                    <vr-select datasource="routeOptionNumbers"
+                                                               datavaluefield="value"
+                                                               datatextfield="text"
+                                                               selectedvalues="routeOptionNumber"
+                                                               onselectionchanged="filterZones"
+                                                               hideremoveicon>
+                                                    </vr-select>
+                                                </span>
+                                                <span style="display: inline-block;width: 33%;">
+                                                    <vr-select datasource="comparisonOptions"
+                                                               datavaluefield="value"
+                                                               datatextfield="symbol"
+                                                               selectedvalues="routeOptionComparisonOption"
+                                                               onselectionchanged="filterZones"
+                                                               hideremoveicon>
+                                                    </vr-select>
+                                                </span>
+                                                <span style="display: inline-block;width: 33%;">
+                                                    <vr-textbox type="number"
+                                                                value="routeOptionFilterValue"
+                                                                onvaluechanged="filterZones">
+                                                    </vr-textbox>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -108,7 +185,21 @@
                                                 <span ng-show="columnsConfig.costColumn_{{$index}}.sortDirection=='DESC'">&darr;</span>
                                                 <span>{{method.Title}}</span>
                                             </div>
-
+                                            <div style="overflow: hidden;">
+                                                <vr-select datasource="comparisonOptions"
+                                                           datavaluefield="value"
+                                                           datatextfield="symbol"
+                                                           selectedvalues="costComparisonOptions[$index]"
+                                                           onselectionchanged="filterZones"
+                                                           hideremoveicon>
+                                                </vr-select>
+                                            </div>
+                                            <div style="overflow: hidden;">
+                                                <vr-textbox type="number"
+                                                            value="costFilterValues[$index]"
+                                                            onvaluechanged="filterZones">
+                                                </vr-textbox>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +211,21 @@
                                                 <span ng-show="columnsConfig.margin.sortDirection=='DESC'">&darr;</span>
                                                 <span>Margin</span>
                                             </div>
-
+                                            <div style="overflow: hidden;">
+                                                <vr-select datasource="comparisonOptions"
+                                                           datavaluefield="value"
+                                                           datatextfield="symbol"
+                                                           selectedvalues="marginComparisonOption"
+                                                           onselectionchanged="filterZones"
+                                                           hideremoveicon>
+                                                </vr-select>
+                                            </div>
+                                            <div style="overflow: hidden;">
+                                                <vr-textbox type="number"
+                                                            value="marginFilterValue"
+                                                            onvaluechanged="filterZones">
+                                                </vr-textbox>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -132,20 +237,34 @@
                                                 <span ng-show="columnsConfig.marginPerc.sortDirection=='DESC'">&darr;</span>
                                                 <span>%Margin</span>
                                             </div>
-
+                                            <div style="overflow: hidden;">
+                                                <vr-select datasource="comparisonOptions"
+                                                           datavaluefield="value"
+                                                           datatextfield="symbol"
+                                                           selectedvalues="marginPercentageComparisonOption"
+                                                           onselectionchanged="filterZones"
+                                                           hideremoveicon>
+                                                </vr-select>
+                                            </div>
+                                            <div style="overflow: hidden;">
+                                                <vr-textbox type="number"
+                                                            value="marginPercentageFilterValue"
+                                                            onvaluechanged="filterZones">
+                                                </vr-textbox>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <!--<div ng-show="rateCalculationMethod" style="width: 50px; display:inline-block">
-                <div class="vr-datagrid-header-cell">
-                    <div col-index="renderIndex" style="width:100%">
-                        <div class="vr-datagrid-celltext" style="overflow: hidden;text-align:right">
-                            <span>Calculated Rate</span>
-                        </div>
+                                    <div class="vr-datagrid-header-cell">
+                                        <div col-index="renderIndex" style="width:100%">
+                                            <div class="vr-datagrid-celltext" style="overflow: hidden;text-align:right">
+                                                <span>Calculated Rate</span>
+                                            </div>
 
-                    </div>
-                </div>
-            </div>-->
+                                        </div>
+                                    </div>
+                                </div>-->
                                 <div style="display:inline-block;width:65px" ng-init="::addColumnFixedAndRecalculate('newRate', 65)">
                                     <div class="vr-datagrid-header-cell">
                                         <div col-index="renderIndex" style="width:100%">
@@ -154,7 +273,20 @@
                                                 <span ng-show="columnsConfig.newRate.sortDirection=='DESC'">&darr;</span>
                                                 <span>N.Rate</span>
                                             </div>
-
+                                            <div style="overflow: hidden;">
+                                                <vr-select datasource="newRateFilterOptions"
+                                                           datavaluefield="value"
+                                                           datatextfield="symbol"
+                                                           selectedvalues="newRateFilterOption"
+                                                           onselectionchanged="filterZones">
+                                                </vr-select>
+                                            </div>
+                                            <div style="overflow: hidden;" ng-hide="newRateFilterOption.symbol == 'Unpriced'">
+                                                <vr-textbox type="number"
+                                                            value="newRateFilterValue"
+                                                            onvaluechanged="filterZones">
+                                                </vr-textbox>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -166,7 +298,16 @@
                                                 <span ng-show="columnsConfig.rateChangeIcon.sortDirection=='DESC'">&darr;</span>
                                                 <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                             </div>
-
+                                            <div style="overflow: hidden;">
+                                                <vr-select datasource="rateComparisonOptions"
+                                                           datavaluefield="value"
+                                                           datatextfield="symbol"
+                                                           selectedvalues="selectedRateComparisonOptions"
+                                                           onselectionchanged="filterZones"
+                                                           ismultipleselection
+                                                           hideselectedvaluessection>
+                                                </vr-select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -325,16 +466,17 @@
                                                                 </div>
 
                                                                 <!--<div ng-show="rateCalculationMethod" style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
-                                                    <div class="vr-datagrid-cell">
-                                                        <div class="vr-datagrid-celltext ">
-                                                            <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-                                                                <span class="span-summary"> {{CalculatedRate| number: longPrecision}}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>-->
+                                                                    <div class="vr-datagrid-cell">
+                                                                        <div class="vr-datagrid-celltext ">
+                                                                            <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                                                                <span class="span-summary"> {{CalculatedRate| number: longPrecision}}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>-->
 
                                                                 <div style="display:inline-block;vertical-align:top;width:65px" class="vr-datagrid-cell-container">
+                                                                    <div cl
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <span vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed)}}">
@@ -351,62 +493,62 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;width:18px" class="vr-datagrid-cell-container">
-                                                                    <div class="vr-datagrid-cell">
-                                                                        <div class="vr-datagrid-celltext ">
-                                                                            <div style="text-align: left">
-                                                                                <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
+                                                                    <div style="display:inline-block;vertical-align:top;width:18px" class="vr-datagrid-cell-container">
+                                                                        <div class="vr-datagrid-cell">
+                                                                            <div class="vr-datagrid-celltext ">
+                                                                                <div style="text-align: left">
+                                                                                    <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
-                                                                    <div class="vr-datagrid-cell">
-                                                                        <div class="vr-datagrid-celltext ">
-                                                                            <span ng-show="dataItem.NewRate != null" vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed)}}">
-                                                                                <vr-datetimepicker type="date" value="dataItem.NewRateBED" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.NewRate != null" disablefocus></vr-datetimepicker>
-                                                                            </span>
-                                                                            <span ng-hide="dataItem.NewRate != null" vr-disabled="true">
-                                                                                <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" customvalidate="dataItem.validateRateChangeDates()" disablefocus></vr-datetimepicker>
-                                                                            </span>
+                                                                    <div style="display:inline-block;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
+                                                                        <div class="vr-datagrid-cell">
+                                                                            <div class="vr-datagrid-celltext ">
+                                                                                <span ng-show="dataItem.NewRate != null" vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed)}}">
+                                                                                    <vr-datetimepicker type="date" value="dataItem.NewRateBED" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.NewRate != null" disablefocus></vr-datetimepicker>
+                                                                                </span>
+                                                                                <span ng-hide="dataItem.NewRate != null" vr-disabled="true">
+                                                                                    <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" customvalidate="dataItem.validateRateChangeDates()" disablefocus></vr-datetimepicker>
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
-                                                                    <div class="vr-datagrid-cell">
-                                                                        <div class="vr-datagrid-celltext ">
-                                                                            <span ng-hide="dataItem.NewRate != null" vr-disabled="{{::(dataItem.isSellingProductZone || dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || !dataItem.IsCurrentRateEditable || (dataItem.currentRateEED != undefined))}}">
-                                                                                <vr-datetimepicker type="date"
-                                                                                                   value="dataItem.CurrentRateEED"
-                                                                                                   onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"
-                                                                                                   customvalidate="dataItem.validateRateChangeDates()" disablefocus>
-                                                                                </vr-datetimepicker>
-                                                                            </span>
-                                                                            <span ng-show="dataItem.NewRate != null" vr-disabled="true">
-                                                                                <vr-datetimepicker type="date"
-                                                                                                   value="dataItem.NewRateEED"
-                                                                                                   customvalidate="dataItem.validateNewRateDates()"
-                                                                                                   disablefocus>
-                                                                                </vr-datetimepicker>
-                                                                            </span>
+                                                                    <div style="display:inline-block;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
+                                                                        <div class="vr-datagrid-cell">
+                                                                            <div class="vr-datagrid-celltext ">
+                                                                                <span ng-hide="dataItem.NewRate != null" vr-disabled="{{::(dataItem.isSellingProductZone || dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || !dataItem.IsCurrentRateEditable || (dataItem.currentRateEED != undefined))}}">
+                                                                                    <vr-datetimepicker type="date"
+                                                                                                       value="dataItem.CurrentRateEED"
+                                                                                                       onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"
+                                                                                                       customvalidate="dataItem.validateRateChangeDates()" disablefocus>
+                                                                                    </vr-datetimepicker>
+                                                                                </span>
+                                                                                <span ng-show="dataItem.NewRate != null" vr-disabled="true">
+                                                                                    <vr-datetimepicker type="date"
+                                                                                                       value="dataItem.NewRateEED"
+                                                                                                       customvalidate="dataItem.validateNewRateDates()"
+                                                                                                       disablefocus>
+                                                                                    </vr-datetimepicker>
+                                                                                </span>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
 
-                                                                <!--</div>-->
+                                                                    <!--</div>-->
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div ng-if="dataItem.loadDrilldownTemplate" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;display:block">
-                                                            <div style="margin:-2px;width:20px;display:inline-block"></div>
-                                                            <div style="width:calc(100% - 20px);display:inline-block;padding:5px;background-color:#F5F5F5;border-left:1px solid #D0D0D0">
-                                                                <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+                                                            <div ng-if="dataItem.loadDrilldownTemplate" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;display:block">
+                                                                <div style="margin:-2px;width:20px;display:inline-block"></div>
+                                                                <div style="width:calc(100% - 20px);display:inline-block;padding:5px;background-color:#F5F5F5;border-left:1px solid #D0D0D0">
+                                                                    <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                         </vr-validation-group>
 
                                         <!--<div id="rowTemplate">-->
@@ -418,7 +560,7 @@
                         </div>
                     </div>
                 </vr-validation-group>
-                
+
             </div>
         </vr-columns>
     </vr-row>

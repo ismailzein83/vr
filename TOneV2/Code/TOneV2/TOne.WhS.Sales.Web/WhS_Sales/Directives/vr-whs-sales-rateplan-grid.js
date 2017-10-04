@@ -109,8 +109,13 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 $scope.costCalculationMethods = [];
                 gridDrillDownDefinitions = getGridDrillDownDefinitions();
 
+                $scope.onFilterRoutingProductSelectorReady = function (api) {
+                    filterRoutingProductSelectorAPI = api;
+                    filterRoutingProductSelectorReadyDeferred.resolve();
+                };
+
+                initGridFilter();
                 defineScrollEvent();
-                defineAPI();
 
                 $scope.onZoneNameClicked = function (dataItem) {
                     var primarySaleEntity = (gridQuery.SaleAreaSettings != undefined) ? gridQuery.SaleAreaSettings.PrimarySaleEntity : undefined;
@@ -215,7 +220,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     return rowStyle;
                 };
 
-
                 $scope.expandRow = function (dataItem) {
                     dataItem.loadDrilldownTemplate = true;
                     dataItem.isRowExpanded = true;
@@ -274,40 +278,16 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     lastTriggerFilterZonesTime = VRDateTimeService.getNowDateTime();
                     triggerfilterZones();
                 };
-
+                $scope.resetGridFilter = function () {
+                    resetGridFilter();
+                };
                 $scope.sortZones = function (col) {
                     sortZones(col);
                 };
-            }
 
-            var lastTriggerFilterZonesTime;
-
-            function triggerfilterZones() {
-                var diffInMilliseconds = (VRDateTimeService.getNowDateTime()).getTime() - lastTriggerFilterZonesTime;
-                if (diffInMilliseconds < 1000) {
-                    setTimeout(triggerfilterZones, 1000);
-                }
-                else {
-                    filterZones();
-                    lastTriggerFilterZonesTime = undefined;
-                }
-            }
-
-            function filterZones() {
-                filteredZoneItems.length = 0;
-                $scope.zoneItems.length = 0;
-                for (var i = 0; i < allZoneItems.length; i++) {
-                    var zoneItem = allZoneItems[i];
-                    if (!isZoneItemExcluded(zoneItem))
-                        filteredZoneItems.push(zoneItem);
-                }
-                return displayZoneItems();
-            }
-
-            function isZoneItemExcluded(zoneItem) {
-                if ($scope.zoneFilter != undefined && zoneItem.ZoneName.toLowerCase().indexOf($scope.zoneFilter.toLowerCase()) < 0)
-                    return true;
-                return false;
+                UtilsService.waitMultiplePromises([filterRoutingProductSelectorReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function setColumnsWidthesInCSS() {
@@ -360,6 +340,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         $scope.scopeModel.longPrecision = query.longPrecision;
                     }
 
+                    defineRouteOptionNumbers();
+                    defineDefaultCostComparisonOptions();
+                    resetGridFilter();
+
+                    $scope.isCurrentRateSourceFilterHidden = (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value);
+
                     var promises = [];
                     $scope.isLoading = true;
 
@@ -371,6 +357,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                     var setDayOffsetsDeferred = setDayOffsets();
                     promises.push(setDayOffsetsDeferred);
+
+                    var loadFilterRoutingProductSelectorPromise = loadFilterRoutingProductSelector();
+                    promises.push(loadFilterRoutingProductSelectorPromise);
 
                     loadZoneLettersPromise.then(function () {
                         if ($scope.zoneLetters.length > 0) {
@@ -470,6 +459,18 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                 $scope.zoneLetters.push(allZonesLetter);
                             }
                         });
+                    }
+                    function loadFilterRoutingProductSelector() {
+                        var filterRoutingProductLoadDeferred = UtilsService.createPromiseDeferred();
+                        var filterRoutingProductSelectorPayload = {
+                            filter: {
+                                SellingNumberPlanId: gridQuery.ownerSellingNumberPlanId,
+                                AssignableToOwnerType: gridQuery.OwnerType,
+                                AssignableToOwnerId: gridQuery.OwnerId
+                            }
+                        };
+                        VRUIUtilsService.callDirectiveLoad(filterRoutingProductSelectorAPI, filterRoutingProductSelectorPayload, filterRoutingProductLoadDeferred);
+                        return filterRoutingProductLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises).finally(function () {
@@ -1202,5 +1203,303 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     }
                 }
             }
+
+            /*##### Grid Filter #####*/
+            var lastTriggerFilterZonesTime;
+            var filterRoutingProductSelectorAPI;
+            var filterRoutingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            function initGridFilter() {
+                defineGridFilterDataSources();
+                defineGridFilterDefaultValues();
+                function defineGridFilterDataSources() {
+                    $scope.comparisonOptions =
+                    [
+                        { value: 1, text: 'Equals', symbol: '=' },
+                        { value: 2, text: 'Greater Than', symbol: '>' },
+                        { value: 3, text: 'Less Than', symbol: '<' }
+                    ];
+                    $scope.rateSourceOptions =
+                    [
+                        { value: 1, text: 'Inherited', symbol: 'I' },
+                        { value: 2, text: 'Explicit', symbol: 'E' }
+                    ];
+                    $scope.newRateFilterOptions =
+                    [
+                        { value: 1, text: 'Priced', symbol: 'Priced' },
+                        { value: 2, text: 'Unpriced', symbol: 'Unpriced' },
+                        { value: 3, text: 'Equals', symbol: '=' },
+                        { value: 4, text: 'Greater Than', symbol: '>' },
+                        { value: 5, text: 'Less Than', symbol: '<' }
+                    ];
+                    $scope.rateComparisonOptions =
+                    [
+                        { value: 1, text: 'Increase', symbol: 'I' },
+                        { value: 2, text: 'Decrease', symbol: 'D' }
+                    ];
+                }
+                function defineGridFilterDefaultValues() {
+                    $scope.routeOptionNumbers = [];
+                    $scope.selectedRateSourceOptions = [];
+                    $scope.costComparisonOptions = [];
+                    $scope.costFilterValues = [];
+                    $scope.selectedRateComparisonOptions = [];
+
+                    var defaultComparisonOption = getDefaultComparisonOption();
+                    $scope.currentRateComparisonOption = defaultComparisonOption;
+                    $scope.marginComparisonOption = defaultComparisonOption;
+                    $scope.marginPercentageComparisonOption = defaultComparisonOption;
+
+                    $scope.routeOptionComparisonOption = defaultComparisonOption;
+                    $scope.newRateFilterOption = getDefaultNewRateFilterOption();
+                }
+            }
+            function defineRouteOptionNumbers() {
+                $scope.routeOptionNumbers.length = 0;
+                for (var i = 0; i < gridQuery.NumberOfOptions; i++) {
+                    var optionNumberValue = i + 1;
+                    $scope.routeOptionNumbers.push({
+                        value: optionNumberValue,
+                        text: 'Option ' + optionNumberValue
+                    });
+                }
+                if ($scope.routeOptionNumbers.length > 0)
+                    $scope.routeOptionNumber = $scope.routeOptionNumbers[0];
+            }
+            function defineDefaultCostComparisonOptions() {
+                $scope.costComparisonOptions.length = 0;
+                var defaultComparisonOption = getDefaultComparisonOption();
+                if (gridQuery.CostCalculationMethods != null) {
+                    for (var i = 0; i < gridQuery.CostCalculationMethods.length; i++) {
+                        $scope.costComparisonOptions.push(defaultComparisonOption);
+                    }
+                }
+            }
+            function getDefaultComparisonOption() {
+                return $scope.comparisonOptions[1];
+            }
+            function getDefaultNewRateFilterOption() {
+                return $scope.newRateFilterOptions[3];
+            }
+
+            function triggerfilterZones() {
+                var diffInMilliseconds = (VRDateTimeService.getNowDateTime()).getTime() - lastTriggerFilterZonesTime;
+                if (diffInMilliseconds < 1000) {
+                    setTimeout(triggerfilterZones, 1000);
+                }
+                else {
+                    filterZones();
+                    lastTriggerFilterZonesTime = undefined;
+                }
+            }
+            function filterZones() {
+                filteredZoneItems.length = 0;
+                $scope.zoneItems.length = 0;
+                for (var i = 0; i < allZoneItems.length; i++) {
+                    var zoneItem = allZoneItems[i];
+                    if (!isZoneItemExcluded(zoneItem))
+                        filteredZoneItems.push(zoneItem);
+                }
+                return displayZoneItems();
+            }
+            function isZoneItemExcluded(zoneItem) {
+
+                function zoneNameFilter(zoneName) {
+                    return ($scope.zoneNameFilterValue == undefined || zoneName.toLowerCase().indexOf($scope.zoneNameFilterValue.toLowerCase()) >= 0);
+                }
+                function routingProductFilter(currentRoutingProductId) {
+                    if ($scope.filterRoutingProducts.length == 0 || currentRoutingProductId == undefined)
+                        return true;
+                    return UtilsService.getItemIndexByVal($scope.filterRoutingProducts, currentRoutingProductId, 'RoutingProductId') != -1;
+                }
+                function currentRateSourceFilter(isCurrentRateEditable) {
+                    if ($scope.selectedRateSourceOptions.length == 0)
+                        return true;
+                    if (isCurrentRateEditable == undefined)
+                        return false;
+                    for (var i = 0; i < $scope.selectedRateSourceOptions.length; i++) {
+                        switch ($scope.selectedRateSourceOptions[i].symbol) {
+                            case 'I':
+                                if (!isCurrentRateEditable)
+                                    return true;
+                            case 'E':
+                                if (isCurrentRateEditable)
+                                    return true;
+                        }
+                    }
+                    return false;
+                }
+                function currentRateFilter(currentRateValue) {
+                    return comparisonOptionFilter(currentRateValue, $scope.currentRateFilterValue, $scope.currentRateComparisonOption);
+                }
+                function newRateFilter(newRateValue) {
+                    if ($scope.newRateFilterOption == undefined)
+                        return true;
+                    if ($scope.newRateFilterOption.symbol == 'Priced')
+                        return newRateValue != undefined;
+                    if ($scope.newRateFilterOption.symbol == 'Unpriced')
+                        return newRateValue == undefined;
+                    return comparisonOptionFilter(newRateValue, $scope.newRateFilterValue, $scope.newRateFilterOption);
+                }
+                function rateComparisionFilter(currentRateValue, newRateValue) {
+                    if ($scope.selectedRateComparisonOptions.length == 0)
+                        return true;
+                    if (currentRateValue == undefined || newRateValue == undefined || currentRateValue == newRateValue)
+                        return false;
+                    for (var i = 0; i < $scope.selectedRateComparisonOptions.length; i++) {
+                        switch ($scope.selectedRateComparisonOptions[i].text) {
+                            case 'Increase':
+                                if (newRateValue > currentRateValue)
+                                    return true;
+                                break;
+                            case 'Decrease':
+                                if (newRateValue < currentRateValue)
+                                    return true;
+                                break;
+                        }
+                    }
+                    return false;
+                }
+                function routeOptionFilter(rpRouteDetail) {
+                    if ($scope.routeOptionNumber == undefined || $scope.routeOptionComparisonOption == undefined || $scope.routeOptionFilterValue == undefined)
+                        return true;
+                    if (rpRouteDetail == undefined || rpRouteDetail.RouteOptionsDetails == null || rpRouteDetail.RouteOptionsDetails.length == 0)
+                        return false;
+                    if ($scope.routeOptionNumber.value > rpRouteDetail.RouteOptionsDetails.length)
+                        return false;
+                    var routeOption = rpRouteDetail.RouteOptionsDetails[$scope.routeOptionNumber.value - 1];
+                    return comparisonOptionFilter(routeOption.ConvertedSupplierRate, $scope.routeOptionFilterValue, $scope.routeOptionComparisonOption);
+                }
+                function costsFilter(costValues) {
+                    for (var i = 0; i < $scope.costCalculationMethods.length; i++) {
+                        var costValue = costValues[i];
+                        var costFilterValue = $scope.costFilterValues[i];
+                        var costComparisonOption = $scope.costComparisonOptions[i];
+                        if (!comparisonOptionFilter(costValue, costFilterValue, costComparisonOption))
+                            return false;
+                    }
+                    return true;
+                }
+                function marginFilter(marginValue) {
+                    return comparisonOptionFilter(marginValue, $scope.marginFilterValue, $scope.marginComparisonOption);
+                }
+                function marginPercentageFilter(marginPercentageValue) {
+                    return comparisonOptionFilter(marginPercentageValue, $scope.marginPercentageFilterValue, $scope.marginPercentageComparisonOption);
+                }
+                function comparisonOptionFilter(value, filterValue, comparisonOption) {
+                    if (comparisonOption == undefined || filterValue == undefined)
+                        return true;
+                    if (value == undefined)
+                        return false;
+                    var parsedValue = parseFloat(value);
+                    var parsedFilterValue = parseFloat(filterValue);
+                    switch (comparisonOption.symbol) {
+                        case '=':
+                            if (parsedValue == parsedFilterValue)
+                                return true;
+                            break;
+                        case '>':
+                            if (parsedValue > parsedFilterValue)
+                                return true;
+                            break;
+                        case '<':
+                            if (parsedValue < parsedFilterValue)
+                                return true;
+                            break;
+                    }
+                    return false;
+                }
+                function pricingOptionFilter(value, pricingOption) {
+                    if (pricingOption == undefined)
+                        return true;
+                    switch (pricingOption.text) {
+                        case 'Priced':
+                            if (value != undefined)
+                                return true;
+                            break;
+                        case 'Unpriced':
+                            if (value == undefined)
+                                return true;
+                            break;
+                    }
+                    return false;
+                }
+
+                if (!zoneNameFilter(zoneItem.ZoneName))
+                    return true;
+                if (!routingProductFilter(zoneItem.CurrentRoutingProductId))
+                    return true;
+                if (!currentRateSourceFilter(zoneItem.IsCurrentRateEditable))
+                    return true;
+                if (!currentRateFilter(zoneItem.CurrentRate))
+                    return true;
+                if (!newRateFilter(zoneItem.NewRate))
+                    return true;
+                if (!rateComparisionFilter(zoneItem.CurrentRate, zoneItem.NewRate))
+                    return true;
+                if (!costsFilter(zoneItem.Costs))
+                    return true;
+                if (!routeOptionFilter(zoneItem.RPRouteDetail))
+                    return true;
+                if (!marginFilter(zoneItem.Margin))
+                    return true;
+                if (!marginPercentageFilter(zoneItem.MarginPercentage))
+                    return true;
+
+                return false;
+            }
+            function resetGridFilter() {
+                var defaultComparisonOption = getDefaultComparisonOption();
+
+                resetZoneFilter();
+                resetRoutingProductFilter();
+                resetCurrentRateFilter();
+                resetRouteOptionFilter();
+                resetCostFilters();
+                resetMarginFilter();
+                resetMarginPercentageFilter();
+                resetNewRateFilter();
+
+                function resetZoneFilter() {
+                    $scope.zoneNameFilterValue = undefined;
+                }
+                function resetRoutingProductFilter() {
+                    $scope.filterRoutingProducts.length = 0;
+                }
+                function resetCurrentRateFilter() {
+                    $scope.currentRateComparisonOption = undefined;
+                    $scope.currentRateFilterValue = undefined;
+                    $scope.selectedRateSourceOptions.length = 0;
+                }
+                function resetRouteOptionFilter() {
+                    $scope.routeOptionNumber = ($scope.routeOptionNumbers.length > 0) ? $scope.routeOptionNumbers[0] : undefined;
+                    $scope.routeOptionComparisonOption = defaultComparisonOption;
+                    $scope.routeOptionFilterValue = undefined;
+                }
+                function resetCostFilters() {
+                    $scope.costComparisonOptions.length = 0;
+                    $scope.costFilterValues.length = 0;
+                    if (gridQuery.CostCalculationMethods != null) {
+                        for (var i = 0; i < gridQuery.CostCalculationMethods.length; i++) {
+                            $scope.costComparisonOptions.push(defaultComparisonOption);
+                            $scope.costFilterValues.push(undefined);
+                        }
+                    }
+                }
+                function resetMarginFilter() {
+                    $scope.marginComparisonOption = defaultComparisonOption;
+                    $scope.marginFilterValue = undefined;
+                }
+                function resetMarginPercentageFilter() {
+                    $scope.marginPercentageComparisonOption = defaultComparisonOption;
+                    $scope.marginPercentageFilterValue = undefined;
+                }
+                function resetNewRateFilter() {
+                    $scope.newRateFilterOption = getDefaultNewRateFilterOption();
+                    $scope.newRateFilterValue = undefined;
+                    $scope.selectedRateComparisonOptions.length = 0;
+                }
+            }
+            /*##### Grid Filter #####*/
         }
     }]);
