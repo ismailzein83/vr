@@ -71,7 +71,6 @@ app.directive('vrCommonCompanycontactSettingsEditor', ['UtilsService', 'VRUIUtil
                 var api = {};
 
                 api.load = function (payload) {
-                    $scope.scopeModel.isrequi = true
                     if (payload != undefined) {
                         $scope.scopeModel.contactTypes.length = 0;
                         if (payload.data != undefined && payload.data.ContactTypes != undefined) {
