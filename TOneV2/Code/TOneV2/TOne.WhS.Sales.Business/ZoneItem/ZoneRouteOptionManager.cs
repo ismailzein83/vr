@@ -20,9 +20,12 @@ namespace TOne.WhS.Sales.Business
         private Guid? _rateCalculationCostColumnConfigId;
         private RateCalculationMethod _rateCalculationMethod;
 
+        private int _longPrecisionValue;
+        private int _normalPrecisionValue;
+
         private Dictionary<long, RPRouteDetail> _rpRoutesByZoneId = new Dictionary<long, RPRouteDetail>();
 
-        public ZoneRouteOptionManager(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId)
+        public ZoneRouteOptionManager(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId, int longPrecisionValue, int normalPrecisionValue)
         {
             if (rpZones != null && rpZones.Count() > 0)
             {
@@ -36,6 +39,9 @@ namespace TOne.WhS.Sales.Business
             _costCalculationMethods = costCalculationMethods;
             _rateCalculationCostColumnConfigId = rateCalculationCostColumnConfigId;
             _rateCalculationMethod = rateCalculationMethod;
+
+            _longPrecisionValue = longPrecisionValue;
+            _normalPrecisionValue = normalPrecisionValue;
         }
 
         #endregion
@@ -89,7 +95,7 @@ namespace TOne.WhS.Sales.Business
                 var context = new CostCalculationMethodContext() { ZoneIds = zoneIds, Route = route, CustomObject = customObjects[i] };
                 _costCalculationMethods[i].CalculateCost(context);
                 customObjects[i] = context.CustomObject;
-                zoneItem.Costs.Add(context.Cost);
+                zoneItem.Costs.Add(decimal.Round(context.Cost, _longPrecisionValue));
             }
         }
 
@@ -101,8 +107,8 @@ namespace TOne.WhS.Sales.Business
                 if (firstSupplierRate.HasValue)
                 {
                     decimal margin = zoneItem.CurrentRate.Value - firstSupplierRate.Value;
-                    zoneItem.Margin = margin;
-                    zoneItem.MarginPercentage = (firstSupplierRate.Value > 0) ? ((margin / firstSupplierRate.Value) * 100) : 0;
+                    zoneItem.Margin = decimal.Round(margin, _longPrecisionValue);
+                    zoneItem.MarginPercentage = (firstSupplierRate.Value > 0) ? decimal.Round(((margin / firstSupplierRate.Value) * 100), _normalPrecisionValue) : 0;
                 }
             }
         }

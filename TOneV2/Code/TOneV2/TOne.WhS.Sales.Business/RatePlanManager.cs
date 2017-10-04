@@ -282,10 +282,11 @@ namespace TOne.WhS.Sales.Business
             int? sellingProductId = GetSellingProductId(input.OwnerType, input.OwnerId, effectiveOn, false);
             Changes draft = _dataManager.GetChanges(input.OwnerType, input.OwnerId, RatePlanStatus.Draft);
 
-            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+            int normalPrecisionValue, longPrecisionValue;
+            SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
 
             var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
-            ZoneRateManager rateSetter = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId, longPrecision, rateLocator);
+            ZoneRateManager rateSetter = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, effectiveOn, draft, input.CurrencyId, longPrecisionValue, rateLocator);
             rateSetter.SetZoneRate(zoneItem);
 
             if (sellingProductId == null)
@@ -317,7 +318,7 @@ namespace TOne.WhS.Sales.Business
                 });
             }
 
-            var routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod, input.CurrencyId);
+            var routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod, input.CurrencyId, longPrecisionValue, normalPrecisionValue);
             routeOptionManager.SetZoneRouteOptionProperties(new List<ZoneItem>() { zoneItem });
 
             return zoneItem;
@@ -663,10 +664,11 @@ namespace TOne.WhS.Sales.Business
             BulkActionValidationResult validationResult = null;
             IEnumerable<SaleZone> applicableSaleZones = saleZones.FindAllRecords(x => applicableZoneIds.Contains(x.SaleZoneId));
 
-            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+            int normalPrecisionValue, longPrecisionValue;
+            SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
 
             var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
-            var rateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, input.EffectiveOn, draft, input.CurrencyId, longPrecision, rateLocator);
+            var rateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, input.EffectiveOn, draft, input.CurrencyId, longPrecisionValue, rateLocator);
 
             var zoneRPLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(input.EffectiveOn));
             var routingProductManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, draft, zoneRPLocator);
@@ -695,6 +697,8 @@ namespace TOne.WhS.Sales.Business
                         NumberOfOptions = input.NumberOfOptions,
                         CostCalculationMethods = input.CostCalculationMethods,
                         CurrencyId = input.CurrencyId,
+                        LongPrecisionValue = longPrecisionValue,
+                        NormalPrecisionValue = normalPrecisionValue,
                         RateManager = rateManager,
                         RoutingProductManager = routingProductManager,
                         SaleRateManager = saleRateManager
@@ -706,7 +710,7 @@ namespace TOne.WhS.Sales.Business
 
             Func<decimal, decimal> getRoundedRate = (rate) =>
             {
-                return decimal.Round(rate, longPrecision);
+                return decimal.Round(rate, longPrecisionValue);
             };
 
             foreach (SaleZone applicableSaleZone in applicableSaleZones)
@@ -984,12 +988,13 @@ namespace TOne.WhS.Sales.Business
                 }
             }
 
-            int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+            int normalPrecisionValue, longPrecisionValue;
+            SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
 
             var baseRatesByZone = new BaseRatesByZone();
             var saleRateManager = new SaleRateManager();
 
-            var rateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, input.SellingProductId, input.EffectiveOn, input.Draft, input.CurrencyId, longPrecision, input.CurrentRateLocator);
+            var rateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, input.SellingProductId, input.EffectiveOn, input.Draft, input.CurrencyId, longPrecisionValue, input.CurrentRateLocator);
             var rpManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, input.Draft, input.RoutingProductLocator);
 
             var pricingSettings = UtilitiesManager.GetPricingSettings(input.OwnerType, input.OwnerId);
@@ -1019,6 +1024,8 @@ namespace TOne.WhS.Sales.Business
                         NumberOfOptions = input.NumberOfOptions,
                         CostCalculationMethods = input.CostCalculationMethods,
                         CurrencyId = input.CurrencyId,
+                        LongPrecisionValue = longPrecisionValue,
+                        NormalPrecisionValue = normalPrecisionValue,
                         RateManager = rateManager,
                         RoutingProductManager = rpManager,
                         SaleRateManager = saleRateManager
@@ -1035,7 +1042,7 @@ namespace TOne.WhS.Sales.Business
 
             Func<decimal, decimal> getRoundedRate = (rate) =>
             {
-                return decimal.Round(rate, longPrecision);
+                return decimal.Round(rate, longPrecisionValue);
             };
 
             foreach (SaleZone saleZone in input.SaleZones)
@@ -1100,7 +1107,7 @@ namespace TOne.WhS.Sales.Business
             }
 
             IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { SaleZoneId = x.ZoneId, RoutingProductId = x.EffectiveRoutingProductId.Value }, x => x.EffectiveRoutingProductId.HasValue);
-            routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, null, null, input.CurrencyId);
+            routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, null, null, input.CurrencyId, longPrecisionValue, normalPrecisionValue);
             routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
 
             return zoneItems;
@@ -1156,7 +1163,7 @@ namespace TOne.WhS.Sales.Business
             }
 
             IEnumerable<RPZone> contextRPZones = contextZoneItems.MapRecords(x => new RPZone() { SaleZoneId = x.ZoneId, RoutingProductId = x.EffectiveRoutingProductId.Value }, x => x.EffectiveRoutingProductId.HasValue);
-            ZoneRouteOptionManager routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, contextRPZones, input.CostCalculationMethods, null, null, input.CurrencyId);
+            ZoneRouteOptionManager routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, contextRPZones, input.CostCalculationMethods, null, null, input.CurrencyId, input.LongPrecisionValue, input.NormalPrecisionValue);
             routeOptionManager.SetZoneRouteOptionProperties(contextZoneItems.Values);
         }
         private void SetDraftVariables(SalePriceListOwnerType ownerType, int ownerId, out Changes draft, out Dictionary<long, ZoneChanges> zoneDraftsByZoneId, out IEnumerable<int> newCountryIds, out IEnumerable<int> changedCountryIds)
@@ -1237,6 +1244,13 @@ namespace TOne.WhS.Sales.Business
             public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
             public SaleEntityZoneRoutingProductLocator RoutingProductLocator { get; set; }
             public SaleEntityZoneRateLocator CurrentRateLocator { get; set; }
+        }
+
+        private void SetNumberPrecisionValues(out int normalPrecisionValue, out int longPrecisionValue)
+        {
+            var generalSettingsManager = new Vanrise.Common.Business.GeneralSettingsManager();
+            normalPrecisionValue = generalSettingsManager.GetNormalPrecisionValue();
+            longPrecisionValue = generalSettingsManager.GetLongPrecisionValue();
         }
 
         #endregion

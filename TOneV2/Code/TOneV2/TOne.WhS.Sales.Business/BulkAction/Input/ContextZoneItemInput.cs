@@ -31,6 +31,10 @@ namespace TOne.WhS.Sales.Entities
 
         public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
 
+        public int LongPrecisionValue { get; set; }
+
+        public int NormalPrecisionValue { get; set; }
+
         #region Routing Properties
 
         public int RoutingDatabaseId { get; set; }
