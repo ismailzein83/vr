@@ -23,5 +23,14 @@ namespace Vanrise.Entities
         public bool IsDefault { get; set; }
         public string BillingEmails { get; set; }
         public List<Guid> BankDetails { get; set; }
+        public Dictionary<string, CompanyContact> Contacts { get; set; }
+
+    }
+
+    public class CompanyContact
+    {
+        public string ContactName { get; set; }
+        public string Title { get; set; }
+        public string Email { get; set; }
     }
 }

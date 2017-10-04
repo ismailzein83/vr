@@ -12,8 +12,13 @@
             });
         }
 
+        function GetCompanyContactTypes() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCompanyContactTypes"));
+        }
+
         return ({
-            GetCompanySettingsInfo: GetCompanySettingsInfo
+            GetCompanySettingsInfo: GetCompanySettingsInfo,
+            GetCompanyContactTypes: GetCompanyContactTypes
         });
     }
 

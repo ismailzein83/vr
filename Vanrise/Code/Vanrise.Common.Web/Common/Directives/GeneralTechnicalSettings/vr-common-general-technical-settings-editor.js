@@ -20,11 +20,17 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
 
         function settingEditorCtor(ctrl, $scope, $attrs) {
             var gaSettingsAPI;
-            var gaSettingsReadyDeferred = UtilsService.createPromiseDeferred();          
+            var gaSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+            var companyContactSettingsAPI;
+            var companyContactSettingsReadyDeferred = UtilsService.createPromiseDeferred();
             $scope.scopeModel = {};
             $scope.scopeModel.onGaSettingsReady = function (api) {
                 gaSettingsAPI = api;
                 gaSettingsReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onCompanyContactSettingsReady = function (api) {
+                companyContactSettingsAPI = api;
+                companyContactSettingsReadyDeferred.resolve();
             };
            
             function initializeController() {
@@ -49,6 +55,17 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
                     });
                     
 
+                    var companyContactSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+                    promises.push(companyContactSettingsLoadDeferred.promise);
+
+                    companyContactSettingsReadyDeferred.promise.then(function () {
+                        var companyContactpayload = {
+                            data: payload != undefined && payload.data != undefined ? payload.data.CompanySettingDefinition : undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(companyContactSettingsAPI, companyContactpayload, companyContactSettingsLoadDeferred);
+                    });
+
+
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -56,7 +73,8 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Entities.GeneralTechnicalSettingData, Vanrise.Entities",
-                        GAData: gaSettingsAPI.getData()
+                        GAData: gaSettingsAPI.getData(),
+                        CompanySettingDefinition: companyContactSettingsAPI.getData()
                     };
                 };
                 

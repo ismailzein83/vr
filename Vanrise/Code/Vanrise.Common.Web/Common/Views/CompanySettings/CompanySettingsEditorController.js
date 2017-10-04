@@ -2,13 +2,15 @@
 
     "use strict";
 
-    companySettingsEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    companySettingsEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_CompanySettingsAPIService'];
 
-    function companySettingsEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function companySettingsEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VRCommon_CompanySettingsAPIService) {
 
         var isEditMode;
         var setDefault;
         var companySettingEntity;
+
+        var contactsTypes = [];
 
         var bankDirectiveApi;
         var bankReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -30,6 +32,9 @@
         function defineScope() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.contactTabObject = { showTab: false };
+            $scope.scopeModel.contacts = [];
+
             $scope.scopeModel.saveCompanySetting = function () {
                 if (isEditMode)
                     return updateCompanySettings();
@@ -50,17 +55,27 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-            loadAllControls()
+            loadContactsTypes().then(function () {
+                loadAllControls();
+            });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail, loadCompanyContacts])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.scopeModel.isLoading = false;
               });
+        }
+
+        function loadContactsTypes() {
+            return VRCommon_CompanySettingsAPIService.GetCompanyContactTypes().then(function (response) {
+                contactsTypes = response;
+                if (response != null && response.length > 0)
+                    $scope.scopeModel.contactTabObject.showTab = true;
+            });
         }
 
         function setTitle() {
@@ -70,7 +85,46 @@
                 $scope.title = UtilsService.buildTitleForAddEditor("Company");
         }
 
+        function loadCompanyContacts() {
+            if (contactsTypes != null ) {
+                for (var i = 0; i < contactsTypes.length; i++) {
+                    var contactType = contactsTypes[i];
+                    var settings;
+                    if (companySettingEntity != undefined && companySettingEntity.Contacts != undefined) {
+                        settings = companySettingEntity.Contacts[contactType.Name];
+                    }
+                    addContact(contactType, settings);
+                }
+            }
+            
+        }
 
+        function addContact(contactType, settings) {
+            var contact = {
+                label: contactType.Title,
+                contactType :contactType.Name,
+                name: settings != undefined ? settings.ContactName : undefined,
+                title: settings != undefined ? settings.Title : undefined,
+                email: settings != undefined ? settings.Email : undefined
+            };
+            $scope.scopeModel.contacts.push(contact);
+        }
+        function getContactsData() {
+            var contacts = {};
+            if ($scope.scopeModel.contacts.length > 0) {
+                for (var i = 0; i < $scope.scopeModel.contacts.length; i++) {
+                    var contact = $scope.scopeModel.contacts[i];
+                    var obj = {
+                        ContactName: contact.name,
+                        Title: contact.title,
+                        Email: contact.email
+                    };
+                    if (obj != null)
+                        contacts[contact.contactType] = obj;
+                }
+            }
+            return contacts;
+        }
         function loadBankDetail() {
             var loadBankPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -124,7 +178,8 @@
                 CompanyLogo: ($scope.scopeModel.companyLogo != null) ? $scope.scopeModel.companyLogo.fileId : 0,
                 IsDefault: $scope.scopeModel.isDefault,
                 BillingEmails: $scope.scopeModel.toMail.join(";"),
-                BankDetails: bankDirectiveApi.getSelectedIds()
+                BankDetails: bankDirectiveApi.getSelectedIds(),
+                Contacts: getContactsData()
             };
             return obj;
         }

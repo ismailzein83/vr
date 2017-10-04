@@ -130,6 +130,14 @@ namespace Vanrise.Common.Business
             return lstCompanySettingsInfo;
         }
 
+        public List<CompanyContactType> GetCompanyContactTypes()
+        {
+            var companyContactTypes = new List<CompanyContactType>();
+            var generalTechnicalSettingData = GetGeneralTechnicalSetting();
+            if (generalTechnicalSettingData != null && generalTechnicalSettingData.CompanySettingDefinition != null)
+                 companyContactTypes =  generalTechnicalSettingData.CompanySettingDefinition.ContactTypes;
+            return companyContactTypes;
+        }
         public IEnumerable<CompanySetting> GetCompanySetting()
         {
             SettingManager settingManager = new SettingManager();

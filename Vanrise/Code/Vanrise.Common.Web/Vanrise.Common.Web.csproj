@@ -212,8 +212,10 @@
     <Content Include="Common\Directives\ActionAudit\vr-common-actionauditlkup-selector.js" />
     <Content Include="Common\Directives\BankDetail\vr-common-bank-detail-selector.js" />
     <Content Include="Common\Directives\Gender\vr-common-gender-selector.js" />
+    <Content Include="Common\Directives\GeneralTechnicalSettings\Templates\CompanyContactSettings.html" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\Templates\GATemplateSettings.html" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\Templates\GeneralTemplateTechnicalSettings.html" />
+    <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companycontact-settings-editor.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-ga-settings-editor.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-general-technical-settings-editor.js" />
     <Content Include="Common\Directives\Region\Templates\RegionGridTemplate.html" />

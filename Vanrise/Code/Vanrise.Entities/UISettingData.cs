@@ -32,11 +32,27 @@ namespace Vanrise.Entities
     public class GeneralTechnicalSettingData :SettingData
     {
         public GoogleAnalyticsData GAData { get; set; }
+
+        public CompanySettingDefinition CompanySettingDefinition { get; set; } 
+       
+
     }
     public class GoogleAnalyticsData
     {
         public bool IsEnabled { get; set; }
 
         public string Account { get; set; }
+    }
+
+    public class CompanySettingDefinition
+    {
+        public List<CompanyContactType> ContactTypes { get; set; }
+
+    }
+    public class CompanyContactType
+    {
+        public string Name { get; set; }
+
+        public string Title { get; set; }
     }
 }
