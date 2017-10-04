@@ -34,6 +34,8 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
         var gridAPI;
         var context;
 
+        var selectAllValue;
+
         function initializeController() {
             $scope.salePriceLists = [];
             $scope.hideSelectedColumn = true;
@@ -110,7 +112,7 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                 return whSBeSalePricelistApiService.GetFilteredSalePriceLists(dataRetrievalInput)
                     .then(function (response) {
                         if (response != undefined && response.Data != null) {
-                            var selectAllValue = context.getSelectAllValue();
+                            setSelectAllValue();
                             for (var i = 0; i < response.Data.length; i++) {
                                 response.Data[i].isSelected = selectAllValue;
                             }
@@ -172,6 +174,10 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                     .then(function (response) {
                         utilsService.downloadFile(response.data, response.headers);
                     });
+        }
+
+        function setSelectAllValue() {
+            selectAllValue = (context.getSelectAllValue != undefined) ? context.getSelectAllValue() : undefined;
         }
     }
 
