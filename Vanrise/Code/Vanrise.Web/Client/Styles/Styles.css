@@ -1177,7 +1177,18 @@ loader .outer-loader {
     border-radius: 0px !important;
     padding: 8px 5px !important;
 }
-
+.vr-company-name{
+    font-size:10px;
+    text-align:center ;
+    position:relative ;
+    left : -15px ;
+    display:inline-block ;
+    width : calc(100% - 5px) ;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    font-weight: bold;
+}
 .active-menu {
     color: #666 !important;
     background-color: #ddd !important;

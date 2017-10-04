@@ -79,6 +79,7 @@
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-if="toogled==true" ng-mouseout="mouseout()" ng-mouseover="mouseover()">
                     <div class="panel panel-default toggle-panel ">
                         <div class="panel-heading dll-menu" style="height: 36px;">
+                            <span title="@ViewBag.CompanyName" class="vr-company-name">@ViewBag.CompanyName</span>
                             <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin " style="font-size: 17px; margin: 6px 4px; position: absolute; right: -1px; top:5px;" ng-click="pinpanel()" ng-class="pinned==true?'unpined-icon':''"></span>
                             <span class=" hand-cursor glyphicon glyphicon-chevron-left" ng-click="hideToogled()" style="font-size: 17px; margin: 6px 4px; position: absolute; right: 16px; top:5px;" ng-if="pinned==true"></span>
                         </div>
@@ -124,7 +125,7 @@
                         <span ng-bind="$root.clock  | date:'EEE dd MMM , yyyy'"></span>
 
                         <span style="color: #6a6a6a;font-weight:bold" ng-bind="$root.clock  | date:'HH:mm:ss'"> </span>
-
+                        <div style="font-size: 10px;">@ViewBag.ProductVersion</div>
                     </div>
 
                 </div>
@@ -165,7 +166,7 @@
                             <span ng-bind="$root.clock  | date:'EEE dd MMM , yyyy'"></span>
 
                             <span style="color: #6a6a6a; font-weight: bold" ng-bind="$root.clock  | date:'HH:mm'"></span>
-
+                            <div style="font-size: 10px;">@ViewBag.ProductVersion</div>
                         </div>
                     </div>
 

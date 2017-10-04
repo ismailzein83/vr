@@ -130,6 +130,22 @@ namespace Vanrise.Common.Business
             return lstCompanySettingsInfo;
         }
 
+        public string GetDefaultCompanyName()
+        {
+            string name = null;
+            IEnumerable<CompanySetting> companySettings = GetCompanySetting();
+            List<CompanySettingsInfo> lstCompanySettingsInfo = new List<CompanySettingsInfo>();
+            var company =  companySettings.FindRecord(c=>c.IsDefault);
+            if (company != null)
+                name = company.CompanyName;
+            return name;           
+        }
+
+        public string GetProductVersionNumber()
+        {
+            return GetProductInfo().VersionNumber;
+        }
+
         public List<CompanyContactType> GetCompanyContactTypes()
         {
             var companyContactTypes = new List<CompanyContactType>();
