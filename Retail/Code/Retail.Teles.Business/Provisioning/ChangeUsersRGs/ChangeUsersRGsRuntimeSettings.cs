@@ -140,7 +140,7 @@ namespace Retail.Teles.Business
 
                 telesSiteId = siteAccountMappingInfo.TelesSiteId;
                 telesSiteId.ThrowIfNull("telesSiteId");
-                var siteTelesUsersToChangeRG = GetTelesUsersToChangeRGFromTelesSite(context, telesSiteId, mappedTelesUserIds, definitionSettings);
+                telesUsersToChangeRG = GetTelesUsersToChangeRGFromTelesSite(context, telesSiteId, mappedTelesUserIds, definitionSettings);
             }
             else
             {
