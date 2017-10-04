@@ -1,7 +1,8 @@
-﻿    using Retail.BusinessEntity.Entities;
+﻿using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,7 +29,8 @@ namespace Retail.Teles.Business
 
         public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
         {
-            return base.DoesUserHaveAccess(context);
+            var securityManager = new Vanrise.Security.Business.SecurityManager();
+           return securityManager.HasPermissionToActions("Retail_Teles/TelesEnterprise/GetFilteredEnterpriseDIDs&Retail_Teles/TelesEnterprise/GetFilteredEnterpriseBusinessTrunks", context.UserId);
         }
         public Guid VRConnectionId { get; set; }
     }
