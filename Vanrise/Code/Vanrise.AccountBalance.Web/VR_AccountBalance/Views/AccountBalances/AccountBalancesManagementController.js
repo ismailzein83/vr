@@ -61,7 +61,7 @@
 
             $scope.scopeModel.top = 1000;
 
-            $scope.scopeModel.signs = [{ text: '>', value: '>', signValue: 0 }, { text: '=>', value: '>=', signValue: 1 }, { text: '<', value: '<', signValue: 2 }, { text: '<=', value: '<=', signValue: 3}];
+            $scope.scopeModel.signs = [{ text: '>', value: '>', signValue: 0 }, { text: '>=', value: '>=', signValue: 1 }, { text: '<', value: '<', signValue: 2 }, { text: '<=', value: '<=', signValue: 3 }];
 
             $scope.scopeModel.orderByOptions = UtilsService.getArrayEnum(VR_AccountBalance_BalanceOrderByEnum);
 

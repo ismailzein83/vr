@@ -351,7 +351,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 whereBuilder.Append(String.Format(@" AND (({0} = 1 and (lb.EED IS NULL or lb.EED >=  GETDATE())) OR  ({0} = 0 and  lb.EED <=  GETDATE())) ", query.IsEffectiveInFuture.Value ? 1 : 0));
 
             if (query.EffectiveDate.HasValue)
-                whereBuilder.Append(String.Format(@" AND (lb.BED <= '{0}' AND (lb.EED > '{0}' OR lb.EED IS NULL))", query.EffectiveDate.Value));
+                whereBuilder.Append(String.Format(@" AND ((lb.BED <= '{0}' OR lb.BED IS NULL) AND (lb.EED > '{0}' OR lb.EED IS NULL))", query.EffectiveDate.Value));
 
             StringBuilder queryBuilder = new StringBuilder(@"SELECT Top(@Top) lb.ID , lb.AccountTypeID , lb.AccountID , lb.CurrencyID , lb.InitialBalance, lb.CurrentBalance ,lb.AlertRuleID ,lb.BED,lb.EED,lb.[Status]
                                                                     FROM [VR_AccountBalance].[LiveBalance] as lb
