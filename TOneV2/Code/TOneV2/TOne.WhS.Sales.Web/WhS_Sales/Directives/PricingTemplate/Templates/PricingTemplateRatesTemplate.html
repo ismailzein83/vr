@@ -1,0 +1,72 @@
+﻿<vr-form name="AddGroup">
+    <vr-row>
+        <vr-whs-sales-pricingtemplate-marginratecalculation on-ready="scopeModel.onMarginRateCalculationReady" normal-col-num="3"></vr-whs-sales-pricingtemplate-marginratecalculation>
+        <vr-columns colnum="6" haschildcolumns>
+            <vr-validator validate="scopeModel.validateRequiredMargin()">
+                <vr-columns width="1/2row">
+                    <vr-textbox type="number" value="scopeModel.margin" label="Margin" onvaluechanged="scopeModel.onMarginChanged" customvalidate="scopeModel.validateMargin()"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-textbox type="number" value="scopeModel.marginPercentage" label="Margin %" onvaluechanged="scopeModel.onMarginChanged" customvalidate="scopeModel.validateMarginPercentage()"></vr-textbox>
+                </vr-columns>
+            </vr-validator>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-textbox type="number" value="scopeModel.fromRate" label="From Rate" isrequired="true"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-textbox type="number" value="scopeModel.toRate" label="To Rate" isrequired="true"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-textbox type="number" value="scopeModel.minRate" label="Min Rate"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-textbox type="number" value="scopeModel.maxRate" label="Max Rate"></vr-textbox>
+        </vr-columns>
+    </vr-row>
+</vr-form>
+<vr-row>
+    <vr-columns colnum="6">
+        <vr-button type="Add" data-onclick="scopeModel.onAddPricingTemplateRate" vr-disabled="AddGroup.validate() != undefined" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns colnum="12">
+        <vr-datagrid on-ready="scopeModel.onGridReady"
+                     datasource="scopeModel.pricingTemplateRates"
+                     ondeleterow="scopeModel.onDeletePricingTemplateRate"
+                     menuactions="scopeModel.menuActions" hidegridmenu>
+
+            <vr-datagridcolumn field="'Entity.Margin'" headertext="'Margin'" type="'number'" widthfactor="1" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn field="'Entity.MarginPercentage'" headertext="'Margin %'" type="'number'" widthfactor="1" disablesorting></vr-datagridcolumn>
+            <!--<vr-datagridcolumn field="'Entity.MarginRateCalculationDescription'" headertext="'Margin Rate Calculation'" type="'text'" widthfactor="1" disablesorting></vr-datagridcolumn>-->
+            <vr-datagridcolumn field="'Entity.FromRate'" headertext="'From Rate'" type="'number'" widthfactor="1" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn field="'Entity.ToRate'" headertext="'ToRate'" type="'number'" widthfactor="1" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn field="'Entity.MinRate'" headertext="'MinRate'" type="'number'" widthfactor="1" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn field="'Entity.MaxRate'" headertext="'MaxRate'" type="'number'" widthfactor="1" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="fullrow" ng-repeat="field in scopeModel.selectedFields">
+        <vr-datalist maxitemsperrow="1" datasource="field">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="dataItem.fieldTitle" label="Field Title" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="dataItem.fieldTitle" label="Field Title" isrequired="true"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-label>Field Name: {{dataItem.fieldTitle}}</vr-label>
+                </vr-columns>
+            </vr-row>
+        </vr-datalist>
+    </vr-columns>
+</vr-row>
+
+<!--onremoveitem="scopeModal.onRemoveField"-->
