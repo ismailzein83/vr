@@ -1,4 +1,72 @@
-﻿<div vr-loader="isLoading" ng-show="showDirective">
+﻿<style type="text/css">
+    /*start of rate-plan-grid */
+    .rate-plan-grid .vr-datagrid-header div {
+        text-transform: none;
+    }
+
+    .rate-plan-grid .vr-datagrid-header {
+        background-color: #829EBF;
+        color: #FFF;
+        cursor: pointer;
+        height: auto;
+        overflow: hidden;
+        font-size: 10px;
+        text-transform: uppercase !important;
+        padding-top: 3px;
+    }
+
+    .rate-plan-grid  .vr-datagrid-header .vr-datagrid-celltext {
+        text-transform: uppercase !important;
+    }
+
+    .rate-plan-grid .vr-datagrid-celltext vr-select[smallselect] .vr-dropdown-select.btn {
+        padding: 4px 2px !important;
+    }
+
+    .rate-plan-grid .vr-datagrid-celltext .right-addon .glyphicon {
+        top: 5px !important;
+    }
+
+    .rate-plan-grid .vr-datagrid-celltext .glyphicon-filter {
+        color: #e85f5e;
+    }
+    .rate-plan-grid vr-select[smallselect] button.btn > span:first-child {
+        display: none !important;
+    }
+
+    .rate-plan-grid vr-select[smallselect] button.btn .vr-select-caret {
+        right: 3px;
+    }
+
+    .rate-plan-grid vr-select[smallselect] .dropdown-menu {
+        width: 70px !important;
+        min-width: unset !important;
+    }
+
+    .rate-plan-grid vr-select[smallselect] .inner-addon {
+        width: 60px !important;
+        padding: 4px 3px !important;
+    }
+
+    .rate-plan-grid vr-select[smallselect] .vr-select-multiple {
+        width: 60px !important;
+    }
+
+    .rate-plan-grid vr-select[smallselect] .vr-select-height {
+        overflow: hidden !important;
+    }
+
+    .rate-plan-grid vr-select[smallselect] .mark-select > div {
+        width: 15px !important;
+    }
+
+    .rate-plan-grid .vr-dash:before {
+        content: "—";
+    }
+/*end of rate-plan-grid */
+</style>
+
+<div vr-loader="isLoading" ng-show="showDirective">
     <div style="min-height: 42px;">
         <vr-row ng-show="showZoneLetters">
             <vr-columns width="fullrow" ng-if="showZoneLetters">
@@ -16,7 +84,7 @@
                         <div class="vr-datagrid-header  drill-down-level-0" style="display: flex" ng-style="headerStyle">
                             <div style="display:inline-flex; width: 100%">
                                 <div style="display:inline-block;width:20px;position: relative;left: 4px;top: 3px;" ng-init="addColumnFixedAndRecalculate('expanddrilldown', 20)">
-                                    <div style="height:20px;font-size: 12px;" ng-init="showfilter =  true">
+                                    <div style="height:20px;font-size: 12px;" ng-init="showfilter =  false">
                                         <i class="glyphicon glyphicon-filter hand-cursor" ng-show="!showfilter" ng-click="showfilter =  true ;" title="show filter"></i>
                                         <span ng-show="showfilter" style="color:#e85f5e" ng-click="showfilter =  false;resetGridFilter()" title="clear filter">
                                             <i class="glyphicon glyphicon-filter hand-cursor "></i>
