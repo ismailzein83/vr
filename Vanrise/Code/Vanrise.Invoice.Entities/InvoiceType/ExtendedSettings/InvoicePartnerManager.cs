@@ -17,7 +17,7 @@ namespace Vanrise.Invoice.Entities
         {
             IPartnerInvoiceSettingManager partnerInvoiceSettingManager = BusinessManagerFactory.GetManager<IPartnerInvoiceSettingManager>();
             IInvoiceSettingManager manager = BusinessManagerFactory.GetManager<IInvoiceSettingManager>();
-            var partnerInvoiceSetting = partnerInvoiceSettingManager.GetPartnerInvoiceSettingByPartnerId(context.PartnerId);
+            var partnerInvoiceSetting = partnerInvoiceSettingManager.GetPartnerInvoiceSettingByPartnerId(context.PartnerId,context.InvoiceTypeId);
             InvoiceSetting invoiceSetting = null;
             if (partnerInvoiceSetting != null)
             {

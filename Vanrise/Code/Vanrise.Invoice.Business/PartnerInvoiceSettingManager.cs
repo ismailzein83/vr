@@ -101,13 +101,13 @@ namespace Vanrise.Invoice.Business
             return deleteOperationOutput;
         }
 
-        public IEnumerable<PartnerInvoiceSetting> GetPartnerInvoiceSettings()
+        public IEnumerable<PartnerInvoiceSetting> GetPartnerInvoiceSettings(Guid invoiceTypeId)
         {
-            return GetCachedPartnerInvoiceSettings().Values;
+            return GetPartnerInvoiceSettingsByInvoiceTypeId(invoiceTypeId);
         }
-        public PartnerInvoiceSetting GetPartnerInvoiceSettingByPartnerId(string partnerId)
+        public PartnerInvoiceSetting GetPartnerInvoiceSettingByPartnerId(string partnerId,Guid invoiceTypeId)
         {
-            var partnerInvoiceSettings = GetPartnerInvoiceSettings();
+            var partnerInvoiceSettings = GetPartnerInvoiceSettings(invoiceTypeId);
             if (partnerInvoiceSettings == null)
                 return null;
             return partnerInvoiceSettings.FirstOrDefault(x => x.PartnerId == partnerId);

@@ -53,7 +53,10 @@ app.directive('vrInvoiceInvoicesettingSelector', ['VR_Invoice_InvoiceSettingAPIS
                 label = "Invoice Settings";
                 multipleselection = "ismultipleselection";
             }
-
+            if (attrs.customlabel != undefined)
+            {
+                label = attrs.customlabel;
+            }
             var addCliked = '';
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewInvoiceSetting"';

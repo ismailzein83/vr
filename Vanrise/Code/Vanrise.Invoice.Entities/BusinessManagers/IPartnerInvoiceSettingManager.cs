@@ -8,7 +8,7 @@ namespace Vanrise.Invoice.Entities
 {
     public interface IPartnerInvoiceSettingManager:IBusinessManager
     {
-        PartnerInvoiceSetting GetPartnerInvoiceSettingByPartnerId(string partnerId);
+        PartnerInvoiceSetting GetPartnerInvoiceSettingByPartnerId(string partnerId,Guid invoiceTypeId);
         T GetPartnerInvoiceSettingDetailByType<T>(Guid partnerInvoiceSettingId) where T : InvoiceSettingPart;
     }
 }
