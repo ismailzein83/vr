@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class WHSFinancialAccountToAdd
     {
         public WHSFinancialAccount FinancialAccount { get; set; }
-        public Guid? InvoiceSettingId { get; set; }
+        public List<InvoiceSettingData> InvoiceSettingsData { get; set; }
+
     }
 }

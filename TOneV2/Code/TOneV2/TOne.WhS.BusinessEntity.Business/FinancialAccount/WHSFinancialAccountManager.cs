@@ -69,9 +69,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 bool insertActionSucc = dataManager.Insert(financialAccountToAdd.FinancialAccount, out financialAccountId);
                 if (insertActionSucc)
                 {
-                    if (financialAccountToAdd.InvoiceSettingId.HasValue)
+                    if (financialAccountToAdd.InvoiceSettingsData != null)
                     {
-                        LinkPartnerToInvoiceSetting(Guid.NewGuid(), financialAccountToAdd.InvoiceSettingId.Value, financialAccountId.ToString());
+                        foreach (var invoiceSettingData in financialAccountToAdd.InvoiceSettingsData)
+                        {
+                            if (invoiceSettingData.InvoiceSettingId.HasValue)
+                            {
+                                LinkPartnerToInvoiceSetting(Guid.NewGuid(), invoiceSettingData.InvoiceSettingId.Value, financialAccountId.ToString());
+                            }
+                        }
                     }
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -104,10 +110,18 @@ namespace TOne.WhS.BusinessEntity.Business
                     bool updateActionSucc = dataManager.Update(financialAccountToEdit);
                     if (updateActionSucc)
                     {
-                        if (financialAccountToEdit.InvoiceSettingId.HasValue)
+                        if (financialAccountToEdit.InvoiceSettingsData != null)
                         {
-                            Guid partnerInvoiceSettingId = financialAccountToEdit.PartnerInvoiceSettingId.HasValue ? financialAccountToEdit.PartnerInvoiceSettingId.Value : Guid.NewGuid();
-                            LinkPartnerToInvoiceSetting(partnerInvoiceSettingId, financialAccountToEdit.InvoiceSettingId.Value, financialAccountToEdit.FinancialAccountId.ToString());
+                            foreach (var invoiceSettingData in financialAccountToEdit.InvoiceSettingsData)
+                            {
+                               
+                                if (invoiceSettingData.InvoiceSettingId.HasValue)
+                                {
+                                    Guid partnerInvoiceSettingId = invoiceSettingData.PartnerInvoiceSettingId.HasValue ? invoiceSettingData.PartnerInvoiceSettingId.Value : Guid.NewGuid();
+                                    LinkPartnerToInvoiceSetting(partnerInvoiceSettingId, invoiceSettingData.InvoiceSettingId.Value, financialAccountToEdit.FinancialAccountId.ToString());
+                                }
+                                
+                            }
                         }
                         Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                         updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;

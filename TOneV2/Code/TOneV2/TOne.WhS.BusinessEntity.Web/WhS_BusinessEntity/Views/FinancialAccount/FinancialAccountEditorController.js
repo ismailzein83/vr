@@ -341,6 +341,7 @@
                 invoiceSettingsData = [];
                 for(var i=0;i<$scope.scopeModel.invoiceSettings.length;i++)
                 {
+                    var invoiceSetting = $scope.scopeModel.invoiceSettings[i];
                     var partnerInvoiceSettingId;
                     if(financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.InvoiceSettingsData != undefined)
                     {
@@ -354,11 +355,11 @@
                             }
                         }
                     }
-                    var invoiceSetting = $scope.scopeModel.invoiceSettings[i];
+                    var selectedId = invoiceSetting.directiveAPI.getSelectedIds();
                     invoiceSettingsData.push({
                         InvoiceSettingId:invoiceSetting.directiveAPI.getSelectedIds(),
                         InvoiceTypeId:invoiceSetting.invoiceTypeId,
-                        PartnerInvoiceSettingId:partnerInvoiceSettingId
+                        PartnerInvoiceSettingId: partnerInvoiceSettingId
                     });
                 }
             }
@@ -384,7 +385,7 @@
                 {
                     var invoiceSetting = $scope.scopeModel.invoiceSettings[i];
                     invoiceSettingsData.push({
-                        InvoiceSettingId:invoiceSetting.directiveAPI.getSelectedIds(),
+                        InvoiceSettingId: invoiceSetting.directiveAPI.getSelectedIds(),
                         InvoiceTypeId:invoiceSetting.invoiceTypeId
                     });
                 }

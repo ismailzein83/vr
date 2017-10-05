@@ -15,7 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
-        public Guid? InvoiceSettingId { get; set; }
-        public Guid? PartnerInvoiceSettingId { get; set; }
+        public List<InvoiceSettingData> InvoiceSettingsData { get; set; }
+      
     }
 }

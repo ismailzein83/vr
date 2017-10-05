@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class InvoiceSettingData
     {
         public Guid InvoiceTypeId { get; set; }
-        public Guid InvoiceSettingId { get; set; }
-        public Guid PartnerInvoiceSettingId { get; set; }
+        public Guid? InvoiceSettingId { get; set; }
+        public Guid? PartnerInvoiceSettingId { get; set; }
     }
 }
