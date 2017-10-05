@@ -24,11 +24,21 @@ namespace TOne.WhS.BusinessEntity.Business.FinancialAccount.EventHandlers
             var eventPayload = context.EventPayload as CarrierProfileStatusChangedEventPayload;
             eventPayload.ThrowIfNull("context.EventPayload", eventPayload);
 
-            VRAccountStatus vrAccountStatus = s_carrierProfileManager.IsCarrierProfileActive(eventPayload.CarrierProfileId) ? VRAccountStatus.Active : VRAccountStatus.InActive;
-
+            VRAccountStatus vrCustomerStatus = s_carrierProfileManager.IsCarrierProfileCustomerActive(eventPayload.CarrierProfileId) ? VRAccountStatus.Active : VRAccountStatus.InActive;
+            VRAccountStatus vrSupplierStatus = s_carrierProfileManager.IsCarrierProfileSupplierActive(eventPayload.CarrierProfileId) ? VRAccountStatus.Active : VRAccountStatus.InActive;
             var financialAccounts = s_financialAccountManager.GetFinancialAccountsByCarrierProfileId(eventPayload.CarrierProfileId);
             if (financialAccounts != null)
-                s_financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(vrAccountStatus, financialAccounts);
+            {
+                if (vrSupplierStatus == vrCustomerStatus)
+                {
+                    s_financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(vrCustomerStatus, financialAccounts, true, true);
+
+                }else
+                {
+                    s_financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(vrCustomerStatus, financialAccounts, true, false);
+                    s_financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(vrSupplierStatus, financialAccounts, false, true);
+                }
+            }
         }
     }
 }

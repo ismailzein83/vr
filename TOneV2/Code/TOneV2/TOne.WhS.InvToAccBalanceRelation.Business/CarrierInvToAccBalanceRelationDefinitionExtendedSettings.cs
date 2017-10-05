@@ -29,20 +29,22 @@ namespace TOne.WhS.InvToAccBalanceRelation.Business
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.AccountId));
             financialAccount.ThrowIfNull("financialAccount", context.AccountId);
-            
 
             WHSFinancialAccountDefinitionManager financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
             var financialAccountDefinitionSettings = financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
-            if(financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
+            if (financialAccountDefinitionSettings.FinancialAccountInvoiceTypes != null)
             {
-                return new List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo>
+                List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> invoiceAccountInfo = new List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo>();
+                foreach (var financialAccountInvoiceType in financialAccountDefinitionSettings.FinancialAccountInvoiceTypes)
                 {
-                    new Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo
-                    {
-                         InvoiceTypeId = financialAccountDefinitionSettings.InvoiceTypeId.Value,
-                          PartnerId = context.AccountId
-                    }
-                };
+                    invoiceAccountInfo.Add(new InvoiceAccountInfo
+                     {
+                         InvoiceTypeId = financialAccountInvoiceType.InvoiceTypeId,
+                         PartnerId = context.AccountId
+                     });
+                }
+                return invoiceAccountInfo;
+
             }
             else
             {

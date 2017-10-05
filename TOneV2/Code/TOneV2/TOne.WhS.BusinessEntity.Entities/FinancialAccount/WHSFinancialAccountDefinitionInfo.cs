@@ -11,6 +11,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Guid FinancialAccountDefinitionId { get; set; }
         public string Name { get; set; }
         public Guid? BalanceAccountTypeId { get; set; }
-        public Guid? InvoiceTypeId { get; set; }
+       // public List<Guid> InvoiceTypeIds { get; set; }
     }
 }

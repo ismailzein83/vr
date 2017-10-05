@@ -82,7 +82,8 @@ namespace TOne.WhS.BusinessEntity.Business
             int carrierProfileId = -1;
 
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-            carrierProfile.Settings.ActivationStatus = CarrierProfileActivationStatus.InActive;
+            carrierProfile.Settings.CustomerActivationStatus = CarrierProfileActivationStatus.InActive;
+            carrierProfile.Settings.SupplierActivationStatus = CarrierProfileActivationStatus.InActive;
             bool insertActionSucc = dataManager.Insert(carrierProfile, out carrierProfileId);
             if (insertActionSucc)
             {
@@ -102,7 +103,8 @@ namespace TOne.WhS.BusinessEntity.Business
             ValidateCarrierProfileToEdit(carrierProfileToEdit);
 
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
-            carrierProfileToEdit.Settings.ActivationStatus = GetCarrierProfileActivationStatus(carrierProfileToEdit.CarrierProfileId);
+            carrierProfileToEdit.Settings.CustomerActivationStatus = GetCarrierProfileCustomerActivationStatus(carrierProfileToEdit.CarrierProfileId);
+            carrierProfileToEdit.Settings.SupplierActivationStatus = GetCarrierProfileSupplierActivationStatus(carrierProfileToEdit.CarrierProfileId);
             bool updateActionSucc = dataManager.Update(carrierProfileToEdit);
             UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new UpdateOperationOutput<CarrierProfileDetail>();
 
@@ -125,27 +127,43 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetCachedCarrierProfiles().Values;
         }
-        public CarrierProfileActivationStatus GetCarrierProfileActivationStatus(int carrierProfileId)
+        public CarrierProfileActivationStatus GetCarrierProfileCustomerActivationStatus(int carrierProfileId)
         {
             var carrierProfile = GetCarrierProfile(carrierProfileId);
             carrierProfile.ThrowIfNull("carrierProfile", carrierProfileId);
-            return carrierProfile.Settings.ActivationStatus;
+            return carrierProfile.Settings.CustomerActivationStatus;
         }
-
+        public CarrierProfileActivationStatus GetCarrierProfileSupplierActivationStatus(int carrierProfileId)
+        {
+            var carrierProfile = GetCarrierProfile(carrierProfileId);
+            carrierProfile.ThrowIfNull("carrierProfile", carrierProfileId);
+            return carrierProfile.Settings.SupplierActivationStatus;
+        }
         public bool IsCarrierProfileActive(int carrierProfileId)
         {
-            return GetCarrierProfileActivationStatus(carrierProfileId) != CarrierProfileActivationStatus.InActive;
+            return IsCarrierProfileCustomerActive(carrierProfileId) || IsCarrierProfileSupplierActive(carrierProfileId);
         }
-
+        public bool IsCarrierProfileCustomerActive(int carrierProfileId)
+        {
+            return GetCarrierProfileCustomerActivationStatus(carrierProfileId) != CarrierProfileActivationStatus.InActive;
+        }
+        public bool IsCarrierProfileSupplierActive(int carrierProfileId)
+        {
+            return GetCarrierProfileSupplierActivationStatus(carrierProfileId) != CarrierProfileActivationStatus.InActive;
+        }
         public void EvaluateAndUpdateCarrierProfileStatus(int carrierProfileId)
         {
-            CarrierProfileActivationStatus newStatus = EvaluateCarrierProfileStatus(carrierProfileId, true, true);
             var carrierProfile = GetCarrierProfile(carrierProfileId);
             carrierProfile.ThrowIfNull("carrierProfile", carrierProfileId);
-            if (carrierProfile.Settings.ActivationStatus != newStatus)
+            CarrierProfileActivationStatus supplierActivationStatus = carrierProfile.Settings.SupplierActivationStatus;
+            CarrierProfileActivationStatus customerActivationStatus = carrierProfile.Settings.CustomerActivationStatus;
+            EvaluateCarrierProfileStatus(carrierProfileId, true, true, ref supplierActivationStatus, ref  customerActivationStatus);
+           
+            if (carrierProfile.Settings.CustomerActivationStatus != customerActivationStatus || carrierProfile.Settings.SupplierActivationStatus != supplierActivationStatus)
             {
                 var carrierProfileSettingsCopy = carrierProfile.Settings.VRDeepCopy();
-                carrierProfileSettingsCopy.ActivationStatus = newStatus;
+                carrierProfileSettingsCopy.CustomerActivationStatus = customerActivationStatus;
+                carrierProfileSettingsCopy.SupplierActivationStatus = supplierActivationStatus;
                 ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
                 bool updateActionSucc = dataManager.Update(new CarrierProfileToEdit
                 {
@@ -155,26 +173,41 @@ namespace TOne.WhS.BusinessEntity.Business
                     Settings = carrierProfileSettingsCopy,
                     SourceId = carrierProfile.SourceId
                 });
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 VREventManager vrEventManager = new VREventManager();
                 vrEventManager.ExecuteEventHandlersAsync(new CarrierProfileStatusChangedEventPayload { CarrierProfileId = carrierProfileId });
             }
         }
 
-        public CarrierProfileActivationStatus EvaluateCarrierProfileStatus(int carrierProfileId, bool asCustomer, bool asSupplier)
+        public void EvaluateCarrierProfileStatus(int carrierProfileId, bool asCustomer, bool asSupplier, ref CarrierProfileActivationStatus supplierActivationStatus, ref CarrierProfileActivationStatus customerActivationStatus)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var profileCarrierAccounts = carrierAccountManager.GetCarriersByProfileId(carrierProfileId, asCustomer, asSupplier);
             if (profileCarrierAccounts != null)
-            {                
+            {
+                if (asCustomer)
+                {
+                    customerActivationStatus = CarrierProfileActivationStatus.InActive;
+                }
+                if (asSupplier)
+                {
+                    supplierActivationStatus = CarrierProfileActivationStatus.InActive;
+                }
                 foreach (var profileCarrierAccount in profileCarrierAccounts)
                 {
                     if (profileCarrierAccount.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active)
                     {
-                        return  CarrierProfileActivationStatus.Active;
+                        if (profileCarrierAccount.AccountType == CarrierAccountType.Customer || profileCarrierAccount.AccountType == CarrierAccountType.Exchange)
+                        {
+                            customerActivationStatus = CarrierProfileActivationStatus.Active;
+                        }
+                        else if (profileCarrierAccount.AccountType == CarrierAccountType.Supplier || profileCarrierAccount.AccountType == CarrierAccountType.Exchange)
+                        {
+                            supplierActivationStatus = CarrierProfileActivationStatus.Active;
+                        }
                     }
                 }
             }
-            return CarrierProfileActivationStatus.InActive;
         }
         #endregion
 

@@ -69,12 +69,21 @@ namespace TOne.WhS.BusinessEntity.Business
         {
 
             var settings = businessEntityDefinition.Settings.CastWithValidate<WHSFinancialAccountDefinitionSettings>("beDefinition.Settings");
+            //Guid? invoiceTypeId = null;
+            //if (settings.InvoiceTypeId.HasValue)
+            //{
+            //    invoiceTypeId = settings.InvoiceTypeId;
+            //}
+            //else if (settings.SecondaryInvoiceTypeId.HasValue)
+            //{
+            //    invoiceTypeId = settings.SecondaryInvoiceTypeId;
+            //}
             return new WHSFinancialAccountDefinitionInfo
             {
                 FinancialAccountDefinitionId = businessEntityDefinition.BusinessEntityDefinitionId,
                 Name = businessEntityDefinition.Title,
                 BalanceAccountTypeId = settings.BalanceAccountTypeId,
-                InvoiceTypeId = settings.InvoiceTypeId,
+               // InvoiceTypeIds = settings.InvoiceTypeIds,
             };
         }
 
@@ -83,10 +92,11 @@ namespace TOne.WhS.BusinessEntity.Business
             var financialAccountDefinitionSettings = GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
             return financialAccountDefinitionSettings.BalanceAccountTypeId;
         }
-        public Guid? GetInvoiceTypeId(Guid financialAccountDefinitionId)
+        public List<FinancialAccountInvoiceType> GetFinancialAccountInvoiceTypes(Guid financialAccountDefinitionId)
         {
             var financialAccountDefinitionSettings = GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
-            return financialAccountDefinitionSettings.InvoiceTypeId;
+            return financialAccountDefinitionSettings.FinancialAccountInvoiceTypes;
         }
+       
     }
 }

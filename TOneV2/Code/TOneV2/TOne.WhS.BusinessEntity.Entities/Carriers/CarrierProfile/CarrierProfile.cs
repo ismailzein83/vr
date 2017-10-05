@@ -23,7 +23,9 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class CarrierProfileSettings
     {
-        public CarrierProfileActivationStatus ActivationStatus { get; set; }
+        public CarrierProfileActivationStatus CustomerActivationStatus { get; set; }
+        public CarrierProfileActivationStatus SupplierActivationStatus { get; set; }
+
         public string Company { get; set; }
 
         public int? CountryId { get; set; }

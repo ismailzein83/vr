@@ -18,8 +18,6 @@
         var financialAccountDefinitionSelectorDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
         var selectedFinancialAccountDefinitionDeferred;
 
-        var invoiceSettingSelectorAPI;
-        var invoiceSettingSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         var directiveAPI;
         var directiveReadyDeferred;
@@ -42,6 +40,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.invoiceSettings = [];
             $scope.scopeModel.periodEndsAt = undefined;
             $scope.scopeModel.beginEffectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             $scope.scopeModel.onDateValueChanged = function () {
@@ -50,12 +49,6 @@
             $scope.scopeModel.onFinancialAccountDefinitionSelectorReady = function (api) {
                 financialAccountDefinitionSelectorDirectiveAPI = api;
                 financialAccountDefinitionSelectorDirectiveReadyDeferred.resolve();
-            };
-
-            $scope.scopeModel.onInvoiceSettingDirectiveReady = function (api) {
-                invoiceSettingSelectorAPI = api;
-                invoiceSettingSelectorReadyDeferred.resolve();
-               
             };
 
             $scope.scopeModel.onFinancialAccountDefinitionSelectionChanged = function (value) {
@@ -67,19 +60,31 @@
                         getFinancialAccountDefinitionSetting().then(function () {
 
                             if ($scope.scopeModel.showInvoiceSettingSelector) {
-                                invoiceSettingSelectorReadyDeferred.promise.then(function () {
-                                    var setLoader = function (value) {
-                                        $scope.scopeModel.isLoadingInvoiceSettingDirective = value;
+                                $scope.scopeModel.invoiceSettings.length = 0;
+                                for (var i = 0; i < financialAccountDefinitionSettings.FinancialAccountInvoiceTypes.length; i++)
+                                {
+                                    var financialAccountInvoiceType = financialAccountDefinitionSettings.FinancialAccountInvoiceTypes[i];
+                                    addInvoiceSettingAPIFunction(financialAccountInvoiceType);
+
+                                }
+                                function addInvoiceSettingAPIFunction(financialAccountInvoiceType) {
+                                    var dataItem = {
+                                        title: financialAccountInvoiceType.InvoiceSettingTitle,
+                                        invoiceTypeId: financialAccountInvoiceType.InvoiceTypeId,
                                     };
-                                    var selectedValue = financialAccountDefinitionSelectorDirectiveAPI.getSelectedValue();
-                                    var directivePayload = {
-                                        invoiceTypeId: selectedValue.InvoiceTypeId,
-                                        filter: {
-                                            InvoiceTypeId: selectedValue.InvoiceTypeId,
-                                        }
+                                    dataItem.onInvoiceSettingDirectiveReady = function (api) {
+                                        dataItem.directiveAPI = api;
+                                        var setLoader = function (value) { $scope.isLoadingSupplierZonesSelector = value };
+                                        var payload = {
+                                            invoiceTypeId: financialAccountInvoiceType.InvoiceTypeId,
+                                            filter: {
+                                                InvoiceTypeId: financialAccountInvoiceType.InvoiceTypeId,
+                                            }
+                                        };
+                                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.directiveAPI, payload, setLoader);
                                     };
-                                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, invoiceSettingSelectorAPI, directivePayload, setLoader);
-                                });
+                                    $scope.scopeModel.invoiceSettings.push(dataItem);
+                                }
                             }
 
                         }).finally(function () {
@@ -212,26 +217,57 @@
             }
 
             function loadInvoiceSettingSelectorDirective() {
-                if (financialAccountDefinitionSettings != undefined)
-                {
+                if (financialAccountDefinitionSettings != undefined) {
                     if ($scope.scopeModel.showInvoiceSettingSelector) {
-                        var invoiceSettingSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         var promises = [];
                         promises.push(selectedFinancialAccountDefinitionDeferred.promise);
-                        promises.push(invoiceSettingSelectorReadyDeferred.promise);
+                        if (financialAccountDefinitionSettings.FinancialAccountInvoiceTypes != undefined)
+                        {
+                            for (var i = 0; i < financialAccountDefinitionSettings.FinancialAccountInvoiceTypes.length; i++) {
+                                var invoiceSettingItem = {
+                                    payload: financialAccountDefinitionSettings.FinancialAccountInvoiceTypes[i],
+                                    readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                promises.push(invoiceSettingItem.loadPromiseDeferred.promise);
+                                addInvoiceSettingItemAPI(invoiceSettingItem);
+                            }
+                            function addInvoiceSettingItemAPI(invoiceSettingItem) {
+                                var dataItem = {
+                                    title: invoiceSettingItem.payload.InvoiceSettingTitle,
+                                    invoiceTypeId: invoiceSettingItem.payload.InvoiceTypeId,
+                                };
+                                var selectedValue;
+                                if (financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.InvoiceSettingsData != undefined) {
+                                    for (var i = 0; i < financialAccountRuntimeEntity.InvoiceSettingsData.length; i++) {
+                                        var invoiceSettingData = financialAccountRuntimeEntity.InvoiceSettingsData[i];
+                                        if (invoiceSettingData.InvoiceTypeId == invoiceSettingItem.payload.InvoiceTypeId) {
+                                            selectedValue = invoiceSettingData.InvoiceSettingId;
+                                            break;
+                                        }
+                                    }
+                                }
+                                var dataItemPayload = {
+                                    selectedIds: selectedValue,
+                                    invoiceTypeId: invoiceSettingItem.payload.InvoiceTypeId,
+                                    filter: {
+                                        InvoiceTypeId: invoiceSettingItem.payload.InvoiceTypeId,
+                                    }
+                                };
+                                dataItem.onInvoiceSettingDirectiveReady = function (api) {
+                                    dataItem.directiveAPI = api;
+                                    invoiceSettingItem.readyPromiseDeferred.resolve();
+                                };
+                                invoiceSettingItem.readyPromiseDeferred.promise
+                                    .then(function () {
+                                        VRUIUtilsService.callDirectiveLoad(dataItem.directiveAPI, dataItemPayload, invoiceSettingItem.loadPromiseDeferred);
+                                    });
 
-                        UtilsService.waitMultiplePromises(promises).then(function () {
-                            selectedFinancialAccountDefinitionDeferred = undefined;
-                            var invoiceSettingSelectorPayload = {
-                                invoiceTypeId: financialAccountDefinitionSettings.InvoiceTypeId,
-                                filter: {
-                                    InvoiceTypeId: financialAccountDefinitionSettings.InvoiceTypeId,
-                                },
-                                selectedIds: financialAccountRuntimeEntity != undefined?financialAccountRuntimeEntity.InvoiceSettingId:undefined
-                            };
-                            VRUIUtilsService.callDirectiveLoad(invoiceSettingSelectorAPI, invoiceSettingSelectorPayload, invoiceSettingSelectorLoadDeferred);
-                        });
-                        return invoiceSettingSelectorLoadDeferred.promise;
+                                $scope.scopeModel.invoiceSettings.push(dataItem);
+                            }
+                        }
+                       
+                        return UtilsService.waitMultiplePromises(promises);
                     }
                 }
             }
@@ -255,7 +291,7 @@
                     financialAccountDefinitionSettings = response;
                     if (response.ExtendedSettings != undefined)
                         $scope.scopeModel.financialAccountDefinitionRuntimeDirective = response.ExtendedSettings.RuntimeEditor;
-                    $scope.scopeModel.showInvoiceSettingSelector = (financialAccountDefinitionSettings.InvoiceTypeId != undefined);
+                    $scope.scopeModel.showInvoiceSettingSelector = (financialAccountDefinitionSettings.FinancialAccountInvoiceTypes != undefined && financialAccountDefinitionSettings.FinancialAccountInvoiceTypes.length > 0);
 
                 }
                     
@@ -299,6 +335,33 @@
         }
 
         function buildFinancialAccountToEditObjFromScope() {
+            var invoiceSettingsData;
+            if ($scope.scopeModel.invoiceSettings != undefined && $scope.scopeModel.invoiceSettings.length > 0)
+            {
+                invoiceSettingsData = [];
+                for(var i=0;i<$scope.scopeModel.invoiceSettings.length;i++)
+                {
+                    var partnerInvoiceSettingId;
+                    if(financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.InvoiceSettingsData != undefined)
+                    {
+                        for(var j=0;j<financialAccountRuntimeEntity.InvoiceSettingsData.length;j++)
+                        {
+                            var invoiceSettingData = financialAccountRuntimeEntity.InvoiceSettingsData[j];
+                            if(invoiceSettingData.InvoiceTypeId == invoiceSetting.invoiceTypeId)
+                            {
+                                partnerInvoiceSettingId = invoiceSettingData.PartnerInvoiceSettingId;
+                                break;
+                            }
+                        }
+                    }
+                    var invoiceSetting = $scope.scopeModel.invoiceSettings[i];
+                    invoiceSettingsData.push({
+                        InvoiceSettingId:invoiceSetting.directiveAPI.getSelectedIds(),
+                        InvoiceTypeId:invoiceSetting.invoiceTypeId,
+                        PartnerInvoiceSettingId:partnerInvoiceSettingId
+                    });
+                }
+            }
             var financialAccount = {
                 FinancialAccountId: financialAccountId,
                 BED: $scope.scopeModel.beginEffectiveDate,
@@ -306,14 +369,26 @@
                 Settings: {
                     ExtendedSettings: directiveAPI.getData()
                 },
-                InvoiceSettingId: invoiceSettingSelectorAPI != undefined ? invoiceSettingSelectorAPI.getSelectedIds() : undefined,
-                PartnerInvoiceSettingId: financialAccountRuntimeEntity != undefined ? financialAccountRuntimeEntity.PartnerInvoiceSettingId : undefined
+                InvoiceSettingsData:invoiceSettingsData
             };
             
             return financialAccount;
         }
 
         function buildFinancialAccountToAddObjFromScope() {
+            var invoiceSettingsData;
+            if ($scope.scopeModel.invoiceSettings != undefined && $scope.scopeModel.invoiceSettings.length > 0)
+            {
+                invoiceSettingsData = [];
+                for (var i = 0;i<$scope.scopeModel.invoiceSettings.length;i++)
+                {
+                    var invoiceSetting = $scope.scopeModel.invoiceSettings[i];
+                    invoiceSettingsData.push({
+                        InvoiceSettingId:invoiceSetting.directiveAPI.getSelectedIds(),
+                        InvoiceTypeId:invoiceSetting.invoiceTypeId
+                    });
+                }
+            }
             var financialAccount = {
                 FinancialAccount:{
                     BED: $scope.scopeModel.beginEffectiveDate,
@@ -325,7 +400,7 @@
                     CarrierProfileId: carrierProfileId,
                     FinancialAccountDefinitionId : financialAccountDefinitionSelectorDirectiveAPI.getSelectedIds()
                 },
-                InvoiceSettingId: invoiceSettingSelectorAPI != undefined? invoiceSettingSelectorAPI.getSelectedIds():undefined
+                InvoiceSettingsData:invoiceSettingsData
 
             };
             return financialAccount;

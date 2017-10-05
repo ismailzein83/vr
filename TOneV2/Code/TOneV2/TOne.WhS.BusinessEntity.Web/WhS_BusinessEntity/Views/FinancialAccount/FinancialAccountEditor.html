@@ -23,8 +23,13 @@
                             <vr-label>  {{scopeModel.periodEndsAt | date  :"yyyy-MM-dd HH:mm:ss"}}</vr-label>
 
                         </vr-columns>
-                        <vr-invoice-invoicesetting-selector ng-if="scopeModel.showInvoiceSettingSelector" on-ready="scopeModel.onInvoiceSettingDirectiveReady" showviewbutton showaddbutton normal-col-num="6"></vr-invoice-invoicesetting-selector>
-
+                    </vr-row>
+                    <vr-row>
+                        <vr-section title="Invoice Settings">
+                            <span ng-repeat="invoiceSetting in scopeModel.invoiceSettings" ng-if="scopeModel.showInvoiceSettingSelector">
+                                <vr-invoice-invoicesetting-selector on-ready="invoiceSetting.onInvoiceSettingDirectiveReady" showviewbutton showaddbutton normal-col-num="4" customlabel="{{invoiceSetting.title}}"></vr-invoice-invoicesetting-selector>
+                            </span>
+                        </vr-section>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>

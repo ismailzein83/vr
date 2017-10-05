@@ -27,10 +27,11 @@ namespace TOne.WhS.BusinessEntity.Business.FinancialAccount.EventHandlers
             eventPayload.ThrowIfNull("context.EventPayload", eventPayload);
            
             VRAccountStatus vrAccountStatus = s_carrierAccountManager.IsCarrierAccountActive(eventPayload.CarrierAccountId) ? VRAccountStatus.Active : VRAccountStatus.InActive;
-                        
+            var carrierAccount = s_carrierAccountManager.GetCarrierAccount(eventPayload.CarrierAccountId);
+            bool isCustomer = !(carrierAccount.AccountType == CarrierAccountType.Supplier);
             var financialAccounts = s_financialAccountManager.GetFinancialAccountsByCarrierAccountId(eventPayload.CarrierAccountId);
             if (financialAccounts != null)
-                s_financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(vrAccountStatus, financialAccounts);
+                s_financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(vrAccountStatus, financialAccounts, isCustomer, !isCustomer);
         }
 
         

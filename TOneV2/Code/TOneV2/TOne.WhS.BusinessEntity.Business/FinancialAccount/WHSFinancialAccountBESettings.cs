@@ -12,8 +12,8 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public Guid? BalanceAccountTypeId { get; set; }
 
-        public Guid? InvoiceTypeId { get; set; }
-
+        public List<FinancialAccountInvoiceType> FinancialAccountInvoiceTypes { get; set; }
+      
         public WHSFinancialAccountDefinitionExtendedSettings ExtendedSettings { get; set; }
 
         #region BusinessEntityDefinitionSettings
@@ -43,5 +43,13 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         
         #endregion
+    }
+    public class FinancialAccountInvoiceType
+    {
+        public Guid InvoiceTypeId { get; set; }
+        public bool IsApplicableToCustomer { get; set; }
+        public bool IsApplicableToSupplier { get; set; }
+        public string InvoiceSettingTitle { get; set; }
+
     }
 }

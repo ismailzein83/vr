@@ -38,6 +38,29 @@ app.directive("whsBeFinancialaccountbedefinitionEditor", ["UtilsService", "VRNot
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.selectedInvoiceTypes = [];
+                $scope.scopeModel.datasource = [];
+                $scope.scopeModel.onSelectItem = function (dataItem) {
+                    addInvoiceTypeAPIFunction(dataItem);
+                };
+                $scope.scopeModel.onDeselectItem = function (dataItem) {
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.InvoiceTypeId, 'Entity.InvoiceTypeId');
+                    $scope.scopeModel.datasource.splice(datasourceIndex, 1);
+                };
+                function addInvoiceTypeAPIFunction(obj) {
+                    var dataItem = {
+                        InvoiceTypeId: obj.InvoiceTypeId,
+                        InvoiceTypeName: obj.Name,
+                        InvoiceSettingTitle: obj.Name,
+                    };
+                    $scope.scopeModel.datasource.push({ Entity: dataItem });
+                }
+                $scope.scopeModel.removeInvoiceType = function (dataItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedInvoiceTypes, dataItem.Entity.InvoiceTypeId, 'InvoiceTypeId');
+                    $scope.scopeModel.selectedInvoiceTypes.splice(index, 1);
+                    var datasourceIndex = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.Entity.InvoiceTypeId, 'Entity.InvoiceTypeId');
+                    $scope.scopeModel.datasource.splice(datasourceIndex, 1);
+                };
                 $scope.scopeModel.onInvoiceTypeSelectorReady = function (api) {
                     invoiceTypeSelectorAPI = api;
                     invoiceTypeSelectorReadyDeferred.resolve();
@@ -61,19 +84,60 @@ app.directive("whsBeFinancialaccountbedefinitionEditor", ["UtilsService", "VRNot
                     var promises = [];
 
                     var beDefinitionSettings;
-
+                    var invoiceTypeIds = [];
                     if (payload != undefined && payload.businessEntityDefinitionSettings != undefined) {
-                         beDefinitionSettings = payload.businessEntityDefinitionSettings;
+                        beDefinitionSettings = payload.businessEntityDefinitionSettings;
+                        if (beDefinitionSettings != undefined && beDefinitionSettings.FinancialAccountInvoiceTypes != undefined) {
+                            for (var i = 0; i < beDefinitionSettings.FinancialAccountInvoiceTypes.length; i++) {
+                                var obj = beDefinitionSettings.FinancialAccountInvoiceTypes[i];
+                                invoiceTypeIds.push(obj.InvoiceTypeId);
+                            }
+                        }
+                    }
+
+                    
+                    function loadFinancialAccountInvoiceTypesGrid() {
+                        if (beDefinitionSettings != undefined && beDefinitionSettings.FinancialAccountInvoiceTypes != undefined) {
+                            for (var i = 0; i < beDefinitionSettings.FinancialAccountInvoiceTypes.length; i++) {
+                                var item = {
+                                    payload: beDefinitionSettings.FinancialAccountInvoiceTypes[i],
+                                };
+                                addItemToGrid(item);
+                            }
+                        }
+                        function addItemToGrid(item) {
+                            for (var i = 0; i < $scope.scopeModel.selectedInvoiceTypes.length; i++) {
+                                var invoiceType = $scope.scopeModel.selectedInvoiceTypes[i];
+                                if (item.payload.InvoiceTypeId == invoiceType.InvoiceTypeId) {
+                                    addAPIToDataItem(item, invoiceType);
+                                }
+                            }
+                        }
+                        function addAPIToDataItem(item, invoiceType) {
+
+                            var dataItem = {
+                                InvoiceTypeId: invoiceType.InvoiceTypeId,
+                                InvoiceTypeName: invoiceType.Name,
+                                IsApplicableToSupplier: item.payload.IsApplicableToSupplier,
+                                IsApplicableToCustomer: item.payload.IsApplicableToCustomer,
+                                InvoiceSettingTitle: item.payload.InvoiceSettingTitle,
+                            };
+                            $scope.scopeModel.datasource.push({ Entity: dataItem });
+                        }
                     }
 
                     function loadInvoiceTypeSelector() {
                         var invoiceTypeSelectorPayload;
                         if (beDefinitionSettings != undefined) {
-                            invoiceTypeSelectorPayload = { selectedIds: beDefinitionSettings.InvoiceTypeId };
+                            invoiceTypeSelectorPayload = { selectedIds: invoiceTypeIds };
                         }
                         return invoiceTypeSelectorAPI.load(invoiceTypeSelectorPayload);
                     }
-                    promises.push(loadInvoiceTypeSelector());
+                    var invoiceTypeSelectorPromise = loadInvoiceTypeSelector();
+                    invoiceTypeSelectorPromise.then(function () {
+                        loadFinancialAccountInvoiceTypesGrid();
+                    });
+                    promises.push(invoiceTypeSelectorPromise);
 
                     function loadBalanceAccountTypeSelector() {
                         var balanceAccountTypeSelectorPayload;
@@ -97,9 +161,19 @@ app.directive("whsBeFinancialaccountbedefinitionEditor", ["UtilsService", "VRNot
                 };
 
                 api.getData = function () {
+                    var financialAccountInvoiceTypes = [];
+                    for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                        var item = $scope.scopeModel.datasource[i];
+                        financialAccountInvoiceTypes.push({
+                            InvoiceTypeId: item.Entity.InvoiceTypeId,
+                            IsApplicableToCustomer: item.Entity.IsApplicableToCustomer,
+                            IsApplicableToSupplier: item.Entity.IsApplicableToSupplier,
+                            InvoiceSettingTitle: item.Entity.InvoiceSettingTitle,
+                        });
+                    }
                     var obj = {
                         $type: "TOne.WhS.BusinessEntity.Business.WHSFinancialAccountDefinitionSettings, TOne.WhS.BusinessEntity.Business",
-                        InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
+                        FinancialAccountInvoiceTypes: financialAccountInvoiceTypes,
                         BalanceAccountTypeId: balanceAccountTypeSelectorAPI.getSelectedIds(),
                         ExtendedSettings: extendedSettingsDirectiveAPI.getData()
                     };

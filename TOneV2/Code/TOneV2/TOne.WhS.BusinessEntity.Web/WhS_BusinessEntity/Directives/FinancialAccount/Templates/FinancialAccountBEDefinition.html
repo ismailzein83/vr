@@ -1,9 +1,25 @@
 ﻿<vr-tab header="'Settings'">
     <vr-row>
-        <vr-invoicetype-selector on-ready="scopeModel.onInvoiceTypeSelectorReady" normal-col-num="6"></vr-invoicetype-selector>
-        <vr-accountbalance-accounttype-selector on-ready="scopeModel.onBalanceAccountTypeSelectorReady" normal-col-num="6"></vr-accountbalance-accounttype-selector>
+        <vr-accountbalance-accounttype-selector on-ready="scopeModel.onBalanceAccountTypeSelectorReady" normal-col-num="4" ></vr-accountbalance-accounttype-selector>
     </vr-row>
-   
-     <whs-be-financialaccountbedefinition-extendedsettings on-ready="scopeModel.onExtendedSettingsDirectiveReady" normal-col-num="6"></whs-be-financialaccountbedefinition-extendedsettings>
+    <vr-row>
+        <vr-invoicetype-selector on-ready="scopeModel.onInvoiceTypeSelectorReady" normal-col-num="4" ismultipleselection onselectitem="scopeModel.onSelectItem" ondeselectitem="    scopeModel.onDeselectItem" selectedvalues="scopeModel.selectedInvoiceTypes"></vr-invoicetype-selector>
+        <vr-columns width="2/3row" vr-loader="scopeModel.isLoadingDirective">
+            <vr-datagrid datasource="scopeModel.datasource"
+                         on-ready="onGridReady" ondeleterow="scopeModel.removeInvoiceType" hidegridmenu norowhighlightonclick="'true'">
+                <vr-datagridcolumn headertext="'Invoice Type'" field="'Entity.InvoiceTypeName'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Customer Applicable'" widthfactor="10" disablesorting>
+                    <vr-switch value="dataItem.Entity.IsApplicableToCustomer"></vr-switch>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Supplier Applicable'" widthfactor="10" disablesorting>
+                    <vr-switch value="dataItem.Entity.IsApplicableToSupplier"></vr-switch>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Invoice Setting Title'" widthfactor="10" disablesorting>
+                    <vr-textbox value="dataItem.Entity.InvoiceSettingTitle" isrequired></vr-textbox>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-columns>
+    </vr-row>
+     <whs-be-financialaccountbedefinition-extendedsettings on-ready="scopeModel.onExtendedSettingsDirectiveReady" normal-col-num="4"></whs-be-financialaccountbedefinition-extendedsettings>
     
 </vr-tab> 

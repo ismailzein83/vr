@@ -20,6 +20,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public WHSFinancialAccountEffectiveStatus EffectiveStatus { get; set; }
         public Guid? BalanceAccountTypeId { get; set; }
-        public Guid? InvoiceTypeId { get; set; }
+        public List<Guid> InvoiceTypeIds { get; set; }
     }
 }
