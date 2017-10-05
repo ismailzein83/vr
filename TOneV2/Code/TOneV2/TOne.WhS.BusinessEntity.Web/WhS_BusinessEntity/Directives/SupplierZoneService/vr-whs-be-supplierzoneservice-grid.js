@@ -62,10 +62,10 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
                                 extendDataItem(dataItem);
                                 serviceViewerLoadPromises.push(dataItem.serviceViewerLoadDeferred.promise);
                             }
-
-                            onResponseReady(response);
-                            return UtilsService.waitMultiplePromises(serviceViewerLoadPromises);
+                            UtilsService.waitMultiplePromises(serviceViewerLoadPromises);
                         }
+                        onResponseReady(response);
+
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
