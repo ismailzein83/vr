@@ -177,8 +177,8 @@
                                                 <span style="display: inline-block;height: 6px"></span>
                                                 <i style="font-size: 6px;float: right;" ng-show="selectedRateSourceOptions.length > 0 " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); selectedRateSourceOptions = [] ; "></i>
                                             </div>
-                                            <div ng-show="showfilter" ng-hide="isCurrentRateSourceFilterHidden">
-                                                <vr-select smallselect datasource="rateSourceOptions"
+                                            <div  ng-hide="isCurrentRateSourceFilterHidden">
+                                                <vr-select ng-show="showfilter" smallselect datasource="rateSourceOptions"
                                                            datavaluefield="value"
                                                            datatextfield="symbol"
                                                            datatooltipfield="text"
@@ -361,8 +361,8 @@
                                                            onselectionchanged="filterZones">
                                                 </vr-select>
                                             </div>
-                                            <div ng-show="showfilter" ng-hide="newRateFilterOption.symbol == 'Unpriced'">
-                                                <vr-textbox type="number"
+                                            <div  ng-hide="newRateFilterOption.symbol == 'Unpriced'">
+                                                <vr-textbox ng-show="showfilter" type="number"
                                                             value="newRateFilterValue"
                                                             decimalprecision="{{::longPrecision}}"
                                                             onvaluechanged="filterZones">
