@@ -23,5 +23,6 @@
     SupplierZoneServices: { value: 20, description: "Supplier Zone Services", defaultMigrate: true },
     SaleEntityServices: { value: 21, description: "Sale Entity Services", defaultMigrate: true },
     Rule: { value: 22, description: "Rules", defaultMigrate: true },
+    SaleEntityRoutingProduct: { value: 24, description: "Sale Entity Routing Product", defaultMigrate: true },
     CarrierAccountStatusHistory: { value: 23, description: "CarrierAccountStatusHistory ", defaultMigrate: false }
 });

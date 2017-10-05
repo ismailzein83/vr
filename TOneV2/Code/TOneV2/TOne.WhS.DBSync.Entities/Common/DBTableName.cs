@@ -55,6 +55,9 @@ namespace TOne.WhS.DBSync.Entities
         [Description("SaleRate")]
         SaleRate,
 
+        [Description("SaleEntityRoutingProduct")]
+        SaleEntityRoutingProduct,
+
         [Description("SupplierRate")]
         SupplierRate,
 

@@ -56,6 +56,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 Change = GetReaderValue<Int16>(reader, "Change"),
                 ServicesFlag = GetReaderValue<Int16>(reader, "ServicesFlag"),
                 CurrencyId = reader["CurrencyID"] as string,
+                CustomerId = reader["CustomerID"] as string
             };
         }
 
@@ -72,7 +73,8 @@ namespace TOne.WhS.DBSync.Data.SQL
                 Change = GetReaderValue<Int16>(reader, "Change"),
                 ServicesFlag = GetReaderValue<Int16>(reader, "ServicesFlag"),
                 CurrencyId = reader["CurrencyID"] as string,
-                RateType = rateType
+                RateType = rateType,
+                CustomerId = reader["CustomerID"] as string
             };
         }
 
@@ -80,7 +82,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         const string query_getSourceRates = @"SELECT    Rate.RateID RateID, Rate.PriceListID PriceListID, Rate.ZoneID ZoneID,
                                                         Rate.Rate Rate, Rate.OffPeakRate OffPeakRate, Rate.WeekendRate WeekendRate,
                                                         Rate.BeginEffectiveDate BeginEffectiveDate, Rate.EndEffectiveDate EndEffectiveDate,
-                                                        Rate.Change, Rate.ServicesFlag, PriceList.CurrencyID CurrencyID
+                                                        Rate.Change, Rate.ServicesFlag, PriceList.CurrencyID CurrencyID, PriceList.CustomerID
                                                         FROM Rate WITH (NOLOCK) INNER JOIN
                                                         Zone WITH (NOLOCK) ON Rate.ZoneID = Zone.ZoneID INNER JOIN
                                                         PriceList WITH (NOLOCK) ON Rate.PriceListID = PriceList.PriceListID ";

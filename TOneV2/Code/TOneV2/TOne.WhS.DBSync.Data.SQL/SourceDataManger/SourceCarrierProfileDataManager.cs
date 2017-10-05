@@ -17,6 +17,16 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(query_getSourceCarrierProfiles, SourceCarrierProfileMapper, null);
         }
 
+        public HashSet<string> GetProfileIdsWithNoActiveAccounts()
+        {
+            return new HashSet<string>(GetItemsText(query_getProfileAccountsWithNoActiveCarriers, ProfileIdMapper, null));
+        }
+
+        string ProfileIdMapper(IDataReader reader)
+        {
+            return reader["ProfileID"].ToString();
+        }
+
         private SourceCarrierProfile SourceCarrierProfileMapper(IDataReader reader)
         {
             SourceCarrierProfile sourceCarrierProfile = new SourceCarrierProfile()
@@ -63,5 +73,10 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                [TechnicalContact] ,[TechnicalEmail]   ,[CommercialContact]   ,[CommercialEmail] , 
                                                                [AccountManagerContact], [IsDeleted], [DuePeriod] FROM [dbo].[CarrierProfile]  
                                                         WITH (NOLOCK)";
+
+        const string query_getProfileAccountsWithNoActiveCarriers = @"select ca.ProfileID
+                                                                      from   CarrierAccount ca 
+                                                                      group by ProfileID
+                                                                      having   count(*) = SUM(case when ca.ActivationStatus=0 then 1 else 0 END)";
     }
 }

@@ -146,7 +146,9 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.SaleRate:
                         iDBSyncDataManager = new SaleRateDBSyncDataManager(context.UseTempTables);
                         break;
-
+                    case DBTableName.SaleEntityRoutingProduct:
+                        iDBSyncDataManager = new SaleEntityRoutingProductDBSyncDataManager(context.UseTempTables);
+                        break;
                     case DBTableName.SaleZone:
                         iDBSyncDataManager = new SaleZoneDBSyncDataManager(context.UseTempTables);
                         break;
@@ -307,7 +309,9 @@ namespace TOne.WhS.DBSync.Business
                 case DBTableName.SaleRate:
                     migrator = new SaleRateMigrator(context);
                     break;
-
+                case DBTableName.SaleEntityRoutingProduct:
+                    migrator = new SaleEntityRoutingProductMigrator(context);
+                    break;
                 case DBTableName.SupplierRate:
                     migrator = new SupplierRateMigrator(context);
                     break;

@@ -24,5 +24,6 @@ namespace TOne.WhS.DBSync.Entities
         public Int16? ServicesFlag { get; set; }
         public string CurrencyId { get; set; }
         public RateTypeEnum? RateType { get; set; }
+        public string CustomerId { get; set; }
     }
 }

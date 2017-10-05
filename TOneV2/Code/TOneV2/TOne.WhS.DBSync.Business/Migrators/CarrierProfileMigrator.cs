@@ -24,6 +24,7 @@ namespace TOne.WhS.DBSync.Business
     }
     public class CarrierProfileMigrator : Migrator<SourceCarrierProfile, CarrierProfile>
     {
+        HashSet<string> InActiveProfileIds;
         CarrierProfileDBSyncDataManager dbSyncDataManager;
         SourceCarrierProfileDataManager dataManager;
         SourceCarrierDocumentDataManager carrierDocumentDataManager;
@@ -54,6 +55,8 @@ namespace TOne.WhS.DBSync.Business
             _timeZonesByProfile = GetTimeZonesByProfile(new SourceCarrierAccountDataManager(Context.ConnectionString).GetTimeZonesByProfile());
 
             allCarrierDocumentsByProfileId = GetAccountDocumentsAndMigrateBETechnicalSettings();
+
+            InActiveProfileIds = dataManager.GetProfileIdsWithNoActiveAccounts();
         }
 
         Dictionary<string, VRTimeZoneByProfile> GetTimeZonesByProfile(List<TimeZonesByProfile> list)
@@ -104,6 +107,7 @@ namespace TOne.WhS.DBSync.Business
                 allCurrencies.TryGetValue(sourceItem.CurrencyId.ToString(), out currency);
 
             CarrierProfileSettings settings = new CarrierProfileSettings();
+            settings.ActivationStatus = InActiveProfileIds.Contains(sourceItem.SourceId) ? CarrierProfileActivationStatus.InActive : CarrierProfileActivationStatus.Active;
             settings.Address = sourceItem.Address1;
             settings.PostalCode = sourceItem.Address2;
             settings.Town = sourceItem.Address3;
