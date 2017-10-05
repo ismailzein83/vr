@@ -213,6 +213,7 @@ namespace TOne.WhS.BusinessEntity.Business
             result.EffectiveDateDayOffset = pricingSettingsParent.EffectiveDateDayOffset;
             result.RetroactiveDayOffset = pricingSettingsParent.RetroactiveDayOffset;
             result.NewRateDayOffset = pricingSettingsParent.NewRateDayOffset;
+            result.EndCountryDayOffset = pricingSettingsParent.EndCountryDayOffset;
             result.IncreasedRateDayOffset = pricingSettingsParent.IncreasedRateDayOffset;
             result.DecreasedRateDayOffset = pricingSettingsParent.DecreasedRateDayOffset;
 
@@ -233,6 +234,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (pricingSettingsChild.NewRateDayOffset.HasValue)
                 result.NewRateDayOffset = pricingSettingsChild.NewRateDayOffset;
+
+            if (pricingSettingsChild.EndCountryDayOffset.HasValue)
+                result.EndCountryDayOffset = pricingSettingsChild.EndCountryDayOffset.Value;
 
             if (pricingSettingsChild.IncreasedRateDayOffset.HasValue)
                 result.IncreasedRateDayOffset = pricingSettingsChild.IncreasedRateDayOffset;

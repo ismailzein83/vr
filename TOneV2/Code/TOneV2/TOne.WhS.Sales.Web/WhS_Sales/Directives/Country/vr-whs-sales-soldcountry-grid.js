@@ -26,7 +26,7 @@ app.directive('vrWhsSalesSoldcountryGrid', ['WhS_Sales_RatePlanAPIService', 'WhS
             var gridQuery;
 
             var selectedCountryIds;
-            var effectiveDate;
+            var endCountryDate;
 
             function initializeController() {
 
@@ -111,7 +111,7 @@ app.directive('vrWhsSalesSoldcountryGrid', ['WhS_Sales_RatePlanAPIService', 'WhS
                     }
 
                     if (settings != undefined) {
-                        effectiveDate = settings.effectiveDate
+                        endCountryDate = settings.endCountryDate;
                     }
 
                     if (changedCountries != undefined) {
@@ -119,7 +119,7 @@ app.directive('vrWhsSalesSoldcountryGrid', ['WhS_Sales_RatePlanAPIService', 'WhS
                         selectedCountryIds = changedCountries.CountryIds;
                     }
                     else {
-                        $scope.scopeModel.endEffectiveDate = effectiveDate;
+                        $scope.scopeModel.endEffectiveDate = endCountryDate;
                         selectedCountryIds = [];
                     }
 

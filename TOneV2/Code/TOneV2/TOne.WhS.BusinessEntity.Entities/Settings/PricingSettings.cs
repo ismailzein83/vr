@@ -15,6 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int? RetroactiveDayOffset { get; set; }
 
         public int? NewRateDayOffset { get; set; }
+        public int? EndCountryDayOffset { get; set; }
         public int? IncreasedRateDayOffset { get; set; }
         public int? DecreasedRateDayOffset { get; set; }
     }

@@ -13,11 +13,11 @@
 
         var retroactiveDayOffset = 0;
         var newRateDayOffset = 0;
-        var effectiveDateDayOffset = 0;
+        var endCountryDayOffset = 0;
 
         var retroactiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
         var newRateDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
-        var effectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+        var endCountryDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
 
         var newCountryGridAPI;
         var newCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -153,7 +153,7 @@
                         EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime())
                     },
                     settings: {
-                        effectiveDate: effectiveDate
+                        endCountryDate: endCountryDate
                     }
                 };
                 if (countryChanges != undefined)
@@ -200,8 +200,8 @@
                     newRateDayOffset = customerPricingSettings.NewRateDayOffset;
                 if (customerPricingSettings.RetroactiveDayOffset != null)
                     retroactiveDayOffset = customerPricingSettings.RetroactiveDayOffset;
-                if (customerPricingSettings.EffectiveDateDayOffset != null)
-                    effectiveDateDayOffset = customerPricingSettings.EffectiveDateDayOffset;
+                if (customerPricingSettings.EndCountryDayOffset != null)
+                    endCountryDayOffset = customerPricingSettings.EndCountryDayOffset;
             }
             if (newRateDayOffset > 0) {
                 var newRateDateValue = WhS_Sales_RatePlanUtilsService.getNowPlusDays(newRateDayOffset);
@@ -211,9 +211,9 @@
                 var retroactiveDateValue = WhS_Sales_RatePlanUtilsService.getNowMinusDays(retroactiveDayOffset);
                 retroactiveDate = UtilsService.getDateFromDateTime(retroactiveDateValue);
             }
-            if (effectiveDateDayOffset > 0) {
-                var effectiveDateValue = WhS_Sales_RatePlanUtilsService.getNowPlusDays(effectiveDateDayOffset);
-                effectiveDate = UtilsService.getDateFromDateTime(effectiveDateValue);
+            if (endCountryDayOffset > 0) {
+                var endCountryDateValue = WhS_Sales_RatePlanUtilsService.getNowPlusDays(endCountryDayOffset);
+                endCountryDate = UtilsService.getDateFromDateTime(endCountryDateValue);
             }
         }
         function getNumberIfValid(value) {

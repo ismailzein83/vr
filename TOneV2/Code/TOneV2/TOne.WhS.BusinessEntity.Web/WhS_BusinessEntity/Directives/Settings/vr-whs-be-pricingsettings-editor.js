@@ -43,14 +43,14 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
                         data = payload.data;
                         directiveContext = payload.directiveContext;
                     }
-                    
+
                     prepareDirectivesViewForContext(directiveContext);
                     prepareDirectivesRequiredForContext(directiveContext);
 
                     promises.push(getSystemCurrency());
 
                     loadStaticData(data);
-                    
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -61,8 +61,9 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
                         RetroactiveDayOffset: ctrl.retroactiveDayOffset,
                         MaximumRate: ctrl.maximumRate,
                         NewRateDayOffset: ctrl.newRateDayOffset,
+                        EndCountryDayOffset: ctrl.endCountryDayOffset,
                         IncreasedRateDayOffset: ctrl.increasedRateDayOffset,
-                        DecreasedRateDayOffset: ctrl.decreasedRateDayOffset,
+                        DecreasedRateDayOffset: ctrl.decreasedRateDayOffset
                     };
                 };
 
@@ -79,6 +80,7 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
                 ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
                 ctrl.maximumRate = data.MaximumRate;
                 ctrl.newRateDayOffset = data.NewRateDayOffset;
+                ctrl.endCountryDayOffset = data.EndCountryDayOffset;
                 ctrl.increasedRateDayOffset = data.IncreasedRateDayOffset;
                 ctrl.decreasedRateDayOffset = data.DecreasedRateDayOffset;
             }
@@ -98,6 +100,7 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
                 ctrl.showEffectiveDateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
                 ctrl.showRetroactiveDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
                 ctrl.showNewRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
+                ctrl.showEndCountryDayOffset = (directiveContext != WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value);
                 ctrl.showIncreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
                 ctrl.showDecreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
             }
@@ -109,6 +112,7 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
                 ctrl.isEffectiveDateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
                 ctrl.isRetroactiveDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
                 ctrl.isNewRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isEndCountryDayOffsetRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
                 ctrl.isIncreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
                 ctrl.isDecreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
             }
