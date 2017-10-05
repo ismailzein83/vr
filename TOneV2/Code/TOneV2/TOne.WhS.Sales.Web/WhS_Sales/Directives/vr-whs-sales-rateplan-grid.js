@@ -1467,7 +1467,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     $scope.filterRoutingProducts.length = 0;
                 }
                 function resetCurrentRateFilter() {
-                    $scope.currentRateComparisonOption = undefined;
+                    $scope.currentRateComparisonOption = defaultComparisonOption;
                     $scope.currentRateFilterValue = undefined;
                     $scope.selectedRateSourceOptions.length = 0;
                 }
