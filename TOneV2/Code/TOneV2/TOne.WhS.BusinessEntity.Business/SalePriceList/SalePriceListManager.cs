@@ -1000,8 +1000,16 @@ namespace TOne.WhS.BusinessEntity.Business
             foreach (var rp in countryGroup.RPChanges)
             {
                 SalePricelistZoneChange zone;
-                if (zoneChanges.TryGetValue(rp.ZoneName, out zone))
-                    zone.RPChange = rp;
+                if (!zoneChanges.TryGetValue(rp.ZoneName, out zone))
+                {
+                    zone = new SalePricelistZoneChange()
+                    {
+                        ZoneId = rp.ZoneId.Value,
+                        ZoneName = rp.ZoneName
+                    };
+                    zoneChanges.Add(zone.ZoneName, zone);
+                }
+                zone.RPChange = rp;
             }
 
             return zoneChanges.Values;
