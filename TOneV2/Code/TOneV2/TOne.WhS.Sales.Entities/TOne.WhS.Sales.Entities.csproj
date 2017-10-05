@@ -48,6 +48,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -79,8 +82,10 @@
     <Compile Include="PricingTemplate\CountryPricingTemplate.cs" />
     <Compile Include="PricingTemplate\PricingTemplate.cs" />
     <Compile Include="PricingTemplate\PricingTemplateDetail.cs" />
+    <Compile Include="PricingTemplate\PricingTemplateEditorRuntime.cs" />
     <Compile Include="PricingTemplate\PricingTemplateQuery.cs" />
     <Compile Include="PricingTemplate\PricingTemplateRule.cs" />
+    <Compile Include="PricingTemplate\PricingTemplateSettings.cs" />
     <Compile Include="PricingTemplate\RatePricingTemplate.cs" />
     <Compile Include="PricingTemplate\ZonePricingTemplate.cs" />
     <Compile Include="RateManagement\Zone\ZoneDataByCountryIds.cs" />

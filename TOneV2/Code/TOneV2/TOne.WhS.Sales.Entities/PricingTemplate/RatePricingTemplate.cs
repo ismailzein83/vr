@@ -3,20 +3,6 @@ using System.Collections.Generic;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public abstract class MarginRateCalculation
-    {
-        public abstract Guid ConfigId { get; }
-
-        public abstract decimal? GetRate(IMarginRateCalculationContext context);
-    }
-
-    public interface IMarginRateCalculationContext
-    {
-        ZoneItem ZoneItem { get; }
-
-        int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
-    }
-
     public class RatePricingTemplate
     {
         public decimal FromRate { get; set; }
@@ -58,6 +44,20 @@ namespace TOne.WhS.Sales.Entities
 
             return rate;
         }
+    }
+
+    public abstract class MarginRateCalculation
+    {
+        public abstract Guid ConfigId { get; }
+
+        public abstract decimal? GetRate(IMarginRateCalculationContext context);
+    }
+
+    public interface IMarginRateCalculationContext
+    {
+        ZoneItem ZoneItem { get; }
+
+        int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
     }
 
     public interface IRatePricingTemplateContext
