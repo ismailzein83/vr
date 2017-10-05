@@ -195,12 +195,15 @@ namespace Retail.MultiNet.Business
        
         public override VRInvoiceAccountData GetInvoiceAccountData(IInvoiceAccountDataContext context)
         {
+            
             FinancialAccountManager financialAccountManager = new FinancialAccountManager();
             var financialAccountData = financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
+            AccountBEManager accountBEManager = new AccountBEManager();
             return new VRInvoiceAccountData
             {
                 BED = financialAccountData.FinancialAccount.BED,
-                EED = financialAccountData.FinancialAccount.EED
+                EED = financialAccountData.FinancialAccount.EED,
+                Status = accountBEManager.IsAccountActive(financialAccountData.Account)? VRAccountStatus.Active :VRAccountStatus.InActive
             };
         }
     }
