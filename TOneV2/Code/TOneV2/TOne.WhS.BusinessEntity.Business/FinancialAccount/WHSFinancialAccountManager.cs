@@ -158,9 +158,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (financialAccountDefinitionSetting.FinancialAccountInvoiceTypes != null && financialAccountDefinitionSetting.FinancialAccountInvoiceTypes.Count > 0)
             {
+                financialAccountRuntimeEditor.InvoiceSettingsData = new List<InvoiceSettingData>();
                 foreach (var financialAccountInvoiceType in financialAccountDefinitionSetting.FinancialAccountInvoiceTypes)
                 {
-                    financialAccountRuntimeEditor.InvoiceSettingsData = new List<InvoiceSettingData>();
                     var partnerInvoiceSetting = new PartnerInvoiceSettingManager().GetPartnerInvoiceSettingByPartnerId(financialAccountId.ToString(), financialAccountInvoiceType.InvoiceTypeId);
                     if (partnerInvoiceSetting != null)
                     {
