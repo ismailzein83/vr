@@ -250,7 +250,7 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.UpdateInvoiceNote(invoiceId, invoiceNote);
         }
-
+      
         public UpdateOperationOutput<InvoiceDetail> UpdateInvoice(Invoice.Entities.Invoice invoice)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<InvoiceDetail>();
@@ -276,7 +276,7 @@ namespace Vanrise.Invoice.Business
 
             return updateOperationOutput;
         }
-        internal bool TryUpdateInvoice(Invoice.Entities.Invoice invoice)
+        public bool TryUpdateInvoice(Invoice.Entities.Invoice invoice)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.Update(invoice);
