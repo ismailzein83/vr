@@ -15,9 +15,9 @@
         padding-top: 3px;
     }
 
-    .rate-plan-grid  .vr-datagrid-header .vr-datagrid-celltext {
-        text-transform: uppercase !important;
-    }
+        .rate-plan-grid .vr-datagrid-header .vr-datagrid-celltext {
+            text-transform: uppercase !important;
+        }
 
     .rate-plan-grid .vr-datagrid-celltext vr-select[smallselect] .vr-dropdown-select.btn {
         padding: 4px 2px !important;
@@ -30,6 +30,7 @@
     .rate-plan-grid .vr-datagrid-celltext .glyphicon-filter {
         color: #e85f5e;
     }
+
     .rate-plan-grid vr-select[smallselect] button.btn > span:first-child {
         display: none !important;
     }
@@ -63,7 +64,7 @@
     .rate-plan-grid .vr-dash:before {
         content: "—";
     }
-/*end of rate-plan-grid */
+    /*end of rate-plan-grid */
 </style>
 
 <div vr-loader="isLoading" ng-show="showDirective">
@@ -102,7 +103,19 @@
                                                 <i style="font-size: 6px;float: right;" ng-show="zoneNameFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); zoneNameFilterValue = undefined ; filterZones()"></i>
                                             </div>
                                             <div ng-show="showfilter">
-                                                <vr-textbox value="zoneNameFilterValue" onvaluechanged="filterZones"></vr-textbox>
+                                                <div style="display: inline-block; width: 90px;">
+                                                    <vr-select datasource="zoneNameFilterOptions"
+                                                               datavaluefield="value"
+                                                               datatextfield="description"
+                                                               selectedvalues="zoneNameFilterOption"
+                                                               onselectionchanged="filterZones"
+                                                               hidefilterbox
+                                                               hideremoveicon>
+                                                    </vr-select>
+                                                </div>
+                                                <div style="display: inline-block; width: 120px;">
+                                                    <vr-textbox value="zoneNameFilterValue" onvaluechanged="filterZones"></vr-textbox>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -177,10 +190,10 @@
                                                 <span style="display: inline-block;height: 6px"></span>
                                                 <i style="font-size: 6px;float: right;" ng-show="selectedRateSourceOptions.length > 0 " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); selectedRateSourceOptions = [] ; "></i>
                                             </div>
-                                            <div  ng-hide="isCurrentRateSourceFilterHidden">
+                                            <div ng-hide="isCurrentRateSourceFilterHidden">
                                                 <vr-select ng-show="showfilter" smallselect datasource="rateSourceOptions"
                                                            datavaluefield="value"
-                                                           datatextfield="symbol"
+                                                           datatextfield="text"
                                                            datatooltipfield="text"
                                                            selectedvalues="selectedRateSourceOptions"
                                                            onselectionchanged="filterZones"
@@ -203,7 +216,7 @@
 
                                             </div>
                                             <div ng-show="showfilter">
-                                                <span style="display: inline-block;width: 33%;">
+                                                <span style="display: inline-block; width: 85px;">
                                                     <vr-select datasource="routeOptionNumbers"
                                                                datavaluefield="value"
                                                                datatextfield="text"
@@ -212,7 +225,7 @@
                                                                hideremoveicon>
                                                     </vr-select>
                                                 </span>
-                                                <span style="display: inline-block;width: 33%;">
+                                                <span style="display: inline-block; width: 50px;">
                                                     <vr-select datasource="comparisonOptions"
                                                                datavaluefield="value"
                                                                datatextfield="symbol"
@@ -222,7 +235,7 @@
                                                                hideremoveicon>
                                                     </vr-select>
                                                 </span>
-                                                <span style="display: inline-block;width: 33%;">
+                                                <span style="display: inline-block; width: 50px;">
                                                     <vr-textbox type="number"
                                                                 value="routeOptionFilterValue"
                                                                 decimalprecision="{{::longPrecision}}"
@@ -358,10 +371,11 @@
                                                            datavaluefield="value"
                                                            datatextfield="symbol"
                                                            selectedvalues="newRateFilterOption"
-                                                           onselectionchanged="filterZones">
+                                                           onselectionchanged="onNewRateFilterOptionChanged"
+                                                           hideremoveicon>
                                                 </vr-select>
                                             </div>
-                                            <div  ng-hide="newRateFilterOption.symbol == 'Unpriced'">
+                                            <div ng-hide="hideNewRateFilterValue">
                                                 <vr-textbox ng-show="showfilter" type="number"
                                                             value="newRateFilterValue"
                                                             decimalprecision="{{::longPrecision}}"
@@ -383,7 +397,7 @@
                                             <div ng-show="showfilter">
                                                 <vr-select smallselect datasource="rateComparisonOptions"
                                                            datavaluefield="value"
-                                                           datatextfield="symbol"
+                                                           datatextfield="text"
                                                            datatooltipfield="text"
                                                            selectedvalues="selectedRateComparisonOptions"
                                                            onselectionchanged="filterZones"

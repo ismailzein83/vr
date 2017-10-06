@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService",
-    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService) {
+app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum',
+    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService, VRCommon_TextFilterTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -277,6 +277,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 $scope.filterZones = function () {
                     lastTriggerFilterZonesTime = VRDateTimeService.getNowDateTime();
                     triggerfilterZones();
+                };
+                $scope.onNewRateFilterOptionChanged = function () {
+                    return onNewRateFilterOptionChanged();
                 };
                 $scope.resetGridFilter = function () {
                     resetGridFilter();
@@ -1209,34 +1212,48 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             var filterRoutingProductSelectorAPI;
             var filterRoutingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var comparisonOptions;
+            var rateSourceOptions;
+            var newRateFilterOptions;
+            var rateComparisonOptions;
+
             function initGridFilter() {
                 defineGridFilterDataSources();
                 defineGridFilterDefaultValues();
                 function defineGridFilterDataSources() {
-                    $scope.comparisonOptions =
-                    [
-                        { value: 1, text: 'Equals', symbol: '=' },
-                        { value: 2, text: 'Greater Than', symbol: '>' },
-                        { value: 3, text: 'Less Than', symbol: '<' }
-                    ];
-                    $scope.rateSourceOptions =
-                    [
-                        { value: 1, text: 'Inherited', symbol: 'I' },
-                        { value: 2, text: 'Explicit', symbol: 'E' }
-                    ];
-                    $scope.newRateFilterOptions =
-                    [
-                        { value: 1, text: 'Priced', symbol: 'Priced' },
-                        { value: 2, text: 'Unpriced', symbol: 'Unpriced' },
-                        { value: 3, text: 'Equals', symbol: '=' },
-                        { value: 4, text: 'Greater Than', symbol: '>' },
-                        { value: 5, text: 'Less Than', symbol: '<' }
-                    ];
-                    $scope.rateComparisonOptions =
-                    [
-                        { value: 1, text: 'Increase', symbol: 'I' },
-                        { value: 2, text: 'Decrease', symbol: 'D' }
-                    ];
+                    $scope.zoneNameFilterOptions = UtilsService.getArrayEnum(VRCommon_TextFilterTypeEnum);
+
+                    comparisonOptions = {
+                        Equals: { value: 1, text: 'Equals', symbol: '=' },
+                        GreaterThan: { value: 2, text: 'Greater Than', symbol: '>' },
+                        GreaterThanOrEquals: { value: 3, text: 'Greater Than Or Equals', symbol: '>=' },
+                        LessThan: { value: 4, text: 'Less Than', symbol: '<' },
+                        LessThanOrEquals: { value: 5, text: 'Less Than Or Equals', symbol: '<=' }
+                    };
+                    $scope.comparisonOptions = UtilsService.getArrayEnum(comparisonOptions);
+
+                    rateSourceOptions = {
+                        Inherited: { value: 1, text: 'Inherited', symbol: 'I' },
+                        Explicit: { value: 2, text: 'Explicit', symbol: 'E' }
+                    };
+                    $scope.rateSourceOptions = UtilsService.getArrayEnum(rateSourceOptions);
+
+                    newRateFilterOptions = {
+                        Priced: { value: 6, text: 'Priced', symbol: 'Priced' },
+                        Unpriced: { value: 7, text: 'Unpriced', symbol: 'Unpriced' },
+                        Equals: { value: 1, text: 'Equals', symbol: '=' },
+                        GreaterThan: { value: 2, text: 'Greater Than', symbol: '>' },
+                        GreaterThanOrEquals: { value: 3, text: 'Greater Than Or Equals', symbol: '>=' },
+                        LessThan: { value: 4, text: 'Less Than', symbol: '<' },
+                        LessThanOrEquals: { value: 5, text: 'Less Than Or Equals', symbol: '<=' }
+                    };
+                    $scope.newRateFilterOptions = UtilsService.getArrayEnum(newRateFilterOptions);
+
+                    rateComparisonOptions = {
+                        Increase: { value: 1, text: 'Increase', symbol: 'I' },
+                        Decrease: { value: 2, text: 'Decrease', symbol: 'D' }
+                    };
+                    $scope.rateComparisonOptions = UtilsService.getArrayEnum(rateComparisonOptions);
                 }
                 function defineGridFilterDefaultValues() {
                     $scope.routeOptionNumbers = [];
@@ -1245,6 +1262,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     $scope.costFilterValues = [];
                     $scope.selectedRateComparisonOptions = [];
 
+                    $scope.zoneNameFilterOption = VRCommon_TextFilterTypeEnum.Contains;
                     var defaultComparisonOption = getDefaultComparisonOption();
                     $scope.currentRateComparisonOption = defaultComparisonOption;
                     $scope.marginComparisonOption = defaultComparisonOption;
@@ -1276,10 +1294,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 }
             }
             function getDefaultComparisonOption() {
-                return $scope.comparisonOptions[1];
+                return comparisonOptions.GreaterThan;
             }
             function getDefaultNewRateFilterOption() {
-                return $scope.newRateFilterOptions[3];
+                return newRateFilterOptions.GreaterThan;
             }
 
             function triggerfilterZones() {
@@ -1305,12 +1323,28 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             function isZoneItemExcluded(zoneItem) {
 
                 function zoneNameFilter(zoneName) {
-                    return ($scope.zoneNameFilterValue == undefined || zoneName.toLowerCase().indexOf($scope.zoneNameFilterValue.toLowerCase()) >= 0);
-                }
-                function routingProductFilter(currentRoutingProductId) {
-                    if ($scope.filterRoutingProducts.length == 0 || currentRoutingProductId == undefined)
+                    if ($scope.zoneNameFilterValue == undefined || $scope.zoneNameFilterOption == undefined)
                         return true;
-                    return UtilsService.getItemIndexByVal($scope.filterRoutingProducts, currentRoutingProductId, 'RoutingProductId') != -1;
+                    if (zoneName == undefined)
+                        return false;
+                    var formattedZoneName = zoneName.toLowerCase();
+                    var formattedZoneNameFilterValue = $scope.zoneNameFilterValue.toLowerCase();
+                    switch ($scope.zoneNameFilterOption.value) {
+                        case VRCommon_TextFilterTypeEnum.StartsWith.value:
+                            return formattedZoneName.startsWith(formattedZoneNameFilterValue);
+                            break;
+                        case VRCommon_TextFilterTypeEnum.Contains.value:
+                            return (formattedZoneName.indexOf(formattedZoneNameFilterValue) >= 0);
+                        case VRCommon_TextFilterTypeEnum.Equals.value:
+                            return (formattedZoneName == formattedZoneNameFilterValue);
+                            break;
+                    }
+                    return false;
+                }
+                function effectiveRoutingProductFilter(effectiveRoutingProductId) {
+                    if ($scope.filterRoutingProducts.length == 0 || effectiveRoutingProductId == undefined)
+                        return true;
+                    return UtilsService.getItemIndexByVal($scope.filterRoutingProducts, effectiveRoutingProductId, 'RoutingProductId') != -1;
                 }
                 function currentRateSourceFilter(isCurrentRateEditable) {
                     if ($scope.selectedRateSourceOptions.length == 0)
@@ -1318,11 +1352,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     if (isCurrentRateEditable == undefined)
                         return false;
                     for (var i = 0; i < $scope.selectedRateSourceOptions.length; i++) {
-                        switch ($scope.selectedRateSourceOptions[i].symbol) {
-                            case 'I':
+                        switch ($scope.selectedRateSourceOptions[i].value) {
+                            case rateSourceOptions.Inherited.value:
                                 if (!isCurrentRateEditable)
                                     return true;
-                            case 'E':
+                            case rateSourceOptions.Explicit.value:
                                 if (isCurrentRateEditable)
                                     return true;
                         }
@@ -1335,9 +1369,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 function newRateFilter(newRateValue) {
                     if ($scope.newRateFilterOption == undefined)
                         return true;
-                    if ($scope.newRateFilterOption.symbol == 'Priced')
+                    if ($scope.newRateFilterOption.value == newRateFilterOptions.Priced.value)
                         return newRateValue != undefined;
-                    if ($scope.newRateFilterOption.symbol == 'Unpriced')
+                    if ($scope.newRateFilterOption.value == newRateFilterOptions.Unpriced.value)
                         return newRateValue == undefined;
                     return comparisonOptionFilter(newRateValue, $scope.newRateFilterValue, $scope.newRateFilterOption);
                 }
@@ -1347,12 +1381,12 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     if (currentRateValue == undefined || newRateValue == undefined || currentRateValue == newRateValue)
                         return false;
                     for (var i = 0; i < $scope.selectedRateComparisonOptions.length; i++) {
-                        switch ($scope.selectedRateComparisonOptions[i].text) {
-                            case 'Increase':
+                        switch ($scope.selectedRateComparisonOptions[i].value) {
+                            case rateComparisonOptions.Increase.value:
                                 if (newRateValue > currentRateValue)
                                     return true;
                                 break;
-                            case 'Decrease':
+                            case rateComparisonOptions.Decrease.value:
                                 if (newRateValue < currentRateValue)
                                     return true;
                                 break;
@@ -1393,17 +1427,25 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         return false;
                     var parsedValue = parseFloat(value);
                     var parsedFilterValue = parseFloat(filterValue);
-                    switch (comparisonOption.symbol) {
-                        case '=':
+                    switch (comparisonOption.value) {
+                        case comparisonOptions.Equals.value:
                             if (parsedValue == parsedFilterValue)
                                 return true;
                             break;
-                        case '>':
+                        case comparisonOptions.GreaterThan.value:
                             if (parsedValue > parsedFilterValue)
                                 return true;
                             break;
-                        case '<':
+                        case comparisonOptions.GreaterThanOrEquals.value:
+                            if (parsedValue >= parsedFilterValue)
+                                return true;
+                            break;
+                        case comparisonOptions.LessThan.value:
                             if (parsedValue < parsedFilterValue)
+                                return true;
+                            break;
+                        case comparisonOptions.LessThanOrEquals.value:
+                            if (parsedValue <= parsedFilterValue)
                                 return true;
                             break;
                     }
@@ -1427,7 +1469,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 if (!zoneNameFilter(zoneItem.ZoneName))
                     return true;
-                if (!routingProductFilter(zoneItem.CurrentRoutingProductId))
+                if (!effectiveRoutingProductFilter(zoneItem.EffectiveRoutingProductId))
                     return true;
                 if (!currentRateSourceFilter(zoneItem.IsCurrentRateEditable))
                     return true;
@@ -1499,6 +1541,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     $scope.newRateFilterValue = undefined;
                     $scope.selectedRateComparisonOptions.length = 0;
                 }
+            }
+
+            function onNewRateFilterOptionChanged() {
+                $scope.hideNewRateFilterValue = ($scope.newRateFilterOption != undefined && ($scope.newRateFilterOption.value == newRateFilterOptions.Priced.value || $scope.newRateFilterOption.value == newRateFilterOptions.Unpriced.value));
+                return $scope.filterZones();
             }
             /*##### Grid Filter #####*/
         }
