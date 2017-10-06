@@ -20,11 +20,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             List<string> listMeasures = new List<string> { "CostNetNotNULL", "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
             List<string> listDimensions = new List<string> { "Supplier", "SupplierZone", "CostCurrency", "CostRate", "CostRateType" };
-            string dimentionName = null;
-            int currencyId = -1;
-            IEnumerable<VRTaxItemDetail> taxItemDetails = null;
-            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
-
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
             var supplierGenerationCustomSectionPayload = context.CustomSectionPayload as SupplierGenerationCustomSectionPayload;
@@ -52,29 +47,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 }
             }
 
-
+            string dimentionName = "CostFinancialAccount";
+            int dimensionValue = financialAccount.FinancialAccountId;
+            int currencyId = financialAccountManager.GetFinancialAccountCurrencyId(financialAccount);
             string partnerType = null;
-            int dimensionValue;
-            int carrierProfileId;
             if (financialAccount.CarrierProfileId.HasValue)
             {
                 partnerType = "Profile";
-                dimensionValue = financialAccount.CarrierProfileId.Value;
-                carrierProfileId = financialAccount.CarrierProfileId.Value;
-                dimentionName = "SupplierProfile";
-                currencyId = carrierProfileManager.GetCarrierProfileCurrencyId(dimensionValue);
             }
             else
             {
                 partnerType = "Account";
-                dimentionName = "Supplier";
-                dimensionValue = financialAccount.CarrierAccountId.Value;
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                currencyId = carrierAccountManager.GetCarrierAccountCurrencyId(dimensionValue);
-                var carrierAccount = carrierAccountManager.GetCarrierAccount(dimensionValue);
-                carrierProfileId = carrierAccount.CarrierProfileId;
             }
-            taxItemDetails = carrierProfileManager.GetTaxItemDetails(carrierProfileId);
+            IEnumerable<VRTaxItemDetail> taxItemDetails = financialAccountManager.GetFinancialAccountTaxItemDetails(financialAccount);
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
@@ -305,43 +290,6 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return itemSetNamesDic;
         }
-
-
-        //private void GroupingData(Dictionary<int, InvoiceBillingRecord> groupedDic, int key, InvoiceBillingRecord newInvoiceBillingRecord)
-        //{
-        //    InvoiceBillingRecord invoiceBillingRecord = null;
-        //    if (!groupedDic.TryGetValue(key, out invoiceBillingRecord))
-        //    {
-        //        invoiceBillingRecord = new InvoiceBillingRecord
-        //        {
-        //            SupplierRateTypeId = newInvoiceBillingRecord.SupplierRateTypeId,
-        //            SupplierRate = newInvoiceBillingRecord.SupplierRate,
-        //            SupplierZoneId = newInvoiceBillingRecord.SupplierZoneId,
-        //            SupplierCurrencyId = newInvoiceBillingRecord.SupplierCurrencyId,
-        //            OriginalSupplierCurrencyId = newInvoiceBillingRecord.OriginalSupplierCurrencyId,
-        //            SupplierId = newInvoiceBillingRecord.SupplierId,
-        //            InvoiceMeasures = new InvoiceMeasures
-        //            {
-        //                CostNet = newInvoiceBillingRecord.InvoiceMeasures.CostNet,
-        //                CostDuration = newInvoiceBillingRecord.InvoiceMeasures.CostDuration,
-        //                BillingPeriodFrom = newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom,
-        //                BillingPeriodTo = newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo,
-        //                NumberOfCalls = newInvoiceBillingRecord.InvoiceMeasures.NumberOfCalls,
-        //                CostNet_OrigCurr = newInvoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr,
-        //            }
-        //        };
-        //        groupedDic.Add(key, invoiceBillingRecord);
-        //    }
-        //    else
-        //    {
-        //        invoiceBillingRecord.InvoiceMeasures.CostDuration += newInvoiceBillingRecord.InvoiceMeasures.CostDuration;
-        //        invoiceBillingRecord.InvoiceMeasures.CostNet += newInvoiceBillingRecord.InvoiceMeasures.CostNet;
-        //        invoiceBillingRecord.InvoiceMeasures.NumberOfCalls += newInvoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
-        //        invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo = invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo > newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo ? invoiceBillingRecord.InvoiceMeasures.BillingPeriodTo : newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodTo;
-        //        invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom = invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom < newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom ? invoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom : newInvoiceBillingRecord.InvoiceMeasures.BillingPeriodFrom;
-        //        groupedDic[key] = invoiceBillingRecord;
-        //    }
-        //}
         private void AddItemToDictionary<T>(Dictionary<T, List<InvoiceBillingRecord>> itemSetNamesDic, T key, InvoiceBillingRecord invoiceBillingRecord)
         {
             if (itemSetNamesDic == null)

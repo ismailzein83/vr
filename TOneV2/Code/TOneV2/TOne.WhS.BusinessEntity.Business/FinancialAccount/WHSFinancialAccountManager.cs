@@ -504,12 +504,13 @@ namespace TOne.WhS.BusinessEntity.Business
             string financialAccountIdAsString = financialAccountToEdit.FinancialAccountId.ToString();
             if (financialAccountDefinitionSettings.FinancialAccountInvoiceTypes != null)
             {
+                List<Guid> invoiceTypeIds = new List<Guid>(); ;
                 foreach (var financialAccountInvoiceType in financialAccountDefinitionSettings.FinancialAccountInvoiceTypes)
                 {
-                    if (!s_invoiceAccountManager.TryUpdateInvoiceAccountEffectiveDate(financialAccountInvoiceType.InvoiceTypeId, financialAccountIdAsString, financialAccountToEdit.BED, financialAccountToEdit.EED, out errorMessage))
-                        return false;
+                    invoiceTypeIds.Add(financialAccountInvoiceType.InvoiceTypeId);
                 }
-               
+                if (!s_invoiceAccountManager.TryUpdateInvoiceAccountEffectiveDate(invoiceTypeIds, financialAccountIdAsString, financialAccountToEdit.BED, financialAccountToEdit.EED, out errorMessage))
+                    return false;
             }
             if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
             {
@@ -601,6 +602,35 @@ namespace TOne.WhS.BusinessEntity.Business
                });
         }
 
+        public int GetFinancialAccountCurrencyId(WHSFinancialAccount financialAccount)
+        {
+            financialAccount.ThrowIfNull("financialAccount");
+            if (financialAccount.CarrierProfileId.HasValue)
+            {
+                return s_carrierProfileManager.GetCarrierProfileCurrencyId(financialAccount.CarrierProfileId.Value);
+            }
+            else
+            {
+                return s_carrierAccountManager.GetCarrierAccountCurrencyId(financialAccount.CarrierAccountId.Value);
+            }
+        }
+        public IEnumerable<VRTaxItemDetail> GetFinancialAccountTaxItemDetails(WHSFinancialAccount financialAccount)
+        {
+            financialAccount.ThrowIfNull("financialAccount");
+            if (financialAccount.CarrierProfileId.HasValue)
+            {
+                return s_carrierProfileManager.GetTaxItemDetails(financialAccount.CarrierProfileId.Value);
+            }
+            else
+            {
+                var carrierProfileId = s_carrierAccountManager.GetCarrierProfileId(financialAccount.CarrierAccountId.Value);
+                if (carrierProfileId.HasValue)
+                {
+                    return s_carrierProfileManager.GetTaxItemDetails(carrierProfileId.Value);
+                }
+            }
+            return null;
+        }
         #endregion
 
         #region Private Methods
