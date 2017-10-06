@@ -46,6 +46,20 @@ namespace TOne.WhS.Invoice.Business
             };
         }
 
+        public bool UpdateOriginalInvoiceData(OriginalInvoiceDataInput input)
+        {
+            Vanrise.Invoice.Business.InvoiceManager invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
+            var invoice = invoiceManager.GetInvoice(input.InvoiceId);
+            invoice.ThrowIfNull("invoice", input.InvoiceId);
+            var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
+            supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
+            supplierInvoiceDetails.OriginalAmount = input.OriginalAmount;
+            supplierInvoiceDetails.Reference = input.Reference;
+            supplierInvoiceDetails.AttachementsFileIds = input.AttachementsFileIds;
+            invoice.Details = supplierInvoiceDetails;
+            return invoiceManager.TryUpdateInvoice(invoice);
+        }
+
         #region Private Classes
 
         private class InvoiceComparisonRequestHandler : BigDataRequestHandler<InvoiceComparisonInput, InvoiceComparisonResult, InvoiceComparisonResultDetail>

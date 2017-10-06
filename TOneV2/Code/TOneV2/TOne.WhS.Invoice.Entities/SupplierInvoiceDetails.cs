@@ -20,6 +20,9 @@ namespace TOne.WhS.Invoice.Entities
         public string OriginalSupplierCurrency { get; set; }
         public Decimal TotalAmount { get; set; }
         public int? TimeZoneId { get; set; }
+        public decimal? OriginalAmount { get; set; }
+        public string Reference { get; set; }
+        public List<long> AttachementsFileIds { get; set; }
         public SupplierInvoiceDetails() { }
         public IEnumerable<SupplierInvoiceDetails> GetSupplierInvoiceDetailsRDLCSchema()
         {

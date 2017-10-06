@@ -10,9 +10,12 @@
         function CompareInvoices(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "CompareInvoices"), input);
         }
-
+        function UpdateOriginalInvoiceData(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "UpdateOriginalInvoiceData"), input);
+        }
         return ({
-            CompareInvoices: CompareInvoices
+            CompareInvoices: CompareInvoices,
+            UpdateOriginalInvoiceData: UpdateOriginalInvoiceData
         });
     }
 

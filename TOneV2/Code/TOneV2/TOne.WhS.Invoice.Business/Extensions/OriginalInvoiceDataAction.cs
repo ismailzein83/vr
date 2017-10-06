@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Invoice.Entities;
+
+namespace TOne.WhS.Invoice.Business.Extensions
+{
+    public class OriginalInvoiceDataAction : InvoiceActionSettings
+    {
+        public override string ActionTypeName { get { return "OriginalInvoiceData"; } }
+        public override Guid ConfigId { get { return new Guid("CA9DF16B-B492-4C86-9FE5-602A990E4D24"); } }
+    }
+}

@@ -177,7 +177,9 @@
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\CustomerGenerationCustomSectionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\whs-invoicetype-generationcustomsection-supplier.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\whs-invoicetype-generationcustomsection-customer.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\Templates\OriginalInvoiceDataActionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\Templates\CompareInvoiceActionTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\whs-invoicetype-gridactionsettings-originalinvoicedata.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\whs-invoicetype-gridactionsettings-compare.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\Templates\PartnerConditionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-partner.js" />
@@ -198,6 +200,8 @@
     <Content Include="WhS_Invoice\Reports\Reporting.aspx" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
     <Content Include="WhS_Invoice\Services\InvoiceService.js" />
+    <Content Include="WhS_Invoice\Views\OriginalInvoiceDataTemplateController.js" />
+    <Content Include="WhS_Invoice\Views\OriginalInvoiceDataTemplate.html" />
     <Content Include="WhS_Invoice\Views\InvoiceCompareTemplate.html" />
     <Content Include="WhS_Invoice\Views\InvoiceCompareTemplateController.js" />
   </ItemGroup>

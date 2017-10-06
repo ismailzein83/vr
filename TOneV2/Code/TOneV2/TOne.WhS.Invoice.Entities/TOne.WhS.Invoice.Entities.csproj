@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OriginalInvoiceDataInput.cs" />
     <Compile Include="SupplierGenerationCustomSectionPayload.cs" />
     <Compile Include="CustomerGenerationCustomSectionPayload.cs" />
     <Compile Include="CustomerInvoiceDetails.cs" />
