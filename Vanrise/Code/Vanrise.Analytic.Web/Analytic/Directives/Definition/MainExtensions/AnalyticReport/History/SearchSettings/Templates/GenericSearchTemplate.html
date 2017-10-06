@@ -10,8 +10,11 @@
                 </vr-columns>
             </vr-row>
             <vr-row>
-                <vr-analytic-dimension-selector on-ready="scopeModel.onGroupingDimensionSelectorDirectiveReady" isrequired="scopeModel.isRequiredGroupingDimensions" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedGroupingDimensions" onselectitem="scopeModel.onSelectGroupingDimensionItem" ondeselectitem="scopeModel.onDeselectGroupingDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
-                <vr-columns width="2/3row" >
+                <vr-analytic-dimension-selector on-ready="scopeModel.onGroupingDimensionSelectorDirectiveReady" selectedvalues="scopeModel.selectedGroupingDimensions"
+                                                onselectitem="scopeModel.onSelectGroupingDimensionItem" ondeselectitem="scopeModel.onDeselectGroupingDimensionItem"
+                                                isrequired="scopeModel.isRequiredGroupingDimensions" normal-col-num="4" hideselectedvaluessection ismultipleselection>
+                </vr-analytic-dimension-selector>
+                <vr-columns width="2/3row">
                     <vr-validator validate="scopeModel.isValidGroupingDimensions()">
                         <vr-datagrid datasource="scopeModel.groupingDimensions" enabledraggablerow="true"
                                      on-ready="onGridReady" ondeleterow="scopeModel.removeGroupingDimension" hidegridmenu norowhighlightonclick="'true'">
@@ -29,12 +32,15 @@
         </vr-section>
     </vr-columns>
 </vr-row>
-<vr-row >
+<vr-row>
     <vr-columns width="fullrow">
         <vr-section title="Filters">
             <vr-row>
-                <vr-analytic-dimension-selector on-ready="scopeModel.onFilterDimensionSelectorDirectiveReady" ismultipleselection normal-col-num="4" selectedvalues="scopeModel.selectedFilterDimensions" onselectitem="    scopeModel.onSelectFilterDimensionItem" ondeselectitem="    scopeModel.onDeselectFilterDimensionItem" hideselectedvaluessection></vr-analytic-dimension-selector>
-                <vr-columns width="2/3row" >
+                <vr-analytic-dimension-selector on-ready="scopeModel.onFilterDimensionSelectorDirectiveReady" selectedvalues="scopeModel.selectedFilterDimensions"
+                                                onselectitem="scopeModel.onSelectFilterDimensionItem" ondeselectitem="scopeModel.onDeselectFilterDimensionItem"
+                                                normal-col-num="4" hideselectedvaluessection ismultipleselection>
+                </vr-analytic-dimension-selector>
+                <vr-columns width="2/3row">
                     <vr-validator validate="scopeModel.isValidFilterDimensions()">
                         <vr-datagrid datasource="scopeModel.filterDimensions"
                                      on-ready="onGridReady" ondeleterow="scopeModel.removeFilterDimension" hidegridmenu enabledraggablerow="true" norowhighlightonclick="'true'">
@@ -52,3 +58,5 @@
         </vr-section>
     </vr-columns>
 </vr-row>
+
+
