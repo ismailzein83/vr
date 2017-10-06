@@ -10,12 +10,14 @@
 
         var pricingTemplateId;
         var pricingTemplateEntity;
+        var pricingTemplateRulesEditorRuntime;
 
         var currencyDirectiveAPI;
         var currencyDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var sellingNumberPlanSelectorAPI;
         var sellingNumberPlanSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var sellingNumberPlanSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
         var pricingTemplateRuleManagementDirectiveAPI;
         var pricingTemplateRuleManagementDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -23,7 +25,6 @@
         loadParameters();
         defineScope();
         load();
-
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -41,15 +42,37 @@
                 currencyDirectiveAPI = api;
                 currencyDirectiveReadyPromiseDeferred.resolve();
             };
-
             $scope.scopeModel.onSellingNumberPlanSelectorReady = function (api) {
                 sellingNumberPlanSelectorAPI = api;
                 sellingNumberPlanSelectorReadyPromiseDeferred.resolve();
             };
-
             $scope.scopeModel.onPricingTemplateRuleManagementDirectiveReady = function (api) {
                 pricingTemplateRuleManagementDirectiveAPI = api;
                 pricingTemplateRuleManagementDirectiveReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onBeforeSellingNumberPlanSelectionChanged = function () {
+                if ($scope.scopeModel.selectedSellingNumberPlan == undefined)
+                    return true;
+
+                if (pricingTemplateRuleManagementDirectiveAPI == undefined || pricingTemplateRuleManagementDirectiveAPI.getData() == undefined)
+                    return true;
+
+                return VRNotificationService.showConfirmation("Settings Data will be deleted. Are you sure you want to continue?").then(function (response) {
+                    return response;
+                });
+            };
+
+            $scope.scopeModel.onSellingNumberPlanSelectionChanged = function (selectdedSNP) {
+
+                if (selectdedSNP != undefined) {
+                    var pricingTemplateRuleManagementDirectivePayload = { context: buildPricingTemplateRulesContext() };
+
+                    var setLoader = function (value) {
+                        setTimeout(function () { $scope.scopeModel.isPricingTemplateRuleGridLoading = value; });
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, pricingTemplateRuleManagementDirectiveAPI, pricingTemplateRuleManagementDirectivePayload, setLoader, sellingNumberPlanSelectionChangedDeferred);
+                }
             };
 
             $scope.scopeModel.save = function () {
@@ -61,7 +84,7 @@
                 }
             };
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
         function load() {
@@ -81,8 +104,11 @@
         }
 
         function getPricingTemplate() {
-            return WhS_Sales_PricingTemplateAPIService.GetPricingTemplate(pricingTemplateId).then(function (response) {
-                pricingTemplateEntity = response;
+            return WhS_Sales_PricingTemplateAPIService.GetPricingTemplateEditorRuntime(pricingTemplateId).then(function (response) {
+                if (response != undefined) {
+                    pricingTemplateEntity = response.Entity;
+                    pricingTemplateRulesEditorRuntime = response.RulesEditorRuntime;
+                }
             });
         }
 
@@ -121,7 +147,7 @@
             }
 
             currencyDirectiveReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred)
+                VRUIUtilsService.callDirectiveLoad(currencyDirectiveAPI, currencyPayload, loadCurrencySelectorPromiseDeferred);
 
             });
 
@@ -136,21 +162,24 @@
                 if (pricingTemplateEntity != undefined) {
                     sellingNumberPlanSelectorPayload = { selectedIds: pricingTemplateEntity.SellingNumberPlanId };
                 }
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanSelectorAPI, sellingNumberPlanSelectorPayload, sellingNumberPlanSelectorLoadPromiseDeferred)
+                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanSelectorAPI, sellingNumberPlanSelectorPayload, sellingNumberPlanSelectorLoadPromiseDeferred);
             });
 
             return sellingNumberPlanSelectorLoadPromiseDeferred.promise;
         }
         function loadPricingTemplateRuleManagementDirective() {
+            if (!isEditMode)
+                sellingNumberPlanSelectionChangedDeferred.resolve();
+
             var pricingTemplateRuleManagementDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            pricingTemplateRuleManagementDirectiveReadyDeferred.promise.then(function () {
+            UtilsService.waitMultiplePromises([pricingTemplateRuleManagementDirectiveReadyDeferred.promise, sellingNumberPlanSelectionChangedDeferred.promise]).then(function () {
+                sellingNumberPlanSelectionChangedDeferred = undefined;
 
-                var pricingTemplateRuleManagementDirectivePayload;
+                var pricingTemplateRuleManagementDirectivePayload = { context: buildPricingTemplateRulesContext() };
                 if (pricingTemplateEntity != undefined) {
-                    pricingTemplateRuleManagementDirectivePayload = {
-                        pricingTemplateRules: pricingTemplateEntity.Settings.Rules
-                    };
+                    pricingTemplateRuleManagementDirectivePayload.pricingTemplateRules = pricingTemplateEntity.Settings.Rules;
+                    pricingTemplateRuleManagementDirectivePayload.pricingTemplateRulesEditorRuntime = pricingTemplateRulesEditorRuntime;
                 }
                 VRUIUtilsService.callDirectiveLoad(pricingTemplateRuleManagementDirectiveAPI, pricingTemplateRuleManagementDirectivePayload, pricingTemplateRuleManagementDirectiveLoadDeferred);
             });
@@ -198,7 +227,15 @@
                 SellingNumberPlanId: sellingNumberPlanSelectorAPI.getSelectedIds(),
                 Settings: {
                     CurrencyId: currencyDirectiveAPI.getSelectedIds(),
-                    Description: $scope.scopeModel.description
+                    Description: $scope.scopeModel.description,
+                    Rules: pricingTemplateRuleManagementDirectiveAPI.getData()
+                }
+            };
+        }
+        function buildPricingTemplateRulesContext() {
+            return {
+                getSellingNumberPlan: function () {
+                    return $scope.scopeModel.selectedSellingNumberPlan ? $scope.scopeModel.selectedSellingNumberPlan.SellingNumberPlanId : undefined;
                 }
             };
         }

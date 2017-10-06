@@ -15,21 +15,24 @@
             VRModalService.showModal('/Client/Modules/WhS_Sales/Views/PricingTemplate/PricingTemplateEditor.html', null, settings);
         };
         function editPricingTemplate(pricingTemplateId, onPricingTemplateUpdated) {
-            var settings = {};
 
             var parameters = {
                 pricingTemplateId: pricingTemplateId
             };
 
-            settings.onScopeReady = function (modalScope) {
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onPricingTemplateUpdated = onPricingTemplateUpdated;
             };
-            VRModalService.showModal('/Client/Modules/WhS_Sales/Views/PricingTemplate/PricingTemplateEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/WhS_Sales/Views/PricingTemplate/PricingTemplateEditor.html', parameters, modalSettings);
         }
 
-        function addPricingTemplateRule(onPricingTemplateRuleAdded) {
+        function addPricingTemplateRule(context, onPricingTemplateRuleAdded) {
 
-            var parameters = {};
+            var parameters = {
+                context: context
+            };
 
             var modalSettings = {};
 
@@ -39,18 +42,18 @@
 
             VRModalService.showModal('/Client/Modules/WhS_Sales/Views/PricingTemplate/PricingTemplateRuleEditor.html', parameters, modalSettings);
         };
-        function editPricingTemplateRule(pricingTemplateRule, onPricingTemplateUpdated) {
+        function editPricingTemplateRule(pricingTemplateRule, context, onPricingTemplateRuleUpdated) {
 
             var parameters = {
-                pricingTemplateRule: pricingTemplateRule
+                pricingTemplateRule: pricingTemplateRule,
+                context: context
             };
 
             var modalSettings = {};
 
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.onColumnDefinitionUpdated = onPricingTemplateUpdated;
+                modalScope.onPricingTemplateRuleUpdated = onPricingTemplateRuleUpdated;
             };
-
             VRModalService.showModal('/Client/Modules/WhS_Sales/Views/PricingTemplate/PricingTemplateRuleEditor.html', parameters, modalSettings);
         }
 

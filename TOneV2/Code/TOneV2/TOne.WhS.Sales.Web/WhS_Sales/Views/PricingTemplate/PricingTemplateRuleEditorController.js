@@ -9,9 +9,13 @@
         var isEditMode;
 
         var pricingTemplateRuleEntity;
+        var context;
 
-        var pricingTemplateZoneFilterDirectiveAPI;
-        var pricingTemplateZoneFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var zoneFilterDirectiveAPI;
+        var zoneFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var ratesDirectiveAPI;
+        var ratesDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -22,6 +26,7 @@
 
             if (parameters != undefined) {
                 pricingTemplateRuleEntity = parameters.pricingTemplateRule;
+                context = parameters.context;
             }
 
             isEditMode = (pricingTemplateRuleEntity != undefined);
@@ -30,8 +35,13 @@
             $scope.scopeModel = {};
 
             $scope.scopeModel.onPricingTemplateZoneFilterDirectiveReady = function (api) {
-                pricingTemplateZoneFilterDirectiveAPI = api;
-                pricingTemplateZoneFilterDirectiveReadyDeferred.resolve();
+                zoneFilterDirectiveAPI = api;
+                zoneFilterDirectiveReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onPricingTemplateRatesDirectiveReady = function (api) {
+                ratesDirectiveAPI = api;
+                ratesDirectiveReadyDeferred.resolve();
             };
 
             $scope.scopeModel.save = function () {
@@ -50,42 +60,46 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPricingTemplateZoneFilterDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadZoneFilterDirective, loadRatesDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
         function setTitle() {
-            $scope.title = (isEditMode) ?
-                UtilsService.buildTitleForUpdateEditor((pricingTemplateRuleEntity != undefined) ? pricingTemplateRuleEntity.FieldName : null, 'Column') :
-                UtilsService.buildTitleForAddEditor('Column');
+            $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor('Princing Template Rule') : UtilsService.buildTitleForAddEditor('Princing Template Rule');
         }
-        function loadStaticData() {
+        function loadZoneFilterDirective() {
+            var zoneFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
 
-            if (pricingTemplateRuleEntity == undefined)
-                return;
+            zoneFilterDirectiveReadyDeferred.promise.then(function () {
 
-            $scope.scopeModel.header = pricingTemplateRuleEntity.Header;
-            $scope.scopeModel.IsAvailableInRoot = pricingTemplateRuleEntity.IsAvailableInRoot;
-            $scope.scopeModel.IsAvailableInSubAccounts = pricingTemplateRuleEntity.IsAvailableInSubAccounts;
-        }
-        function loadPricingTemplateZoneFilterDirective() {
-            var pricingTemplateZoneFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
-            pricingTemplateZoneFilterDirectiveReadyDeferred.promise.then(function () {
-
-                var pricingTemplateZoneFilterPayload;
+                var zoneFilterDirectivePayload = { context: context };
                 if (pricingTemplateRuleEntity != undefined) {
-                    pricingTemplateZoneFilterPayload = {
-                        countries: pricingTemplateRuleEntity.Countries,
-                        zones: pricingTemplateRuleEntity.Zones
-                    };
-                };
-                VRUIUtilsService.callDirectiveLoad(pricingTemplateZoneFilterDirectiveAPI, pricingTemplateZoneFilterPayload, pricingTemplateZoneFilterDirectiveLoadDeferred);
+                    zoneFilterDirectivePayload.pricingTemplateRuleIndex = pricingTemplateRuleEntity.PricingTemplateRuleIndex;
+                    zoneFilterDirectivePayload.countries = pricingTemplateRuleEntity.Countries;
+                    zoneFilterDirectivePayload.countriesName = pricingTemplateRuleEntity.CountriesName;
+                    zoneFilterDirectivePayload.zones = pricingTemplateRuleEntity.Zones;
+                    zoneFilterDirectivePayload.zonesName = pricingTemplateRuleEntity.ZonesName;
+                }
+                VRUIUtilsService.callDirectiveLoad(zoneFilterDirectiveAPI, zoneFilterDirectivePayload, zoneFilterDirectiveLoadDeferred);
             });
 
-            return pricingTemplateZoneFilterDirectiveLoadDeferred.promise;
+            return zoneFilterDirectiveLoadDeferred.promise;
+        }
+        function loadRatesDirective() {
+            var ratesDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            ratesDirectiveReadyDeferred.promise.then(function () {
+
+                var ratesDirectivePayload;
+                if (pricingTemplateRuleEntity != undefined) {
+                    ratesDirectivePayload = { rates: pricingTemplateRuleEntity.Rates };
+                }
+                VRUIUtilsService.callDirectiveLoad(ratesDirectiveAPI, ratesDirectivePayload, ratesDirectiveLoadDeferred);
+            });
+
+            return ratesDirectiveLoadDeferred.promise;
         }
 
         function insert() {
@@ -107,14 +121,17 @@
 
         function buildPricingTemplateRuleObjectFromScope() {
 
-            var accountGenericFieldDefinitionSelectorObj = accountGenericFieldDefinitionSelectorAPI.getData();
+            var pricingTemplateZoneFilterObj = zoneFilterDirectiveAPI.getData();
+            if (pricingTemplateZoneFilterObj == undefined)
+                return;
 
             return {
-                FieldName: accountGenericFieldDefinitionSelectorObj != undefined ? accountGenericFieldDefinitionSelectorObj.Name : undefined,
-                Header: $scope.scopeModel.header,
-                IsAvailableInRoot: $scope.scopeModel.IsAvailableInRoot,
-                IsAvailableInSubAccounts: $scope.scopeModel.IsAvailableInSubAccounts,
-                SubAccountsAvailabilityCondition: $scope.scopeModel.IsAvailableInSubAccounts == true ? accountConditionSelectiveAPI.getData() : null
+                PricingTemplateRuleIndex: pricingTemplateZoneFilterObj.pricingTemplateRuleIndex,
+                Countries: pricingTemplateZoneFilterObj.countries,
+                CountriesName: pricingTemplateZoneFilterObj.countriesName,
+                Zones: pricingTemplateZoneFilterObj.zones,
+                ZonesName: pricingTemplateZoneFilterObj.zonesName,
+                Rates: ratesDirectiveAPI.getData()
             };
         }
     }

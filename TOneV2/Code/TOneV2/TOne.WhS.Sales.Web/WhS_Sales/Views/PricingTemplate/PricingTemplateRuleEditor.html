@@ -1,11 +1,22 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Sales_PricingTemplateRuleEditorController" width="'60%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formPricingTemplateRuleEditor">
-
-            <vr-row>
-                <vr-whs-sales-pricingtemplate-zonefilter on-ready="scopeModel.onPricingTemplateZoneFilterDirectiveReady" normal-col-num="3"></vr-whs-sales-pricingtemplate-zonefilter>
-            </vr-row>
-
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-whs-sales-pricingtemplate-zonefilter on-ready="scopeModel.onPricingTemplateZoneFilterDirectiveReady" 
+                                                                 normal-col-num="3">
+                        </vr-whs-sales-pricingtemplate-zonefilter>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Rates'">
+                    <vr-row>
+                        <vr-whs-sales-pricingtemplate-rates on-ready="scopeModel.onPricingTemplateRatesDirectiveReady"
+                                                            normal-col-num="3">
+                        </vr-whs-sales-pricingtemplate-rates>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>

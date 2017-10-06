@@ -30,6 +30,13 @@
         function PricingTemplateRuleManagementCtor($scope, ctrl) {
             this.initializeController = initializeController;
 
+            var countryNameByIds;
+            var zoneNameByIds;
+            var context;
+
+            var selectedCountries = [];
+            var selectedZones = [];
+
             var gridAPI;
 
             function initializeController() {
@@ -43,19 +50,26 @@
 
                 $scope.scopeModel.onAddPricingTemplateRule = function () {
                     var onPricingTemplateRuleAdded = function (addedPricingTemplateRule) {
-                        //extendPricingTemplateRuleObj(addedPricingTemplateRule);
+                        extendPricingTemplateRuleObj(addedPricingTemplateRule, undefined);
                         $scope.scopeModel.pricingTemplateRules.push({ Entity: addedPricingTemplateRule });
                     };
 
-                    WhS_Sales_PricingTemplateService.addPricingTemplateRule(onPricingTemplateRuleAdded);
+                    WhS_Sales_PricingTemplateService.addPricingTemplateRule(context, onPricingTemplateRuleAdded);
                 };
+
                 $scope.scopeModel.onDeletePricingTemplateRule = function (pricingTemplateRule) {
                     VRNotificationService.showConfirmation().then(function (confirmed) {
                         if (confirmed) {
-                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.pricingTemplateRules, pricingTemplateRule.Entity.FieldName, 'Entity.FieldName');
+                            var index = UtilsService.getItemIndexByVal($scope.scopeModel.pricingTemplateRules, pricingTemplateRule.Entity.PricingTemplateRuleIndex, 'Entity.PricingTemplateRuleIndex');
                             $scope.scopeModel.pricingTemplateRules.splice(index, 1);
                         }
                     });
+                };
+
+                $scope.scopeModel.validate = function () {
+                    if ($scope.scopeModel.pricingTemplateRules.length == 0)
+                        return 'You Should Define Rules!!';
+                    return null;
                 };
 
                 defineMenuActions();
@@ -64,24 +78,37 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    //var promises = [];
+                    $scope.scopeModel.pricingTemplateRules.length = 0;
 
                     var pricingTemplateRules;
 
                     if (payload != undefined) {
+                        context = payload.context;
                         pricingTemplateRules = payload.pricingTemplateRules;
+
+                        var pricingTemplateRulesEditorRuntime = payload.pricingTemplateRulesEditorRuntime;
+                        if (pricingTemplateRulesEditorRuntime != undefined) {
+                            countryNameByIds = pricingTemplateRulesEditorRuntime.CountryNameByIds;
+                            zoneNameByIds = pricingTemplateRulesEditorRuntime.ZoneNameByIds;
+                        }
                     }
 
                     //Loading PricingTemplateRules Grid
                     if (pricingTemplateRules != undefined) {
                         for (var index = 0; index < pricingTemplateRules.length; index++) {
                             var currentPricingTemplateRule = pricingTemplateRules[index];
-                            extendPricingTemplateRuleObj(currentPricingTemplateRule);
+
+                            var countries = currentPricingTemplateRule.Countries;
+                            if (countries != undefined) {
+                                for (var index = 0; index < countries.length; index++) {
+                                    selectedCountries.push(countries[index]);
+                                }
+                            }
+
+                            extendPricingTemplateRuleObj(currentPricingTemplateRule, index);
                             $scope.scopeModel.pricingTemplateRules.push({ Entity: currentPricingTemplateRule });
                         }
                     }
-
-                    //return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
@@ -91,7 +118,7 @@
                         pricingTemplateRules = [];
                         for (var i = 0; i < $scope.scopeModel.pricingTemplateRules.length; i++) {
                             var pricingTemplateRule = $scope.scopeModel.pricingTemplateRules[i].Entity;
-                            pricingTemplateRules.push(pricingTemplateRule);
+                            pricingTemplateRules.push({ Countries: pricingTemplateRule.Countries, Zones: pricingTemplateRule.Zones, Rates: pricingTemplateRule.Rates });
                         }
                     }
 
@@ -111,25 +138,57 @@
             }
             function editPricingTemplateRuleDefinition(pricingTemplateRule) {
                 var onPricingTemplateRuleUpdated = function (updatedPricingTemplateRule) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.pricingTemplateRules, pricingTemplateRule.Entity.FieldName, 'Entity.FieldName');
-                    extendPricingTemplateRuleObj(updatedPricingTemplateRule);
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.pricingTemplateRules, pricingTemplateRule.Entity.PricingTemplateRuleIndex, 'Entity.PricingTemplateRuleIndex');
+                    extendPricingTemplateRuleObj(updatedPricingTemplateRule, undefined);
                     $scope.scopeModel.pricingTemplateRules[index] = { Entity: updatedPricingTemplateRule };
                 };
 
-                WhS_Sales_PricingTemplateService.editGridPricingTemplateRule(pricingTemplateRule.Entity, onPricingTemplateRuleUpdated);
+                WhS_Sales_PricingTemplateService.editPricingTemplateRule(pricingTemplateRule.Entity, context, onPricingTemplateRuleUpdated);
             }
 
-            function extendPricingTemplateRuleObj(pricingTemplateRule) {
-                //if (accountFields == undefined)
-                //    return;
+            function extendPricingTemplateRuleObj(pricingTemplateRule, pricingTemplateRuleIndex) {
+                if (pricingTemplateRule == undefined)
+                    return;
 
-                //for (var index = 0; index < accountFields.length; index++) {
-                //    var currentAccountField = accountFields[index];
-                //    if (pricingTemplateRule.FieldName == currentAccountField.Name) {
-                //        pricingTemplateRule.FieldTitle = currentAccountField.Title;
-                //        return;
-                //    }
-                //}
+                //Index
+                if (pricingTemplateRuleIndex != undefined)
+                    pricingTemplateRule.PricingTemplateRuleIndex = pricingTemplateRuleIndex;
+
+                //Countries
+                if (pricingTemplateRule.CountriesName != undefined) {
+                    pricingTemplateRule.CountriesAsString = pricingTemplateRule.CountriesName.join(", ");
+                }
+                else {
+                    var countriesName = [];
+                    for (var index = 0; index < pricingTemplateRule.Countries.length; index++) {
+                        var currentCountry = pricingTemplateRule.Countries[index];
+                        countriesName.push(countryNameByIds[currentCountry.CountryId]);
+                    }
+                    pricingTemplateRule.CountriesName = countriesName;
+                    pricingTemplateRule.CountriesAsString = pricingTemplateRule.CountriesName.join(", ");
+                }
+
+                //Zones
+                if (pricingTemplateRule.ZonesName != undefined) {
+                    var tempIncludedZoneNames = UtilsService.getPropValuesFromArray(pricingTemplateRule.ZonesName, "IncludedZoneNames");
+                    pricingTemplateRule.ZonesAsString = tempIncludedZoneNames ? tempIncludedZoneNames.join(", ") : undefined;
+                }
+                else {
+                    var zonesName = [];
+                    for (var i = 0; i < pricingTemplateRule.Zones.length; i++) {
+                        var currentZonePricingTemplate = pricingTemplateRule.Zones[i];
+                        var includedZoneNames = { IncludedZoneNames: [] };
+
+                        for (var j = 0; j < currentZonePricingTemplate.IncludedZoneIds.length; j++) {
+                            var currentZoneId = currentZonePricingTemplate.IncludedZoneIds[j];
+                            includedZoneNames.IncludedZoneNames.push(zoneNameByIds[currentZoneId]);
+                        }
+                        zonesName.push(includedZoneNames)
+                    }
+                    pricingTemplateRule.ZonesName = zonesName;
+                    var tempIncludedZoneNames = UtilsService.getPropValuesFromArray(pricingTemplateRule.ZonesName, "IncludedZoneNames");
+                    pricingTemplateRule.ZonesAsString = tempIncludedZoneNames ? tempIncludedZoneNames.join(", ") : undefined;
+                }
             }
         }
     }

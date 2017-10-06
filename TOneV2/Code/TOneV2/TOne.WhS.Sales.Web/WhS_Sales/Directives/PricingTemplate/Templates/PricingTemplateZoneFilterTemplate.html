@@ -43,10 +43,9 @@
                     <vr-datagrid on-ready="scopeModel.onGridReady"
                                  datasource="scopeModel.gridDataSource"
                                  ondeleterow="scopeModel.remove"
-                                 enabledraggablerow="true"
                                  norowhighlightonclick="'true'"
-                                 maxheight="150px"
                                  hidegridmenu>
+
                         <vr-datagridcolumn headertext="'Type'" field="'Entity.entityTypeDescription'" disablesorting></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Name'" field="'Entity.entityName'" disablesorting></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Excluded'" disablesorting>

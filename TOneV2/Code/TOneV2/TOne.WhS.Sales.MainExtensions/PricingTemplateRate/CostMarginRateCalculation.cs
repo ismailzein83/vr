@@ -6,11 +6,10 @@ namespace TOne.WhS.Sales.MainExtensions.PricingTemplateRate
 {
     public class CostMarginRateCalculation : MarginRateCalculation
     {
-        public override Guid ConfigId
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override Guid ConfigId { get { return new Guid("01090AC4-8995-485B-A5E1-7FD80271641C"); } }
+
         public Guid CostCalculationMethodConfigId { get; set; }
+
         public override decimal? GetRate(IMarginRateCalculationContext context)
         {
             if (context.ZoneItem.Costs != null)

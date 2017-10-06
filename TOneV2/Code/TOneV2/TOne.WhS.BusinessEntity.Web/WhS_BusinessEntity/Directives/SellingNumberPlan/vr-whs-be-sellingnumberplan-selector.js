@@ -13,7 +13,9 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 onselectitem: "=",
                 ondeselectitem: "=",
                 isdisabled: "=",
-                normalColNum: '@'
+                normalColNum: '@',
+                hideremoveicon: '@',
+                onbeforeselectionchanged: '='
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -71,11 +73,16 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewSellingNumberPlan"';
 
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon)
+                hideremoveicon = "hideremoveicon";
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-               + '<vr-select ' + multipleselection +  ' ' + addCliked + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId"  on-ready="ctrl.onSelectorReady"'
-               + ' label="' + label +'"  datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"></vr-select>'
-               + '</vr-columns>';
+                       + '<vr-select ' + multipleselection + ' ' + addCliked + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId" on-ready="ctrl.onSelectorReady" '
+                           + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" onselectionchanged="ctrl.onselectionchanged"'
+                           + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission" ' + hideremoveicon + '>'
+                       + '</vr-select>' +
+                   '</vr-columns>';
         }
 
         function sellingNumberPlanCtor(ctrl, $scope, attrs) {

@@ -1,12 +1,10 @@
 ﻿<vr-columns colnum="{{routeOptionMarginRateCalculationCtrl.normalColNum}}">
-    <vr-select on-ready="scopeModel.onOptionNumberSelectorReady"
-               datasource="scopeModel.optionNumbers"
-               onselectionchanged="scopeModel.onOptionNumberChanged"
+    <vr-select datasource="scopeModel.optionNumbers"
                selectedvalues="scopeModel.selectedOptionNumber"
                datavaluefield="value"
                datatextfield="description"
-               isrequired="true"
                label="Option Number"
+               isrequired="true"
                hideremoveicon>
     </vr-select>
 </vr-columns>

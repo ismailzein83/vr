@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Entities;
@@ -20,10 +21,10 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetPricingTemplate")]
-        public PricingTemplate GetPricingTemplate(int pricingTemplateId)
+        [Route("GetPricingTemplateEditorRuntime")]
+        public PricingTemplateEditorRuntime GetPricingTemplateEditorRuntime(int pricingTemplateId)
         {
-            return manager.GetPricingTemplate(pricingTemplateId);
+            return manager.GetPricingTemplateEditorRuntime(pricingTemplateId);
         }
 
         [HttpPost]
@@ -38,6 +39,13 @@ namespace TOne.WhS.Sales.Web.Controllers
         public UpdateOperationOutput<PricingTemplateDetail> UpdatePricingTemplate(PricingTemplateToEdit pricingTemplateToEdit) 
         {
             return manager.UpdatePricingTemplate(pricingTemplateToEdit);
+        }
+
+        [HttpGet]
+        [Route("GetMarginRateCalculationExtensionConfigs")]
+        public IEnumerable<MarginRateCalculationConfig> GetMarginRateCalculationExtensionConfigs()
+        {
+            return manager.GetMarginRateCalculationExtensionConfigs();
         }
     }
 }

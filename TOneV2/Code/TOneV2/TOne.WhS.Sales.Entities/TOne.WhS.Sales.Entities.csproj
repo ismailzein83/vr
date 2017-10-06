@@ -80,6 +80,8 @@
     <Compile Include="CountryWithDefaultRateQuery.cs" />
     <Compile Include="DraftTaskData.cs" />
     <Compile Include="PricingTemplate\CountryPricingTemplate.cs" />
+    <Compile Include="PricingTemplate\MarginRateCalculation.cs" />
+    <Compile Include="PricingTemplate\MarginRateCalculationConfig.cs" />
     <Compile Include="PricingTemplate\PricingTemplate.cs" />
     <Compile Include="PricingTemplate\PricingTemplateDetail.cs" />
     <Compile Include="PricingTemplate\PricingTemplateEditorRuntime.cs" />

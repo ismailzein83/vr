@@ -9,6 +9,7 @@
             restrict: "E",
             scope: {
                 onReady: "=",
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -42,14 +43,14 @@
                     }
 
                     if (marginRateCalculation != undefined) {
-                        $scope.scopeModel.selectedOptionNumber = marginRateCalculation.RPRouteOptionNumber;
+                        $scope.scopeModel.selectedOptionNumber = UtilsService.getItemByVal($scope.scopeModel.optionNumbers, marginRateCalculation.RPRouteOptionNumber, 'value');
                     }
                 };
 
                 api.getData = function getData() {
                     var data = {
                         $type: "TOne.WhS.Sales.MainExtensions.PricingTemplateRate.RouteOptionMarginRateCalculation, TOne.WhS.Sales.MainExtensions",
-                        RPRouteOptionNumber: $scope.scopeModel.className
+                        RPRouteOptionNumber: $scope.scopeModel.selectedOptionNumber ? $scope.scopeModel.selectedOptionNumber.value : undefined
                     };
                     return data;
                 };

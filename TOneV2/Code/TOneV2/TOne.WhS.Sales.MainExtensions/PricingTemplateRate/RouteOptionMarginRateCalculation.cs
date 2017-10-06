@@ -7,11 +7,10 @@ namespace TOne.WhS.Sales.MainExtensions.PricingTemplateRate
 {
     public class RouteOptionMarginRateCalculation : MarginRateCalculation
     {
-        public override Guid ConfigId
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override Guid ConfigId { get { return new Guid("3151D541-ADE3-4069-9203-D6C1873F0055"); } }
+
         public int RPRouteOptionNumber { get; set; }
+
         public override decimal? GetRate(IMarginRateCalculationContext context)
         {
             if (context.ZoneItem.RPRouteDetail != null && context.ZoneItem.RPRouteDetail.RouteOptionsDetails != null)

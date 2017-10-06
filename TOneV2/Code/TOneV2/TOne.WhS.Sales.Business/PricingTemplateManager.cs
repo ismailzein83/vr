@@ -4,6 +4,7 @@ using System.Linq;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business 
@@ -33,9 +34,15 @@ namespace TOne.WhS.Sales.Business
             return cachedPricingTemplates.GetRecord(pricingTemplateId);
         }
 
-        public string GetPricingTemplateName(PricingTemplate pricingTemplate)
+        public PricingTemplateEditorRuntime GetPricingTemplateEditorRuntime(int pricingTemplateId)
         {
-            return pricingTemplate != null ? pricingTemplate.Name : null;
+            PricingTemplate pricingTemplate = this.GetPricingTemplate(pricingTemplateId);
+            
+            return new PricingTemplateEditorRuntime()
+            {
+                Entity = pricingTemplate,
+                RulesEditorRuntime = this.GetPricingTemplateRuleEditorRuntime(pricingTemplate)
+            };
         }
 
         public Vanrise.Entities.InsertOperationOutput<PricingTemplateDetail> AddPricingTemplate(PricingTemplate pricingTemplate)
@@ -86,11 +93,17 @@ namespace TOne.WhS.Sales.Business
             return updateOperationOutput;
         }
 
+        public IEnumerable<MarginRateCalculationConfig> GetMarginRateCalculationExtensionConfigs()
+        {
+            var templateConfigManager = new ExtensionConfigurationManager();
+            return templateConfigManager.GetExtensionConfigurations<MarginRateCalculationConfig>(MarginRateCalculationConfig.EXTENSION_TYPE);
+        }
+
         #endregion
 
         #region Private Methods
 
-        Dictionary<int, PricingTemplate> GetCachedPricingTemplates()
+        private Dictionary<int, PricingTemplate> GetCachedPricingTemplates()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetPricingTemplates",
                     () =>
@@ -99,6 +112,49 @@ namespace TOne.WhS.Sales.Business
                         return dataManager.GetPricingTemplates().ToDictionary(itm => itm.PricingTemplateId , itm => itm);
                     });
         }
+
+        private PricingTemplateRulesEditorRuntime GetPricingTemplateRuleEditorRuntime(PricingTemplate pricingTemplate)
+        {
+            pricingTemplate.ThrowIfNull("pricingTemplate");
+            pricingTemplate.Settings.ThrowIfNull("pricingTemplate.Settings");
+            pricingTemplate.Settings.Rules.ThrowIfNull("pricingTemplate.Settings.Rules");
+
+            Dictionary<int, string> CountryNameByIds = new Dictionary<int, string>();
+            Dictionary<long, string> ZoneNameByIds = new Dictionary<long, string>();
+
+            var countryManager = new Vanrise.Common.Business.CountryManager();
+            var saleZoneManager = new TOne.WhS.BusinessEntity.Business.SaleZoneManager();
+
+            foreach (var pricingTemplateRule in pricingTemplate.Settings.Rules)
+            {
+                if (pricingTemplateRule.Countries != null)
+                {
+                    foreach (var country in pricingTemplateRule.Countries)
+                    {
+                        if (!CountryNameByIds.ContainsKey(country.CountryId))
+                        {
+                            string countryName = countryManager.GetCountryName(country.CountryId);
+                            CountryNameByIds.Add(country.CountryId, countryName);
+                        }
+                    }
+                }
+
+                if (pricingTemplateRule.Zones != null)
+                {
+                    foreach (var zoneId in pricingTemplateRule.Zones.SelectMany(itm => itm.IncludedZoneIds))
+                    {
+                        if (!ZoneNameByIds.ContainsKey(zoneId))
+                        {
+                            string zoneName = saleZoneManager.GetSaleZoneName(zoneId);
+                            ZoneNameByIds.Add(zoneId, zoneName);
+                        }
+                    }
+                }
+            }
+
+            return new PricingTemplateRulesEditorRuntime() { CountryNameByIds = CountryNameByIds, ZoneNameByIds = ZoneNameByIds };
+        }
+
 
         #endregion 
 

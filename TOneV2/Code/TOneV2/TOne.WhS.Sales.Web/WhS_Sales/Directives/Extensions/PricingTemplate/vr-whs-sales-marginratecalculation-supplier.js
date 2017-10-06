@@ -9,6 +9,7 @@
             restrict: "E",
             scope: {
                 onReady: "=",
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;

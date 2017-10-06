@@ -11,19 +11,23 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var bulkActionZoneFilter = new BulkActionZoneFilter($scope, ctrl, $attrs);
-                bulkActionZoneFilter.initializeController();
+                var ctor = new PricingTemplateZoneFilterCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_Sales/Directives/Extensions/BulkAction/ActionZoneFilters/Templates/BulkActionZoneFilterTemplate.html'
+            templateUrl: '/Client/Modules/WhS_Sales/Directives/PricingTemplate/Templates/PricingTemplateZoneFilterTemplate.html' //BulkActionZoneFilterTemplate.html'
         };
 
-        function BulkActionZoneFilter($scope, ctrl, $attrs) {
+        function PricingTemplateZoneFilterCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var zoneFilter;
             var bulkActionContext;
+
+            var pricingTemplateRuleIndex;
+            var countries, countriesName;
+            var zones, zonesName;
+            var context;
 
             var entityTypeSelectorAPI;
             var entityTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -56,21 +60,25 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                 $scope.scopeModel.onEntityTypeSelectionChanged = function (selectedEntityType) {
                     if (selectedEntityType == undefined)
                         return;
+
                     $scope.scopeModel.selectedCountry = undefined;
                     $scope.scopeModel.selectedCountries.length = 0;
                     $scope.scopeModel.isSaleZoneSelectorVisible = (selectedEntityType.value == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value);
-                    loadSaleZoneSelector();
 
-                    switch (selectedEntityType.value) {
-                        case WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value:
-                            $scope.scopeModel.showCountrySelector = false;
-                            $scope.scopeModel.showMultipleCountrySelector = true;
-                            break;
-                        case WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value:
-                            $scope.scopeModel.showCountrySelector = true;
-                            $scope.scopeModel.showMultipleCountrySelector = false;
-                            break;
-                    }
+                    saleZoneSelectorReadyDeferred.promise.then(function () {
+                        loadSaleZoneSelector();
+
+                        switch (selectedEntityType.value) {
+                            case WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value:
+                                $scope.scopeModel.showCountrySelector = false;
+                                $scope.scopeModel.showMultipleCountrySelector = true;
+                                break;
+                            case WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value:
+                                $scope.scopeModel.showCountrySelector = true;
+                                $scope.scopeModel.showMultipleCountrySelector = false;
+                                break;
+                        }
+                    });
                 };
 
                 $scope.scopeModel.onCountrySelectorReady = function (api) {
@@ -122,6 +130,7 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                     var entities = UtilsService.getPropValuesFromArray($scope.scopeModel.gridDataSource, 'Entity');
                     if (entities == undefined)
                         return;
+
                     var index = UtilsService.getItemIndexByVal(entities, dataRow.Entity.id, 'id');
                     $scope.scopeModel.gridDataSource.splice(index, 1);
 
@@ -141,24 +150,23 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                 api.load = function (payload) {
                     var promises = [];
 
-                    var countries;
-                    var zones;
-                    var context;
-
                     if (payload != undefined) {
-                        countries = pricingTemplateZoneFilter.Countries;
-                        zones = pricingTemplateZoneFilter.Zones;
+                        pricingTemplateRuleIndex = payload.pricingTemplateRuleIndex;
+                        countries = payload.countries;
+                        countriesName = payload.countriesName;
+                        zones = payload.zones;
+                        zonesName = payload.zonesName;
                         context = payload.context;
-
-                        //zoneFilter = payload.zoneFilter;
-                        //bulkActionContext = payload.bulkActionContext;
                     }
 
-                    //extendBulkActionContext();
+                    //Loading Grid
+                    loadGrid(promises);
 
+                    //Loading Country selector
                     var loadCountrySelectorPromise = loadCountrySelector();
                     promises.push(loadCountrySelectorPromise);
 
+                    //Loading MultipleCountry selector
                     var loadMultipleCountrySelectorPromise = loadMultipleCountrySelector();
                     promises.push(loadMultipleCountrySelectorPromise);
 
@@ -168,27 +176,33 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                 api.getData = function () {
 
                     var data = {
-                        Countries: [],
-                        ZoneIds: []
+                        pricingTemplateRuleIndex: pricingTemplateRuleIndex,
+                        countries: [],
+                        countriesName: [],
+                        zones: [],
+                        zonesName: []
                     };
 
                     for (var i = 0; i < $scope.scopeModel.gridDataSource.length; i++) {
                         var entity = $scope.scopeModel.gridDataSource[i].Entity;
 
                         if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value) {
-                            data.ZoneIds.push(entity.entityId);
+                            data.zones.push({ IncludedZoneIds: [entity.entityId] });
+                            data.zonesName.push({ IncludedZoneNames: [entity.entityName] });
                         }
                         else {
-                            data.Countries.push({
+                            data.countries.push({
                                 CountryId: entity.entityId,
                                 ExcludedZoneIds: entity.saleZoneSelectorAPI.getSelectedIds()
                             });
+                            data.countriesName.push(entity.entityName);
                         }
                     }
 
                     return data;
                 };
 
+                //ToBeRemoved
                 api.getSummary = function () {
                     var numberOfCountries = 0;
                     var numberOfZones = 0;
@@ -210,19 +224,57 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                 }
             }
 
-            //function extendBulkActionContext() {
-            //    if (bulkActionContext == undefined)
-            //        return;
+            function loadGrid(promises) {
+                var gridDataSourceIndex = 0;
 
-            //    bulkActionContext.onBulkActionChanged = function () {
-            //        $scope.scopeModel.gridDataSource.length = 0;
-            //        $scope.scopeModel.isLoading = true;
+                if (countries != undefined) {
+                    for (var index = 0; index < countries.length; index++) {
+                        var currentCountry = countries[index];
+                        var countryId = currentCountry.CountryId;
+                        var countryName = countriesName[index];
 
-            //        UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadMultipleCountrySelector, loadSaleZoneSelector]).finally(function () {
-            //            $scope.scopeModel.isLoading = false;
-            //        });
-            //    };
-            //}
+                        var countryEntity = {
+                            id: gridDataSourceIndex++,
+                            entityTypeValue: WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.value,
+                            entityTypeDescription: WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Country.description,
+                            entityId: countryId,
+                            entityName: countryName,
+                            isCountryEntityType: true
+                        };
+
+
+                        var commonSaleZoneSelectorPayload = getGridCommonSaleZoneSelectorPayload();
+                        commonSaleZoneSelectorPayload.filter.CountryIds = [countryId];
+                        commonSaleZoneSelectorPayload.selectedIds = currentCountry.ExcludedZoneIds;
+
+                        var gridSaleZoneSelectorLoadPromise = getGridSaleZoneSelectorLoadPromise(countryEntity, commonSaleZoneSelectorPayload);
+                        promises.push(gridSaleZoneSelectorLoadPromise);
+
+                        $scope.scopeModel.gridDataSource.push({ Entity: countryEntity });
+                    }
+                }
+
+                if (zones != undefined) {
+                    for (var i = 0; i < zones.length; i++) {
+                        var currentZonePricingTemplate = zones[i];
+                        var currentZoneNamePricingTemplate = zonesName[i];
+
+                        for (var j = 0; j < currentZonePricingTemplate.IncludedZoneIds.length; j++) {
+                            var includedZoneId = currentZonePricingTemplate.IncludedZoneIds[j];
+                            var includedZoneName = currentZoneNamePricingTemplate.IncludedZoneNames[j];
+
+                            var zoneEntity = {
+                                id: gridDataSourceIndex++,
+                                entityTypeValue: WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value,
+                                entityTypeDescription: WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.description,
+                                entityId: includedZoneId,
+                                entityName: includedZoneName
+                            };
+                            $scope.scopeModel.gridDataSource.push({ Entity: zoneEntity });
+                        }
+                    }
+                }
+            }
 
             function loadCountrySelector() {
                 var countrySelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -259,40 +311,6 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                 }
                 return excludedCountryIds;
             }
-            function getCountrySelectorFilters() {
-                var countrySelectorFilters = [];
-
-                var ownerType;
-                var ownerId;
-                var bulkAction;
-
-                if (bulkActionContext != undefined) {
-                    ownerType = bulkActionContext.ownerType;
-                    ownerId = bulkActionContext.ownerId;
-                    if (bulkActionContext.getSelectedBulkAction != undefined)
-                        bulkAction = bulkActionContext.getSelectedBulkAction();
-                }
-
-                var bulkActionApplicableToCountryFilter = {
-                    $type: 'TOne.WhS.Sales.Business.BulkActionApplicableToCountryFilter, TOne.WhS.Sales.Business',
-                    OwnerType: ownerType,
-                    OwnerId: ownerId,
-                    BulkAction: bulkAction
-                };
-                countrySelectorFilters.push(bulkActionApplicableToCountryFilter);
-
-                if (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-                    var countrySoldToCustomerFilter = {
-                        $type: 'TOne.WhS.Sales.Business.CountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
-                        CustomerId: bulkActionContext.ownerId,
-                        EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
-                        IsEffectiveInFuture: true
-                    };
-                    countrySelectorFilters.push(countrySoldToCustomerFilter);
-                }
-
-                return countrySelectorFilters;
-            }
 
             function loadSaleZoneSelector() {
                 var saleZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -309,10 +327,6 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                     }
                 };
 
-                //if (bulkActionContext != undefined) {
-                //    saleZoneSelectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
-                //}
-
                 var countryId = countrySelectorAPI.getSelectedIds();
                 if (countryId != undefined) {
                     saleZoneSelectorPayload.filter.CountryIds = [];
@@ -322,13 +336,14 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                 //saleZoneSelectorPayload.filter.ExcludedZoneIds = getExcludedSaleZoneIds();
                 //saleZoneSelectorPayload.filter.Filters = getSaleZoneSelectorFilters();
 
-                saleZoneSelectorPayload.sellingNumberPlanId = 16;
+                saleZoneSelectorPayload.sellingNumberPlanId = context ? context.getSellingNumberPlan() : undefined;
                 return saleZoneSelectorPayload;
             }
             function getExcludedSaleZoneIds() {
                 var excludedSaleZoneIds = [];
                 for (var i = 0; i < $scope.scopeModel.gridDataSource.length; i++) {
                     var entity = $scope.scopeModel.gridDataSource[i].Entity;
+
                     if (entity.entityTypeValue == WhS_Sales_SpecificApplicableZoneEntityTypeEnum.Zone.value)
                         excludedSaleZoneIds.push(entity.entityId);
                     else {
@@ -340,40 +355,6 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                     }
                 }
                 return excludedSaleZoneIds;
-            }
-            function getSaleZoneSelectorFilters() {
-                var saleZoneSelectorFilters = [];
-
-                var ownerType;
-                var ownerId;
-                var bulkAction;
-
-                if (bulkActionContext != undefined) {
-                    ownerType = bulkActionContext.ownerType;
-                    ownerId = bulkActionContext.ownerId;
-                    if (bulkActionContext.getSelectedBulkAction != undefined)
-                        bulkAction = bulkActionContext.getSelectedBulkAction();
-                }
-
-                var applicableSaleZoneFilter = {
-                    $type: 'TOne.WhS.Sales.Business.ApplicableSaleZoneFilter, TOne.WhS.Sales.Business',
-                    OwnerType: ownerType,
-                    OwnerId: ownerId,
-                    ActionType: bulkAction
-                };
-                saleZoneSelectorFilters.push(applicableSaleZoneFilter);
-
-                if (ownerType != undefined && ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-                    var countrySoldToCustomerFilter = {
-                        $type: 'TOne.WhS.Sales.Business.SaleZoneCountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
-                        CustomerId: ownerId,
-                        EffectiveOn: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
-                        IsEffectiveInFuture: true
-                    };
-                    saleZoneSelectorFilters.push(countrySoldToCustomerFilter);
-                }
-
-                return saleZoneSelectorFilters;
             }
 
             function add() {
@@ -412,11 +393,10 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                 $scope.scopeModel.isLoading = true;
 
                 var directiveLoadPromises = [];
-                var commonDirectivePayload = getCommonSaleZoneSelectorPayload();
 
                 for (var i = 0; i < $scope.scopeModel.selectedCountries.length; i++) {
                     var country = $scope.scopeModel.selectedCountries[i];
-                    addCountry(country, entityTypeValue, entityTypeDescription, commonDirectivePayload, directiveLoadPromises);
+                    addCountry(country, entityTypeValue, entityTypeDescription, directiveLoadPromises);
                 }
 
                 UtilsService.waitMultiplePromises(directiveLoadPromises).then(function () {
@@ -429,22 +409,8 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                     VRNotificationService.notifyException(error, $scope);
                     $scope.scopeModel.isLoading = false;
                 });
-
-                function getCommonSaleZoneSelectorPayload() {
-                    var selectorPayload = {
-                        filter: {
-                            EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.CurrentAndFuture.value,
-                            Filters: getSaleZoneSelectorFilters(),
-                            ExcludedZoneIds: getExcludedSaleZoneIds()
-                        }
-                    };
-                    if (bulkActionContext != undefined) {
-                        selectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
-                    }
-                    return selectorPayload;
-                }
             }
-            function addCountry(country, entityTypeValue, entityTypeDescription, commonDirectivePayload, directiveLoadPromises) {
+            function addCountry(country, entityTypeValue, entityTypeDescription, directiveLoadPromises) {
 
                 var countryEntity = {
                     id: ($scope.scopeModel.gridDataSource.length + 1),
@@ -455,19 +421,40 @@ app.directive('vrWhsSalesPricingtemplateZonefilter', ['WhS_BE_SalePriceListOwner
                     isCountryEntityType: true
                 };
 
-                countryEntity.saleZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                directiveLoadPromises.push(countryEntity.saleZoneSelectorLoadDeferred.promise);
+                var commonSaleZoneSelectorPayload = getGridCommonSaleZoneSelectorPayload();
+                commonSaleZoneSelectorPayload.filter.CountryIds = [country.CountryId];
 
-                countryEntity.onSaleZoneSelectorReady = function (api) {
-                    countryEntity.saleZoneSelectorAPI = api;
-                    onDirectiveReady(api, commonDirectivePayload, countryEntity.entityId, countryEntity.saleZoneSelectorLoadDeferred);
-                };
+                var gridSaleZoneSelectorLoadPromise = getGridSaleZoneSelectorLoadPromise(countryEntity, commonSaleZoneSelectorPayload);
+                directiveLoadPromises.push(gridSaleZoneSelectorLoadPromise);
 
                 $scope.scopeModel.gridDataSource.push({ Entity: countryEntity });
             }
-            function onDirectiveReady(directiveAPI, directivePayload, countryId, directiveLoadDeferred) {
-                directivePayload.filter.CountryIds = [countryId];
-                VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
+
+            function getGridCommonSaleZoneSelectorPayload() {
+                var selectorPayload = {
+                    filter: {
+                        EffectiveMode: VRCommon_EntityFilterEffectiveModeEnum.CurrentAndFuture.value,
+                        //Filters: getSaleZoneSelectorFilters(),
+                        //ExcludedZoneIds: getExcludedSaleZoneIds()
+                    }
+                };
+
+                if (bulkActionContext != undefined) {
+                    selectorPayload.sellingNumberPlanId = bulkActionContext.ownerSellingNumberPlanId;
+                }
+
+                selectorPayload.sellingNumberPlanId = context ? context.getSellingNumberPlan() : undefined;
+                return selectorPayload;
+            }
+            function getGridSaleZoneSelectorLoadPromise(countryEntity, saleZoneSelectorPayload) {
+                countryEntity.saleZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                countryEntity.onSaleZoneSelectorReady = function (api) {
+                    countryEntity.saleZoneSelectorAPI = api;
+                    VRUIUtilsService.callDirectiveLoad(api, saleZoneSelectorPayload, countryEntity.saleZoneSelectorLoadDeferred);
+                };
+
+                return countryEntity.saleZoneSelectorLoadDeferred.promise;
             }
         }
     }]);

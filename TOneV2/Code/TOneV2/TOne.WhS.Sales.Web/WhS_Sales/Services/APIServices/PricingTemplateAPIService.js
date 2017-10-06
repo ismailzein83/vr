@@ -8,14 +8,13 @@
 
         var controllerName = "PricingTemplate";
 
-
         function GetFilteredPricingTemplates(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, 'GetFilteredPricingTemplates'), input);
         }
 
-        function GetPricingTemplate(pricingTemplated) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, 'GetPricingTemplate'), {
-                PricingTemplateId: pricingTemplated
+        function GetPricingTemplateEditorRuntime(pricingTemplateId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, 'GetPricingTemplateEditorRuntime'), {
+                PricingTemplateId: pricingTemplateId
             });
         }
 
@@ -27,6 +26,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, 'UpdatePricingTemplate'), pricingTemplateItem);
         }
 
+        function GetMarginRateCalculationExtensionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetMarginRateCalculationExtensionConfigs"));
+        }
+
         //function GetPricingTemplatesInfo(filter) {
         //    return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetPricingTemplatesInfo"), {
         //        filter: filter
@@ -36,9 +39,10 @@
 
         return ({
             GetFilteredPricingTemplates: GetFilteredPricingTemplates,
-            GetPricingTemplate: GetPricingTemplate,
+            GetPricingTemplateEditorRuntime: GetPricingTemplateEditorRuntime,
             AddPricingTemplate: AddPricingTemplate,
             UpdatePricingTemplate: UpdatePricingTemplate,
+            GetMarginRateCalculationExtensionConfigs: GetMarginRateCalculationExtensionConfigs
             //GetPricingTemplatesInfo: GetPricingTemplatesInfo
         });
     }
