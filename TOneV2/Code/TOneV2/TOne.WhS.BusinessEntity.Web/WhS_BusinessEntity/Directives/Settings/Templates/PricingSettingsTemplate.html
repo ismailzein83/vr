@@ -1,4 +1,4 @@
-﻿<vr-row>
+﻿<vr-row ng-if="ctrl.showDefaultRate || ctrl.isMaxSaleRateRequired">
     <vr-columns width="1/2row">
         <vr-label ng-if="ctrl.showDefaultRate">Default Rate ({{ctrl.systemCurrencySymbol}})</vr-label>
         <vr-textbox value="ctrl.defaultRate" type="number" minvalue="0"

@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierAccountEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="WhS_BE_CarrierAccountEditorController" vr-loader="scopeModel.isLoading" width="'75%'">
     <vr-modalbody>
         <vr-form name="formCarrierAccountEditor">
             <vr-tabs>
@@ -65,47 +65,53 @@
                         </vr-columns>
                 </vr-tab>
                 <vr-tab header="'Customer Settings'" ng-if="scopeModel.showSellingNumberPlan">
-                    <vr-section header="General Settings">
                     <vr-row>
-                        <span vr-loader="scopeModel.isLoadingCustomerTimeZoneSelector">
-                            <vr-common-timezone-selector on-ready="scopeModel.onCustomerTimeSelectorReady" normal-col-num="6" showaddbutton></vr-common-timezone-selector>
-                        </span>
-                        <vr-columns width="1/2row">
-                            <vr-switch value="scopeModel.customerInvoiceTimeZone" label="Invoice Time Zone"></vr-switch>
+                        <vr-columns width="fullrow">
+                            <vr-section header="General Settings">
+                                <vr-row>
+                                    <span vr-loader="scopeModel.isLoadingCustomerTimeZoneSelector">
+                                        <vr-common-timezone-selector on-ready="scopeModel.onCustomerTimeSelectorReady" normal-col-num="6" showaddbutton></vr-common-timezone-selector>
+                                    </span>
+                                    <vr-columns width="1/2row">
+                                        <vr-switch value="scopeModel.customerInvoiceTimeZone" label="Invoice Time Zone"></vr-switch>
+                                    </vr-columns>
+                                    <span ng-show="scopeModel.showSellingNumberPlan" vr-disabled="scopeModel.disableSellingNumberPlan" vr-loader="scopeModel.isLoadingSellingNumberPlanSelector">
+                                        <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberPlanSelectorReady"
+                                                                              selectedvalues="scopeModel.sellingNumberPlan"
+                                                                              onselectionchanged="scopeModel.onSellingNumberPlanChanged"
+                                                                              normal-col-num="6"
+                                                                              isrequired="scopeModel.showSellingNumberPlan"
+                                                                              hideremoveicon showaddbutton>
+                                        </vr-whs-be-sellingnumberplan-selector>
+                                    </span>
+                                    <span vr-disabled="scopeModel.isSellingProductSelectorDisabled" vr-loader="scopeModel.isLoadingSellingProductSelector">
+                                        <vr-whs-be-sellingproduct-selector on-ready="scopeModel.onSellingProductSelectorReady"
+                                                                           normal-col-num="6"
+                                                                           isrequired="true"
+                                                                           hideremoveicon showaddbutton>
+                                        </vr-whs-be-sellingproduct-selector>
+                                    </span>
+                                    <span vr-loader="scopeModel.isLoadingCustomerRoutingStatusSelector">
+                                        <vr-whs-be-routingstatus-selector on-ready="scopeModel.onCustomerRoutingStatusSelectorReady"
+                                                                          normal-col-num="6"
+                                                                          isrequired="true"
+                                                                          hideremoveicon>
+                                        </vr-whs-be-routingstatus-selector>
+                                    </span>
+                                </vr-row>
+                            </vr-section>
                         </vr-columns>
-                        <span ng-show="scopeModel.showSellingNumberPlan" vr-disabled="scopeModel.disableSellingNumberPlan" vr-loader="scopeModel.isLoadingSellingNumberPlanSelector">
-                            <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberPlanSelectorReady"
-                                                                  selectedvalues="scopeModel.sellingNumberPlan"
-                                                                  onselectionchanged="scopeModel.onSellingNumberPlanChanged"
-                                                                  normal-col-num="6"
-                                                                  isrequired="scopeModel.showSellingNumberPlan"
-                                                                  hideremoveicon showaddbutton>
-                            </vr-whs-be-sellingnumberplan-selector>
-                        </span>
-                        <span vr-disabled="scopeModel.isSellingProductSelectorDisabled" vr-loader="scopeModel.isLoadingSellingProductSelector">
-                            <vr-whs-be-sellingproduct-selector on-ready="scopeModel.onSellingProductSelectorReady"
-                                                               normal-col-num="6"
-                                                               isrequired="true"
-                                                               hideremoveicon showaddbutton>
-                            </vr-whs-be-sellingproduct-selector>
-                        </span>
-                        <span vr-loader="scopeModel.isLoadingCustomerRoutingStatusSelector">
-                            <vr-whs-be-routingstatus-selector on-ready="scopeModel.onCustomerRoutingStatusSelectorReady"
-                                                              normal-col-num="6"
-                                                              isrequired="true"
-                                                              hideremoveicon>
-                            </vr-whs-be-routingstatus-selector>
-                        </span>
                     </vr-row>
-                    </vr-section>
-                    <vr-section header="Pricing Settings" ng-if="scopeModel.showSellingNumberPlan" vr-loader="scopeModel.isLoadingPricingSettingsEditor">
-                        <vr-whs-be-pricingsettings-editor on-ready="scopeModel.onPricingSettingsEditorReady"></vr-whs-be-pricingsettings-editor>
-                    </vr-section>
-                    <vr-section header="Pricelist Settings" ng-if="scopeModel.showSellingNumberPlan" vr-loader="scopeModel.isLoadingPriceListSettingsEditor">
-                        <vr-whs-be-pricelistsettings-editor on-ready="scopeModel.onPriceListSettingsEditorReady"></vr-whs-be-pricelistsettings-editor>
-                    </vr-section>
+                    <vr-tabs>
+                        <vr-tab header="'Pricelist Settings'" ng-if="scopeModel.showSellingNumberPlan" vr-loader="scopeModel.isLoadingPriceListSettingsEditor">
+                            <vr-whs-be-pricelistsettings-editor on-ready="scopeModel.onPriceListSettingsEditorReady"></vr-whs-be-pricelistsettings-editor>
+                        </vr-tab>
+                        <vr-tab header="'Pricing Settings'" ng-if="scopeModel.showSellingNumberPlan" vr-loader="scopeModel.isLoadingPricingSettingsEditor">
+                            <vr-whs-be-pricingsettings-editor on-ready="scopeModel.onPricingSettingsEditorReady"></vr-whs-be-pricingsettings-editor>
+                        </vr-tab>
+                    </vr-tabs>
                 </vr-tab>
-                
+
                 <vr-tab header="'Supplier Settings'" ng-if="scopeModel.showZoneServiceConfig">
                     <vr-row>
                         <span vr-loader="scopeModel.isLoadingSupplierTimeZoneSelector">
