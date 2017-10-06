@@ -37,7 +37,6 @@ app.directive("vrInvoicetypeFilenameTime", ["UtilsService", "VRNotificationServi
                 var api = {};
 
                 api.load = function (payload) {
-                    console.log(payload);
                     if (payload != undefined) {
                         context = payload.context;
                         if (context != undefined) {

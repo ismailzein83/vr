@@ -75,6 +75,14 @@
                 invoiceId: invoiceId
             });
         }
+        function GetPartnerGroupTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetPartnerGroupTemplates"));
+        }
+
+        function GetFilteredInvoicePartners(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetFilteredInvoicePartners'), input);
+        }
+
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -88,7 +96,9 @@
             GetBillingInterval: GetBillingInterval,
             CheckGeneratedInvoicePeriodGaP: CheckGeneratedInvoicePeriodGaP,
             CheckInvoiceFollowBillingPeriod: CheckInvoiceFollowBillingPeriod,
-            GetInvoiceEditorRuntime: GetInvoiceEditorRuntime
+            GetInvoiceEditorRuntime: GetInvoiceEditorRuntime,
+            GetPartnerGroupTemplates: GetPartnerGroupTemplates,
+            GetFilteredInvoicePartners: GetFilteredInvoicePartners
         });
     }
 

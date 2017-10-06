@@ -38,10 +38,10 @@ namespace Vanrise.Invoice.Web.Controllers
 
         [HttpGet]
         [Route("CheckInvoiceFollowBillingPeriod")]
-        public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId,string partnerId)
+        public bool CheckInvoiceFollowBillingPeriod(Guid invoiceTypeId, string partnerId)
         {
             InvoiceManager manager = new InvoiceManager();
-            return manager.CheckInvoiceFollowBillingPeriod(invoiceTypeId,partnerId);
+            return manager.CheckInvoiceFollowBillingPeriod(invoiceTypeId, partnerId);
         }
         [HttpGet]
         [Route("CheckGeneratedInvoicePeriodGaP")]
@@ -122,7 +122,7 @@ namespace Vanrise.Invoice.Web.Controllers
         }
         [HttpGet]
         [Route("GetBillingInterval")]
-        public BillingInterval GetBillingInterval(Guid invoiceTypeId, string partnerId,DateTime issueDate)
+        public BillingInterval GetBillingInterval(Guid invoiceTypeId, string partnerId, DateTime issueDate)
         {
             InvoiceManager manager = new InvoiceManager();
             return manager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
@@ -140,6 +140,24 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             InvoiceManager manager = new InvoiceManager();
             return manager.GetLastInvoice(invoiceTypeId, partnerId);
+        }
+
+        [HttpGet]
+        [Route("GetPartnerGroupTemplates")]
+        public IEnumerable<PartnerGroupConfig> GetPartnerGroupTemplates()
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GetPartnerGroupTemplates();
+        }
+
+        [HttpPost]
+        [Route("GetFilteredInvoicePartners")]
+        public object GetFilteredInvoicePartners(Vanrise.Entities.DataRetrievalInput<InvoicePartnerQuery> input)
+        {
+            if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.Query.InvoiceTypeId))
+                return GetUnauthorizedResponse();
+            InvoiceManager manager = new InvoiceManager();
+            return GetWebResponse(input, manager.GetFilteredInvoicePartners(input));
         }
     }
 }

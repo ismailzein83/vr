@@ -1,0 +1,8 @@
+﻿<vr-columns colnum="{{partnerGroupCtrl.normalColNum}}">
+    <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Type" datasource="partnerGroupTemplates" text="None"
+               selectedvalues="selectedPartnerGroupTemplate" on-ready="onPartnerGroupSelectorReady" hideremoveicon isrequired="true">
+    </vr-select>
+</vr-columns>
+<span ng-show="selectedPartnerGroupTemplate" vr-loader="isLoadingPartnerGroupTemplateDirective">
+    <vr-directivewrapper directive="selectedPartnerGroupTemplate.Editor" on-ready="onPartnerGroupDirectiveReady" normal-col-num="{{partnerGroupCtrl.normalColNum}}"></vr-directivewrapper>
+</span>

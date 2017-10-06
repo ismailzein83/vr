@@ -1,0 +1,7 @@
+﻿<vr-invoice-invoicesetting-selector on-ready="scopeModel.onInvoiceSettingSelectorReady" isrequired="true" normal-col-num="{{invoiceSettingCtrl.normalColNum}}"></vr-invoice-invoicesetting-selector>
+
+<vr-columns colnum="{{invoiceSettingCtrl.normalColNum}}">
+    <vr-select datatextfield="description" datavaluefield="value" label="Setting" datasource="scopeModel.invoiceGenerationSettings"
+               selectedvalues="scopeModel.selectedInvoiceGenerationSetting" on-ready="scopeModel.onInvoiceGenerationSettingReady" hideremoveicon isrequired="true">
+    </vr-select>
+</vr-columns>

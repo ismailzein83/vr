@@ -186,6 +186,8 @@
   <ItemGroup>
     <Content Include="VR_Invoice\Constants\AggregateTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\CounterTypeEnum.js" />
+    <Content Include="VR_Invoice\Constants\InvoiceGenerationSettingEnum.js" />
+    <Content Include="VR_Invoice\Constants\InvoiceGenerationPeriodEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceAccountStatusEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceAttachmentTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceDailyTypeEnum.js" />
@@ -222,6 +224,10 @@
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-convertor-editor.js" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-reader-directive.js" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-synchronizer-editor.js" />
+    <Content Include="VR_Invoice\Directives\Extensions\PartnerGroup\Templates\SpecificAccountsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Extensions\PartnerGroup\Templates\InvoiceSettingTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Extensions\PartnerGroup\vr-invoice-partnergroup-specificaccounts.js" />
+    <Content Include="VR_Invoice\Directives\Extensions\PartnerGroup\vr-invoice-partnergroup-invoicesetting.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoicefieldpropertyevaluator.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoiceobjecttype.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\AutomaticInvoiceActionsPartTemplate.html" />
@@ -401,12 +407,16 @@
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoicePropertyEvaluatorTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\ProcessInput\Normal\Templates\InvoiceGenerationProcessManualTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\ProcessInput\Normal\vr-invoice-invoicegenerationprocess-manual.js" />
+    <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoicePartnerGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\Templates\PartnerGroupTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\GroupingSubSectionGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoicePartnerSelectorTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\SubSectionGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoiceGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-invoicepartner-grid.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-grid.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-groupingsubsection-grid.js" />
+    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-partnergroup.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-invoicepartner-selector.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-subsection-grid.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\OpenRDLCReportActionTemplate.html" />

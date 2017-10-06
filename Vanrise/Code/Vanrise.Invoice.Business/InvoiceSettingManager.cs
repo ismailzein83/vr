@@ -19,7 +19,7 @@ namespace Vanrise.Invoice.Business
         public InvoiceSetting GetInvoiceSetting(Guid invoiceSettingId, bool isViewedFromUI)
         {
             var invoiceSettings = GetCachedInvoiceSettings();
-            var invoiceSetting= invoiceSettings.GetRecord(invoiceSettingId);
+            var invoiceSetting = invoiceSettings.GetRecord(invoiceSettingId);
             if (invoiceSetting != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(new InvoiceSettingLoggableEntity(invoiceSetting.InvoiceTypeId), invoiceSetting);
             return invoiceSetting;
@@ -27,7 +27,7 @@ namespace Vanrise.Invoice.Business
 
         public InvoiceSetting GetInvoiceSetting(Guid invoiceSettingId)
         {
-           return  GetInvoiceSetting(invoiceSettingId,false);
+            return GetInvoiceSetting(invoiceSettingId, false);
         }
         public IDataRetrievalResult<InvoiceSettingDetail> GetFilteredInvoiceSettings(DataRetrievalInput<InvoiceSettingQuery> input)
         {
@@ -41,11 +41,11 @@ namespace Vanrise.Invoice.Business
         }
         public bool DoesUserHaveAssignPartnerAccess(Guid invoiceSettingsId)
         {
-            var settings = GetInvoiceSetting(invoiceSettingsId);            
-            var invoiceType = (settings != null) ? new InvoiceTypeManager().GetInvoiceType(settings.InvoiceTypeId):null;
-            if ( invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.AssignPartnerRequiredPermission != null)
+            var settings = GetInvoiceSetting(invoiceSettingsId);
+            var invoiceType = (settings != null) ? new InvoiceTypeManager().GetInvoiceType(settings.InvoiceTypeId) : null;
+            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.AssignPartnerRequiredPermission != null)
                 return DoesUserHaveAccess(invoiceType.Settings.Security.AssignPartnerRequiredPermission);
-           
+
             return true;
         }
         public Vanrise.Entities.InsertOperationOutput<InvoiceSettingDetail> AddInvoiceSetting(InvoiceSetting invoiceSetting)
@@ -74,7 +74,7 @@ namespace Vanrise.Invoice.Business
 
             return insertOperationOutput;
         }
-    
+
         public Vanrise.Entities.UpdateOperationOutput<InvoiceSettingDetail> UpdateInvoiceSetting(InvoiceSetting invoiceSetting)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<InvoiceSettingDetail>();
@@ -107,28 +107,32 @@ namespace Vanrise.Invoice.Business
         }
         public Guid GetSettingInvoiceTypeId(Guid invoiceSettingId)
         {
-            var invoiceSettings =GetInvoiceSetting( invoiceSettingId) ;
+            var invoiceSettings = GetInvoiceSetting(invoiceSettingId);
             invoiceSettings.ThrowIfNull("invoiceSettings", invoiceSettingId);
             return invoiceSettings.InvoiceTypeId;
         }
         public IEnumerable<InvoiceSettingInfo> GetInvoiceSettingsInfo(InvoiceSettingFilter filter)
         {
             var invoiceSettings = GetCachedInvoiceSettings();
-            Func<InvoiceSetting,bool> filterExpression = (invoiceSetting) => {
-                if(invoiceSetting.InvoiceTypeId != filter.InvoiceTypeId)
-                    return false;
+            Func<InvoiceSetting, bool> filterExpression = (invoiceSetting) =>
+            {
+                if (filter != null)
+                {
+                    if (invoiceSetting.InvoiceTypeId != filter.InvoiceTypeId)
+                        return false;
+                }
                 return true;
             };
-            return invoiceSettings.MapRecords(InvoiceSettingInfoMapper, filterExpression).OrderBy(x=>x.Name);
+            return invoiceSettings.MapRecords(InvoiceSettingInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
         public IEnumerable<InvoiceSetting> GetInvoiceSettings(Guid invoiceTypeId)
         {
-            return GetCachedInvoiceSettings().FindAllRecords(x=>x.InvoiceTypeId == invoiceTypeId);
+            return GetCachedInvoiceSettings().FindAllRecords(x => x.InvoiceTypeId == invoiceTypeId);
         }
         public InvoiceSetting GetDefaultInvoiceSetting(Guid invoiceTypeId)
         {
             var invoiceSettings = GetInvoiceSettings(invoiceTypeId);
-            foreach(var item in invoiceSettings)
+            foreach (var item in invoiceSettings)
             {
                 if (item.IsDefault)
                     return item;
@@ -170,7 +174,7 @@ namespace Vanrise.Invoice.Business
         public List<InvoiceSettingPartUISection> GetOverridableInvoiceSetting(Guid invoiceSettingId)
         {
             var invoiceSetting = GetInvoiceSetting(invoiceSettingId);
-            if(invoiceSetting == null)
+            if (invoiceSetting == null)
                 throw new NullReferenceException("invoiceSetting");
 
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceSetting.InvoiceTypeId);
@@ -183,22 +187,22 @@ namespace Vanrise.Invoice.Business
             if (invoiceType.Settings.InvoiceSettingPartUISections != null)
             {
                 invoiceSettingPartUISections = new List<InvoiceSettingPartUISection>();
-                foreach(var section in invoiceType.Settings.InvoiceSettingPartUISections)
+                foreach (var section in invoiceType.Settings.InvoiceSettingPartUISections)
                 {
                     InvoiceSettingPartUISection invoiceSettingPartUISection = new InvoiceSettingPartUISection
                     {
                         SectionTitle = section.SectionTitle
                     };
-                    if(section.Rows != null)
+                    if (section.Rows != null)
                     {
                         invoiceSettingPartUISection.Rows = new List<InvoiceSettingPartUIRow>();
-                        foreach(var row in section.Rows)
+                        foreach (var row in section.Rows)
                         {
                             InvoiceSettingPartUIRow invoiceSettingPartUIRow = new InvoiceSettingPartUIRow();
-                            if(row.Parts != null)
+                            if (row.Parts != null)
                             {
                                 invoiceSettingPartUIRow.Parts = new List<InvoiceSettingPartDefinition>();
-                                foreach(var part in row.Parts)
+                                foreach (var part in row.Parts)
                                 {
                                     if (part.IsOverridable)
                                     {
@@ -211,14 +215,14 @@ namespace Vanrise.Invoice.Business
                                         invoiceSettingPartUIRow.Parts.Add(invoiceSettingPartDefinition);
                                     }
                                 }
-                                if (invoiceSettingPartUIRow.Parts != null && invoiceSettingPartUIRow.Parts.Count >0 )
+                                if (invoiceSettingPartUIRow.Parts != null && invoiceSettingPartUIRow.Parts.Count > 0)
                                 {
                                     invoiceSettingPartUISection.Rows.Add(invoiceSettingPartUIRow);
                                 }
                             }
                         }
                     }
-                    if(invoiceSettingPartUISection.Rows != null && invoiceSettingPartUISection.Rows.Count > 0)
+                    if (invoiceSettingPartUISection.Rows != null && invoiceSettingPartUISection.Rows.Count > 0)
                     {
                         invoiceSettingPartUISections.Add(invoiceSettingPartUISection);
                     }
@@ -350,6 +354,6 @@ namespace Vanrise.Invoice.Business
         }
         #endregion
 
-        
+
     }
 }

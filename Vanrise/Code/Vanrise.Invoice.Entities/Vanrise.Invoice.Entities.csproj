@@ -69,6 +69,8 @@
     <Compile Include="InvoiceItem\IGroupingInvoiceItemQueryContext.cs" />
     <Compile Include="InvoicePartner\InvoiceAccount.cs" />
     <Compile Include="InvoicePartner\InvoiceAccountData.cs" />
+    <Compile Include="Invoice\InvoicePartner.cs" />
+    <Compile Include="Invoice\InvoicePartnerQuery.cs" />
     <Compile Include="InvoiceReader\InvoiceSourceBatch.cs" />
     <Compile Include="InvoiceSetting\InvoiceSetting.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingDetail.cs" />
@@ -144,6 +146,7 @@
     <Compile Include="InvoiceType\InvoiceTypeSettings.cs" />
     <Compile Include="InvoiceViewSettings.cs" />
     <Compile Include="InvoiceType\InvoiceDataSourceSettings.cs" />
+    <Compile Include="Invoice\PartnerGroupConfig.cs" />
     <Compile Include="ItemGroupingFieldInfo.cs" />
     <Compile Include="PartnerInvoiceSetting\PartnerInvoiceSetting.cs" />
     <Compile Include="PartnerInvoiceSetting\PartnerInvoiceSettingDetail.cs" />
