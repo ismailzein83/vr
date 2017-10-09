@@ -62,7 +62,7 @@ app.directive('vrWhsSalesPricingtemplateGrid', ['VRNotificationService', 'VRUIUt
                 $scope.scopeModel.menuActions.push({
                     name: 'Edit',
                     clicked: editPricingTemplate,
-                    //haspermission: hasEditPricingTemplatePermission
+                    haspermission: hasEditPricingTemplatePermission
                 });
             }
             function editPricingTemplate(pricingTemplateItem) {
@@ -72,8 +72,8 @@ app.directive('vrWhsSalesPricingtemplateGrid', ['VRNotificationService', 'VRUIUt
 
                 WhS_Sales_PricingTemplateService.editPricingTemplate(pricingTemplateItem.Entity.PricingTemplateId, onPricingTemplateUpdated);
             }
-            //function hasEditPricingTemplatePermission() {
-            //    return WhS_Sales_PricingTemplateAPIService.HasEditPricingTemplatePermission();
-            //}
+            function hasEditPricingTemplatePermission() {
+                return WhS_Sales_PricingTemplateAPIService.HasUpdatePricingTemplatePermission();
+            }
         }
     }]);

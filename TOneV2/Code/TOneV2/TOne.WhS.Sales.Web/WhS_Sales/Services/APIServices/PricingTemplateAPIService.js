@@ -30,11 +30,13 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetMarginRateCalculationExtensionConfigs"));
         }
 
-        //function GetPricingTemplatesInfo(filter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetPricingTemplatesInfo"), {
-        //        filter: filter
-        //    });
-        //}
+        function HasAddPricingTemplatePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Sales_ModuleConfig.moduleName, controllerName, ['AddPricingTemplate']));
+        }
+
+        function HasUpdatePricingTemplatePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Sales_ModuleConfig.moduleName, controllerName, ['UpdatePricingTemplate']));
+        }
 
 
         return ({
@@ -42,8 +44,9 @@
             GetPricingTemplateEditorRuntime: GetPricingTemplateEditorRuntime,
             AddPricingTemplate: AddPricingTemplate,
             UpdatePricingTemplate: UpdatePricingTemplate,
-            GetMarginRateCalculationExtensionConfigs: GetMarginRateCalculationExtensionConfigs
-            //GetPricingTemplatesInfo: GetPricingTemplatesInfo
+            GetMarginRateCalculationExtensionConfigs: GetMarginRateCalculationExtensionConfigs,
+            HasAddPricingTemplatePermission: HasAddPricingTemplatePermission,
+            HasUpdatePricingTemplatePermission: HasUpdatePricingTemplatePermission
         });
     }
 

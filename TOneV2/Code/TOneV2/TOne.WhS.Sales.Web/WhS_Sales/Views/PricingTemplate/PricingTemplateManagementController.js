@@ -33,9 +33,9 @@
                 WhS_Sales_PricingTemplateService.addPricingTemplate(onPricingTemplateAdded);
             };
 
-            //$scope.scopeModel.hasAddPricingTemplatePermission = function () {
-            //    return WhS_Sales_PricingTemplateAPIService.HasAddPricingTemplatePermission()
-            //};
+            $scope.scopeModel.hasAddPricingTemplatePermission = function () {
+                return WhS_Sales_PricingTemplateAPIService.HasAddPricingTemplatePermission()
+            };
         }
 
         function load() {
