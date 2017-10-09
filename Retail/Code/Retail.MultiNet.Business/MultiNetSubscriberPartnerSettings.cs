@@ -203,7 +203,7 @@ namespace Retail.MultiNet.Business
             {
                 BED = financialAccountData.FinancialAccount.BED,
                 EED = financialAccountData.FinancialAccount.EED,
-                Status = accountBEManager.IsAccountActive(financialAccountData.Account)? VRAccountStatus.Active :VRAccountStatus.InActive
+                Status = accountBEManager.IsAccountInvoiceActive(financialAccountData.Account)? VRAccountStatus.Active :VRAccountStatus.InActive
             };
         }
     }
