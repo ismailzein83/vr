@@ -28,6 +28,7 @@ namespace Retail.MultiNet.Business.Convertors
         }
         public Guid TransactionTypeId { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
+        public Guid InvoiceTypeId { get; set; }
         public string SourceAccountIdColumn { get; set; }
         public string AmountColumn { get; set; }
         public string InvoiceSourceIdColumn { get; set; }
@@ -52,7 +53,7 @@ namespace Retail.MultiNet.Business.Convertors
                     Currency currency = currencyManager.GetCurrencyBySymbol(currencySourceId);
                     currency.ThrowIfNull("currency", currencySourceId);
 
-                    string invoiceId = GetStringRowValue(row,InvoiceSourceIdColumn);
+                    string invoiceId = GetStringRowValue(row, InvoiceSourceIdColumn);
                     DateTime transactionTime = (DateTime)row[this.PaymentDateColumn];
 
                     SourceBillingTransaction sourceTransaction = new SourceBillingTransaction
@@ -78,7 +79,7 @@ namespace Retail.MultiNet.Business.Convertors
                 }
             }
 
-            List<Invoice> invoices = new InvoiceManager().GetInvoicesBySerialNumbers(billingTransactionsBySerialNumber.Keys);
+            List<Invoice> invoices = new InvoiceManager().GetInvoicesBySerialNumbers(this.InvoiceTypeId, billingTransactionsBySerialNumber.Keys);
             foreach (var invoice in invoices)
             {
                 try

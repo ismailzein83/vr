@@ -33,6 +33,8 @@ app.directive('retailMultinetPaymentConvertorEditor', ['UtilsService', 'VRUIUtil
             var currencySelectorAPI;
             var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var invoiceTypeIdSelectorApi;
+            var invoiceTypeIdSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 
             $scope.scopeModel = {};
 
@@ -49,6 +51,11 @@ app.directive('retailMultinetPaymentConvertorEditor', ['UtilsService', 'VRUIUtil
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onInvoiceTypeSelectorReady = function (api) {
+                invoiceTypeIdSelectorApi = api;
+                invoiceTypeIdSelectorPromiseDeferred.resolve();
             };
 
             function initializeController() {
@@ -68,6 +75,7 @@ app.directive('retailMultinetPaymentConvertorEditor', ['UtilsService', 'VRUIUtil
                         $scope.scopeModel.invoiceSourceIdColumn = payload.InvoiceSourceIdColumn;
                         $scope.scopeModel.currencyColumn = payload.CurrencyColumnName;
                         $scope.scopeModel.referenceColumnName = payload.ReferenceColumnName;
+                        $scope.scopeModel.invoiceTypeId = payload.InvoiceTypeId;
                     }
 
                     var promises = [];
@@ -77,6 +85,9 @@ app.directive('retailMultinetPaymentConvertorEditor', ['UtilsService', 'VRUIUtil
 
                     var loadAccountDefinitionTypePromise = getAccountDefinitionSelectorLoadPromise();
                     promises.push(loadAccountDefinitionTypePromise);
+
+                    var loadInvoiceTypePromise = getInvoiceTypeSelectorPromise();
+                    promises.push(loadInvoiceTypePromise);
 
 
                     function getAccountDefinitionSelectorLoadPromise() {
@@ -114,6 +125,20 @@ app.directive('retailMultinetPaymentConvertorEditor', ['UtilsService', 'VRUIUtil
                         return billingTransactionTypeLoadDeferred.promise;
                     };
 
+                    function getInvoiceTypeSelectorPromise() {
+                        var invoiceTypeLoadDeferred = UtilsService.createPromiseDeferred();
+                        invoiceTypeIdSelectorPromiseDeferred.promise.then(function () {
+                            var selectorPayload;
+                            if (payload != undefined) {
+                                selectorPayload = {
+                                    selectedIds: payload.InvoiceTypeId
+                                }
+                            }
+                            VRUIUtilsService.callDirectiveLoad(invoiceTypeIdSelectorApi, selectorPayload, invoiceTypeLoadDeferred);
+                        });
+                        return invoiceTypeLoadDeferred.promise;
+                    };
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -129,7 +154,8 @@ app.directive('retailMultinetPaymentConvertorEditor', ['UtilsService', 'VRUIUtil
                         SourceAccountIdColumn: $scope.scopeModel.accountColumn,
                         SourceIdColumnName: $scope.scopeModel.sourceIdColumn,
                         InvoiceSourceIdColumn: $scope.scopeModel.invoiceSourceIdColumn,
-                        ReferenceColumnName: $scope.scopeModel.referenceColumnName
+                        ReferenceColumnName: $scope.scopeModel.referenceColumnName,
+                        InvoiceTypeId: invoiceTypeIdSelectorApi.getSelectedIds(),
                     };
                     return data;
                 };
