@@ -1037,7 +1037,24 @@ namespace TOne.WhS.BusinessEntity.Business
             else
             {
                 WHSFinancialAccountDefinitionSettings definitionSettings = GetDefinitionWithValidate(financialAccount);
-                return !s_carrierProfileManager.IsCarrierProfileDeleted(financialAccount.CarrierProfileId.Value) && s_carrierProfileManager.IsCarrierProfileActive(financialAccount.CarrierProfileId.Value);
+                if (s_carrierProfileManager.IsCarrierProfileDeleted(financialAccount.CarrierProfileId.Value))
+                    return false;
+                if (definitionSettings.ExtendedSettings.IsApplicableToCustomer && definitionSettings.ExtendedSettings.IsApplicableToSupplier)
+                {
+                    if (!s_carrierProfileManager.IsCarrierProfileCustomerActive(financialAccount.CarrierProfileId.Value) || !s_carrierProfileManager.IsCarrierProfileSupplierActive(financialAccount.CarrierProfileId.Value))
+                        return false;
+                }
+                else if (definitionSettings.ExtendedSettings.IsApplicableToCustomer && !definitionSettings.ExtendedSettings.IsApplicableToSupplier)
+                {
+                    if (!s_carrierProfileManager.IsCarrierProfileCustomerActive(financialAccount.CarrierProfileId.Value))
+                        return false;
+                }
+                else if (definitionSettings.ExtendedSettings.IsApplicableToSupplier && !definitionSettings.ExtendedSettings.IsApplicableToCustomer)
+                {
+                    if (!s_carrierProfileManager.IsCarrierProfileSupplierActive(financialAccount.CarrierProfileId.Value))
+                        return false;
+                }
+                return true;
             }
         }
         private bool IsCarrierAccountActive(int carrierAccountId)
