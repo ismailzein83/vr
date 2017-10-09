@@ -48,7 +48,13 @@ namespace Vanrise.Common.Data.SQL
         {
             return GetItemSP("[common].[sp_File_GetFileById]", FileMapper, fileId);
         }
-
+        public List<VRFileInfo> GetFilesInfo(IEnumerable<long> fileIds)
+        {
+            string fileIdsAsString = null;
+            if (fileIds != null)
+                fileIdsAsString = string.Join<long>(",", fileIds);
+            return GetItemsSP("[common].[sp_File_GetByFileIds]", FileInfoMapper, fileIdsAsString);
+        }
         public bool UpdateFileUsed(long fileId, bool isUsed)
         {
             int recordesEffected = ExecuteNonQuerySP("[common].[sp_File_GetFileById]", fileId, isUsed);

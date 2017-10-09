@@ -57,6 +57,10 @@ namespace Vanrise.Common.Business
         {
             return _datamanager.GetFileInfo(fileId);
         }
+        public List<VRFileInfo> GetFilesInfo(IEnumerable<long> fileIds)
+        {
+            return _datamanager.GetFilesInfo(fileIds);
+        }
 
         public IDataRetrievalResult<VRFileInfo> GetFilteredRecentFiles(DataRetrievalInput<VRFileQuery> input)
         {
