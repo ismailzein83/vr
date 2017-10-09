@@ -22,11 +22,15 @@ namespace TOne.WhS.Invoice.Entities
         public int? TimeZoneId { get; set; }
         public decimal? OriginalAmount { get; set; }
         public string Reference { get; set; }
-        public List<long> AttachementsFileIds { get; set; }
+        public List<AttachementFile> AttachementFiles { get; set; }
         public SupplierInvoiceDetails() { }
         public IEnumerable<SupplierInvoiceDetails> GetSupplierInvoiceDetailsRDLCSchema()
         {
             return null;
         }
+    }
+    public class AttachementFile
+    {
+        public long FileId { get; set; }
     }
 }

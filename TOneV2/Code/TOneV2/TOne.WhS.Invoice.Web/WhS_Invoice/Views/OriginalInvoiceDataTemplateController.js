@@ -10,7 +10,7 @@
         var invoiceId;
         var invoiceTypeId;
         var fileAPI;
-        var invoiceEntity;
+        var originalInvoiceDataRuntime;
         loadParameters();
         defineScope();
         load();
@@ -54,19 +54,30 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-            UtilsService.waitMultipleAsyncOperations([getInvoice]).then(function () {
+            UtilsService.waitMultipleAsyncOperations([getOriginalInvoiceDataRuntime]).then(function () {
                 loadAllControls();
             });
         }
 
-        function getInvoice()
+        function getOriginalInvoiceDataRuntime()
         {
-            return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
-                invoiceEntity = response;
-                if (invoiceEntity != undefined && invoiceEntity.Entity != undefined && invoiceEntity.Entity.Details != undefined)
+            return WhS_Invoice_InvoiceAPIService.GetOriginalInvoiceDataRuntime(invoiceId).then(function (response) {
+                originalInvoiceDataRuntime = response;
+                if (originalInvoiceDataRuntime != undefined)
                 {
-                    $scope.scopeModel.originalAmount = invoiceEntity.Entity.Details.OriginalAmount;
-                    $scope.scopeModel.reference = invoiceEntity.Entity.Details.Reference;
+                    $scope.scopeModel.originalAmount = originalInvoiceDataRuntime.OriginalAmount;
+                    $scope.scopeModel.reference = originalInvoiceDataRuntime.Reference;
+                    if(originalInvoiceDataRuntime.AttachementFilesRuntime != undefined)
+                    {
+                        for (var i = 0; i < originalInvoiceDataRuntime.AttachementFilesRuntime.length; i++)
+                        {
+                            var attachementFileRuntime = originalInvoiceDataRuntime.AttachementFilesRuntime[i];
+                            $scope.scopeModel.uploadedAttachements.push({
+                                fileId:attachementFileRuntime.FileId,
+                                fileName: attachementFileRuntime.FileName
+                            });
+                        }
+                    }
                 }
             });
         }
@@ -106,12 +117,21 @@
         function buildOriginalInvoiceDataObjFromScope() {
 
             var attachementFileIds;
-            if($scope.scopeModel.uploadedAttachements != undefined)
-                attachementFileIds = $scope.scopeModel.uploadedAttachements.map(function (a) { return a.fileId; });
+            if ($scope.scopeModel.uploadedAttachements != undefined)
+            {
+                attachementFileIds = [];
+                for(var i=0;i<$scope.scopeModel.uploadedAttachements.length;i++)
+                {
+                    var uploadedAttachement = $scope.scopeModel.uploadedAttachements[i];
+                    attachementFileIds.push({
+                        FileId: uploadedAttachement.fileId
+                    });
+                }
+            }
             var obj = {
                 OriginalAmount: $scope.scopeModel.originalAmount,
                 Reference: $scope.scopeModel.reference,
-                AttachementsFileIds: attachementFileIds,
+                AttachementFiles: attachementFileIds,
                 InvoiceId :invoiceId,
             };
             return obj;

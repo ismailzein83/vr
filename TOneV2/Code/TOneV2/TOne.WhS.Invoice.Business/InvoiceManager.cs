@@ -55,11 +55,50 @@ namespace TOne.WhS.Invoice.Business
             supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
             supplierInvoiceDetails.OriginalAmount = input.OriginalAmount;
             supplierInvoiceDetails.Reference = input.Reference;
-            supplierInvoiceDetails.AttachementsFileIds = input.AttachementsFileIds;
+            supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
             invoice.Details = supplierInvoiceDetails;
             return invoiceManager.TryUpdateInvoice(invoice);
         }
 
+
+        public OriginalInvoiceDataRuntime GetOriginalInvoiceDataRuntime(long invoiceId)
+        {
+            Vanrise.Invoice.Business.InvoiceManager invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
+            var invoice = invoiceManager.GetInvoice(invoiceId);
+            invoice.ThrowIfNull("invoice", invoiceId);
+            var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
+            supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
+
+            OriginalInvoiceDataRuntime originalInvoiceDataRuntime = new OriginalInvoiceDataRuntime
+            {
+                OriginalAmount = supplierInvoiceDetails.OriginalAmount,
+                Reference = supplierInvoiceDetails.Reference,
+            };
+
+            if (supplierInvoiceDetails.AttachementFiles != null && supplierInvoiceDetails.AttachementFiles.Count > 0)
+            {
+                originalInvoiceDataRuntime.AttachementFilesRuntime = new List<AttachementFileRuntime>();
+                var fileIds = supplierInvoiceDetails.AttachementFiles.Select(x => x.FileId);
+                VRFileManager vrFileManager = new VRFileManager();
+                var files = vrFileManager.GetFilesInfo(fileIds);
+                foreach (var attachementFile in supplierInvoiceDetails.AttachementFiles)
+                {
+                    if (files != null)
+                    {
+                        var file = files.FindRecord(x => x.FileId == attachementFile.FileId);
+                        if (file != null)
+                        {
+                            originalInvoiceDataRuntime.AttachementFilesRuntime.Add(new AttachementFileRuntime
+                            {
+                                FileId = file.FileId,
+                                FileName = file.Name
+                            });
+                        }
+                    }
+                }
+            }
+            return originalInvoiceDataRuntime;
+        }
         #region Private Classes
 
         private class InvoiceComparisonRequestHandler : BigDataRequestHandler<InvoiceComparisonInput, InvoiceComparisonResult, InvoiceComparisonResultDetail>
