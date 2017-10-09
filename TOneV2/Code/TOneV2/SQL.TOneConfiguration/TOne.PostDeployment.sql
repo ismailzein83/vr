@@ -507,7 +507,9 @@ as (select * from (values
 ('986C3FC1-2FCE-4966-ABF6-900EBCB6306B','WhS_Routing_CostGenerationProcess','Cost Generation'			,'B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View Process Logs", "Start Process", "View Costs"]'),
 
 ('86699A30-0F8C-4F23-8CFC-9EA19297B06B','VR_Invoice_Customer','Customer Invoice'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate","Set_Paid","Set_Unpaid","Set_Lock","Set_UnLock","Recreate","Send Email"]'),
-('B8074080-DEA8-4BA2-BD13-0620083EA740','VR_Invoice_Supplier','Supplier Invoice'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate"]')
+('B8074080-DEA8-4BA2-BD13-0620083EA740','VR_Invoice_Supplier','Supplier Invoice'						,'520558FA-CF2F-440B-9B58-09C23B6A2E9B',0,'["View","Generate"]'),
+
+('D3E15F1E-8847-435E-BF3E-6CDE83E611A8','WhS_BE_PricingTemplate','Pricing Template'						,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View","Add","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
