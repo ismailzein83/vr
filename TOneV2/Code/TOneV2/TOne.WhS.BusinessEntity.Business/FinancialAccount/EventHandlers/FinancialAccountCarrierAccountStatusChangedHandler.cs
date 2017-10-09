@@ -25,13 +25,19 @@ namespace TOne.WhS.BusinessEntity.Business.FinancialAccount.EventHandlers
         {
             var eventPayload = context.EventPayload as CarrierAccountStatusChangedEventPayload;
             eventPayload.ThrowIfNull("context.EventPayload", eventPayload);
+
+
            
+
             VRAccountStatus vrAccountStatus = s_carrierAccountManager.IsCarrierAccountActive(eventPayload.CarrierAccountId) ? VRAccountStatus.Active : VRAccountStatus.InActive;
+
             var carrierAccount = s_carrierAccountManager.GetCarrierAccount(eventPayload.CarrierAccountId);
-            bool isCustomer = !(carrierAccount.AccountType == CarrierAccountType.Supplier);
+            bool isCustomerOrExchange = carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange;
+            bool isSupplierOrExchange = carrierAccount.AccountType == CarrierAccountType.Supplier || carrierAccount.AccountType == CarrierAccountType.Exchange;
+
             var financialAccounts = s_financialAccountManager.GetFinancialAccountsByCarrierAccountId(eventPayload.CarrierAccountId);
             if (financialAccounts != null)
-                s_financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(vrAccountStatus, financialAccounts, isCustomer, !isCustomer);
+                s_financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(vrAccountStatus, financialAccounts, isCustomerOrExchange, isSupplierOrExchange);
         }
 
         
