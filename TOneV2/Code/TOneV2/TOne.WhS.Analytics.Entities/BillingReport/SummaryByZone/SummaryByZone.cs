@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string RateFormatted { get; set; }
         public decimal? DurationNet { get; set; }
         public string DurationNetFormatted { get; set; }
-        public int RateType { get; set; }
+        public int? RateType { get; set; }
         public string RateTypeFormatted { get; set; }
         public decimal DurationInSeconds { get; set; }
         public string DurationInSecondsFormatted { get; set; }
