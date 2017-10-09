@@ -98,6 +98,7 @@
     <Compile Include="ApplyNewZonesToDB.cs" />
     <Compile Include="ApplyPreviewRatesToDB.cs" />
     <Compile Include="ApplyPreviewCodesToDB.cs" />
+    <Compile Include="ApplyPreviewZonesRPsToDB.cs" />
     <Compile Include="ApplyPreviewZonesToDB.cs" />
     <Compile Include="BackupData.cs" />
     <Compile Include="GenerateZonesRPsPreview.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="PrepareChangedCustomerCountriesForApply.cs" />
     <Compile Include="PrepareExistingEffectiveRates.cs" />
     <Compile Include="PrepareNewZonesRPForApply.cs" />
+    <Compile Include="PreparePreviewZonesRPsForDBApply.cs" />
     <Compile Include="ProcessCountries.cs" />
     <Compile Include="SavePricelistFiles.cs" />
     <Compile Include="SendSalePLNotifications.cs" />
