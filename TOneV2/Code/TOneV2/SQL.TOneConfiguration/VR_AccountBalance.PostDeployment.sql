@@ -15,6 +15,7 @@ BEGIN
 set nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('F0A06C27-2850-40ED-BF6C-F0E65BD3894D','Daily','Daily','VR_AccountBalance_AccountUsagePeriodSettingsConfig'																	,'{"Editor":"vr-accountusage-periodsettings-daily"}'),
+('7DF9BEA6-6DCA-41DD-8C9A-A9D8AD323512','30Min','30 Min','VR_AccountBalance_AccountUsagePeriodSettingsConfig'																	,'{"Editor":"vr-accountusage-periodsettings-thirtymin"}'),
 
 ('7824DFFA-0EBF-4939-93E8-DEC6E5EDFA10','VR_AccountBalance_AccountType','Account Balance Type','VR_Common_VRComponentType'														,'{"Editor":"vr-accountbalance-accounttype-settings"}'),
 ('831CB917-CAD7-4BC8-99B8-4B2EB839B647','VRAccountBalance_AccountTypeSource_LiveBalances','Live Balances','VR_AccountBalance_AccountTypeSources'								,'{"Editor":"vr-accountbalance-accounttype-source-livebalance"}'),
