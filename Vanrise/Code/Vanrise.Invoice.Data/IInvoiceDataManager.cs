@@ -27,7 +27,7 @@ namespace Vanrise.Invoice.Data
         IEnumerable<Entities.Invoice> GetLasInvoices(Guid invoiceTypeId, string partnerId, DateTime? beforeDate, int lastInvoices);
         VRPopulatedPeriod GetInvoicesPopulatedPeriod(Guid invoiceTypeId, string partnerId);
         bool CheckPartnerIfHasInvoices(Guid invoiceTypeId, string partnerId);
-        List<Entities.Invoice> GetInvoicesBySerialNumbers(IEnumerable<string> serialNumbers);
+        List<Entities.Invoice> GetInvoicesBySerialNumbers(Guid invoiceTypeId,IEnumerable<string> serialNumbers);
         bool UpdateInvoicePaidDateById(Guid invoiceTypeId, long invoiceId, DateTime paidDate);
         bool UpdateInvoiceSettings(long invoiceId, InvoiceSettings invoiceSettings);
     }

@@ -144,7 +144,7 @@ namespace Vanrise.Invoice.Data.SQL
             );
 
             insertedInvoiceId = Convert.ToInt64(invoiceId);
-           
+
             if (itemSetNameStorageDic != null && itemSetNameStorageDic.Count > 0)
             {
                 var remainingInvoiceItemSets = invoiceItemSets.FindAllRecords(x => !itemSetNameStorageDic.Values.Any(y => y.Contains(x.SetName)));
@@ -173,7 +173,7 @@ namespace Vanrise.Invoice.Data.SQL
                 IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
                 Timeout = TransactionManager.DefaultTimeout
             };
-           
+
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
             {
                 var transactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
@@ -186,7 +186,7 @@ namespace Vanrise.Invoice.Data.SQL
                     DeleteInvoice(invoiceIdToDelete.Value);
                     transactionDataManager.SetBillingTransactionsAsDeleted(invoiceIdToDelete.Value);
                 }
-              
+
                 SetDraft(insertedInvoiceId, false);
                 transactionScope.Complete();
             }
@@ -246,9 +246,9 @@ namespace Vanrise.Invoice.Data.SQL
             return GetItemSP("VR_Invoice.sp_Invoice_CheckIfHasInvoices", (reader) => { return (bool)reader["HasInvoices"]; }, invoiceTypeId, partnerId);
         }
 
-        public List<Entities.Invoice> GetInvoicesBySerialNumbers(IEnumerable<string> serialNumbers)
+        public List<Entities.Invoice> GetInvoicesBySerialNumbers(Guid invoiceTypeId, IEnumerable<string> serialNumbers)
         {
-            return GetItemsSP("[VR_Invoice].[sp_Invoice_GetBySerialNumbers]", InvoiceMapper, string.Join(",", serialNumbers));
+            return GetItemsSP("[VR_Invoice].[sp_Invoice_GetBySerialNumbers]", InvoiceMapper, invoiceTypeId, string.Join(",", serialNumbers));
         }
 
         #endregion
@@ -325,6 +325,6 @@ namespace Vanrise.Invoice.Data.SQL
 
 
 
-      
+
     }
 }

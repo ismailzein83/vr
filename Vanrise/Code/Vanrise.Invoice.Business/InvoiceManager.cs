@@ -250,7 +250,7 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.UpdateInvoiceNote(invoiceId, invoiceNote);
         }
-      
+
         public UpdateOperationOutput<InvoiceDetail> UpdateInvoice(Invoice.Entities.Invoice invoice)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<InvoiceDetail>();
@@ -461,10 +461,10 @@ namespace Vanrise.Invoice.Business
             return dataManager.CheckPartnerIfHasInvoices(invoiceTypeId, partnerId);
         }
 
-        public List<Entities.Invoice> GetInvoicesBySerialNumbers(IEnumerable<string> serialNumbers)
+        public List<Entities.Invoice> GetInvoicesBySerialNumbers(Guid invoiceTypeId, IEnumerable<string> serialNumbers)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.GetInvoicesBySerialNumbers(serialNumbers);
+            return dataManager.GetInvoicesBySerialNumbers(invoiceTypeId, serialNumbers);
         }
         public bool UpdateInvoicePaidDateById(Guid invoiceTypeId, long invoiceId, DateTime paidDate)
         {
