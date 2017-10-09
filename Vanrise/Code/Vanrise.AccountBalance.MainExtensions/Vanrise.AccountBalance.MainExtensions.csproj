@@ -61,6 +61,7 @@
     <Compile Include="AccountBalanceFieldSource\BillingTransactionFieldSourceSetting.cs" />
     <Compile Include="AccountBalanceFieldSource\LiveBalanceFieldSourceSetting.cs" />
     <Compile Include="AccountUsagePeriods\DailyAccountUsagePeriod.cs" />
+    <Compile Include="AccountUsagePeriods\ThirtyMinAccountUsagePeriod.cs" />
     <Compile Include="BalancePeriod\MonthlyBalancePeriodSettings.cs" />
     <Compile Include="BalancePeriod\WeeklyBalancePeriodSettings.cs" />
     <Compile Include="BalanceRuleDefinitionSettings.cs" />

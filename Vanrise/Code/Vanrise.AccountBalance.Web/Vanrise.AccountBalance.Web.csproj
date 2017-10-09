@@ -176,7 +176,9 @@
     <Content Include="VR_AccountBalance\Directives\AccountStatus\vr-accountbalance-accountstatus-selector.js" />
     <Content Include="VR_AccountBalance\Directives\AccountType\vr-accountbalance-accounttype-extendedsettings.js" />
     <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\Templates\DailyAccountUsagePeriodTemplate.html" />
+    <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\Templates\ThirtyMinAccountUsagePeriodTemplate.html" />
     <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\vr-accountusage-periodsettings-daily.js" />
+    <Content Include="VR_AccountBalance\Directives\AccountUsage\MainExtensions\vr-accountusage-periodsettings-thirtymin.js" />
     <Content Include="VR_AccountBalance\Directives\AccountUsage\vr-accountusage-periodsettings.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAccountType\vr-accountbalance-account-selector.js" />
     <Content Include="VR_AccountBalance\Directives\BalanceAccountType\vr-accountbalance-accounttype-selector.js" />
