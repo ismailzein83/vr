@@ -20,6 +20,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             AnalyticManager analyticManager = new AnalyticManager();
             RateTypeManager rateTypeManager = new RateTypeManager();
+            TOne.WhS.BusinessEntity.Business.ConfigManager configManager = new BusinessEntity.Business.ConfigManager();
+            int offPeakRateTypeId = configManager.GetOffPeakRateTypeId();
             List<string> listDimensions = new List<string>();
             List<string> listMeasures = new List<string> { "NumberOfCalls", "DurationNet" };
 
@@ -31,12 +33,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (parameters.IsCost)
             {
                 listDimensions.Add("CostRateType");
-                listDimensions.Add("CostRate");
+                listMeasures.Add("CostRate");
             }
             else
             {
                 listDimensions.Add("SaleRateType");
-                listDimensions.Add("SaleRate");
+                listMeasures.Add("SaleRate");
             }
 
             if (parameters.GroupBySupplier)
@@ -131,21 +133,20 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         if (rateTypeValue.Value != null)
                         {
                             summaryByZone.RateType = (int)rateTypeValue.Value;
-                            summaryByZone.RateTypeFormatted = rateTypeManager.GetRateTypeName(summaryByZone.RateType);
+                            summaryByZone.RateTypeFormatted = rateTypeManager.GetRateTypeName(summaryByZone.RateType.Value);
                         }
                         else
                             summaryByZone.RateTypeFormatted = "Normal";
 
-                    var rateValue = analyticRecord.DimensionValues[2];
-                    if (rateValue != null)
-                    {
-                        summaryByZone.Rate = (rateValue == null) ? (decimal)0.0 : Convert.ToDecimal(rateValue.Value ?? 0.0);
-                        summaryByZone.RateFormatted = ReportHelpers.FormatNumberDigitRate(summaryByZone.Rate);
-                    }
+                    MeasureValue rate;
+                    analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostRate" : "SaleRate", out rate);
+                    summaryByZone.Rate =  Convert.ToDecimal(rate.Value ?? 0.0);
+                    summaryByZone.RateFormatted = ReportHelpers.FormatLongNumberDigit(summaryByZone.Rate);
+
 
                     if (parameters.IsCost && parameters.GroupBySupplier)
                     {
-                        var supplierValue = analyticRecord.DimensionValues[3];
+                        var supplierValue = analyticRecord.DimensionValues[2];
                         if (supplierValue != null)
                             summaryByZone.SupplierID = supplierValue.Name;
                     }
@@ -187,13 +188,13 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     listSummaryByZone.Add(summaryByZone);
                 }
             //parameters.ServicesForCustomer = services;
-            parameters.NormalDuration = listSummaryByZone.Where(y => y.RateTypeFormatted == RateTypeEnum.Normal.ToString()).Sum(x => Math.Round(x.DurationInSeconds, 2));
+            parameters.NormalDuration = listSummaryByZone.Where(y => !y.RateType.HasValue).Sum(x => Math.Round(x.DurationInSeconds, 2));
 
-            parameters.OffPeakDuration = Math.Ceiling(listSummaryByZone.Where(y => y.RateTypeFormatted == RateTypeEnum.OffPeak.ToString()).Sum(x => Math.Round(x.DurationInSeconds, 2)));
+            parameters.OffPeakDuration = Math.Ceiling(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => Math.Round(x.DurationInSeconds, 2)));
 
-            parameters.NormalNet = listSummaryByZone.Where(y => y.RateTypeFormatted == RateTypeEnum.Normal.ToString()).Sum(x => x.Net).Value;
+            parameters.NormalNet = listSummaryByZone.Where(y => !y.RateType.HasValue).Sum(x => x.Net).Value;
 
-            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateType == -2).Sum(x => x.Net).Value, 0);
+            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => x.Net).Value, 0);
 
             parameters.TotalAmount = parameters.OffPeakNet + parameters.NormalNet;
 

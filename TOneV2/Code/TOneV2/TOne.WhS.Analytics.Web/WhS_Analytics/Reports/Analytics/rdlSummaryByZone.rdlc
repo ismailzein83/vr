@@ -1904,7 +1904,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(CDbl(Parameters!TotalAmount.Value),Parameters!DigitRate.Value)</Value>
+                              <Value>=FormatNumber(CDbl(Parameters!TotalAmount.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2007,7 +2007,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Sum(Fields!ExtraChargeValue.Value),2)</Value>
+                              <Value>=FormatNumber(Sum(Fields!ExtraChargeValue.Value),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2080,27 +2080,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(
-	Parameters!IsService.Value = "True" , 
-	IIf(
-		Parameters!IsCommission.Value = "True",
-		IIf(
-			Parameters!IsCost.Value = "True",
-			FormatNumber(CDbl(Parameters!TotalAmount.Value) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (+1) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value),
-			FormatNumber(CDbl(Parameters!TotalAmount.Value) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (-1) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value)
-			),
-		FormatNumber(CDbl(Parameters!TotalAmount.Value) + CDbl(Parameters!ServicesForCustomer.Value) ,Parameters!DigitRate.Value)
-		),
-	IIf(
-		Parameters!IsCommission.Value = "True",
-		IIf(
-			Parameters!IsCost.Value = "True",
-			FormatNumber(CDbl(Parameters!TotalAmount.Value) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (+1),Parameters!DigitRate.Value),
-			FormatNumber(CDbl(Parameters!TotalAmount.Value) + (Sum(Fields!ExtraChargeValue.Value)+ Sum(Fields!CommissionValue.Value)) * (-1),Parameters!DigitRate.Value)
-			),
-		FormatNumber(CDbl(Parameters!TotalAmount.Value),Parameters!DigitRate.Value)
-		)
-	)</Value>
+                              <Value>=FormatNumber(CDbl(Parameters!TotalAmount.Value) + (Sum(Fields!ExtraChargeValue.Value) ),Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2125,6 +2105,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
