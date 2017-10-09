@@ -141,6 +141,11 @@
                                     $scope.scopeModel.filterDimensions.push(dataItem);
                                 }
                             }
+
+                            if (payload.searchSettings.Legends) {
+                                $scope.scopeModel.legendHeader = payload.searchSettings.Legends[0].Header;
+                                $scope.scopeModel.legendContent = payload.searchSettings.Legends[0].Content;
+                            }
                         }
 
                         var loadGroupingDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -196,10 +201,15 @@
                         }
                     }
 
+                    var legends;
+                    if ($scope.scopeModel.legendHeader != undefined && $scope.scopeModel.legendContent != undefined)
+                        legends = [{ Header: $scope.scopeModel.legendHeader, Content: $scope.scopeModel.legendContent }];
+
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.History.SearchSettings.GenericSearchSettings, Vanrise.Analytic.MainExtensions ",
                         GroupingDimensions: groupingDimensions,
                         Filters: filterDimensions,
+                        Legends: legends,
                         IsRequiredGroupingDimensions: $scope.scopeModel.isRequiredGroupingDimensions,
                         ShowCurrency: $scope.scopeModel.showCurrency
                     };

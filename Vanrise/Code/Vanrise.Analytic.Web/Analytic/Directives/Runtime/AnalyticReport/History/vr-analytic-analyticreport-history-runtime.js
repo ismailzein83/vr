@@ -43,11 +43,12 @@
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.widgets = [];
                 $scope.scopeModel.filters = [];
-                $scope.scopeModel.fromdate = VRDateTimeService.getNowDateTime();
-                $scope.scopeModel.todate;
+                $scope.scopeModel.legends = [];
                 $scope.scopeModel.groupingDimentions = [];
                 $scope.scopeModel.selectedGroupingDimentions = [];
                 $scope.scopeModel.isGroupingRequired = false;
+                $scope.scopeModel.fromdate = VRDateTimeService.getNowDateTime();
+                $scope.scopeModel.todate;
 
                 $scope.scopeModel.onTimeRangeDirectiveReady = function (api) {
                     timeRangeDirectiveAPI = api;
@@ -103,6 +104,7 @@
                 defineColumnWidth();
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
@@ -110,10 +112,8 @@
                     if (payload != undefined) {
                         settings = payload.settings;
                     }
+
                     var loadPromiseDeffer = UtilsService.createPromiseDeferred();
-
-
-
 
                     UtilsService.waitMultipleAsyncOperations([getWidgetsTemplateConfigs, getFieldTypeConfigs, loadMeasures, loadDimensions, loadTimeRangeDirective]).then(function () {
                         UtilsService.waitMultipleAsyncOperations([loadFilters]).finally(function () {
@@ -125,16 +125,14 @@
                         loadPromiseDeffer.reject(error);
                     });
 
-
                     return loadPromiseDeffer.promise;
                 };
-
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
-
             }
+
             function defineColumnWidth() {
                 $scope.scopeModel.columnWidth = [];
                 for (var td in ColumnWidthEnum)
@@ -178,7 +176,16 @@
 
             function loadFilters() {
                 var filterPromises = [];
+
+                if (settings == undefined || settings.SearchSettings == undefined)
+                    return filterPromises;
+
                 $scope.scopeModel.isGroupingRequired = settings.SearchSettings.IsRequiredGroupingDimensions;
+
+                if (settings.SearchSettings.Legends != undefined) {
+                    $scope.scopeModel.legends = settings.SearchSettings.Legends;
+                }
+
                 if (settings.SearchSettings.Filters != undefined) {
                     for (var i = 0; i < settings.SearchSettings.Filters.length; i++) {
                         var filterConfiguration = settings.SearchSettings.Filters[i];
@@ -205,11 +212,10 @@
                                 $scope.scopeModel.selectedGroupingDimentions.push(dimensionObj);
                             }
                         }
-
                     }
                 }
 
-                if (settings != undefined && settings.SearchSettings != undefined && settings.SearchSettings.ShowCurrency) {
+                if (settings.SearchSettings.ShowCurrency) {
                     $scope.scopeModel.showCurrency = true;
                     var loadCurrencySelectorDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                     currencySelectorReadyDeferred.promise.then(function () {
@@ -217,12 +223,6 @@
                     });
                     filterPromises.push(loadCurrencySelectorDirectivePromiseDeferred.promise);
                 }
-
-
-
-
-
-                return UtilsService.waitMultiplePromises(filterPromises);
 
                 function getFilter(filterConfiguration) {
                     //console.log(filterConfiguration);
@@ -255,6 +255,8 @@
 
                     return filter;
                 }
+
+                return UtilsService.waitMultiplePromises(filterPromises);
             }
 
             function loadMeasures() {

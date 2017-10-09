@@ -23,9 +23,12 @@
             <span ng-repeat="filter in scopeModel.filters">
                 <vr-directivewrapper directive="filter.directiveEditor" on-ready="filter.onDirectiveReady" normal-col-num="2" isrequired="filter.isRequired"></vr-directivewrapper>
             </span>
+            <vr-columns colnum="4" ng-repeat="legend in scopeModel.legends" withemptyline>
+                <vr-legend header="{{legend.Header}}" content="{{legend.Content}}"></vr-legend>
+            </vr-columns>
         </vr-row>
-        <vr-row removeline ng-if="advancedSelected">
 
+        <vr-row removeline ng-if="advancedSelected">
             <vr-columns width="fullrow">
                 <vr-section title="Advanced Filter">
                     <vr-row ng-show="scopeModel.expression !=undefined" removeline>

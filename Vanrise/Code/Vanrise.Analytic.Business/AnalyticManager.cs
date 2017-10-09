@@ -574,14 +574,20 @@ namespace Vanrise.Analytic.Business
                     dimIndex++;
                 }
             }
+
             var getMeasureValueContext = new GetMeasureValueContext(analyticTableQueryContext, groupingKey, dbRecord, allDimensionNames, analyticRecord, isSummaryRecord);
+            RecordFilterManager filterManager = new RecordFilterManager();
             allMeasuresAreNull = true;
+
             foreach (var measureName in measureNames)
             {
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
 
-                RecordFilterManager filterManager = new RecordFilterManager();
+                DataRecordFieldType measureType = analyticTableQueryContext.GetMeasureConfig(measureName).Config.FieldType;
+                if (measureType.CanRoundValue)
+                    measureValue = measureType.GetRoundedValue(measureValue);
+
                 string styleCode = null;
                 if (measureStyleRulesDictionary != null)
                 {
@@ -590,7 +596,6 @@ namespace Vanrise.Analytic.Business
                     {
                         foreach (var rule in measureStyleRule.Rules)
                         {
-                            StyleRuleConditionContext context = new StyleRuleConditionContext { Value = measureValue };
                             if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, measureValue, measureConfig.Config.FieldType))
                             {
                                 styleCode = rule.StyleCode;
@@ -598,13 +603,13 @@ namespace Vanrise.Analytic.Business
                             }
                         }
                     }
-
                 }
+
                 if (measureValue != null)
                     allMeasuresAreNull = false;
+
                 analyticRecord.MeasureValues.Add(measureName, new MeasureValue { Value = measureValue, StyleCode = styleCode });
             }
-
 
             return analyticRecord;
         }

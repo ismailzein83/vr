@@ -12,12 +12,15 @@ using Vanrise.Common.Business;
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public enum FieldNumberPrecision { Normal = 0, Long = 1 }
+
     public class FieldNumberType : DataRecordFieldType
     {
         public override Guid ConfigId { get { return new Guid("75aef329-27bd-4108-b617-f5cc05ff2aa3"); } }
 
         public FieldNumberPrecision DataPrecision { get; set; }
+
         public FieldNumberDataType DataType { get; set; }
+
         public bool IsNullable { get; set; }
 
         #region Public Methods
@@ -54,7 +57,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                             var longPrecision = new GeneralSettingsManager().GetLongPrecision();
                             decimalPrecision += longPrecision;
                             break;
-                        case FieldNumberPrecision.Normal: 
+                        case FieldNumberPrecision.Normal:
                             var normalPrecision = new GeneralSettingsManager().GetNormalPrecision();
                             decimalPrecision += normalPrecision;
                             break;
@@ -133,8 +136,6 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return false;
         }
 
-        #endregion
-
         public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
         {
             string numberPrecision;
@@ -147,7 +148,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                         case FieldNumberPrecision.Normal:
                         default: numberPrecision = ""; break;
                     }
-                    
+
                     break;
                 case FieldNumberDataType.BigInt:
                 case FieldNumberDataType.Int:
@@ -175,6 +176,38 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
         }
+
+        public override bool CanRoundValue { get { return true; } }
+        public override dynamic GetRoundedValue(dynamic value)
+        {
+            switch (this.DataType)
+            {
+                case FieldNumberDataType.Int:
+                case FieldNumberDataType.BigInt:
+                    return value;
+
+                case FieldNumberDataType.Decimal:
+                    GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
+
+                    decimal valueAsDecimal = Convert.ToDecimal(value);
+                    switch (this.DataPrecision)
+                    {
+                        case FieldNumberPrecision.Normal:
+                            int normalePrecision = generalSettingsManager.GetNormalPrecisionValue();
+                            return Math.Round(valueAsDecimal, normalePrecision);
+
+                        case FieldNumberPrecision.Long:
+                            int longPrecision = generalSettingsManager.GetLongPrecisionValue();
+                            return Math.Round(valueAsDecimal, longPrecision);
+
+                        default: throw new NotSupportedException(string.Format("FieldNumberPrecision {0} not supported.", this.DataPrecision));
+                    }
+
+                default: throw new NotSupportedException(string.Format("FieldNumberDataType {0} not supported.", this.DataType));
+            }
+        }
+
+        #endregion
     }
 
     public enum FieldNumberDataType

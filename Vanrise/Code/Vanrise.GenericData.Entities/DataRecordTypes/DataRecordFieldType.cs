@@ -52,7 +52,6 @@ namespace Vanrise.GenericData.Entities
         public string ConvertFilterMethod { get; set; }
 
         public virtual bool StoreValueSerialized { get { return false; } }
-
         public virtual string SerializeValue(ISerializeDataRecordFieldValueContext context)
         {
             context.ThrowIfNull("context");
@@ -68,6 +67,12 @@ namespace Vanrise.GenericData.Entities
                 return null;
 
             return Vanrise.Common.Serializer.Deserialize(context.Value);
+        }
+
+        public virtual bool CanRoundValue { get { return false; } }
+        public virtual dynamic GetRoundedValue(dynamic value)
+        {
+            throw new NotImplementedException();
         }
     }
 

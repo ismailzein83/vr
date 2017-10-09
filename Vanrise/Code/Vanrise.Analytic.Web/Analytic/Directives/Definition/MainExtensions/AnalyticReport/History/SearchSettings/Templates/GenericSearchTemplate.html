@@ -58,5 +58,21 @@
         </vr-section>
     </vr-columns>
 </vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-section title="Legends">
+            <vr-row>
+                <vr-columns width="1/3row">
+                    <vr-textbox type="text" value="scopeModel.legendHeader" label="Header" isrequired="scopeModel.legendContent != undefined && scopeModel.legendContent.length > 0"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-editor value="scopeModel.legendContent" label="Content" isrequired="scopeModel.legendHeader != undefined  && scopeModel.legendHeader.length > 0"></vr-editor>
+                </vr-columns>
+            </vr-row>
+        </vr-section>
+    </vr-columns>
+</vr-row>
 
 
