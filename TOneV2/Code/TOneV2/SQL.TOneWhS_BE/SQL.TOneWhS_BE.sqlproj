@@ -503,5 +503,9 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetSupplierRatesForZone.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetByIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_CarrierAccountStatusHistory_Insert.sql" />
+    <Build Include="TOneWhS_Sales\Tables\PricingTemplate.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_PricingTemplate_Update.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_PricingTemplate_Insert.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_PricingTemplate_GetAll.sql" />
   </ItemGroup>
 </Project>
