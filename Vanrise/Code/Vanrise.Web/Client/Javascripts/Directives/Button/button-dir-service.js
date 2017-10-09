@@ -186,10 +186,10 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Upload',
                     class: 'glyphicon glyphicon-upload'
                 };
-            case 'ManageSellingCountries':
+            case 'ManageCountries':
                 return {
-                    text: 'Manage Selling Countries',
-                    class: 'glyphicon  glyphicon-plus-sign'
+                    text: 'Manage Countries',
+                    class: undefined
                 };
             case 'Download':
                 return {
