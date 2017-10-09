@@ -22,7 +22,8 @@ BEGIN
 			inv.LockDate,Notes,
 			inv.Settings,
 			SourceId,
-			IsAutomatic
+			IsAutomatic,
+			InvoiceSettingId
 	FROM	VR_Invoice.Invoice inv with(nolock)
 	join @PartnerInvoiceTypeTable pit on  inv.InvoiceTypeID = pit.InvoiceTypeID AND inv.PartnerID = pit.PartnerId 
 	where PaidDate IS NULL AND DueDate <= GETDATE() AND ISNULL(IsDeleted,0) = 0 AND ISNULL(IsDraft, 0) = 0

@@ -11,7 +11,8 @@
 	@PaidDate datetime,
 	@LockDate datetime,
 	@Notes nvarchar(MAX),
-	@SourceID nvarchar(255)
+	@SourceID nvarchar(255),
+	@InvoiceSettingId uniqueidentifier
 AS
 BEGIN
 	
@@ -28,5 +29,6 @@ BEGIN
       ,[LockDate] = @LockDate
       ,[Notes] = @Notes
 	  ,SourceId = @SourceID
+	  ,InvoiceSettingID = @InvoiceSettingId
  WHERE ID = @ID
 END

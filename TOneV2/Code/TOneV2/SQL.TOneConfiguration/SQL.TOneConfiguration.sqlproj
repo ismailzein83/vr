@@ -665,6 +665,7 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByAccountIds.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateSettings.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByAccountIds.sql" />
+    <Build Include="common\Stored Procedures\sp_File_GetByFileIds.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

@@ -27,7 +27,8 @@ select  ParsedString from [VR_Invoice].ParseStringList(@SerialNumbers)
 			vrIn.Notes,
 			vrIn.SourceId,
 			vrIn.Settings,
-			vrIn.IsAutomatic
+			vrIn.IsAutomatic,
+			vrIn.InvoiceSettingId
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	where	
 			(@SerialNumbers is Null or vrIn.SerialNumber IN (SELECT SerialNumber FROM @SerialNumbersTable)) 
