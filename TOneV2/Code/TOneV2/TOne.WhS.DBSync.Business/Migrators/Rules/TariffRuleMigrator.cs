@@ -72,25 +72,113 @@ namespace TOne.WhS.DBSync.Business.Migrators
         private List<SourceRule> GetTariffRules(IEnumerable<SourceTariffRule> sourceTariffRules, RuleType type)
         {
             List<SourceRule> routeRules = new List<SourceRule>();
-            var dicRules = GetRulesDictionary(sourceTariffRules, type);
-            foreach (var rules in dicRules.Values)
+            Dictionary<string, TariffRulesByKeyWithMaxCount> tariffRulesByKeyWithMaxCounts;
+            var dicRules = GetRulesDictionary(sourceTariffRules, type, out tariffRulesByKeyWithMaxCounts);
+            foreach (var item in dicRules)
             {
-                SourceTariffRule sourceRule = rules.First();
-                if (sourceRule == null)
-                    continue;
-                var rule = GetSourceRule(rules, type);
-                if (rule != null)
+                TariffRulesByKeyWithMaxCount tariffRulesByKeyWithMaxCount;
+                string carrierId = item.Key;
+
+                if (tariffRulesByKeyWithMaxCounts.TryGetValue(carrierId, out tariffRulesByKeyWithMaxCount))
                 {
-                    routeRules.Add(rule);
+                    routeRules.Add(GetSourceRule(tariffRulesByKeyWithMaxCount.TariffRulesByKey.TariffRules, type, false));
                 }
-                
+
+                foreach (var tariffByKey in item.Value)
+                {
+                    if (tariffByKey.Value == tariffRulesByKeyWithMaxCount.TariffRulesByKey)
+                        continue;
+                    var rule = GetSourceRule(tariffByKey.Value.TariffRules, type, true);
+                    if (rule != null)
+                    {
+                        routeRules.Add(rule);
+                    }
+                }
             }
             return routeRules;
         }
-        private SourceRule GetSourceRule(List<SourceTariffRule> rules, RuleType type)
+
+        private SourceRule GetSourceRule(List<SourceTariffRule> rules, RuleType type, bool includeZonesCriteria)
         {
             CarrierAccount carrier = null;
             SourceTariffRule defaultRule = rules.FirstOrDefault();
+            TariffRule tariffRule = GetBasicTariffRule(defaultRule);
+
+            switch (type)
+            {
+                case RuleType.Sale:
+                    if (!_allCarrierAccounts.TryGetValue(defaultRule.CustomerId, out carrier))
+                        throw new NullReferenceException(string.Format("customer not found. Customer Source Id {0}.", defaultRule.CustomerId));
+                    tariffRule.Criteria.FieldsValues.Add("CustomerId", new BusinessEntityValues()
+                    {
+                        BusinessEntityGroup = new SelectiveCustomerGroup
+                        {
+                            CustomerIds = new List<int>() { carrier.CarrierAccountId }
+                        }
+                    });
+                    if (includeZonesCriteria)
+                        tariffRule.Criteria.FieldsValues.Add("SaleZoneId", new BusinessEntityValues()
+                        {
+                            BusinessEntityGroup = new SelectiveSaleZoneGroup
+                            {
+                                SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId,
+                                ZoneIds = GetZoneIds(rules, type).ToList()
+                            }
+                        });
+
+                    tariffRule.Settings.CurrencyId = carrier.CarrierAccountSettings == null ? Context.CurrencyId : carrier.CarrierAccountSettings.CurrencyId;
+                    tariffRule.Description = string.Format("Migrated Sale Tariff Rule {0}", Context.Counter++);
+                    tariffRule.DefinitionId = _SaleDefinitionId;
+                    break;
+                case RuleType.Purchase:
+                    if (!_allCarrierAccounts.TryGetValue(defaultRule.SupplierId, out carrier))
+                        throw new NullReferenceException(string.Format("Supplier not found. Supplier Source Id {0}.", defaultRule.CustomerId));
+                    tariffRule.Settings.CurrencyId = Context.CurrencyId;
+                    tariffRule.Description = string.Format("Migrated Supplier Tariff Rule {0}", Context.Counter++);
+                    tariffRule.DefinitionId = _CostDefinitionId;
+
+                    if (includeZonesCriteria)
+                    {
+                        tariffRule.Criteria.FieldsValues.Add("SupplierZoneId", new BusinessEntityValues()
+                        {
+                            BusinessEntityGroup = new SelectiveSupplierZoneGroup()
+                            {
+                                SuppliersWithZones = new List<SupplierWithZones>()
+                            {
+                               new SupplierWithZones
+                                {
+                                    SupplierId = carrier.CarrierAccountId,
+                                    SupplierZoneIds =   GetZoneIds(rules, type).ToList()
+                                }
+                            }
+                            }
+                        });
+                    }
+                    else
+                    {
+                        tariffRule.Criteria.FieldsValues.Add("SupplierId", new StaticValues
+                        {
+                            Values = ((new List<int> { carrier.CarrierAccountId }).Cast<Object>()).ToList()
+                        });
+                    }
+                    break;
+            }
+            SourceRule sourceRule = new SourceRule
+            {
+                Rule = new Rule
+                {
+                    BED = RuleMigrator.s_defaultRuleBED,
+                    EED = null,
+                    TypeId = _ruleTypeId,
+                    RuleDetails = Serializer.Serialize(tariffRule)
+                }
+            };
+
+            return sourceRule;
+        }
+
+        private static TariffRule GetBasicTariffRule(SourceTariffRule defaultRule)
+        {
             TariffRule tariffRule = new TariffRule
             {
                 BeginEffectiveTime = defaultRule.BED,
@@ -111,66 +199,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     FieldsValues = new Dictionary<string, GenericRuleCriteriaFieldValues>()
                 }
             };
-
-            switch (type)
-            {
-                case RuleType.Sale:
-                    if (!_allCarrierAccounts.TryGetValue(defaultRule.CustomerId, out carrier))
-                        throw new NullReferenceException(string.Format("customer not found. Customer Source Id {0}.", defaultRule.CustomerId));
-                    tariffRule.Criteria.FieldsValues.Add("CustomerId", new BusinessEntityValues()
-                    {
-                        BusinessEntityGroup = new SelectiveCustomerGroup
-                        {
-                            CustomerIds = new List<int>() { carrier.CarrierAccountId }
-                        }
-                    });
-                    tariffRule.Criteria.FieldsValues.Add("SaleZoneId", new BusinessEntityValues()
-                    {
-                        BusinessEntityGroup = new SelectiveSaleZoneGroup
-                        {
-                            SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId,
-                            ZoneIds = GetZoneIds(rules, type).ToList()
-                        }
-                    });
-                    tariffRule.Settings.CurrencyId = carrier.CarrierAccountSettings == null ? Context.CurrencyId : carrier.CarrierAccountSettings.CurrencyId;
-                    tariffRule.Description = string.Format("Migrated Sale Tariff Rule {0}", Context.Counter++);
-                    tariffRule.DefinitionId = _SaleDefinitionId;
-                    break;
-                case RuleType.Purchase:
-                    if (!_allCarrierAccounts.TryGetValue(defaultRule.SupplierId, out carrier))
-                        throw new NullReferenceException(string.Format("Supplier not found. Supplier Source Id {0}.", defaultRule.CustomerId));
-                    tariffRule.Settings.CurrencyId = Context.CurrencyId;
-                    tariffRule.Description = string.Format("Migrated Supplier Tariff Rule {0}", Context.Counter++);
-                    tariffRule.DefinitionId = _CostDefinitionId;
-                    tariffRule.Criteria.FieldsValues.Add("SupplierZoneId", new BusinessEntityValues()
-                    {
-                        BusinessEntityGroup = new SelectiveSupplierZoneGroup()
-                        {
-                            SuppliersWithZones = new List<SupplierWithZones>()
-                            {
-                               new SupplierWithZones
-                                {
-                                    SupplierId = carrier.CarrierAccountId,
-                                    SupplierZoneIds =   GetZoneIds(rules, type).ToList()
-                                }
-                            }
-                        }
-                    });
-
-                    break;
-            }
-            SourceRule sourceRule = new SourceRule
-            {
-                Rule = new Rule
-                {
-                    BED = RuleMigrator.s_defaultRuleBED,
-                    EED = null,
-                    TypeId = _ruleTypeId,
-                    RuleDetails = Serializer.Serialize(tariffRule)
-                }
-            };
-
-            return sourceRule;
+            return tariffRule;
         }
         HashSet<long> GetZoneIds(List<SourceTariffRule> rules, RuleType type)
         {
@@ -205,21 +234,36 @@ namespace TOne.WhS.DBSync.Business.Migrators
             }
             return zoneIds;
         }
-        Dictionary<string, List<SourceTariffRule>> GetRulesDictionary(IEnumerable<SourceTariffRule> tariffRules, RuleType type)
+        Dictionary<string, Dictionary<string, TariffRulesByKey>> GetRulesDictionary(IEnumerable<SourceTariffRule> tariffRules, RuleType type, out Dictionary<string, TariffRulesByKeyWithMaxCount> tariffRulesByKeyWithMaxCounts)
         {
-            Dictionary<string, List<SourceTariffRule>> dicRules = new Dictionary<string, List<SourceTariffRule>>();
+            tariffRulesByKeyWithMaxCounts = new Dictionary<string, TariffRulesByKeyWithMaxCount>();
+
+            Dictionary<string, Dictionary<string, TariffRulesByKey>> dicRules = new Dictionary<string, Dictionary<string, TariffRulesByKey>>();
             foreach (var tariffRule in tariffRules)
             {
+                string carrierId = type == RuleType.Sale ? tariffRule.CustomerId : tariffRule.SupplierId;
+                TariffRulesByKeyWithMaxCount tariffRulesByKeyWithMaxCount = tariffRulesByKeyWithMaxCounts.GetOrCreateItem(carrierId);
+
+                Dictionary<string, TariffRulesByKey> dictariffRules = dicRules.GetOrCreateItem(carrierId);
+
                 string key = GetTariffRuleKey(tariffRule, type);
 
-                List<SourceTariffRule> lstRules;
-                if (!dicRules.TryGetValue(key, out lstRules))
+                TariffRulesByKey lstRules;
+                if (!dictariffRules.TryGetValue(key, out lstRules))
                 {
-                    lstRules = new List<SourceTariffRule>();
-                    dicRules.Add(key, lstRules);
+                    lstRules = new TariffRulesByKey();
+                    dictariffRules.Add(key, lstRules);
                 }
-                lstRules.Add(tariffRule);
+                lstRules.TariffRules.Add(tariffRule);
+                lstRules.Counter++;
+                if (tariffRulesByKeyWithMaxCount.MaxCount < lstRules.Counter)
+                {
+                    tariffRulesByKeyWithMaxCount.MaxCount = lstRules.Counter;
+                    tariffRulesByKeyWithMaxCount.TariffRulesByKey = lstRules;
+                }
             }
+
+
             return dicRules;
         }
         SourceRule GetDefaultSupplierTariffRule()
@@ -299,5 +343,22 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
         #endregion
 
+    }
+
+    class TariffRulesByKey
+    {
+        public TariffRulesByKey()
+        {
+            this.TariffRules = new List<SourceTariffRule>();
+        }
+        public List<SourceTariffRule> TariffRules { get; set; }
+        public int Counter { get; set; }
+        public string CarrierId { get; set; }
+    }
+
+    class TariffRulesByKeyWithMaxCount
+    {
+        public TariffRulesByKey TariffRulesByKey { get; set; }
+        public int MaxCount { get; set; }
     }
 }

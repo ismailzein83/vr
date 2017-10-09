@@ -148,7 +148,7 @@
     <Compile Include="DBSyncTaskAction.cs" />
     <Compile Include="DBSyncTaskActionArgument.cs" />
     <Compile Include="Migrators\Rules\RouteBlockRuleMigrator.cs" />
-    <Compile Include="SaleEntityRoutingProductMigrator.cs" />
+    <Compile Include="Migrators\SaleEntityRoutingProductMigrator.cs" />
     <Compile Include="SwitchMigration\ISwitchParser.cs" />
     <Compile Include="SwitchMigration\IVSwitchMigrationParser.cs" />
     <Compile Include="SwitchMigration\MVTSSwitchMigrationParser.cs" />
