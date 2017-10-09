@@ -11,6 +11,7 @@ using Vanrise.Entities;
 using Vanrise.Notification.Business;
 using Vanrise.AccountBalance.Business.Extensions;
 using Retail.BusinessEntity.APIEntities;
+using Vanrise.Invoice.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -19,7 +20,10 @@ namespace Retail.BusinessEntity.Business
         static AccountBEManager s_accountManager = new AccountBEManager();
         static AccountBEDefinitionManager s_accountBEDefinitionManager = new AccountBEDefinitionManager();
         static FinancialAccountDefinitionManager s_financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
-      
+        static InvoiceManager s_invoiceManager = new InvoiceManager();
+        static InvoiceAccountManager s_invoiceAccountManager = new InvoiceAccountManager();
+        static LiveBalanceManager s_liveBalanceManager = new LiveBalanceManager();
+
         #region Public Methods
 
         #region Main Methods
@@ -74,21 +78,18 @@ namespace Retail.BusinessEntity.Business
                 accountBEFinancialAccountsSettings.FinancialAccounts.Remove(financialAccount);
                 accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToEdit.FinancialAccount);
 
-                if (UpdateAccountEffectiveDate(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out errorrMessage))
+                if (TryUpdateFinancialAccount(financialAccountToEdit, out errorrMessage))
                 {
-                    if (s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings))
-                    {
-                        Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToEdit.AccountBEDefinitionId);
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(financialAccountToEdit.AccountBEDefinitionId);
 
-                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                        updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
-                    }
-                    else
-                    {
-                        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-                    }
-
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = FinancialAccountDetailMapper(financialAccountToEdit.FinancialAccount);
                 }
+                else
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                }
+
             }
             if (errorrMessage != null)
             {
@@ -96,6 +97,18 @@ namespace Retail.BusinessEntity.Business
                 updateOperationOutput.ShowExactMessage = true;
             }
             return updateOperationOutput;
+        }
+        internal bool TryUpdateFinancialAccount(FinancialAccountToEdit financialAccountToEdit, out string errorrMessage)
+        {
+            var accountBEFinancialAccountsSettings = GetAccountBEFinancialAccountsSettings(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId);
+            var financialAccount = accountBEFinancialAccountsSettings.FinancialAccounts.FindRecord(x => x.SequenceNumber == financialAccountToEdit.FinancialAccount.SequenceNumber);
+            accountBEFinancialAccountsSettings.FinancialAccounts.Remove(financialAccount);
+            accountBEFinancialAccountsSettings.FinancialAccounts.Add(financialAccountToEdit.FinancialAccount);
+            if (UpdateAccountEffectiveDate(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out errorrMessage))
+            {
+                return s_accountManager.UpdateAccountExtendedSetting(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, accountBEFinancialAccountsSettings);
+            }
+            return false;
         }
         public FinancialAccountRuntimeEditor GetFinancialAccountEditorRuntime(Guid accountBEDefinitionId, long accountId, int sequenceNumber)
         {
@@ -815,7 +828,63 @@ namespace Retail.BusinessEntity.Business
 
             return result;
         }
+        public void ReflectStatusToInvoiceAndBalanceAccounts(Guid accountBEDefinitionId ,VRAccountStatus vrAccountStatus, IEnumerable<FinancialAccountData> financialAccounts)
+        {
+            if (financialAccounts != null)
+            {
+                foreach (var financialAccount in financialAccounts)
+                {
+                    Guid? balanceAccountTypeId = financialAccount.BalanceAccountTypeId;
+                    DateTime? eedToSet = null;
+                    if (balanceAccountTypeId.HasValue)
+                        s_liveBalanceManager.TryUpdateLiveBalanceStatus(financialAccount.FinancialAccountId, balanceAccountTypeId.Value, vrAccountStatus, false);
 
+                    if (financialAccount.InvoiceTypeId.HasValue)
+                    {
+                        s_invoiceAccountManager.TryUpdateInvoiceAccountStatus(financialAccount.InvoiceTypeId.Value, financialAccount.FinancialAccountId, vrAccountStatus, false);
+                        var lastInvoiceToDate = s_invoiceManager.GetLastInvoiceToDate(financialAccount.InvoiceTypeId.Value, financialAccount.FinancialAccountId);
+                        if (lastInvoiceToDate.HasValue)
+                            eedToSet = lastInvoiceToDate.Value.AddDays(1).Date;
+                    }
+                    if (vrAccountStatus == VRAccountStatus.InActive)
+                    {
+                        CloseFinancialAccount(accountBEDefinitionId,vrAccountStatus, financialAccount, eedToSet, balanceAccountTypeId);
+                    }
+                }
+            }
+        }
+        private void CloseFinancialAccount(Guid accountBEDefinitionId ,VRAccountStatus vrAccountStatus, FinancialAccountData financialAccount, DateTime? eedToSet, Guid? balanceAccountTypeId)
+        {
+            if (!financialAccount.FinancialAccount.EED.HasValue || financialAccount.FinancialAccount.EED.Value > DateTime.Today)
+            {
+                if (!eedToSet.HasValue && balanceAccountTypeId.HasValue)
+                {
+                    var lastTransactionDate = new BillingTransactionManager().GetLastTransactionDate(balanceAccountTypeId.Value, financialAccount.FinancialAccountId);
+                    if (lastTransactionDate.HasValue)
+                        eedToSet = lastTransactionDate.Value;
+                }
+                if (!eedToSet.HasValue)
+                    eedToSet = DateTime.Today;
+                if (financialAccount.FinancialAccount.BED > eedToSet)
+                    eedToSet = financialAccount.FinancialAccount.BED;
+                var financialAccountToEdit = new FinancialAccountToEdit
+                {
+                    AccountBEDefinitionId = accountBEDefinitionId,
+                    AccountId = financialAccount.Account.AccountId,
+                    FinancialAccount = new FinancialAccount
+                    {
+                        SequenceNumber = financialAccount.FinancialAccount.SequenceNumber,
+                        ExtendedSettings = financialAccount.FinancialAccount.ExtendedSettings,
+                        BED = financialAccount.FinancialAccount.BED,
+                        EED = eedToSet,
+                        FinancialAccountDefinitionId = financialAccount.FinancialAccount.FinancialAccountDefinitionId
+                    }
+                };
+                string errorMessage = null;
+                if (UpdateAccountEffectiveDate(financialAccountToEdit.AccountBEDefinitionId, financialAccountToEdit.AccountId, financialAccountToEdit.FinancialAccount, out  errorMessage))
+                    TryUpdateFinancialAccount(financialAccountToEdit, out errorMessage);
+            }
+        }
         #endregion
 
         #region Private Classes

@@ -499,10 +499,20 @@ namespace Retail.BusinessEntity.Business
             {
                 var accountStatusHistoryManager = new AccountStatusHistoryManager();
                 var statusDefinitionManager = new Vanrise.Common.Business.StatusDefinitionManager();
+                FinancialAccountManager financialAccountManager = new Business.FinancialAccountManager();
+                var status = statusDefinitionManager.GetStatusDefinition(statusId);
+                VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
+                if(!status.Settings.IsActive)
+                {
+                    vrAccountStatus = VRAccountStatus.InActive;
+                }
                 string statusName = statusDefinitionManager.GetStatusDefinitionName(statusId);
                 IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
                 foreach (var account in accounts)
                 {
+                    var financialAccountData = financialAccountManager.GetFinancialAccounts(accountBEDefinitionId,account.AccountId,false);
+                    financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(accountBEDefinitionId, vrAccountStatus, financialAccountData);
+
                     long accountId = account.AccountId;
                     Guid previousStatusId = account.StatusId;
                     string previousStatusName = statusDefinitionManager.GetStatusDefinitionName(previousStatusId);
