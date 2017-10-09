@@ -19,6 +19,7 @@ namespace Vanrise.HelperTools
     {
         public static string ServerIP { get { return ConfigurationManager.AppSettings["ServerIP"]; } }
         public static string ActiveDBs { get { return ConfigurationManager.AppSettings["ActiveDBs"]; } }
+        public static string PreventCreateDbScript { get { return ConfigurationManager.AppSettings["PreventCreateDbScript"]; } }
         public static string SqlFilesOutputPath { get { return ConfigurationManager.AppSettings["sqlFilesOutputPath"]; } }
         public static string JavascriptsOutputPath { get { return ConfigurationManager.AppSettings["javascriptsOutputPath"]; } }
         public static string VersionDateFormat { get { return ConfigurationManager.AppSettings["VersionDateFormat"]; } }
@@ -122,9 +123,19 @@ namespace Vanrise.HelperTools
 
                     string[] allFiles = Directory.GetFiles(directory, "*.sql", SearchOption.AllDirectories); ;
                     Array.Sort(allFiles);
+
                     if (File.Exists(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt")))
                     {
                         allFiles = File.ReadAllLines(string.Format("{0}\\{1}{2}", directory, orgDirectoryName, ".txt"));
+
+                        if (orgDirectoryName == "DBsStructure")
+                        {
+                            for (int i = 0; i < allFiles.Length; i++)
+                            {
+                                string db = allFiles[i].Replace("#VersionDate#", currentDateShort);
+                                allFiles[i] = db;
+                            }
+                        }
                     }
 
                     //add folder content to created file
@@ -174,12 +185,12 @@ namespace Vanrise.HelperTools
             Parallel.ForEach(lstDBs, item =>
             {
                 Console.WriteLine(string.Format("Creating database structure for: {0}", item));
-                GenerateSQLDBScript(item, string.Format(sqlFilesOutputPath, currentDateShort, "DBsStructure", projectName), currentDate, currentDateShort);
+                GenerateSQLDBScript(item, lstDBs[0], string.Format(sqlFilesOutputPath, currentDateShort, "DBsStructure", projectName), currentDateShort, currentDateShort, !string.IsNullOrEmpty(projectName));
                 Console.WriteLine(string.Format("Finish creating database structure for: {0}", item));
             });
         }
 
-        public static void GenerateSQLDBScript(string item, string sqlFilesOutputPath, string currentDate, string currentDateShort)
+        public static void GenerateSQLDBScript(string item, string mainItem, string sqlFilesOutputPath, string currentDate, string currentDateShort, bool autoGeneration)
         {
             var sb = new StringBuilder();
 
@@ -208,17 +219,29 @@ namespace Vanrise.HelperTools
             scriptOptions.SchemaQualify = true;
             scriptOptions.AllowSystemObjects = true;
 
+            bool dbExist = false;
+
             foreach (string script in dbname.Script(scriptOptions))
             {
-                sb.AppendLine(script);
-                sb.AppendLine("GO");
+                dbExist = DbExist(script, autoGeneration);
+                if (!dbExist)
+                {
+                    sb.AppendLine(script);
+                    sb.AppendLine("GO");
+                }
+                else
+                {
+                    sb.AppendLine(string.Format("USE [{0}]", mainItem));
+                    sb.AppendLine("GO");
+                }
             }
 
             Urn[] DatabaseURNs = new Urn[] { dbname.Urn };
             StringCollection scriptCollection = scripter.Script(DatabaseURNs);
             foreach (string script in scriptCollection)
             {
-                if (script.Contains("CREATE DATABASE"))
+                dbExist = DbExist(script, autoGeneration);
+                if (script.Contains("CREATE DATABASE") && !dbExist)
                 {
                     sb.AppendLine(string.Format("CREATE DATABASE [{0}]", item));
                     sb.AppendLine("GO");
@@ -228,8 +251,11 @@ namespace Vanrise.HelperTools
                 }
                 else
                 {
-                    sb.AppendLine(script);
-                    sb.AppendLine("GO");
+                    if (!dbExist)
+                    {
+                        sb.AppendLine(script);
+                        sb.AppendLine("GO");
+                    }
                 }
             }
 
@@ -243,11 +269,37 @@ namespace Vanrise.HelperTools
             }
 
             sb = sb.Replace(item, string.Format("{0}_{1}", item, currentDateShort));
+
+            if (item != mainItem && !item.Contains(mainItem) && !mainItem.Contains(item))
+            {
+                sb = sb.Replace(mainItem, string.Format("{0}_{1}", mainItem, currentDateShort));
+            }
+
             if (!Directory.Exists(sqlFilesOutputPath))
             {
                 Directory.CreateDirectory(sqlFilesOutputPath);
             }
             File.WriteAllText(string.Format("{0}\\{1}_{2}.sql", sqlFilesOutputPath, item, currentDate), sb.ToString());
+        }
+
+        private static bool DbExist(string script, bool autoGeneration)
+        {
+            bool exist = false;
+
+            if (autoGeneration)
+            {
+                List<string> lst = Common.GetDBs("PreventCreateDbScript");
+
+                foreach (string db in lst)
+                {
+                    if (!exist)
+                    {
+                        exist = script.Contains(db);
+                    }
+                }
+            }
+
+            return exist;
         }
 
         private static StringCollection GetTransferScript(Database database)
