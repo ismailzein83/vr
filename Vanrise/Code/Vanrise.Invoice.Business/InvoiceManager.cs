@@ -97,7 +97,7 @@ namespace Vanrise.Invoice.Business
                     var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                     IEnumerable<GeneratedInvoiceBillingTransaction> billingTarnsactions;
                     GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTarnsactions);
-
+                    
                     Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic);
                     invoice.SerialNumber = currentInvocie.SerialNumber;
                     invoice.Note = currentInvocie.Note;
@@ -801,6 +801,8 @@ namespace Vanrise.Invoice.Business
         }
         private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic invoiceDetails, int duePeriod, bool isAutomatic)
         {
+            var invoiceSetting = _partnerManager.GetInvoicePartnerSetting(invoiceType.InvoiceTypeId, partnerId);
+            invoiceSetting.ThrowIfNull("invoiceSetting");
             Entities.Invoice invoice = new Entities.Invoice
             {
                 UserId = new Vanrise.Security.Business.SecurityContext().GetLoggedInUserId(),
@@ -810,7 +812,8 @@ namespace Vanrise.Invoice.Business
                 PartnerId = partnerId,
                 ToDate = toDate,
                 IssueDate = issueDate,
-                IsAutomatic = isAutomatic
+                IsAutomatic = isAutomatic,
+                InvoiceSettingId = invoiceSetting.InvoiceSetting.InvoiceSettingId
             };
             var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
             invoice.DueDate = issueDate.AddDays(duePeriod);

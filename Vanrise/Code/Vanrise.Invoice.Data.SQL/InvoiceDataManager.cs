@@ -104,8 +104,8 @@ namespace Vanrise.Invoice.Data.SQL
                                                                          invoice.PaidDate,
                                                                          invoice.LockDate,
                                                                          invoice.Note,
-                                                                         invoice.SourceId
-                                                                         ) > 0;
+                                                                         invoice.SourceId,
+                                                                         invoice.InvoiceSettingId) > 0;
         }
         public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
         {
@@ -140,7 +140,8 @@ namespace Vanrise.Invoice.Data.SQL
                 invoiceEntity.SourceId,
                 true,
                 invoiceEntity.IsAutomatic,
-                serializedSettings
+                serializedSettings,
+                invoiceEntity.InvoiceSettingId
             );
 
             insertedInvoiceId = Convert.ToInt64(invoiceId);
@@ -307,7 +308,8 @@ namespace Vanrise.Invoice.Data.SQL
                 Note = reader["Notes"] as string,
                 SourceId = reader["SourceID"] as string,
                 IsAutomatic = GetReaderValue<Boolean>(reader, "IsAutomatic"),
-                Settings = Vanrise.Common.Serializer.Deserialize<InvoiceSettings>(reader["Settings"] as string)
+                Settings = Vanrise.Common.Serializer.Deserialize<InvoiceSettings>(reader["Settings"] as string),
+                InvoiceSettingId =  GetReaderValue<Guid>(reader, "InvoiceSettingId"),
             };
             return invoice;
         }

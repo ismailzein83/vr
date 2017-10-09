@@ -17,7 +17,7 @@ namespace Vanrise.Invoice.Entities
         public string SerialNumber { get; set; }
 
         public DateTime FromDate { get; set; }
-
+        public Guid InvoiceSettingId { get; set; }
         public DateTime ToDate { get; set; }
 
         public DateTime IssueDate { get; set; }
