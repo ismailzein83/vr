@@ -207,6 +207,7 @@
   <ItemGroup>
     <Content Include="WhS_Analytics\Constant\RealeaseCodeAnalyticDimensionEnum.js" />
     <Content Include="WhS_Analytics\Constant\BillingReportTypeEnum.js" />
+    <Content Include="WhS_Analytics\Constant\VariationReportDimensionSuffixEnum.js" />
     <Content Include="WhS_Analytics\Directives\BillingReports\vr-whs-analytics-billingreporttype-selector.js" />
     <Content Include="WhS_Analytics\Directives\CallStatus\vr-whs-analytics-callstatus-selector.js" />
     <Content Include="WhS_Analytics\Directives\PhoneNumber\vr-whs-analytics-phonenumber-selector.js" />

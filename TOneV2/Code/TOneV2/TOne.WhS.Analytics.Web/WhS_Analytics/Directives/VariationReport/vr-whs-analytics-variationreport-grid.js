@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VariationReportGridDirective.$inject = ['WhS_Analytics_VariationReportAPIService', 'WhS_Analytics_VariationReportDimensionEnum', 'WhS_Analytics_VariationReportTypeEnum', 'WhS_Analytics_VariationReportTimePeriodEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    VariationReportGridDirective.$inject = ['WhS_Analytics_VariationReportAPIService', 'WhS_Analytics_VariationReportDimensionEnum', 'WhS_Analytics_VariationReportTypeEnum', 'WhS_Analytics_VariationReportTimePeriodEnum', 'WhS_Analytics_VariationReportDimensionSuffixEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
-    function VariationReportGridDirective(WhS_Analytics_VariationReportAPIService, WhS_Analytics_VariationReportDimensionEnum, WhS_Analytics_VariationReportTypeEnum, WhS_Analytics_VariationReportTimePeriodEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function VariationReportGridDirective(WhS_Analytics_VariationReportAPIService, WhS_Analytics_VariationReportDimensionEnum, WhS_Analytics_VariationReportTypeEnum, WhS_Analytics_VariationReportTimePeriodEnum, WhS_Analytics_VariationReportDimensionSuffixEnum, UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: 'E',
             scope: {
@@ -94,6 +94,13 @@
 
                 $scope.scopeModel.showExpandIcon = function (dataItem) {
                     return (dataItem.Dimension != null);
+                };
+
+                $scope.scopeModel.getRowStyle = function (row) {
+                    var rowStyle;
+                    if (row.DimensionSuffix == WhS_Analytics_VariationReportDimensionSuffixEnum.Total.value)
+                        rowStyle = { CssClass: 'vr-control-label' };
+                    return rowStyle;
                 };
             }
 
