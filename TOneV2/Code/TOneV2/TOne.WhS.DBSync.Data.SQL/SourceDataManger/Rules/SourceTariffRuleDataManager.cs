@@ -41,7 +41,8 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                 CallFee = GetReaderValue<decimal>(reader, "CallFee"),
                 FirstPeriod = GetReaderValue<byte>(reader, "FirstPeriod"),
                 FirstPeriodRate = GetReaderValue<decimal>(reader, "FirstPeriodRate"),
-                FractionUnit = GetReaderValue<byte>(reader, "FractionUnit")
+                FractionUnit = GetReaderValue<byte>(reader, "FractionUnit"),
+                SupplierProfileID = reader["ProfileID"].ToString()
             };
         }
 
@@ -56,7 +57,9 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                                                           ,[FractionUnit]
                                                           ,[BeginEffectiveDate]
                                                           ,[EndEffectiveDate]
+														  ,ca.ProfileID
                                                       FROM      [dbo].[Tariff]
+													  join CarrierAccount ca on ca.CarrierAccountID = SupplierID
                                                       WHERE  ((@GetEffectiveOnly = 0 and BeginEffectiveDate <= getdate()) 
                                                                 or (@GetEffectiveOnly = 1 and IsEffective = 'Y'))";
     }

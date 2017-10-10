@@ -29,6 +29,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             get { return "Tariff"; }
         }
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
+        readonly Dictionary<string, CarrierProfile> _allCarrierProfiles;
         readonly Dictionary<string, SupplierZone> _allSupplierZones;
         readonly Dictionary<string, SaleZone> _allSaleZones;
         readonly int _ruleTypeId;
@@ -41,6 +42,10 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
+
+
+            var dbTableCarrierProfile = Context.MigrationContext.DBTables[DBTableName.CarrierProfile];
+            _allCarrierProfiles = (Dictionary<string, CarrierProfile>)dbTableCarrierProfile.Records;
 
             var dtTableSupplierZones = Context.MigrationContext.DBTables[DBTableName.SupplierZone];
             _allSupplierZones = (Dictionary<string, SupplierZone>)dtTableSupplierZones.Records;
@@ -133,7 +138,12 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 case RuleType.Purchase:
                     if (!_allCarrierAccounts.TryGetValue(defaultRule.SupplierId, out carrier))
                         throw new NullReferenceException(string.Format("Supplier not found. Supplier Source Id {0}.", defaultRule.CustomerId));
-                    tariffRule.Settings.CurrencyId = Context.CurrencyId;
+                    CarrierProfile profile;
+                    if (!_allCarrierProfiles.TryGetValue(defaultRule.SupplierProfileID, out profile))
+                        throw new NullReferenceException(string.Format("Profile not found. Profile Source Id {0}.", defaultRule.SupplierProfileID));
+
+                    profile.ThrowIfNull("profile.Settings", defaultRule.SupplierProfileID);
+                    tariffRule.Settings.CurrencyId = profile.Settings.CurrencyId;
                     tariffRule.Description = string.Format("Migrated Supplier Tariff Rule {0}", Context.Counter++);
                     tariffRule.DefinitionId = _CostDefinitionId;
 

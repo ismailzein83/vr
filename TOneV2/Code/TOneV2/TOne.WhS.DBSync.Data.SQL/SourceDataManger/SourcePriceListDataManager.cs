@@ -61,13 +61,13 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         const string query_getSupplierSourcePriceLists = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, NULL SourceFileName, p.BeginEffectiveDate , NULL SourceFileBytes, IsSent
                                                             FROM         PriceList AS p WITH (NOLOCK)
-                                                           join CarrierAccount ca on ca.CarrierAccountID = p.CustomerID
+                                                           join CarrierAccount ca on ca.CarrierAccountID = p.SupplierID
 															where p.CustomerID = 'SYS' and ca.AccountType <> 0 ";
 
         const string query_getSupplierSourcePriceListsWithData = @"															SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, p.SourceFileName, p.BeginEffectiveDate , data.SourceFileBytes, p.IsSent
                                                             FROM         PriceList AS p WITH (NOLOCK)
 															LEFT JOIN PriceListData AS data WITH (NOLOCK) ON p.PriceListID = data.PriceListID
-															join CarrierAccount ca on ca.CarrierAccountID = p.CustomerID
+															join CarrierAccount ca on ca.CarrierAccountID = p.SupplierID
                                                             WHERE     (p.CustomerID = 'SYS') and ca.AccountType <> 0 ";
 
     }

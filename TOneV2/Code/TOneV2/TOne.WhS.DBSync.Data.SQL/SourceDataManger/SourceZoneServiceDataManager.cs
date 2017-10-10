@@ -65,7 +65,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                         FROM Rate WITH (NOLOCK) INNER JOIN
                                                         Zone WITH (NOLOCK) ON Rate.ZoneID = Zone.ZoneID INNER JOIN
                                                         PriceList WITH (NOLOCK) ON Rate.PriceListID = PriceList.PriceListID 
-														Inner Join CarrierAccount ca on ca.CarrierAccountID = PriceList.CustomerID
+														Inner Join CarrierAccount ca on ca.CarrierAccountID = PriceList.SupplierID
 														where Zone.SupplierID <> 'SYS'  and ca.AccountType <> 0 ";
 
     }

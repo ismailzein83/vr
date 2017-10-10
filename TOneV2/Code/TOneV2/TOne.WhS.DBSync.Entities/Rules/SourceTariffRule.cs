@@ -16,6 +16,7 @@ namespace TOne.WhS.DBSync.Entities
         public int FirstPeriod { get; set; }
         public bool RepeatFirstPeriod { get; set; }
         public int FractionUnit { get; set; }
+        public string SupplierProfileID { get; set; }
         
     }
 }
