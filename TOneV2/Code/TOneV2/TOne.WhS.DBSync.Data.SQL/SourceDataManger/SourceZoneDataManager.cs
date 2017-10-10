@@ -15,8 +15,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public List<SourceZone> GetSourceZones(bool isSaleZone, bool onlyEffective)
         {
-            string queryOnlyEffective = onlyEffective ? "and Zone.IsEffective = 'Y'" : string.Empty;
-            return GetItemsText(query_getSourceZones + (isSaleZone ? " and SupplierID = 'SYS'" : " and SupplierID <> 'SYS'") + queryOnlyEffective, SourceZoneMapper, null);
+            string queryOnlyEffective = onlyEffective ? " and Zone.IsEffective = 'Y'" : string.Empty;
+            return GetItemsText((isSaleZone ? query_getSourceZones_Sale : query_getSourceZones_Purchase) + queryOnlyEffective, SourceZoneMapper, null);
         }
 
         private SourceZone SourceZoneMapper(IDataReader arg)
@@ -32,6 +32,11 @@ namespace TOne.WhS.DBSync.Data.SQL
             };
         }
 
-        const string query_getSourceZones = @"SELECT  ZoneID, CodeGroup, Name, SupplierID, BeginEffectiveDate, EndEffectiveDate  FROM [dbo].[Zone] WITH (NOLOCK) where ZoneID <> -1";
+        const string query_getSourceZones_Sale = @"SELECT  ZoneID, CodeGroup, Name, SupplierID, BeginEffectiveDate, EndEffectiveDate  FROM [dbo].[Zone] WITH (NOLOCK) where ZoneID <> -1 and SupplierID = 'SYS' ";
+
+        const string query_getSourceZones_Purchase = @"SELECT  ZoneID, CodeGroup, Name, SupplierID, BeginEffectiveDate, EndEffectiveDate  FROM [dbo].[Zone] WITH (NOLOCK) 
+                                                        join CarrierAccount ca on ca.CarrierAccountID = SupplierId
+                                                        where ZoneID <> -1 and SupplierID <> 'SYS' and ca.AccountType <> 0 ";
+
     }
 }

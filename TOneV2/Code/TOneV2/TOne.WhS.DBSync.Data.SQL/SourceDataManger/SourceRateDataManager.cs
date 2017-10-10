@@ -16,15 +16,15 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public List<SourceRate> GetSourceRates(bool isSaleRate, bool onlyEffective)
         {
-            string queryOnlyEffective = onlyEffective ? "and Rate.IsEffective = 'Y'" : string.Empty;
-            return GetItemsText(query_getSourceRates + (isSaleRate ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'") + queryOnlyEffective, SourceRateMapper, null);
+            string queryOnlyEffective = onlyEffective ? " and Rate.IsEffective = 'Y'" : string.Empty;
+            return GetItemsText((isSaleRate ? query_getSourceRates_Sale : query_getSourceRates_Purchase) + queryOnlyEffective, SourceRateMapper, null);
         }
 
 
         public void LoadSourceItems(bool isSaleRate, bool onlyEffective, Action<SourceRate> itemToAdd)
         {
             string queryOnlyEffective = onlyEffective ? "and Rate.IsEffective = 'Y'" : string.Empty;
-            ExecuteReaderText(query_getSourceRates + (isSaleRate ? "where Zone.SupplierID = 'SYS'" : "where Zone.SupplierID <> 'SYS'") + queryOnlyEffective, (reader) =>
+            ExecuteReaderText((isSaleRate ? query_getSourceRates_Sale : query_getSourceRates_Purchase) + queryOnlyEffective, (reader) =>
             {
                 while (reader.Read())
                 {
@@ -79,12 +79,24 @@ namespace TOne.WhS.DBSync.Data.SQL
         }
 
 
-        const string query_getSourceRates = @"SELECT    Rate.RateID RateID, Rate.PriceListID PriceListID, Rate.ZoneID ZoneID,
+        const string query_getSourceRates_Sale = @"SELECT Rate.RateID RateID, Rate.PriceListID PriceListID, Rate.ZoneID ZoneID,
                                                         Rate.Rate Rate, Rate.OffPeakRate OffPeakRate, Rate.WeekendRate WeekendRate,
                                                         Rate.BeginEffectiveDate BeginEffectiveDate, Rate.EndEffectiveDate EndEffectiveDate,
                                                         Rate.Change, Rate.ServicesFlag, PriceList.CurrencyID CurrencyID, PriceList.CustomerID
-                                                        FROM Rate WITH (NOLOCK) INNER JOIN
-                                                        Zone WITH (NOLOCK) ON Rate.ZoneID = Zone.ZoneID INNER JOIN
-                                                        PriceList WITH (NOLOCK) ON Rate.PriceListID = PriceList.PriceListID ";
+                                                        FROM Rate WITH (NOLOCK) 
+														INNER JOIN Zone WITH (NOLOCK) ON Rate.ZoneID = Zone.ZoneID 
+														INNER JOIN PriceList WITH (NOLOCK) ON Rate.PriceListID = PriceList.PriceListID
+														Inner Join CarrierAccount ca on ca.CarrierAccountID = PriceList.CustomerID
+														where Zone.SupplierID = 'SYS'  and ca.AccountType <> 2 ";
+
+        const string query_getSourceRates_Purchase = @"SELECT Rate.RateID RateID, Rate.PriceListID PriceListID, Rate.ZoneID ZoneID,
+                                                        Rate.Rate Rate, Rate.OffPeakRate OffPeakRate, Rate.WeekendRate WeekendRate,
+                                                        Rate.BeginEffectiveDate BeginEffectiveDate, Rate.EndEffectiveDate EndEffectiveDate,
+                                                        Rate.Change, Rate.ServicesFlag, PriceList.CurrencyID CurrencyID, PriceList.CustomerID
+                                                        FROM Rate WITH (NOLOCK) 
+														INNER JOIN Zone WITH (NOLOCK) ON Rate.ZoneID = Zone.ZoneID 
+														INNER JOIN PriceList WITH (NOLOCK) ON Rate.PriceListID = PriceList.PriceListID
+														Inner Join CarrierAccount ca on ca.CarrierAccountID = PriceList.CustomerID
+														where Zone.SupplierID <> 'SYS'  and ca.AccountType <> 0 ";
     }
 }
