@@ -35,21 +35,21 @@
             $scope.scopeModel.onInvoicePartnerGroupReady = function (api) {
                 invoicePartnerGroupAPI = api;
                 invoicePartnerGroupReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.onInvoiceGenerationPeriodReady = function (api) {
                 invoiceGenerationPeriodAPI = api;
-            }
+            };
 
             $scope.scopeModel.validateDates = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
-            }
+            };
 
             $scope.scopeModel.areDatesRequired = function () {
                 if ($scope.scopeModel.selectedInvoiceGenerationPeriod != undefined && $scope.scopeModel.selectedInvoiceGenerationPeriod.datesRequired)
                     return true;
                 return false;
-            }
+            };
 
             $scope.scopeModel.onAccountStatusSelectorReady = function (api) {
                 accountStatusSelectorAPI = api;
@@ -61,16 +61,16 @@
                     var accountStatusData = accountStatusSelectorAPI.getData();
                     invoicePartnerGroupAPI.accountStatusChanged(accountStatusData);
                 }
-            }
+            };
 
             $scope.scopeModel.onInvoiceGenerationDraftReady = function (api) {
                 invoiceGenerationDraftGridAPI = api;
                 invoiceGenerationDraftGridReadyDeferred.resolve();
-            }
+            };
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
-            }
+            };
 
             $scope.scopeModel.evaluate = function () {
                 $scope.scopeModel.errorMessage = undefined;
@@ -100,7 +100,7 @@
                     }
                 });
 
-            }
+            };
 
             UtilsService.waitMultiplePromises([invoiceGenerationDraftGridReadyDeferred.promise]).then(function () {
                 load();

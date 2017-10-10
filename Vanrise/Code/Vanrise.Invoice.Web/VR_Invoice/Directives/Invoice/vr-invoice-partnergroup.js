@@ -31,7 +31,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
         var partnerGroupSelectorAPI;
 
         var partnerGroupDirectiveAPI;
-        var partnerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred()
+        var partnerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
 

@@ -38,7 +38,7 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                         return 'At least one item should exist';
 
                     return null;
-                }
+                };
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;

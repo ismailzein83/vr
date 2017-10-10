@@ -38,7 +38,7 @@
 
                 $scope.scopeModel.onInvoiceGenerationSettingReady = function (api) {
                     invoiceGenerationSettingAPI = api;
-                }
+                };
 
                 defineAPI();
             }
