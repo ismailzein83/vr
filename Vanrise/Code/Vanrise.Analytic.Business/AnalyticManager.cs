@@ -22,6 +22,7 @@ namespace Vanrise.Analytic.Business
             // CheckAnalyticRequiredPermission(input);
             if (input.Query.FromTime == input.Query.ToTime)
                 return null;
+            SetQueryToTimeIfNull(input.Query);
             if (!input.Query.CurrencyId.HasValue)
             {
                 CurrencyManager currencyManager = new CurrencyManager();
@@ -47,6 +48,7 @@ namespace Vanrise.Analytic.Business
 
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, out AnalyticRecord summaryRecord)
         {
+            SetQueryToTimeIfNull(query);
             if (query.LastHours.HasValue)
             {
                 query.FromTime = DateTime.Now.AddHours(-query.LastHours.Value);
@@ -68,6 +70,12 @@ namespace Vanrise.Analytic.Business
                 summaryRecord = null;
                 return null;
             }
+        }
+
+        private void SetQueryToTimeIfNull(AnalyticQuery query)
+        {
+            if (!query.ToTime.HasValue)
+                query.ToTime = DateTime.Today.AddDays(1);
         }
         public RecordFilterGroup BuildRecordSearchFilterGroup(RecordSearchFilterGroupInput input)
         {
