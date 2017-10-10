@@ -4,7 +4,6 @@
     Country: { value: 2, description: "Country", defaultMigrate: true },
     CodeGroup: { value: 3, description: "CodeGroup", defaultMigrate: true },
     CarrierProfile: { value: 4, description: "CarrierProfile", defaultMigrate: true },
-    ZoneServicesConfig: { value: 5, description: "Zone Services", defaultMigrate: true },
     VRTimeZone: { value: 6, description: "VRTimeZone", defaultMigrate: true },
     CarrierAccount: { value: 7, description: "CarrierAccount", defaultMigrate: true },
     Switch: { value: 8, description: "Switch", defaultMigrate: true },
