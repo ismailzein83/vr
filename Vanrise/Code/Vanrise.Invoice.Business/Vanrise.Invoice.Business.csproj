@@ -74,6 +74,7 @@
     <Compile Include="Extensions\InvoiceTypeExtendedSettingsInfoContext.cs" />
     <Compile Include="InvoiceItemGroupingManager.cs" />
     <Compile Include="InvoiceItemManager.cs" />
+    <Compile Include="InvoiceGenerationDraftManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="InvoicePartnerFilter\NotAssignedPartnerToInvoiceSettingFilter.cs" />
     <Compile Include="InvoiceAccountManager.cs" />

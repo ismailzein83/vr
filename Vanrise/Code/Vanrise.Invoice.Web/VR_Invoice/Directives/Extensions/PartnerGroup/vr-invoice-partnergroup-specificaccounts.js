@@ -64,7 +64,6 @@
 
                     function loadPartnerSelectorDirective() {
                         var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
-
                         UtilsService.waitMultiplePromises([partnerSelectorReadyDeferred.promise, invoiceTypePromise]).then(function () {
                             var partnerSelectorPayload = {
                                 //context: getContext(),

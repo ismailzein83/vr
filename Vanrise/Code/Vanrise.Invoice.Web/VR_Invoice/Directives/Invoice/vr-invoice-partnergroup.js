@@ -93,7 +93,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
                 return UtilsService.waitMultiplePromises(promises);
             };
 
-            api.accountStatusChanged = function (accountStatus) {
+            api.accountStatusChanged = function (newAccountStatus) {
+                accountStatus = newAccountStatus;
                 if (partnerGroupDirectiveAPI != undefined) {
                     partnerGroupDirectiveAPI.accountStatusChanged(accountStatus);
                 }

@@ -151,13 +151,23 @@ namespace Vanrise.Invoice.Web.Controllers
         }
 
         [HttpPost]
-        [Route("GetFilteredInvoicePartners")]
-        public object GetFilteredInvoicePartners(Vanrise.Entities.DataRetrievalInput<InvoicePartnerQuery> input)
+        [Route("GenerateFilteredInvoiceGenerationDrafts")]
+        public object GenerateFilteredInvoiceGenerationDrafts(InvoiceGenerationDraftQuery query)
+        {
+            if (!_invoiceTypeManager.DoesUserHaveViewAccess(query.InvoiceTypeId))
+                return GetUnauthorizedResponse();
+            InvoiceGenerationDraftManager manager = new InvoiceGenerationDraftManager();
+            return manager.GenerateFilteredInvoiceGenerationDrafts(query);
+        }
+
+        [HttpPost]
+        [Route("GetFilteredInvoiceGenerationDrafts")]
+        public object GetFilteredInvoiceGenerationDrafts(Vanrise.Entities.DataRetrievalInput<InvoiceGenerationDraftQuery> input)
         {
             if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.Query.InvoiceTypeId))
                 return GetUnauthorizedResponse();
-            InvoiceManager manager = new InvoiceManager();
-            return GetWebResponse(input, manager.GetFilteredInvoicePartners(input));
+            InvoiceGenerationDraftManager manager = new InvoiceGenerationDraftManager();
+            return GetWebResponse(input, manager.GetFilteredInvoiceGenerationDrafts(input));
         }
     }
 }

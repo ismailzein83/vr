@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceInvoicepartnerGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VR_Invoice_InvoiceService", "VR_Invoice_InvoiceTypeConfigsAPIService", "VR_Invoice_InvoiceActionService",
+app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VR_Invoice_InvoiceService", "VR_Invoice_InvoiceTypeConfigsAPIService", "VR_Invoice_InvoiceActionService",
     function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService, VR_Invoice_InvoiceService, VR_Invoice_InvoiceTypeConfigsAPIService, VR_Invoice_InvoiceActionService) {
 
         var directiveDefinitionObject = {
@@ -21,7 +21,7 @@ app.directive("vrInvoiceInvoicepartnerGrid", ["UtilsService", "VRNotificationSer
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/Invoice/Templates/InvoicePartnerGridTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/Invoice/Templates/InvoiceGenerationDraftGridTemplate.html"
 
         };
 
@@ -60,7 +60,7 @@ app.directive("vrInvoiceInvoicepartnerGrid", ["UtilsService", "VRNotificationSer
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     $scope.isLodingGrid = true;
                     var promises = [];
-                    return VR_Invoice_InvoiceAPIService.GetFilteredInvoicePartners(dataRetrievalInput)
+                    return VR_Invoice_InvoiceAPIService.GetFilteredInvoiceGenerationDrafts(dataRetrievalInput)
                         .then(function (response) {
                             if (response && response.Data) {
                                 for (var i = 0; i < response.Data.length; i++) {
@@ -71,7 +71,7 @@ app.directive("vrInvoiceInvoicepartnerGrid", ["UtilsService", "VRNotificationSer
                                         currentItem.generationCustomSectionDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
                                         currentItem.onGenerationCustomSectionDirectiveReady = function (api) {
                                             currentItem.generationCustomSectionDirectiveAPI = api;
-                                            var payload = {partnerId:currentItem.PartnerId};
+                                            var payload = { partnerId: currentItem.PartnerId, customPayload: currentItem.CustomPayload };
                                             VRUIUtilsService.callDirectiveLoad(currentItem.generationCustomSectionDirectiveAPI, payload, currentItem.generationCustomSectionDirectiveLoadDeferred);
                                         };
                                         return currentItem.generationCustomSectionDirectiveLoadDeferred.promise;
@@ -80,7 +80,7 @@ app.directive("vrInvoiceInvoicepartnerGrid", ["UtilsService", "VRNotificationSer
                                     promises.push(promise);
                                 }
                             }
-                            UtilsService.waitMultiplePromises(promises).then(function () { $scope.isLodingGrid = false;});
+                            UtilsService.waitMultiplePromises(promises).then(function () { $scope.isLodingGrid = false; });
                             onResponseReady(response);
                         })
                         .catch(function (error) {

@@ -4,7 +4,7 @@ using Vanrise.Entities;
 namespace Vanrise.Invoice.Entities
 {
     public enum InvoicePartnerPeriod { FollowBillingCycle = 0, FixedDates = 1 }
-    public class InvoicePartnerQuery
+    public class InvoiceGenerationDraftQuery
     {
         public Guid InvoiceTypeId { get; set; }
         public DateTime? EffectiveDate { get; set; }
@@ -15,5 +15,12 @@ namespace Vanrise.Invoice.Entities
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public DateTime IssueDate { get; set; }
+    }
+
+    public enum InvoiceGenerationDraftResult { Succeeded = 0, Failed = 1 }
+    public class InvoiceGenerationDraftOutput
+    {
+        public InvoiceGenerationDraftResult Result { get; set; }
+        public string Message { get; set; } 
     }
 }

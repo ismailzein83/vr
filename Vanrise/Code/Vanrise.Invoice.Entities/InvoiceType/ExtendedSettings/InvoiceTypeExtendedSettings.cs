@@ -19,6 +19,18 @@ namespace Vanrise.Invoice.Entities
     public abstract class GenerationCustomSection
     {
         public abstract string GenerationCustomSectionDirective { get; }
+
+        public abstract dynamic GetGenerationCustomPayload(IGetGenerationCustomPayloadContext context);
+    }
+
+    public interface IGetGenerationCustomPayloadContext 
+    {
+        string PartnerId { get; }
+    }
+
+    public class GetGenerationCustomPayloadContext : IGetGenerationCustomPayloadContext
+    {
+        public string PartnerId { get; set; }
     }
 
     public abstract class InvoiceGenerator

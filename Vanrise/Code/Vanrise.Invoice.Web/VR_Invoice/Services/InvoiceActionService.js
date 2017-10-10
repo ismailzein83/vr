@@ -1,5 +1,5 @@
 ﻿
-app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService','VR_Invoice_InvoiceAPIService','VRNotificationService','SecurityService','FileAPIService',
+app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService', 'SecurityService', 'FileAPIService',
     function (VRModalService, UtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, SecurityService, FileAPIService) {
 
         var actionTypes = [];
@@ -73,23 +73,20 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
             registerActionType(actionType);
         }
 
-        function getInvoiceActionContext(payload)
-        {
+        function getInvoiceActionContext(payload) {
             var context;
-            if(payload.isPreGenerateAction)
-            {
-                 context = {
+            if (payload.isPreGenerateAction) {
+                context = {
                     $type: "Vanrise.Invoice.Business.PreviewInvoiceActionContext,Vanrise.Invoice.Business",
                     InvoiceTypeId: payload.generatorEntity.invoiceTypeId,
                     PartnerId: payload.generatorEntity.partnerId,
                     FromDate: payload.generatorEntity.fromDate,
                     ToDate: payload.generatorEntity.toDate,
                     IssueDate: payload.generatorEntity.issueDate,
-                    CustomSectionPayload: payload.generatorEntity.customSectionPayload, 
+                    CustomSectionPayload: payload.generatorEntity.customSectionPayload,
                 };
-            }else
-            {
-                 context = {
+            } else {
+                context = {
                     $type: "Vanrise.Invoice.Business.PhysicalInvoiceActionContext,Vanrise.Invoice.Business",
                     InvoiceId: payload.invoice.Entity.InvoiceId,
                 };
@@ -102,8 +99,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                 ActionTypeName: "RecreateInvoiceAction",
                 actionMethod: function (payload) {
                     var onGenerateInvoice = function (invoiceGenerated) {
-                        if(payload.onItemAdded != undefined)
-                        {
+                        if (payload.onItemAdded != undefined) {
                             payload.onItemAdded(invoiceGenerated);
                         }
                         if (payload.onItemDeleted != undefined) {
@@ -124,7 +120,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
                     var onNoteAdded = function (note) {
                         promiseDeffered.resolve(note);
                     };
-                    openInvoiceNote(onNoteAdded,payload.invoice.Entity.InvoiceId);
+                    openInvoiceNote(onNoteAdded, payload.invoice.Entity.InvoiceId);
                     return promiseDeffered.promise;
                 }
             };
@@ -246,17 +242,35 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService','UtilsService',
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/GenerateInvoiceEditor.html', parameters, settings);
         }
+
+        function generateInvoices(onGenerateInvoice, invoiceTypeId) {
+            var settings = {
+
+            };
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenerateInvoice = onGenerateInvoice;
+            };
+            var parameters = {
+                invoiceTypeId: invoiceTypeId,
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceGenerationProcessEditor.html', parameters, settings);
+        }
+
+
         return ({
             addInvoiceAction: addInvoiceAction,
             editInvoiceAction: editInvoiceAction,
             registerSetInvoicePaidAction: registerSetInvoicePaidAction,
-            registerSetInvoiceLockedAction:registerSetInvoiceLockedAction,
+            registerSetInvoiceLockedAction: registerSetInvoiceLockedAction,
             registerInvoiceRDLCReport: registerInvoiceRDLCReport,
-            registerInvoiceNoteAction:registerInvoiceNoteAction,
-            registerRecreateAction:registerRecreateAction,
+            registerInvoiceNoteAction: registerInvoiceNoteAction,
+            registerRecreateAction: registerRecreateAction,
             registerActionType: registerActionType,
             getActionTypeIfExist: getActionTypeIfExist,
             generateInvoice: generateInvoice,
+            generateInvoices: generateInvoices,
             reGenerateInvoice: reGenerateInvoice,
             registerSendEmailAction: registerSendEmailAction,
             registerDownloadFileInvoiceAction: registerDownloadFileInvoiceAction

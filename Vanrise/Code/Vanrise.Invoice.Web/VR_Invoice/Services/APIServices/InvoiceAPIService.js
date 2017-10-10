@@ -79,14 +79,18 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetPartnerGroupTemplates"));
         }
 
-        function GetFilteredInvoicePartners(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetFilteredInvoicePartners'), input);
+        function GenerateFilteredInvoiceGenerationDrafts(query) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GenerateFilteredInvoiceGenerationDrafts'), query);
+        }
+
+        function GetFilteredInvoiceGenerationDrafts(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetFilteredInvoiceGenerationDrafts'), input);
         }
 
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
-            DoesUserHaveGenerateAccess:DoesUserHaveGenerateAccess,
+            DoesUserHaveGenerateAccess: DoesUserHaveGenerateAccess,
             GetFilteredInvoices: GetFilteredInvoices,
             SetInvoicePaid: SetInvoicePaid,
             GetInvoiceDetail: GetInvoiceDetail,
@@ -98,7 +102,8 @@
             CheckInvoiceFollowBillingPeriod: CheckInvoiceFollowBillingPeriod,
             GetInvoiceEditorRuntime: GetInvoiceEditorRuntime,
             GetPartnerGroupTemplates: GetPartnerGroupTemplates,
-            GetFilteredInvoicePartners: GetFilteredInvoicePartners
+            GenerateFilteredInvoiceGenerationDrafts: GenerateFilteredInvoiceGenerationDrafts,
+            GetFilteredInvoiceGenerationDrafts: GetFilteredInvoiceGenerationDrafts
         });
     }
 

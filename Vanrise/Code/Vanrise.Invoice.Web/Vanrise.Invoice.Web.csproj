@@ -405,15 +405,13 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\vr-invoicetype-subsections.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoiceObjectTypeTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoicePropertyEvaluatorTemplate.html" />
-    <Content Include="VR_Invoice\Directives\Invoice\ProcessInput\Normal\Templates\InvoiceGenerationProcessManualTemplate.html" />
-    <Content Include="VR_Invoice\Directives\Invoice\ProcessInput\Normal\vr-invoice-invoicegenerationprocess-manual.js" />
-    <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoicePartnerGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoiceGenerationDraftGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\PartnerGroupTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\GroupingSubSectionGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoicePartnerSelectorTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\SubSectionGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\Invoice\Templates\InvoiceGridTemplate.html" />
-    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-invoicepartner-grid.js" />
+    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-invoicegenerationdraft-grid.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-grid.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-groupingsubsection-grid.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-partnergroup.js" />
@@ -497,7 +495,9 @@
     <Content Include="VR_Invoice\Views\InvoiceViewEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\Templates\InvoiceDataSourceEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceDataSourceSettings\InvoiceDataSourceEditorController.js" />
+    <Content Include="VR_Invoice\Views\Runtime\InvoiceGenerationProcessEditor.html" />
     <Content Include="VR_Invoice\Views\Runtime\GenerateInvoiceEditor.html" />
+    <Content Include="VR_Invoice\Views\Runtime\InvoiceGenerationProcessEditorController.js" />
     <Content Include="VR_Invoice\Views\Runtime\GenerateInvoiceEditorController.js" />
     <Content Include="VR_Invoice\Views\GenericInvoiceManagement.html" />
     <Content Include="VR_Invoice\Views\GenericInvoiceManagementController.js" />
@@ -524,7 +524,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="VR_Invoice\Directives\InvoiceType\InvoiceSettingDefinition\MainExtensions\Templates\" />
-    <Folder Include="VR_Invoice\Directives\Invoice\ProcessInput\Scheduled\Templates\" />
+    <Folder Include="VR_Invoice\Directives\Invoice\ProcessInput\Normal\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="JSLintNet.json" />

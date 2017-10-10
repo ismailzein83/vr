@@ -1,0 +1,56 @@
+﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceGenerationProcessEditorController" size="medium" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formGeneration">
+            <vr-row>
+                <vr-invoice-accountstatus-selector hideremoveicon isrequired="true" on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="3" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
+
+                <vr-invoice-partnergroup normal-col-num="3" isrequired="true" on-ready="scopeModel.onInvoicePartnerGroupReady"></vr-invoice-partnergroup>
+            </vr-row>
+            <vr-row>
+                <vr-columns colnum="3">
+                    <vr-select datatextfield="description" datavaluefield="value" label="Period" datasource="scopeModel.invoiceGenerationPeriods"
+                               selectedvalues="scopeModel.selectedInvoiceGenerationPeriod" on-ready="scopeModel.onInvoiceGenerationPeriodReady" hideremoveicon isrequired="true">
+                    </vr-select>
+                </vr-columns>
+                <vr-columns colnum="3">
+                    <vr-datetimepicker value="scopeModel.fromDate" type="date" label="From" customvalidate="scopeModel.validateDates()" isrequired="scopeModel.areDatesRequired()"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns colnum="3">
+                    <vr-datetimepicker value="scopeModel.toDate" type="date" label="To" customvalidate="scopeModel.validateDates()" isrequired="scopeModel.areDatesRequired()"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns colnum="3">
+                    <vr-datetimepicker value="scopeModel.issueDate" type="date" label="Issue Date" isrequired="true"></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+
+        <vr-row removeline>
+            <vr-columns width="fullrow">
+                <vr-button class="pull-right" vr-disabled="formGeneration.validate()" type="EvaluateResult" data-onclick="scopeModel.evaluate" standalone></vr-button>
+            </vr-columns>
+        </vr-row>
+        <vr-row removeline ng-show="scopeModel.errorMessage!=undefined">
+            <vr-columns width="fullrow">
+                <label class="alert alert-danger" vr-alert>
+                    {{scopeModel.errorMessage}}
+                </label>
+            </vr-columns>
+        </vr-row>
+
+        <vr-form name="formInvoiceGeneration">
+            <vr-row>
+                <vr-invoice-invoicegenerationdraft-grid on-ready="scopeModel.onInvoiceGenerationDraftReady"></vr-invoice-invoicegenerationdraft-grid>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="GenerateInvoice" formname="formInvoiceGeneration" data-onclick="scopeModel.generateInvoice"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -57,10 +57,6 @@ namespace Vanrise.Invoice.Business
             }
             return result;
         }
-        public IDataRetrievalResult<InvoicePartner> GetFilteredInvoicePartners(DataRetrievalInput<InvoicePartnerQuery> input)
-        {
-            return BigDataManager.Instance.RetrieveData(input, new InvoicePartnerRequestHandler());
-        }
 
         public Entities.Invoice GetInvoice(long invoiceId)
         {
@@ -97,7 +93,7 @@ namespace Vanrise.Invoice.Business
                     var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                     IEnumerable<GeneratedInvoiceBillingTransaction> billingTarnsactions;
                     GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTarnsactions);
-                    
+
                     Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic);
                     invoice.SerialNumber = currentInvocie.SerialNumber;
                     invoice.Note = currentInvocie.Note;
@@ -920,64 +916,5 @@ namespace Vanrise.Invoice.Business
         }
 
         #endregion
-
-        private class InvoicePartnerRequestHandler : BigDataRequestHandler<InvoicePartnerQuery, InvoicePartner, InvoicePartner>
-        {
-            public override InvoicePartner EntityDetailMapper(InvoicePartner entity)
-            {
-                return entity;
-            }
-
-            public override IEnumerable<InvoicePartner> RetrieveAllData(DataRetrievalInput<InvoicePartnerQuery> input)
-            {
-                var query = input.Query;
-
-                InvoiceTypeManager manager = new InvoiceTypeManager();
-                var invoiceType = manager.GetInvoiceType(query.InvoiceTypeId);
-                var invoiceTypePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
-
-                PartnerGroupContext partnerGroupContext = new PartnerGroupContext() { InvoiceTypeId = query.InvoiceTypeId, Status = query.Status, EffectiveDate = query.EffectiveDate, IsEffectiveInFuture = query.IsEffectiveInFuture };
-
-                List<string> partnerIds = query.PartnerGroup.GetPartnerIds(partnerGroupContext);
-                if (partnerIds == null || partnerIds.Count == 0)
-                    return null;
-                InvoiceManager invoiceManager = new InvoiceManager();
-
-                List<InvoicePartner> invoicePartners = new List<InvoicePartner>();
-                foreach (string partnerId in partnerIds)
-                {
-                    DateTime? fromDate;
-                    DateTime? toDate;
-                    switch (query.Period)
-                    {
-                        case InvoicePartnerPeriod.FixedDates:
-                            fromDate = query.FromDate;
-                            toDate = query.ToDate;
-                            break;
-
-                        case InvoicePartnerPeriod.FollowBillingCycle:
-                            BillingInterval billingInterval = invoiceManager.GetBillingInterval(query.InvoiceTypeId, partnerId, query.IssueDate);
-                            if (billingInterval != null)
-                            {
-                                fromDate = billingInterval.FromDate;
-                                toDate = billingInterval.ToDate;
-                            }
-                            else
-                            {
-                                fromDate = query.FromDate;
-                                toDate = query.ToDate;
-                            }
-                            break;
-                        default: throw new NotSupportedException(string.Format("InvoicePartnerPeriod '{0}' is not supported", query.Period));
-                    }
-                    PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = partnerId };
-                    var partnerName = invoiceTypePartnerManager.GetPartnerName(partnerNameManagerContext);
-
-                    InvoicePartner invoicePartner = new InvoicePartner() { From = fromDate, To = toDate, PartnerId = partnerId, PartnerName = partnerName };
-                    invoicePartners.Add(invoicePartner);
-                }
-                return invoicePartners;
-            }
-        }
     }
 }
