@@ -16,7 +16,8 @@ SELECT [PricelistID]
       ,[ZoneName]
       ,[Change],
 	  BED,
-	  EED
+	  EED,
+	  zoneid
   FROM [TOneWhS_BE].[SalePricelistCodeChange] SP
   JOIN TOneWhS_BE.SalePricelistCustomerChange spc on spc.BatchID = SP.BatchID and spc.CountryID = sp.countryID
   WHERE spc.PricelistID = @PriceListID

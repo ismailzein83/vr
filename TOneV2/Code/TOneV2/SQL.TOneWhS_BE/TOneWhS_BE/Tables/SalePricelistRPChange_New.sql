@@ -7,8 +7,11 @@
     [EED]                    DATETIME       NULL,
     [PriceListId]            BIGINT         NULL,
     [CountryId]              INT            NULL,
-    [ProcessInstanceID]      INT            NULL
+    [ProcessInstanceID]      INT            NULL,
+    [CustomerId]             INT            NULL
 );
+
+
 
 
 

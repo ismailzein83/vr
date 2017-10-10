@@ -58,8 +58,8 @@ BEGIN
 				where changedService.ProcessInstanceID = @ProcessInstanceID
 			end
 			
-				INSERT INTO [TOneWhS_BE].[SalePricelistCodeChange] ([Code],[RecentZoneName],[ZoneName],[Change],[BatchID], [BED], [EED],[countryid])
-				select  spcc.[Code],spcc.[RecentZoneName],spcc.[ZoneName],spcc.[Change],spcc.[BatchID], spcc.BED, spcc.EED,spcc.[countryid]
+				INSERT INTO [TOneWhS_BE].[SalePricelistCodeChange] ([Code],[RecentZoneName],[ZoneName],[ZoneID],[Change],[BatchID], [BED], [EED],[countryid])
+				select  spcc.[Code],spcc.[RecentZoneName],spcc.[ZoneName],spcc.[ZoneID],spcc.[Change],spcc.[BatchID], spcc.BED, spcc.EED,spcc.[countryid]
 				from  [TOneWhS_BE].[SalePricelistCodeChange_New] spcc where spcc.[BatchID] = @ProcessInstanceID
 
 				INSERT INTO [TOneWhS_BE].[SalePricelistCustomerChange] ([BatchID],[PricelistID],[CountryID],[CustomerID])
@@ -74,7 +74,7 @@ BEGIN
 				INSERT INTO [TOneWhS_BE].[SalePricelistRPChange]  ([ZoneName],[ZoneID],[RoutingProductId],[RecentRoutingProductId],[BED],[EED],[PriceListId],[CountryId])
 				SELECT sprpc.[ZoneName],sprpc.[ZoneID],sprpc.[RoutingProductId],sprpc.[RecentRoutingProductId],sprpc.[BED],sprpc.[EED],sprpc.[PriceListId],sprpc.[CountryId]
 				FROM [TOneWhS_BE].[SalePricelistRPChange_New] sprpc
-				where sprpc.ProcessInstanceID = @ProcessInstanceID
+				where sprpc.ProcessInstanceID = @ProcessInstanceID and CustomerId is null
 
 			-- Sync default routing product
 			

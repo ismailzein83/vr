@@ -2,7 +2,7 @@
     [ID]                           INT              IDENTITY (1, 1) NOT NULL,
     [CarrierProfileId]             INT              NULL,
     [CarrierAccountId]             INT              NULL,
-    [FinancialAccountDefinitionId] UNIQUEIDENTIFIER NULL,
+    [FinancialAccountDefinitionId] UNIQUEIDENTIFIER NOT NULL,
     [FinancialAccountSettings]     NVARCHAR (MAX)   NULL,
     [BED]                          DATETIME         NOT NULL,
     [EED]                          DATETIME         NULL,
@@ -10,4 +10,6 @@
     [timestamp]                    ROWVERSION       NULL,
     CONSTRAINT [PK_FinancialAccount] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

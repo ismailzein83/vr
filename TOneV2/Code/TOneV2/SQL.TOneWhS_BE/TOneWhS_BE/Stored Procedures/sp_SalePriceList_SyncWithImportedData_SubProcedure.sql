@@ -27,8 +27,8 @@ Begin Try
 	select newRate.ID, newRate.PriceListID, newRate.ZoneID, newRate.CurrencyId, newRate.NormalRate, 1, newRate.BED, newRate.EED
 	from TOneWhS_BE.CP_SaleRate_New newRate WITH(NOLOCK) where newRate.ProcessInstanceID = @ProcessInstanceId
 
-	INSERT INTO [TOneWhS_BE].[SalePricelistCodeChange] ([Code],[RecentZoneName],[ZoneName],[Change],[BatchID],[BED],[EED],[CountryID])
-    select  spcc.[Code],spcc.[RecentZoneName],spcc.[ZoneName],spcc.[Change],spcc.[BatchID],spcc.BED,spcc.EED,spcc.CountryID
+	INSERT INTO [TOneWhS_BE].[SalePricelistCodeChange] ([Code],[RecentZoneName],[ZoneName],[ZoneID],[Change],[BatchID],[BED],[EED],[CountryID])
+    select  spcc.[Code],spcc.[RecentZoneName],spcc.[ZoneName],spcc.[ZoneID],spcc.[Change],spcc.[BatchID],spcc.BED,spcc.EED,spcc.CountryID
 	from  [TOneWhS_BE].[SalePricelistCodeChange_New] spcc where spcc.[BatchID] = @ProcessInstanceID
 
 	INSERT INTO [TOneWhS_BE].[SalePricelistCustomerChange] ([BatchID],[PricelistID],[CountryID],[CustomerID])
@@ -43,7 +43,7 @@ Begin Try
 	INSERT INTO [TOneWhS_BE].[SalePricelistRPChange]  ([ZoneName],[ZoneID],[RoutingProductId],[RecentRoutingProductId],[BED],[EED],[PriceListId],[CountryId])
 	SELECT sprpc.[ZoneName],sprpc.[ZoneID],sprpc.[RoutingProductId],sprpc.[RecentRoutingProductId],sprpc.[BED],sprpc.[EED],sprpc.[PriceListId],sprpc.[CountryId]
 	FROM [TOneWhS_BE].[SalePricelistRPChange_New] sprpc
-	where sprpc.ProcessInstanceID = @ProcessInstanceID
+	where sprpc.ProcessInstanceID = @ProcessInstanceID and CustomerId is null
 
 	Update ToneWhs_be.SaleZone
 	Set EED = szchanged.EED

@@ -507,5 +507,22 @@
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_PricingTemplate_Update.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_PricingTemplate_Insert.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_PricingTemplate_GetAll.sql" />
+    <Build Include="TOneWhs_CP\Tables\SaleZoneRoutingProduct_Preview.sql" />
+    <Build Include="TOneWhS_BE\Tables\SwitchReleaseCause.sql" />
+    <Build Include="TOneWhS_BE\Tables\CP_SaleZoneRoutingProduct_New.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\RP_CustomerRatePlanPreviewSummary_Get.sql" />
+    <Build Include="TOneWhs_CP\Stored Procedures\sp_SaleZoneRoutingProduct_Preview_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchReleaseCause_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchReleaseCause_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchReleaseCause_GetByID.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchReleaseCause_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleZone_UpdateName.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListRPChangeNew_GetRoutingProductPreviews.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistRPChange_GetPricelistsRPChanges.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListRateChangeNew_GetCustomerRatePreviews.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistRateChange_GetPricelistsRateChanges.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistCodeChange_GetPricelistsCodeChanges.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\SP_RPChangesNew_GetAffectedCustonerIds.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\SP_RateChangesNew_GetAffectedCustonerIds.sql" />
   </ItemGroup>
 </Project>
