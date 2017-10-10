@@ -17,6 +17,7 @@ namespace Vanrise.GenericData.Data.SQL
         }
 
         #region Public Methods
+
         public List<StagingSummaryInfo> GetStagingSummaryInfo(long processInstanceId, string stageName)
         {
             return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetStageRecordInfo", StagingSummaryInfoMapper, processInstanceId, stageName);
@@ -44,12 +45,17 @@ namespace Vanrise.GenericData.Data.SQL
         {
             return base.InitializeStreamForBulkInsert();
         }
+
         public void WriteRecordToStream(StagingSummaryRecord record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.ProcessInstanceId, record.StageName, GetDateTimeForBCP(record.BatchStart), GetDateTimeForBCP(record.BatchEnd), record.Data != null ? Convert.ToBase64String(record.Data) : null, record.AlreadyFinalised ? 1 : 0);
         }
 
+        public void ApplyStreamToDB(object stream)
+        {
+            base.InsertBulkToTable(stream as StreamBulkInsertInfo);
+        }
 
         public object FinishDBApplyStream(object dbApplyStream)
         {
@@ -66,14 +72,10 @@ namespace Vanrise.GenericData.Data.SQL
             };
         }
 
-        public void ApplyStreamToDB(object stream)
-        {
-            base.InsertBulkToTable(stream as StreamBulkInsertInfo);
-        }
-
         #endregion
 
         #region Mappers
+
         private StagingSummaryRecord StagingSummaryRecordMapper(IDataReader reader)
         {
             return new StagingSummaryRecord()
@@ -96,6 +98,7 @@ namespace Vanrise.GenericData.Data.SQL
                 AlreadyFinalised = GetReaderValue<bool>(reader, "AlreadyFinalised")
             };
         }
+
         #endregion
     }
 }
