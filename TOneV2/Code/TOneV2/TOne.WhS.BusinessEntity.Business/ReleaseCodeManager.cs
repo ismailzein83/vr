@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -41,6 +42,49 @@ namespace TOne.WhS.BusinessEntity.Business
                         }
                     }
                     return descriptionsByCode;
+                });
+        }
+
+        public List<SwitchReleaseCause> GetReleaseCausesByCode(string code, int? switchId)
+        {
+            List<SwitchReleaseCause> releaseCauses = new List<SwitchReleaseCause>();
+            var allReleaseCauses = GetAllReleaseCauses();
+            if(allReleaseCauses != null)
+            {
+                releaseCauses.AddRange(allReleaseCauses.Values.FindAllRecords(itm => itm.ReleaseCode == code && (!switchId.HasValue || itm.SwitchId == switchId.Value)));
+            }
+            return releaseCauses;
+        }
+
+        Dictionary<int, SwitchReleaseCause> GetAllReleaseCauses()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<GenericBusinessEntityManager.CacheManager>().GetOrCreateObject("GetAllReleaseCauses", s_businessEntityDefinitionId,
+                () =>
+                {
+                    Dictionary<int, SwitchReleaseCause> releaseCauses = new Dictionary<int, SwitchReleaseCause>();
+                    Dictionary<long, GenericBusinessEntity> releaseCausesGeneric = new GenericBusinessEntityManager().GetCachedGenericBusinessEntities(s_businessEntityDefinitionId);
+                    if (releaseCausesGeneric != null)
+                    {
+                        foreach (var releaseCauseGeneric in releaseCausesGeneric.Values)
+                        {
+                            if (releaseCauseGeneric.Details != null)
+                            {
+                                SwitchReleaseCause releaseCause = new SwitchReleaseCause
+                                {
+                                    ReleaseCode = releaseCauseGeneric.Details.ReleaseCode,
+                                    SwitchId = releaseCauseGeneric.Details.SwitchId,
+                                    SwitchReleaseCauseId = (int)releaseCauseGeneric.GenericBusinessEntityId,
+                                    Settings = new SwitchReleaseCauseSetting
+                                    {
+                                        Description = releaseCauseGeneric.Details.Description,
+                                        IsDelivered = releaseCauseGeneric.Details.IsDelivered
+                                    }
+                                };
+                                releaseCauses.Add(releaseCause.SwitchReleaseCauseId, releaseCause);
+                            }
+                        }
+                    }
+                    return releaseCauses;
                 });
         }
     }
