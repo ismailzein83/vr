@@ -183,6 +183,8 @@
     <Content Include="WhS_CodePreparation\Directives\RatePreview\vr-cp-ratepreview-grid.js" />
     <Content Include="WhS_CodePreparation\Directives\ZonePreview\Templates\CodePreparationZonePreviewGridTemplate.html" />
     <Content Include="WhS_CodePreparation\Directives\ZonePreview\vr-cp-zonepreview-grid.js" />
+    <Content Include="WhS_CodePreparation\Directives\ZoneRoutingProductPreview\Templates\CodePreparationZoneRoutingProductPreviewGrid.html" />
+    <Content Include="WhS_CodePreparation\Directives\ZoneRoutingProductPreview\vr-cp-zoneroutingproductpreview-grid.js" />
     <Content Include="WhS_CodePreparation\Services\APIServices\CodePreparationPreviewAPIService.js" />
     <Content Include="WhS_CodePreparation\Services\CodePreparationService.js" />
     <Content Include="WhS_CodePreparation\Services\APIServices\CodePreparationAPIService.js" />
