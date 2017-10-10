@@ -49,6 +49,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             var sellingProductDirectiveAPI;
 
             function initializeController() {
+                $scope.defaultRate = 1;
                 $scope.useTempTables = true;
                 $scope.onlyEffective = false;
                 var migrationTablesBasetable = new Array();
@@ -194,6 +195,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction.MigratePriceListData = $scope.migratePriceListData;
                     schedulerTaskAction.IsCustomerCommissionNegative = $scope.isCustomerCommissionNegative;
                     schedulerTaskAction.OnlyEffective = $scope.onlyEffective;
+                    schedulerTaskAction.DefaultRate = $scope.defaultRate;
                     var selectedTables = [];
 
                     $scope.migrationTablesSelectedValues;
@@ -227,6 +229,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         $scope.onlyEffective = payload.data.OnlyEffective;
                         $scope.migrationTablesSelectedValues = [];
                         fillParameterDefinitions(payload.data.ParameterDefinitions);
+                        $scope.defaultRate = payload.data.DefaultRate;
 
                         angular.forEach(payload.data.MigrationRequestedTables, function (x) {
                             if (x != WhS_BE_DBTableNameEnum.CustomerCountry.value && x != WhS_BE_DBTableNameEnum.File.value && x != WhS_BE_DBTableNameEnum.CarrierAccountStatusHistory.value)

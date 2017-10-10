@@ -13,6 +13,7 @@ namespace TOne.WhS.DBSync.Business
 {
     public class SaleEntityRoutingProductMigrator : Migrator<SourceRate, SaleEntityRoutingProduct>
     {
+        
         SourceRateDataManager dataManager;
         SaleEntityRoutingProductDBSyncDataManager dbSyncDataManager;
         Dictionary<string, CarrierAccount> allCarrierAccounts;
@@ -41,6 +42,8 @@ namespace TOne.WhS.DBSync.Business
             StructureRoutingProductsByServiceIds();
 
             _onlyEffective = Context.OnlyEffective;
+
+            TableName = dbSyncDataManager.GetTableName();
 
         }
 

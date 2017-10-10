@@ -21,7 +21,7 @@ namespace TOne.WhS.DBSync.Entities
         public int HolidayRateTypeId { get; set; }
         public bool MigratePriceListData { get; set; }
         public bool OnlyEffective { get; set; }
-
+        public decimal DefaultRate { get; set; }
 
         public virtual void WriteException(Exception ex)
         {

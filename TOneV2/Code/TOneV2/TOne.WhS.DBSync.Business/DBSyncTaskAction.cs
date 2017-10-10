@@ -6,6 +6,8 @@ using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Runtime.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.Common.Business;
 
 
 namespace TOne.WhS.DBSync.Business
@@ -36,6 +38,7 @@ namespace TOne.WhS.DBSync.Business
             _context.WriteInformation("Database Sync Task Action Started");
             DBSyncTaskActionArgument dbSyncTaskActionArgument = taskActionArgument as DBSyncTaskActionArgument;
             MigrationManager migrationManager;
+            _context.DefaultRate = dbSyncTaskActionArgument.DefaultRate;
             _context.UseTempTables = dbSyncTaskActionArgument.UseTempTables;
             _context.ConnectionString = dbSyncTaskActionArgument.ConnectionString;
             _context.DefaultSellingNumberPlanId = dbSyncTaskActionArgument.DefaultSellingNumberPlanId;
@@ -56,12 +59,23 @@ namespace TOne.WhS.DBSync.Business
             //CreateForeignKeys(context, migrationManager);
             FinalizeMigration(_context, migrationManager);
             _context.WriteInformation("Database Sync Task Action Executed");
-
+            ApplyPostData();
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {
                 Result = ExecuteOutputResult.Completed
             };
             return output;
+        }
+
+        private void ApplyPostData()
+        {
+            SettingManager settingManager = new SettingManager();
+            Setting systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
+            CurrencySettingData currencySettingData = (CurrencySettingData)systemCurrencySetting.Data;
+
+            PostDataDBSyncDataManager postDataDBSyncDataManager = new PostDataDBSyncDataManager();
+
+            postDataDBSyncDataManager.FixSellingProductRates(_context.DefaultSellingNumberPlanId, _context.SellingProductId, currencySettingData.CurrencyId, _context.DefaultRate);
         }
 
         private MigrationManager ConstructMigrationManager(MigrationContext context)

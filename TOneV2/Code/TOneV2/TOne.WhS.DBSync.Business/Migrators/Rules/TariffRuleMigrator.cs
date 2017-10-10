@@ -275,11 +275,9 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
                 {
                     PricingUnit = 60,
-                    FractionUnit = 0,
+                    FractionUnit = 1,
                     CurrencyId = Context.CurrencyId,
-                    FirstPeriodRateType = Vanrise.Rules.Pricing.MainExtensions.Tariff.FirstPeriodRateType.FixedRate,
-                    FirstPeriodRate = 0
-
+                    FirstPeriodRateType = Vanrise.Rules.Pricing.MainExtensions.Tariff.FirstPeriodRateType.EffectiveRate
                 },
                 DefinitionId = _CostDefinitionId,
                 Description = "Default Supplier Tariff Rule"
@@ -306,10 +304,9 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 Settings = new Vanrise.Rules.Pricing.MainExtensions.Tariff.RegularTariffSettings
                 {
                     PricingUnit = 60,
-                    FractionUnit = 0,
+                    FractionUnit = 1,
                     CurrencyId = Context.CurrencyId,
-                    FirstPeriodRateType = Vanrise.Rules.Pricing.MainExtensions.Tariff.FirstPeriodRateType.FixedRate,
-                    FirstPeriodRate = 0
+                    FirstPeriodRateType = Vanrise.Rules.Pricing.MainExtensions.Tariff.FirstPeriodRateType.EffectiveRate
                 },
                 DefinitionId = _SaleDefinitionId,
                 Description = "Default Sale Tariff Rule"
