@@ -133,11 +133,16 @@ namespace Vanrise.Common.Business
         public string GetDefaultCompanyName()
         {
             string name = null;
-            IEnumerable<CompanySetting> companySettings = GetCompanySetting();
-            List<CompanySettingsInfo> lstCompanySettingsInfo = new List<CompanySettingsInfo>();
-            var company =  companySettings.FindRecord(c=>c.IsDefault);
-            if (company != null)
-                name = company.CompanyName;
+            CompanySetting company =  null ;
+            SettingManager settingManager = new SettingManager();
+            CompanySettings companySettings = settingManager.GetSetting<CompanySettings>(CompanySettings.SETTING_TYPE);
+            if (companySettings != null && companySettings.Settings != null)
+            {
+                company = companySettings.Settings.FindRecord(c => c.IsDefault);
+                if (company != null)
+                    name = company.CompanyName;
+            }
+                
             return name;           
         }
 
