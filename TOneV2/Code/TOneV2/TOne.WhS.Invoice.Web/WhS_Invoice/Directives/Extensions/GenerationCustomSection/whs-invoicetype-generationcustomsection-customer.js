@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", "VRNotificationService", "VRUIUtilsService","WhS_BE_FinancialAccountAPIService",
+app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_FinancialAccountAPIService",
     function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_FinancialAccountAPIService) {
 
         var directiveDefinitionObject = {
@@ -9,6 +9,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
             scope:
             {
                 onReady: "=",
+                normalColNum: '@'
+
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -16,7 +18,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                 var ctor = new CustomerGenerationCustomSection($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "ctrlCustomerGeneration",
             bindToController: true,
             compile: function (element, attrs) {
 
@@ -48,35 +50,46 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                 api.load = function (payload) {
                     var invoice;
                     var financialAccountId;
+                    var customPayload;
                     if (payload != undefined) {
+                        customPayload = payload.customPayload;
                         invoice = payload.invoice;
-                        financialAccountId = payload.financialAccountId;
+                        financialAccountId = payload.partnerId;
+                        if (financialAccountId == undefined) {
+                            financialAccountId = payload.financialAccountId;
+                        }
                         context = payload.context;
                     }
                     var promises = [];
-                    if (financialAccountId != undefined) {
-                        var loadTimeZonePromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadTimeZonePromiseDeferred.promise);
 
-                        WhS_BE_FinancialAccountAPIService.GetCustomerTimeZoneId(financialAccountId).then(function (response) {
-                            loadTimeZoneSelector(response).then(function () {
-                                loadTimeZonePromiseDeferred.resolve();
+                    if (customPayload == undefined) {
+                        if (financialAccountId != undefined) {
+                            var loadTimeZonePromiseDeferred = UtilsService.createPromiseDeferred();
+                            promises.push(loadTimeZonePromiseDeferred.promise);
+
+                            WhS_BE_FinancialAccountAPIService.GetCustomerTimeZoneId(financialAccountId).then(function (response) {
+                                loadTimeZoneSelector(response).then(function () {
+                                    loadTimeZonePromiseDeferred.resolve();
+                                }).catch(function (error) {
+                                    loadTimeZonePromiseDeferred.reject(error);
+                                });
                             }).catch(function (error) {
                                 loadTimeZonePromiseDeferred.reject(error);
                             });
-                        }).catch(function (error) {
-                            loadTimeZonePromiseDeferred.reject(error);
-                        });
-                    } else {
-                        promises.push(loadTimeZoneSelector());
+                        } else {
+                            promises.push(loadTimeZoneSelector());
+                        }
                     }
-                    function loadTimeZoneSelector(selectedIds)
-                    {
+                    else {
+                        promises.push(loadTimeZoneSelector(customPayload.TimeZoneId));
+                    }
+
+                    function loadTimeZoneSelector(selectedIds) {
                         var timeZoneSelectorPayload = {
                             selectedIds: selectedIds
                         };
                         if (invoice != undefined && invoice.Details != undefined) {
-                            timeZoneSelectorPayload.selectedIds= invoice.Details.TimeZoneId;
+                            timeZoneSelectorPayload.selectedIds = invoice.Details.TimeZoneId;
                         }
                         return timeZoneSelectorAPI.load(timeZoneSelectorPayload);
                     }

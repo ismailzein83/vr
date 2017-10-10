@@ -9,6 +9,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
             scope:
             {
                 onReady: "=",
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -16,7 +17,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                 var ctor = new SupplierGenerationCustomSection($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "ctrlSupplierGeneration",
             bindToController: true,
             compile: function (element, attrs) {
 
@@ -48,31 +49,38 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                 api.load = function (payload) {
                     var invoice;
                     var financialAccountId;
+                    var customPayload;
                     if (payload != undefined) {
+                        customPayload = payload.customPayload;
                         invoice = payload.invoice;
-                        financialAccountId = payload.financialAccountId;
+                        financialAccountId = payload.partnerId;
+                        if (financialAccountId == undefined) {
+                            financialAccountId = payload.financialAccountId;
+                        }
                         context = payload.context;
                     }
                     var promises = [];
 
+                    if (customPayload == undefined) {
+                        if (financialAccountId != undefined) {
+                            var loadTimeZonePromiseDeferred = UtilsService.createPromiseDeferred();
+                            promises.push(loadTimeZonePromiseDeferred.promise);
 
-                    if (financialAccountId != undefined)
-                    {
-                        var loadTimeZonePromiseDeferred = UtilsService.createPromiseDeferred();
-                        promises.push(loadTimeZonePromiseDeferred.promise);
-
-                        WhS_BE_FinancialAccountAPIService.GetSupplierTimeZoneId(financialAccountId).then(function (response) {
-                            loadTimeZoneSelector(response).then(function () {
-                                loadTimeZonePromiseDeferred.resolve();
-                            }).catch(function(error){
+                            WhS_BE_FinancialAccountAPIService.GetSupplierTimeZoneId(financialAccountId).then(function (response) {
+                                loadTimeZoneSelector(response).then(function () {
+                                    loadTimeZonePromiseDeferred.resolve();
+                                }).catch(function (error) {
+                                    loadTimeZonePromiseDeferred.reject(error);
+                                });
+                            }).catch(function (error) {
                                 loadTimeZonePromiseDeferred.reject(error);
                             });
-                        }).catch(function (error) {
-                            loadTimeZonePromiseDeferred.reject(error);
-                        });
-                    } else
-                    {
-                        promises.push(loadTimeZoneSelector());
+                        } else {
+                            promises.push(loadTimeZoneSelector());
+                        }
+                    }
+                    else {
+                        promises.push(loadTimeZoneSelector(customPayload.TimeZoneId));
                     }
 
                     function loadTimeZoneSelector(selectedIds)
