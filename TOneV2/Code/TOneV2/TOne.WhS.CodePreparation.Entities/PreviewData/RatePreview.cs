@@ -36,4 +36,46 @@ namespace TOne.WhS.CodePreparation.Entities
         public string OwnerName { get; set; }
         public string CurrencySymbol { get; set; }
     }
+
+    public class ZoneRoutingProductPreview
+    {
+        public string ZoneName { get; set; }
+
+        public SalePriceListOwnerType OwnerType { get; set; }
+        
+        public int OwnerId { get; set; }
+
+        public int RoutingProductId { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
+
+        public ZoneRoutingProductChangeType ChangeType { get; set; }
+    }
+
+    public class ZoneRoutingProductPreviewDetail
+    {
+        public ZoneRoutingProductPreview Entity { get; set; }
+
+        public string RoutingProductName { get; set; }
+
+        public string OwnerTypeDescription { get; set; }
+
+        public string OwnerName { get; set; }
+        public string ChangeTypeDescription { get; set; }
+    }
+
+    public enum ZoneRoutingProductChangeType
+    {
+        [Description("Same")]
+        NotChanged = 0,
+
+        [Description("New")]
+        New = 1,
+
+        [Description("Deleted")]
+        Deleted = 2,
+
+    }
 }

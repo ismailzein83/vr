@@ -13,5 +13,7 @@ namespace TOne.WhS.CodePreparation.Business
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
         public IEnumerable<ExistingZoneRoutingProducts> ExistingZonesRoutingProducts { get; set; }
         public IEnumerable<ChangedZoneRoutingProducts> ChangedZonesRoutingProducts { get; set; }
+        public IEnumerable<ZoneToProcess> ZonesToProcess { get; set; }
+        public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
     }
 }

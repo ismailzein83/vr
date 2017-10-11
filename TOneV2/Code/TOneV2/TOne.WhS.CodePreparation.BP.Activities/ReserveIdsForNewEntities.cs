@@ -18,7 +18,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public IEnumerable<AddedCode> NewCodes { get; set; }
 
         public IEnumerable<AddedRate> NewRates { get; set; }
-
+        public IEnumerable<AddedZoneRoutingProduct> NewZonesRoutingProducts { get; set; }
         public SalePriceListsByOwner SalePriceListsByOwner { get; set; }
 
     }
@@ -32,6 +32,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         [RequiredArgument]
         public InArgument<IEnumerable<AddedRate>> NewRates { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<AddedZoneRoutingProduct>> NewZonesRoutingProducts { get; set; }
        
         [RequiredArgument]
         public InArgument<SalePriceListsByOwner> SalePriceListsByOwner { get; set; }
@@ -41,6 +44,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             IEnumerable<AddedZone> zoneList = inputArgument.NewZones;
             IEnumerable<AddedCode> codeList = inputArgument.NewCodes;
             IEnumerable<AddedRate> rateList = inputArgument.NewRates;
+            IEnumerable<AddedZoneRoutingProduct> zoneRoutingProductList = inputArgument.NewZonesRoutingProducts;
             SalePriceListsByOwner salePriceListsByOwner = inputArgument.SalePriceListsByOwner;
 
             SaleZoneManager zoneManager = new SaleZoneManager();
@@ -67,6 +71,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 addedRate.RateId = rateStartingId++;
             }
 
+            SaleEntityRoutingProductManager zoneRoutingProductManager = new SaleEntityRoutingProductManager();
+            long zoneRoutingProductStartingId = zoneRoutingProductManager.ReserveIdRange(zoneRoutingProductList.Count());
+
+            foreach (AddedZoneRoutingProduct addedZoneRoutingProduct in zoneRoutingProductList)
+            {
+                addedZoneRoutingProduct.SaleEntityRoutingProductId = zoneRoutingProductStartingId++;
+            }
+
             salePriceListsByOwner.ReserveIds();
 
         }
@@ -78,6 +90,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 NewCodes = this.NewCodes.Get(context),
                 NewZones = this.NewZones.Get(context),
                 NewRates = this.NewRates.Get(context),
+                NewZonesRoutingProducts=this.NewZonesRoutingProducts.Get(context),
                 SalePriceListsByOwner = this.SalePriceListsByOwner.Get(context),
             };
         }

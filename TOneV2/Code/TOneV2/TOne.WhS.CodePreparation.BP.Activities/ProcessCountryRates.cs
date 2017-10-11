@@ -28,6 +28,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     {
         public IEnumerable<ChangedRate> ChangedRates { get; set; }
         public IEnumerable<AddedRate> NewRates { get; set; }
+        public IEnumerable<AddedZoneRoutingProduct> NewZonesRoutingProducts { get; set; }
 
     }
 
@@ -64,6 +65,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<AddedRate>> NewRates { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<IEnumerable<AddedZoneRoutingProduct>> NewZonesRoutingProducts { get; set; }
+
         protected override ProcessCountryRatesOutput DoWorkWithResult(ProcessCountryRatesInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<ExistingZone> existingZones = null;
@@ -90,7 +94,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return new ProcessCountryRatesOutput()
             {
                 ChangedRates = processCountryRateContext.ChangedRates,
-                NewRates = processCountryRateContext.NewRates
+                NewRates = processCountryRateContext.NewRates,
+                NewZonesRoutingProducts = processCountryRateContext.NewZonesRoutingProducts
             };
         }
 
@@ -113,6 +118,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         {
             ChangedRates.Set(context, result.ChangedRates);
             NewRates.Set(context, result.NewRates);
+            NewZonesRoutingProducts.Set(context, result.NewZonesRoutingProducts);
         }
     }
 }

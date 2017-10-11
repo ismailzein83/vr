@@ -16,6 +16,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
     {
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
         public IEnumerable<ExistingZoneRoutingProducts> ExistingZonesRoutingProducts { get; set; }
+        public IEnumerable<ZoneToProcess> ZonesToProcess { get; set; }
+        public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
     }
 
     public class ProcessCountryZonesRoutingProductsOutput
@@ -25,6 +27,11 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
     public sealed class ProcessCountryZonesRoutingProducts : BaseAsyncActivity<ProcessCountryZonesRoutingProductsInput, ProcessCountryZonesRoutingProductsOutput>
     {
+        [RequiredArgument]
+        public InArgument<IEnumerable<ZoneToProcess>> ZonesToProcess { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         [RequiredArgument]
         public InArgument<Dictionary<long, ExistingZone>> ExistingZonesByZoneId { get; set; }
@@ -46,7 +53,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             ProcessCountryZonesRoutingProductsContext processCountryZonesServicesContext = new ProcessCountryZonesRoutingProductsContext()
             {
                 ExistingZones = existingZones,
-                ExistingZonesRoutingProducts = inputArgument.ExistingZonesRoutingProducts
+                ExistingZonesRoutingProducts = inputArgument.ExistingZonesRoutingProducts,
+                ZonesToProcess=inputArgument.ZonesToProcess,
+                NotImportedZones=inputArgument.NotImportedZones
             };
 
             PriceListZoneRoutingProductsManager plZonesServicesManager = new PriceListZoneRoutingProductsManager();
@@ -64,7 +73,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return new ProcessCountryZonesRoutingProductsInput()
             {
                 ExistingZonesRoutingProducts = this.ExistingZonesRoutingProducts.Get(context),
-                ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context)
+                ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
+                ZonesToProcess = this.ZonesToProcess.Get(context),
+                NotImportedZones = this.NotImportedZones.Get(context),
             };
         }
 

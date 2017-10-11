@@ -43,5 +43,12 @@ namespace TOne.WhS.CodePreparation.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredRatesPreview(input));
         }
 
+        [HttpPost]
+        [Route("GetFilteredZonesRoutingProductsPreview")]
+        public object GetFilteredZonesRoutingProductsPreview(Vanrise.Entities.DataRetrievalInput<SPLPreviewQuery> input)
+        {
+            ZoneRoutingProductPreviewManager manager = new ZoneRoutingProductPreviewManager();
+            return GetWebResponse(input, manager.GetFilteredZonesRoutingProductsPreview(input));
+        }
     }
 }

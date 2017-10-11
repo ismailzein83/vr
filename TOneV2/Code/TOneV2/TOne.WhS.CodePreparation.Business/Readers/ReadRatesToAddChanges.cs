@@ -74,4 +74,74 @@ namespace TOne.WhS.CodePreparation.Business
             };
         }
     }
+
+    public class ReadZonesRoutingProductsToAddChanges : ISaleEntityRoutingProductReader
+    {
+        private SaleZoneRoutingProductsByOwner _allSaleZonesRoutingProductsByOwner;
+
+        public ReadZonesRoutingProductsToAddChanges(IEnumerable<ZoneRoutingProductToAdd> allZonesRoutingProducts)
+        {
+            _allSaleZonesRoutingProductsByOwner = GetAllSaleZonesRoutingProductsByOwner(allZonesRoutingProducts);
+        }
+        private SaleZoneRoutingProductsByOwner GetAllSaleZonesRoutingProductsByOwner(IEnumerable<ZoneRoutingProductToAdd> allZonesRoutingProducts)
+        {
+            SaleZoneRoutingProductsByOwner result = new SaleZoneRoutingProductsByOwner
+            {
+                SaleZoneRoutingProductsByCustomer = new Dictionary<int, SaleZoneRoutingProductsByZone>(),
+                SaleZoneRoutingProductsByProduct = new Dictionary<int, SaleZoneRoutingProductsByZone>(),
+            };
+
+            foreach (var zoneRoutingProductToAdd in allZonesRoutingProducts)
+            {
+                foreach (var addedRP in zoneRoutingProductToAdd.AddedZonesRoutingProducts)
+                {
+                    SaleZoneRoutingProduct saleZoneRoutingProduct = new SaleZoneRoutingProduct 
+                    {
+                        OwnerId=addedRP.OwnerId,
+                        OwnerType=addedRP.OwnerType,
+                        BED=addedRP.BED,
+                        EED=addedRP.EED,
+                        RoutingProductId=addedRP.RoutingProductId,
+                        SaleZoneId=addedRP.AddedZone.ZoneId,
+                        SaleEntityRoutingProductId=addedRP.SaleEntityRoutingProductId
+                    };
+
+                    var saleZoneRoutingProductsByOwner = (addedRP.OwnerType == SalePriceListOwnerType.Customer) ? result.SaleZoneRoutingProductsByCustomer : result.SaleZoneRoutingProductsByProduct;
+                    {
+                        SaleZoneRoutingProductsByZone saleZoneRoutingProductsByZone;
+                        if (!saleZoneRoutingProductsByOwner.TryGetValue(addedRP.OwnerId, out saleZoneRoutingProductsByZone))
+                            {
+                                saleZoneRoutingProductsByZone=new SaleZoneRoutingProductsByZone();
+                                saleZoneRoutingProductsByZone.Add(saleZoneRoutingProduct.SaleZoneId,saleZoneRoutingProduct);
+                                saleZoneRoutingProductsByOwner.Add(addedRP.OwnerId, saleZoneRoutingProductsByZone);
+                            }
+                        else if (!saleZoneRoutingProductsByZone.ContainsKey(saleZoneRoutingProduct.SaleZoneId))
+                            {
+                                saleZoneRoutingProductsByZone.Add(saleZoneRoutingProduct.SaleZoneId, saleZoneRoutingProduct);
+                            }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public DefaultRoutingProduct GetDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, long? zoneId)
+        {
+            return null;
+        }
+
+        public SaleZoneRoutingProductsByZone GetRoutingProductsOnZones(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            if (_allSaleZonesRoutingProductsByOwner != null)
+            {
+                var saleZoneRoutingProductsByOwner = (ownerType == SalePriceListOwnerType.Customer) ? _allSaleZonesRoutingProductsByOwner.SaleZoneRoutingProductsByCustomer : _allSaleZonesRoutingProductsByOwner.SaleZoneRoutingProductsByProduct;
+                SaleZoneRoutingProductsByZone saleZoneRoutingProductByZone;
+                saleZoneRoutingProductsByOwner.TryGetValue(ownerId, out saleZoneRoutingProductByZone);
+                return saleZoneRoutingProductByZone;
+            }
+            return null;
+        }
+
+    }
 }

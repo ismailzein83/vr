@@ -12,5 +12,7 @@ namespace TOne.WhS.CodePreparation.Entities
         IEnumerable<ExistingZone> ExistingZones { get; }
         IEnumerable<ExistingZoneRoutingProducts> ExistingZonesRoutingProducts { get; set; }
         IEnumerable<ChangedZoneRoutingProducts> ChangedZonesRoutingProducts { get; set; }
+        IEnumerable<ZoneToProcess> ZonesToProcess { get; set; }
+        IEnumerable<NotImportedZone> NotImportedZones { get; set; }
     }
 }

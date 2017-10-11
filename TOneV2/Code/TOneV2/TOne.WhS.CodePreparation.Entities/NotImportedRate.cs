@@ -27,4 +27,20 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         public int CurrencyId { get; set; }
 
     }
+
+    public class NotImportedZoneRoutingProduct
+    {
+        public string ZoneName { get; set; }
+
+        public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public int RoutingProductId { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
+
+    }
 }

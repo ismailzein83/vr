@@ -120,6 +120,7 @@
     <Compile Include="SalePriceListsByOwner.cs" />
     <Compile Include="NumberingPlanHelper.cs" />
     <Compile Include="ZonePreviewManager.cs" />
+    <Compile Include="ZoneRoutingProductPreviewManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Entities\TOne.Entities.csproj">

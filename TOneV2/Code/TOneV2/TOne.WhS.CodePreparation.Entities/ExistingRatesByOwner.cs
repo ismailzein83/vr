@@ -53,4 +53,50 @@ namespace TOne.WhS.CodePreparation.Entities
             };
         }   
     }
+
+    public class ExistingZonesRoutingProductsByOwner
+    {
+        private Dictionary<string, List<ExistingZoneRoutingProducts>> _existingZonesRoutingProductsByOwner;
+
+        public ExistingZonesRoutingProductsByOwner()
+        {
+            _existingZonesRoutingProductsByOwner = new Dictionary<string, List<ExistingZoneRoutingProducts>>();
+        }
+
+        public void TryAddValue(int ownertype, int ownerId, ExistingZoneRoutingProducts value)
+        {
+            string owner = string.Join<int>(",", new List<int>() { ownertype, ownerId });
+            List<ExistingZoneRoutingProducts> matchedExistingRoutingProducts;
+            if (!this.TryGetValue(ownertype, ownerId, out matchedExistingRoutingProducts))
+            {
+                matchedExistingRoutingProducts = new List<ExistingZoneRoutingProducts>();
+                this._existingZonesRoutingProductsByOwner.Add(owner, matchedExistingRoutingProducts);
+            }
+            matchedExistingRoutingProducts.Add(value);
+        }
+
+        public bool TryGetValue(int ownertype, int ownerId, out List<ExistingZoneRoutingProducts> value)
+        {
+            string owner = string.Join<int>(",", new List<int>() { ownertype, ownerId });
+            return _existingZonesRoutingProductsByOwner.TryGetValue(owner, out value);
+        }
+
+        public Dictionary<string, List<ExistingZoneRoutingProducts>>.Enumerator GetEnumerator()
+        {
+            return this._existingZonesRoutingProductsByOwner.GetEnumerator();
+        }
+
+        public Owner GetOwner(string key)
+        {
+            if (key == null)
+                throw new NullReferenceException("key");
+
+            string[] owner = key.Split(',');
+            return new Owner()
+            {
+                OwnerId = int.Parse(owner[1]),
+                OwnerType = (SalePriceListOwnerType)int.Parse(owner[0])
+            };
+        }
+    }
 }

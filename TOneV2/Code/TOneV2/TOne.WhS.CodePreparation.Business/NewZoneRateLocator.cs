@@ -127,7 +127,8 @@ namespace TOne.WhS.CodePreparation.Business
                     OwnerType = owner.OwnerType,
                     CurrencyId = highestRate.CurrencyId,
                     Rate = highestRate.Value,
-                    RateBED = highestRate.BED
+                    RateBED = highestRate.BED,
+                    HighesRateZoneId=highestRate.ZoneId
                 };
                 ratesEntities.Add(zoneRate);
             }
@@ -148,6 +149,7 @@ namespace TOne.WhS.CodePreparation.Business
                     highestRate.Value = existingRate.RateEntity.Rate;
                     highestRate.CurrencyId = saleRateManager.GetCurrencyId(existingRate.RateEntity);
                     highestRate.BED = existingRate.RateEntity.BED;
+                    highestRate.ZoneId = existingRate.ParentZone.ZoneId;
                 }
             }
             return highestRate;
@@ -159,5 +161,6 @@ namespace TOne.WhS.CodePreparation.Business
         public Decimal Value { get; set; }
         public int CurrencyId { get; set; }
         public DateTime BED { get; set; }
+        public long ZoneId { get; set; }
     }
 }

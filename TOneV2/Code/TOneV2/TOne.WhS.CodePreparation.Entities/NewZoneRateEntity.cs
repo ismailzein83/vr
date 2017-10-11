@@ -14,7 +14,7 @@ namespace TOne.WhS.CodePreparation.Entities
         public SalePriceListOwnerType OwnerType { get; set; }
 
         public decimal Rate { get; set; }
-
+        public long? HighesRateZoneId { get; set; }
         public int? CurrencyId { get; set; }
         public DateTime RateBED { get; set; }
     }

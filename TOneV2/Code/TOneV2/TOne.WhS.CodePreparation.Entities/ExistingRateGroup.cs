@@ -21,4 +21,19 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             }
         }
     }
+
+    public class ExistingZoneRoutingProductGroup
+    {
+        public string ZoneName { get; set; }
+
+        private ExistingZonesRoutingProductsByOwner _zoneRoutingProducts = new ExistingZonesRoutingProductsByOwner();
+
+        public ExistingZonesRoutingProductsByOwner ZoneRoutingProducts
+        {
+            get
+            {
+                return this._zoneRoutingProducts;
+            }
+        }
+    }
 }

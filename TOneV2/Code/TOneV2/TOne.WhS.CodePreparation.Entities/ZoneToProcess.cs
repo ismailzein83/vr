@@ -74,6 +74,17 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             }
         }
 
+        private List<ZoneRoutingProductToAdd> _zonesRoutingProductsToAdd = new List<ZoneRoutingProductToAdd>();
+
+        public List<ZoneRoutingProductToAdd> ZonesRoutingProductsToAdd
+        {
+            get
+            {
+                return this._zonesRoutingProductsToAdd;
+            }
+        }
+
+
         private List<NotImportedRate> _notImportedNormalRates = new List<NotImportedRate>();
 
         public List<NotImportedRate> NotImportedNormalRates 
@@ -82,6 +93,16 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             {
                 return this._notImportedNormalRates;
             } 
+        }
+
+        private List<NotImportedZoneRoutingProduct> _notImportedZoneRoutingProduct = new List<NotImportedZoneRoutingProduct>();
+
+        public List<NotImportedZoneRoutingProduct> NotImportedZoneRoutingProduct
+        {
+            get
+            {
+                return this._notImportedZoneRoutingProduct;
+            }
         }
 
         public string RecentZoneName { get; set; }

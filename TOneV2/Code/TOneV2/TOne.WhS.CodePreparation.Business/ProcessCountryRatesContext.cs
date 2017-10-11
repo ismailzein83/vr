@@ -15,6 +15,7 @@ namespace TOne.WhS.CodePreparation.Business
         public IEnumerable<ZoneToProcess> ZonesToProcess { get; set; }
         public IEnumerable<ChangedRate> ChangedRates { get; set; }
         public IEnumerable<AddedRate> NewRates { get; set; }
+        public IEnumerable<AddedZoneRoutingProduct> NewZonesRoutingProducts { get; set; }
         public DateTime EffectiveDate { get; set; }
         public SalePriceListsByOwner SalePriceListsByOwner { get; set; }
         public int SellingNumberPlanId { get; set; }

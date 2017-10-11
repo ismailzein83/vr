@@ -1,9 +1,19 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-datagrid datasource="zonesRoutingProductsPreview"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="[]"
+             defaultsortbyfieldname="'OwnerName'">
 
-</body>
-</html>
+    <vr-datagridcolumn headertext="'Owner Type'" field="'OwnerTypeDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Owner Name'" field="'OwnerName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone Name'" field="'Entity.ZoneName'" type="'Text'" ng-if="!isSubGrid"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn widthfactor="3">
+        <vr-icon iconurl="dataItem.codeStatusIconUrl" tooltip="dataItem.codeStatusIconTooltip" inline></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
+
+
+</vr-datagrid>

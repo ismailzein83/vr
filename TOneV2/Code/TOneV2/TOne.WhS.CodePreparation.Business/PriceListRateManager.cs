@@ -19,6 +19,7 @@ namespace TOne.WhS.CodePreparation.Business
             ProcessCountryRates(context.ZonesToProcess, context.ExistingZones, context.ExistingRates, salePriceListsByOwner, context.NotImportedZones, context.EffectiveDate, context.SellingNumberPlanId);
             context.NewRates = context.ZonesToProcess.SelectMany(item => item.RatesToAdd).SelectMany(itm => itm.AddedRates);
             context.ChangedRates = context.ExistingRates.Where(itm => itm.ChangedRate != null).Select(itm => itm.ChangedRate);
+            context.NewZonesRoutingProducts = context.ZonesToProcess.SelectMany(item => item.ZonesRoutingProductsToAdd).SelectMany(item => item.AddedZonesRoutingProducts);
         }
 
         private void ProcessCountryRates(IEnumerable<ZoneToProcess> zonesToProcess, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingRate> existingRates,
@@ -127,6 +128,8 @@ namespace TOne.WhS.CodePreparation.Business
         }
         private void AddRateToAddToZoneToProcess(ZoneToProcess zoneToProcess, DateTime effectiveDate, SalePriceListsByOwner salePriceListsByOwner, IEnumerable<NewZoneRateEntity> rates)
         {
+            SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(effectiveDate));
+
             foreach (var rate in rates)
             {
                 PriceListToAdd priceListToAdd = new PriceListToAdd
@@ -159,7 +162,63 @@ namespace TOne.WhS.CodePreparation.Business
                     });
                 }
                 zoneToProcess.RatesToAdd.Add(rateToAdd);
+
+                var saleEntityZoneRoutingProduct = this.GetSaleEntityZoneRoutingProduct(rate.OwnerType, rate.OwnerId, rate.HighesRateZoneId, effectiveRoutingProductLocator);
+                ZoneRoutingProductToAdd zoneRoutingProductToAdd = new ZoneRoutingProductToAdd
+                {
+                    ZoneName = zoneToProcess.ZoneName,
+                    OwnerId = rate.OwnerId,
+                    OwnerType = rate.OwnerType,
+                    RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId
+                };
+
+                foreach (AddedZone addedZone in zoneToProcess.AddedZones)
+                {
+                    zoneRoutingProductToAdd.AddedZonesRoutingProducts.Add(new AddedZoneRoutingProduct
+                    {
+                        RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId,
+                        OwnerType = rate.OwnerType,
+                        OwnerId = rate.OwnerId,
+                        BED = addedZone.BED > saleEntityZoneRoutingProduct.BED ? addedZone.BED : saleEntityZoneRoutingProduct.BED,
+                        //EED = addedZone.EED < saleEntityZoneRoutingProduct.EED ? addedZone.EED : saleEntityZoneRoutingProduct.EED,
+                        EED=null,
+                        AddedZone = addedZone,
+                    });
+                }
+                zoneToProcess.ZonesRoutingProductsToAdd.Add(zoneRoutingProductToAdd);
+
             }
+        }
+
+        private SaleEntityZoneRoutingProduct GetSaleEntityZoneRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, long? highesRateZoneId, SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator)
+        {
+            RoutingProductManager routingProductManager = new RoutingProductManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct = null;
+
+            int sellingProductId=0;
+
+            if (ownerType == SalePriceListOwnerType.Customer)
+                sellingProductId = carrierAccountManager.GetSellingProductId(ownerId);
+
+            if (highesRateZoneId.HasValue)
+            {
+                if (ownerType == SalePriceListOwnerType.SellingProduct)
+                    saleEntityZoneRoutingProduct = effectiveRoutingProductLocator.GetSellingProductZoneRoutingProduct(ownerId, highesRateZoneId.Value);
+                else
+                    saleEntityZoneRoutingProduct = effectiveRoutingProductLocator.GetCustomerZoneRoutingProduct(ownerId, sellingProductId, highesRateZoneId.Value);
+            }
+
+            if (saleEntityZoneRoutingProduct != null)
+            {
+                var routingProduct = routingProductManager.GetRoutingProduct(saleEntityZoneRoutingProduct.RoutingProductId);
+                if (routingProduct.Settings.ZoneRelationType == RoutingProductZoneRelationType.AllZones)
+                    return saleEntityZoneRoutingProduct;
+            }
+
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+                return effectiveRoutingProductLocator.GetSellingProductDefaultRoutingProduct(ownerId);
+            return effectiveRoutingProductLocator.GetCustomerDefaultRoutingProduct(ownerId, sellingProductId);
         }
 
         private List<ExistingZone> GetMatchedExistingZones(IEnumerable<string> codes, IEnumerable<ExistingZone> existingZonesByType)
@@ -233,7 +292,8 @@ namespace TOne.WhS.CodePreparation.Business
                     OwnerType = owner.OwnerType,
                     CurrencyId = highestRate.CurrencyId,
                     Rate = highestRate.Value,
-                    RateBED = highestRate.BED
+                    RateBED = highestRate.BED,
+                    HighesRateZoneId = highestRate.ZoneId
                 };
                 ratesEntities.Add(zoneRate);
             }
@@ -254,6 +314,7 @@ namespace TOne.WhS.CodePreparation.Business
                     highestRate.Value = existingRate.RateEntity.Rate;
                     highestRate.CurrencyId = saleRateManager.GetCurrencyId(existingRate.RateEntity);
                     highestRate.BED = existingRate.RateEntity.BED;
+                    highestRate.ZoneId = existingRate.ParentZone.ZoneId;
                 }
             }
             return highestRate;

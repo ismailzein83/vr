@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.CodePreparation.Entities.Processing
 {
@@ -24,5 +25,37 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
                 return this._addedRate;
             }
         }
+    }
+
+    public class ZoneRoutingProductToAdd
+    {
+        public string ZoneName { get; set; }
+        public SalePriceListOwnerType OwnerType { get; set; }
+        public int OwnerId { get; set; }
+        public int RoutingProductId { get; set; }
+
+        private List<AddedZoneRoutingProduct> _addedZonesRoutingProducts = new List<AddedZoneRoutingProduct>();
+
+        public List<AddedZoneRoutingProduct> AddedZonesRoutingProducts
+        {
+            get
+            {
+                return this._addedZonesRoutingProducts;
+            }
+        }
+    }
+
+    public class AddedZoneRoutingProduct
+    {
+        public long SaleEntityRoutingProductId { get; set; }
+        public AddedZone AddedZone { get; set; }
+        public SalePriceListOwnerType OwnerType { get; set; }
+        public int  OwnerId { get; set; }
+        public int RoutingProductId { get; set; }
+
+        public DateTime BED { get; set; }
+
+        public DateTime? EED { get; set; }
+        
     }
 }

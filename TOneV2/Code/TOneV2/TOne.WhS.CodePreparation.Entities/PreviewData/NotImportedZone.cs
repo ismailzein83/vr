@@ -28,6 +28,16 @@ namespace TOne.WhS.CodePreparation.Entities
             }
         }
 
+        private List<NotImportedZoneRoutingProduct> _notImportedZoneRoutingProduct = new List<NotImportedZoneRoutingProduct>();
+
+        public List<NotImportedZoneRoutingProduct> NotImportedZoneRoutingProduct
+        {
+            get
+            {
+                return this._notImportedZoneRoutingProduct;
+            }
+        }
+
         public bool HasChanged { get; set; }
 
         public object Key

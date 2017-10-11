@@ -107,9 +107,26 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_ZoneChangeTypeEnum, VR
                 }
             };
 
+            var zoneRoutingProductsTab = {
+                title: "Routing Products",
+                directive: "vr-cp-zoneroutingproductpreview-grid",
+                loadDirective: function (directiveAPI, zoneDataItem) {
+                    zoneDataItem.zoneRoutingProductsGridAPI = directiveAPI;
+
+                    var zoneRoutingProductsGridPayload = {
+                        isSubGrid: true,
+                            ProcessInstanceId: processInstanceId,
+                            ZoneName: zoneDataItem.ZoneName,
+                            OnlyModified: onlyModified
+                    };
+
+                    return zoneDataItem.zoneRoutingProductsGridAPI.load(zoneRoutingProductsGridPayload);
+                }
+            };
+
             directiveTabs.push(codesTab);
             directiveTabs.push(ratesTab);
-
+            directiveTabs.push(zoneRoutingProductsTab);
             return directiveTabs;
         }
 

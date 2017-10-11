@@ -26,4 +26,25 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
             return _existingRateGroupByZoneName.TryGetValue(key.ToLower(), out value);
         }
     }
+
+    public class ExistingZoneRoutingProductGroupByZoneName
+    {
+        private Dictionary<string, ExistingZoneRoutingProductGroup> _existingZoneRoutingProductGroupByZoneName;
+
+        public ExistingZoneRoutingProductGroupByZoneName()
+        {
+            this._existingZoneRoutingProductGroupByZoneName = new Dictionary<string, ExistingZoneRoutingProductGroup>();
+
+        }
+
+        public void Add(string key, ExistingZoneRoutingProductGroup value)
+        {
+            _existingZoneRoutingProductGroupByZoneName.Add(key.ToLower(), value);
+        }
+
+        public bool TryGetValue(string key, out ExistingZoneRoutingProductGroup value)
+        {
+            return _existingZoneRoutingProductGroupByZoneName.TryGetValue(key.ToLower(), out value);
+        }
+    }
 }

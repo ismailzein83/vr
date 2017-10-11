@@ -171,6 +171,7 @@
     <Content Include="WhS_CodePreparation\Constant\CodeItemDraftStatusEnum.js" />
     <Content Include="WhS_CodePreparation\Constant\ModuleConfig.js" />
     <Content Include="WhS_CodePreparation\Constant\NewCPOutputResultEnum.js" />
+    <Content Include="WhS_CodePreparation\Constant\ZoneRoutingProductChangeTypeEnum.js" />
     <Content Include="WhS_CodePreparation\Directives\ChangesPreview\vr-cp-groupedby-selector.js" />
     <Content Include="WhS_CodePreparation\Directives\ChangesPreview\vr-cp-viewchangetype-selector.js" />
     <Content Include="WhS_CodePreparation\Directives\CodePreparation\Templates\CodePreparationSaleCodesGridTemplate.html" />
