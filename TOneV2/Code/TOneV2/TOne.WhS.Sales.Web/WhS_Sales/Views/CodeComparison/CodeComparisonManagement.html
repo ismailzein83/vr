@@ -2,22 +2,23 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
+                <span vr-loader="isLoadingSellingNumberPlan">
+                    <vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady"></vr-whs-be-sellingnumberplan-selector>
+                </span>
+                <vr-whs-be-supplier-selector getsuppliers on-ready="onCarrierAccountDirectiveReady" normal-col-num="2" isrequired="true" ismultipleselection selectedvalues="selectedSuppliers"></vr-whs-be-supplier-selector>
+                <vr-columns width="normal">
+                    <vr-textbox value="threshold" label="Threshold" isrequired="true" customvalidate="validateThreshold()"></vr-textbox>
+                </vr-columns>
                 <vr-columns width="normal">
                     <vr-textbox value="codeStartWith" label="Code Start With"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="normal">
-                    <vr-textbox value="threshold" label="Threshold" isrequired="true"></vr-textbox>
-                </vr-columns>
-                    <span vr-loader="isLoadingSellingNumberPlan">
-                        <vr-whs-be-sellingnumberplan-selector normal-col-num="2" isrequired="true" on-ready="onSellingNumberPlanSelectorReady"></vr-whs-be-sellingnumberplan-selector>
-                    </span>
-                <vr-whs-be-supplier-selector getsuppliers on-ready="onCarrierAccountDirectiveReady" normal-col-num="2" isrequired="true" ismultipleselection></vr-whs-be-supplier-selector>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Load" formname="formFilter" data-onclick="loadClicked"></vr-button>
+                    <vr-button type="Export" formname="formFilter" data-onclick="exportClicked"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

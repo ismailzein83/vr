@@ -2,15 +2,15 @@
 
     "use strict";
 
-    codeCompareManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService'];
+    codeCompareManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'WhS_Sales_CodeCompareAPIService'];
 
-    function codeCompareManagementController($scope, UtilsService, VRUIUtilsService) {
+    function codeCompareManagementController($scope, UtilsService, VRUIUtilsService, WhS_Sales_CodeCompareAPIService) {
         var gridAPI;
         var sellingNumberPlanDirectiveAPI;
         var sellingNumberPlanReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var carrierAccountDirectiveAPI;
         var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        
+
 
         defineScope();
         load();
@@ -21,9 +21,19 @@
             $scope.scopeModel = {};
             $scope.loadClicked = function () {
                 setFilterObject();
-                return gridAPI.loadGrid(filter);
+                var gridPayload = {
+                    query: filter,
+                    selectedSuppliers: UtilsService.cloneObject($scope.selectedSuppliers)
+                };
+                return gridAPI.load(gridPayload);
             };
-
+            $scope.exportClicked = function () {
+                setFilterObject();
+                WhS_Sales_CodeCompareAPIService.ExportCodeCompareTemplate(filter).then(function (response) {
+                    console.log(response.data);
+                    UtilsService.downloadFile(response.data, response.headers);
+                });
+            };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
             };
@@ -34,6 +44,19 @@
             $scope.onCarrierAccountDirectiveReady = function (api) {
                 carrierAccountDirectiveAPI = api;
                 carrierAccountReadyPromiseDeferred.resolve();
+            };
+            $scope.validateThreshold = function () {
+                if (carrierAccountDirectiveAPI.getSelectedIds() == null)
+                    return "Select Suppliers"
+                if ($scope.threshold > 0 && $scope.threshold <= carrierAccountDirectiveAPI.getSelectedIds().length)
+                    return null;
+                else
+                {
+                    if ($scope.threshold < 0)
+                        return "negative number";
+                    if ($scope.threshold > carrierAccountDirectiveAPI.getSelectedIds().length)
+                        return "greater than maximum"
+                }
             };
         }
 
@@ -76,7 +99,6 @@
                 sellingNumberPlanId: sellingNumberPlanDirectiveAPI.getSelectedIds(),
                 supplierIds: carrierAccountDirectiveAPI.getSelectedIds(),
                 codeStartWith: ($scope.codeStartWith != null) ? $scope.codeStartWith : null
-
             };
         }
 

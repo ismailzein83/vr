@@ -37,7 +37,7 @@ namespace TOne.WhS.Routing.Business
 			return dataManager.GetOtherSupplierZonesMatchedToSupplierZones(supplierId, supplierZoneIds, otherSupplierIds);
 		}
 
-        public IEnumerable<CodeSaleZoneMatch> GetSaleZoneMatchBySellingNumberPlanId(int sellingNumberPlanId,string codeStartWith)
+        public IEnumerable<CodeSaleZoneMatch> GetSaleCodeMatchBySellingNumberPlanId(int sellingNumberPlanId,string codeStartWith)
         { 
             if(sellingNumberPlanId==null)
                 throw new NullReferenceException("sellingNumberPlanId");
@@ -45,7 +45,7 @@ namespace TOne.WhS.Routing.Business
             return dataManager.GetSaleZoneMatchBySellingNumberPlanId(sellingNumberPlanId, codeStartWith);
         }
 
-        public IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBysupplierIds(IEnumerable<long> supplierIds, string codeStartWith)
+        public IEnumerable<CodeSupplierZoneMatch> GetSupplierCodeMatchBysupplierIds(IEnumerable<long> supplierIds, string codeStartWith)
         {
             if (supplierIds == null)
                 throw new NullReferenceException("supplierIds");

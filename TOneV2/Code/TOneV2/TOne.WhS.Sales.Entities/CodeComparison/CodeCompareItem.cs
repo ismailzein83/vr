@@ -36,6 +36,8 @@ namespace TOne.WhS.Sales.Entities
 
     public class CodeCompareSupplierItem
     {
+        public int SupplierId { get; set; }
+
         public string SupplierZone { get; set; }
 
         public string SupplierCode { get; set; }

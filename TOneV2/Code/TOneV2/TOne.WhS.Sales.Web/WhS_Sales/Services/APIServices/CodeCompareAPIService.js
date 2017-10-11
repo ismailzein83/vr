@@ -10,10 +10,16 @@
         function GetFilteredCodeCompare(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredCodeCompare"), input);
         }
-       
-
+        
+        function ExportCodeCompareTemplate(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "ExportCodeCompareTemplate"), input,{
+            returnAllResponseParameters: true,
+            responseTypeAsBufferArray: true
+        });
+        }
         return ({
-            GetFilteredCodeCompare: GetFilteredCodeCompare
+            GetFilteredCodeCompare: GetFilteredCodeCompare,
+            ExportCodeCompareTemplate: ExportCodeCompareTemplate
         });
     }
 
