@@ -41,9 +41,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             else
                 analyticQuery.Query.DimensionFields.Add("Supplier");
 
-            analyticQuery.Query.DimensionFields.Add("SaleZone");
-            analyticQuery.Query.DimensionFields.Add("SaleRateConvCurr");
-            analyticQuery.Query.DimensionFields.Add("CostRateConvCurr");
+            analyticQuery.Query.DimensionFields.Add("SaleZoneName");
+            analyticQuery.Query.MeasureFields.Add("SaleRate_DurAvg");
+            analyticQuery.Query.MeasureFields.Add("CostRate_DurAvg");
 
             if (!String.IsNullOrEmpty(parameters.CustomersId))
             {
@@ -80,13 +80,25 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     var zoneValue = analyticRecord.DimensionValues[2];
                     if (zoneValue != null)
                         customerFormatted.Destination = zoneValue.Name;
-                    var saleRateValue = analyticRecord.DimensionValues[3];
-                    if (saleRateValue != null)
-                        customerFormatted.SaleRate = ReportHelpers.FormatLongNumberDigit(Convert.ToDecimal(saleRateValue.Value ?? 0.0));
 
-                    var costRateValue = analyticRecord.DimensionValues[4];
-                    if (costRateValue != null)
-                        customerFormatted.CostRate = ReportHelpers.FormatLongNumberDigit(Convert.ToDecimal(costRateValue.Value ?? 0.0));
+                    //var saleRateValue = analyticRecord.DimensionValues[3];
+                    //if (saleRateValue != null)
+                    //    customerFormatted.SaleRate = ReportHelpers.FormatLongNumberDigit(Convert.ToDecimal(saleRateValue.Value ?? 0.0));
+
+                    //var costRateValue = analyticRecord.DimensionValues[4];
+                    //if (costRateValue != null)
+                    //    customerFormatted.CostRate = ReportHelpers.FormatLongNumberDigit(Convert.ToDecimal(costRateValue.Value ?? 0.0));
+
+
+                    MeasureValue saleRate;
+                    analyticRecord.MeasureValues.TryGetValue("SaleRate_DurAvg", out saleRate);
+                    decimal saleRateValue = Convert.ToDecimal(saleRate.Value ?? 0.0);
+                    customerFormatted.SaleRate = ReportHelpers.FormatLongNumberDigit(saleRateValue);
+
+                    MeasureValue costRate;
+                    analyticRecord.MeasureValues.TryGetValue("CostRate_DurAvg", out costRate);
+                    decimal costRateValue = Convert.ToDecimal(saleRate.Value ?? 0.0);
+                    customerFormatted.CostRate = ReportHelpers.FormatLongNumberDigit(costRateValue);
 
                     MeasureValue saleDuration;
                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out saleDuration);
