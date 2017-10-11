@@ -47,7 +47,7 @@
             };
             $scope.validateThreshold = function () {
                 if (carrierAccountDirectiveAPI.getSelectedIds() == null)
-                    return "Select Suppliers"
+                    return "Select Suppliers";
                 if ($scope.threshold > 0 && $scope.threshold <= carrierAccountDirectiveAPI.getSelectedIds().length)
                     return null;
                 else
