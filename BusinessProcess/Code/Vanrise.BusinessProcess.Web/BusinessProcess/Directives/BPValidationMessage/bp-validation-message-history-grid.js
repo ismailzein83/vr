@@ -1,59 +1,43 @@
-﻿"use strict";
-app.directive("businessprocessBpValidationMessageHistory", ["BusinessProcess_BPValidationMessageAPIService", "VRNotificationService", "UtilsService", "BPActionSeverityEnum", "BusinessProcess_BPValidationMessageService",
-function (BusinessProcess_BPValidationMessageAPIService, VRNotificationService, UtilsService, BPActionSeverityEnum, BusinessProcess_BPValidationMessageService) {
+﻿'use strict';
 
-    var directiveDefinitionObject = {
+app.directive('businessprocessBpValidationMessageHistory', ['BusinessProcess_BPValidationMessageAPIService', 'VRNotificationService', 'UtilsService', 'BPActionSeverityEnum', 'BusinessProcess_BPValidationMessageService', function (BusinessProcess_BPValidationMessageAPIService, VRNotificationService, UtilsService, BPActionSeverityEnum, BusinessProcess_BPValidationMessageService) {
 
-        restrict: "E",
+    return {
+        restrict: 'E',
         scope: {
-            onReady: "="
+            onReady: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-
             var bpValidationMessageGrid = new BPValidationMessageGrid($scope, ctrl, $attrs);
             bpValidationMessageGrid.initializeController();
         },
-        controllerAs: "ctrl",
+        controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
 
         },
-        templateUrl: "/Client/Modules/BusinessProcess/Directives/BPValidationMessage/Templates/BPValidationMessageHistoryGridTemplate.html"
-
+        templateUrl: '/Client/Modules/BusinessProcess/Directives/BPValidationMessage/Templates/BPValidationMessageHistoryGridTemplate.html'
     };
-
     function BPValidationMessageGrid($scope, ctrl) {
-
-        var gridAPI;
-        var filter = {};
-
-        var bpInstanceId;
 
         this.initializeController = initializeController;
 
+        var bpInstanceId;
+
+        var gridAPI;
+        var gridReadyDeferred = UtilsService.createPromiseDeferred();
+        var gridFilter = {};
+
         function initializeController() {
-
             $scope.bpValidationMessages = [];
-            $scope.selectedActionSeverity = [];
 
-            loadFilters();
+            $scope.actionSeverities = UtilsService.getArrayEnum(BPActionSeverityEnum);
+            $scope.selectedActionSeverities = [];
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                    ctrl.onReady(getDirectiveAPI());
-
-                function getDirectiveAPI() {
-                    var directiveAPI = {};
-                    directiveAPI.load = function (query) {
-                        bpInstanceId = query.BPInstanceID;
-                        getFilterObject();
-                        return gridAPI.retrieveData(filter);
-                    };
-
-                    return directiveAPI;
-                }
+                gridReadyDeferred.resolve();
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -66,28 +50,37 @@ function (BusinessProcess_BPValidationMessageAPIService, VRNotificationService, 
                     });
             };
 
-            $scope.searchClicked = function () {
-                getFilterObject();
-                return gridAPI.retrieveData(filter);
+            $scope.getSeverityColor = function (dataItem, colDef) {
+                return BusinessProcess_BPValidationMessageService.getSeverityColor(dataItem.Entity.Severity);
             };
 
+            $scope.search = function () {
+                setGridFilter();
+                return gridAPI.retrieveData(gridFilter);
+            };
+
+            UtilsService.waitMultiplePromises([gridReadyDeferred.promise]).then(function () {
+                defineAPI();
+            });
+        }
+        function defineAPI() {
+            var api = {};
+
+            api.load = function (query) {
+                bpInstanceId = query.BPInstanceID;
+                setGridFilter();
+                return gridAPI.retrieveData(gridFilter);
+            };
+
+            if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
+                ctrl.onReady(api);
         }
 
-        $scope.getSeverityColor = function (dataItem, colDef) {
-            return BusinessProcess_BPValidationMessageService.getSeverityColor(dataItem.Entity.Severity);
-        };
-
-        function loadFilters() {
-            $scope.actionSeverity = UtilsService.getArrayEnum(BPActionSeverityEnum);
-        }
-
-        function getFilterObject() {
-            filter = {
+        function setGridFilter() {
+            gridFilter = {
                 ProcessInstanceId: bpInstanceId,
-                Severities: UtilsService.getPropValuesFromArray($scope.selectedActionSeverity, "value")
+                Severities: UtilsService.getPropValuesFromArray($scope.selectedActionSeverities, 'value')
             };
         }
     }
-    return directiveDefinitionObject;
-
 }]);
