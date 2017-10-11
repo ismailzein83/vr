@@ -22,7 +22,7 @@ app.directive("whsRoutesyncProcessScheduled", ["VRUIUtilsService", "UtilsService
                     }
                 };
             },
-            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/ProcessInput/Scheduled/Templates/RouteSyncProcessManualTemplate.html"
+            templateUrl: "/Client/Modules/WhS_RouteSync/Directives/ProcessInput/Scheduled/Templates/RouteSyncProcessScheduledTemplate.html"
         };
 
         function DirectiveConstructor($scope, ctrl) {
@@ -46,10 +46,8 @@ app.directive("whsRoutesyncProcessScheduled", ["VRUIUtilsService", "UtilsService
                 var api = {};
                 api.getData = function () {
                     return {
-                        InputArguments: {
-                            $type: "TOne.WhS.RouteSync.BP.Arguments.RouteSyncProcessInput, TOne.WhS.RouteSync.BP.Arguments",
-                            RouteSyncDefinitionId: routeSyncDefinitionSelectorAPI.getSelectedIds()
-                        }
+                        $type: "TOne.WhS.RouteSync.BP.Arguments.RouteSyncProcessInput, TOne.WhS.RouteSync.BP.Arguments",
+                        RouteSyncDefinitionId: routeSyncDefinitionSelectorAPI.getSelectedIds()
                     };
                 };
 
