@@ -379,6 +379,8 @@
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-ratechangetypesettings-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-salepricelistfilenamepattern-helper.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\vr-whs-be-salepricelistfilenamepattern.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SwitchReleaseCause\Templates\SwitchReleaseCauseGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SwitchReleaseCause\whs-be-switchreleasecause-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\Templates\SaleEntityZoneRoutingProductHistoryGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\ZoneRoutingProduct\vr-whs-be-saleentityzoneroutingproduct-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\RoutingProduct\Templates\RoutingProductGridTemplate.html" />
@@ -662,9 +664,7 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Templates\Sale Pricelist Template.xlsx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_BusinessEntity\Directives\SwitchReleaseCause\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
