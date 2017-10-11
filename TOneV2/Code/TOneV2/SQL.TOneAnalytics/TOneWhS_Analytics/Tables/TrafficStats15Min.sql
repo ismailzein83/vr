@@ -17,7 +17,7 @@
     [DeliveredAttempts]           INT              NULL,
     [SuccessfulAttempts]          INT              NULL,
     [DurationInSeconds]           DECIMAL (20, 4)  NULL,
-    [SumOfPDDInSeconds]           DECIMAL (25)     NULL,
+    [SumOfPDDInSeconds]           DECIMAL (20, 4)  NULL,
     [MaxDurationInSeconds]        DECIMAL (20, 4)  NULL,
     [NumberOfCalls]               INT              NULL,
     [DeliveredNumberOfCalls]      INT              NULL,
@@ -43,6 +43,8 @@
     [Type]                        INT              NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
