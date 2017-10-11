@@ -733,6 +733,7 @@
     <None Include="Mediation_Datasource_Namibia.PostDeployment.sql" />
     <None Include="Mediation_Datasource_Iraq.PostDeployment.sql" />
     <None Include="CarrierPortal.RetailPortal_Centrex.PostDeployment.sql" />
+    <None Include="Sama.FlaggedService.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
