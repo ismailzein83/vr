@@ -123,7 +123,7 @@ namespace TOne.WhS.DBSync.Business
             else
             {
                 TotalRowsFailed++;
-                Context.WriteWarning(string.Format("Failed migrating Supplier Zone Service, Source Id: {0}", sourceItem.SourceId));
+                //Context.WriteWarning(string.Format("Failed migrating Supplier Zone Service, Source Id: {0}", sourceItem.SourceId));
                 return null;
             }
         }

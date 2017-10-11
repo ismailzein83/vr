@@ -13,7 +13,7 @@ namespace TOne.WhS.DBSync.Business
 {
     public class SaleEntityRoutingProductMigrator : Migrator<SourceRate, SaleEntityRoutingProduct>
     {
-        
+
         SourceRateDataManager dataManager;
         SaleEntityRoutingProductDBSyncDataManager dbSyncDataManager;
         Dictionary<string, CarrierAccount> allCarrierAccounts;
@@ -151,7 +151,7 @@ namespace TOne.WhS.DBSync.Business
         {
             return new SaleEntityRoutingProduct
             {
-                BED = saleEntityRateByCustomer.Rates.Min(r => r.BeginEffectiveDate.Value),
+                BED = saleEntityRateByCustomer.Rates.Where(r => r.BeginEffectiveDate.HasValue).Min(r => r.BeginEffectiveDate.Value),
                 SaleZoneId = null,
                 OwnerType = SalePriceListOwnerType.Customer,
                 OwnerId = saleEntityRateByCustomer.CustomerId,
@@ -177,7 +177,7 @@ namespace TOne.WhS.DBSync.Business
                 if (allSaleZones != null && saleRate.ZoneId.HasValue)
                     allSaleZones.TryGetValue(saleRate.ZoneId.Value.ToString(), out saleZone);
 
-                if (saleZone != null)
+                if (saleZone != null && saleRate.BeginEffectiveDate.HasValue && saleRate.Rate.HasValue)
                 {
                     result.Add(new SaleEntityRoutingProduct
                     {
@@ -191,7 +191,7 @@ namespace TOne.WhS.DBSync.Business
                 }
                 else
                 {
-                    Context.WriteWarning(string.Format("Failed migrating Sale Entity Routing Product, Sale Zone is not found: {0}", saleRate.ZoneId));
+                    //Context.WriteWarning(string.Format("Failed migrating Sale Entity Routing Product, Sale Zone is not found: {0}", saleRate.ZoneId));
                     this.TotalRowsFailed++;
                 }
             }
