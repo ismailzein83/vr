@@ -390,18 +390,17 @@ namespace TOne.WhS.Sales.BP.Activities
                     minDate = Vanrise.Common.Utilities.Min(minDate, newCustomerCountry.BED);
                 }
             }
-            if (countryChanges.ChangedCountries != null && countryChanges.ChangedCountries.CountryIds != null)
+            if (countryChanges.ChangedCountries != null && countryChanges.ChangedCountries.Countries != null)
             {
                 minDate = Vanrise.Common.Utilities.Min(minDate, countryChanges.ChangedCountries.EED);
 
-                foreach (int changedCountryId in countryChanges.ChangedCountries.CountryIds)
+                foreach (DraftChangedCountry draftChangedCountry in countryChanges.ChangedCountries.Countries)
                 {
                     customerCountriesToChange.Add(new CustomerCountryToChange()
                     {
-                        CountryId = changedCountryId,
+                        CountryId = draftChangedCountry.CountryId,
                         CloseEffectiveDate = countryChanges.ChangedCountries.EED
                     });
-
                 }
             }
         }

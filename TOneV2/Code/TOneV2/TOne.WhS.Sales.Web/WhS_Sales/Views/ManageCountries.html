@@ -1,0 +1,87 @@
+﻿<div vr-modalcontent ng-controller="WhS_Sales_ManageCountriesController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formManageCountries">
+            <vr-tabs>
+                <vr-tab header="'Countries To Sell'">
+                    <vr-row removeline>
+                        <vr-columns width="1/4row">
+                            <vr-select on-ready="scopeModel.onCountrySelectionTypeSelectorReady"
+                                       label="Filter By"
+                                       datasource="scopeModel.countrySelectionTypes"
+                                       selectedvalues="scopeModel.selectedCountrySelectionType"
+                                       onselectitem="scopeModel.onCountrySelectionTypeSelected"
+                                       datavaluefield="value"
+                                       datatextfield="description"
+                                       isrequired="true"
+                                       hideremoveicon="true">
+                            </vr-select>
+                        </vr-columns>
+                        <vr-common-country-selector ng-show="scopeModel.isCountryToSellSelectorShown"
+                                                    on-ready="scopeModel.onCountryToSellSelectorReady"
+                                                    selectedvalues="scopeModel.selectedCountriesToSell"
+                                                    normal-col-num="3"
+                                                    isrequired="scopeModel.isCountryToSellSelectorShown && scopeModel.countriesToSell.length == 0"
+                                                    ismultipleselection>
+                        </vr-common-country-selector>
+                        <vr-columns width="1/4row">
+                            <vr-datetimepicker type="date" label="BED" value="scopeModel.beginEffectiveDate" customvalidate="scopeModel.isBEDValid()"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="1/4row" withemptyline>
+                            <vr-button type="Add" data-onclick="scopeModel.addCountriesToSell" vr-disabled="scopeModel.disableAddCountriesToSellButton()" standalone></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-datagrid on-ready="scopeModel.onCountryToSellGridReady"
+                                         datasource="scopeModel.countriesToSell"
+                                         ondeleterow="scopeModel.removeCountryToSell"
+                                         maxheight="500px"
+                                         norowhighlightonclick
+                                         hidegridmenu>
+                                <vr-datagridcolumn headertext="'Name'" field="'entity.countryName'" type="'Text'" widthfactor="75" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'BED'" widthfactor="25" disablesorting="true">
+                                    <vr-datetimepicker type="date" value="dataItem.entity.beginEffectiveDate" customvalidate="viewScope.scopeModel.isCountryToSellBEDValid(dataItem)" isrequired></vr-datetimepicker>
+                                </vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Countries To Close'">
+                    <vr-row removeline>
+                        <vr-common-country-selector on-ready="scopeModel.onCountryToCloseSelectorReady"
+                                                    selectedvalues="scopeModel.selectedCountriesToClose"
+                                                    normal-col-num="3"
+                                                    ismultipleselection>
+                        </vr-common-country-selector>
+                        <vr-columns width="1/4row">
+                            <vr-datetimepicker type="date" label="EED" value="scopeModel.endEffectiveDate" customvalidate="scopeModel.isEEDValid()" isrequired="scopeModel.countriesToClose.length > 0"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="1/4row" withemptyline>
+                            <vr-button type="Add" data-onclick="scopeModel.addCountriesToClose" vr-disabled="scopeModel.selectedCountriesToClose.length == 0" standalone></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-datagrid on-ready="scopeModel.onCountryToCloseGridReady"
+                                         datasource="scopeModel.countriesToClose"
+                                         ondeleterow="scopeModel.removeCountryToClose"
+                                         maxheight="500px"
+                                         norowhighlightonclick
+                                         hidegridmenu>
+                                <vr-datagridcolumn headertext="'Name'" field="'entity.countryName'" type="'Text'" disablesorting></vr-datagridcolumn>
+                            </vr-datagrid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formManageCountries" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

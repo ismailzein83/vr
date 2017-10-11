@@ -6,7 +6,7 @@
                 <vr-columns width="fullrow">
                     <vr-choices-filter selectedindex="selectedChoiceindex">
                         <vr-choice-filter isselected="isSettingsSelected">Settings</vr-choice-filter>
-                        <vr-choice-filter isselected="isZoneFilterSelected">Zone Filter</vr-choice-filter>
+                        <!--<vr-choice-filter isselected="isZoneFilterSelected">Zone Filter</vr-choice-filter>-->
                         <vr-choice-filter isselected="isInfoSelected">Info</vr-choice-filter>
                     </vr-choices-filter>
                 </vr-columns>
@@ -114,7 +114,7 @@
                     <vr-button type="Load" validationcontext="LoadGroup" data-onclick="load"></vr-button>
                     <vr-button type="Settings" data-onclick="editSettings" ng-show="showSettingsButton"></vr-button>
                     <vr-button type="BulkActions" validationcontext="LoadGroup" data-onclick="openBulkActionWizard" ng-show="showBulkActionButton"></vr-button>
-                    <vr-button type="ManageCountries" validationcontext="OwnerGroup" ng-show="showCarrierAccountSelector" data-onclick="sellNewCountries"></vr-button>
+                    <vr-button type="ManageCountries" validationcontext="OwnerGroup" ng-show="showCarrierAccountSelector" data-onclick="manageCountries"></vr-button>
                     <vr-button type="Apply" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="applyButtonMenuActions" ng-show="showSaveButton"></vr-button>
                     <vr-button type="CancelChanges" ng-show="showCancelButton" data-onclick="deleteDraft"></vr-button>
                 </div>

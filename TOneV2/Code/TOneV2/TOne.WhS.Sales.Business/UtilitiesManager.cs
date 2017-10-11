@@ -240,8 +240,8 @@ namespace TOne.WhS.Sales.Business
         {
             var closedCountryIds = new List<int>();
 
-            if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
-                closedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+            if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.Countries != null)
+                closedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.Countries.MapRecords(x => x.CountryId));
 
             IEnumerable<CustomerCountry2> soldCountries = new CustomerCountryManager().GetSoldCountries(customerId, effectiveOn);
             if (soldCountries != null)

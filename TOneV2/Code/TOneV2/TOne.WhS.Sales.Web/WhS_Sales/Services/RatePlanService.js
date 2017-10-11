@@ -6,7 +6,7 @@
 
     function RatePlanService(VRModalService) {
         return {
-            sellNewCountries: sellNewCountries,
+            manageCountries: manageCountries,
             editSettings: editSettings,
             editPricingSettings: editPricingSettings,
             viewFutureRate: viewFutureRate,
@@ -15,16 +15,14 @@
             openBulkActionWizard: openBulkActionWizard,
             openTQIEditor: openTQIEditor,
             importRatePlan: importRatePlan,
-            addCountries: addCountries,
             areDatesTheSame: areDatesTheSame
         };
 
-        function sellNewCountries(input) {
+        function manageCountries(input) {
 
             var parameters = {
                 customerId: input.customerId,
                 countryChanges: input.countryChanges,
-                saleAreaSettings: input.saleAreaSettings,
                 customerPricingSettings: input.customerPricingSettings
             };
 
@@ -33,7 +31,7 @@
                 modalScope.onCountryChangesUpdated = input.onCountryChangesUpdated;
             };
 
-            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/SellNewCountries.html", parameters, settings);
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ManageCountries.html", parameters, settings);
         }
 
         function editSettings(settings, onSettingsUpdated) {
@@ -160,24 +158,6 @@
                 }
             };
             VRModalService.showModal("/Client/Modules/WhS_Sales/Views/ImportRatePlan/ImportRatePlan.html", parameters, modalSettings);
-        }
-
-        function addCountries(input) {
-
-            var parameters = {
-                customerId: input.customerId,
-                retroactiveDate: input.retroactiveDate,
-                newRateDate: input.newRateDate,
-                excludedCountryIds: input.excludedCountryIds
-            };
-
-            var settings = {
-                onScopeReady: function (modalScope) {
-                    modalScope.onCountriesAdded = input.onCountriesAdded;
-                }
-            };
-
-            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/AddCountries.html", parameters, settings);
         }
 
         function areDatesTheSame(date1, date2) {

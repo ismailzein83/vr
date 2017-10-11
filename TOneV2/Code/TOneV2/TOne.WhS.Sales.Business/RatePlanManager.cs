@@ -125,8 +125,8 @@ namespace TOne.WhS.Sales.Business
             Changes draft = _dataManager.GetChanges(input.Filter.OwnerType, input.Filter.OwnerId, RatePlanStatus.Draft);
 
             var changedCountryIds = new List<int>();
-            if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
-                changedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.CountryIds);
+            if (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.Countries != null)
+                changedCountryIds.AddRange(draft.CountryChanges.ChangedCountries.Countries.MapRecords(x => x.CountryId));
 
             int? sellingProductId = GetSellingProductId(input.Filter.OwnerType, input.Filter.OwnerId, DateTime.Now, false);
             if (sellingProductId == null)
@@ -1182,8 +1182,8 @@ namespace TOne.WhS.Sales.Business
                     if (draft.CountryChanges.NewCountries != null)
                         newCountryIds = draft.CountryChanges.NewCountries.MapRecords(x => x.CountryId);
 
-                    if (draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.CountryIds != null)
-                        changedCountryIds = draft.CountryChanges.ChangedCountries.CountryIds;
+                    if (draft.CountryChanges.ChangedCountries != null && draft.CountryChanges.ChangedCountries.Countries != null)
+                        changedCountryIds = draft.CountryChanges.ChangedCountries.Countries.MapRecords(x => x.CountryId);
                 }
             }
         }
@@ -1551,5 +1551,36 @@ namespace TOne.WhS.Sales.Business
         }
 
         #endregion
+    }
+
+    public class CountryToCloseFilter : ICountryFilter
+    {
+        public int CustomerId { get; set; }
+        public DateTime EffectiveOn { get; set; }
+
+        public bool IsExcluded(ICountryFilterContext context)
+        {
+            if (context.CustomObject == null)
+                context.CustomObject = new CustomObject(CustomerId, EffectiveOn);
+
+            var customObject = context.CustomObject as CustomObject;
+            return !customObject.CountryIdsToClose.Contains(context.Country.CountryId);
+        }
+
+        private class CustomObject
+        {
+            public IEnumerable<int> CountryIdsToClose { get; set; }
+
+            public CustomObject(int customerId, DateTime effectiveOn)
+            {
+                var countryIdsToClose = new List<int>();
+                IEnumerable<CustomerCountry2> soldCountries = new CustomerCountryManager().GetSoldCountries(customerId, effectiveOn);
+
+                if (soldCountries != null && soldCountries.Count() > 0)
+                    countryIdsToClose.AddRange(soldCountries.MapRecords(x => x.CountryId, x => x.IsEffective(effectiveOn) && !x.EED.HasValue));
+
+                CountryIdsToClose = countryIdsToClose;
+            }
+        }
     }
 }

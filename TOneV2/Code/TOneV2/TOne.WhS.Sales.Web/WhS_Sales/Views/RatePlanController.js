@@ -306,7 +306,7 @@
             $scope.load = function () {
                 return loadRatePlan();
             };
-            $scope.sellNewCountries = function () {
+            $scope.manageCountries = function () {
                 var customerId = $scope.selectedCustomer.CarrierAccountId;
                 var onCountryChangesUpdated = function (updatedCountryChanges) {
                     countryChanges = updatedCountryChanges;
@@ -350,14 +350,13 @@
                             loadRatePlan();
                     });
                 };
-                var sellNewCountriesInput = {
+                var manageCountriesInput = {
                     customerId: customerId,
                     countryChanges: countryChanges,
-                    saleAreaSettings: saleAreaSettingsData,
                     customerPricingSettings: ownerPricingSettings,
                     onCountryChangesUpdated: onCountryChangesUpdated
                 };
-                WhS_Sales_RatePlanService.sellNewCountries(sellNewCountriesInput);
+                WhS_Sales_RatePlanService.manageCountries(manageCountriesInput);
             };
             $scope.editSettings = function () {
                 var onSettingsUpdated = function (updatedSettings) {
