@@ -93,6 +93,7 @@
     <Compile Include="BusinessRules\BPBusinessRuleSetDetail.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleSetInfoFilter.cs" />
     <Compile Include="BusinessRules\BPBusinessRuleSetQuery.cs" />
+    <Compile Include="BusinessRules\BPValidationMessageBigResult.cs" />
     <Compile Include="BusinessRules\BPValidationMessageQuery.cs" />
     <Compile Include="BusinessRules\BPViolatedRule.cs" />
     <Compile Include="BusinessRules\BPValitaionMessageUpdateOutput.cs" />

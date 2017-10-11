@@ -49,7 +49,19 @@ namespace Vanrise.BusinessProcess
         public Vanrise.Entities.IDataRetrievalResult<BPValidationMessageDetail> GetFilteredBPValidationMessage(Vanrise.Entities.DataRetrievalInput<BPValidationMessageQuery> input)
         {
             IBPValidationMessageDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPValidationMessageDataManager>();
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredBPValidationMessage(input));
+            Vanrise.Entities.BigResult<BPValidationMessageDetail> bigResult = dataManager.GetFilteredBPValidationMessage(input);
+
+            BPValidationMessageBigResult bpValidationMessageBigResult = new BPValidationMessageBigResult()
+            {
+                ResultKey = bigResult.ResultKey,
+                Data = bigResult.Data,
+                TotalCount = bigResult.TotalCount
+            };
+
+            if (bigResult.Data != null && bigResult.Data.Count() > 0)
+                bpValidationMessageBigResult.HasWarningMessages = bigResult.Data.Any(x => x.Entity.Severity == ActionSeverity.Warning);
+
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, bpValidationMessageBigResult);
         }
 
         private BPValidationMessageDetail BPValidationMessageDetailMapper(BPValidationMessage bpValidationMessage)
@@ -61,7 +73,5 @@ namespace Vanrise.BusinessProcess
                 Entity = bpValidationMessage
             };
         }
-
-
     }
 }

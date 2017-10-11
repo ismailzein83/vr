@@ -24,25 +24,35 @@ app.directive('businessprocessBpValidationMessageHistory', ['BusinessProcess_BPV
         this.initializeController = initializeController;
 
         var bpInstanceId;
+        var hasWarningMessages;
+        var requireWarningConfirmation;
 
         var gridAPI;
         var gridReadyDeferred = UtilsService.createPromiseDeferred();
         var gridFilter = {};
 
         function initializeController() {
-            $scope.bpValidationMessages = [];
+            $scope.scopeModel = {};
+            $scope.scopeModel.bpValidationMessages = [];
 
-            $scope.actionSeverities = UtilsService.getArrayEnum(BPActionSeverityEnum);
-            $scope.selectedActionSeverities = [];
+            $scope.scopeModel.actionSeverities = UtilsService.getArrayEnum(BPActionSeverityEnum);
+            $scope.scopeModel.selectedActionSeverities = [];
 
-            $scope.onGridReady = function (api) {
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridReadyDeferred.resolve();
             };
 
-            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+            $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return BusinessProcess_BPValidationMessageAPIService.GetFilteredBPValidationMessage(dataRetrievalInput)
                     .then(function (response) {
+                        if (response != undefined) {
+                            if (hasWarningMessages === undefined) {
+                                hasWarningMessages = response.HasWarningMessages;
+                                if (hasWarningMessages === true && requireWarningConfirmation === true)
+                                    $scope.scopeModel.showWarningConfirmationSection = true;
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -50,13 +60,17 @@ app.directive('businessprocessBpValidationMessageHistory', ['BusinessProcess_BPV
                     });
             };
 
-            $scope.getSeverityColor = function (dataItem, colDef) {
+            $scope.scopeModel.getSeverityColor = function (dataItem, colDef) {
                 return BusinessProcess_BPValidationMessageService.getSeverityColor(dataItem.Entity.Severity);
             };
 
-            $scope.search = function () {
+            $scope.scopeModel.search = function () {
                 setGridFilter();
                 return gridAPI.retrieveData(gridFilter);
+            };
+
+            $scope.scopeModel.validateWarningConfirmationValue = function () {
+                return ($scope.scopeModel.warningConfirmationValue === true) ? null : 'You must confirm the warnings to continue';
             };
 
             UtilsService.waitMultiplePromises([gridReadyDeferred.promise]).then(function () {
@@ -68,6 +82,7 @@ app.directive('businessprocessBpValidationMessageHistory', ['BusinessProcess_BPV
 
             api.load = function (query) {
                 bpInstanceId = query.BPInstanceID;
+                requireWarningConfirmation = query.requireWarningConfirmation;
                 setGridFilter();
                 return gridAPI.retrieveData(gridFilter);
             };
@@ -79,7 +94,7 @@ app.directive('businessprocessBpValidationMessageHistory', ['BusinessProcess_BPV
         function setGridFilter() {
             gridFilter = {
                 ProcessInstanceId: bpInstanceId,
-                Severities: UtilsService.getPropValuesFromArray($scope.selectedActionSeverities, 'value')
+                Severities: UtilsService.getPropValuesFromArray($scope.scopeModel.selectedActionSeverities, 'value')
             };
         }
     }
