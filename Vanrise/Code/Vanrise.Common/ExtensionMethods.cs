@@ -433,6 +433,11 @@ namespace Vanrise.Common
         public delegate bool TryParseHandler<T>(string value, out T result);
         public static T TryParseWithValidate<T>(this string valueToBeConverted, TryParseHandler<T> handler)
         {
+            return TryParseWithValidate(valueToBeConverted, handler, null);
+        }
+
+        public static T TryParseWithValidate<T>(this string valueToBeConverted, TryParseHandler<T> handler, string objectName)
+        {
             if (String.IsNullOrEmpty(valueToBeConverted))
                 throw new ArgumentNullException("valueToBeConverted");
 
@@ -440,7 +445,7 @@ namespace Vanrise.Common
             if (handler(valueToBeConverted, out result))
                 return result;
 
-            throw new Exception(String.Format("Unable to convert value '{0}' to type '{1}'", valueToBeConverted, typeof(T)));
+            throw new Exception(String.Format("Unable to convert value '{0}' to type '{1}'. objectName '{2}'", valueToBeConverted, typeof(T), objectName));
         }
 
         /// <summary>

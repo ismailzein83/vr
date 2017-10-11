@@ -89,7 +89,7 @@ namespace Vanrise.Analytic.Business
                             case AnalyticAggregateType.Min: aggregateValue = aggFieldValues.Min(); break;
                             default: throw new NotSupportedException(String.Format("AggregateType '{0}'", aggregateType));
                         }
-                        dbRecord.AggValuesByAggName.Add(aggregateName, aggregateValue);
+                        dbRecord.AggValuesByAggName.Add(aggregateName, new DBAnalyticRecordAggValue { Value = aggregateValue });
                     }
                     groupedRecords.Add(dbRecord);
                 }

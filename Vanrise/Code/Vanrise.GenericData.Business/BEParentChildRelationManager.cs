@@ -332,7 +332,7 @@ namespace Vanrise.GenericData.Business
 
         #region Private Classes
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
+        public class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             IBEParentChildRelationDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
             ConcurrentDictionary<Guid, Object> _updateHandlesByRelationDefinitionId = new ConcurrentDictionary<Guid, Object>();

@@ -76,6 +76,7 @@ namespace Vanrise.Analytic.Business
                         AnalyticAggregate measure = new AnalyticAggregate
                         {
                             AnalyticAggregateConfigId = itemConfig.AnalyticItemConfigId,
+                            Name = itemConfig.Name,
                             Config = aggregateConfig
                         };
                         analyticAggregates.Add(itemConfig.Name, measure);
