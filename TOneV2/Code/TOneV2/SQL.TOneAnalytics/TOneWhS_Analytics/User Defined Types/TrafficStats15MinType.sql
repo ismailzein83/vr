@@ -38,10 +38,11 @@
     [ReleaseSourceSCount]         INT              NULL,
     [SaleExtraCharges]            DECIMAL (26, 10) NULL,
     [CostExtraCharges]            DECIMAL (26, 10) NULL,
-    [CustomerInterconnectSwitch]  BIT              NULL,
-    [SupplierInterconnectSwitch]  BIT              NULL,
     [SaleFinancialAccountId]      INT              NULL,
-    [CostFinancialAccountId]      INT              NULL);
+    [CostFinancialAccountId]      INT              NULL,
+    [Type]                        INT              NULL);
+
+
 
 
 

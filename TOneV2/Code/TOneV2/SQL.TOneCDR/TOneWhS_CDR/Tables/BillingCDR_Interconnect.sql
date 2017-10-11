@@ -1,5 +1,6 @@
 ﻿CREATE TABLE [TOneWhS_CDR].[BillingCDR_Interconnect] (
     [CDRId]                       BIGINT          NOT NULL,
+    [SwitchId]                    INT             NULL,
     [AttemptDateTime]             DATETIME        NULL,
     [AlertDateTime]               DATETIME        NULL,
     [ConnectDateTime]             DATETIME        NULL,
@@ -7,35 +8,37 @@
     [PDDInSeconds]                DECIMAL (20, 4) NULL,
     [DurationInSeconds]           DECIMAL (20, 4) NULL,
     [CustomerID]                  INT             NULL,
+    [SellingNumberPlanID]         INT             NULL,
     [SaleZoneID]                  BIGINT          NULL,
+    [SaleCode]                    VARCHAR (20)    NULL,
+    [MasterPlanZoneID]            BIGINT          NULL,
+    [MasterPlanCode]              VARCHAR (20)    NULL,
     [OriginatingZoneID]           BIGINT          NULL,
+    [MasterPlanOriginatingZoneId] BIGINT          NULL,
     [SupplierID]                  INT             NULL,
+    [SupplierZoneID]              BIGINT          NULL,
     [CGPN]                        VARCHAR (50)    NULL,
     [CDPN]                        VARCHAR (50)    NULL,
     [CDPNIn]                      VARCHAR (50)    NULL,
     [CDPNOut]                     VARCHAR (50)    NULL,
-    [SaleCode]                    VARCHAR (20)    NULL,
     [SupplierCode]                VARCHAR (20)    NULL,
     [IDonSwitch]                  BIGINT          NULL,
     [Tag]                         VARCHAR (100)   NULL,
     [SIP]                         VARCHAR (100)   NULL,
     [IsRerouted]                  BIT             NULL,
-    [SupplierZoneID]              BIGINT          NULL,
     [ReleaseCode]                 VARCHAR (50)    NULL,
     [ReleaseSource]               VARCHAR (10)    NULL,
     [IsDelivered]                 BIT             NULL,
-    [SellingNumberPlanID]         INT             NULL,
-    [MasterPlanZoneID]            BIGINT          NULL,
-    [MasterPlanCode]              VARCHAR (20)    NULL,
-    [MasterPlanOriginatingZoneId] BIGINT          NULL,
     [PortIN]                      VARCHAR (42)    NULL,
     [PortOUT]                     VARCHAR (42)    NULL,
-    [SwitchId]                    INT             NULL,
     [CountryId]                   INT             NULL,
-    [QueueItemId]                 BIGINT          NULL,
     [SaleFinancialAccountId]      INT             NULL,
-    [CostFinancialAccountId]      INT             NULL
+    [CostFinancialAccountId]      INT             NULL,
+    [Type]                        INT             NULL,
+    [QueueItemId]                 BIGINT          NULL
 );
+
+
 
 
 
