@@ -24,7 +24,7 @@ namespace TOne.WhS.DBSync.Business
     }
     public class CarrierProfileMigrator : Migrator<SourceCarrierProfile, CarrierProfile>
     {
-        HashSet<string> InActiveProfileIds;
+        Dictionary<string, CarrierProfileBlockedStatusEntity> InActiveProfileIds;
         CarrierProfileDBSyncDataManager dbSyncDataManager;
         SourceCarrierProfileDataManager dataManager;
         SourceCarrierDocumentDataManager carrierDocumentDataManager;
@@ -107,7 +107,17 @@ namespace TOne.WhS.DBSync.Business
                 allCurrencies.TryGetValue(sourceItem.CurrencyId.ToString(), out currency);
 
             CarrierProfileSettings settings = new CarrierProfileSettings();
-            //settings.ActivationStatus = InActiveProfileIds.Contains(sourceItem.SourceId) ? CarrierProfileActivationStatus.InActive : CarrierProfileActivationStatus.Active;
+
+            settings.SupplierActivationStatus = CarrierProfileActivationStatus.Active;
+            settings.CustomerActivationStatus = CarrierProfileActivationStatus.Active;
+
+            CarrierProfileBlockedStatusEntity carrierProfileBlockedEntity;
+            if (InActiveProfileIds.TryGetValue(sourceItem.SourceId, out carrierProfileBlockedEntity))
+            {
+                settings.SupplierActivationStatus = carrierProfileBlockedEntity.IsSupplierBlocked ? CarrierProfileActivationStatus.InActive : CarrierProfileActivationStatus.Active;
+                settings.CustomerActivationStatus = carrierProfileBlockedEntity.IsCustomerBlocked ? CarrierProfileActivationStatus.InActive : CarrierProfileActivationStatus.Active;
+            }
+
             settings.Address = sourceItem.Address1;
             settings.PostalCode = sourceItem.Address2;
             settings.Town = sourceItem.Address3;

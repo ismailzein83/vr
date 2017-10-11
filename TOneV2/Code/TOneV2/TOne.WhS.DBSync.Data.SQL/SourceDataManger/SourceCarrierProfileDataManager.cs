@@ -2,6 +2,7 @@
 using System.Data;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
+using System.Linq;
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -17,14 +18,20 @@ namespace TOne.WhS.DBSync.Data.SQL
             return GetItemsText(query_getSourceCarrierProfiles, SourceCarrierProfileMapper, null);
         }
 
-        public HashSet<string> GetProfileIdsWithNoActiveAccounts()
+        public Dictionary<string, CarrierProfileBlockedStatusEntity> GetProfileIdsWithNoActiveAccounts()
         {
-            return new HashSet<string>(GetItemsText(query_getProfileAccountsWithNoActiveCarriers, ProfileIdMapper, null));
+            return GetItemsText(query_getProfileAccountsWithNoActiveCarriers, CarrierProfileBlockedStatusEntityMapper, null).ToDictionary(k => k.ProfileId, k => k);
         }
 
-        string ProfileIdMapper(IDataReader reader)
+        CarrierProfileBlockedStatusEntity CarrierProfileBlockedStatusEntityMapper(IDataReader reader)
         {
-            return reader["ProfileID"].ToString();
+            return new CarrierProfileBlockedStatusEntity
+            {
+                ProfileId = reader["ProfileID"].ToString(),
+                IsCustomerBlocked = reader["IsCustomerBlocked"].ToString() == "1",
+                IsSupplierBlocked = reader["IsSupplierBlocked"].ToString() == "1",
+            };
+
         }
 
         private SourceCarrierProfile SourceCarrierProfileMapper(IDataReader reader)
@@ -74,9 +81,22 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                                [AccountManagerContact], [IsDeleted], [DuePeriod] FROM [dbo].[CarrierProfile]  
                                                         WITH (NOLOCK)";
 
-        const string query_getProfileAccountsWithNoActiveCarriers = @"select ca.ProfileID
-                                                                      from   CarrierAccount ca 
-                                                                      group by ProfileID
-                                                                      having   count(*) = SUM(case when ca.ActivationStatus=0 then 1 else 0 END)";
+        const string query_getProfileAccountsWithNoActiveCarriers = @";with InActive_Customr as (
+                                                            select ca.ProfileID, 1 as IsBlocked
+                                                            from   CarrierAccount ca 
+                                                            where ca.AccountType = 0 or ca.AccountType = 1
+                                                            group by ProfileID
+                                                            having   count(*) = SUM(case when ca.ActivationStatus=0 then 1 else 0 END)),
+                                                            InActive_Supplier as (
+                                                            select ca.ProfileID, 1 as IsBlocked
+                                                            from   CarrierAccount ca 
+                                                            where ca.AccountType = 2 or ca.AccountType = 1
+                                                            group by ProfileID
+                                                            having   count(*) = SUM(case when ca.ActivationStatus=0 then 1 else 0 END))
+
+                                                            select isnull(c.ProfileID, s.ProfileID)as ProfileID, isnull(c.IsBlocked,0) as IsCustomerBlocked, isnull(s.IsBlocked,0) as IsSupplierBlocked from InActive_Customr c
+                                                            FULL OUTER JOIN  InActive_Supplier s on s.profileid = c.profileid
+																		   
+                                                            order by s.profileid";
     }
 }
