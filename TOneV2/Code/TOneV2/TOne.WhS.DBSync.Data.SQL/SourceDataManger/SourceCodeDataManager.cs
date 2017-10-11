@@ -50,12 +50,12 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                     Code.BeginEffectiveDate BeginEffectiveDate, Code.EndEffectiveDate EndEffectiveDate, Zone.CodeGroup CodeGroup
                                                     FROM Code WITH (NOLOCK) INNER JOIN Zone WITH (NOLOCK)  ON Code.ZoneID = Zone.ZoneID
                                                     
-                                                    where Zone.SupplierID = 'SYS'  ";
+                                                    where Zone.SupplierID = 'SYS'  and zone.CodeGroup <> '-'";
 
         const string query_getSourceCodes_Purchase = @"SELECT Code.ID ID, Code.Code Code, Code.ZoneID ZoneID, 
                                                         Code.BeginEffectiveDate BeginEffectiveDate, Code.EndEffectiveDate EndEffectiveDate, Zone.CodeGroup CodeGroup
                                                         FROM Code WITH (NOLOCK) INNER JOIN Zone WITH (NOLOCK)  ON Code.ZoneID = Zone.ZoneID
                                                         Join CarrierAccount ca on ca.CarrierAccountID = Zone.SupplierID
-                                                        where Zone.SupplierID <> 'SYS'  and ca.AccountType <> 0  ";
+                                                        where Zone.SupplierID <> 'SYS'  and ca.AccountType <> 0  and zone.CodeGroup <> '-'";
     }
 }
