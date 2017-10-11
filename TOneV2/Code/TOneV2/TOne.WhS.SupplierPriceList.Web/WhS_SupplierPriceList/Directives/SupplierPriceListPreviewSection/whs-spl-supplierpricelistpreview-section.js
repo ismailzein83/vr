@@ -174,6 +174,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
                 var payload = {
                     BPInstanceID: processInstanceId,
+                    requireWarningConfirmation: true
                 };
 
                 VRUIUtilsService.callDirectiveLoad(validationMessageHistoryGridAPI, payload, loadValidationMessageHistoryPromiseDeferred);
