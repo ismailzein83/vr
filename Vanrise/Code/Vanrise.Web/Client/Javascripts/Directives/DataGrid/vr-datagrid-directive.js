@@ -302,8 +302,19 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     col.fixedWidth = col.fixedWidth;
                 if (columnIndex == undefined)
                     ctrl.columnDefs.splice(ctrl.columnDefs.length, 0, colDef);//to insert before the actionType column
-                else
-                    ctrl.columnDefs.splice(columnIndex, 0, colDef);
+                else {
+                    colDef.columnIndex = columnIndex;
+                    var columnIndexToInsert = 0;
+                    for (var i = 0; i < ctrl.columnDefs.length; i++) {
+                        columnIndexToInsert = i;
+                        var iColDef = ctrl.columnDefs[i];
+                        if (i == columnIndex || (iColDef.columnIndex != undefined && iColDef.columnIndex >= columnIndex)) {
+                            break;
+                        }
+                    }
+                    
+                    ctrl.columnDefs.splice(columnIndexToInsert, 0, colDef);
+                }
 
                 if (ctrl.datasource != undefined) {
                     for (var i = 0; i < ctrl.datasource.length; i++) {
