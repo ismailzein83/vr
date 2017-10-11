@@ -28,6 +28,6 @@ namespace TOne.WhS.DBSync.Data.SQL
             return sourceCodeGroup;
         }
 
-        const string query_getSourceCodeGroups = @"SELECT [Code] , [Name]  FROM [dbo].[CodeGroup] WITH (NOLOCK)";
+        const string query_getSourceCodeGroups = @"SELECT [Code] , [Name]  FROM [dbo].[CodeGroup] WITH (NOLOCK) where Code <> '-'";
     }
 }
