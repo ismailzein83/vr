@@ -73,7 +73,7 @@
 
         function loadAllControls() {
 
-            return UtilsService.waitMultipleAsyncOperations([loadSupplierPriceListPreviewSection])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadSupplierPriceListPreviewSection])
                           .catch(function (error) {
                               VRNotificationService.notifyException(error);
                           })
@@ -82,7 +82,9 @@
                           });
 
         }
-
+        function setTitle() {
+            $scope.title = 'Supplier Pricelist Preview';
+        }
         function loadSupplierPriceListPreviewSection() {
             var loadSupplierPriceListPreviewSectionPromiseDeferred = UtilsService.createPromiseDeferred();
             SupplierPriceListPreviewSectionReadyPromiseDeferred.promise.then(function () {
