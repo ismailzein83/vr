@@ -39,11 +39,10 @@ namespace TOne.WhS.Analytics.Data.SQL
             string query = String.Format(@"
                 SELECT TOP (@TopDestination)  {2} AS ZoneId into #BillingStatsDailyTemp 
                 From [TOneWhS_Analytics].[BillingStatsDaily] BS WITH(NOLOCK,INDEX(IX_BillingStatsDaily_BatchStart,IX_BillingStatsDaily_Id))
-                LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3} , @FromDate, @ToDate)) AS ERC ON BS.CostCurrencyId = ERC.CurrencyID 
-                LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3} , @FromDate, @ToDate)) AS ERS ON BS.SaleCurrencyId = ERS.CurrencyID 
+                LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3} , @FromDate, @ToDate)) AS ERC ON BS.CostCurrencyId = ERC.CurrencyID AND BS.BatchStart >= ERC.BED AND (ERC.EED IS NULL OR BS.BatchStart < ERC.EED)
+                LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3} , @FromDate, @ToDate)) AS ERS ON BS.SaleCurrencyId = ERS.CurrencyID AND BS.BatchStart >= ERS.BED AND (ERS.EED IS NULL OR BS.BatchStart < ERS.EED)
                 WHERE BS.BatchStart >= @FromDate AND BS.BatchStart < @ToDate AND {1} = @CustomerId 
-                GROUP BY {2} , Year(BS.BatchStart), MONTH(BS.BatchStart) ORDER BY Year(BS.BatchStart) asc, MONTH(BS.BatchStart) asc,
-                    (cast( (SUM({0} )/{4} ) as decimal(13,4) )) desc
+                GROUP BY {2} ORDER BY (cast( (SUM({0} )/{4} ) as decimal(13,4) )) desc
 
                 SELECT {2} AS ZoneId ,Year(BS.BatchStart) AS YearDuration, 
                 MONTH(BS.BatchStart) AS MonthDuration, 
@@ -51,9 +50,9 @@ namespace TOne.WhS.Analytics.Data.SQL
                 From [TOneWhS_Analytics].[BillingStatsDaily] BS WITH(NOLOCK,INDEX(IX_BillingStatsDaily_BatchStart,IX_BillingStatsDaily_Id)) 
                     JOIN #BillingStatsDailyTemp t on {2} = t.ZoneId
                 LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3}, @FromDate, @ToDate)) AS ERC 
-                ON BS.CostCurrencyId = ERC.CurrencyID 
+                ON BS.CostCurrencyId = ERC.CurrencyID AND BS.BatchStart >= ERC.BED AND (ERC.EED IS NULL OR BS.BatchStart < ERC.EED)
                 LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3} , @FromDate, @ToDate)) AS ERS 
-                ON BS.SaleCurrencyId = ERS.CurrencyID
+                ON BS.SaleCurrencyId = ERS.CurrencyID AND BS.BatchStart >= ERS.BED AND (ERS.EED IS NULL OR BS.BatchStart < ERS.EED)
                 WHERE BS.BatchStart >= @FromDate AND BS.BatchStart < @ToDate AND {1} = @CustomerId 
                 GROUP BY {2} , Year(BS.BatchStart), MONTH(BS.BatchStart) ORDER BY Year(BS.BatchStart) asc, MONTH(BS.BatchStart) asc,
                     (cast( (SUM({0} )/{4} ) as decimal(13,4) )) desc drop table #BillingStatsDailyTemp",

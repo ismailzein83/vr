@@ -12,6 +12,7 @@ using Vanrise.Entities;
 using System.Drawing;
 using TOne.WhS.BusinessEntity.Business;
 using System.IO;
+using TOne.WhS.Analytics.Business.BillingReports;
 
 namespace TOne.WhS.Analytics.Business
 {
@@ -113,14 +114,14 @@ namespace TOne.WhS.Analytics.Business
                                     analyticRecord.MeasureValues.TryGetValue("TotalSaleNet", out net);
                                 else
                                     analyticRecord.MeasureValues.TryGetValue("TotalCostNet", out net);
-                                caseStatus.Amount = (net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0);
+                                caseStatus.Amount = Math.Round((net == null) ? 0 : Convert.ToDouble(net.Value ?? 0.0), ReportHelpers.GetLongNumberPrecision());
 
                                 MeasureValue duration;
                                 if (isSale)
                                     analyticRecord.MeasureValues.TryGetValue("SaleDuration", out duration);
                                 else
                                     analyticRecord.MeasureValues.TryGetValue("CostDuration", out duration);
-                                caseStatus.Durations = Convert.ToDecimal(duration.Value ?? 0.0); 
+                                caseStatus.Durations = Math.Round(Convert.ToDecimal(duration.Value ?? 0.0), ReportHelpers.GetNormalNumberPrecision()); 
                             }
                         }
                     }
@@ -205,6 +206,8 @@ namespace TOne.WhS.Analytics.Business
             int lstCarrierProfileCount = listBusinessCaseStatus.Count();
             double total = listBusinessCaseStatus.Sum(item => item.Amount.Value);
             decimal totalDuration = listBusinessCaseStatus.Sum(item => item.Durations.Value);
+            int decimalPrecision = ReportHelpers.GetNormalNumberPrecision();
+
             worksheet.Cells.SetColumnWidth(4, 20);
             worksheet.Cells.SetColumnWidth(5, 20);
             worksheet.Cells.SetColumnWidth(6, 20);
@@ -259,8 +262,18 @@ namespace TOne.WhS.Analytics.Business
                 for (int i = 0; i < lstCarrierProfileCount; i++)
                 {
                     worksheet.Cells[1, HeaderIndex].PutValue(listBusinessCaseStatus[i].MonthYear);
-                    worksheet.Cells[2, HeaderIndex].PutValue(listBusinessCaseStatus[i].Amount);
-                    worksheet.Cells[3, HeaderIndex++].PutValue(listBusinessCaseStatus[i].Durations);
+
+                    Style cellstyle = new Style();
+                    cellstyle.Custom = "0." + "".PadLeft(decimalPrecision, '0');
+
+                    var cellAmmount = worksheet.Cells[2, HeaderIndex];
+                    cellAmmount.PutValue(listBusinessCaseStatus[i].Amount);
+                    cellAmmount.SetStyle(cellstyle);
+
+                    var cellDuration = worksheet.Cells[3, HeaderIndex++];
+                    cellDuration.PutValue(listBusinessCaseStatus[i].Durations);
+                    cellDuration.SetStyle(cellstyle);
+
                     worksheet.Cells.SetColumnWidth(i + 1, 23);
                 }
                 worksheet.Cells.SetColumnWidth(lstCarrierProfileCount + 1, 23);
@@ -295,6 +308,9 @@ namespace TOne.WhS.Analytics.Business
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = listBusinessCaseStatus.Count;
+            int decimalPrecision =  ReportHelpers.GetNormalNumberPrecision();
+            Style cellstyle = new Style();
+            cellstyle.Custom = "0." + "".PadLeft(decimalPrecision, '0');
             if (lstCarrierProfileCount > 0)
             {
                 Range range = worksheet.Cells.CreateRange("B1:D1");
@@ -384,12 +400,19 @@ namespace TOne.WhS.Analytics.Business
                         {
                             if (listBusinessCaseStatus[j].Month == fDate.Month && listBusinessCaseStatus[j].Year == fDate.Year && lstZones[k] == listBusinessCaseStatus[j].Zone)
                             {
-                                worksheet.Cells[irow, valueIndex++].PutValue(listBusinessCaseStatus[j].Durations);
+                                var cell = worksheet.Cells[irow, valueIndex++];
+                                cell.PutValue(listBusinessCaseStatus[j].Durations);
+                                cell.SetStyle(cellstyle);
                                 f = true;
                             }
                         }
                         if (f == false)
-                            worksheet.Cells[irow, valueIndex++].PutValue("0");
+                        {
+                           
+                            var cell = worksheet.Cells[irow, valueIndex++];
+                            cell.PutValue(0);
+                            cell.SetStyle(cellstyle);
+                        }
                         fDate = fDate.AddMonths(1);
                     }
                 }

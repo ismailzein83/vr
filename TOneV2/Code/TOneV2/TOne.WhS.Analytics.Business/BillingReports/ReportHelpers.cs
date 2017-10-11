@@ -42,9 +42,19 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         {
             return _normalprecision.ToString();
         }
+
+        public static int GetNormalNumberPrecision()
+        {
+            return _normalprecision;
+        }
         public static string GetLongNumberDigit()
         {
             return _longprecision.ToString();
+        }
+
+        public static int GetLongNumberPrecision()
+        {
+            return _longprecision;
         }
         
         public static string FormatNormalNumberDigit(Decimal? number)
