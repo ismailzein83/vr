@@ -5,84 +5,80 @@ namespace TOne.WhS.DBSync.Entities
     public enum DBTableName
     {
         [Description("Currency")]
-        Currency,
+        Currency = 0,
 
         [Description("CurrencyExchangeRate")]
-        CurrencyExchangeRate,
+        CurrencyExchangeRate = 1,
 
         [Description("Country")]
-        Country,
+        Country = 2,
 
         [Description("CodeGroup")]
-        CodeGroup,
-
-        [Description("VRTimeZone")]
-        VRTimeZone,
+        CodeGroup = 3,
 
         [Description("CarrierProfile")]
-        CarrierProfile,
+        CarrierProfile = 4,
 
         [Description("ZoneServiceConfig")]
-        ZoneServiceConfig,
+        ZoneServiceConfig = 5,
 
+        [Description("VRTimeZone")]
+        VRTimeZone = 6,
 
         [Description("CarrierAccount")]
-        CarrierAccount,
+        CarrierAccount = 7,
 
         [Description("Switch")]
-        Switch,
+        Switch = 8,
 
         [Description("SaleZone")]
-        SaleZone,
+        SaleZone = 9,
 
         [Description("SupplierZone")]
-        SupplierZone,
+        SupplierZone = 10,
 
 
         [Description("SaleCode")]
-        SaleCode,
+        SaleCode = 11,
 
         [Description("SupplierCode")]
-        SupplierCode,
+        SupplierCode = 12,
 
 
         [Description("SalePriceList")]
-        SalePriceList,
+        SalePriceList = 13,
 
         [Description("SupplierPriceList")]
-        SupplierPriceList,
+        SupplierPriceList = 14,
 
         [Description("SaleRate")]
-        SaleRate,
+        SaleRate = 15,
 
         [Description("SaleEntityRoutingProduct")]
-        SaleEntityRoutingProduct,
+        SaleEntityRoutingProduct = 16,
 
         [Description("SupplierRate")]
-        SupplierRate,
+        SupplierRate = 17,
 
         [Description("CustomerCountry")]
-        CustomerCountry,
-
-        //[Description("CustomerSellingProduct")]
-        //CustomerSellingProduct,
+        CustomerCountry = 18,
 
         [Description("File")]
-        File,
+        File = 19,
 
         [Description("SwitchConnectivity")]
-        SwitchConnectivity,
+        SwitchConnectivity = 20,
 
         [Description("SupplierZoneService")]
-        SupplierZoneService,
+        SupplierZoneService = 21,
 
         [Description("SaleEntityService")]
-        SaleEntityService,
+        SaleEntityService = 22,
 
         [Description("Rule")]
-        Rule,
+        Rule = 23,
 
         [Description("CarrierAccountStatusHistory")]
-        CarrierAccountStatusHistory
+        CarrierAccountStatusHistory = 24
     }
 }

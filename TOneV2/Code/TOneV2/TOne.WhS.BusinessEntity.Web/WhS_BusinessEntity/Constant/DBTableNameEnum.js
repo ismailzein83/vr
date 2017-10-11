@@ -14,14 +14,13 @@
     SalePriceList: { value: 13, description: "SalePriceList", defaultMigrate: true },
     SupplierPriceList: { value: 14, description: "SupplierPriceList", defaultMigrate: true },
     SaleRate: { value: 15, description: "SaleRate", defaultMigrate: true },
-    SupplierRate: { value: 16, description: "SupplierRate", defaultMigrate: true },
-    CustomerCountry: { value: 17, description: "CustomerCountry", defaultMigrate: false },
-    //CustomerSellingProduct: { value: 18, description: "CustomerSellingProduct", defaultMigrate: false },
-    File: { value: 18, description: "File", defaultMigrate: false },
-    SwitchConnectivity: { value: 19, description: "SwitchConnectivity", defaultMigrate: true },
-    SupplierZoneServices: { value: 20, description: "Supplier Zone Services", defaultMigrate: true },
-    SaleEntityServices: { value: 21, description: "Sale Entity Services", defaultMigrate: true },
-    Rule: { value: 22, description: "Rules", defaultMigrate: true },
-    SaleEntityRoutingProduct: { value: 24, description: "Sale Entity Routing Product", defaultMigrate: true },
-    CarrierAccountStatusHistory: { value: 23, description: "CarrierAccountStatusHistory ", defaultMigrate: false }
+    SaleEntityRoutingProduct: { value: 16, description: "Sale Entity Routing Product", defaultMigrate: true},
+    SupplierRate: { value: 17, description: "SupplierRate", defaultMigrate: true },
+    CustomerCountry: { value: 18, description: "CustomerCountry", defaultMigrate: false },
+    File: { value: 19, description: "File", defaultMigrate: false },
+    SwitchConnectivity: { value: 20, description: "SwitchConnectivity", defaultMigrate: true },
+    SupplierZoneServices: { value: 21, description: "Supplier Zone Services", defaultMigrate: true },
+    SaleEntityServices: { value: 22, description: "Sale Entity Services", defaultMigrate: true },
+    Rule: { value: 23, description: "Rules", defaultMigrate: true },
+    CarrierAccountStatusHistory: { value: 24, description: "CarrierAccountStatusHistory ", defaultMigrate: false }
 });
