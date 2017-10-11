@@ -44,7 +44,10 @@
     [CostDealRateTierNb]       INT              NULL,
     [CostDealDurInSec]         DECIMAL (20, 4)  NULL,
     [SaleFinancialAccountId]   INT              NULL,
-    [CostFinancialAccountId]   INT              NULL);
+    [CostFinancialAccountId]   INT              NULL,
+    [Type]                     INT              NULL);
+
+
 
 
 

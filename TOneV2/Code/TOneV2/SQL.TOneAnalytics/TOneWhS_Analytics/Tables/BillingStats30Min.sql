@@ -45,8 +45,11 @@
     [CostDealDurInSec]         DECIMAL (20, 4)  NULL,
     [SaleFinancialAccountId]   INT              NULL,
     [CostFinancialAccountId]   INT              NULL,
+    [Type]                     INT              NULL,
     CONSTRAINT [IX_BillingStats30Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
