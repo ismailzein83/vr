@@ -187,14 +187,14 @@ namespace TOne.WhS.RouteSync.TelesIdb
                         concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
                     }
 
-                    for (int i = 1; i <= routeOption.NumberOfTries; i++)
-                    {
-                        if (numberOfAddedOptions == NumberOfOptions)
-                            break;
+                    //for (int i = 1; i <= routeOption.NumberOfTries; i++)
+                    //{
+                    //    if (numberOfAddedOptions == NumberOfOptions)
+                    //        break;
 
-                        numberOfAddedOptions++;
-                        strBuilder.AppendFormat("{0}{1}{2}", strBuilder.Length > 0 ? supplierOptionsSeparator : string.Empty, concatSupplierMapping, concatBackUpSupplierMapping);
-                    }
+                    numberOfAddedOptions++;
+                    strBuilder.AppendFormat("{0}{1}{2}", strBuilder.Length > 0 ? supplierOptionsSeparator : string.Empty, concatSupplierMapping, concatBackUpSupplierMapping);
+                    //}
                 }
             }
             return strBuilder.Length > 0 ? strBuilder.ToString() : "BLK";
