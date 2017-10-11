@@ -61,7 +61,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
         public override IEnumerable<SourceRule> GetSourceRules()
         {
             List<SourceRule> sourceRules = new List<SourceRule>();
-            SourceTodDataManager dataManager = new SourceTodDataManager(Context.MigrationContext.ConnectionString);
+            SourceTodDataManager dataManager = new SourceTodDataManager(Context.MigrationContext.ConnectionString, Context.MigrationContext.OnlyEffective);
             var todRules = dataManager.GetSourceTods();
             sourceRules = GetRules(todRules);
 

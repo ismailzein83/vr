@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,15 +12,19 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SourceTodDataManager : BaseSQLDataManager
     {
-        public SourceTodDataManager(string connectionString)
+        readonly bool _getEffectiveOnly;
+        public SourceTodDataManager(string connectionString, bool getEffectiveOnly)
             : base(connectionString, false)
         {
-
+            _getEffectiveOnly = getEffectiveOnly;
         }
 
         public IEnumerable<SourceTod> GetSourceTods()
         {
-            return GetItemsText(query_getTods, SourceTodMapper, null);
+            return GetItemsText(query_getTods, SourceTodMapper, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
+            });
         }
 
 
@@ -57,6 +62,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                                               ,[BeginEffectiveDate]
                                               ,[EndEffectiveDate]
                                           FROM [ToDConsideration]
+                                          WHERE  ((@GetEffectiveOnly = 0 and BeginEffectiveDate <= getdate()) or (@GetEffectiveOnly = 1 and IsEffective = 'Y'))
                                           order by CustomerId";
     }
 }
