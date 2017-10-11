@@ -152,11 +152,13 @@ namespace TOne.WhS.Sales.BP.Activities
                             MinimumDate = minimumDate,
                             RatesToAddForNewCountriesbyCountryId = structuredZoneActions.RatesToAddForNewCountriesbyCountryId,
                             SaleCodesByZoneId = saleCodesByZoneId,
-                            CurrencyId = ratePlanContext.CurrencyId
+                            CurrencyId = ratePlanContext.CurrencyId,
+                            RoutingProductEffectiveLocator = effectiveRoutingProductLocator
                         };
 
                         this.GetChangesForNewCountries(customerNewCountriesContext);
-
+                        outRoutingProductChanges.AddRange(customerNewCountriesContext.RoutingProductChanges);
+                        changesForThisCustomer.RoutingProductChanges.AddRange(customerNewCountriesContext.RoutingProductChanges);
                         changesForThisCustomer.RateChanges.AddRange(customerNewCountriesContext.RateChangesOutArgument);
                         changesForThisCustomer.CodeChanges.AddRange(customerNewCountriesContext.CodeChangesOutArgument);
                     }
@@ -363,7 +365,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             context.RateChangesOutArgument = new List<SalePricelistRateChange>();
             context.CodeChangesOutArgument = new List<SalePricelistCodeChange>();
-
+            context.RoutingProductChanges = new List<SalePricelistRPChange>();
             var lastRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(new List<RoutingCustomerInfoDetails> { context.CustomerInfo }, context.MinimumDate));
             var saleZoneManager = new SaleZoneManager();
             var saleRateManager = new SaleRateManager();
@@ -441,6 +443,23 @@ namespace TOne.WhS.Sales.BP.Activities
                             BED = countryToAdd.BED
                         });
                     }
+                    SaleEntityZoneRoutingProduct effectiveRoutingProduct = context.RoutingProductEffectiveLocator.GetCustomerZoneRoutingProduct(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, zoneId);
+
+                    if (effectiveRoutingProduct.RoutingProductId != null)
+                    {
+                        var routingProduct = new SalePricelistRPChange
+                        {
+                            CountryId = countryToAdd.CountryId,
+                            ZoneName = zoneName,
+                            ZoneId = zoneId,
+                            RoutingProductId = effectiveRoutingProduct.RoutingProductId,
+                            BED = effectiveRoutingProduct.BED,
+                            EED = null,
+                            CustomerId = context.CustomerInfo.CustomerId
+                        };
+                        context.RoutingProductChanges.Add(routingProduct);
+                    }
+
                 }
 
                 #endregion
@@ -1050,7 +1069,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             public DateTime MinimumDate { get; set; }
             public int CurrencyId { get; set; }
-
+            public SaleEntityZoneRoutingProductLocator RoutingProductEffectiveLocator { get; set; }
             #endregion
 
             #region Output Arguments
@@ -1058,7 +1077,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public List<SalePricelistRateChange> RateChangesOutArgument { get; set; }
 
             public List<SalePricelistCodeChange> CodeChangesOutArgument { get; set; }
-
+            public List<SalePricelistRPChange> RoutingProductChanges { get; set; }
             #endregion
         }
 
@@ -1087,6 +1106,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public List<SalePricelistRateChange> RateChangesOutArgument { get; set; }
 
             public List<SalePricelistCodeChange> CodeChangesOutArgument { get; set; }
+
 
             #endregion
         }
