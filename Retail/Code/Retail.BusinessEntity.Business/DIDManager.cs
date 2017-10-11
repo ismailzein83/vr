@@ -423,6 +423,82 @@ namespace Retail.BusinessEntity.Business
             return numbers;
         }
 
+        public Dictionary<long, DIDAccount> GetAllDIDAccounts()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<BEParentChildRelationManager.CacheManager>().GetOrCreateObject("Retail_DIDManager_GetAllDIDAccounts",
+                _accountDIDRelationDefinitionId,
+                () =>
+                {
+                    var relationDefinition = GetAccountDIDRelationDefinition();
+                    relationDefinition.ThrowIfNull("relationDefinition");
+                    relationDefinition.Settings.ThrowIfNull("relationDefinition.Settings");
+                    Dictionary<long, DIDAccount> allDIDAcccounts = new Dictionary<long, DIDAccount>();
+                    var parentChildRelationManager = new BEParentChildRelationManager();
+                    IEnumerable<BEParentChildRelation> allRelations = parentChildRelationManager.GetBEParentChildRelationsByDefinitionId(_accountDIDRelationDefinitionId);
+                    var accountBEManager = new AccountBEManager();
+                    if (allRelations != null)
+                    {
+                        foreach (var relation in allRelations)
+                        {
+                            int didId = relation.ChildBEId.TryParseWithValidate<int>(int.TryParse, "relation.ChildBEId");
+                            long accountId = relation.ParentBEId.TryParseWithValidate<long>(long.TryParse, "relation.ParentBEId");
+                            var did = GetDID(didId);
+                            did.ThrowIfNull("did", didId);
+                            var account = accountBEManager.GetAccount(relationDefinition.Settings.ParentBEDefinitionId, accountId);
+                            account.ThrowIfNull("account", accountId);
+                            var didAccount = new DIDAccount
+                                {
+                                    DIDAccountId = relation.BEParentChildRelationId,
+                                    DID = did,
+                                    Account = account,
+                                    BED = relation.BED,
+                                    EED = relation.EED
+                                };
+                            allDIDAcccounts.Add(didAccount.DIDAccountId, didAccount);
+                        }
+                    }
+                    return allDIDAcccounts;
+                });
+        }
+
+        public Dictionary< long, List<DIDAccount>> GetDIDAccountsByAccountId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<BEParentChildRelationManager.CacheManager>().GetOrCreateObject("Retail_DIDManager_GetDIDAccountsByAccountId",
+                _accountDIDRelationDefinitionId,
+                () =>
+                {
+                    Dictionary<long, List<DIDAccount>> didAccountsByAccountId = new Dictionary<long, List<DIDAccount>>();
+                    var allDIDAccounts = GetAllDIDAccounts();
+                    if(allDIDAccounts != null)
+                    {
+                        foreach(var didAccount in allDIDAccounts.Values)
+                        {
+                            didAccountsByAccountId.GetOrCreateItem(didAccount.Account.AccountId).Add(didAccount);
+                        }
+                    }
+                    return didAccountsByAccountId;
+                });
+        }
+
+        public Dictionary<int, List<DIDAccount>> GetDIDAccountsByDIDId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<BEParentChildRelationManager.CacheManager>().GetOrCreateObject("Retail_DIDManager_GetDIDAccountsByDIDId",
+                _accountDIDRelationDefinitionId,
+                () =>
+                {
+                    Dictionary<int, List<DIDAccount>> didAccountsByDID = new Dictionary<int, List<DIDAccount>>();
+                    var allDIDAccounts = GetAllDIDAccounts();
+                    if (allDIDAccounts != null)
+                    {
+                        foreach (var didAccount in allDIDAccounts.Values)
+                        {
+                            didAccountsByDID.GetOrCreateItem(didAccount.DID.DIDId).Add(didAccount);
+                        }
+                    }
+                    return didAccountsByDID;
+                });
+        }
+
         #endregion
 
         #region Private Methods

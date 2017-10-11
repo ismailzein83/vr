@@ -83,6 +83,7 @@
     <Folder Include="VR_Invoice\Functions\" />
     <Folder Include="VR_Invoice\Stored Procedures\" />
     <Folder Include="VR_Invoice\User Defined Types\" />
+    <Folder Include="Retail_CDR\Views\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail_Event\Tables\VoiceEvent.sql" />
@@ -142,5 +143,6 @@
     <Build Include="Retail_CDR\Stored Procedures\sp_CDRCost_GetDistinctDatesAfterId_1.sql" />
     <Build Include="Retail_CDR\Stored Procedures\sp_CDRCost_GetByCDPNs_1.sql" />
     <Build Include="Retail_CDR\User Defined Types\CDRCostType_1.sql" />
+    <Build Include="Retail_CDR\Views\vw_BillingCDR.sql" />
   </ItemGroup>
 </Project>

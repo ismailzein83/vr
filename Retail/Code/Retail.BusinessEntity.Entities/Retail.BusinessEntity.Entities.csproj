@@ -98,6 +98,7 @@
     <Compile Include="ChargeableEntity\ChargeableEntityDefinitionSettings.cs" />
     <Compile Include="ChargeableEntity\ChargeableEntitySettings.cs" />
     <Compile Include="DID\DID.cs" />
+    <Compile Include="DID\DIDAccount.cs" />
     <Compile Include="DID\DIDDetail.cs" />
     <Compile Include="DID\DIDFilter.cs" />
     <Compile Include="DID\DIDInfo.cs" />
