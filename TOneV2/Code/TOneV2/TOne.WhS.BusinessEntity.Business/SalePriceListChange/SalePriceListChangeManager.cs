@@ -17,7 +17,25 @@ namespace TOne.WhS.BusinessEntity.Business
             var salePriceListRateChanges = dataManager.GetFilteredSalePricelistRateChanges(input.Query.PriceListId, input.Query.Countries);
             return DataRetrievalManager.Instance.ProcessResult(input, salePriceListRateChanges.ToBigResult(input, null, SalePricelistRateChangeDetailMapper));
         }
+        public Vanrise.Entities.IDataRetrievalResult<CustomerRatePreviewDetail> GetFilteredCustomerRatePreviews(Vanrise.Entities.DataRetrievalInput<CustomerRatePreviewQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new CustomerRatePreviewRequestHandler());
+        }
+        public IEnumerable<int> GetAffectedCustomerIdsRPChangesByProcessInstanceId(long ProcessInstanceId)
+        {
+            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            return dataManager.GetAffectedCustomerIdsRPChangesByProcessInstanceId(ProcessInstanceId);
+        }
 
+        public IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long ProcessInstanceId)
+        {
+            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            return dataManager.GetAffectedCustomerIdsRateChangesByProcessInstanceId(ProcessInstanceId);
+        }
+        public Vanrise.Entities.IDataRetrievalResult<RoutingProductPreviewDetail> GetFilteredRoutingProductPreviews(Vanrise.Entities.DataRetrievalInput<RoutingProductPreviewQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new RoutingProductPreviewRequestHandler());
+        }
         public Vanrise.Entities.IDataRetrievalResult<SalePricelistCodeChange> GetFilteredPricelistCodeChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
@@ -102,6 +120,81 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return changes;
         }
+
+        private class CustomerRatePreviewRequestHandler : BigDataRequestHandler<CustomerRatePreviewQuery, CustomerRatePreview, CustomerRatePreviewDetail>
+        {
+
+
+            public override CustomerRatePreviewDetail EntityDetailMapper(CustomerRatePreview entity)
+            {
+                 RoutingProductManager routingProductManager = new RoutingProductManager();
+            CurrencyManager currencyManager = new CurrencyManager();
+                CarrierAccountManager carrierAccountManager =  new CarrierAccountManager();
+                var entityDetail = new CustomerRatePreviewDetail()
+                {
+                      ZoneName = entity.ZoneName,
+                      Rate = entity.Rate, 
+                      BED = entity.BED,
+                      EED = entity.EED,
+                      ChangeType = entity.ChangeType ,
+                      ServicesId = !entity.ZoneId.HasValue
+                    ? routingProductManager.GetDefaultServiceIds(entity.RoutingProductId)
+                    : routingProductManager.GetZoneServiceIds(entity.RoutingProductId,
+                        entity.ZoneId.Value),
+                      CustomerName = carrierAccountManager.GetCarrierAccountName(entity.CustomerId)
+                    
+                };
+                 if (entity.CurrencyId.HasValue)
+                entityDetail.CurrencySymbol = currencyManager.GetCurrencySymbol(entity.CurrencyId.Value);
+                return entityDetail;
+            }
+
+            public override IEnumerable<CustomerRatePreview> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CustomerRatePreviewQuery> input)
+            {
+                var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+                return dataManager.GetCustomerRatePreviews(input.Query);
+            }
+        }
+
+        private class RoutingProductPreviewRequestHandler : BigDataRequestHandler<RoutingProductPreviewQuery, RoutingProductPreview, RoutingProductPreviewDetail>
+        {
+
+
+            public override RoutingProductPreviewDetail EntityDetailMapper(RoutingProductPreview entity)
+            {
+                RoutingProductManager routingProductManager = new RoutingProductManager();
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                var entityDetail = new RoutingProductPreviewDetail()
+                {
+                    ZoneName = entity.ZoneName,
+                    BED = entity.BED,
+                    EED = entity.EED,
+                    RoutingProductName = routingProductManager.GetRoutingProductName(entity.RoutingProductId),
+                     CustomerName = carrierAccountManager.GetCarrierAccountName(entity.CustomerId),
+                    RoutingProductServicesId = !entity.ZoneId.HasValue
+                        ? routingProductManager.GetDefaultServiceIds(entity.RoutingProductId)
+                        : routingProductManager.GetZoneServiceIds(entity.RoutingProductId,
+                            entity.ZoneId.Value)
+                };
+                if (entity.RecentRoutingProductId.HasValue)
+                {
+                    int recentRoutingProductId = entity.RecentRoutingProductId.Value;
+                    entityDetail.RecentRoutingProductName = routingProductManager.GetRoutingProductName(recentRoutingProductId);
+
+                    entityDetail.RecentRouringProductServicesId = !entity.ZoneId.HasValue
+                        ? routingProductManager.GetDefaultServiceIds(recentRoutingProductId)
+                        : routingProductManager.GetZoneServiceIds(recentRoutingProductId, entity.ZoneId.Value);
+                }
+                return entityDetail;
+            }
+
+            public override IEnumerable<RoutingProductPreview> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RoutingProductPreviewQuery> input)
+            {
+                var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+                return dataManager.GetRoutingProductPreviews(input.Query);
+            }
+        }
+
         #region Mapper
         private SalePricelistRateChangeDetail SalePricelistRateChangeDetailMapper(SalePricelistRateChange salePricelistRateChange)
         {

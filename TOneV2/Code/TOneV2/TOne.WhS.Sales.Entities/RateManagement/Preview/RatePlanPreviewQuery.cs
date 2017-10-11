@@ -9,6 +9,7 @@ namespace TOne.WhS.Sales.Entities
     public class RatePlanPreviewQuery
     {
         public long ProcessInstanceId { get; set; }
+        public IEnumerable<int> CustomerIds { get; set; }
     }
 
     public class RatePreviewQuery : RatePlanPreviewQuery

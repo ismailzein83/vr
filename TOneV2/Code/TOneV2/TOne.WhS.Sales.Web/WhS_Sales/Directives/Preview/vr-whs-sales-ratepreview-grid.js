@@ -1,4 +1,5 @@
-﻿'use strict';
+﻿
+'use strict';
 
 app.directive('vrWhsSalesRatepreviewGrid', ['WhS_Sales_RatePlanPreviewAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_RateChangeTypeEnum', function (WhS_Sales_RatePlanPreviewAPIService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_RateChangeTypeEnum)
 {
@@ -34,8 +35,8 @@ app.directive('vrWhsSalesRatepreviewGrid', ['WhS_Sales_RatePlanPreviewAPIService
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
 
-                var drillDownDefinitions = getDrillDownDefinitions();
-                gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, null);
+                //var drillDownDefinitions = getDrillDownDefinitions();
+                //gridDrillDownTabs = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, null);
 
                 defineAPI();
             };
@@ -61,31 +62,36 @@ app.directive('vrWhsSalesRatepreviewGrid', ['WhS_Sales_RatePlanPreviewAPIService
                 processInstanceId = query.ProcessInstanceId;
                 return gridAPI.retrieveData(query);
             };
-
+            api.gridHasData = function () {
+                return ($scope.scopeModel.ratePreviews.length != 0) ? true : false;
+            };
+            api.cleanGrid = function () {
+                $scope.scopeModel.ratePreviews.length = 0
+            };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
 
-        function getDrillDownDefinitions() {
-            return [{
-                title: "Other Rates",
-                directive: "vr-whs-sales-ratepreview-grid",
-                loadDirective: function (otherRatePreviewGridAPI, dataItem)
-                {
-                    dataItem.otherRatePreviewGridAPI = otherRatePreviewGridAPI;
-                    var otherRatePreviewGridQuery = {
-                        ProcessInstanceId: processInstanceId,
-                        ZoneName: dataItem.Entity.ZoneName
-                    };
-                    return otherRatePreviewGridAPI.load(otherRatePreviewGridQuery);
-                }
-            }];
-        }
+        //function getDrillDownDefinitions() {
+        //    return [{
+        //        title: "Other Rates",
+        //        directive: "vr-whs-sales-ratepreview-grid",
+        //        loadDirective: function (otherRatePreviewGridAPI, dataItem)
+        //        {
+        //            dataItem.otherRatePreviewGridAPI = otherRatePreviewGridAPI;
+        //            var otherRatePreviewGridQuery = {
+        //                ProcessInstanceId: processInstanceId,
+        //                ZoneName: dataItem.Entity.ZoneName
+        //            };
+        //            return otherRatePreviewGridAPI.load(otherRatePreviewGridQuery);
+        //        }
+        //    }];
+        //}
 
         function extendDataItem(dataItem)
         {
-            if (ctrl.isNormalRateGrid)
-                gridDrillDownTabs.setDrillDownExtensionObject(dataItem);
+            //if (ctrl.isNormalRateGrid)
+            //    gridDrillDownTabs.setDrillDownExtensionObject(dataItem);
 
             var rateChangeType = UtilsService.getEnum(WhS_BE_RateChangeTypeEnum, 'value', dataItem.Entity.ChangeType);
             

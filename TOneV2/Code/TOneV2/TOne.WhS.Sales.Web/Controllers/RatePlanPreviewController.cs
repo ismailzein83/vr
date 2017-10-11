@@ -14,13 +14,20 @@ namespace TOne.WhS.Sales.Web.Controllers
     public class RatePlanPreviewController : BaseAPIController
     {
         [HttpPost]
-        [Route("GetRatePlanPreviewSummary")]
-        public RatePlanPreviewSummary GetRatePlanPreviewSummary(RatePlanPreviewQuery query)
+        [Route("GetCustomerRatePlanPreviewSummary")]
+        public RatePlanPreviewSummary GetCustomerRatePlanPreviewSummary(RatePlanPreviewQuery query)
         {
             var manager = new RatePlanPreviewSummaryManager();
-            return manager.GetRatePlanPreviewSummary(query);
+            return manager.GetCustomerRatePlanPreviewSummary(query);
         }
-
+         [HttpPost]
+         [Route("GetProductRatePlanPreviewSummary")]
+        public RatePlanPreviewSummary GetProductRatePlanPreviewSummary(RatePlanPreviewQuery query)
+        {
+            var manager = new RatePlanPreviewSummaryManager();
+            return manager.GetProductRatePlanPreviewSummary(query);
+        }
+        
         [HttpPost]
         [Route("GetFilteredRatePreviews")]
         public object GetFilteredRatePreviews(Vanrise.Entities.DataRetrievalInput<RatePreviewQuery> input)

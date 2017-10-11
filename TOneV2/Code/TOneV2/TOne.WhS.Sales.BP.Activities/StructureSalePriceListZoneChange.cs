@@ -34,7 +34,7 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<DateTime> EffectiveOn { get; set; }
         public OutArgument<IEnumerable<NewCustomerPriceListChange>> CustomerChange { get; set; }
         public OutArgument<IEnumerable<NewPriceList>> NewSalePriceList { get; set; }
-
+        public OutArgument<IEnumerable<SalePricelistRPChange>> AllSalePricelistRPChanges { get; set; }
         protected override void Execute(CodeActivityContext context)
         {
             #region Getting Arguments From Context
@@ -57,7 +57,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             Dictionary<int, List<DataByZone>> importedZonesByCountryId = this.StructureImportedZonesByCountryId(dataByZones);
             Dictionary<int, List<SaleZone>> existingZonesByCountryId = this.StructureExistingZonesByCountryId(saleZones);
-
+            List<SalePricelistRPChange> outRoutingProductChanges = new List<SalePricelistRPChange>();
             List<int> customerIds;
             IEnumerable<RoutingCustomerInfoDetails> dataByCustomer = GetDataByCustomer(ratePlanContext.OwnerType, ratePlanContext.OwnerId, ratePlanContext.EffectiveDate, out customerIds);
             SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithDraft(ownerType, ownerId, effectiveOn, draft, false));
@@ -87,7 +87,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         CurrentRoutingProductLocator = currenRoutingProductLocator
                     };
 
-                    customerPriceListChanges = this.GetChangesForSellingProduct(sellingProductContext);
+                    customerPriceListChanges = this.GetChangesForSellingProduct(sellingProductContext, out outRoutingProductChanges);
 
                     #endregion
                 }
@@ -214,6 +214,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     {
                         List<SalePricelistRPChange> routingProductChanges = GetRoutingProductChanges(customerInfo.CustomerId, customerInfo.SellingProductId,
                             soldCountries.Select(x => x.CountryId), existingZonesByCountryId, effectiveRoutingProductLocator, currenRoutingProductLocator);
+                        outRoutingProductChanges.AddRange(routingProductChanges);
                         changesForThisCustomer.RoutingProductChanges.AddRange(routingProductChanges);
                     }
 
@@ -242,12 +243,14 @@ namespace TOne.WhS.Sales.BP.Activities
 
             NewSalePriceList.Set(context, pricelistByCurrencyId.Values.SelectMany(p => p));
             CustomerChange.Set(context, changes);
+            AllSalePricelistRPChanges.Set(context, outRoutingProductChanges);
         }
 
         #region Get Pricelist Changes from Selling Product Methods
 
-        private List<CustomerPriceListChange> GetChangesForSellingProduct(SellingProductChangesContext context)
+        private List<CustomerPriceListChange> GetChangesForSellingProduct(SellingProductChangesContext context,out List<SalePricelistRPChange> outRoutingProductChanges)
         {
+            outRoutingProductChanges = new List<SalePricelistRPChange>();
             var customerCountryManager = new CustomerCountryManager();
             List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
 
@@ -262,7 +265,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 IEnumerable<SalePricelistRPChange> routingProductChanges = GetRoutingProductChanges(customer.CustomerId, customer.SellingProductId,
                     soldCountries.Select(itm => itm.CountryId), context.ExistingZonesByCountryId, context.EffectiveRoutingProductLocator, context.CurrentRoutingProductLocator);
-
+                outRoutingProductChanges.AddRange(routingProductChanges);
                 if (rateChanges.Any())
                 {
                     CustomerPriceListChange changesForThisCustomer = new CustomerPriceListChange
@@ -910,7 +913,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             ZoneId = saleZone.SaleZoneId,
                             RoutingProductId = effectiveRoutingProduct.RoutingProductId,
                             BED = effectiveRoutingProduct.BED,
-                            EED = effectiveRoutingProduct.EED
+                            EED = effectiveRoutingProduct.EED,
+                            CustomerId = customerId
                         };
                         if (currentRoutingProduct != null)
                             routingProduct.RecentRoutingProductId = currentRoutingProduct.RoutingProductId;

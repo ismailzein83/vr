@@ -11,8 +11,9 @@ namespace TOne.WhS.Sales.Data
     {
         long ProcessInstanceId { set; }
 
-        RatePlanPreviewSummary GetRatePlanPreviewSummary(RatePlanPreviewQuery query);
-
+        RatePlanPreviewSummary GetCustomerRatePlanPreviewSummary(RatePlanPreviewQuery query);
+        RatePlanPreviewSummary GetProductRatePlanPreviewSummary(RatePlanPreviewQuery query);
+        
         void ApplyRatePlanPreviewSummaryToDB(RatePlanPreviewSummary summary);
     }
 }

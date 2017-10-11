@@ -53,6 +53,14 @@
                 priceListId: priceListId
             });
         }
+
+        function GetFilteredCustomerRatePreviews(input) {
+            return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, 'GetFilteredCustomerRatePreviews'), input);
+        }
+        function GetFilteredRoutingProductPreviews(input) {
+
+            return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, 'GetFilteredRoutingProductPreviews'), input);
+        }
         return ({
             GetFilteredSalePriceListCodeChanges: GetFilteredSalePriceListCodeChanges,
             GetFilteredSalePriceListRateChanges: GetFilteredSalePriceListRateChanges,
@@ -63,7 +71,9 @@
             GenerateAndEvaluateSalePriceListEmail: GenerateAndEvaluateSalePriceListEmail,
             GetOwnerPriceListType: GetOwnerPriceListType,
             SetPriceListAsSent: SetPriceListAsSent,
-            GetOwnerPricelistTemplateId: GetOwnerPricelistTemplateId
+            GetOwnerPricelistTemplateId: GetOwnerPricelistTemplateId,
+            GetFilteredCustomerRatePreviews: GetFilteredCustomerRatePreviews,
+            GetFilteredRoutingProductPreviews: GetFilteredRoutingProductPreviews
         });
     }
 

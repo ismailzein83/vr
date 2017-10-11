@@ -529,7 +529,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<CarrierAccountInfo> GetCarrierAccountInfo(CarrierAccountInfoFilter filter)
         {
             Func<CarrierAccount, bool> filterPredicate = null;
-
+            List<object> customObjects = null;
             if (filter != null)
             {
                 HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(filter.SupplierFilterSettings);
@@ -548,6 +548,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     AccountManagerManager AccountManagerManager = new AccountManagerManager();
                     assignedCarriers = AccountManagerManager.GetAssignedCarriers();
+                }
+
+                if (filter.Filters != null)
+                {
+                    customObjects = new List<object>();
+                    foreach (ICarrierAccountFilter carrierAccountFilter in filter.Filters)
+                        customObjects.Add(null);
                 }
 
                 filterPredicate = (carr) =>
@@ -572,7 +579,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (filter.AssignableToUserId.HasValue && !IsCarrierAccountAssignableToUser(carr, filter.GetCustomers, filter.GetSuppliers, assignedCarriers))
                         return false;
-
+                    if (filter.Filters != null)
+                    {
+                        for (int i = 0; i < filter.Filters.Count(); i++)
+                        {
+                            var context = new CarrierAccountFilterContext() { CarrierAccount = carr, CustomObject = customObjects[i] };
+                            if (filter.Filters.ElementAt(i).IsExcluded(context))
+                                return false;
+                            customObjects[i] = context.CustomObject;
+                        }
+                    }
                     return true;
                 };
             }

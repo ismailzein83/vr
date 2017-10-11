@@ -1,168 +1,178 @@
-﻿<div vr-modalcontent ng-controller="WhS_Sales_RatePlanPreviewController" width="'65%'" vr-loader="isLoading">
-	<vr-modalbody>
-		<vr-form name="formRatePlanPreview">
-			<vr-tabs>
-				<vr-tab header="'Summary'">
-					<vr-row>
-						<vr-columns width="1/2row">
-							<vr-section title="Zone Changes">
-								<vr-section title="Rate Changes" level="2">
-									<vr-row>
-										<vr-columns width="1/2row">
-											<vr-label>New: </vr-label>
-											<vr-label isvalue>{{scopeModel.numberOfNewRates}}</vr-label>
-										</vr-columns>
-										<vr-columns width="1/2row">
-											<vr-label>Increases: </vr-label>
-											<vr-label isvalue>{{scopeModel.numberOfIncreasedRates}}</vr-label>
-										</vr-columns>
-										<vr-columns width="1/2row">
-											<vr-label>Changes: </vr-label>
-											<vr-label isvalue>{{scopeModel.numberOfClosedRates}}</vr-label>
-										</vr-columns>
-										<vr-columns width="1/2row">
-											<vr-label>Decreases: </vr-label>
-											<vr-label isvalue>{{scopeModel.numberOfDecreasedRates}}</vr-label>
-										</vr-columns>
-									</vr-row>
-								</vr-section>
-								<vr-section title="Routing Product Changes" level="2">
-									<vr-row>
-										<vr-columns width="fullrow">
-											<vr-label>New: </vr-label>
-											<vr-label isvalue>{{scopeModel.numberOfNewSaleZoneRoutingProducts}}</vr-label>
-										</vr-columns>
-										<vr-columns width="fullrow">
-											<vr-label>Changes: </vr-label>
-											<vr-label isvalue>{{scopeModel.numberOfClosedSaleZoneRoutingProducts}}</vr-label>
-										</vr-columns>
-									</vr-row>
-								</vr-section>
-								</vr-section>
-						</vr-columns>
-						<vr-columns width="1/2row">
+﻿<div vr-modalcontent ng-controller="WhS_Sales_RatePlanPreviewController" width="'65%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formRatePlanPreview">
+            <vr-tabs>
 
-							<vr-section title="Default Changes">
-								<vr-section title="Routing Product Changes" level="2">
-									<vr-row>
-										<vr-columns width="fullrow" ng-show="scopeModel.newDefaultRoutingProductName">
-											<vr-label>New: </vr-label>
-											<vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
-										</vr-columns>
-										<vr-columns width="fullrow" ng-show="scopeModel.newDefaultRoutingProductName == null && scopeModel.effectiveOn != null">
-											<vr-label>Change (Default): </vr-label>
-											<vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
-										</vr-columns>
-										<vr-columns width="fullrow" ng-show="scopeModel.effectiveOn == null">
-											<vr-label isvalue>No changes</vr-label>
-										</vr-columns>
-									</vr-row>
-								</vr-section>
-							</vr-section>
-                            <vr-section title="Country Changes" ng-show="scopeModel.showCountrySummary">
-                                <vr-row>
-                                    <vr-columns width="fullrow">
-                                        <vr-label>New: </vr-label>
-                                        <vr-label isvalue>{{scopeModel.numberOfNewCountries}}</vr-label>
-                                    </vr-columns>
-									<vr-columns width="fullrow">
-										<vr-label>Ended: </vr-label>
-										<vr-label isvalue>{{scopeModel.numberOfChangedCountries}}</vr-label>
-									</vr-columns>
-								</vr-row>
-							</vr-section>
-						</vr-columns>
-					</vr-row>
-				</vr-tab>
-				<vr-tab header="'Default Changes'">
-					<vr-row>
-						<vr-columns width="1/2row">
-							<vr-section title="Routing Product Changes">
-								<vr-row>
-									<vr-columns width="1/2row" ng-show="scopeModel.currentDefaultRoutingProductName != null">
-										<vr-label>Current:</vr-label>
-										<vr-label isvalue>{{scopeModel.currentDefaultRoutingProductName}}</vr-label>
-									</vr-columns>
-									<vr-columns width="1/2row" ng-show="scopeModel.newDefaultRoutingProductName != null">
-										<vr-label>New:</vr-label>
-										<vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
-									</vr-columns>
-									<vr-columns width="1/2row" ng-show="scopeModel.effectiveOn != null">
-										<vr-label>Effective On:</vr-label>
-										<vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
-									</vr-columns>
-								</vr-row>
-							</vr-section>
-						</vr-columns>
-						<vr-columns width="1/2row">
-							<vr-section title="Service Changes">
-								<vr-row>
-									<vr-columns width="1/2row" ng-show="scopeModel.showCurrentDefaultServiceViewer">
-										<vr-label>Current:</vr-label>
-										<vr-whs-be-services-viewer on-ready="scopeModel.onCurrentDefaultServiceViewerReady"></vr-whs-be-services-viewer>
-									</vr-columns>
-									<vr-columns width="1/2row" ng-show="scopeModel.showNewDefaultServiceViewer">
-										<vr-label>New:</vr-label>
-										<vr-whs-be-services-viewer on-ready="scopeModel.onNewDefaultServiceViewerReady"></vr-whs-be-services-viewer>
-									</vr-columns>
-									<vr-columns width="1/2row" ng-show="scopeModel.defaultServicePreview.effectiveOn != undefined">
-										<vr-label>Effective On:</vr-label>
-										<vr-label isvalue>{{scopeModel.defaultServicePreview.effectiveOn}}</vr-label>
-									</vr-columns>
-									<vr-columns width="1/2row" ng-show="scopeModel.defaultServicePreview.effectiveUntil != undefined">
-										<vr-label>Effective Until:</vr-label>
-										<vr-label isvalue>{{scopeModel.defaultServicePreview.effectiveUntil}}</vr-label>
-									</vr-columns>
-								</vr-row>
-							</vr-section>
-						</vr-columns>
-					</vr-row>
-				</vr-tab>
-				<vr-tab header="'Zone Rate Changes'">
-					<vr-row>
-						<vr-columns width="fullrow">
-							<vr-whs-sales-ratepreview-grid on-ready="scopeModel.onRatePreviewGridReady"></vr-whs-sales-ratepreview-grid>
-						</vr-columns>
-					</vr-row>
-				</vr-tab>
-				<vr-tab header="'Zone Routing Product Changes'">
-					<vr-row>
-						<vr-columns width="fullrow">
-							<vr-whs-sales-salezoneroutingproductpreview-grid on-ready="scopeModel.onSaleZoneRoutingProductPreviewGridReady"></vr-whs-sales-salezoneroutingproductpreview-grid>
-						</vr-columns>
-					</vr-row>
-				</vr-tab>
-				<vr-tab header="'Country Changes'" ng-show="scopeModel.showCountryTab">
-					<vr-row>
-						<vr-columns width="fullrow">
-							<vr-tabs>
-								<vr-tab header="'New Countries'">
-									<vr-row>
-										<vr-columns width="fullrow">
-											<vr-whs-sales-newcountrypreview-grid on-ready="scopeModel.onNewCountryPreviewGridReady"></vr-whs-sales-newcountrypreview-grid>
-										</vr-columns>
-									</vr-row>
-								</vr-tab>
-								<vr-tab header="'Ended Countries'">
-									<vr-row>
-										<vr-columns width="fullrow">
-											<vr-whs-sales-changedcountrypreview-grid on-ready="scopeModel.onChangedCountryPreviewGridReady"></vr-whs-sales-changedcountrypreview-grid>
-										</vr-columns>
-									</vr-row>
-								</vr-tab>
-							</vr-tabs>
-						</vr-columns>
-					</vr-row>
-				</vr-tab>
-			</vr-tabs>
-		</vr-form>
-	</vr-modalbody>
-	<div>
-		<vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-			<div transclude-to="buttons">
+                <vr-tab header="'Customer Rates'">
+                    <span ng-show="scopeModel.tabCustomerRateObject.showTab">
+                        <vr-row>
+                                <span ng-show="scopeModel.showCarrierAccountSelector">
+                                    <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onRateCarrierAccountSelectorReady"
+                                                                       getcustomers
+                                                                       ismultipleselection
+                                                                       selectedvalues="selectedCustomers"
+                                                                       normal-col-num="2"
+                                                                       hideremoveicon>
+                                    </vr-whs-be-carrieraccount-selector>
+                                </span>
+                            <vr-columns normal-col-num="1" ng-show="scopeModel.showCarrierAccountSelector" withemptyline>
+                                <vr-button type="Load" data-onclick="scopeModel.loadRatePrview" standalone ></vr-button>
+
+                            </vr-columns>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns colnum="10" haschildcolumns>
+                                <vr-columns width="1/4row">
+                                    <vr-label>New: </vr-label>
+                                    <vr-label isvalue>{{scopeModel.numberOfNewRates}}</vr-label>
+                                </vr-columns>
+                                <vr-columns width="1/4row">
+                                    <vr-label>Increased: </vr-label>
+                                    <vr-label isvalue>{{scopeModel.numberOfIncreasedRates}}</vr-label>
+                                </vr-columns>
+                                <vr-columns width="1/4row">
+                                    <vr-label>Decreased: </vr-label>
+                                    <vr-label isvalue>{{scopeModel.numberOfDecreasedRates}}</vr-label>
+                                </vr-columns>
+                            </vr-columns>
+                            
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-whs-be-customerratepreview-grid on-ready="scopeModel.onCustomerRatePreviewGridReady"></vr-whs-be-customerratepreview-grid>
+                            </vr-columns>
+                        </vr-row>
+                    </span>
+                    <span ng-show="scopeModel.showCustomerRateMsg">
+                        <vr-label isvalue>
+                            No customers rates changes
+                        </vr-label>
+                    </span>
+                </vr-tab>
+                <vr-tab header="'Customer RPs'">
+                    <span ng-show="scopeModel.tabCustomerRPObject.showTab ">
+                        <vr-row>
+                            <vr-row>
+                                    <span ng-show="scopeModel.showCarrierAccountSelector">
+                                        <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onRoutingProductCarrierAccountSelectorReady"
+                                                                           getcustomers
+                                                                           ismultipleselection
+                                                                           selectedvalues="selectedCustomers"
+                                                                           normal-col-num="2"
+                                                                           hideremoveicon>
+                                        </vr-whs-be-carrieraccount-selector>
+                                    </span>
+                                <vr-columns colnumn="1" ng-show="scopeModel.showCarrierAccountSelector" withemptyline>
+                                    <vr-button type="Load" data-onclick="scopeModel.loadCustomerRoutingProductPrview" standalone ></vr-button>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-whs-be-routingproductpreview-grid on-ready="scopeModel.onCustomerSaleZoneRoutingProductPreviewGridReady"></vr-whs-be-routingproductpreview-grid>
+                            </vr-columns>
+                        </vr-row>
+                    </span>
+                    <span ng-show="scopeModel.showCustomerRPMsg">
+                        <vr-label isvalue>No customers Routing Products changes</vr-label>
+                    </span>
+                </vr-tab>
+                <vr-tab tabobject="scopeModel.tabProductRateObject" header="' Product Rates'">
+                    <span ng-show="scopeModel.showProductRateData">
+                        <vr-row>
+                            <vr-columns width="1/4row">
+                                <vr-label>New: </vr-label>
+                                <vr-label isvalue>{{scopeModel.numberOfNewProductRates}}</vr-label>
+                            </vr-columns>
+                            <vr-columns width="1/4row">
+                                <vr-label>Increased: </vr-label>
+                                <vr-label isvalue>{{scopeModel.numberOfIncreasedProductRates}}</vr-label>
+                            </vr-columns>
+                            <vr-columns width="1/4row">
+                                <vr-label>Decreased: </vr-label>
+                                <vr-label isvalue>{{scopeModel.numberOfDecreasedProductRates}}</vr-label>
+                            </vr-columns>
+                        </vr-row>
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-whs-sales-ratepreview-grid on-ready="scopeModel.onRatePreviewGridReady"></vr-whs-sales-ratepreview-grid>
+                            </vr-columns>
+                        </vr-row>
+                    </span>
+                    <span ng-show="scopeModel.showProductRateMsg">
+                        <vr-label isvalue> No selling product rates changes </vr-label>
+                    </span>
+                </vr-tab>
+                <vr-tab tabobject="scopeModel.tabProductRPObject" header="'Product RPs'">
+                    <vr-row>
+                        <vr-columns width="1/2row" ng-show="scopeModel.currentDefaultRoutingProductName != null">
+                            <vr-label>Old Default Routing Product :</vr-label>
+                            <vr-label isvalue>{{scopeModel.currentDefaultRoutingProductName}}</vr-label>
+                        </vr-columns>
+                        <vr-columns width="1/2row" ng-show="scopeModel.newDefaultRoutingProductName">
+                            <vr-label>New Default Routing Product : </vr-label>
+                            <vr-label isvalue>{{scopeModel.newDefaultRoutingProductName}}</vr-label>
+                        </vr-columns>
+                        <vr-columns width="1/2row" ng-show="scopeModel.newDefaultRoutingProductName == null && scopeModel.effectiveOn != null">
+                            <vr-label>Default Routing Product: </vr-label>
+                            <vr-label>Change (Default): </vr-label>
+                            <vr-label isvalue>{{scopeModel.effectiveOn}}</vr-label>
+                        </vr-columns>
+                        <vr-columns width="1/2row" ng-show="scopeModel.effectiveOn == null">
+                            <vr-label>Default Routing Product: </vr-label>
+                            <vr-label isvalue>No changes</vr-label>
+                        </vr-columns>
+                    </vr-row>
+                    <span ng-show="scopeModel.showProductRPData">
+                        <vr-row>
+                            <vr-columns width="fullrow">
+                                <vr-whs-sales-salezoneroutingproductpreview-grid on-ready="scopeModel.onSaleZoneRoutingProductPreviewGridReady"></vr-whs-sales-salezoneroutingproductpreview-grid>
+                            </vr-columns>
+                        </vr-row>
+                    </span>
+                    <span ng-show="scopeModel.showProductRPMsg">
+                        <vr-row>
+                            <vr-columns width="1/2row">
+                                <vr-label>Zone Routing Product: </vr-label>
+                                <vr-label isvalue>No changes</vr-label>
+                            </vr-columns>
+                        </vr-row>
+                    </span>
+                </vr-tab>
+                <vr-tab header="'Country Changes'" tabobject="scopeModel.countryTab">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-tabs>
+                                <vr-tab header="'New Countries'">
+                                    <vr-row>
+                                        <vr-columns width="fullrow">
+                                            <vr-whs-sales-newcountrypreview-grid on-ready="scopeModel.onNewCountryPreviewGridReady"></vr-whs-sales-newcountrypreview-grid>
+                                        </vr-columns>
+                                    </vr-row>
+                                </vr-tab>
+                                <vr-tab header="'Ended Countries'">
+                                    <vr-row>
+                                        <vr-columns width="fullrow">
+                                            <vr-whs-sales-changedcountrypreview-grid on-ready="scopeModel.onChangedCountryPreviewGridReady"></vr-whs-sales-changedcountrypreview-grid>
+                                        </vr-columns>
+                                    </vr-row>
+                                </vr-tab>
+                            </vr-tabs>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+
+
+
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
                 <vr-button type="Continue" formname="formRatePlanPreview" data-onclick="scopeModel.continueTask"></vr-button>
                 <vr-button type="Stop" data-onclick="scopeModel.stopTask"></vr-button>
-			</div>
-		</vr-actionbar>
-	</div>
+            </div>
+        </vr-actionbar>
+    </div>
 </div>

@@ -31,19 +31,13 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #endregion
 
-        #region Output Arguments
 
-        [RequiredArgument]
-        public OutArgument<IEnumerable<int>> CustomerIdsWithPriceList { get; set; }
-
-        #endregion
 
         protected override void Execute(CodeActivityContext context)
         {
             IRatePlanContext ratePlanContext = context.GetRatePlanContext();
             IEnumerable<CustomerCountryToChange> countriesToChange = CustomerCountriesToChange.Get(context);
             IEnumerable<NewCustomerPriceListChange> customerPriceListChanges = NewCustomerChanges.Get(context);
-            IEnumerable<int> customerIdsWithPriceList;
             int currencyId = CurrencyId.Get(context);
             IEnumerable<NewPriceList> salePriceLists = NewSalePriceList.Get(context);
 
@@ -53,12 +47,10 @@ namespace TOne.WhS.Sales.BP.Activities
 
             if (countriesToChange != null && countriesToChange.Any())
             {
-                customerIdsWithPriceList = new List<int> { ratePlanContext.OwnerId };
                 plChangeType = SalePLChangeType.CountryAndRate;
             }
             else
             {
-                customerIdsWithPriceList = customerPriceListChanges.Select(c => c.CustomerId);
                 plChangeType = SalePLChangeType.Rate;
             }
             var salePricelistFileContext = new SalePricelistFileContext
@@ -74,7 +66,6 @@ namespace TOne.WhS.Sales.BP.Activities
             };
             var salePricelistManager = new SalePriceListManager();
             salePricelistManager.SavePriceList(salePricelistFileContext);
-            CustomerIdsWithPriceList.Set(context, customerIdsWithPriceList);
         }
 
         #region Private Methods

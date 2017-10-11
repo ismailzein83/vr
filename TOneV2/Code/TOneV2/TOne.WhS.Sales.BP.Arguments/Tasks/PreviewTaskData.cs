@@ -11,5 +11,8 @@ namespace TOne.WhS.Sales.BP.Arguments.Tasks
     public class PreviewTaskData : BPTaskData
     {
 		public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
     }
 }

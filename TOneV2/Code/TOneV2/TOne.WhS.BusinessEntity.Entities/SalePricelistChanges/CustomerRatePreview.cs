@@ -15,10 +15,10 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
         public Decimal Rate { get; set; }
         public Decimal? RecentRate { get; set; }
         public RateChangeType ChangeType { get; set; }
-        public long PricelistId { get; set; }
+        public int PricelistId { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
         public int? CurrencyId { get; set; }
-        public int customerId { get; set; }
+        public int CustomerId { get; set; }
     }
 }

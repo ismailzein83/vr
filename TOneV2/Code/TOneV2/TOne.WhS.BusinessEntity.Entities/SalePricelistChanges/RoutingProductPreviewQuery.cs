@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
 {
-    class RoutingProductPreviewQuery
+   public class RoutingProductPreviewQuery
     {
+        public long ProcessInstanceId { get; set; }
+        public List<int> CustomerIds { get; set; }
     }
 }

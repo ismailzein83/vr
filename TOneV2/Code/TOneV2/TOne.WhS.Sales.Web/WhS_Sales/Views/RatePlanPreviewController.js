@@ -1,314 +1,461 @@
 ﻿(function (appControllers) {
 
-	'use strict';
+    'use strict';
 
-	RatePlanPreviewController.$inject = ['$scope', 'WhS_Sales_RatePlanPreviewAPIService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'BusinessProcess_BPTaskAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    RatePlanPreviewController.$inject = ['$scope', 'WhS_Sales_RatePlanPreviewAPIService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'BusinessProcess_BPTaskAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_SellingProductAPIService', 'WhS_BE_CarrierAccountAPIService'];
 
-	function RatePlanPreviewController($scope, WhS_Sales_RatePlanPreviewAPIService, WhS_BE_SalePriceListOwnerTypeEnum, BusinessProcess_BPTaskAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function RatePlanPreviewController($scope, WhS_Sales_RatePlanPreviewAPIService, WhS_BE_SalePriceListOwnerTypeEnum, BusinessProcess_BPTaskAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SellingProductAPIService, WhS_BE_CarrierAccountAPIService) {
 
-		var taskId;
-		var processInstanceId;
-		var ownerType;
+        var taskId;
+        var processInstanceId;
+        var ownerType;
+        var ownerId;
+        var ratePreviewGridAPI;
+        var ratePreviewGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var customeRatePreviewGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var productRatePreviewGridAPI;
+        var productRatePreviewGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var ratePreviewGridAPI;
-		var ratePreviewGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var saleZoneRoutingProductPreviewGridAPI;
+        var saleZoneRoutingProductGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var saleZoneRoutingProductPreviewGridAPI;
-		var saleZoneRoutingProductGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var summaryServiceViewerAPI;
+        var summaryServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var currentDefaultServiceViewerAPI;
-		var currentDefaultServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
+        var newCountryGridAPI;
+        var newCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var newDefaultServiceViewerAPI;
-		var newDefaultServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
+        var changedCountryGridAPI;
+        var changedCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var summaryServiceViewerAPI;
-		var summaryServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
+        var rateCarrierAccountSelectorAPI;
+        var rateCarrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var newCountryGridAPI;
-		var newCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var routingProductCarrierAccountSelectorAPI;
+        var RPCarrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-		var changedCountryGridAPI;
-		var changedCountryGridReadyDeferred = UtilsService.createPromiseDeferred();
+        var customerSaleZoneRoutingProductPreviewGridAPI;
+        var customerSaleZoneRoutingProductGridReadyDeferred = UtilsService.createPromiseDeferred();
+        loadParameters();
+        defineScope();
+        load();
 
-		loadParameters();
-		defineScope();
-		load();
+        function loadParameters() {
+            var parameters = VRNavigationService.getParameters($scope);
 
-		function loadParameters() {
-			var parameters = VRNavigationService.getParameters($scope);
+            if (parameters != undefined && parameters != null) {
+                taskId = parameters.TaskId;
+            }
+        }
+        function defineScope() {
+            $scope.scopeModel = {};
+            $scope.scopeModel.tabProductRPObject = { showTab: false };
+            $scope.scopeModel.tabProductRateObject = { showTab: false };
+            $scope.scopeModel.showCarrierAccountSelector = true;
+            $scope.scopeModel.countryTab = { showTab: false };
+            $scope.scopeModel.tabCustomerRPObject = { showTab: false };
+            $scope.scopeModel.tabCustomerRateObject = { showTab: false };
+            $scope.scopeModel.showCustomerRateMsg = false;
+            $scope.scopeModel.showCustomerRPMsg = false;
+            $scope.scopeModel.showProductRateMsg = false;
+            $scope.scopeModel.showProductRPMsg = false;
+            $scope.scopeModel.showProductRPData = false;
+            $scope.scopeModel.showProductRateData = false;
+            //$scope.scopeModel.defaultServicePreview = {};
+            $scope.scopeModel.onRPSelectorBlurred = function () {
+                customerSaleZoneRoutingProductPreviewGridAPI.cleanGrid();
+                $scope.scopeModel.numberOfNewSaleZoneRoutingProducts = undefined;
+                $scope.scopeModel.numberOfClosedSaleZoneRoutingProducts = undefined;
+            };
+            $scope.scopeModel.onRateSelectorBlurred = function () {
+                ratePreviewGridAPI.cleanGrid();
+                $scope.scopeModel.numberOfNewRates = undefined;
+                $scope.scopeModel.numberOfIncreasedRates = undefined;
+                $scope.scopeModel.numberOfDecreasedRates = undefined;
+            };
+            $scope.scopeModel.onCustomerRatePreviewGridReady = function (api) {
+                ratePreviewGridAPI = api;
+                customeRatePreviewGridReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onRatePreviewGridReady = function (api) {
+                productRatePreviewGridAPI = api;
+                productRatePreviewGridReadyDeferred.resolve();
+            };
+            $scope.scopeModel.loadRatePrview = function () {
 
-			if (parameters != undefined && parameters != null) {
-				taskId = parameters.TaskId;
-			}
-		}
-		function defineScope() {
-			$scope.scopeModel = {};
-			$scope.scopeModel.defaultServicePreview = {};
+                var selectedCustomerIds = (rateCarrierAccountSelectorAPI.getSelectedIds() != null) ? rateCarrierAccountSelectorAPI.getSelectedIds() : null;
+                var ratePreviewGridPayload = {
+                    ProcessInstanceId: processInstanceId,
+                    ZoneName: null,
+                    CustomerIds: selectedCustomerIds
+                };
+                var query = {
+                    ProcessInstanceId: processInstanceId,
+                    CustomerIds: selectedCustomerIds
+                };
+                WhS_Sales_RatePlanPreviewAPIService.GetCustomerRatePlanPreviewSummary(query).then(function (response) {
+                    if (response == undefined || response == null)
+                        return undefined;
+                    else {
+                        $scope.scopeModel.numberOfNewRates = response.NumberOfNewRates;
+                        $scope.scopeModel.numberOfIncreasedRates = response.NumberOfIncreasedRates;
+                        $scope.scopeModel.numberOfDecreasedRates = response.NumberOfDecreasedRates;
+                    }
+                });
+                VRUIUtilsService.callDirectiveLoad(ratePreviewGridAPI, ratePreviewGridPayload, undefined);
+            };
+            $scope.scopeModel.loadCustomerRoutingProductPrview = function () {
 
-			$scope.scopeModel.onRatePreviewGridReady = function (api) {
-				ratePreviewGridAPI = api;
-				ratePreviewGridReadyDeferred.resolve();
-			};
+                var selectedCustomerIds = (routingProductCarrierAccountSelectorAPI.getSelectedIds() != null) ? routingProductCarrierAccountSelectorAPI.getSelectedIds() : null;
+                var routingProductPreviewGridPayload = {
+                    ProcessInstanceId: processInstanceId,
+                    CustomerIds: selectedCustomerIds
+                };
+                var query = {
+                    ProcessInstanceId: processInstanceId,
+                    CustomerIds: selectedCustomerIds
+                };
+                WhS_Sales_RatePlanPreviewAPIService.GetCustomerRatePlanPreviewSummary(query).then(function (response) {
+                    if (response == undefined || response == null)
+                        return undefined;
+                    else {
+                        $scope.scopeModel.numberOfNewSaleZoneRoutingProducts = response.NumberOfNewSaleZoneRoutingProducts;
+                        $scope.scopeModel.numberOfClosedSaleZoneRoutingProducts = response.NumberOfClosedSaleZoneRoutingProducts;
+                    }
+                });
 
-			$scope.scopeModel.onSaleZoneRoutingProductPreviewGridReady = function (api) {
-				saleZoneRoutingProductPreviewGridAPI = api;
-				saleZoneRoutingProductGridReadyDeferred.resolve();
-			};
+                VRUIUtilsService.callDirectiveLoad(customerSaleZoneRoutingProductPreviewGridAPI, routingProductPreviewGridPayload, undefined);
+            };
+            $scope.scopeModel.onSaleZoneRoutingProductPreviewGridReady = function (api) {
+                saleZoneRoutingProductPreviewGridAPI = api;
+                saleZoneRoutingProductGridReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onCustomerSaleZoneRoutingProductPreviewGridReady = function (api) {
+                customerSaleZoneRoutingProductPreviewGridAPI = api;
+                customerSaleZoneRoutingProductGridReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onRateCarrierAccountSelectorReady = function (api) {
+                rateCarrierAccountSelectorAPI = api;
+                rateCarrierAccountSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onRoutingProductCarrierAccountSelectorReady = function (api) {
+                routingProductCarrierAccountSelectorAPI = api;
+                RPCarrierAccountSelectorReadyDeferred.resolve();
 
-			$scope.scopeModel.onCurrentDefaultServiceViewerReady = function (api) {
-				currentDefaultServiceViewerAPI = api;
-				currentDefaultServiceViewerReadyDeferred.resolve();
-			};
+            };
+            $scope.scopeModel.onRPCarrierAccountChanged = function () {
+               
+            };
+            $scope.scopeModel.onRateCarrierAccountChanged = function () {
+                
+            };
 
-			$scope.scopeModel.onNewDefaultServiceViewerReady = function (api) {
-				newDefaultServiceViewerAPI = api;
-				newDefaultServiceViewerReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onSummaryServiceViewerReady = function (api) {
+                summaryServiceViewerAPI = api;
+                summaryServiceViewerReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onSummaryServiceViewerReady = function (api) {
-				summaryServiceViewerAPI = api;
-				summaryServiceViewerReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onNewCountryPreviewGridReady = function (api) {
+                newCountryGridAPI = api;
+                newCountryGridReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onNewCountryPreviewGridReady = function (api) {
-				newCountryGridAPI = api;
-				newCountryGridReadyDeferred.resolve();
-			};
+            $scope.scopeModel.onChangedCountryPreviewGridReady = function (api) {
+                changedCountryGridAPI = api;
+                changedCountryGridReadyDeferred.resolve();
+            };
 
-			$scope.scopeModel.onChangedCountryPreviewGridReady = function (api) {
-				changedCountryGridAPI = api;
-				changedCountryGridReadyDeferred.resolve();
-			};
+            $scope.scopeModel.continueTask = function () {
+                return executeTask(true);
+            };
+            $scope.scopeModel.stopTask = function () {
+                return executeTask(false);
+            };
+        }
+        function load() {
+            $scope.scopeModel.isLoading = true;
 
-			$scope.scopeModel.continueTask = function () {
-				return executeTask(true);
-			};
-			$scope.scopeModel.stopTask = function () {
-				return executeTask(false);
-			};
-		}
-		function load() {
-			$scope.scopeModel.isLoading = true;
+            getTaskData().then(function () {
+                loadAllControls();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
+            });
+        }
 
-			getTaskData().then(function () {
-				loadAllControls();
-			}).catch(function (error) {
-				VRNotificationService.notifyExceptionWithClose(error, $scope);
-				$scope.scopeModel.isLoading = false;
-			});
-		}
+        function getTaskData() {
+            return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
+                if (response == null)
+                    return;
+                processInstanceId = response.ProcessInstanceId;
+                if (response.TaskData == null)
+                    return;
+                ownerType = response.TaskData.OwnerType;
+                ownerId = response.TaskData.OwnerId;
+                if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                    $scope.scopeModel.showCountrySummary = true;
+                    $scope.scopeModel.countryTab.showTab = true;
+                    $scope.scopeModel.showCarrierAccountSelector = false;
 
-		function getTaskData() {
-			return BusinessProcess_BPTaskAPIService.GetTask(taskId).then(function (response) {
-				if (response == null)
-					return;
-				processInstanceId = response.ProcessInstanceId;
-				if (response.TaskData == null)
-					return;
-				ownerType = response.TaskData.OwnerType;
-				if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
-					$scope.scopeModel.showCountrySummary = true;
-					$scope.scopeModel.showCountryTab = true;
-				}
-			});
-		}
-		function loadAllControls() {
-			return UtilsService.waitMultipleAsyncOperations([loadSummary, loadDefaultRoutingProductPreview, loadDefaultServicePreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid, loadNewCountryPreviewGrid, loadChangedCountryPreviewGrid]).catch(function (error) {
-				VRNotificationService.notifyExceptionWithClose(error, $scope);
-			}).finally(function () {
-				$scope.scopeModel.isLoading = false;
-			});
-		}
-		function loadSummary() {
+                }
 
-			var promises = [];
+            });
+        }
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([setTitle,loadDefaultRoutingProductPreview, loadRatePreviewGrid, loadSaleZoneRoutingProductPreviewGrid, loadNewCountryPreviewGrid, loadChangedCountryPreviewGrid, rateLoadCarrierAccountSelector, RPLoadCarrierAccountSelector, loadCustomerSaleZoneRoutingProductPreviewGrid, loadProductRatePreviewGrid]).then(function () {
+                if (customerSaleZoneRoutingProductPreviewGridAPI.gridHasData())
+                    $scope.scopeModel.tabCustomerRPObject.showTab = true;
+                else
+                {
+                    $scope.scopeModel.showCustomerRPMsg = true;
+                  
+                }
+                if (ratePreviewGridAPI.gridHasData())
+                    $scope.scopeModel.tabCustomerRateObject.showTab = true;
+                else {
+                    $scope.scopeModel.showCustomerRateMsg = true;
+                   
+                }
+                if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
+                    $scope.scopeModel.tabProductRPObject.showTab = true;
+                    $scope.scopeModel.tabProductRateObject.showTab = true;
+                    if (saleZoneRoutingProductPreviewGridAPI.gridHasData())
+                        $scope.scopeModel.showProductRPData = true;
+                    else {
+                        $scope.scopeModel.showProductRPMsg = true;
+                    }
+                    if (productRatePreviewGridAPI.gridHasData())
+                        $scope.scopeModel.showProductRateData = true;
+                    else {
+                        $scope.scopeModel.showProductRateMsg = true;
+                    }
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+        function rateLoadCarrierAccountSelector() {
+            var loadCarrierAccountSelectorDeferred = UtilsService.createPromiseDeferred();
+            rateCarrierAccountSelectorReadyDeferred.promise.then(function () {
+                var carrierAccountselectorPayload = {
+                    filter: {
+                        Filters: getCarrierAccountSelectorRateFilter()
+                    }
 
-			var query = { ProcessInstanceId: processInstanceId };
-			var getRatePlanPreviewSummaryPromise = WhS_Sales_RatePlanPreviewAPIService.GetRatePlanPreviewSummary(query);
-			promises.push(getRatePlanPreviewSummaryPromise);
+                };
+                VRUIUtilsService.callDirectiveLoad(rateCarrierAccountSelectorAPI, carrierAccountselectorPayload, loadCarrierAccountSelectorDeferred);
+            });
+            return loadCarrierAccountSelectorDeferred.promise;
+        }
 
-			var summaryServiceViewerLoadDeferred = UtilsService.createPromiseDeferred();
-			promises.push(summaryServiceViewerLoadDeferred.promise);
+        function getCarrierAccountSelectorRateFilter() {
+            var carrierAccountRateFilters = [];
 
-			getRatePlanPreviewSummaryPromise.then(function (response) {
-				if (response == undefined || response == null)
-					summaryServiceViewerLoadDeferred.resolve();
-				else {
-					$scope.scopeModel.numberOfNewRates = response.NumberOfNewRates;
-					$scope.scopeModel.numberOfIncreasedRates = response.NumberOfIncreasedRates;
-					$scope.scopeModel.numberOfDecreasedRates = response.NumberOfDecreasedRates;
-					$scope.scopeModel.numberOfClosedRates = response.NumberOfClosedRates;
+            var carrierAccountRateFilterAffectedCustomer = {
+                $type: 'TOne.WhS.Sales.Business.AffectedCarrierAccountFilterInRateChanges, TOne.WhS.Sales.Business',
+                ProcessInstanceId: processInstanceId
+            };
+            carrierAccountRateFilters.push(carrierAccountRateFilterAffectedCustomer);
+            return carrierAccountRateFilters;
+        }
 
-					$scope.scopeModel.nameOfNewDefaultRoutingProduct = response.NameOfNewDefaultRoutingProduct;
-					$scope.scopeModel.nameOfClosedDefaultRoutingProudct = response.NameOfClosedDefaultRoutingProudct;
+        function RPLoadCarrierAccountSelector() {
+            var loadCarrierAccountSelectorDeferred = UtilsService.createPromiseDeferred();
+            RPCarrierAccountSelectorReadyDeferred.promise.then(function () {
+                var carrierAccountselectorPayload = {
+                    filter: {
+                        Filters: getCarrierAccountSelectorRPFilter()
+                    }
 
-					$scope.scopeModel.numberOfNewSaleZoneRoutingProducts = response.NumberOfNewSaleZoneRoutingProducts;
-					$scope.scopeModel.numberOfClosedSaleZoneRoutingProducts = response.NumberOfClosedSaleZoneRoutingProducts;
+                };
+                VRUIUtilsService.callDirectiveLoad(routingProductCarrierAccountSelectorAPI, carrierAccountselectorPayload, loadCarrierAccountSelectorDeferred);
+            });
+            return loadCarrierAccountSelectorDeferred.promise;
+        }
+        function getCarrierAccountSelectorRPFilter() {
+            var carrierAccountRPFilters = [];
 
-					$scope.scopeModel.numberOfNewSaleZoneServices = response.NumberOfNewSaleZoneServices;
-					$scope.scopeModel.numberOfClosedSaleZoneServices = response.NumberOfClosedSaleZoneServices;
+            var carrierAccountRPFilterAffectedCustomer = {
+                $type: 'TOne.WhS.Sales.Business.AffectedCarrierAccountFilterInRPChanges, TOne.WhS.Sales.Business',
+                ProcessInstanceId: processInstanceId
+            };
+            carrierAccountRPFilters.push(carrierAccountRPFilterAffectedCustomer);
+            return carrierAccountRPFilters;
+        }
 
-					$scope.scopeModel.numberOfChangedCountries = response.NumberOfChangedCountries;
-					$scope.scopeModel.numberOfNewCountries = response.NumberOfNewCountries;
 
-					if (response.NewDefaultServices == null)
-						summaryServiceViewerLoadDeferred.resolve();
-					else {
-						$scope.scopeModel.showSummaryServiceViewer = true;
-						summaryServiceViewerReadyDeferred.promise.then(function () {
-							var summaryServiceViewerPayload = {
-								selectedIds: UtilsService.getPropValuesFromArray(response.NewDefaultServices, 'ServiceId')
-							};
-							VRUIUtilsService.callDirectiveLoad(summaryServiceViewerAPI, summaryServiceViewerPayload, summaryServiceViewerLoadDeferred);
-						});
-					}
+        function loadDefaultRoutingProductPreview() {
+            var input = { ProcessInstanceId: processInstanceId };
+            return WhS_Sales_RatePlanPreviewAPIService.GetDefaultRoutingProductPreview(input).then(function (response) {
+                if (response != null) {
+                    $scope.scopeModel.currentDefaultRoutingProductName = response.CurrentDefaultRoutingProductName;
+                    if (response.IsCurrentDefaultRoutingProductInherited === true)
+                        $scope.scopeModel.currentDefaultRoutingProductName += ' (Inherited)';
+                    $scope.scopeModel.newDefaultRoutingProductName = response.NewDefaultRoutingProductName;
+                    $scope.scopeModel.effectiveOn = UtilsService.getShortDate(new Date(response.EffectiveOn));
+                }
+            });
+        }
 
-					if (response.ClosedDefaultServiceEffectiveOn != null)
-						$scope.scopeModel.closedDefaultServiceEffectiveOn = UtilsService.getShortDate(new Date(response.ClosedDefaultServiceEffectiveOn));
-				}
-			});
+        function loadRatePreviewGrid() {
+            var ratePreviewGridLoadDeferred = UtilsService.createPromiseDeferred();
+            var ownerIds = [ownerId];
+            customeRatePreviewGridReadyDeferred.promise.then(function () {
+                var ratePreviewGridPayload = {
+                    ProcessInstanceId: processInstanceId,
+                    CustomerIds: (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) ? ownerIds : null
+                };
+                var query = {
+                    ProcessInstanceId: processInstanceId,
+                    CustomerIds: (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) ? ownerIds : null
+                };
+                WhS_Sales_RatePlanPreviewAPIService.GetCustomerRatePlanPreviewSummary(query).then(function (response) {
+                    if (response == undefined || response == null)
+                        return undefined;
+                    else {
+                        $scope.scopeModel.numberOfNewRates = response.NumberOfNewRates;
+                        $scope.scopeModel.numberOfIncreasedRates = response.NumberOfIncreasedRates;
+                        $scope.scopeModel.numberOfDecreasedRates = response.NumberOfDecreasedRates;
+                    }
+                });
+                VRUIUtilsService.callDirectiveLoad(ratePreviewGridAPI, ratePreviewGridPayload, ratePreviewGridLoadDeferred);
+            });
 
-			return UtilsService.waitMultiplePromises(promises);
-		}
-		function loadDefaultRoutingProductPreview() {
-			var input = { ProcessInstanceId: processInstanceId };
-			return WhS_Sales_RatePlanPreviewAPIService.GetDefaultRoutingProductPreview(input).then(function (response) {
-				if (response != null) {
-					$scope.scopeModel.currentDefaultRoutingProductName = response.CurrentDefaultRoutingProductName;
-					if (response.IsCurrentDefaultRoutingProductInherited === true)
-						$scope.scopeModel.currentDefaultRoutingProductName += ' (Inherited)';
-					$scope.scopeModel.newDefaultRoutingProductName = response.NewDefaultRoutingProductName;
-					$scope.scopeModel.effectiveOn = UtilsService.getShortDate(new Date(response.EffectiveOn));
-				}
-			});
-		}
-		function loadDefaultServicePreview() {
-			var promises = [];
+            return ratePreviewGridLoadDeferred.promise;
+        }
 
-			var input = { ProcessInstanceId: processInstanceId };
-			var getDefaultServicePreviewPromise = WhS_Sales_RatePlanPreviewAPIService.GetDefaultServicePreview(input);
-			promises.push(getDefaultServicePreviewPromise);
+        function loadProductRatePreviewGrid() {
+            var ratePreviewGridLoadDeferred = UtilsService.createPromiseDeferred();
 
-			var loadDefaultServiceViewersDeferred = UtilsService.createPromiseDeferred();
-			promises.push(loadDefaultServiceViewersDeferred.promise);
+            productRatePreviewGridReadyDeferred.promise.then(function () {
+                var ratePreviewGridPayload = {
+                    ProcessInstanceId: processInstanceId,
+                    ZoneName: null
+                };
+                var query = {
+                    ProcessInstanceId: processInstanceId,
+                    CustomerIds: null
+                };
+                WhS_Sales_RatePlanPreviewAPIService.GetProductRatePlanPreviewSummary(query).then(function (response) {
+                    if (response == undefined || response == null)
+                        return undefined;
+                    else {
+                        $scope.scopeModel.numberOfNewProductRates = response.NumberOfNewRates;
+                        $scope.scopeModel.numberOfIncreasedProductRates = response.NumberOfIncreasedRates;
+                        $scope.scopeModel.numberOfDecreasedProductRates = response.NumberOfDecreasedRates;
+                    }
+                });
+                VRUIUtilsService.callDirectiveLoad(productRatePreviewGridAPI, ratePreviewGridPayload, ratePreviewGridLoadDeferred);
+            });
 
-			getDefaultServicePreviewPromise.then(function (response) {
-				var serviceViewerPromises = [];
+            return ratePreviewGridLoadDeferred.promise;
+        }
 
-				if (response != null) {
-					$scope.scopeModel.defaultServicePreview.effectiveOn = UtilsService.getShortDate(new Date(response.EffectiveOn));
-					if (response.EffectiveUntil != null)
-						$scope.scopeModel.defaultServicePreview.effectiveUntil = UtilsService.getShortDate(new Date(response.EffectiveUntil));
 
-					if (response.CurrentServices != null) {
-						$scope.scopeModel.showCurrentDefaultServiceViewer = true;
+        function loadSaleZoneRoutingProductPreviewGrid() {
+            var saleZoneRoutingProductGridLoadDeferred = UtilsService.createPromiseDeferred();
 
-						var currentDefaultServiceViewerLoadDeferred = UtilsService.createPromiseDeferred();
-						serviceViewerPromises.push(currentDefaultServiceViewerLoadDeferred.promise);
+            saleZoneRoutingProductGridReadyDeferred.promise.then(function () {
+                var saleZoneRoutingProductPreviewGridPayload = {
+                    ProcessInstanceId: processInstanceId
+                };
+                VRUIUtilsService.callDirectiveLoad(saleZoneRoutingProductPreviewGridAPI, saleZoneRoutingProductPreviewGridPayload, saleZoneRoutingProductGridLoadDeferred);
+            });
 
-						currentDefaultServiceViewerReadyDeferred.promise.then(function () {
-							var currentDefaultServiceViewerPayload = {
-								selectedIds: UtilsService.getPropValuesFromArray(response.CurrentServices, 'ServiceId')
-							};
-							VRUIUtilsService.callDirectiveLoad(currentDefaultServiceViewerAPI, currentDefaultServiceViewerPayload, currentDefaultServiceViewerLoadDeferred);
-						});
-					}
+            return saleZoneRoutingProductGridLoadDeferred.promise;
+        }
+        function loadCustomerSaleZoneRoutingProductPreviewGrid() {
+            var saleZoneRoutingProductGridLoadDeferred = UtilsService.createPromiseDeferred();
+            var ownerIds = [ownerId];
+            customerSaleZoneRoutingProductGridReadyDeferred.promise.then(function () {
+                var saleZoneRoutingProductPreviewGridPayload = {
+                    ProcessInstanceId: processInstanceId,
+                    CustomerIds: (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) ? ownerIds : null
+                };
+                var query = {
+                    ProcessInstanceId: processInstanceId,
+                    CustomerIds: (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) ? ownerIds : null
+                };
+                WhS_Sales_RatePlanPreviewAPIService.GetCustomerRatePlanPreviewSummary(query).then(function (response) {
+                    if (response == undefined || response == null)
+                        return undefined;
+                    else {
+                        $scope.scopeModel.numberOfNewSaleZoneRoutingProducts = response.NumberOfNewSaleZoneRoutingProducts;
+                        $scope.scopeModel.numberOfClosedSaleZoneRoutingProducts = response.NumberOfClosedSaleZoneRoutingProducts;
+                    }
+                });
+                VRUIUtilsService.callDirectiveLoad(customerSaleZoneRoutingProductPreviewGridAPI, saleZoneRoutingProductPreviewGridPayload, saleZoneRoutingProductGridLoadDeferred);
+            });
 
-					if (response.NewServices != null) {
-						$scope.scopeModel.showNewDefaultServiceViewer = true;
+            return saleZoneRoutingProductGridLoadDeferred.promise;
+        }
+        function loadNewCountryPreviewGrid() {
+            var newCountryGridLoadDeferred = UtilsService.createPromiseDeferred();
+            newCountryGridReadyDeferred.promise.then(function () {
+                var newCountryGridPayload = {
+                    ProcessInstanceId: processInstanceId
+                };
+                VRUIUtilsService.callDirectiveLoad(newCountryGridAPI, newCountryGridPayload, newCountryGridLoadDeferred);
+            });
+            return newCountryGridLoadDeferred.promise;
+        }
+        function loadChangedCountryPreviewGrid() {
+            var changedCountryGridLoadDeferred = UtilsService.createPromiseDeferred();
+            changedCountryGridReadyDeferred.promise.then(function () {
+                var changedCountryGridPayload = {
+                    ProcessInstanceId: processInstanceId
+                };
+                VRUIUtilsService.callDirectiveLoad(changedCountryGridAPI, changedCountryGridPayload, changedCountryGridLoadDeferred);
+            });
+            return changedCountryGridLoadDeferred.promise;
+        }
 
-						var newDefaultServiceViewerLoadDeferred = UtilsService.createPromiseDeferred();
-						serviceViewerPromises.push(newDefaultServiceViewerLoadDeferred.promise);
+        function executeTask(decision) {
+            $scope.scopeModel.isLoading = true;
 
-						newDefaultServiceViewerReadyDeferred.promise.then(function () {
-							var newDefaultServiceViewerPayload = {
-								selectedIds: UtilsService.getPropValuesFromArray(response.NewServices, 'ServiceId')
-							};
-							VRUIUtilsService.callDirectiveLoad(newDefaultServiceViewerAPI, newDefaultServiceViewerPayload, newDefaultServiceViewerLoadDeferred);
-						});
-					}
-				}
+            var executionInformation = {
+                $type: "TOne.WhS.Sales.BP.Arguments.Tasks.PreviewTaskExecutionInformation, TOne.WhS.Sales.BP.Arguments",
+                Decision: decision
+            };
 
-				UtilsService.waitMultiplePromises(serviceViewerPromises).then(function () {
-					loadDefaultServiceViewersDeferred.resolve();
-				}).catch(function (error) {
-					loadDefaultServiceViewersDeferred.reject(error);
-				});
-			});
+            var input = {
+                $type: "Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput, Vanrise.BusinessProcess.Entities",
+                TaskId: taskId,
+                ExecutionInformation: executionInformation
+            };
 
-			return UtilsService.waitMultiplePromises(promises);
-		}
-		function loadRatePreviewGrid() {
-			var ratePreviewGridLoadDeferred = UtilsService.createPromiseDeferred();
+            return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
+                $scope.modalContext.closeModal();
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
 
-			ratePreviewGridReadyDeferred.promise.then(function () {
-				var ratePreviewGridPayload = {
-					ProcessInstanceId: processInstanceId,
-					ZoneName: null
-				};
-				VRUIUtilsService.callDirectiveLoad(ratePreviewGridAPI, ratePreviewGridPayload, ratePreviewGridLoadDeferred);
-			});
+        function setTitle()
+        {
+            var titlePromise = UtilsService.createPromiseDeferred();
+            if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+                WhS_BE_CarrierAccountAPIService.GetCarrierAccountName(ownerId).then(function (response) {
+                    $scope.title ="Customer : "+ response;
+                    titlePromise.resolve();
+                });
+            }
+            else {
+                WhS_BE_SellingProductAPIService.GetSellingProductName(ownerId).then(function (response) {
+                    $scope.title ="Selling Product : "+ response;
+                    titlePromise.resolve();
+                });
+            }
+            
+            return titlePromise.promise;
 
-			return ratePreviewGridLoadDeferred.promise;
-		}
-		function loadSaleZoneRoutingProductPreviewGrid() {
-			var saleZoneRoutingProductGridLoadDeferred = UtilsService.createPromiseDeferred();
+        }
+    }
 
-			saleZoneRoutingProductGridReadyDeferred.promise.then(function () {
-				var saleZoneRoutingProductPreviewGridPayload = {
-					ProcessInstanceId: processInstanceId
-				};
-				VRUIUtilsService.callDirectiveLoad(saleZoneRoutingProductPreviewGridAPI, saleZoneRoutingProductPreviewGridPayload, saleZoneRoutingProductGridLoadDeferred);
-			});
-
-			return saleZoneRoutingProductGridLoadDeferred.promise;
-		}
-		function loadNewCountryPreviewGrid() {
-			var newCountryGridLoadDeferred = UtilsService.createPromiseDeferred();
-			newCountryGridReadyDeferred.promise.then(function () {
-				var newCountryGridPayload = {
-					ProcessInstanceId: processInstanceId
-				};
-				VRUIUtilsService.callDirectiveLoad(newCountryGridAPI, newCountryGridPayload, newCountryGridLoadDeferred);
-			});
-			return newCountryGridLoadDeferred.promise;
-		}
-		function loadChangedCountryPreviewGrid() {
-			var changedCountryGridLoadDeferred = UtilsService.createPromiseDeferred();
-			changedCountryGridReadyDeferred.promise.then(function () {
-				var changedCountryGridPayload = {
-					ProcessInstanceId: processInstanceId
-				};
-				VRUIUtilsService.callDirectiveLoad(changedCountryGridAPI, changedCountryGridPayload, changedCountryGridLoadDeferred);
-			});
-			return changedCountryGridLoadDeferred.promise;
-		}
-
-		function executeTask(decision) {
-			$scope.scopeModel.isLoading = true;
-
-			var executionInformation = {
-				$type: "TOne.WhS.Sales.BP.Arguments.Tasks.PreviewTaskExecutionInformation, TOne.WhS.Sales.BP.Arguments",
-				Decision: decision
-			};
-
-			var input = {
-				$type: "Vanrise.BusinessProcess.Entities.ExecuteBPTaskInput, Vanrise.BusinessProcess.Entities",
-				TaskId: taskId,
-				ExecutionInformation: executionInformation
-			};
-
-			return BusinessProcess_BPTaskAPIService.ExecuteTask(input).then(function (response) {
-				$scope.modalContext.closeModal();
-			}).catch(function (error) {
-				VRNotificationService.notifyException(error);
-			}).finally(function () {
-				$scope.scopeModel.isLoading = false;
-			});
-		}
-	}
-
-	appControllers.controller('WhS_Sales_RatePlanPreviewController', RatePlanPreviewController);
+    appControllers.controller('WhS_Sales_RatePlanPreviewController', RatePlanPreviewController);
 
 })(appControllers);

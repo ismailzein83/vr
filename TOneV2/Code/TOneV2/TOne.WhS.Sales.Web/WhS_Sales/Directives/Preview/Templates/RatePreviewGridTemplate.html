@@ -10,12 +10,12 @@
         <vr-label isvalue="true" ng-if="dataItem.Entity.IsCurrentRateInherited">(Inherited)</vr-label>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'New Rate'" field="'Entity.NewRate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Change Type'">
+    <vr-datagridcolumn headertext="'Change Type'" fixedwidth="'100'">
         <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateChangeTypeIconUrl" tooltip="dataItem.RateChangeTypeIconTooltip"></vr-icon>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Effective On'" field="'Entity.EffectiveOn'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Effective Until'" field="'Entity.EffectiveUntil'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridexpandablerow ng-if="ctrl.isNormalRateGrid">
+    <vr-datagridcolumn headertext="'BED'" field="'Entity.EffectiveOn'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'Entity.EffectiveUntil'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
+    <!--<vr-datagridexpandablerow ng-if="ctrl.isNormalRateGrid">
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-    </vr-datagridexpandablerow>
+    </vr-datagridexpandablerow>-->
 </vr-datagrid>

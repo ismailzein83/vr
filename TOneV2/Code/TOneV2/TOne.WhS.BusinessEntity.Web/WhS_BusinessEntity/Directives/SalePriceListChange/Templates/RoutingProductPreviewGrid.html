@@ -1,1 +1,12 @@
-﻿
+﻿<vr-datagrid datasource="scopeModel.saleZoneRoutingProductPreviews"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions">
+    <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Routing Product'" field="'RecentRoutingProductName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'New Routing Product'" field="'RoutingProductName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Effective On'" field="'BED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
+</vr-datagrid>

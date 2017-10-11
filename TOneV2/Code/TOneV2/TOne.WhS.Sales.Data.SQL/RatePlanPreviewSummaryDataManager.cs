@@ -35,11 +35,17 @@ namespace TOne.WhS.Sales.Data.SQL
         
         #region Public Methods
 
-        public RatePlanPreviewSummary GetRatePlanPreviewSummary(RatePlanPreviewQuery query)
+        public RatePlanPreviewSummary GetCustomerRatePlanPreviewSummary(RatePlanPreviewQuery query)
         {
-            return GetItemSP("TOneWhS_Sales.RP_RatePlanPreviewSummary_Get", RatePlanPreviewSummaryMapper, query.ProcessInstanceId);
+            string strcustomerIds = null;
+            if (query.CustomerIds != null && query.CustomerIds.Any())
+                strcustomerIds = string.Join(",", query.CustomerIds);
+            return GetItemSP("TOneWhS_Sales.RP_RatePlanPreviewSummary_GetCustomerRatePlanPreviewSummary", CustomerRatePlanPreviewSummaryMapper, query.ProcessInstanceId, strcustomerIds);
         }
-
+        public RatePlanPreviewSummary GetProductRatePlanPreviewSummary(RatePlanPreviewQuery query)
+        {
+            return GetItemSP("TOneWhS_Sales.RP_RatePlanPreviewSummary_GetProductRatePlanPreviewSummary", ProductRatePlanPreviewSummaryMapper, query.ProcessInstanceId);
+        }
         public void ApplyRatePlanPreviewSummaryToDB(RatePlanPreviewSummary summary)
         {
             string newDefaultServices = summary.NewDefaultServices != null ? Vanrise.Common.Serializer.Serialize(summary.NewDefaultServices) : null;
@@ -69,7 +75,50 @@ namespace TOne.WhS.Sales.Data.SQL
 
         #region Mappers
 
-        private RatePlanPreviewSummary RatePlanPreviewSummaryMapper(IDataReader reader)
+        private RatePlanPreviewSummary CustomerRatePlanPreviewSummaryMapper(IDataReader reader)
+        {
+            RatePlanPreviewSummary ratePlanPreviewSummary = new RatePlanPreviewSummary();
+            string newDefaultServices = reader["NewDefaultServices"] as string;
+            while (reader.Read())
+            {
+                ratePlanPreviewSummary.NewDefaultServices = newDefaultServices != null ? Vanrise.Common.Serializer.Deserialize<List<ZoneService>>(newDefaultServices) : null;
+                ratePlanPreviewSummary.ClosedDefaultServiceEffectiveOn = GetReaderValue<DateTime?>(reader, "ClosedDefaultServiceEffectiveOn");
+                ratePlanPreviewSummary.NumberOfNewSaleZoneServices = (int)reader["NumberOfNewSaleZoneServices"];
+                ratePlanPreviewSummary.NumberOfClosedSaleZoneServices = (int)reader["NumberOfClosedSaleZoneServices"];
+                ratePlanPreviewSummary.NumberOfChangedCountries = (int)reader["NumberOfChangedCountries"];
+                ratePlanPreviewSummary.NumberOfNewCountries = GetReaderValue<int>(reader, "NumberOfNewCountries");
+            }
+
+            if (reader.NextResult())
+                while (reader.Read())
+                {
+                    ratePlanPreviewSummary.NumberOfNewRates = (int)reader["NumberOfNewRates"];
+                }
+            if (reader.NextResult())
+                while (reader.Read())
+                {
+                    ratePlanPreviewSummary.NumberOfIncreasedRates = (int)reader["NumberOfIncreasedRates"];
+                }
+            if (reader.NextResult())
+                while (reader.Read())
+                {
+                    ratePlanPreviewSummary.NumberOfDecreasedRates = (int)reader["NumberOfDecreasedRates"];
+                }
+            if (reader.NextResult())
+                while (reader.Read())
+                {
+                    ratePlanPreviewSummary.NumberOfNewSaleZoneRoutingProducts = (int)reader["NumberOfNewSaleZoneRoutingProducts"];
+                }
+            if (reader.NextResult())
+                while (reader.Read())
+                {
+                    ratePlanPreviewSummary.NumberOfClosedSaleZoneRoutingProducts = (int)reader["NumberOfClosedSaleZoneRoutingProducts"];
+                }
+            return ratePlanPreviewSummary;
+        }
+
+
+        private RatePlanPreviewSummary ProductRatePlanPreviewSummaryMapper(IDataReader reader)
         {
             string newDefaultServices = reader["NewDefaultServices"] as string;
 
@@ -78,7 +127,6 @@ namespace TOne.WhS.Sales.Data.SQL
                 NumberOfNewRates = (int)reader["NumberOfNewRates"],
                 NumberOfIncreasedRates = (int)reader["NumberOfIncreasedRates"],
                 NumberOfDecreasedRates = (int)reader["NumberOfDecreasedRates"],
-                NumberOfClosedRates = (int)reader["NumberOfClosedRates"],
                 NameOfNewDefaultRoutingProduct = reader["NameOfNewDefaultRoutingProduct"] as string,
                 NameOfClosedDefaultRoutingProduct = reader["NameOfClosedDefaultRoutingProduct"] as string,
                 NumberOfNewSaleZoneRoutingProducts = (int)reader["NumberOfNewSaleZoneRoutingProducts"],
@@ -92,6 +140,7 @@ namespace TOne.WhS.Sales.Data.SQL
             };
         }
         
+
         #endregion
     }
 }

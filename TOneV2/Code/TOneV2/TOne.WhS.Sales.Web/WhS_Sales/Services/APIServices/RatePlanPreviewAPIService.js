@@ -7,15 +7,20 @@
     function RatePlanPreviewAPIService(BaseAPIService, UtilsService, WhS_Sales_ModuleConfig)
     {
         var controllerName = "RatePlanPreview";
-
-        function GetRatePlanPreviewSummary(query) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRatePlanPreviewSummary"), query);
+        
+        function GetCustomerRatePlanPreviewSummary(query) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetCustomerRatePlanPreviewSummary"), query);
         }
-
+        
+        function GetProductRatePlanPreviewSummary(query) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetProductRatePlanPreviewSummary"), query);
+        }
         function GetFilteredRatePreviews(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredRatePreviews"), input);
         }
-
+        function GetFilteredCustomerRatePreviews(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredCustomerRatePreviews"), input);
+        }
         function GetFilteredSaleZoneRoutingProductPreviews(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredSaleZoneRoutingProductPreviews"), input);
         }
@@ -41,14 +46,16 @@
         }
 
         return {
-            GetRatePlanPreviewSummary: GetRatePlanPreviewSummary,
+            GetProductRatePlanPreviewSummary:GetProductRatePlanPreviewSummary,
+            GetCustomerRatePlanPreviewSummary: GetCustomerRatePlanPreviewSummary,
             GetFilteredRatePreviews: GetFilteredRatePreviews,
             GetFilteredSaleZoneRoutingProductPreviews: GetFilteredSaleZoneRoutingProductPreviews,
             GetDefaultRoutingProductPreview: GetDefaultRoutingProductPreview,
             GetFilteredSaleZoneServicePreviews: GetFilteredSaleZoneServicePreviews,
             GetDefaultServicePreview: GetDefaultServicePreview,
             GetFilteredChangedCustomerCountryPreviews: GetFilteredChangedCustomerCountryPreviews,
-            GetFilteredNewCustomerCountryPreviews: GetFilteredNewCustomerCountryPreviews
+            GetFilteredNewCustomerCountryPreviews: GetFilteredNewCustomerCountryPreviews,
+            GetFilteredCustomerRatePreviews: GetFilteredCustomerRatePreviews
         };
     }
 

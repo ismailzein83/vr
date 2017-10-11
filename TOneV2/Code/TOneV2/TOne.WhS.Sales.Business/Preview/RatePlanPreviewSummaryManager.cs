@@ -10,10 +10,16 @@ namespace TOne.WhS.Sales.Business
 {
     public class RatePlanPreviewSummaryManager
     {
-        public RatePlanPreviewSummary GetRatePlanPreviewSummary(RatePlanPreviewQuery query)
+        public RatePlanPreviewSummary GetCustomerRatePlanPreviewSummary(RatePlanPreviewQuery query)
         {
             var dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanPreviewSummaryDataManager>();
-            return dataManager.GetRatePlanPreviewSummary(query);
+            return dataManager.GetCustomerRatePlanPreviewSummary(query);
+        }
+
+        public RatePlanPreviewSummary GetProductRatePlanPreviewSummary(RatePlanPreviewQuery query)
+        {
+            var dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanPreviewSummaryDataManager>();
+            return dataManager.GetProductRatePlanPreviewSummary(query);
         }
     }
 }

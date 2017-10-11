@@ -25,5 +25,27 @@ namespace TOne.WhS.BusinessEntity.Entities
 		public int? SellingNumberPlanId { get; set; }
 
         public List<int> ExcludedCarrierAccountIds { get; set; }
+
+        public IEnumerable<ICarrierAccountFilter> Filters { get; set; }
 	}
+
+    public interface ICarrierAccountFilter
+    {
+        bool IsExcluded(ICarrierAccountFilterContext context);
+    }
+
+    public interface ICarrierAccountFilterContext
+    {
+        CarrierAccount CarrierAccount { get; }
+
+        object CustomObject { get; set; }
+    }
+
+    public class CarrierAccountFilterContext : ICarrierAccountFilterContext
+    {
+        public CarrierAccount CarrierAccount { get; set; }
+
+        public object CustomObject { get; set; }
+    }
+
 }

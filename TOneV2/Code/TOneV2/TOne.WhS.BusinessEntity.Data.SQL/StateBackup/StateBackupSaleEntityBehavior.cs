@@ -32,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             CustomerCountryDataManager customerCountryDataManager = new CustomerCountryDataManager();
 
-            if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.SellingProduct)
+            if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.SellingProduct && backupSaleEntityData.SellingProductCustomerIds.Any())
             {
                 var customerIds = backupSaleEntityData.SellingProductCustomerIds;
                 backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, customerIds));

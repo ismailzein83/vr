@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Entities.SalePricelistChanges;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
@@ -16,5 +17,10 @@ namespace TOne.WhS.BusinessEntity.Data
         void SaveSalePriceListSnapshotToDb(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots);
         List<SalePricelistCodeChange> GetNotSentCodechanges(IEnumerable<int> customerIds);
         List<SalePricelistRateChange> GetNotSentRatechanges(IEnumerable<int> customerIds);
+        IEnumerable<CustomerRatePreview> GetCustomerRatePreviews(CustomerRatePreviewQuery query);
+        IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query);
+        IEnumerable<int> GetAffectedCustomerIdsRPChangesByProcessInstanceId(long ProcessInstanceId);
+        IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long ProcessInstanceId);
+        
     }
 }

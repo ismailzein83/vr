@@ -39,7 +39,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     }
                     var systemCurrency = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
                     CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-                    var convertedDefaultRate = currencyExchangeRateManager.ConvertValueToCurrency(roundDefaultRate,systemCurrency, ratePlanContext.SellingProductCurrencyId,DateTime.Today);
+                    var convertedDefaultRate = currencyExchangeRateManager.ConvertValueToCurrency(roundDefaultRate,systemCurrency, ratePlanContext.SellingProductCurrencyId,DateTime.Now);
                     List<RateToChange> ratesToChange = this.RatesToChange.Get(context);
                     SaleZoneManager saleZoneManager = new SaleZoneManager();
                     foreach (var zoneId in zoneIdsWithMissingRates)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Entities.SalePricelistChanges;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
@@ -23,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         };
         private readonly string[] _salePricelistRPChangeColumns =
         {
-            "ZoneName","ZoneID","RoutingProductId","RecentRoutingProductId","BED","EED","PriceListId","CountryId","ProcessInstanceID"
+            "ZoneName","ZoneID","RoutingProductId","RecentRoutingProductId","BED","EED","PriceListId","CountryId","ProcessInstanceID","CustomerId"
         };
         private readonly string[] _salePriceListSnapshot =
         {
@@ -62,6 +63,23 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemSP("TOneWhS_BE.sp_SalePricelistSnapShot", SalePricelistSnapShotMapper, priceListId);
         }
+
+        public IEnumerable<CustomerRatePreview> GetCustomerRatePreviews(CustomerRatePreviewQuery query)
+        {
+            string strcustomerIds = null;
+            if (query.CustomerIds != null && query.CustomerIds.Any())
+                strcustomerIds = string.Join(",", query.CustomerIds);
+            return GetItemsSP("TOneWhS_BE.sp_SalePriceListRateChangeNew_GetCustomerRatePreviews", CustomerRatePreviewMapper, query.ProcessInstanceId, strcustomerIds);
+        }
+
+        public IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query)
+        {
+            string strcustomerIds = null;
+            if (query.CustomerIds != null && query.CustomerIds.Any())
+                strcustomerIds = string.Join(",", query.CustomerIds);
+            return GetItemsSP("TOneWhS_BE.sp_SalePriceListRPChangeNew_GetRoutingProductPreviews", RoutingProductPreviewMapper, query.ProcessInstanceId, strcustomerIds);
+        }
+
         public List<SalePricelistCodeChange> GetNotSentCodechanges(IEnumerable<int> customerIds)
         {
             string strcustomerIds = null;
@@ -109,11 +127,36 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             if (routingProductChanges == null || !routingProductChanges.Any()) return;
             Object dbApplyStream = InitialiazeStreamForDBApply();
             foreach (SalePricelistRPChange routingProductChange in routingProductChanges)
-                WriteRecordToStream(routingProductChange, dbApplyStream, processInstanceId);
+                WriteRecordToStream(routingProductChange, dbApplyStream, processInstanceId, routingProductChange.CustomerId);
             Object preparedSalePriceLists = FinishDBApplyStream(dbApplyStream, "TOneWhS_BE.SalePricelistRPChange_New", _salePricelistRPChangeColumns);
             ApplyChangesToDataBase(preparedSalePriceLists);
         }
 
+        public IEnumerable<int> GetAffectedCustomerIdsRPChangesByProcessInstanceId(long ProcessInstanceId)
+        {
+             List<int> lstAffectedCustomerIds = new List<int>();
+             ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistRPChangesNew_GetAffectedCustomerIds", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "CustomerId"));
+                }
+            }, ProcessInstanceId);
+            return lstAffectedCustomerIds;
+        }
+        public IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long ProcessInstanceId)
+        {
+             List<int> lstAffectedCustomerIds = new List<int>();
+             ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistRateChangesNew_GetAffectedCustomerIds", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "OwnerID"));
+                }
+            }, ProcessInstanceId);
+            return lstAffectedCustomerIds;
+        }
+        
         public void SaveSalePriceListSnapshotToDb(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots)
         {
             if (salePriceListSaleCodeSnapshots == null || !salePriceListSaleCodeSnapshots.Any())
@@ -153,11 +196,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                     GetDateTimeForBCP(record.EED),
                     record.CountryId);
         }
-        private void WriteRecordToStream(SalePricelistRPChange record, object dbApplyStream, long processInstanceId)
+        private void WriteRecordToStream(SalePricelistRPChange record, object dbApplyStream, long processInstanceId, int customerId)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             if (streamForBulkInsert != null)
-                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}",
                     record.ZoneName,
                     record.ZoneId,
                     record.RoutingProductId,
@@ -166,7 +209,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                     GetDateTimeForBCP(record.EED),
                     record.PriceListId,
                     record.CountryId,
-                    processInstanceId);
+                    processInstanceId,
+                    customerId);
         }
         private void WriteRecordToStream(SalePricelistRateChange record, object dbApplyStream, long processInstanceId)
         {
@@ -267,7 +311,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             };
             return salePricelistRpChange;
         }
-
+        RoutingProductPreview RoutingProductPreviewMapper(IDataReader reader)
+        {
+            RoutingProductPreview routingProductPreview = new RoutingProductPreview
+            {
+                ZoneName = GetReaderValue<string>(reader, "ZoneName"),
+                ZoneId = GetReaderValue<long?>(reader, "ZoneID"),
+                RoutingProductId = GetReaderValue<int>(reader, "RoutingProductId"),
+                RecentRoutingProductId = GetReaderValue<int>(reader, "RecentRoutingProductId"),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                CountryId = GetReaderValue<int>(reader, "CountryId"),
+                CustomerId = GetReaderValue<int>(reader, "CustomerId")
+            };
+            return routingProductPreview;
+        }
         SalePriceListSnapShot SalePricelistSnapShotMapper(IDataReader reader)
         {
             return new SalePriceListSnapShot
@@ -276,7 +334,24 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SnapShotDetail = Vanrise.Common.Serializer.Deserialize<SnapShotDetail>(reader["SnapShotDetail"] as string)
             };
         }
-
+        private CustomerRatePreview CustomerRatePreviewMapper(IDataReader reader)
+        {
+            return new CustomerRatePreview()
+            {
+                ZoneName = reader["ZoneName"] as string,
+                ZoneId = GetReaderValue<long?>(reader, "ZoneID"),
+                RoutingProductId = GetReaderValue<int>(reader, "RoutingProductID"),
+                CountryId = GetReaderValue<int>(reader, "CountryID"),
+                RecentRate = GetReaderValue<decimal?>(reader, "RecentRate"),
+                Rate = GetReaderValue<decimal>(reader, "Rate"),
+                ChangeType = (RateChangeType)GetReaderValue<byte>(reader, "Change"),
+                PricelistId = GetReaderValue<int>(reader, "PricelistId"),
+                BED = GetReaderValue<DateTime>(reader, "BED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
+                CurrencyId = GetReaderValue<int?>(reader, "CurrencyID"),
+                CustomerId = GetReaderValue<int>(reader, "OwnerID")
+            };
+        }
         #endregion
 
     }

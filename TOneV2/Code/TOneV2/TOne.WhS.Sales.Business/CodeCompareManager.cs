@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Aspose.Cells;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +19,7 @@ namespace TOne.WhS.Sales.Business
     public class CodeCompareManager
     {
 
-        public Dictionary<string, List<CodeSupplierZoneMatch>> StructureCodeSupplierZoneMatchDictionary(List<CodeSupplierZoneMatch> codeZoneMatches)
+        private Dictionary<string, List<CodeSupplierZoneMatch>> StructureCodeSupplierZoneMatchDictionary(IEnumerable<CodeSupplierZoneMatch> codeZoneMatches)
         {
             var codeZoneMatchByCode = new Dictionary<string, List<CodeSupplierZoneMatch>>();
             foreach (var codeZoneMatch in codeZoneMatches)
@@ -28,15 +30,16 @@ namespace TOne.WhS.Sales.Business
             return codeZoneMatchByCode;
         }
 
-        public Dictionary<string, CodeSaleZoneMatch> StructureCodeSaleZoneMatchDictionary(List<CodeSaleZoneMatch> codeZoneMatches)
+        private Dictionary<string, CodeSaleZoneMatch> StructureCodeSaleZoneMatchDictionary(IEnumerable<CodeSaleZoneMatch> codeZoneMatches)
         {
             var codeZoneMatchByCode = new Dictionary<string, CodeSaleZoneMatch>();
 
             foreach (var codeZoneMatch in codeZoneMatches)
-            {CodeSaleZoneMatch codeSaleZoneMatch;
-                if(!codeZoneMatchByCode.TryGetValue(codeZoneMatch.Code,out codeSaleZoneMatch))
+            {
+                CodeSaleZoneMatch codeSaleZoneMatch;
+                if (!codeZoneMatchByCode.TryGetValue(codeZoneMatch.Code, out codeSaleZoneMatch))
                 {
-                codeZoneMatchByCode.Add(codeZoneMatch.Code,codeZoneMatch);
+                    codeZoneMatchByCode.Add(codeZoneMatch.Code, codeZoneMatch);
                 }
             }
             return codeZoneMatchByCode;
@@ -45,7 +48,125 @@ namespace TOne.WhS.Sales.Business
         {
             return BigDataManager.Instance.RetrieveData(input, new CodeCompareRequestHandler());
         }
+        public IEnumerable<CodeCompareItem> GetFilteredData(CodeCompareQuery query)
+        {
+            var codeCompareManager = new CodeCompareManager();
+            var codeCompareItems = new List<CodeCompareItem>();
+            var codeZoneMatchManager = new CodeZoneMatchManager();
+            var saleZoneManager = new SaleZoneManager();
+            var supplierZoneManager = new SupplierZoneManager();
 
+            IEnumerable<CodeSupplierZoneMatch> codeMatchBySupplier = codeZoneMatchManager.GetSupplierCodeMatchBysupplierIds(query.supplierIds, query.codeStartWith);
+            Dictionary<string, List<CodeSupplierZoneMatch>> codeSupplierZoneMatchDictionary = codeCompareManager.StructureCodeSupplierZoneMatchDictionary(codeMatchBySupplier);
+
+            IEnumerable<CodeSaleZoneMatch> saleCodeMatch = codeZoneMatchManager.GetSaleCodeMatchBySellingNumberPlanId(query.sellingNumberPlanId, query.codeStartWith);
+            Dictionary<string, CodeSaleZoneMatch> codeSaleZoneMatchDictionary = codeCompareManager.StructureCodeSaleZoneMatchDictionary(saleCodeMatch);
+
+            HashSet<string> distinctCode = codeSupplierZoneMatchDictionary.Keys.ToHashSet<string>();
+            foreach (var code in codeSaleZoneMatchDictionary.Keys)
+            {
+                distinctCode.Add(code);
+            }
+
+            foreach (var code in distinctCode)
+            {
+                CodeSaleZoneMatch codeSaleZoneMatch;
+                List<CodeSupplierZoneMatch> codeSupplierZoneMatches;
+                var codeCompareItem = new CodeCompareItem();
+
+                codeCompareItem.Code = code;
+                if (codeSaleZoneMatchDictionary.TryGetValue(code, out codeSaleZoneMatch))
+                {
+                    codeCompareItem.SaleZone = saleZoneManager.GetSaleZoneName(codeSaleZoneMatch.SaleZoneId);
+                    codeCompareItem.SaleCode = codeSaleZoneMatch.CodeMatch;
+                    if (codeSaleZoneMatch.CodeMatch == code)
+                        codeCompareItem.SaleCodeIndicator = CodeCompareIndicator.None;
+                    else
+                        codeCompareItem.SaleCodeIndicator = CodeCompareIndicator.Highlight;
+                }
+                if (codeSupplierZoneMatchDictionary.TryGetValue(code, out codeSupplierZoneMatches))
+                {
+                    codeCompareItem.SupplierItems = new List<CodeCompareSupplierItem>();
+                    foreach (var codeSupplierZoneMatch in codeSupplierZoneMatches)
+                    {
+                        CodeCompareSupplierItem codeCompareSupplierItem = new CodeCompareSupplierItem();
+                        codeCompareSupplierItem.SupplierId = codeSupplierZoneMatch.SupplierId;
+                        codeCompareSupplierItem.SupplierZone = supplierZoneManager.GetSupplierZoneName(codeSupplierZoneMatch.SupplierZoneId);
+                        codeCompareSupplierItem.SupplierCode = codeSupplierZoneMatch.CodeMatch;
+                        if (!string.IsNullOrEmpty(codeSupplierZoneMatch.CodeMatch) && codeSupplierZoneMatch.CodeMatch == code)
+                        {
+                            codeCompareSupplierItem.SupplierCodeIndicator = CodeCompareIndicator.None;
+                            codeCompareItem.OccurrenceInSuppliers++;
+                        }
+                        else
+                        {
+                            codeCompareSupplierItem.SupplierCodeIndicator = CodeCompareIndicator.Highlight;
+                            
+
+                        }
+                        codeCompareItem.SupplierItems.Add(codeCompareSupplierItem);
+
+                    }
+                }
+                codeCompareItem.AbsenceInSuppliers = query.supplierIds.Count() - codeCompareItem.OccurrenceInSuppliers;
+                if (codeCompareItem.OccurrenceInSuppliers >= query.threshold && codeCompareItem.SaleCode != code)
+                {
+                    codeCompareItem.OccurrenceInSuppliersIndicator = CodeCompareIndicator.Highlight;
+                    codeCompareItem.AbsenceInSuppliersIndicator = CodeCompareIndicator.None;
+                    codeCompareItem.Action = CodeCompareAction.New;
+                }
+                else
+                {
+                    if (codeCompareItem.AbsenceInSuppliers > query.threshold && codeCompareItem.SaleCode == code)
+                    {
+                        codeCompareItem.OccurrenceInSuppliersIndicator = CodeCompareIndicator.None;
+                        codeCompareItem.AbsenceInSuppliersIndicator = CodeCompareIndicator.Highlight;
+                        codeCompareItem.Action = CodeCompareAction.Delete;
+                    }
+
+
+                }
+                codeCompareItems.Add(codeCompareItem);
+
+            }
+            return codeCompareItems;
+        }
+        public byte[] ExportCodeCompareTemplate(byte[] buffer, CodeCompareQuery query)
+        {
+            IEnumerable<CodeCompareItem> codeCompareItems = new CodeCompareManager().GetFilteredData(query);
+            if (codeCompareItems == null)
+            {
+                return null;
+            }
+
+            Vanrise.Common.Utilities.ActivateAspose();
+            MemoryStream stream = new MemoryStream(buffer);
+            Workbook workbook = new Workbook(stream);
+            Worksheet worksheet = workbook.Worksheets[0];
+            var i = 0;
+            var cellCounter = 1;
+            var countOfItems = codeCompareItems.Count();
+            for (i = 0; i < countOfItems; i++)
+            {
+                var codeCompareItem = codeCompareItems.ElementAt(i);
+                if (codeCompareItem.Action != null)
+                {
+                    worksheet.Cells[cellCounter, 0].PutValue(codeCompareItem.SaleZone);
+                    worksheet.Cells[cellCounter, 1].PutValue(codeCompareItem.Code);
+                    worksheet.Cells[cellCounter, 2].PutValue(codeCompareItem.Action);
+                    cellCounter++;
+                }
+
+            }
+            byte[] array;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                workbook.Save(ms, SaveFormat.Excel97To2003);
+                array = ms.ToArray();
+            }
+            return array;
+        }
         private class CodeCompareRequestHandler : BigDataRequestHandler<CodeCompareQuery, CodeCompareItem, CodeCompareItemDetail>
         {
 
@@ -53,95 +174,22 @@ namespace TOne.WhS.Sales.Business
             {
                 return new CodeCompareItemDetail()
                 {
-                      Code =entity.Code,
-                      SaleZone=entity.SaleZone,
-                      SaleCode=entity.SaleCode,
-                      SaleCodeIndicator=entity.SaleCodeIndicator,
-                      SupplierItems=entity.SupplierItems,
-                      OccurrenceInSuppliers=entity.OccurrenceInSuppliers,
-                      OccurrenceInSuppliersIndicator=entity.OccurrenceInSuppliersIndicator,
-                      AbsenceInSuppliers=entity.AbsenceInSuppliers,
-                      AbsenceInSuppliersIndicator=entity.AbsenceInSuppliersIndicator,
-                      Action = entity.Action
+                    Code = entity.Code,
+                    SaleZone = entity.SaleZone,
+                    SaleCode = entity.SaleCode,
+                    SaleCodeIndicator = entity.SaleCodeIndicator,
+                    SupplierItems = entity.SupplierItems,
+                    OccurrenceInSuppliers = entity.OccurrenceInSuppliers,
+                    OccurrenceInSuppliersIndicator = entity.OccurrenceInSuppliersIndicator,
+                    AbsenceInSuppliers = entity.AbsenceInSuppliers,
+                    AbsenceInSuppliersIndicator = entity.AbsenceInSuppliersIndicator,
+                    Action = entity.Action
                 };
             }
 
-            public override IEnumerable< CodeCompareItem> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CodeCompareQuery> input)
+            public override IEnumerable<CodeCompareItem> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CodeCompareQuery> input)
             {
-                CodeCompareManager codeCompareManager=new CodeCompareManager();
-                List<CodeCompareItem> CodeCompareItems = new List<CodeCompareItem>();
-                CodeZoneMatchManager codeZoneMatchManager = new CodeZoneMatchManager();
-                SaleZoneManager saleZoneManager = new SaleZoneManager();
-                SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
-                Dictionary<string, List<CodeSupplierZoneMatch>> codeSupplierZoneMatchDictionary = codeCompareManager.StructureCodeSupplierZoneMatchDictionary((List<CodeSupplierZoneMatch>)codeZoneMatchManager.GetSupplierZoneMatchBysupplierIds(input.Query.supplierIds, input.Query.codeStartWith));
-                Dictionary<string, CodeSaleZoneMatch> codeSaleZoneMatchDictionary = codeCompareManager.StructureCodeSaleZoneMatchDictionary((List<CodeSaleZoneMatch>)codeZoneMatchManager.GetSaleZoneMatchBySellingNumberPlanId(input.Query.sellingNumberPlanId, input.Query.codeStartWith));
-
-                HashSet<string> distinctCode = new HashSet<string>();
-                distinctCode = codeSupplierZoneMatchDictionary.Keys.ToHashSet<string>();
-                foreach (var code in codeSaleZoneMatchDictionary.Keys)
-                {
-                    distinctCode.Add(code);
-                }
-                foreach (var code in distinctCode)
-                {
-
-                    CodeSaleZoneMatch codeSaleZoneMatch;
-                    List<CodeSupplierZoneMatch> codeSupplierZoneMatches;
-                    CodeCompareItem codeCompareItem = new CodeCompareItem();
-                    codeCompareItem.Code = code;
-                    if (codeSaleZoneMatchDictionary.TryGetValue(code, out codeSaleZoneMatch))
-                    {
-                        codeCompareItem.SaleZone = saleZoneManager.GetSaleZoneName(codeSaleZoneMatch.SaleZoneId);
-                        codeCompareItem.SaleCode = codeSaleZoneMatch.CodeMatch;
-                        if (codeSaleZoneMatch.CodeMatch == code)
-                            codeCompareItem.SaleCodeIndicator = CodeCompareIndicator.None;
-                        else
-                            codeCompareItem.SaleCodeIndicator = CodeCompareIndicator.Highlight;
-                    }
-                    if (codeSupplierZoneMatchDictionary.TryGetValue(code, out codeSupplierZoneMatches))
-                    {
-                        codeCompareItem.SupplierItems = new List<CodeCompareSupplierItem>();
-                        foreach (var codeSupplierZoneMatch in codeSupplierZoneMatches)
-                        {
-                            CodeCompareSupplierItem codeCompareSupplierItem = new CodeCompareSupplierItem();
-                            codeCompareSupplierItem.SupplierZone = supplierZoneManager.GetSupplierZoneName(codeSupplierZoneMatch.SupplierZoneId);
-                            codeCompareSupplierItem.SupplierCode = codeSupplierZoneMatch.CodeMatch;
-                            if (codeSupplierZoneMatch.CodeMatch == code)
-                            {
-                                codeCompareSupplierItem.SupplierCodeIndicator = CodeCompareIndicator.None;
-                                codeCompareItem.OccurrenceInSuppliers = codeCompareItem.OccurrenceInSuppliers + 1;
-                            }
-
-                            else
-                            {
-                                codeCompareSupplierItem.SupplierCodeIndicator = CodeCompareIndicator.Highlight;
-                                codeCompareItem.AbsenceInSuppliers = codeCompareItem.AbsenceInSuppliers + 1;
-                            }
-                            codeCompareItem.SupplierItems.Add(codeCompareSupplierItem);
-
-                        }
-                    }
-                    if (codeCompareItem.OccurrenceInSuppliers >= input.Query.threshold && codeCompareItem.SaleCode != code)
-                    {
-                        codeCompareItem.OccurrenceInSuppliersIndicator = CodeCompareIndicator.Highlight;
-                        codeCompareItem.AbsenceInSuppliersIndicator = CodeCompareIndicator.None;
-                        codeCompareItem.Action = CodeCompareAction.New;
-                    }
-                    else
-                    {
-                        if (codeCompareItem.AbsenceInSuppliers >= input.Query.threshold && codeCompareItem.SaleCode == code)
-                        {
-                            codeCompareItem.OccurrenceInSuppliersIndicator = CodeCompareIndicator.None;
-                            codeCompareItem.AbsenceInSuppliersIndicator = CodeCompareIndicator.Highlight;
-                            codeCompareItem.Action = CodeCompareAction.Delete;
-                        }
-
-
-                    }
-                    CodeCompareItems.Add(codeCompareItem);
-
-                }
-                return CodeCompareItems;
+                return new CodeCompareManager().GetFilteredData(input.Query);
             }
 
             protected override ResultProcessingHandler<CodeCompareItemDetail> GetResultProcessingHandler(DataRetrievalInput<CodeCompareQuery> input, BigResult<CodeCompareItemDetail> bigResult)
@@ -164,14 +212,8 @@ namespace TOne.WhS.Sales.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Code" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sale Zone Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sale Zone Code"});
-                for (var i = 0; i < context.BigResult.Data.ElementAt(0).SupplierItems.Count(); i++)
-                {var j=i+1;
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Supplier " + j+" Zone Name", Width = 30});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Supplier " + j + " Zone Code",Width = 30 });
-                }
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Occurrence Code In Suppliers" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Absence Code In Suppliers" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sale Zone Code" });
+                var maxCountOfSuppliers = 0;
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Action" });
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -184,11 +226,19 @@ namespace TOne.WhS.Sales.Business
                             row.Cells.Add(new ExportExcelCell() { Value = record.Code });
                             row.Cells.Add(new ExportExcelCell() { Value = record.SaleZone });
                             row.Cells.Add(new ExportExcelCell() { Value = record.SaleCode });
-                            for (var f = 0; f < record.SupplierItems.Count(); f++)
+                            if (record.SupplierItems != null)
                             {
-                                row.Cells.Add(new ExportExcelCell() { Value = record.SupplierItems[f].SupplierZone });
-                                row.Cells.Add(new ExportExcelCell() { Value = record.SupplierItems[f].SupplierCode });
+                                if (record.SupplierItems.Count() > maxCountOfSuppliers)
+                                {
+                                    maxCountOfSuppliers = record.SupplierItems.Count();
+                                }
+                                foreach (var supplier in record.SupplierItems)
+                                {
+                                    row.Cells.Add(new ExportExcelCell() { Value = supplier.SupplierZone });
+                                    row.Cells.Add(new ExportExcelCell() { Value = supplier.SupplierCode });
+                                }
                             }
+
                             row.Cells.Add(new ExportExcelCell() { Value = record.OccurrenceInSuppliers });
                             row.Cells.Add(new ExportExcelCell() { Value = record.AbsenceInSuppliers });
                             row.Cells.Add(new ExportExcelCell() { Value = record.Action });
@@ -196,7 +246,12 @@ namespace TOne.WhS.Sales.Business
                         }
                     }
                 }
-
+                for (var i = 0; i < maxCountOfSuppliers; i++)
+                {
+                    var j = i + 1;
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Supplier " + j + " Zone Name", Width = 30 });
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Supplier " + j + " Zone Code", Width = 30 });
+                }
                 context.MainSheet = sheet;
             }
         }

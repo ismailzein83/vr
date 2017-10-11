@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Http;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Entities.SalePricelistChanges;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Web.Base;
@@ -23,6 +24,23 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
             return GetWebResponse(input, manager.GetFilteredPricelistRateChanges(input));
         }
+
+        [HttpPost]
+        [Route("GetFilteredCustomerRatePreviews")]
+        public object GetFilteredCustomerRatePreviews(Vanrise.Entities.DataRetrievalInput<CustomerRatePreviewQuery> input)
+        {
+            SalePriceListChangeManager manager = new SalePriceListChangeManager();
+            return GetWebResponse(input, manager.GetFilteredCustomerRatePreviews(input));
+        }
+
+         [HttpPost]
+         [Route("GetFilteredRoutingProductPreviews")]
+        public object GetFilteredRoutingProductPreviews(Vanrise.Entities.DataRetrievalInput<RoutingProductPreviewQuery> input)
+        {
+            SalePriceListChangeManager manager = new SalePriceListChangeManager();
+            return GetWebResponse(input, manager.GetFilteredRoutingProductPreviews(input));
+        }
+        
         [HttpPost]
         [Route("GetFilteredSalePriceListCodeChanges")]
         public object GetFilteredSalePriceListCodeChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
