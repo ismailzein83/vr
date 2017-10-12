@@ -27,7 +27,7 @@ app.directive('retailMultinetInvoicesettingRuntimeExcludecdrspart', ['UtilsServi
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/Retail_MultiNet/Directives/Elements/InvoiceType/InvoiceSetting/Templates/ExcludeCDRsPartTemplate.html';
+                return '/Client/Modules/Retail_MultiNet/Elements/InvoiceType/InvoiceSetting/Templates/ExcludeCDRsPartTemplate.html';
             }
 
         };
