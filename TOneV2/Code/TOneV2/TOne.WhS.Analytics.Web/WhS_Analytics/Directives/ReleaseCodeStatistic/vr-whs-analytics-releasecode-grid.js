@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsAnalyticsReleasecodeGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_ReleaseCodeAPIService","VR_Analytic_AnalyticItemActionService","WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum",
-function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIService, VR_Analytic_AnalyticItemActionService, WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum) {
+app.directive("vrWhsAnalyticsReleasecodeGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_ReleaseCodeAPIService","VR_Analytic_AnalyticItemActionService","WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum","WhS_BE_SwitchService",
+function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIService, VR_Analytic_AnalyticItemActionService, WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum, WhS_BE_SwitchService) {
 
     var directiveDefinitionObject = {
 
@@ -72,6 +72,9 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
 
                     return directiveAPI;
                 }
+            };
+            $scope.onClickReleaseCode = function (dataItem) {
+                WhS_BE_SwitchService.openReleaseCodeDescriptions(dataItem.Entity.ReleaseCode,dataItem.Entity.SwitchId);
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                  ctrl.showGrid = true;            

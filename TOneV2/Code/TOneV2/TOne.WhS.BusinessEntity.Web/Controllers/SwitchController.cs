@@ -61,5 +61,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return manager.DeleteSwitch(switchId);
         }
 
+        [HttpGet]
+        [Route("GetReleaseCausesByCode")]
+        public List<SwitchReleaseCauseDetail> GetReleaseCausesByCode(string code, int? switchId = null )
+        {
+            SwitchReleaseCodeManager manager = new SwitchReleaseCodeManager();
+            return manager.GetReleaseCausesByCode(code,switchId);
+        }
+
+
     }
 }

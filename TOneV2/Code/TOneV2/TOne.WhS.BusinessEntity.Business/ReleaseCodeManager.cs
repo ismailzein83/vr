@@ -13,11 +13,16 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SwitchReleaseCodeManager
     {
         static Guid s_businessEntityDefinitionId = new Guid("4652abe7-81f7-4129-a222-31933747018d");
+        private SwitchManager _switchManager;
+        public SwitchReleaseCodeManager()
+        {
+            _switchManager = new SwitchManager();
+        }
         public string GetReleaseCodeDescription(string code)
         {
             string description = null;
-            if (code!=null)
-                description =  GetRCDescriptionsByCodes().GetRecord(code);
+            if (code != null)
+                description = GetRCDescriptionsByCodes().GetRecord(code);
             return description;
         }
 
@@ -28,9 +33,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     Dictionary<string, string> descriptionsByCode = new Dictionary<string, string>();
                     Dictionary<long, GenericBusinessEntity> allReleaseCodes = new GenericBusinessEntityManager().GetCachedGenericBusinessEntities(s_businessEntityDefinitionId);
-                    if(allReleaseCodes != null)
+                    if (allReleaseCodes != null)
                     {
-                        foreach(var releaseCode in allReleaseCodes.Values)
+                        foreach (var releaseCode in allReleaseCodes.Values)
                         {
                             if (releaseCode.Details != null)
                             {
@@ -45,13 +50,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 });
         }
 
-        public List<SwitchReleaseCause> GetReleaseCausesByCode(string code, int? switchId)
+        public List<SwitchReleaseCauseDetail> GetReleaseCausesByCode(string code, int? switchId)
         {
-            List<SwitchReleaseCause> releaseCauses = new List<SwitchReleaseCause>();
+            List<SwitchReleaseCauseDetail> releaseCauses = new List<SwitchReleaseCauseDetail>();
             var allReleaseCauses = GetAllReleaseCauses();
-            if(allReleaseCauses != null)
+            if (allReleaseCauses != null)
             {
-                releaseCauses.AddRange(allReleaseCauses.Values.FindAllRecords(itm => itm.ReleaseCode == code && (!switchId.HasValue || itm.SwitchId == switchId.Value)));
+                releaseCauses.AddRange(allReleaseCauses.Values.FindAllRecords(itm => itm.ReleaseCode == code && (!switchId.HasValue || itm.SwitchId == switchId.Value)).MapRecords(SwitchReleaseCauseDetailMapper));
             }
             return releaseCauses;
         }
@@ -86,6 +91,19 @@ namespace TOne.WhS.BusinessEntity.Business
                     }
                     return releaseCauses;
                 });
+        }
+
+        SwitchReleaseCauseDetail SwitchReleaseCauseDetailMapper(SwitchReleaseCause switchReleaseCause)
+        {
+            string switchName = _switchManager.GetSwitchName(switchReleaseCause.SwitchId);
+            return new SwitchReleaseCauseDetail()
+            { 
+                ReleaseCode =  switchReleaseCause.ReleaseCode,
+                SwitchName =  switchName,
+                SwitchId = switchReleaseCause.SwitchId,
+                Description = switchReleaseCause.Settings !=null ? switchReleaseCause.Settings.Description: null,
+                IsDelivered = switchReleaseCause.Settings !=null ? switchReleaseCause.Settings.IsDelivered : false
+            };
         }
     }
 }
