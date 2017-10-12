@@ -122,6 +122,19 @@ namespace Vanrise.Invoice.Business
             }
             return fileNamePattern;
         }
+
+        public T GetInvoicePartnerSettingPart<T>(Guid invoiceTypeId, string partnerId) where T : InvoiceSettingPart
+        {
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
+            var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+            InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
+            {
+                InvoiceTypeId = invoiceTypeId,
+                PartnerId = partnerId,
+                InvoiceSettingId = partnerSettings.InvoiceSetting.InvoiceSettingId
+            };
+            return invoicePartnerManager.GetInvoicePartnerSettingPart<T>(invoicePartnerSettingPartContext) as T; 
+        }
         public string GetPartnerFileNamePattern(Guid invoiceTypeId, string partnerId)
         {
             var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
