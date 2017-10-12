@@ -1,1 +1,31 @@
-﻿
+﻿<vr-panel ng-controller="WhS_BE_SwitchReleaseCauseManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row>
+                <vr-columns colnum="3">
+                    <vr-textbox value="scopeModel.releaseCode" label="Release Code" ></vr-textbox>
+                </vr-columns>
+                <vr-whs-be-switch-selector on-ready="scopeModel.onSwitchSelectorReady" normal-col-num="3" ismultipleselection="true" hideremoveicon="true"></vr-whs-be-switch-selector>
+                <vr-columns colnum="3">
+                    <vr-textbox value="scopeModel.description" label="Description"></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="3">
+                    <vr-select datasource="scopeModel.deliveryStatus" datatextfield="description" datavaluefield="value" label="Delivered" selectedvalues="scopeModel.selectedDeliveryStatus"></vr-select>
+                </vr-columns>
+           </vr-row>
+        </div>
+        <vr-row>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Add" data-onclick="scopeModel.addNewSwitchReleaseCause"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <whs-be-switchreleasecause-grid on-ready="scopeModel.onGridReady"></whs-be-switchreleasecause-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
