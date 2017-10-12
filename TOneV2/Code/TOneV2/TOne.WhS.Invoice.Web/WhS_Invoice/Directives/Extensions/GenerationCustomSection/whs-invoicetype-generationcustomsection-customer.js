@@ -33,6 +33,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
 
             var timeZoneSelectorAPI;
             var timeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var selectedTimeZoneReadyDeferred;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onTimeZoneSelectorReady = function (api) {
@@ -41,15 +42,23 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                 };
                 $scope.scopeModel.commissionTypes = UtilsService.getArrayEnum(WhS_BE_CommisssionTypeEnum);
                 $scope.scopeModel.selectedCommissionType = WhS_BE_CommisssionTypeEnum.Display;
+                $scope.scopeModel.onTimeZoneSelectionChanged = function () {
+                    if (selectedTimeZoneReadyDeferred != undefined)
+                        selectedTimeZoneReadyDeferred.resolve();
+                    else {
+                        console.log("Logic to be implemented");
+                    }
+                };
                 UtilsService.waitMultiplePromises([timeZoneSelectorReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
+                
             }
 
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
+                api.load = function (payload) { 
                     var invoice;
                     var financialAccountId;
                     var customPayload;
@@ -90,6 +99,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                         }
                     }
                     else {
+                        selectedTimeZoneReadyDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadTimeZoneSelector(customPayload.TimeZoneId));
                     }
 
@@ -103,7 +113,9 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                         }
                         return timeZoneSelectorAPI.load(timeZoneSelectorPayload);
                     }
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        selectedTimeZoneReadyDeferred = undefined;
+                    });
                 };
 
                 api.getData = function () {

@@ -40,6 +40,13 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                 };
                 $scope.scopeModel.commissionTypes = UtilsService.getArrayEnum(WhS_BE_CommisssionTypeEnum);
                 $scope.scopeModel.selectedCommissionType = WhS_BE_CommisssionTypeEnum.Display;
+                $scope.scopeModel.onTimeZoneSelectionChanged = function () {
+                    if (selectedTimeZoneReadyDeferred != undefined)
+                        selectedTimeZoneReadyDeferred.resolve();
+                    else {
+                        console.log("Logic to be implemented");
+                    }
+                };
                 UtilsService.waitMultiplePromises([timeZoneSelectorReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
@@ -89,6 +96,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                         }
                     }
                     else {
+                        selectedTimeZoneReadyDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadTimeZoneSelector(customPayload.TimeZoneId));
                     }
 
@@ -104,7 +112,9 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                         }
                         return timeZoneSelectorAPI.load(timeZoneSelectorPayload);
                     }
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        selectedTimeZoneReadyDeferred = undefined;
+                    });
                 };
 
                 api.getData = function () {

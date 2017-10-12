@@ -1,4 +1,4 @@
-﻿<vr-common-timezone-selector on-ready="scopeModel.onTimeZoneSelectorReady" normal-col-num="{{ctrlCustomerGeneration.normalColNum}}" selectedvalues="scopeModel.selectedTimeZone"></vr-common-timezone-selector>
+﻿<vr-common-timezone-selector on-ready="scopeModel.onTimeZoneSelectorReady" normal-col-num="{{ctrlCustomerGeneration.normalColNum}}" selectedvalues="scopeModel.selectedTimeZone" onselectionchanged="    scopeModel.onTimeZoneSelectionChanged"></vr-common-timezone-selector>
 <vr-columns colnum="{{ctrlCustomerGeneration.normalColNum}}">
     <vr-textbox type="number" label="Commission" value="scopeModel.commission" minvalue="-100" maxvalue="100"></vr-textbox>
 </vr-columns>
