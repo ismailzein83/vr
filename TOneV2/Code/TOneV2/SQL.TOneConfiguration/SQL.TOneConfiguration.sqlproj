@@ -666,6 +666,13 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateSettings.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByAccountIds.sql" />
     <Build Include="common\Stored Procedures\sp_File_GetByFileIds.sql" />
+    <Build Include="VR_Invoice\Tables\InvoiceGenerationDraft.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_Update.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_Insert.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_GetAll.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_Delete.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_Clear.sql" />
+    <Build Include="common\Stored Procedures\sp_File_InsertWithIdentityOff.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
