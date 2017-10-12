@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
-    public interface IDataSourceManager
+    public interface IDataSourceManager : IBEManager
     {
+        string GetDataSourceName(Guid dataSourceId);
+
         bool UpdateAdapterState(Guid dataSourceId, Vanrise.Integration.Entities.BaseAdapterState adapterState);
     }
 }
