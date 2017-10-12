@@ -70,7 +70,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 throw new DataIntegrityValidationException("System Currency was not found");
             _systemCurrencyId = systemCurrency.CurrencyId;
 
-            MaximumRate = new BusinessEntity.Business.ConfigManager().GetPurchaseAreaMaximumRate();
+
+            var tOneConfigManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
+            MaximumRate = tOneConfigManager.GetPurchaseAreaMaximumRate();
+            
+            int retroactiveDayOffset = tOneConfigManager.GetPurchaseAreaRetroactiveDayOffset();
+            RetroactiveDate = DateTime.Today.AddDays(-retroactiveDayOffset).Date;
+
+            DateFormat = new Vanrise.Common.Business.GeneralSettingsManager().GetDateFormat();
         }
         public int PriceListCurrencyId
         {
@@ -96,6 +103,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             set { _codeCloseDateOffset = value; }
         }
         public decimal MaximumRate { get; set; }
+
+        public DateTime RetroactiveDate { get; set; }
+        public string DateFormat { get; set; }
 
         #region public functions
         public void SetToTrueProcessHasChangesWithLock()
@@ -128,7 +138,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             return _priceListCurrencyId;
         }
 
-        public void SetSupplierEffectiveDateDayOffset (int supplierId)
+        public void SetSupplierEffectiveDateDayOffset(int supplierId)
         {
             int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetSupplierEffectiveDateDayOffset(supplierId);
             TimeSpan codeCloseDateOffset = new TimeSpan(effectiveDateDayOffset, 0, 0, 0);

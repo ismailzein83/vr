@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common.Business;
+using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    public class CodeBEDLessThanRetroactiveDateCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
+    public class ServiceBEDLessThanRetroactiveDateCondition : BusinessRuleCondition
     {
-        public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
+        public override bool ShouldValidate(IRuleTarget target)
         {
             return target is AllImportedDataByZone;
         }
-        public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
+        public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             var allData = context.Target as AllImportedDataByZone;
 
@@ -26,9 +31,9 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             foreach (ImportedDataByZone zoneData in allData.ImportedDataByZoneList)
             {
-                foreach (var importedCode in zoneData.ImportedCodes)
+                foreach (ImportedZoneService importedService in zoneData.ImportedZoneServicesToValidate.Values.SelectMany(x => x))
                 {
-                    if (importedCode.BED < importSPLContext.RetroactiveDate)
+                    if (importedService.BED < importSPLContext.RetroactiveDate)
                     {
                         invalidZoneNames.Add(zoneData.ZoneName);
                         break;
@@ -39,13 +44,13 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (invalidZoneNames.Count > 0)
             {
                 string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("BEDs of some of the codes of the following zones are less than the retroactive date '{0}': {1}", retroactiveDateString, string.Join(", ", invalidZoneNames));
+                context.Message = string.Format("BEDs of some of the services of the following zones are less than the retroactive date '{0}': {1}", retroactiveDateString, string.Join(", ", invalidZoneNames));
                 return false;
             }
 
             return true;
         }
-        public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
+        public override string GetMessage(IRuleTarget target)
         {
             throw new NotImplementedException();
         }

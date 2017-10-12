@@ -14,7 +14,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
     {
         [RequiredArgument]
         public InArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
-        
+
         [RequiredArgument]
         public InArgument<IEnumerable<PriceListCode>> FilteredImportedCodes { get; set; }
 
@@ -26,6 +26,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ImportedDataByZone>> ImportedDataByZone { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<AllImportedDataByZone> AllImportedDataByZone { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -113,7 +116,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
             }
 
-            this.ImportedDataByZone.Set(context, importedDataByZoneName.Values);
+            IEnumerable<ImportedDataByZone> importedDataByZoneList = importedDataByZoneName.Values;
+            this.ImportedDataByZone.Set(context, importedDataByZoneList);
+            this.AllImportedDataByZone.Set(context, new AllImportedDataByZone() { ImportedDataByZoneList = importedDataByZoneList });
         }
     }
 }

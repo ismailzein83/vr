@@ -18,5 +18,8 @@ namespace TOne.WhS.SupplierPriceList.Entities
         decimal GetMaximumRateConverted(int currencyId);
 
         decimal MaximumRate { get; }
+
+        DateTime RetroactiveDate { get; }
+        string DateFormat { get; }
     }
 }

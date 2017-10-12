@@ -7,8 +7,16 @@ using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    public class AllImportedDataByZone
+    public class AllImportedDataByZone : Vanrise.BusinessProcess.Entities.IRuleTarget
     {
-        public List<ImportedDataByZone> ImportedDataByZoneList { get; set; }
+        public IEnumerable<ImportedDataByZone> ImportedDataByZoneList { get; set; }
+        public object Key
+        {
+            get { return "ImportedData"; }
+        }
+        public string TargetType
+        {
+            get { return "ImportedData"; }
+        }
     }
 }
