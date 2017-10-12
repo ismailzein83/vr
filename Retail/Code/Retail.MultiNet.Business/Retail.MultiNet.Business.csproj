@@ -129,7 +129,7 @@
     <Compile Include="Convertors\PaymentConvertor.cs" />
     <Compile Include="Convertors\MigrationConvertors\SubscriberConvertor.cs" />
     <Compile Include="Convertors\MigrationConvertors\UserConvertor.cs" />
-    <Compile Include="ExcludeCDRsInvoiceSettingPart.cs" />
+    <Compile Include="IncludeCDRsInvoiceSettingPart.cs" />
     <Compile Include="ExtendedInfo\MultiNetBranchExtendedInfo.cs" />
     <Compile Include="ExtendedInfo\MultiNetBranchExtendedInfoDefinition.cs" />
     <Compile Include="ExtendedInfo\MultiNetCompanyExtendedInfo.cs" />

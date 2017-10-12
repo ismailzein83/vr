@@ -7,9 +7,9 @@ using Vanrise.Invoice.Entities;
 
 namespace Retail.MultiNet.Business
 {
-    public class ExcludeCDRsInvoiceSettingPart : InvoiceSettingPart
+    public class IncludeCDRsInvoiceSettingPart : InvoiceSettingPart
     {
-        public bool ExcludeCDRs { get; set; }
+        public bool IncludeCDRs { get; set; }
         public override Guid ConfigId
         {
             get { return new Guid("809622AB-15B3-4398-8CB8-1EA96ED90CAB"); }

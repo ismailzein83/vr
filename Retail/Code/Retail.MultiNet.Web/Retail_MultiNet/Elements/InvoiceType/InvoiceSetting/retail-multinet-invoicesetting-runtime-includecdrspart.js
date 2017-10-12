@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('retailMultinetInvoicesettingRuntimeExcludecdrspart', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailMultinetInvoicesettingRuntimeIncludecdrspart', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -27,7 +27,7 @@ app.directive('retailMultinetInvoicesettingRuntimeExcludecdrspart', ['UtilsServi
                 };
             },
             templateUrl: function (element, attrs) {
-                return '/Client/Modules/Retail_MultiNet/Elements/InvoiceType/InvoiceSetting/Templates/ExcludeCDRsPartTemplate.html';
+                return '/Client/Modules/Retail_MultiNet/Elements/InvoiceType/InvoiceSetting/Templates/IncludeCDRsPartTemplate.html';
             }
 
         };
@@ -45,14 +45,14 @@ app.directive('retailMultinetInvoicesettingRuntimeExcludecdrspart', ['UtilsServi
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.fieldValue != undefined) {
-                        $scope.scopeModel.excludeCDRs = payload.fieldValue.ExcludeCDRs;
+                        $scope.scopeModel.includeCDRs = payload.fieldValue.IncludeCDRs;
                     }
                 };
 
                 api.getData = function () {
                     return {
-                        $type: "Retail.MultiNet.Business.ExcludeCDRsInvoiceSettingPart,Retail.MultiNet.Business",
-                        ExcludeCDRs: $scope.scopeModel.excludeCDRs
+                        $type: "Retail.MultiNet.Business.IncludeCDRsInvoiceSettingPart,Retail.MultiNet.Business",
+                        IncludeCDRs: $scope.scopeModel.includeCDRs
                     };
                 };
 

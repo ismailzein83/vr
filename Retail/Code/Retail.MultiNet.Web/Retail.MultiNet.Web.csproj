@@ -169,8 +169,8 @@
     <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceGeneratorFilterCondition\Templates\AccountTypeConditionTemplate.html" />
     <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceGridActionFilter\retail-invoicetype-invoicefiltercondition-multinetpartner.js" />
     <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceGridActionFilter\Templates\MultiNetPartnerCondition.html" />
-    <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceSetting\retail-multinet-invoicesetting-runtime-excludecdrspart.js" />
-    <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceSetting\Templates\ExcludeCDRsPartTemplate.html" />
+    <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceSetting\retail-multinet-invoicesetting-runtime-includecdrspart.js" />
+    <Content Include="Retail_MultiNet\Elements\InvoiceType\InvoiceSetting\Templates\IncludeCDRsPartTemplate.html" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-multinet-account-invoice-selector.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\retail-invoice-invoicetype-multinetsubscriberinvoicesettings.js" />
     <Content Include="Retail_MultiNet\Elements\Invoice\Directives\Templates\MultiNetnvoiceSettingsTemplate.html" />

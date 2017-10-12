@@ -99,11 +99,11 @@ namespace Retail.MultiNet.Business
 
             var branchSummaries = new List<BranchSummary>();
             PartnerManager partnerManager = new PartnerManager();
-            var excludeCDRsPart = partnerManager.GetInvoicePartnerSettingPart<ExcludeCDRsInvoiceSettingPart>(context.InvoiceTypeId,context.PartnerId);
-            bool excludeCDRs = false;
-            if (excludeCDRsPart != null)
+            var excludeCDRsPart = partnerManager.GetInvoicePartnerSettingPart<IncludeCDRsInvoiceSettingPart>(context.InvoiceTypeId,context.PartnerId);
+            bool includeCDRs = false;
+            if (includeCDRs != null)
             {
-                excludeCDRs = excludeCDRsPart.ExcludeCDRs;
+                includeCDRs = excludeCDRsPart.IncludeCDRs;
             }
 
             bool excludeTaxes = false;
@@ -122,7 +122,7 @@ namespace Retail.MultiNet.Business
             if (financialAccountData.Account.TypeId == this._branchTypeId)
             {
 
-                var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, financialAccountData.Account, currencyId, context.FromDate, context.ToDate, _branchTypeId, excludeTaxes, excludeCDRs);
+                var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, financialAccountData.Account, currencyId, context.FromDate, context.ToDate, _branchTypeId, excludeTaxes, includeCDRs);
                 if (branchSummary != null)
                     branchSummaries.Add(branchSummary);
             }
@@ -131,7 +131,7 @@ namespace Retail.MultiNet.Business
                 List<Account> childAccounts = _accountBEManager.GetChildAccounts(this._acountBEDefinitionId, financialAccountData.Account.AccountId, false);
                 foreach (Account branchAccount in childAccounts)
                 {
-                    var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, branchAccount, currencyId, context.FromDate, context.ToDate, branchAccount.TypeId, excludeTaxes, excludeCDRs);
+                    var branchSummary = BuildBranchSummary(multiNetInvoiceGeneratorContext, branchAccount, currencyId, context.FromDate, context.ToDate, branchAccount.TypeId, excludeTaxes, includeCDRs);
                     if (branchSummary != null)
                         branchSummaries.Add(branchSummary);
                 }
@@ -142,7 +142,8 @@ namespace Retail.MultiNet.Business
             if (branchSummaries.Count > 0)
             {
                 InvoiceDetails retailSubscriberInvoiceDetails = BuildGeneratedInvoiceDetails(branchSummaries, context.FromDate, context.ToDate, context.IssueDate, currencyId, financialAccountData.Account, multiNetInvoiceGeneratorContext.FinancialAccount.TypeId);
-
+                if (retailSubscriberInvoiceDetails != null)
+                    retailSubscriberInvoiceDetails.IncludeCDRs = includeCDRs;
                 context.Invoice = new GeneratedInvoice
                 {
                     InvoiceDetails = retailSubscriberInvoiceDetails,
@@ -218,10 +219,10 @@ namespace Retail.MultiNet.Business
 
         #region Build Branch Summary
 
-        private BranchSummary BuildBranchSummary(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId, bool excludeTaxes, bool excludeCDRs)
+        private BranchSummary BuildBranchSummary(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId, bool excludeTaxes, bool includeCDRs)
         {
 
-            BuildTrafficData(multiNetInvoiceGeneratorContext, account, currencyId, fromDate, toDate, branchTypeId, excludeCDRs);
+            BuildTrafficData(multiNetInvoiceGeneratorContext, account, currencyId, fromDate, toDate, branchTypeId, includeCDRs);
             AddRecurringChargeToBranchSummary(multiNetInvoiceGeneratorContext, account, currencyId, fromDate, toDate);
             if (multiNetInvoiceGeneratorContext.SummaryItemsByBranch != null && multiNetInvoiceGeneratorContext.SummaryItemsByBranch.Count > 0)
             {
@@ -313,7 +314,7 @@ namespace Retail.MultiNet.Business
             multiNetInvoiceGeneratorContext.GeneratedInvoiceItemSets.Add(generatedSummaryItemSet);
         }
 
-        private void BuildTrafficData(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId, bool excludeCDRs)
+        private void BuildTrafficData(MultiNetInvoiceGeneratorContext multiNetInvoiceGeneratorContext, Account account, int currencyId, DateTime fromDate, DateTime toDate, Guid branchTypeId, bool includeCDRs)
         {
             LoadTrafficData(multiNetInvoiceGeneratorContext, account.AccountId, fromDate, toDate, currencyId, branchTypeId);
             var billingSummaries = multiNetInvoiceGeneratorContext.BillingSummariesByBranch.GetOrCreateItem(account.AccountId);
@@ -377,7 +378,7 @@ namespace Retail.MultiNet.Business
                     outgoingCallsSummary.NetAmount = decimal.Round(outgoingCallsSummary.NetAmount, normalPrecisionValue);
                 }
                 BuildGeneratedUsageSummaryItemSet(multiNetInvoiceGeneratorContext, usagesSummariesBySubItemIdentifier, account.AccountId);
-                if (!excludeCDRs)
+                if (includeCDRs)
                  LoadAndBuildUsageCDRs(multiNetInvoiceGeneratorContext, account.AccountId, currencyId, fromDate, toDate, branchTypeId);
             }
         }

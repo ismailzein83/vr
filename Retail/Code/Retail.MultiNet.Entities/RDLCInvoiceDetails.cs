@@ -17,6 +17,7 @@ namespace Retail.MultiNet.Entities
         public Decimal PayableByDueDate { get; set; }
         public Decimal LatePaymentCharges { get; set; }
         public Decimal PayableAfterDueDate { get; set; }
+        public bool IncludeCDRs { get; set; }
         public RDLCInvoiceDetails()
         {
 

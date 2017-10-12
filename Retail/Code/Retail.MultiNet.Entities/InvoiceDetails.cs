@@ -30,7 +30,7 @@ namespace Retail.MultiNet.Entities
         public string BranchCode { get; set; }
         public decimal IncomingDurationInSec { get; set; }
         public decimal OutgoingDurationInSec { get; set; }
-
+        public bool IncludeCDRs { get; set; }
 
     }
 }
