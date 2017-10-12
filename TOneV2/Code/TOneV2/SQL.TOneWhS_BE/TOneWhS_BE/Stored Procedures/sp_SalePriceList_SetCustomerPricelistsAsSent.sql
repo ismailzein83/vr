@@ -14,5 +14,5 @@ BEGIN
 	
 	Update TOneWhS_BE.SalePriceList Set IsSent = 1
 	Where Ownertype = 1 AND OwnerID in (select CustomerID from @CustomerIDsTable)
-	and (@PriceListId is null or ID<=@PriceListId)
+	and (ID=@PriceListId)
 END

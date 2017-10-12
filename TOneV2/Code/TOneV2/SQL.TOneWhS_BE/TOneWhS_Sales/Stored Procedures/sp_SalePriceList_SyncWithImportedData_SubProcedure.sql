@@ -30,7 +30,7 @@ BEGIN
 				
 				update TOneWhS_BE.SaleRate
 				set EED = changedRate.EED
-				from TOneWhS_BE.SaleRate rate with(nolock) inner join TOneWhS_Sales.RP_SaleRate_Changed changedRate with(nolock) on rate.ID = changedRate.ID
+				from TOneWhS_BE.SaleRate rate inner join TOneWhS_Sales.RP_SaleRate_Changed changedRate with(nolock) on rate.ID = changedRate.ID
 				where changedRate.ProcessInstanceID = @ProcessInstanceId
 
 				-- Sync default services
@@ -42,29 +42,29 @@ BEGIN
 			
 				update TOneWhS_BE.SaleEntityService
 				set EED = changedService.EED
-				from TOneWhS_BE.SaleEntityService ses with(nolock) inner join TOneWhS_Sales.RP_DefaultService_Changed changedService on ses.ID = changedService.ID
+				from TOneWhS_BE.SaleEntityService ses inner join TOneWhS_Sales.RP_DefaultService_Changed changedService with(nolock) on ses.ID = changedService.ID
 				where changedService.ProcessInstanceID = @ProcessInstanceID
 
 				-- Sync zone services
 
 				insert into TOneWhS_BE.SaleEntityService (ID, PriceListID, ZoneID, [Services], BED, EED)
 				select ID, @ReservedSalePriceListId, ZoneID, [Services], BED, EED
-				from TOneWhS_Sales.RP_SaleZoneService_New newService
+				from TOneWhS_Sales.RP_SaleZoneService_New newService  with(nolock)
 				where newService.ProcessInstanceID = @ProcessInstanceID
 			
 				update TOneWhS_BE.SaleEntityService
 				set EED = changedService.EED
-				from TOneWhS_BE.SaleEntityService ses inner join TOneWhS_Sales.RP_SaleZoneService_Changed changedService on ses.ID = changedService.ID
+				from TOneWhS_BE.SaleEntityService ses  inner join TOneWhS_Sales.RP_SaleZoneService_Changed changedService with(nolock) on ses.ID = changedService.ID
 				where changedService.ProcessInstanceID = @ProcessInstanceID
 			end
 			
 				INSERT INTO [TOneWhS_BE].[SalePricelistCodeChange] ([Code],[RecentZoneName],[ZoneName],[ZoneID],[Change],[BatchID], [BED], [EED],[countryid])
 				select  spcc.[Code],spcc.[RecentZoneName],spcc.[ZoneName],spcc.[ZoneID],spcc.[Change],spcc.[BatchID], spcc.BED, spcc.EED,spcc.[countryid]
-				from  [TOneWhS_BE].[SalePricelistCodeChange_New] spcc where spcc.[BatchID] = @ProcessInstanceID
+				from  [TOneWhS_BE].[SalePricelistCodeChange_New] spcc  with(nolock)where spcc.[BatchID] = @ProcessInstanceID
 
 				INSERT INTO [TOneWhS_BE].[SalePricelistCustomerChange] ([BatchID],[PricelistID],[CountryID],[CustomerID])
 				select [BatchID],[PricelistID],[CountryID],[CustomerID]
-				from  [TOneWhS_BE].[SalePricelistCustomerChange_New] spcc where spcc.[BatchID]= @ProcessInstanceID
+				from  [TOneWhS_BE].[SalePricelistCustomerChange_New] spcc  with(nolock)where spcc.[BatchID]= @ProcessInstanceID
 
 				INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED],[RoutingProductID],[CurrencyID],ZoneID)
 				select sprc.[PricelistId],sprc.[Rate],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.BED,sprc.EED,sprc.RoutingProductID,CurrencyID,sprc.ZoneID
@@ -73,7 +73,7 @@ BEGIN
 
 				INSERT INTO [TOneWhS_BE].[SalePricelistRPChange]  ([ZoneName],[ZoneID],[RoutingProductId],[RecentRoutingProductId],[BED],[EED],[PriceListId],[CountryId])
 				SELECT sprpc.[ZoneName],sprpc.[ZoneID],sprpc.[RoutingProductId],sprpc.[RecentRoutingProductId],sprpc.[BED],sprpc.[EED],sprpc.[PriceListId],sprpc.[CountryId]
-				FROM [TOneWhS_BE].[SalePricelistRPChange_New] sprpc
+				FROM [TOneWhS_BE].[SalePricelistRPChange_New] sprpc with(nolock)
 				where sprpc.ProcessInstanceID = @ProcessInstanceID and CustomerId is null
 
 			-- Sync default routing product
@@ -85,19 +85,19 @@ BEGIN
 			
 			update TOneWhS_BE.SaleEntityRoutingProduct
 			set EED = changedDRP.EED
-			from TOneWhS_BE.SaleEntityRoutingProduct serp with(nolock) inner join TOneWhS_Sales.RP_DefaultRoutingProduct_Changed changedDRP on serp.ID = changedDRP.ID
+			from TOneWhS_BE.SaleEntityRoutingProduct serp inner join TOneWhS_Sales.RP_DefaultRoutingProduct_Changed changedDRP with(nolock) on serp.ID = changedDRP.ID
 			where changedDRP.ProcessInstanceID = @ProcessInstanceID
 			
 			-- Sync zone routing products
 			
 			insert into TOneWhS_BE.SaleEntityRoutingProduct (ID, OwnerType, OwnerID, RoutingProductID, ZoneID, BED, EED)
 			select ID, @OwnerType, @OwnerID, RoutingProductID, ZoneID, BED, EED
-			from TOneWhS_Sales.RP_SaleZoneRoutingProduct_New newSZRP
+			from TOneWhS_Sales.RP_SaleZoneRoutingProduct_New newSZRP with(nolock)
 			where newSZRP.ProcessInstanceID = @ProcessInstanceID
 			
 			update TOneWhS_BE.SaleEntityRoutingProduct
 			set EED = changedSZRP.EED
-			from TOneWhS_BE.SaleEntityRoutingProduct szrp inner join TOneWhS_Sales.RP_SaleZoneRoutingProduct_Changed changedSZRP on szrp.ID = changedSZRP.ID
+			from TOneWhS_BE.SaleEntityRoutingProduct szrp inner join TOneWhS_Sales.RP_SaleZoneRoutingProduct_Changed changedSZRP with(nolock) on szrp.ID = changedSZRP.ID
 			where changedSZRP.ProcessInstanceID = @ProcessInstanceID
 			
 			-- Sync customer countries
@@ -109,7 +109,8 @@ BEGIN
 
 			update TOneWhS_BE.CustomerCountry
 			set EED = changedCountry.EED
-			from TOneWhS_BE.CustomerCountry country inner join TOneWhS_Sales.RP_CustomerCountry_Changed changedCountry on country.ID = changedCountry.ID
+			from	TOneWhS_BE.CustomerCountry country
+					inner join TOneWhS_Sales.RP_CustomerCountry_Changed changedCountry  with(nolock)on country.ID = changedCountry.ID
 			where changedCountry.ProcessInstanceID = @ProcessInstanceId
 
 		commit tran

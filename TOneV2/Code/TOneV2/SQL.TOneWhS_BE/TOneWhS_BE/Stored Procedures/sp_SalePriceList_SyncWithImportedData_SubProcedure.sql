@@ -33,51 +33,51 @@ Begin Try
 
 	INSERT INTO [TOneWhS_BE].[SalePricelistCodeChange] ([Code],[RecentZoneName],[ZoneName],[ZoneID],[Change],[BatchID],[BED],[EED],[CountryID])
     select  spcc.[Code],spcc.[RecentZoneName],spcc.[ZoneName],spcc.[ZoneID],spcc.[Change],spcc.[BatchID],spcc.BED,spcc.EED,spcc.CountryID
-	from  [TOneWhS_BE].[SalePricelistCodeChange_New] spcc where spcc.[BatchID] = @ProcessInstanceID
+	from  [TOneWhS_BE].[SalePricelistCodeChange_New] spcc with(nolock) where spcc.[BatchID] = @ProcessInstanceID
 
 	INSERT INTO [TOneWhS_BE].[SalePricelistCustomerChange] ([BatchID],[PricelistID],[CountryID],[CustomerID])
 	select [BatchID],[PricelistID],[CountryID],[CustomerID]
-	from  [TOneWhS_BE].[SalePricelistCustomerChange_New] spcc where spcc.[BatchID]= @ProcessInstanceID
+	from  [TOneWhS_BE].[SalePricelistCustomerChange_New] spcc with(nolock) where spcc.[BatchID]= @ProcessInstanceID
 
 	INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED],[RoutingProductID],[CurrencyID],ZoneID)
 	select sprc.[PricelistId],sprc.[Rate],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.[BED],sprc.[EED],sprc.RoutingProductID,sprc.CurrencyID,sprc.ZoneID
-	from [TOneWhS_BE].[SalePricelistRateChange_New] sprc
+	from [TOneWhS_BE].[SalePricelistRateChange_New] sprc with(nolock)
 	where sprc.ProcessInstanceID = @ProcessInstanceID
 
 	INSERT INTO [TOneWhS_BE].[SalePricelistRPChange]  ([ZoneName],[ZoneID],[RoutingProductId],[RecentRoutingProductId],[BED],[EED],[PriceListId],[CountryId])
 	SELECT sprpc.[ZoneName],sprpc.[ZoneID],sprpc.[RoutingProductId],sprpc.[RecentRoutingProductId],sprpc.[BED],sprpc.[EED],sprpc.[PriceListId],sprpc.[CountryId]
-	FROM [TOneWhS_BE].[SalePricelistRPChange_New] sprpc
+	FROM [TOneWhS_BE].[SalePricelistRPChange_New] sprpc with(nolock)
 	where sprpc.ProcessInstanceID = @ProcessInstanceID and CustomerId is null
 
 	Update ToneWhs_be.SaleZone
 	Set EED = szchanged.EED
-	from ToneWhs_be.SaleZone sz join TOneWhS_BE.CP_SaleZone_Changed szchanged
+	from ToneWhs_be.SaleZone sz join TOneWhS_BE.CP_SaleZone_Changed szchanged with(nolock)
 	on sz.ID = szchanged.ID Where szchanged.ProcessInstanceID = @ProcessInstanceID
 	
 	Update TOneWhs_BE.SaleCode
 	Set EED = scchanged.EED
-	from TOneWhs_BE.SaleCode sc join TOneWhS_BE.CP_SaleCode_Changed scchanged
+	from TOneWhs_BE.SaleCode sc join TOneWhS_BE.CP_SaleCode_Changed scchanged with(nolock)
 	on sc.ID = scchanged.ID Where scchanged.ProcessInstanceID = @ProcessInstanceID
 	
 	Update TOneWhs_BE.CustomerCountry
 	Set EED = scchanged.EED
-	from TOneWhs_BE.CustomerCountry sc join TOneWhS_BE.CP_CustomerCountry_Changed scchanged
+	from TOneWhs_BE.CustomerCountry sc join TOneWhS_BE.CP_CustomerCountry_Changed scchanged with(nolock)
 	on sc.ID = scchanged.ID Where scchanged.ProcessInstanceID = @ProcessInstanceID
 
 	Update TOneWhs_BE.SaleRate
 	Set EED = srchanged.EED
-	from TOneWhs_BE.SaleRate sr join TOneWhS_BE.CP_SaleRate_Changed srchanged
+	from TOneWhs_BE.SaleRate sr join TOneWhS_BE.CP_SaleRate_Changed srchanged with(nolock)
 	on sr.ID = srchanged.ID Where srchanged.ProcessInstanceID = @ProcessInstanceId
 	
 	
 	Update TOneWhs_BE.SaleEntityService
 	Set EED = zschanged.EED
-	from TOneWhs_BE.SaleEntityService zs join TOneWhS_BE.CP_SaleZoneServices_Changed zschanged
+	from TOneWhs_BE.SaleEntityService zs join TOneWhS_BE.CP_SaleZoneServices_Changed zschanged with(nolock)
 	on zs.ID = zschanged.ID Where zschanged.ProcessInstanceID = @ProcessInstanceId
 
 	Update TOneWhs_BE.SaleEntityRoutingProduct
 	Set EED = rpchanged.EED
-	from TOneWhs_BE.SaleEntityRoutingProduct rp join TOneWhS_BE.CP_SaleZoneRoutingProducts_Changed rpchanged
+	from TOneWhs_BE.SaleEntityRoutingProduct rp join TOneWhS_BE.CP_SaleZoneRoutingProducts_Changed rpchanged with(nolock)
 	on rp.ID = rpchanged.ID Where rpchanged.ProcessInstanceID = @ProcessInstanceId
 
 	COMMIT TRAN

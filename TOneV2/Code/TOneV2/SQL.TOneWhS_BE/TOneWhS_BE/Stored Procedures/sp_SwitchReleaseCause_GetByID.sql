@@ -7,7 +7,7 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SwitchReleaseCause_GetByID]
 	@ID INT
 AS
 BEGIN
-	SELECT ID,ReleaseCode,SwitchID,Settings
-	FROM SwitchReleaseCause
+	SELECT	ID,ReleaseCode,SwitchID,Settings
+	FROM	SwitchReleaseCause with(nolock)
 	WHERE ID=@ID
 END
