@@ -10,7 +10,7 @@ using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class DIDMemoryAnalyticDataManager : MemoryAnalyticDataManager
+    public class AccountDIDMemoryAnalyticDataManager : MemoryAnalyticDataManager
     {
         public override List<RawMemoryRecord> GetRawRecords(AnalyticQuery query, List<string> neededFieldNames)
         {
@@ -32,6 +32,7 @@ namespace Retail.BusinessEntity.Business
                             {
                                 RawMemoryRecord record = CreateRecordFromDID(did);
                                 record.FieldValues.Add("AccountId", didAccount.Account.AccountId);
+                                record.FieldValues.Add("AccountStatusId", didAccount.Account.StatusId);
                                 record.FieldValues.Add("BED", didAccount.BED);
                                 record.FieldValues.Add("EED", didAccount.EED);
                                 records.Add(record);
@@ -43,6 +44,7 @@ namespace Retail.BusinessEntity.Business
                     {
                         RawMemoryRecord record = CreateRecordFromDID(did);
                         record.FieldValues.Add("AccountId", null);
+                        record.FieldValues.Add("AccountStatusId", null);
                         record.FieldValues.Add("BED", null);
                         record.FieldValues.Add("EED", null);
                         records.Add(record);
