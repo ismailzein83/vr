@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 namespace Vanrise.Queueing.Entities
 {
     public abstract class PersistentQueueItem
-    {        
+    {
         public long ExecutionFlowTriggerItemId { get; set; }
+
+        public Guid DataSourceID { get; set; }
+
+        public string BatchDescription { get; set; }
 
         public abstract DateTime GetBatchStart();
 

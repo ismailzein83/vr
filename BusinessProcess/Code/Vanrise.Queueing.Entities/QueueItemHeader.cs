@@ -28,6 +28,10 @@ namespace Vanrise.Queueing.Entities
 
         public long ExecutionFlowTriggerItemId { get; set; }
 
+        public Guid? DataSourceID { get; set; }
+
+        public string BatchDescription { get; set; }
+
         public long SourceItemId { get; set; }
 
         public string Description { get; set; }

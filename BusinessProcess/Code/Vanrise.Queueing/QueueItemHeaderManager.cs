@@ -17,6 +17,8 @@ namespace Vanrise.Queueing
 
         #region ctor/Local Variables
 
+        static Vanrise.Integration.Entities.IDataSourceManager s_dataSourceManager = Vanrise.Integration.Entities.BEManagerFactory.GetManager<Vanrise.Integration.Entities.IDataSourceManager>();
+
         static QueueItemHeaderManager()
         {
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Queueing_GetItemStatusSummaryTimeInterval"], out s_GetItemStatusSummaryTimeInterval))
@@ -126,6 +128,8 @@ namespace Vanrise.Queueing
             queueItemHeaderDetail.StatusName = Vanrise.Common.Utilities.GetEnumDescription(queueItemHeader.Status);
             queueItemHeaderDetail.QueueTitle = instance.Title;
             queueItemHeaderDetail.ExecutionFlowName = executionFlowManager.GetExecutionFlowName((Guid)instance.ExecutionFlowId);
+            if (queueItemHeader.DataSourceID.HasValue)
+                queueItemHeaderDetail.DataSourceName = s_dataSourceManager.GetDataSourceName(queueItemHeader.DataSourceID.Value);
             return queueItemHeaderDetail;
         }
 

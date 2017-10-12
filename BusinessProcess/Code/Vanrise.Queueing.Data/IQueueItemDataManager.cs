@@ -10,9 +10,9 @@ namespace Vanrise.Queueing.Data
 
         long GenerateItemID();
 
-        void EnqueueItem(QueueActivatorType queueActivatorType, int queueId, long itemId, DateTime batchStart, DateTime batchEnd, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
+        void EnqueueItem(QueueActivatorType queueActivatorType, int queueId, long itemId, Guid? dataSourceId, string batchDescription, DateTime batchStart, DateTime batchEnd, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
 
-        void EnqueueItem(QueueActivatorType queueActivatorType, Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, DateTime batchStart, DateTime batchEnd, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
+        void EnqueueItem(QueueActivatorType queueActivatorType, Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, Guid? dataSourceId, string batchDescription, DateTime batchStart, DateTime batchEnd, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus);
 
         QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, int? maximumConcurrentReaders);
 

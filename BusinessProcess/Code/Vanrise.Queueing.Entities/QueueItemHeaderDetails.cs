@@ -17,5 +17,7 @@ namespace Vanrise.Queueing.Entities
         public string QueueTitle { get; set; }
  
         public string ExecutionFlowName { get; set; }
+
+        public string DataSourceName { get; set; }
     }
 }

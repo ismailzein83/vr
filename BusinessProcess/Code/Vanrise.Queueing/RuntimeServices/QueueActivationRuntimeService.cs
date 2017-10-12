@@ -74,6 +74,8 @@ namespace Vanrise.Queueing
                                     foreach (var outputItem in context.OutputItems)
                                     {
                                         outputItem.Item.ExecutionFlowTriggerItemId = itemToProcess.ExecutionFlowTriggerItemId;
+                                        outputItem.Item.DataSourceID = itemToProcess.DataSourceID;
+                                        outputItem.Item.BatchDescription = itemToProcess.BatchDescription;
                                         var outputQueue = queuesByStages[outputItem.StageName].Queue;
                                         outputQueue.EnqueueObject(outputItem.Item);
                                     }

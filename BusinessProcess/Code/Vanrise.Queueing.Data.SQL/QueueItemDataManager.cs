@@ -50,13 +50,13 @@ namespace Vanrise.Queueing.Data.SQL
             return (long)ExecuteScalarSP("queue.sp_QueueItemIDGen_GenerateID");
         }
 
-        public void EnqueueItem(QueueActivatorType queueActivatorType, int queueId, long itemId, DateTime batchStart, DateTime batchEnd, long executionFlowTriggerItemId,
+        public void EnqueueItem(QueueActivatorType queueActivatorType, int queueId, long itemId, Guid? dataSourceId, string batchDescription, DateTime batchStart, DateTime batchEnd, long executionFlowTriggerItemId,
             byte[] item, string description, QueueItemStatus queueItemStatus)
         {
-            ExecuteEnqueueItemQuery(queueActivatorType, String.Format(s_query_EnqueueItemAndHeaderTemplate, queueId, itemId, "null"), batchStart, batchEnd, item, executionFlowTriggerItemId, description, queueItemStatus);
+            ExecuteEnqueueItemQuery(queueActivatorType, String.Format(s_query_EnqueueItemAndHeaderTemplate, queueId, itemId, "null"), dataSourceId, batchDescription, batchStart, batchEnd, item, executionFlowTriggerItemId, description, queueItemStatus);
         }
 
-        public void EnqueueItem(QueueActivatorType queueActivatorType, Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, DateTime batchStart,
+        public void EnqueueItem(QueueActivatorType queueActivatorType, Dictionary<int, long> targetQueuesItemsIds, int sourceQueueId, long sourceItemId, Guid? dataSourceId, string batchDescription, DateTime batchStart,
             DateTime batchEnd, long executionFlowTriggerItemId, byte[] item, string description, QueueItemStatus queueItemStatus)
         {
 
@@ -78,7 +78,7 @@ namespace Vanrise.Queueing.Data.SQL
                                             queryItemBuilder,
                                             queryItemHeaderBuilder);
 
-            ExecuteEnqueueItemQuery(queueActivatorType, query, batchStart, batchEnd, item, executionFlowTriggerItemId, description, queueItemStatus);
+            ExecuteEnqueueItemQuery(queueActivatorType, query, dataSourceId, batchDescription, batchStart, batchEnd, item, executionFlowTriggerItemId, description, queueItemStatus);
         }
 
         public QueueItem DequeueItem(int queueId, int currentProcessId, IEnumerable<int> runningProcessesIds, int? maximumConcurrentReaders)
@@ -105,7 +105,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         public QueueItem DequeueItem(int queueId, Guid activatorInstanceId)
         {
-            string query = @"SELECT TOP 1 ID, Content, ExecutionFlowTriggerItemID, BatchStart, BatchEnd
+            string query = @"SELECT TOP 1 ID, Content, ExecutionFlowTriggerItemID, DataSourceID, BatchDescription, BatchStart, BatchEnd
                             FROM queue.QueueItem WITH(NOLOCK)
                             WHERE QueueID = @QueueID AND ActivatorID = @ActivatorID AND ISNULL([IsSuspended], 0) = 0
                             ORDER BY ID";
@@ -203,7 +203,7 @@ namespace Vanrise.Queueing.Data.SQL
         #endregion
 
         #region Private Methods
-        void ExecuteEnqueueItemQuery(QueueActivatorType queueActivatorType, string query, DateTime batchStart, DateTime batchEnd, byte[] item, long executionFlowTriggerItemID, string description, QueueItemStatus queueItemStatus)
+        void ExecuteEnqueueItemQuery(QueueActivatorType queueActivatorType, string query, Guid? dataSourceId, string batchDescription, DateTime batchStart, DateTime batchEnd, byte[] item, long executionFlowTriggerItemID, string description, QueueItemStatus queueItemStatus)
         {
             query = String.Format(@" --BEGIN TRANSACTION 
                                      {0}
@@ -215,6 +215,8 @@ namespace Vanrise.Queueing.Data.SQL
                {
                    cmd.Parameters.Add(new SqlParameter("@BatchStart", batchStart));
                    cmd.Parameters.Add(new SqlParameter("@BatchEnd", batchEnd));
+                   cmd.Parameters.Add(new SqlParameter("@DataSourceID", dataSourceId));
+                   cmd.Parameters.Add(new SqlParameter("@BatchDescription", batchDescription));
                    cmd.Parameters.Add(new SqlParameter("@ExecutionFlowTriggerItemID", executionFlowTriggerItemID));
                    cmd.Parameters.Add(new SqlParameter("@Content", item));
                    cmd.Parameters.Add(new SqlParameter("@Description", description));
@@ -247,6 +249,8 @@ namespace Vanrise.Queueing.Data.SQL
                 ItemId = (long)reader["ItemID"],
                 QueueId = (int)reader["QueueID"],
                 ExecutionFlowTriggerItemId = GetReaderValue<long>(reader, "ExecutionFlowTriggerItemID"),
+                DataSourceID = GetReaderValue<Guid?>(reader, "DataSourceID"),
+                BatchDescription = reader["BatchDescription"] as string,
                 SourceItemId = GetReaderValue<long>(reader, "SourceItemID"),
                 Description = reader["Description"] as string,
                 Status = (QueueItemStatus)reader["Status"],
@@ -263,6 +267,8 @@ namespace Vanrise.Queueing.Data.SQL
             {
                 ItemId = (long)reader["ID"],
                 ExecutionFlowTriggerItemId = (long)reader["ExecutionFlowTriggerItemID"],
+                DataSourceID = GetReaderValue<Guid?>(reader, "DataSourceID"),
+                BatchDescription = reader["BatchDescription"] as string,
                 BatchStart = GetReaderValue<DateTime>(reader, "BatchStart"),
                 BatchEnd = GetReaderValue<DateTime>(reader, "BatchEnd"),
                 Content = (byte[])reader["Content"]
@@ -290,15 +296,17 @@ namespace Vanrise.Queueing.Data.SQL
 
         const string query_EnqueueItemTemplate = @" 
                                                      INSERT INTO queue.#QUEUEITEMTABLE#
-                                                           ([ID], QueueID, [BatchStart], [BatchEnd], [Content], [ExecutionFlowTriggerItemID])
+                                                           ([ID], QueueID, DataSourceID, BatchDescription, [BatchStart], [BatchEnd], [Content], [ExecutionFlowTriggerItemID])
                                                      VALUES
-                                                           ({1}, {0}, @BatchStart, @BatchEnd, @Content, @ExecutionFlowTriggerItemID)
+                                                           ({1}, {0}, @DataSourceID, @BatchDescription, @BatchStart, @BatchEnd, @Content, @ExecutionFlowTriggerItemID)
                                                          ";
 
         const string query_EnqueueItemHeaderTemplate = @" INSERT INTO [queue].[QueueItemHeader]
                                                                    ([QueueID]
                                                                    ,[ItemID]
                                                                    ,ExecutionFlowTriggerItemID
+                                                                   ,DataSourceID
+                                                                   ,BatchDescription
 		                                                           ,[SourceItemID]
                                                                    ,[Description]
                                                                    ,[Status]
@@ -308,7 +316,9 @@ namespace Vanrise.Queueing.Data.SQL
                                                                    ({0}
                                                                    ,{1}
                                                                    ,@ExecutionFlowTriggerItemID
-                                                                   ,{2}
+                                                                   ,@DataSourceID
+                                                                   ,@BatchDescription
+		                                                           ,{2}
                                                                    ,@Description
                                                                    ,@Status
                                                                    ,GETDATE()
@@ -344,7 +354,7 @@ namespace Vanrise.Queueing.Data.SQL
                                             #VALIDATEMAXIMUMREADERS#
                                         END
 
-                                        SELECT ID, Content, ExecutionFlowTriggerItemID, BatchStart, BatchEnd FROM [queue].[QueueItem_{0}] WITH(NOLOCK) WHERE ID = @ID AND ISNULL(@IsLocked, 0) = 1";
+                                        SELECT ID, Content, ExecutionFlowTriggerItemID, DataSourceID, BatchDescription, BatchStart, BatchEnd FROM [queue].[QueueItem_{0}] WITH(NOLOCK) WHERE ID = @ID AND ISNULL(@IsLocked, 0) = 1";
 
         const string query_DequeueMaximumReadersValidation = @"
                                                             IF ((SELECT COUNT(*) FROM [queue].[QueueItem_{0}] WITH (NOLOCK)
@@ -365,7 +375,7 @@ namespace Vanrise.Queueing.Data.SQL
 
         const string query_SetItemsSuspended = @"UPDATE queue.SummaryQueueItem SET [IsSuspended] = 1 WHERE ID IN ({1})";
 
-        const string query_GetSummaryBatchesByBatchStart = @"SELECT TOP(@NbOfRows) ID, Content, ExecutionFlowTriggerItemID, BatchStart, BatchEnd
+        const string query_GetSummaryBatchesByBatchStart = @"SELECT TOP(@NbOfRows) ID, Content, ExecutionFlowTriggerItemID, DataSourceID, BatchDescription, BatchStart, BatchEnd
                                                             FROM queue.SummaryQueueItem 
                                                             WHERE QueueID = {0} AND [BatchStart] = @BatchStart AND ISNULL([IsSuspended], 0) = 0
                                                             ORDER BY ID ";

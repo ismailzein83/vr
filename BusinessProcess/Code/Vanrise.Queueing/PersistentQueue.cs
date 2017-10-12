@@ -86,11 +86,11 @@ namespace Vanrise.Queueing
 
             long itemId = _dataManagerQueueItem.GenerateItemID();
             long executionFlowTriggerItemId = item.ExecutionFlowTriggerItemId > 0 ? item.ExecutionFlowTriggerItemId : itemId;//if first item in the flow, assign the item id to the ExecutionFlowTriggerItemId
-
+            Guid? dataSourceId = item.DataSourceID != Guid.Empty ? item.DataSourceID : default(Guid?);
             var subscribedQueueIds = queueSubscriptionManager.GetSubscribedQueueIds(_queueId);
             if (subscribedQueueIds == null || subscribedQueueIds.Count == 0)
             {
-                _dataManagerQueueItem.EnqueueItem(_queueActivatorType, _queueId, itemId, item.GetBatchStart(), item.GetBatchEnd(), executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(_queueActivatorType, _queueId, itemId, dataSourceId, item.BatchDescription, item.GetBatchStart(), item.GetBatchEnd(), executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
             }
             else
             {
@@ -101,7 +101,7 @@ namespace Vanrise.Queueing
                     foreach (int queueId in subscribedQueueIds)
                         targetQueuesItemsIds.Add(queueId, _dataManagerQueueItem.GenerateItemID());
                 }
-                _dataManagerQueueItem.EnqueueItem(_queueActivatorType, targetQueuesItemsIds, _queueId, itemId, item.GetBatchStart(), item.GetBatchEnd(), executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
+                _dataManagerQueueItem.EnqueueItem(_queueActivatorType, targetQueuesItemsIds, _queueId, itemId, dataSourceId, item.BatchDescription, item.GetBatchStart(), item.GetBatchEnd(), executionFlowTriggerItemId, compressed, itemDescription, QueueItemStatus.New);
             }
             return itemId;
         }
@@ -163,6 +163,9 @@ namespace Vanrise.Queueing
             byte[] decompressed = Vanrise.Common.Compressor.Decompress(queueItem.Content);
             T deserialized = _emptyObject.Deserialize<T>(decompressed);
             deserialized.ExecutionFlowTriggerItemId = queueItem.ExecutionFlowTriggerItemId;
+            if (queueItem.DataSourceID.HasValue)
+                deserialized.DataSourceID = queueItem.DataSourceID.Value;
+            deserialized.BatchDescription = queueItem.BatchDescription;
             deserialized.SetBatchStart(queueItem.BatchStart);
             deserialized.SetBatchEnd(queueItem.BatchEnd);
             return deserialized;
