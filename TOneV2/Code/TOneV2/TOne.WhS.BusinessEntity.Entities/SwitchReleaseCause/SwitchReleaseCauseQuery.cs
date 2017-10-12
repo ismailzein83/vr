@@ -8,5 +8,10 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SwitchReleaseCauseQuery
     {
+        public string ReleaseCode { get; set; }
+        public List<int> SwitchIds { get; set; }
+        public bool? IsDelivered { get; set; }
+        public string Description { get; set; }
     }
+
 }
