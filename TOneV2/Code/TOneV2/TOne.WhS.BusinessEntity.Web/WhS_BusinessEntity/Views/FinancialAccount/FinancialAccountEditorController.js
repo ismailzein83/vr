@@ -2,9 +2,9 @@
 
     'use strict';
 
-    financialAccountEditorController.$inject = ['$scope', 'WhS_BE_FinancialAccountAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_FinancialAccountDefinitionAPIService', 'VRDateTimeService'];
+    financialAccountEditorController.$inject = ['$scope', 'WhS_BE_FinancialAccountAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_FinancialAccountDefinitionAPIService', 'VRDateTimeService','WhS_BE_CommisssionTypeEnum'];
 
-    function financialAccountEditorController($scope, WhS_BE_FinancialAccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_FinancialAccountDefinitionAPIService, VRDateTimeService) {
+    function financialAccountEditorController($scope, WhS_BE_FinancialAccountAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_FinancialAccountDefinitionAPIService, VRDateTimeService, WhS_BE_CommisssionTypeEnum) {
         var carrierAccountId;
         var carrierProfileId;
 
@@ -41,6 +41,8 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.invoiceSettings = [];
+            $scope.scopeModel.commissionTypes = UtilsService.getArrayEnum(WhS_BE_CommisssionTypeEnum);
+
             $scope.scopeModel.periodEndsAt = undefined;
             $scope.scopeModel.beginEffectiveDate = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
             $scope.scopeModel.onDateValueChanged = function () {
@@ -71,6 +73,7 @@
                                     var dataItem = {
                                         title: financialAccountInvoiceType.InvoiceSettingTitle,
                                         invoiceTypeId: financialAccountInvoiceType.InvoiceTypeId,
+                                        selectedCommissionType: WhS_BE_CommisssionTypeEnum.Display
                                     };
                                     dataItem.onInvoiceSettingDirectiveReady = function (api) {
                                         dataItem.directiveAPI = api;
@@ -236,16 +239,40 @@
                                 var dataItem = {
                                     title: invoiceSettingItem.payload.InvoiceSettingTitle,
                                     invoiceTypeId: invoiceSettingItem.payload.InvoiceTypeId,
+                                    selectedCommissionType: WhS_BE_CommisssionTypeEnum.Display
                                 };
                                 var selectedValue;
-                                if (financialAccountRuntimeEntity != undefined && financialAccountRuntimeEntity.InvoiceSettingsData != undefined) {
-                                    for (var i = 0; i < financialAccountRuntimeEntity.InvoiceSettingsData.length; i++) {
-                                        var invoiceSettingData = financialAccountRuntimeEntity.InvoiceSettingsData[i];
-                                        if (invoiceSettingData.InvoiceTypeId == invoiceSettingItem.payload.InvoiceTypeId) {
-                                            selectedValue = invoiceSettingData.InvoiceSettingId;
-                                            break;
+                                var financialAccountInvoiceSettingData;
+                                if (financialAccountRuntimeEntity != undefined)
+                                {
+                                    if (financialAccountRuntimeEntity.InvoiceSettingsData != undefined) {
+                                        for (var i = 0; i < financialAccountRuntimeEntity.InvoiceSettingsData.length; i++) {
+                                            var invoiceSettingData = financialAccountRuntimeEntity.InvoiceSettingsData[i];
+                                            if (invoiceSettingData.InvoiceTypeId == invoiceSettingItem.payload.InvoiceTypeId) {
+                                                selectedValue = invoiceSettingData.InvoiceSettingId;
+                                                break;
+                                            }
                                         }
                                     }
+                                    if (financialAccountRuntimeEntity.FinancialAccount != undefined && financialAccountRuntimeEntity.FinancialAccount.Settings != undefined && financialAccountRuntimeEntity.FinancialAccount.Settings.FinancialAccountInvoiceSettings != undefined)
+                                    {
+                                        for(var i =0 ;i<financialAccountRuntimeEntity.FinancialAccount.Settings.FinancialAccountInvoiceSettings.length;i++)
+                                        {
+                                            var financialAccountInvoiceSetting = financialAccountRuntimeEntity.FinancialAccount.Settings.FinancialAccountInvoiceSettings[i];
+                                            if (financialAccountInvoiceSetting.InvoiceTypeId == invoiceSettingItem.payload.InvoiceTypeId)
+                                            {
+                                                financialAccountInvoiceSettingData = financialAccountInvoiceSetting;
+                                                break;
+                                            }
+                                               
+                                        }
+                                    }
+                                }
+                                
+                                if (financialAccountInvoiceSettingData != undefined && financialAccountInvoiceSettingData.FinancialAccountCommission != undefined)
+                                {
+                                    dataItem.commission = financialAccountInvoiceSettingData.FinancialAccountCommission.Commission;
+                                    dataItem.selectedCommissionType = UtilsService.getItemByVal($scope.scopeModel.commissionTypes, financialAccountInvoiceSettingData.FinancialAccountCommission.CommissionType, "value");
                                 }
                                 var dataItemPayload = {
                                     selectedIds: selectedValue,
@@ -336,9 +363,11 @@
 
         function buildFinancialAccountToEditObjFromScope() {
             var invoiceSettingsData;
+            var financialAccountInvoiceSetting;
             if ($scope.scopeModel.invoiceSettings != undefined && $scope.scopeModel.invoiceSettings.length > 0)
             {
                 invoiceSettingsData = [];
+                financialAccountInvoiceSetting = [];
                 for(var i=0;i<$scope.scopeModel.invoiceSettings.length;i++)
                 {
                     var invoiceSetting = $scope.scopeModel.invoiceSettings[i];
@@ -361,6 +390,13 @@
                         InvoiceTypeId:invoiceSetting.invoiceTypeId,
                         PartnerInvoiceSettingId: partnerInvoiceSettingId
                     });
+                    financialAccountInvoiceSetting.push({
+                        InvoiceTypeId: invoiceSetting.invoiceTypeId,
+                        FinancialAccountCommission: {
+                            Commission:invoiceSetting.commission,
+                            CommissionType: invoiceSetting.selectedCommissionType.value
+                        }
+                    });
                 }
             }
             var financialAccount = {
@@ -368,7 +404,8 @@
                 BED: $scope.scopeModel.beginEffectiveDate,
                 EED: $scope.scopeModel.endEffectiveDate,
                 Settings: {
-                    ExtendedSettings: directiveAPI.getData()
+                    ExtendedSettings: directiveAPI.getData(),
+                    FinancialAccountInvoiceSettings: financialAccountInvoiceSetting
                 },
                 InvoiceSettingsData:invoiceSettingsData
             };
@@ -378,8 +415,11 @@
 
         function buildFinancialAccountToAddObjFromScope() {
             var invoiceSettingsData;
+            var financialAccountInvoiceSetting;
+
             if ($scope.scopeModel.invoiceSettings != undefined && $scope.scopeModel.invoiceSettings.length > 0)
             {
+                financialAccountInvoiceSetting = [];
                 invoiceSettingsData = [];
                 for (var i = 0;i<$scope.scopeModel.invoiceSettings.length;i++)
                 {
@@ -388,6 +428,13 @@
                         InvoiceSettingId: invoiceSetting.directiveAPI.getSelectedIds(),
                         InvoiceTypeId:invoiceSetting.invoiceTypeId
                     });
+                    financialAccountInvoiceSetting.push({
+                        InvoiceTypeId: invoiceSetting.invoiceTypeId,
+                        FinancialAccountCommission: {
+                            Commission: invoiceSetting.commission,
+                            CommissionType: invoiceSetting.selectedCommissionType.value
+                        }
+                    });
                 }
             }
             var financialAccount = {
@@ -395,7 +442,9 @@
                     BED: $scope.scopeModel.beginEffectiveDate,
                     EED: $scope.scopeModel.endEffectiveDate,
                     Settings: {
-                        ExtendedSettings: directiveAPI.getData()
+                        ExtendedSettings: directiveAPI.getData(),
+                        FinancialAccountInvoiceSettings: financialAccountInvoiceSetting
+
                     },
                     CarrierAccountId: carrierAccountId,
                     CarrierProfileId: carrierProfileId,

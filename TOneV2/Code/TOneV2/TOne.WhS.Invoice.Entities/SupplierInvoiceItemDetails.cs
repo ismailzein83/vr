@@ -23,7 +23,7 @@ namespace TOne.WhS.Invoice.Entities
         public int? SupplierRateTypeId { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-
+        public decimal AmountAfterCommission { get; set; }
         public SupplierInvoiceItemDetails() { }
         public IEnumerable<SupplierInvoiceItemDetails> GetSupplierInvoiceItemDetailsRDLCSchema()
         {

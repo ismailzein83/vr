@@ -208,6 +208,7 @@
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountActivationStatusEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CDPNIdentificationEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CodeChangeTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\CommisssionTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\FinancialAccountCarrierTypeEnum.js" />

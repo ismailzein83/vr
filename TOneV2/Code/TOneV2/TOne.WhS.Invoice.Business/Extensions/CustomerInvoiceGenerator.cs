@@ -25,9 +25,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             var customerGenerationCustomSectionPayload = context.CustomSectionPayload as CustomerGenerationCustomSectionPayload;
             int? timeZoneId = null;
+            decimal commission = 0;
+            CommissionType? commissionType = null;
             if (customerGenerationCustomSectionPayload != null && customerGenerationCustomSectionPayload.TimeZoneId.HasValue)
             {
                 timeZoneId = customerGenerationCustomSectionPayload.TimeZoneId;
+                if (customerGenerationCustomSectionPayload.Commission.HasValue)
+                {
+                    commission = customerGenerationCustomSectionPayload.Commission.Value;
+                    commissionType = customerGenerationCustomSectionPayload.CommissionType;
+                }
+               
             }
             if (!timeZoneId.HasValue)
             {
@@ -66,19 +74,23 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 context.ErrorMessage = "No data available between the selected period."; 
                 throw new InvoiceGeneratorException("No data available between the selected period.");
             }
-            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId);
+            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
             #region BuildCustomerInvoiceDetails
-            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate);
+            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType);
             if (customerInvoiceDetails != null)
             {
                 customerInvoiceDetails.TimeZoneId = timeZoneId;
-
+                customerInvoiceDetails.Commission = commission;
                 customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
+                customerInvoiceDetails.CommissionType = commissionType;
+
+                customerInvoiceDetails.TotalAmountAfterCommission = customerInvoiceDetails.AmountAfterCommission;
                 if (taxItemDetails != null)
                 {
                     foreach (var tax in taxItemDetails)
                     {
+                        customerInvoiceDetails.TotalAmountAfterCommission += ((customerInvoiceDetails.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
                         customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
@@ -128,7 +140,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
 
         }
-        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType, DateTime fromDate, DateTime toDate)
+        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType, DateTime fromDate, DateTime toDate,decimal commission, CommissionType? commissionType)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             CustomerInvoiceDetails customerInvoiceDetails = null;
@@ -154,7 +166,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             customerInvoiceDetails.CountryId = invoiceBillingRecord.CountryId;
                             customerInvoiceDetails.SupplierId = invoiceBillingRecord.SupplierId;
                             customerInvoiceDetails.SupplierZoneId = invoiceBillingRecord.SupplierZoneId;
-
+                            customerInvoiceDetails.AmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
+                        }
+                        if (commissionType.HasValue)
+                        {
+                            switch (commissionType.Value)
+                            {
+                                case CommissionType.Display:
+                                    customerInvoiceDetails.DisplayComission = true;
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            customerInvoiceDetails.DisplayComission = false;
                         }
                     };
                 }
@@ -194,7 +219,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             ToDate = item.InvoiceMeasures.BillingPeriodTo,
                             CountryId = item.CountryId,
                             SupplierId = item.SupplierId,
-                            SupplierZoneId = item.SupplierZoneId
+                            SupplierZoneId = item.SupplierZoneId,
+                            AmountAfterCommission = item.InvoiceMeasures.AmountAfterCommission,
 
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -256,7 +282,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
-        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId)
+        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId,decimal commission, CommissionType? commissionType)
         {
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
             if (analyticRecords != null)
@@ -304,6 +330,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         SupplierZoneId = Convert.ToInt32(supplierZone.Value),
 
                     };
+                   
+                     invoiceBillingRecord.SaleRate = invoiceBillingRecord.SaleRate + ((invoiceBillingRecord.SaleRate * commission) / 100);
+                     invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr * commission) / 100);
+
+                    
                     AddItemToDictionary(itemSetNamesDic, "GroupedBySaleZone", invoiceBillingRecord);
                 }
             }
@@ -336,6 +367,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             public Decimal SaleDuration { get; set; }
             public DateTime BillingPeriodTo { get; set; }
             public DateTime BillingPeriodFrom { get; set; }
+            public decimal AmountAfterCommission { get; set; }
 
 
         }

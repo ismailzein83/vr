@@ -25,11 +25,23 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-section title="Invoice Settings">
-                            <span ng-repeat="invoiceSetting in scopeModel.invoiceSettings" ng-if="scopeModel.showInvoiceSettingSelector">
-                                <vr-invoice-invoicesetting-selector on-ready="invoiceSetting.onInvoiceSettingDirectiveReady" showviewbutton showaddbutton normal-col-num="4" customlabel="{{invoiceSetting.title}}"></vr-invoice-invoicesetting-selector>
-                            </span>
+                        <vr-section title="{{invoiceSetting.title}} Invoice" ng-repeat="invoiceSetting in scopeModel.invoiceSettings" ng-if="scopeModel.showInvoiceSettingSelector">
+                            <vr-invoice-invoicesetting-selector on-ready="invoiceSetting.onInvoiceSettingDirectiveReady" showviewbutton showaddbutton normal-col-num="4"></vr-invoice-invoicesetting-selector>
+                            <vr-columns colnum="4">
+                                <vr-textbox type="number" label="Commission" value="invoiceSetting.commission" minvalue="-100" maxvalue="100"></vr-textbox>
+                            </vr-columns>
+                            <vr-columns colnum="4">
+                                <vr-select datasource="scopeModel.commissionTypes"
+                                           datatextfield="description"
+                                           datavaluefield="value"
+                                           selectedvalues="invoiceSetting.selectedCommissionType"
+                                           entityname="Commission Type"
+                                           label="Commission Type"
+                                           isrequired="true" hideremoveicon>
+                                </vr-select>
+                            </vr-columns>
                         </vr-section>
+                    
                     </vr-row>
                 </vr-tab>
             </vr-tabs>

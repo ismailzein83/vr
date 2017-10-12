@@ -29,6 +29,18 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class WHSFinancialAccountSettings
     {
         public WHSFinancialAccountExtendedSettings ExtendedSettings { get; set; }
+        public List<FinancialAccountInvoiceSetting> FinancialAccountInvoiceSettings { get; set; }
+    }
+    public enum CommissionType { Display = 0 , DoNotDisplay = 1}
+    public class FinancialAccountInvoiceSetting
+    {
+        public Guid InvoiceTypeId { get; set; }
+        public FinancialAccountCommission FinancialAccountCommission { get; set; }
+    }
+    public class FinancialAccountCommission
+    {
+        public decimal? Commission { get; set; }
+        public CommissionType CommissionType { get; set; }
     }
 
     public abstract class WHSFinancialAccountExtendedSettings

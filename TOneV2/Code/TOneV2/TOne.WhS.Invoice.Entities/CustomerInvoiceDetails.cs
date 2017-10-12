@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Invoice.Entities
 {
@@ -22,8 +23,11 @@ namespace TOne.WhS.Invoice.Entities
         public int CountryId { get; set; }
         public int SupplierId { get; set; }
         public int SupplierZoneId { get; set; }
-
-        
+        public decimal AmountAfterCommission { get; set; }
+        public Decimal TotalAmountAfterCommission { get; set; }
+        public CommissionType? CommissionType { get; set; }
+        public decimal? Commission { get; set; }
+        public bool DisplayComission { get; set; }
         public CustomerInvoiceDetails() { }
         public IEnumerable<CustomerInvoiceDetails> GetCustomerInvoiceDetailsRDLCSchema()
         {
