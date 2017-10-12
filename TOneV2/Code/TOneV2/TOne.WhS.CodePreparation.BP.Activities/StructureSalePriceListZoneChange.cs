@@ -187,14 +187,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     actionsForThisCountry.RatesToAdd.AddRange(zoneData.RatesToAdd);
                     actionsForThisCountry.ZonesRoutingProductsToAdd.AddRange(zoneData.ZonesRoutingProductsToAdd);
 
-                    if (zoneData.ChangeType == ZoneChangeType.Deleted || zoneData.ChangeType == ZoneChangeType.PendingClosed)
-                    {
-                        if (!zoneData.EED.HasValue)
-                            throw new Exception(string.Format("Closing zone {0} without EED", zoneData.ZoneName));
-                        DateTime closureDate = zoneData.EED.Value;
+                    //if (zoneData.ChangeType == ZoneChangeType.Deleted || zoneData.ChangeType == ZoneChangeType.PendingClosed)
+                    //{
+                    //    if (!zoneData.EED.HasValue)
+                    //        throw new Exception(string.Format("Closing zone {0} without EED", zoneData.ZoneName));
+                    //    DateTime closureDate = zoneData.EED.Value;
 
-                        actionsForThisCountry.ZonesToClose.Add(GetExistingZoneAtClosureTime(zoneData.ExistingZones, zoneData.ZoneName, closureDate, null));
-                    }
+                    //    actionsForThisCountry.ZonesToClose.Add(GetExistingZoneAtClosureTime(zoneData.ExistingZones, zoneData.ZoneName, closureDate, null));
+                    //}
                 }
 
                 allCountryActions.Add(actionsForThisCountry);
