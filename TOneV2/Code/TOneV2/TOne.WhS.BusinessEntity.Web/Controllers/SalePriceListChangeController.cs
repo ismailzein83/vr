@@ -49,6 +49,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredPricelistCodeChanges(input));
         }
         [HttpPost]
+        [Route("GetSalePricelistCodes")]
+        public object GetSalePricelistCodes(Vanrise.Entities.DataRetrievalInput<SalePriceListCodeQuery> input)
+        {
+            SalePriceListChangeManager manager = new SalePriceListChangeManager();
+            return GetWebResponse(input, manager.GetFilteredSalePricelistCodes(input));
+        }
+
+        [HttpPost]
         [Route("GetFilteredSalePriceListRPChanges")]
         public object GetFilteredSalePriceListRPChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
