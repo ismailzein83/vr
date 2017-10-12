@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[SP_RateChangesNew_GetAffectedCustonerIds]
+CREATE PROCEDURE [TOneWhS_BE].[SP_SalePricelistRateChangesNew_GetAffectedCustomerIds]
 	@ProcessInstanceId bigint
 AS
 BEGIN

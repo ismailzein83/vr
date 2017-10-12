@@ -7,7 +7,7 @@ AS
 BEGIN
 	DECLARE @ProcessInstanceId INT,
 	@ZoneName nvarchar(255),
-	@OnlyModified bit
+	@OnlyModified bit=0
 	
 	SELECT @ProcessInstanceId  = @ProcessInstanceId_IN,
 	@ZoneName = @ZoneName_IN,

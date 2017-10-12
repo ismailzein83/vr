@@ -330,7 +330,6 @@
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_SaleZoneRoutingProduct_GetPreviews.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_SaleRate_GetPreviews.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlanPreviewSummary_Insert.sql" />
-    <Build Include="TOneWhS_Sales\Stored Procedures\RP_RatePlanPreviewSummary_Get.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProductsEffectiveAfter.sql" />
     <Build Include="TOneWhS_Routing\Stored Procedures\sp_RoutingDatabase_UpdateSettings.sql" />
     <Build Include="TOneWhS_Sales\Tables\RP_DefaultRoutingProduct_Preview.sql" />
@@ -510,7 +509,6 @@
     <Build Include="TOneWhs_CP\Tables\SaleZoneRoutingProduct_Preview.sql" />
     <Build Include="TOneWhS_BE\Tables\SwitchReleaseCause.sql" />
     <Build Include="TOneWhS_BE\Tables\CP_SaleZoneRoutingProduct_New.sql" />
-    <Build Include="TOneWhS_Sales\Stored Procedures\RP_CustomerRatePlanPreviewSummary_Get.sql" />
     <Build Include="TOneWhs_CP\Stored Procedures\sp_SaleZoneRoutingProduct_Preview_GetFiltered.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchReleaseCause_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SwitchReleaseCause_Insert.sql" />
@@ -522,7 +520,9 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListRateChangeNew_GetCustomerRatePreviews.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistRateChange_GetPricelistsRateChanges.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistCodeChange_GetPricelistsCodeChanges.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\SP_RPChangesNew_GetAffectedCustonerIds.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\SP_RateChangesNew_GetAffectedCustonerIds.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\RP_RatePlanPreviewSummary_GetProductRatePlanPreviewSummary.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\RP_RatePlanPreviewSummary_GetCustomerRatePlanPreviewSummary.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistRPChangesNew_GetAffectedCustomerIds.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistRateChangesNew_GetAffectedCustomerIds.sql" />
   </ItemGroup>
 </Project>

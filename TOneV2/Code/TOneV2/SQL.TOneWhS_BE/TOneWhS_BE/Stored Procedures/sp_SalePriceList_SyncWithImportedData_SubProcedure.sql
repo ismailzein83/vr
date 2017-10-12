@@ -27,6 +27,10 @@ Begin Try
 	select newRate.ID, newRate.PriceListID, newRate.ZoneID, newRate.CurrencyId, newRate.NormalRate, 1, newRate.BED, newRate.EED
 	from TOneWhS_BE.CP_SaleRate_New newRate WITH(NOLOCK) where newRate.ProcessInstanceID = @ProcessInstanceId
 
+	Insert into TOneWhS_BE.SaleEntityRoutingProduct(ID, OwnerType,OwnerID, ZoneID, RoutingProductID, BED, EED)
+	select newZoneRP.ID, newZoneRP.OwnerType, newZoneRP.OwnerID, newZoneRP.ZoneID, newZoneRP.RoutingProductID, newZoneRP.BED, newZoneRP.EED
+	from TOneWhS_BE.CP_SaleZoneRoutingProduct_New newZoneRP WITH(NOLOCK) where newZoneRP.ProcessInstanceID = @ProcessInstanceId
+
 	INSERT INTO [TOneWhS_BE].[SalePricelistCodeChange] ([Code],[RecentZoneName],[ZoneName],[ZoneID],[Change],[BatchID],[BED],[EED],[CountryID])
     select  spcc.[Code],spcc.[RecentZoneName],spcc.[ZoneName],spcc.[ZoneID],spcc.[Change],spcc.[BatchID],spcc.BED,spcc.EED,spcc.CountryID
 	from  [TOneWhS_BE].[SalePricelistCodeChange_New] spcc where spcc.[BatchID] = @ProcessInstanceID

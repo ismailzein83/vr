@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_Sales].[RP_RatePlanPreviewSummary_Get]
+CREATE PROCEDURE [TOneWhS_Sales].[RP_RatePlanPreviewSummary_GetProductRatePlanPreviewSummary]
 	@ProcessInstanceID_IN bigint
 AS
 BEGIN
@@ -18,7 +18,6 @@ Select @ProcessInstanceID = @ProcessInstanceID_IN
 	select NumberOfNewRates,
 		NumberOfIncreasedRates,
 		NumberOfDecreasedRates,
-		NumberOfClosedRates,
 		NameOfNewDefaultRoutingProduct,
 		NameOfClosedDefaultRoutingProduct,
 		NumberOfNewSaleZoneRoutingProducts,

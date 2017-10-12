@@ -5,6 +5,9 @@
     [OwnerID]           INT            NOT NULL,
     [RoutingProductID]  INT            NOT NULL,
     [BED]               DATETIME       NOT NULL,
-    [EED]               DATETIME       NULL
+    [EED]               DATETIME       NULL,
+    [ChangeType]        INT            NOT NULL
 );
+
+
 

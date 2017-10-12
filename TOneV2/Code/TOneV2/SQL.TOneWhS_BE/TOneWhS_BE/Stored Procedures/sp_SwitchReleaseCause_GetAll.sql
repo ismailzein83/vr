@@ -7,6 +7,6 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SwitchReleaseCause_GetAll]
 	
 AS
 BEGIN
-	SELECT ReleaseCode,ID,SwitchID,Settings,CreatedTime,timestamp
+	SELECT ReleaseCode,ID,SwitchID,Settings
 	FROM SwitchReleaseCause
 END
