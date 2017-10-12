@@ -3,12 +3,16 @@
     [QueueID]                    INT              NOT NULL,
     [Content]                    VARBINARY (MAX)  NOT NULL,
     [ExecutionFlowTriggerItemID] BIGINT           NOT NULL,
+    [DataSourceID]               UNIQUEIDENTIFIER NULL,
+    [BatchDescription]           NVARCHAR (1000)  NULL,
     [LockedByProcessID]          INT              NULL,
     [IsSuspended]                BIT              NULL,
     [ActivatorID]                UNIQUEIDENTIFIER NULL,
     [BatchStart]                 DATETIME         NULL,
     [BatchEnd]                   DATETIME         NULL
 );
+
+
 
 
 

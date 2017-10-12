@@ -14,6 +14,8 @@ BEGIN
 SELECT [ItemID]
       ,[QueueID]
       ,[ExecutionFlowTriggerItemID]
+	  ,DataSourceID
+	  ,BatchDescription
       ,[SourceItemID]
       ,[Description]
       ,[Status]

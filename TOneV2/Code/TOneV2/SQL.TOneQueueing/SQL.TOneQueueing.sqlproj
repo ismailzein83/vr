@@ -111,7 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="queue\Tables\QueueItemHeader.sql">
-      <AnsiNulls>Off</AnsiNulls>
+      <AnsiNulls>On</AnsiNulls>
     </Build>
     <Build Include="queue\Tables\QueueItemIDGen.sql" />
     <Build Include="queue\Stored Procedures\sp_QueueItemHeader_GetByID.sql">

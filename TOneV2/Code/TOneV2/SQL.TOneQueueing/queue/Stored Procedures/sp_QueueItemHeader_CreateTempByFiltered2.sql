@@ -21,6 +21,8 @@ IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 			       itemHeader.[Description],
 			       itemHeader.[Status],
 			       itemHeader.ExecutionFlowTriggerItemID,
+				   itemHeader.DataSourceID,
+				   itemHeader.BatchDescription,
 			       itemHeader.RetryCount,
 			       itemHeader.SourceItemID,
 			       itemHeader.ErrorMessage,

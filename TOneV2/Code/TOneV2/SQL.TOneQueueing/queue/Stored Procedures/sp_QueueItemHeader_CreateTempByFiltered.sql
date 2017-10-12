@@ -9,11 +9,13 @@ IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 			With ExecutionFlowItemIds as (SELECT  itemHeader.[ItemID], itemHeader.[ExecutionFlowTriggerItemID]
             FROM  [queue].[QueueItemHeader] itemHeader WITH(NOLOCK) JOIN  @ItemIds ids ON itemHeader.ItemID = ids.ItemID)
 
-			SELECT execFlowIds.[ItemID],
+			SELECT itemHeader.ItemID,
 				   itemHeader.QueueID,
 			       itemHeader.[Description],
 			       itemHeader.[Status],
 			       itemHeader.ExecutionFlowTriggerItemID,
+				   itemHeader.DataSourceID,
+				   itemHeader.BatchDescription,
 			       itemHeader.RetryCount,
 			       itemHeader.SourceItemID,
 			       itemHeader.ErrorMessage,
