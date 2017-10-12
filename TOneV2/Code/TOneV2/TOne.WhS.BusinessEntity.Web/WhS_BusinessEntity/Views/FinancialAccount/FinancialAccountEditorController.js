@@ -458,7 +458,8 @@
         function evaluatePeriodEndsAt(currentDate)
         {
             if (currentDate != undefined) {
-                var date = currentDate;
+                var clonedDate = UtilsService.cloneObject(currentDate);
+                var date = UtilsService.createDateFromString(clonedDate);
                 date.setDate(date.getDate() - 1);
                 date.setHours(23);
                 date.setMinutes(59);
