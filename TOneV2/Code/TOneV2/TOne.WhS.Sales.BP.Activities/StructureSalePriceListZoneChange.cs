@@ -262,7 +262,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 if (soldCountries == null)
                     continue;
 
-                List<SalePricelistRateChange> rateChanges = this.GetRateChangesForCustomer(customer.CustomerId, customer.SellingProductId, soldCountries.Select(x => x.CountryId),
+                List<SalePricelistRateChange> rateChanges = this.GetRateChangesForCustomer(customer.CustomerId, customer.SellingProductId, soldCountries,
                     context.ImportedZonesByCountryId, context.LastRateNoCachelocator);
 
                 IEnumerable<SalePricelistRPChange> routingProductChanges = GetRoutingProductChanges(customer.CustomerId, customer.SellingProductId,
@@ -287,15 +287,15 @@ namespace TOne.WhS.Sales.BP.Activities
             return customerPriceListChanges;
         }
 
-        private List<SalePricelistRateChange> GetRateChangesForCustomer(int customerId, int sellingProductId, IEnumerable<int> soldCountriesIds,
+        private List<SalePricelistRateChange> GetRateChangesForCustomer(int customerId, int sellingProductId, IEnumerable<CustomerCountry2> soldCountries,
             Dictionary<int, List<DataByZone>> importedZonesByCountryId, SaleEntityZoneRateLocator lastRateNoCachelocator)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
             var saleRateManager = new SaleRateManager();
 
-            foreach (int countryId in soldCountriesIds)
+            foreach (var country in soldCountries)
             {
-                IEnumerable<DataByZone> zones = importedZonesByCountryId.GetRecord(countryId);
+                IEnumerable<DataByZone> zones = importedZonesByCountryId.GetRecord(country.CountryId);
 
                 if (zones == null)
                     continue;
@@ -319,7 +319,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             ZoneName = zone.ZoneName,
                             Rate = zone.NormalRateToChange.NormalRate,
                             ChangeType = zone.NormalRateToChange.ChangeType,
-                            BED = zone.NormalRateToChange.BED,
+                            BED = (country.BED > zone.NormalRateToChange.BED) ? country.BED : zone.NormalRateToChange.BED,
                             EED = zone.NormalRateToChange.EED,
                             CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
                         };
