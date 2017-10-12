@@ -1391,7 +1391,7 @@
         <Top>3.47791in</Top>
         <Left>0.23562in</Left>
         <Height>0.5in</Height>
-        <Width>7.1575in</Width>
+        <Width>7.15749in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -1646,9 +1646,9 @@
       </Tablix>
       <Line Name="Line2">
         <Top>4.2743in</Top>
-        <Left>6.62682in</Left>
+        <Left>6.3039in</Left>
         <Height>0in</Height>
-        <Width>-2.57331in</Width>
+        <Width>-2.25039in</Width>
         <ZIndex>14</ZIndex>
         <Style>
           <Border>
@@ -1812,7 +1812,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
         <Top>4.30208in</Top>
-        <Left>0.23562in</Left>
+        <Left>0.38964in</Left>
         <Height>0.22in</Height>
         <Width>0.8in</Width>
         <ZIndex>19</ZIndex>
@@ -2386,7 +2386,7 @@
         <Top>4.30208in</Top>
         <Left>4.05351in</Left>
         <Height>0.25in</Height>
-        <Width>3.33961in</Width>
+        <Width>3.3396in</Width>
         <ZIndex>32</ZIndex>
         <Style>
           <Border>
@@ -2394,6 +2394,80 @@
           </Border>
         </Style>
       </Tablix>
+      <Textbox Name="Textbox37">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Commission %:</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontSize>8pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>4.54986in</Top>
+        <Left>0.38964in</Left>
+        <Height>0.22in</Height>
+        <Width>1.15in</Width>
+        <ZIndex>33</ZIndex>
+        <Visibility>
+          <Hidden>= iif(Parameters!DisplayCommission.Value = True, false, true)</Hidden>
+        </Visibility>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox39">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>=Parameters!Commission.Value</Value>
+                <Style>
+                  <FontFamily>Verdana</FontFamily>
+                  <FontSize>8pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox1</rd:DefaultName>
+        <Top>4.54986in</Top>
+        <Left>1.66492in</Left>
+        <Height>0.22in</Height>
+        <Width>1.82543in</Width>
+        <ZIndex>34</ZIndex>
+        <Visibility>
+          <Hidden>= iif(Parameters!DisplayCommission.Value = True, false, true)</Hidden>
+        </Visibility>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>12.16542in</Height>
     <Style />
@@ -2792,6 +2866,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="TotalAmountAfterCommission">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Commission">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
