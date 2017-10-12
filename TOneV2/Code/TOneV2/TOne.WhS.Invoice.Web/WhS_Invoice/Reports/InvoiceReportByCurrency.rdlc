@@ -1506,6 +1506,9 @@
               <Width>1.19875in</Width>
             </TablixColumn>
             <TablixColumn>
+              <Width>1in</Width>
+            </TablixColumn>
+            <TablixColumn>
               <Width>1.21875in</Width>
             </TablixColumn>
           </TablixColumns>
@@ -1525,7 +1528,7 @@
                               <Value>Calls(Successful)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1562,7 +1565,7 @@
                               <Value>Duration (Min)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1599,7 +1602,7 @@
                               <Value>Amount</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1626,6 +1629,43 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Textbox34">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=iif(Parameters!DisplayCommission.Value = true,"Net Amount","Amount")</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox34</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="Textbox35">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1636,7 +1676,7 @@
                               <Value>Currency</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1678,7 +1718,7 @@
                               <Value>=FormatNumber(Fields!NumberOfCalls.Value,0)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1713,7 +1753,7 @@
                               <Value>=FormatNumber(Fields!Duration.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1748,7 +1788,7 @@
                               <Value>=FormatNumber(Fields!OriginalSaleAmount.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1773,6 +1813,41 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="Textbox36">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=FormatNumber(Fields!AmountAfterCommission.Value,0)</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox36</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="OriginalSaleCurrencyIdDescription">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1783,7 +1858,7 @@
                               <Value>=Fields!OriginalSaleCurrencyIdDescription.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
+                                <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
@@ -1814,6 +1889,11 @@
           <TablixMembers>
             <TablixMember />
             <TablixMember />
+            <TablixMember>
+              <Visibility>
+                <Hidden>= iif(Parameters!DisplayCommission.Value = True, false, true)</Hidden>
+              </Visibility>
+            </TablixMember>
             <TablixMember />
             <TablixMember />
           </TablixMembers>
@@ -1832,7 +1912,7 @@
         <Top>4.20708in</Top>
         <Left>0.1425in</Left>
         <Height>0.5in</Height>
-        <Width>5.38165in</Width>
+        <Width>6.38165in</Width>
         <ZIndex>28</ZIndex>
         <Style>
           <Border>
@@ -2045,6 +2125,12 @@
                             </Parameter>
                             <Parameter Name="DueDate">
                               <Value>=Parameters!InvoiceDueDate.Value</Value>
+                            </Parameter>
+                            <Parameter Name="DisplayCommission">
+                              <Value>=Parameters!DisplayCommission.Value</Value>
+                            </Parameter>
+                            <Parameter Name="TotalAmountAfterCommission">
+                              <Value>=Parameters!TotalAmountAfterCommission.Value</Value>
                             </Parameter>
                           </Parameters>
                           <Top>0.15625in</Top>
@@ -2352,6 +2438,14 @@
           <DataField>ToDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
+        <Field Name="SaleRateAfterCommission">
+          <DataField>SaleRateAfterCommission</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="AmountAfterCommission">
+          <DataField>AmountAfterCommission</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>
@@ -2471,6 +2565,17 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ToDate">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DisplayCommission">
+      <DataType>Boolean</DataType>
+      <Nullable>true</Nullable>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="TotalAmountAfterCommission">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
