@@ -156,6 +156,7 @@
     <Compile Include="SalePricelistChanges\SalePricelistRPChange.cs" />
     <Compile Include="SalePricelistChanges\SalePricelistRPChangeDetail.cs" />
     <Compile Include="SalePricelistChanges\SalePriceListSnapshot.cs" />
+    <Compile Include="SalePriceListCodeQuery.cs" />
     <Compile Include="SalePriceListTemplate\MappedSheet\IMappedCellContext.cs" />
     <Compile Include="SalePriceListTemplate\MappedSheet\SalePricelistTemplateSettingsMappedCellExtensionConfig.cs" />
     <Compile Include="SalePriceListTemplate\SalePricelistTemplateTableRow.cs" />
