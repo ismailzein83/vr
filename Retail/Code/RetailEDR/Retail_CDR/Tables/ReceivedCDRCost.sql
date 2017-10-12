@@ -16,3 +16,10 @@
     [ReceivedCDPN]      VARCHAR (100)   NULL
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_Retail_CDR_ReceivedCDRCost_AttempteDateTime]
+    ON [Retail_CDR].[ReceivedCDRCost]([AttemptDateTime] ASC);
+
