@@ -25,6 +25,11 @@ namespace TOne.WhS.Analytics.Data.SQL
         private string failedCDRTableAlias = "FailedCDR";
         private string failedCDRTableIndex = "IX_BillingCDR_Failed_AttemptDateTime";
 
+
+        private string partialPricedCDRTableName = "[TOneWhS_CDR].[BillingCDR_PartialPriced]";
+        private string partialPricedCDRTableAlias = "PartialPriced";
+        private string partialPricedCDRTableIndex = "IX_BillingCDR_PartialPriced_AttemptDateTime";
+
         public RepeatedNumberDataManager()
             : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))
         {
@@ -63,9 +68,11 @@ namespace TOne.WhS.Analytics.Data.SQL
             switch (cdrType)
             {
                 case CDRType.All:
-                    queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2}", GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex, repeatedMorethan, phoneNumber),
+                    queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2} UNION ALL {3}",
+                        GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex, repeatedMorethan, phoneNumber),
                         GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumber),
-                        GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex, repeatedMorethan, phoneNumber));
+                        GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex, repeatedMorethan, phoneNumber),
+                        GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex, repeatedMorethan, phoneNumber));
                     break;
                 case CDRType.Invalid:
                     queryData = GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumber);
@@ -75,6 +82,9 @@ namespace TOne.WhS.Analytics.Data.SQL
                     break;
                 case CDRType.Successful:
                     queryData = GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex, repeatedMorethan, phoneNumber);
+                    break;
+                case CDRType.PartialPriced:
+                    queryData = GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex, repeatedMorethan, phoneNumber);
                     break;
             }
 

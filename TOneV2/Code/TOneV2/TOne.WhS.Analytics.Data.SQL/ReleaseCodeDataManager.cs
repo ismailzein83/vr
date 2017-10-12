@@ -25,6 +25,11 @@ namespace TOne.WhS.Analytics.Data.SQL
         private string failedCDRTableName = "[TOneWhS_CDR].[BillingCDR_Failed]";
         private string failedCDRTableAlias = "FailedCDR";
         private string failedCDRTableIndex = "IX_BillingCDR_Failed_AttemptDateTime";
+
+        private string partialPricedCDRTableName = "[TOneWhS_CDR].[BillingCDR_PartialPriced]";
+        private string partialPricedCDRTableAlias = "PartialPriced";
+        private string partialPricedCDRTableIndex = "IX_BillingCDR_PartialPriced_AttemptDateTime";
+
         private int totalCount;
         public ReleaseCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))
@@ -104,10 +109,11 @@ namespace TOne.WhS.Analytics.Data.SQL
             StringBuilder selectColumnBuilder = new StringBuilder();
             StringBuilder groupByBuilder = new StringBuilder();
             StringBuilder havingBuilder = new StringBuilder();
-            string queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2}",
+            string queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2} UNION ALL {3}",
                         GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex),
                         GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex),
-                        GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex));
+                        GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex),
+                        GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex));
 
             StringBuilder queryBuilder = new StringBuilder(String.Format(@"  SELECT *
                                                                 INTO #RESULT FROM (#Query#) {0}

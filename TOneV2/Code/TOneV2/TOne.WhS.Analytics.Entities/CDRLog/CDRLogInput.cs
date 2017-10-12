@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Analytics.Entities
 {
-    public enum CDRType { All = 0, Successful = 1, Failed = 2, Invalid = 3, }
+    public enum CDRType { All = 0, Successful = 1, Failed = 2, Invalid = 3, PartialPriced = 4}
     public class CDRLogInput
     {
         public CDRLogFilter Filter { get; set; }
