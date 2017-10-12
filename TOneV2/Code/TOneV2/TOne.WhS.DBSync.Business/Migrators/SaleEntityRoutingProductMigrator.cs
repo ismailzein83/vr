@@ -62,11 +62,19 @@ namespace TOne.WhS.DBSync.Business
         {
 
         }
+        public override void Migrate(MigrationInfoContext context)
+        {
+            SaleEntityRoutingProductManager manager = new SaleEntityRoutingProductManager();
+            context.GeneratedIdsInfoContext = new GeneratedIdsInfoContext();
+            context.GeneratedIdsInfoContext.TypeId = manager.GetSaleEntityRoutingProductTypeId();
+            base.Migrate(context);
+        }
 
         public override void AddItems(List<SaleEntityRoutingProduct> itemsToAdd)
         {
 
-            dbSyncDataManager.ApplySaleEntityRoutingProductsToTemp(itemsToAdd, TotalRowsSuccess + 1);
+            dbSyncDataManager.ApplySaleEntityRoutingProductsToTemp(itemsToAdd, 1);
+            TotalRowsSuccess = itemsToAdd.Count;
         }
 
         public override IEnumerable<SourceRate> GetSourceItems()

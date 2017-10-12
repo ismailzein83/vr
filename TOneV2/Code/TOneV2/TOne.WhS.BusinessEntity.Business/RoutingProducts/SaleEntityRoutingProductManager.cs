@@ -34,5 +34,10 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return this.GetType();
         }
+
+        public int GetSaleEntityRoutingProductTypeId()
+        {
+            return Vanrise.Common.Business.TypeManager.Instance.GetTypeId(this.SaleEntityRoutingProductType());
+        }
     }
 }
