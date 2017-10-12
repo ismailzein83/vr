@@ -97,13 +97,9 @@ function (utilsService, vrNotificationService, whSBeSalePricelistApiService, fil
                                 }
                             }
                             if (numberOfSelectedPriceLists > 1)
-                                return false;
+                                return undefined;
                         }
-                        if (priceListToPreview != undefined) {
-                            PreviewPriceList(priceListToPreview, true);
-                            return true;
-                        }
-                        return false;
+                        return priceListToPreview;
                     };
                     return directiveAPI;
                 }

@@ -40,7 +40,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("SendCustomerPriceLists")]
-        public bool SendCustomerPriceLists(SendCustomerPriceListsInput input)
+        public bool SendCustomerPriceLists(SendPricelistsInput input)
         {
             return new SalePriceListManager().SendCustomerPriceLists(input);
         }
@@ -50,6 +50,20 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public bool CheckIfAnyPriceListExists(SalePriceListOwnerType ownerType, int ownerId)
         {
             return new SalePriceListManager().CheckIfAnyPriceListExists(ownerType, ownerId);
+        }
+
+        [HttpPost]
+        [Route("SendPricelistsWithCheckNotSendPreviousPricelists")]
+        public SendCustomerPricelistsResponse SendPricelistsWithCheckNotSendPreviousPricelists(SendPricelistsWithCheckPreviousInput input)
+        {
+            return new SalePriceListManager().SendPricelistsWithCheckNotSendPreviousPricelists(input);
+        }
+
+        [HttpGet]
+        [Route("CheckIfCustomerHasNotSendPricelist")]
+        public bool CheckIfCustomerHasNotSendPricelist(int pricelistId)
+        {
+            return new SalePriceListManager().CheckIfCustomerHasNotSendPricelists(pricelistId);
         }
     }
 }

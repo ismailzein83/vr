@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SendSalePriceListController.$inject = ['$scope', 'WhS_BE_SalePricelistAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SendSalePriceListController.$inject = ['$scope', 'WhS_BE_SalePricelistAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_BE_SalePriceListChangeService', 'WhS_BE_SalePriceListChangeAPIService', 'VRCommon_VRMailAPIService'];
 
-    function SendSalePriceListController($scope, WhS_BE_SalePricelistAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function SendSalePriceListController($scope, WhS_BE_SalePricelistAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SalePriceListChangeService, WhS_BE_SalePriceListChangeAPIService, VRCommon_VRMailAPIService) {
 
         var processInstanceId;
 
@@ -13,9 +13,9 @@
         var salePriceListGridContext;
         var hideSelectedColumn;
         var customerPriceListIds;
-
+        var haveAllEmailsBeenSent;
         var selectAll;
-
+        var singlePricelistToPreview;
         loadParameters();
         defineScope();
         load();
@@ -54,46 +54,125 @@
                 return (salePriceListData == undefined || salePriceListData.selectedPriceListIds == undefined || salePriceListData.selectedPriceListIds.length == 0);
             };
             $scope.scopeModel.send = function () {
-                if (salePriceListGridAPI.previewIfSinglePriceList())
+                singlePricelistToPreview = salePriceListGridAPI.previewIfSinglePriceList();
+                if (singlePricelistToPreview != undefined) {
+                    sendSinglePricelist(singlePricelistToPreview);
                     return;
+                }
 
                 $scope.scopeModel.isLoading = true;
-                var promises = [];
+                var sendCustomerPriceListsPromise = UtilsService.createPromiseDeferred();
 
-                var haveAllEmailsBeenSent;
-
-                var sendCustomerPriceListsPromise = sendCustomerPriceLists();
-                promises.push(sendCustomerPriceListsPromise);
-
-                var loadSalePriceListGridDeferred = UtilsService.createPromiseDeferred();
-                promises.push(loadSalePriceListGridDeferred.promise);
-
-                sendCustomerPriceListsPromise.then(function (response) {
-                    haveAllEmailsBeenSent = response;
-                    loadSalePriceListGrid().then(function () {
-                        loadSalePriceListGridDeferred.resolve();
-                    }).catch(function (error) {
-                        loadSalePriceListGridDeferred.reject(error);
-                    });
-                });
-
-                return UtilsService.waitMultiplePromises(promises).then(function () {
-                    if (haveAllEmailsBeenSent === false)
-                        VRNotificationService.showWarning('Some pricelists have failed to send');
+                WhS_BE_SalePricelistAPIService.SendPricelistsWithCheckNotSendPreviousPricelists(getSendPricelistsInputObject()).then(function (response) {
+                    if (response.Customers.length == 0) {
+                        haveAllEmailsBeenSent = response.AllEmailsHaveBeenSent;
+                        sendCustomerPriceListsPromise.resolve();
+                    }
                     else {
-                        $scope.scopeModel.isSendAllButtonDisabled = true;
-                        $scope.modalContext.closeModal();
+                        WhS_BE_SalePriceListChangeService.showSendPricelistsConfirmation(response.Customers)
+                            .then(function (confirmationResponse) {
+                                if (confirmationResponse.decision) {
+                                    sendCustomerPriceLists(response.PricelistIds).then(function (response) {
+                                        haveAllEmailsBeenSent = response;
+                                        sendCustomerPriceListsPromise.resolve();
+                                    });
+                                }
+                                else {
+                                    sendCustomerPriceListsPromise.resolve();
+                                    haveAllEmailsBeenSent = undefined;
+                                }
+                            });
                     }
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
+                });
+
+                sendCustomerPriceListsPromise.promise.then(function (response) {
+                    if (haveAllEmailsBeenSent != undefined) {
+                        loadSalePriceListGrid().then(function (response) {
+                            $scope.scopeModel.isLoading = false;
+                            if (haveAllEmailsBeenSent === false)
+                                VRNotificationService.showWarning('Some pricelists have failed to send');
+                            else {
+                                $scope.scopeModel.isSendAllButtonDisabled = true;
+                                $scope.modalContext.closeModal();
+                            }
+                        });
+                    }
+                    else {
+                        $scope.scopeModel.isLoading = false;
+                    }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
                 });
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
+
+        function sendSinglePricelist(singlePricelistToPreview) {
+            $scope.scopeModel.isLoading = true;
+            var sendPromiseDeferred = UtilsService.createPromiseDeferred();
+            WhS_BE_SalePricelistAPIService.CheckIfCustomerHasNotSendPricelist(singlePricelistToPreview.Entity.PriceListId).then(function (response) {
+                if (response == true) {
+                    VRNotificationService.showConfirmation("This Customer has previous Pricelists not sent. Are you sure you want to continue ?").then(function (response) {
+                        if (response) {
+                            sendSinglePricelistMail(singlePricelistToPreview.Entity).then(function () {
+                                sendPromiseDeferred.resolve();
+                            });
+                        }
+                        else {
+                            sendPromiseDeferred.resolve();
+                        }
+                    });
+                }
+                else {
+                    sendSinglePricelistMail(singlePricelistToPreview.Entity).then(function () {
+                        sendPromiseDeferred.resolve();
+                    });
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+            return sendPromiseDeferred.promise.then(function () {
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+
+        function sendSinglePricelistMail(pricelistEntity) {
+            return WhS_BE_SalePriceListChangeAPIService.GenerateAndEvaluateSalePricelistEmailByPricelistIdAndOwnerId(pricelistEntity.PriceListId, pricelistEntity.OwnerId).then(function (emailResponse) {
+                WhS_BE_SalePriceListChangeService.sendEmail(emailResponse, onSinglePricelistMailSent);
+            });
+        }
+
+        function onSinglePricelistMailSent(evaluatedEmail) {
+            $scope.scopeModel.isLoading = true;
+            var promises = [];
+            evaluatedEmail.CompressFile = $scope.scopeModel.compressPriceListFile;
+            var sendEmailPromise = VRCommon_VRMailAPIService.SendEmail(evaluatedEmail);
+            promises.push(sendEmailPromise);
+
+            var setPriceListAsSentDeferred = UtilsService.createPromiseDeferred();
+            promises.push(setPriceListAsSentDeferred.promise);
+
+            sendEmailPromise.then(function () {
+                WhS_BE_SalePriceListChangeAPIService.SetPriceListAsSent(singlePricelistToPreview.Entity.PriceListId).then(function () {
+                    setPriceListAsSentDeferred.resolve();
+                }).catch(function (error) {
+                    setPriceListAsSentDeferred.reject(error);
+                });
+            });
+
+            return UtilsService.waitMultiplePromises(promises).then(function () {
+                loadSalePriceListGrid().then(function (response) { $scope.scopeModel.isLoading = false; });
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+
+                $scope.scopeModel.isLoading = false;
+            });
+        }
+
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -145,8 +224,7 @@
 
             return salePriceListGridLoadDeferred.promise;
         }
-
-        function sendCustomerPriceLists() {
+        function getSendPricelistsInputObject() {
             var sendPriceListsInput = {
                 ProcessInstanceId: processInstanceId,
                 SelectAll: selectAll,
@@ -158,6 +236,15 @@
                 sendPriceListsInput.SelectedPriceListIds = salePriceListData.selectedPriceListIds;
                 sendPriceListsInput.NotSelectedPriceListIds = salePriceListData.notSelectedPriceListIds;
             }
+            return sendPriceListsInput;
+        }
+
+        function sendCustomerPriceLists(pricelistIds) {
+
+            var sendPriceListsInput = {
+                PricelistIds: pricelistIds,
+                CompressAttachement: $scope.scopeModel.compressPriceListFile
+            };
 
             return WhS_BE_SalePricelistAPIService.SendCustomerPriceLists(sendPriceListsInput);
         }

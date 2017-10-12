@@ -287,34 +287,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCustomerCachedSalePriceLists().MapRecords(x => x.Value.PriceListId, x => x.Value.ProcessInstanceId == processInstanceId);
         }
 
-        public bool SendCustomerPriceLists(SendCustomerPriceListsInput input)
+        public bool SendCustomerPriceLists(SendPricelistsInput input)
         {
-            Func<SalePriceList, bool> idFilterExpression = null;
-
-            if (input.SelectAll)
-            {
-                if (input.NotSelectedPriceListIds != null && input.NotSelectedPriceListIds.Count() > 0)
-                    idFilterExpression = (salePriceList) => { return !input.NotSelectedPriceListIds.Contains(salePriceList.PriceListId); };
-            }
-            else
-            {
-                if (input.SelectedPriceListIds == null || input.SelectedPriceListIds.Count() == 0)
-                    throw new Vanrise.Entities.MissingArgumentValidationException("selectedPriceListIds");
-                idFilterExpression = (salePriceList) => { return input.SelectedPriceListIds.Contains(salePriceList.PriceListId); };
-            }
-
-            Func<SalePriceList, bool> filterExpression = (salePriceList) =>
-            {
-                if (salePriceList.ProcessInstanceId != input.ProcessInstanceId)
-                    return false;
-
-                if (idFilterExpression != null && !idFilterExpression(salePriceList))
-                    return false;
-
-                return true;
-            };
-
-            IEnumerable<SalePriceList> customerPriceLists = GetCustomerCachedSalePriceLists().FindAllRecords(filterExpression);
+            IEnumerable<SalePriceList> customerPriceLists = GetCustomerCachedSalePriceLists().Values.Where(item => input.PricelistIds.Contains(item.PriceListId));
 
             var fileManager = new VRFileManager();
             var salePriceListManager = new SalePriceListManager();
@@ -352,7 +327,69 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return allEmailsHaveBeenSent;
         }
+        public SendCustomerPricelistsResponse SendPricelistsWithCheckNotSendPreviousPricelists(SendPricelistsWithCheckPreviousInput input)
+        {
+            Func<SalePriceList, bool> idFilterExpression = null;
 
+            if (input.SelectAll)
+            {
+                if (input.NotSelectedPriceListIds != null && input.NotSelectedPriceListIds.Count() > 0)
+                    idFilterExpression = (salePriceList) => { return !input.NotSelectedPriceListIds.Contains(salePriceList.PriceListId); };
+            }
+            else
+            {
+                if (input.SelectedPriceListIds == null || input.SelectedPriceListIds.Count() == 0)
+                    throw new Vanrise.Entities.MissingArgumentValidationException("selectedPriceListIds");
+                idFilterExpression = (salePriceList) => { return input.SelectedPriceListIds.Contains(salePriceList.PriceListId); };
+            }
+
+            Func<SalePriceList, bool> filterExpression = (salePriceList) =>
+            {
+                if (salePriceList.ProcessInstanceId != input.ProcessInstanceId)
+                    return false;
+
+                if (idFilterExpression != null && !idFilterExpression(salePriceList))
+                    return false;
+
+                return true;
+            };
+
+            IEnumerable<SalePriceList> customerPricelists = GetCustomerCachedSalePriceLists().FindAllRecords(filterExpression);
+            CarrierAccountManager carrierAccountManager=new CarrierAccountManager();
+            List<CarrierAccountInfo> customers = new List<CarrierAccountInfo>();
+            List<int> customerPricelistIds = customerPricelists.Select(item => item.PriceListId).ToList();
+            bool allEmailsHaveBeenSent = false;
+
+            foreach (var customerPricelist in customerPricelists)
+            {
+                if (CheckIfCustomerHasNotSendPricelists(customerPricelist.OwnerId, customerPricelist.CreatedTime))
+                {
+                    customers.Add(new CarrierAccountInfo { CarrierAccountId = customerPricelist.OwnerId, Name = carrierAccountManager.GetCarrierAccountName(customerPricelist.OwnerId) });
+                }
+            }
+            if (customers.Count == 0)
+                allEmailsHaveBeenSent = SendCustomerPriceLists(new SendPricelistsInput() { PricelistIds = customerPricelistIds, CompressAttachement = input.CompressAttachement });
+
+            var sendCustomerPricelistsResponse = new SendCustomerPricelistsResponse()
+            {
+                Customers = customers,
+                PricelistIds = customerPricelistIds,
+                AllEmailsHaveBeenSent = allEmailsHaveBeenSent,
+            };
+
+            return sendCustomerPricelistsResponse;
+        }
+        private bool CheckIfCustomerHasNotSendPricelists(int customerId, DateTime pricelistCreateDate)
+        {
+            Dictionary<int, SalePriceList> allSalePriceLists = GetCustomerCachedSalePriceLists();
+            IEnumerable<SalePriceList> salePricelists = allSalePriceLists.Values.FindAllRecords(itm => itm.OwnerId == customerId && itm.CreatedTime < pricelistCreateDate && itm.IsSent!=true);
+            return (salePricelists.Count() > 0);
+        }
+        public bool CheckIfCustomerHasNotSendPricelists(int pricelistId)
+        {
+            SalePriceList salePriceList = GetPriceList(pricelistId);
+            return CheckIfCustomerHasNotSendPricelists(salePriceList.OwnerId, salePriceList.CreatedTime);
+        }
         public List<NewCustomerPriceListChange> CreateCustomerChanges(List<StructuredCustomerPricelistChange> customerPriceListChanges, SaleEntityZoneRateLocator lastRateNoCacheLocator
         , Dictionary<int, List<NewPriceList>> salePriceListsByCurrencyId, DateTime effectiveDate, long processInstanceId, int userId)
         {
@@ -1477,5 +1514,93 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+
+        /*
+        #region Merge Pricelists
+        private List<CountryChange> StructureCountryChanges(List<SalePricelistRateChange> rateChanges, List<SalePricelistCodeChange> codeChanges, List<SalePricelistRPChange> routingProductChanges)
+        {
+            var countryChanges = new Dictionary<int, CountryChange>();
+
+            foreach (var rateChange in rateChanges)
+            {
+                CountryChange countryChange;
+
+                SalePricelistZoneChange zoneChange = new SalePricelistZoneChange() { ZoneId = rateChange.ZoneId.Value, ZoneName = rateChange.ZoneName };
+                zoneChange.RateChange = rateChange;
+
+                if (!countryChanges.TryGetValue(rateChange.CountryId, out countryChange))
+                {
+                    countryChange = new CountryChange
+                    {
+                        CountryId = rateChange.CountryId,
+                        ZoneChanges = { zoneChange },
+                    };
+                    countryChanges.Add(rateChange.CountryId, countryChange);
+                }
+                else
+                    countryChange.ZoneChanges.Add(zoneChange);
+            }
+
+            foreach (var codeChange in codeChanges)
+            {
+                CountryChange countryChange;
+                SalePricelistZoneChange zoneChange = new SalePricelistZoneChange() { ZoneId = codeChange.ZoneId.Value, ZoneName = codeChange.ZoneName };
+                zoneChange.CodeChanges.Add(codeChange);
+
+                if (!countryChanges.TryGetValue(codeChange.CountryId, out countryChange))
+                {
+
+                    countryChange = new CountryChange
+                    {
+                        CountryId = codeChange.CountryId,
+                        ZoneChanges = { zoneChange },
+                    };
+                    countryChanges.Add(codeChange.CountryId, countryChange);
+                }
+                else
+                {
+                    if (countryChange.ZoneChanges.Where(item => item.ZoneId == codeChange.ZoneId).First() == null)
+                    {
+                        countryChange.ZoneChanges.Add(zoneChange);
+                    }
+                    else
+                    {
+                        countryChange.ZoneChanges.Where(item => item.ZoneId == codeChange.ZoneId).First().CodeChanges.Add(codeChange);
+                    }
+                }
+            }
+
+            foreach (var routingProductChange in routingProductChanges)
+            {
+                CountryChange countryChange;
+                SalePricelistZoneChange zoneChange = new SalePricelistZoneChange() { ZoneId = routingProductChange.ZoneId.Value, ZoneName = routingProductChange.ZoneName };
+                zoneChange.RPChange = routingProductChange;
+
+                if (!countryChanges.TryGetValue(routingProductChange.CountryId, out countryChange))
+                {
+
+                    countryChange = new CountryChange
+                    {
+                        CountryId = routingProductChange.CountryId,
+                        ZoneChanges = { zoneChange },
+                    };
+                    countryChanges.Add(routingProductChange.CountryId, countryChange);
+                }
+                else
+                {
+                    if (countryChange.ZoneChanges.Where(item => item.ZoneId == routingProductChange.ZoneId).First() == null)
+                    {
+                        countryChange.ZoneChanges.Add(zoneChange);
+                    }
+                    else
+                    {
+                        countryChange.ZoneChanges.Where(item => item.ZoneId == routingProductChange.ZoneId).First().RPChange = routingProductChange;
+                    }
+                }
+            }
+
+            return countryChanges.Values.ToList();
+        }
+        #endregion*/
     }
 }

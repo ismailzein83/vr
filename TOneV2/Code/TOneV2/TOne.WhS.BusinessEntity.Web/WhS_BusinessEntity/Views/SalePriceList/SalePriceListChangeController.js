@@ -1,11 +1,12 @@
 ﻿(function (appControllers) {
     "use strict";
 
-    salePriceListPreviewController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListChangeAPIService', 'VRModalService', 'WhS_BE_SalePriceListChangeService', 'VRCommon_VRMailAPIService'];
+    salePriceListPreviewController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'WhS_BE_SalePriceListChangeAPIService', 'VRModalService', 'WhS_BE_SalePriceListChangeService', 'VRCommon_VRMailAPIService', 'WhS_BE_SalePricelistAPIService'];
 
-    function salePriceListPreviewController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, whSBeSalePriceListChangeApiService, VRModalService, WhS_BE_SalePriceListChangeService, VRCommon_VRMailAPIService) {
+    function salePriceListPreviewController($scope, utilsService, vrNotificationService, vrNavigationService, vruiUtilsService, whSBeSalePriceListChangeApiService, VRModalService, WhS_BE_SalePriceListChangeService, VRCommon_VRMailAPIService, WhS_BE_SalePricelistAPIService) {
         var priceListId;
-        var filter = {};
+        var filter = {
+        };
 
         var ownerName;
 
@@ -32,7 +33,8 @@
         loadAllControls();
 
         function defineScope() {
-            $scope.scopeModel = {};
+            $scope.scopeModel = {
+            };
             $scope.onCodeChangeGridReady = function (api) {
                 codeChangeGridApi = api;
                 codeChangeGridApi.loadGrid(filter);
@@ -47,7 +49,9 @@
             };
             $scope.onCountryCodeReady = function (api) {
                 countryCodeDirectiveApi = api;
-                var setLoader = function (value) { $scope.isLoadingCountryCode = value };
+                var setLoader = function (value) {
+                    $scope.isLoadingCountryCode = value;
+                };
                 vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, countryCodeDirectiveApi, undefined, setLoader);
 
             };
@@ -57,7 +61,9 @@
             };
             $scope.onCountryRPReady = function (api) {
                 countryRPDirectiveApi = api;
-                var setLoader = function (value) { $scope.isLoadingRPCountryCode = value };
+                var setLoader = function (value) {
+                    $scope.isLoadingRPCountryCode = value;
+                };
                 vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, countryRPDirectiveApi, undefined, setLoader);
             };
             $scope.onPriceListTypeSelectorReady = function (api) {
@@ -65,7 +71,9 @@
                 var payload = {
                     selectfirstitem: true
                 };
-                var setLoader = function (value) { $scope.isLoadingPriceListTypeFormatSelector = value };
+                var setLoader = function (value) {
+                    $scope.isLoadingPriceListTypeFormatSelector = value;
+                };
                 vruiUtilsService.callDirectiveLoadOrResolvePromise($scope, priceLisTypeSelectorAPI, payload, setLoader, priceListTypeSelectorReadyDeferred);
             };
             $scope.onPricelistTemplateSelectorReady = function (api) {
@@ -106,22 +114,41 @@
 
             $scope.SendPriceListByEmail = function () {
                 $scope.isLoadingFilter = true;
-                whSBeSalePriceListChangeApiService.GenerateAndEvaluateSalePriceListEmail(BuildSalePriceListInput()).then(function (emailResponse) {
-                    WhS_BE_SalePriceListChangeService.sendEmail(emailResponse, onSalePriceListEmailSent);
+                var sendPromiseDeferred = utilsService.createPromiseDeferred();
+                WhS_BE_SalePricelistAPIService.CheckIfCustomerHasNotSendPricelist(priceListId).then(function (response) {
+                    if (response == true) {
+                        vrNotificationService.showConfirmation("This Customer has previous Pricelists not sent. Are you sure you want to continue ?").then(function (response) {
+                            if (response) {
+                                sendMail().then(function () { sendPromiseDeferred.resolve(); });
+                            }
+                            else {
+                                sendPromiseDeferred.resolve();
+                            }
+                        });
+                    }
+                    else {
+                        sendMail().then(function () { sendPromiseDeferred.resolve(); });
+                    }
                 }).catch(function (error) {
                     vrNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.isLoadingFilter = false;
                 });
+                return sendPromiseDeferred.promise.then(function () { $scope.isLoadingFilter = false; });
             };
 
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
         }
+        function sendMail() {
+            return whSBeSalePriceListChangeApiService.GenerateAndEvaluateSalePriceListEmail(BuildSalePriceListInput()).then(function (emailResponse) {
+                WhS_BE_SalePriceListChangeService.sendEmail(emailResponse, onSalePriceListEmailSent);
+        });
+        }
+
         function PreviewPriceListFileByCurrency(vrFiles) {
             WhS_BE_SalePriceListChangeService.salePricelistFilePreview(vrFiles);
         }
+
         function BuildSalePriceListInput() {
             return {
                 PriceListTypeId: priceLisTypeSelectorAPI.getSelectedIds(),
@@ -163,7 +190,7 @@
                 {
                     PriceListId: priceListId,
                     Countries: countryCodeDirectiveApi.getSelectedIds()
-                }
+                };
             }
         }
         function SetFilteredRateObject() {
@@ -172,7 +199,7 @@
                 {
                     PriceListId: priceListId,
                     Countries: countryRateDirectiveApi.getSelectedIds()
-                }
+                };
             }
         }
         function SetFilteredRPObject() {
@@ -181,7 +208,7 @@
                 {
                     PriceListId: priceListId,
                     Countries: countryRPDirectiveApi.getSelectedIds()
-                }
+                };
             }
         }
         function loadParameters() {

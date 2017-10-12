@@ -41,6 +41,12 @@
         function GenerateAndEvaluateSalePriceListEmail(pricelistInput) {
             return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GenerateAndEvaluateSalePriceListEmail"), pricelistInput);
         }
+        function GenerateAndEvaluateSalePricelistEmailByPricelistIdAndOwnerId(pricelistId,ownerId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GenerateAndEvaluateSalePricelistEmailByPricelistIdAndOwnerId"), {
+                pricelistId: pricelistId,
+                ownerId: ownerId
+            });
+        }
         function GetOwnerPriceListType(priceListId) {
             return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetOwnerPriceListType"), {
                 priceListId: priceListId
@@ -69,6 +75,7 @@
             GetFilteredSalePriceListRateChanges: GetFilteredSalePriceListRateChanges,
             GetFilteredSalePriceListRPChanges: GetFilteredSalePriceListRPChanges,
             GetOwnerOptions: GetOwnerOptions,
+            GenerateAndEvaluateSalePricelistEmailByPricelistIdAndOwnerId:GenerateAndEvaluateSalePricelistEmailByPricelistIdAndOwnerId,
             GetPricelistSalePricelistVRFile: GetPricelistSalePricelistVRFile,
             DownloadSalePriceList: DownloadSalePriceList,
             GenerateAndEvaluateSalePriceListEmail: GenerateAndEvaluateSalePriceListEmail,

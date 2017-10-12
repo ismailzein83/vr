@@ -2,13 +2,14 @@
 
     'use strict';
 
-    salePriceListPreviewService.$inject = ['VRModalService'];
+    salePriceListPreviewService.$inject = ['VRModalService', 'UtilsService'];
 
-    function salePriceListPreviewService(vrModalService) {
+    function salePriceListPreviewService(vrModalService, UtilsService) {
         return ({
             previewPriceList: previewPriceList,
             salePricelistFilePreview: salePricelistFilePreview,
-            sendEmail: sendEmail
+            sendEmail: sendEmail,
+        showSendPricelistsConfirmation: showSendPricelistsConfirmation
         });
 
         function previewPriceList(priceListId, onSalePriceListPreviewClosed, shouldOpenEmailPage) {
@@ -44,7 +45,37 @@
             };
             vrModalService.showModal('/Client/Modules/Common/Views/VRMail/VRMailMessageEvaluator.html', parametrs, modalSettings);
         }
-    };
+
+        function showSendPricelistsConfirmation(customers) {
+            var parameters = {
+            customers: customers,
+            };
+
+            var modalSettings = {};
+
+            var deferred = UtilsService.createPromiseDeferred();
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onCancelSendSalePricelist = function () {
+                    modalScope.modalContext.closeModal();
+                    var response={
+                        decision: false
+                };
+                    deferred.resolve(response);
+                };
+                modalScope.onContinueSendSalePricelist = function () {
+                    modalScope.modalContext.closeModal();
+                        var response={
+                        decision: true
+                    };
+                    deferred.resolve(response);
+                };
+            };
+
+            vrModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SalePricelist/SendSalePricelistConfirmation.html', parameters, modalSettings);
+            return deferred.promise;
+        }
+    }
     appControllers.service('WhS_BE_SalePriceListChangeService', salePriceListPreviewService);
 
 })(appControllers);

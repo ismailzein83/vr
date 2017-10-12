@@ -115,7 +115,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         {
             SalePriceListManager salePriceListManager = new SalePriceListManager();
             var pricelist = salePriceListManager.GetPriceList(priceListId);
-            return salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { pricelist.OwnerId }, null);
+            return salePriceListManager.SetCustomerPricelistsAsSent(new List<int> { pricelist.OwnerId }, priceListId);
 
         }
 
@@ -135,5 +135,17 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             };
         }
 
+        [HttpGet]
+        [Route("GenerateAndEvaluateSalePricelistEmailByPricelistIdAndOwnerId")]
+        public SalePriceListEvaluatedEmail GenerateAndEvaluateSalePricelistEmailByPricelistIdAndOwnerId(int pricelistId, int ownerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var customerPriceListTemplateId = carrierAccountManager.GetCustomerPriceListTemplateId(ownerId);
+            var customerPriceListType = carrierAccountManager.GetCustomerPriceListType(ownerId);
+
+            SalePriceListInput salePriceListInput = new SalePriceListInput { PriceListId = pricelistId, PricelistTemplateId = customerPriceListTemplateId, PriceListTypeId = (int)customerPriceListType };
+
+            return GenerateAndEvaluateSalePriceListEmail(salePriceListInput);
+        }
     }
 }

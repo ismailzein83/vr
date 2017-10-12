@@ -30,13 +30,23 @@
         function SendCustomerPriceLists(customerPriceListEmailInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "SendCustomerPriceLists"), customerPriceListEmailInput);
         }
+        function SendPricelistsWithCheckNotSendPreviousPricelists(sendPricelistsWithCheckPreviousInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "SendPricelistsWithCheckNotSendPreviousPricelists"), sendPricelistsWithCheckPreviousInput);
+        }
+        function CheckIfCustomerHasNotSendPricelist(pricelistId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "CheckIfCustomerHasNotSendPricelist"), {
+                pricelistId: pricelistId
+            });
+        }
 
         return {
             GetFilteredSalePriceLists: GetFilteredSalePriceLists,
             SendPriceList: SendPriceList,
             GetSalePriceListIdsByProcessInstanceId: GetSalePriceListIdsByProcessInstanceId,
             SendCustomerPriceLists: SendCustomerPriceLists,
-            CheckIfAnyPriceListExists: CheckIfAnyPriceListExists
+            CheckIfAnyPriceListExists: CheckIfAnyPriceListExists,
+            SendPricelistsWithCheckNotSendPreviousPricelists: SendPricelistsWithCheckNotSendPreviousPricelists,
+            CheckIfCustomerHasNotSendPricelist: CheckIfCustomerHasNotSendPricelist
         };
     }
 
