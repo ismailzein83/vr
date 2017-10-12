@@ -9,6 +9,7 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
     public class DailySummaryFormatted
     {
         public string Day { get; set; }
+        public DateTime Date { get; set; }
         public int Calls { get; set; }
         public string CallsFormatted { get; set; }
         public decimal? DurationNet { get; set; }

@@ -352,6 +352,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -363,7 +364,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Day.Value</Value>
+                              <Value>=CDate(Fields!Day.Value).ToString("MMM dd yyyy")</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                               </Style>
@@ -1212,7 +1213,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -1243,6 +1243,11 @@
               <Group Name="table1_Details_Group">
                 <DataElementName>Detail</DataElementName>
               </Group>
+              <SortExpressions>
+                <SortExpression>
+                  <Value>=CDate(Fields!Day.Value)</Value>
+                </SortExpression>
+              </SortExpressions>
               <TablixMembers>
                 <TablixMember />
               </TablixMembers>
@@ -1587,6 +1592,10 @@
         <Field Name="Day">
           <DataField>Day</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Date">
+          <DataField>Date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
         <Field Name="Calls">
           <DataField>Calls</DataField>

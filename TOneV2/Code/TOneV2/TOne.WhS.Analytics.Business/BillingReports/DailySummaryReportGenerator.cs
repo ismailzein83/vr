@@ -71,7 +71,17 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     var dayValue = analyticRecord.DimensionValues[0];
                     if (dayValue != null)
+                    {
+                        DateTime outputDateTimeValue;
+                        DateTime.TryParseExact(dayValue.Name, "MMM d yyyy",
+                            System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None,
+                            out outputDateTimeValue);
+
+                        dailySummary.Date = outputDateTimeValue;
                         dailySummary.Day = dayValue.Name;
+                    }
+
+
 
                     MeasureValue calls;
 
