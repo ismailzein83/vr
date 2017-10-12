@@ -21,6 +21,13 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime? EED { get; set; }
 
     }
+    public class SalePricelistCode
+    {
+        public string Code { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
+    }
+
     public enum CodeChange
     {
         [Description("Not Changed")]

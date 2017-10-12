@@ -134,29 +134,34 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public IEnumerable<int> GetAffectedCustomerIdsRPChangesByProcessInstanceId(long ProcessInstanceId)
         {
-             List<int> lstAffectedCustomerIds = new List<int>();
-             ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistRPChangesNew_GetAffectedCustomerIds", (reader) =>
-            {
-                while (reader.Read())
-                {
-                    lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "CustomerId"));
-                }
-            }, ProcessInstanceId);
+            List<int> lstAffectedCustomerIds = new List<int>();
+            ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistRPChangesNew_GetAffectedCustomerIds", (reader) =>
+           {
+               while (reader.Read())
+               {
+                   lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "CustomerId"));
+               }
+           }, ProcessInstanceId);
             return lstAffectedCustomerIds;
         }
         public IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long ProcessInstanceId)
         {
-             List<int> lstAffectedCustomerIds = new List<int>();
-             ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistRateChangesNew_GetAffectedCustomerIds", (reader) =>
-            {
-                while (reader.Read())
-                {
-                    lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "OwnerID"));
-                }
-            }, ProcessInstanceId);
+            List<int> lstAffectedCustomerIds = new List<int>();
+            ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistRateChangesNew_GetAffectedCustomerIds", (reader) =>
+           {
+               while (reader.Read())
+               {
+                   lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "OwnerID"));
+               }
+           }, ProcessInstanceId);
             return lstAffectedCustomerIds;
         }
-        
+
+        public bool AreSalePriceListCodeSnapShotUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("TOneWhS_BE.SalePriceListSnapShot", ref updateHandle);
+
+        }
         public void SaveSalePriceListSnapshotToDb(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots)
         {
             if (salePriceListSaleCodeSnapshots == null || !salePriceListSaleCodeSnapshots.Any())

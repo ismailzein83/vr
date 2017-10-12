@@ -1,1 +1,12 @@
-﻿
+﻿<vr-datagrid datasource="salecodes"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="SaleCodeId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'SaleCodeId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'"></vr-datagridcolumn>
+</vr-datagrid>

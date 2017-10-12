@@ -39,8 +39,18 @@ namespace TOne.WhS.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<SalePricelistCodeChange> GetFilteredPricelistCodeChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
-            var salePriceListRateChanges = dataManager.GetFilteredSalePricelistCodeChanges(input.Query.PriceListId, input.Query.Countries);
-            return DataRetrievalManager.Instance.ProcessResult(input, salePriceListRateChanges.ToBigResult(input, null, SalePricelistCodeChangeDetailMapper));
+            var salePriceListCodeChanges = dataManager.GetFilteredSalePricelistCodeChanges(input.Query.PriceListId, input.Query.Countries);
+            return DataRetrievalManager.Instance.ProcessResult(input, salePriceListCodeChanges.ToBigResult(input, null, SalePricelistCodeChangeDetailMapper));
+        }
+        public Vanrise.Entities.IDataRetrievalResult<SalePricelistCode> GetFilteredSalePricelistCodes(Vanrise.Entities.DataRetrievalInput<SalePriceListCodeQuery> input)
+        {
+            var saleCodesByZoneId = GetAllSaleCodesSnapShotByPricelistId(input.Query.PriceListId);
+
+            List<SalePricelistCode> filteredCodes;
+            if (saleCodesByZoneId.TryGetValue(input.Query.ZoneId, out filteredCodes))
+                return DataRetrievalManager.Instance.ProcessResult(input, filteredCodes.ToBigResult(input, null));
+
+            return null;
         }
         public Vanrise.Entities.IDataRetrievalResult<SalePricelistRPChangeDetail> GetFilteredSalePriceListRPChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
@@ -105,7 +115,7 @@ namespace TOne.WhS.BusinessEntity.Business
             dataManager.SaveCustomerRateChangesToDb(rateChanges, processInstanceId);
             dataManager.SaveCustomerRoutingProductChangesToDb(rpChanges, processInstanceId);
         }
-       
+
         public CustomerPriceListChange GetCustomerChangesByPriceListId(int pricelistId)
         {
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
@@ -121,31 +131,80 @@ namespace TOne.WhS.BusinessEntity.Business
             return changes;
         }
 
+        private Dictionary<long, List<SalePricelistCode>> StructureSaleCodeByZoneId(IEnumerable<SaleCode> saleCodes, IEnumerable<SalePricelistCodeChange> codeChanges)
+        {
+            Dictionary<long, List<SalePricelistCode>> salecodeByZoneId = new Dictionary<long, List<SalePricelistCode>>();
+            foreach (var code in saleCodes)
+            {
+                List<SalePricelistCode> codes = salecodeByZoneId.GetOrCreateItem(code.ZoneId);
+                codes.Add(new SalePricelistCode
+                {
+                    Code = code.Code,
+                    BED = code.BED,
+                    EED = code.EED
+                });
+            }
+            foreach (var codeChange in codeChanges)
+            {
+                List<SalePricelistCode> codes=salecodeByZoneId.GetOrCreateItem(codeChange.ZoneId.Value);
+                codes.Add(new SalePricelistCode
+                {
+                    Code = codeChange.Code,
+                    BED = codeChange.BED,
+                    EED = codeChange.EED
+                });
+            }
+            return salecodeByZoneId;
+        }
+        private Dictionary<long, List<SalePricelistCode>> GetAllSaleCodesSnapShotByPricelistId(int pricelistId)
+        {
+            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            string cacheName = String.Format("GetAllSaleCodesSnapShotByPricelistId-{0}", pricelistId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+               () =>
+               {
+                   IEnumerable<SaleCode> saleCodes = GetSalePriceListSaleCodeSnapShot(pricelistId);
+                   var salePriceListCodeChanges = dataManager.GetFilteredSalePricelistCodeChanges(pricelistId, null);
+                   return StructureSaleCodeByZoneId(saleCodes, salePriceListCodeChanges);
+               });
+
+        }
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISalePriceListChangeDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreSalePriceListCodeSnapShotUpdated(ref _updateHandle);
+            }
+        }
+
         private class CustomerRatePreviewRequestHandler : BigDataRequestHandler<CustomerRatePreviewQuery, CustomerRatePreview, CustomerRatePreviewDetail>
         {
 
 
             public override CustomerRatePreviewDetail EntityDetailMapper(CustomerRatePreview entity)
             {
-                 RoutingProductManager routingProductManager = new RoutingProductManager();
-            CurrencyManager currencyManager = new CurrencyManager();
-                CarrierAccountManager carrierAccountManager =  new CarrierAccountManager();
+                RoutingProductManager routingProductManager = new RoutingProductManager();
+                CurrencyManager currencyManager = new CurrencyManager();
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                 var entityDetail = new CustomerRatePreviewDetail()
                 {
-                      ZoneName = entity.ZoneName,
-                      Rate = entity.Rate, 
-                      BED = entity.BED,
-                      EED = entity.EED,
-                      ChangeType = entity.ChangeType ,
-                      ServicesId = !entity.ZoneId.HasValue
-                    ? routingProductManager.GetDefaultServiceIds(entity.RoutingProductId)
-                    : routingProductManager.GetZoneServiceIds(entity.RoutingProductId,
-                        entity.ZoneId.Value),
-                      CustomerName = carrierAccountManager.GetCarrierAccountName(entity.CustomerId)
-                    
+                    ZoneName = entity.ZoneName,
+                    Rate = entity.Rate,
+                    BED = entity.BED,
+                    EED = entity.EED,
+                    ChangeType = entity.ChangeType,
+                    ServicesId = !entity.ZoneId.HasValue
+                  ? routingProductManager.GetDefaultServiceIds(entity.RoutingProductId)
+                  : routingProductManager.GetZoneServiceIds(entity.RoutingProductId,
+                      entity.ZoneId.Value),
+                    CustomerName = carrierAccountManager.GetCarrierAccountName(entity.CustomerId)
+
                 };
-                 if (entity.CurrencyId.HasValue)
-                entityDetail.CurrencySymbol = currencyManager.GetCurrencySymbol(entity.CurrencyId.Value);
+                if (entity.CurrencyId.HasValue)
+                    entityDetail.CurrencySymbol = currencyManager.GetCurrencySymbol(entity.CurrencyId.Value);
                 return entityDetail;
             }
 
@@ -170,7 +229,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     BED = entity.BED,
                     EED = entity.EED,
                     RoutingProductName = routingProductManager.GetRoutingProductName(entity.RoutingProductId),
-                     CustomerName = carrierAccountManager.GetCarrierAccountName(entity.CustomerId),
+                    CustomerName = carrierAccountManager.GetCarrierAccountName(entity.CustomerId),
                     RoutingProductServicesId = !entity.ZoneId.HasValue
                         ? routingProductManager.GetDefaultServiceIds(entity.RoutingProductId)
                         : routingProductManager.GetZoneServiceIds(entity.RoutingProductId,
@@ -196,6 +255,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #region Mapper
+
         private SalePricelistRateChangeDetail SalePricelistRateChangeDetailMapper(SalePricelistRateChange salePricelistRateChange)
         {
             RoutingProductManager routingProductManager = new RoutingProductManager();
@@ -203,6 +263,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var salePricelistRateChangeDetail = new SalePricelistRateChangeDetail
             {
                 ZoneName = salePricelistRateChange.ZoneName,
+                ZoneId = salePricelistRateChange.ZoneId.Value,
                 BED = salePricelistRateChange.BED,
                 EED = salePricelistRateChange.EED,
                 Rate = salePricelistRateChange.Rate,

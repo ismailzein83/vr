@@ -25,6 +25,9 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
     function RateChangeGrid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var pricelistId;
+        var gridDrillDownTabsObj;
+
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -32,6 +35,9 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
             $scope.RateChange = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+
+                var drillDownDefinitions = getDrillDownDefinitions();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, []);
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(getDirectiveAPI());
@@ -46,6 +52,8 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                if (dataRetrievalInput != undefined && dataRetrievalInput.Query != undefined)
+                    pricelistId = dataRetrievalInput.Query.PriceListId;
                 return whSBeSalePricelistChangeApiService.GetFilteredSalePriceListRateChanges(dataRetrievalInput)
                     .then(function (response) {
                         if (response && response.Data) {
@@ -53,6 +61,7 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
                                 var item = response.Data[i];
                                 setRPService(item);
                                 SetRateChangeIcon(item);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(item);
                             }
                         }
                         onResponseReady(response);
@@ -100,6 +109,27 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
                     break;
             }
         }
+        function getDrillDownDefinitions() {
+
+            var drillDownDefinitions = [];
+
+            drillDownDefinitions.push({
+                title: 'Sale Code',
+                directive: 'vr-whs-be-salepricelistcode-grid',
+                loadDirective: function (directiveAPI, saleRate) {
+                    var payload =
+                    {
+                        query: {
+                            PriceListId: pricelistId,
+                            ZoneId: saleRate.ZoneId
+                        }
+                    };
+                    return directiveAPI.loadGrid(payload);
+                }
+            });
+            return drillDownDefinitions;
+        }
+
     }
     return directiveDefinitionObject;
 }]);

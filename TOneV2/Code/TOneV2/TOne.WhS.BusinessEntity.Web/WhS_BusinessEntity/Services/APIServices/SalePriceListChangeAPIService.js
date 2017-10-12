@@ -12,6 +12,9 @@
         function GetFilteredSalePriceListRateChanges(input) {
             return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetFilteredSalePriceListRateChanges"), input);
         }
+        function GetSalePricelistCodes(input) {
+            return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetSalePricelistCodes"), input);
+        }
         function GetFilteredSalePriceListRPChanges(input) {
             return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetFilteredSalePriceListRPChanges"), input);
         }
@@ -73,7 +76,8 @@
             SetPriceListAsSent: SetPriceListAsSent,
             GetOwnerPricelistTemplateId: GetOwnerPricelistTemplateId,
             GetFilteredCustomerRatePreviews: GetFilteredCustomerRatePreviews,
-            GetFilteredRoutingProductPreviews: GetFilteredRoutingProductPreviews
+            GetFilteredRoutingProductPreviews: GetFilteredRoutingProductPreviews,
+            GetSalePricelistCodes: GetSalePricelistCodes
         });
     }
 

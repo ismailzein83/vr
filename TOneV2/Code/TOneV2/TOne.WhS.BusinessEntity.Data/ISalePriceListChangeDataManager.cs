@@ -21,6 +21,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query);
         IEnumerable<int> GetAffectedCustomerIdsRPChangesByProcessInstanceId(long ProcessInstanceId);
         IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long ProcessInstanceId);
+        bool AreSalePriceListCodeSnapShotUpdated(ref object updateHandle);
         
     }
 }
