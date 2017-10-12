@@ -90,6 +90,15 @@ namespace TOne.WhS.DBSync.Business
         public override List<SaleEntityRoutingProduct> BuildAllItemsFromSource(IEnumerable<SourceRate> sourceItems)
         {
             List<SaleEntityRoutingProduct> result = new List<SaleEntityRoutingProduct>();
+            result.Add(new SaleEntityRoutingProduct
+            {
+                BED = new DateTime(2000, 1, 1),
+                EED = null,
+                OwnerId = 1,
+                OwnerType = SalePriceListOwnerType.SellingProduct,
+                RoutingProductId = 1,
+                SaleZoneId = null
+            });
 
             Dictionary<int, Dictionary<string, SaleEntityRateByCustomer>> data = new Dictionary<int, Dictionary<string, SaleEntityRateByCustomer>>();
             Dictionary<int, SaleEntityRateByCustomerWithMaxCount> saleEntityRateByCustomerMaxCount = new Dictionary<int, SaleEntityRateByCustomerWithMaxCount>();

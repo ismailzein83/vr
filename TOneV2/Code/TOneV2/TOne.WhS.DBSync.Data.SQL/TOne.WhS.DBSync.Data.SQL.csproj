@@ -85,6 +85,7 @@
     <Compile Include="Common\MigrationUtils.cs" />
     <Compile Include="DBSyncDataManager\CarrierAccountStatusHistoryDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\ClearTempTablesDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\PreDataDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\PostDataDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SaleEntityRoutingProductDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\VRTimeZoneDBSyncDataManager.cs" />

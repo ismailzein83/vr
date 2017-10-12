@@ -8,6 +8,8 @@ using Vanrise.Runtime.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Common.Business;
+using TOne.WhS.BusinessEntity.Data.SQL;
+using TOne.WhS.BusinessEntity.MainExtensions;
 
 
 namespace TOne.WhS.DBSync.Business
@@ -54,6 +56,9 @@ namespace TOne.WhS.DBSync.Business
             _context.DBTables = FillDBTables(_context);
             migrationManager = ConstructMigrationManager(_context);
             PrepareBeforeApplyingRecords(_context, migrationManager);
+
+            ApplyPreData();
+
             //TruncateTables(context, migrationManager);
             TransferData(_context);
             //CreateForeignKeys(context, migrationManager);
@@ -67,8 +72,44 @@ namespace TOne.WhS.DBSync.Business
             return output;
         }
 
+        private void ApplyPreData()
+        {
+            _context.WriteInformation("Start Applying Pre Data");
+            List<long> fileIds = new List<long>();
+
+            SalePriceListTemplateDataManager salePriceListTemplateDataManager = new SalePriceListTemplateDataManager();
+
+            foreach (var priceListTemplate in salePriceListTemplateDataManager.GetAll())
+            {
+                var settings = priceListTemplate.Settings as BasicSalePriceListTemplateSettings;
+                if (settings != null)
+                    fileIds.Add(settings.TemplateFileId);
+            }
+
+            SettingManager settingManager = new SettingManager();
+            Setting setting = settingManager.GetSettingByType("VR_Common_CompanySettings");
+            CompanySettings companySettingData = (CompanySettings)setting.Data;
+
+            if (companySettingData != null)
+            {
+                foreach (var companySetting in companySettingData.Settings)
+                {
+                    fileIds.Add(companySetting.CompanyLogo);
+                }
+            }
+
+            PreDataDBSyncDataManager dataManager = new PreDataDBSyncDataManager();
+            List<VRFile> vrFiles = dataManager.GetExistingFiles(fileIds);
+
+            FileDBSyncDataManager fileManager = new FileDBSyncDataManager(_context.UseTempTables);
+            fileManager.InsertFiles(vrFiles);
+            _context.WriteInformation("Finish Applying Pre Data");
+        }
+
         private void ApplyPostData()
         {
+            _context.WriteInformation("Start Applying Post Data");
+
             SettingManager settingManager = new SettingManager();
             Setting systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
             CurrencySettingData currencySettingData = (CurrencySettingData)systemCurrencySetting.Data;
@@ -76,6 +117,8 @@ namespace TOne.WhS.DBSync.Business
             PostDataDBSyncDataManager postDataDBSyncDataManager = new PostDataDBSyncDataManager();
 
             postDataDBSyncDataManager.FixSellingProductRates(_context.DefaultSellingNumberPlanId, _context.SellingProductId, currencySettingData.CurrencyId, _context.DefaultRate);
+
+            _context.WriteInformation("Finish Applying Post Data");
         }
 
         private MigrationManager ConstructMigrationManager(MigrationContext context)
