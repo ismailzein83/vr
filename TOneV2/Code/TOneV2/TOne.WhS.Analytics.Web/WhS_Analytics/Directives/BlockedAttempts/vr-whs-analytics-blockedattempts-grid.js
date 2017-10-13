@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsAnalyticsBlockedattemptsGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_BlockedAttemptsAPIService", "WhS_BE_SwitchService",
-function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIService, WhS_BE_SwitchService) {
+app.directive("vrWhsAnalyticsBlockedattemptsGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_BlockedAttemptsAPIService", "WhS_BE_SwitchReleaseCauseService",
+function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIService, WhS_BE_SwitchReleaseCauseService) {
 
     var directiveDefinitionObject = {
 
@@ -50,7 +50,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
                 }
             };
             $scope.onClickReleaseCode = function (dataItem) {
-                WhS_BE_SwitchService.openReleaseCodeDescriptions(dataItem.ReleaseCode);
+                WhS_BE_SwitchReleaseCauseService.openReleaseCodeDescriptions(dataItem.ReleaseCode);
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 ctrl.showGrid = true;

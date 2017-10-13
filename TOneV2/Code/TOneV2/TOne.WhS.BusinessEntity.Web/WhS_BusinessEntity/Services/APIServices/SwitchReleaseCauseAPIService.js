@@ -17,11 +17,18 @@
         function UpdateSwitchReleaseCause(switchReleaseCause) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateSwitchReleaseCause"), switchReleaseCause);
         }
+        function GetReleaseCausesByCode(code, switchId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetReleaseCausesByCode"), {
+                code: code,
+                switchId: switchId
+            });
+        }
         return ({
             GetFilteredSwitchReleaseCauses: GetFilteredSwitchReleaseCauses,
             AddSwitchReleaseCause: AddSwitchReleaseCause,
             GetSwitchReleaseCause: GetSwitchReleaseCause,
-            UpdateSwitchReleaseCause: UpdateSwitchReleaseCause
+            UpdateSwitchReleaseCause: UpdateSwitchReleaseCause,
+            GetReleaseCausesByCode: GetReleaseCausesByCode
         });
     }
     appControllers.service("WhS_BE_SwitchReleaseCauseAPIService", switchReleaseCauseAPIService);

@@ -9,7 +9,8 @@
         return ({
             addSwitchReleaseCause: addSwitchReleaseCause,
             editSwitchReleaseCause: editSwitchReleaseCause,
-            uploadSwitchReleaseCause: uploadSwitchReleaseCause
+            uploadSwitchReleaseCause: uploadSwitchReleaseCause,
+            openReleaseCodeDescriptions:openReleaseCodeDescriptions
         });
 
         function addSwitchReleaseCause(onSwitchReleaseCauseAdded) {
@@ -46,8 +47,16 @@
           
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SwitchReleaseCause/SwitchReleaseCauseEditor.html', parameters, modalSettings);
         }
-
-
+        function openReleaseCodeDescriptions(code, switchId) {
+            var modalSettings = {
+                autoclose: true
+            };
+            var parameters = {
+                code: code,
+                switchId: switchId
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/ReleaseCodeDescription/ReleaseCodeDescriptionViewer.html', parameters, modalSettings);
+        }
     }
 
     appControllers.service('WhS_BE_SwitchReleaseCauseService', SwitchReleaseCauseService);

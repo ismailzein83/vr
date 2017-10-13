@@ -11,8 +11,7 @@
             editSwitch: editSwitch,
             deleteSwitch: deleteSwitch,
             registerObjectTrackingDrillDownToSwitch: registerObjectTrackingDrillDownToSwitch,
-            getDrillDownDefinition: getDrillDownDefinition,
-            openReleaseCodeDescriptions:openReleaseCodeDescriptions
+            getDrillDownDefinition: getDrillDownDefinition
         });
 
         function addSwitch(onSwitchAdded) {
@@ -42,17 +41,7 @@
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/Switch/SwitchEditor.html', parameters, modalSettings);
         }
 
-        function openReleaseCodeDescriptions(code, switchId) {
-            var modalSettings = {
-                autoclose: true
-            };
-            var parameters = {
-                code:code,
-                switchId: switchId
-            };
-            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/ReleaseCodeDescription/ReleaseCodeDescriptionViewer.html', parameters, modalSettings);
-        }
-
+       
         function deleteSwitch(scope, switchId, onSwitchDeleted) {
             VRNotificationService.showConfirmation()
                 .then(function (response) {

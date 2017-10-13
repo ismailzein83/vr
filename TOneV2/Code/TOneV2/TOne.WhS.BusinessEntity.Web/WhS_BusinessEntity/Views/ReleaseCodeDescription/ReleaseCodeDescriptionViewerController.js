@@ -2,9 +2,9 @@
 
     "use strict";
 
-    releaseCodeDescriptionViewerController.$inject = ['$scope', 'WhS_BE_SwitchAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+    releaseCodeDescriptionViewerController.$inject = ['$scope', 'WhS_BE_SwitchReleaseCauseAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
 
-    function releaseCodeDescriptionViewerController($scope, WhS_BE_SwitchAPIService, VRNotificationService, VRNavigationService, UtilsService) {
+    function releaseCodeDescriptionViewerController($scope, WhS_BE_SwitchReleaseCauseAPIService, VRNotificationService, VRNavigationService, UtilsService) {
 
         var switchId;
         var code;
@@ -27,7 +27,7 @@
 
         function load() {
             $scope.scopeModel.isGettingData = true;
-            WhS_BE_SwitchAPIService.GetReleaseCausesByCode(code, switchId).then(function (response) {
+            WhS_BE_SwitchReleaseCauseAPIService.GetReleaseCausesByCode(code, switchId).then(function (response) {
                 $scope.scopeModel.releaseCodeDescriptions = response;
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);

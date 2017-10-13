@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsAnalyticsReleasecodeGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_ReleaseCodeAPIService","VR_Analytic_AnalyticItemActionService","WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum","WhS_BE_SwitchService",
-function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIService, VR_Analytic_AnalyticItemActionService, WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum, WhS_BE_SwitchService) {
+app.directive("vrWhsAnalyticsReleasecodeGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_ReleaseCodeAPIService", "VR_Analytic_AnalyticItemActionService", "WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum", "WhS_BE_SwitchReleaseCauseService",
+function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIService, VR_Analytic_AnalyticItemActionService, WhS_Analytics_GenericAnalyticReleaseCodeDimensionsEnum, WhS_BE_SwitchReleaseCauseService) {
 
     var directiveDefinitionObject = {
 
@@ -74,7 +74,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
                 }
             };
             $scope.onClickReleaseCode = function (dataItem) {
-                WhS_BE_SwitchService.openReleaseCodeDescriptions(dataItem.Entity.ReleaseCode,dataItem.Entity.SwitchId);
+                WhS_BE_SwitchReleaseCauseService.openReleaseCodeDescriptions(dataItem.Entity.ReleaseCode, dataItem.Entity.SwitchId);
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                  ctrl.showGrid = true;            

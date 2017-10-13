@@ -43,12 +43,7 @@
         function HasDeleteSwitchPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['DeleteSwitch']));
         }
-        function GetReleaseCausesByCode(code,switchId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetReleaseCausesByCode"), {                
-                code: code,
-                switchId: switchId
-            });
-        }
+       
         return ({
             GetFilteredSwitches: GetFilteredSwitches,
             GetSwitch: GetSwitch,
@@ -58,8 +53,7 @@
             GetSwitchesInfo: GetSwitchesInfo,
             HasUpdateSwitchPermission: HasUpdateSwitchPermission,
             HasAddSwitchPermission: HasAddSwitchPermission,
-            HasDeleteSwitchPermission: HasDeleteSwitchPermission,
-            GetReleaseCausesByCode: GetReleaseCausesByCode
+            HasDeleteSwitchPermission: HasDeleteSwitchPermission
         });
     }
 
