@@ -82,7 +82,6 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeBEDOutOfRangeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\RateIncreasedCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneBEDGreaterThanSystemPeriodCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneBEDOutOfRangeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesRates\MissingZonesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateImportedZones\ImportedRateIsGreaterThanMaximumRateCondition.cs" />
@@ -101,7 +100,6 @@
     <Compile Include="BusinessRules\Conditions\ValidateZones\SameZoneWithDifferentRatesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\SameCodeInSameZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneEEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\ZoneBEDCondition.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Context\SupplierPriceListExecutionContext.cs" />
     <Compile Include="ImportPriceListManager.cs" />
