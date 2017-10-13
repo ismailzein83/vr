@@ -96,7 +96,8 @@ as (select * from (values
 ('29EFBD4C-A6B2-4D6B-9535-A8CC2BFA0FB7','VR_BEBridge_BEConvertor_MultiNet_GPUser','MultiNet GP User Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-multinet-user-convertor-editor"}'),
 ('6F5F8B11-D44E-4017-8029-AAE03149C12B','VR_BEBridge_BEConvertor_MultiNet_GPCompany','MultiNet GP Company Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-multinet-customer-convertor-editor"}'),
 ('0A9D1248-64C9-48F1-A159-B5999D33F96F','VR_BEBridge_BEConvertor_MultiNet_GPPayment','MultiNet GP Payment Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-multinet-payment-convertor-editor"}'),
-('0D1DA83A-AF30-4347-858B-FDF413EF0DE7','VR_BEBridge_BEConvertor_MultiNet_GPAccount','MultiNet GP Branch Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-multinet-account-convertor-editor"}')
+('0D1DA83A-AF30-4347-858B-FDF413EF0DE7','VR_BEBridge_BEConvertor_MultiNet_GPAccount','MultiNet GP Branch Convertor','VR_BEBridge_BEConvertor','{"Editor":"retail-multinet-account-convertor-editor"}'),
+('809622ab-15b3-4398-8cb8-1ea96ed90cab','IncludeCDRs','Include CDRs','VR_Invoice_InvoiceSettingPartConfig','{"RuntimeEditor":"retail-multinet-invoicesetting-runtime-includecdrspart"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
