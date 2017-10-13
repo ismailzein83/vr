@@ -32,6 +32,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
             ctrl.sortField = "";
             var fromTime;
             var toTime;
+            var currencyId;
 
             function initializeController() {
 
@@ -47,6 +48,7 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
 
                         directiveAPI.load = function (payload) {
                             var query = getQuery(payload);
+                            currencyId = payload.CurrencyId;
 
                             var dataRetrievalInput = {
                                 DataRetrievalResultType: 0,
@@ -171,7 +173,8 @@ app.directive("vrAnalyticPiechartToprecords", ['UtilsService', 'VRNotificationSe
                     TableId: payLoad.TableId,
                     FilterGroup: payLoad.FilterGroup,
                     TopRecords: payLoad.Settings.TopRecords,
-                    OrderType: VR_Analytic_OrderTypeEnum.ByAllMeasures.value
+                    OrderType: VR_Analytic_OrderTypeEnum.ByAllMeasures.value,
+                    CurrencyId: currencyId
                 };
                 return queryFinalized;
             }
