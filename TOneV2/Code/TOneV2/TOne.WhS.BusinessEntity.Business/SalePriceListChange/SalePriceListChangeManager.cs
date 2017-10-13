@@ -134,24 +134,29 @@ namespace TOne.WhS.BusinessEntity.Business
         private Dictionary<long, List<SalePricelistCode>> StructureSaleCodeByZoneId(IEnumerable<SaleCode> saleCodes, IEnumerable<SalePricelistCodeChange> codeChanges)
         {
             Dictionary<long, List<SalePricelistCode>> salecodeByZoneId = new Dictionary<long, List<SalePricelistCode>>();
+
+            Dictionary<string, SalePricelistCodeChange> codeChangesByCode = codeChanges.ToDictionary(x => x.Code);
+
+            foreach (var codeChange in codeChanges)
+            {
+                List<SalePricelistCode> codes = salecodeByZoneId.GetOrCreateItem(codeChange.ZoneId.Value);
+                codes.Add(new SalePricelistCode
+                {
+                    Code = codeChange.Code,
+                    BED = codeChange.BED,
+                    EED = codeChange.EED
+                });
+            }
+
             foreach (var code in saleCodes)
             {
+                if (codeChangesByCode.ContainsKey(code.Code)) continue;
                 List<SalePricelistCode> codes = salecodeByZoneId.GetOrCreateItem(code.ZoneId);
                 codes.Add(new SalePricelistCode
                 {
                     Code = code.Code,
                     BED = code.BED,
                     EED = code.EED
-                });
-            }
-            foreach (var codeChange in codeChanges)
-            {
-                List<SalePricelistCode> codes=salecodeByZoneId.GetOrCreateItem(codeChange.ZoneId.Value);
-                codes.Add(new SalePricelistCode
-                {
-                    Code = codeChange.Code,
-                    BED = codeChange.BED,
-                    EED = codeChange.EED
                 });
             }
             return salecodeByZoneId;

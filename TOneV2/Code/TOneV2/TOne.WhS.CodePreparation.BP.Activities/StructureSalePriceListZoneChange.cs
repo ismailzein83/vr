@@ -457,7 +457,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             foreach (var codeToMove in codesToMove)
             {
 
-                long? ExistingZoneId = GetZoneIdofLastExistingCode(codeToMove.ChangedExistingCodes);
+                //long? ExistingZoneId = GetZoneIdofLastExistingCode(codeToMove.ChangedExistingCodes);
                 long? NewZoneId = GetZoneIdofLastAddedCode(codeToMove.AddedCodes);
 
                 codeToMove.OldCodeBED = codeToMove.ChangedExistingCodes.Select(item => item.CodeEntity.BED).Min();
@@ -473,16 +473,16 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 });
 
                 //We need to mention the closed code also in the sheet
-                codeChanges.Add(new SalePricelistCodeChange
-                {
-                    CountryId = countryId,
-                    ZoneName = codeToMove.OldZoneName,
-                    ZoneId = ExistingZoneId,
-                    Code = codeToMove.Code,
-                    ChangeType = CodeChange.Closed,
-                    EED = codeToMove.BED,
-                    BED = codeToMove.OldCodeBED
-                });
+                //codeChanges.Add(new SalePricelistCodeChange
+                //{
+                //    CountryId = countryId,
+                //    ZoneName = codeToMove.OldZoneName,
+                //    ZoneId = ExistingZoneId,
+                //    Code = codeToMove.Code,
+                //    ChangeType = CodeChange.Closed,
+                //    EED = codeToMove.BED,
+                //    BED = codeToMove.OldCodeBED
+                //});
             }
             return codeChanges;
         }

@@ -604,8 +604,33 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     if (zoneChange.CodeChanges != null)
                     {
-                        //Add all code changes as notifications
-                        salePlZone.Codes.AddRange(zoneChange.CodeChanges.MapRecords(SalePLCodeChangeToSalePLNotificationMapper));
+                        foreach (var codeChange in zoneChange.CodeChanges)
+                        {
+                            if (codeChange.ChangeType == CodeChange.Moved)
+                            {
+                                ExistingSaleZone recentZone = existingSaleZones.FirstOrDefault(z => z.ZoneName.Equals(codeChange.RecentZoneName));
+                                IEnumerable<ExistingSaleCode> existingCodes = recentZone.Codes.FindAllRecords(x => x.Code == codeChange.Code);
+                                ExistingSaleCode existingCode = existingCodes.FirstOrDefault();
+                                if (existingCode == null)
+                                    throw new DataIntegrityValidationException(string.Format("No existing codes found for zone {0}", existingSaleZone.ZoneName));
+
+                                salePlZone.Codes.Add(new SalePLCodeNotification()
+                                {
+                                    Code = codeChange.Code,
+                                    BED = existingCode.BED,
+                                    EED = codeChange.BED,
+                                    CodeChange = CodeChange.Closed
+                                });
+                            }
+
+                            salePlZone.Codes.Add(new SalePLCodeNotification()
+                            {
+                                Code = codeChange.Code,
+                                BED = codeChange.BED,
+                                EED = codeChange.EED,
+                                CodeChange = codeChange.ChangeType
+                            });
+                        }
                     }
 
                     if (existingSaleZone != null)
