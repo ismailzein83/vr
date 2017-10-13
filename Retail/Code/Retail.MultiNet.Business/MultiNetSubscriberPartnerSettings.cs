@@ -84,11 +84,11 @@ namespace Retail.MultiNet.Business
 
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountName, accountName, true);
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
+                    CityManager cityManager = new CityManager();
 
                     IAccountProfile accountProfile;
-                    accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountProfile);
-                    var companyProfile = accountProfile.CastWithValidate<AccountPartCompanyProfile>("accountProfile", financialAccountData.Account.AccountId);
-
+                    string address = null;
+   
                     if(financialAccountData.Account.TypeId ==_companyTypeId ) 
                     {
                         foreach (var accountPart in financialAccountData.Account.Settings.Parts)
@@ -117,50 +117,55 @@ namespace Retail.MultiNet.Business
                                     var accountType = Utilities.GetEnumDescription<MultiNetAccountType>(multiNetBranchExtendedInfo.AccountType.Value);
                                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountType, accountType, true);
                                 }
+                                address = multiNetBranchExtendedInfo.BillingAddress;
+                                break;
                             }
                         }
                     }
 
-                 
-                  
-                    if (companyProfile != null)
+                    if (accountBEManager.HasAccountProfile(this._acountBEDefinitionId, financialAccountData.Account.AccountId, true, out accountProfile))
                     {
-                        string address = companyProfile.Address;
+                        var companyProfile = accountProfile.CastWithValidate<AccountPartCompanyProfile>("accountProfile", financialAccountData.Account.AccountId);
 
-                        if (companyProfile.CityId.HasValue)
+                        if (companyProfile != null)
                         {
-                            CityManager cityManager = new CityManager();
-                            address += string.Format(" {0}",cityManager.GetCityName(companyProfile.CityId.Value));
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, address, true);
-
-                        }
-                        string phoneNumbers = null;
-                        if (companyProfile.PhoneNumbers != null && companyProfile.PhoneNumbers.Count > 0)
-                        {
-                            phoneNumbers = string.Join(",", companyProfile.PhoneNumbers);
-                        }
-                        if (companyProfile.MobileNumbers != null && companyProfile.MobileNumbers.Count > 0)
-                        {
-                            if (phoneNumbers != null)
-                                phoneNumbers += ",";
-                            phoneNumbers += string.Join(",", companyProfile.MobileNumbers);
-                        }
-                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone, phoneNumbers, true);
-
-                        if (accountProfile.Faxes != null)
-                        {
-                            string faxes = string.Join(",", accountProfile.Faxes);
-                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Fax, faxes, true);
-                        }
-                        if (companyProfile.Contacts != null)
-                        {
-                            AccountCompanyContact accountCompanyContact;
-                            if (companyProfile.Contacts.TryGetValue("Main", out accountCompanyContact))
+                            if (financialAccountData.Account.TypeId == _companyTypeId)
                             {
-                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, accountCompanyContact.Email, true);
+                                address = companyProfile.Address;
+                            }
+                            string phoneNumbers = null;
+                            if (companyProfile.PhoneNumbers != null && companyProfile.PhoneNumbers.Count > 0)
+                            {
+                                phoneNumbers = string.Join(",", companyProfile.PhoneNumbers);
+                            }
+                            if (companyProfile.MobileNumbers != null && companyProfile.MobileNumbers.Count > 0)
+                            {
+                                if (phoneNumbers != null)
+                                    phoneNumbers += ",";
+                                phoneNumbers += string.Join(",", companyProfile.MobileNumbers);
+                            }
+                            AddRDLCParameter(rdlcReportParameters, RDLCParameter.Phone, phoneNumbers, true);
+
+                            if (accountProfile.Faxes != null)
+                            {
+                                string faxes = string.Join(",", accountProfile.Faxes);
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.Fax, faxes, true);
+                            }
+                            if (companyProfile.Contacts != null)
+                            {
+                                AccountCompanyContact accountCompanyContact;
+                                if (companyProfile.Contacts.TryGetValue("Main", out accountCompanyContact))
+                                {
+                                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Email, accountCompanyContact.Email, true);
+                                }
                             }
                         }
+                        if (accountProfile.CityId.HasValue)
+                        {
+                            address += string.Format(" {0}", cityManager.GetCityName(accountProfile.CityId.Value));
+                        }
                     }
+                    AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, address, true);
                     if (companySetting != null)
                     {
                         VRFileManager fileManager = new VRFileManager();

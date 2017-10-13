@@ -23,7 +23,8 @@ namespace Retail.MultiNet.Business
         public int BillingPeriod { get; set; }
         public DateTime? DueDate { get; set; }
         public string GPSiteID { get; set; }
-        public bool ExcludeTaxes  { get; set; }
+        public bool ExcludeWHTaxes { get; set; }
+        public bool ExcludeSaleTaxes { get; set; }
         public MultiNetAccountType? AccountType { get; set; }
         public long CustomerLogo { get; set; }
 
@@ -36,7 +37,8 @@ namespace Retail.MultiNet.Business
                 case "NTN": return this.NTN;
                 case "GPSiteID": return this.GPSiteID;
                 case "AccountType": return this.AccountType;
-                case "ExcludeTaxes": return this.ExcludeTaxes;
+                case "ExcludeWHTaxes": return this.ExcludeWHTaxes;
+                case "ExcludeSaleTaxes": return this.ExcludeSaleTaxes;
                 case "BillingPeriod": return this.BillingPeriod;
                 case "DueDate": return this.DueDate;
                 default: return null;

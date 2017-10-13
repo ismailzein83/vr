@@ -31,7 +31,8 @@ namespace Retail.MultiNet.APIEntities
         public string FormatedCNICExpiryDate { get; set; }
         public string NTN { get; set; }
         public string GPSiteID { get; set; }
-        public bool ExcludeTaxes { get; set; }
+        public bool ExcludeSaleTaxes { get; set; }
+        public bool ExcludeWHTaxes { get; set; }
         public string AccountType { get; set; }
         public long CustomerLogo { get; set; }
     }

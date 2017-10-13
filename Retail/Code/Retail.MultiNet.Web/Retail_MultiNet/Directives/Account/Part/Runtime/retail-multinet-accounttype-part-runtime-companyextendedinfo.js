@@ -56,7 +56,8 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     $scope.scopeModel.cNIC = payload.partSettings.CNIC;
                     $scope.scopeModel.nTN = payload.partSettings.NTN;
                     $scope.scopeModel.gPSiteID = payload.partSettings.GPSiteID;
-                    $scope.scopeModel.excludeTaxes = payload.partSettings.ExcludeTaxes;
+                    $scope.scopeModel.excludeWHTaxes = payload.partSettings.ExcludeWHTaxes;
+                    $scope.scopeModel.excludeSaleTaxes = payload.partSettings.ExcludeSaleTaxes;
                     $scope.scopeModel.cNICExpiryDate = payload.partSettings.CNICExpiryDate;
                     if (payload.partSettings.CustomerLogo > 0)
                         $scope.scopeModel.customerLogo = {
@@ -91,7 +92,8 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     NTN: $scope.scopeModel.nTN,
                     GPSiteID: $scope.scopeModel.gPSiteID,
                     AccountType: accountTypeAPI.getSelectedIds(),
-                    ExcludeTaxes: $scope.scopeModel.excludeTaxes,
+                    ExcludeWHTaxes: $scope.scopeModel.excludeWHTaxes,
+                    ExcludeSaleTaxes: $scope.scopeModel.excludeSaleTaxes,
                     CustomerLogo: ($scope.scopeModel.customerLogo != null) ? $scope.scopeModel.customerLogo.fileId : 0,
                     CNICExpiryDate: $scope.scopeModel.cNICExpiryDate
 

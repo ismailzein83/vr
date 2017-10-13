@@ -39,7 +39,8 @@ namespace Retail.MultiNet.Business
                             GPSiteID = companyInfo.GPSiteID,
                             CNICExpiryDate = companyInfo.CNICExpiryDate,
                             CustomerLogo = companyInfo.CustomerLogo,
-                            ExcludeTaxes = companyInfo.ExcludeTaxes,
+                            ExcludeSaleTaxes = companyInfo.ExcludeSaleTaxes,
+                            ExcludeWHTaxes = companyInfo.ExcludeWHTaxes,
                             NTN = companyInfo.NTN,
                         };
                         break;

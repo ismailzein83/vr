@@ -230,7 +230,6 @@ namespace Retail.MultiNet.Business.Convertors
                 NTN = GetStringRowValue(row, NTNColumnName),
                 BillingPeriod = row[BillingPeriodColumnName] == DBNull.Value ? 0 : (int)row[BillingPeriodColumnName],
                 DueDate = row[DueDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[BillingPeriodColumnName],
-                ExcludeTaxes = row[IsExcludedFromTaxColumnName] == DBNull.Value ? false : (bool)row[IsExcludedFromTaxColumnName],
                 GPSiteID = sourceId
             };
 
