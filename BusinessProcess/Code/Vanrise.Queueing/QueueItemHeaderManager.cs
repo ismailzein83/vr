@@ -101,7 +101,7 @@ namespace Vanrise.Queueing
                 Data = queueItemHeader.Data.MapRecords(QueueItemHeaderDetailMapper)
             };
 
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, queueItemHeaderDetailResult);
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, queueItemHeaderDetailResult, new ResultProcessingHandler<QueueItemHeaderDetails> { ExportExcelHandler = new QueueItemHeaderExportHandler() });
         }
 
         #endregion
@@ -117,7 +117,7 @@ namespace Vanrise.Queueing
 
         private static Object s_thisLock = new Object();
 
-        private QueueItemHeaderDetails QueueItemHeaderDetailMapper(QueueItemHeader queueItemHeader)
+        internal static QueueItemHeaderDetails QueueItemHeaderDetailMapper(QueueItemHeader queueItemHeader)
         {
             QueueItemHeaderDetails queueItemHeaderDetail = new QueueItemHeaderDetails();
             QueueInstanceManager queueManager = new QueueInstanceManager();
@@ -135,7 +135,58 @@ namespace Vanrise.Queueing
 
         #endregion
 
+        #region Private Classes
 
+        internal class QueueItemHeaderExportHandler : ExcelExportHandler<QueueItemHeaderDetails>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<QueueItemHeaderDetails> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Queue Items",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Item Id" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Execution Flow" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Queue" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Stage" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Data Source" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Imported Batch" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Status" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Error Message" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Updated Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        if (record.Entity != null)
+                        {
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ItemId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.ExecutionFlowName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.QueueTitle });
+                            row.Cells.Add(new ExportExcelCell { Value = record.StageName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.DataSourceName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.BatchDescription });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
+                            row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.Status) });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ErrorMessage });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreatedTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastUpdatedTime });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
+        #endregion
 
     }
 }

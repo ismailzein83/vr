@@ -109,81 +109,16 @@ namespace Vanrise.Queueing
             Vanrise.Entities.BigResult<QueueItemHeaderDetails> returnedResult = new Vanrise.Entities.BigResult<QueueItemHeaderDetails>();
             returnedResult.ResultKey = data.ResultKey;
             returnedResult.TotalCount = data.TotalCount;
-            returnedResult.Data = data.Data.MapRecords(QueueItemHeaderDetailsMapper);
+            returnedResult.Data = data.Data.MapRecords(QueueItemHeaderManager.QueueItemHeaderDetailMapper);
 
             ResultProcessingHandler<QueueItemHeaderDetails> handler = new ResultProcessingHandler<QueueItemHeaderDetails>()
             {
-                ExportExcelHandler = new QueueingExcelExportHandler()
+                ExportExcelHandler = new QueueItemHeaderManager.QueueItemHeaderExportHandler()
             };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, returnedResult, handler);
         }
        
               
-        #endregion
-
-        #region Private Classes
-        private QueueItemStatus GetSubStatus(List<ItemExecutionFlowInfo> subList)
-        {
-            return QueueItemStatus.Processed;
-        }
-
-        private class QueueingExcelExportHandler : ExcelExportHandler<QueueItemHeaderDetails>
-        {
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<QueueItemHeaderDetails> context)
-            {
-                ExportExcelSheet sheet = new ExportExcelSheet()
-                {
-                    SheetName = "Queue Items",
-                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
-                };
-
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Item Id" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Stage Name", Width = 30});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Status" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Retry Count" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Error Message" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Updated Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                        sheet.Rows.Add(row);
-                        if (record.Entity != null)
-                        {
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ItemId });
-                            row.Cells.Add(new ExportExcelCell { Value = record.StageName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Description });
-                            row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Entity.Status) });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.RetryCount });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ErrorMessage });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreatedTime });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastUpdatedTime });
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
-        }
-        #endregion
-
-        #region Mappers
-        QueueItemHeaderDetails QueueItemHeaderDetailsMapper(QueueItemHeader queueItemHeader)
-        {
-            QueueInstanceManager queueManager = new QueueInstanceManager();
-            var instance = queueManager.GetQueueInstanceById(queueItemHeader.QueueId);
-            return new QueueItemHeaderDetails
-            {
-                Entity = queueItemHeader,
-                StageName = instance != null ? instance.StageName : "",
-
-            };
-        }
-
         #endregion
     }
 }

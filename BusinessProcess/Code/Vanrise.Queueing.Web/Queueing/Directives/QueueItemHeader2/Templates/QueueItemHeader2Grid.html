@@ -3,10 +3,10 @@
              pagingtype="'PagingOnScroll'"
              defaultsortbyfieldname="'Entity.QueueId'"
              on-ready="ongridReady"
-             idfield="Entity.QueueId" normalcell>
+             idfield="Entity.QueueId" normalcell enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'Entity.ItemId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Execution Flow'" field="'ExecutionFlowName'" disablesorting></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Queue Instance'" field="'QueueTitle'" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Queue'" field="'QueueTitle'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Stage'" field="'StageName'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Data Source'" field="'DataSourceName'" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Imported Batch'" field="'Entity.BatchDescription'" disablesorting></vr-datagridcolumn>
