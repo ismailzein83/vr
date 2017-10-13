@@ -3,6 +3,7 @@ using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -10,24 +11,36 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target as ImportedRate != null;
+            return target is ImportedCountry;
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
+            var importedCountry = context.Target as ImportedCountry;
+
+            if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
+                return true;
+
+            var invalidZoneNames = new HashSet<string>();
             IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
 
-            ImportedRate importedRate = context.Target as ImportedRate;
+            foreach (ImportedRate importedRate in importedCountry.ImportedRates)
+            {
+                if (importedRate.ChangedExistingRates.Count() > 0 && importedRate.ChangedExistingRates.Any(x => importedRate.Rate > x.RateEntity.Rate))
+                    invalidZoneNames.Add(importedRate.ZoneName);
+            }
 
-            var result = !(importedRate.ChangedExistingRates.Count() > 0 && importedRate.ChangedExistingRates.Any(item => item.RateEntity.Rate < importedRate.Rate));
+            if (invalidZoneNames.Count > 0)
+            {
+                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(importedCountry.CountryId);
+                context.Message = string.Format("Some of the rates of some of the zones of country '{0}' have been increased: {1}", countryName, string.Join(", ", invalidZoneNames));
+                return false;
+            }
 
-            if (result == false)
-                context.Message = string.Format("The rate of zone {0} has been increased", importedRate.ZoneName);
-
-            return result;
+            return true;
         }
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("The rate of zone {0} has been increased", (target as ImportedRate).ZoneName);
+            throw new NotImplementedException();
         }
     }
 }

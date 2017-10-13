@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.BusinessProcess.Entities;
@@ -10,26 +12,37 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target as NotImportedZone != null;
+            return target is CountryNotImportedZones;
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            NotImportedZone notImportedZone = context.Target as NotImportedZone;
+            var countryNotImportedZones = context.Target as CountryNotImportedZones;
 
-            if (!notImportedZone.HasChanged)
+            if (countryNotImportedZones.NotImportedZones == null || countryNotImportedZones.NotImportedZones.Count() == 0)
                 return true;
 
-            IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
-            var result = !notImportedZone.EED.VRLessThanOrEqual(DateTime.Today.Add(importSplContext.CodeCloseDateOffset));
+            var invalidZoneNames = new HashSet<string>();
+            IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
-            if (result == false)
-                context.Message = string.Format("Zone {0} has been closed in a period less than system period", notImportedZone.ZoneName);
+            foreach (NotImportedZone notImportedZone in countryNotImportedZones.NotImportedZones)
+            {
+                if (notImportedZone.HasChanged && notImportedZone.EED.HasValue && notImportedZone.EED.Value < importSPLContext.CodeEffectiveDate)
+                    invalidZoneNames.Add(notImportedZone.ZoneName);
+            }
 
-            return result;
+            if (invalidZoneNames.Count > 0)
+            {
+                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryNotImportedZones.CountryId);
+                string codeEffectiveDateString = importSPLContext.CodeEffectiveDate.ToString(importSPLContext.DateFormat);
+                context.Message = string.Format("EEDs of some of the zones of country '{0}' must be greater than or equal to '{1}': {2}", countryName, codeEffectiveDateString, string.Join(", ", invalidZoneNames));
+                return false;
+            }
+
+            return true;
         }
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has been closed in a period less than system period", (target as NotImportedZone).ZoneName);
+            throw new NotImplementedException();
         }
     }
 }
