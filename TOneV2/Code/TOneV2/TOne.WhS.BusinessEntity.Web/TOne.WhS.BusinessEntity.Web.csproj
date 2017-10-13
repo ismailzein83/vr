@@ -650,6 +650,8 @@
     <Content Include="WhS_BusinessEntity\Views\SwitchReleaseCause\SwitchReleaseCauseEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SwitchReleaseCause\SwitchReleaseCauseManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SwitchReleaseCause\SwitchReleaseCauseManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchReleaseCause\UploadSwitchReleaseCauseEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\SwitchReleaseCause\UploadSwitchReleaseCauseEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SingleSwitchManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditor.html" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SingleSwitchManagementController.js" />

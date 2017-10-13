@@ -27,7 +27,9 @@
                 };
                 WhS_BE_SwitchReleaseCauseService.addSwitchReleaseCause(onSwitchReleaseCauseAdded);
             };
-
+            $scope.scopeModel.uploadSwitchReleaseCause = function () {
+                WhS_BE_SwitchReleaseCauseService.uploadSwitchReleaseCause();
+            }
             $scope.scopeModel.searchClicked = function () {
                 gridAPI.loadGrid(getGridFilter());
             };
@@ -56,7 +58,7 @@
                 SwitchIds: switchSelectorAPI.getSelectedIds(),
                 IsDelivered: $scope.scopeModel.selectedDeliveryStatus != undefined ? $scope.scopeModel.selectedDeliveryStatus.value : undefined,
                 Description: $scope.scopeModel.description
-            }
+            };
             return query;
         }
      

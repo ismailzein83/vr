@@ -74,13 +74,13 @@
             function loadStaticData() {
                 if (switchReleaseCauseEntity != undefined) {
                     $scope.scopeModel.releaseCode = switchReleaseCauseEntity.ReleaseCode;
-                        $scope.scopeModel.description = switchReleaseCauseEntity.Description;
-                        $scope.scopeModel.isDelivered = switchReleaseCauseEntity.IsDelivered;
+                    $scope.scopeModel.description = (switchReleaseCauseEntity.Settings != undefined) ? switchReleaseCauseEntity.Settings.Description : undefined;
+                    $scope.scopeModel.isDelivered = (switchReleaseCauseEntity.Settings != undefined) ? switchReleaseCauseEntity.Settings.IsDelivered : undefined;
                 }
             }
 
             return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadSwitchSelector]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                VRNotificationService.notifyExceptionWithClose(error, $scope);  
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
@@ -121,7 +121,6 @@
         function updateSwitchReleaseCause() {
             $scope.scopeModel.isLoading = true;
             var switchReleaseCauseObject = buildObjectFromScope();
-            console.log(switchReleaseCauseObject)
           return  WhS_BE_SwitchReleaseCauseAPIService.UpdateSwitchReleaseCause(switchReleaseCauseObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Switch Release Cause", response)) {
                     if ($scope.onSwitchReleaseCauseUpdated != undefined)

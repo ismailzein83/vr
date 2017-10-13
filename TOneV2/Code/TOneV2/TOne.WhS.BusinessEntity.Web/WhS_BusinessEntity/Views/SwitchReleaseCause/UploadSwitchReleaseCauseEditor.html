@@ -1,0 +1,39 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_UploadSwitchReleaseCauseEditorController" width="'50%'">
+    <vr-modalbody>
+        <vr-form name="formUploadSwitchReleaseCauseEditor">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-label>Upload File</vr-label>
+                    <vr-fileupload extension="xls,xlsx" value="file" isrequired> </vr-fileupload>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-row removeline>
+                        <vr-columns width="fullrow" ng-show="isUploadingComplete">
+                            <vr-label>Number Of Switch Release Causes Added:</vr-label><vr-label isvalue>{{addedCountries}}</vr-label>
+                        </vr-columns>
+
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="fullrow" ng-show="isUploadingComplete">
+                            <vr-label>Number Of Switch Release Causes Failed:</vr-label><vr-label isvalue>{{existsCountries}}</vr-label>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="fullrow" ng-show="isUploadingComplete">
+                            <vr-label>Download Result</vr-label>
+                            <vr-button type="Download" data-onclick="downloadLog" standalone></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Upload" formname="formUploadSwitchReleaseCauseEditor" data-onclick="scopeModel.uploadSwitchReleaseCause"></vr-button>
+                <vr-button type="Download"  data-onclick="scopeModel.downloadTemplate"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

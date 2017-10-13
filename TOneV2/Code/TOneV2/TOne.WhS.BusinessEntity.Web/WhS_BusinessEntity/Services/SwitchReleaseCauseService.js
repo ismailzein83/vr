@@ -8,7 +8,8 @@
       
         return ({
             addSwitchReleaseCause: addSwitchReleaseCause,
-            editSwitchReleaseCause:editSwitchReleaseCause
+            editSwitchReleaseCause: editSwitchReleaseCause,
+            uploadSwitchReleaseCause: uploadSwitchReleaseCause
         });
 
         function addSwitchReleaseCause(onSwitchReleaseCauseAdded) {
@@ -24,7 +25,13 @@
 
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SwitchReleaseCause/SwitchReleaseCauseEditor.html', parameters, settings);
         }
-
+        function uploadSwitchReleaseCause() {
+            var settings = {
+            };
+            var parameters = {
+            };
+            VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SwitchReleaseCause/UploadSwitchReleaseCauseEditor.html', parameters, settings);
+        }
         function editSwitchReleaseCause(switchReleaseCauseId, onSwitchReleaseCauseUpdated) {
             var modalSettings = {
             };
