@@ -671,7 +671,9 @@
   <ItemGroup>
     <Content Include="WhS_BusinessEntity\Templates\Sale Pricelist Template.xlsx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="WhS_BusinessEntity\Templates\ReleaseCauseTemplate.xlsx" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
