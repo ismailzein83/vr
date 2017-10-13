@@ -92,6 +92,7 @@
     <Compile Include="FillArgumentFromContext.cs" />
     <Compile Include="GetZonesWithMissingRates.cs" />
     <Compile Include="LogEmailedCustomers.cs" />
+    <Compile Include="NotificationContext.cs" />
     <Compile Include="SaveRoutingProductChanges.cs" />
     <Compile Include="SetContextActionRateLocator.cs" />
     <Compile Include="PrepareCustomerCountryPreviews.cs" />

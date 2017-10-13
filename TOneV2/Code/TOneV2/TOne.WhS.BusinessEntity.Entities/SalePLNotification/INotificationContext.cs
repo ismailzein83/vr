@@ -17,5 +17,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         IEnumerable<NewPriceList> SalePriceLists { get; }
         int CurrencyId { get; }
         int UserId { get; }
+
+        void WriteMessageToWorkflowLogs(string messageFormat, params object[] args);
     }
 }

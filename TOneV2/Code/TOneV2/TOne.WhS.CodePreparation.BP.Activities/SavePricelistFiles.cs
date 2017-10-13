@@ -50,7 +50,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         private void SavePriceLists(int sellingNumberPlanId, IEnumerable<NewCustomerPriceListChange> customerPriceListChanges, long processInstanceId, DateTime effectiveOn, IEnumerable<NewPriceList> newSalePriceLists, int userId
             , CodeActivityContext activityContext)
         {
-            ISalePricelistFileContext salePriceListFileContext = new SalePricelistFileContext
+            ISalePricelistFileContext salePriceListFileContext = new SalePricelistFileContext(activityContext)
             {
                 SellingNumberPlanId = sellingNumberPlanId,
                 ProcessInstanceId = processInstanceId,

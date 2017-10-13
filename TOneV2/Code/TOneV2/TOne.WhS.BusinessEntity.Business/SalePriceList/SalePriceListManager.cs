@@ -49,6 +49,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 foreach (var customerChange in context.CustomerPriceListChanges)
                 {
+                    string customerName = _carrierAccountManager.GetCarrierAccountName(customerChange.CustomerId);
+                    context.WriteMessageToWorkflowLogs("Creating pricelist for customer {0}", customerName);
+                    
                     SalePriceListType? priceListTypeForMultipleCurrency = null;
                     if (customerChange.PriceLists.Count() > 1)
                         priceListTypeForMultipleCurrency = SalePriceListType.Country;
@@ -77,6 +80,8 @@ namespace TOne.WhS.BusinessEntity.Business
                             pricelistIds.Add(customerPriceList.PriceList.PriceListId);
                         }
                     }
+
+                    context.WriteMessageToWorkflowLogs("Finished creating pricelist for customer {0}", customerName);
                 }
                 SaveChangesToDB(context.CustomerPriceListChanges, context.ProcessInstanceId);
                 BulkInsertSalePriceListSnapshot(saleCodes.Select(item => item.SaleCodeId).ToList(), pricelistIds);

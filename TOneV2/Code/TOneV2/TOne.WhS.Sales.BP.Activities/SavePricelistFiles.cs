@@ -53,7 +53,7 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 plChangeType = SalePLChangeType.Rate;
             }
-            var salePricelistFileContext = new SalePricelistFileContext
+            var salePricelistFileContext = new SalePricelistFileContext(context)
             {
                 SellingNumberPlanId = ratePlanContext.OwnerSellingNumberPlanId,
                 ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,

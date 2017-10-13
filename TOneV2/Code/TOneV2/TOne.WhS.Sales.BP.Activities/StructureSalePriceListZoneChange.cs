@@ -445,21 +445,20 @@ namespace TOne.WhS.Sales.BP.Activities
                     }
                     SaleEntityZoneRoutingProduct effectiveRoutingProduct = context.RoutingProductEffectiveLocator.GetCustomerZoneRoutingProduct(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, zoneId);
 
-                    if (effectiveRoutingProduct.RoutingProductId != null)
-                    {
-                        var routingProduct = new SalePricelistRPChange
-                        {
-                            CountryId = countryToAdd.CountryId,
-                            ZoneName = zoneName,
-                            ZoneId = zoneId,
-                            RoutingProductId = effectiveRoutingProduct.RoutingProductId,
-                            BED = effectiveRoutingProduct.BED,
-                            EED = null,
-                            CustomerId = context.CustomerInfo.CustomerId
-                        };
-                        context.RoutingProductChanges.Add(routingProduct);
-                    }
+                    if (effectiveRoutingProduct == null)
+                        throw new VRBusinessException(string.Format("No routing product assigned for zone {0}", zoneName));
 
+                    var routingProduct = new SalePricelistRPChange
+                    {
+                        CountryId = countryToAdd.CountryId,
+                        ZoneName = zoneName,
+                        ZoneId = zoneId,
+                        RoutingProductId = effectiveRoutingProduct.RoutingProductId,
+                        BED = countryToAdd.BED > effectiveRoutingProduct.BED ? countryToAdd.BED : effectiveRoutingProduct.BED,
+                        EED = null, //TODO: this is not reflecting the correct value now, if the def customer ro for example is closed in the future
+                        CustomerId = context.CustomerInfo.CustomerId
+                    };
+                    context.RoutingProductChanges.Add(routingProduct);
                 }
 
                 #endregion
@@ -508,7 +507,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         ZoneName = zoneName,
                         Rate = zoneRate.Rate.Rate,
                         ChangeType = RateChangeType.Deleted,
-                        BED = zoneRate.Rate.BED, //TODO: There is a gap here that we need to fix, if the rate is got from selling product BED is not exaclty the one we sent to customer
+                        BED = (soldCountry.BED > zoneRate.Rate.BED) ? soldCountry.BED : zoneRate.Rate.BED, //TODO: The only gap found here if there was a rate explicit closed at a time and another inherited. This way the BED of the sent rate will be sell date or SP rate BED and not the closure date of the explicit rate
                         EED = context.ActionDatesByZoneId[zoneId],// countryToClose.CloseEffectiveDate,
                         CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
                     });

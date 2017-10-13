@@ -103,6 +103,7 @@
     <Compile Include="BackupData.cs" />
     <Compile Include="GenerateZonesRPsPreview.cs" />
     <Compile Include="LogCustomersToNotify.cs" />
+    <Compile Include="NotificationContext.cs" />
     <Compile Include="PrepareChangedCustomerCountriesForApply.cs" />
     <Compile Include="PrepareExistingEffectiveRates.cs" />
     <Compile Include="PrepareNewZonesRPForApply.cs" />
