@@ -7,9 +7,10 @@ using TOne.WhS.SupplierPriceList.Entities.SPL;
 
 namespace TOne.WhS.SupplierPriceList.Entities
 {
-    public class AllImportedDataByZone : Vanrise.BusinessProcess.Entities.IRuleTarget
+    public class CountryNotImportedCodes : Vanrise.BusinessProcess.Entities.IRuleTarget
     {
-        public IEnumerable<ImportedDataByZone> ImportedDataByZoneList { get; set; }
+        public int CountryId { get; set; }
+        public IEnumerable<NotImportedCode> NotImportedCodes { get; set; }
         public object Key
         {
             get { return "Pricelist"; }

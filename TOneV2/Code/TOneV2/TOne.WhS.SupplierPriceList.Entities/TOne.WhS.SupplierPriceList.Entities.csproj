@@ -89,6 +89,7 @@
     <Compile Include="SPL\ExistingRateGroup.cs" />
     <Compile Include="SPL\ExistingZoneService.cs" />
     <Compile Include="SPL\ImportedData\AllImportedDataByZone.cs" />
+    <Compile Include="SPL\ImportedData\CountryNotImportedCodes.cs" />
     <Compile Include="SPL\ImportedData\ImportedDataByZone.cs" />
     <Compile Include="SPL\ImportedData\ImportedZoneServiceGroup.cs" />
     <Compile Include="SPL\ImportedData\ImportedZoneService.cs" />
