@@ -10,12 +10,12 @@ namespace TOne.WhS.Sales.Entities
     {
         public object Key
         {
-            get { return string.Empty; }
+            get { return null; }
         }
 
         public string TargetType
         {
-            get { return "ZoneDataByCountryIds"; }
+            get { return "Zones"; }
         }
     }
 }
