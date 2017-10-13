@@ -363,7 +363,8 @@
                     FromTime: $scope.scopeModel.fromdate,
                     FilterGroup: buildFilterGroupObj(filterObj, widgetPayload.RecordFilter),
                     ToTime: $scope.scopeModel.todate,
-                    Period: $scope.selectedPeriod.value
+                    Period: $scope.selectedPeriod.value,
+                    CurrencyId: currencySelectorAPI != undefined?currencySelectorAPI.getSelectedIds():undefined
                 };
                 return query;
             };

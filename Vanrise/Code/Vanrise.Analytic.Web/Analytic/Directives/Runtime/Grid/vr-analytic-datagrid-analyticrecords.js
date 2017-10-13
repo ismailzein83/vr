@@ -49,7 +49,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var fromTime;
             var toTime;
             var gridWidths;
-
+            var currencyId;
             $scope.isExpandable = function (dataItem) {
                 if (dataItem.drillDownExtensionObject != undefined && dataItem.drillDownExtensionObject.drillDownDirectiveTabs != undefined && dataItem.drillDownExtensionObject.drillDownDirectiveTabs.length > 0)
                     return true;
@@ -89,6 +89,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                             if (payLoad.MeasuresConfig == undefined) {
                                 promises.push(loadMeasuresConfig());
                             }
+                            currencyId = payLoad.CurrencyId;
                             UtilsService.waitMultiplePromises(promises).then(function () {
                                 loadGrid(payLoad).finally(function () {
                                     promiseReadyDeferred.resolve();
@@ -294,7 +295,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 FilterGroup: ctrl.filterGroups,
                                 GridMenuActions: $scope.gridMenuActions,
                                 ItemActions: itemActions,
-                                AdvancedOrderOptions: queryFinalized.AdvancedOrderOptions
+                                AdvancedOrderOptions: queryFinalized.AdvancedOrderOptions,
+                                CurrencyId: currencyId
                             };
                             return dataItem.gridAPI.load(drillDownPayLoad);
                         };
@@ -344,6 +346,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         TableId: payLoad.TableId,
                         MeasureStyleRules: measureStyleRules,
                         AdvancedOrderOptions: payLoad.Settings != undefined ? payLoad.Settings.AdvancedOrderOptions : payLoad.AdvancedOrderOptions,
+                        CurrencyId: currencyId
                     };
                     return queryFinalized;
                 }
