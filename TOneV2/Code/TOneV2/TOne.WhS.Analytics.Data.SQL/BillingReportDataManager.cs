@@ -47,7 +47,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 SELECT {2} AS ZoneId ,Year(BS.BatchStart) AS YearDuration, 
                 MONTH(BS.BatchStart) AS MonthDuration, 
                 cast( (SUM({0} )/{4} ) as decimal(13,4) ) AS SaleDuration 
-                From [TOneWhS_Analytics].[BillingStatsDaily] BS WITH(NOLOCK,INDEX(IX_BillingStatsDaily_BatchStart,IX_BillingStatsDaily_Id)) 
+                From [TOneWhS_Analytics].[BillingStats30Min] BS WITH(NOLOCK,INDEX(IX_BillingStatsDaily_BatchStart,IX_BillingStatsDaily_Id)) 
                     JOIN #BillingStatsDailyTemp t on {2} = t.ZoneId
                 LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3}, @FromDate, @ToDate)) AS ERC 
                 ON BS.CostCurrencyId = ERC.CurrencyID AND BS.BatchStart >= ERC.BED AND (ERC.EED IS NULL OR BS.BatchStart < ERC.EED)
