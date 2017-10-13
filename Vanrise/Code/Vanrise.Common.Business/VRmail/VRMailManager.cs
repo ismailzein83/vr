@@ -150,7 +150,19 @@ namespace Vanrise.Common.Business
 
             SmtpClient client = GetSMTPClient(emailSettingData);
             SetAttachement(mailMessage, attachements, compressAttachement);
-            client.Send(mailMessage);
+            string logEmailDescription = String.Format("Email Information - To: '{0}'. Subject: '{1}'", to, subject);
+            string logEventType = "Email Notification";
+            try
+            {
+                client.Send(mailMessage);
+                LoggerFactory.GetLogger().WriteEntry(logEventType, null, LogEntryType.Information, "Email sent successfully. {0}", logEmailDescription);
+            }
+            catch (Exception ex)
+            {
+                var businessException = new VRBusinessException(string.Format("Email is not sent (click to check error). {0}", logEmailDescription), ex);
+                LoggerFactory.GetExceptionLogger().WriteException(logEventType, null, businessException);
+                throw;
+            }
         }
 
         private void SetAttachement(MailMessage mailMessage, List<VRMailAttachement> attachements, bool compressAttachement)
