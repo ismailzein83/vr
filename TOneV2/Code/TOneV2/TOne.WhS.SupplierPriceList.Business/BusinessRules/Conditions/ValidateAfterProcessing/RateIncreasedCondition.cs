@@ -6,13 +6,12 @@ using System.Linq;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    class RateIncreasedCondition : BusinessRuleCondition
+    public class RateIncreasedCondition : BusinessRuleCondition
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
             return target as ImportedRate != null;
         }
-
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
@@ -21,7 +20,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             var result = !(importedRate.ChangedExistingRates.Count() > 0 && importedRate.ChangedExistingRates.Any(item => item.RateEntity.Rate < importedRate.Rate));
 
-            if(result == false)
+            if (result == false)
                 context.Message = string.Format("The rate of zone {0} has been increased", importedRate.ZoneName);
 
             return result;
