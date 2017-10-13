@@ -37,9 +37,10 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             if (invalidZoneNames.Count > 0)
             {
+                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(importedCountry.CountryId);
                 string todayString = today.ToString(importSPLContext.DateFormat);
                 string codeEffectiveDateString = importSPLContext.CodeEffectiveDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("BEDs of some of the codes of the following zones must be between '{0}' and '{1}': {2}", todayString, codeEffectiveDateString, string.Join(", ", invalidZoneNames));
+                context.Message = string.Format("BEDs of some of the codes of the following zones of country '{0}' must be between '{1}' and '{2}': {3}", countryName, todayString, codeEffectiveDateString, string.Join(", ", invalidZoneNames));
                 return false;
             }
 
