@@ -87,6 +87,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetFilteredInvoiceGenerationDrafts'), input);
         }
 
+        function GenerateInvoices(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GenerateInvoices'), input);
+        }
+
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -103,7 +107,8 @@
             GetInvoiceEditorRuntime: GetInvoiceEditorRuntime,
             GetPartnerGroupTemplates: GetPartnerGroupTemplates,
             GenerateFilteredInvoiceGenerationDrafts: GenerateFilteredInvoiceGenerationDrafts,
-            GetFilteredInvoiceGenerationDrafts: GetFilteredInvoiceGenerationDrafts
+            GetFilteredInvoiceGenerationDrafts: GetFilteredInvoiceGenerationDrafts,
+            GenerateInvoices: GenerateInvoices
         });
     }
 

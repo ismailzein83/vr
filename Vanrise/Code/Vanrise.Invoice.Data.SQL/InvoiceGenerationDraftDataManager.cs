@@ -14,16 +14,16 @@ namespace Vanrise.Invoice.Data.SQL
 
         }
 
-        public List<InvoiceGenerationDraft> GetInvoiceGenerationDrafts(int userId, Guid invoiceTypeId)
+        public List<InvoiceGenerationDraft> GetInvoiceGenerationDrafts(Guid invoiceGenerationIdentifier)
         {
-            return GetItemsSP("VR_Invoice.sp_InvoiceGenerationDraft_GetAll", InvoiceGenerationDraftMapper, userId, invoiceTypeId);
+            return GetItemsSP("VR_Invoice.sp_InvoiceGenerationDraft_GetAll", InvoiceGenerationDraftMapper, invoiceGenerationIdentifier);
         }
 
-        public bool InsertInvoiceGenerationDraft(int userId, InvoiceGenerationDraft invoiceGenerationDraft, out long insertedId)
+        public bool InsertInvoiceGenerationDraft(InvoiceGenerationDraft invoiceGenerationDraft, out long insertedId)
         {
             object invoiceGenerationDraftId;
-            int recordsEffected = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Insert", out invoiceGenerationDraftId, userId, invoiceGenerationDraft.InvoiceTypeId, 
-                invoiceGenerationDraft.PartnerId, invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To,
+            int recordsEffected = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Insert", out invoiceGenerationDraftId, invoiceGenerationDraft.InvoiceGenerationIdentifier, 
+                invoiceGenerationDraft.InvoiceTypeId, invoiceGenerationDraft.PartnerId, invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To,
                 invoiceGenerationDraft.CustomPayload != null ? Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload) : DBNull.Value);
 
             bool insertedSuccesfully = (recordsEffected > 0);
@@ -34,14 +34,21 @@ namespace Vanrise.Invoice.Data.SQL
             return insertedSuccesfully;
         }
 
-        public void DeleteInvoiceGenerationDraft(int userId, Guid invoiceTypeId)
+        public void DeleteInvoiceGenerationDraft(long invoiceGenerationDraftId)
         {
-            ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Delete", userId, invoiceTypeId);
+            ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Delete", invoiceGenerationDraftId);
+        }
+        public void ClearInvoiceGenerationDrafts(Guid invoiceGenerationIdentifier)
+        {
+            ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Clear", invoiceGenerationIdentifier);
         }
 
-        public bool UpdateInvoiceGenerationDraft(InvoiceGenerationDraft invoiceGenerationDraft)
+        public bool UpdateInvoiceGenerationDraft(InvoiceGenerationDraftToEdit invoiceGenerationDraft)
         {
-            throw new NotImplementedException();
+            int recordsEffected = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Update",  invoiceGenerationDraft.InvoiceGenerationDraftId, invoiceGenerationDraft.From, 
+                invoiceGenerationDraft.To, invoiceGenerationDraft.CustomPayload != null ? Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload) : DBNull.Value);
+
+            return (recordsEffected > 0);
         }
 
         private InvoiceGenerationDraft InvoiceGenerationDraftMapper(IDataReader reader)
@@ -50,6 +57,7 @@ namespace Vanrise.Invoice.Data.SQL
             InvoiceGenerationDraft invoiceGenerationDraft = new InvoiceGenerationDraft()
             {
                 InvoiceGenerationDraftId = (long)reader["ID"],
+                InvoiceGenerationIdentifier = (Guid)reader["invoiceGenerationIdentifier"],
                 InvoiceTypeId = (Guid)reader["InvoiceTypeId"],
                 PartnerId = reader["PartnerId"] as string,
                 PartnerName = reader["PartnerName"] as string,

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Business;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
+using Vanrise.Invoice.BP.Arguments;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Business.Extensions;
 using Vanrise.Invoice.Data;
@@ -916,5 +918,23 @@ namespace Vanrise.Invoice.Business
         }
 
         #endregion
+
+        public GenerateInvoicesOutput GenerateInvoices(Guid invoiceTypeId, Guid invoiceGenerationIdentifier, List<InvoiceGenerationDraftToEdit> changedItems)
+        {
+            if (changedItems != null && changedItems.Count > 0)
+            {
+                InvoiceGenerationDraftManager invoiceGenerationDraftManager = new InvoiceGenerationDraftManager();
+                invoiceGenerationDraftManager.UpdateInvoiceGenerationDrafts(changedItems);
+            }
+            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            InvoiceGenerationProcessInput invoiceGenerationProcessInput = new InvoiceGenerationProcessInput() { InvoiceGenerationIdentifier = invoiceGenerationIdentifier, InvoiceTypeId = invoiceTypeId, UserId = userId };
+            var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
+            {
+                InputArguments = invoiceGenerationProcessInput
+            };
+
+            new BPInstanceManager().CreateNewProcess(createProcessInput);
+            return new GenerateInvoicesOutput { };
+        }
     }
 }

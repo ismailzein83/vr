@@ -9,9 +9,10 @@ namespace Vanrise.Invoice.Data
 {
     public interface IInvoiceGenerationDraftDataManager : IDataManager
     {
-        List<InvoiceGenerationDraft> GetInvoiceGenerationDrafts(int userId, Guid invoiceTypeId);
-        bool InsertInvoiceGenerationDraft(int userId, InvoiceGenerationDraft invoiceGenerationDraft, out long insertedId);
-        bool UpdateInvoiceGenerationDraft(InvoiceGenerationDraft invoiceGenerationDraft);
-        void DeleteInvoiceGenerationDraft(int userId, Guid invoiceTypeId);
+        List<InvoiceGenerationDraft> GetInvoiceGenerationDrafts(Guid invoiceGenerationIdentifier);
+        bool InsertInvoiceGenerationDraft(InvoiceGenerationDraft invoiceGenerationDraft, out long insertedId);
+        bool UpdateInvoiceGenerationDraft(InvoiceGenerationDraftToEdit invoiceGenerationDraft);
+        void DeleteInvoiceGenerationDraft(long invoiceGenerationDraftId);
+        void ClearInvoiceGenerationDrafts(Guid invoiceGenerationIdentifier);
     }
 }

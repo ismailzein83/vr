@@ -25,11 +25,13 @@ namespace Vanrise.Invoice.Entities
 
     public interface IGetGenerationCustomPayloadContext 
     {
+        Guid InvoiceTypeId { get; }
         string PartnerId { get; }
     }
 
     public class GetGenerationCustomPayloadContext : IGetGenerationCustomPayloadContext
     {
+        public Guid InvoiceTypeId { get; set; }
         public string PartnerId { get; set; }
     }
 

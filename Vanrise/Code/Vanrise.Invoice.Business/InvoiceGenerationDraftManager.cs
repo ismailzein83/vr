@@ -12,7 +12,7 @@ namespace Vanrise.Invoice.Business
     {
         public InvoiceGenerationDraftOutput GenerateFilteredInvoiceGenerationDrafts(InvoiceGenerationDraftQuery query)
         {
-            DeleteInvoiceGenerationDraft(query.InvoiceTypeId);
+            ClearInvoiceGenerationDrafts(query.InvoiceGenerationIdentifier);
 
             InvoiceTypeManager manager = new InvoiceTypeManager();
             var invoiceType = manager.GetInvoiceType(query.InvoiceTypeId);
@@ -56,7 +56,7 @@ namespace Vanrise.Invoice.Business
                 }
 
                 if (!fromDate.HasValue || !toDate.HasValue)
-                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Invalid Dates" };
+                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Some Partners have Invalid Dates. Please fill the following fields: 'From' and 'To'" };
 
                 PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = partnerId };
                 var partnerName = invoiceTypePartnerManager.GetPartnerName(partnerNameManagerContext);
@@ -64,12 +64,13 @@ namespace Vanrise.Invoice.Business
                 dynamic generationCustomPayload = null;
                 if (generationCustomSection != null)
                 {
-                    GetGenerationCustomPayloadContext generationCustomPayloadContext = new Entities.GetGenerationCustomPayloadContext() { PartnerId = partnerId };
+                    GetGenerationCustomPayloadContext generationCustomPayloadContext = new Entities.GetGenerationCustomPayloadContext() { PartnerId = partnerId, InvoiceTypeId = query.InvoiceTypeId };
                     generationCustomPayload = generationCustomSection.GetGenerationCustomPayload(generationCustomPayloadContext);
                 }
 
                 InvoiceGenerationDraft invoiceGenerationDraft = new InvoiceGenerationDraft()
                 {
+                    InvoiceGenerationIdentifier = query.InvoiceGenerationIdentifier,
                     InvoiceTypeId = query.InvoiceTypeId,
                     From = fromDate.Value,
                     To = toDate.Value,
@@ -83,6 +84,12 @@ namespace Vanrise.Invoice.Business
                     return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Failed to Add Records" };
             }
             return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Succeeded };
+        }
+
+        public List<InvoiceGenerationDraft> GetInvoiceGenerationDrafts(Guid invoiceGenerationIdentifier)
+        {
+            IInvoiceGenerationDraftDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceGenerationDraftDataManager>();
+            return dataManager.GetInvoiceGenerationDrafts(invoiceGenerationIdentifier);
         }
 
         public IDataRetrievalResult<InvoiceGenerationDraftDetail> GetFilteredInvoiceGenerationDrafts(DataRetrievalInput<InvoiceGenerationDraftQuery> input)
@@ -100,8 +107,7 @@ namespace Vanrise.Invoice.Business
             IInvoiceGenerationDraftDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceGenerationDraftDataManager>();
 
             long invoiceGenerationDraftId;
-            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            bool insertActionSucc = dataManager.InsertInvoiceGenerationDraft(userId, invoiceGenerationDraft, out invoiceGenerationDraftId);
+            bool insertActionSucc = dataManager.InsertInvoiceGenerationDraft(invoiceGenerationDraft, out invoiceGenerationDraftId);
 
             if (insertActionSucc)
             {
@@ -112,13 +118,24 @@ namespace Vanrise.Invoice.Business
             return insertOperationOutput;
         }
 
-        public void DeleteInvoiceGenerationDraft(Guid invoiceTypeId)
+        public void ClearInvoiceGenerationDrafts(Guid invoiceGenerationIdentifier)
         {
             IInvoiceGenerationDraftDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceGenerationDraftDataManager>();
-            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            dataManager.DeleteInvoiceGenerationDraft(userId, invoiceTypeId);
+            dataManager.ClearInvoiceGenerationDrafts(invoiceGenerationIdentifier);
         }
 
+
+        public void UpdateInvoiceGenerationDrafts(List<InvoiceGenerationDraftToEdit> invoiceGenerationDrafts)
+        {
+            IInvoiceGenerationDraftDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceGenerationDraftDataManager>();
+            foreach (InvoiceGenerationDraftToEdit invoiceGenerationDraft in invoiceGenerationDrafts)
+            {
+                if (!invoiceGenerationDraft.IsSelected)
+                    dataManager.DeleteInvoiceGenerationDraft(invoiceGenerationDraft.InvoiceGenerationDraftId);
+                else
+                    dataManager.UpdateInvoiceGenerationDraft(invoiceGenerationDraft);
+            }
+        }
         private class InvoicePartnerRequestHandler : BigDataRequestHandler<InvoiceGenerationDraftQuery, InvoiceGenerationDraft, InvoiceGenerationDraftDetail>
         {
             public override InvoiceGenerationDraftDetail EntityDetailMapper(InvoiceGenerationDraft entity)
@@ -137,10 +154,8 @@ namespace Vanrise.Invoice.Business
 
             public override IEnumerable<InvoiceGenerationDraft> RetrieveAllData(DataRetrievalInput<InvoiceGenerationDraftQuery> input)
             {
-                var query = input.Query;
                 IInvoiceGenerationDraftDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceGenerationDraftDataManager>();
-                int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-                return dataManager.GetInvoiceGenerationDrafts(userId, input.Query.InvoiceTypeId);
+                return dataManager.GetInvoiceGenerationDrafts(input.Query.InvoiceGenerationIdentifier);
             }
         }
     }

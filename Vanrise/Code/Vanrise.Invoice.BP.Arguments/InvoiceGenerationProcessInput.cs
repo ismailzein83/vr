@@ -12,5 +12,8 @@ namespace Vanrise.Invoice.BP.Arguments
         {
             return "Invoice Generation Process";
         }
+
+        public Guid InvoiceTypeId { get; set; }
+        public Guid InvoiceGenerationIdentifier { get; set; }
     }
 }

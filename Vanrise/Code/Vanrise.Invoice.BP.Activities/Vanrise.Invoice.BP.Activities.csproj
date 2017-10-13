@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GeneratePartnersInvoices.cs" />
+    <Compile Include="LoadInvoiceGenerationDrafts.cs" />
     <Compile Include="LoadAllPartnerIds.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

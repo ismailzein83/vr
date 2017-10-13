@@ -169,5 +169,22 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceGenerationDraftManager manager = new InvoiceGenerationDraftManager();
             return GetWebResponse(input, manager.GetFilteredInvoiceGenerationDrafts(input));
         }
+
+        [HttpPost]
+        [Route("GenerateInvoices")]
+        public object GenerateInvoices(GenerateInvoicesInput input)
+        {
+            if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.InvoiceTypeId))
+                return GetUnauthorizedResponse();
+            InvoiceManager manager = new InvoiceManager();
+            return manager.GenerateInvoices(input.InvoiceTypeId, input.InvoiceGenerationIdentifier, input.ChangedItems);
+        }
+    }
+
+    public class GenerateInvoicesInput
+    {
+        public Guid InvoiceTypeId { get; set; }
+        public Guid InvoiceGenerationIdentifier { get; set; }
+        public List<InvoiceGenerationDraftToEdit> ChangedItems { get; set; }
     }
 }

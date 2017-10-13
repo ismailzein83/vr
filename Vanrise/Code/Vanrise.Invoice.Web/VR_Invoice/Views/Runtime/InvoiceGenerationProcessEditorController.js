@@ -19,6 +19,8 @@
         var invoiceGenerationDraftGridAPI;
         var invoiceGenerationDraftGridReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceGenerationIdentifier;
+
         defineScope();
         loadParameters();
 
@@ -85,21 +87,33 @@
                     FromDate: $scope.scopeModel.fromDate,
                     ToDate: $scope.scopeModel.toDate,
                     IssueDate: $scope.scopeModel.issueDate,
-                    PartnerGroup: invoicePartnerGroupAPI.getData()
+                    PartnerGroup: invoicePartnerGroupAPI.getData(),
+                    InvoiceGenerationIdentifier: invoiceGenerationIdentifier
                 };
 
                 VR_Invoice_InvoiceAPIService.GenerateFilteredInvoiceGenerationDrafts(query).then(function (response) {
                     $scope.scopeModel.isLoading = false;
-                    console.log(response);
+                    $scope.scopeModel.errorMessage = response.Message;
                     if (response.Result == 0) {
                         var gridPayload = { query: query, customPayloadDirective: invoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective };
                         invoiceGenerationDraftGridAPI.loadGrid(gridPayload);
                     }
                     else {
+                        invoiceGenerationDraftGridAPI.clearDataSource();
                         $scope.scopeModel.errorMessage = response.Message;
                     }
                 });
 
+
+                $scope.scopeModel.generateInvoice = function () {
+                    var changedItems = invoiceGenerationDraftGridAPI.getChangedItems();
+
+                    var input = { InvoiceGenerationIdentifier: invoiceGenerationIdentifier, ChangedItems: changedItems, InvoiceTypeId: invoiceTypeId };
+
+                    return VR_Invoice_InvoiceAPIService.GenerateInvoices(input).then(function (response) {
+                        $scope.modalContext.closeModal();
+                    });
+                };
             };
 
             UtilsService.waitMultiplePromises([invoiceGenerationDraftGridReadyDeferred.promise]).then(function () {
@@ -109,6 +123,7 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
+            invoiceGenerationIdentifier = UtilsService.guid();
 
             getInvoiceType().then(function () {
                 loadAllControls();

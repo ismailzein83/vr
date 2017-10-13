@@ -57,6 +57,10 @@
     <Reference Include="Vanrise.BusinessProcess.WFActivities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,6 +79,10 @@
     <ProjectReference Include="..\Vanrise.Invoice.BP.Arguments\Vanrise.Invoice.BP.Arguments.csproj">
       <Project>{73d64484-43b6-4e3a-8bd8-b30f86d45c36}</Project>
       <Name>Vanrise.Invoice.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Invoice.Entities\Vanrise.Invoice.Entities.csproj">
+      <Project>{af8043ce-bc7c-445a-8c02-af023f5bdd68}</Project>
+      <Name>Vanrise.Invoice.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,7 @@ namespace Vanrise.Invoice.Entities
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public DateTime IssueDate { get; set; }
+        public Guid InvoiceGenerationIdentifier { get; set; }
     }
 
     public enum InvoiceGenerationDraftResult { Succeeded = 0, Failed = 1 }
