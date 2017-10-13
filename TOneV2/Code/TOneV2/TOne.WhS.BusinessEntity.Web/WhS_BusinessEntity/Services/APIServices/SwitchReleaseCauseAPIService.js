@@ -23,12 +23,33 @@
                 switchId: switchId
             });
         }
+        function DownloadSwitchReleaseCausesTemplate() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "DownloadSwitchReleaseCausesTemplate"),
+                {},
+                {
+                    returnAllResponseParameters: true,
+                    responseTypeAsBufferArray: true
+                }
+            );
+        }
+        function UploadSwitchReleaseCauses(fileId,switchId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UploadSwitchReleaseCauses"), { fileId: fileId, switchId: switchId });
+        }
+        function DownloadSwitchReleaseCauseLog(fileID) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "DownloadSwitchReleaseCauseLog"), { fileID: fileID }, {
+                returnAllResponseParameters: true,
+                responseTypeAsBufferArray: true
+            });
+        }
         return ({
             GetFilteredSwitchReleaseCauses: GetFilteredSwitchReleaseCauses,
             AddSwitchReleaseCause: AddSwitchReleaseCause,
             GetSwitchReleaseCause: GetSwitchReleaseCause,
             UpdateSwitchReleaseCause: UpdateSwitchReleaseCause,
-            GetReleaseCausesByCode: GetReleaseCausesByCode
+            GetReleaseCausesByCode: GetReleaseCausesByCode,
+            DownloadSwitchReleaseCausesTemplate: DownloadSwitchReleaseCausesTemplate,
+            UploadSwitchReleaseCauses: UploadSwitchReleaseCauses,
+            DownloadSwitchReleaseCauseLog: DownloadSwitchReleaseCauseLog
         });
     }
     appControllers.service("WhS_BE_SwitchReleaseCauseAPIService", switchReleaseCauseAPIService);

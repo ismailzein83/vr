@@ -179,6 +179,7 @@
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseDetail.cs" />
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseInfo.cs" />
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseQuery.cs" />
+    <Compile Include="SwitchReleaseCause\UploadSwitchReleaseCauseLog.cs" />
     <Compile Include="Switch\InsertSwitchOperationOutput.cs" />
     <Compile Include="Switch\UpdateSwitchOperationOutput.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryQuery.cs" />

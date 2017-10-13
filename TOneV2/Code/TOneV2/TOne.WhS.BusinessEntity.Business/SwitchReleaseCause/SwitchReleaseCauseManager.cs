@@ -1,11 +1,15 @@
-﻿using System;
+﻿using Aspose.Cells;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -46,7 +50,6 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
             return insertOperationOutput;
-
         }
         public SwitchReleaseCause GetSwitchReleaseCause(int switchReleaseCauseId)
         {
@@ -72,8 +75,127 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
+        public UploadSwitchReleaseCauseLog AddSwitchReleaseCauses(int fileId, int switchId)
+        {
+            UploadSwitchReleaseCauseLog uploadSwitchReleaseCauseLog = new UploadSwitchReleaseCauseLog();
+            VRFileManager fileManager = new VRFileManager();
+            byte[] bytes = fileManager.GetFile(fileId).Content;
+            var fileStream = new System.IO.MemoryStream(bytes);
+            //ExportTableOptions options = new ExportTableOptions();
+            //options.CheckMixedValueType = true;
+            Workbook wbk = new Workbook(fileStream);
+            Worksheet worksheet = wbk.Worksheets[0];
+            List<String> headers = new List<string>();
+            headers.Add(worksheet.Cells[0, 0].StringValue);
+            headers.Add("Result");
+            headers.Add("Error Message");
+            //wbk.CalculateFormula();
+            List<SwitchReleaseCause> addedSwitchReleaseCauses = new List<SwitchReleaseCause>();
+            int count = 1;
+            while (count < worksheet.Cells.Rows.Count)
+            {
+                var switchReleaseCause = new SwitchReleaseCause()
+                {
+                    ReleaseCode =  worksheet.Cells[count, 0].StringValue.Trim(),
+                    SwitchId = switchId
+                };
+                switchReleaseCause.Settings = new SwitchReleaseCauseSetting();
+                if (worksheet.Cells[count, 2].StringValue.Trim() == "Y")
+                    switchReleaseCause.Settings.IsDelivered = true;
+                else if (worksheet.Cells[count, 2].StringValue.Trim() == "N")
+                    switchReleaseCause.Settings.IsDelivered = false;
+                switchReleaseCause.Settings.Description = worksheet.Cells[count, 1].StringValue.Trim();
+                addedSwitchReleaseCauses.Add(switchReleaseCause);
+                count++;
+            }
+            Workbook returnedExcel = new Workbook();
+            Vanrise.Common.Utilities.ActivateAspose();
+            returnedExcel.Worksheets.Clear();
+            Worksheet SwitchReleaseCauseWorkSheet = returnedExcel.Worksheets.Add("Result");
+            int rowIndex = 0;
+            int colIndex = 0;
+            foreach (var header in headers)
+            {
+                SwitchReleaseCauseWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+                SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue(header);
+                Cell cell = SwitchReleaseCauseWorkSheet.Cells.GetCell(rowIndex, colIndex);
+                Style style = cell.GetStyle();
+                style.Font.Name = "Times New Roman";
+                style.Font.Color = Color.FromArgb(255, 0, 0);
+                style.Font.Size = 14;
+                style.Font.IsBold = true;
+                cell.SetStyle(style);
+                colIndex++;
+            }
+            rowIndex++;
+            colIndex = 0;
+            foreach (var addedSwitchReleaseCause in addedSwitchReleaseCauses)
+            {
+                SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue(addedSwitchReleaseCause.ReleaseCode);
+                colIndex++;
+
+                SwitchReleaseCause switchReleaseCause = GetCachedSwitchReleaseCauses().FindRecord(it => it.ReleaseCode.Equals(addedSwitchReleaseCause.ReleaseCode, StringComparison.InvariantCultureIgnoreCase) && it.SwitchId.Equals(addedSwitchReleaseCause.SwitchId));
+                if (!String.IsNullOrEmpty(addedSwitchReleaseCause.ReleaseCode))
+                {
+                    if (switchReleaseCause == null)
+                    {
+                        int switchReleaseCauseId = -1;
+                        ISwitchReleaseCauseDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchReleaseCauseDataManager>();
+                        bool insertActionSucc = dataManager.AddSwitchReleaseCause(addedSwitchReleaseCause, out switchReleaseCauseId);
+                        if (insertActionSucc)
+                        {
+                            SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
+                            uploadSwitchReleaseCauseLog.CountOfSwitchReleaseCausesAdded++;
+                            colIndex = 0;
+                            rowIndex++;
+                        }
+                        else
+                        {
+                            SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                            colIndex++;
+                            SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("SwitchReleaseCause already exists");
+                            uploadSwitchReleaseCauseLog.CountOfSwitchReleaseCausesExist++;
+                            colIndex = 0;
+                            rowIndex++;
+                        }
+                    }
+                    else
+                    {
+                        SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                        colIndex++;
+                        SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Country already exists");
+                        uploadSwitchReleaseCauseLog.CountOfSwitchReleaseCausesExist++;
+                        colIndex = 0;
+                        rowIndex++;
+                    }
+                }
+                else
+                    colIndex = 0;
+            }
+
+            MemoryStream memoryStream = new MemoryStream();
+            memoryStream = returnedExcel.SaveToStream();
+
+            VRFile saveFile = new VRFile()
+            {
+                Content = memoryStream.ToArray(),
+                Name = "SwitchReleaseCauseLog",
+                CreatedTime = DateTime.Now,
+                Extension = ".xlsx"
+            };
+            VRFileManager manager = new VRFileManager();
+            uploadSwitchReleaseCauseLog.fileID = manager.AddFile(saveFile);
+
+            return uploadSwitchReleaseCauseLog;
+        }
+        public byte[] DownloadSwitchReleaseCauseLog(long fileID)
+        {
+            VRFileManager fileManager = new VRFileManager();
+            VRFile file = fileManager.GetFile(fileID);
+            return file.Content;
+        }
         #endregion
-   
+
         #region Private Classes
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
