@@ -376,7 +376,7 @@ namespace TOne.WhS.Routing.Business
                 Entity = rpRouteOptionSupplierZone,
                 SupplierZoneName = supplierZone != null ? supplierZone.Name : null,
                 ConvertedSupplierRate = rpRouteOptionSupplierZone.SupplierRate,
-                FutureRate = supplierRate != null ? GetFutureRate(supplierRate, futureSupplierZoneRateLocator, supplierZone.SupplierId, supplierZone.SupplierZoneId, now) : null,
+                FutureRate = supplierRate != null && futureSupplierZoneRateLocator != null ? GetFutureRate(supplierRate, futureSupplierZoneRateLocator, supplierZone.SupplierId, supplierZone.SupplierZoneId, now) : null,
                 RateEED = supplierRate != null ? supplierRate.EED : null
             };
 
