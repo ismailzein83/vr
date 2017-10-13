@@ -10,6 +10,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
     public interface IImportSPLContext
     {
         TimeSpan CodeCloseDateOffset { get; }
+        DateTime CodeEffectiveDate { get; }
 
         bool ProcessHasChanges { get; }
 

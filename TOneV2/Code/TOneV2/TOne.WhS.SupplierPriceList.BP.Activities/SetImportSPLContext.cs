@@ -73,7 +73,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             var tOneConfigManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
             MaximumRate = tOneConfigManager.GetPurchaseAreaMaximumRate();
-            
+
             int retroactiveDayOffset = tOneConfigManager.GetPurchaseAreaRetroactiveDayOffset();
             RetroactiveDate = DateTime.Today.AddDays(-retroactiveDayOffset).Date;
 
@@ -102,6 +102,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             }
             set { _codeCloseDateOffset = value; }
         }
+        public DateTime CodeEffectiveDate { get; set; }
         public decimal MaximumRate { get; set; }
 
         public DateTime RetroactiveDate { get; set; }
@@ -143,6 +144,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetSupplierEffectiveDateDayOffset(supplierId);
             TimeSpan codeCloseDateOffset = new TimeSpan(effectiveDateDayOffset, 0, 0, 0);
             _codeCloseDateOffset = codeCloseDateOffset;
+            CodeEffectiveDate = DateTime.Today.AddDays(effectiveDateDayOffset);
         }
         #endregion
     }
