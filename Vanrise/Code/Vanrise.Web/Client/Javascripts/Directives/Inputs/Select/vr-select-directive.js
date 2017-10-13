@@ -74,7 +74,9 @@
                 var controller = this;
                 controller.filtername = '';
                 controller.includeAdvancedSearch = $attrs.includeadvancedsearch != undefined;
-                controller.readOnly = utilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
+                controller.readOnly = false;
+                if ($attrs.stopreadonly == undefined)
+                    controller.readOnly = utilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
                 controller.validate = function () {
                     return VRValidationService.validate(controller.selectedvalues, $scope, $attrs);

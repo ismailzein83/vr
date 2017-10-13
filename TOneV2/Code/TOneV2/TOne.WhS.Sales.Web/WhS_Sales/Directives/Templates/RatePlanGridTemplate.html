@@ -60,10 +60,11 @@
     .rate-plan-grid vr-select[smallselect] .mark-select > div:first-child {
         width: 120px !important;
     }
+
     .rate-plan-grid vr-select[smallselect] .mark-select > div:nth-child(2) {
         width: 15px !important;
     }
-   
+
 
     .rate-plan-grid .vr-dash:before {
         content: "—";
@@ -114,11 +115,12 @@
                                                                selectedvalues="zoneNameFilterOption"
                                                                onselectionchanged="filterZones"
                                                                hidefilterbox
+                                                               stopreadonly
                                                                hideremoveicon>
                                                     </vr-select>
                                                 </div>
                                                 <div style="display: inline-block; width: 120px;">
-                                                    <vr-textbox value="zoneNameFilterValue" onvaluechanged="filterZones"></vr-textbox>
+                                                    <vr-textbox value="zoneNameFilterValue" onvaluechanged="filterZones" stopreadonly></vr-textbox>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,7 +141,8 @@
                                                                                    selectedvalues="filterRoutingProducts"
                                                                                    onselectionchanged="filterZones"
                                                                                    label
-                                                                                   ismultipleselection>
+                                                                                   ismultipleselection
+                                                                                   stopreadonly>
                                                 </vr-whs-be-routingproduct-selector>
                                             </div>
                                         </div>
@@ -172,6 +175,7 @@
                                                            selectedvalues="currentRateComparisonOption"
                                                            onselectionchanged="filterZones"
                                                            hidefilterbox
+                                                           stopreadonly
                                                            hideremoveicon>
                                                 </vr-select>
                                             </div>
@@ -179,6 +183,7 @@
                                                 <vr-textbox type="number"
                                                             value="currentRateFilterValue"
                                                             decimalprecision="{{::longPrecision}}"
+                                                            stopreadonly
                                                             onvaluechanged="filterZones">
                                                 </vr-textbox>
                                             </div>
@@ -203,7 +208,8 @@
                                                            onselectionchanged="filterZones"
                                                            ismultipleselection
                                                            hidefilterbox
-                                                           hideselectedvaluessection>
+                                                           hideselectedvaluessection
+                                                           stopreadonly>
                                                 </vr-select>
                                             </div>
                                         </div>
@@ -226,7 +232,8 @@
                                                                datatextfield="text"
                                                                selectedvalues="routeOptionNumber"
                                                                onselectionchanged="filterZones"
-                                                               hideremoveicon>
+                                                               hideremoveicon
+                                                               stopreadonly>
                                                     </vr-select>
                                                 </span>
                                                 <span style="display: inline-block; width: 50px;">
@@ -236,14 +243,16 @@
                                                                selectedvalues="routeOptionComparisonOption"
                                                                onselectionchanged="filterZones"
                                                                hidefilterbox
-                                                               hideremoveicon>
+                                                               hideremoveicon
+                                                               stopreadonly>
                                                     </vr-select>
                                                 </span>
                                                 <span style="display: inline-block; width: 50px;">
                                                     <vr-textbox type="number"
                                                                 value="routeOptionFilterValue"
                                                                 decimalprecision="{{::longPrecision}}"
-                                                                onvaluechanged="filterZones">
+                                                                onvaluechanged="filterZones"
+                                                                stopreadonly>
                                                     </vr-textbox>
                                                 </span>
                                             </div>
@@ -277,14 +286,16 @@
                                                            selectedvalues="costComparisonOptions[$index]"
                                                            onselectionchanged="filterZones"
                                                            hidefilterbox
-                                                           hideremoveicon>
+                                                           hideremoveicon
+                                                           stopreadonly>
                                                 </vr-select>
                                             </div>
                                             <div ng-show="showfilter">
                                                 <vr-textbox type="number"
                                                             value="costFilterValues[$index]"
                                                             decimalprecision="{{::longPrecision}}"
-                                                            onvaluechanged="filterZones">
+                                                            onvaluechanged="filterZones"
+                                                            stopreadonly>
                                                 </vr-textbox>
                                             </div>
                                         </div>
@@ -307,14 +318,16 @@
                                                            selectedvalues="marginComparisonOption"
                                                            onselectionchanged="filterZones"
                                                            hidefilterbox
-                                                           hideremoveicon>
+                                                           hideremoveicon
+                                                           stopreadonly>
                                                 </vr-select>
                                             </div>
                                             <div ng-show="showfilter">
                                                 <vr-textbox type="number"
                                                             value="marginFilterValue"
                                                             decimalprecision="{{::longPrecision}}"
-                                                            onvaluechanged="filterZones">
+                                                            onvaluechanged="filterZones"
+                                                            stopreadonly>
                                                 </vr-textbox>
                                             </div>
                                         </div>
@@ -337,14 +350,16 @@
                                                            selectedvalues="marginPercentageComparisonOption"
                                                            onselectionchanged="filterZones"
                                                            hidefilterbox
-                                                           hideremoveicon>
+                                                           hideremoveicon
+                                                           stopreadonly>
                                                 </vr-select>
                                             </div>
                                             <div ng-show="showfilter">
                                                 <vr-textbox type="number"
                                                             value="marginPercentageFilterValue"
                                                             decimalprecision="{{::normalPrecision}}"
-                                                            onvaluechanged="filterZones">
+                                                            onvaluechanged="filterZones"
+                                                            stopreadonly>
                                                 </vr-textbox>
                                             </div>
                                         </div>
@@ -376,14 +391,16 @@
                                                            datatextfield="symbol"
                                                            selectedvalues="newRateFilterOption"
                                                            onselectionchanged="onNewRateFilterOptionChanged"
-                                                           hideremoveicon>
+                                                           hideremoveicon
+                                                           stopreadonly>
                                                 </vr-select>
                                             </div>
                                             <div ng-hide="hideNewRateFilterValue">
                                                 <vr-textbox ng-show="showfilter" type="number"
                                                             value="newRateFilterValue"
                                                             decimalprecision="{{::longPrecision}}"
-                                                            onvaluechanged="filterZones">
+                                                            onvaluechanged="filterZones"
+                                                            stopreadonly>
                                                 </vr-textbox>
                                             </div>
                                         </div>
@@ -407,7 +424,8 @@
                                                            onselectionchanged="filterZones"
                                                            ismultipleselection
                                                            hidefilterbox
-                                                           hideselectedvaluessection>
+                                                           hideselectedvaluessection
+                                                           stopreadonly>
                                                 </vr-select>
                                             </div>
                                         </div>

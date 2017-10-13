@@ -22,7 +22,9 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
+                ctrl.readOnly = false;
+                if ($attrs.stopreadonly == undefined)
+                    ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
                 var validationOptions = {};
                 if ($attrs.type === TextboxTypeEnum.Email.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Email.name)
                     validationOptions.emailValidation = true;
@@ -30,7 +32,7 @@
                     validationOptions.ipValidation = true;
                 if ($attrs.type === TextboxTypeEnum.FileName.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.FileName.name)
                     validationOptions.filenameValidation = true;
-                if ($attrs.minlength!=undefined ) {
+                if ($attrs.minlength != undefined) {
                     validationOptions.minlengthValidation = true;
                     validationOptions.minLength = ctrl.minlength;
                 }
