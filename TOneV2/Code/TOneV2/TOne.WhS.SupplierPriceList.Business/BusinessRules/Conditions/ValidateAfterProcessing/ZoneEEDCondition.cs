@@ -6,13 +6,12 @@ using Vanrise.Common;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
-    class ZoneEEDCondition : BusinessRuleCondition
+    public class ZoneEEDCondition : BusinessRuleCondition
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
             return target as NotImportedZone != null;
         }
-
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             NotImportedZone notImportedZone = context.Target as NotImportedZone;
@@ -28,7 +27,6 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             return result;
         }
-
         public override string GetMessage(IRuleTarget target)
         {
             return string.Format("Zone {0} has been closed in a period less than system period", (target as NotImportedZone).ZoneName);
