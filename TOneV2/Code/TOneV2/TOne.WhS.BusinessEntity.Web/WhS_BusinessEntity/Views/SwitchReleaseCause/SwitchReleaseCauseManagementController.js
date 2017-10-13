@@ -29,7 +29,7 @@
             };
             $scope.scopeModel.uploadSwitchReleaseCause = function () {
                 WhS_BE_SwitchReleaseCauseService.uploadSwitchReleaseCause();
-            }
+            };
             $scope.scopeModel.searchClicked = function () {
                 gridAPI.loadGrid(getGridFilter());
             };
@@ -40,13 +40,13 @@
             $scope.scopeModel.deliveryStatus = [
                 {
                     value: true,
-                    description:"Yes"
+                    description: "Yes"
                 },
                 {
-                      value: false,
-                      description: "No"
+                    value: false,
+                    description: "No"
                 },
-            ]
+            ];
         };
         function load() {
             loadAllControls();

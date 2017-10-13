@@ -38,7 +38,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SwitchReleaseCauseAPIServi
 
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
-                    }
+                    };
                     directiveAPI.onSwitchReleaseCauseAdded = function (switchObject) {
                         gridAPI.itemAdded(switchObject);
                     };
