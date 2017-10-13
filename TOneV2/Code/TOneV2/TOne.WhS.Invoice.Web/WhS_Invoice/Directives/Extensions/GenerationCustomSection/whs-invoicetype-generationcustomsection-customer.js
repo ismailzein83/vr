@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_FinancialAccountAPIService","WhS_BE_CommisssionTypeEnum",
+app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "WhS_BE_FinancialAccountAPIService", "WhS_BE_CommisssionTypeEnum",
     function (UtilsService, VRNotificationService, VRUIUtilsService, WhS_BE_FinancialAccountAPIService, WhS_BE_CommisssionTypeEnum) {
 
         var directiveDefinitionObject = {
@@ -10,7 +10,6 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
             {
                 onReady: "=",
                 normalColNum: '@'
-
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -24,16 +23,20 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
 
             },
             templateUrl: "/Client/Modules/WhS_Invoice/Directives/Extensions/GenerationCustomSection/Templates/CustomerGenerationCustomSectionTemplate.html"
-
-        }; 
+        };
 
         function CustomerGenerationCustomSection($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var context;
 
+            var oldCommission;
+
             var timeZoneSelectorAPI;
             var timeZoneSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var emptyTimeZonePromiseDeferred;
             var selectedTimeZoneReadyDeferred;
+
+            var selectedCommissionTypeReadyDeferred;
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onTimeZoneSelectorReady = function (api) {
@@ -42,23 +45,56 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                 };
                 $scope.scopeModel.commissionTypes = UtilsService.getArrayEnum(WhS_BE_CommisssionTypeEnum);
                 $scope.scopeModel.selectedCommissionType = WhS_BE_CommisssionTypeEnum.Display;
-                $scope.scopeModel.onTimeZoneSelectionChanged = function () {
-                    if (selectedTimeZoneReadyDeferred != undefined)
-                        selectedTimeZoneReadyDeferred.resolve();
+                $scope.scopeModel.onTimeZoneSelectionChanged = function (value) {
+                    if (value != undefined) {
+                        if (selectedTimeZoneReadyDeferred != undefined) {
+                            selectedTimeZoneReadyDeferred.resolve();
+                        }
+                        else {
+                            onvaluechanged();
+                        }
+                    }
                     else {
-                        console.log("Logic to be implemented");
+                        if (emptyTimeZonePromiseDeferred != undefined) {
+                            emptyTimeZonePromiseDeferred.resolve();
+                        }
+                        else {
+                            onvaluechanged();
+                        }
                     }
                 };
+
+                $scope.scopeModel.onCommissionFocusChanged = function () {
+                    if (oldCommission != $scope.scopeModel.commission)
+                        onvaluechanged();
+
+                    oldCommission != $scope.scopeModel.commission;
+                };
+
+                $scope.scopeModel.onCommissionTypeSelectionChanged = function (value) {
+                    if (selectedCommissionTypeReadyDeferred != undefined) {
+                        selectedCommissionTypeReadyDeferred.resolve();
+                    }
+                    else {
+                        onvaluechanged();
+                    }
+                };
+
+                function onvaluechanged() {
+                    if (context != undefined && context.onvaluechanged != undefined && typeof (context.onvaluechanged) == 'function') {
+                        context.onvaluechanged();
+                    }
+                };
+
                 UtilsService.waitMultiplePromises([timeZoneSelectorReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
-                
             }
 
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) { 
+                api.load = function (payload) {
                     var invoice;
                     var financialAccountId;
                     var customPayload;
@@ -70,10 +106,12 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                             financialAccountId = payload.financialAccountId;
                         }
                         if (customPayload != undefined) {
+                            selectedCommissionTypeReadyDeferred = UtilsService.createPromiseDeferred();
+                            oldCommission = $scope.scopeModel.commission = customPayload.Commission;
                             $scope.scopeModel.selectedCommissionType = UtilsService.getItemByVal($scope.scopeModel.commissionTypes, customPayload.CommissionType, "value");
                         }
                         if (invoice != undefined && invoice.Details != undefined) {
-                            $scope.scopeModel.commission = invoice.Details.Commission;
+                            oldCommission = $scope.scopeModel.commission = invoice.Details.Commission;
                             $scope.scopeModel.selectedCommissionType = UtilsService.getItemByVal($scope.scopeModel.commissionTypes, invoice.Details.CommissionType, "value");
                         }
                         context = payload.context;
@@ -100,6 +138,9 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                     }
                     else {
                         selectedTimeZoneReadyDeferred = UtilsService.createPromiseDeferred();
+                        emptyTimeZonePromiseDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(emptyTimeZonePromiseDeferred.promise);
+
                         promises.push(loadTimeZoneSelector(customPayload.TimeZoneId));
                     }
 
@@ -109,12 +150,17 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                         };
                         if (invoice != undefined && invoice.Details != undefined) {
                             timeZoneSelectorPayload.selectedIds = invoice.Details.TimeZoneId;
-
                         }
+
+                        if (timeZoneSelectorPayload.selectedIds != undefined && timeZoneSelectorPayload.selectedIds > 0)
+                            promises.push(selectedTimeZoneReadyDeferred.promise);
+
                         return timeZoneSelectorAPI.load(timeZoneSelectorPayload);
                     }
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         selectedTimeZoneReadyDeferred = undefined;
+                        emptyTimeZonePromiseDeferred = undefined;
+                        selectedCommissionTypeReadyDeferred = undefined;
                     });
                 };
 
@@ -123,7 +169,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
                         $type: "TOne.WhS.Invoice.Entities.CustomerGenerationCustomSectionPayload,TOne.WhS.Invoice.Entities",
                         TimeZoneId: timeZoneSelectorAPI.getSelectedIds(),
                         Commission: $scope.scopeModel.commission,
-                        CommissionType: $scope.scopeModel.selectedCommissionType != undefined?$scope.scopeModel.selectedCommissionType.value:undefined
+                        CommissionType: $scope.scopeModel.selectedCommissionType != undefined ? $scope.scopeModel.selectedCommissionType.value : undefined
                     };
                 };
 
@@ -139,6 +185,5 @@ app.directive("whsInvoicetypeGenerationcustomsectionCustomer", ["UtilsService", 
         }
 
         return directiveDefinitionObject;
-
     }
 ]);
