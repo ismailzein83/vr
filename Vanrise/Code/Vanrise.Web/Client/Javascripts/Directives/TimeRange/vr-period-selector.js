@@ -85,7 +85,7 @@ function (UtilsService, VRUIUtilsService, PeriodEnum) {
                 }
 
                 ctrl.datasource = UtilsService.getArrayEnum(PeriodEnum);
-
+                ctrl.datasource.splice(ctrl.datasource.length - 1, 1);
                 if (selectedIds != undefined) {
                     VRUIUtilsService.setSelectedValues(selectedIds, 'value', $attrs, ctrl);
                 }
