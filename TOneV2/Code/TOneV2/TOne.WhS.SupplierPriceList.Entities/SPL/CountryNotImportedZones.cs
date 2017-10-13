@@ -13,7 +13,7 @@ namespace TOne.WhS.SupplierPriceList
         public IEnumerable<NotImportedZone> NotImportedZones { get; set; }
         public object Key
         {
-            get { return "Pricelist"; }
+            get { return default(object); }
         }
         public string TargetType
         {
