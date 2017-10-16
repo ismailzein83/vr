@@ -94,7 +94,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     salesAndProfitsByCustomer.Profit = (salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet);
                     salesAndProfitsByCustomer.ProfitFormatted = ReportHelpers.FormatNormalNumberDigit(salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet);
-                    salesAndProfitsByCustomer.ProfitPercentageFormatted = ReportHelpers.FormatNumberPercentage((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet);
+                    salesAndProfitsByCustomer.ProfitPercentageFormatted = (salesAndProfitsByCustomer.SaleNet == 0)? "" :ReportHelpers.FormatNumberPercentage((salesAndProfitsByCustomer.SaleNet - salesAndProfitsByCustomer.CostNet) / salesAndProfitsByCustomer.SaleNet);
 
                     if (!String.IsNullOrEmpty(salesAndProfitsByCustomer.Customer))
                         listSalesAndProfitsByCustomer.Add(salesAndProfitsByCustomer);
@@ -143,7 +143,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Profit = Math.Truncate((double)((r.SaleNet - r.CostNet) * 100)) / 100,
                 FormattedProfit = ReportHelpers.FormatNormalNumberDigit((r.SaleNet - r.CostNet)),
                 Customer = r.Customer.ToString()
-            }).OrderByDescending(r => r.Profit).Take(10).ToList();
+            }).OrderByDescending(r => r.Profit).Take(10).ToList();          
             return lstProfitSummary;
         }
         private List<SaleAmountSummary> GetCustomerSaleAmountSummary(List<SalesAndProfitsByCustomer> summarieslist)
@@ -159,7 +159,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     Customer = cs.Customer
                 };
                 saleAmountSummary.Add(s);
-            }
+            }          
             return saleAmountSummary.OrderByDescending(s => s.SaleAmount).Take(10).ToList();
         }
     }
