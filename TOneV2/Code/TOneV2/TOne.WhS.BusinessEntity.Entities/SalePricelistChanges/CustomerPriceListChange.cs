@@ -104,4 +104,29 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SalePricelistRateChange RateChange { get; set; }
         public SalePricelistRPChange RPChange { get; set; }
     }
+    public class SalePricelistZoneChangeByZoneName
+    {
+        private Dictionary<string, SalePricelistZoneChange> _salePricelistZoneChangeByZoneName;
+        public SalePricelistZoneChangeByZoneName()
+        {
+            _salePricelistZoneChangeByZoneName = new Dictionary<string, SalePricelistZoneChange>();
+        }
+        public SalePricelistZoneChange TryAddValue(SalePricelistZoneChange zoneChange)
+        {
+            string zoneName = zoneChange.ZoneName.ToLower();
+
+            foreach (var salePricelistZoneChange in _salePricelistZoneChangeByZoneName.Values)
+            {
+                if (salePricelistZoneChange.ZoneName.ToLower().Equals(zoneName))
+                    return salePricelistZoneChange;
+            }
+
+            _salePricelistZoneChangeByZoneName.Add(zoneChange.ZoneName, zoneChange);
+            return zoneChange;
+        }
+        public IEnumerable<SalePricelistZoneChange> GetZoneChanges()
+        {
+            return _salePricelistZoneChangeByZoneName.Values;
+        }
+    }
 }
