@@ -20,7 +20,7 @@ app.directive("qmBeSourcezonereader", ['UtilsService', 'VRUIUtilsService', 'VRNo
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
 

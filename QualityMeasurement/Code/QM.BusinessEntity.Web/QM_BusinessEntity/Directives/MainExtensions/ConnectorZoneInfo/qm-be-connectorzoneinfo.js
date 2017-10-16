@@ -21,7 +21,7 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/QM_BusinessEntity/Directives/MainExtensions/ConnectorZoneInfo/Templates/ConnectorZoneInfoTemplate.html"
     };
@@ -107,7 +107,7 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
                         if (payload != undefined && payload.data != undefined)
                             directivePayload = {
                                 selectedIds: payload.data.ProfileId
-                            }
+                            };
                         VRUIUtilsService.callDirectiveLoad(profileDirectiveAPI, directivePayload, profileLoadPromiseDeferred);
                     });
 
@@ -120,7 +120,7 @@ app.directive("qmBeConnectorzoneinfo", ['UtilsService', 'VRUIUtilsService', 'QM_
                         if (payload != undefined && payload.data != undefined)
                             directivePayload = {
                                 selectedIds: payload.data.SupplierId
-                            }
+                            };
                         VRUIUtilsService.callDirectiveLoad(supplierDirectiveAPI, directivePayload, supplierLoadPromiseDeferred);
                     });
 

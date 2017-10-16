@@ -20,7 +20,7 @@ app.directive("qmClitesterTestconnectorConnectorvi", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/TestConnector-ConnectorVI.html"
     };

@@ -20,7 +20,7 @@ app.directive("qmClitesterInitiatetest", ['UtilsService', 'VRUIUtilsService', 'Q
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/QM_CliTester/Directives/MainExtensions/ITest/Templates/InitiateTestTemplate.html"
     };
@@ -36,7 +36,7 @@ app.directive("qmClitesterInitiatetest", ['UtilsService', 'VRUIUtilsService', 'Q
             $scope.sourceTypeTemplates = [];
             $scope.onSourceTypeDirectiveReady = function (api) {
                 sourceTypeDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
+                var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
             };
 

@@ -20,7 +20,7 @@ app.directive("vrQmClitesterSourceprofilereader", ['UtilsService', 'VRUIUtilsSer
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
          
@@ -36,7 +36,7 @@ app.directive("vrQmClitesterSourceprofilereader", ['UtilsService', 'VRUIUtilsSer
     function DirectiveConstructor($scope, ctrl) {
         this.initializeController = initializeController;
         var sourceTemplateDirectiveAPI;
-        var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();;
+        var sourceDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
        
         function initializeController() {
             defineAPI();

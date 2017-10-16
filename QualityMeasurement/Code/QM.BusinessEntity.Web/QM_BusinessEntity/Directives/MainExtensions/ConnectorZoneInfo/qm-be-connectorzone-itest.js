@@ -20,7 +20,7 @@ app.directive("qmBeConnectorzoneItest", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/QM_BusinessEntity/Directives/MainExtensions/ConnectorZoneInfo/Templates/ConnectorZoneInfo-ITest.html"
     };

@@ -88,7 +88,7 @@
                             
                             $scope.isGettingEntityStatistics = false;
                         });
-                };
+                }
             }
     }
 

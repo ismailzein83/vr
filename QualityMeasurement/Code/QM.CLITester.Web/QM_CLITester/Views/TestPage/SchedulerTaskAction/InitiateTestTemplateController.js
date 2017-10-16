@@ -11,7 +11,7 @@ function InitiateTestTemplateController($scope, UtilsService, VRUIUtilsService, 
         $scope.sourceTypeTemplates = [];
         $scope.onSourceTypeDirectiveReady = function (api) {
             sourceTypeDirectiveAPI = api;
-            var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
+            var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value; };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
         };
         $scope.schedulerTaskAction.getData = function () {

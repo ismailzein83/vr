@@ -20,7 +20,7 @@ app.directive("qmClitesterSourceprofilereaderItest", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/QM_CLITester/Directives/MainExtensions/SourceProfileReader/Templates/SouceProfileReaderiTest.html"
     };

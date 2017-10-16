@@ -66,7 +66,7 @@
 
             $scope.onCountrySelectItem = function (selectedItem) {
                 if (selectedItem != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
+                    var setLoader = function (value) { $scope.isLoadingZonesSelector = value; };
                     var payload = {
                         filter: {
                             CountryId: [selectedItem.CountryId]

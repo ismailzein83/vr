@@ -20,7 +20,7 @@ app.directive("qmBeSourcezonereaderTonev2", [function () {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
          

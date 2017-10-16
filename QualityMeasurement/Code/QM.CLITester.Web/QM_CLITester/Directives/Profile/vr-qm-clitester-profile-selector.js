@@ -32,7 +32,7 @@ function (QM_CLITester_ProfileAPIService, UtilsService, $compile, VRUIUtilsServi
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);

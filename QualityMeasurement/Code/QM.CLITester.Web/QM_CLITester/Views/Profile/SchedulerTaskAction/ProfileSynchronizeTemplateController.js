@@ -54,7 +54,7 @@ function ProfileSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSer
     function load() {
         $scope.isLoading = true;
         loadAllControls().then(function () {
-            loadForm()
+            loadForm();
         }).catch(function () {
             VRNotificationService.notifyExceptionWithClose(error, $scope);
             $scope.isLoading = false;

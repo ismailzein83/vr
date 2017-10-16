@@ -52,7 +52,7 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
 
         $scope.onCountrySelectItem = function (selectedItem) {
             if (selectedItem != undefined) {
-                var setLoader = function (value) { $scope.isLoadingZonesSelector = value };
+                var setLoader = function (value) { $scope.isLoadingZonesSelector = value; };
                 var payload = {
                     filter: {
                         CountryId: selectedItem.CountryId
@@ -65,7 +65,7 @@ function TestCallTemplateController($scope, UtilsService, VRUIUtilsService, Qm_C
         $scope.sourceTypeTemplates = [];
         $scope.onSourceTypeDirectiveReady = function (api) {
             sourceTypeDirectiveAPI = api;
-            var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
+            var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value; };
             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTypeDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
         };
         $scope.schedulerTaskAction.getData = function () {

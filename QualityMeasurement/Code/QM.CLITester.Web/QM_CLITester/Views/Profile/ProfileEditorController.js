@@ -33,7 +33,7 @@
             };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
         }
@@ -42,7 +42,7 @@
             $scope.isLoading = true;
             $scope.title = "Edit Profile";
             getProfile().then(function () {
-                loadAllControls()
+                loadAllControls();
             }).catch(function () {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;

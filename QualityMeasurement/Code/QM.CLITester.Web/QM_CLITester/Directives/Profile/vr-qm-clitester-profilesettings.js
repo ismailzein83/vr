@@ -20,7 +20,7 @@ app.directive("vrQmClitesterProfilesettings", ['ProfileTypeEnum', 'UtilsService'
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: function (element, attrs) {
             return getDirectiveTemplateUrl();

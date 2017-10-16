@@ -48,11 +48,11 @@ function (Qm_CliTester_TestCallService) {
                     if (item.Entity.InitiateTestInformation != null && item.Entity.InitiateTestInformation != undefined) {
                         ctrl.testId = item.Entity.InitiateTestInformation.Test_ID;
                     }
-                    
+
                     if (item.Entity.TestProgress != null && item.Entity.TestProgress != undefined) {
-                        
+
                         ctrl.name = item.Entity.TestProgress.Name;
-                        
+
                         $scope.testcallsdetails = (item.Entity.TestProgress.CallResults) ? item.Entity.TestProgress.CallResults : [];
                     }
                     if (item.Entity.Measure != null && item.Entity.Measure != undefined) {
@@ -64,7 +64,7 @@ function (Qm_CliTester_TestCallService) {
                         if ($scope.testcallsdetails[i].Duration == null)
                             $scope.testcallsdetails[i].Duration = "";
                     }
-                }
+                };
 
                 return directiveAPI;
             }

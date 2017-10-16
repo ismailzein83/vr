@@ -21,7 +21,7 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         templateUrl: "/Client/Modules/QM_BusinessEntity/Directives/MainExtensions/SourceSupplierReader/Templates/SourceSupplierReader.html"
     };
@@ -35,9 +35,9 @@ app.directive("qmBeSourcesupplierreader", ['UtilsService', 'VRUIUtilsService', '
             $scope.sourceTypeTemplates = [];
             $scope.onSourceTypeDirectiveReady = function (api) {
                 sourceTemplateDirectiveAPI = api;
-                var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value };
+                var setLoader = function (value) { $scope.isLoadingSourceTypeDirective = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sourceTemplateDirectiveAPI, undefined, setLoader, sourceDirectiveReadyPromiseDeferred);
-            }
+            };
 
             defineAPI();
         }

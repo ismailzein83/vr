@@ -77,7 +77,7 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-            }
+            };
 
             $scope.onCountryDirectiveReady = function (api) {
                 countryDirectiveAPI = api;
@@ -106,7 +106,7 @@
 
             $scope.onCountrySelectionChanged = function () {
                 var countries = countryDirectiveAPI.getSelectedIds();
-                var setLoader = function (value) { $scope.isLoadingZoneSelector = value };
+                var setLoader = function (value) { $scope.isLoadingZoneSelector = value; };
                 var payload;
                 if (countries != undefined && countries.length > 0)
                     payload = {

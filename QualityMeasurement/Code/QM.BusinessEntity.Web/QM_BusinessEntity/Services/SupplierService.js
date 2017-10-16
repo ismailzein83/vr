@@ -42,7 +42,7 @@
 
             var modalSettings = {};
             modalSettings.onScopeReady = function (modalScope) {
-                modalScope.title = "Upload Suppliers"
+                modalScope.title = "Upload Suppliers";
 
 
             };

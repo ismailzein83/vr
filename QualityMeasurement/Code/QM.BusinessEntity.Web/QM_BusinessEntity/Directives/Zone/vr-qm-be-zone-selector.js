@@ -32,7 +32,7 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);
@@ -79,7 +79,7 @@ function (QM_BE_ZoneAPIService, UtilsService, $compile, VRUIUtilsService) {
                     selectedIds = payload.selectedIds;
                 }
                 var serializedFilter = {};
-                ctrl.filter = undefined
+                ctrl.filter = undefined;
                 if (filter != undefined) {
                     ctrl.filter = filter;
                     serializedFilter = UtilsService.serializetoJson(filter);
