@@ -475,6 +475,7 @@
                     if ((innerHeight - 100) - basetop < heigth) {
                         var dropdownMenu = dropdown.find('.dropdown-menu');
                         var height = dropdownMenu.css({ display: "block" }).height();
+                        $element.find('.vr-select-add').css({ top: selfHeight + 16 });
                         dropdownMenu.css({ overflow: "hidden", marginTop: height, height: 0 }).animate({
                             marginTop: 0,
                             height: height
@@ -509,7 +510,7 @@
                     var baseleft = selfOffset.left - $(window).scrollLeft();
                     var heigth = $('div[name=' + id + ']').parents('.vr-pager-container').length > 0 ? 235 : 200;
                     if ((innerHeight - 100) - basetop < heigth) {
-                        initialtop = basetop - (heigth + (selfHeight * 2.7));
+                        initialtop = basetop - (heigth + (selfHeight * 2.9));
                         if (isRemoteLoad()) {
                             initialtop = initialtop - 35;
                         }
