@@ -1,6 +1,6 @@
 ﻿<div vr-modalcontent ng-controller="WhS_BE_SwitchReleaseCauseEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
-    <vr-form name="formFilter">
-        <vr-modalbody>
+    <vr-modalbody>
+        <vr-form name="formFilter">
             <vr-row>
                 <vr-whs-be-switch-selector on-ready="scopeModel.onSwitchSelectorReady" normal-col-num="6" isrequired="true" hideremoveicon="true"></vr-whs-be-switch-selector>
                 <vr-columns colnum="6">
@@ -15,17 +15,17 @@
                     <vr-switch value="scopeModel.isDelivered" label="Delivered"></vr-switch>
                 </vr-columns>
             </vr-row>
-        </vr-modalbody>
-        <div>
-            <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
-                <div transclude-to="buttons">
-
-
-                    <vr-button type="Save" data-onclick="scopeModel.save" formname="formFilter"></vr-button>
-                    <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
-                </div>
-            </vr-actionbar>
-
-        </div>
         </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+
+
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formFilter"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
 </div>

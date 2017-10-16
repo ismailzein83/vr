@@ -2,12 +2,12 @@
              on-ready="onGridReady"
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             menuactions="gridMenuActions">
+             menuactions="gridMenuActions"
+             idfield="SwitchReleaseCauseId"
+             enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'SwitchReleaseCauseId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Release Code'" field="'ReleaseCode'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Switch Name'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" field="'Description'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Delivered'" field="'IsDelivered'" type="'Text'"><vr-icon icontype="dataItem.IsDelivered"></vr-datagridcolumn>
-
-
 </vr-datagrid>

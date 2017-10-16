@@ -15,41 +15,34 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "SwitchReleaseCause")]
-
     public class SwitchReleaseCauseController : BaseAPIController
     {
+        SwitchReleaseCauseManager _manager = new SwitchReleaseCauseManager();
+
         [HttpPost]
         [Route("GetFilteredSwitchReleaseCauses")]
         public object GetFilteredSwitchReleaseCauses(Vanrise.Entities.DataRetrievalInput<SwitchReleaseCauseQuery> input)
         {
-
-            SwitchReleaseCauseManager manager = new SwitchReleaseCauseManager();
-            return GetWebResponse(input, manager.GetFilteredSwitchReleaseCauses(input));
+            return GetWebResponse(input, _manager.GetFilteredSwitchReleaseCauses(input));
         }
         [HttpPost]
         [Route("AddSwitchReleaseCause")]
         public InsertOperationOutput<SwitchReleaseCauseDetail> AddSwitchReleaseCause(SwitchReleaseCause switchReleaseCause)
         {
-            SwitchReleaseCauseManager manager = new SwitchReleaseCauseManager();
-            return manager.AddSwitchReleaseCause(switchReleaseCause);
+            return _manager.AddSwitchReleaseCause(switchReleaseCause);
 
         }
         [HttpGet]
         [Route("GetSwitchReleaseCause")]
         public SwitchReleaseCause GetSwitchReleaseCause(int switchReleaseCauseId)
         {
-            SwitchReleaseCauseManager manager = new SwitchReleaseCauseManager();
-            return manager.GetSwitchReleaseCause(switchReleaseCauseId);
-
-
-
+            return _manager.GetSwitchReleaseCause(switchReleaseCauseId);
         }
         [HttpPost]
         [Route("UpdateSwitchReleaseCause")]
         public UpdateOperationOutput<SwitchReleaseCauseDetail> UpdateSwitchReleaseCause(SwitchReleaseCause switchReleaseCause)
         {
-            SwitchReleaseCauseManager manager = new SwitchReleaseCauseManager();
-            return manager.UpdateSwitchReleaseCause(switchReleaseCause);
+            return _manager.UpdateSwitchReleaseCause(switchReleaseCause);
         }
 
         [HttpGet]
@@ -72,20 +65,18 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
             return GetExcelResponse(memStreamRate, "ReleaseCauseTemplate.xlsx");
         }
-          [HttpGet]
-          [Route("UploadSwitchReleaseCauses")]
-           public UploadSwitchReleaseCauseLog UploadSwitchReleaseCauses(int fileID,int switchId)
-           {
-           SwitchReleaseCauseManager manager = new SwitchReleaseCauseManager();
-           return manager.AddSwitchReleaseCauses(fileID, switchId);
-         }
-          [HttpGet]
-          [Route("DownloadSwitchReleaseCauseLog")]
-          public object DownloadCountryLog(long fileID)
-          {
-               SwitchReleaseCauseManager manager = new SwitchReleaseCauseManager();
-              byte[] bytes = manager.DownloadSwitchReleaseCauseLog(fileID);
-              return GetExcelResponse(bytes, "ImportedSwitchReleaseCausesResults.xls");
-          }
+        [HttpGet]
+        [Route("UploadSwitchReleaseCauses")]
+        public UploadSwitchReleaseCauseLog UploadSwitchReleaseCauses(int fileID, int switchId)
+        {
+            return _manager.UploadSwitchReleaseCauses(fileID, switchId);
+        }
+        [HttpGet]
+        [Route("DownloadSwitchReleaseCauseLog")]
+        public object DownloadSwitchReleaseCauseLog(long fileID)
+        {
+            byte[] bytes = _manager.DownloadSwitchReleaseCauseLog(fileID);
+            return GetExcelResponse(bytes, "ImportedSwitchReleaseCausesResults.xls");
+        }
     }
 }
