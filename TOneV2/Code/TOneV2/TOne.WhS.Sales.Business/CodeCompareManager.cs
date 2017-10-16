@@ -56,10 +56,11 @@ namespace TOne.WhS.Sales.Business
             var saleZoneManager = new SaleZoneManager();
             var supplierZoneManager = new SupplierZoneManager();
 
-            IEnumerable<CodeSupplierZoneMatch> codeMatchBySupplier = codeZoneMatchManager.GetSupplierCodeMatchBysupplierIds(query.supplierIds, query.codeStartWith);
-            Dictionary<string, List<CodeSupplierZoneMatch>> codeSupplierZoneMatchDictionary = codeCompareManager.StructureCodeSupplierZoneMatchDictionary(codeMatchBySupplier);
-
+            IEnumerable<CodeSupplierZoneMatch> codeMatchBySupplier = codeZoneMatchManager.GetSupplierZoneMatchBysupplierIdsAndSellingNumberPanId(query.sellingNumberPlanId, query.supplierIds, query.codeStartWith);
             IEnumerable<CodeSaleZoneMatch> saleCodeMatch = codeZoneMatchManager.GetSaleCodeMatchBySellingNumberPlanId(query.sellingNumberPlanId, query.codeStartWith);
+            if (codeMatchBySupplier == null || codeMatchBySupplier.Count() == 0 || saleCodeMatch == null || saleCodeMatch.Count() == 0)
+                return null;
+            Dictionary<string, List<CodeSupplierZoneMatch>> codeSupplierZoneMatchDictionary = codeCompareManager.StructureCodeSupplierZoneMatchDictionary(codeMatchBySupplier);
             Dictionary<string, CodeSaleZoneMatch> codeSaleZoneMatchDictionary = codeCompareManager.StructureCodeSaleZoneMatchDictionary(saleCodeMatch);
 
             HashSet<string> distinctCode = codeSupplierZoneMatchDictionary.Keys.ToHashSet<string>();
@@ -101,7 +102,7 @@ namespace TOne.WhS.Sales.Business
                         else
                         {
                             codeCompareSupplierItem.SupplierCodeIndicator = CodeCompareIndicator.Highlight;
-                            
+
 
                         }
                         codeCompareItem.SupplierItems.Add(codeCompareSupplierItem);
@@ -146,14 +147,34 @@ namespace TOne.WhS.Sales.Business
             var i = 0;
             var cellCounter = 1;
             var countOfItems = codeCompareItems.Count();
+
+            worksheet.Cells.DeleteRows(1, 3);
+
             for (i = 0; i < countOfItems; i++)
             {
                 var codeCompareItem = codeCompareItems.ElementAt(i);
                 if (codeCompareItem.Action != null)
                 {
-                    worksheet.Cells[cellCounter, 0].PutValue(codeCompareItem.SaleZone);
+                    if (codeCompareItem.SaleCode == null)
+                    {
+                        worksheet.Cells[cellCounter, 0].PutValue(codeCompareItem.SupplierItems[0].SupplierZone);
+                    }
+                    else
+                    {
+                        worksheet.Cells[cellCounter, 0].PutValue(codeCompareItem.SaleZone);
+                    }
                     worksheet.Cells[cellCounter, 1].PutValue(codeCompareItem.Code);
-                    worksheet.Cells[cellCounter, 2].PutValue(codeCompareItem.Action);
+                    if (codeCompareItem.Action == CodeCompareAction.New)
+                    {
+                        worksheet.Cells[cellCounter, 2].PutValue("N");
+                    }
+                    else
+                    {
+                        if (codeCompareItem.Action == CodeCompareAction.Delete)
+                        {
+                            worksheet.Cells[cellCounter, 2].PutValue("D");
+                        }
+                    }
                     cellCounter++;
                 }
 

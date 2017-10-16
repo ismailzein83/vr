@@ -305,12 +305,13 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 else {
                     colDef.columnIndex = columnIndex;
                     var columnIndexToInsert = 0;
-                    for (var i = 0; i < ctrl.columnDefs.length; i++) {
+                    for (var i = 0; i < ctrl.columnDefs.length + 1; i++) {//+ 1 because the column is not yet added to ctrl.columnDefs 
                         columnIndexToInsert = i;
-                        var iColDef = ctrl.columnDefs[i];
-                        if (i == columnIndex || (iColDef.columnIndex != undefined && iColDef.columnIndex >= columnIndex)) {
+                        var iColDef = i < ctrl.columnDefs.length ? ctrl.columnDefs[i] : undefined;
+                        if (i == columnIndex || (iColDef != undefined && iColDef.columnIndex != undefined && iColDef.columnIndex >= columnIndex)) {
                             break;
                         }
+                        
                     }
                     
                     ctrl.columnDefs.splice(columnIndexToInsert, 0, colDef);

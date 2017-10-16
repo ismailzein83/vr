@@ -4,16 +4,16 @@
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
              idfield="Code" enableautoexport="true">
-    <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Sale Code'" field="'SaleCode'" type="'Text'" getcolor="getSaleCodeStatusColor"></vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="supplier in suppliers" headertext="supplier.Name" type="'Text'" tag="supplier" columnindex="3">
+    <vr-datagridcolumn headertext="'Code'" field="'Code'" type="'Text'" columnindex="0"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Sale Code'" field="'SaleCode'" type="'Text'" getcolor="getSaleCodeStatusColor" columnindex="1"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="supplier in suppliers" headertext="supplier.Name" type="'Text'" tag="supplier" columnindex="(2 + $index)">
         <vr-label isvalue color="{{viewScope.getSupplierCodeStatusColor(dataItem,colDef)}}">{{viewScope.getSupplierCode(colDef.tag.CarrierAccountId, dataItem)}}</vr-label>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Sale Zone Name'" field="'SaleZone'" type="'Text'" columnindex="1002"></vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="supplier in suppliers" headertext="supplier.Name" type="'Text'" tag="supplier" columnindex="1010">
+    <vr-datagridcolumn headertext="'Sale Zone Name'" field="'SaleZone'" type="'Text'" columnindex="(2 + suppliers.length)"></vr-datagridcolumn>
+    <vr-datagridcolumn ng-repeat="supplier in suppliers" headertext="supplier.Name" type="'Text'" tag="supplier" columnindex="(3 + suppliers.length + $index)">
         <vr-label isvalue>{{viewScope.getSupplierZoneName(colDef.tag.CarrierAccountId, dataItem)}}</vr-label>
     </vr-datagridcolumn>
-    <vr-datagridcolumn  headertext="'Occurrence Code In Suppliers'" field="'OccurrenceInSuppliers'" type="'Text'" columnindex="2003" getcolor="getOccurrenceInSupplierStatusColor"></vr-datagridcolumn>
-    <vr-datagridcolumn  headertext="'Absence Code In Suppliers'" field="'AbsenceInSuppliers'" type="'Text'" columnindex="2004" getcolor="getAbssenceInSupplierStatusColor"></vr-datagridcolumn>
-    <vr-datagridcolumn  headertext="'Action'" field="'Action'" type="'Text'" columnindex="2005"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Occurrence Code In Suppliers'" field="'OccurrenceInSuppliers'" type="'Text'" columnindex="(3 + (2 * suppliers.length))" getcolor="getOccurrenceInSupplierStatusColor"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Absence Code In Suppliers'" field="'AbsenceInSuppliers'" type="'Text'" columnindex="(4 + (2 * suppliers.length))" getcolor="getAbssenceInSupplierStatusColor"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Action'" field="'Action'" type="'Text'" columnindex="(5 + (2 * suppliers.length))"></vr-datagridcolumn>
 </vr-datagrid>

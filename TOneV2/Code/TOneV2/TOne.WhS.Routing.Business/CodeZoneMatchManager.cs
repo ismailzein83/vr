@@ -53,6 +53,16 @@ namespace TOne.WhS.Routing.Business
             return dataManager.GetSupplierZoneMatchBysupplierIds(supplierIds, codeStartWith);
         }
 
+        public IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBysupplierIdsAndSellingNumberPanId(int sellingNumberPlanId, IEnumerable<long> supplierIds, string codeStartWith)
+        {
+            if (supplierIds == null)
+                throw new NullReferenceException("supplierIds");
+            if (sellingNumberPlanId == null)
+                throw new NullReferenceException("sellingNumberPlanId");
+            ICodeZoneMatchDataManager dataManager = GetDataManager();
+            return dataManager.GetSupplierZoneMatchBysupplierIdsAndSellingNumberPanId(sellingNumberPlanId, supplierIds, codeStartWith);
+        }
+
 		#endregion
 
 		#region Private Methods

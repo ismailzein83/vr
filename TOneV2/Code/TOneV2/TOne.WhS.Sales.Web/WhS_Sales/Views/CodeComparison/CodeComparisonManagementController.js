@@ -30,7 +30,6 @@
             $scope.exportClicked = function () {
                 setFilterObject();
                 WhS_Sales_CodeCompareAPIService.ExportCodeCompareTemplate(filter).then(function (response) {
-                    console.log(response.data);
                     UtilsService.downloadFile(response.data, response.headers);
                 });
             };
@@ -55,7 +54,7 @@
                     if ($scope.threshold < 0)
                         return "negative number";
                     if ($scope.threshold > carrierAccountDirectiveAPI.getSelectedIds().length)
-                        return "greater than maximum"
+                        return "Maximum value : " + carrierAccountDirectiveAPI.getSelectedIds().length;
                 }
             };
         }

@@ -69,6 +69,41 @@ namespace TOne.WhS.Routing.Data.SQL
                 cmd.Parameters.Add(supplierIdsParameter);
             });
         }
+
+        public IEnumerable<CodeSupplierZoneMatch> GetSupplierZoneMatchBysupplierIdsAndSellingNumberPanId(int sellingNumberPlanId ,IEnumerable<long> supplierIds, string codeStartWith)
+        {
+            return base.GetItemsText<CodeSupplierZoneMatch>(query_GetCodeSupplierZoneMatchBySupplierIdsAndSellingNumberPlanId, CodeSupplierZoneMatchMapper, (cmd) =>
+            {
+                var codeStartWithParameter = new SqlParameter()
+                {
+                    ParameterName = "@CodeStartWith",
+                    SqlDbType = System.Data.SqlDbType.NVarChar,
+                    IsNullable = true,
+                    Value = DBNull.Value
+                };
+                if (codeStartWith != null)
+                    codeStartWithParameter.Value = codeStartWith;
+                cmd.Parameters.Add(codeStartWithParameter);
+
+                var sNPId = new SqlParameter()
+                {
+                    ParameterName = "@SellingNumberPlanId",
+                    SqlDbType = System.Data.SqlDbType.Int,
+                    Value = sellingNumberPlanId
+                };
+
+                cmd.Parameters.Add(sNPId);
+                var supplierIdsParameter = new SqlParameter()
+                {
+                    ParameterName = "@SupplierIds",
+                    SqlDbType = System.Data.SqlDbType.NVarChar,
+                    Value = DBNull.Value
+                };
+                if (supplierIds != null)
+                    supplierIdsParameter.Value = string.Join(",", supplierIds);
+                cmd.Parameters.Add(supplierIdsParameter);
+            });
+        }
        public IEnumerable<CodeSaleZoneMatch> GetSaleZoneMatchBySellingNumberPlanId(int sellingNumberPlanId, string codeStartWith)
         {
             return base.GetItemsText<CodeSaleZoneMatch>(query_GetSaleZoneMatchBySellingNumberPlanId, CodeSaleZoneMatchMapper, (cmd) =>
@@ -196,6 +231,22 @@ namespace TOne.WhS.Routing.Data.SQL
 			where SupplierID in (select SupplierId from @SupplierIdsTable)
                 And( @CodeStartWith is null OR Code like @CodeStartWith+'%')
 		";
+
+        private const string query_GetCodeSupplierZoneMatchBySupplierIdsAndSellingNumberPlanId =
+       @"
+			declare @SupplierIdsTable table (SupplierId bigint not null)
+			insert into @SupplierIdsTable (SupplierId)
+			select ParsedString from dbo.ParseStringList(@SupplierIds);
+		    
+            with allValidCodes as (
+                            select [CodeMatch] from [TOneV2Dev_RoutingProductRoute_2019].[dbo].[CodeSupplierZoneMatch] with (nolock)
+                            union all 
+                            select [CodeMatch] from [TOneV2Dev_RoutingProductRoute_2019].[dbo].[CodeSaleZoneMatch] with (nolock) where SellingNumberPlanID = @SellingNumberPlanId),
+                            distinctCodes As  (select distinct CodeMatch as Code from allValidCodes)
+
+                         select cs.Code,cs.SupplierID,cs.SupplierZoneID,cs.CodeMatch from [dbo].[CodeSupplierZoneMatch] as cs join distinctCodes dc on cs.Code = dc.Code where  SupplierID in (select SupplierId from @SupplierIdsTable)
+                            And( @CodeStartWith is null OR cs.Code like @CodeStartWith+'%')";
+
 		private const string query_GetSupplierZonesMatchedToSaleZones =
 		@"
 			declare @SaleZoneIdTable table (SaleZoneId bigint not null)

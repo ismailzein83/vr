@@ -30,6 +30,8 @@ namespace TOne.WhS.Sales.Web.Controllers
             string templateAbsolutePath = HttpContext.Current.Server.MapPath(templateRelativePath);
             byte[] templateBytes = File.ReadAllBytes(templateAbsolutePath);
             byte[] templateWithDataBytes = new CodeCompareManager().ExportCodeCompareTemplate(templateBytes,query);
+            if (templateWithDataBytes == null)
+                return null;
             MemoryStream memoryStream = new System.IO.MemoryStream();
             memoryStream.Write(templateWithDataBytes, 0, templateWithDataBytes.Length);
             memoryStream.Seek(0, System.IO.SeekOrigin.Begin);

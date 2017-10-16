@@ -81,13 +81,13 @@ function (UtilsService, VRNotificationService, WhS_Sales_CodeCompareAPIService, 
 
             };
             $scope.getSupplierCodeStatusColor = function (dataItem, colDef) {
-                
+
                 if (dataItem.SupplierItems == null || dataItem.SupplierItems.length == 0)
                     return undefined;
-                var supplierItem = UtilsService.getItemByVal(dataItem.SupplierItems, colDef.tag.CarrierAccountId, 'SupplierId');
+                var supplierItem = (colDef!=undefined && colDef.tag!=undefined)?UtilsService.getItemByVal(dataItem.SupplierItems, colDef.tag.CarrierAccountId, 'SupplierId'):undefined;
                 if (supplierItem == null)
                     return undefined;
-                return  WhS_Sales_CodeCompareService.getStatusColor(supplierItem.SupplierCodeIndicator);
+                return WhS_Sales_CodeCompareService.getStatusColor(supplierItem.SupplierCodeIndicator);
 
             };
 
