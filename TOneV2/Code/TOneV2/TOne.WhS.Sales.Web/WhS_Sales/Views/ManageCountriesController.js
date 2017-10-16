@@ -293,7 +293,7 @@
                         }
                     }
                     else {
-                        countryIdsToClose = getCountryIds($scope.scopeModel.countriesToSell);
+                        countryIdsToClose = getCountryIds($scope.scopeModel.countriesToClose);
                     }
                     return countryIdsToClose;
                 }
