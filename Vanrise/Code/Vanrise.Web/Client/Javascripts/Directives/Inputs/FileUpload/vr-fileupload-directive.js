@@ -47,7 +47,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                 else if ($attrs.extension == "all")
                     $scope.extensionList.length = 0;
                 else
-                   $scope.extensionList = $attrs.extension.split(',');
+                    $scope.extensionList = $attrs.extension.toLowerCase().split(',');
             }
            
             var pathArray = location.href.split('/');
@@ -74,7 +74,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                         return;
                     var nameAsTab = data.originalFiles[0].name.split(".");
                     var fileExt = nameAsTab[nameAsTab.length - 1];
-                    if ($scope.extensionList.indexOf(fileExt) == -1 && $scope.extensionList.length > 0 ) {
+                    if ($scope.extensionList.indexOf(fileExt.toLowerCase()) == -1 && $scope.extensionList.length > 0) {
                         data.originalFiles.length = 0;
                         VRNotificationService.showError("Invalide file type.");
                         filecontrol.val("");
