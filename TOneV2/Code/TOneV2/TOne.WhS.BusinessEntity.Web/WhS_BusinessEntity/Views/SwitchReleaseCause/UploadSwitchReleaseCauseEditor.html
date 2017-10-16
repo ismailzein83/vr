@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="WhS_BE_UploadSwitchReleaseCauseEditorController" width="'50%'">
+﻿<div vr-modalcontent ng-controller="WhS_BE_UploadSwitchReleaseCauseEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formUploadSwitchReleaseCauseEditor">
             <vr-row removeline>
@@ -33,7 +33,7 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <vr-button type="Upload" formname="formUploadSwitchReleaseCauseEditor" data-onclick="scopeModel.uploadSwitchReleaseCauses"></vr-button>
-                <vr-button type="Download"  data-onclick="scopeModel.downloadTemplate"></vr-button>
+                <vr-button type="Download" data-onclick="scopeModel.downloadTemplate"></vr-button>
             </div>
         </vr-actionbar>
     </div>

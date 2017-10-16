@@ -81,44 +81,49 @@ namespace TOne.WhS.BusinessEntity.Business
             VRFileManager fileManager = new VRFileManager();
             byte[] bytes = fileManager.GetFile(fileId).Content;
             var fileStream = new System.IO.MemoryStream(bytes);
-            //ExportTableOptions options = new ExportTableOptions();
-            //options.CheckMixedValueType = true;
             Workbook wbk = new Workbook(fileStream);
             Worksheet worksheet = wbk.Worksheets[0];
             List<String> headers = new List<string>();
             headers.Add(worksheet.Cells[0, 0].StringValue);
             headers.Add("Result");
             headers.Add("Error Message");
-            //wbk.CalculateFormula();
             List<SwitchReleaseCause> addedSwitchReleaseCauses = new List<SwitchReleaseCause>();
             int count = 1;
             while (count < worksheet.Cells.Rows.Count)
             {
-                var switchReleaseCause = new SwitchReleaseCause()
+                if (!String.IsNullOrEmpty(worksheet.Cells[count, 0].StringValue) || !String.IsNullOrEmpty(worksheet.Cells[count, 1].StringValue) || !String.IsNullOrEmpty(worksheet.Cells[count, 0].StringValue))
                 {
-                    ReleaseCode =  worksheet.Cells[count, 0].StringValue.Trim(),
-                    SwitchId = switchId
-                };
-                switchReleaseCause.Settings = new SwitchReleaseCauseSetting();
-                if (worksheet.Cells[count, 2].StringValue.Trim() == "Y")
-                    switchReleaseCause.Settings.IsDelivered = true;
-                else if (worksheet.Cells[count, 2].StringValue.Trim() == "N")
-                    switchReleaseCause.Settings.IsDelivered = false;
-                switchReleaseCause.Settings.Description = worksheet.Cells[count, 1].StringValue.Trim();
-                addedSwitchReleaseCauses.Add(switchReleaseCause);
+                    var switchReleaseCause = new SwitchReleaseCause()
+                    {
+
+                        ReleaseCode = worksheet.Cells[count, 0].StringValue,
+                        SwitchId = switchId
+                    };
+
+                    switchReleaseCause.Settings = new SwitchReleaseCauseSetting();
+                    if (worksheet.Cells[count, 2].StringValue != null && worksheet.Cells[count, 2].StringValue == "Y")
+                        switchReleaseCause.Settings.IsDelivered = true;
+                    else
+                        switchReleaseCause.Settings.IsDelivered = false;
+                    if (worksheet.Cells[count, 1].StringValue != null)
+                        switchReleaseCause.Settings.Description = worksheet.Cells[count, 1].StringValue;
+                    addedSwitchReleaseCauses.Add(switchReleaseCause);
+                }
+                else break;
+                
                 count++;
             }
             Workbook returnedExcel = new Workbook();
             Vanrise.Common.Utilities.ActivateAspose();
             returnedExcel.Worksheets.Clear();
-            Worksheet SwitchReleaseCauseWorkSheet = returnedExcel.Worksheets.Add("Result");
+            Worksheet switchReleaseCauseWorkSheet = returnedExcel.Worksheets.Add("Result");
             int rowIndex = 0;
             int colIndex = 0;
             foreach (var header in headers)
             {
-                SwitchReleaseCauseWorkSheet.Cells.SetColumnWidth(colIndex, 20);
-                SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue(header);
-                Cell cell = SwitchReleaseCauseWorkSheet.Cells.GetCell(rowIndex, colIndex);
+                switchReleaseCauseWorkSheet.Cells.SetColumnWidth(colIndex, 20);
+                switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue(header);
+                Cell cell = switchReleaseCauseWorkSheet.Cells.GetCell(rowIndex, colIndex);
                 Style style = cell.GetStyle();
                 style.Font.Name = "Times New Roman";
                 style.Font.Color = Color.FromArgb(255, 0, 0);
@@ -131,10 +136,11 @@ namespace TOne.WhS.BusinessEntity.Business
             colIndex = 0;
             foreach (var addedSwitchReleaseCause in addedSwitchReleaseCauses)
             {
-                SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue(addedSwitchReleaseCause.ReleaseCode);
+                
+                switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue(addedSwitchReleaseCause.ReleaseCode);
                 colIndex++;
 
-                SwitchReleaseCause switchReleaseCause = GetCachedSwitchReleaseCauses().FindRecord(it => it.ReleaseCode.Equals(addedSwitchReleaseCause.ReleaseCode, StringComparison.InvariantCultureIgnoreCase) && it.SwitchId.Equals(addedSwitchReleaseCause.SwitchId));
+                SwitchReleaseCause switchReleaseCause = GetCachedSwitchReleaseCauses().FindRecord(it => it.ReleaseCode.Equals(addedSwitchReleaseCause.ReleaseCode, StringComparison.InvariantCultureIgnoreCase) && it.SwitchId == addedSwitchReleaseCause.SwitchId);
                 if (!String.IsNullOrEmpty(addedSwitchReleaseCause.ReleaseCode))
                 {
                     if (switchReleaseCause == null)
@@ -144,16 +150,16 @@ namespace TOne.WhS.BusinessEntity.Business
                         bool insertActionSucc = dataManager.AddSwitchReleaseCause(addedSwitchReleaseCause, out switchReleaseCauseId);
                         if (insertActionSucc)
                         {
-                            SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
+                            switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
                             uploadSwitchReleaseCauseLog.CountOfSwitchReleaseCausesAdded++;
                             colIndex = 0;
                             rowIndex++;
                         }
                         else
                         {
-                            SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                            switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
                             colIndex++;
-                            SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("SwitchReleaseCause already exists");
+                            switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("SwitchReleaseCause already exists");
                             uploadSwitchReleaseCauseLog.CountOfSwitchReleaseCausesExist++;
                             colIndex = 0;
                             rowIndex++;
@@ -161,16 +167,23 @@ namespace TOne.WhS.BusinessEntity.Business
                     }
                     else
                     {
-                        SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                        switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
                         colIndex++;
-                        SwitchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Country already exists");
+                        switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Switch Release Cause already exists");
                         uploadSwitchReleaseCauseLog.CountOfSwitchReleaseCausesExist++;
                         colIndex = 0;
                         rowIndex++;
                     }
                 }
-                else
+                else 
+                {
+                    switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
+                    colIndex++;
+                    switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Switch Release Cause is null");
+                    uploadSwitchReleaseCauseLog.CountOfSwitchReleaseCausesExist++;
                     colIndex = 0;
+                    rowIndex++;
+                }
             }
 
             MemoryStream memoryStream = new MemoryStream();

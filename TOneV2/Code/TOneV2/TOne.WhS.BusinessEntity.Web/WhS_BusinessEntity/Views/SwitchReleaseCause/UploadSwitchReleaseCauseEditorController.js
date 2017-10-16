@@ -18,33 +18,39 @@
 
             $scope.scopeModel.downloadTemplate = function () {
                 return WhS_BE_SwitchReleaseCauseAPIService.DownloadSwitchReleaseCausesTemplate().then(function (response) {
+                    if (response != undefined)
                     UtilsService.downloadFile(response.data, response.headers);
                 });
             };
 
             $scope.scopeModel.uploadSwitchReleaseCauses = function () {
-
+                $scope.scopeModel.isLoading = true;
                 var switchId = switchSelectorAPI.getSelectedIds();
 
                 return WhS_BE_SwitchReleaseCauseAPIService.UploadSwitchReleaseCauses($scope.file.fileId, switchId).then(function (response) {
+                    if (response != undefined) {
 
-                    $scope.scopeModel.isUploadingComplete = true;
+                        $scope.scopeModel.isUploadingComplete = true;
 
-                    $scope.scopeModel.addedSwitchReleaseCauses = response.CountOfSwitchReleaseCausesAdded;
+                        $scope.scopeModel.addedSwitchReleaseCauses = response.CountOfSwitchReleaseCausesAdded;
 
-                    $scope.scopeModel.existsSwitchReleaseCauses = response.CountOfSwitchReleaseCausesExist;
+                        $scope.scopeModel.existsSwitchReleaseCauses = response.CountOfSwitchReleaseCausesExist;
 
-                    fileID = response.fileID;
+                        fileID = response.fileID;
 
-                    VRNotificationService.showSuccess("Switch Release Cause Finished Upload");
+                        VRNotificationService.showSuccess("Switch Release Cause Finished Upload");
+                    }
                 }).catch(function (error) {
                     VRNotificationService.showError(error.ExceptionMessage);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
                 });
             };
 
             $scope.scopeModel.downloadLog = function () {
                 if (fileID != undefined) {
                     return WhS_BE_SwitchReleaseCauseAPIService.DownloadSwitchReleaseCauseLog(fileID).then(function (response) {
+                        if (response != undefined)
                         UtilsService.downloadFile(response.data, response.headers);
                     });
                 }
@@ -57,6 +63,7 @@
         }
 
         function load() {
+            $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
 
