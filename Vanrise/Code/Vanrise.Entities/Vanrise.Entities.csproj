@@ -157,6 +157,9 @@
     <Compile Include="VREvent\VREventHandlerSettings.cs" />
     <Compile Include="VREvent\VREventPayload.cs" />
     <Compile Include="VREvent\VREventHandler.cs" />
+    <Compile Include="VRExclusiveSession\VRExclusiveSessionOperArgs.cs" />
+    <Compile Include="VRExclusiveSession\VRExclusiveSessionType.cs" />
+    <Compile Include="VRExclusiveSession\VRExclusiveSessionTypeSettings.cs" />
     <Compile Include="VRMail\VRMail.cs" />
     <Compile Include="VRMail\VRMailAttachement.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentExcel.cs" />
