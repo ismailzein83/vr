@@ -14,7 +14,7 @@ function SupplierSynchronizeTemplateController($scope, UtilsService, VRUIUtilsSe
         $scope.onSourceTypeDirectiveReady = function (api) {
             sourceTemplateDirectiveAPI = api;
             sourceDirectiveReadyPromiseDeferred.resolve();
-        }
+        };
         $scope.schedulerTaskAction.getData = function () {
 
             var schedulerTaskAction;
