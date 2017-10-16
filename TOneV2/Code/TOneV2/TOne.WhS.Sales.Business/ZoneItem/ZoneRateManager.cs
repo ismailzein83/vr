@@ -108,8 +108,10 @@ namespace TOne.WhS.Sales.Business
                 }
             }
 
-            if (zoneItem.CurrentRateBED.HasValue && zoneItem.CurrentRateBED.Value <= DateTime.Today)
+            // Don't set the future rates of future zones or of those sold in the future
+            if (!zoneItem.IsFutureZone && (!zoneItem.CountryBED.HasValue || zoneItem.CountryBED.Value <= DateTime.Today))
                 SetFutureRates(zoneItem);
+            
             SetZoneRateChanges(zoneItem);
             SetZoneRateTypes(zoneItem);
         }
