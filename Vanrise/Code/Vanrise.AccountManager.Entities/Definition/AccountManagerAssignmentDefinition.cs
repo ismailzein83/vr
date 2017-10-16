@@ -8,7 +8,9 @@ namespace Vanrise.AccountManager.Entities
 {
     public class AccountManagerAssignmentDefinition
     {
-        public Guid AccountPackageAssignementDefinitionId { get; set; }
+        public Guid AccountManagerAssignementDefinitionId { get; set; }
+
+        public string Name { get; set; }
 
         public AccountManagerAssignmentDefinitionSettings Settings { get; set; }
     }
