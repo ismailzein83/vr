@@ -131,38 +131,42 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 }).ToList();
         }
 
-        private ZoneToClose GetExistingZoneAtClosureTime(List<ExistingZone> existingZones, String zoneName, DateTime closureDate, int? countryId)
+        private List<ZoneToClose> GetZoneToCloseFromClosedExistingZones(IEnumerable<ExistingZone> closedExistingZones, DateTime closureDate)
         {
-            ExistingZone existingZoneAtClosureTime = new ExistingZone();
+            List<ZoneToClose> zonesToClose = new List<ZoneToClose>();
 
-            foreach (var existingZone in existingZones)
+            foreach (var existingZone in closedExistingZones)
             {
-                if (existingZone.BED <= closureDate && existingZone.OriginalEED.VRGreaterThan(closureDate) && (countryId == null || existingZone.CountryId == countryId))
+                if (existingZone.BED <= closureDate && existingZone.OriginalEED.VRGreaterThan(closureDate))
                 {
-                    existingZoneAtClosureTime = existingZone;
-                    break;
+                    zonesToClose.Add(new ZoneToClose { ZoneId = existingZone.ZoneId, ZoneName = existingZone.ZoneEntity.Name, EED = closureDate });
                 }
             }
 
-            if (existingZoneAtClosureTime == null)
-                throw new DataIntegrityValidationException(string.Format("Could not find existing zone at closure time for Zone {0}", zoneName));
-
-            return (new ZoneToClose { ZoneId = existingZoneAtClosureTime.ZoneId, ZoneName = zoneName, EED = closureDate });
+            return zonesToClose;
         }
 
         private IEnumerable<StructuredCountryActions> GetCountryActions(IEnumerable<CountryToProcess> countriesToProcess, ClosedExistingZones closedExistingZones, DateTime processEffectiveDate)
         {
             List<StructuredCountryActions> allCountryActions = new List<StructuredCountryActions>();
-            Dictionary<string, List<ExistingZone>> closedExistingZonesDictionary = (closedExistingZones != null) ? closedExistingZones.GetClosedExistingZones() : new Dictionary<string, List<ExistingZone>>();
+            Dictionary<int, List<ExistingZone>> closedExistingZonesByCountryId = new Dictionary<int, List<ExistingZone>>();
+
+            foreach (var listOfExistingZones in closedExistingZones.GetClosedExistingZones().Values)
+            {
+                foreach (var existingZone in listOfExistingZones)
+                {
+                    List<ExistingZone> list = closedExistingZonesByCountryId.GetOrCreateItem(existingZone.CountryId);
+                    list.Add(existingZone);
+                }
+            }
 
             foreach (CountryToProcess countryData in countriesToProcess)
             {
                 StructuredCountryActions actionsForThisCountry = new StructuredCountryActions();
 
-                foreach (var closedExistingZone in closedExistingZonesDictionary)
-                {
-                    actionsForThisCountry.ZonesToClose.Add(GetExistingZoneAtClosureTime(closedExistingZone.Value, closedExistingZone.Key, processEffectiveDate, countryData.CountryId));
-                }
+                IEnumerable<ExistingZone> closedExistingZonesFotThisCountry = closedExistingZonesByCountryId.GetRecord(countryData.CountryId);
+                if (closedExistingZonesFotThisCountry != null)
+                    actionsForThisCountry.ZonesToClose.AddRange(GetZoneToCloseFromClosedExistingZones(closedExistingZonesFotThisCountry, processEffectiveDate));
 
                 actionsForThisCountry.CountryId = countryData.CountryId;
                 actionsForThisCountry.CodesToAdd.AddRange(countryData.CodesToAdd);
