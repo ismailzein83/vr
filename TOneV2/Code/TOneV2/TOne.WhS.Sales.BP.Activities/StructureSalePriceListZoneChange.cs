@@ -250,7 +250,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Get Pricelist Changes from Selling Product Methods
 
-        private List<CustomerPriceListChange> GetChangesForSellingProduct(SellingProductChangesContext context,out List<SalePricelistRPChange> outRoutingProductChanges)
+        private List<CustomerPriceListChange> GetChangesForSellingProduct(SellingProductChangesContext context, out List<SalePricelistRPChange> outRoutingProductChanges)
         {
             outRoutingProductChanges = new List<SalePricelistRPChange>();
             var customerCountryManager = new CustomerCountryManager();
@@ -440,7 +440,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             ZoneId = existingCode.ZoneId,
                             Code = existingCode.Code,
                             ChangeType = CodeChange.New,
-                            BED = countryToAdd.BED
+                            BED = existingCode.BED > countryToAdd.BED ? existingCode.BED : countryToAdd.BED
                         });
                     }
                     SaleEntityZoneRoutingProduct effectiveRoutingProduct = context.RoutingProductEffectiveLocator.GetCustomerZoneRoutingProduct(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, zoneId);
