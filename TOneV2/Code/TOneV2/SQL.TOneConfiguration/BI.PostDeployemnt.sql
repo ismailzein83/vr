@@ -95,10 +95,10 @@ set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('VR_Sec/Widget/GetFilteredWidgets','VR_SystemConfiguration:View'),
-('VR_Sec/Widget/AddWidget','VR_SystemConfiguration:Add'),
-('VR_Sec/Widget/UpdateWidget','VR_SystemConfiguration:Edit'),
-('VR_Sec/Widget/DeleteWidget','VR_SystemConfiguration:Delete')
+('VR_Sec/Widget/GetFilteredWidgets','VR_SystemConfiguration: View'),
+('VR_Sec/Widget/AddWidget','VR_SystemConfiguration: Add'),
+('VR_Sec/Widget/UpdateWidget','VR_SystemConfiguration: Edit'),
+('VR_Sec/Widget/DeleteWidget','VR_SystemConfiguration: Delete')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[systemaction] as t
