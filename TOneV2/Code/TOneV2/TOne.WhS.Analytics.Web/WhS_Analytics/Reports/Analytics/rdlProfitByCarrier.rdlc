@@ -603,6 +603,10 @@
                   <Name>PointWidth</Name>
                   <Value>0.6</Value>
                 </CustomProperty>
+                <CustomProperty>
+                  <Name>LabelStyle</Name>
+                  <Value>TopLeft</Value>
+                </CustomProperty>
               </CustomProperties>
               <ValueAxisName>Primary</ValueAxisName>
               <CategoryAxisName>Primary</CategoryAxisName>
