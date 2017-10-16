@@ -14,10 +14,11 @@
             <!--<span ng-show="advancedSelected">
                 <vr-directivewrapper directive="scopeModel.settingsFilterEditor" on-ready="onSettingsFilterDirectiveReady" normal-col-num="2"></vr-directivewrapper>
             </span>-->
-            <vr-columns colnum="1" withemptyline haschildcolumns>
-                <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked"></vr-button>
-                <vr-button type="Add" standalone data-onclick="scopeModel.addGenericRule" ng-show="scopeModel.hasAddRulePermission"></vr-button>
-            </vr-columns>
+          
+        </vr-columns>
+        <vr-columns colnum="12" >
+            <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked"></vr-button>
+            <vr-button type="Add" standalone data-onclick="scopeModel.addGenericRule" ng-show="scopeModel.hasAddRulePermission"></vr-button>
         </vr-columns>
     </vr-row>
     <span>{{scopeModel.settingsFilterEditor}}</span>
