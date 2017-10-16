@@ -31,10 +31,10 @@ as (select * from (values
 
 ('VRCommon/LogEntry/GetFilteredLogs','VRCommon_System_Log: View General Logs'),
 
-('VRCommon/Settings/GetFilteredSettings','VRCommon_Settings:View'),
-('VRCommon/Settings/UpdateSetting','VRCommon_Settings:Edit'),
-('VRCommon/Settings/GetSetting','VRCommon_Settings:View'),
-('VRCommon/Settings/GetDistinctSettingCategories','VRCommon_Settings:View'),
+('VRCommon/Settings/GetFilteredSettings','VRCommon_Settings: View'),
+('VRCommon/Settings/UpdateSetting','VRCommon_Settings: Edit'),
+('VRCommon/Settings/GetSetting','VRCommon_Settings: View'),
+('VRCommon/Settings/GetDistinctSettingCategories','VRCommon_Settings: View'),
 ('VRCommon/Settings/GetFilteredTechnicalSettings','VR_SystemConfiguration:  View'),('VRCommon/Settings/UpdateTechnicalSetting','VR_SystemConfiguration:  Edit'),('VRCommon/Settings/GetTechnicalSetting', 'VR_SystemConfiguration:  View'),
 
 ('VRCommon/RateType/GetFilteredRateTypes','VRCommon_RateType: View'),

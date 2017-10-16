@@ -726,9 +726,9 @@ as (select * from (values
 ('WhS_BE/SalePriceListTemplate/AddSalePriceListTemplate','WhS_BE_SalePricelistTemplate: Add'),
 ('WhS_BE/SalePriceListTemplate/UpdateSalePriceListTemplate','WhS_BE_SalePricelistTemplate: Edit'),
 
-('WhS_Sales/PricingTemplate/GetFilteredPricingTemplates','WhS_BE_PricingTemplate:View'),
-('WhS_Sales/PricingTemplate/AddPricingTemplate','WhS_BE_PricingTemplate:Add'),
-('WhS_Sales/PricingTemplate/UpdatePricingTemplate','WhS_BE_PricingTemplate:Edit')
+('WhS_Sales/PricingTemplate/GetFilteredPricingTemplates','WhS_BE_PricingTemplate: View'),
+('WhS_Sales/PricingTemplate/AddPricingTemplate','WhS_BE_PricingTemplate: Add'),
+('WhS_Sales/PricingTemplate/UpdatePricingTemplate','WhS_BE_PricingTemplate: Edit')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t

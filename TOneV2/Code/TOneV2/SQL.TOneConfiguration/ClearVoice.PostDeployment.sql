@@ -137,11 +137,11 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('QM_CLITester/TestCall/GetTotalCallsByUserId',null),
 
-('QM_CLITester/TestCall/AddNewTestCall'			,'QM_CLITester_TestCall:Test Call'),
+('QM_CLITester/TestCall/AddNewTestCall'			,'QM_CLITester_TestCall: Test Call'),
 ('QM_CLITester/TestCall/GetUpdated'				,'QM_CLITester_TestCall: View'),
 ('QM_CLITester/TestCall/GetBeforeId'			,'QM_CLITester_TestCall: View'),
 ('QM_CLITester/TestCall/GetFilteredTestCalls'	,'QM_CLITester_TestCall: View'),
-('QM_CLITester/TestCall/ViewAllUsers'			,'QM_CLITester_TestCall:View All Users'),
+('QM_CLITester/TestCall/ViewAllUsers'			,'QM_CLITester_TestCall: View All Users'),
 
 ('QM_CLITester/TestCall/GetInitiateTestTemplates',null),
 ('QM_CLITester/TestCall/GetTestProgressTemplates',null),
