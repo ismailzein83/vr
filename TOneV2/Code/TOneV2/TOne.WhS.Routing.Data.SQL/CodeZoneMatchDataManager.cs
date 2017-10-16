@@ -239,9 +239,9 @@ namespace TOne.WhS.Routing.Data.SQL
 			select ParsedString from dbo.ParseStringList(@SupplierIds);
 		    
             with allValidCodes as (
-                            select [CodeMatch] from [TOneV2Dev_RoutingProductRoute_2019].[dbo].[CodeSupplierZoneMatch] with (nolock)
+                            select [CodeMatch] from [dbo].[CodeSupplierZoneMatch] with (nolock)
                             union all 
-                            select [CodeMatch] from [TOneV2Dev_RoutingProductRoute_2019].[dbo].[CodeSaleZoneMatch] with (nolock) where SellingNumberPlanID = @SellingNumberPlanId),
+                            select [CodeMatch] from [dbo].[CodeSaleZoneMatch] with (nolock) where SellingNumberPlanID = @SellingNumberPlanId),
                             distinctCodes As  (select distinct CodeMatch as Code from allValidCodes)
 
                          select cs.Code,cs.SupplierID,cs.SupplierZoneID,cs.CodeMatch from [dbo].[CodeSupplierZoneMatch] as cs join distinctCodes dc on cs.Code = dc.Code where  SupplierID in (select SupplierId from @SupplierIdsTable)
