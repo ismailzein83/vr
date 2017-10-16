@@ -1356,9 +1356,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             case rateSourceOptions.Inherited.value:
                                 if (!isCurrentRateEditable)
                                     return true;
+                                break;
                             case rateSourceOptions.Explicit.value:
                                 if (isCurrentRateEditable)
                                     return true;
+                                break;
                         }
                     }
                     return false;
