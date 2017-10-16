@@ -592,9 +592,12 @@ namespace Vanrise.Analytic.Business
                 var measureConfig = analyticTableQueryContext.GetMeasureConfig(measureName);
                 var measureValue = measureConfig.Evaluator.GetMeasureValue(getMeasureValueContext);
 
+                dynamic modifiedMeasureValue;
                 DataRecordFieldType measureType = analyticTableQueryContext.GetMeasureConfig(measureName).Config.FieldType;
                 if (measureType.CanRoundValue)
-                    measureValue = measureType.GetRoundedValue(measureValue);
+                    modifiedMeasureValue = measureType.GetRoundedValue(measureValue);
+                else
+                    modifiedMeasureValue = measureValue;
 
                 string styleCode = null;
                 if (measureStyleRulesDictionary != null)
@@ -604,7 +607,7 @@ namespace Vanrise.Analytic.Business
                     {
                         foreach (var rule in measureStyleRule.Rules)
                         {
-                            if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, measureValue, measureConfig.Config.FieldType))
+                            if (rule.RecordFilter != null && filterManager.IsSingleFieldFilterMatch(rule.RecordFilter, modifiedMeasureValue, measureConfig.Config.FieldType))
                             {
                                 styleCode = rule.StyleCode;
                                 break;
