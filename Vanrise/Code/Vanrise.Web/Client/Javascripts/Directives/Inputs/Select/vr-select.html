@@ -25,10 +25,10 @@
                                     <div class="inner-addon right-addon" ng-style="{'width':(ctrl.includeAdvancedSearch)?'calc(100% - 25px)':'100%','display':'inline-block'}">
 
                                         <i ng-if="!ctrl.isRemoteLoad()" class="glyphicon glyphicon-remove hand-cursor" ng-click="ctrl.clearFilter($event)"></i>
-                                        <input ng-if="!ctrl.isRemoteLoad()" id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-change="ctrl.searchLocal();" />
+                                        <input ng-if="!ctrl.isRemoteLoad()" id="filterInput" ng-init="ctrl.focusFilterInput()" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-change="ctrl.searchLocal();" />
 
                                         <i ng-if="ctrl.isRemoteLoad()" class="glyphicon icon-loader" ng-show="ctrl.showloading"></i>
-                                        <input ng-if="ctrl.isRemoteLoad()" id="filterInput" class="form-control input-sm" style="width:100%" type="text" placeholder="{{ctrl.limitplaceholder}}" ng-model="ctrl.filtername" ng-change="ctrl.search();">
+                                        <input ng-if="ctrl.isRemoteLoad()" id="filterInput" ng-init="ctrl.focusFilterInput()" class="form-control input-sm" style="width:100%" type="text" placeholder="{{ctrl.limitplaceholder}}" ng-model="ctrl.filtername" ng-change="ctrl.search();">
 
                                     </div>
                                     <span style="display: inline-block;width:20px;z-index:1200" ng-if="ctrl.includeAdvancedSearch" ng-click="ctrl.toggleAdvancedSearch()" class=" glyphicon hand-cursor" ng-class="ctrl.showSearchSection ? 'glyphicon-backward': 'glyphicon-forward'" title="{{ctrl.showSearchSection?'Hide advance search':'Show advance search'}}"></span>
@@ -66,7 +66,7 @@
                                 <div ng-if="ctrl.withLocalFiter()" style="padding-bottom: 5px; border-bottom: 1px solid #f0f0f0; ">
                                     <div class="inner-addon right-addon" ng-style="{'width':(ctrl.includeAdvancedSearch)?'calc(100% - 25px)':'100%','display':'inline-block'}">
                                         <i class="glyphicon glyphicon-remove hand-cursor" style="top:9px" ng-click="ctrl.clearFilter($event)"></i>
-                                        <input id="filterInput" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-change="ctrl.searchLocal();" />
+                                        <input id="filterInput" ng-init="ctrl.focusFilterInput()" type="text" class="form-control input-sm" style="width:100%" ng-model="ctrl.filtername" ng-change="ctrl.searchLocal();" />
                                     </div>
                                     <span style="display: inline-block;width:20px;z-index:1200" ng-if="ctrl.includeAdvancedSearch" ng-click="ctrl.toggleAdvancedSearch()" class=" glyphicon hand-cursor" ng-class="ctrl.showSearchSection ? 'glyphicon-backward': 'glyphicon-forward'" title="{{ctrl.showSearchSection?'Hide advance search':'Show advance search'}}"></span>
 

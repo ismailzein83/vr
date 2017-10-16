@@ -452,8 +452,7 @@
                     var dropdown = $('div[name=' + id + ']');
                     var menuPosition = getDropDownDirection(id);
                     $('div[name=' + id + ']').find('.dropdown-menu').css({ position: 'fixed', top: menuPosition.top, left: menuPosition.left });
-                    setTimeout(function () {
-                        $('#filterInput').focus();
+                    setTimeout(function () {                       
                         var lastScrollTop;
                         dropdown.find("#divDataSourceContainer" + id).scroll(function (e) {
                             var scrollTop = dropdown.find("#divDataSourceContainer" + id).scrollTop();
@@ -500,6 +499,11 @@
                     vrSelectSharedObject.onCloseDropDown(id);
                     found = false;
                     controller.showSearchSection = false;
+                };
+                controller.focusFilterInput = function () {
+                    setTimeout(function () {
+                        $('#filterInput').focus();
+                    }, 100);
                 };
                 function getDropDownDirection(id) {
                     var self = $('div[name=' + id + ']').find('.dropdown-toggle').first();
