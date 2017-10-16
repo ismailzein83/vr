@@ -108,7 +108,7 @@ namespace TOne.WhS.BusinessEntity.Business
             saleRate.ZoneName = zoneName;
             saleRate.CountryId = countryId;
             saleRate.RateTypeName = rateType.Name;
-            saleRate.DisplayedCurrency = _currencyManager.GetCurrencySymbol(currencyId);
+            saleRate.DisplayedCurrency = _currencyManager.GetCurrencySymbol(isSystemCurrency ? currencyId : saleRateHistoryRecord.CurrencyId);
             saleRate.DisplayedRate = isSystemCurrency ? saleRateHistoryRecord.ConvertedRate : saleRateHistoryRecord.Rate;
             saleRate.IsRateInherited = saleRateHistoryRecord.SellingProductId.HasValue;
 
