@@ -20,6 +20,26 @@ namespace TOne.WhS.Routing.Data.SQL
         //}
 
         readonly string[] columns = { "RoutingProductId", "SaleZoneId", "SaleZoneServices", "ExecutedRuleId", "OptionsDetailsBySupplier", "OptionsByPolicy", "IsBlocked" };
+
+        #region Public Methods
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(Entities.RPRoute record, object dbApplyStream)
+        {
+            string optionsDetailsBySupplier = Vanrise.Common.Serializer.Serialize(record.OptionsDetailsBySupplier, true);
+            string rpOptionsByPolicy = Vanrise.Common.Serializer.Serialize(record.RPOptionsByPolicy, true);
+            string saleZoneServices = (record.SaleZoneServiceIds != null && record.SaleZoneServiceIds.Count > 0) ? string.Join(",", record.SaleZoneServiceIds) : null;
+
+
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.RoutingProductId, record.SaleZoneId, saleZoneServices, record.ExecutedRuleId,
+                optionsDetailsBySupplier, rpOptionsByPolicy, record.IsBlocked ? 1 : 0);
+        }
+
         public void ApplyProductRouteForDB(object preparedProductRoute)
         {
             InsertBulkToTable(preparedProductRoute as BaseBulkInsertInfo);
@@ -38,23 +58,6 @@ namespace TOne.WhS.Routing.Data.SQL
                 FieldSeparator = '^',
                 ColumnNames = columns
             };
-        }
-
-        public object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
-        }
-
-        public void WriteRecordToStream(Entities.RPRoute record, object dbApplyStream)
-        {
-            string optionsDetailsBySupplier = Vanrise.Common.Serializer.Serialize(record.OptionsDetailsBySupplier, true);
-            string rpOptionsByPolicy = Vanrise.Common.Serializer.Serialize(record.RPOptionsByPolicy, true);
-            string saleZoneServices = (record.SaleZoneServiceIds != null && record.SaleZoneServiceIds.Count > 0) ? string.Join(",", record.SaleZoneServiceIds) : null;
-
-
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.RoutingProductId, record.SaleZoneId, saleZoneServices, record.ExecutedRuleId,
-                optionsDetailsBySupplier, rpOptionsByPolicy, record.IsBlocked ? 1 : 0);
         }
 
         public IEnumerable<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQuery> input)
@@ -76,12 +79,10 @@ namespace TOne.WhS.Routing.Data.SQL
             bool? isBlocked = null;
             if (input.Query.RouteStatus.HasValue)
                 isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
-         
+
             return GetItemsText(query_GetFilteredRPRoutes.ToString(), RPRouteMapper, (cmd) =>
             {
-
                 cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value));
-
             });
         }
 
@@ -118,8 +119,7 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 cmd.Parameters.Add(new SqlParameter("@RoutingProductId", routingProductId));
                 cmd.Parameters.Add(new SqlParameter("@SaleZoneId", saleZoneId));
-            }
-            );
+            });
 
             if (routeOptionSuppliersSerialized == null)
                 return null;
@@ -143,16 +143,7 @@ namespace TOne.WhS.Routing.Data.SQL
             trackStep("Finished create Index on ProductRoute table (SaleZoneId).");
         }
 
-        const string query_CreateIX_ProductRoute_RoutingProductId = @"CREATE CLUSTERED INDEX [IX_ProductRoute_RoutingProductId] ON dbo.ProductRoute
-                                                                    (
-                                                                          [RoutingProductId] ASC,
-                                                                          SaleZoneId ASC
-                                                                    )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
-
-        const string query_CreateIX_ProductRoute_SaleZoneId = @"CREATE NONCLUSTERED INDEX [IX_ProductRoute_SaleZoneId] ON dbo.ProductRoute
-                                                                (
-                                                                      SaleZoneId ASC
-                                                                )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
+        #endregion
 
         #region Private
 
@@ -173,7 +164,7 @@ namespace TOne.WhS.Routing.Data.SQL
             };
         }
 
-        DataTable BuildRPZoneTable(IEnumerable<RPZone> rpZones)
+        private DataTable BuildRPZoneTable(IEnumerable<RPZone> rpZones)
         {
             DataTable dtRPZonesInfo = new DataTable();
             dtRPZonesInfo.Columns.Add("RoutingProductID", typeof(Int32));
@@ -194,25 +185,24 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Queries
 
-        private StringBuilder query_GetFilteredRPRoutes = new StringBuilder(@"
-                                                            SELECT TOP #LimitResult# pr.[RoutingProductId]
-                                                                  ,pr.[SaleZoneId]
-                                                                  ,sz.[Name] 
-                                                                  ,pr.[SaleZoneServices]
-                                                                  ,pr.[ExecutedRuleId]
-                                                                  ,pr.[OptionsDetailsBySupplier]
-                                                                  ,pr.[OptionsByPolicy]
-                                                                  ,pr.[IsBlocked]
-                                                            FROM [dbo].[ProductRoute] as pr with(nolock) JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
-                                                            Where (@IsBlocked is null or IsBlocked = @IsBlocked) AND #ROUTING_PRODUCT_IDS# AND #SALE_ZONE_IDS#");
+        private StringBuilder query_GetFilteredRPRoutes = new StringBuilder(@"SELECT TOP #LimitResult# pr.[RoutingProductId]
+                                                                                    ,pr.[SaleZoneId]
+                                                                                    ,sz.[Name] 
+                                                                                    ,pr.[SaleZoneServices]
+                                                                                    ,pr.[ExecutedRuleId]
+                                                                                    ,pr.[OptionsDetailsBySupplier]
+                                                                                    ,pr.[OptionsByPolicy]
+                                                                                    ,pr.[IsBlocked]
+                                                                              FROM [dbo].[ProductRoute] as pr with(nolock) JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
+                                                                              Where (@IsBlocked is null or IsBlocked = @IsBlocked) AND #ROUTING_PRODUCT_IDS# AND #SALE_ZONE_IDS#");
 
         private const string query_GetRouteOptions = @"SELECT [OptionsByPolicy]
-                                                        FROM [dbo].[ProductRoute] 
-                                                        Where RoutingProductId = @RoutingProductId And SaleZoneId = @SaleZoneId";
+                                                       FROM [dbo].[ProductRoute] 
+                                                       Where RoutingProductId = @RoutingProductId And SaleZoneId = @SaleZoneId";
 
         private const string query_GetRouteOptionSuppliers = @"SELECT [OptionsDetailsBySupplier]
-                                                        FROM [dbo].[ProductRoute] 
-                                                        Where RoutingProductId = @RoutingProductId And SaleZoneId = @SaleZoneId";
+                                                               FROM [dbo].[ProductRoute] 
+                                                               Where RoutingProductId = @RoutingProductId And SaleZoneId = @SaleZoneId";
 
         private const string query_GetRPRoutesByRPZones = @"SELECT pr.[RoutingProductId],
                                                                 pr.[SaleZoneId],
@@ -225,6 +215,19 @@ namespace TOne.WhS.Routing.Data.SQL
                                                             FROM [dbo].[ProductRoute] pr with(nolock) JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
                                                             JOIN @RPZoneList z
                                                             ON z.RoutingProductId = pr.RoutingProductId AND z.SaleZoneId = pr.SaleZoneId";
+
+        private const string query_CreateIX_ProductRoute_RoutingProductId = @"CREATE CLUSTERED INDEX [IX_ProductRoute_RoutingProductId] ON dbo.ProductRoute
+                                                                              (
+                                                                                    [RoutingProductId] ASC,
+                                                                                    [SaleZoneId] ASC
+                                                                              )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, 
+                                                                                     ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
+
+        private const string query_CreateIX_ProductRoute_SaleZoneId = @"CREATE NONCLUSTERED INDEX [IX_ProductRoute_SaleZoneId] ON dbo.ProductRoute
+                                                                        (
+                                                                           [SaleZoneId] ASC
+                                                                        )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, 
+                                                                               ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
 
         #endregion
     }
