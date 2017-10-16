@@ -12,8 +12,7 @@ namespace TOne.WhS.Routing.Entities
     {
         static RPRouteOptionSupplier()
         {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RPRouteOptionSupplier),
-                "SupplierId", "SupplierZones");
+            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RPRouteOptionSupplier), "SupplierId", "SupplierZones");
         }
 
         public int SupplierId { get; set; }
@@ -33,6 +32,7 @@ namespace TOne.WhS.Routing.Entities
         }
 
         public int NumberOfBlockedZones { get; set; }
+
         public int NumberOfUnblockedZones { get; set; }
 
         public int? Percentage { get; set; }
