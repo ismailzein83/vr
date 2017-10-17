@@ -173,6 +173,8 @@
     <Content Include="WhS_SupplierPriceList\Directives\CountryPreview\whs-spl-countrypreview-grid.js" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\Templates\BasicSupplierPriceListConfiguration.html" />
     <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPriceListConfiguration\whs-spl-supplierpricelistconfiguration-basic.js" />
+    <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPricelistDateField\Template\PricelistDateFieldTemplate.html" />
+    <Content Include="WhS_SupplierPriceList\Directives\MainExtensions\SupplierPriceListTemplate\SupplierPricelistDateField\whs-spl-excelconversion-fieldmapping-pricelistdatefield.js" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewSection\Templates\SupplierPriceListPreviewSectionTemplate.html" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPriceListPreviewSection\whs-spl-supplierpricelistpreview-section.js" />
     <Content Include="WhS_SupplierPriceList\Directives\SupplierPricelistPreviewSummary\Templates\SupplierPricelistPreviewSummary.html" />

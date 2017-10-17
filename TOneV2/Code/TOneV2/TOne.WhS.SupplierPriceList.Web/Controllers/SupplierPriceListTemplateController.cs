@@ -58,12 +58,13 @@ namespace TOne.WhS.SupplierPriceList.Web.Controllers
         [Route("TestConversionForSupplierPriceList")]
         public Object TestConversionForSupplierPriceList(SupplierPriceListTestConversionInput input)
         {
-            return base.GetExcelResponse(_manager.TestConversionForSupplierPriceList(input.FileId, input.Settings));
+            return base.GetExcelResponse(_manager.TestConversionForSupplierPriceList(input.FileId,input.PricelistDate, input.Settings));
         }
     }
     public class SupplierPriceListTestConversionInput
     {
         public long FileId { get; set; }
+        public DateTime PricelistDate{ get; set; }
         public SupplierPriceListSettings Settings { get; set; }
     }
 }

@@ -95,11 +95,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             return extensionConfigurationManager.GetExtensionConfigurations<SupplierPriceListInputConfig>(SupplierPriceListInputConfig.EXTENSION_TYPE);
         }
 
-        public ExcelResult TestConversionForSupplierPriceList(long fileId, SupplierPriceListSettings settings)
+        public ExcelResult TestConversionForSupplierPriceList(long fileId, DateTime pricelistDate, SupplierPriceListSettings settings)
         {
             SupplierPriceListExecutionContext contextObj = new SupplierPriceListExecutionContext
             {
-                InputFileId = fileId
+                InputFileId = fileId,
+                PricelistDate = pricelistDate
             };
             ConvertedPriceList convertedPriceList = settings.Execute(contextObj);
             ExcelManager manager = new ExcelManager();

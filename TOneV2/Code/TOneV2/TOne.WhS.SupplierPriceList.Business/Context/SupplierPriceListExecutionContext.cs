@@ -10,5 +10,7 @@ namespace TOne.WhS.SupplierPriceList.Business
     public class SupplierPriceListExecutionContext : ISupplierPriceListExecutionContext
     {
         public long InputFileId { get; set; }
+
+        public DateTime PricelistDate { get; set; }
     }
 }

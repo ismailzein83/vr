@@ -26,6 +26,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<int> CurrencyId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<DateTime> PriceListDate { get; set; }
+
         #endregion
 
         #region Output Arguments
@@ -60,16 +63,17 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             int currencyId = this.CurrencyId.Get(context);
             int supplierPriceListTemplateId = SupplierPriceListTemplateId.Get(context);
+            DateTime pricelistDate = PriceListDate.Get(context);
 
             DateTime startReading = DateTime.Now;
 
             SupplierPriceListTemplateManager supplierPriceListTemplateManager = new Business.SupplierPriceListTemplateManager();
 
             SupplierPriceListSettings settings = supplierPriceListTemplateManager.GetSupplierPriceListTemplateSettings(supplierPriceListTemplateId, true);
-
             SupplierPriceListExecutionContext contextObj = new SupplierPriceListExecutionContext
             {
-                InputFileId = FileId.Get(context)
+                InputFileId = FileId.Get(context),
+                PricelistDate = pricelistDate
             };
             ConvertedPriceList convertedPriceList = settings.Execute(contextObj);
 

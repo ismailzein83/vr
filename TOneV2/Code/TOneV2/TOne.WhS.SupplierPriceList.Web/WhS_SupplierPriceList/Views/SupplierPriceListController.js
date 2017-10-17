@@ -32,6 +32,7 @@
                     var priceListTemplateObject =
                         {
                             FileId: $scope.scopeModel.inPutFile.fileId,
+                            PricelistDate:$scope.scopeModel.priceListDate,
                             Settings: buildSupplierPriceListConfigurationObj()
 
                         };
