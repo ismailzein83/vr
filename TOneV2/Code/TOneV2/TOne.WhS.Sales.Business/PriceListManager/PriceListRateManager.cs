@@ -212,7 +212,8 @@ namespace TOne.WhS.Sales.Business
                 Rate = rateToChange.NormalRate,
                 Zone = zone,
                 BED = zone.BED > currentRateBED ? zone.BED : currentRateBED,
-                EED = rateToChange.EED
+                EED = rateToChange.EED,
+                ChangeType = rateToChange.ChangeType
             };
             if (newRate.EED.VRGreaterThan(zone.EED))//this means that zone has EED value
             {
@@ -363,7 +364,8 @@ namespace TOne.WhS.Sales.Business
                         Rate = mergedNormalRate.RateValue,
                         CurrencyId = mergedNormalRate.CurrencyId,
                         BED = mergedNormalRate.BED,
-                        EED = mergedNormalRate.EED
+                        EED = mergedNormalRate.EED,
+                        ChangeType = mergedNormalRate.RateChange,
                     });
                 }
             }
