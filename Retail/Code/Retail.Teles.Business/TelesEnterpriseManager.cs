@@ -289,6 +289,49 @@ namespace Retail.Teles.Business
                 }
                 return enterpriseDID;
             }
+
+            protected override ResultProcessingHandler<EnterpriseDIDDetail> GetResultProcessingHandler(DataRetrievalInput<EnterpriseDIDsQuery> input, BigResult<EnterpriseDIDDetail> bigResult)
+            {
+                return new ResultProcessingHandler<EnterpriseDIDDetail>
+                {
+                    ExportExcelHandler = new EnterpriseDIDsExcelExportHandler(input.Query)
+                };
+            }
+        }
+        private class EnterpriseDIDsExcelExportHandler : ExcelExportHandler<EnterpriseDIDDetail>
+        {
+            EnterpriseDIDsQuery _query;
+            public EnterpriseDIDsExcelExportHandler(EnterpriseDIDsQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<EnterpriseDIDDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "DIDs",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell> { new ExportExcelHeaderCell { Title = "Screen Number" } } }
+                };
+
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    var results = context.BigResult as BigResult<EnterpriseDIDDetail>;
+
+                    if (results != null && results.Data != null)
+                    {
+                        sheet.Rows = new List<ExportExcelRow>();
+                        foreach (var item in results.Data)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell { Value = item.ScreenNumber });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
         private class EnterpriseBusinessTrunksRequestHandler : BigDataRequestHandler<EnterpriseBusinessTrunksQuery, EnterpriseBusinessTrunk, EnterpriseBusinessTrunkDetail>
         {
@@ -351,7 +394,48 @@ namespace Retail.Teles.Business
 
                 return enterpriseBusinessTrunks;
             }
-         
+            protected override ResultProcessingHandler<EnterpriseBusinessTrunkDetail> GetResultProcessingHandler(DataRetrievalInput<EnterpriseBusinessTrunksQuery> input, BigResult<EnterpriseBusinessTrunkDetail> bigResult)
+            {
+                return new ResultProcessingHandler<EnterpriseBusinessTrunkDetail>
+                {
+                    ExportExcelHandler = new EnterpriseBusinessTrunkExcelExportHandler(input.Query)
+                };
+            }
+        }
+        private class EnterpriseBusinessTrunkExcelExportHandler : ExcelExportHandler<EnterpriseBusinessTrunkDetail>
+        {
+            EnterpriseBusinessTrunksQuery _query;
+            public EnterpriseBusinessTrunkExcelExportHandler(EnterpriseBusinessTrunksQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<EnterpriseBusinessTrunkDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Business Trunks",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell> { new ExportExcelHeaderCell { Title = "Business Trunk" } } }
+                };
+
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    var results = context.BigResult as BigResult<EnterpriseBusinessTrunkDetail>;
+
+                    if (results != null && results.Data != null)
+                    {
+                        sheet.Rows = new List<ExportExcelRow>();
+                        foreach (var item in results.Data)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell { Value = item.StartSn });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
         #endregion
 
