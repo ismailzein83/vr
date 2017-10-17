@@ -494,7 +494,7 @@ as (select * from (values
 ('8FC751F7-209D-4B9F-B4A7-5B81B7BAD23A','WhS_BE_SaleRoutingProduct','Sale Routing Product'				,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View"]'),
 ('124CD5B7-9554-48B2-91CB-6C9F6CCAFF1E','WhS_BE_SellingNumberPlan','Selling Number Plan'				,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View", "Add", "Edit"]'),
 ('842A7143-6513-460A-A7CE-5C8D95E84A49','WhS_BE_SellingProduct','Selling Product'						,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View","Add","Edit","View Assigned Customers","Assign Customers"]'),
-('B736A4DE-7C96-40D5-898C-C638D9859161','WhS_Sales_CodeComparison','Code Comparison'					,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View"]')
+('B736A4DE-7C96-40D5-898C-C638D9859161','WhS_Sales_CodeComparison','Code Comparison'					,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View"]'),
 ('DA8ED40F-52E3-4FB8-8192-7B5153FA1CCB','WhS_Sales_NumberingPlan','Numbering Plan'						,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View", "Start Process"]'),
 ('36C0C9B0-0FAD-4A87-8A28-D3D43AF12A14','WhS_Sales_RatePlan','Sale Offer Plan'							,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View", "Start Process"]'),
 ('2A1AC701-43AE-4AD5-9459-331A394A8DC2','Whs_Sales_Rules','Sale Rules'									,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View","Add","Edit"]'),
