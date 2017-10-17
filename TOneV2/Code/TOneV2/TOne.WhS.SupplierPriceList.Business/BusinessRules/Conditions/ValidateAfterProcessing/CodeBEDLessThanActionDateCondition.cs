@@ -22,8 +22,6 @@ namespace TOne.WhS.SupplierPriceList.Business
                 return true;
 
             var invalidZoneNames = new HashSet<string>();
-
-            DateTime today = DateTime.Today;
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
             foreach (ImportedCode importedCode in importedCountry.ImportedCodes)

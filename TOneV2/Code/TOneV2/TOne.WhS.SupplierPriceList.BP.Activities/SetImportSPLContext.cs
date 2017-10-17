@@ -34,9 +34,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             int supplierId = SupplierId.Get(context);
             int currencyId = CurrencyId.Get(context);
             DateTime priceListDate = PriceListDate.Get(context);
+
             ImportSPLContext importSPLContext = context.GetSPLParameterContext() as ImportSPLContext;
+
             importSPLContext.PriceListCurrencyId = currencyId;
-            importSPLContext.SetSupplierEffectiveDateDayOffset(supplierId);
+            importSPLContext.SetDateMembers(supplierId, priceListDate);
         }
     }
 
@@ -62,6 +64,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         private int _priceListCurrencyId;
         private int _systemCurrencyId;
         private Dictionary<int, decimal> _maximumRateConvertedByCurrency = new Dictionary<int, decimal>();
+        private TOne.WhS.BusinessEntity.Business.ConfigManager _tOneConfigManager = new BusinessEntity.Business.ConfigManager();
 
         #endregion
 
@@ -104,13 +107,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             if (systemCurrency == null)
                 throw new DataIntegrityValidationException("System Currency was not found");
             _systemCurrencyId = systemCurrency.CurrencyId;
-
-            var tOneConfigManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
-            MaximumRate = tOneConfigManager.GetPurchaseAreaMaximumRate();
-
-            int retroactiveDayOffset = tOneConfigManager.GetPurchaseAreaRetroactiveDayOffset();
-            RetroactiveDate = DateTime.Today.AddDays(-retroactiveDayOffset).Date;
-
+            MaximumRate = _tOneConfigManager.GetPurchaseAreaMaximumRate();
             DateFormat = new Vanrise.Common.Business.GeneralSettingsManager().GetDateFormat();
         }
 
@@ -143,12 +140,14 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             return _priceListCurrencyId;
         }
-        public void SetSupplierEffectiveDateDayOffset(int supplierId)
+        public void SetDateMembers(int supplierId, DateTime priceListDate)
         {
             int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetSupplierEffectiveDateDayOffset(supplierId);
-            TimeSpan codeCloseDateOffset = new TimeSpan(effectiveDateDayOffset, 0, 0, 0);
-            _codeCloseDateOffset = codeCloseDateOffset;
-            CodeEffectiveDate = DateTime.Today.AddDays(effectiveDateDayOffset);
+            _codeCloseDateOffset = new TimeSpan(effectiveDateDayOffset, 0, 0, 0);
+            CodeEffectiveDate = priceListDate.AddDays(effectiveDateDayOffset);
+
+            int retroactiveDayOffset = _tOneConfigManager.GetPurchaseAreaRetroactiveDayOffset();
+            RetroactiveDate = priceListDate.AddDays(-retroactiveDayOffset).Date;
         }
 
         #endregion
