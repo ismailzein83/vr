@@ -29,3 +29,4 @@ Retail_Teles			C:\TFS\Retail\Code\Retail.Teles.Web\Retail_Teles
 VR_InvToAccBalanceRelation  C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation
 Retail_MultiNet			C:\TFS\Retail\Code\Retail.MultiNet.Web\Retail_MultiNet
 Retail_Cost				C:\TFS\Retail\Code\Retail.Cost.Web\Retail_Cost
+VR_AccountManager		C:\TFS\Vanrise\Code\Vanrise.AccountManager.Web\VR_AccountManager
