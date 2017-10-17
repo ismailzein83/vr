@@ -58,7 +58,7 @@ namespace TOne.WhS.Sales.Business
 
             IEnumerable<CodeSupplierZoneMatch> codeMatchBySupplier = codeZoneMatchManager.GetSupplierZoneMatchBysupplierIdsAndSellingNumberPanId(query.sellingNumberPlanId, query.supplierIds, query.codeStartWith);
             IEnumerable<CodeSaleZoneMatch> saleCodeMatch = codeZoneMatchManager.GetSaleCodeMatchBySellingNumberPlanId(query.sellingNumberPlanId, query.codeStartWith);
-            if (codeMatchBySupplier == null || codeMatchBySupplier.Count() == 0 || saleCodeMatch == null || saleCodeMatch.Count() == 0)
+            if (codeMatchBySupplier == null || codeMatchBySupplier.Count() == 0)
                 return null;
             Dictionary<string, List<CodeSupplierZoneMatch>> codeSupplierZoneMatchDictionary = codeCompareManager.StructureCodeSupplierZoneMatchDictionary(codeMatchBySupplier);
             Dictionary<string, CodeSaleZoneMatch> codeSaleZoneMatchDictionary = codeCompareManager.StructureCodeSaleZoneMatchDictionary(saleCodeMatch);
