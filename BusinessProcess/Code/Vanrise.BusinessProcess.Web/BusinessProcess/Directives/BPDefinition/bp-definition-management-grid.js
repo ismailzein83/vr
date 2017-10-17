@@ -172,7 +172,13 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
         };
 
         function scheduleTask(bpDefinitionObj) {
-            BusinessProcess_BPSchedulerTaskService.showAddTaskModal(bpDefinitionObj);
+            var onScheduleTaskAdded = function (scheduleTaskObj) {
+                if (bpDefinitionObj.bpInstanceGridAPI != undefined) {
+                    bpDefinitionObj.bpInstanceGridAPI.onTaskAdded(scheduleTaskObj);
+                }
+            };
+
+            BusinessProcess_BPSchedulerTaskService.showAddTaskModal(bpDefinitionObj, onScheduleTaskAdded);
         };
     }
 

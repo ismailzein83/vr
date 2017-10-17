@@ -11,7 +11,7 @@
             showAddTaskModal: showAddTaskModal
         });
 
-        function showAddTaskModal(bpDefinitionObj) {
+        function showAddTaskModal(bpDefinitionObj, onTaskAdded) {
             var settings = {
             };
             //'7a35f562-319b-47b3-8258-ec1a704a82eb' is the related action type id for workflow
@@ -21,6 +21,8 @@
 
             settings.onScopeReady = function (modalScope) {
                 modalScope.title = "Schedule Task";
+                modalScope.onTaskAdded = onTaskAdded;
+
             };
 
             VRModalService.showModal('/Client/Modules/Runtime/Views/SchedulerTaskEditor.html', parameters, settings);
