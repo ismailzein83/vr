@@ -88,9 +88,10 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public string GetSwitchReleaseCauseName(int switchReleaseCauseId)
         {
-            var allSwitchReleaseCauses = this.GetCachedSwitchReleaseCauses();
-            var switchReleaseCause = allSwitchReleaseCauses.GetRecord(switchReleaseCauseId);
-            return switchReleaseCause.ReleaseCode;
+            var switchReleaseCause = GetSwitchReleaseCause(switchReleaseCauseId);
+            if (switchReleaseCause != null)
+                return switchReleaseCause.ReleaseCode;
+            return null;
         }
         public UploadSwitchReleaseCauseLog UploadSwitchReleaseCauses(int fileId, int switchId)
         {
@@ -289,12 +290,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 SwitchName = switchManager.GetSwitchName(switchReleaseCause.SwitchId),
 
             };
+            if (switchReleaseCause.Settings != null)
+            {
+                switchReleaseCauseDetail.Description = switchReleaseCause.Settings.Description;
+                switchReleaseCauseDetail.IsDelivered = switchReleaseCause.Settings.IsDelivered;
 
-            switchReleaseCauseDetail.Description = switchReleaseCause.Settings.Description;
-            switchReleaseCauseDetail.IsDelivered = switchReleaseCause.Settings.IsDelivered;
-
-
-
+            }
             return switchReleaseCauseDetail;
         }
         #endregion
