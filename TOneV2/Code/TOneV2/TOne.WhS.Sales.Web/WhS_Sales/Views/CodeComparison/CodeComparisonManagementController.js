@@ -29,7 +29,7 @@
             };
             $scope.exportClicked = function () {
                 setFilterObject();
-                WhS_Sales_CodeCompareAPIService.ExportCodeCompareTemplate(filter).then(function (response) {
+                return WhS_Sales_CodeCompareAPIService.ExportCodeCompareTemplate(filter).then(function (response) {
                     UtilsService.downloadFile(response.data, response.headers);
                 });
             };
