@@ -39,6 +39,18 @@
             });
         }
 
+        function DisableTask(taskId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'DisableTask'), {
+                taskId: taskId
+            });
+        }
+
+        function EnableTask(taskId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'EnableTask'), {
+                taskId: taskId
+            });
+        }
+
         function GetSchedulesInfo() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetSchedulesInfo'));
         }
@@ -74,6 +86,8 @@
             AddTask: AddTask,
             UpdateTask: UpdateTask,
             DeleteTask: DeleteTask,
+            DisableTask: DisableTask,
+            EnableTask: EnableTask,
             GetSchedulesInfo: GetSchedulesInfo,
             HasAddSchedulerTaskPermission: HasAddSchedulerTaskPermission,
             GetUpdated: GetUpdated,

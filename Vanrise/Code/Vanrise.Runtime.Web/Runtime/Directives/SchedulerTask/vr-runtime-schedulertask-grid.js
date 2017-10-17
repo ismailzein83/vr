@@ -127,6 +127,19 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                                 clicked: runSchedulerTask
                             })
                         }
+                        if (entity.IsEnabled && dataItem.AllowEdit == true) {
+                            var menuAction1 = {
+                                name: "Disable",
+                                clicked: disableTask
+                            };
+                            menuActions.push(menuAction1);
+                        } else if (dataItem.AllowEdit == true) {
+                            var menuAction2 = {
+                                name: "Enable",
+                                clicked: enableTask
+                            };
+                            menuActions.push(menuAction2);
+                        }
                     }
 
                     return menuActions;
@@ -240,6 +253,57 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
             }
             function hasUpdateSchedulerTaskPermission() {
                 return SchedulerTaskAPIService.HasUpdateSchedulerTaskPermission();
+            }
+
+            function disableTask(dataItem) {
+                var onPermissionDisabled = function (entity) {
+                    var gridDataItem = {
+                        Entity: entity,
+                        AllowEdit:dataItem.AllowEdit
+                    };
+                    gridDataItem.Entity.IsEnabled = false;
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
+                    $scope.gridMenuActions(gridDataItem);
+                    gridAPI.itemUpdated(gridDataItem);
+                };
+
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return SchedulerTaskAPIService.DisableTask(dataItem.Entity.TaskId).then(function () {
+                            if (onPermissionDisabled && typeof onPermissionDisabled == 'function') {
+                                onPermissionDisabled(dataItem.Entity);
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
+                });
+            }
+
+            function enableTask(dataItem) {
+                var onPermissionDisabled = function (entity) {
+                    var gridDataItem = {
+                        Entity: entity,
+                        AllowEdit: dataItem.AllowEdit
+                    };
+                    gridDataItem.Entity.IsEnabled = true;
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
+                    $scope.gridMenuActions(gridDataItem);
+                    gridAPI.itemUpdated(gridDataItem);
+                };
+
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return SchedulerTaskAPIService.EnableTask(dataItem.Entity.TaskId).then(function () {
+
+                            if (onPermissionDisabled && typeof onPermissionDisabled == 'function') {
+                                onPermissionDisabled(dataItem.Entity);
+                            }
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        });
+                    }
+                });
             }
         }
 

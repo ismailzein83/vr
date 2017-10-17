@@ -214,11 +214,11 @@ namespace Vanrise.Runtime.Business
             return deleteOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<SchedulerTask> DisableTask(Guid taskId)
+        public Vanrise.Entities.UpdateOperationOutput<SchedulerTaskDetail> DisableTask(Guid taskId)
         {
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
             bool updateActionSucc = dataManager.DisableTask(taskId);
-            UpdateOperationOutput<SchedulerTask> updateOperationOutput = new UpdateOperationOutput<SchedulerTask>()
+            UpdateOperationOutput<SchedulerTaskDetail> updateOperationOutput = new UpdateOperationOutput<SchedulerTaskDetail>()
             {
                 Result = UpdateOperationResult.Failed,
                 UpdatedObject = null
@@ -229,17 +229,17 @@ namespace Vanrise.Runtime.Business
                 var taskObject = GetTask(taskId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = taskObject;
+                updateOperationOutput.UpdatedObject = SchedulerTaskDetailMapper(taskObject);
             }
 
             return updateOperationOutput;
         }
 
-        public Vanrise.Entities.UpdateOperationOutput<SchedulerTask> EnableTask(Guid taskId)
+        public Vanrise.Entities.UpdateOperationOutput<SchedulerTaskDetail> EnableTask(Guid taskId)
         {
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
             bool updateActionSucc = dataManager.EnableTask(taskId);
-            UpdateOperationOutput<SchedulerTask> updateOperationOutput = new UpdateOperationOutput<SchedulerTask>()
+            UpdateOperationOutput<SchedulerTaskDetail> updateOperationOutput = new UpdateOperationOutput<SchedulerTaskDetail>()
             {
                 Result = UpdateOperationResult.Failed,
                 UpdatedObject = null
@@ -250,12 +250,19 @@ namespace Vanrise.Runtime.Business
                 var taskObject = GetTask(taskId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = taskObject;
+                updateOperationOutput.UpdatedObject = SchedulerTaskDetailMapper(taskObject);
             }
 
 
             return updateOperationOutput;
         }
+
+        public bool DoesUserHaveConfigureSpecificTaskAccess(Guid taskId)
+        {
+            var schedulerTask =  GetTask(taskId);
+            return _schedulerTaskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(schedulerTask);
+        }
+
         private class SchedulerTaskLoggableEntity : VRLoggableEntityBase
         {
             public static SchedulerTaskLoggableEntity Instance = new SchedulerTaskLoggableEntity();

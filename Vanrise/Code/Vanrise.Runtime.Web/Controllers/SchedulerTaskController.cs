@@ -15,54 +15,49 @@ namespace Vanrise.Runtime.Web.Controllers
     {
 
         SchedulerTaskActionTypeManager _taskActionTypeManager = new SchedulerTaskActionTypeManager();
+        SchedulerTaskManager _schedulerTaskManager = new SchedulerTaskManager();
         [HttpPost]
         [Route("GetFilteredTasks")]
         public object GetFilteredTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
         {
             if (!_taskActionTypeManager.DoesUserHaveViewAccess())
                 return GetUnauthorizedResponse();
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return GetWebResponse(input, manager.GetFilteredTasks(input));
+            return GetWebResponse(input, _schedulerTaskManager.GetFilteredTasks(input));
         }
 
         [HttpPost]
         [Route("GetFilteredMyTasks")]
         public object GetFilteredMyTasks(Vanrise.Entities.DataRetrievalInput<SchedulerTaskQuery> input)
         {
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return GetWebResponse(input, manager.GetFilteredMyTasks(input));
+            return GetWebResponse(input, _schedulerTaskManager.GetFilteredMyTasks(input));
         }
 
         [HttpGet]
         [Route("GetTask")]
         public SchedulerTask GetTask(Guid taskId)
         {
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetTask(taskId,true);
+            return _schedulerTaskManager.GetTask(taskId, true);
         }
 
         [HttpGet]
         [Route("GetSchedulesInfo")]
         public List<SchedulerTaskInfo> GetSchedulesInfo()
         {
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetTasksInfo();
+            return _schedulerTaskManager.GetTasksInfo();
         }
 
         [HttpGet]
         [Route("GetMySchedulesInfo")]
         public List<SchedulerTaskInfo> GetMySchedulesInfo()
         {
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetMyTasksInfo();
+            return _schedulerTaskManager.GetMyTasksInfo();
         }
 
         [HttpGet]
         [Route("GetSchedulerTaskTriggerTypes")]
         public List<SchedulerTaskTriggerType> GetSchedulerTaskTriggerTypes()
         {
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.GetSchedulerTaskTriggerTypes();
+            return _schedulerTaskManager.GetSchedulerTaskTriggerTypes();
         }
         [HttpGet]
         [Route("DoesUserHaveAddAccess")]
@@ -78,8 +73,7 @@ namespace Vanrise.Runtime.Web.Controllers
             if (!_taskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(taskObject))
                 return GetUnauthorizedResponse();
 
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.AddTask(taskObject);
+            return _schedulerTaskManager.AddTask(taskObject);
         }
 
         [HttpPost]
@@ -89,16 +83,14 @@ namespace Vanrise.Runtime.Web.Controllers
             if (!_taskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(taskObject))
                 return GetUnauthorizedResponse();
 
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.UpdateTask(taskObject);
+            return _schedulerTaskManager.UpdateTask(taskObject);
         }
 
         [HttpGet]
         [Route("DeleteTask")]
         public Vanrise.Entities.DeleteOperationOutput<object> DeleteTask(Guid taskId)
         {
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.DeleteTask(taskId);
+            return _schedulerTaskManager.DeleteTask(taskId);
         }
 
         [HttpPost]
@@ -117,6 +109,28 @@ namespace Vanrise.Runtime.Web.Controllers
                  GetUnauthorizedResponse();
             SchedulerTaskStateManager manager = new SchedulerTaskStateManager();
             manager.RunSchedulerTask(taskId);
+        }
+
+        [HttpGet]
+        [Route("DisableTask")]
+        public object DisableTask(Guid taskId)
+        {
+            if (!_schedulerTaskManager.DoesUserHaveConfigureSpecificTaskAccess(taskId))
+                return GetUnauthorizedResponse();
+
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return manager.DisableTask(taskId);
+        }
+
+        [HttpGet]
+        [Route("EnableTask")]
+        public object EnableTask(Guid taskId)
+        {
+            if (!_schedulerTaskManager.DoesUserHaveConfigureSpecificTaskAccess(taskId))
+                return GetUnauthorizedResponse();
+
+            SchedulerTaskManager manager = new SchedulerTaskManager();
+            return manager.EnableTask(taskId);
         }
     }
 }
