@@ -62,13 +62,21 @@
                     var filter;
                     var selectedIds;
                     var selectFirstItem;
+                    var dontShowInActive;
+
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
                         selectFirstItem = payload.selectFirstItem;
+                        dontShowInActive = payload.dontShowInActive;
                     }
                     setTimeout(function () {
-                        ctrl.datasource = UtilsService.getArrayEnum(VR_AccountBalance_AccountStatusEnum);
+                        ctrl.datasource.push(VR_AccountBalance_AccountStatusEnum.Active);
+                        if (dontShowInActive) {
+                            ctrl.datasource.push(VR_AccountBalance_AccountStatusEnum.ActiveAndExpired);
+                        } else {
+                            ctrl.datasource.push(VR_AccountBalance_AccountStatusEnum.All);
+                        }
                         if (selectedIds) {
                             VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                         } else if (selectFirstItem == true) {
@@ -95,6 +103,11 @@
                                 break;
                             case VR_AccountBalance_AccountStatusEnum.All.value:
                                 returnedObj.Status = undefined;
+                                returnedObj.IsEffectiveInFuture = undefined;
+                                returnedObj.EffectiveDate = undefined;
+                                break;
+                            case VR_AccountBalance_AccountStatusEnum.ActiveAndExpired.value:
+                                returnedObj.Status = VR_AccountBalance_AccountStatusEnum.Active.value;
                                 returnedObj.IsEffectiveInFuture = undefined;
                                 returnedObj.EffectiveDate = undefined;
                                 break;

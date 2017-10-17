@@ -99,8 +99,11 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                     promises.push(loadTransactionTypeSelector());
                    
                 }
-                if (accountTypeId)
+                if (accountTypeId) {
                     promises.push(checkHasAddBillingTransaction(accountTypeId));
+                    promises.push(canAddBillingTransaction());
+                }
+                  
                 promises.push(loadTimeRangeDirective());
                 return UtilsService.waitMultiplePromises(promises).finally(function () {
                     loadBillingTransactionsGrid();
@@ -172,6 +175,12 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function checkHasAddBillingTransaction(accountTypeId) {
           return VR_AccountBalance_BillingTransactionAPIService.HasAddBillingTransactionPermission(accountTypeId).then(function (response) {
                 $scope.scopeModel.hasAddTransaction = response;
+            });
+        }
+        function canAddBillingTransaction()
+        {
+            return VR_AccountBalance_BillingTransactionAPIService.CanAddBillingTransaction(accountsIds[0], accountTypeId).then(function (response) {
+                $scope.scopeModel.disableAddBillingTransaction = response != true;
             });
         }
     }

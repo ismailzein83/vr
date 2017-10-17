@@ -218,7 +218,7 @@
         function loadAccountStatusSelectorDirective() {
             var loadAccountStatusSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
             accountStatusSelectorReadyDeferred.promise.then(function () {
-                var accountStatusSelectorPayload = { selectFirstItem: true };
+                var accountStatusSelectorPayload = { selectFirstItem: true,dontShowInActive: true };
 
                 VRUIUtilsService.callDirectiveLoad(accountStatusSelectorAPI, accountStatusSelectorPayload, loadAccountStatusSelectorPromiseDeferred);
             });

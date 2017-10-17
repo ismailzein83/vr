@@ -26,7 +26,8 @@ namespace Vanrise.AccountBalance.Business
             insertOperationOutput.InsertedObject = null;
 
             long billingTransactionId = -1;
-            if (TryAddBillingTransaction(billingTransaction, out billingTransactionId))
+            string errorMessage;
+            if (TryAddBillingTransaction(billingTransaction, out billingTransactionId,out  errorMessage))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 billingTransaction.AccountBillingTransactionId = billingTransactionId;
@@ -34,15 +35,37 @@ namespace Vanrise.AccountBalance.Business
             }
             else
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                insertOperationOutput.Message = errorMessage;
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+                insertOperationOutput.ShowExactMessage = true;
             }
 
             return insertOperationOutput;
         }
-        public bool TryAddBillingTransaction(BillingTransaction billingTransaction, out long billingTransactionId)
+        public bool TryAddBillingTransaction(BillingTransaction billingTransaction, out long billingTransactionId, out string errorMessage)
         {
+            errorMessage = null;
+            if (!ValidateAddBillingTransaction(billingTransaction.AccountId,billingTransaction.AccountTypeId,out  errorMessage))
+            {
+                billingTransactionId = -1;
+                return false;
+            }
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.Insert(billingTransaction, out billingTransactionId);
+        }
+
+        private bool ValidateAddBillingTransaction(string accountId, Guid accountTypeId, out string errorMessage)
+        {
+            errorMessage = null;
+            AccountManager accountManager = new AccountManager();
+            var accountInfo = accountManager.GetAccountInfo(accountTypeId, accountId);
+            accountInfo.ThrowIfNull("accountInfo", accountId);
+            if( accountInfo.Status != VRAccountStatus.Active)
+            {
+                errorMessage = "Cannot add billing transaction for inactive account.";
+                return false;
+            }
+            return true;
         }
         private BillingTransactionDetail BillingTransactionDetailMapper(BillingTransaction billingTransaction, BillingTransactionSource billingTransactionSource)
         {
@@ -203,7 +226,6 @@ namespace Vanrise.AccountBalance.Business
             }
         }
 
-        
         public IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypes, List<string> accountIds, List<Guid> transactionTypeIds, DateTime fromDate, DateTime? toDate)
         {
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
@@ -237,6 +259,14 @@ namespace Vanrise.AccountBalance.Business
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetLastBillingTransaction(accountTypeId, accountId);
         }
+        public bool CanAddBillingTransaction(string accountId, Guid accountTypeId)
+        {
+            AccountManager accountManager = new AccountManager();
+            var accountInfo = accountManager.GetAccountInfo(accountTypeId, accountId);
+            accountInfo.ThrowIfNull("accountInfo", accountId);
+            return accountInfo.Status == VRAccountStatus.Active;
+        }
+        
         #region Private Classes
 
         private class BillingTransactionRequestHandler : BigDataRequestHandler<BillingTransactionQuery, BillingTransactionResultItem, BillingTransactionDetail>
