@@ -49,8 +49,7 @@
                     return "Select Suppliers";
                 if ($scope.threshold > 0 && $scope.threshold <= carrierAccountDirectiveAPI.getSelectedIds().length)
                     return null;
-                else
-                {
+                else {
                     if ($scope.threshold < 0)
                         return "negative number";
                     if ($scope.threshold > carrierAccountDirectiveAPI.getSelectedIds().length)
@@ -75,7 +74,7 @@
             var loadSNPPromiseDeferred = UtilsService.createPromiseDeferred();
             sellingNumberPlanReadyPromiseDeferred.promise.then(function () {
 
-                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, undefined, loadSNPPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, { selectifsingleitem: true }, loadSNPPromiseDeferred);
             });
 
             return loadSNPPromiseDeferred.promise;
