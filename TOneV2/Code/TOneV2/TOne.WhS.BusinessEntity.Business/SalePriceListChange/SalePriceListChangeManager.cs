@@ -198,6 +198,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     ZoneName = entity.ZoneName,
                     Rate = entity.Rate,
+                    RecentRate= entity.RecentRate,
                     BED = entity.BED,
                     EED = entity.EED,
                     ChangeType = entity.ChangeType,
@@ -272,6 +273,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 BED = salePricelistRateChange.BED,
                 EED = salePricelistRateChange.EED,
                 Rate = salePricelistRateChange.Rate,
+                RecentRate = salePricelistRateChange.RecentRate,
                 ChangeType = salePricelistRateChange.ChangeType,
                 ServicesId = !salePricelistRateChange.ZoneId.HasValue
                     ? routingProductManager.GetDefaultServiceIds(salePricelistRateChange.RoutingProductId)

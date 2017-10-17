@@ -5,8 +5,9 @@
              menuactions="scopeModel.menuActions">
     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Rate'" field="'RecentRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'100'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'100'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Change Type'" fixedwidth="'100'">
+    <vr-datagridcolumn headertext="'Change Type'" fixedwidth="'100'" field="'ChangeType'">
         <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateChangeTypeIconUrl" tooltip="dataItem.RateChangeTypeIconTooltip"></vr-icon>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" fixedwidth="'55'"></vr-datagridcolumn>

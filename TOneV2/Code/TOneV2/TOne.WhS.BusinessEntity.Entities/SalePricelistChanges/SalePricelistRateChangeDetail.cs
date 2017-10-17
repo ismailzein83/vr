@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
     {
         public string ZoneName { get; set; }
         public decimal Rate { get; set; }
+        public decimal? RecentRate { get; set; }
         public IEnumerable<int> ServicesId { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
