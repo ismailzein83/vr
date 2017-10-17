@@ -12,12 +12,10 @@ namespace TOne.WhS.CodePreparation.Business
 {
     public class NewZoneWithNoRatesCondition : BusinessRuleCondition
     {
-
         public override bool ShouldValidate(IRuleTarget target)
         {
             return (target as ZoneToProcess != null);
         }
-
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             bool result = true;
@@ -31,11 +29,9 @@ namespace TOne.WhS.CodePreparation.Business
 
             return result;
         }
-
         public override string GetMessage(IRuleTarget target)
         {
             throw new NotImplementedException();
         }
-
     }
 }
