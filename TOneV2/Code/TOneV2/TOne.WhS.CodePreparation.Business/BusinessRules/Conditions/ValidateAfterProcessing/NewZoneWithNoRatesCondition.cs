@@ -14,20 +14,31 @@ namespace TOne.WhS.CodePreparation.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ZoneToProcess != null);
+            return target is CountryToProcess;
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            bool result = true;
-            ZoneToProcess zoneTopProcess = context.Target as ZoneToProcess;
+            var countryToProcess = context.Target as CountryToProcess;
 
-            if (zoneTopProcess.ChangeType == ZoneChangeType.New)
-                result = zoneTopProcess.RatesToAdd.Count() > 0;
+            if (countryToProcess.ZonesToProcess == null || countryToProcess.ZonesToProcess.Count == 0)
+                return true;
 
-            if (result == false)
-                context.Message = string.Format("Zone '{0}' has been created without rates", zoneTopProcess.ZoneName);
+            var invalidZoneNames = new List<string>();
 
-            return result;
+            foreach (ZoneToProcess zoneToProcess in countryToProcess.ZonesToProcess)
+            {
+                if (zoneToProcess.ChangeType == ZoneChangeType.New && zoneToProcess.RatesToAdd.Count == 0)
+                    invalidZoneNames.Add(zoneToProcess.ZoneName);
+            }
+
+            if (invalidZoneNames.Count > 0)
+            {
+                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryToProcess.CountryId);
+                context.Message = string.Format("The following zones of country '{0}' have been created without rates: {1}", countryName, string.Join(", ", invalidZoneNames));
+                return false;
+            }
+
+            return true;
         }
         public override string GetMessage(IRuleTarget target)
         {
