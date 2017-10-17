@@ -10,14 +10,15 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISaleEntityRoutingProductDataManager : IDataManager
     {
+        List<SaleZoneRoutingProduct> GetAllZoneRoutingProducts();
+
+        List<DefaultRoutingProduct> GetAllDefaultRoutingProducts();
+
         IEnumerable<DefaultRoutingProduct> GetDefaultRoutingProducts(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture);
 
         IEnumerable<DefaultRoutingProduct> GetEffectiveDefaultRoutingProducts(DateTime effectiveOn);
 
         IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProducts(IEnumerable<int> customerIds, DateTime? effectiveOn, bool isEffectiveInFuture);
-
-        IEnumerable<SaleZoneRoutingProduct> GetSaleZoneRoutingProductsByZoneIds(IEnumerable<int> customerIds, DateTime effectiveAfter, List<long> zoneIds);
-        IEnumerable<DefaultRoutingProduct> GetDefaultRoutingProductsEffectiveAfter(IEnumerable<int> customerIds, DateTime? effectiveAfter);
 
         IEnumerable<SaleZoneRoutingProduct> GetEffectiveZoneRoutingProducts(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn);
 

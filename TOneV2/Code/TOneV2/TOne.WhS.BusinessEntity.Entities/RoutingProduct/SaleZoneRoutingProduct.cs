@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleZoneRoutingProduct : Vanrise.Entities.IDateEffectiveSettingsEditable
+    public class SaleZoneRoutingProduct : Vanrise.Entities.IDateEffectiveSettingsEditable, Vanrise.Entities.IDateEffectiveSettings
     {
         public long SaleEntityRoutingProductId { get; set; }
 
