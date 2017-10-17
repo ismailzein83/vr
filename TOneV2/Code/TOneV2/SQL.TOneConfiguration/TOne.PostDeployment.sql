@@ -313,7 +313,7 @@ delete from [sec].[View] where [Id] in ('3FB29A16-7107-42B7-851F-97ABA49C2EDF', 
 delete from [sec].[View] where [Id] in ('8544F681-3D7A-4489-82AD-0712349B005C', 'AA6326E5-CFD2-49B1-9AAF-DA0627BDCD11')
 --delete sale and purchase rules 
 delete from [sec].[View] where [Id] in ('81D8BD96-2074-43BD-A58C-C59D2CE15B3C', 'E2AD2BF1-51C3-4EC2-8A20-690FBEC34C90','9FD65F16-FE17-4207-9905-80C414F86B1B','108F776A-6269-40CE-868B-BD42FCED981A','6FC297C5-F82A-493A-9136-393118FC2D5F','6313A9A0-6B4D-4005-89AF-4157CC2450B4')
-delete from [sec].[View] where [Id] in ('31F69E85-8D77-488D-9726-907DC477FFA8')--,'Customer Product'
+delete from [sec].[View] where [Id] in ('31F69E85-8D77-488D-9726-907DC477FFA8','83C94D63-2650-46A2-B4DC-147FFEF9804B')--,'Customer Product','Switch Release Cause'
 
 delete from [sec].[Module] where [Id] in ('DD18AB4F-2317-4E1E-8CF7-D52C6C8271AF', '4E881659-0067-4FFF-B42F-E2750EC46B82')--pricing rules nodes
 delete from [sec].[Module] where [Id] in ('4A2282CA-525E-40A7-951D-DE29E3145F2A', '4E881659-0067-4FFF-B42F-E2750EC46B82')--'Account Manager'
@@ -354,6 +354,7 @@ as (select * from (values
 ('2D8901D2-4BF2-48E5-ABDD-353E572B7236','Zone Routing Product','Sale Zone Routing Product','#/view/WhS_BusinessEntity/Views/ZoneRoutingProduct/ZoneRoutingProductManagement'		,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/ZoneRoutingProduct/GetFilteredZoneRoutingProducts',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',45),
 --('31F69E85-8D77-488D-9726-907DC477FFA8','Customer Product','Customer Selling Product','#/view/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductManagement'			,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/CustomerSellingProduct/GetFilteredCustomerSellingProducts',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',50),
 
+('DBD01498-8194-4BA0-85FD-B9B8CD6C7529','Code Comparison','Code Comparison','#/view/WhS_Sales/Views/CodeComparison/CodeComparisonManagement'		,'80E0E78C-F7DA-481C-B8D3-1FF61188263B','WhS_Sales/CodeCompare/GetFilteredCodeCompare',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',14),
 ('5DC5C8ED-6D09-44DA-A77F-85C4DC4354D0','Numbering Plan','Numbering Plan Management','#/view/WhS_CodePreparation/Views/CodePreparationManagement'	,'80E0E78C-F7DA-481C-B8D3-1FF61188263B','WhS_CodePrep/CodePreparation/CheckCodePreparationState',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
 ('3A7700BB-4822-468D-BEBA-7404DE0ABD1F','Sale Offer Plan','Sale Offer Plan','#/view/Whs_Sales/Views/RatePlan'										,'80E0E78C-F7DA-481C-B8D3-1FF61188263B','WhS_Sales/RatePlan/GetRatePlanSettingsData',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',20),
 
@@ -364,7 +365,8 @@ as (select * from (values
 ('6EDB23CF-5ECF-4020-80CE-21241D661720','Traffic Summary','Traffic Summary',null															,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":"96113101-C1D3-4EF0-A28A-52E1AF892A49","TypeId":"E5FB0790-5428-44B4-BB1F-4F79B69CD6EF"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',5),
 ('0A028781-C435-4E45-B3DD-0F4FFAD80223','Variation Report','Variation Report','#/view/WhS_Analytics/Views/VariationReport/VariationReport'	,'EB303A61-929A-4D33-BF50-18F40308BC86','WhS_Analytics/VariationReport/GetFilteredVariationReportRecords',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
 
-('83C94D63-2650-46A2-B4DC-147FFEF9804B','Switch Release Cause','Switch Release Cause',null																				,'D7146EBA-A2B1-484C-A498-0DDE876A7580',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":"4652abe7-81f7-4129-a222-31933747018d"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8),
+--('83C94D63-2650-46A2-B4DC-147FFEF9804B','Switch Release Cause','Switch Release Cause',null																				,'D7146EBA-A2B1-484C-A498-0DDE876A7580',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":"4652abe7-81f7-4129-a222-31933747018d"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8),
+('3F7327B6-0742-4C6D-8B2C-BE9B5D4DECD4','Switch Release Cause','Switch Release Cause','#/view/WhS_BusinessEntity/Views/SwitchReleaseCause/SwitchReleaseCauseManagement'	,'D7146EBA-A2B1-484C-A498-0DDE876A7580','WhS_BE/SwitchReleaseCause/GetFilteredSwitchReleaseCauses',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8),
 ('0D2A2A90-A3B7-42BE-AA37-7C9D2DECE9D3','Switches Configuration','Switches Configuration','#/view/WhS_BusinessEntity/Views/Switch/SwitchManagement'						,'D7146EBA-A2B1-484C-A498-0DDE876A7580','WhS_BE/Switch/GetFilteredSwitches',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4),
 ('11603625-2CF3-436D-9FAA-B5D04CB42F09','Switch Connectivity','Switch Connectivity','#/view/WhS_BusinessEntity/Views/SwitchConnectivity/SwitchConnectivityManagement'	,'D7146EBA-A2B1-484C-A498-0DDE876A7580','WhS_BE/SwitchConnectivity/GetFilteredSwitchConnectivities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',6),
 
@@ -492,6 +494,7 @@ as (select * from (values
 ('8FC751F7-209D-4B9F-B4A7-5B81B7BAD23A','WhS_BE_SaleRoutingProduct','Sale Routing Product'				,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View"]'),
 ('124CD5B7-9554-48B2-91CB-6C9F6CCAFF1E','WhS_BE_SellingNumberPlan','Selling Number Plan'				,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View", "Add", "Edit"]'),
 ('842A7143-6513-460A-A7CE-5C8D95E84A49','WhS_BE_SellingProduct','Selling Product'						,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View","Add","Edit","View Assigned Customers","Assign Customers"]'),
+('B736A4DE-7C96-40D5-898C-C638D9859161','WhS_Sales_CodeComparison','Code Comparison'					,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View"]')
 ('DA8ED40F-52E3-4FB8-8192-7B5153FA1CCB','WhS_Sales_NumberingPlan','Numbering Plan'						,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View", "Start Process"]'),
 ('36C0C9B0-0FAD-4A87-8A28-D3D43AF12A14','WhS_Sales_RatePlan','Sale Offer Plan'							,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View", "Start Process"]'),
 ('2A1AC701-43AE-4AD5-9459-331A394A8DC2','Whs_Sales_Rules','Sale Rules'									,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View","Add","Edit"]'),
@@ -619,11 +622,15 @@ as (select * from (values
 ('WhS_BE/Switch/GetSwitch','WhS_BE_Switch: View'),
 ('WhS_BE/Switch/GetSwitchesInfo',null),
 
+('WhS_BE/SwitchReleaseCause/GetFilteredSwitchReleaseCauses','WhS_BE_SwitchReleaseCode: View'),
+
 ('WhS_BE/ZoneServiceConfig/GetFilteredZoneServiceConfigs','Whs_BE_ZoneServiceConfig: View'),
 ('WhS_BE/ZoneServiceConfig/GetAllZoneServiceConfigs',null),
 ('WhS_BE/ZoneServiceConfig/GetZoneServiceConfig',null),
 ('WhS_BE/ZoneServiceConfig/UpdateZoneServiceConfig','Whs_BE_ZoneServiceConfig: Edit'),
 ('WhS_BE/ZoneServiceConfig/AddZoneServiceConfig','Whs_BE_ZoneServiceConfig: Add'),
+
+('WhS_Sales/CodeCompare/GetFilteredCodeCompare','WhS_Sales_CodeComparison: View'),
 
 ('WhS_CodePrep/CodePreparation/GetZoneItems',null),
 ('WhS_CodePrep/CodePreparation/CheckCodePreparationState','WhS_Sales_NumberingPlan: Start Process'),
