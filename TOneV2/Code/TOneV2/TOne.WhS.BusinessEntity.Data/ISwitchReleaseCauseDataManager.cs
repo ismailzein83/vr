@@ -14,6 +14,5 @@ namespace TOne.WhS.BusinessEntity.Data
         bool AddSwitchReleaseCause(SwitchReleaseCause switchReleaseCause, out int insertedId);
         bool UpdateSwitchReleaseCause(SwitchReleaseCause switchReleaseCause);
         bool AreSwitchReleaseCausesUpdated(ref object updateHandle);
-        string GetSwitchReleaseCauseName(int switchReleaseCauseId);
     }
 }

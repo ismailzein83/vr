@@ -49,10 +49,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 Settings = Serializer.Deserialize<SwitchReleaseCauseSetting>(reader["Settings"] as string)
             };
         }
-        public string GetSwitchReleaseCauseName(int switchReleaseCauseId)
-        {
-            return GetItemSP("[TOneWhS_BE].[sp_SwitchReleaseCause_GetReleaseCode]", SwitchReleaseCauseMapper, switchReleaseCauseId).ReleaseCode;
-        }
         public bool AreSwitchReleaseCausesUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("TOneWhS_BE.SwitchReleaseCause", ref updateHandle);
