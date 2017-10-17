@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Business;
 using TOne.WhS.Deal.Entities;
+using TOne.WhS.Routing.Data.SQL;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Caching.Runtime;
@@ -21,7 +22,7 @@ namespace TOne.WhS.Runtime.Tasks
     public class AliAtouiTask : ITask
     {
         #region Public Methods
-        
+
         public void Execute()
         {
             #region Runtime
@@ -39,6 +40,15 @@ namespace TOne.WhS.Runtime.Tasks
             //VRMailMessageTemplateTask vrMailMessageTemplateTask = new VRMailMessageTemplateTask();
             //vrMailMessageTemplateTask.VRMailMessageTemplate_Main();
             #endregion
+
+            #region Deserialize
+            string serializedOptionsDetailsBySupplier = "75~970$22468$0.13000000$1@2$$False$296543~0~1~30~4";
+            string serializedOptionsByPolicy = "6d584c11-ce52-4385-a871-3b59505d0f57~75$0.13000000$100$0$11451$0$4$False|cb8cc5ed-afda-4ed7-882d-1377666c141e~75$0.13000000$100$0$11451$0$4$False|e85f9e2f-1ce6-4cc3-9df9-b664e63826f5~75$0.13000000$100$0$11451$0$4$False";
+
+            Deserialize deserialize = new Deserialize();
+            string optionsDetailsBySupplierAsJSON = deserialize.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
+            string OptionsByPolicyAsJSON = deserialize.DeserializeOptionsByPolicy(serializedOptionsByPolicy);
+            #endregion 
         }
 
         public static MappingOutput DataSourceMapData(IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
@@ -110,7 +120,7 @@ namespace TOne.WhS.Runtime.Tasks
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
-            
+
             return result;
         }
 
@@ -131,7 +141,7 @@ namespace TOne.WhS.Runtime.Tasks
             return Enumerable.Range(0, hex.Length)
                              .Where(x => x % 2 == 0)
                              .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                             .ToArray(); 
+                             .ToArray();
         }
 
         #endregion
@@ -328,6 +338,27 @@ namespace TOne.WhS.Runtime.Tasks
             public string Email { get; set; }
             public string Name { get; set; }
         }
+        #endregion
+    }
+
+    public class Deserialize
+    {
+        RPRouteDataManager rpRouteDataManager = new RPRouteDataManager();
+
+        #region Public Methods
+
+        public string DeserializeOptionsDetailsBySupplier(string serializedOptionsDetailsBySupplier)
+        {
+            Dictionary<int, RPRouteOptionSupplier> optionsDetailsBySupplier = rpRouteDataManager.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
+            return Vanrise.Common.Serializer.Serialize(optionsDetailsBySupplier, true);
+        }
+
+        public  string DeserializeOptionsByPolicy(string serializedOptionsByPolicy)
+        {
+            Dictionary<Guid, IEnumerable<RPRouteOption>> optionsByPolicy  = rpRouteDataManager.DeserializeOptionsByPolicy(serializedOptionsByPolicy);
+            return Vanrise.Common.Serializer.Serialize(optionsByPolicy, true);
+        }
+
         #endregion
     }
 }
