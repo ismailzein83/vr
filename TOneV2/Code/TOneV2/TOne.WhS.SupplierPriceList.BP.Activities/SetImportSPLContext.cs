@@ -20,6 +20,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public InArgument<int> CurrencyId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<DateTime> PriceListDate { get; set; }
+
         #endregion
         protected override void CacheMetadata(CodeActivityMetadata metadata)
         {
@@ -31,6 +34,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             int supplierId = SupplierId.Get(context);
             int currencyId = CurrencyId.Get(context);
+            DateTime priceListDate = PriceListDate.Get(context);
             ImportSPLContext importSPLContext = context.GetSPLParameterContext() as ImportSPLContext;
             importSPLContext.PriceListCurrencyId = currencyId;
             importSPLContext.SetSupplierEffectiveDateDayOffset(supplierId);
