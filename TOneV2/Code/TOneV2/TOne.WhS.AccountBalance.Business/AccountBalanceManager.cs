@@ -29,13 +29,18 @@ namespace TOne.WhS.AccountBalance.Business
             financialAccount.ThrowIfNull("financialAccount", financialAccountId);
             bed = financialAccount.BED;
             eed = financialAccount.EED;
+
             status = VRAccountStatus.Active;
             if (financialAccount.CarrierProfileId.HasValue)
             {
+                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                status = carrierProfileManager.IsCarrierProfileActive(financialAccount.CarrierProfileId.Value)? VRAccountStatus.Active :VRAccountStatus.InActive;
                 carrierProfileId = financialAccount.CarrierProfileId.Value;
             }
             else
             {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                status = carrierAccountManager.IsCarrierAccountActive(financialAccount.CarrierAccountId.Value) ? VRAccountStatus.Active : VRAccountStatus.InActive;
                 carrierAccountId = financialAccount.CarrierAccountId.Value;
             }
         }
