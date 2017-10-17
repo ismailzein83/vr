@@ -30,7 +30,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 (input.Query.SwitchIds == null || input.Query.SwitchIds.Contains(prod.SwitchId)) &&
                 (!input.Query.IsDelivered.HasValue || input.Query.IsDelivered.Value == (prod.Settings.IsDelivered)) &&
                 (input.Query.Description == null || prod.Settings.Description.ToLower().Contains(input.Query.Description.ToLower()));
-
+            VRActionLogger.Current.LogGetFilteredAction(SwitchReleaseCauseLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitchReleaseCauses.ToBigResult(input, filterExpression, SwitchReleaseCauseDetailMapper));
         }
         public Vanrise.Entities.InsertOperationOutput<SwitchReleaseCauseDetail> AddSwitchReleaseCause(SwitchReleaseCause switchReleaseCause)
@@ -46,15 +46,24 @@ namespace TOne.WhS.BusinessEntity.Business
                 switchReleaseCause.SwitchReleaseCauseId = switchReleaseCauseId;
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = SwitchReleaseCauseDetailMapper(switchReleaseCause);
+                VRActionLogger.Current.TrackAndLogObjectAdded(SwitchReleaseCauseLoggableEntity.Instance, switchReleaseCause);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
             return insertOperationOutput;
         }
-        public SwitchReleaseCause GetSwitchReleaseCause(int switchReleaseCauseId)
+        public SwitchReleaseCause GetSwitchReleaseCause(int switchReleaseCauseId, bool isViewedFromUI)
         {
             var allSwitchReleaseCauses = this.GetCachedSwitchReleaseCauses();
-            return allSwitchReleaseCauses.GetRecord(switchReleaseCauseId);
+            var switchReleaseCause = allSwitchReleaseCauses.GetRecord(switchReleaseCauseId);
+            if (switchReleaseCause != null && isViewedFromUI)
+            VRActionLogger.Current.LogObjectViewed(SwitchReleaseCauseLoggableEntity.Instance, switchReleaseCause);
+            return switchReleaseCause;
+        }
+        public SwitchReleaseCause GetSwitchReleaseCause(int switchReleaseCauseId)
+        {
+            return GetSwitchReleaseCause(switchReleaseCauseId, false);
         }
         public Vanrise.Entities.UpdateOperationOutput<SwitchReleaseCauseDetail> UpdateSwitchReleaseCause(SwitchReleaseCause switchReleaseCause)
         {
@@ -67,6 +76,8 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = SwitchReleaseCauseDetailMapper(switchReleaseCause);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(SwitchReleaseCauseLoggableEntity.Instance, switchReleaseCause);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
             else
             {
@@ -74,6 +85,11 @@ namespace TOne.WhS.BusinessEntity.Business
             }
 
             return updateOperationOutput;
+        }
+        public string GetSwitchReleaseCauseName(int switchReleaseCauseId)
+        {
+             ISwitchReleaseCauseDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchReleaseCauseDataManager>();
+             return dataManager.GetSwitchReleaseCauseName(switchReleaseCauseId);
         }
         public UploadSwitchReleaseCauseLog UploadSwitchReleaseCauses(int fileId, int switchId)
         {
@@ -176,7 +192,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
                     colIndex++;
-                    switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Switch Release Cause is null");
+                    switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Release code should not be null");
                     uploadSwitchReleaseCauseLog.CountOfSwitchReleaseCausesExist++;
                     colIndex = 0;
                     rowIndex++;
@@ -194,7 +210,7 @@ namespace TOne.WhS.BusinessEntity.Business
             };
             VRFileManager manager = new VRFileManager();
             uploadSwitchReleaseCauseLog.fileID = manager.AddFile(saveFile);
-
+            Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return uploadSwitchReleaseCauseLog;
         }
         public byte[] DownloadSwitchReleaseCauseLog(long fileID)
@@ -214,6 +230,49 @@ namespace TOne.WhS.BusinessEntity.Business
             protected override bool ShouldSetCacheExpired(object parameter)
             {
                 return dataManager.AreSwitchReleaseCausesUpdated(ref _updateHandle);
+            }
+        }
+        private class SwitchReleaseCauseLoggableEntity : VRLoggableEntityBase
+        {
+            public static SwitchReleaseCauseLoggableEntity Instance = new SwitchReleaseCauseLoggableEntity();
+
+            private SwitchReleaseCauseLoggableEntity()
+            {
+
+            }
+
+            SwitchReleaseCauseManager switchReleaseCauseManager = new SwitchReleaseCauseManager();
+
+            public override string EntityUniqueName
+            {
+                get { return "WhS_BE_SwitchReleaseCause"; }
+            }
+
+            public override string ModuleName
+            {
+                get { return "Buisiness Entity"; }
+            }
+
+            public override string EntityDisplayName
+            {
+                get { return "Switch Release Cause"; }
+            }
+
+            public override string ViewHistoryItemClientActionName
+            {
+                get { return "WhS_BE_SwitchReleaseCause_ViewHistoryItem"; }
+            }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                SwitchReleaseCause switchReleaseCause = context.Object.CastWithValidate<SwitchReleaseCause>("context.Object");
+                return switchReleaseCause.SwitchReleaseCauseId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                SwitchReleaseCause switchReleaseCause = context.Object.CastWithValidate<SwitchReleaseCause>("context.Object");
+                return switchReleaseCauseManager.GetSwitchReleaseCauseName(switchReleaseCause.SwitchReleaseCauseId);
             }
         }
         #endregion

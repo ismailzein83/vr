@@ -10,4 +10,7 @@
     <vr-datagridcolumn headertext="'Switch Name'" field="'SwitchName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" field="'Description'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Delivered'" field="'IsDelivered'" type="'Text'"><vr-icon icontype="dataItem.IsDelivered"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

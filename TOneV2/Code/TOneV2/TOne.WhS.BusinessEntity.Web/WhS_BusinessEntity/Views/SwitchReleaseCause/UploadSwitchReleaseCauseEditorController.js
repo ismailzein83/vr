@@ -69,7 +69,7 @@
 
         function loadAllControls() {
             function setTitle() {
-                $scope.title = UtilsService.buildTitleForAddEditor("Switch Release Cause");
+                $scope.title = UtilsService.buildTitleForUploadEditor("Switch Release Cause");
             };
 
             function loadSwitchSelector() {

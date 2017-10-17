@@ -10,7 +10,8 @@
             addSwitchReleaseCause: addSwitchReleaseCause,
             editSwitchReleaseCause: editSwitchReleaseCause,
             uploadSwitchReleaseCause: uploadSwitchReleaseCause,
-            openReleaseCodeDescriptions:openReleaseCodeDescriptions
+            openReleaseCodeDescriptions: openReleaseCodeDescriptions,
+            getEntityUniqueName: getEntityUniqueName
         });
 
         function addSwitchReleaseCause(onSwitchReleaseCauseAdded) {
@@ -44,8 +45,10 @@
                 modalScope.onSwitchReleaseCauseUpdated = onSwitchReleaseCauseUpdated;
             };
 
-          
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SwitchReleaseCause/SwitchReleaseCauseEditor.html', parameters, modalSettings);
+        }
+        function getEntityUniqueName() {
+            return "WhS_BE_SwitchReleaseCause";
         }
         function openReleaseCodeDescriptions(code, switchId) {
             var modalSettings = {
