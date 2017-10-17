@@ -55,11 +55,11 @@ namespace TOne.WhS.CodePreparation.Business
           if (numberOfZonesOfCountry == numberOfClosedZones)
            {
                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-               IEnumerable<CarrierAccountInfo> customersBySellingNumberPlanId = carrierAccountManager.GetCustomersBySellingNumberPlanId(SellingNumberPlanId, true);
+               IEnumerable<CarrierAccountInfo> customersBySellingNumberPlanId = carrierAccountManager.GetCustomersBySellingNumberPlanId(SellingNumberPlanId, false);
                CustomerCountryManager customerCountryManager = new CustomerCountryManager();
                foreach (var customer in customersBySellingNumberPlanId)
                {
-                   var customerCountry = customerCountryManager.GetCustomerCountry(customer.CarrierAccountId, CountryId, DateTime.Today, true);
+                   var customerCountry = customerCountryManager.GetEffectiveOrFutureCustomerCountry(customer.CarrierAccountId, CountryId, DateTime.Today);
                    if (customerCountry != null)
                    {
                        if (customerCountry.EED.VRGreaterThan(lastEED))

@@ -456,6 +456,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 if (closedRate == null)
                     throw new VRBusinessException(string.Format("Zone {0} has no rates set neither for customer nor for selling product", zoneToClose.ZoneName));
 
+                DateTime rateBED = (closedRate.Rate.BED > countrySellDate) ? closedRate.Rate.BED : countrySellDate;
+                DateTime rateEED = (zoneToClose.EED > rateBED) ? zoneToClose.EED : rateBED;
+
                 rateChanges.Add(new SalePricelistRateChange()
                 {
                     CountryId = countryId,
@@ -463,8 +466,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     ZoneId = zoneToClose.ZoneId,
                     Rate = closedRate.Rate.Rate,
                     ChangeType = RateChangeType.Deleted,
-                    BED = (closedRate.Rate.BED > countrySellDate) ? closedRate.Rate.BED : countrySellDate, //TODO: The same gap in Rate Plan when it is a selling product rate the BED is not correclt the same as the one on customer side
-                    EED = zoneToClose.EED,
+                    BED = rateBED, //TODO: The same gap in Rate Plan when it is a selling product rate the BED is not correclt the same as the one on customer side
+                    EED = rateEED,
                     CurrencyId = saleRateManager.GetCurrencyId(closedRate.Rate)
                 });
                 zoneIdsWithRateBED.Add(zoneToClose.ZoneId, closedRate.Rate.BED);
@@ -591,14 +594,17 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     throw new Exception(string.Format("Trying to close code {0} on zone {1}, this code does not have existing data", codeToClose.Code, codeToClose.ZoneName));
                 long? zoneId = GetZoneIdofLastExistingCode(codeToClose.ChangedExistingCodes);
 
+                DateTime codeBED = firstExistingCode.BED > soldCountry.BED ? firstExistingCode.BED : soldCountry.BED;
+                DateTime codeEED = codeToClose.CloseEffectiveDate > codeBED ? codeToClose.CloseEffectiveDate : codeBED;
+
                 codeChanges.Add(new SalePricelistCodeChange
                 {
                     CountryId = countryId,
                     ZoneName = codeToClose.ZoneName,
                     Code = codeToClose.Code,
                     ChangeType = CodeChange.Closed,
-                    BED = firstExistingCode.BED > soldCountry.BED ? firstExistingCode.BED : soldCountry.BED,
-                    EED = codeToClose.CloseEffectiveDate,
+                    BED = codeBED,
+                    EED = codeEED,
                     ZoneId = zoneId
                 });
             }

@@ -27,11 +27,12 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleZoneManager _saleZoneManager = new SaleZoneManager();
 
             #region mapper
-            private ZoneRoutingProduct ZoneRoutingProductMapper(SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct, long zoneId, DateTime zoneBED, int countryId, IEnumerable<int> serviceIds, bool IsInherited)
+            private ZoneRoutingProduct ZoneRoutingProductMapper(SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct, long zoneId, DateTime zoneBED, int countryId, IEnumerable<int> serviceIds, bool IsInherited, DateTime countrySellDate)
             {
+                List<DateTime> dates = new List<DateTime> { saleEntityZoneRoutingProduct.BED, zoneBED, countrySellDate };
                 return new ZoneRoutingProduct
                 {
-                    BED = saleEntityZoneRoutingProduct.BED > zoneBED ? saleEntityZoneRoutingProduct.BED : zoneBED,
+                    BED = dates.Max<DateTime>(),
                     EED = saleEntityZoneRoutingProduct.EED,
                     ZoneRoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId,
                     ZoneId = zoneId,
@@ -73,13 +74,21 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var serviceIds = _routingProductManager.GetZoneServiceIds(
                                 saleEntityZoneRoutingProduct.RoutingProductId, saleZone.SaleZoneId);
-                            ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(saleEntityZoneRoutingProduct, saleZone.SaleZoneId, saleZone.BED, saleZone.CountryId, serviceIds, false);
+                            ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(saleEntityZoneRoutingProduct, saleZone.SaleZoneId, saleZone.BED, saleZone.CountryId, serviceIds, false, DateTime.MinValue);
                             zoneRoutingProducts.Add(routingProduct);
                         }
                     }
                 }
                 else
                 {
+                    CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+                    IEnumerable<CustomerCountry2> customerCountries = customerCountryManager.GetCustomerCountries(input.Query.OwnerId, input.Query.EffectiveOn, false);
+                    Dictionary<int, DateTime> customerCountriesDatesById = new Dictionary<int, DateTime>();
+                    foreach (var customerCountrie in customerCountries)
+                    {
+                        customerCountriesDatesById.Add(customerCountrie.CountryId, customerCountrie.BED);
+                    }
+
                     var customerSellingProductManager = new CustomerSellingProductManager();
                     var sellingProductId =
                         customerSellingProductManager.GetEffectiveSellingProductId(input.Query.OwnerId,
@@ -89,6 +98,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     foreach (SaleZone saleZone in filteredSaleZone)
                     {
+                        DateTime countrySellDate = customerCountriesDatesById.GetRecord(saleZone.CountryId);
+
+                        if (countrySellDate == null)
+                            throw new Exception(string.Format("The Country of Zone {} is not sold for the customer with Id {1}", saleZone.Name, input.Query.OwnerId));
+
                         SaleEntityZoneRoutingProduct zoneRoutingProduct =
                             routingProductLocator.GetCustomerZoneRoutingProduct(input.Query.OwnerId,
                                 sellingProductId.Value, saleZone.SaleZoneId);
@@ -98,7 +112,7 @@ namespace TOne.WhS.BusinessEntity.Business
                                 zoneRoutingProduct.RoutingProductId, saleZone.SaleZoneId);
                             ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(zoneRoutingProduct,
                                 saleZone.SaleZoneId, saleZone.BED, saleZone.CountryId, serviceIds,
-                                zoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone);
+                                zoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone, countrySellDate);
                             zoneRoutingProducts.Add(routingProduct);
                         }
                     }
