@@ -29,7 +29,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             metadata.AddDefaultExtensionProvider<IImportSPLContext>(() => new ImportSPLContext());
             base.CacheMetadata(metadata);
         }
-
         protected override void Execute(CodeActivityContext context)
         {
             int supplierId = SupplierId.Get(context);
@@ -54,35 +53,20 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
     public class ImportSPLContext : IImportSPLContext
     {
+        #region Fields
+
         private object _obj = new object();
-
         private volatile bool _processHasChanges = false;
-
         private TimeSpan _codeCloseDateOffset;
-
         public const string CustomDataKey = "ImportSPLContext";
-
         private int _priceListCurrencyId;
         private int _systemCurrencyId;
         private Dictionary<int, decimal> _maximumRateConvertedByCurrency = new Dictionary<int, decimal>();
-        public ImportSPLContext()
-        {
 
-            CurrencyManager currencyManager = new CurrencyManager();
-            var systemCurrency = currencyManager.GetSystemCurrency();
-            if (systemCurrency == null)
-                throw new DataIntegrityValidationException("System Currency was not found");
-            _systemCurrencyId = systemCurrency.CurrencyId;
+        #endregion
 
+        #region Properties
 
-            var tOneConfigManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
-            MaximumRate = tOneConfigManager.GetPurchaseAreaMaximumRate();
-
-            int retroactiveDayOffset = tOneConfigManager.GetPurchaseAreaRetroactiveDayOffset();
-            RetroactiveDate = DateTime.Today.AddDays(-retroactiveDayOffset).Date;
-
-            DateFormat = new Vanrise.Common.Business.GeneralSettingsManager().GetDateFormat();
-        }
         public int PriceListCurrencyId
         {
             get
@@ -108,11 +92,30 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         }
         public DateTime CodeEffectiveDate { get; set; }
         public decimal MaximumRate { get; set; }
-
         public DateTime RetroactiveDate { get; set; }
         public string DateFormat { get; set; }
 
-        #region public functions
+        #endregion
+
+        public ImportSPLContext()
+        {
+            CurrencyManager currencyManager = new CurrencyManager();
+            var systemCurrency = currencyManager.GetSystemCurrency();
+            if (systemCurrency == null)
+                throw new DataIntegrityValidationException("System Currency was not found");
+            _systemCurrencyId = systemCurrency.CurrencyId;
+
+            var tOneConfigManager = new TOne.WhS.BusinessEntity.Business.ConfigManager();
+            MaximumRate = tOneConfigManager.GetPurchaseAreaMaximumRate();
+
+            int retroactiveDayOffset = tOneConfigManager.GetPurchaseAreaRetroactiveDayOffset();
+            RetroactiveDate = DateTime.Today.AddDays(-retroactiveDayOffset).Date;
+
+            DateFormat = new Vanrise.Common.Business.GeneralSettingsManager().GetDateFormat();
+        }
+
+        #region Public Methods
+
         public void SetToTrueProcessHasChangesWithLock()
         {
             if (!_processHasChanges)
@@ -123,7 +126,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 }
             }
         }
-
         public decimal GetMaximumRateConverted(int currencyId)
         {
             CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
@@ -137,12 +139,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             }
             return convertedRate;
         }
-
         public int GetImportedRateCurrencyId(ImportedRate importedRate)
         {
             return _priceListCurrencyId;
         }
-
         public void SetSupplierEffectiveDateDayOffset(int supplierId)
         {
             int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetSupplierEffectiveDateDayOffset(supplierId);
@@ -150,6 +150,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             _codeCloseDateOffset = codeCloseDateOffset;
             CodeEffectiveDate = DateTime.Today.AddDays(effectiveDateDayOffset);
         }
+
         #endregion
     }
 }
