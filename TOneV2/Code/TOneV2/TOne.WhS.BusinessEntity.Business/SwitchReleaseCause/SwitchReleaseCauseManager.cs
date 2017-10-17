@@ -88,8 +88,9 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public string GetSwitchReleaseCauseName(int switchReleaseCauseId)
         {
-             ISwitchReleaseCauseDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchReleaseCauseDataManager>();
-             return dataManager.GetSwitchReleaseCauseName(switchReleaseCauseId);
+            var allSwitchReleaseCauses = this.GetCachedSwitchReleaseCauses();
+            var switchReleaseCause = allSwitchReleaseCauses.GetRecord(switchReleaseCauseId);
+            return switchReleaseCause.ReleaseCode;
         }
         public UploadSwitchReleaseCauseLog UploadSwitchReleaseCauses(int fileId, int switchId)
         {
@@ -250,7 +251,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override string ModuleName
             {
-                get { return "Buisiness Entity"; }
+                get { return "Business Entity"; }
             }
 
             public override string EntityDisplayName
