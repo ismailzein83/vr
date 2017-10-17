@@ -70,6 +70,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                      lastRateNoCacheLocator, infoDetailsByCustomerId, processEffectiveDate, zonesRoutingProductToAddLocator);
                 Dictionary<int, List<NewPriceList>> salePriceListsByCurrencyId = StructurePriceListByCurrencyId(salePriceListByOwner, processInstanceId, userId);
                 var customerChanges = salePriceListManager.CreateCustomerChanges(allCustomersPricelistChanges, lastRateNoCacheLocator, salePriceListsByCurrencyId, processEffectiveDate, processInstanceId, userId);
+
+                GetPricelistDescription(customerChanges, closedExistingZones, allCountryActions);
                 CustomerPriceListChange.Set(context, customerChanges);
                 SalePriceList.Set(context, salePriceListsByCurrencyId.Values.SelectMany(p => p));
             }
@@ -103,6 +105,88 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         #endregion
 
         #region Private Methods
+
+        private void GetPricelistDescription(List<NewCustomerPriceListChange> customerChanges, ClosedExistingZones closedExistingZones, IEnumerable<StructuredCountryActions> structuredCountryActions)
+        {
+            int newZonesCounter = 0;
+            int closedZonesCounter = 0;
+            int newCodesCounter = 0;
+            int closedCodesCounter = 0;
+            int movedCodesCounter = 0;
+            int newRatesCounter = 0;
+            int closedRatesCounter = 0;
+            Dictionary<string, NewZoneToAdd> zoneToAddByZoneName = new Dictionary<string, NewZoneToAdd>();
+
+            NewZoneToAdd newZoneToAdd = new NewZoneToAdd();
+            foreach (var structuredCountryAction in structuredCountryActions)
+            {
+                foreach(var zoneToAdd in structuredCountryAction.NewZonesToAdd)
+                {
+                    if (!zoneToAddByZoneName.TryGetValue(zoneToAdd.ZoneName,out newZoneToAdd))
+                    {
+                        zoneToAddByZoneName.Add(zoneToAdd.ZoneName, zoneToAdd);
+                    }
+                }
+            }
+
+            List<ExistingZone> existingZone;
+            foreach (NewCustomerPriceListChange customerChange in customerChanges)
+            {
+                foreach (PriceListChange pricelist in customerChange.PriceLists)
+                {
+                    foreach (CountryChange countryChange in pricelist.CountryChanges)
+                    {
+                        foreach (SalePricelistZoneChange zoneChange in countryChange.ZoneChanges)
+                        {
+                            if (closedExistingZones.TryGetValue(zoneChange.ZoneName, out existingZone))
+                                closedZonesCounter++;
+                            else if (zoneToAddByZoneName.TryGetValue(zoneChange.ZoneName,out newZoneToAdd))
+                                newZonesCounter++;
+
+                            foreach (SalePricelistCodeChange codeChange in zoneChange.CodeChanges)
+                            {
+                                if (codeChange.ChangeType == CodeChange.New)
+                                    newCodesCounter++;
+                                else if (codeChange.ChangeType == CodeChange.Closed)
+                                    closedCodesCounter++;
+                                else if (codeChange.ChangeType == CodeChange.Moved)
+                                    movedCodesCounter++;
+                            }
+                            if (zoneChange.RateChange != null)
+                            {
+                                if (zoneChange.RateChange.ChangeType == RateChangeType.New)
+                                    newRatesCounter++;
+                                else if (zoneChange.RateChange.ChangeType == RateChangeType.Deleted)
+                                    closedRatesCounter++;
+                            }
+                        }
+                    }
+                    pricelist.PriceList.Description = GetPricelistDescriptionString(newZonesCounter, closedZonesCounter, newCodesCounter, closedCodesCounter, movedCodesCounter, newRatesCounter, closedRatesCounter);
+                }
+            }
+        }
+
+        private string GetPricelistDescriptionString(int newZonesCounter, int closedZonesCounter, int newCodesCounter, int closedCodesCounter, int movedCodesCounter, int newRatesCounter, int closedRatesCounter)
+        {
+            string result = "";
+            if (newZonesCounter != 0)
+                result = string.Format(result + "New Zones: {0} ", newZonesCounter);
+            if (closedZonesCounter != 0)
+                result = string.Format(result + "Closed Zones: {0} ", closedZonesCounter);
+            if (newCodesCounter != 0)
+                result = string.Format(result + "New Codes: {0} ", newCodesCounter);
+            if (movedCodesCounter != 0)
+                result = string.Format(result + "Moved Codes: {0} ", movedCodesCounter);
+            if (closedCodesCounter != 0)
+                result = string.Format(result + "Closed Codes: {0} ", closedCodesCounter);
+            if (newRatesCounter != 0)
+                result = string.Format(result + "New Rates: {0} ", newRatesCounter);
+            if (closedRatesCounter != 0)
+                result = string.Format(result + "Closed Rates: {0} ", closedRatesCounter);
+            return result;
+        }
+
+
 
         private Dictionary<int, List<NewPriceList>> StructurePriceListByCurrencyId(SalePriceListsByOwner salePriceListByOnwer, long processInstanceId, int userId)
         {
@@ -333,8 +417,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     ZoneName = rateChange.ZoneName,
                     ZoneId = rateChange.ZoneId,
                     BED = zoneRoutingProduct.BED,
-                    EED =zoneRoutingProduct.EED,
-                    RoutingProductId =zoneRoutingProduct.RoutingProductId,
+                    EED = zoneRoutingProduct.EED,
+                    RoutingProductId = zoneRoutingProduct.RoutingProductId,
                 });
             }
             return routingProductchanges;

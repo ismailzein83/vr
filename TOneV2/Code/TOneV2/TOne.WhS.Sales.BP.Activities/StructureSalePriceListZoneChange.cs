@@ -243,10 +243,63 @@ namespace TOne.WhS.Sales.BP.Activities
             var structuredCustomers = salePriceListManager.StructureCustomerPricelistChange(customerPriceListChanges);
             var changes = salePriceListManager.CreateCustomerChanges(structuredCustomers, lastRateNoCachelocator, pricelistByCurrencyId, effectiveOn, processInstanceId, userId);
 
+            GetPricelistDescription(changes, customerCountriesToAdd, customerCountriesToClose);
+
             NewSalePriceList.Set(context, pricelistByCurrencyId.Values.SelectMany(p => p));
             CustomerChange.Set(context, changes);
             AllSalePricelistRPChanges.Set(context, outRoutingProductChanges);
         }
+
+        #region Get Pricelist Description
+        private void GetPricelistDescription(List<NewCustomerPriceListChange> customerChanges, IEnumerable<CustomerCountryToAdd> customerCountriesToAdd, IEnumerable<CustomerCountryToChange> customerCountriesToClose)
+        {
+            int newCountriesCounter = 0;
+            int closedCountriesCounter = 0;
+            int newRatesCounter = 0;
+            int increasedRatesCounter = 0;
+            int decreasedRatesCounter = 0;
+            foreach (NewCustomerPriceListChange customerChange in customerChanges)
+            {
+                foreach (PriceListChange pricelist in customerChange.PriceLists)
+                {
+                    foreach (CountryChange countryChange in pricelist.CountryChanges)
+                    {
+                        if (customerCountriesToAdd.Where(item => item.CountryId == countryChange.CountryId && item.CustomerId == customerChange.CustomerId).Count() > 0)
+                            newCountriesCounter++;
+                        else if (customerCountriesToClose.Where(item => item.CountryId == countryChange.CountryId).Count() > 0)
+                            closedCountriesCounter++;
+
+                        foreach (SalePricelistZoneChange zoneChange in countryChange.ZoneChanges)
+                        {
+                            if (zoneChange.RateChange.ChangeType == RateChangeType.New)
+                                newRatesCounter++;
+                            else if (zoneChange.RateChange.ChangeType == RateChangeType.Increase)
+                                increasedRatesCounter++;
+                            else if (zoneChange.RateChange.ChangeType == RateChangeType.Decrease)
+                                decreasedRatesCounter++;
+                        }
+                    }
+                    pricelist.PriceList.Description = GetPricelistDescriptionString(newCountriesCounter,closedCountriesCounter,newRatesCounter,increasedRatesCounter,decreasedRatesCounter);
+                }
+            }
+        }
+
+        private string GetPricelistDescriptionString(int newCountriesCounter, int closedCountriesCounter, int newRatesCounter, int increasedRatesCounter, int decreasedRatesCounter)
+        {
+            string result = "";
+            if (newCountriesCounter != 0)
+                result = string.Format(result + "New Countries : {0} ", newCountriesCounter);
+            if (closedCountriesCounter != 0)
+                result = string.Format(result + "Closed Countries : {0} ", closedCountriesCounter);
+            if (newRatesCounter != 0)
+                result = string.Format(result + "New Rates : {0} ", newRatesCounter);
+            if (increasedRatesCounter != 0)
+                result = string.Format(result + "Increased Rates : {0} ", increasedRatesCounter);
+            if (decreasedRatesCounter != 0)
+                result = string.Format(result + "Decreased Rates : {0} ", decreasedRatesCounter);
+            return result;
+        }
+        #endregion
 
         #region Get Pricelist Changes from Selling Product Methods
 

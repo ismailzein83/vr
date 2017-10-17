@@ -85,7 +85,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long ProcessInstanceId { get; set; }
         public long FileId { get; set; }
         public int UserId { get; set; }
+        public string Description { get; set; }
     }
+
     public class CountryChange
     {
         public int CountryId { get; set; }

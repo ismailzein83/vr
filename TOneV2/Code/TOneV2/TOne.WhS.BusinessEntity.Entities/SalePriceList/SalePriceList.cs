@@ -33,5 +33,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public bool IsDeleted { get; set; }
         public DateTime CreatedTime { get; set; }
         public bool IsSent { get; set; }
+        public string Description { get; set; }
     }
 }
