@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('whsRoutesyncRoutesyncdefinitionSelector', ['WhS_RouteSync_RouteSyncDefinitionAPIService', 'VRUIUtilsService',
-    function (WhS_RouteSync_RouteSyncDefinitionAPIService, VRUIUtilsService) {
+app.directive('whsRoutesyncRoutesyncdefinitionSelector', ['WhS_RouteSync_RouteSyncDefinitionAPIService', 'VRUIUtilsService','WhS_RouteSync_RouteSyncDefinitionService',
+    function (WhS_RouteSync_RouteSyncDefinitionAPIService, VRUIUtilsService, WhS_RouteSync_RouteSyncDefinitionService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -17,6 +17,20 @@ app.directive('whsRoutesyncRoutesyncdefinitionSelector', ['WhS_RouteSync_RouteSy
 
                 var ctrl = this;
                 ctrl.datasource = [];
+
+                $scope.addNewRouteSyncDefinition = function () {
+                    var onRouteSyncDefinitionAdded = function (routeSyncDefinitionObj) {
+                        ctrl.datasource.push(routeSyncDefinitionObj.Entity);
+                        if ($attrs.ismultipleselection != undefined)
+                            ctrl.selectedvalues.push(routeSyncDefinitionObj.Entity);
+                        else
+                            ctrl.selectedvalues = routeSyncDefinitionObj.Entity;
+                    };
+                    WhS_RouteSync_RouteSyncDefinitionService.addRouteSyncDefinition(onRouteSyncDefinitionAdded);
+                };
+                ctrl.haspermission = function () {
+                    return WhS_RouteSync_RouteSyncDefinitionAPIService.HasAddRouteSyncDefinitionPermission();
+                };
                 var routeSyncDefinitionSelectorCtor = new RouteSyncDefinitionSelectorCtor(ctrl, $scope, $attrs);
                 routeSyncDefinitionSelectorCtor.initializeController();
                 ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
@@ -44,15 +58,20 @@ app.directive('whsRoutesyncRoutesyncdefinitionSelector', ['WhS_RouteSync_RouteSy
                 label = "Route Sync Definitions";
                 multipleselection = "ismultipleselection";
             }
+            var addCliked = '';
+            if (attrs.showaddbutton != undefined)
+                addCliked = 'onaddclicked="addNewRouteSyncDefinition"';
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '<vr-select on-ready="ctrl.onSelectorReady"'
                    + '  selectedvalues="ctrl.selectedvalues"'
                    + '  onselectionchanged="ctrl.onselectionchanged"'
                    + '  datasource="ctrl.datasource"'
+                   + '  haspermission="ctrl.haspermission" '
                    + '  datavaluefield="RouteSyncDefinitionId"'
                    + '  datatextfield="Name"'
                    + '  ' + multipleselection
+                   + '  ' + addCliked
                    + '  isrequired="ctrl.isrequired"'
                    + '  label="' + label + '"'
                    + ' entityName="' + label + '"'
