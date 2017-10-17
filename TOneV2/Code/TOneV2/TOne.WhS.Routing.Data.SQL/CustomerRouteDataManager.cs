@@ -26,6 +26,24 @@ namespace TOne.WhS.Routing.Data.SQL
             RouteOption dummy = new RouteOption();
         }
 
+        #region Public Methods
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(Entities.CustomerRoute record, object dbApplyStream)
+        {
+            string serializedOptions = record.Options != null ? SerializeOptions(record.Options) : null;// Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
+            //string serializedOptions = Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            string saleZoneServiceIds = (record.SaleZoneServiceIds != null && record.SaleZoneServiceIds.Count > 0) ? string.Join(",", record.SaleZoneServiceIds) : null;
+
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.CustomerId, record.Code, record.SaleZoneId,
+                record.Rate, saleZoneServiceIds, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions);//Vanrise.Common.Serializer.Serialize(record.Options, true));
+        }
+
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
         {
             var streamInfo = preparedCustomerRoute as StreamBulkInsertInfo;
@@ -50,22 +68,6 @@ namespace TOne.WhS.Routing.Data.SQL
                 FieldSeparator = '^',
                 ColumnNames = columns,
             };
-        }
-
-        public object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
-        }
-
-        public void WriteRecordToStream(Entities.CustomerRoute record, object dbApplyStream)
-        {
-            string serializedOptions = record.Options != null ? SerializeOptions(record.Options) : null;// Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
-            //string serializedOptions = Convert.ToBase64String(Vanrise.Common.ProtoBufSerializer.Serialize<List<RouteOption>>(record.Options));
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            string saleZoneServiceIds = (record.SaleZoneServiceIds != null && record.SaleZoneServiceIds.Count > 0) ? string.Join(",", record.SaleZoneServiceIds) : null;
-
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.CustomerId, record.Code, record.SaleZoneId,
-                record.Rate, saleZoneServiceIds, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions);//Vanrise.Common.Serializer.Serialize(record.Options, true));
         }
 
         public IEnumerable<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input)
@@ -145,6 +147,29 @@ namespace TOne.WhS.Routing.Data.SQL
             trackStep("Finished create Index on CustomerRoute table (SaleZoneId).");
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private CustomerRoute CustomerRouteMapper(IDataReader reader)
+        {
+            string saleZoneServiceIds = (reader["SaleZoneServiceIds"] as string);
+
+            return new CustomerRoute()
+            {
+                CustomerId = (int)reader["CustomerID"],
+                CustomerName = reader["CustomerName"].ToString(),
+                Code = reader["Code"].ToString(),
+                SaleZoneId = (long)reader["SaleZoneID"],
+                SaleZoneName = reader["SaleZoneName"].ToString(),
+                Rate = GetReaderValue<decimal?>(reader, "Rate"),
+                SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
+                IsBlocked = (bool)reader["IsBlocked"],
+                ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
+                Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null
+            };
+        }
+
         private string SerializeOptions(List<RouteOption> options)
         {
             StringBuilder str = new StringBuilder();
@@ -193,24 +218,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return options;
         }
 
-        private CustomerRoute CustomerRouteMapper(IDataReader reader)
-        {
-            string saleZoneServiceIds = (reader["SaleZoneServiceIds"] as string);
-
-            return new CustomerRoute()
-            {
-                CustomerId = (int)reader["CustomerID"],
-                CustomerName = reader["CustomerName"].ToString(),
-                Code = reader["Code"].ToString(),
-                SaleZoneId = (long)reader["SaleZoneID"],
-                SaleZoneName = reader["SaleZoneName"].ToString(),
-                Rate = GetReaderValue<decimal?>(reader, "Rate"),
-                SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
-                IsBlocked = (bool)reader["IsBlocked"],
-                ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
-                Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null
-            };
-        }
+        #endregion
 
         #region Queries
 
@@ -239,7 +247,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 ,[ExecutedRuleId]
                                                                 ,[RouteOptions]
                                                   FROM [dbo].[CustomerRoute] as cr with(nolock) JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId=sz.ID JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID=ca.ID
-                                                    #FILTER#";
+                                                  #FILTER#";
 
         const string query_CreateIX_CustomerRoute_CustomerId = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_CustomerId] ON dbo.CustomerRoute
                                                                 (
@@ -247,14 +255,14 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
 
         const string query_CreateIX_CustomerRoute_Code = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_Code] ON dbo.CustomerRoute
-                                                              (
-                                                                      Code ASC
-                                                              )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
+                                                           (
+                                                                   Code ASC
+                                                           )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
 
         const string query_CreateIX_CustomerRoute_SaleZone = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_SaleZone] ON dbo.CustomerRoute
-                                                                (
-                                                                      SaleZoneId ASC
-                                                                )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
+                                                               (
+                                                                     SaleZoneId ASC
+                                                               )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
 
         #endregion
     }
