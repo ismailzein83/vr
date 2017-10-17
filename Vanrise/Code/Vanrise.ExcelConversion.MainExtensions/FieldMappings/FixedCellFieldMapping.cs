@@ -22,7 +22,7 @@ namespace Vanrise.ExcelConversion.MainExtensions
         public TextManipulationSettings ManipulationSettings { get; set; }
         public override object GetFieldValue(IGetFieldValueContext context)
         {
-            Aspose.Cells.Worksheet worksheet = context.Sheet;
+            Aspose.Cells.Worksheet worksheet = (this.SheetIndex.HasValue) ? context.Workbook.Worksheets[SheetIndex.Value]: context.Sheet;
             var cell = worksheet.Cells[RowIndex, CellIndex];
             if (this.ManipulationSettings != null && this.ManipulationSettings.Actions != null)
             {

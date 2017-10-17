@@ -140,10 +140,12 @@
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\Templates\CellFieldMappingTemplate.html" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\Templates\ConcatenateFieldMappingTemplate.html" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\Templates\ConditionalCellFieldMappingTemplate.html" />
+    <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\Templates\ConstantFieldMappingTemplate.html" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\Templates\FixedCellFieldMappingTemplate.html" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\vr-excelconversion-fieldmapping-cellfieldmapping.js" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\vr-excelconversion-fieldmapping-concatenatefieldmapping.js" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\vr-excelconversion-fieldmapping-conditionalcell.js" />
+    <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\vr-excelconversion-fieldmapping-constantfieldmapping.js" />
     <Content Include="ExcelConversion\Directives\MainExtensions\FieldMapping\vr-excelconversion-fieldmapping-fixedcell.js" />
     <Content Include="ExcelConversion\Services\APIServices\ExcelAPIService.js" />
   </ItemGroup>

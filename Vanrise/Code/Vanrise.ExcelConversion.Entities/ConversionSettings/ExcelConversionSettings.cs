@@ -13,5 +13,16 @@ namespace Vanrise.ExcelConversion.Entities
         public List<ListMapping> ListMappings { get; set; }
 
         public string DateTimeFormat { get; set; }
+
+        public int? Precision { get; set; }
+
+        public bool IsCrop { get; set; }
+
+        public ExcelConversionExtendedSettings ExtendedSettings { get; set; }
+    }
+
+    public abstract class ExcelConversionExtendedSettings
+    {
+
     }
 }

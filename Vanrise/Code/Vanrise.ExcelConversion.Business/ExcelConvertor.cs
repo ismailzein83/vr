@@ -54,7 +54,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings.DateTimeFormat, null, null,isCommaDecimalSeparator, null)
+                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings.DateTimeFormat, null, null, isCommaDecimalSeparator, null, null, false, conversionSettings.ExtendedSettings)
                     };
                     convertedExcel.Fields.Add(fld);
                 }
@@ -118,13 +118,13 @@ namespace Vanrise.ExcelConversion.Business
                     RecordFilterManager manager = new RecordFilterManager();
                     MappingFilterMatchContext context = new MappingFilterMatchContext();
                     context.fieldTypeByFieldName = fieldTypeByFieldName;
-                   
+
                     foreach(var field in listMapping.Filter.Fields)
                     {
                         object fieldValue = null;
                         if(!fieldValueByFieldName.TryGetValue(field.FieldName,out fieldValue))
                         {
-                            fieldValueByFieldName.Add(field.FieldName, GetFieldValue(workbook, field.FieldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName));
+                            fieldValueByFieldName.Add(field.FieldName, GetFieldValue(workbook, field.FieldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName, conversionSettings.Precision, conversionSettings.IsCrop, conversionSettings.ExtendedSettings));
                         }
                     }
                     context.fieldValueByFieldName = fieldValueByFieldName;
@@ -144,7 +144,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName)
+                        FieldValue = GetFieldValue(workbook, fldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName, conversionSettings.Precision, conversionSettings.IsCrop, conversionSettings.ExtendedSettings)
                     };
                     convertedRecord.Fields.Add(fld);
                 }
@@ -154,13 +154,14 @@ namespace Vanrise.ExcelConversion.Business
             convertedExcel.Lists.Add(lst);
         }
 
-        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, string dateTimeFormat, Worksheet workSheet, Row row, bool isCommaDecimalSeparator, Dictionary<string, Object> fieldValueByFieldName)
+        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, string dateTimeFormat, Worksheet workSheet, Row row, bool isCommaDecimalSeparator, Dictionary<string, Object> fieldValueByFieldName, int? precision, bool isCrop, ExcelConversionExtendedSettings extendedSettings)
         {
             GetFieldValueContext getFieldValueContext = new GetFieldValueContext
             {
                 Workbook = workbook,
                 Sheet = workSheet,
-                Row = row, 
+                Row = row,
+                ExtendedSettings = extendedSettings,
                 FieldValueByFieldName = fieldValueByFieldName
             };
             Object fldValue = fldMapping.GetFieldValue(getFieldValueContext);
@@ -175,7 +176,7 @@ namespace Vanrise.ExcelConversion.Business
                     DateTime result;
                     if (dateTimeFormat.Contains("Y"))
                     {
-                      dateTimeFormat = dateTimeFormat.Replace("Y","y");
+                        dateTimeFormat = dateTimeFormat.Replace("Y","y");
                     }
                     if (DateTime.TryParseExact(fldValue.ToString(), dateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
                     {
@@ -187,26 +188,46 @@ namespace Vanrise.ExcelConversion.Business
             }
             else if(fldMapping.FieldType == FieldType.Decimal)
             {
+                Decimal result;
+
                 if (fldValue is Decimal)
-                    return fldValue;
+                {
+                    result = (Decimal)fldValue;
+                }
+
                 else
                 {
-                    Decimal result;
                     if (isCommaDecimalSeparator && Decimal.TryParse(fldValue.ToString().Replace(",", "."), out result))
                     {
-                        return result;
                     }
-                    else if (!isCommaDecimalSeparator && (Decimal.TryParse(fldValue.ToString(),NumberStyles.Any,CultureInfo.InvariantCulture, out result)))
+                    else if (!isCommaDecimalSeparator && (Decimal.TryParse(fldValue.ToString(), NumberStyles.Any, CultureInfo.InvariantCulture, out result)))
                     {
-                        return result;
-                    }else
+                    }
+                    else
                     {
-                        throw new VRBusinessException(string.Format("{0} is mapped to an invalid field.",fldMapping.FieldName));
+                        throw new VRBusinessException(string.Format("{0} is mapped to an invalid field.", fldMapping.FieldName));
                     }
                 }
+                if (precision.HasValue)
+                    return getCropOrRoundedValue(result, precision.Value, isCrop);
+                return result;
             }
             else
                 return fldValue;
+        }
+
+        private Decimal getCropOrRoundedValue(Decimal value,int precision , bool isCrop)
+        {
+            Decimal result; 
+            if (isCrop)
+            {
+                Decimal y = (Decimal)(Math.Pow(10, precision));
+                result = value * y;
+                result = Decimal.Floor(result);
+                result = result/y;
+            }
+            else result = Decimal.Round(value, precision);
+            return result;
         }
 
         private bool CheckIsRowEmpty(Row row, int maxdatacol)

@@ -163,7 +163,7 @@
                         ctrl.firstRowIndex = undefined;
                         $scope.scopeModel.labelName = (payload.listTitle!=undefined)?payload.listTitle + " Date Time Format":undefined;
                         $scope.showDateFormat = payload.showDateFormat;
-                        $scope.scopeModel.dateTimeFormat = (payload.listMappingData!=undefined)?payload.listMappingData.DateTimeFormat:undefined;
+                        $scope.scopeModel.dateTimeFormat = (payload.listMappingData != undefined && payload.showDateFormat==true) ? payload.listMappingData.DateTimeFormat : undefined;
                         if (listMappingData != undefined) {
 
                             if (listMappingData.FirstRowIndex != undefined) {
@@ -303,7 +303,7 @@
                         LastRowIndex: ctrl.lastRowIndex != undefined ? ctrl.lastRowIndex.row : undefined,
                         FieldMappings: fieldMappings,
                         Filter: filter,
-                        DateTimeFormat: ($scope.scopeModel.dateTimeFormat != undefined) ? $scope.scopeModel.dateTimeFormat : undefined
+                        DateTimeFormat: ($scope.scopeModel.dateTimeFormat != undefined && $scope.scopeModel.showDateFormat==true) ? $scope.scopeModel.dateTimeFormat : undefined
                     };
                     return data;
                 }

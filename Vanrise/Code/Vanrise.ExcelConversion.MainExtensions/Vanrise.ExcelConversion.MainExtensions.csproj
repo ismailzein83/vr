@@ -51,6 +51,7 @@
     <Compile Include="FieldMappings\CellFieldMapping.cs" />
     <Compile Include="FieldMappings\ConcatenateFieldMapping.cs" />
     <Compile Include="FieldMappings\ConditionalCellFieldMapping.cs" />
+    <Compile Include="FieldMappings\ConstantFieldMapping.cs" />
     <Compile Include="FieldMappings\FixedCellFieldMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

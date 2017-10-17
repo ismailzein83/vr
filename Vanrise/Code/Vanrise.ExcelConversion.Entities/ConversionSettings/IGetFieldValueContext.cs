@@ -14,6 +14,8 @@ namespace Vanrise.ExcelConversion.Entities
 
         Aspose.Cells.Row Row { get; }
 
+        ExcelConversionExtendedSettings ExtendedSettings { get; set; }
+
         Dictionary<string, Object> FieldValueByFieldName { get; }
     }
 }

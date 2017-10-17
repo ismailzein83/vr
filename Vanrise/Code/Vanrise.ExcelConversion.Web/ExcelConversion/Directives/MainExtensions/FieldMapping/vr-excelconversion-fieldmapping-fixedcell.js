@@ -60,12 +60,12 @@
 
                 };
                 ctrl.validate = function () {
-                    if ($scope.cellObject != undefined && context != undefined) {
+                    /*if ($scope.cellObject != undefined && context != undefined) {
                         var row = context.getFirstRowIndex();
                         if (row != undefined && $scope.cellObject != undefined && $scope.cellObject.sheet != row.sheet)
                             return "Error sheet index.";
 
-                    }
+                    }*/
                     return null;
                 };
                 ctrl.selectCell = function () {
