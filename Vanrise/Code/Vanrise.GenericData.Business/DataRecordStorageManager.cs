@@ -816,7 +816,7 @@ namespace Vanrise.GenericData.Business
 
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<DataRecordDetail> context)
             {
-                if (_query.Columns.Count != _query.ColumnTitles.Count)
+                if (_query.Columns == null || _query.ColumnTitles == null || _query.Columns.Count != _query.ColumnTitles.Count)
                 {
                     throw new ArgumentNullException("Count of columns titles different then count of columns");
                 }
@@ -826,13 +826,11 @@ namespace Vanrise.GenericData.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                if (_query.Columns != null)
+                foreach (var dimName in _query.ColumnTitles)
                 {
-                    foreach (var dimName in _query.ColumnTitles)
-                    {
-                        sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = dimName });
-                    }
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = dimName });
                 }
+                
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {
