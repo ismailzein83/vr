@@ -39,7 +39,8 @@ namespace Vanrise.Analytic.Data.SQL
                         parameterDeclarationBuilder.Append(", ");
                     if (parameterAssignementBuilder.Length > 0)
                         parameterAssignementBuilder.Append(", ");
-                    parameterDeclarationBuilder.Append(String.Format("{0} varchar(max)", prm.Key));
+                    
+                    parameterDeclarationBuilder.Append(String.Format("{0} {1}", prm.Key, GetSqlParameterSqlType(prm.Key, prm.Value)));
                     parameterAssignementBuilder.Append(String.Format("{0} = {0}_FromOut", prm.Key));
                 }
                 querySQL = string.Format(@"DECLARE {0}  

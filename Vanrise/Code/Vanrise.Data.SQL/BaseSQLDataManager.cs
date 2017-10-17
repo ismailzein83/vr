@@ -686,5 +686,16 @@ namespace Vanrise.Data.SQL
         }
 
         #endregion
+
+        public string GetSqlParameterSqlType(string parameterName, Object parameterValue)
+        {
+            SqlParameter sqlPrm = new SqlParameter(parameterName, parameterValue);
+            string sqlType = sqlPrm.SqlDbType.ToString();
+            if (sqlPrm.Size > 0)
+                sqlType = string.Format("{0}({1})", sqlType, sqlPrm.Size);
+            else if (sqlPrm.SqlDbType == SqlDbType.Decimal)
+                sqlType = "Decimal(38, 15)";
+            return sqlType;
+        }
     }
 }
