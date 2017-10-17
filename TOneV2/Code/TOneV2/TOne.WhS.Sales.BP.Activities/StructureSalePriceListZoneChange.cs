@@ -279,7 +279,7 @@ namespace TOne.WhS.Sales.BP.Activities
                                 decreasedRatesCounter++;
                         }
                     }
-                    pricelist.PriceList.Description = GetPricelistDescriptionString(newCountriesCounter,closedCountriesCounter,newRatesCounter,increasedRatesCounter,decreasedRatesCounter);
+                    pricelist.PriceList.Description = GetPricelistDescriptionString(newCountriesCounter, closedCountriesCounter, newRatesCounter, increasedRatesCounter, decreasedRatesCounter);
                 }
             }
         }
@@ -311,7 +311,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             foreach (var customer in context.Customers)
             {
-                var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customer.CustomerId, context.MinimumDate);
+                var soldCountries = customerCountryManager.GetNotEndedCustomerCountriesEffectiveAfter(customer.CustomerId, context.MinimumDate);
                 if (soldCountries == null)
                     continue;
 

@@ -228,6 +228,14 @@ namespace TOne.WhS.BusinessEntity.Business
             else
                 return null;
         }
+        public IEnumerable<CustomerCountry2> GetNotEndedCustomerCountriesEffectiveAfter(int customerId, DateTime date)
+        {
+            IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountries(customerId);
+            if (customerCountries != null)
+                return customerCountries.FindAllRecords(x => x.IsEffectiveOrFuture(date) && !x.EED.HasValue);
+            else
+                return null;
+        }
         public IEnumerable<CustomerCountry2> GetCustomerCountriesEffectiveAfter(int customerId, DateTime date, long? processInstanceId)
         {
             IEnumerable<CustomerCountry2> customerCountries = GetCustomerCountriesEffectiveAfter(customerId, date);
