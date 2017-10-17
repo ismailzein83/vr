@@ -371,12 +371,14 @@ namespace TOne.WhS.Routing.Business
             SupplierRate supplierRate = supplierRateByIds != null ? supplierRateByIds.GetRecord(rpRouteOptionSupplierZone.SupplierRateId) : null;
             DateTime now = DateTime.Now;
 
+            bool shouldGetFutureRate = supplierRate != null && supplierRate.EED.HasValue && futureSupplierZoneRateLocator != null;
+
             var detailEntity = new RPRouteOptionSupplierZoneDetail()
             {
                 Entity = rpRouteOptionSupplierZone,
                 SupplierZoneName = supplierZone != null ? supplierZone.Name : null,
                 ConvertedSupplierRate = rpRouteOptionSupplierZone.SupplierRate,
-                FutureRate = supplierRate != null && futureSupplierZoneRateLocator != null ? GetFutureRate(supplierRate, futureSupplierZoneRateLocator, supplierZone.SupplierId, supplierZone.SupplierZoneId, now) : null,
+                FutureRate = shouldGetFutureRate ? GetFutureRate(supplierRate, futureSupplierZoneRateLocator, supplierZone.SupplierId, supplierZone.SupplierZoneId, now) : null,
                 RateEED = supplierRate != null ? supplierRate.EED : null
             };
 
