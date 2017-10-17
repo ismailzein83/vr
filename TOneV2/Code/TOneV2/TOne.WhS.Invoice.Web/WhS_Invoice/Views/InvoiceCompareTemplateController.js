@@ -2,9 +2,9 @@
 
     'use strict';
 
-    invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService','VR_ExcelConversion_FieldTypeEnum','VR_Invoice_InvoiceTypeAPIService','WhS_Invoice_InvoiceAPIService','WhS_Invoice_ComparisonResultEnum','LabelColorsEnum'];
+    invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService','VR_ExcelConversion_FieldTypeEnum','VR_Invoice_InvoiceTypeAPIService','WhS_Invoice_InvoiceAPIService','WhS_Invoice_ComparisonResultEnum','LabelColorsEnum','WhS_Invoice_ComparisonCriteriaEnum'];
 
-    function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum) {
+    function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum) {
 
         var invoiceAccountEntity;
         var invoiceId;
@@ -37,7 +37,28 @@
             $scope.scopeModel.comparisonResults = [];
             $scope.scopeModel.dateTimeFormat = "yyyy-MM-dd";
             $scope.scopeModel.comparisonResult = [];
-          
+            $scope.scopeModel.comparisonCriterias = [];
+            $scope.scopeModel.selectedComparisonCriterias = [];
+            $scope.scopeModel.reset = function () {
+                    var payload = {
+                        context: getContext(),
+                        fieldMappings: [
+                            { FieldName: "Zone", FieldTitle: "Zone", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
+                            { FieldName: "FromDate", FieldTitle: "From", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
+                            { FieldName: "ToDate", FieldTitle: "Till", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
+                            { FieldName: "Duration", FieldTitle: "Duration", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
+                            { FieldName: "NumberOfCalls", FieldTitle: "Calls", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Int.value },
+                            { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
+                            { FieldName: "Amount", FieldTitle: "Amount", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
+                        ],
+                        listName: "MainList",
+                        showDateFormat: false,
+                    };
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, mainListAPI, payload, setLoader);
+            };
             $scope.scopeModel.selectedComparisonResults = [];
 
             $scope.scopeModel.onMainListMappingReady = function (api) {
@@ -53,12 +74,10 @@
             $scope.scopeModel.onReadyWoorkBook = function (api) {
                 inputWorkBookApi = api;
             };
-
             $scope.scopeModel.compare = function () {
                 $scope.scopeModel.recievedComparisonTab.isSelected = true;
                return startCompare();
             };
-
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -71,7 +90,6 @@
                     VRNotificationService.notifyException(error, $scope);
                 });
             };
-
             $scope.scopeModel.getResultColor = function (dataItem, coldef) {
 
                 if (dataItem.Entity.ResultColor != undefined) {
@@ -80,7 +98,6 @@
                         return color.color;
                 }
             };
-
             $scope.scopeModel.getDiffCallsColor = function (dataItem, coldef) {
                 if (dataItem.Entity.DiffCallsColor != undefined) {
                     var color = UtilsService.getEnum(LabelColorsEnum, 'value', dataItem.Entity.DiffCallsColor);
@@ -88,7 +105,6 @@
                         return color.color;
                 }
             };
-
             $scope.scopeModel.getDiffDurationColor = function (dataItem, coldef) {
                 if (dataItem.Entity.DiffDurationColor != undefined) {
                     var color = UtilsService.getEnum(LabelColorsEnum, 'value', dataItem.Entity.DiffDurationColor);
@@ -96,7 +112,6 @@
                         return color.color;
                 }
             };
-
             $scope.scopeModel.getDiffAmountColor = function (dataItem, coldef) {
                 if (dataItem.Entity.DiffAmountColor != undefined) {
                     var color = UtilsService.getEnum(LabelColorsEnum, 'value', dataItem.Entity.DiffAmountColor);
@@ -104,7 +119,6 @@
                         return color.color;
                 }
             };
-
         }
 
         function load() {
@@ -124,10 +138,11 @@
                     $scope.scopeModel.issuedBy = invoiceEntity.UserName;
 
                     $scope.scopeModel.to = invoiceEntity.PartnerName;
-                    $scope.scopeModel.fromDate = invoiceEntity.Entity.FromDate;
-                    $scope.scopeModel.toDate = invoiceEntity.Entity.ToDate;
-                    $scope.scopeModel.issuedDate = invoiceEntity.Entity.IssueDate;
-                    $scope.scopeModel.dueDate = invoiceEntity.Entity.DueDate;
+                    $scope.scopeModel.toDate = UtilsService.getShortDate( UtilsService.createDateFromString(invoiceEntity.Entity.ToDate) );
+                    $scope.scopeModel.fromDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.FromDate));
+                    $scope.scopeModel.issuedDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.IssueDate));
+                    $scope.scopeModel.dueDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.DueDate));
+                        
                     $scope.scopeModel.serialNumber = invoiceEntity.Entity.SerialNumber;
                     $scope.scopeModel.timeZone = invoiceEntity.TimeZoneName;
                     $scope.scopeModel.calls = invoiceEntity.Entity.Details.TotalNumberOfCalls;
@@ -155,7 +170,7 @@
          
             function setTitle() {
               
-                $scope.title = 'Compare Account';
+                $scope.title = 'Compare Invoice';
             }
 
             function loadStaticData() {
@@ -168,6 +183,7 @@
                     }
                     $scope.scopeModel.comparisonResult.push(enumObj);
                 }
+                $scope.scopeModel.comparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_ComparisonCriteriaEnum);
             }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadMainListListMapping]).catch(function (error) {
@@ -175,42 +191,6 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
-
-        function insertInvoiceAccount() {
-            $scope.scopeModel.isLoading = true;
-
-            var invoiceAccountObj = buildInvoiceCompareObjFromScope();
-
-            //return WhS_Invoice_InvoiceAccountAPIService.AddInvoiceAccount(invoiceAccountObj).then(function (response) {
-            //    if (VRNotificationService.notifyOnItemAdded('Invoice Account', response, 'Name')) {
-            //        if ($scope.onInvoiceAccountAdded != undefined)
-            //            $scope.onInvoiceAccountAdded(response.InsertedObject);
-            //        $scope.modalContext.closeModal();
-            //    }
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyException(error, $scope);
-            //}).finally(function () {
-            //    $scope.scopeModel.isLoading = false;
-            //});
-        }
-
-        function updateInvoiceAccount() {
-            $scope.scopeModel.isLoading = true;
-
-            var invoiceAccountObj = buildInvoiceCompareObjFromScope();
-
-            //return WhS_Invoice_InvoiceAccountAPIService.UpdateInvoiceAccount(invoiceAccountObj).then(function (response) {
-            //    if (VRNotificationService.notifyOnItemUpdated('Invoice Account', response, 'Name')) {
-            //        if ($scope.onInvoiceAccountUpdated != undefined)
-            //            $scope.onInvoiceAccountUpdated(response.UpdatedObject);
-            //        $scope.modalContext.closeModal();
-            //    }
-            //}).catch(function (error) {
-            //    VRNotificationService.notifyException(error, $scope);
-            //}).finally(function () {
-            //    $scope.scopeModel.isLoading = false;
-            //});
         }
 
         function buildInvoiceCompareObjFromScope() {
@@ -222,12 +202,14 @@
                 InvoiceActionId :invoiceActionId,
                 InvoiceId :invoiceId,
                 InputFileId: $scope.scopeModel.inPutFile.fileId,
-                ComparisonResults: UtilsService.getPropValuesFromArray($scope.scopeModel.selectedComparisonResults,"value")
+                ComparisonResults: UtilsService.getPropValuesFromArray($scope.scopeModel.selectedComparisonResults, "value"),
+                ComparisonCriterias: UtilsService.getPropValuesFromArray($scope.scopeModel.selectedComparisonCriterias, "value"),
+                DecimalDigits:$scope.scopeModel.decimalDigits
             };
             return obj;
         }
 
-        function loadMainListListMapping() {
+        function loadMainListListMapping()   {
             var loadMainListMappingPromiseDeferred = UtilsService.createPromiseDeferred();
             mainListMappingReadyPromiseDeferred.promise.then(function () {
                 var payload = {
@@ -240,8 +222,6 @@
                         { FieldName: "NumberOfCalls", FieldTitle: "Calls", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Int.value },
                         { FieldName: "Rate", FieldTitle: "Rate", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
                         { FieldName: "Amount", FieldTitle: "Amount", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value },
-                        { FieldName: "Currency", FieldTitle: "Currency", isRequired: true, type: "cell", FieldType: VR_ExcelConversion_FieldTypeEnum.String.value },
-                       
                     ],
                     listName: "MainList",
                     showDateFormat: false,
@@ -297,13 +277,6 @@
                             SheetIndex: 0,
                             RowIndex: 1,
                             CellIndex: 6
-                        }, {
-                            ConfigId: "ab48ff16-7b04-42ff-8525-c68590a88799",
-                            FieldName: "Currency",
-                            FieldType: VR_ExcelConversion_FieldTypeEnum.String.value,
-                            SheetIndex: 0,
-                            RowIndex: 1,
-                            CellIndex: 7
                         }]
                     }
                 };

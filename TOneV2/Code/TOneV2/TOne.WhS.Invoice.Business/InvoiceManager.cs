@@ -29,20 +29,36 @@ namespace TOne.WhS.Invoice.Business
         {
 
             string description = null;
+            string resultTooltipDescription = null;
 
             switch(invoiceComparisonResult.Result)
             {
-                case ComparisonResult.Identical: description = Utilities.GetEnumDescription(invoiceComparisonResult.Result); break;
-                case ComparisonResult.MajorDiff: description = Utilities.GetEnumDescription(invoiceComparisonResult.Result); break;
-                case ComparisonResult.MinorDiff: description = Utilities.GetEnumDescription(invoiceComparisonResult.Result); break;
-                case ComparisonResult.MissingProvider: description = string.Format("{0} {1}", Utilities.GetEnumDescription(invoiceComparisonResult.Result), compareInvoiceAction.PartnerLabel); break;
-                case ComparisonResult.MissingSystem: description = Utilities.GetEnumDescription(invoiceComparisonResult.Result); break;
+                case ComparisonResult.Identical: 
+                    description = Utilities.GetEnumDescription(invoiceComparisonResult.Result); 
+                    break;
+                case ComparisonResult.MajorDiff: 
+                    description = Utilities.GetEnumDescription(invoiceComparisonResult.Result);
+                    resultTooltipDescription = "Difference greater than threshold.";
+                    break;
+                case ComparisonResult.MinorDiff: 
+                    description = Utilities.GetEnumDescription(invoiceComparisonResult.Result);
+                    resultTooltipDescription = "Difference less than threshold.";
+                    break;
+                case ComparisonResult.MissingProvider:
+                    description = string.Format("{0} {1}", Utilities.GetEnumDescription(invoiceComparisonResult.Result), compareInvoiceAction.PartnerLabel);
+                    resultTooltipDescription = "Record doesn't exist for provider.";
+                    break;
+                case ComparisonResult.MissingSystem: 
+                    description = Utilities.GetEnumDescription(invoiceComparisonResult.Result);
+                    resultTooltipDescription = "Record doesn't exist for system.";
+                    break;
             }
 
             return new InvoiceComparisonResultDetail
             {
                 Entity = invoiceComparisonResult,
-                ResultDescription = description
+                ResultDescription = description,
+                ResultTooltipDescription = resultTooltipDescription
             };
         }
 
@@ -145,17 +161,21 @@ namespace TOne.WhS.Invoice.Business
                 invoiceActionSettings.ThrowIfNull("invoiceActionSettings");
 
                 var itemGrouping = invoiceType.Settings.ItemGroupings.FirstOrDefault(x => x.ItemGroupingId == invoiceActionSettings.ItemGroupingId);
-
+                var longPrecision = new GeneralSettingsManager().GetLongPrecisionValue();
                 InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
                 var invoiceItems = invoiceItemManager.GetInvoiceItemsByItemSetNames(input.InvoiceId, new List<String> { itemGrouping.ItemSetName }, CompareOperator.Equal);
                 InvoiceItemGroupingManager invoiceItemGroupingManager = new InvoiceItemGroupingManager();
-
+                var invoice = new Vanrise.Invoice.Business.InvoiceManager().GetInvoice(input.InvoiceId);
+                invoice.ThrowIfNull("invoice", input.InvoiceId);
+                var currencyId = invoice.Details.GetType().GetProperty(invoiceType.Settings.CurrencyFieldName).GetValue(invoice.Details, null) ;
+                 string currencySymbol = null;
+                if(currencyId != null)
+                 currencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId);
 
                 List<Guid> dimensions = new List<Guid>();
                 dimensions.Add(invoiceActionSettings.ZoneDimensionId);
                 dimensions.Add(invoiceActionSettings.FromDateDimensionId);
                 dimensions.Add(invoiceActionSettings.ToDateDimensionId);
-                dimensions.Add(invoiceActionSettings.CurrencyDimensionId);
                 dimensions.Add(invoiceActionSettings.RateDimensionId);
 
                 List<Guid> measures = new List<Guid>();
@@ -172,7 +192,7 @@ namespace TOne.WhS.Invoice.Business
                 };
                 var groupedItems = invoiceItemGroupingManager.ApplyFinalGroupingAndFiltering(new GroupingInvoiceItemQueryContext(query), invoiceItems, query.DimensionIds, query.MeasureIds, null, itemGrouping);
 
-                var systemInvoiceItems = ConverGroupingItemsToComparisonResult(groupedItems, invoiceActionSettings, itemGrouping);
+                var systemInvoiceItems = ConverGroupingItemsToComparisonResult(groupedItems, invoiceActionSettings, itemGrouping, input.DecimalDigits, longPrecision, currencySymbol);
 
                 ExcelConvertor excelConvertor = new ExcelConvertor();
 
@@ -182,11 +202,11 @@ namespace TOne.WhS.Invoice.Business
                 excelConversionSettings.ListMappings.Add(input.ListMapping);
 
                 ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(input.InputFileId, excelConversionSettings, true, false);
-                return ProccessInvoiceComparisonResult(convertedExcel, systemInvoiceItems, input.Threshold,input.DateTimeFormat);
+                return ProccessInvoiceComparisonResult(convertedExcel, systemInvoiceItems, input.Threshold, input.DateTimeFormat, input.ComparisonCriterias, input.DecimalDigits, longPrecision, currencySymbol);
 
 
             }
-            private List<InvoiceComparisonResult> ProccessInvoiceComparisonResult(ConvertedExcel convertedExcel, Dictionary<ComparisonKey, InvoiceItemToCompare> systemInvoiceItems, decimal threshold, string dateTimeFormat)
+            private List<InvoiceComparisonResult> ProccessInvoiceComparisonResult(ConvertedExcel convertedExcel, Dictionary<ComparisonKey, InvoiceItemToCompare> systemInvoiceItems, decimal threshold, string dateTimeFormat, List<ComparisonCriteria> comparisonCriterias, int? decimalDigits, int longPrecision, string currencySymbol)
             {
                 List<InvoiceComparisonResult> invoiceComparisonResults = new List<InvoiceComparisonResult>();
                 ConvertedExcelList convertedExcelList;
@@ -196,14 +216,14 @@ namespace TOne.WhS.Invoice.Business
                     {
 
                         InvoiceComparisonResult invoiceComparisonResult = new InvoiceComparisonResult();
-                        FillInvoiceComparisonProviderFields(invoiceComparisonResult, obj.Fields, dateTimeFormat);
+                        FillInvoiceComparisonProviderFields(invoiceComparisonResult, obj.Fields, dateTimeFormat, decimalDigits, longPrecision);
 
                         ComparisonKey comparisonKey = new ComparisonKey
                         {
-                            Currency = invoiceComparisonResult.Currency,
                             Destination = invoiceComparisonResult.Destination,
                             From = invoiceComparisonResult.From.Date,
-                            To = invoiceComparisonResult.To.Date
+                            To = invoiceComparisonResult.To.Date,
+                            Rate = invoiceComparisonResult.Rate
                         };
 
                         InvoiceItemToCompare invoiceItemToCompare;
@@ -212,14 +232,16 @@ namespace TOne.WhS.Invoice.Business
                             invoiceComparisonResult.SystemAmount = invoiceItemToCompare.Amount;
                             invoiceComparisonResult.SystemCalls = invoiceItemToCompare.Calls;
                             invoiceComparisonResult.SystemDuration = invoiceItemToCompare.Duration;
-                            invoiceComparisonResult.SystemRate = invoiceItemToCompare.Rate;
+                            invoiceComparisonResult.Rate = invoiceItemToCompare.Rate;
+                            invoiceComparisonResult.Currency = invoiceItemToCompare.Currency;
                             LabelColor resultLabelColor;
-                            invoiceComparisonResult.Result = GetInvoiceComparisonResult(threshold, invoiceItemToCompare.Amount, invoiceItemToCompare.Calls, invoiceItemToCompare.Duration, invoiceComparisonResult.ProviderAmount, invoiceComparisonResult.ProviderCalls, invoiceComparisonResult.ProviderDuration, out resultLabelColor);
+                            invoiceComparisonResult.Result = GetInvoiceComparisonResult(threshold, invoiceItemToCompare.Amount, invoiceItemToCompare.Calls, invoiceItemToCompare.Duration, invoiceComparisonResult.ProviderAmount, invoiceComparisonResult.ProviderCalls, invoiceComparisonResult.ProviderDuration,comparisonCriterias, out resultLabelColor);
                             invoiceComparisonResult.ResultColor = resultLabelColor;
                             systemInvoiceItems.Remove(comparisonKey);
                         }
                         else
                         {
+                            invoiceComparisonResult.Currency = currencySymbol;
                             invoiceComparisonResult.Result = ComparisonResult.MissingSystem;
                             invoiceComparisonResult.ResultColor = LabelColor.Error;
                         }
@@ -239,30 +261,102 @@ namespace TOne.WhS.Invoice.Business
                 }
                 return invoiceComparisonResults;
             }
-            private ComparisonResult GetInvoiceComparisonResult(decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls,decimal? providerDuration, out LabelColor resultLabelColor)
+            private ComparisonResult GetInvoiceComparisonResult(decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls,decimal? providerDuration,List<ComparisonCriteria> comparisonCriterias,  out LabelColor resultLabelColor)
             {
-
-                if (CheckThresholdPercentage(sysAmount, providerAmount, threshold) 
-                    || CheckThresholdPercentage(sysNCalls, providerNCalls, threshold) 
-                    || CheckThresholdPercentage(sysDuration, providerDuration, threshold))
+                if (CheckIfMajorErrorDiff(comparisonCriterias, threshold, sysAmount, sysNCalls, sysDuration, providerAmount, providerNCalls, providerDuration))
                 {
                     resultLabelColor = LabelColor.Error;
                     return ComparisonResult.MajorDiff;
                 }
-               
-                if ((providerAmount.HasValue && sysAmount != providerAmount.Value) 
-                    || (providerNCalls.HasValue && sysNCalls != providerNCalls.Value) 
-                    || (providerDuration.HasValue && sysDuration != providerDuration.Value))
+                if (CheckIfMinorErrorDiff(comparisonCriterias, threshold, sysAmount, sysNCalls, sysDuration, providerAmount, providerNCalls, providerDuration))
                 {
                     resultLabelColor = LabelColor.Warning;
                     return ComparisonResult.MinorDiff;
                 }
                 resultLabelColor = LabelColor.Success;
                 return ComparisonResult.Identical;
+                
+            }
+            private bool CheckIfMajorErrorDiff(List<ComparisonCriteria> comparisonCriterias, decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls, decimal? providerDuration)
+            {
+                if (comparisonCriterias != null && comparisonCriterias.Count>0)
+                {
+                    foreach (var item in comparisonCriterias)
+                    {
+                        switch (item)
+                        {
+                            case ComparisonCriteria.Calls:
+                                if (CheckThresholdPercentage(sysNCalls, providerNCalls, threshold))
+                                {
+
+                                    return true;
+                                }
+                                break;
+                            case ComparisonCriteria.Amount:
+                                if (CheckThresholdPercentage(sysAmount, providerAmount, threshold))
+                                {
+
+                                    return true;
+                                }
+                                break;
+                            case ComparisonCriteria.Duration:
+                                if (CheckThresholdPercentage(sysDuration, providerDuration, threshold))
+                                {
+                                    return true;
+                                }
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    if (CheckThresholdPercentage(sysAmount, providerAmount, threshold)
+                       || CheckThresholdPercentage(sysNCalls, providerNCalls, threshold)
+                       || CheckThresholdPercentage(sysDuration, providerDuration, threshold))
+                    {
+                        return true;
+                    }
+                }
+               
+                return false;
+            }
+            private bool CheckIfMinorErrorDiff(List<ComparisonCriteria> comparisonCriterias, decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls, decimal? providerDuration)
+            {
+                if (comparisonCriterias != null && comparisonCriterias.Count > 0)
+                {
+                    foreach (var item in comparisonCriterias)
+                    {
+                        switch (item)
+                        {
+                            case ComparisonCriteria.Calls:
+                                if (providerNCalls.HasValue && sysNCalls != providerNCalls.Value)
+                                    return true;
+                                break;
+                            case ComparisonCriteria.Amount:
+                                if (providerAmount.HasValue && sysAmount != providerAmount.Value)
+                                    return true;
+                                break;
+                            case ComparisonCriteria.Duration:
+                                if (providerDuration.HasValue && sysDuration != providerDuration.Value)
+                                    return true;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    if ((providerAmount.HasValue && sysAmount != providerAmount.Value)
+                                           || (providerNCalls.HasValue && sysNCalls != providerNCalls.Value)
+                                           || (providerDuration.HasValue && sysDuration != providerDuration.Value))
+                    {
+                        return true;
+                    }
+                }
+               
+                return false;
             }
 
-       
-            private Dictionary<ComparisonKey, InvoiceItemToCompare> ConverGroupingItemsToComparisonResult(List<GroupingInvoiceItemDetail> groupedItems, CompareInvoiceAction compareInvoiceAction, ItemGrouping itemGrouping)
+            private Dictionary<ComparisonKey, InvoiceItemToCompare> ConverGroupingItemsToComparisonResult(List<GroupingInvoiceItemDetail> groupedItems, CompareInvoiceAction compareInvoiceAction, ItemGrouping itemGrouping, int? decimalDigits, int longPrecision, string currency)
             {
                 Dictionary<ComparisonKey, InvoiceItemToCompare> invoiceItemsToCompare = new Dictionary<ComparisonKey, InvoiceItemToCompare>();
                 if (groupedItems != null)
@@ -287,22 +381,22 @@ namespace TOne.WhS.Invoice.Business
                             callsMeasure = measure;
                         }
                     }
+                 
 
                     foreach (var item in groupedItems)
                     {
                         var zoneDimension = item.DimensionValues[0];
                         var fromDateDimension = item.DimensionValues[1];
                         var toDateDimension = item.DimensionValues[2];
-                        var currencyDimension = item.DimensionValues[3];
-                        var rateDimension = item.DimensionValues[4];
+                        var rateDimension = item.DimensionValues[3];
 
                         InvoiceItemToCompare invoiceItemToCompare = new InvoiceItemToCompare
                         {
                             Destination = zoneDimension != null ? zoneDimension.Name : null,
                             From = fromDateDimension != null ? Convert.ToDateTime(fromDateDimension.Value) : default(DateTime),
                             To = toDateDimension != null ? Convert.ToDateTime(toDateDimension.Value) : default(DateTime),
-                            Currency = currencyDimension != null ? currencyDimension.Name : null,
-                            Rate = rateDimension != null ? Convert.ToDecimal(zoneDimension.Value) : default(decimal),
+                            Currency = currency,
+                            Rate = rateDimension != null ? Convert.ToDecimal(rateDimension.Value) : default(decimal),
                         };
 
                         InvoiceGroupingMeasureValue amountMeasureItem;
@@ -323,12 +417,19 @@ namespace TOne.WhS.Invoice.Business
                         {
                             invoiceItemToCompare.Duration = durationMeasureItem.Value != null ? Convert.ToDecimal(durationMeasureItem.Value) : default(decimal);
                         }
+                        invoiceItemToCompare.Rate = Math.Round(invoiceItemToCompare.Rate, longPrecision);
+                        if (decimalDigits.HasValue)
+                        {
+                            invoiceItemToCompare.Amount = Math.Round(invoiceItemToCompare.Amount, decimalDigits.Value);
+                            invoiceItemToCompare.Duration = Math.Round(invoiceItemToCompare.Duration, decimalDigits.Value);
+                        }
+
                         invoiceItemsToCompare.Add(new ComparisonKey
                         {
-                            Currency = invoiceItemToCompare.Currency,
                             Destination = invoiceItemToCompare.Destination,
                             From = invoiceItemToCompare.From.Date,
                             To = invoiceItemToCompare.To.Date,
+                            Rate = invoiceItemToCompare.Rate
                         }, invoiceItemToCompare);
                     }
 
@@ -341,11 +442,11 @@ namespace TOne.WhS.Invoice.Business
                 {
                     foreach (var item in systemInvoiceItems)
                     {
-                        invoiceComparisonResults.Add(new InvoiceComparisonResult
+                        var invoiceComparisonResult = new InvoiceComparisonResult
                         {
                             SystemDuration = item.Value.Duration,
                             SystemCalls = item.Value.Calls,
-                            SystemRate = item.Value.Rate,
+                            Rate = item.Value.Rate,
                             SystemAmount = item.Value.Amount,
                             Currency = item.Value.Currency,
                             Destination = item.Value.Destination,
@@ -353,11 +454,12 @@ namespace TOne.WhS.Invoice.Business
                             To = item.Value.To,
                             Result = ComparisonResult.MissingProvider,
                             ResultColor = LabelColor.Error
-                        });
+                        };
+                        invoiceComparisonResults.Add(invoiceComparisonResult);
                     }
                 }
             }
-            private void FillInvoiceComparisonProviderFields(InvoiceComparisonResult invoiceComparisonResult, ConvertedExcelFieldsByName fields, string dateTimeFormat)
+            private void FillInvoiceComparisonProviderFields(InvoiceComparisonResult invoiceComparisonResult, ConvertedExcelFieldsByName fields, string dateTimeFormat, int? decimalDigits, int longPrecision)
             {
 
                 #region Fill Destination
@@ -411,23 +513,15 @@ namespace TOne.WhS.Invoice.Business
                 };
                 #endregion
 
-                #region Fill Currency
-
-                ConvertedExcelField currencyField;
-                if (fields.TryGetValue("Currency", out currencyField))
-                {
-                    invoiceComparisonResult.Currency = currencyField.FieldValue.ToString();
-                };
-               
-                #endregion
-
                 #region Fill Rate
 
                 ConvertedExcelField rateField;
                 if (fields.TryGetValue("Rate", out rateField))
                 {
                     if (rateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateField.FieldValue.ToString()))
-                        invoiceComparisonResult.ProviderRate = Convert.ToDecimal(rateField.FieldValue);
+                    {
+                      invoiceComparisonResult.Rate = Math.Round(Convert.ToDecimal(rateField.FieldValue), longPrecision);
+                    }
                 };
               
                 #endregion
@@ -438,7 +532,13 @@ namespace TOne.WhS.Invoice.Business
                 if (fields.TryGetValue("NumberOfCalls", out callsField))
                 {
                     if (callsField.FieldValue != null && !String.IsNullOrWhiteSpace(callsField.FieldValue.ToString()))
+                    {
                         invoiceComparisonResult.ProviderCalls = Convert.ToDecimal(callsField.FieldValue);
+                        if (decimalDigits.HasValue && invoiceComparisonResult.ProviderCalls.HasValue)
+                        {
+                            invoiceComparisonResult.ProviderCalls = Math.Round(invoiceComparisonResult.ProviderCalls.Value, decimalDigits.Value);
+                        }
+                    }
                 };
                 #endregion
 
@@ -448,7 +548,13 @@ namespace TOne.WhS.Invoice.Business
                 if (fields.TryGetValue("Amount", out amountField))
                 {
                     if (amountField.FieldValue != null && !String.IsNullOrWhiteSpace(amountField.FieldValue.ToString()))
+                    {
                         invoiceComparisonResult.ProviderAmount = Convert.ToDecimal(amountField.FieldValue);
+                        if (decimalDigits.HasValue && invoiceComparisonResult.ProviderAmount.HasValue)
+                        {
+                            invoiceComparisonResult.ProviderAmount = Math.Round(invoiceComparisonResult.ProviderAmount.Value, decimalDigits.Value);
+                        }
+                    }
                 };
                 #endregion
 
@@ -458,7 +564,16 @@ namespace TOne.WhS.Invoice.Business
                 if (fields.TryGetValue("Duration", out durationField))
                 {
                     if (durationField.FieldValue != null && !String.IsNullOrWhiteSpace(durationField.FieldValue.ToString()))
+                    {
                         invoiceComparisonResult.ProviderDuration = Convert.ToDecimal(durationField.FieldValue);
+                        if (decimalDigits.HasValue && invoiceComparisonResult.ProviderDuration.HasValue)
+                        {
+                            invoiceComparisonResult.ProviderDuration = Math.Round(invoiceComparisonResult.ProviderDuration.Value, decimalDigits.Value);
+                        }
+                    
+                    }
+                      
+
                 };
                 #endregion
 
@@ -477,6 +592,8 @@ namespace TOne.WhS.Invoice.Business
             {
                 if (provValue.HasValue)
                 {
+                    if (sysValue == provValue)
+                        return false;
                     if (sysValue == 0)
                     {
                         return Math.Abs(provValue.Value - sysValue) * 100 / provValue.Value > threshold;
@@ -514,7 +631,7 @@ namespace TOne.WhS.Invoice.Business
                 public string Destination { get; set; }
                 public DateTime From { get; set; }
                 public DateTime To { get; set; }
-                public string Currency { get; set; }
+                public decimal Rate { get; set; }
             }
             private class InvoiceItemToCompare
             {
@@ -574,12 +691,8 @@ namespace TOne.WhS.Invoice.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
-                    Title = "Sys. Rate",
+                    Title = "Rate",
                   });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell
-                {
-                     Title = string.Format("{0} Rate", invoiceActionSettings.PartnerLabel),
-               });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell
                 {
                      Title = "Sys. Calls",
@@ -635,8 +748,7 @@ namespace TOne.WhS.Invoice.Business
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.From });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.To });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.Currency });
-                            row.Cells.Add(new ExportExcelCell { Value = item.Entity.SystemRate });
-                            row.Cells.Add(new ExportExcelCell { Value = item.Entity.ProviderRate });
+                            row.Cells.Add(new ExportExcelCell { Value = item.Entity.Rate });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.SystemCalls });
                             row.Cells.Add(new ExportExcelCell { Value = item.Entity.ProviderCalls });
                             row.Cells.Add(new ExportExcelCell

@@ -10,5 +10,6 @@ namespace TOne.WhS.Invoice.Entities
     {
         public InvoiceComparisonResult Entity { get; set; }
         public string ResultDescription { get; set; }
+        public string ResultTooltipDescription { get; set; }
     }
 }

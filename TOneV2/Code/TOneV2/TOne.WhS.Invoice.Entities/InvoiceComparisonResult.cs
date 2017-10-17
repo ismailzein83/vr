@@ -30,9 +30,7 @@ namespace TOne.WhS.Invoice.Entities
         public DateTime From { get; set; }
         public DateTime To { get; set; }
         public string Currency { get; set; }
-
-        public Decimal? SystemRate { get; set; }
-        public Decimal? ProviderRate { get; set; }
+        public Decimal Rate { get; set; }
         public Decimal? SystemDuration { get; set; }
         public Decimal? ProviderDuration { get; set; }
         public Decimal? SystemAmount { get; set; }
