@@ -32,40 +32,33 @@ Select @ProcessInstanceID = @ProcessInstanceID_IN
                 SET NOCOUNT OFF
 
                select count(*) NumberOfNewRates
-                from [TOneWhS_BE].[SalePricelistRateChange_New] 
-				spr WITH(NOLOCK) 
-				join TOneWhS_BE.SalePriceList_New sp on sp.ID = spr.PricelistId
-                where spr.Change = 1 and spr.ProcessInstanceID = @ProcessInstanceID
-				and ((@CustomerIds is null) or ( sp.OwnerID in (select CustomerID  from @CustomerIDsTable)))
+                from	[TOneWhS_BE].[SalePricelistRateChange_New] spr WITH(NOLOCK) 
+						join TOneWhS_BE.SalePriceList_New sp WITH(NOLOCK) on sp.ID = spr.PricelistId
+                where	spr.Change = 1 and spr.ProcessInstanceID = @ProcessInstanceID
+						and ((@CustomerIds is null) or ( sp.OwnerID in (select CustomerID  from @CustomerIDsTable)))
 
 
                 select count(*) NumberOfIncreasedRates
-                from [TOneWhS_BE].[SalePricelistRateChange_New]
-				spr WITH(NOLOCK) 
-				join TOneWhS_BE.SalePriceList_New sp on sp.ID = spr.PricelistId
-                where spr.Change = 3 and spr.ProcessInstanceID = @ProcessInstanceID
-				and ((@CustomerIds is null) or ( sp.OwnerID in (select CustomerID  from @CustomerIDsTable)))
+                from	[TOneWhS_BE].[SalePricelistRateChange_New] spr WITH(NOLOCK) 
+						join TOneWhS_BE.SalePriceList_New sp WITH(NOLOCK) on sp.ID = spr.PricelistId
+                where	spr.Change = 3 and spr.ProcessInstanceID = @ProcessInstanceID
+						and ((@CustomerIds is null) or ( sp.OwnerID in (select CustomerID  from @CustomerIDsTable)))
 
                 select count(*) NumberOfDecreasedRates
-                from [TOneWhS_BE].[SalePricelistRateChange_New]
-				spr WITH(NOLOCK) 
-				join TOneWhS_BE.SalePriceList_New sp on sp.ID = spr.PricelistId
-                where spr.Change = 4 and spr.ProcessInstanceID = @ProcessInstanceID
-				and ((@CustomerIds is null) or ( sp.OwnerID in (select CustomerID  from @CustomerIDsTable)))
+                from	[TOneWhS_BE].[SalePricelistRateChange_New] spr WITH(NOLOCK) 
+						join TOneWhS_BE.SalePriceList_New sp WITH(NOLOCK) on sp.ID = spr.PricelistId
+                where	spr.Change = 4 and spr.ProcessInstanceID = @ProcessInstanceID
+						and ((@CustomerIds is null) or ( sp.OwnerID in (select CustomerID  from @CustomerIDsTable)))
 
-                select count(*) NumberOfNewSaleZoneRoutingProducts
-                from [TOneWhS_BE].[SalePricelistRPChange_New]
-				spr WITH(NOLOCK) 
-				where spr.ProcessInstanceID = @ProcessInstanceID
-				and ((@CustomerIds is null) or ( spr.CustomerId in (select CustomerID  from @CustomerIDsTable)))
-                and  RecentRoutingProductId is null
+                select	count(*) NumberOfNewSaleZoneRoutingProducts
+                from	[TOneWhS_BE].[SalePricelistRPChange_New] spr WITH(NOLOCK) 
+				where	spr.ProcessInstanceID = @ProcessInstanceID
+						and ((@CustomerIds is null) or ( spr.CustomerId in (select CustomerID  from @CustomerIDsTable)))
+						and  RecentRoutingProductId is null
 
-                select count(*) NumberOfClosedSaleZoneRoutingProducts
-                from [TOneWhS_BE].[SalePricelistRPChange_New]
-				spr WITH(NOLOCK) 
-				where spr.ProcessInstanceID = @ProcessInstanceID
-				and ((@CustomerIds is null) or ( spr.CustomerId in (select CustomerID  from @CustomerIDsTable)))
-                and RecentRoutingProductId is not null and ProcessInstanceID = @ProcessInstanceID
-
-
+                select	count(*) NumberOfClosedSaleZoneRoutingProducts
+                from	[TOneWhS_BE].[SalePricelistRPChange_New] spr WITH(NOLOCK) 
+				where	spr.ProcessInstanceID = @ProcessInstanceID
+						and ((@CustomerIds is null) or ( spr.CustomerId in (select CustomerID  from @CustomerIDsTable)))
+						and RecentRoutingProductId is not null and ProcessInstanceID = @ProcessInstanceID
 END

@@ -15,7 +15,7 @@ SELECT @ProcessInstanceId  = @ProcessInstanceId_IN
 	SET NOCOUNT ON;	
 
 	select ZoneName, ProcessInstanceId, CurrentServices, IsCurrentServiceInherited, NewServices, EffectiveOn, EffectiveUntil
-	from [TOneWhS_Sales].[RP_SaleZoneService_Preview]
+	from [TOneWhS_Sales].[RP_SaleZoneService_Preview] WITH(NOLOCK)
 	where ProcessInstanceId = @ProcessInstanceId
 	
 	SET NOCOUNT OFF

@@ -14,9 +14,9 @@ SELECT @ProcessInstanceId  = @ProcessInstanceId_IN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;	
 
-	select ProcessInstanceId, CurrentServices, IsCurrentServiceInherited, NewServices, EffectiveOn, EffectiveUntil
-	from [TOneWhS_Sales].[RP_DefaultService_Preview]
-	where ProcessInstanceId = @ProcessInstanceId
+	select	ProcessInstanceId, CurrentServices, IsCurrentServiceInherited, NewServices, EffectiveOn, EffectiveUntil
+	from	[TOneWhS_Sales].[RP_DefaultService_Preview] WITH(NOLOCK)
+	where	ProcessInstanceId = @ProcessInstanceId
 	
 	SET NOCOUNT OFF
 END

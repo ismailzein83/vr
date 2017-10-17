@@ -1,4 +1,4 @@
-﻿create PROCEDURE [TOneWhS_Invoice].[sp_CarrierInvoiceAccount_GetAll]
+﻿CREATE PROCEDURE [TOneWhS_Invoice].[sp_CarrierInvoiceAccount_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -10,6 +10,6 @@ BEGIN
 		cia.EED,
 		cia.BED,
 		cia.InvoiceAccountSettings
-	FROM [TOneWhS_Invoice].CarrierInvoiceAccount cia
+	FROM [TOneWhS_Invoice].CarrierInvoiceAccount cia WITH(NOLOCK)
 	SET NOCOUNT OFF
 END

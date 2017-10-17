@@ -20,9 +20,9 @@ BEGIN
 	insert into @ZoneIdTable (ZoneId)
 	select convert(int, ParsedString) from TOneWhS_BE.ParseStringList(@ZoneIds)
 
-	select rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[RateTypeID], rate.[Rate], rate.[BED], rate.[EED], rate.[Change]
-	from TOneWhS_BE.SaleRate rate inner join TOneWhS_BE.SalePriceList pricelist with(nolock) on rate.PriceListID = pricelist.ID
-	where rate.BED <= @Today and rate.EED is not null and rate.EED > rate.BED -- Exclude future and deleted rates
+	select	rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[RateTypeID], rate.[Rate], rate.[BED], rate.[EED], rate.[Change]
+	from	TOneWhS_BE.SaleRate rate WITH(NOLOCK) inner join TOneWhS_BE.SalePriceList pricelist with(nolock) on rate.PriceListID = pricelist.ID
+	where	rate.BED <= @Today and rate.EED is not null and rate.EED > rate.BED -- Exclude future and deleted rates
 		and pricelist.OwnerType = @OwnerType
 		and pricelist.OwnerID = @OwnerId
 		and rate.ZoneID in (select ZoneId from @ZoneIdTable)

@@ -8,6 +8,6 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SaleEntityService_GetEffectiveDefaultServices]
 AS
 BEGIN
 	select [ID], [PriceListID], [Services], [BED], [EED]
-	from TOneWhS_BE.SaleEntityService
+	from TOneWhS_BE.SaleEntityService WITH(NOLOCK)
 	where [ZoneID] is null and (BED <= @EffectiveOn and (EED is null or EED > @EffectiveOn))
 END

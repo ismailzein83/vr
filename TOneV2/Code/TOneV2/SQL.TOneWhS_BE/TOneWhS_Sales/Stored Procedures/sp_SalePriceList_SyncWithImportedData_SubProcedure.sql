@@ -15,8 +15,8 @@ AS
 BEGIN
 	begin try
 		begin tran
-			Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID,FileID, PriceListType,UserID)
-				Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType, UserID
+			Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID,FileID, PriceListType,UserID,[Description])
+				Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType, UserID,splnew.[Description]
 				from TOneWhS_BE.SalePriceList_New splnew WITH(NOLOCK) Where splnew.ProcessInstanceID = @ProcessInstanceID 
 	
 			if @ReservedSalePriceListId is not null
@@ -24,7 +24,7 @@ BEGIN
 				-- Sync rates					
 				
 				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, RateTypeID, Rate, Change, BED, EED)
-				select ID, @ReservedSalePriceListId, ZoneID, CurrencyId, RateTypeID, Rate, 1, BED, EED
+				select ID, @ReservedSalePriceListId, ZoneID, CurrencyId, RateTypeID, Rate, ChangeType, BED, EED
 				from TOneWhS_Sales.RP_SaleRate_New newRate with(nolock)
 				where newRate.ProcessInstanceID = @ProcessInstanceId
 				
@@ -42,7 +42,7 @@ BEGIN
 			
 				update TOneWhS_BE.SaleEntityService
 				set EED = changedService.EED
-				from TOneWhS_BE.SaleEntityService ses inner join TOneWhS_Sales.RP_DefaultService_Changed changedService with(nolock) on ses.ID = changedService.ID
+				from TOneWhS_BE.SaleEntityService ses WITH(NOLOCK) inner join TOneWhS_Sales.RP_DefaultService_Changed changedService with(nolock) on ses.ID = changedService.ID
 				where changedService.ProcessInstanceID = @ProcessInstanceID
 
 				-- Sync zone services
@@ -54,7 +54,7 @@ BEGIN
 			
 				update TOneWhS_BE.SaleEntityService
 				set EED = changedService.EED
-				from TOneWhS_BE.SaleEntityService ses  inner join TOneWhS_Sales.RP_SaleZoneService_Changed changedService with(nolock) on ses.ID = changedService.ID
+				from TOneWhS_BE.SaleEntityService ses WITH(NOLOCK)  inner join TOneWhS_Sales.RP_SaleZoneService_Changed changedService with(nolock) on ses.ID = changedService.ID
 				where changedService.ProcessInstanceID = @ProcessInstanceID
 			end
 			
@@ -68,7 +68,7 @@ BEGIN
 
 				INSERT INTO [TOneWhS_BE].[SalePricelistRateChange] ([PricelistId],[Rate],[RecentRate],[CountryID],[ZoneName],[Change],[BED],[EED],[RoutingProductID],[CurrencyID],ZoneID)
 				select sprc.[PricelistId],sprc.[Rate],sprc.[RecentRate],sprc.[CountryID],sprc.[ZoneName],sprc.[Change],sprc.BED,sprc.EED,sprc.RoutingProductID,CurrencyID,sprc.ZoneID
-				from [TOneWhS_BE].[SalePricelistRateChange_New] sprc
+				from [TOneWhS_BE].[SalePricelistRateChange_New] sprc WITH(NOLOCK)
 				where sprc.ProcessInstanceID = @ProcessInstanceID
 
 				INSERT INTO [TOneWhS_BE].[SalePricelistRPChange]  ([ZoneName],[ZoneID],[RoutingProductId],[RecentRoutingProductId],[BED],[EED],[PriceListId],[CountryId])
@@ -85,7 +85,7 @@ BEGIN
 			
 			update TOneWhS_BE.SaleEntityRoutingProduct
 			set EED = changedDRP.EED
-			from TOneWhS_BE.SaleEntityRoutingProduct serp inner join TOneWhS_Sales.RP_DefaultRoutingProduct_Changed changedDRP with(nolock) on serp.ID = changedDRP.ID
+			from TOneWhS_BE.SaleEntityRoutingProduct serp WITH(NOLOCK) inner join TOneWhS_Sales.RP_DefaultRoutingProduct_Changed changedDRP with(nolock) on serp.ID = changedDRP.ID
 			where changedDRP.ProcessInstanceID = @ProcessInstanceID
 			
 			-- Sync zone routing products
@@ -97,7 +97,7 @@ BEGIN
 			
 			update TOneWhS_BE.SaleEntityRoutingProduct
 			set EED = changedSZRP.EED
-			from TOneWhS_BE.SaleEntityRoutingProduct szrp inner join TOneWhS_Sales.RP_SaleZoneRoutingProduct_Changed changedSZRP with(nolock) on szrp.ID = changedSZRP.ID
+			from TOneWhS_BE.SaleEntityRoutingProduct szrp WITH(NOLOCK) inner join TOneWhS_Sales.RP_SaleZoneRoutingProduct_Changed changedSZRP with(nolock) on szrp.ID = changedSZRP.ID
 			where changedSZRP.ProcessInstanceID = @ProcessInstanceID
 			
 			-- Sync customer countries
@@ -109,7 +109,7 @@ BEGIN
 
 			update TOneWhS_BE.CustomerCountry
 			set EED = changedCountry.EED
-			from	TOneWhS_BE.CustomerCountry country
+			from	TOneWhS_BE.CustomerCountry country WITH(NOLOCK)
 					inner join TOneWhS_Sales.RP_CustomerCountry_Changed changedCountry  with(nolock)on country.ID = changedCountry.ID
 			where changedCountry.ProcessInstanceID = @ProcessInstanceId
 

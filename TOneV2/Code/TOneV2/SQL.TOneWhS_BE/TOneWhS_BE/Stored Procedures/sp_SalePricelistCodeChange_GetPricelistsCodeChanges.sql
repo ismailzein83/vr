@@ -17,8 +17,8 @@ SELECT [PricelistID]
 	  BED,
 	  EED,
 	  zoneid
-  FROM [TOneWhS_BE].[SalePricelistCodeChange] SP
-  JOIN TOneWhS_BE.SalePricelistCustomerChange spc on spc.BatchID = SP.BatchID and spc.CountryID = sp.countryID
+  FROM [TOneWhS_BE].[SalePricelistCodeChange] SP WITH(NOLOCK)
+  JOIN TOneWhS_BE.SalePricelistCustomerChange spc WITH(NOLOCK) on spc.BatchID = SP.BatchID and spc.CountryID = sp.countryID
   WHERE (@PricelistIDs  is null or spc.PricelistID in (select PricelistID from @PricelistIDsTable))
 	
 END

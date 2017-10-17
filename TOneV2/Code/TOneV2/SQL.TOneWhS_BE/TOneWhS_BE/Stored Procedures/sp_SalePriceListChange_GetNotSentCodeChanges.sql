@@ -10,7 +10,7 @@ select Convert(int, ParsedString) from [TOneWhS_BE].[ParseStringList](@CustomerI
 ;with customerPriceLists as 
 (
 	select id 
-	from TOneWhS_BE.SalePriceList sp
+	from TOneWhS_BE.SalePriceList sp WITH(NOLOCK)
 	where (@CustomerIds  is null or ( sp.OwnerID in (select CustomerID from @CustomerIDsTable) and sp.OwnerType=1))
 	and sp.IsSent = 0
 )
@@ -23,8 +23,8 @@ SELECT  scc.PricelistID
 		codec.Change,
 		codec.BED,
 		codec.EED
-FROM TOneWhS_BE.SalePricelistCustomerChange scc
-JOIN TOneWhS_BE.SalePricelistCodeChange codec ON codec.batchid = scc.BatchID
+FROM TOneWhS_BE.SalePricelistCustomerChange scc WITH(NOLOCK)
+JOIN TOneWhS_BE.SalePricelistCodeChange codec WITH(NOLOCK) ON codec.batchid = scc.BatchID
 where scc.PricelistID in ( select id from customerPriceLists)
 order by scc.PricelistID desc
 

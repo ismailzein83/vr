@@ -15,7 +15,7 @@ BEGIN
 	if (@SaleZoneIds is not null) begin insert into @SaleZoneIdsTable select convert(bigint, ParsedString) from TOneWhS_BE.ParseStringList(@SaleZoneIds) end
 	
 	select rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[RateTypeID], rate.[Rate], rate.[BED], rate.[EED], rate.[SourceID], rate.[Change]
-	from TOneWhS_BE.SaleRate rate inner join TOneWhS_BE.SalePriceList pricelist on rate.PriceListID = pricelist.ID
+	from TOneWhS_BE.SaleRate rate WITH(NOLOCK) inner join TOneWhS_BE.SalePriceList pricelist WITH(NOLOCK) on rate.PriceListID = pricelist.ID
 	where (rate.EED is null or rate.EED > rate.BED)
 		and pricelist.OwnerType = @OwnerType
 		and pricelist.OwnerID = @OwnerId

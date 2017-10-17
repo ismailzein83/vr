@@ -9,6 +9,6 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SaleCode_GetFilteredByZone]
 AS
 BEGIN
 	select Id, Code, ZoneId, CodeGroupId, BED, EED, SourceId
-	from TOneWhS_BE.SaleCode
+	from TOneWhS_BE.SaleCode WITH(NOLOCK)
 	where ZoneId = @ZoneId and (EED is null or (BED != EED and EED > @EffectiveOn))
 END

@@ -19,7 +19,7 @@ SELECT [PricelistId]
 	  EED,
 	  RoutingProductID,
 	  CurrencyID
-  FROM [TOneWhS_BE].[SalePricelistRateChange] SR
+  FROM [TOneWhS_BE].[SalePricelistRateChange] SR WITH(NOLOCK)
   WHERE (@PricelistIDs  is null or Sr.PricelistId in (select PricelistID from @PricelistIDsTable))
 	
 END

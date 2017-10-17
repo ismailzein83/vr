@@ -17,6 +17,6 @@ BEGIN
 		ca.IsDeleted,
 		ca.ExtendedSettings,
 		ca.CreatedTime
-	FROM TOneWhS_BE.CarrierAccount ca
+	FROM TOneWhS_BE.CarrierAccount ca WITH(NOLOCK)
 	SET NOCOUNT OFF
 END

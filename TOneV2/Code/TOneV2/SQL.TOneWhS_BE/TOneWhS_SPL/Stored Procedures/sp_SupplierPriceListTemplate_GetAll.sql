@@ -10,5 +10,5 @@ BEGIN
 		SupplierID,
 		ConfigDetails,
 		Draft
-	FROM [TOneWhS_SPL].SupplierPriceListTemplate
+	FROM [TOneWhS_SPL].SupplierPriceListTemplate WITH(NOLOCK)
 END

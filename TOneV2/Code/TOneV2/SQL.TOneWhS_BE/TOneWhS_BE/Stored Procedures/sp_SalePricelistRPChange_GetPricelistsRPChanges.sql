@@ -16,7 +16,7 @@ SELECT SpRP.[ZoneName]
       ,SpRP.[EED]
       ,SpRP.[PriceListId]
       ,SpRP.[CountryId]
-  FROM [TOneWhS_BE].[SalePricelistRPChange] SpRP
+  FROM [TOneWhS_BE].[SalePricelistRPChange] SpRP WITH(NOLOCK)
 WHERE (@PricelistIDs  is null or SpRP.PricelistId in (select PricelistID from @PricelistIDsTable))
 	
 END

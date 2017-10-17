@@ -16,7 +16,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 		SELECT  sr.[ID],sr.RateTypeID,sr.Rate,sr.PriceListID,sr.ZoneID,sr.BED,sr.EED
-		FROM	[TOneWhS_BE].SaleRate sr 
+		FROM	[TOneWhS_BE].SaleRate sr  WITH(NOLOCK)
 				LEFT JOIN [TOneWhS_BE].SalePriceList spl WITH(NOLOCK) ON sr.PriceListID = spl.ID 
 				Left Join @ActiveCustomersInfo ci on ci.CustomerId = spl.OwnerId
 		Where	((@IsFuture = 0 AND sr.BED <= @EffectiveTime AND (sr.EED > @EffectiveTime OR sr.EED IS NULL))

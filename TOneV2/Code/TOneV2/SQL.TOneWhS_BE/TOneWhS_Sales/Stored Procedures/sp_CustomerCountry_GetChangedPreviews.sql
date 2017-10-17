@@ -14,9 +14,9 @@ SELECT @ProcessInstanceId  = @ProcessInstanceId_IN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;	
 
-	select [ID], [EED]
-	from TOneWhS_Sales.RP_CustomerCountry_ChangedPreview
-	where ProcessInstanceID = @ProcessInstanceID
+	select	[ID], [EED]
+	from	TOneWhS_Sales.RP_CustomerCountry_ChangedPreview WITH(NOLOCK)
+	where	ProcessInstanceID = @ProcessInstanceID
 	
 	SET NOCOUNT OFF
 END

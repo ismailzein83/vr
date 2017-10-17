@@ -474,7 +474,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierZoneService_Update.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierDefaultServices_GetByDate.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePricelistRPChange_GetFiltered.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetFilteredByOwnerAndZone.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\SupplierZoneServiceClose.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_RatePlan_Delete.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetEffectiveAfterByMultipleOwners.sql" />
@@ -523,5 +522,7 @@
     <Build Include="TOneWhS_Sales\Stored Procedures\RP_RatePlanPreviewSummary_GetCustomerRatePlanPreviewSummary.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistRPChangesNew_GetAffectedCustomerIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistRateChangesNew_GetAffectedCustomerIds.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllZoneRPs.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPs.sql" />
   </ItemGroup>
 </Project>

@@ -8,5 +8,5 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_CustomerCountry_GetAll]
 AS
 BEGIN
 	select [ID], [CustomerID], [CountryID], [BED], [EED],ProcessInstanceID
-	from TOneWhS_BE.CustomerCountry
+	from TOneWhS_BE.CustomerCountry WITH(NOLOCK)
 END

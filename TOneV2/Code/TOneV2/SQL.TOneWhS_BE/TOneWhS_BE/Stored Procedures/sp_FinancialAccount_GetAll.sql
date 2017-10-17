@@ -1,4 +1,4 @@
-﻿create PROCEDURE [TOneWhS_BE].[sp_FinancialAccount_GetAll]
+﻿CREATE PROCEDURE [TOneWhS_BE].[sp_FinancialAccount_GetAll]
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -11,6 +11,6 @@ BEGIN
 			fa.EED,
 			fa.BED,
 			fa.FinancialAccountSettings
-	FROM    [TOneWhS_BE].FinancialAccount fa
+	FROM    [TOneWhS_BE].FinancialAccount fa WITH(NOLOCK)
 	SET NOCOUNT OFF
 END

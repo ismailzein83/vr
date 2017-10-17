@@ -6,8 +6,11 @@
     [Rate]              DECIMAL (20, 8) NOT NULL,
     [CurrencyID]        INT             NULL,
     [BED]               DATETIME        NOT NULL,
-    [EED]               DATETIME        NULL
+    [EED]               DATETIME        NULL,
+    [ChangeType]        INT             NULL
 );
+
+
 
 
 

@@ -11,7 +11,7 @@ AS
 BEGIN
 	UPDATE TOneWhS_BE.SaleEntityRoutingProduct
 	SET EED = newProducts.BED
-	FROM TOneWhS_BE.SaleEntityRoutingProduct rp
+	FROM TOneWhS_BE.SaleEntityRoutingProduct rp  WITH(NOLOCK)
 		INNER JOIN @NewZoneRoutingProducts newProducts
 		ON rp.ZoneID = newProducts.ZoneID
 	WHERE rp.OwnerType = @OwnerType AND rp.OwnerID = @OwnerID
