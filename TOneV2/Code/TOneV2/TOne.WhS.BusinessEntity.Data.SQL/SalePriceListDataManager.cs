@@ -178,7 +178,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                    ,[UserID]
                                                    ,[CreatedTime]
                                                     ,[Description]
-                                                   ,[StateBackupID]])
+                                                   ,[StateBackupID])
                                             SELECT 
                                                      sp.[ID]
 		                                            ,sp.[OwnerType]
