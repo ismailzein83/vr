@@ -122,6 +122,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                         if (financialAccountId != undefined) {
                             var loadTimeZonePromiseDeferred = UtilsService.createPromiseDeferred();
                             promises.push(loadTimeZonePromiseDeferred.promise);
+                            selectedTimeZoneReadyDeferred = UtilsService.createPromiseDeferred();
+
 
                             WhS_BE_FinancialAccountAPIService.GetSupplierTimeZoneId(financialAccountId).then(function (response) {
                                 loadTimeZoneSelector(response).then(function () {
