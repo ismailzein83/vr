@@ -672,7 +672,6 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_GetAll.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_Delete.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_Clear.sql" />
-    <Build Include="common\Stored Procedures\sp_File_InsertWithIdentityOff.sql" />
     <Build Include="common\Tables\VRExclusiveSession.sql" />
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_TryTake.sql" />
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_Release.sql" />
