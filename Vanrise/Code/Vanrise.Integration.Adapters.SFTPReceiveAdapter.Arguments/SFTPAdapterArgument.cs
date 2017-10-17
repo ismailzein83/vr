@@ -35,6 +35,8 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         public string LastImportedFile { get; set; }
         public bool CompressedFiles { get; set; }
         public CompressionTypes CompressionType { get; set; }
+        public short? NumberOfFiles { get; set; }
+        public short? FileCompletenessCheckInterval { get; set; }
 
         # endregion
     }
@@ -42,5 +44,6 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
     public class SFTPAdapterState : BaseAdapterState
     {
         public DateTime LastRetrievedFileTime { get; set; }
+        public string LastRetrievedFileName { get; set; }
     }
 }

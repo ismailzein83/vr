@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Rebex.Net;
 using Vanrise.Common;
 using Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments;
@@ -36,14 +37,31 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                 }
 
                 sftp.ChangeDirectory(SFTPAdapterArgument.Directory);
-                SftpItemCollection currentItems = sftp.GetList(string.Format("{0}/*{1}", SFTPAdapterArgument.Directory, SFTPAdapterArgument.Extension));
+                SftpItemCollection sftpCollection = sftp.GetList(string.Format("{0}/*{1}", SFTPAdapterArgument.Directory, SFTPAdapterArgument.Extension));
+                SftpItemCollection sftpCollectionToProcess = new SftpItemCollection();
+                base.LogInformation("{0} files are ready to be imported", sftpCollection.Count);
 
-                base.LogInformation("{0} files are ready to be imported", currentItems.Count);
-
-                if (currentItems.Count > 0)
+                if (sftpCollection.Count > 0)
                 {
+                    short numberOfFilesRead = 0;
                     DateTime? localLastRetrievedFileTime = null;
-                    foreach (var fileObj in currentItems.OrderBy(c => c.Modified).ThenBy(c => c.Name))
+
+                    if (SFTPAdapterArgument.FileCompletenessCheckInterval.HasValue)
+                    {
+                        Thread.Sleep(SFTPAdapterArgument.FileCompletenessCheckInterval.Value);
+                        SftpItemCollection currenctSftpCollection = sftp.GetList(string.Format("{0}/*{1}", SFTPAdapterArgument.Directory, SFTPAdapterArgument.Extension));
+                        foreach (var ftpFile in currenctSftpCollection.OrderBy(c => c.Modified))
+                        {
+                            SftpItem sftpItem = currenctSftpCollection.FindRecord(itm => itm.Name == ftpFile.Name);
+                            if (sftpItem.Size != ftpFile.Size)
+                                break;
+
+                            sftpCollectionToProcess.Add(sftpItem);
+                        }
+                    }
+
+
+                    foreach (var fileObj in sftpCollection.OrderBy(c => c.Modified).ThenBy(c => c.Name))
                     {
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
@@ -57,15 +75,31 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                             if (!string.IsNullOrEmpty(SFTPAdapterArgument.LastImportedFile) && SFTPAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
                                 continue;
 
+                            if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                continue;
+
+
+                            SFTPAdapterState.LastRetrievedFileName = fileObj.Name;
+                            SFTPAdapterState = SaveOrGetAdapterState(context, SFTPAdapterArgument, fileObj.Name);
+
                             String filePath = SFTPAdapterArgument.Directory + "/" + fileObj.Name;
                             if (SFTPAdapterState.LastRetrievedFileTime != fileObj.Modified)
                             {
-                                SFTPAdapterState = SaveOrGetAdapterState(context, SFTPAdapterArgument, fileObj.Modified);
+                                SFTPAdapterState = SaveOrGetAdapterState(context, SFTPAdapterArgument, fileObj.Name, fileObj.Modified);
                                 localLastRetrievedFileTime = fileObj.Modified;
                             }
 
+
                             CreateStreamReader(context.OnDataReceived, sftp, fileObj, filePath, SFTPAdapterArgument);
                             AfterImport(sftp, fileObj, filePath, SFTPAdapterArgument);
+
+                            numberOfFilesRead++;
+
+                            if (SFTPAdapterArgument.NumberOfFiles.HasValue && SFTPAdapterArgument.NumberOfFiles.Value == numberOfFilesRead)
+                            {
+                                base.LogInformation("Max number of files {0} reached", numberOfFilesRead);
+                                break;
+                            }
                         }
                     }
                 }
@@ -80,7 +114,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
 
         #region Private Functions
-        private SFTPAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, SFTPAdapterArgument SFTPAdapterArgument, DateTime? fileModifiedDate = null)
+        private SFTPAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, SFTPAdapterArgument SFTPAdapterArgument, string fileName = "", DateTime? fileModifiedDate = null)
         {
             SFTPAdapterState adapterState = null;
             context.GetStateWithLock((state) =>
@@ -93,6 +127,10 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                 if (fileModifiedDate != null && fileModifiedDate.HasValue)
                 {
                     adapterState.LastRetrievedFileTime = fileModifiedDate.Value;
+                }
+                if (!string.IsNullOrEmpty(fileName))
+                {
+                    adapterState.LastRetrievedFileName = fileName;
                 }
                 return adapterState;
             });

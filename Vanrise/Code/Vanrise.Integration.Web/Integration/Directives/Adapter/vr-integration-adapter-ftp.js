@@ -68,7 +68,9 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
                     BasedOnLastModifiedTime: $scope.basedOnTime,
                     LastImportedFile: $scope.lastImportedFile,
                     CompressedFiles: $scope.compressed,
-                    CompressionType: $scope.selectedCompressionType != undefined ? $scope.selectedCompressionType.value : undefined
+                    CompressionType: $scope.selectedCompressionType != undefined ? $scope.selectedCompressionType.value : undefined,
+                    FileCompletenessCheckInterval: $scope.fileCompletenessCheckInterval,
+                    NumberOfFiles: $scope.maxNumberOfFiles
                 };
             };
             api.getStateData = function () {
@@ -95,11 +97,12 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
                         $scope.lastImportedFile = argumentData.LastImportedFile;
                         $scope.compressed = argumentData.CompressedFiles;
                         $scope.selectedCompressionType = UtilsService.getEnum(VR_Integration_CompressionTypeEnum, "value", argumentData.CompressionType);
+                        $scope.fileCompletenessCheckInterval = argumentData.FileCompletenessCheckInterval;
+                        $scope.maxNumberOfFiles = argumentData.NumberOfFiles;
                     }
 
                 }
             };
-
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
