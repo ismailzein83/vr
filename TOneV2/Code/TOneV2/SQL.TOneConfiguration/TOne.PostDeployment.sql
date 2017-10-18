@@ -154,7 +154,9 @@ as (select * from (values
 ('09ED9252-AF87-447D-9C40-738CF222C64E','Whs_RouteSync_RadiusDataManager_SQL','Teles SQL Radius Data Manager','WhS_RouteSync_RadiusDataManagerSettings'				,'{"Editor":"whs-routesync-telesradius-sqldatamanager"}'),
 ('34F3483D-2572-4349-A6ED-3504B2D9E714','Whs_RouteSync_IdbDataManager_Postgres','Teles Postgres Idb Data Manager','WhS_RouteSync_IdbDataManagerSettings'			,'{"Editor":"whs-routesync-telesidb-postgresdatamanager"}'),
 
-('6B36007E-3333-40D3-B574-510C8338E6C0','WhS_SupPL_SupplierPriceListConfiguration_Basic','Basic','WhS_SupPL_SupplierPriceListConfiguration','{"Editor":"whs-spl-supplierpricelistconfiguration-basic"}'),
+('6B36007E-3333-40D3-B574-510C8338E6C0','WhS_SupPL_SupplierPriceListConfiguration_Basic','Basic','WhS_SupPL_SupplierPriceListConfiguration'	,'{"Editor":"whs-spl-supplierpricelistconfiguration-basic"}'),
+('13CDF53A-3780-41D3-9FE1-0054458171C3','Pricelist Date','Pricelist Date','VR_ExcelConversion_FieldMapping'									,'{"Editor":"whs-spl-excelconversion-fieldmapping-pricelistdatefield"}'),
+
 ('63C1310D-FDEA-4AC7-BDE1-58FD11E4EC65','Swap Deal','Swap Deal','WhS_Deal_DealSettings','{}'),
 
 ('B606E88C-4AE5-4BF0-BCE5-10D456A092F5','Volume Commitment','Volume Commitment','WhS_Deal_DealConfig','{}'),
