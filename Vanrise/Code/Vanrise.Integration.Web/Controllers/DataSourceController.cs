@@ -33,7 +33,7 @@ namespace Vanrise.Integration.Web.Controllers
 
         [HttpGet]
         [Route("GetDataSourceHistoryDetailbyHistoryId")]
-        public DataSource GetDataSourceHistoryDetailbyHistoryId(int dataSourceHistoryId)
+        public Vanrise.Integration.Entities.DataSourceDetail GetDataSourceHistoryDetailbyHistoryId(int dataSourceHistoryId)
         {
             DataSourceManager manager = new DataSourceManager();
             

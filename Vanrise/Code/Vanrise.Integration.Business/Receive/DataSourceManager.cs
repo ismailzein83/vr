@@ -26,11 +26,11 @@ namespace Vanrise.Integration.Business
                 return null;
         }
 
-        public DataSource GetDataSourceHistoryDetailbyHistoryId(int dataSourceHistoryId)
+        public Vanrise.Integration.Entities.DataSourceDetail GetDataSourceHistoryDetailbyHistoryId(int dataSourceHistoryId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
             var dataSource = s_vrObjectTrackingManager.GetObjectDetailById(dataSourceHistoryId);
-            return dataSource.CastWithValidate<DataSource>("DataSource : historyId ", dataSourceHistoryId);
+            return dataSource.CastWithValidate<DataSourceDetail>("DataSourceDetail : historyId ", dataSourceHistoryId);
         }
 
         public IEnumerable<Vanrise.Integration.Entities.DataSourceInfo> GetDataSources(DataSourceFilter filter)
@@ -118,8 +118,9 @@ namespace Vanrise.Integration.Business
 
                 if (dataSourceInsertActionSucc)
                 {
+                    var dataSourceDetail = GetDataSourceDetail(dataSourceObject.DataSourceId);
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                    VRActionLogger.Current.TrackAndLogObjectAdded(DataSourceLoggableEntity.Instance, dataSourceObject);
+                    VRActionLogger.Current.TrackAndLogObjectAdded(DataSourceLoggableEntity.Instance, dataSourceDetail);
                     insertOperationOutput.Result = InsertOperationResult.Succeeded;
                     insertOperationOutput.InsertedObject = GetDataSourceDetail(dataSourceObject.DataSourceId);
                 }
@@ -147,8 +148,9 @@ namespace Vanrise.Integration.Business
             {
                 if (dataSourceUpdateActionSucc)
                 {
+                    var dataSourceDetail = GetDataSourceDetail(dataSourceObject.DataSourceId);
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                    VRActionLogger.Current.TrackAndLogObjectUpdated(DataSourceLoggableEntity.Instance, dataSourceObject);
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(DataSourceLoggableEntity.Instance, dataSourceDetail);
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceObject.DataSourceId);
                 }
@@ -168,9 +170,9 @@ namespace Vanrise.Integration.Business
 
             if (deleted)
             {
-               
+                var dataSourceDetail = GetDataSourceDetail(dataSourceId);
                 Vanrise.Runtime.Business.SchedulerTaskManager schedulerTaskManager = new Runtime.Business.SchedulerTaskManager();
-                VRActionLogger.Current.TrackAndLogObjectDeleted(DataSourceLoggableEntity.Instance, dataSource);
+                VRActionLogger.Current.TrackAndLogObjectDeleted(DataSourceLoggableEntity.Instance, dataSourceDetail);
                 if ((schedulerTaskManager.DeleteTask(taskId)).Result == DeleteOperationResult.Succeeded)
                 {
                    
@@ -245,8 +247,8 @@ namespace Vanrise.Integration.Business
             if (taskUpdated.Result == UpdateOperationResult.Succeeded)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                
-                VRActionLogger.Current.LogObjectCustomAction(DataSourceLoggableEntity.Instance, "Disable", true, dataSource, null);
+                var dataSourceDetail = GetDataSourceDetail(dataSourceId);
+                VRActionLogger.Current.LogObjectCustomAction(DataSourceLoggableEntity.Instance, "Disable", true, dataSourceDetail, null);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceId);
             }
@@ -265,12 +267,13 @@ namespace Vanrise.Integration.Business
             };
 
             var dataSource = GetDataSource(dataSourceId);
+            var dataSourceDetail = GetDataSourceDetail(dataSourceId);
             var taskUpdated = schedulerManager.EnableTask(dataSource.TaskId);
 
             if (taskUpdated.Result == UpdateOperationResult.Succeeded)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-               VRActionLogger.Current.LogObjectCustomAction(DataSourceLoggableEntity.Instance, "Enable", true, dataSource, null);
+                VRActionLogger.Current.LogObjectCustomAction(DataSourceLoggableEntity.Instance, "Enable", true, dataSourceDetail, null);
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceId);
             }
@@ -394,14 +397,14 @@ namespace Vanrise.Integration.Business
 
             public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
             {
-                DataSource dataSource = context.Object.CastWithValidate<DataSource>("context.Object");
-                return dataSource.DataSourceId;
+                DataSourceDetail dataSource = context.Object.CastWithValidate<DataSourceDetail>("context.Object");
+                return dataSource.Entity.DataSourceId;
             }
 
             public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
             {
-                DataSource dataSource = context.Object.CastWithValidate<DataSource>("context.Object");
-                return s_dataSourceManager.GetDataSourceName(dataSource.DataSourceId);
+                DataSourceDetail dataSource = context.Object.CastWithValidate<DataSourceDetail>("context.Object");
+                return s_dataSourceManager.GetDataSourceName(dataSource.Entity.DataSourceId);
             }
         }
 

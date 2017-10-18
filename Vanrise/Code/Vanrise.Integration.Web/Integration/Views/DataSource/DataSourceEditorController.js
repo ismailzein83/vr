@@ -11,7 +11,6 @@
         var isViewHistoryMode;
         var dataSourceId;
         var taskId = 0;
-
         var taskTriggerDirectiveAPI;
         var taskTriggerDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -34,6 +33,7 @@
 
             isEditMode = (dataSourceId != undefined);
             isViewHistoryMode = (context != undefined && context.historyId != undefined);
+            
         }
 
         function defineScope() {
@@ -126,9 +126,15 @@
             }
             else if (isViewHistoryMode) {
                 getDataSourceHistory().then(function () {
-                    loadAllControls().finally(function () {
-                        dataSourceEntity = undefined;
+                    getDataSourceTask().then(function () {
+                        loadAllControls().finally(function () {
+                            dataSourceEntity = undefined;
+                        });
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        $scope.scopeModel.isLoading = false;
                     });
+                  
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
@@ -141,7 +147,6 @@
         }
         function getDataSourceHistory() {
             return VR_Integration_DataSourceAPIService.GetDataSourceHistoryDetailbyHistoryId(context.historyId).then(function (response) {
-
                 dataSourceEntity = response;
 
             });
