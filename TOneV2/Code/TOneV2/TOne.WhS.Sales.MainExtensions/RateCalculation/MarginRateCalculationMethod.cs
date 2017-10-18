@@ -77,8 +77,9 @@ namespace TOne.WhS.Sales.MainExtensions.RateCalculation
 
         private decimal ApplyMargin(decimal rate)
         {
-            decimal marginRate = rate + Margin;
-            return (MarginPercentage != 0) ? (marginRate + ((MarginPercentage * marginRate) / 100)) : marginRate;
+            decimal marginPercentageRate = (MarginPercentage != 0) ? (rate+((MarginPercentage * rate) / 100)): rate;
+            decimal marginRate = marginPercentageRate + Margin;
+            return marginRate;
         }
 
         #endregion
