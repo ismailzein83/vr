@@ -18,7 +18,7 @@ namespace TOne.WhS.Analytics.Business
         private readonly CarrierAccountManager _carrierAccountManager;
         private readonly SaleZoneManager _saleZoneManager;
         private readonly SwitchManager _switchManager;
-        private readonly SwitchReleaseCodeManager _switchReleaseCodeManager;
+        private readonly SwitchReleaseCauseManager _switchReleaseCauseManager;
 
       
         public ReleaseCodeManager()
@@ -26,7 +26,7 @@ namespace TOne.WhS.Analytics.Business
             _carrierAccountManager = new CarrierAccountManager();
             _saleZoneManager = new SaleZoneManager();
             _switchManager = new SwitchManager();
-            _switchReleaseCodeManager = new SwitchReleaseCodeManager();
+            _switchReleaseCauseManager = new SwitchReleaseCauseManager();
         }
         public Vanrise.Entities.IDataRetrievalResult<ReleaseCodeStatDetail> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<ReleaseCodeQuery> input)
         {
@@ -39,7 +39,7 @@ namespace TOne.WhS.Analytics.Business
             string supplierName = _carrierAccountManager.GetCarrierAccountName(releaseCode.SupplierId);
             string switchName = _switchManager.GetSwitchName(releaseCode.SwitchId);
             string zoneName = _saleZoneManager.GetSaleZoneName(releaseCode.MasterPlanZoneId);
-            string releaseCodeDescription = _switchReleaseCodeManager.GetReleaseCodeDescription(releaseCode.ReleaseCode);
+            string releaseCodeDescription = _switchReleaseCauseManager.GetReleaseCodeDescription(releaseCode.ReleaseCode,releaseCode.SwitchId);
             ReleaseCodeStatDetail releaseCodeDetail = new ReleaseCodeStatDetail
             {
                 Entity = releaseCode,

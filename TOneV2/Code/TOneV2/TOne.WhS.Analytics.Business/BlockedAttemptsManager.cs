@@ -12,14 +12,14 @@ namespace TOne.WhS.Analytics.Business
     {
         private readonly CarrierAccountManager _carrierAccountManager;
         private readonly SaleZoneManager _saleZoneManager;
-        private readonly SwitchReleaseCodeManager _switchReleaseCodeManager;
+        private readonly SwitchReleaseCauseManager _switchReleaseCauseManager;
 
 
         public BlockedAttemptsManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
             _saleZoneManager = new SaleZoneManager();
-            _switchReleaseCodeManager = new SwitchReleaseCodeManager();
+            _switchReleaseCauseManager = new SwitchReleaseCauseManager();
         }
 
         public Vanrise.Entities.IDataRetrievalResult<BlockedAttemptDetail> GetBlockedAttemptData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input)
@@ -35,7 +35,7 @@ namespace TOne.WhS.Analytics.Business
                 Entity = blockedAttempt,
                 CustomerName = _carrierAccountManager.GetCarrierAccountName(blockedAttempt.CustomerID),
                 SaleZoneName = _saleZoneManager.GetSaleZoneName(blockedAttempt.SaleZoneID),
-                ReleaseCodeDescription = _switchReleaseCodeManager.GetReleaseCodeDescription(blockedAttempt.ReleaseCode)
+                ReleaseCodeDescription = _switchReleaseCauseManager.GetReleaseCodeDescription(blockedAttempt.ReleaseCode, null)
 
             };
             return blockedAttemptDetail;
