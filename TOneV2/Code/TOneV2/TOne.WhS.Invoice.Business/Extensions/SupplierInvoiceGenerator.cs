@@ -177,8 +177,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
                 }
             }
-            supplierInvoiceDetails.OriginalSupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.OriginalSupplierCurrencyId);
-            supplierInvoiceDetails.SupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.SupplierCurrencyId);
+            if (supplierInvoiceDetails != null)
+            {
+                supplierInvoiceDetails.OriginalSupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.OriginalSupplierCurrencyId);
+                supplierInvoiceDetails.SupplierCurrency = currencyManager.GetCurrencySymbol(supplierInvoiceDetails.SupplierCurrencyId);
+            }
             return supplierInvoiceDetails;
         }
 
@@ -219,23 +222,28 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             Name = " "
                         });
                     }
-                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
-
-                }
-                if (taxItemDetails != null)
-                {
-                    GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                    generatedInvoiceItemSet.SetName = "Taxes";
-                    generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
-                    foreach (var item in taxItemDetails)
+                    if (generatedInvoiceItemSet.Items.Count > 0)
                     {
-                        generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
-                        {
-                            Details = item,
-                            Name = " "
-                        });
+                        generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
                     }
-                    generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+                }
+                if (generatedInvoiceItemSets.Count > 0)
+                {
+                    if (taxItemDetails != null)
+                    {
+                        GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                        generatedInvoiceItemSet.SetName = "Taxes";
+                        generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+                        foreach (var item in taxItemDetails)
+                        {
+                            generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                            {
+                                Details = item,
+                                Name = " "
+                            });
+                        }
+                        generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+                    }
                 }
             }
             return generatedInvoiceItemSets;
@@ -294,29 +302,36 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
                     MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
                     #endregion
-                    InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
+
+                    var costNetValue = Convert.ToDecimal(costNet == null ? 0.0 : costNet.Value ?? 0.0);
+                    if (costNetValue != 0)
                     {
-                        SupplierId = Convert.ToInt32(supplierId.Value),
-                        SupplierCurrencyId = currencyId,
-                        OriginalSupplierCurrencyId = Convert.ToInt32(supplierCurrencyId.Value),
-                        SupplierRate = supplierRate != null ? Convert.ToDecimal(supplierRate.Value) : default(Decimal),
-                        SupplierRateTypeId = supplierRateTypeId != null && supplierRateTypeId.Value != null ? Convert.ToInt32(supplierRateTypeId.Value) : default(int?),
-                        SupplierZoneId = Convert.ToInt64(supplierZoneId.Value),
-                        InvoiceMeasures = new InvoiceMeasures
+                        InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
                         {
-                            BillingPeriodFrom = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
-                            BillingPeriodTo = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
-                            CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0),
-                            CostNet = Convert.ToDecimal(costNet == null ? 0.0 : costNet.Value ?? 0.0),
-                            NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
-                            CostNet_OrigCurr = Convert.ToDecimal(costNet_OrigCurr == null ? 0.0 : costNet_OrigCurr.Value ?? 0.0),
-                        }
+                            SupplierId = Convert.ToInt32(supplierId.Value),
+                            SupplierCurrencyId = currencyId,
+                            OriginalSupplierCurrencyId = Convert.ToInt32(supplierCurrencyId.Value),
+                            SupplierRate = supplierRate != null ? Convert.ToDecimal(supplierRate.Value) : default(Decimal),
+                            SupplierRateTypeId = supplierRateTypeId != null && supplierRateTypeId.Value != null ? Convert.ToInt32(supplierRateTypeId.Value) : default(int?),
+                            SupplierZoneId = Convert.ToInt64(supplierZoneId.Value),
+                            InvoiceMeasures = new InvoiceMeasures
+                            {
+                                BillingPeriodFrom = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
+                                BillingPeriodTo = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
+                                CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0),
+                                CostNet = costNetValue,
+                                NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
+                                CostNet_OrigCurr = Convert.ToDecimal(costNet_OrigCurr == null ? 0.0 : costNet_OrigCurr.Value ?? 0.0),
+                            }
 
-                    };
-                    invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission) / 100);
-                    invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * commission) / 100);
+                        };
+                        invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission) / 100);
+                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * commission) / 100);
 
-                    AddItemToDictionary(itemSetNamesDic, "GroupedByCostZone", invoiceBillingRecord);
+                        AddItemToDictionary(itemSetNamesDic, "GroupedByCostZone", invoiceBillingRecord);
+
+                    }
+                    
                 }
             }
             return itemSetNamesDic;
