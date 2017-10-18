@@ -223,15 +223,14 @@ namespace Vanrise.Invoice.Business
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
                 }
             }
-            catch (Exception e)
+            catch (InvoiceGeneratorException invoiceGeneratorException)
             {
-                if (e as InvoiceGeneratorException != null)
-                {
-                    insertOperationOutput.Message = e.Message;
-                    insertOperationOutput.ShowExactMessage = true;
-                }
-                else
-                    throw e;
+                insertOperationOutput.Message = invoiceGeneratorException.Message;
+                insertOperationOutput.ShowExactMessage = true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return insertOperationOutput;
         }
@@ -919,7 +918,7 @@ namespace Vanrise.Invoice.Business
 
         #endregion
 
-        public GenerateInvoicesOutput GenerateInvoices(Guid invoiceTypeId, Guid invoiceGenerationIdentifier, List<InvoiceGenerationDraftToEdit> changedItems)
+        public GenerateInvoicesOutput GenerateInvoices(Guid invoiceTypeId, Guid invoiceGenerationIdentifier, DateTime issueDate, List<InvoiceGenerationDraftToEdit> changedItems)
         {
             if (changedItems != null && changedItems.Count > 0)
             {
@@ -927,14 +926,14 @@ namespace Vanrise.Invoice.Business
                 invoiceGenerationDraftManager.UpdateInvoiceGenerationDrafts(changedItems);
             }
             int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            InvoiceGenerationProcessInput invoiceGenerationProcessInput = new InvoiceGenerationProcessInput() { InvoiceGenerationIdentifier = invoiceGenerationIdentifier, InvoiceTypeId = invoiceTypeId, UserId = userId };
+            InvoiceGenerationProcessInput invoiceGenerationProcessInput = new InvoiceGenerationProcessInput() { InvoiceGenerationIdentifier = invoiceGenerationIdentifier, InvoiceTypeId = invoiceTypeId, UserId = userId, IssueDate = issueDate };
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
             {
                 InputArguments = invoiceGenerationProcessInput
             };
 
-            new BPInstanceManager().CreateNewProcess(createProcessInput);
-            return new GenerateInvoicesOutput { };
+            var result = new BPInstanceManager().CreateNewProcess(createProcessInput);
+            return new GenerateInvoicesOutput { ProcessInstanceId = result.ProcessInstanceId };
         }
     }
 }

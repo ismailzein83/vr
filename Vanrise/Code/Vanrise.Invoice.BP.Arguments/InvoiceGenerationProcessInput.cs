@@ -15,5 +15,7 @@ namespace Vanrise.Invoice.BP.Arguments
 
         public Guid InvoiceTypeId { get; set; }
         public Guid InvoiceGenerationIdentifier { get; set; }
+        public bool IsAutomatic { get; set; }
+        public DateTime IssueDate { get; set; }
     }
 }
