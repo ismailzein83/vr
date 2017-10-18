@@ -271,6 +271,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
                         foreach (SalePricelistZoneChange zoneChange in countryChange.ZoneChanges)
                         {
+                            if (zoneChange.RateChange == null)
+                                continue;
+
                             if (zoneChange.RateChange.ChangeType == RateChangeType.New)
                                 newRatesCounter++;
                             else if (zoneChange.RateChange.ChangeType == RateChangeType.Increase)
