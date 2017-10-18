@@ -27,7 +27,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (defaultData.CurrentDefaultRoutingProduct == null && defaultData.DefaultRoutingProductToAdd == null)
             {
-                context.Message = string.Format("Default routing product was not found");
+                context.Message = string.Format("Default routing product must be assigned");
                 return false;
             }
 
@@ -36,7 +36,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return "Default routing product was not found";
+            return "Default routing product must be assigned";
         }
     }
 }
