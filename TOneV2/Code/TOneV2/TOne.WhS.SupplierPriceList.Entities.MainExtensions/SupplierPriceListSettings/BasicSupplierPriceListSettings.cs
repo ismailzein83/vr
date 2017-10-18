@@ -30,7 +30,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
         public char RangeSeparator { get; set; }
         public bool IsCommaDecimalSeparator { get; set; }
         public int? Precision { get; set; }
-        public bool IsCrop { get; set; }
+        public RatePrecicionType RatePrecicionType { get; set; }
         #endregion
 
         #region Override
@@ -43,7 +43,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
             excelConversionSettings.ListMappings = new List<ListMapping>();
             excelConversionSettings.ListMappings.Add(this.CodeListMapping);
             excelConversionSettings.Precision=this.Precision;
-            excelConversionSettings.IsCrop=this.IsCrop;
+            excelConversionSettings.RatePrecicionType = this.RatePrecicionType;
             excelConversionSettings.ExtendedSettings = new ImportSupplierPriceListExtendedSettings { PricelistDate = context.PricelistDate};
 
             if (this.NormalRateListMapping != null)
