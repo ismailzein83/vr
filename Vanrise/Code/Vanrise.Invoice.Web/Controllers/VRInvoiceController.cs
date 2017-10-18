@@ -177,12 +177,13 @@ namespace Vanrise.Invoice.Web.Controllers
             if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.InvoiceTypeId))
                 return GetUnauthorizedResponse();
             InvoiceManager manager = new InvoiceManager();
-            return manager.GenerateInvoices(input.InvoiceTypeId, input.InvoiceGenerationIdentifier, input.ChangedItems);
+            return manager.GenerateInvoices(input.InvoiceTypeId, input.InvoiceGenerationIdentifier, input.IssueDate, input.ChangedItems);
         }
     }
 
     public class GenerateInvoicesInput
     {
+        public DateTime IssueDate { get; set; }
         public Guid InvoiceTypeId { get; set; }
         public Guid InvoiceGenerationIdentifier { get; set; }
         public List<InvoiceGenerationDraftToEdit> ChangedItems { get; set; }
