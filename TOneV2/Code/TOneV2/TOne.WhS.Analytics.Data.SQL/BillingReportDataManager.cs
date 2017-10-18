@@ -38,7 +38,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             string query = String.Format(@"
                 SELECT TOP (@TopDestination)  {2} AS ZoneId into #BillingStatsDailyTemp 
-                From [TOneWhS_Analytics].[BillingStats30Min] BS WITH(NOLOCK,INDEX(IX_BillingStatsDaily_BatchStart,IX_BillingStatsDaily_Id))
+                From [TOneWhS_Analytics].[BillingStats30Min] BS WITH(NOLOCK,INDEX(IX_BillingStats30Min_BatchStart,IX_BillingStats30Min_Id))
                 LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3} , @FromDate, @ToDate)) AS ERC ON BS.CostCurrencyId = ERC.CurrencyID AND BS.BatchStart >= ERC.BED AND (ERC.EED IS NULL OR BS.BatchStart < ERC.EED)
                 LEFT JOIN (select * from Common.getExchangeRatesConvertedToCurrency({3} , @FromDate, @ToDate)) AS ERS ON BS.SaleCurrencyId = ERS.CurrencyID AND BS.BatchStart >= ERS.BED AND (ERS.EED IS NULL OR BS.BatchStart < ERS.EED)
                 WHERE BS.BatchStart >= @FromDate AND BS.BatchStart < @ToDate AND {1} = @CustomerId 
