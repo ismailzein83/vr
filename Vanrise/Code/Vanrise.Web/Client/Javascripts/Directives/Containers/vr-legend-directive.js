@@ -62,7 +62,7 @@ app.directive('vrLegend', ['$compile', 'UtilsService', function ($compile, Utils
                 var legend = $element.find('#MainContent');
                 var legendHeigth = $(legend).height();
                 var top = 0;
-                var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
+                var basetop = selfOffset.top - $(window).scrollTop() + selfHeight - 10;
                 var baseleft = selfOffset.left - $(window).scrollLeft();
                 top = (innerHeight - basetop < legendHeigth + 200) ? basetop - (legendHeigth) - selfHeight : basetop;
                 $(legend).css({position: 'fixed',top: top ,left: baseleft, width: self.width()});
@@ -74,7 +74,7 @@ app.directive('vrLegend', ['$compile', 'UtilsService', function ($compile, Utils
         bindToController: true,
         template: function (element, attrs) {
             var template = '<div class="vr-legend-{{legendCtrl.id}}">'
-                              + '<div class="legend-header-container-{{legendCtrl.id}}"><label href="" ng-click="legendCtrl.toogleLegendContent($event)" id="LegendHeader" class="legend-header">{{legendCtrl.header}}</label></div>'
+                              + '<div class="legend-header-container-{{legendCtrl.id}}"><label  ng-click="legendCtrl.toogleLegendContent($event)" id="LegendHeader" class="legend-header">{{legendCtrl.header}}</label></div>'
                               + '<div  id="MainContent" class="main-content">'
                                   + '<div class="legend-container">'
                                     + '<div class="legend-close" ng-click="legendCtrl.hideLegend($event)">X</div>'
