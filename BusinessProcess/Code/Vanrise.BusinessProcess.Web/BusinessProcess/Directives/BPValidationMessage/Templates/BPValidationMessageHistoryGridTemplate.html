@@ -21,11 +21,11 @@
                      pagingtype="'PagingOnScroll'"
                      idfield="Entity.ValidationMessageId">
             <vr-datagridcolumn headertext="'ID'" field="'Entity.ValidationMessageId'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Target Key'" field="'Entity.TargetKey'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Target Type'" field="'Entity.TargetType'" type="'Text'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="5" getcolor="scopeModel.getSeverityColor"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'" expendablecolumn>
-            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'" expendablecolumn></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" fixedwidth="'56'" getcolor="scopeModel.getSeverityColor"></vr-datagridcolumn>
+            <vr-datagridcolumn fixedwidth="'5'"></vr-datagridcolumn>
+            <!--<vr-datagridcolumn headertext="'Target Key'" field="'Entity.TargetKey'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Target Type'" field="'Entity.TargetType'" type="'Text'"></vr-datagridcolumn>-->
         </vr-datagrid>
     </vr-columns>
 </vr-row>
@@ -34,7 +34,7 @@
         <div style="float:right">
             <vr-validator validate="scopeModel.validateWarningConfirmationValue()">
                 <vr-columns haschildcolumns style="float:right;position:relative;top:5px;left:15px;width:120px;">
-                    <vr-label>Confirm Warnings</vr-label>
+                    <vr-label>Skip Warnings</vr-label>
                 </vr-columns>
                 <vr-columns haschildcolumns>
                     <vr-switch value="scopeModel.warningConfirmationValue"></vr-switch>
