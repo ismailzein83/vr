@@ -667,7 +667,7 @@ namespace TOne.WhS.Sales.Business
             int normalPrecisionValue, longPrecisionValue;
             SetNumberPrecisionValues(out normalPrecisionValue, out longPrecisionValue);
 
-            var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(input.EffectiveOn));
+            var rateLocator = new SaleEntityZoneRateLocator(currentRateReader);
             var rateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId, input.EffectiveOn, draft, input.CurrencyId, longPrecisionValue, rateLocator);
 
             var zoneRPLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(input.EffectiveOn));
