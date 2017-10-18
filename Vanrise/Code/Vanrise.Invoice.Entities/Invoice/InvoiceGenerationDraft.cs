@@ -35,6 +35,6 @@ namespace Vanrise.Invoice.Entities
 
     public class GenerateInvoicesOutput
     {
-
+        public long ProcessInstanceId { get; set; }
     }
 }
