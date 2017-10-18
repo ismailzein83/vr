@@ -312,7 +312,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 RecentRoutingProductId = GetReaderValue<int>(reader, "RecentRoutingProductId"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
-                CountryId = GetReaderValue<int>(reader, "CountryId")
+                CountryId = GetReaderValue<int>(reader, "CountryId"),
+                CustomerId = GetReaderValue<int>(reader, "CustomerId")
             };
             return salePricelistRpChange;
         }
