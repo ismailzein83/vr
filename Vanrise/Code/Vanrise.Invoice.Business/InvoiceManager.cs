@@ -23,6 +23,7 @@ namespace Vanrise.Invoice.Business
     public class InvoiceManager
     {
         PartnerManager _partnerManager = new PartnerManager();
+       
         #region Public Methods
         public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
@@ -162,7 +163,7 @@ namespace Vanrise.Invoice.Business
                 GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTransactions);
 
 
-                if (generatedInvoice.InvoiceDetails == null)
+                if (generatedInvoice == null || generatedInvoice.InvoiceDetails == null)
                 {
                     throw new InvoiceGeneratorException("No data available between the selected period.");
                 }
@@ -474,6 +475,8 @@ namespace Vanrise.Invoice.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<PartnerGroupConfig>(PartnerGroupConfig.EXTENSION_TYPE);
         }
+
+      
 
         #endregion
 
@@ -905,8 +908,8 @@ namespace Vanrise.Invoice.Business
                             billingTransaction.Settings.UsageOverrides.Add(new AccountBalance.Entities.BillingTransactionUsageOverride()
                             {
                                 TransactionTypeId = usageOverride.TransactionTypeId,
-                                FromDate = fromDate,
-                                ToDate = usageOverrideToDate
+                                FromDate = x.FromDate.HasValue ? x.FromDate.Value : fromDate,
+                                ToDate = x.ToDate.HasValue ? x.ToDate.Value : usageOverrideToDate
                             });
                         }
                     }
