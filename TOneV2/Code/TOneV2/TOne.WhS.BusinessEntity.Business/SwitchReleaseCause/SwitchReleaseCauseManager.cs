@@ -227,18 +227,21 @@ namespace TOne.WhS.BusinessEntity.Business
         public List<SwitchReleaseCauseDetail> GetReleaseCauseDetailsByCode(string code, int? switchId)
         {
             List<SwitchReleaseCauseDetail> releaseCauses = new List<SwitchReleaseCauseDetail>();
-            Dictionary<int, SwitchReleaseCause> releaseCausesBySwitch = GetReleaseCausesByCodeThenSwitch().GetRecord(code);
-            if(releaseCausesBySwitch != null)
+            if (code != null)
             {
-                if(switchId.HasValue)
+                Dictionary<int, SwitchReleaseCause> releaseCausesBySwitch = GetReleaseCausesByCodeThenSwitch().GetRecord(code);
+                if (releaseCausesBySwitch != null)
                 {
-                    var rc = releaseCausesBySwitch.GetRecord(switchId.Value);
-                    if (rc != null)
-                        releaseCauses.Add(SwitchReleaseCauseDetailMapper(rc));
-                }
-                else
-                {
-                    releaseCauses.AddRange(releaseCausesBySwitch.Values.MapRecords(SwitchReleaseCauseDetailMapper));
+                    if (switchId.HasValue)
+                    {
+                        var rc = releaseCausesBySwitch.GetRecord(switchId.Value);
+                        if (rc != null)
+                            releaseCauses.Add(SwitchReleaseCauseDetailMapper(rc));
+                    }
+                    else
+                    {
+                        releaseCauses.AddRange(releaseCausesBySwitch.Values.MapRecords(SwitchReleaseCauseDetailMapper));
+                    }
                 }
             }
             return releaseCauses;
@@ -246,6 +249,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public SwitchReleaseCause GetReleaseCauseByCodeAndSwitch(string code, int switchId)
         {
+            if (code == null)
+                return null;
             return GetReleaseCausesByCodeThenSwitch().GetRecord(code).GetRecord(switchId);
         }
 
@@ -257,6 +262,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public string GetReleaseCodeDescription(string code, int? switchId)
         {
+            if (code == null)
+                return null;
             SwitchReleaseCause switchReleaseCause = null;
             var releaseCausesByCode = GetReleaseCausesByCodeThenSwitch().GetRecord(code);
             if(releaseCausesByCode != null)
