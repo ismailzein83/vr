@@ -215,12 +215,60 @@ namespace TOne.WhS.BusinessEntity.Business
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return uploadSwitchReleaseCauseLog;
         }
+        
         public byte[] DownloadSwitchReleaseCauseLog(long fileID)
         {
             VRFileManager fileManager = new VRFileManager();
             VRFile file = fileManager.GetFile(fileID);
             return file.Content;
         }
+
+
+        public List<SwitchReleaseCauseDetail> GetReleaseCauseDetailsByCode(string code, int? switchId)
+        {
+            List<SwitchReleaseCauseDetail> releaseCauses = new List<SwitchReleaseCauseDetail>();
+            Dictionary<int, SwitchReleaseCause> releaseCausesBySwitch = GetReleaseCausesByCodeThenSwitch().GetRecord(code);
+            if(releaseCausesBySwitch != null)
+            {
+                if(switchId.HasValue)
+                {
+                    var rc = releaseCausesBySwitch.GetRecord(switchId.Value);
+                    if (rc != null)
+                        releaseCauses.Add(SwitchReleaseCauseDetailMapper(rc));
+                }
+                else
+                {
+                    releaseCauses.AddRange(releaseCausesBySwitch.Values.MapRecords(SwitchReleaseCauseDetailMapper));
+                }
+            }
+            return releaseCauses;
+        }
+
+        public SwitchReleaseCause GetReleaseCauseByCodeAndSwitch(string code, int switchId)
+        {
+            return GetReleaseCausesByCodeThenSwitch().GetRecord(code).GetRecord(switchId);
+        }
+
+        public bool IsReleaseCodeDelivered(string code, int switchId)
+        {
+            var switchReleaseCause = GetReleaseCauseByCodeAndSwitch(code, switchId);
+            return switchReleaseCause != null && switchReleaseCause.Settings != null && switchReleaseCause.Settings.IsDelivered;
+        }
+
+        public string GetReleaseCodeDescription(string code, int? switchId)
+        {
+            SwitchReleaseCause switchReleaseCause = null;
+            var releaseCausesByCode = GetReleaseCausesByCodeThenSwitch().GetRecord(code);
+            if(releaseCausesByCode != null)
+            {
+                if (switchId.HasValue)
+                    switchReleaseCause = releaseCausesByCode.GetRecord(switchId.Value);
+                else
+                    switchReleaseCause = releaseCausesByCode.Values.FirstOrDefault();
+            }
+            return switchReleaseCause != null && switchReleaseCause.Settings != null ? switchReleaseCause.Settings.Description : null;
+        }
+
         #endregion
 
         #region Private Classes
@@ -311,6 +359,27 @@ namespace TOne.WhS.BusinessEntity.Business
                    return switchReleaseCauses.ToDictionary(cn => cn.SwitchReleaseCauseId, cn => cn);
                });
         }
+
+        Dictionary<string, Dictionary<int, SwitchReleaseCause>> GetReleaseCausesByCodeThenSwitch()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetReleaseCausesByCodeThenSwitch",
+               () =>
+               {
+                   Dictionary<string, Dictionary<int, SwitchReleaseCause>> rslt = new Dictionary<string, Dictionary<int, SwitchReleaseCause>>();
+                   Dictionary<int, SwitchReleaseCause> allReleaseCauses = GetCachedSwitchReleaseCauses();
+                   if(allReleaseCauses != null)
+                   {
+                       foreach(var rc in allReleaseCauses.Values)
+                       {
+                           Dictionary<int, SwitchReleaseCause> releaseCausesBySwitch = rslt.GetOrCreateItem(rc.ReleaseCode);
+                           if (!releaseCausesBySwitch.ContainsKey(rc.SwitchId))
+                               releaseCausesBySwitch.Add(rc.SwitchId, rc);
+                       }
+                   }
+                   return rslt;
+               });
+        }
+
         #endregion
 
  
