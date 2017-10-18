@@ -15,7 +15,7 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
-        readonly string[] columns = { "ZoneName", "ProcessInstanceID", "RateTypeID", "CurrentRate", "IsCurrentRateInherited", "NewRate", "ChangeType", "EffectiveOn", "EffectiveUntil" };
+        readonly string[] columns = { "ZoneName", "ProcessInstanceID", "RateTypeID", "CurrentRate", "IsCurrentRateInherited", "NewRate", "ChangeType", "EffectiveOn", "EffectiveUntil","CurrencyId" };
 
         private long _processInstanceId;
 
@@ -77,7 +77,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
             streamForBulkInsert.WriteRecord
             (
-                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
+                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}",
                 record.ZoneName,
                 _processInstanceId,
                 record.RateTypeId,
@@ -86,7 +86,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 GetRoundedRate(record.NewRate),
                 Convert.ToInt32(record.ChangeType),
 				GetDateTimeForBCP(record.EffectiveOn),
-				GetDateTimeForBCP(record.EffectiveUntil)
+				GetDateTimeForBCP(record.EffectiveUntil),
+                record.CurrencyId
             );
         }
 
@@ -127,7 +128,8 @@ namespace TOne.WhS.Sales.Data.SQL
                 NewRate = GetReaderValue<decimal?>(reader, "NewRate"),
                 ChangeType = (RateChangeType)reader["ChangeType"],
                 EffectiveOn = GetReaderValue<DateTime?>(reader, "EffectiveOn"),
-                EffectiveUntil = GetReaderValue<DateTime?>(reader, "EffectiveUntil")
+                EffectiveUntil = GetReaderValue<DateTime?>(reader, "EffectiveUntil"),
+                CurrencyId = (int) reader["CurrencyId"]
             };
         }
 

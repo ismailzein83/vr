@@ -24,6 +24,8 @@ namespace TOne.WhS.Sales.Entities
         public DateTime? EffectiveOn { get; set; }
 
         public DateTime? EffectiveUntil { get; set; }
+
+        public int CurrencyId { get; set; }
     }
 
     public class RatePreviewDetail
@@ -33,5 +35,7 @@ namespace TOne.WhS.Sales.Entities
         public string RateTypeName { get; set; }
 
         public string ChangeTypeDescription { get; set; }
+
+        public string CurrencySymbol { get; set; }
     }
 }

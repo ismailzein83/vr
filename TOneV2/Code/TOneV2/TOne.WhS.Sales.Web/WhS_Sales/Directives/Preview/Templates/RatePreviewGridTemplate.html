@@ -10,6 +10,7 @@
         <vr-label isvalue="true" ng-if="dataItem.Entity.IsCurrentRateInherited">(Inherited)</vr-label>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'New Rate'" field="'Entity.NewRate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" type="'Text'" fixedwidth="'80'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Change Type'" fixedwidth="'100'" field="'Entity.ChangeType'">
         <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateChangeTypeIconUrl" tooltip="dataItem.RateChangeTypeIconTooltip"></vr-icon>
     </vr-datagridcolumn>

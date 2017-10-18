@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -56,33 +58,38 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+            handle.CustomData.Add("RatePlanContext", ratePlanContext);
+
             if (this.RatePreviews.Get(context) == null)
                 this.RatePreviews.Set(context, new List<RatePreview>());
+
             base.OnBeforeExecute(context, handle);
         }
 
         protected override PrepareRatePreviewsOutput DoWorkWithResult(PrepareRatePreviewsInput inputArgument, AsyncActivityHandle handle)
         {
             var ratePreviews = new List<RatePreview>();
+            RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
 
             SalePriceListOwnerType ownerType = inputArgument.OwnerType;
             IEnumerable<DataByZone> dataByZone = inputArgument.DataByZone;
 
             foreach (DataByZone zoneData in dataByZone)
             {
-                RatePreview normalRatePreview = GetNormalRatePreview(ownerType, zoneData);
+                RatePreview normalRatePreview = GetNormalRatePreview(ownerType, zoneData, ratePlanContext.CurrencyId);
                 if (normalRatePreview != null)
                     ratePreviews.Add(normalRatePreview);
 
                 foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
                 {
-                    var otherRatePreview = GetPreviewFromRateToChange(otherRateToChange, zoneData.ZoneRateGroup, ownerType);
+                    var otherRatePreview = GetPreviewFromRateToChange(otherRateToChange, zoneData.ZoneRateGroup, ownerType, ratePlanContext.CurrencyId);
                     ratePreviews.Add(otherRatePreview);
                 }
 
                 foreach (RateToClose otherRateToClose in zoneData.OtherRatesToClose)
                 {
-                    var otherRatePreview = GetPreviewFromRateToClose(otherRateToClose, zoneData.ZoneRateGroup, ownerType);
+                    var otherRatePreview = GetPreviewFromRateToClose(otherRateToClose, zoneData.ZoneRateGroup, ownerType, ratePlanContext.CurrencyId);
                     ratePreviews.Add(otherRatePreview);
                 }
             }
@@ -100,15 +107,15 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Private Methods
 
-        private RatePreview GetNormalRatePreview(SalePriceListOwnerType ownerType, DataByZone zoneData)
+        private RatePreview GetNormalRatePreview(SalePriceListOwnerType ownerType, DataByZone zoneData, int currencyId)
         {
             RatePreview normalRatePreview = null;
 
             if (zoneData.NormalRateToChange != null)
-                normalRatePreview = GetPreviewFromRateToChange(zoneData.NormalRateToChange, zoneData.ZoneRateGroup, ownerType);
+                normalRatePreview = GetPreviewFromRateToChange(zoneData.NormalRateToChange, zoneData.ZoneRateGroup, ownerType, currencyId);
 
             else if (zoneData.NormalRateToClose != null)
-                normalRatePreview = GetPreviewFromRateToClose(zoneData.NormalRateToClose, zoneData.ZoneRateGroup, ownerType);
+                normalRatePreview = GetPreviewFromRateToClose(zoneData.NormalRateToClose, zoneData.ZoneRateGroup, ownerType, currencyId);
 
             else if (zoneData.OtherRatesToChange.Count > 0 || zoneData.OtherRatesToClose.Count > 0)
             {
@@ -123,7 +130,7 @@ namespace TOne.WhS.Sales.BP.Activities
             return normalRatePreview;
         }
 
-        private RatePreview GetPreviewFromRateToChange(RateToChange rateToChange, ZoneRateGroup zoneRateGroup, SalePriceListOwnerType ownerType)
+        private RatePreview GetPreviewFromRateToChange(RateToChange rateToChange, ZoneRateGroup zoneRateGroup, SalePriceListOwnerType ownerType, int currencyId)
         {
             var ratePreview = new RatePreview()
             {
@@ -132,7 +139,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 NewRate = rateToChange.NormalRate,
                 ChangeType = rateToChange.ChangeType,
                 EffectiveOn = rateToChange.BED,
-                EffectiveUntil = rateToChange.EED
+                EffectiveUntil = rateToChange.EED,
+                CurrencyId = currencyId
             };
             if (rateToChange.RateTypeId.HasValue)
                 SetCurrentOtherRateProperties(ratePreview, zoneRateGroup, ownerType);
@@ -140,14 +148,15 @@ namespace TOne.WhS.Sales.BP.Activities
                 SetCurrentNormalRateProperties(ratePreview, zoneRateGroup, ownerType);
             return ratePreview;
         }
-        private RatePreview GetPreviewFromRateToClose(RateToClose rateToClose, ZoneRateGroup zoneRateGroup, SalePriceListOwnerType ownerType)
+        private RatePreview GetPreviewFromRateToClose(RateToClose rateToClose, ZoneRateGroup zoneRateGroup, SalePriceListOwnerType ownerType, int currencyId)
         {
             var ratePreview = new RatePreview()
             {
                 ZoneName = rateToClose.ZoneName,
                 RateTypeId = rateToClose.RateTypeId,
                 ChangeType = RateChangeType.Deleted,
-                EffectiveOn = rateToClose.CloseEffectiveDate
+                EffectiveOn = rateToClose.CloseEffectiveDate,
+                CurrencyId = currencyId
             };
             if (rateToClose.RateTypeId.HasValue)
                 SetCurrentOtherRateProperties(ratePreview, zoneRateGroup, ownerType);

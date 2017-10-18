@@ -25,6 +25,7 @@ namespace TOne.WhS.Sales.Business
         {
             Vanrise.Common.Business.RateTypeManager _rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
 
+            CurrencyManager _currencyManager = new CurrencyManager();
             public override RatePreviewDetail EntityDetailMapper(RatePreview entity)
             {
                 var entityDetail = new RatePreviewDetail()
@@ -36,7 +37,7 @@ namespace TOne.WhS.Sales.Business
                     entityDetail.RateTypeName = _rateTypeManager.GetRateTypeName(entity.RateTypeId.Value);
                     
                 entityDetail.ChangeTypeDescription = Utilities.GetEnumAttribute<RateChangeType, DescriptionAttribute>(entity.ChangeType).Description;
-                
+                entityDetail.CurrencySymbol = _currencyManager.GetCurrencySymbol(entity.CurrencyId);
                 return entityDetail;
             }
 
