@@ -309,7 +309,7 @@
                             $scope.scopeModel.rangeSeparator = configDetails.RangeSeparator;
                             $scope.scopeModel.delimiterValue = configDetails.Delimiter;
                             $scope.scopeModel.isCommaDecimalSeparator = configDetails.IsCommaDecimalSeparator;
-                            $scope.scopeModel.ratePrecicionType = UtilsService.getItemByVal($scope.scopeModel.ratePrecisionTypes, configDetails.RatePrecicionType, "value"); //(configDetails.RatePrecicionType == WhS_SupPL_RatePrecisionTypeEnum.CropRate.value) ? WhS_SupPL_RatePrecisionTypeEnum.CropRate : WhS_SupPL_CodeRateMappingEnum.RoundRate;
+                            $scope.scopeModel.ratePrecicionType = UtilsService.getItemByVal($scope.scopeModel.ratePrecisionTypes, configDetails.RatePrecicionType, "value");
                             $scope.scopeModel.precisionValue = configDetails.Precision;
 
                             isCodeLayoutSelected = false;
