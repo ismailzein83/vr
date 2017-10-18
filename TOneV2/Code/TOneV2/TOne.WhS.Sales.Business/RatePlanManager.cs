@@ -906,7 +906,7 @@ namespace TOne.WhS.Sales.Business
 
             if (input.OwnerType == SalePriceListOwnerType.Customer)
             {
-                countryBEDsByCountry = UtilitiesManager.GetDatesByCountry(input.OwnerId, DateTime.Today, false);
+                countryBEDsByCountry = UtilitiesManager.GetDatesByCountry(input.OwnerId, DateTime.Today, true);
                 closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, null, DateTime.Today);
             }
 
