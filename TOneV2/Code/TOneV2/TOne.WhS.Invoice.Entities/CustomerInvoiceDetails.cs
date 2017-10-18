@@ -28,6 +28,7 @@ namespace TOne.WhS.Invoice.Entities
         public CommissionType? CommissionType { get; set; }
         public decimal? Commission { get; set; }
         public bool DisplayComission { get; set; }
+        public string Offset { get; set; }
         public CustomerInvoiceDetails() { }
         public IEnumerable<CustomerInvoiceDetails> GetCustomerInvoiceDetailsRDLCSchema()
         {

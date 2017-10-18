@@ -30,6 +30,7 @@ namespace TOne.WhS.Invoice.Entities
 
         public decimal? Commission { get; set; }
         public bool DisplayComission { get; set; }
+        public string Offset { get; set; }
         public SupplierInvoiceDetails() { }
         public IEnumerable<SupplierInvoiceDetails> GetSupplierInvoiceDetailsRDLCSchema()
         {

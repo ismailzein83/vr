@@ -44,6 +44,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             string offset = null;
             DateTime fromDate = context.FromDate;
             DateTime toDate = context.ToDate;
+            DateTime toDateForBillingTransaction = context.ToDate.Date.AddDays(1);
             if (timeZoneId.HasValue)
             {
                 VRTimeZone timeZone = new VRTimeZoneManager().GetVRTimeZone(timeZoneId.Value);
@@ -52,6 +53,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     offset = timeZone.Settings.Offset.ToString();
                     fromDate = context.FromDate.Add(-timeZone.Settings.Offset);
                     toDate = context.ToDate.Add(-timeZone.Settings.Offset);
+                    toDateForBillingTransaction = toDateForBillingTransaction.Add(-timeZone.Settings.Offset);
                 }
             }
             string partnerType = null;
@@ -78,12 +80,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
             #region BuildCustomerInvoiceDetails
             CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType);
-            if (customerInvoiceDetails != null)
+            if (customerInvoiceDetails != null && customerInvoiceDetails.SaleAmount != 0)
             {
                 customerInvoiceDetails.TimeZoneId = timeZoneId;
                 customerInvoiceDetails.Commission = commission;
                 customerInvoiceDetails.TotalAmount = customerInvoiceDetails.SaleAmount;
                 customerInvoiceDetails.CommissionType = commissionType;
+                customerInvoiceDetails.Offset = offset;
 
                 customerInvoiceDetails.TotalAmountAfterCommission = customerInvoiceDetails.AmountAfterCommission;
                 if (taxItemDetails != null)
@@ -94,19 +97,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
-                SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount);
+                SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                context.Invoice = new GeneratedInvoice
+                {
+                    InvoiceDetails = customerInvoiceDetails,
+                    InvoiceItemSets = generatedInvoiceItemSets,
+                };
+
             }
 
             #endregion
 
-            context.Invoice = new GeneratedInvoice
-            {
-                InvoiceDetails = customerInvoiceDetails,
-                InvoiceItemSets = generatedInvoiceItemSets,
-            };
-
+           
         }
-        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, CustomerInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount)
+        private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, CustomerInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount, DateTime fromDate, DateTime toDate)
         {
             var financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
             var balanceAccountTypeId = financialAccountDefinitionManager.GetBalanceAccountTypeId(financialAccount.FinancialAccountDefinitionId);
@@ -123,7 +127,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     AccountId = context.PartnerId,
                     TransactionTypeId = invoiceSettings.InvoiceTransactionTypeId,
                     Amount = invoiceDetails.TotalAmount,
-                    CurrencyId = invoiceDetails.SaleCurrencyId
+                    CurrencyId = invoiceDetails.SaleCurrencyId,
+                    FromDate = fromDate,
+                    ToDate = toDate
                 };
 
                 billingTransaction.Settings = new GeneratedInvoiceBillingTransactionSettings();
@@ -184,7 +190,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
                 }
             }
-            if (customerInvoiceDetails != null)
+            if (customerInvoiceDetails != null && customerInvoiceDetails.SaleAmount > 0)
             {
                 customerInvoiceDetails.OriginalSaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.OriginalSaleCurrencyId);
                 customerInvoiceDetails.SaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.SaleCurrencyId);
