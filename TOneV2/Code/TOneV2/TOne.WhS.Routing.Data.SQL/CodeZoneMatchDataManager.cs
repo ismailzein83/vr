@@ -239,7 +239,7 @@ namespace TOne.WhS.Routing.Data.SQL
 			select ParsedString from dbo.ParseStringList(@SupplierIds);
 		    
             with allValidCodes as (
-                            select [CodeMatch] from [dbo].[CodeSupplierZoneMatch] with (nolock)
+                            select [CodeMatch] from [dbo].[CodeSupplierZoneMatch] with (nolock) where SupplierID in (select SupplierId from @SupplierIdsTable)
                             union all 
                             select [CodeMatch] from [dbo].[CodeSaleZoneMatch] with (nolock) where SellingNumberPlanID = @SellingNumberPlanId),
                             distinctCodes As  (select distinct CodeMatch as Code from allValidCodes)
