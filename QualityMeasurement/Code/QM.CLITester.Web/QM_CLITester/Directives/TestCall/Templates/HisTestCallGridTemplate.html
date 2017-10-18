@@ -1,8 +1,11 @@
 ﻿<vr-datagrid datasource="testcalls"
-             on-ready="onGridReady" dataretrievalfunction="dataRetrievalFunction"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Entity.ID" defaultsortdirection="'DESC'" enableautoexport="true">
+             defaultsortdirection="'DESC'"
+             enableautoexport="true"
+             idfield="Entity.ID">
 
     <vr-datagridcolumn headertext="'Id'" field="'Entity.ID'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'" type="'Text'"></vr-datagridcolumn>
@@ -16,8 +19,8 @@
     <vr-datagridcolumn headertext="'Batch Number'" field="'Entity.BatchNumber'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Call Status'" field="'CallTestStatusDescription'" type="'Text'" getcolor="getColorStatus" tooltipfield="'Entity.FailureMessage'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Call Result'" field="'CallTestResultDescription'" type="'Text'" getcolor="getColorResult"></vr-datagridcolumn>
+
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
-
 </vr-datagrid>

@@ -13,13 +13,13 @@ namespace QM.Runtime.Tasks
     {
         public void Execute()
         {
-            object test = null;
-            ZoneITestReader zoneITestReader = new ZoneITestReader();
-            zoneITestReader.GetChangedItems(ref test);
+            //object test = null;
+            //ZoneITestReader zoneITestReader = new ZoneITestReader();
+            //zoneITestReader.GetChangedItems(ref test);
 
             #region Runtime
-            //ExecuteRuntime executeRuntime = new ExecuteRuntime();
-            //executeRuntime.Runtime_Main();
+            ExecuteRuntime executeRuntime = new ExecuteRuntime();
+            executeRuntime.Runtime_Main();
             #endregion
         }
 

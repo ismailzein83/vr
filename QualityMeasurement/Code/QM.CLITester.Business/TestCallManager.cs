@@ -25,18 +25,17 @@ namespace QM.CLITester.Business
 {
     public class TestCallManager
     {
+        #region Public Methods
+
         public AddTestCallOutput AddNewTestCall(AddTestCallInput testCallInput)
         {
-
-
             AddTestCallOutput testCallOutput = new AddTestCallOutput();
 
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            
+
             ZoneManager zoneManager = new ZoneManager();
             SupplierManager supplierManager = new SupplierManager();
 
-            
             Zone zone = new Zone();
             List<Zone> zones = new List<Zone>();
 
@@ -45,8 +44,7 @@ namespace QM.CLITester.Business
                 zone = zoneManager.GetZonebySourceId(testCallInput.ZoneSourceId);
                 if (zone != null)
                 {
-                    zones.Add(zone);  
-
+                    zones.Add(zone);
                 }
             }
             else
@@ -73,14 +71,17 @@ namespace QM.CLITester.Business
                 }
             }
 
-
             long batchNumber;
             IDManager.Instance.ReserveIDRange(this.GetType(), listSuppliersIds.Count, out batchNumber);
 
             foreach (int supplierId in listSuppliersIds)
+            {
                 foreach (Zone z in zones)
+                {
                     dataManager.Insert(supplierId, z.CountryId, z.ZoneId, (int)CallTestStatus.New, (int)CallTestResult.NotCompleted, 0, 0,
-                            testCallInput.UserId, testCallInput.ProfileID, batchNumber, testCallInput.ScheduleId, testCallInput.Quantity);
+                                       testCallInput.UserId, testCallInput.ProfileID, batchNumber, testCallInput.ScheduleId, testCallInput.Quantity);
+                }
+            }
 
             testCallOutput.BatchNumber = batchNumber;
             return testCallOutput;
@@ -100,25 +101,39 @@ namespace QM.CLITester.Business
 
         public LastCallUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows)
         {
-            LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
-
-            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-
             SettingManager settingManager = new SettingManager();
             int numberOfMinutes = settingManager.GetSetting<LastTestCallsSettingsData>(Constants.LastTestCallSettings).LastTestCall;
 
+            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             List<TestCall> listTestCalls = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId(), numberOfMinutes);
+            
             List<TestCallDetail> listTestCallDetails = new List<TestCallDetail>();
+
             foreach (TestCall testCall in listTestCalls)
             {
                 listTestCallDetails.Add(TestCallDetailMapper(testCall));
             }
-
+            
+            LastCallUpdateOutput lastCallUpdateOutputs = new LastCallUpdateOutput();
             lastCallUpdateOutputs.ListTestCallDetails = listTestCallDetails;
             lastCallUpdateOutputs.MaxTimeStamp = maxTimeStamp;
             return lastCallUpdateOutputs;
         }
 
+        public List<TestCallDetail> GetBeforeId(GetBeforeIdInput input)
+        {
+            input.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
+
+            List<TestCall> listTestCalls = dataManager.GetBeforeId(input);
+            List<TestCallDetail> listTestCallDetails = new List<TestCallDetail>();
+
+            foreach (TestCall testCall in listTestCalls)
+            {
+                listTestCallDetails.Add(TestCallDetailMapper(testCall));
+            }
+            return listTestCallDetails;
+        }
 
         public void SendMail(TestCallInfo testCallInfo)
         {
@@ -129,27 +144,12 @@ namespace QM.CLITester.Business
             vrMailManager.SendMail(new Guid("019A4F17-CDDC-47FC-B0E0-4F65473E173D"), objects);
         }
 
-
-        public List<TestCallDetail> GetBeforeId(GetBeforeIdInput input)
-        {
-            input.UserId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-
-            List<TestCall> listTestCalls = dataManager.GetBeforeId(input);
-            List<TestCallDetail> listTestCallDetails = new List<TestCallDetail>();
-            foreach (TestCall testCall in listTestCalls)
-            {
-                listTestCallDetails.Add(TestCallDetailMapper(testCall));
-            }
-            return listTestCallDetails;
-        }
-
-
         public List<TestCall> GetTestCalls(List<CallTestStatus> listCallTestStatus)
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
             return dataManager.GetTestCalls(listCallTestStatus);
         }
+
         public List<TotalCallsChart> GetTotalCallsByUserId()
         {
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
@@ -179,9 +179,9 @@ namespace QM.CLITester.Business
                 input.Query.UserIds.Add(SecurityContext.Current.GetLoggedInUserId());
             }
             ITestCallDataManager dataManager = CliTesterDataManagerFactory.GetDataManager<ITestCallDataManager>();
-            
-            Vanrise.Entities.BigResult<TestCall> testCalls= dataManager.GetTestCallFilteredFromTemp(input);
-             Vanrise.Entities.BigResult<TestCallDetail> testBigResult = new BigResult<TestCallDetail>();
+
+            Vanrise.Entities.BigResult<TestCall> testCalls = dataManager.GetTestCallFilteredFromTemp(input);
+            Vanrise.Entities.BigResult<TestCallDetail> testBigResult = new BigResult<TestCallDetail>();
 
             List<TestCallDetail> listTestCallDetails = new List<TestCallDetail>();
 
@@ -209,7 +209,9 @@ namespace QM.CLITester.Business
             return manager.GetExtensionConfigurations<CliTesterConnectorVIConfig>(CliTesterConnectorVIConfig.EXTENSION_TYPE);
         }
 
-         #region Private Members
+        #endregion
+
+        #region Private Classes
 
         private class TestCallRequestHandler : BigDataRequestHandler<TestCallQuery, TestCall, TestCallDetail>
         {
@@ -251,16 +253,14 @@ namespace QM.CLITester.Business
             }
         }
 
-
-         #endregion
-        TestCallDetail TestCallDetailMapper(TestCall testCall)
+        private TestCallDetail TestCallDetailMapper(TestCall testCall)
         {
             SupplierManager supplierManager = new SupplierManager();
             Supplier supplier = supplierManager.GetSupplier(testCall.SupplierID);
-            
+
             ZoneManager zoneManager = new ZoneManager();
             Zone zone = zoneManager.GetZone(testCall.ZoneID);
-            
+
             CountryManager countryManager = new CountryManager();
             Country country = countryManager.GetCountry(testCall.CountryID);
 
@@ -268,7 +268,7 @@ namespace QM.CLITester.Business
             User user = userManager.GetUserbyId(testCall.UserID);
 
             SchedulerTaskManager schedulerTaskManager = new SchedulerTaskManager();
-            SchedulerTask schedulerTask = schedulerTaskManager.GetTask(testCall.ScheduleId); 
+            SchedulerTask schedulerTask = schedulerTaskManager.GetTask(testCall.ScheduleId);
 
             return new TestCallDetail()
             {
@@ -283,5 +283,6 @@ namespace QM.CLITester.Business
             };
         }
 
+        #endregion
     }
 }

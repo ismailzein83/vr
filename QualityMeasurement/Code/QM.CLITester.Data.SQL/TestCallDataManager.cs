@@ -14,13 +14,8 @@ namespace QM.CLITester.Data.SQL
 {
     public class TestCallDataManager : BaseSQLDataManager, ITestCallDataManager
     {
-        public TestCallDataManager() :
-            base(GetConnectionStringName("QM_CLITester_DBConnStringKey", "QM_CLITester_DBConnString"))
-        {
-
-        }
-
         private static Dictionary<string, string> _columnMapper = new Dictionary<string, string>();
+
         static TestCallDataManager()
         {
             _columnMapper.Add("SupplierName", "SupplierId");
@@ -31,6 +26,12 @@ namespace QM.CLITester.Data.SQL
             _columnMapper.Add("CallTestResultDescription", "CallTestResult");
             _columnMapper.Add("Entity.ID", "ID");
             _columnMapper.Add("Entity.CreationDate", "CreationDate");
+        }
+
+        public TestCallDataManager() :
+            base(GetConnectionStringName("QM_CLITester_DBConnStringKey", "QM_CLITester_DBConnString"))
+        {
+
         }
 
         public bool Insert(int supplierId, int countryId, long zoneId, int callTestStatus, int callTestResult, int initiationRetryCount, int getProgressRetryCount,
@@ -74,6 +75,7 @@ namespace QM.CLITester.Data.SQL
                 maxTimeStamp = timestamp;
             return listTestCalls;
         }
+
         public List<TestCall> GetBeforeId(GetBeforeIdInput input)
         {
             return GetItemsSP("[QM_CLITester].[sp_TestCall_GetBeforeID]", TestCallMapper, input.LessThanID, input.NbOfRows, input.UserId);
@@ -142,7 +144,7 @@ namespace QM.CLITester.Data.SQL
             return RetrieveData(input, createTempTableAction, TestCallMapper, _columnMapper);
         }
 
-        TestCall TestCallMapper(IDataReader reader)
+        private TestCall TestCallMapper(IDataReader reader)
         {
             Measure measure = new Measure
             {
@@ -185,7 +187,7 @@ namespace QM.CLITester.Data.SQL
             return testCall;
         }
 
-        TotalCallsChart TotalCallsByUserIdMapper(IDataReader reader)
+        private TotalCallsChart TotalCallsByUserIdMapper(IDataReader reader)
         {
             return new TotalCallsChart()
             {
