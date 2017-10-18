@@ -35,7 +35,7 @@ namespace Vanrise.Common.MainExtensions.TextManipulationAction
                 return;
 
             target.TextValue = (this.IgnoreCase) ?
-                Regex.Replace(target.TextValue, this.StringToReplace, this.NewString, RegexOptions.IgnoreCase) :
+                Utilities.ReplaceString(target.TextValue, this.StringToReplace, this.NewString, StringComparison.OrdinalIgnoreCase):
                 target.TextValue.Replace(this.StringToReplace, this.NewString);
         }
     }
