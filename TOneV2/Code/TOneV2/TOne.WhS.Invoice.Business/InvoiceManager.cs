@@ -22,6 +22,10 @@ namespace TOne.WhS.Invoice.Business
     {
         public IDataRetrievalResult<InvoiceComparisonResultDetail> CompareInvoices(Vanrise.Entities.DataRetrievalInput<InvoiceComparisonInput> input)
         {
+            if(input.ResultKey == null)
+            {
+                ValidateCompareInvoices(input.Query);
+            }
             return BigDataManager.Instance.RetrieveData(input, new InvoiceComparisonRequestHandler());
         }
 
@@ -115,6 +119,529 @@ namespace TOne.WhS.Invoice.Business
             }
             return originalInvoiceDataRuntime;
         }
+
+
+        private void ValidateCompareInvoices(InvoiceComparisonInput input)
+        {
+            CompareInvoices(input);
+        }
+        private List<InvoiceComparisonResult> CompareInvoices(InvoiceComparisonInput input)
+        {
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(input.InvoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", input.InvoiceTypeId);
+            var invoiceAction = invoiceTypeManager.GetInvoiceAction(input.InvoiceTypeId, input.InvoiceActionId);
+            invoiceAction.ThrowIfNull("invoiceAction");
+            var invoiceActionSettings = invoiceAction.Settings as CompareInvoiceAction;
+            invoiceActionSettings.ThrowIfNull("invoiceActionSettings");
+
+            var itemGrouping = invoiceType.Settings.ItemGroupings.FirstOrDefault(x => x.ItemGroupingId == invoiceActionSettings.ItemGroupingId);
+            var longPrecision = new GeneralSettingsManager().GetLongPrecisionValue();
+            InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
+            var invoiceItems = invoiceItemManager.GetInvoiceItemsByItemSetNames(input.InvoiceId, new List<String> { itemGrouping.ItemSetName }, CompareOperator.Equal);
+            InvoiceItemGroupingManager invoiceItemGroupingManager = new InvoiceItemGroupingManager();
+            var invoice = new Vanrise.Invoice.Business.InvoiceManager().GetInvoice(input.InvoiceId);
+            invoice.ThrowIfNull("invoice", input.InvoiceId);
+            var currencyId = invoice.Details.GetType().GetProperty(invoiceType.Settings.CurrencyFieldName).GetValue(invoice.Details, null);
+            string currencySymbol = null;
+            if (currencyId != null)
+                currencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId);
+
+            List<Guid> dimensions = new List<Guid>();
+            dimensions.Add(invoiceActionSettings.ZoneDimensionId);
+            dimensions.Add(invoiceActionSettings.FromDateDimensionId);
+            dimensions.Add(invoiceActionSettings.ToDateDimensionId);
+            dimensions.Add(invoiceActionSettings.RateDimensionId);
+
+            List<Guid> measures = new List<Guid>();
+            measures.Add(invoiceActionSettings.AmountMeasureId);
+            measures.Add(invoiceActionSettings.DurationMeasureId);
+            measures.Add(invoiceActionSettings.NumberOfCallsMeasureId);
+
+            GroupingInvoiceItemQuery query = new GroupingInvoiceItemQuery
+            {
+                DimensionIds = dimensions,
+                MeasureIds = measures,
+                InvoiceTypeId = input.InvoiceTypeId,
+                ItemGroupingId = invoiceActionSettings.ItemGroupingId
+            };
+            var groupedItems = invoiceItemGroupingManager.ApplyFinalGroupingAndFiltering(new GroupingInvoiceItemQueryContext(query), invoiceItems, query.DimensionIds, query.MeasureIds, null, itemGrouping);
+
+            var systemInvoiceItems = ConverGroupingItemsToComparisonResult(groupedItems, invoiceActionSettings, itemGrouping, input.DecimalDigits, longPrecision, currencySymbol);
+
+            ExcelConvertor excelConvertor = new ExcelConvertor();
+
+            ExcelConversionSettings excelConversionSettings = new ExcelConversionSettings();
+            excelConversionSettings.DateTimeFormat = input.DateTimeFormat;
+            excelConversionSettings.ListMappings = new List<ListMapping>();
+            excelConversionSettings.ListMappings.Add(input.ListMapping);
+
+            ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(input.InputFileId, excelConversionSettings, true, false);
+            return ProccessInvoiceComparisonResult(convertedExcel, systemInvoiceItems, input.Threshold, input.DateTimeFormat, input.ComparisonCriterias, input.DecimalDigits, longPrecision, currencySymbol);
+
+
+        }
+        private List<InvoiceComparisonResult> ProccessInvoiceComparisonResult(ConvertedExcel convertedExcel, Dictionary<ComparisonKey, InvoiceItemToCompare> systemInvoiceItems, decimal threshold, string dateTimeFormat, List<ComparisonCriteria> comparisonCriterias, int? decimalDigits, int longPrecision, string currencySymbol)
+        {
+            List<InvoiceComparisonResult> invoiceComparisonResults = new List<InvoiceComparisonResult>();
+            ConvertedExcelList convertedExcelList;
+            if (convertedExcel.Lists.TryGetValue("MainList", out convertedExcelList))
+            {
+                foreach (var obj in convertedExcelList.Records)
+                {
+
+                    InvoiceComparisonResult invoiceComparisonResult = new InvoiceComparisonResult();
+                    FillInvoiceComparisonProviderFields(invoiceComparisonResult, obj.Fields, dateTimeFormat, decimalDigits, longPrecision);
+
+                    ComparisonKey comparisonKey = new ComparisonKey
+                    {
+                        Destination = invoiceComparisonResult.Destination,
+                        From = invoiceComparisonResult.From.Date,
+                        To = invoiceComparisonResult.To.Date,
+                        Rate = invoiceComparisonResult.Rate
+                    };
+
+                    InvoiceItemToCompare invoiceItemToCompare;
+                    if (systemInvoiceItems.TryGetValue(comparisonKey, out invoiceItemToCompare))
+                    {
+                        invoiceComparisonResult.SystemAmount = invoiceItemToCompare.Amount;
+                        invoiceComparisonResult.SystemCalls = invoiceItemToCompare.Calls;
+                        invoiceComparisonResult.SystemDuration = invoiceItemToCompare.Duration;
+                        invoiceComparisonResult.Rate = invoiceItemToCompare.Rate;
+                        invoiceComparisonResult.Currency = invoiceItemToCompare.Currency;
+                        LabelColor resultLabelColor;
+                        invoiceComparisonResult.Result = GetInvoiceComparisonResult(threshold, invoiceItemToCompare.Amount, invoiceItemToCompare.Calls, invoiceItemToCompare.Duration, invoiceComparisonResult.ProviderAmount, invoiceComparisonResult.ProviderCalls, invoiceComparisonResult.ProviderDuration, comparisonCriterias, out resultLabelColor);
+                        invoiceComparisonResult.ResultColor = resultLabelColor;
+                        systemInvoiceItems.Remove(comparisonKey);
+                    }
+                    else
+                    {
+                        invoiceComparisonResult.Currency = currencySymbol;
+                        invoiceComparisonResult.Result = ComparisonResult.MissingSystem;
+                        invoiceComparisonResult.ResultColor = LabelColor.Error;
+                    }
+
+                    invoiceComparisonResult.DiffCalls = CalculateDiffValue(invoiceComparisonResult.SystemCalls, invoiceComparisonResult.ProviderCalls);
+                    invoiceComparisonResult.DiffCallsColor = GetDiffLabelColor(invoiceComparisonResult.DiffCalls, threshold);
+
+                    invoiceComparisonResult.DiffAmount = CalculateDiffValue(invoiceComparisonResult.SystemAmount, invoiceComparisonResult.ProviderAmount);
+                    invoiceComparisonResult.DiffAmountColor = GetDiffLabelColor(invoiceComparisonResult.DiffAmount, threshold);
+
+                    invoiceComparisonResult.DiffDuration = CalculateDiffValue(invoiceComparisonResult.SystemDuration, invoiceComparisonResult.ProviderDuration);
+                    invoiceComparisonResult.DiffDurationColor = GetDiffLabelColor(invoiceComparisonResult.DiffDuration, threshold);
+
+                    invoiceComparisonResults.Add(invoiceComparisonResult);
+                }
+                AddMissingSystemInvoices(invoiceComparisonResults, systemInvoiceItems);
+            }
+            return invoiceComparisonResults;
+        }
+        private ComparisonResult GetInvoiceComparisonResult(decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls, decimal? providerDuration, List<ComparisonCriteria> comparisonCriterias, out LabelColor resultLabelColor)
+        {
+            if (CheckIfMajorErrorDiff(comparisonCriterias, threshold, sysAmount, sysNCalls, sysDuration, providerAmount, providerNCalls, providerDuration))
+            {
+                resultLabelColor = LabelColor.Error;
+                return ComparisonResult.MajorDiff;
+            }
+            if (CheckIfMinorErrorDiff(comparisonCriterias, threshold, sysAmount, sysNCalls, sysDuration, providerAmount, providerNCalls, providerDuration))
+            {
+                resultLabelColor = LabelColor.Warning;
+                return ComparisonResult.MinorDiff;
+            }
+            resultLabelColor = LabelColor.Success;
+            return ComparisonResult.Identical;
+
+        }
+        private bool CheckIfMajorErrorDiff(List<ComparisonCriteria> comparisonCriterias, decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls, decimal? providerDuration)
+        {
+            if (comparisonCriterias != null && comparisonCriterias.Count > 0)
+            {
+                foreach (var item in comparisonCriterias)
+                {
+                    switch (item)
+                    {
+                        case ComparisonCriteria.Calls:
+                            if (CheckThresholdPercentage(sysNCalls, providerNCalls, threshold))
+                            {
+
+                                return true;
+                            }
+                            break;
+                        case ComparisonCriteria.Amount:
+                            if (CheckThresholdPercentage(sysAmount, providerAmount, threshold))
+                            {
+
+                                return true;
+                            }
+                            break;
+                        case ComparisonCriteria.Duration:
+                            if (CheckThresholdPercentage(sysDuration, providerDuration, threshold))
+                            {
+                                return true;
+                            }
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                if (CheckThresholdPercentage(sysAmount, providerAmount, threshold)
+                   || CheckThresholdPercentage(sysNCalls, providerNCalls, threshold)
+                   || CheckThresholdPercentage(sysDuration, providerDuration, threshold))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        private bool CheckIfMinorErrorDiff(List<ComparisonCriteria> comparisonCriterias, decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls, decimal? providerDuration)
+        {
+            if (comparisonCriterias != null && comparisonCriterias.Count > 0)
+            {
+                foreach (var item in comparisonCriterias)
+                {
+                    switch (item)
+                    {
+                        case ComparisonCriteria.Calls:
+                            if (providerNCalls.HasValue && sysNCalls != providerNCalls.Value)
+                                return true;
+                            break;
+                        case ComparisonCriteria.Amount:
+                            if (providerAmount.HasValue && sysAmount != providerAmount.Value)
+                                return true;
+                            break;
+                        case ComparisonCriteria.Duration:
+                            if (providerDuration.HasValue && sysDuration != providerDuration.Value)
+                                return true;
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                if ((providerAmount.HasValue && sysAmount != providerAmount.Value)
+                                       || (providerNCalls.HasValue && sysNCalls != providerNCalls.Value)
+                                       || (providerDuration.HasValue && sysDuration != providerDuration.Value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private Dictionary<ComparisonKey, InvoiceItemToCompare> ConverGroupingItemsToComparisonResult(List<GroupingInvoiceItemDetail> groupedItems, CompareInvoiceAction compareInvoiceAction, ItemGrouping itemGrouping, int? decimalDigits, int longPrecision, string currency)
+        {
+            Dictionary<ComparisonKey, InvoiceItemToCompare> invoiceItemsToCompare = new Dictionary<ComparisonKey, InvoiceItemToCompare>();
+            if (groupedItems != null)
+            {
+
+                AggregateItemField amountMeasure = null;
+                AggregateItemField durationMeasure = null;
+                AggregateItemField callsMeasure = null;
+
+                foreach (var measure in itemGrouping.AggregateItemFields)
+                {
+                    if (measure.AggregateItemFieldId == compareInvoiceAction.AmountMeasureId)
+                    {
+                        amountMeasure = measure;
+                    }
+                    else if (measure.AggregateItemFieldId == compareInvoiceAction.DurationMeasureId)
+                    {
+                        durationMeasure = measure;
+                    }
+                    else if (measure.AggregateItemFieldId == compareInvoiceAction.NumberOfCallsMeasureId)
+                    {
+                        callsMeasure = measure;
+                    }
+                }
+
+
+                foreach (var item in groupedItems)
+                {
+                    var zoneDimension = item.DimensionValues[0];
+                    var fromDateDimension = item.DimensionValues[1];
+                    var toDateDimension = item.DimensionValues[2];
+                    var rateDimension = item.DimensionValues[3];
+
+                    InvoiceItemToCompare invoiceItemToCompare = new InvoiceItemToCompare
+                    {
+                        Destination = zoneDimension != null ? zoneDimension.Name : null,
+                        From = fromDateDimension != null ? Convert.ToDateTime(fromDateDimension.Value) : default(DateTime),
+                        To = toDateDimension != null ? Convert.ToDateTime(toDateDimension.Value) : default(DateTime),
+                        Currency = currency,
+                        Rate = rateDimension != null ? Convert.ToDecimal(rateDimension.Value) : default(decimal),
+                    };
+
+                    InvoiceGroupingMeasureValue amountMeasureItem;
+                    InvoiceGroupingMeasureValue callsMeasureItem;
+                    InvoiceGroupingMeasureValue durationMeasureItem;
+
+                    if (amountMeasure != null && item.MeasureValues.TryGetValue(amountMeasure.FieldName, out amountMeasureItem))
+                    {
+                        invoiceItemToCompare.Amount = amountMeasureItem.Value != null ? Convert.ToDecimal(amountMeasureItem.Value) : default(decimal);
+                    }
+
+                    if (callsMeasure != null && item.MeasureValues.TryGetValue(callsMeasure.FieldName, out callsMeasureItem))
+                    {
+                        invoiceItemToCompare.Calls = callsMeasureItem.Value != null ? Convert.ToInt32(callsMeasureItem.Value) : default(Int32);
+                    }
+
+                    if (durationMeasure != null && item.MeasureValues.TryGetValue(durationMeasure.FieldName, out durationMeasureItem))
+                    {
+                        invoiceItemToCompare.Duration = durationMeasureItem.Value != null ? Convert.ToDecimal(durationMeasureItem.Value) : default(decimal);
+                    }
+                    invoiceItemToCompare.Rate = Math.Round(invoiceItemToCompare.Rate, longPrecision);
+                    if (decimalDigits.HasValue)
+                    {
+                        invoiceItemToCompare.Amount = Math.Round(invoiceItemToCompare.Amount, decimalDigits.Value);
+                        invoiceItemToCompare.Duration = Math.Round(invoiceItemToCompare.Duration, decimalDigits.Value);
+                    }
+
+                    invoiceItemsToCompare.Add(new ComparisonKey
+                    {
+                        Destination = invoiceItemToCompare.Destination,
+                        From = invoiceItemToCompare.From.Date,
+                        To = invoiceItemToCompare.To.Date,
+                        Rate = invoiceItemToCompare.Rate
+                    }, invoiceItemToCompare);
+                }
+
+            }
+            return invoiceItemsToCompare;
+        }
+        private void AddMissingSystemInvoices(List<InvoiceComparisonResult> invoiceComparisonResults, Dictionary<ComparisonKey, InvoiceItemToCompare> systemInvoiceItems)
+        {
+            if (systemInvoiceItems.Count > 0)
+            {
+                foreach (var item in systemInvoiceItems)
+                {
+                    var invoiceComparisonResult = new InvoiceComparisonResult
+                    {
+                        SystemDuration = item.Value.Duration,
+                        SystemCalls = item.Value.Calls,
+                        Rate = item.Value.Rate,
+                        SystemAmount = item.Value.Amount,
+                        Currency = item.Value.Currency,
+                        Destination = item.Value.Destination,
+                        From = item.Value.From,
+                        To = item.Value.To,
+                        Result = ComparisonResult.MissingProvider,
+                        ResultColor = LabelColor.Error
+                    };
+                    invoiceComparisonResults.Add(invoiceComparisonResult);
+                }
+            }
+        }
+        private void FillInvoiceComparisonProviderFields(InvoiceComparisonResult invoiceComparisonResult, ConvertedExcelFieldsByName fields, string dateTimeFormat, int? decimalDigits, int longPrecision)
+        {
+
+            #region Fill Destination
+            ConvertedExcelField zoneField;
+            if (fields.TryGetValue("Zone", out zoneField))
+            {
+                if (zoneField.FieldValue == null || String.IsNullOrWhiteSpace(zoneField.FieldValue.ToString()))
+                    throw new NullReferenceException("Mapped Zone cannot have a null value.");
+                invoiceComparisonResult.Destination = zoneField.FieldValue.ToString();
+            };
+            #endregion
+
+            #region Fill FromDate
+            ConvertedExcelField fromDateField;
+            if (fields.TryGetValue("FromDate", out fromDateField))
+            {
+                if (fromDateField.FieldValue == null || String.IsNullOrWhiteSpace(fromDateField.FieldValue.ToString()))
+                    throw new NullReferenceException("Mapped from date cannot have a null value.");
+              
+                if (fromDateField.FieldValue is DateTime)
+                {
+                    invoiceComparisonResult.From = Convert.ToDateTime(fromDateField.FieldValue).Date;
+                }
+                else
+                {
+                    DateTime fromDate;
+                    if (DateTime.TryParseExact(fromDateField.FieldValue.ToString(), dateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out fromDate))
+                        invoiceComparisonResult.From = fromDate.Date;
+                    else
+                        throw new NullReferenceException("From date has an invalid format.");
+                }
+               
+            };
+            #endregion
+
+            #region Fill ToDate
+
+            ConvertedExcelField toDateField;
+            if (fields.TryGetValue("ToDate", out toDateField))
+            {
+                if (toDateField.FieldValue == null || String.IsNullOrWhiteSpace(toDateField.FieldValue.ToString()))
+                    throw new NullReferenceException("Mapped to date cannot have a null value.");
+               
+                if (toDateField.FieldValue is DateTime)
+                {
+                    invoiceComparisonResult.To = Convert.ToDateTime(toDateField.FieldValue).Date;
+                }
+                else
+                {
+                    DateTime toDate;
+                    if (DateTime.TryParseExact(toDateField.FieldValue.ToString(), dateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out toDate))
+                        invoiceComparisonResult.To = toDate.Date;
+                    else
+                        throw new NullReferenceException("To date has an invalid format.");
+                }
+               
+            };
+            #endregion
+
+            #region Fill Rate
+
+            ConvertedExcelField rateField;
+            if (fields.TryGetValue("Rate", out rateField))
+            {
+                if (rateField.FieldValue == null || String.IsNullOrWhiteSpace(rateField.FieldValue.ToString()))
+                    throw new NullReferenceException("Mapped rate cannot have a null value.");
+              
+                Decimal rate;
+                if (Decimal.TryParse(rateField.FieldValue.ToString(), out rate))
+                {
+                    invoiceComparisonResult.Rate = Math.Round(rate, longPrecision);
+                }
+                else
+                    throw new NullReferenceException("Rate has an invalid format.");
+               
+            };
+
+            #endregion
+
+            #region Fill NumberOfCalls
+
+            ConvertedExcelField callsField;
+            if (fields.TryGetValue("NumberOfCalls", out callsField))
+            {
+                if (callsField.FieldValue == null || String.IsNullOrWhiteSpace(callsField.FieldValue.ToString()))
+                    throw new NullReferenceException("Mapped number of calls cannot have a null value.");
+                Decimal providerCalls;
+                if (Decimal.TryParse(callsField.FieldValue.ToString(), out providerCalls))
+                {
+                    if (decimalDigits.HasValue)
+                    {
+                        invoiceComparisonResult.ProviderCalls = Math.Round(providerCalls, decimalDigits.Value);
+                    }
+                    else
+                        invoiceComparisonResult.ProviderCalls = providerCalls;
+                }
+                else
+                    throw new NullReferenceException("Number of calls has an invalid format.");
+            };
+            #endregion
+
+            #region Fill Amount
+
+            ConvertedExcelField amountField;
+            if (fields.TryGetValue("Amount", out amountField))
+            {
+                if (amountField.FieldValue == null || String.IsNullOrWhiteSpace(amountField.FieldValue.ToString()))
+                    throw new NullReferenceException("Mapped amount cannot have a null value.");
+                Decimal providerAmount;
+                if (Decimal.TryParse(amountField.FieldValue.ToString(), out providerAmount))
+                {
+                    if (decimalDigits.HasValue)
+                    {
+                        invoiceComparisonResult.ProviderAmount = Math.Round(providerAmount, decimalDigits.Value);
+                    }
+                    else
+                        invoiceComparisonResult.ProviderAmount = providerAmount;
+                }
+                else
+                    throw new NullReferenceException("Amount has an invalid format.");
+               
+            };
+            #endregion
+
+            #region Fill Duration
+
+            ConvertedExcelField durationField;
+            if (fields.TryGetValue("Duration", out durationField))
+            {
+                if (durationField.FieldValue == null || String.IsNullOrWhiteSpace(durationField.FieldValue.ToString()))
+                    throw new NullReferenceException("Mapped duration cannot have a null value.");
+
+                Decimal providerDuration;
+                if (Decimal.TryParse(durationField.FieldValue.ToString(), out providerDuration))
+                {
+                    if (decimalDigits.HasValue)
+                    {
+                        invoiceComparisonResult.ProviderDuration = Math.Round(providerDuration, decimalDigits.Value);
+                    }
+                    else
+                        invoiceComparisonResult.ProviderDuration = providerDuration;
+                }
+                else
+                    throw new NullReferenceException("Duration has an invalid format.");
+            };
+            #endregion
+
+        }
+
+
+
+        private bool CheckThresholdPercentage(decimal sysValue, decimal? provValue, decimal threshold)
+        {
+            if (provValue.HasValue)
+            {
+                if (sysValue == provValue)
+                    return false;
+                if (sysValue == 0)
+                {
+                    return Math.Abs(provValue.Value - sysValue) * 100 / provValue.Value > threshold;
+                }
+                return Math.Abs(sysValue - provValue.Value) * 100 / sysValue > threshold;
+            }
+            return false;
+        }
+        private LabelColor? GetDiffLabelColor(decimal? diffValue, decimal threshold)
+        {
+            if (diffValue.HasValue && diffValue.Value != 0)
+            {
+                if (Math.Abs(diffValue.Value) > threshold)
+                {
+                    return LabelColor.Error;
+                }
+                else
+                {
+                    return LabelColor.Warning;
+                }
+            }
+            return null;
+        }
+        private decimal? CalculateDiffValue(decimal? sysVal, decimal? provideVal)
+        {
+            if (sysVal.HasValue && sysVal.Value != 0 && provideVal.HasValue && provideVal.Value != 0)
+            {
+                return (sysVal.Value - provideVal.Value) * 100 / sysVal.Value;
+            }
+            return null;
+        }
+
+        private struct ComparisonKey
+        {
+            public string Destination { get; set; }
+            public DateTime From { get; set; }
+            public DateTime To { get; set; }
+            public decimal Rate { get; set; }
+        }
+        private class InvoiceItemToCompare
+        {
+            public string Destination { get; set; }
+            public DateTime From { get; set; }
+            public DateTime To { get; set; }
+            public string Currency { get; set; }
+            public Decimal Rate { get; set; }
+            public Decimal Duration { get; set; }
+            public Decimal Amount { get; set; }
+            public int Calls { get; set; }
+        }
         #region Private Classes
 
         private class InvoiceComparisonRequestHandler : BigDataRequestHandler<InvoiceComparisonInput, InvoiceComparisonResult, InvoiceComparisonResultDetail>
@@ -148,501 +675,14 @@ namespace TOne.WhS.Invoice.Business
             }
             public override IEnumerable<InvoiceComparisonResult> RetrieveAllData(DataRetrievalInput<InvoiceComparisonInput> input)
             {
-                return CompareInvoices(input.Query);
+                return new InvoiceManager().CompareInvoices(input.Query);
             }
-            private List<InvoiceComparisonResult> CompareInvoices(InvoiceComparisonInput input)
-            {
-                InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-                var invoiceType = invoiceTypeManager.GetInvoiceType(input.InvoiceTypeId);
-                invoiceType.ThrowIfNull("invoiceType", input.InvoiceTypeId);
-                var invoiceAction = invoiceTypeManager.GetInvoiceAction(input.InvoiceTypeId, input.InvoiceActionId);
-                invoiceAction.ThrowIfNull("invoiceAction");
-                var invoiceActionSettings = invoiceAction.Settings as CompareInvoiceAction;
-                invoiceActionSettings.ThrowIfNull("invoiceActionSettings");
-
-                var itemGrouping = invoiceType.Settings.ItemGroupings.FirstOrDefault(x => x.ItemGroupingId == invoiceActionSettings.ItemGroupingId);
-                var longPrecision = new GeneralSettingsManager().GetLongPrecisionValue();
-                InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
-                var invoiceItems = invoiceItemManager.GetInvoiceItemsByItemSetNames(input.InvoiceId, new List<String> { itemGrouping.ItemSetName }, CompareOperator.Equal);
-                InvoiceItemGroupingManager invoiceItemGroupingManager = new InvoiceItemGroupingManager();
-                var invoice = new Vanrise.Invoice.Business.InvoiceManager().GetInvoice(input.InvoiceId);
-                invoice.ThrowIfNull("invoice", input.InvoiceId);
-                var currencyId = invoice.Details.GetType().GetProperty(invoiceType.Settings.CurrencyFieldName).GetValue(invoice.Details, null) ;
-                 string currencySymbol = null;
-                if(currencyId != null)
-                 currencySymbol = new CurrencyManager().GetCurrencySymbol(currencyId);
-
-                List<Guid> dimensions = new List<Guid>();
-                dimensions.Add(invoiceActionSettings.ZoneDimensionId);
-                dimensions.Add(invoiceActionSettings.FromDateDimensionId);
-                dimensions.Add(invoiceActionSettings.ToDateDimensionId);
-                dimensions.Add(invoiceActionSettings.RateDimensionId);
-
-                List<Guid> measures = new List<Guid>();
-                measures.Add(invoiceActionSettings.AmountMeasureId);
-                measures.Add(invoiceActionSettings.DurationMeasureId);
-                measures.Add(invoiceActionSettings.NumberOfCallsMeasureId);
-
-                GroupingInvoiceItemQuery query = new GroupingInvoiceItemQuery
-                {
-                    DimensionIds = dimensions,
-                    MeasureIds = measures,
-                    InvoiceTypeId = input.InvoiceTypeId,
-                    ItemGroupingId = invoiceActionSettings.ItemGroupingId
-                };
-                var groupedItems = invoiceItemGroupingManager.ApplyFinalGroupingAndFiltering(new GroupingInvoiceItemQueryContext(query), invoiceItems, query.DimensionIds, query.MeasureIds, null, itemGrouping);
-
-                var systemInvoiceItems = ConverGroupingItemsToComparisonResult(groupedItems, invoiceActionSettings, itemGrouping, input.DecimalDigits, longPrecision, currencySymbol);
-
-                ExcelConvertor excelConvertor = new ExcelConvertor();
-
-                ExcelConversionSettings excelConversionSettings = new ExcelConversionSettings();
-                excelConversionSettings.DateTimeFormat = input.DateTimeFormat;
-                excelConversionSettings.ListMappings = new List<ListMapping>();
-                excelConversionSettings.ListMappings.Add(input.ListMapping);
-
-                ConvertedExcel convertedExcel = excelConvertor.ConvertExcelFile(input.InputFileId, excelConversionSettings, true, false);
-                return ProccessInvoiceComparisonResult(convertedExcel, systemInvoiceItems, input.Threshold, input.DateTimeFormat, input.ComparisonCriterias, input.DecimalDigits, longPrecision, currencySymbol);
-
-
-            }
-            private List<InvoiceComparisonResult> ProccessInvoiceComparisonResult(ConvertedExcel convertedExcel, Dictionary<ComparisonKey, InvoiceItemToCompare> systemInvoiceItems, decimal threshold, string dateTimeFormat, List<ComparisonCriteria> comparisonCriterias, int? decimalDigits, int longPrecision, string currencySymbol)
-            {
-                List<InvoiceComparisonResult> invoiceComparisonResults = new List<InvoiceComparisonResult>();
-                ConvertedExcelList convertedExcelList;
-                if (convertedExcel.Lists.TryGetValue("MainList", out convertedExcelList))
-                {
-                    foreach (var obj in convertedExcelList.Records)
-                    {
-
-                        InvoiceComparisonResult invoiceComparisonResult = new InvoiceComparisonResult();
-                        FillInvoiceComparisonProviderFields(invoiceComparisonResult, obj.Fields, dateTimeFormat, decimalDigits, longPrecision);
-
-                        ComparisonKey comparisonKey = new ComparisonKey
-                        {
-                            Destination = invoiceComparisonResult.Destination,
-                            From = invoiceComparisonResult.From.Date,
-                            To = invoiceComparisonResult.To.Date,
-                            Rate = invoiceComparisonResult.Rate
-                        };
-
-                        InvoiceItemToCompare invoiceItemToCompare;
-                        if (systemInvoiceItems.TryGetValue(comparisonKey, out invoiceItemToCompare))
-                        {
-                            invoiceComparisonResult.SystemAmount = invoiceItemToCompare.Amount;
-                            invoiceComparisonResult.SystemCalls = invoiceItemToCompare.Calls;
-                            invoiceComparisonResult.SystemDuration = invoiceItemToCompare.Duration;
-                            invoiceComparisonResult.Rate = invoiceItemToCompare.Rate;
-                            invoiceComparisonResult.Currency = invoiceItemToCompare.Currency;
-                            LabelColor resultLabelColor;
-                            invoiceComparisonResult.Result = GetInvoiceComparisonResult(threshold, invoiceItemToCompare.Amount, invoiceItemToCompare.Calls, invoiceItemToCompare.Duration, invoiceComparisonResult.ProviderAmount, invoiceComparisonResult.ProviderCalls, invoiceComparisonResult.ProviderDuration,comparisonCriterias, out resultLabelColor);
-                            invoiceComparisonResult.ResultColor = resultLabelColor;
-                            systemInvoiceItems.Remove(comparisonKey);
-                        }
-                        else
-                        {
-                            invoiceComparisonResult.Currency = currencySymbol;
-                            invoiceComparisonResult.Result = ComparisonResult.MissingSystem;
-                            invoiceComparisonResult.ResultColor = LabelColor.Error;
-                        }
-                      
-                        invoiceComparisonResult.DiffCalls = CalculateDiffValue(invoiceComparisonResult.SystemCalls, invoiceComparisonResult.ProviderCalls);
-                        invoiceComparisonResult.DiffCallsColor = GetDiffLabelColor(invoiceComparisonResult.DiffCalls, threshold);
-
-                        invoiceComparisonResult.DiffAmount = CalculateDiffValue(invoiceComparisonResult.SystemAmount, invoiceComparisonResult.ProviderAmount);
-                        invoiceComparisonResult.DiffAmountColor = GetDiffLabelColor(invoiceComparisonResult.DiffAmount, threshold);
-                       
-                        invoiceComparisonResult.DiffDuration = CalculateDiffValue(invoiceComparisonResult.SystemDuration, invoiceComparisonResult.ProviderDuration);
-                        invoiceComparisonResult.DiffDurationColor = GetDiffLabelColor(invoiceComparisonResult.DiffDuration, threshold);
-                        
-                        invoiceComparisonResults.Add(invoiceComparisonResult);
-                    }
-                    AddMissingSystemInvoices(invoiceComparisonResults, systemInvoiceItems);
-                }
-                return invoiceComparisonResults;
-            }
-            private ComparisonResult GetInvoiceComparisonResult(decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls,decimal? providerDuration,List<ComparisonCriteria> comparisonCriterias,  out LabelColor resultLabelColor)
-            {
-                if (CheckIfMajorErrorDiff(comparisonCriterias, threshold, sysAmount, sysNCalls, sysDuration, providerAmount, providerNCalls, providerDuration))
-                {
-                    resultLabelColor = LabelColor.Error;
-                    return ComparisonResult.MajorDiff;
-                }
-                if (CheckIfMinorErrorDiff(comparisonCriterias, threshold, sysAmount, sysNCalls, sysDuration, providerAmount, providerNCalls, providerDuration))
-                {
-                    resultLabelColor = LabelColor.Warning;
-                    return ComparisonResult.MinorDiff;
-                }
-                resultLabelColor = LabelColor.Success;
-                return ComparisonResult.Identical;
-                
-            }
-            private bool CheckIfMajorErrorDiff(List<ComparisonCriteria> comparisonCriterias, decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls, decimal? providerDuration)
-            {
-                if (comparisonCriterias != null && comparisonCriterias.Count>0)
-                {
-                    foreach (var item in comparisonCriterias)
-                    {
-                        switch (item)
-                        {
-                            case ComparisonCriteria.Calls:
-                                if (CheckThresholdPercentage(sysNCalls, providerNCalls, threshold))
-                                {
-
-                                    return true;
-                                }
-                                break;
-                            case ComparisonCriteria.Amount:
-                                if (CheckThresholdPercentage(sysAmount, providerAmount, threshold))
-                                {
-
-                                    return true;
-                                }
-                                break;
-                            case ComparisonCriteria.Duration:
-                                if (CheckThresholdPercentage(sysDuration, providerDuration, threshold))
-                                {
-                                    return true;
-                                }
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    if (CheckThresholdPercentage(sysAmount, providerAmount, threshold)
-                       || CheckThresholdPercentage(sysNCalls, providerNCalls, threshold)
-                       || CheckThresholdPercentage(sysDuration, providerDuration, threshold))
-                    {
-                        return true;
-                    }
-                }
-               
-                return false;
-            }
-            private bool CheckIfMinorErrorDiff(List<ComparisonCriteria> comparisonCriterias, decimal threshold, decimal sysAmount, decimal sysNCalls, decimal sysDuration, decimal? providerAmount, decimal? providerNCalls, decimal? providerDuration)
-            {
-                if (comparisonCriterias != null && comparisonCriterias.Count > 0)
-                {
-                    foreach (var item in comparisonCriterias)
-                    {
-                        switch (item)
-                        {
-                            case ComparisonCriteria.Calls:
-                                if (providerNCalls.HasValue && sysNCalls != providerNCalls.Value)
-                                    return true;
-                                break;
-                            case ComparisonCriteria.Amount:
-                                if (providerAmount.HasValue && sysAmount != providerAmount.Value)
-                                    return true;
-                                break;
-                            case ComparisonCriteria.Duration:
-                                if (providerDuration.HasValue && sysDuration != providerDuration.Value)
-                                    return true;
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    if ((providerAmount.HasValue && sysAmount != providerAmount.Value)
-                                           || (providerNCalls.HasValue && sysNCalls != providerNCalls.Value)
-                                           || (providerDuration.HasValue && sysDuration != providerDuration.Value))
-                    {
-                        return true;
-                    }
-                }
-               
-                return false;
-            }
-
-            private Dictionary<ComparisonKey, InvoiceItemToCompare> ConverGroupingItemsToComparisonResult(List<GroupingInvoiceItemDetail> groupedItems, CompareInvoiceAction compareInvoiceAction, ItemGrouping itemGrouping, int? decimalDigits, int longPrecision, string currency)
-            {
-                Dictionary<ComparisonKey, InvoiceItemToCompare> invoiceItemsToCompare = new Dictionary<ComparisonKey, InvoiceItemToCompare>();
-                if (groupedItems != null)
-                {
-
-                    AggregateItemField amountMeasure = null;
-                    AggregateItemField durationMeasure = null;
-                    AggregateItemField callsMeasure = null;
-
-                    foreach (var measure in itemGrouping.AggregateItemFields)
-                    {
-                        if (measure.AggregateItemFieldId == compareInvoiceAction.AmountMeasureId)
-                        {
-                            amountMeasure = measure;
-                        }
-                        else if (measure.AggregateItemFieldId == compareInvoiceAction.DurationMeasureId)
-                        {
-                            durationMeasure = measure;
-                        }
-                        else if (measure.AggregateItemFieldId == compareInvoiceAction.NumberOfCallsMeasureId)
-                        {
-                            callsMeasure = measure;
-                        }
-                    }
-                 
-
-                    foreach (var item in groupedItems)
-                    {
-                        var zoneDimension = item.DimensionValues[0];
-                        var fromDateDimension = item.DimensionValues[1];
-                        var toDateDimension = item.DimensionValues[2];
-                        var rateDimension = item.DimensionValues[3];
-
-                        InvoiceItemToCompare invoiceItemToCompare = new InvoiceItemToCompare
-                        {
-                            Destination = zoneDimension != null ? zoneDimension.Name : null,
-                            From = fromDateDimension != null ? Convert.ToDateTime(fromDateDimension.Value) : default(DateTime),
-                            To = toDateDimension != null ? Convert.ToDateTime(toDateDimension.Value) : default(DateTime),
-                            Currency = currency,
-                            Rate = rateDimension != null ? Convert.ToDecimal(rateDimension.Value) : default(decimal),
-                        };
-
-                        InvoiceGroupingMeasureValue amountMeasureItem;
-                        InvoiceGroupingMeasureValue callsMeasureItem;
-                        InvoiceGroupingMeasureValue durationMeasureItem;
-
-                        if (amountMeasure != null && item.MeasureValues.TryGetValue(amountMeasure.FieldName, out amountMeasureItem))
-                        {
-                            invoiceItemToCompare.Amount = amountMeasureItem.Value != null ? Convert.ToDecimal(amountMeasureItem.Value) : default(decimal);
-                        }
-
-                        if (callsMeasure != null && item.MeasureValues.TryGetValue(callsMeasure.FieldName, out callsMeasureItem))
-                        {
-                            invoiceItemToCompare.Calls = callsMeasureItem.Value != null ? Convert.ToInt32(callsMeasureItem.Value) : default(Int32);
-                        }
-
-                        if (durationMeasure != null && item.MeasureValues.TryGetValue(durationMeasure.FieldName, out durationMeasureItem))
-                        {
-                            invoiceItemToCompare.Duration = durationMeasureItem.Value != null ? Convert.ToDecimal(durationMeasureItem.Value) : default(decimal);
-                        }
-                        invoiceItemToCompare.Rate = Math.Round(invoiceItemToCompare.Rate, longPrecision);
-                        if (decimalDigits.HasValue)
-                        {
-                            invoiceItemToCompare.Amount = Math.Round(invoiceItemToCompare.Amount, decimalDigits.Value);
-                            invoiceItemToCompare.Duration = Math.Round(invoiceItemToCompare.Duration, decimalDigits.Value);
-                        }
-
-                        invoiceItemsToCompare.Add(new ComparisonKey
-                        {
-                            Destination = invoiceItemToCompare.Destination,
-                            From = invoiceItemToCompare.From.Date,
-                            To = invoiceItemToCompare.To.Date,
-                            Rate = invoiceItemToCompare.Rate
-                        }, invoiceItemToCompare);
-                    }
-
-                }
-                return invoiceItemsToCompare;
-            }
-            private void AddMissingSystemInvoices(List<InvoiceComparisonResult> invoiceComparisonResults, Dictionary<ComparisonKey, InvoiceItemToCompare> systemInvoiceItems)
-            {
-                if (systemInvoiceItems.Count > 0)
-                {
-                    foreach (var item in systemInvoiceItems)
-                    {
-                        var invoiceComparisonResult = new InvoiceComparisonResult
-                        {
-                            SystemDuration = item.Value.Duration,
-                            SystemCalls = item.Value.Calls,
-                            Rate = item.Value.Rate,
-                            SystemAmount = item.Value.Amount,
-                            Currency = item.Value.Currency,
-                            Destination = item.Value.Destination,
-                            From = item.Value.From,
-                            To = item.Value.To,
-                            Result = ComparisonResult.MissingProvider,
-                            ResultColor = LabelColor.Error
-                        };
-                        invoiceComparisonResults.Add(invoiceComparisonResult);
-                    }
-                }
-            }
-            private void FillInvoiceComparisonProviderFields(InvoiceComparisonResult invoiceComparisonResult, ConvertedExcelFieldsByName fields, string dateTimeFormat, int? decimalDigits, int longPrecision)
-            {
-
-                #region Fill Destination
-                ConvertedExcelField zoneField;
-                if (fields.TryGetValue("Zone", out zoneField))
-                {
-                    invoiceComparisonResult.Destination = zoneField.FieldValue.ToString();
-                };
-                #endregion
-
-                #region Fill FromDate
-                ConvertedExcelField fromDateField;
-                if (fields.TryGetValue("FromDate", out fromDateField))
-                {
-                   
-                    if (fromDateField.FieldValue != null && !String.IsNullOrWhiteSpace(fromDateField.FieldValue.ToString()))
-                    {
-                        if(fromDateField.FieldValue is DateTime)
-                        {
-                            invoiceComparisonResult.From = Convert.ToDateTime(fromDateField.FieldValue).Date;
-
-                        }else
-                        {
-                            DateTime fromDate;
-                            if (DateTime.TryParseExact(fromDateField.FieldValue.ToString(), dateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out fromDate))
-                                invoiceComparisonResult.From = fromDate.Date;
-                        }
-                       
-                    }
-                };
-                #endregion
-
-                #region Fill ToDate
-
-                ConvertedExcelField toDateField;
-                if (fields.TryGetValue("ToDate", out toDateField))
-                {
-                    if (toDateField.FieldValue != null && !String.IsNullOrWhiteSpace(toDateField.FieldValue.ToString()))
-                    {
-                        if (toDateField.FieldValue is DateTime)
-                        {
-                            invoiceComparisonResult.To = Convert.ToDateTime(toDateField.FieldValue).Date;
-                        }
-                        else
-                        {
-                            DateTime toDate;
-                            if (DateTime.TryParseExact(toDateField.FieldValue.ToString(), dateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out toDate))
-                                invoiceComparisonResult.To = toDate.Date;
-                        }
-                    }
-                };
-                #endregion
-
-                #region Fill Rate
-
-                ConvertedExcelField rateField;
-                if (fields.TryGetValue("Rate", out rateField))
-                {
-                    if (rateField.FieldValue != null && !String.IsNullOrWhiteSpace(rateField.FieldValue.ToString()))
-                    {
-                      invoiceComparisonResult.Rate = Math.Round(Convert.ToDecimal(rateField.FieldValue), longPrecision);
-                    }
-                };
-              
-                #endregion
-
-                #region Fill NumberOfCalls
-
-                ConvertedExcelField callsField;
-                if (fields.TryGetValue("NumberOfCalls", out callsField))
-                {
-                    if (callsField.FieldValue != null && !String.IsNullOrWhiteSpace(callsField.FieldValue.ToString()))
-                    {
-                        invoiceComparisonResult.ProviderCalls = Convert.ToDecimal(callsField.FieldValue);
-                        if (decimalDigits.HasValue && invoiceComparisonResult.ProviderCalls.HasValue)
-                        {
-                            invoiceComparisonResult.ProviderCalls = Math.Round(invoiceComparisonResult.ProviderCalls.Value, decimalDigits.Value);
-                        }
-                    }
-                };
-                #endregion
-
-                #region Fill Amount
-
-                ConvertedExcelField amountField;
-                if (fields.TryGetValue("Amount", out amountField))
-                {
-                    if (amountField.FieldValue != null && !String.IsNullOrWhiteSpace(amountField.FieldValue.ToString()))
-                    {
-                        invoiceComparisonResult.ProviderAmount = Convert.ToDecimal(amountField.FieldValue);
-                        if (decimalDigits.HasValue && invoiceComparisonResult.ProviderAmount.HasValue)
-                        {
-                            invoiceComparisonResult.ProviderAmount = Math.Round(invoiceComparisonResult.ProviderAmount.Value, decimalDigits.Value);
-                        }
-                    }
-                };
-                #endregion
-
-                #region Fill Duration
-
-                ConvertedExcelField durationField;
-                if (fields.TryGetValue("Duration", out durationField))
-                {
-                    if (durationField.FieldValue != null && !String.IsNullOrWhiteSpace(durationField.FieldValue.ToString()))
-                    {
-                        invoiceComparisonResult.ProviderDuration = Convert.ToDecimal(durationField.FieldValue);
-                        if (decimalDigits.HasValue && invoiceComparisonResult.ProviderDuration.HasValue)
-                        {
-                            invoiceComparisonResult.ProviderDuration = Math.Round(invoiceComparisonResult.ProviderDuration.Value, decimalDigits.Value);
-                        }
-                    
-                    }
-                      
-
-                };
-                #endregion
-
-            }
-      
             protected override ResultProcessingHandler<InvoiceComparisonResultDetail> GetResultProcessingHandler(DataRetrievalInput<InvoiceComparisonInput> input, BigResult<InvoiceComparisonResultDetail> bigResult)
             {
                 return new ResultProcessingHandler<InvoiceComparisonResultDetail>
                 {
                     ExportExcelHandler = new InvoiceComparisonExcelExportHandler(input.Query)
                 };
-            }
-
-
-            private bool CheckThresholdPercentage(decimal sysValue, decimal? provValue, decimal threshold)
-            {
-                if (provValue.HasValue)
-                {
-                    if (sysValue == provValue)
-                        return false;
-                    if (sysValue == 0)
-                    {
-                        return Math.Abs(provValue.Value - sysValue) * 100 / provValue.Value > threshold;
-                    }
-                    return Math.Abs(sysValue - provValue.Value) * 100 / sysValue > threshold;
-                }
-                return false;
-            }
-            private LabelColor? GetDiffLabelColor(decimal? diffValue, decimal threshold)
-            {
-                if (diffValue.HasValue && diffValue.Value != 0)
-                {
-                    if (Math.Abs(diffValue.Value) > threshold)
-                    {
-                        return LabelColor.Error;
-                    }
-                    else
-                    {
-                        return LabelColor.Warning;
-                    }
-                }
-                return null;
-            }
-            private decimal? CalculateDiffValue(decimal? sysVal,decimal? provideVal)
-            {
-                if (sysVal.HasValue && sysVal.Value != 0 && provideVal.HasValue && provideVal.Value != 0)
-                {
-                    return (sysVal.Value - provideVal.Value) * 100 / sysVal.Value;
-                }
-                return null;
-            }
-
-            private struct ComparisonKey
-            {
-                public string Destination { get; set; }
-                public DateTime From { get; set; }
-                public DateTime To { get; set; }
-                public decimal Rate { get; set; }
-            }
-            private class InvoiceItemToCompare
-            {
-                public string Destination { get; set; }
-                public DateTime From { get; set; }
-                public DateTime To { get; set; }
-                public string Currency { get; set; }
-                public Decimal Rate { get; set; }
-                public Decimal Duration { get; set; }
-                public Decimal Amount { get; set; }
-                public int Calls { get; set; }
             }
 
         }

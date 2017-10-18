@@ -75,7 +75,7 @@
                 inputWorkBookApi = api;
             };
             $scope.scopeModel.compare = function () {
-                $scope.scopeModel.recievedComparisonTab.isSelected = true;
+                $scope.scopeModel.comparisonResults.length = 0;
                return startCompare();
             };
             $scope.scopeModel.close = function () {
@@ -83,9 +83,16 @@
             };
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Invoice_InvoiceAPIService.CompareInvoices(dataRetrievalInput).then(function (response) {
-                    if (response != undefined && response.Data != null) {
+
+                    if (response != undefined && response.Result != undefined)
+                    {
+                        VRNotificationService.notifyOnItemAdded("Compare Invoice", response);
+                    }else
+                    {
+                        $scope.scopeModel.recievedComparisonTab.isSelected = true;
+                        onResponseReady(response);
                     }
-                    onResponseReady(response);
+                    
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });

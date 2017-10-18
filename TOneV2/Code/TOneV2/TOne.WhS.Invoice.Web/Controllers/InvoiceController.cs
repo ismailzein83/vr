@@ -7,6 +7,7 @@ using TOne.WhS.Invoice.Business;
 using Vanrise.Web.Base;
 using System.Web.Http;
 using Vanrise.Invoice.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Invoice.Web.Controllers
 {
@@ -19,8 +20,20 @@ namespace TOne.WhS.Invoice.Web.Controllers
         [Route("CompareInvoices")]
         public object CompareInvoices(Vanrise.Entities.DataRetrievalInput<InvoiceComparisonInput> input)
         {
-            InvoiceManager manager = new InvoiceManager();
-            return GetWebResponse(input, manager.CompareInvoices(input));
+            try
+            {
+                InvoiceManager manager = new InvoiceManager();
+                return GetWebResponse(input, manager.CompareInvoices(input));
+            }
+            catch (Exception ex)
+            {
+                return new CompareInvoiceOperationOutput<object>
+                {
+                    Message = ex.Message,
+                    ShowExactMessage = true,
+                    Result = InsertOperationResult.Failed
+                };
+            }
         }
 
         [HttpPost]
