@@ -54,7 +54,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings.DateTimeFormat, null, null, isCommaDecimalSeparator, null, null, false, conversionSettings.ExtendedSettings)
+                        FieldValue = GetFieldValue(workbook, fldMapping, conversionSettings.DateTimeFormat, null, null, isCommaDecimalSeparator, null, null, null, conversionSettings.ExtendedSettings)
                     };
                     convertedExcel.Fields.Add(fld);
                 }
@@ -124,7 +124,7 @@ namespace Vanrise.ExcelConversion.Business
                         object fieldValue = null;
                         if(!fieldValueByFieldName.TryGetValue(field.FieldName,out fieldValue))
                         {
-                            fieldValueByFieldName.Add(field.FieldName, GetFieldValue(workbook, field.FieldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName, conversionSettings.Precision, conversionSettings.IsCrop, conversionSettings.ExtendedSettings));
+                            fieldValueByFieldName.Add(field.FieldName, GetFieldValue(workbook, field.FieldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName, conversionSettings.Precision, conversionSettings.RatePrecicionType, conversionSettings.ExtendedSettings));
                         }
                     }
                     context.fieldValueByFieldName = fieldValueByFieldName;
@@ -144,7 +144,7 @@ namespace Vanrise.ExcelConversion.Business
                     ConvertedExcelField fld = new ConvertedExcelField
                     {
                         FieldName = fldMapping.FieldName,
-                        FieldValue = GetFieldValue(workbook, fldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName, conversionSettings.Precision, conversionSettings.IsCrop, conversionSettings.ExtendedSettings)
+                        FieldValue = GetFieldValue(workbook, fldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName, conversionSettings.Precision, conversionSettings.RatePrecicionType, conversionSettings.ExtendedSettings)
                     };
                     convertedRecord.Fields.Add(fld);
                 }
@@ -154,7 +154,7 @@ namespace Vanrise.ExcelConversion.Business
             convertedExcel.Lists.Add(lst);
         }
 
-        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, string dateTimeFormat, Worksheet workSheet, Row row, bool isCommaDecimalSeparator, Dictionary<string, Object> fieldValueByFieldName, int? precision, bool isCrop, ExcelConversionExtendedSettings extendedSettings)
+        private object GetFieldValue(Workbook workbook, FieldMapping fldMapping, string dateTimeFormat, Worksheet workSheet, Row row, bool isCommaDecimalSeparator, Dictionary<string, Object> fieldValueByFieldName, int? precision, RatePrecicionType? ratePrecicionType, ExcelConversionExtendedSettings extendedSettings)
         {
             GetFieldValueContext getFieldValueContext = new GetFieldValueContext
             {
@@ -209,17 +209,17 @@ namespace Vanrise.ExcelConversion.Business
                     }
                 }
                 if (precision.HasValue)
-                    return getCropOrRoundedValue(result, precision.Value, isCrop);
+                    return getCropOrRoundedValue(result, precision.Value, ratePrecicionType.Value);
                 return result;
             }
             else
                 return fldValue;
         }
 
-        private Decimal getCropOrRoundedValue(Decimal value,int precision , bool isCrop)
+        private Decimal getCropOrRoundedValue(Decimal value, int precision, RatePrecicionType ratePrecicionType)
         {
-            Decimal result; 
-            if (isCrop)
+            Decimal result;
+            if (ratePrecicionType == RatePrecicionType.CropRate)
             {
                 Decimal y = (Decimal)(Math.Pow(10, precision));
                 result = value * y;

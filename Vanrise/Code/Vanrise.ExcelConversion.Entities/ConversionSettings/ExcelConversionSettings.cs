@@ -16,7 +16,7 @@ namespace Vanrise.ExcelConversion.Entities
 
         public int? Precision { get; set; }
 
-        public bool IsCrop { get; set; }
+        public RatePrecicionType RatePrecicionType { get; set; }
 
         public ExcelConversionExtendedSettings ExtendedSettings { get; set; }
     }
@@ -24,5 +24,10 @@ namespace Vanrise.ExcelConversion.Entities
     public abstract class ExcelConversionExtendedSettings
     {
 
+    }
+    public enum RatePrecicionType
+    {
+        RoundRate = 0,
+        CropRate = 1,
     }
 }
