@@ -181,7 +181,7 @@ namespace TOne.WhS.CodePreparation.Business
                         OwnerId = rate.OwnerId,
                         BED = addedZone.BED > saleEntityZoneRoutingProduct.BED ? addedZone.BED : saleEntityZoneRoutingProduct.BED,
                         //EED = addedZone.EED < saleEntityZoneRoutingProduct.EED ? addedZone.EED : saleEntityZoneRoutingProduct.EED,
-                        EED=null,
+                        EED = null,
                         AddedZone = addedZone,
                     });
                 }
@@ -196,7 +196,7 @@ namespace TOne.WhS.CodePreparation.Business
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct = null;
 
-            int sellingProductId=0;
+            int sellingProductId = 0;
 
             if (ownerType == SalePriceListOwnerType.Customer)
                 sellingProductId = carrierAccountManager.GetSellingProductId(ownerId);
@@ -496,23 +496,31 @@ namespace TOne.WhS.CodePreparation.Business
         }
         private Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> StructureZonesByType(IEnumerable<ExistingZone> existingZones, SaleAreaSettingsData saleAreaSettingsData)
         {
-            List<ExistingZone> fixedExistingZones = new List<ExistingZone>();
-            List<ExistingZone> mobileExistingZones = new List<ExistingZone>();
-
+            Dictionary<long, ExistingZone> fixedExistingZonesById = new Dictionary<long, ExistingZone>();
+            Dictionary<long, ExistingZone> mobileExistingZonesById = new Dictionary<long, ExistingZone>();
+            ExistingZone dictionaryExistingZone;
             foreach (ExistingZone existingZone in existingZones)
             {
-                if (!(existingZone.BED <= DateTime.Today && Vanrise.Common.ExtensionMethods.VRGreaterThan(existingZone.EED, DateTime.Today)))
+                if (!existingZone.IsEffectiveOrFuture(DateTime.Today))
                     continue;
 
                 if (GetSaleZoneType(existingZone.Name, saleAreaSettingsData) == SaleZoneTypeEnum.Fixed)
-                    fixedExistingZones.Add(existingZone);
-                else
-                    mobileExistingZones.Add(existingZone);
-            }
+                {
+                    dictionaryExistingZone = fixedExistingZonesById.GetRecord(existingZone.ZoneId);
+                    if (dictionaryExistingZone == null || existingZone.BED > dictionaryExistingZone.BED)
+                        fixedExistingZonesById.Add(existingZone.ZoneId, existingZone);
+                }
 
+                else
+                {
+                    dictionaryExistingZone = mobileExistingZonesById.GetRecord(existingZone.ZoneId);
+                    if (dictionaryExistingZone == null || existingZone.BED > dictionaryExistingZone.BED)
+                        mobileExistingZonesById.Add(existingZone.ZoneId, existingZone);
+                }
+            }
             Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType = new Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>>();
-            zonesByType.Add(SaleZoneTypeEnum.Fixed, fixedExistingZones);
-            zonesByType.Add(SaleZoneTypeEnum.Mobile, mobileExistingZones);
+            zonesByType.Add(SaleZoneTypeEnum.Fixed, fixedExistingZonesById.Values.ToList());
+            zonesByType.Add(SaleZoneTypeEnum.Mobile, mobileExistingZonesById.Values.ToList());
 
             return zonesByType;
         }
