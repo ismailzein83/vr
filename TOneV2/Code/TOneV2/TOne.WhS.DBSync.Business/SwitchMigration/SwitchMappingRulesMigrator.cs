@@ -161,18 +161,18 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
         }
         private MappingRule GetRule(string carrierId, StaticValues inOutCarrier, StaticValues inPrefix, int currentSwitchId, DateTime date, int carrierType)
         {
-            int carrierAccountId;
-            if (CarrierAccounts.ContainsKey(carrierId)) carrierAccountId = CarrierAccounts[carrierId].CarrierAccountId;
-            else
+            CarrierAccount carrierAccount;
+            if (!CarrierAccounts.TryGetValue(carrierId, out carrierAccount))
             {
                 Logger.WarningMessage.AppendLine(string.Format("Carrier ID {0} does not have any matching in ToneV2", carrierId));
                 return null;
             }
+
             MappingRule rule = new MappingRule
             {
                 Settings = new MappingRuleSettings
                 {
-                    Value = carrierAccountId
+                    Value = carrierAccount.CarrierAccountId
                 },
                 DefinitionId = new Guid("E1ADF1F2-6BC3-4541-8DE4-E5F578A79372"),
                 Criteria = new GenericRuleCriteria
@@ -182,12 +182,11 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 RuleId = 0,
                 Description = "Switch Migration",
                 BeginEffectiveTime = date
-
             };
+
             if (inPrefix != null)
-            {
                 rule.Criteria.FieldsValues["CDPNPrefix"] = inPrefix;
-            }
+
             rule.Criteria.FieldsValues["Type"] = new StaticValues
             {
                 Values = ((new List<long> { carrierType }).Cast<Object>()).ToList()

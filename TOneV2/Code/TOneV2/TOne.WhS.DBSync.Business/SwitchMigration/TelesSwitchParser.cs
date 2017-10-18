@@ -46,60 +46,77 @@ namespace TOne.WhS.DBSync.Business
                         {
                             string carrierAccountId = anode.Attributes["CarrierAccountID"] != null
                                 ? anode.Attributes["CarrierAccountID"].InnerText
-                                : "";
-
-                            string inPrefix = anode.Attributes["InPrefix"] != null
-                                ? (!anode.Attributes["InPrefix"].InnerText.Equals("---")
-                                    ? anode.Attributes["InPrefix"].InnerText
-                                    : "")
-                                : "";
-
-                            string inTrunk = anode.Attributes["In"] != null ? anode.Attributes["In"].InnerText : "";
-                            string outTrunk = anode.Attributes["Out"] != null ? anode.Attributes["Out"].InnerText : "";
-
-                            string outCdpnOutPrefix = anode.Attributes["OutCDPNOutPrefix"] != null
-                                ? (!anode.Attributes["OutCDPNOutPrefix"].InnerText.Equals("---")
-                                    ? anode.Attributes["OutCDPNOutPrefix"].InnerText
-                                    : "")
-                                : "";
-
+                                : null;
+                            
                             #region IN
-                            string[] inTrunkStrings = inTrunk.Split(';');
-                            InParsedMapping inParsedMapping = new InParsedMapping
+
+                            string inTrunk = anode.Attributes["In"] != null ? anode.Attributes["In"].InnerText : null;
+                            if (inTrunk != null)
                             {
-                                CustomerId = carrierAccountId,
-                                InPrefix = new StaticValues
+                                string[] inTrunkStrings = inTrunk.Split(';');
+                                InParsedMapping inParsedMapping = new InParsedMapping
                                 {
-                                    Values = inPrefix.Split(',').Cast<Object>().ToList()
-                                },
-                                InTrunk = new StaticValues()
-                            };
-                            List<string> trunkList = new List<string>();
-                            foreach (var inTrunkElt in inTrunkStrings)
-                            {
-                                trunkList.AddRange((from Match match in CdrInOutParser.Matches(inTrunkElt) select match.Groups["Cdr"].Value).ToList());
+                                    CustomerId = carrierAccountId,
+                                    InTrunk = new StaticValues()
+                                };
+
+                                string inPrefix = anode.Attributes["InPrefix"] != null
+                                    ? (!anode.Attributes["InPrefix"].InnerText.Equals("---")
+                                        ? anode.Attributes["InPrefix"].InnerText
+                                        : null)
+                                    : null;
+
+                                if (inPrefix != null)
+                                    inParsedMapping.InPrefix = new StaticValues
+                                    {
+                                        Values = inPrefix.Split(',').Cast<Object>().ToList()
+                                    };
+
+                                List<string> trunkList = new List<string>();
+                                foreach (var inTrunkElt in inTrunkStrings)
+                                {
+                                    trunkList.AddRange((from Match match in CdrInOutParser.Matches(inTrunkElt.Trim())
+                                                        select match.Groups["Cdr"].Value).ToList());
+                                }
+                                inParsedMapping.InTrunk.Values = trunkList.Cast<Object>().ToList();
+                                InParsedMappings.Add(inParsedMapping);
                             }
-                            inParsedMapping.InTrunk.Values = trunkList.Cast<Object>().ToList();
-                            InParsedMappings.Add(inParsedMapping);
+
                             #endregion
                             #region OUT
-                            string[] outTrunkStrings = outTrunk.Split(';');
-                            OutParsedMapping outParsedMapping = new OutParsedMapping
+
+                            string outTrunk = anode.Attributes["Out"] != null ? anode.Attributes["Out"].InnerText : null;
+                            if (outTrunk != null)
                             {
-                                SupplierId = carrierAccountId,
-                                OutPrefix = new StaticValues
+                                string[] outTrunkStrings = outTrunk.Split(';');
+                                OutParsedMapping outParsedMapping = new OutParsedMapping
                                 {
-                                    Values = outCdpnOutPrefix.Split(',').Cast<Object>().ToList()
-                                },
-                                OutTrunk = new StaticValues()
-                            };
-                            List<string> outrunkList = new List<string>();
-                            foreach (var outTrunkElt in outTrunkStrings)
-                            {
-                                outrunkList.AddRange((from Match match in CdrInOutParser.Matches(outTrunkElt) select match.Groups["Cdr"].Value).ToList());
+                                    SupplierId = carrierAccountId,
+                                    OutTrunk = new StaticValues()
+                                };
+
+                                string outCdpnOutPrefix = anode.Attributes["OutCDPNOutPrefix"] != null
+                                    ? (!anode.Attributes["OutCDPNOutPrefix"].InnerText.Equals("---")
+                                        ? anode.Attributes["OutCDPNOutPrefix"].InnerText
+                                        : null)
+                                    : null;
+
+                                if (outCdpnOutPrefix != null)
+                                    outParsedMapping.OutPrefix = new StaticValues
+                                    {
+                                        Values = outCdpnOutPrefix.Split(',').Cast<Object>().ToList()
+                                    };
+
+                                List<string> outrunkList = new List<string>();
+                                foreach (var outTrunkElt in outTrunkStrings)
+                                {
+                                    outrunkList.AddRange((from Match match in CdrInOutParser.Matches(outTrunkElt.Trim())
+                                                          select match.Groups["Cdr"].Value).ToList());
+                                }
+                                outParsedMapping.OutTrunk.Values = outrunkList.Cast<Object>().ToList();
+                                OutParsedMappings.Add(outParsedMapping);
                             }
-                            outParsedMapping.OutTrunk.Values = outrunkList.Cast<Object>().ToList();
-                            OutParsedMappings.Add(outParsedMapping);
+
                             #endregion
                         }
                     }
