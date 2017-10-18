@@ -12,7 +12,7 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public IEnumerable<ImportedDataByZone> ImportedDataByZoneList { get; set; }
         public object Key
         {
-            get { return "Pricelist"; }
+            get { return default(object); }
         }
         public string TargetType
         {
