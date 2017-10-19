@@ -30,7 +30,9 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
         var decreasedRateDayOffset;
         var maximumRateValue;
 
-        var pageSize = 10;
+
+        var h = innerHeight * 0.3;
+        var pageSize = (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10) < 30 ? 30 : (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10);;
 
         var emptyRates;
         var zeroRates;
@@ -44,6 +46,7 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
 
         function initializeController() {
             $scope.scopeModel = {};
+            $scope.scopeModel.maxheight = (window.innerHeight - 437) + 'px';
 
             $scope.scopeModel.emptyRates = [];
             $scope.scopeModel.zeroRates = [];
