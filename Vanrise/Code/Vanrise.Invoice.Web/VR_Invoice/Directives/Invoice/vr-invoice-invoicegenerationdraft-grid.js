@@ -35,7 +35,6 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
             function initializeController() {
 
                 $scope.invoicePartners = [];
-
                 $scope.isValid = function () {
                     if ($scope.invoicePartners == undefined || $scope.invoicePartners.length == 0)
                         return 'At least one item should exist';
@@ -130,7 +129,7 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                                     if (currentChangedItem.key == currentItem.InvoiceGenerationDraftId) {
                                                         alreadyAdded = true;
                                                         currentChangedItem.value = currentItem;
-                                                        currentChangedItem.value.CustomPayload = currentItem.generationCustomSectionDirectiveAPI.getData();
+                                                        currentChangedItem.value.CustomPayload = currentItem.generationCustomSectionDirectiveAPI != undefined ? currentItem.generationCustomSectionDirectiveAPI.getData() : undefined;
                                                         break;
                                                     }
                                                 }
@@ -141,17 +140,22 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                                     key: currentItem.InvoiceGenerationDraftId,
                                                     value: currentItem
                                                 };
-                                                obj.value.CustomPayload = currentItem.generationCustomSectionDirectiveAPI.getData();
+                                                obj.value.CustomPayload = currentItem.generationCustomSectionDirectiveAPI != undefined ? currentItem.generationCustomSectionDirectiveAPI.getData() : undefined;
                                                 changedItems.push(obj);
                                             }
                                         };
 
                                         currentItem.generationCustomSectionDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                                        currentItem.onGenerationCustomSectionDirectiveReady = function (api) {
-                                            currentItem.generationCustomSectionDirectiveAPI = api;
-                                            var payload = { partnerId: currentItem.PartnerId, customPayload: currentItem.CustomPayload, context: { onvaluechanged: currentItem.onItemChanged } };
-                                            VRUIUtilsService.callDirectiveLoad(currentItem.generationCustomSectionDirectiveAPI, payload, currentItem.generationCustomSectionDirectiveLoadDeferred);
-                                        };
+                                        if ($scope.generationCustomSectionDirective == undefined) {
+                                            currentItem.generationCustomSectionDirectiveLoadDeferred.resolve();
+                                        }
+                                        else {
+                                            currentItem.onGenerationCustomSectionDirectiveReady = function (api) {
+                                                currentItem.generationCustomSectionDirectiveAPI = api;
+                                                var payload = { partnerId: currentItem.PartnerId, customPayload: currentItem.CustomPayload, context: { onvaluechanged: currentItem.onItemChanged } };
+                                                VRUIUtilsService.callDirectiveLoad(currentItem.generationCustomSectionDirectiveAPI, payload, currentItem.generationCustomSectionDirectiveLoadDeferred);
+                                            };
+                                        }
 
                                         currentItem.isInvalid = function () {
                                             if (currentItem.From == undefined || currentItem.To == undefined)

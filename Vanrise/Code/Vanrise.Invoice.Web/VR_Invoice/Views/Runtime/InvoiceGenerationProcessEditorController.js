@@ -101,7 +101,7 @@
                     if (response.Result == 0) {
                         var gridPayload = {
                             query: query,
-                            customPayloadDirective: invoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective,
+                            customPayloadDirective: invoiceType.Settings.ExtendedSettings.GenerationCustomSection != undefined ? invoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective : undefined,
                             invoiceTypeId: invoiceTypeId,
                             issueDate: issueDate
                         };
