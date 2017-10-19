@@ -10,11 +10,19 @@ using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
-	public class CodeMatchesDataManager : RoutingDataManager, ICodeMatchesDataManager
-	{
-		private readonly string[] codeMatchColumns = { "CodePrefix", "Code", "Content" };
-		private readonly string[] codeSaleZoneMatchColumns = { "Code", "SellingNumberPlanID", "SaleZoneID","CodeMatch" };
+    public class CodeMatchesDataManager : RoutingDataManager, ICodeMatchesDataManager
+    {
+        private readonly string[] codeMatchColumns = { "CodePrefix", "Code", "Content" };
+        private readonly string[] codeSaleZoneMatchColumns = { "Code", "SellingNumberPlanID", "SaleZoneID", "CodeMatch" };
         private readonly string[] codeSupplierZoneMatchColumns = { "Code", "SupplierID", "SupplierZoneID", "CodeMatch" };
+
+        const char SupplierCodeMatchesWithRateSeparator = '|';
+        const char SupplierCodeMatchWithRatePropertiesSeparator = '~';
+        const char SupplierCodeMatchPropertiesSeparator = '$';
+        const char SupplierServicesSeparator = '#';
+        const string SupplierServicesSeparatorAsString = "#";
+        const char ExactSupplierServicesSeparator = '#';
+        const string ExactSupplierServicesSeparatorAsString = "#";
 
         #region Public Methods
 
@@ -36,9 +44,10 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public void WriteRecordToStream(Entities.CodeMatches record, object dbApplyStream)
         {
-            var codeMatchBulkInsert = dbApplyStream as CodeMatchBulkInsert;
+            string supplierCodeMatchesWithRate = this.SerializeSupplierCodeMatches(record.SupplierCodeMatches);
 
-            codeMatchBulkInsert.CodeMatchStream.WriteRecord("{0}^{1}^{2}", record.CodePrefix, record.Code, Vanrise.Common.Serializer.Serialize(record.SupplierCodeMatches, true));
+            var codeMatchBulkInsert = dbApplyStream as CodeMatchBulkInsert;
+            codeMatchBulkInsert.CodeMatchStream.WriteRecord("{0}^{1}^{2}", record.CodePrefix, record.Code, supplierCodeMatchesWithRate);
 
             if (ShouldApplyCodeZoneMatch)
             {
@@ -131,6 +140,100 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #endregion
 
+        #region Private Methods
+
+        private RPCodeMatches RPCodeMatchesMapper(IDataReader reader)
+        {
+            string supplierCodeMatchesWithRate = reader["Content"] as string;
+
+            return new RPCodeMatches()
+            {
+                Code = reader["Code"] as string,
+                SupplierCodeMatches = this.DeserializeSupplierCodeMatches(supplierCodeMatchesWithRate),
+                SaleZoneId = (long)reader["SaleZoneId"]
+            };
+        }
+
+        /// <summary>
+        /// CM~RateValue~ServiceId1#...#ServiceIdn~ExactServiceId1#...#ExactServiceIdn~...~SupplierRateEED|CM~RateValue~ServiceId1#...#ServiceIdn~ExactServiceId1#...#ExactServiceIdn~...~SupplierRateEED
+        /// CM --> SupplierId$SupplierZoneId$SupplierCode$SupplierCodeSourceId
+        /// </summary>
+        /// <param name="supplierCodeMatchesWithRate"></param>
+        /// <returns></returns>
+        private string SerializeSupplierCodeMatches(List<SupplierCodeMatchWithRate> supplierCodeMatchesWithRate)
+        {
+            StringBuilder str = new StringBuilder();
+
+            foreach (var item in supplierCodeMatchesWithRate)
+            {
+                if (str.Length > 0)
+                    str.Append(SupplierCodeMatchesWithRateSeparator);
+
+                SupplierCodeMatch supplierCodeMatch = item.CodeMatch;
+                string serializedSupplierCodeMatch = string.Format("{1}{0}{2}{0}{3}{0}{4}", SupplierCodeMatchPropertiesSeparator, supplierCodeMatch.SupplierId,
+                                                        supplierCodeMatch.SupplierZoneId, supplierCodeMatch.SupplierCode, supplierCodeMatch.SupplierCodeSourceId);
+
+                string serializedSupplierServiceIds = string.Empty;
+                if (item.SupplierServiceIds != null)
+                    serializedSupplierServiceIds = string.Join(SupplierServicesSeparatorAsString, item.SupplierServiceIds);
+
+                string serializedExactSupplierServiceIds = string.Empty;
+                if (item.ExactSupplierServiceIds != null)
+                    serializedExactSupplierServiceIds = string.Join(ExactSupplierServicesSeparatorAsString, item.ExactSupplierServiceIds);
+
+                str.AppendFormat("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}", SupplierCodeMatchWithRatePropertiesSeparator, serializedSupplierCodeMatch, item.RateValue,
+                                    serializedSupplierServiceIds, serializedExactSupplierServiceIds, item.SupplierServiceWeight, item.SupplierRateId, item.SupplierRateEED);
+            }
+            return str.ToString();
+        }
+
+        public List<SupplierCodeMatchWithRate> DeserializeSupplierCodeMatches(string serializedSupplierCodeMatches)
+        {
+            if (string.IsNullOrEmpty(serializedSupplierCodeMatches))
+                return null;
+
+            List<SupplierCodeMatchWithRate> supplierCodeMatches = new List<SupplierCodeMatchWithRate>();
+
+            string[] lines = serializedSupplierCodeMatches.Split(SupplierCodeMatchesWithRateSeparator);
+
+            foreach (var line in lines)
+            {
+                string[] parts = line.Split(SupplierCodeMatchWithRatePropertiesSeparator);
+
+                var supplierCodeMatchWithRate = new SupplierCodeMatchWithRate();
+                supplierCodeMatchWithRate.RateValue = decimal.Parse(parts[1]);
+                supplierCodeMatchWithRate.SupplierServiceWeight = int.Parse(parts[4]);
+                supplierCodeMatchWithRate.SupplierRateId = long.Parse(parts[5]);
+                supplierCodeMatchWithRate.SupplierRateEED = !string.IsNullOrEmpty(parts[6]) ? DateTime.Parse(parts[6]) : default(DateTime?);
+
+                string supplierCodeMatchAsString = parts[0];
+                if (!string.IsNullOrEmpty(supplierCodeMatchAsString))
+                {
+                    string[] supplierCodeMatchZones = supplierCodeMatchAsString.Split(SupplierCodeMatchPropertiesSeparator);
+
+                    SupplierCodeMatch supplierCodeMatch = new SupplierCodeMatch();
+                    supplierCodeMatch.SupplierId = int.Parse(supplierCodeMatchZones[0]);
+                    supplierCodeMatch.SupplierZoneId = long.Parse(supplierCodeMatchZones[1]);
+                    supplierCodeMatch.SupplierCode = supplierCodeMatchZones[2] as string;
+                    supplierCodeMatch.SupplierCodeSourceId = supplierCodeMatchZones[3] as string;
+
+                    supplierCodeMatchWithRate.CodeMatch = supplierCodeMatch;
+                }
+
+                if (!string.IsNullOrEmpty(parts[2]))
+                    supplierCodeMatchWithRate.SupplierServiceIds = new HashSet<int>(parts[2].Split(SupplierServicesSeparator).Select(itm => int.Parse(itm)));
+
+                if (!string.IsNullOrEmpty(parts[3]))
+                    supplierCodeMatchWithRate.ExactSupplierServiceIds = new HashSet<int>(parts[3].Split(ExactSupplierServicesSeparator).Select(itm => int.Parse(itm)));
+
+                supplierCodeMatches.Add(supplierCodeMatchWithRate);
+            }
+
+            return supplierCodeMatches;
+        }
+
+        #endregion
+
         #region Private Classes
 
         private class CodeMatchBulkInsert
@@ -149,20 +252,6 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #endregion
 
-        #region Mappers
-
-        private RPCodeMatches RPCodeMatchesMapper(IDataReader reader)
-		{
-			return new RPCodeMatches()
-			{
-				Code = reader["Code"] as string,
-				SupplierCodeMatches = reader["Content"] != null ? Vanrise.Common.Serializer.Deserialize<List<SupplierCodeMatchWithRate>>(reader["Content"].ToString()) : null,
-				SaleZoneId = (long)reader["SaleZoneId"]
-			};
-		}
-
-        #endregion
-
         #region Queries
 
         const string query_GetCodeMatchesByZone = @"SELECT  cm.Code, 
@@ -173,5 +262,5 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     where   sz.SaleZoneId between @FromZoneId and @ToZoneId";
 
         #endregion
-	}
+    }
 }

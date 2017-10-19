@@ -1,47 +1,48 @@
-﻿using System;
+﻿using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Activities;
-using Vanrise.Queueing;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
-using TOne.WhS.Routing.Data;
-using TOne.WhS.Routing.Business;
 using Vanrise.Entities;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-
     public class GetRPCodeMatchesInput
     {
         public int RoutingDatabaseId { get; set; }
         public long FromZoneId { get; set; }
         public long ToZoneId { get; set; }
         public BaseQueue<RPCodeMatchesByZone> OutputQueue { get; set; }
-
     }
 
     public sealed class GetRPCodeMatches : BaseAsyncActivity<GetRPCodeMatchesInput>
     {
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
+
         [RequiredArgument]
         public InArgument<long> FromZoneId { get; set; }
+
         [RequiredArgument]
         public InArgument<long> ToZoneId { get; set; }
+
         [RequiredArgument]
         public InOutArgument<BaseQueue<RPCodeMatchesByZone>> OutputQueue { get; set; }
 
         protected override void DoWork(GetRPCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {
-            ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
+            ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
             var codeMatches = dataManager.GetCodeMatches(inputArgument.FromZoneId, inputArgument.ToZoneId);
+            
             long currentZoneId = 0;
             Dictionary<long, SupplierCodeMatchWithRate> currentSupplierCodeMatchesWithRate = null;
+            
             foreach (var codeMatch in codeMatches.OrderBy(c => c.SaleZoneId))
             {
                 if (currentZoneId != codeMatch.SaleZoneId)
@@ -60,12 +61,17 @@ namespace TOne.WhS.Routing.BP.Activities
                     currentSupplierCodeMatchesWithRate = new Dictionary<long, SupplierCodeMatchWithRate>();
                     currentZoneId = codeMatch.SaleZoneId;
                 }
-                foreach (var item in codeMatch.SupplierCodeMatches)
+
+                if (codeMatch.SupplierCodeMatches != null)
                 {
-                    if (!currentSupplierCodeMatchesWithRate.ContainsKey(item.CodeMatch.SupplierZoneId))
-                        currentSupplierCodeMatchesWithRate.Add(item.CodeMatch.SupplierZoneId, item);
+                    foreach (var item in codeMatch.SupplierCodeMatches)
+                    {
+                        if (!currentSupplierCodeMatchesWithRate.ContainsKey(item.CodeMatch.SupplierZoneId))
+                            currentSupplierCodeMatchesWithRate.Add(item.CodeMatch.SupplierZoneId, item);
+                    }
                 }
             }
+
             if (currentSupplierCodeMatchesWithRate != null)
             {
                 RPCodeMatchesByZone codeMatchByZone = new RPCodeMatchesByZone()
@@ -83,6 +89,7 @@ namespace TOne.WhS.Routing.BP.Activities
         private SupplierCodeMatchesWithRateBySupplier GetSupplierCodeMatchesBySupplier(IEnumerable<SupplierCodeMatchWithRate> supplierCodeMatchesWithRate)
         {
             SupplierCodeMatchesWithRateBySupplier codeMatchBySupplierId = new SupplierCodeMatchesWithRateBySupplier();
+
             foreach (var supplierCodeMatch in supplierCodeMatchesWithRate)
             {
                 List<SupplierCodeMatchWithRate> currentCodeMatches;

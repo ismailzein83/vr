@@ -159,6 +159,7 @@ namespace TOne.WhS.Routing.Data.SQL
         }
 
         #region Constants
+
         const string query_SaleZoneTable = @"CREATE TABLE [dbo].[SaleZone](
 	                                         [ID] [int] NOT NULL,
 	                                         [Name] [varchar](max) NOT NULL,
@@ -208,10 +209,10 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                        [SaleZoneId] ASC
                                                         );";
 
-        const string query_CodeMatchTable = @"    CREATE TABLE [dbo].[CodeMatch](
+        const string query_CodeMatchTable = @"CREATE TABLE [dbo].[CodeMatch](
 	                                                    [CodePrefix] [varchar](20) NOT NULL,
 	                                                    [Code] [varchar](20) NOT NULL,
-	                                                    [Content] [nvarchar](max) NOT NULL
+	                                                    [Content] [nvarchar](max) NULL
                                                     ) ON [PRIMARY]";
 
         const string query_CodeSaleZoneTable = @"CREATE TABLE [dbo].[CodeSaleZone](
@@ -255,7 +256,11 @@ namespace TOne.WhS.Routing.Data.SQL
 																CREATE CLUSTERED INDEX [IX_CodeSupplierZoneMatch_Code] ON [dbo].[CodeSupplierZoneMatch]
 																(
 																	[Code] ASC
-																);";
+																);
+                                                                CREATE NONCLUSTERED INDEX [IX_CodeSupplierZoneMatch_SupplierID] ON dbo.CodeSupplierZoneMatch
+                                                                (
+                                                                    [SupplierID] ASC
+                                                                );";
 
         private const string query_ParseStringListFunction = @"CREATE Function [dbo].[ParseStringList] (@StringArray nvarchar(max))
 																Returns @tbl_string Table  (ParsedString nvarchar(max))  As  
