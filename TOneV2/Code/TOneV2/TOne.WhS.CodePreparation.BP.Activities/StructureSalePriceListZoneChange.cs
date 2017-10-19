@@ -120,9 +120,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             NewZoneToAdd newZoneToAdd = new NewZoneToAdd();
             foreach (var structuredCountryAction in structuredCountryActions)
             {
-                foreach(var zoneToAdd in structuredCountryAction.NewZonesToAdd)
+                foreach (var zoneToAdd in structuredCountryAction.NewZonesToAdd)
                 {
-                    if (!zoneToAddByZoneName.TryGetValue(zoneToAdd.ZoneName,out newZoneToAdd))
+                    if (!zoneToAddByZoneName.TryGetValue(zoneToAdd.ZoneName, out newZoneToAdd))
                     {
                         zoneToAddByZoneName.Add(zoneToAdd.ZoneName, zoneToAdd);
                     }
@@ -140,7 +140,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         {
                             if (closedExistingZones.TryGetValue(zoneChange.ZoneName, out existingZone))
                                 closedZonesCounter++;
-                            else if (zoneToAddByZoneName.TryGetValue(zoneChange.ZoneName,out newZoneToAdd))
+                            else if (zoneToAddByZoneName.TryGetValue(zoneChange.ZoneName, out newZoneToAdd))
                                 newZonesCounter++;
 
                             foreach (SalePricelistCodeChange codeChange in zoneChange.CodeChanges)
@@ -351,9 +351,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     rateChanges.AddRange(zonesToCloseRateChanges);
                     routingProductChanges.AddRange(GetRPChangesFromZonesToClose(customerId, sellingProductId, zonesToCloseRateChanges, routingProductLocator));
 
-                    codeChanges.AddRange(this.GetCodeChangesFromCodeToAdd(countryAction.CodesToAdd, countryAction.CountryId, countrySellDate));
+                    codeChanges.AddRange(this.GetCodeChangesFromCodeToAdd(countryAction.CodesToAdd, countryAction.CountryId));
                     codeChanges.AddRange(this.GetCodeChangesFromCodeToMove(countryAction.CodesToMove, countryAction.CountryId));
-                    codeChanges.AddRange(this.GetCodeChangesFromCodeToClose(countryAction.CodesToClose, countryAction.CountryId, customerId, processEffectiveDate));
+                    codeChanges.AddRange(this.GetCodeChangesFromCodeToClose(countryAction.CodesToClose, countryAction.CountryId, customerId));
 
                     countryGroups.Add(new CountryGroup
                     {
@@ -416,8 +416,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     CountryId = rateChange.CountryId,
                     ZoneName = rateChange.ZoneName,
                     ZoneId = rateChange.ZoneId,
-                    BED = zoneRoutingProduct.BED,
-                    EED = zoneRoutingProduct.EED,
+                    BED = rateChange.BED,
+                    EED = rateChange.EED,
                     RoutingProductId = zoneRoutingProduct.RoutingProductId,
                 });
             }
@@ -435,7 +435,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     CountryId = zoneToCloseRateChange.CountryId,
                     ZoneName = zoneToCloseRateChange.ZoneName,
                     ZoneId = zoneToCloseRateChange.ZoneId,
-                    BED = routingPRoduct.BED,//TODO the BED should be the assigned date of routing product on this zone
+                    BED = zoneToCloseRateChange.BED,//TODO the BED should be the assigned date of routing product on this zone
                     EED = zoneToCloseRateChange.EED,
                     RoutingProductId = routingPRoduct.RoutingProductId
                 });
@@ -491,7 +491,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 }
             }
         }
-        private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToAdd(IEnumerable<CodeToAdd> codesToAdd, int countryId, DateTime countrySellDate)
+        private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToAdd(IEnumerable<CodeToAdd> codesToAdd, int countryId)
         {
             List<SalePricelistCodeChange> codeChanges = new List<SalePricelistCodeChange>();
 
@@ -514,7 +514,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     ZoneName = codeToAdd.ZoneName,
                     Code = codeToAdd.Code,
                     ChangeType = CodeChange.New,
-                    BED = (codeToAdd.BED > countrySellDate) ? codeToAdd.BED : countrySellDate,
+                    BED = codeToAdd.BED,
                     ZoneId = zoneId
                 });
             }
@@ -578,14 +578,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return codeChanges;
         }
 
-        private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToClose(IEnumerable<CodeToClose> codesToClose, int countryId, int customerId, DateTime effectiveDate)
+        private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToClose(IEnumerable<CodeToClose> codesToClose, int countryId, int customerId)
         {
             List<SalePricelistCodeChange> codeChanges = new List<SalePricelistCodeChange>();
-
-            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
-            CustomerCountry2 soldCountry = customerCountryManager.GetEffectiveOrFutureCustomerCountry(customerId, countryId, effectiveDate);
-
-            soldCountry.ThrowIfNull("soldCountry");
 
             foreach (var codeToClose in codesToClose)
             {
@@ -594,17 +589,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     throw new Exception(string.Format("Trying to close code {0} on zone {1}, this code does not have existing data", codeToClose.Code, codeToClose.ZoneName));
                 long? zoneId = GetZoneIdofLastExistingCode(codeToClose.ChangedExistingCodes);
 
-                DateTime codeBED = firstExistingCode.BED > soldCountry.BED ? firstExistingCode.BED : soldCountry.BED;
-                DateTime codeEED = codeToClose.CloseEffectiveDate > codeBED ? codeToClose.CloseEffectiveDate : codeBED;
-
                 codeChanges.Add(new SalePricelistCodeChange
                 {
                     CountryId = countryId,
                     ZoneName = codeToClose.ZoneName,
                     Code = codeToClose.Code,
                     ChangeType = CodeChange.Closed,
-                    BED = codeBED,
-                    EED = codeEED,
+                    BED = firstExistingCode.BED,
+                    EED = codeToClose.CloseEffectiveDate,
                     ZoneId = zoneId
                 });
             }
