@@ -106,31 +106,32 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public Dictionary<Guid, IEnumerable<RPRouteOption>> GetRouteOptions(int routingProductId, long saleZoneId)
         {
-            object routeOptionsSerialized = ExecuteScalarText(query_GetRouteOptions, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@RoutingProductId", routingProductId));
-                cmd.Parameters.Add(new SqlParameter("@SaleZoneId", saleZoneId));
-            }
-            );
-
-            if (routeOptionsSerialized == null)
-                return null;
-
-            return this.DeserializeOptionsByPolicy(routeOptionsSerialized.ToString());
-        }
-
-        public Dictionary<int, RPRouteOptionSupplier> GetRouteOptionSuppliers(int routingProductId, long saleZoneId)
-        {
-            object routeOptionSuppliersSerialized = ExecuteScalarText(query_GetRouteOptionSuppliers, (cmd) =>
+            object serializedRouteOptions = ExecuteScalarText(query_GetRouteOptions, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@RoutingProductId", routingProductId));
                 cmd.Parameters.Add(new SqlParameter("@SaleZoneId", saleZoneId));
             });
 
-            if (routeOptionSuppliersSerialized == null)
+            string serializedRouteOptionsAsString = serializedRouteOptions as String;
+            if (string.IsNullOrEmpty(serializedRouteOptionsAsString))
                 return null;
 
-            return this.DeserializeOptionsDetailsBySupplier(routeOptionSuppliersSerialized.ToString());
+            return this.DeserializeOptionsByPolicy(serializedRouteOptionsAsString);
+        }
+
+        public Dictionary<int, RPRouteOptionSupplier> GetRouteOptionSuppliers(int routingProductId, long saleZoneId)
+        {
+            object serializedRouteOptionSuppliers = ExecuteScalarText(query_GetRouteOptionSuppliers, (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@RoutingProductId", routingProductId));
+                cmd.Parameters.Add(new SqlParameter("@SaleZoneId", saleZoneId));
+            });
+
+            string serializedRouteOptionSuppliersAsString = serializedRouteOptionSuppliers as String;
+            if (string.IsNullOrEmpty(serializedRouteOptionSuppliersAsString))
+                return null;
+
+            return this.DeserializeOptionsDetailsBySupplier(serializedRouteOptionSuppliersAsString);
         }
 
         public void FinalizeProductRoute(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP)
@@ -151,22 +152,24 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #endregion
 
-        #region Private
+        #region Private Methods
 
         private RPRoute RPRouteMapper(IDataReader reader)
         {
-            string saleZoneServices = (reader["SaleZoneServices"] as string);
+            string saleZoneServices = reader["SaleZoneServices"] as string;
+            string optionsDetailsBySupplier = reader["OptionsDetailsBySupplier"] as string;
+            string optionsByPolicy = reader["OptionsByPolicy"] as string;
 
             return new RPRoute()
             {
                 RoutingProductId = (int)reader["RoutingProductId"],
                 SaleZoneId = (long)reader["SaleZoneId"],
+                SaleZoneName = reader["Name"] as string,
                 SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServices) ? new HashSet<int>(saleZoneServices.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
-                SaleZoneName = reader["Name"] as string,
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
-                OptionsDetailsBySupplier = reader["OptionsDetailsBySupplier"] != null ? this.DeserializeOptionsDetailsBySupplier(reader["OptionsDetailsBySupplier"].ToString()) : null,
-                RPOptionsByPolicy = reader["OptionsByPolicy"] != null ? this.DeserializeOptionsByPolicy(reader["OptionsByPolicy"].ToString()) : null
+                OptionsDetailsBySupplier = this.DeserializeOptionsDetailsBySupplier(optionsDetailsBySupplier),
+                RPOptionsByPolicy = this.DeserializeOptionsByPolicy(optionsByPolicy)
             };
         }
 
@@ -188,7 +191,7 @@ namespace TOne.WhS.Routing.Data.SQL
         }
 
         /// <summary>
-        /// SupplierID1~SZ1#SZ2#...#SZn~SupplierStatus~...~SupplierServiceWeight|SupplierID2~SZ1#SZ2#...#SZn~SupplierStatus~...~SupplierServiceWeight
+        /// SupplierID~SZ1#SZ2#...#SZn~SupplierStatus~...~SupplierServiceWeight|SupplierID~SZ1#SZ2#...#SZn~SupplierStatus~...~SupplierServiceWeight
         /// SZ1 --> SupplierCode$SupplierZoneId$SupplierRate$SupplierServiceID1@SupplierServiceID2@...@SupplierServiceID1SupplierServiceID1n$IsBlocked$SupplierRateId
         /// </summary>
         /// <param name="optionsDetailsBySupplier"></param>
@@ -232,14 +235,12 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 string[] parts = line.Split(RouteOptionSupplierPropertiesSeparator);
 
-                var routeOptionSupplier = new RPRouteOptionSupplier
-                {
-                    SupplierId = int.Parse(parts[0]),
-                    NumberOfBlockedZones = int.Parse(parts[2]),
-                    NumberOfUnblockedZones = int.Parse(parts[3]),
-                    Percentage = !string.IsNullOrEmpty(parts[4]) ? int.Parse(parts[4]) : default(int?),
-                    SupplierServiceWeight = int.Parse(parts[5])
-                };
+                var routeOptionSupplier = new RPRouteOptionSupplier();
+                routeOptionSupplier.SupplierId = int.Parse(parts[0]);
+                routeOptionSupplier.NumberOfBlockedZones = int.Parse(parts[2]);
+                routeOptionSupplier.NumberOfUnblockedZones = int.Parse(parts[3]);
+                routeOptionSupplier.Percentage = !string.IsNullOrEmpty(parts[4]) ? int.Parse(parts[4]) : default(int?);
+                routeOptionSupplier.SupplierServiceWeight = int.Parse(parts[5]);
 
                 string supplierZonesAsString = parts[1];
                 if (!string.IsNullOrEmpty(supplierZonesAsString))
@@ -273,7 +274,7 @@ namespace TOne.WhS.Routing.Data.SQL
         }
 
         /// <summary>
-        /// PolicyID1~S1#S2#...#Sn|PolicyID2~S1#S2#...#Sn
+        /// PolicyID~S1#S2#...#Sn|PolicyID~S1#S2#...#Sn
         /// S1 --> SupplierId$SupplierRate$...$SupplierZoneMatchHasClosedRate
         /// </summary>
         /// <param name="optionsByPolicy"></param>
@@ -306,10 +307,10 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public Dictionary<Guid, IEnumerable<RPRouteOption>> DeserializeOptionsByPolicy(string serializedOptionsDetailsBySupplier)
         {
-            Dictionary<Guid, IEnumerable<RPRouteOption>> optionsByPolicy = new Dictionary<Guid, IEnumerable<RPRouteOption>>();
-
             if (string.IsNullOrEmpty(serializedOptionsDetailsBySupplier))
                 return null;
+
+            Dictionary<Guid, IEnumerable<RPRouteOption>> optionsByPolicy = new Dictionary<Guid, IEnumerable<RPRouteOption>>();
 
             string[] lines = serializedOptionsDetailsBySupplier.Split(PolicyRouteOptionsSeparator);
 
@@ -386,8 +387,8 @@ namespace TOne.WhS.Routing.Data.SQL
 
         private const string query_CreateIX_ProductRoute_RoutingProductId = @"CREATE CLUSTERED INDEX [IX_ProductRoute_RoutingProductId] ON dbo.ProductRoute
                                                                               (
-                                                                                    [RoutingProductId] ASC,
-                                                                                    [SaleZoneId] ASC
+                                                                                 [RoutingProductId] ASC,
+                                                                                 [SaleZoneId] ASC
                                                                               )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, 
                                                                                      ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON {0}) ON [PRIMARY]";
 
