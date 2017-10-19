@@ -184,9 +184,6 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 BeginEffectiveTime = date
             };
 
-            if (inPrefix != null)
-                rule.Criteria.FieldsValues["CDPNPrefix"] = inPrefix;
-
             rule.Criteria.FieldsValues["Type"] = new StaticValues
             {
                 Values = ((new List<long> { carrierType }).Cast<Object>()).ToList()
