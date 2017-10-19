@@ -15,9 +15,9 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
     public class UpdateWhSBalancesQueueActivator : BaseUpdateAccountBalancesQueueActivator
     {
         static WHSFinancialAccountManager s_financialAccountManager = new WHSFinancialAccountManager();
-        public UpdateAccountBalanceSettings UpdateAccountBalanceSettings { get; set; }
         public Guid CustomerUsageTransactionTypeId { get; set; }
         public Guid SupplierUsageTransactionTypeId { get; set; }
+        public UpdateAccountBalanceSettings UpdateAccountBalanceSettings { get; set; }
 
         protected override void ConvertToBalanceUpdate(IConvertToBalanceUpdateContext context)
         {
@@ -74,24 +74,9 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
             }
         }
 
-        protected override void FinalizeEmptyBatches(IFinalizeEmptyBatchesContext context)
+        protected override List<AccountBalanceType> GetAccountBalanceTypeCombinations(IGetAccountBalanceTypeCombinationsContext context)
         {
-            IEnumerable<AccountBalanceType> unFinalizedAccountBalanceTypes;
-            List<AccountBalanceType> finalizedAccountBalanceTypes = context.FinalizedAccountBalanceTypes;
-            List<AccountBalanceType> allAccountBalanceTypeCombinations = GetAccountBalanceTypeCombinations(UpdateAccountBalanceSettings);
-
-            if (finalizedAccountBalanceTypes == null || finalizedAccountBalanceTypes.Count == 0)
-                unFinalizedAccountBalanceTypes = allAccountBalanceTypeCombinations;
-            else
-                unFinalizedAccountBalanceTypes = allAccountBalanceTypeCombinations.FindAllRecords(itm => !finalizedAccountBalanceTypes.Contains(itm));
-
-            if (unFinalizedAccountBalanceTypes != null)
-            {
-                foreach (var unFinalizedAccountBalanceType in unFinalizedAccountBalanceTypes)
-                {
-                    context.GenerateEmptyBatch(unFinalizedAccountBalanceType);
-                }
-            }
+            return base.GetAccountBalanceTypeCombinations(UpdateAccountBalanceSettings);
         }
     }
 }
