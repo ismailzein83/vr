@@ -259,10 +259,62 @@ namespace Vanrise.Runtime.Business
 
         public bool DoesUserHaveConfigureSpecificTaskAccess(Guid taskId)
         {
-            var schedulerTask =  GetTask(taskId);
+            var schedulerTask = GetTask(taskId);
             return _schedulerTaskActionTypeManager.DoesUserHaveConfigureSpecificTaskAccess(schedulerTask);
         }
 
+        public bool DoesUserHaveConfigureAllTaskAccess()
+        {
+            var allScheduledTasks = GetAllTasksExceptDS();
+            foreach (var task in allScheduledTasks)
+                if (!DoesUserHaveConfigureSpecificTaskAccess(task.TaskId))
+                    return false;
+            return true;
+        }
+
+        public bool DisableAllTasks()
+        {
+            var tasks = GetAllTasksExceptDS();
+            foreach (var task in tasks)
+            {
+                if (!task.IsEnabled)
+                    continue;
+                else
+                {
+                    var output = DisableTask(task.TaskId);
+                    if (output.Result != UpdateOperationResult.Succeeded)
+                        return false;
+                }
+
+            }
+            return true;
+        }
+
+        public SchedulerTaskManagmentInfo GetTaskManagmentInfo()
+        {
+            var tasks = GetAllTasksExceptDS();
+            return new SchedulerTaskManagmentInfo()
+            {
+                ShowEnableAll = tasks.FindRecord(x => !x.IsEnabled) != null,
+                ShowDisableAll = tasks.FindRecord(x => x.IsEnabled) != null
+            };
+        }
+        public bool EnableAllTasks()
+        {
+            var tasks = GetAllTasksExceptDS();
+            foreach (var task in tasks)
+            {
+                if (task.IsEnabled)
+                    continue;
+                else
+                {
+                    var output = EnableTask(task.TaskId);
+                    if (output.Result != UpdateOperationResult.Succeeded)
+                        return false;
+                }
+            }
+            return true;
+        }
         private class SchedulerTaskLoggableEntity : VRLoggableEntityBase
         {
             public static SchedulerTaskLoggableEntity Instance = new SchedulerTaskLoggableEntity();
@@ -341,6 +393,11 @@ namespace Vanrise.Runtime.Business
             };
         }
 
+
+        private List<SchedulerTask> GetAllTasksExceptDS()
+        {
+            return GetCachedSchedulerTasks().Values.FindAllRecords(x => x.ActionTypeId != Guid.Parse("B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68")).ToList();
+        }
         #endregion
 
     }

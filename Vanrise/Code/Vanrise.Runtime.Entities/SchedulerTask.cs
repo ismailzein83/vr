@@ -32,6 +32,13 @@ namespace Vanrise.Runtime.Entities
         User = 1
     }
 
+    public class SchedulerTaskManagmentInfo
+    {
+        public bool ShowEnableAll { get; set; }
+
+        public bool ShowDisableAll { get; set; }
+
+    }
     public class SchedulerTask
     {
         public Guid TaskId { get; set; }

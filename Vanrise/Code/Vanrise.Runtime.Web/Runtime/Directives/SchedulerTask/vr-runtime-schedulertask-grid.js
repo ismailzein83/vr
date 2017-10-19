@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService", "VRNotificationService", "SchedulerTaskAPIService", "VR_Runtime_SchedulerTaskService", "VRTimerService", "VR_Runtime_SchedulerTaskStatusEnum",
-    function (VRUIUtilsService,UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runtime_SchedulerTaskService, VRTimerService, VR_Runtime_SchedulerTaskStatusEnum) {
+    function (VRUIUtilsService, UtilsService, VRNotificationService, SchedulerTaskAPIService, VR_Runtime_SchedulerTaskService, VRTimerService, VR_Runtime_SchedulerTaskStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -38,6 +38,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
 
             var gridAPI;
             var gridDrillDownTabsObj;
+            var context;
             function initializeController() {
 
                 $scope.schedulerTasks = [];
@@ -45,7 +46,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     var drillDownDefinitions = VR_Runtime_SchedulerTaskService.getDrillDownDefinition();
-                    
+
                     gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
@@ -54,14 +55,24 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
 
                         var directiveAPI = {};
 
+
+
                         directiveAPI.loadGrid = function (query) {
                             input.Filter = query;
                             return gridAPI.retrieveData(query);
                         };
 
+                        directiveAPI.load = function (payload) {
+                            context = payload.context;
+                            var query = payload.query;
+                            return directiveAPI.loadGrid(query);
+                        };
                         directiveAPI.onTaskAdded = function (taskObject) {
-                          gridDrillDownTabsObj.setDrillDownExtensionObject(taskObject);
+                            gridDrillDownTabsObj.setDrillDownExtensionObject(taskObject);
                             gridAPI.itemAdded(taskObject);
+                        };
+                        directiveAPI.updateDataItemsStatuts = function (status) {
+                            updateDataItemsStatuts(status);
                         };
 
                         directiveAPI.isMyTasksSelected = function (isMyTask) {
@@ -75,7 +86,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    
+
                     if (isMyTaskSelected) {
                         return SchedulerTaskAPIService.GetFilteredMyTasks(dataRetrievalInput)
                             .then(function (response) {
@@ -121,7 +132,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
 
                     if (dataItem != undefined) {
                         var entity = dataItem.Entity;
-                        if (entity.IsEnabled == true && entity.NextRunTime != undefined && !isSchedulerTaskRunning(entity.StatusDescription) && entity.AllowRun==true) {
+                        if (entity.IsEnabled == true && entity.NextRunTime != undefined && !isSchedulerTaskRunning(entity.StatusDescription) && entity.AllowRun == true) {
                             menuActions.push({
                                 name: "Run",
                                 clicked: runSchedulerTask
@@ -243,10 +254,11 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
             }
             function editTask(task) {
                 var onTaskUpdated = function (updatedItem) {
-                 
-                    var updatedItemObj = updatedItem ;
+
+                    var updatedItemObj = updatedItem;
                     gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItemObj);
                     gridAPI.itemUpdated(updatedItemObj);
+                    enableDisableAll();
                 };
 
                 VR_Runtime_SchedulerTaskService.editTask(task.Entity.TaskId, onTaskUpdated);
@@ -259,7 +271,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 var onPermissionDisabled = function (entity) {
                     var gridDataItem = {
                         Entity: entity,
-                        AllowEdit:dataItem.AllowEdit
+                        AllowEdit: dataItem.AllowEdit
                     };
                     gridDataItem.Entity.IsEnabled = false;
                     gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
@@ -272,6 +284,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                         return SchedulerTaskAPIService.DisableTask(dataItem.Entity.TaskId).then(function () {
                             if (onPermissionDisabled && typeof onPermissionDisabled == 'function') {
                                 onPermissionDisabled(dataItem.Entity);
+                                enableDisableAll();
                             }
                         }).catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -295,9 +308,9 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 VRNotificationService.showConfirmation().then(function (confirmed) {
                     if (confirmed) {
                         return SchedulerTaskAPIService.EnableTask(dataItem.Entity.TaskId).then(function () {
-
                             if (onPermissionDisabled && typeof onPermissionDisabled == 'function') {
                                 onPermissionDisabled(dataItem.Entity);
+                                enableDisableAll();
                             }
                         }).catch(function (error) {
                             VRNotificationService.notifyException(error, $scope);
@@ -305,7 +318,38 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                     }
                 });
             }
-        }
 
+
+            function updateDataItemsStatuts(status) {
+                for (var j = 0; j < $scope.schedulerTasks.length; j++) {
+                    if ($scope.schedulerTasks[j].Entity.IsEnabled != status) {
+                        var currentSchedulerTask = $scope.schedulerTasks[j];
+                        var Entity = {
+                            TaskId: currentSchedulerTask.Entity.TaskId,
+                            Name: currentSchedulerTask.Entity.Name,
+                            IsEnabled: status,
+                            LastRunTime: currentSchedulerTask.Entity.LastRunTime,
+                            NextRunTime: currentSchedulerTask.Entity.NextRunTime,
+                            StatusDescription: currentSchedulerTask.StatusDescription
+                        };
+                        var obj = {
+                            Entity: Entity,
+                            AllowEdit: currentSchedulerTask.AllowEdit,
+                            AllowRun: currentSchedulerTask.AllowRun
+                        };
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(obj);
+                        $scope.schedulerTasks[j] = obj;
+                        gridAPI.itemUpdated(obj);
+                    }
+                }
+            }
+
+
+            function enableDisableAll() {
+                if (context != undefined && typeof (context.getTaskManagmentInfo) == "function") {                   
+                    context.getTaskManagmentInfo();
+                }
+            }
+        }
         return directiveDefinitionObject;
     }]);

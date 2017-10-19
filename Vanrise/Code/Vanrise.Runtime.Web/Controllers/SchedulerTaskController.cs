@@ -106,7 +106,7 @@ namespace Vanrise.Runtime.Web.Controllers
         public void RunSchedulerTask(Guid taskId)
         {
             if (!_taskActionTypeManager.DoesUserHaveRunSpecificTaskAccess(taskId))
-                 GetUnauthorizedResponse();
+                GetUnauthorizedResponse();
             SchedulerTaskStateManager manager = new SchedulerTaskStateManager();
             manager.RunSchedulerTask(taskId);
         }
@@ -118,8 +118,7 @@ namespace Vanrise.Runtime.Web.Controllers
             if (!_schedulerTaskManager.DoesUserHaveConfigureSpecificTaskAccess(taskId))
                 return GetUnauthorizedResponse();
 
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.DisableTask(taskId);
+            return _schedulerTaskManager.DisableTask(taskId);
         }
 
         [HttpGet]
@@ -129,8 +128,39 @@ namespace Vanrise.Runtime.Web.Controllers
             if (!_schedulerTaskManager.DoesUserHaveConfigureSpecificTaskAccess(taskId))
                 return GetUnauthorizedResponse();
 
-            SchedulerTaskManager manager = new SchedulerTaskManager();
-            return manager.EnableTask(taskId);
+            return _schedulerTaskManager.EnableTask(taskId);
         }
+        [HttpGet]
+        [Route("DoesUserHaveConfigureAllTaskAccess")]
+        public bool DoesUserHaveConfigureAllTaskAccess()
+        {
+            return _schedulerTaskManager.DoesUserHaveConfigureAllTaskAccess();
+        }
+
+        [HttpGet]
+        [Route("EnableAllTasks")]
+        public bool EnableAllTasks()
+        {
+            if (!DoesUserHaveConfigureAllTaskAccess())
+                return false;
+            return _schedulerTaskManager.EnableAllTasks();
+        }
+        
+        [HttpGet]
+        [Route("DisableAllTasks")]
+        public bool DisableAllTasks()
+        {
+            if (!DoesUserHaveConfigureAllTaskAccess())
+                return false;
+            return _schedulerTaskManager.DisableAllTasks();
+        }
+
+        [HttpGet]
+        [Route("GetTaskManagmentInfo")]
+        public SchedulerTaskManagmentInfo GetTaskManagmentInfo()
+        {
+            return _schedulerTaskManager.GetTaskManagmentInfo();
+        }
+
     }
 }

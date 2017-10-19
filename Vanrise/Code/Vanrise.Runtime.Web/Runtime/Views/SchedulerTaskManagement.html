@@ -11,6 +11,8 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
+                    <vr-button type="Disable All" ng-if="showDisableAll" data-onclick="DisableAllTasks" haspermission="hasConfigureAllTaskPermission"></vr-button>
+                    <vr-button type="Enable All" ng-if="showEnableAll" data-onclick="EnableAllTasks" haspermission="hasConfigureAllTaskPermission"></vr-button>
                     <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous=" true"></vr-button>
                     <vr-button type="Add" data-onclick="AddNewTask" haspermission="hasAddSchedulerTaskPermission"></vr-button>
                 </div>

@@ -77,6 +77,20 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Runtime_ModuleConfig.moduleName, controllerName, ['RunSchedulerTask']));
         }
 
+        function DoesUserHaveConfigureAllTaskAccess() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'DoesUserHaveConfigureAllTaskAccess'));
+        }
+
+        function EnableAllTasks() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'EnableAllTasks'));
+        }
+
+        function DisableAllTasks() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'DisableAllTasks'));
+        }
+        function GetTaskManagmentInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Runtime_ModuleConfig.moduleName, controllerName, 'GetTaskManagmentInfo'));
+        }
 
         return ({
             GetMySchedulesInfo: GetMySchedulesInfo,
@@ -92,7 +106,11 @@
             HasAddSchedulerTaskPermission: HasAddSchedulerTaskPermission,
             GetUpdated: GetUpdated,
             GetFilteredMyTasks: GetFilteredMyTasks,
-            RunSchedulerTask: RunSchedulerTask
+            RunSchedulerTask: RunSchedulerTask,
+            DoesUserHaveConfigureAllTaskAccess: DoesUserHaveConfigureAllTaskAccess,
+            EnableAllTasks: EnableAllTasks,
+            DisableAllTasks: DisableAllTasks,
+            GetTaskManagmentInfo: GetTaskManagmentInfo
         });
     }
 
