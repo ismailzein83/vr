@@ -4,9 +4,12 @@
     [BatchStart]        DATETIME       NOT NULL,
     [BatchEnd]          DATETIME       NOT NULL,
     [Data]              VARCHAR (MAX)  NULL,
+    [Payload]           VARCHAR (MAX)  NULL,
     [AlreadyFinalised]  BIT            NOT NULL,
     [CreatedTime]       DATETIME       CONSTRAINT [DF_StagingSummaryRecord_CreatedTime] DEFAULT (getdate()) NOT NULL
 );
+
+
 
 
 
