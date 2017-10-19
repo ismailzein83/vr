@@ -192,6 +192,7 @@ namespace Vanrise.GenericData.QueueActivators
 
                 PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName,
                     stageBatchRecord.BatchStart, tempStorageInformation);
+                loadDataTask.Wait();
             }
         }
 
@@ -258,6 +259,8 @@ namespace Vanrise.GenericData.QueueActivators
             }
             else
             {
+                stagingSummaryInfoList = stagingSummaryInfoList.GroupBy(itm => new { itm.BatchStart, itm.BatchEnd, itm.AlreadyFinalised }).Select(itm => itm.First()).ToList();
+
                 DateTime current = context.StartDate;
                 foreach (var stagingSummaryInfo in stagingSummaryInfoList.OrderBy(itm => itm.BatchStart))
                 {
@@ -268,7 +271,7 @@ namespace Vanrise.GenericData.QueueActivators
                     current = stagingSummaryInfo.BatchEnd;
                     if (stagingSummaryInfo.AlreadyFinalised)
                     {
-                        dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stagingSummaryInfo.BatchStart);
+                        dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stagingSummaryInfo.BatchStart, stagingSummaryInfo.BatchEnd);
                     }
                     else
                     {
@@ -309,7 +312,7 @@ namespace Vanrise.GenericData.QueueActivators
             try
             {
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start Loading Batches for Stage {0}", context.CurrentStageName));
-                dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart, (stagingSummaryRecord) =>
+                dataManager.GetStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart, stageBatchRecord.BatchEnd, (stagingSummaryRecord) =>
                 {
                     GenericSummaryRecordBatch genericSummaryRecordBatch = new GenericSummaryRecordBatch();
                     genericSummaryRecordBatch = genericSummaryRecordBatch.Deserialize<GenericSummaryRecordBatch>(stagingSummaryRecord.Data);
@@ -318,7 +321,7 @@ namespace Vanrise.GenericData.QueueActivators
             }
             finally
             {
-                dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart);
+                dataManager.DeleteStagingSummaryRecords(context.ProcessInstanceId, context.CurrentStageName, stageBatchRecord.BatchStart, stageBatchRecord.BatchEnd);
                 loadBatchStatus.IsComplete = true;
                 context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Finish Loading Batches for Stage {0}", context.CurrentStageName));
             }

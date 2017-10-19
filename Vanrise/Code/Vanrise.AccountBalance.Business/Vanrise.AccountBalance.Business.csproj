@@ -92,9 +92,9 @@
     <Compile Include="QueueActivators\BalanceUpdatePayload.cs" />
     <Compile Include="QueueActivators\BaseUpdateAccountBalancesQueueActivator.cs" />
     <Compile Include="QueueActivators\ConvertToBalanceUpdateContext.cs" />
-    <Compile Include="QueueActivators\FinalizeEmptyBatchesContext.cs" />
+    <Compile Include="QueueActivators\GetAccountBalanceTypeCombinationsContext.cs" />
     <Compile Include="QueueActivators\IConvertToBalanceUpdateContext.cs" />
-    <Compile Include="QueueActivators\IFinalizeEmptyBatchesContext.cs" />
+    <Compile Include="QueueActivators\IGetAccountBalanceTypeCombinationsContext.cs" />
     <Compile Include="UsageBalanceManager.cs" />
     <Compile Include="BillingTransactionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

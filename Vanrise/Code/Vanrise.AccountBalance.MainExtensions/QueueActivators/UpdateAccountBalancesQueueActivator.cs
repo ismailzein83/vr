@@ -60,24 +60,9 @@ namespace Vanrise.AccountBalance.MainExtensions.QueueActivators
             }
         }
 
-        protected override void FinalizeEmptyBatches(IFinalizeEmptyBatchesContext context)
+        protected override List<AccountBalanceType> GetAccountBalanceTypeCombinations(IGetAccountBalanceTypeCombinationsContext context)
         {
-            IEnumerable<AccountBalanceType> unFinalizedAccountBalanceTypes;
-            List<AccountBalanceType> finalizedAccountBalanceTypes = context.FinalizedAccountBalanceTypes;
-            List<AccountBalanceType> allAccountBalanceTypeCombinations = GetAccountBalanceTypeCombinations(UpdateAccountBalanceSettings);
-
-            if (finalizedAccountBalanceTypes == null || finalizedAccountBalanceTypes.Count == 0)
-                unFinalizedAccountBalanceTypes = allAccountBalanceTypeCombinations;
-            else
-                unFinalizedAccountBalanceTypes = allAccountBalanceTypeCombinations.FindAllRecords(itm => !finalizedAccountBalanceTypes.Contains(itm));
-
-            if (unFinalizedAccountBalanceTypes != null)
-            {
-                foreach (var unFinalizedAccountBalanceType in unFinalizedAccountBalanceTypes)
-                {
-                    context.GenerateEmptyBatch(unFinalizedAccountBalanceType);
-                }
-            }
+            return base.GetAccountBalanceTypeCombinations(this.UpdateAccountBalanceSettings);
         }
     }
 }

@@ -6,9 +6,9 @@ namespace Vanrise.GenericData.Data
 {
     public interface IStagingSummaryRecordDataManager : IDataManager, Vanrise.Data.IBulkApplyDataManager<StagingSummaryRecord>
     {
-        void GetStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, Action<StagingSummaryRecord> onItemLoaded);
+        void GetStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, DateTime batchEnd, Action<StagingSummaryRecord> onItemLoaded); 
         void ApplyStreamToDB(object stream);
-        void DeleteStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart);
+        void DeleteStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, DateTime batchEnd); 
         List<StagingSummaryInfo> GetStagingSummaryInfo(long processInstanceId, string stageName);
     }
 }

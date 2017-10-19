@@ -8,7 +8,7 @@ namespace Vanrise.GenericData.Data.SQL
 {
     public class StagingSummaryRecordDataManager : BaseSQLDataManager, IStagingSummaryRecordDataManager
     {
-        readonly string[] columns = { "ProcessInstanceId", "StageName", "BatchStart", "BatchEnd", "Data", "AlreadyFinalised" };
+        readonly string[] columns = { "ProcessInstanceId", "StageName", "BatchStart", "BatchEnd", "Data", "Payload", "AlreadyFinalised" };
 
         public StagingSummaryRecordDataManager()
             : base(GetConnectionStringName("BusinessProcessDBConnStringKey", "BusinessProcessDBConnString"))
@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.Data.SQL
             return GetItemsSP("reprocess.sp_StagingSummaryRecord_GetStageRecordInfo", StagingSummaryInfoMapper, processInstanceId, stageName);
         }
 
-        public void GetStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, Action<StagingSummaryRecord> onItemLoaded)
+        public void GetStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, DateTime batchEnd, Action<StagingSummaryRecord> onItemLoaded)
         {
             ExecuteReaderSP("reprocess.sp_StagingSummaryRecord_GetRecords",
                (reader) =>
@@ -33,12 +33,12 @@ namespace Vanrise.GenericData.Data.SQL
                        StagingSummaryRecord instance = StagingSummaryRecordMapper(reader);
                        onItemLoaded(instance);
                    }
-               }, processInstanceId, stageName, batchStart);
+               }, processInstanceId, stageName, batchStart, batchEnd);
         }
 
-        public void DeleteStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart)
+        public void DeleteStagingSummaryRecords(long processInstanceId, string stageName, DateTime batchStart, DateTime batchEnd)
         {
-            ExecuteNonQuerySP("reprocess.sp_StagingSummaryRecord_Delete", processInstanceId, stageName, batchStart);
+            ExecuteNonQuerySP("reprocess.sp_StagingSummaryRecord_Delete", processInstanceId, stageName, batchStart, batchEnd);
         }
 
         public object InitialiazeStreamForDBApply()
@@ -49,7 +49,7 @@ namespace Vanrise.GenericData.Data.SQL
         public void WriteRecordToStream(StagingSummaryRecord record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.ProcessInstanceId, record.StageName, GetDateTimeForBCP(record.BatchStart), GetDateTimeForBCP(record.BatchEnd), record.Data != null ? Convert.ToBase64String(record.Data) : null, record.AlreadyFinalised ? 1 : 0);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.ProcessInstanceId, record.StageName, GetDateTimeForBCP(record.BatchStart), GetDateTimeForBCP(record.BatchEnd), record.Data != null ? Convert.ToBase64String(record.Data) : null, record.Payload, record.AlreadyFinalised ? 1 : 0);
         }
 
         public void ApplyStreamToDB(object stream)
@@ -95,7 +95,8 @@ namespace Vanrise.GenericData.Data.SQL
             {
                 BatchStart = GetReaderValue<DateTime>(reader, "BatchStart"),
                 BatchEnd = GetReaderValue<DateTime>(reader, "BatchEnd"),
-                AlreadyFinalised = GetReaderValue<bool>(reader, "AlreadyFinalised")
+                AlreadyFinalised = GetReaderValue<bool>(reader, "AlreadyFinalised"),
+                Payload = reader["Payload"] as string
             };
         }
 

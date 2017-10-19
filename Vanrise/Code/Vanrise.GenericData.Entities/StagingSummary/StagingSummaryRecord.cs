@@ -10,5 +10,6 @@ namespace Vanrise.GenericData.Entities
         public DateTime BatchEnd { get; set; }
         public bool AlreadyFinalised { get; set; }
         public byte[] Data { get; set; }
+        public string Payload { get; set; }
     }
 }
