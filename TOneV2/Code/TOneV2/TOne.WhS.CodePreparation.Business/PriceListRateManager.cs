@@ -130,8 +130,33 @@ namespace TOne.WhS.CodePreparation.Business
         {
             SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(effectiveDate));
 
+            CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+
+            Dictionary<int, Dictionary<int, DateTime>> countriesByCustomerId = new Dictionary<int, Dictionary<int, DateTime>>();
+            Dictionary<int, DateTime> customerCountriesByCountryId;
+
+            List<CustomerCountry2> customerCountries;
+
+
             foreach (var rate in rates)
             {
+                if (rate.OwnerType == SalePriceListOwnerType.Customer)
+                {
+                    customerCountriesByCountryId = countriesByCustomerId.GetRecord(rate.OwnerId);
+                    if (customerCountriesByCountryId == null)
+                    {
+                        customerCountriesByCountryId = new Dictionary<int, DateTime>();
+                        customerCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(rate.OwnerId, effectiveDate).ToList();
+                        foreach (var customerCountry in customerCountries)
+                        {
+                            DateTime countrySellDate;
+                            if (!customerCountriesByCountryId.TryGetValue(customerCountry.CountryId, out countrySellDate) || customerCountry.BED < countrySellDate)
+                                customerCountriesByCountryId.Add(customerCountry.CountryId, customerCountry.BED);
+                        }
+                        countriesByCustomerId.Add(rate.OwnerId, customerCountriesByCountryId);
+                    }
+                }
+
                 PriceListToAdd priceListToAdd = new PriceListToAdd
                 {
                     OwnerId = rate.OwnerId,
@@ -152,9 +177,19 @@ namespace TOne.WhS.CodePreparation.Business
 
                 foreach (AddedZone addedZone in zoneToProcess.AddedZones)
                 {
+                    DateTime countrySellDate = DateTime.MinValue;
+                    if (rate.OwnerType == SalePriceListOwnerType.Customer)
+                    {
+                        if (!countriesByCustomerId.TryGetValue(rate.OwnerId, out customerCountriesByCountryId))
+                            throw new Exception(string.Format("Customer with Id {0} do not have any sold country", rate.OwnerId));
+
+                        if (!customerCountriesByCountryId.TryGetValue(addedZone.CountryId, out countrySellDate))
+                            throw new Exception(string.Format("Country with Id {0} is not sold to Customer with Id {1}", addedZone.CountryId, rate.OwnerId));
+                    }
+
                     rateToAdd.AddedRates.Add(new AddedRate
                     {
-                        BED = addedZone.BED > rate.RateBED ? addedZone.BED : rate.RateBED,
+                        BED = addedZone.BED > countrySellDate ? addedZone.BED : countrySellDate,
                         EED = addedZone.EED,
                         PriceListToAdd = rateToAdd.PriceListToAdd,
                         NormalRate = rateToAdd.Rate,

@@ -341,7 +341,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     DateTime countrySellDate = customerCountry.BED;
 
                     IEnumerable<SalePricelistRateChange> newRateChanges =
-                    this.GetRateChangesFromZonesToAdd(countryAction.NewZonesToAdd, ratesToAddLocator, countryAction.CountryId, customerId, sellingProductId, zonesRoutingProductToAddLocator);
+                    this.GetRateChangesFromZonesToAdd(countryAction.NewZonesToAdd, ratesToAddLocator, countryAction.CountryId, customerId, sellingProductId, zonesRoutingProductToAddLocator, countrySellDate);
 
                     routingProductChanges.AddRange(GetRPChangesFromNewRateChange(newRateChanges, customerId, sellingProductId, zonesRoutingProductToAddLocator));
                     rateChanges.AddRange(newRateChanges);
@@ -351,7 +351,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     rateChanges.AddRange(zonesToCloseRateChanges);
                     routingProductChanges.AddRange(GetRPChangesFromZonesToClose(customerId, sellingProductId, zonesToCloseRateChanges, routingProductLocator));
 
-                    codeChanges.AddRange(this.GetCodeChangesFromCodeToAdd(countryAction.CodesToAdd, countryAction.CountryId));
+                    codeChanges.AddRange(this.GetCodeChangesFromCodeToAdd(countryAction.CodesToAdd, countryAction.CountryId, countrySellDate));
                     codeChanges.AddRange(this.GetCodeChangesFromCodeToMove(countryAction.CodesToMove, countryAction.CountryId));
                     codeChanges.AddRange(this.GetCodeChangesFromCodeToClose(countryAction.CodesToClose, countryAction.CountryId, customerId, processEffectiveDate));
 
@@ -373,7 +373,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         }
 
         private IEnumerable<SalePricelistRateChange> GetRateChangesFromZonesToAdd(IEnumerable<NewZoneToAdd> newZonesToAdd, SaleEntityZoneRateLocator ratesToAddLocator, int countryId,
-            int customerId, int sellingProductId, SaleEntityZoneRoutingProductLocator zonesRoutingProductToAddLocator)
+            int customerId, int sellingProductId, SaleEntityZoneRoutingProductLocator zonesRoutingProductToAddLocator, DateTime countrySellDate)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
 
@@ -394,7 +394,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     ZoneId = zoneToAdd.ZoneId,
                     Rate = rateToSend.Rate.Rate,
                     ChangeType = RateChangeType.New,
-                    BED = rateToSend.Rate.BED,
+                    BED = (rateToSend.Rate.BED > countrySellDate) ? rateToSend.Rate.BED : countrySellDate,
                     RoutingProductId = zoneRoutingProduct.RoutingProductId,
                     CurrencyId = rateToSend.Rate.CurrencyId
                 });
@@ -491,7 +491,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 }
             }
         }
-        private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToAdd(IEnumerable<CodeToAdd> codesToAdd, int countryId)
+        private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToAdd(IEnumerable<CodeToAdd> codesToAdd, int countryId, DateTime countrySellDate)
         {
             List<SalePricelistCodeChange> codeChanges = new List<SalePricelistCodeChange>();
 
@@ -514,7 +514,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     ZoneName = codeToAdd.ZoneName,
                     Code = codeToAdd.Code,
                     ChangeType = CodeChange.New,
-                    BED = codeToAdd.BED,
+                    BED = (codeToAdd.BED > countrySellDate) ? codeToAdd.BED : countrySellDate,
                     ZoneId = zoneId
                 });
             }
