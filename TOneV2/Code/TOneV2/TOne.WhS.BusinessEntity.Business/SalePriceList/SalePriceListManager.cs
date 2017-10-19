@@ -549,7 +549,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     continue;
                 DateTime countrySellDate;
                 if (!customerCountriesSellDatesByCountryId.TryGetValue(soldCountry.CountryId, out countrySellDate))
-                    throw new DataIntegrityValidationException(string.Format("Country with Id {0} is not sold fro customer with Id {1}", soldCountry.CountryId, customerId));
+                    countrySellDate = DateTime.MinValue;
 
                 List<ExistingSaleZone> existingZones = existingDataByCountryId.GetRecord(soldCountry.CountryId);
                 List<SalePLZoneNotification> notifications = null;
@@ -585,7 +585,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 DateTime countrySellDate;
                 if (!customerCountriesSellDatesByCountryId.TryGetValue(countryChange.CountryId, out countrySellDate))
-                    throw new DataIntegrityValidationException(string.Format("Country with Id {0} is not sold fro customer with Id {1}", countryChange.CountryId, customerId));
+                    countrySellDate = DateTime.MinValue;
 
                 List<ExistingSaleZone> existingZones = existingDataByCountryId.GetRecord(countryChange.CountryId);
                 salePlZoneNotifications.AddRange(GetZoneNotificationsFromExistingData(customerId, sellingProductId, existingZones, salePlZoneNotifications.Select(z => z.ZoneName), futureLocator, countrySellDate));
@@ -606,7 +606,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 DateTime countrySellDate;
                 if (!customerCountriesSellDatesByCountryId.TryGetValue(country.CountryId, out countrySellDate))
-                    throw new DataIntegrityValidationException(string.Format("Country with Id {0} is not sold fro customer with Id {1}", country.CountryId, customerId));
+                    countrySellDate = DateTime.MinValue;
 
                 if (existingSaleZones == null) continue;
 
@@ -634,8 +634,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
                                 SalePLZoneNotification salePlZoneNotificationForRecentZone = GetSalePlNotification(recentZone.ZoneId, recentZone.ZoneName, countryZoneNotificationsByZoneId);
                                 DateTime existingCodeBED = (existingCode.BED > countrySellDate) ? existingCode.BED : countrySellDate;
-                                DateTime existingCodeEED = codeChange.BED>existingCodeBED ? codeChange.BED : existingCodeBED;
-                            
+                                DateTime existingCodeEED = codeChange.BED > existingCodeBED ? codeChange.BED : existingCodeBED;
+
                                 salePlZoneNotificationForRecentZone.Codes.Add(new SalePLCodeNotification
                                 {
                                     Code = codeChange.Code,
@@ -695,7 +695,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 salePlZoneNotifications.AddRange(countryZoneNotificationsByZoneId.Values);
             }
-           
+
             List<SalePricelistRPChange> rpChanges = StructureRPChange(countryChanges);
             AddRPChangesToSalePLNotification(salePlZoneNotifications, rpChanges, customerId, sellingProductId);
             return salePlZoneNotifications;

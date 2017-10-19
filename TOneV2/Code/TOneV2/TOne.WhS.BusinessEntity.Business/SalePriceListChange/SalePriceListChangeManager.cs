@@ -198,7 +198,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     ZoneName = entity.ZoneName,
                     Rate = entity.Rate,
-                    RecentRate= entity.RecentRate,
+                    RecentRate = entity.RecentRate,
                     BED = entity.BED,
                     EED = entity.EED,
                     ChangeType = entity.ChangeType,
@@ -287,7 +287,29 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         private SalePricelistCodeChange SalePricelistCodeChangeDetailMapper(SalePricelistCodeChange salePricelistCodeChange)
         {
-            return salePricelistCodeChange;
+            var salePriceListManager = new SalePriceListManager();
+            SalePriceList pricelist = salePriceListManager.GetPriceList((int)salePricelistCodeChange.PricelistId);
+
+            var customerCountryManager = new CustomerCountryManager();
+            CustomerCountry2 customerCountry = customerCountryManager.GetEffectiveOrFutureCustomerCountry(pricelist.OwnerId, salePricelistCodeChange.CountryId, pricelist.EffectiveOn);
+
+            SalePricelistCodeChange codeChange = new SalePricelistCodeChange
+            {
+                ZoneId = salePricelistCodeChange.ZoneId,
+                CountryId = salePricelistCodeChange.CountryId,
+                ZoneName = salePricelistCodeChange.ZoneName,
+
+                ChangeType = salePricelistCodeChange.ChangeType,
+                Code = salePricelistCodeChange.Code,
+                PricelistId = salePricelistCodeChange.PricelistId,
+                BatchId = salePricelistCodeChange.BatchId,
+                RecentZoneName = salePricelistCodeChange.RecentZoneName
+            };
+            codeChange.BED = customerCountry.BED > salePricelistCodeChange.BED
+                ? customerCountry.BED
+                : salePricelistCodeChange.BED;
+            codeChange.EED = salePricelistCodeChange.EED.VRGreaterThan(codeChange.BED) ? salePricelistCodeChange.EED : codeChange.BED;
+            return codeChange;
         }
         private SalePricelistRPChangeDetail SalePricelistRPChangeDetailMapper(SalePricelistRPChange salePricelistRpChange)
         {
