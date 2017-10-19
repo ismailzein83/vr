@@ -10,6 +10,8 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_InvoiceItem_ItemSetName]
     ON [VR_Invoice].[InvoiceItem]([ItemSetName] ASC);
@@ -18,4 +20,9 @@ CREATE NONCLUSTERED INDEX [IX_InvoiceItem_ItemSetName]
 GO
 CREATE NONCLUSTERED INDEX [IX_InvoiceItem_InvoiceID]
     ON [VR_Invoice].[InvoiceItem]([InvoiceID] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_InvoiceItem_InvoiceItemSetName]
+    ON [VR_Invoice].[InvoiceItem]([InvoiceID] ASC, [ItemSetName] ASC);
 
