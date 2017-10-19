@@ -30,7 +30,6 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
         var decreasedRateDayOffset;
         var maximumRateValue;
 
-
         var h = innerHeight * 0.3;
         var pageSize = (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10) < 30 ? 30 : (Math.ceil(parseInt((h / 25) * 1.5) / 10) * 10);;
 
@@ -138,24 +137,28 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
                 if (emptyRates != undefined && emptyRates.length > 0) {
                     $scope.scopeModel.showEmptyRateGrid = true;
                     gridReadyPromises.push(emptyRateGridReadyDeferred.promise);
+                    sortGridData(emptyRates);
                     loadMoreGridData($scope.scopeModel.emptyRates, emptyRates);
                 }
 
                 if (zeroRates != undefined && zeroRates.length > 0) {
                     $scope.scopeModel.showZeroRateGrid = true;
                     gridReadyPromises.push(zeroRateGridReadyDeferred.promise);
+                    sortGridData(zeroRates);
                     loadMoreGridData($scope.scopeModel.zeroRates, zeroRates);
                 }
 
                 if (negativeRates != undefined && negativeRates.length > 0) {
                     $scope.scopeModel.showNegativeRateGrid = true;
                     gridReadyPromises.push(negativeRateGridReadyDeferred.promise);
+                    sortGridData(negativeRates);
                     loadMoreGridData($scope.scopeModel.negativeRates, negativeRates);
                 }
 
                 if (duplicateRates != undefined && duplicateRates.length > 0) {
                     $scope.scopeModel.showDuplicateRateGrid = true;
                     gridReadyPromises.push(duplicateRateGridReadyDeferred.promise);
+                    sortGridData(duplicateRates);
                     loadMoreGridData($scope.scopeModel.duplicateRates, duplicateRates);
                 }
 
@@ -199,7 +202,7 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
             if (sourceArray == undefined)
                 return;
             if (gridArray.length < sourceArray.length) {
-                for (var i = 0; i < sourceArray.length && i < pageSize; i++) {
+                for (var i = gridArray.length, rowIndex = 0; i < sourceArray.length && rowIndex < pageSize; i++, rowIndex++) {
                     gridArray.push({
                         Entity: sourceArray[i]
                     });
@@ -219,6 +222,16 @@ app.directive('vrWhsSalesBulkactionValidationresultRate', ['WhS_Sales_RatePlanUt
                         CorrectedRateBED: arrayElement.correctedRateBED
                     });
                 }
+            }
+        }
+
+        function sortGridData(sourceArray) {
+            sourceArray.sort(sortByZoneName);
+            function sortByZoneName(invalidZoneRate1, invalidZoneRate2) {
+                if (invalidZoneRate1.ZoneName > invalidZoneRate2.ZoneName)
+                    return 1;
+                else
+                    return -1;
             }
         }
     }
