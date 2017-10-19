@@ -63,6 +63,12 @@
         function setRateChangeTypeIcon(dataItem) {
             if (dataItem.NewRate) // This check is false when newRate is undefined, null or an empty string
             {
+                if (dataItem.IsCountryNew == true) {
+                    dataItem.RateChangeTypeIcon = null;
+                    dataItem.RateChangeTypeIconTooltip = null;
+                    return;
+                }
+
                 if (dataItem.CurrentRate == null) {
                     dataItem.RateChangeTypeIcon = null;
                     dataItem.RateChangeTypeIconTooltip = null;
