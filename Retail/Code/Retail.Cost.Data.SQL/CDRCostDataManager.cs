@@ -9,13 +9,18 @@ namespace Retail.Cost.Data.SQL
 {
     public class CDRCostDataManager : BaseSQLDataManager, ICDRCostDataManager
     {
+        #region Properties/Ctor
+
         public CDRCostDataManager()
             : base(GetConnectionStringName("RetailCDRDBConnStringKey", "RetailCDRDBConnString"))
         {
 
         }
 
+        #endregion
+
         #region Public Methods
+
         public List<CDRCost> GetCDRCostByCDPNs(CDRCostBatchRequest cdrCostBatchRequest)
         {
             string cdpnsAsString = null;
@@ -61,9 +66,11 @@ namespace Retail.Cost.Data.SQL
             object id = ExecuteScalarSP("[Retail_CDR].[sp_CDRCost_GetMaxId]");
             return id != null ? (long?)id : null;
         }
+
         #endregion
 
         #region Mappers
+
         CDRCost CDRCostMapper(IDataReader reader)
         {
             CDRCost cdrCost = new CDRCost
@@ -81,6 +88,7 @@ namespace Retail.Cost.Data.SQL
             };
             return cdrCost;
         }
+
         #endregion
     }
 }
