@@ -1495,6 +1495,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 return false;
             }
             function resetGridFilter() {
+                $scope.showfilter = false;
                 var defaultComparisonOption = getDefaultComparisonOption();
 
                 resetZoneFilter();
