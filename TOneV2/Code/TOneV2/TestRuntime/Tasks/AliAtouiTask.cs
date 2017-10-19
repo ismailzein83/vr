@@ -42,13 +42,15 @@ namespace TOne.WhS.Runtime.Tasks
             #endregion
 
             #region Deserialize
-            string serializedOptionsDetailsBySupplier = "75~970$22468$0.13000000$1@2$$False$296543~0~1~30~4";
-            string serializedOptionsByPolicy = "6d584c11-ce52-4385-a871-3b59505d0f57~75$0.13000000$100$0$11451$0$4$False|cb8cc5ed-afda-4ed7-882d-1377666c141e~75$0.13000000$100$0$11451$0$4$False|e85f9e2f-1ce6-4cc3-9df9-b664e63826f5~75$0.13000000$100$0$11451$0$4$False";
+            //string serializedOptionsDetailsBySupplier = "75~970$22468$0.13000000$1@2$$False$296543~0~1~30~4";
+            //string serializedOptionsByPolicy = "6d584c11-ce52-4385-a871-3b59505d0f57~75$0.13000000$100$0$11451$0$4$False|cb8cc5ed-afda-4ed7-882d-1377666c141e~75$0.13000000$100$0$11451$0$4$False|e85f9e2f-1ce6-4cc3-9df9-b664e63826f5~75$0.13000000$100$0$11451$0$4$False";
+            //string serializedSupplierZodeMatchesWithRate = "88$31089$48$~0.01690000~7#4#8#3~7#4~79~396015~|66$10765$48$~0.01230000~7#4#8#3~7#4~79~130519~|68$12438$48$~0.01230000~7#4#8#3~7#4~79~151274~|57$5292$48$~0.01050000~1#6#7#5#4#8#3#2#9~1#2#5~20~63520~|60$9110$48$~0.01050000~7#4#8#3~7#4~79~110510~|69$14923$48$~0.01050000~7#4#8#3~7#4~79~182340~|70$16037$48$~0.00980000~7#4#8#3~7#4~79~204973~|75$22505$48$~0.00950000~1#6#7#5#4#8#3#2#9~1#2~4~299772~";
 
             Deserialize deserialize = new Deserialize();
-            string optionsDetailsBySupplierAsJSON = deserialize.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
-            string OptionsByPolicyAsJSON = deserialize.DeserializeOptionsByPolicy(serializedOptionsByPolicy);
-            #endregion 
+            //string optionsDetailsBySupplierAsJSON = deserialize.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
+            //string OptionsByPolicyAsJSON = deserialize.DeserializeOptionsByPolicy(serializedOptionsByPolicy);
+            //string supplierZodeMatchesWithRateAsJSON = deserialize.DeserializeSupplierZodeMatchesWithRate(serializedSupplierZodeMatchesWithRate);
+            #endregion
         }
 
         public static MappingOutput DataSourceMapData(IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
@@ -344,6 +346,7 @@ namespace TOne.WhS.Runtime.Tasks
     public class Deserialize
     {
         RPRouteDataManager rpRouteDataManager = new RPRouteDataManager();
+        CodeMatchesDataManager codeMatchesDataManager = new CodeMatchesDataManager();
 
         #region Public Methods
 
@@ -353,10 +356,16 @@ namespace TOne.WhS.Runtime.Tasks
             return Vanrise.Common.Serializer.Serialize(optionsDetailsBySupplier, true);
         }
 
-        public  string DeserializeOptionsByPolicy(string serializedOptionsByPolicy)
+        public string DeserializeOptionsByPolicy(string serializedOptionsByPolicy)
         {
-            Dictionary<Guid, IEnumerable<RPRouteOption>> optionsByPolicy  = rpRouteDataManager.DeserializeOptionsByPolicy(serializedOptionsByPolicy);
+            Dictionary<Guid, IEnumerable<RPRouteOption>> optionsByPolicy = rpRouteDataManager.DeserializeOptionsByPolicy(serializedOptionsByPolicy);
             return Vanrise.Common.Serializer.Serialize(optionsByPolicy, true);
+        }
+
+        public string DeserializeSupplierZodeMatchesWithRate(string serializedSupplierZodeMatchesWithRate)
+        {
+            List<SupplierCodeMatchWithRate> supplierCodeMatchWithRate = codeMatchesDataManager.DeserializeSupplierCodeMatches(serializedSupplierZodeMatchesWithRate);
+            return Vanrise.Common.Serializer.Serialize(supplierCodeMatchWithRate, true);
         }
 
         #endregion
