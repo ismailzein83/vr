@@ -1342,8 +1342,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     return false;
                 }
                 function effectiveRoutingProductFilter(effectiveRoutingProductId) {
-                    if ($scope.filterRoutingProducts.length == 0 || effectiveRoutingProductId == undefined)
+                    if ($scope.filterRoutingProducts.length == 0)
                         return true;
+                    if (effectiveRoutingProductId == undefined)
+                        return false;
                     return UtilsService.getItemIndexByVal($scope.filterRoutingProducts, effectiveRoutingProductId, 'RoutingProductId') != -1;
                 }
                 function currentRateSourceFilter(isCurrentRateEditable) {
