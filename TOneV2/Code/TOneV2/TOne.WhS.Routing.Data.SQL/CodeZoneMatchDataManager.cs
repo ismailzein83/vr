@@ -238,14 +238,10 @@ namespace TOne.WhS.Routing.Data.SQL
 			insert into @SupplierIdsTable (SupplierId)
 			select ParsedString from dbo.ParseStringList(@SupplierIds);
 		    
-            with allValidCodes as (
-                            select [CodeMatch] from [dbo].[CodeSupplierZoneMatch] with (nolock) where SupplierID in (select SupplierId from @SupplierIdsTable)
-                            union all 
-                            select [CodeMatch] from [dbo].[CodeSaleZoneMatch] with (nolock) where SellingNumberPlanID = @SellingNumberPlanId),
-                            distinctCodes As  (select distinct CodeMatch as Code from allValidCodes)
+           
 
-                         select cs.Code,cs.SupplierID,cs.SupplierZoneID,cs.CodeMatch from [dbo].[CodeSupplierZoneMatch] as cs join distinctCodes dc on cs.Code = dc.Code where  SupplierID in (select SupplierId from @SupplierIdsTable)
-                            And( @CodeStartWith is null OR cs.Code like @CodeStartWith+'%')";
+                         select cs.Code,cs.SupplierID,cs.SupplierZoneID,cs.CodeMatch from [dbo].[CodeSupplierZoneMatch] as cs JOIN @SupplierIdsTable sIds ON cs.SupplierID = sIds.SupplierId
+                            WHERE( @CodeStartWith is null OR cs.Code like @CodeStartWith+'%')";
 
 		private const string query_GetSupplierZonesMatchedToSaleZones =
 		@"
