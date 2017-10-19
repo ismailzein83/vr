@@ -67,10 +67,13 @@ namespace Retail.Runtime.Tasks
                 dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
                 cdr.SourceID = rowData[0];
                 cdr.AttemptDateTime = DateTime.ParseExact(rowData[1], "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
-                cdr.CGPN = rowData[4];
-                cdr.CDPN = rowData[5];
+                cdr.ReceivedCGPN = rowData[4];
+                cdr.CGPN = cdr.ReceivedCGPN;
+                cdr.ReceivedCDPN = rowData[5];
+                cdr.CDPN = cdr.ReceivedCDPN;
                 cdr.DurationInSeconds = !string.IsNullOrEmpty(durationAsString) ? decimal.Parse(durationAsString) : default(decimal?);
                 cdr.Amount = !string.IsNullOrEmpty(amountAsString) ? decimal.Parse(amountAsString) : default(decimal?);
+                cdr.FileName = ImportedData.Name;
 
                 string rateAsString = rowData[12];
                 cdr.Rate = !string.IsNullOrEmpty(rateAsString) ? decimal.Parse(rateAsString) : default(decimal?);
@@ -102,12 +105,10 @@ namespace Retail.Runtime.Tasks
                     currentCDRId++;
                 }
                 var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of Raw CDRs", "CDRCost");
-                mappedBatches.Add("CDR Cost Storage Stage", batch);
+                mappedBatches.Add("Distribute CDR Cost Stage", batch);
             }
             else
-            {
                 ImportedData.IsEmpty = true;
-            }
 
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
