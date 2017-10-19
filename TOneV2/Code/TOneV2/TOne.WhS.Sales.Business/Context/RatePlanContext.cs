@@ -75,7 +75,7 @@ namespace TOne.WhS.Sales.Business
         public decimal MaximumRate { get; set; }
         public int LongPrecision { get; set; }
         public bool? IsFirstSellingProductOffer { get; set; }
-
+        public IEnumerable<DataByZone> DataByZoneList { get; set; }
 
         #endregion
 
@@ -140,6 +140,7 @@ namespace TOne.WhS.Sales.Business
         Dictionary<int, decimal> MaximumRateConvertedByCurrency { get; }
         int LongPrecision { get; }
         bool? IsFirstSellingProductOffer { get; }
+        IEnumerable<DataByZone> DataByZoneList { get; }
 
         #endregion
 

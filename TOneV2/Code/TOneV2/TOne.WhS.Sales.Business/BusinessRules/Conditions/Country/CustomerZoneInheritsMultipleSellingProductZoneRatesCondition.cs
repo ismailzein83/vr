@@ -25,15 +25,21 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 return true;
 
             var countryToAdd = context.Target as CustomerCountryToAdd;
-            IEnumerable<ExistingZone> countryZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryToAdd.CountryId);
+            IEnumerable<ExistingZone> countryZones = ratePlanContext.EffectiveAndFutureExistingZonesByCountry.GetRecord(countryToAdd.CountryId);
 
             if (countryZones == null || countryZones.Count() == 0)
                 throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SaleZones of Country '{0}' were not found", countryToAdd.CountryId));
 
             DateTime? validCountryBED = null;
+            Dictionary<long, DataByZone> dataByZoneId = GetDataByZoneId(ratePlanContext.DataByZoneList);
 
             foreach (ExistingZone countryZone in countryZones)
             {
+                DataByZone zoneData = dataByZoneId.GetRecord(countryZone.ZoneId);
+
+                if (zoneData != null && zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED == countryToAdd.BED)
+                    continue;
+
                 ZoneInheritedRates zoneRates = ratePlanContext.InheritedRatesByZoneId.GetRecord(countryZone.ZoneId);
                 IEnumerable<SaleRate> zoneNormalRates = (zoneRates != null) ? zoneRates.NormalRates : null;
 
@@ -63,6 +69,22 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             var countryToAdd = target as CustomerCountryToAdd;
             return string.Format("One or more SaleZones of Country '{0}' inherit multiple SaleRates from the assigned SellingProducts", countryToAdd.CountryId);
+        }
+
+        private Dictionary<long, DataByZone> GetDataByZoneId(IEnumerable<DataByZone> zoneDataList)
+        {
+            var dataByZoneId = new Dictionary<long, DataByZone>();
+
+            if (zoneDataList != null)
+            {
+                foreach (DataByZone zoneData in zoneDataList)
+                {
+                    if (!dataByZoneId.ContainsKey(zoneData.ZoneId))
+                        dataByZoneId.Add(zoneData.ZoneId, zoneData);
+                }
+            }
+
+            return dataByZoneId;
         }
     }
 }
