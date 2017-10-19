@@ -105,9 +105,14 @@
 
             var zoneBED = UtilsService.createDateFromString(dataItem.ZoneBED);
             var zoneEED = (dataItem.ZoneEED != null) ? UtilsService.createDateFromString(dataItem.ZoneEED) : null;
+            var countryBED = (dataItem.CountryBED != null) ? UtilsService.createDateFromString(dataItem.CountryBED) : null;
+            var minRateBED = zoneBED;
 
-            if (dataItem.NewRateBED < zoneBED)
-                return 'Min BED: ' + UtilsService.getShortDate(zoneBED);
+            if (countryBED != null && countryBED > minRateBED)
+                minRateBED = countryBED;
+
+            if (dataItem.NewRateBED < minRateBED)
+                return 'Min BED: ' + UtilsService.getShortDate(minRateBED);
 
             if (zoneEED != null && (dataItem.NewRateEED == null || dataItem.NewRateEED > zoneEED))
                 return 'Max EED: ' + UtilsService.getShortDate(zoneEED);
