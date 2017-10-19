@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService) {
+app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VRValidationService", "VR_Invoice_InvoiceActionService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService, VRValidationService, VR_Invoice_InvoiceActionService) {
 
         var directiveDefinitionObject = {
 
@@ -29,6 +29,9 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
             this.initializeController = initializeController;
             var gridAPI;
             var changedItems = [];
+            var invoiceTypeId;
+            var issueDate;
+
             function initializeController() {
 
                 $scope.invoicePartners = [];
@@ -51,6 +54,9 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                         directiveAPI.loadGrid = function (payload) {
                             changedItems.length = 0;
                             var query = payload.query;
+                            invoiceTypeId = payload.invoiceTypeId;
+                            issueDate = payload.issueDate;
+
                             $scope.generationCustomSectionDirective = payload.customPayloadDirective;
                             return gridAPI.retrieveData(query);
                         };
@@ -92,6 +98,7 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                 for (var i = 0; i < response.Data.length; i++) {
                                     var currentItem = response.Data[i];
                                     currentItem.IsSelected = true;
+                                    currentItem.menuActions = [];
 
                                     if (changedItems.length > 0) {
                                         for (var j = 0; j < changedItems.length; j++) {
@@ -109,6 +116,12 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                     var promise = extendInvoicePartner(currentItem);
 
                                     function extendInvoicePartner(currentItem) {
+                                        var extendInvoicePartnerPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                                        currentItem.validateDates = function () {
+                                            return VRValidationService.validateTimeRange(currentItem.From, currentItem.To);
+                                        };
+
                                         currentItem.onItemChanged = function () {
                                             var alreadyAdded = false;
                                             if (changedItems.length > 0) {
@@ -140,7 +153,83 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                             VRUIUtilsService.callDirectiveLoad(currentItem.generationCustomSectionDirectiveAPI, payload, currentItem.generationCustomSectionDirectiveLoadDeferred);
                                         };
 
-                                        return currentItem.generationCustomSectionDirectiveLoadDeferred.promise;
+                                        currentItem.isInvalid = function () {
+                                            if (currentItem.From == undefined || currentItem.To == undefined)
+                                                return true;
+
+                                            return false;
+                                        };
+
+                                        buildActionsFromDictionary(currentItem.InvoiceGenerationDraftActionDetails);
+
+                                        function buildActionsFromDictionary(actionsDictionary) {
+                                            if (actionsDictionary != undefined) {
+                                                for (var prop in actionsDictionary) {
+                                                    if (prop == '$type')
+                                                        continue;
+
+                                                    if (actionsDictionary[prop].length > 1) {
+                                                        var menuActions = [];
+                                                        for (var i = 0; i < actionsDictionary[prop].length; i++) {
+                                                            if (menuActions == undefined)
+                                                                menuActions = [];
+                                                            var object = actionsDictionary[prop][i];
+                                                            addMenuAction(object.InvoiceGeneratorAction, object.InvoiceAction);
+                                                        }
+                                                        function addMenuAction(invoiceGeneratorAction, invoiceAction) {
+                                                            menuActions.push({
+                                                                name: invoiceGeneratorAction.Title,
+                                                                clicked: function () {
+                                                                    return callActionMethod(invoiceAction);
+                                                                },
+                                                            });
+                                                        }
+
+                                                        addActionToList(prop, undefined, menuActions);
+                                                    } else {
+                                                        var object = actionsDictionary[prop][0];
+                                                        var clickFunc = function () {
+                                                            return callActionMethod(object.InvoiceAction);
+                                                        };
+                                                        addActionToList(prop, clickFunc, undefined);
+                                                    }
+                                                }
+                                            }
+                                            function addActionToList(buttonType, clickEvent, menuActions) {
+                                                currentItem.menuActions.push({
+                                                    type: buttonType,
+                                                    onclick: clickEvent,
+                                                    menuActions: menuActions
+                                                });
+                                            }
+
+                                        }
+                                        function callActionMethod(invoiceAction) {
+                                            console.log(currentItem);
+
+                                            var payload = {
+                                                generatorEntity: {
+                                                    invoiceTypeId: invoiceTypeId,
+                                                    partnerId: currentItem.PartnerId,
+                                                    fromDate: currentItem.From,
+                                                    toDate: currentItem.To,
+                                                    issueDate: issueDate,
+                                                    customSectionPayload: currentItem.CustomPayload
+                                                },
+                                                invoiceAction: invoiceAction,
+                                                isPreGenerateAction: true
+                                            };
+                                            var actionType = VR_Invoice_InvoiceActionService.getActionTypeIfExist(invoiceAction.Settings.ActionTypeName);
+
+                                            var promise = actionType.actionMethod(payload);
+
+                                            return promise;
+                                        }
+
+                                        UtilsService.waitMultiplePromises([currentItem.generationCustomSectionDirectiveLoadDeferred.promise]).then(function () {
+                                            extendInvoicePartnerPromiseDeferred.resolve();
+                                        });
+                                        return extendInvoicePartnerPromiseDeferred.promise;
                                     }
 
                                     promises.push(promise);

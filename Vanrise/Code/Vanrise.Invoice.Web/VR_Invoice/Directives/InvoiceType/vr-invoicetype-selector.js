@@ -109,22 +109,23 @@
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                + '<vr-select on-ready="ctrl.onSelectorReady"'
-                    + ' datasource="ctrl.datasource"'
-                    + ' selectedvalues="ctrl.selectedvalues"'
-                    + ' onselectionchanged="ctrl.onselectionchanged"'
-                    + ' onselectitem="ctrl.onselectitem"'
-                    + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="InvoiceTypeId"'
-                    + ' datatextfield="Name"'
-                    + ' ' + multipleselection
-                    + ' ' + hideselectedvaluessection
-                    + ' isrequired="ctrl.isrequired"'
-                    + ' ' + hideremoveicon
-                    + ' vr-disabled="ctrl.isdisabled"'
-                    + ' label="' + label + '"'
-                    + ' entityName="' + label + '"'
-                + '</vr-select>'
+                + '<span vr-disabled="ctrl.isdisabled">'
+                    + '<vr-select on-ready="ctrl.onSelectorReady"'
+                        + ' datasource="ctrl.datasource"'
+                        + ' selectedvalues="ctrl.selectedvalues"'
+                        + ' onselectionchanged="ctrl.onselectionchanged"'
+                        + ' onselectitem="ctrl.onselectitem"'
+                        + ' ondeselectitem="ctrl.ondeselectitem"'
+                        + ' datavaluefield="InvoiceTypeId"'
+                        + ' datatextfield="Name"'
+                        + ' ' + multipleselection
+                        + ' ' + hideselectedvaluessection
+                        + ' isrequired="ctrl.isrequired"'
+                        + ' ' + hideremoveicon
+                        + ' label="' + label + '"'
+                        + ' entityName="' + label + '"'
+                    + '</vr-select>'
+                + '</span>'
             + '</vr-columns>';
         }
     }

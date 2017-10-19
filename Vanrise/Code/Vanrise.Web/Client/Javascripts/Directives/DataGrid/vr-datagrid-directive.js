@@ -624,7 +624,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     if (colDef == undefined || colDef.expendableColumn == undefined)
                         return false;
                     else
-                        return true
+                        return true;
                 };
 
                 ctrl.getGridMenuActions = function () {

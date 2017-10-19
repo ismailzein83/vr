@@ -28,6 +28,7 @@
             var invoiceSettingSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var invoiceGenerationSettingAPI;
+            var isAutomatic;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -49,9 +50,22 @@
                 api.load = function (payload) {
                     var promises = [];
                     var invoiceTypeId = payload.invoiceTypeId;
-
+                    var partnerGroup = payload.partnerGroup;
+                    isAutomatic = payload.isAutomatic;
+                    $scope.scopeModel.showInvoiceGenerationSettings = isAutomatic != undefined ? !isAutomatic : true;
                     $scope.scopeModel.invoiceGenerationSettings = UtilsService.getArrayEnum(VR_Invoice_InvoiceGenerationSettingEnum);
-                    $scope.scopeModel.selectedInvoiceGenerationSetting = UtilsService.getEnum(VR_Invoice_InvoiceGenerationSettingEnum, 'value', VR_Invoice_InvoiceGenerationSettingEnum.All.value);
+
+                    if (partnerGroup != undefined) {
+                        $scope.scopeModel.selectedInvoiceGenerationSetting = UtilsService.getEnum(VR_Invoice_InvoiceGenerationSettingEnum, 'value', partnerGroup.Setting);
+                    }
+                    else {
+                        if (isAutomatic) {
+                            $scope.scopeModel.selectedInvoiceGenerationSetting = UtilsService.getEnum(VR_Invoice_InvoiceGenerationSettingEnum, 'value', VR_Invoice_InvoiceGenerationSettingEnum.OnlyEnabledAutomaticInvoice.value);
+                        }
+                        else {
+                            $scope.scopeModel.selectedInvoiceGenerationSetting = UtilsService.getEnum(VR_Invoice_InvoiceGenerationSettingEnum, 'value', VR_Invoice_InvoiceGenerationSettingEnum.All.value);
+                        }
+                    }
 
                     var loadInvoiceSettingPromise = loadInvoiceSetting();
                     promises.push(loadInvoiceSettingPromise);
@@ -62,6 +76,9 @@
                         invoiceSettingSelectorReadyDeferred.promise.then(function () {
                             var filter = { InvoiceTypeId: invoiceTypeId };
                             var invoiceSettingPayload = { filter: filter };
+                            if (partnerGroup != undefined) {
+                                invoiceSettingPayload.selectedIds = partnerGroup.InvoiceSettingIds;
+                            }
                             VRUIUtilsService.callDirectiveLoad(invoiceSettingSelectorAPI, invoiceSettingPayload, invoiceSettingDirectiveLoadPromiseDeferred);
                         });
                         return invoiceSettingDirectiveLoadPromiseDeferred.promise;
@@ -76,7 +93,7 @@
 
                     var data = {
                         $type: "Vanrise.Invoice.MainExtensions.PartnerGroup.InvoiceSetting, Vanrise.Invoice.MainExtensions",
-                        InvoiceSettingId: invoiceSettingSelectorAPI.getSelectedIds(),
+                        InvoiceSettingIds: invoiceSettingSelectorAPI.getSelectedIds(),
                         Setting: $scope.scopeModel.selectedInvoiceGenerationSetting.value
                     };
                     return data;

@@ -29,55 +29,161 @@ app.directive("vrInvoiceAutomaticinvoiceprocessScheduled", ['UtilsService', 'VRU
 
         var invoiceTypeSelectorAPI;
         var invoiceTypeSelectorAPIReadyDeferred = UtilsService.createPromiseDeferred();
+        var invoiceTypeSelectorAPISelectionChangedDeferred;
+
+        var invoicePartnerGroupAPI;
+        var invoicePartnerGroupReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var invoiceGenerationPeriodAPI;
+
+        var accountStatusSelectorAPI;
+        var accountStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
+
 
             $scope.invoiceTypeSelectorReady = function (api) {
                 invoiceTypeSelectorAPI = api;
                 invoiceTypeSelectorAPIReadyDeferred.resolve();
             };
-            $scope.endDateOffsetFromToday = 0;
-            $scope.issueDateOffsetFromToday = 0;
+
+            $scope.onInvoiceTypeSelectionChanged = function (selectedInvoiceType) {
+                if (selectedInvoiceType != undefined) {
+                    if (invoiceTypeSelectorAPISelectionChangedDeferred != undefined) {
+                        invoiceTypeSelectorAPISelectionChangedDeferred.resolve();
+                    }
+                    else {
+                        var partnerGroupSelectorPaylod = { invoiceTypeId: selectedInvoiceType.InvoiceTypeId, accountStatus: accountStatusSelectorAPI.getData(), isAutomatic: true };
+                        var setLoader = function (value) {
+                            $scope.isLoadingPartnerGroup = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, invoicePartnerGroupAPI, partnerGroupSelectorPaylod, setLoader);
+                    }
+                }
+            };
+
+            $scope.onInvoicePartnerGroupReady = function (api) {
+                invoicePartnerGroupAPI = api;
+                invoicePartnerGroupReadyDeferred.resolve();
+            };
+
+            $scope.onAccountStatusSelectorReady = function (api) {
+                accountStatusSelectorAPI = api;
+                accountStatusSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onAccountStatusSelectionChanged = function (selectedItem) {
+                if (invoicePartnerGroupAPI != undefined) {
+                    var accountStatusData = accountStatusSelectorAPI.getData();
+                    invoicePartnerGroupAPI.accountStatusChanged(accountStatusData);
+                }
+            };
+
             defineAPI();
         }
 
         function defineAPI() {
-
             var api = {};
+
+            api.load = function (payload) {
+                var promises = [];
+
+                var isEditMode;
+
+                if (payload != undefined && payload.data != undefined) {
+                    isEditMode = true;
+                    $scope.endDateOffsetFromToday = payload.data.EndDateOffsetFromToday;
+                    $scope.issueDateOffsetFromToday = payload.data.IssueDateOffsetFromToday;
+                }
+                else {
+                    $scope.endDateOffsetFromToday = 0;
+                    $scope.issueDateOffsetFromToday = 0;
+                }
+
+                var loadInvoiceTypeSelectorPromise = loadInvoiceTypeSelector();
+                promises.push(loadInvoiceTypeSelectorPromise);
+
+                var loadAccountStatusSelectorDirectivePromise = loadAccountStatusSelectorDirective();
+                promises.push(loadAccountStatusSelectorDirectivePromise);
+
+                if (isEditMode) {
+                    invoiceTypeSelectorAPISelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
+                    var loadPartnerGroupSelectorPromise = loadPartnerGroupSelector();
+                    promises.push(loadPartnerGroupSelectorPromise);
+                }
+
+
+                function loadInvoiceTypeSelector() {
+                    var invoiceTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    invoiceTypeSelectorAPIReadyDeferred.promise.then(function () {
+
+                        var payloadSelector;
+                        if (payload != undefined && payload.data != undefined) {
+                            payloadSelector = { selectedIds: payload.data.InvoiceTypeId };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(invoiceTypeSelectorAPI, payloadSelector, invoiceTypeSelectorLoadDeferred);
+                    });
+
+                    return invoiceTypeSelectorLoadDeferred.promise;
+                }
+
+                function loadAccountStatusSelectorDirective() {
+                    var accountStatusSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    accountStatusSelectorReadyDeferred.promise.then(function () {
+                        var accountStatusSelectorPayload = {
+                            selectFirstItem: true,
+                            dontShowInActive: true
+                        };
+                        if (payload != undefined && payload.data != undefined)
+                            accountStatusSelectorPayload.selectedIds = payload.data.AccountStatus;
+
+                        VRUIUtilsService.callDirectiveLoad(accountStatusSelectorAPI, accountStatusSelectorPayload, accountStatusSelectorPayloadLoadDeferred);
+                    });
+
+                    return accountStatusSelectorPayloadLoadDeferred.promise;
+                }
+
+                function loadPartnerGroupSelector() {
+                    var partnerGroupSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    var partnerGroupPromises = [];
+                    partnerGroupPromises.push(invoicePartnerGroupReadyDeferred.promise);
+                    partnerGroupPromises.push(loadAccountStatusSelectorDirectivePromise);
+                    partnerGroupPromises.push(invoiceTypeSelectorAPISelectionChangedDeferred.promise);
+
+                    UtilsService.waitMultiplePromises(partnerGroupPromises).then(function () {
+                        invoiceTypeSelectorAPISelectionChangedDeferred = undefined;
+
+                        var partnerGroupSelectorPaylod = { invoiceTypeId: payload.data.InvoiceTypeId, accountStatus: accountStatusSelectorAPI.getData(), partnerGroup: payload.data.PartnerGroup, isAutomatic: true };
+                        VRUIUtilsService.callDirectiveLoad(invoicePartnerGroupAPI, partnerGroupSelectorPaylod, partnerGroupSelectorLoadDeferred);
+                    });
+
+                    return partnerGroupSelectorLoadDeferred.promise;
+                }
+
+                return UtilsService.waitMultiplePromises(promises);
+            };
+
             api.getData = function () {
+                var accountStatusData = accountStatusSelectorAPI.getData();
                 return {
                     $type: "Vanrise.Invoice.BP.Arguments.AutomaticInvoiceProcessInput, Vanrise.Invoice.BP.Arguments",
                     InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
                     EndDateOffsetFromToday: $scope.endDateOffsetFromToday,
-                    IssueDateOffsetFromToday: $scope.issueDateOffsetFromToday
+                    IssueDateOffsetFromToday: $scope.issueDateOffsetFromToday,
+                    EffectiveDate: accountStatusData.EffectiveDate,
+                    IsEffectiveInFuture: accountStatusData.IsEffectiveInFuture,
+                    Status: accountStatusData.Status,
+                    AccountStatus: accountStatusData.selectedId,
+                    PartnerGroup: invoicePartnerGroupAPI.getData(),
                 };
-            };
-
-            api.load = function (payload) {
-                var promises = [];
-                promises.push(loadInvoiceTypeSelector(payload));
-                if (payload != undefined && payload.data != undefined) {
-                    $scope.endDateOffsetFromToday = payload.data.EndDateOffsetFromToday;
-                    $scope.issueDateOffsetFromToday = payload.data.IssueDateOffsetFromToday;
-                }
-                return UtilsService.waitMultiplePromises(promises);
             };
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
-        }
-
-        function loadInvoiceTypeSelector(payload) {
-            var invoiceTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            invoiceTypeSelectorAPIReadyDeferred.promise.then(function () {
-                var payloadSelector;
-                if (payload != undefined && payload.data != undefined) {
-                    payloadSelector = { selectedIds: payload.data.InvoiceTypeId }
-                }
-                VRUIUtilsService.callDirectiveLoad(invoiceTypeSelectorAPI, payloadSelector, invoiceTypeSelectorLoadDeferred);
-            });
-
-            return invoiceTypeSelectorLoadDeferred.promise;
         }
     }
 

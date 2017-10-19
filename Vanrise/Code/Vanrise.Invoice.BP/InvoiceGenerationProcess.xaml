@@ -16,6 +16,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(viba:InvoiceGenerationProcessInput)" />
+    <x:Property Name="Output" Type="OutArgument(viba:InvoiceGenerationProcessOutput)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.Invoice.BP.InvoiceGenerationProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -27,6 +28,7 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>Vanrise.Invoice.BP.Arguments</x:String>
+      <x:String>Vanrise.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -45,9 +47,9 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP.Arguments</AssemblyReference>
-      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP</AssemblyReference>
@@ -56,6 +58,9 @@
   <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(vie:InvoiceGenerationDraft)" Name="InvoiceGenerationDrafts" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="TotalSucceeded" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="TotalInvoices" />
+      <Variable x:TypeArguments="x:Int32" Default="0" Name="TotalProcessedInvoices" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Invoice Generation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -83,21 +88,143 @@
         </InArgument>
       </If.Condition>
       <If.Then>
-        <ForEach x:TypeArguments="vie:InvoiceGenerationDraft" DisplayName="ForEach&lt;InvoiceGenerationDraft&gt;">
-          <ForEach.Values>
-            <InArgument x:TypeArguments="scg:IEnumerable(vie:InvoiceGenerationDraft)">
-              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vie:InvoiceGenerationDraft)">InvoiceGenerationDrafts</mca:CSharpValue>
-            </InArgument>
-          </ForEach.Values>
-          <ActivityAction x:TypeArguments="vie:InvoiceGenerationDraft">
-            <ActivityAction.Argument>
-              <DelegateInArgument x:TypeArguments="vie:InvoiceGenerationDraft" Name="invoiceGenerationDraft" />
-            </ActivityAction.Argument>
-          </ActivityAction>
-          <sap2010:WorkflowViewState.IdRef>ForEach`1_1</sap2010:WorkflowViewState.IdRef>
-        </ForEach>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int32">
+                <mca:CSharpReference x:TypeArguments="x:Int32">TotalInvoices</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">InvoiceGenerationDrafts.Count</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+          <ForEach x:TypeArguments="vie:InvoiceGenerationDraft" DisplayName="ForEach&lt;InvoiceGenerationDraft&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_1">
+            <ForEach.Values>
+              <InArgument x:TypeArguments="scg:IEnumerable(vie:InvoiceGenerationDraft)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vie:InvoiceGenerationDraft)">InvoiceGenerationDrafts</mca:CSharpValue>
+              </InArgument>
+            </ForEach.Values>
+            <ActivityAction x:TypeArguments="vie:InvoiceGenerationDraft">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="vie:InvoiceGenerationDraft" Name="invoiceGenerationDraft" />
+              </ActivityAction.Argument>
+              <Sequence DisplayName="Invoice_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_2">
+                <Sequence.Variables>
+                  <Variable x:TypeArguments="x:Boolean" Name="succeeded" />
+                  <Variable x:TypeArguments="x:String" Name="message" />
+                  <Variable x:TypeArguments="ve:LogEntryType" Name="logEntryType" />
+                </Sequence.Variables>
+                <viba1:GeneratePartnerInvoice sap2010:WorkflowViewState.IdRef="GeneratePartnerInvoice_1">
+                  <viba1:GeneratePartnerInvoice.InvoiceGenerationDraft>
+                    <InArgument x:TypeArguments="vie:InvoiceGenerationDraft">
+                      <mca:CSharpValue x:TypeArguments="vie:InvoiceGenerationDraft">invoiceGenerationDraft</mca:CSharpValue>
+                    </InArgument>
+                  </viba1:GeneratePartnerInvoice.InvoiceGenerationDraft>
+                  <viba1:GeneratePartnerInvoice.IsAutomatic>
+                    <InArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAutomatic</mca:CSharpValue>
+                    </InArgument>
+                  </viba1:GeneratePartnerInvoice.IsAutomatic>
+                  <viba1:GeneratePartnerInvoice.IssueDate>
+                    <InArgument x:TypeArguments="s:DateTime">
+                      <mca:CSharpValue x:TypeArguments="s:DateTime">Input.IssueDate</mca:CSharpValue>
+                    </InArgument>
+                  </viba1:GeneratePartnerInvoice.IssueDate>
+                  <viba1:GeneratePartnerInvoice.LogEntryType>
+                    <OutArgument x:TypeArguments="ve:LogEntryType">
+                      <mca:CSharpReference x:TypeArguments="ve:LogEntryType">logEntryType</mca:CSharpReference>
+                    </OutArgument>
+                  </viba1:GeneratePartnerInvoice.LogEntryType>
+                  <viba1:GeneratePartnerInvoice.Message>
+                    <OutArgument x:TypeArguments="x:String">
+                      <mca:CSharpReference x:TypeArguments="x:String">message</mca:CSharpReference>
+                    </OutArgument>
+                  </viba1:GeneratePartnerInvoice.Message>
+                  <viba1:GeneratePartnerInvoice.Succeeded>
+                    <OutArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpReference x:TypeArguments="x:Boolean">succeeded</mca:CSharpReference>
+                    </OutArgument>
+                  </viba1:GeneratePartnerInvoice.Succeeded>
+                </viba1:GeneratePartnerInvoice>
+                <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+                  <Assign.To>
+                    <OutArgument x:TypeArguments="x:Int32">
+                      <mca:CSharpReference x:TypeArguments="x:Int32">TotalProcessedInvoices</mca:CSharpReference>
+                    </OutArgument>
+                  </Assign.To>
+                  <Assign.Value>
+                    <InArgument x:TypeArguments="x:Int32">
+                      <mca:CSharpValue x:TypeArguments="x:Int32">TotalProcessedInvoices+1</mca:CSharpValue>
+                    </InArgument>
+                  </Assign.Value>
+                </Assign>
+                <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3">
+                  <vbw:WriteTrackingMessage.Message>
+                    <InArgument x:TypeArguments="x:String">
+                      <mca:CSharpValue x:TypeArguments="x:String">string.Format("{0}. Remaining Invoices: {1}",message, InvoiceGenerationDrafts.Count - TotalProcessedInvoices)</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:WriteTrackingMessage.Message>
+                  <vbw:WriteTrackingMessage.Severity>
+                    <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                      <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">logEntryType</mca:CSharpValue>
+                    </InArgument>
+                  </vbw:WriteTrackingMessage.Severity>
+                </vbw:WriteTrackingMessage>
+                <If sap2010:WorkflowViewState.IdRef="If_2">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpValue x:TypeArguments="x:Boolean">succeeded</mca:CSharpValue>
+                    </InArgument>
+                  </If.Condition>
+                  <If.Then>
+                    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+                      <Assign.To>
+                        <OutArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpReference x:TypeArguments="x:Int32">TotalSucceeded</mca:CSharpReference>
+                        </OutArgument>
+                      </Assign.To>
+                      <Assign.Value>
+                        <InArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpValue x:TypeArguments="x:Int32">TotalSucceeded + 1</mca:CSharpValue>
+                        </InArgument>
+                      </Assign.Value>
+                    </Assign>
+                  </If.Then>
+                </If>
+              </Sequence>
+            </ActivityAction>
+          </ForEach>
+        </Sequence>
       </If.Then>
+      <If.Else>
+        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="No invoices found to be generated">
+          <vbw:WriteTrackingMessage.Severity>
+            <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">LogEntryType.Warning</mca:CSharpValue>
+            </InArgument>
+          </vbw:WriteTrackingMessage.Severity>
+        </vbw:WriteTrackingMessage>
+      </If.Else>
     </If>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+      <Assign.To>
+        <OutArgument x:TypeArguments="viba:InvoiceGenerationProcessOutput">
+          <mca:CSharpReference x:TypeArguments="viba:InvoiceGenerationProcessOutput">Output</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="viba:InvoiceGenerationProcessOutput">
+          <mca:CSharpValue x:TypeArguments="viba:InvoiceGenerationProcessOutput" xml:space="preserve">new InvoiceGenerationProcessOutput() 
+{ 
+    TotalInvoices = TotalInvoices,
+    TotalSucceeded = TotalSucceeded
+}</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finished Invoice Generation Process.">
       <vbw:WriteTrackingMessage.Severity>
         <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
@@ -105,23 +232,45 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlR2VuZXJhdGlvblByb2Nlc3MueGFtbA44A20OAgEBPAVCIAIBFkMFTikCAQ9PBWQKAgEHZQVrIAIBAj8LP4UBAgEYPGA8hgECARdLC0toAgETRgtGhAECARBSC1KZAQIBCFYJYhMCAQtoC2iFAQIBBGVgZYYBAgEDWQ9ZhwECAQw=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlR2VuZXJhdGlvblByb2Nlc3MueGFtbC46A+wBDgIBAT0zPTYCAQQ+Mz42AgEDPzM/NgIBAkEFRyADAeoBSAVTKQMB2wFUBdMBCgIBHdQBBeMBDgIBDuQBBeoBIAIBBUQLRIUBAwHsAUFgQYYBAwHrAVALUGgDAeMBSwtLhAEDAdwBVwtXmQECAR5bCcgBFAIBLssBCdEBJAIBJdwBC+ABFAIBFtcBC9cBcgIBD+cBC+cBhQECAQfkAWDkAYYBAgEGXAtnFAMBzAFoC8cBFQIBL84BD84BdAIBJ8sBZMsBhwECASZkEWRrAwHUAV8RX2MDAc0BaxFriQEDAcUBcg/FARoCATB4EZcBMAMBggGYARGjARoCAWukARGvASwCAVSwARHEARYCATGAAReAAWcDAboBlAEXlAFnAwGvAYUBF4UBZgMBpAGPARePAWQDAZkBigEXigFwAwGOAXsXe30DAYMBoAEXoAFsAgF3mwEXmwFyAgFsrAEXrAF0AgFgpwEXpwHCAQIBVbMBF7MBXwIBMrcBFcIBHgIBPb8BG78BagIBSboBG7oBbgIBPg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="LoadInvoiceGenerationDrafts_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="287,210" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,360" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,670">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="763,22" />
+      <sap2010:ViewStateData Id="LoadInvoiceGenerationDrafts_1" sap:VirtualizedContainerService.HintSize="763,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="516,62" />
+      <sap2010:ViewStateData Id="GeneratePartnerInvoice_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="464,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,212" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="486,562">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.InvoiceGenerationProcess_1" sap:VirtualizedContainerService.HintSize="526,750" />
+      <sap2010:ViewStateData Id="ForEach`1_1" sap:VirtualizedContainerService.HintSize="516,712" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="538,938">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="763,1088" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="763,62" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="763,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1500">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.InvoiceGenerationProcess_1" sap:VirtualizedContainerService.HintSize="825,1580" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -1,34 +1,39 @@
 ﻿<span vr-loader="isLodingGrid">
     <vr-validator validate="isValid()">
-
         <vr-datagrid datasource="invoicePartners"
                      on-ready="onGridReady"
                      dataretrievalfunction="dataRetrievalFunction"
-                     pagingtype="'Pager'"
+                     pagingtype="'Pager'" norowhighlightonclick="true"
                      idfield="InvoiceGenerationDraftId" defaultsortbyfieldname="'InvoiceGenerationDraftId'">
             <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'InvoiceGenerationDraftId'" disablesorting="true"></vr-datagridcolumn>
             <vr-datagridcolumn fixedwidth="20" disablesorting="true">
                 <vr-check value="dataItem.IsSelected" onvaluechanged="dataItem.onItemChanged"></vr-check>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'PartnerName'" disablesorting="true" widthfactor="'1'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'PartnerName'" disablesorting="true" widthfactor="'2'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'From'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline>
-                    <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged"></vr-datetimepicker>
+                    <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateDates()"></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'To'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline>
-                    <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged"></vr-datetimepicker>
+                    <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateDates()"></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Settings'" disablesorting="true" widthfactor="'3'">
+            <vr-datagridcolumn headertext="'Settings'" disablesorting="true" widthfactor="'6'" ng-if="generationCustomSectionDirective!=undefined" columnindex="5">
                 <span ng-if="viewScope.generationCustomSectionDirective!=undefined">
                     <vr-directivewrapper directive="viewScope.generationCustomSectionDirective" on-ready="dataItem.onGenerationCustomSectionDirectiveReady" normal-col-num="4"></vr-directivewrapper>
                 </span>
             </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Actions'" disablesorting="true" columnindex="6" widthfactor="'1'" invisibleheader>
+                <vr-columns width="fullrow" haschildcolumns withemptyline>
+                    <span ng-repeat="action in dataItem.menuActions" ng-if="dataItem.menuActions.length > 0">
+                        <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" standalone menuactions="action.menuActions" vr-disabled="dataItem.isInvalid()"></vr-directivewrapper>
+                    </span>
+                </vr-columns>
+            </vr-datagridcolumn>
         </vr-datagrid>
-
     </vr-validator>
 </span>

@@ -14,5 +14,6 @@ namespace Vanrise.Invoice.Data
         bool UpdateInvoiceGenerationDraft(InvoiceGenerationDraftToEdit invoiceGenerationDraft);
         void DeleteInvoiceGenerationDraft(long invoiceGenerationDraftId);
         void ClearInvoiceGenerationDrafts(Guid invoiceGenerationIdentifier);
+        InvoiceGenerationDraftSummary GetInvoiceGenerationDraftsSummary(Guid invoiceGenerationIdentifier);
     }
 }

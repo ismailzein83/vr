@@ -14,14 +14,19 @@ namespace Vanrise.Invoice.Entities
         public InvoicePartnerPeriod Period { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+        public DateTime? MaximumToDate { get; set; }
         public DateTime IssueDate { get; set; }
         public Guid InvoiceGenerationIdentifier { get; set; }
+        public bool IsAutomatic { get; set; }
     }
 
     public enum InvoiceGenerationDraftResult { Succeeded = 0, Failed = 1 }
     public class InvoiceGenerationDraftOutput
     {
         public InvoiceGenerationDraftResult Result { get; set; }
-        public string Message { get; set; } 
+        public string Message { get; set; }
+        public int Count { get; set; }
+        public DateTime MinimumFrom { get; set; }
+        public DateTime MaximumTo { get; set; }
     }
 }

@@ -1,9 +1,16 @@
 ﻿<vr-row>
-    <vr-invoicetype-selector normal-col-num="6" isrequired="true" on-ready="invoiceTypeSelectorReady"></vr-invoicetype-selector>
-    <vr-columns width="1/2row">
+    <vr-invoicetype-selector normal-col-num="4" isrequired="true" on-ready="invoiceTypeSelectorReady" selectedvalues="selectedInvoiceType" hideremoveicon onselectionchanged="onInvoiceTypeSelectionChanged"></vr-invoicetype-selector>
+    <vr-columns width="1/3row">
         <vr-textbox value="endDateOffsetFromToday" label="End Date Offset From Today" minvalue="0" isrequired="true" type="number"></vr-textbox>
     </vr-columns>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/3row">
         <vr-textbox value="issueDateOffsetFromToday" label="Issue Date Offset From Today" minvalue="0" isrequired="true" type="number"></vr-textbox>
     </vr-columns>
+<!--</vr-row>
+
+<vr-row>-->
+    <vr-invoice-accountstatus-selector hideremoveicon isrequired="true" on-ready="onAccountStatusSelectorReady" normal-col-num="4" onselectionchanged="onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
+    <span ng-show="selectedInvoiceType!=undefined" vr-loader="isLoadingPartnerGroup">
+        <vr-invoice-partnergroup normal-col-num="4" on-ready="onInvoicePartnerGroupReady"></vr-invoice-partnergroup>
+    </span>
 </vr-row>

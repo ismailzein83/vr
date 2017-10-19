@@ -7,7 +7,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
         restrict: 'E',
         scope: {
             onReady: '=',
-            normalColNum: '@'
+            normalColNum: '@',
+            isrequired: '='
         },
         controller: function ($scope, $element, $attrs) {
 
@@ -27,6 +28,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
 
     function partnerGroupCtor(ctrl, $scope, $attrs) {
         var invoiceTypeId;
+        var selectedPartnerGroup;
+        var isAutomatic;
+
         var accountStatus;
         var partnerGroupSelectorAPI;
 
@@ -45,7 +49,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
 
             $scope.onPartnerGroupDirectiveReady = function (api) {
                 partnerGroupDirectiveAPI = api;
-                var partnerGroupDirectivePayload = { invoiceTypeId: invoiceTypeId, accountStatus: accountStatus };
+                var partnerGroupDirectivePayload = { invoiceTypeId: invoiceTypeId, accountStatus: accountStatus, isAutomatic: isAutomatic };
+                if (selectedPartnerGroup != undefined) {
+                    partnerGroupDirectivePayload.partnerGroup = selectedPartnerGroup;
+                }
+
                 var setLoader = function (value) {
                     $scope.isLoadingPartnerGroupTemplateDirective = value;
                 };
@@ -72,9 +80,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
 
             api.load = function (payload) {
                 partnerGroupSelectorAPI.clearDataSource();
+
                 if (payload != undefined) {
                     invoiceTypeId = payload.invoiceTypeId;
                     accountStatus = payload.accountStatus;
+                    selectedPartnerGroup = payload.partnerGroup;
+                    isAutomatic = payload.isAutomatic;
                 }
 
                 var promises = [];
@@ -87,6 +98,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
                         angular.forEach(response, function (item) {
                             $scope.partnerGroupTemplates.push(item);
                         });
+
+                        if (selectedPartnerGroup != undefined) {
+                            $scope.selectedPartnerGroupTemplate = UtilsService.getItemByVal($scope.partnerGroupTemplates, selectedPartnerGroup.ConfigId, "ExtensionConfigurationId");
+                        }
                     });
                 }
 

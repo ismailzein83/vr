@@ -2,11 +2,13 @@
 
     "use strict";
 
-    invoiceGenerationProcessEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService', 'VR_Invoice_InvoiceGenerationPeriodEnum', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService'];
+    invoiceGenerationProcessEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService', 'VR_Invoice_InvoiceGenerationPeriodEnum', 'VR_Invoice_InvoiceTypeAPIService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService', 'BusinessProcess_BPInstanceService'];
 
-    function invoiceGenerationProcessEditorController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRValidationService, VRDateTimeService, VR_Invoice_InvoiceGenerationPeriodEnum, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService) {
+    function invoiceGenerationProcessEditorController($scope, VRNavigationService, UtilsService, VRUIUtilsService, VRValidationService, VRDateTimeService, VR_Invoice_InvoiceGenerationPeriodEnum, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRNotificationService, BusinessProcess_BPInstanceService) {
         var invoiceTypeId;
         var invoiceType;
+
+        var issueDate;
 
         var invoicePartnerGroupAPI;
         var invoicePartnerGroupReadyDeferred = UtilsService.createPromiseDeferred();
@@ -75,6 +77,8 @@
             };
 
             $scope.scopeModel.evaluate = function () {
+                issueDate = $scope.scopeModel.issueDate;
+
                 $scope.scopeModel.errorMessage = undefined;
                 $scope.scopeModel.isLoading = true;
                 var accountStatusData = accountStatusSelectorAPI.getData();
@@ -86,32 +90,45 @@
                     Period: $scope.scopeModel.selectedInvoiceGenerationPeriod.value,
                     FromDate: $scope.scopeModel.fromDate,
                     ToDate: $scope.scopeModel.toDate,
-                    IssueDate: $scope.scopeModel.issueDate,
+                    IssueDate: issueDate,
                     PartnerGroup: invoicePartnerGroupAPI.getData(),
                     InvoiceGenerationIdentifier: invoiceGenerationIdentifier
                 };
 
+
                 VR_Invoice_InvoiceAPIService.GenerateFilteredInvoiceGenerationDrafts(query).then(function (response) {
                     $scope.scopeModel.isLoading = false;
-                    $scope.scopeModel.errorMessage = response.Message;
                     if (response.Result == 0) {
-                        var gridPayload = { query: query, customPayloadDirective: invoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective };
+                        var gridPayload = {
+                            query: query,
+                            customPayloadDirective: invoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective,
+                            invoiceTypeId: invoiceTypeId,
+                            issueDate: issueDate
+                        };
                         invoiceGenerationDraftGridAPI.loadGrid(gridPayload);
                     }
                     else {
                         invoiceGenerationDraftGridAPI.clearDataSource();
-                        $scope.scopeModel.errorMessage = response.Message;
+                        VRNotificationService.showError(response.Message, $scope);
                     }
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
                 });
 
 
                 $scope.scopeModel.generateInvoice = function () {
                     var changedItems = invoiceGenerationDraftGridAPI.getChangedItems();
 
-                    var input = { InvoiceGenerationIdentifier: invoiceGenerationIdentifier, ChangedItems: changedItems, InvoiceTypeId: invoiceTypeId };
+                    var input = { InvoiceGenerationIdentifier: invoiceGenerationIdentifier, IssueDate: issueDate, ChangedItems: changedItems, InvoiceTypeId: invoiceTypeId };
 
                     return VR_Invoice_InvoiceAPIService.GenerateInvoices(input).then(function (response) {
-                        $scope.modalContext.closeModal();
+                        if (response.Succeed) {
+                            $scope.modalContext.closeModal();
+                            BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
+                        }
+                        else {
+                            VRNotificationService.showError(response.OutputMessage, $scope);
+                        }
                     });
                 };
             };

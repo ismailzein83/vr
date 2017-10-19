@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Data;
@@ -20,18 +22,50 @@ namespace Vanrise.Invoice.Business
 
             var invoiceTypePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
 
-            PartnerGroupContext partnerGroupContext = new PartnerGroupContext() { InvoiceTypeId = query.InvoiceTypeId, Status = query.Status, EffectiveDate = query.EffectiveDate, IsEffectiveInFuture = query.IsEffectiveInFuture };
+            PartnerGroupContext partnerGroupContext = new PartnerGroupContext() { InvoiceTypeId = query.InvoiceTypeId, Status = query.Status, EffectiveDate = query.EffectiveDate, IsEffectiveInFuture = query.IsEffectiveInFuture, IsStatusFilterMatching = IsStatusFilterMatching };
 
-            List<string> partnerIds = query.PartnerGroup.GetPartnerIds(partnerGroupContext);
-            if (partnerIds == null || partnerIds.Count == 0)
-                return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "No Partners were found." };
+            IEnumerable<string> partnerIds;
+            if (query.PartnerGroup != null)
+            {
+                partnerIds = query.PartnerGroup.GetPartnerIds(partnerGroupContext);
+            }
+            else
+            {
+                if (query.IsAutomatic)
+                {
+                    IEnumerable<string> allPartnerIds = invoiceType.Settings.ExtendedSettings.GetPartnerIds(new ExtendedSettingsPartnerIdsContext { InvoiceTypeId = query.InvoiceTypeId, PartnerRetrievalType = Entities.PartnerRetrievalType.GetAll });
+                    List<string> matchingPartners = new List<string>();
+
+                    if (allPartnerIds != null)
+                    {
+                        DateTime now = DateTime.Now;
+                        foreach (string partnerId in allPartnerIds)
+                        {
+                            PartnerStatusFilterMatchingContext partnerStatusFilterMatchingContext = new PartnerStatusFilterMatchingContext() { AccountId = partnerId, EffectiveDate = query.EffectiveDate, InvoiceTypeId = query.InvoiceTypeId, IsEffectiveInFuture = query.IsEffectiveInFuture, Status = query.Status, CurrentDate = now };
+                            if (IsStatusFilterMatching(partnerStatusFilterMatchingContext))
+                                matchingPartners.Add(partnerId);
+                        }
+                    }
+                    partnerIds = matchingPartners.Count > 0 ? matchingPartners : null;
+                }
+                else
+                    throw new NullReferenceException("PartnerGroup");
+            }
+
+            if (partnerIds == null || partnerIds.Count() == 0)
+                return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "No partners found." };
 
             InvoiceManager invoiceManager = new InvoiceManager();
 
+
+            int count = 0;
+            DateTime minimumFrom = DateTime.MaxValue;
+            DateTime maximumTo = DateTime.MinValue;
+
             foreach (string partnerId in partnerIds)
             {
-                DateTime? fromDate;
-                DateTime? toDate;
+                DateTime? fromDate = null;
+                DateTime? toDate = null;
                 switch (query.Period)
                 {
                     case InvoicePartnerPeriod.FixedDates:
@@ -48,15 +82,26 @@ namespace Vanrise.Invoice.Business
                         }
                         else
                         {
-                            fromDate = query.FromDate;
-                            toDate = query.ToDate;
+                            if (!query.IsAutomatic)
+                            {
+                                fromDate = query.FromDate;
+                                toDate = query.ToDate;
+                            }
                         }
                         break;
                     default: throw new NotSupportedException(string.Format("InvoicePartnerPeriod '{0}' is not supported", query.Period));
                 }
 
                 if (!fromDate.HasValue || !toDate.HasValue)
-                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Some Partners have Invalid Dates. Please fill the following fields: 'From' and 'To'" };
+                {
+                    if (!query.IsAutomatic)
+                        return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Billing cycle is not defined for some partners. Please fill the following fields: 'From' and 'To'" };
+                    else
+                        continue;
+                }
+                if (CheckIFShouldGenerateInvoice(toDate.Value, query.MaximumToDate))
+                    if (query.MaximumToDate.HasValue && toDate.Value > query.MaximumToDate.Value)
+                        continue;
 
                 PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = partnerId };
                 var partnerName = invoiceTypePartnerManager.GetPartnerName(partnerNameManagerContext);
@@ -79,11 +124,44 @@ namespace Vanrise.Invoice.Business
                     CustomPayload = generationCustomPayload
                 };
 
+                if (minimumFrom > invoiceGenerationDraft.From)
+                    minimumFrom = invoiceGenerationDraft.From;
+
+                if (maximumTo < invoiceGenerationDraft.To)
+                    maximumTo = invoiceGenerationDraft.To;
+
                 InsertOperationOutput<InvoiceGenerationDraft> insertedInvoiceGenerationDraft = InsertInvoiceGenerationDraft(invoiceGenerationDraft);
                 if (insertedInvoiceGenerationDraft.Result != InsertOperationResult.Succeeded)
-                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Failed to Add Records" };
+                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Technical Error occured while trying to Add Records" };
+                count++;
             }
-            return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Succeeded };
+            return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Succeeded, Count = count, MinimumFrom = minimumFrom, MaximumTo = maximumTo };
+        }
+
+        private bool CheckIFShouldGenerateInvoice(DateTime toDate, DateTime? maximumToDate)
+        {
+            return !maximumToDate.HasValue || toDate <= maximumToDate;
+        }
+
+        private bool IsStatusFilterMatching(IPartnerStatusFilterMatchingContext context)
+        {
+            PartnerManager partnerManager = new PartnerManager();
+            VRInvoiceAccountData invoiceAccountData = partnerManager.GetInvoiceAccountData(context.InvoiceTypeId, context.AccountId);
+            invoiceAccountData.ThrowIfNull("invoiceAccountData");
+
+            DateTime? effectiveDate = context.EffectiveDate;
+            bool? isEffectiveInFuture = context.IsEffectiveInFuture;
+            DateTime? bed = invoiceAccountData.BED;
+            DateTime? eed = invoiceAccountData.EED;
+
+            if (invoiceAccountData.Status == context.Status
+                && (!effectiveDate.HasValue || ((!bed.HasValue || bed <= effectiveDate) && (!eed.HasValue || eed > effectiveDate)))
+                && (!isEffectiveInFuture.HasValue || (isEffectiveInFuture.Value && (!eed.HasValue || eed >= context.CurrentDate)) || (!isEffectiveInFuture.Value && eed.HasValue && eed <= context.CurrentDate)))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public List<InvoiceGenerationDraft> GetInvoiceGenerationDrafts(Guid invoiceGenerationIdentifier)
@@ -94,7 +172,53 @@ namespace Vanrise.Invoice.Business
 
         public IDataRetrievalResult<InvoiceGenerationDraftDetail> GetFilteredInvoiceGenerationDrafts(DataRetrievalInput<InvoiceGenerationDraftQuery> input)
         {
-            return BigDataManager.Instance.RetrieveData(input, new InvoicePartnerRequestHandler());
+            var result = BigDataManager.Instance.RetrieveData(input, new InvoicePartnerRequestHandler());
+            if (input.DataRetrievalResultType == DataRetrievalResultType.Normal)
+            {
+                var bigResult = result as Vanrise.Entities.BigResult<InvoiceGenerationDraftDetail>;
+
+                foreach (var invoiceGenerationDraftDetail in bigResult.Data)
+                {
+                    InvoiceGenerationDraftDetailMapper2(invoiceGenerationDraftDetail, input.Query);
+                }
+                return bigResult;
+            }
+            return result;
+        }
+
+        private void InvoiceGenerationDraftDetailMapper2(InvoiceGenerationDraftDetail invoiceGenerationDraftDetail, InvoiceGenerationDraftQuery query)
+        {
+            if (query == null)
+                return;
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            var invoiceGeneratorActions = invoiceTypeManager.GetInvoiceGeneratorActions(new GenerateInvoiceInput
+            {
+                CustomSectionPayload = invoiceGenerationDraftDetail.CustomPayload,
+                FromDate = invoiceGenerationDraftDetail.From,
+                InvoiceId = null,
+                InvoiceTypeId = query.InvoiceTypeId,
+                IsAutomatic = query.IsAutomatic,
+                IssueDate = query.IssueDate,
+                PartnerId = invoiceGenerationDraftDetail.PartnerId,
+                ToDate = invoiceGenerationDraftDetail.To
+            });
+
+            Dictionary<VRButtonType, List<InvoiceGenerationDraftActionDetail>> actionDetailsByButtonType = null;
+
+            if (invoiceGeneratorActions != null)
+            {
+                actionDetailsByButtonType = new Dictionary<VRButtonType, List<InvoiceGenerationDraftActionDetail>>();
+                foreach (var invoiceGeneratorAction in invoiceGeneratorActions)
+                {
+                    List<InvoiceGenerationDraftActionDetail> invoiceGenerationDraftActionDetails = actionDetailsByButtonType.GetOrCreateItem(invoiceGeneratorAction.ButtonType);
+                    invoiceGenerationDraftActionDetails.Add(new InvoiceGenerationDraftActionDetail
+                    {
+                        InvoiceGeneratorAction = invoiceGeneratorAction,
+                        InvoiceAction = invoiceTypeManager.GetInvoiceAction(query.InvoiceTypeId, invoiceGeneratorAction.InvoiceGeneratorActionId)
+                    });
+                }
+            }
+            invoiceGenerationDraftDetail.InvoiceGenerationDraftActionDetails = actionDetailsByButtonType;
         }
 
         public InsertOperationOutput<InvoiceGenerationDraft> InsertInvoiceGenerationDraft(InvoiceGenerationDraft invoiceGenerationDraft)
@@ -125,16 +249,21 @@ namespace Vanrise.Invoice.Business
         }
 
 
-        public void UpdateInvoiceGenerationDrafts(List<InvoiceGenerationDraftToEdit> invoiceGenerationDrafts)
+        public InvoiceGenerationDraftSummary ApplyInvoiceGenerationDraftsChanges(List<InvoiceGenerationDraftToEdit> invoiceGenerationDrafts, Guid invoiceGenerationIdentifier)
         {
             IInvoiceGenerationDraftDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceGenerationDraftDataManager>();
-            foreach (InvoiceGenerationDraftToEdit invoiceGenerationDraft in invoiceGenerationDrafts)
+            if (invoiceGenerationDrafts != null)
             {
-                if (!invoiceGenerationDraft.IsSelected)
-                    dataManager.DeleteInvoiceGenerationDraft(invoiceGenerationDraft.InvoiceGenerationDraftId);
-                else
-                    dataManager.UpdateInvoiceGenerationDraft(invoiceGenerationDraft);
+                foreach (InvoiceGenerationDraftToEdit invoiceGenerationDraft in invoiceGenerationDrafts)
+                {
+                    if (!invoiceGenerationDraft.IsSelected)
+                        dataManager.DeleteInvoiceGenerationDraft(invoiceGenerationDraft.InvoiceGenerationDraftId);
+                    else
+                        dataManager.UpdateInvoiceGenerationDraft(invoiceGenerationDraft);
+                }
             }
+            return dataManager.GetInvoiceGenerationDraftsSummary(invoiceGenerationIdentifier);
+
         }
         private class InvoicePartnerRequestHandler : BigDataRequestHandler<InvoiceGenerationDraftQuery, InvoiceGenerationDraft, InvoiceGenerationDraftDetail>
         {

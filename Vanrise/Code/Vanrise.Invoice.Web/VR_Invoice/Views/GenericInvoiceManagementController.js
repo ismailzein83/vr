@@ -69,6 +69,7 @@
                 return VR_Invoice_InvoiceAPIService.DoesUserHaveGenerateAccess(invoiceTypeId);
             };
             $scope.generateInvoice = generateInvoice;
+            $scope.generateInvoices = generateInvoices;
         }
 
         function load() {
@@ -161,6 +162,14 @@
             };
 
             VR_Invoice_InvoiceActionService.generateInvoice(onGenerateInvoice, invoiceTypeId);
+        }
+
+        function generateInvoices() {
+            var onGenerateInvoice = function (invoice) {
+                //gridAPI.onGenerateInvoice(invoice);
+            };
+
+            VR_Invoice_InvoiceActionService.generateInvoices(onGenerateInvoice, invoiceTypeId);
         }
 
     }

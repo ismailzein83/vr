@@ -23,7 +23,7 @@ namespace Vanrise.Invoice.Business
     public class InvoiceManager
     {
         PartnerManager _partnerManager = new PartnerManager();
-       
+
         #region Public Methods
         public IDataRetrievalResult<InvoiceDetail> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input)
         {
@@ -476,7 +476,7 @@ namespace Vanrise.Invoice.Business
             return manager.GetExtensionConfigurations<PartnerGroupConfig>(PartnerGroupConfig.EXTENSION_TYPE);
         }
 
-      
+
 
         #endregion
 
@@ -923,20 +923,31 @@ namespace Vanrise.Invoice.Business
 
         public GenerateInvoicesOutput GenerateInvoices(Guid invoiceTypeId, Guid invoiceGenerationIdentifier, DateTime issueDate, List<InvoiceGenerationDraftToEdit> changedItems)
         {
-            if (changedItems != null && changedItems.Count > 0)
-            {
-                InvoiceGenerationDraftManager invoiceGenerationDraftManager = new InvoiceGenerationDraftManager();
-                invoiceGenerationDraftManager.UpdateInvoiceGenerationDrafts(changedItems);
-            }
+            InvoiceGenerationDraftManager invoiceGenerationDraftManager = new InvoiceGenerationDraftManager();
+            InvoiceGenerationDraftSummary invoiceGenerationDraftSummary = invoiceGenerationDraftManager.ApplyInvoiceGenerationDraftsChanges(changedItems, invoiceGenerationIdentifier);
+
             int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
-            InvoiceGenerationProcessInput invoiceGenerationProcessInput = new InvoiceGenerationProcessInput() { InvoiceGenerationIdentifier = invoiceGenerationIdentifier, InvoiceTypeId = invoiceTypeId, UserId = userId, IssueDate = issueDate };
+
+            //if (invoiceGenerationDraftSummary.TotalCount == 0)
+            //    return new GenerateInvoicesOutput { Succeed = false, OutputMessage = "At least one invoice should be selected for generation process" };
+
+            InvoiceGenerationProcessInput invoiceGenerationProcessInput = new InvoiceGenerationProcessInput()
+            {
+                InvoiceGenerationIdentifier = invoiceGenerationIdentifier,
+                InvoiceTypeId = invoiceTypeId,
+                UserId = userId,
+                IssueDate = issueDate,
+                MinimumFrom = invoiceGenerationDraftSummary.MinimumFrom,
+                MaximumTo = invoiceGenerationDraftSummary.MaximumTo
+            };
+
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
             {
                 InputArguments = invoiceGenerationProcessInput
             };
 
             var result = new BPInstanceManager().CreateNewProcess(createProcessInput);
-            return new GenerateInvoicesOutput { ProcessInstanceId = result.ProcessInstanceId };
+            return new GenerateInvoicesOutput { Succeed = true, ProcessInstanceId = result.ProcessInstanceId };
         }
     }
 }

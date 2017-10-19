@@ -67,18 +67,15 @@
                         selectFirstItem = payload.selectFirstItem;
                         dontShowInActive = payload.dontShowInActive;
                         ctrl.datasource.push(VR_Invoice_InvoiceAccountStatusEnum.Active);
-                        if(dontShowInActive)
-                        {
+                        if (dontShowInActive) {
                             ctrl.datasource.push(VR_Invoice_InvoiceAccountStatusEnum.ActiveAndExpired);
-                        }else
-                        {
+                        } else {
                             ctrl.datasource.push(VR_Invoice_InvoiceAccountStatusEnum.All);
                         }
                     }
                     if (selectedIds) {
                         VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
-                    }else if(selectFirstItem == true)
-                    {
+                    } else if (selectFirstItem == true) {
                         var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].value] : ctrl.datasource[0].value;
                         VRUIUtilsService.setSelectedValues(defaultValue, 'value', attrs, ctrl);
                     }
@@ -91,7 +88,7 @@
                 function getData() {
                     var selectedValue = VRUIUtilsService.getIdSelectedIds('value', attrs, ctrl);
                     if (selectedValue != undefined) {
-                        var returnedObj = {};
+                        var returnedObj = { selectedId: selectedValue };
                         switch (selectedValue) {
                             case VR_Invoice_InvoiceAccountStatusEnum.Active.value:
                                 returnedObj.Status = selectedValue;

@@ -15,7 +15,7 @@ namespace Vanrise.Invoice.MainExtensions.PartnerGroup
     public class InvoiceSetting : Vanrise.Invoice.Entities.PartnerGroup
     {
         public override Guid ConfigId { get { return new Guid("CF988AC3-FF1A-49F7-9293-4E7FD1E8E270"); } }
-        public Guid InvoiceSettingId { get; set; }
+        public List<Guid> InvoiceSettingIds { get; set; }
         public InvoicePartnerSetting Setting { get; set; }
 
         public override List<string> GetPartnerIds(IPartnerGroupContext context)
@@ -25,6 +25,9 @@ namespace Vanrise.Invoice.MainExtensions.PartnerGroup
 
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(context.InvoiceTypeId);
             invoiceType.ThrowIfNull("invoiceType", context.InvoiceTypeId);
+
+            if (InvoiceSettingIds == null || InvoiceSettingIds.Count == 0)
+                return null;
 
             var partnerIds = invoiceType.Settings.ExtendedSettings.GetPartnerIds(new ExtendedSettingsPartnerIdsContext { InvoiceTypeId = context.InvoiceTypeId, PartnerRetrievalType = Entities.PartnerRetrievalType.GetAll });
 
@@ -39,11 +42,11 @@ namespace Vanrise.Invoice.MainExtensions.PartnerGroup
             foreach (string partnerId in partnerIds)
             {
                 var partnerSetting = partnerManager.GetInvoicePartnerSetting(context.InvoiceTypeId, partnerId);
-                if (partnerSetting == null || partnerSetting.InvoiceSetting == null || partnerSetting.InvoiceSetting.InvoiceSettingId != this.InvoiceSettingId)
+                if (partnerSetting == null || partnerSetting.InvoiceSetting == null || !InvoiceSettingIds.Contains(partnerSetting.InvoiceSetting.InvoiceSettingId))
                     continue;
 
                 bool isInvoicePartnerSettingMatching = false;
-                AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoicePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceSettingPart>(new InvoicePartnerSettingPartContext() { InvoiceSettingId = this.InvoiceSettingId, InvoiceTypeId = context.InvoiceTypeId, PartnerId = partnerId });
+                AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoicePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceSettingPart>(new InvoicePartnerSettingPartContext() { InvoiceSettingId = partnerSetting.InvoiceSetting.InvoiceSettingId, InvoiceTypeId = context.InvoiceTypeId, PartnerId = partnerId });
 
                 switch (this.Setting)
                 {
@@ -56,20 +59,18 @@ namespace Vanrise.Invoice.MainExtensions.PartnerGroup
                 if (!isInvoicePartnerSettingMatching)
                     continue;
 
-                VRInvoiceAccountData invoiceAccountData = partnerManager.GetInvoiceAccountData(context.InvoiceTypeId, partnerId);
-                invoiceAccountData.ThrowIfNull("invoiceAccountData");
-
-                DateTime? effectiveDate = context.EffectiveDate;
-                bool? isEffectiveInFuture = context.IsEffectiveInFuture;
-                DateTime? bed = invoiceAccountData.BED;
-                DateTime? eed = invoiceAccountData.EED;
-
-                if (invoiceAccountData.Status == context.Status
-                    && (!effectiveDate.HasValue || ((!bed.HasValue || bed <= effectiveDate) && (!eed.HasValue || eed > effectiveDate)))
-                    && (!isEffectiveInFuture.HasValue || (isEffectiveInFuture.Value && (!eed.HasValue || eed >= now)) || (!isEffectiveInFuture.Value && eed.HasValue && eed <= now)))
+                PartnerStatusFilterMatchingContext partnerStatusFilterMatchingContext = new PartnerStatusFilterMatchingContext()
                 {
+                    AccountId = partnerId,
+                    EffectiveDate = context.EffectiveDate,
+                    InvoiceTypeId = context.InvoiceTypeId,
+                    IsEffectiveInFuture = context.IsEffectiveInFuture,
+                    Status = context.Status,
+                    CurrentDate = now
+                };
+
+                if (context.IsStatusFilterMatching(partnerStatusFilterMatchingContext))
                     invoiceSettingPartnerIds.Add(partnerId);
-                }
             }
 
             return invoiceSettingPartnerIds.Count > 0 ? invoiceSettingPartnerIds : null;

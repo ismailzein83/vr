@@ -30,6 +30,8 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
                         var elleft = selfOffset.left - $(window).scrollLeft();
                         if ($(self).parents('.section-menu').length > 0)
                             elleft -= $(self).width();
+                        if ($(self).parents('.vr-datagrid-celltext').length > 0)
+                            basetop -= 10;
 
                         $(dropDown).css({ position: 'fixed', top: basetop, left: elleft, bottom: 'unset' });
 

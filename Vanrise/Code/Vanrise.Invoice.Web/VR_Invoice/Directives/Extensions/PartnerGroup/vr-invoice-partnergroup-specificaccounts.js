@@ -25,6 +25,7 @@
             this.initializeController = initializeController;
             var invoiceTypeId;
             var accountStatus;
+            var isAutomatic;
 
             var selectorAPI;
             var partnerSelectorAPI;
@@ -46,6 +47,9 @@
                     var promises = [];
                     invoiceTypeId = payload.invoiceTypeId;
                     accountStatus = payload.accountStatus;
+                    isAutomatic = payload.isAutomatic;
+
+                    var partnerGroup = payload.partnerGroup;
 
                     var invoiceTypePromise = getInvoiceType();
                     promises.push(invoiceTypePromise);
@@ -71,7 +75,9 @@
                                 invoiceTypeId: invoiceTypeId,
                                 filter: accountStatus
                             };
-
+                            if (partnerGroup != undefined) {
+                                partnerSelectorPayload.selectedIds = partnerGroup.AccountIds;
+                            }
                             VRUIUtilsService.callDirectiveLoad(partnerSelectorAPI, partnerSelectorPayload, partnerSelectorPayloadLoadDeferred);
                         });
                         return partnerSelectorPayloadLoadDeferred.promise;

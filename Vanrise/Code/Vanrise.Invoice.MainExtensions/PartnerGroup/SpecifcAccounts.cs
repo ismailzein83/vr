@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions.PartnerGroup
@@ -14,7 +12,27 @@ namespace Vanrise.Invoice.MainExtensions.PartnerGroup
 
         public override List<string> GetPartnerIds(IPartnerGroupContext context)
         {
-            return this.AccountIds;
+            if (this.AccountIds == null || this.AccountIds.Count == 0)
+                return null;
+
+            DateTime now = DateTime.Now;
+            List<string> matchingAccounts = new List<string>();
+            foreach (string accountId in this.AccountIds)
+            {
+                PartnerStatusFilterMatchingContext partnerStatusFilterMatchingContext = new PartnerStatusFilterMatchingContext()
+                {
+                    AccountId = accountId,
+                    EffectiveDate = context.EffectiveDate,
+                    InvoiceTypeId = context.InvoiceTypeId,
+                    IsEffectiveInFuture = context.IsEffectiveInFuture,
+                    Status = context.Status,
+                    CurrentDate = now
+                };
+                if (context.IsStatusFilterMatching(partnerStatusFilterMatchingContext))
+                    matchingAccounts.Add(accountId);
+            }
+
+            return matchingAccounts != null && matchingAccounts.Count > 0 ? matchingAccounts : null;
         }
     }
 }

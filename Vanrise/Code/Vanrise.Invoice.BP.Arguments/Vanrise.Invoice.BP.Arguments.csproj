@@ -46,9 +46,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvoiceGenerationProcessOutput.cs" />
     <Compile Include="InvoiceGenerationProcessInput.cs" />
     <Compile Include="AutomaticInvoiceProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Invoice.Entities\Vanrise.Invoice.Entities.csproj">
+      <Project>{af8043ce-bc7c-445a-8c02-af023f5bdd68}</Project>
+      <Name>Vanrise.Invoice.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

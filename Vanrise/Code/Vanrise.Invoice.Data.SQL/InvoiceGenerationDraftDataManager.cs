@@ -22,7 +22,7 @@ namespace Vanrise.Invoice.Data.SQL
         public bool InsertInvoiceGenerationDraft(InvoiceGenerationDraft invoiceGenerationDraft, out long insertedId)
         {
             object invoiceGenerationDraftId;
-            int recordsEffected = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Insert", out invoiceGenerationDraftId, invoiceGenerationDraft.InvoiceGenerationIdentifier, 
+            int recordsEffected = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Insert", out invoiceGenerationDraftId, invoiceGenerationDraft.InvoiceGenerationIdentifier,
                 invoiceGenerationDraft.InvoiceTypeId, invoiceGenerationDraft.PartnerId, invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To,
                 invoiceGenerationDraft.CustomPayload != null ? Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload) : DBNull.Value);
 
@@ -45,10 +45,20 @@ namespace Vanrise.Invoice.Data.SQL
 
         public bool UpdateInvoiceGenerationDraft(InvoiceGenerationDraftToEdit invoiceGenerationDraft)
         {
-            int recordsEffected = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Update",  invoiceGenerationDraft.InvoiceGenerationDraftId, invoiceGenerationDraft.From, 
+            int recordsEffected = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceGenerationDraft_Update", invoiceGenerationDraft.InvoiceGenerationDraftId, invoiceGenerationDraft.From,
                 invoiceGenerationDraft.To, invoiceGenerationDraft.CustomPayload != null ? Vanrise.Common.Serializer.Serialize(invoiceGenerationDraft.CustomPayload) : DBNull.Value);
 
             return (recordsEffected > 0);
+        }
+
+        public InvoiceGenerationDraftSummary GetInvoiceGenerationDraftsSummary(Guid invoiceGenerationIdentifier)
+        {
+            return GetItemSPCmd("VR_Invoice.sp_InvoiceGenerationDraft_GetSummary", InvoiceGenerationDraftSummaryMapper, (cmd) =>
+             {
+                 var invoiceGenerationIdentifierParam = new System.Data.SqlClient.SqlParameter("@InvoiceGenerationIdentifier", SqlDbType.UniqueIdentifier);
+                 invoiceGenerationIdentifierParam.Value = invoiceGenerationIdentifier;
+                 cmd.Parameters.Add(invoiceGenerationIdentifierParam);
+             });
         }
 
         private InvoiceGenerationDraft InvoiceGenerationDraftMapper(IDataReader reader)
@@ -66,6 +76,17 @@ namespace Vanrise.Invoice.Data.SQL
                 CustomPayload = !string.IsNullOrEmpty(customPayload) ? Vanrise.Common.Serializer.Deserialize(customPayload) : null
             };
             return invoiceGenerationDraft;
+        }
+
+        private InvoiceGenerationDraftSummary InvoiceGenerationDraftSummaryMapper(IDataReader reader)
+        {
+            InvoiceGenerationDraftSummary invoiceGenerationDraftSummary = new InvoiceGenerationDraftSummary()
+            {
+                TotalCount = (int)reader["TotalCount"],
+                MinimumFrom = GetReaderValue<DateTime?>(reader, "MinimumFrom"),
+                MaximumTo = GetReaderValue<DateTime?>(reader, "MaximumTo"),
+            };
+            return invoiceGenerationDraftSummary;
         }
     }
 }

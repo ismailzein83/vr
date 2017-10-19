@@ -452,7 +452,7 @@
                             }).catch(function (error) {
                                 $scope.scopeModel.isLoading = false;
 
-                            });;
+                            });
                         }else
                         {
                             $scope.scopeModel.fromDate = undefined;

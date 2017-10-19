@@ -27,6 +27,7 @@ namespace Vanrise.Invoice.Entities
         DateTime? EffectiveDate { get; }
         bool? IsEffectiveInFuture { get; }
         VRAccountStatus Status { get; }
+        Func<IPartnerStatusFilterMatchingContext, bool> IsStatusFilterMatching { get; }
     }
 
     public class PartnerGroupContext : IPartnerGroupContext
@@ -35,5 +36,26 @@ namespace Vanrise.Invoice.Entities
         public DateTime? EffectiveDate { get; set; }
         public bool? IsEffectiveInFuture { get; set; }
         public VRAccountStatus Status { get; set; }
+        public Func<IPartnerStatusFilterMatchingContext, bool> IsStatusFilterMatching { get; set; }
+    }
+
+    public interface IPartnerStatusFilterMatchingContext
+    {
+        string AccountId { get; }
+        Guid InvoiceTypeId { get; }
+        DateTime? EffectiveDate { get; }
+        bool? IsEffectiveInFuture { get; }
+        VRAccountStatus Status { get; }
+        DateTime CurrentDate { get; }
+    }
+
+    public class PartnerStatusFilterMatchingContext : IPartnerStatusFilterMatchingContext
+    {
+        public string AccountId { get; set; }
+        public Guid InvoiceTypeId { get; set; }
+        public DateTime? EffectiveDate { get; set; }
+        public bool? IsEffectiveInFuture { get; set; }
+        public VRAccountStatus Status { get; set; }
+        public DateTime CurrentDate { get; set; }
     }
 }

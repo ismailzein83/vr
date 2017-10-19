@@ -1,6 +1,6 @@
 ﻿<vr-columns colnum="{{partnerGroupCtrl.normalColNum}}">
     <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Type" datasource="partnerGroupTemplates" text="None"
-               selectedvalues="selectedPartnerGroupTemplate" on-ready="onPartnerGroupSelectorReady" hideremoveicon isrequired="true">
+               selectedvalues="selectedPartnerGroupTemplate" on-ready="onPartnerGroupSelectorReady" isrequired="partnerGroupCtrl.isrequired">
     </vr-select>
 </vr-columns>
 <span ng-show="selectedPartnerGroupTemplate" vr-loader="isLoadingPartnerGroupTemplateDirective">
