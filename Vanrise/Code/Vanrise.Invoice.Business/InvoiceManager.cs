@@ -229,10 +229,7 @@ namespace Vanrise.Invoice.Business
                 insertOperationOutput.Message = invoiceGeneratorException.Message;
                 insertOperationOutput.ShowExactMessage = true;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
             return insertOperationOutput;
         }
         public bool SetInvoicePaid(long invoiceId, bool isInvoicePaid)

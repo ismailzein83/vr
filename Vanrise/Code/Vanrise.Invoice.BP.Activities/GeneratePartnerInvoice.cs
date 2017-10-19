@@ -51,24 +51,24 @@ namespace Vanrise.Invoice.BP.Activities
                 PartnerManager partnerManager = new PartnerManager();
                 var partnerSetting = partnerManager.GetInvoicePartnerSetting(invoiceTypeId, partnerId);
 
-                if (isAutomatic)
-                {
-                    AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceSettingPart>(
-                    new InvoicePartnerSettingPartContext
-                    {
-                        InvoiceSettingId = partnerSetting.InvoiceSetting.InvoiceSettingId,
-                        InvoiceTypeId = invoiceTypeId,
-                        PartnerId = partnerId
-                    });
+                //if (isAutomatic)
+                //{
+                //    AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceSettingPart>(
+                //    new InvoicePartnerSettingPartContext
+                //    {
+                //        InvoiceSettingId = partnerSetting.InvoiceSetting.InvoiceSettingId,
+                //        InvoiceTypeId = invoiceTypeId,
+                //        PartnerId = partnerId
+                //    });
 
-                    if (automaticInvoiceSettingPart == null || !automaticInvoiceSettingPart.IsEnabled)
-                    {
-                        this.Succeeded.Set(context.ActivityContext, false);
-                        this.LogEntryType.Set(context.ActivityContext, Vanrise.Entities.LogEntryType.Warning);
-                        this.Message.Set(context.ActivityContext, string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Automatic invoice not enabled for this partner'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To));
-                        return;
-                    }
-                }
+                //    if (automaticInvoiceSettingPart == null || !automaticInvoiceSettingPart.IsEnabled)
+                //    {
+                //        this.Succeeded.Set(context.ActivityContext, false);
+                //        this.LogEntryType.Set(context.ActivityContext, Vanrise.Entities.LogEntryType.Warning);
+                //        this.Message.Set(context.ActivityContext, string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Automatic invoice not enabled for this partner'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To));
+                //        return;
+                //    }
+                //}
 
                 BillingPeriodInvoiceSettingPart billingPeriodInvoiceSettingPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<BillingPeriodInvoiceSettingPart>(
                     new InvoicePartnerSettingPartContext
@@ -86,7 +86,7 @@ namespace Vanrise.Invoice.BP.Activities
                     {
                         this.Succeeded.Set(context.ActivityContext, false);
                         this.LogEntryType.Set(context.ActivityContext, Vanrise.Entities.LogEntryType.Warning);
-                        this.Message.Set(context.ActivityContext, string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Invalid Billing Interval'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To));
+                        this.Message.Set(context.ActivityContext, string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Invalid Billing Period'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To));
                         return;
                     }
                 }
