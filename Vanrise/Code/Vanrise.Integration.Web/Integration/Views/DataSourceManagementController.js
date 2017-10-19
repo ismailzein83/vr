@@ -13,6 +13,11 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
             { value: true, description: "Enabled" },
             { value: false, description: "Disabled" }
         ];
+
+        $scope.showEnableAll = false;
+        $scope.showDisableAll = false;
+
+
         $scope.selectedStatuses = [];
 
         $scope.searchClicked = function () {
@@ -29,12 +34,21 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
         $scope.hasAddDataSource = function () {
             return VR_Integration_DataSourceAPIService.HasAddDataSource();
         };
+
+        function hasDisableDataSourcePermission() {
+            return VR_Integration_DataSourceAPIService.HasDisablePermission();
+        }
+
+        function hasEnableDataSourcePermission() {
+            return VR_Integration_DataSourceAPIService.HasEnablePermission();
+        }
+
     }
 
     function load() {
-        $scope.isLoading= true;
+        $scope.isLoading = true;
         loadAllControls();
-       
+
     }
 
     function loadAllControls() {
@@ -65,10 +79,17 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
         };
         return payload;
     }
+    function getTaskManagmentInfo() {
+        VR_Integration_DataSourceAPIService.GetDataSourceManagmentInfo().then(function (response) {
+            $scope.showDisableAll = response.ShowDisableAll;
+            $scope.showEnableAll = response.ShowEnableAll;
+        });
+    }
 
     function addNewDataSource() {
         var onDataSourceAdded = function (dataSource) {
             gridApi.onDataSourceAdded(dataSource);
+            getTaskManagmentInfo();
         };
         VR_Integration_DataSourceService.addDataSource(onDataSourceAdded);
     }
@@ -79,7 +100,9 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
             if (confirmed) {
                 return VR_Integration_DataSourceAPIService.DisableAllDataSource().then(function (response) {
                     if (response) {
-                        $scope.viewAll = false;
+                        $scope.showEnableAll = true;
+                        $scope.showDisableAll = false;
+                        gridApi.updateDataItemsStatuts(false);
                         $scope.searchClicked();
                     }
                 }).catch(function (error) {
@@ -95,7 +118,9 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
             if (confirmed) {
                 return VR_Integration_DataSourceAPIService.EnableAllDataSource().then(function (response) {
                     if (response) {
-                        $scope.viewAll = true;
+                        $scope.showEnableAll = false;
+                        $scope.showDisableAll = true;
+                        gridApi.updateDataItemsStatuts(true);
                         $scope.searchClicked();
                     }
                 }).catch(function (error) {
@@ -105,17 +130,13 @@ function DataSourceManagementController($scope, VR_Integration_DataSourceAPIServ
         });
     }
 
-    function getContext () {
-        var context = {
-            showEnableAll: function() {
-                $scope.viewAll = false;
-            },
-            showDisableAll: function() {
-                $scope.viewAll = true;
+    function getContext() {
+        return {
+            getTaskManagmentInfo: function () {
+                getTaskManagmentInfo();
             }
         };
-        return context;
-        };
+    };
 }
 
 appControllers.controller('Integration_DataSourceManagementController', DataSourceManagementController);

@@ -54,6 +54,9 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
                         gridAPI.itemAdded(dataSource);
 
                     };
+                    directiveAPI.updateDataItemsStatuts = function (status) {
+                        updateDataItemsStatuts(status);
+                    };
                     return directiveAPI;
                 }
             };
@@ -115,6 +118,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
             var onDataSourceUpdated = function (dataSource) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(dataSource);
                 gridAPI.itemUpdated(dataSource);
+                enableDisableAll();
             };
 
             VR_Integration_DataSourceService.editDataSource(dataSourceObj.Entity.DataSourceId, onDataSourceUpdated);
@@ -127,6 +131,7 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
         function deleteDataSource(dataSourceObj) {
             var onDataSourceDeleted = function (dataSource) {
                 gridAPI.itemDeleted({ Entity: dataSource });
+                enableDisableAll();
             };
 
             VR_Integration_DataSourceService.deleteDataSource($scope, dataSourceObj.Entity, onDataSourceDeleted);
@@ -197,21 +202,26 @@ function (UtilsService, VRNotificationService, VR_Integration_DataSourceService,
             });
         }
 
-        function enableDisableAll(dataItems) {
-            if (context != undefined && typeof (context.showDisableAll) == "function" && typeof (context.showEnableAll) == "function") {
-                var isExistDisabled = false;
-                var isExistEnabled = false;
-                angular.forEach(dataItems, function (item) {
-                    if (item.Entity.IsEnabled === false)
-                        isExistDisabled = true;
-                    if (item.Entity.IsEnabled === true)
-                        isExistEnabled = true;
-                });
+        function updateDataItemsStatuts(status) {
+            for (var j = 0; j < $scope.dataSources.length; j++) {
+                if ($scope.dataSources[j].Entity.IsEnabled != status) {
+                    var currentDataSource = $scope.dataSources[j];                   
+                    var obj = {
+                        Entity: currentDataSource.Entity,
+                        AdapterInfo: currentDataSource.AdapterInfo
+                    };
+                    obj.Entity.IsEnabled = status;
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(obj);
+                    $scope.gridMenuActions(obj);
+                    $scope.dataSources[j] = obj;
+                    gridAPI.itemUpdated(obj);
+                }
+            }
+        }
 
-                if ((isExistDisabled && isExistEnabled) || !isExistDisabled)
-                    context.showDisableAll();
-                else
-                    context.showEnableAll();
+        function enableDisableAll(dataItems) {
+            if (context != undefined && typeof (context.getTaskManagmentInfo) == "function" ) {
+                context.getTaskManagmentInfo();
             }
         }
 

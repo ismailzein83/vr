@@ -135,6 +135,16 @@ namespace Vanrise.Integration.Web.Controllers
             DataSourceManager manager = new DataSourceManager();
             return manager.EnableDataSource(dataSourceId);
         }
+
+        [HttpGet]
+        [Route("GetDataSourceManagmentInfo")]
+        public DataSourceManagmentInfo GetDataSourceManagmentInfo()
+        {
+            DataSourceManager manager = new DataSourceManager();
+            return manager.GetDataSourceManagmentInfo();
+        }
+
+        
     }
 
     public class DataSourceWrapper

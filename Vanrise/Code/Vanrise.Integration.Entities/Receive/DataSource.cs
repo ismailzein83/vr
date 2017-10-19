@@ -75,4 +75,12 @@ namespace Vanrise.Integration.Entities
 
         List<dynamic> ParsedRecords { set; }
     }
+
+    public class DataSourceManagmentInfo
+    {
+        public bool ShowEnableAll { get; set; }
+
+        public bool ShowDisableAll { get; set; }
+
+    }
 }

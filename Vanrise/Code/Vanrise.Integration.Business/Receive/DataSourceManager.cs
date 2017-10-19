@@ -286,6 +286,8 @@ namespace Vanrise.Integration.Business
             var cachedDataSources = GetCachedDataSources();
             foreach (KeyValuePair<Guid, DataSource> entry in cachedDataSources)
             {
+                if (!entry.Value.IsEnabled)
+                    continue;
                 var output = DisableDataSource(entry.Value.DataSourceId);
                 if (output.Result != UpdateOperationResult.Succeeded)
                     return false;
@@ -298,11 +300,23 @@ namespace Vanrise.Integration.Business
             var cachedDataSources = GetCachedDataSources();
             foreach (KeyValuePair<Guid, DataSource> entry in cachedDataSources)
             {
+                if (entry.Value.IsEnabled)
+                    continue;
                 var output = EnableDataSource(entry.Value.DataSourceId);
                 if (output.Result != UpdateOperationResult.Succeeded)
                     return false;
             }
             return true;
+        }
+
+        public DataSourceManagmentInfo GetDataSourceManagmentInfo()
+        {
+            var dataSources = GetCachedDataSources();
+            return new DataSourceManagmentInfo()
+            {
+                ShowEnableAll = dataSources.FindRecord(x => !x.IsEnabled) != null,
+                ShowDisableAll = dataSources.FindRecord(x => x.IsEnabled) != null
+            };
         }
         #endregion
 

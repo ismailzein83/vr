@@ -25,7 +25,8 @@
             EnableDataSource: EnableDataSource,
             DisableAllDataSource: DisableAllDataSource,
             EnableAllDataSource: EnableAllDataSource,
-            GetDataSourceHistoryDetailbyHistoryId: GetDataSourceHistoryDetailbyHistoryId
+            GetDataSourceHistoryDetailbyHistoryId: GetDataSourceHistoryDetailbyHistoryId,
+            GetDataSourceManagmentInfo:GetDataSourceManagmentInfo
         });
 
         function GetDataSourceHistoryDetailbyHistoryId(dataSourceHistoryId) {
@@ -110,6 +111,11 @@
         function HasEnablePermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Integration_ModuleConfig.moduleName, "DataSource", ['EnableDataSource']));
         }
+
+        function GetDataSourceManagmentInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Integration_ModuleConfig.moduleName, "DataSource", 'GetDataSourceManagmentInfo'));
+        }
+        
     }
 
     appControllers.service('VR_Integration_DataSourceAPIService', DataSourceAPIService);
