@@ -8,11 +8,15 @@ using System.Threading.Tasks;
 using Vanrise.AccountManager.Data;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Common;
+using Vanrise.Security.Business;
+
 
 namespace Vanrise.AccountManager.Business
 {
-   public class AMManager
-    {
+   public class AccountManagerManager
+   {
+       UserManager userManager = new UserManager();
+       #region Public Methods
        public Vanrise.Entities.IDataRetrievalResult<AccountManagerDetail> GetFilteredAccountManagers(Vanrise.Entities.DataRetrievalInput<AccountManagerQuery> input)
        {
            var allAccountManagers = this.GetCachedAccountManagers();
@@ -25,14 +29,20 @@ namespace Vanrise.AccountManager.Business
            };
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
        }
+       #endregion
+
+       #region Mappers
        private AccountManagerDetail AccountManagerDetailMapper(Vanrise.AccountManager.Entities.AccountManager accountManager)
        {
            var accountManagerDetail = new AccountManagerDetail()
            {
-               UserID = accountManager.UserId,
+               UserName = userManager.GetUserName(accountManager.UserId),
            };
            return accountManagerDetail;
        }
+       #endregion
+
+       #region Private Classes
        private class CacheManager : Vanrise.Caching.BaseCacheManager
        {
            IAccountManagerDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerDataManager>();
@@ -43,6 +53,9 @@ namespace Vanrise.AccountManager.Business
                return dataManager.AreAccountManagersUpdated(ref _updateHandle);
            }
        }
+       #endregion
+
+       #region Private Methods
        Dictionary<int, Vanrise.AccountManager.Entities.AccountManager> GetCachedAccountManagers()
        {
            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountManagers",
@@ -53,5 +66,6 @@ namespace Vanrise.AccountManager.Business
                   return accountManagers.ToDictionary(cn => cn.UserId, cn => cn);
               });
        }
-    }
+       #endregion
+   }
 }

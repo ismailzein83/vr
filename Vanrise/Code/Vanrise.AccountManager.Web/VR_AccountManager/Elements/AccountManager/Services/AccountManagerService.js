@@ -23,9 +23,9 @@
             };
             VRModalService.showModal('/Client/Modules/VR_AccountManager/Elements/AccountManager/Views/AssignmentDefinitionEditor.html', parameters, settings);
         }
-        function editAssignmentDefinition(assignmentDefinitionObj, onAssignmentDefinitionUpdated) {
+        function editAssignmentDefinition(assignmentDefinitionEntity, onAssignmentDefinitionUpdated) {
             var parameters = {
-                Name: assignmentDefinitionObj.Name
+                assignmentDefinitionEntity: assignmentDefinitionEntity
             };
             var settings = {};
 

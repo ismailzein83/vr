@@ -6,7 +6,7 @@
 
     function assignmentDefinitionController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
-        var accountManagerAssignementDefinitionName;
+        var AssignementDefinitionEntity;
         loadParameters();
         defineScope();
         load();
@@ -14,24 +14,24 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                accountManagerAssignementDefinitionName = parameters.Name;
-            }
-            isEditMode = (accountManagerAssignementDefinitionName != undefined);
+                AssignementDefinitionEntity = parameters;
+            };
+            isEditMode = (AssignementDefinitionEntity != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
-            }
+            };
             $scope.scopeModel.assignmentName = accountManagerAssignementDefinitionName;
             $scope.scopeModel.save = function () {
-                if (!isEditMode) { 
+                if (!isEditMode) {
                     addAssignmentDefinition();
                 }
                 else {
                     updateAssignmnetDefinition();
                 }
-            }
+            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -57,12 +57,13 @@
                 var assignmentDefiniton = {
                     AccountManagerAssignementDefinitionId: UtilsService.guid(),
                     Name: $scope.scopeModel.assignmentName
-                }
+                };
             }
             else {
                 var assignmentDefiniton = {
+                    AccountManagerAssignementDefinitionId: AssignementDefinitionEntity.AccountManagerAssignementDefinitionId,
                     Name: $scope.scopeModel.assignmentName
-                }
+                };
             }
             return assignmentDefiniton;
         }

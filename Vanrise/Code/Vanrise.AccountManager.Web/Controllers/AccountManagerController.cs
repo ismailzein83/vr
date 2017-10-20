@@ -14,7 +14,7 @@ namespace Vanrise.AccountManager.Web.Controllers
     [JSONWithTypeAttribute]
     public class AccountManagerController : BaseAPIController
     {
-        AMManager _manager = new AMManager();
+        AccountManagerManager _manager = new AccountManagerManager();
             
         [HttpPost]
         [Route("GetFilteredAccountManagers")]

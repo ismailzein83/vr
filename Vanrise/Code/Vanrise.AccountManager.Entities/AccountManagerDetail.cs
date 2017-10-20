@@ -8,6 +8,6 @@ namespace Vanrise.AccountManager.Entities
 {
   public  class AccountManagerDetail
     {
-      public int UserID { get; set; }
+      public string UserName { get; set; }
     }
 }
