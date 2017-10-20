@@ -338,10 +338,14 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
             function getCellTemplateWithFilter(template, colDef) {
                 if (colDef.type == "Number") {
                     var numberPrecision = UISettingsService.getNormalPrecision() || 2;
-                    if (colDef.numberPrecision == "NoDecimal")
-                        numberPrecision = 0;
-                    else if (colDef.numberPrecision == "LongPrecision")
-                        numberPrecision = UISettingsService.getUIParameterValue('LongPrecision') || 4;
+                    if (colDef.numberPrecision != undefined) {
+                        if (colDef.numberPrecision == "NoDecimal")
+                            numberPrecision = 0;
+                        else if (colDef.numberPrecision == "LongPrecision")
+                            numberPrecision = UISettingsService.getUIParameterValue('LongPrecision') || 4;
+                        else if (Number.isInteger(colDef.numberPrecision))
+                            numberPrecision = parseInt(colDef.numberPrecision);
+                    }
                     template = template.replace("#TEXTALIGN#", "right;padding-right:2px");
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "| vrtextOrNumber:" + numberPrecision);
                     template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
