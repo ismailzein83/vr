@@ -1,4 +1,5 @@
-﻿using Vanrise.Entities.EntitySynchronization;
+﻿using System;
+using Vanrise.Entities.EntitySynchronization;
 namespace TOne.WhS.DBSync.Entities
 {
 
@@ -40,6 +41,17 @@ namespace TOne.WhS.DBSync.Entities
         public bool IsAToZ { get; set; }
         public bool IsDeleted { get; set; }
         public bool RepresentsASwitch { get; set; }
+
+
+        public SourcePaymentType CustomerPaymentType { get; set; }
+        public SourcePaymentType SupplierPaymentType { get; set; }
+        public int? CustomerCreditLimit { get; set; }
+        public int? SupplierCreditLimit { get; set; }
+        public DateTime? CustomerActivateDate { get; set; }
+        public DateTime? CustomerDeactivateDate { get; set; }
+        public DateTime? SupplierActivateDate { get; set; }
+        public DateTime? SupplierDeactivateDate { get; set; }
+        public bool IsNettingEnabled { get; set; }
         
     }
 

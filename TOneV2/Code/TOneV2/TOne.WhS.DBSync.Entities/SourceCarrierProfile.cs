@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using Vanrise.Entities.EntitySynchronization;
 namespace TOne.WhS.DBSync.Entities
 {
@@ -40,5 +42,47 @@ namespace TOne.WhS.DBSync.Entities
         public string CurrencyId { get; set; }
         public byte DuePeriod { get; set; }
         public bool IsDeleted { get; set; }
+
+    }
+
+    public class SourceCarrierProfileWithAccounts : ISourceItem
+    {
+        public SourceCarrierProfileWithAccounts()
+        {
+            this.Customers = new List<SourceCarrierAccount>();
+            this.Suppliers = new List<SourceCarrierAccount>();
+        }
+        public string SourceId
+        {
+            get;
+            set;
+        }
+        public bool IsDeleted { get; set; }
+
+        #region Financial Props
+        public SourcePaymentType CustomerPaymentType { get; set; }
+        public SourcePaymentType SupplierPaymentType { get; set; }
+        public int? CustomerCreditLimit { get; set; }
+        public int? SupplierCreditLimit { get; set; }
+        public DateTime? CustomerActivateDate { get; set; }
+        public DateTime? CustomerDeactivateDate { get; set; }
+        public DateTime? SupplierActivateDate { get; set; }
+        public DateTime? SupplierDeactivateDate { get; set; }
+        public bool InvoiceByProfile { get; set; }
+        public bool IsNettingEnabled { get; set; }
+
+        #endregion
+
+        public List<SourceCarrierAccount> Customers { get; set; }
+        public List<SourceCarrierAccount> Suppliers { get; set; }
+
+    }
+
+    public enum SourcePaymentType
+    {
+        Postpaid = 0,
+        Prepaid = 1,
+        Undefined = 100,
+        Defined_By_Profile = 200
     }
 }

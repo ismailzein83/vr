@@ -201,8 +201,10 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     $scope.migrationTablesSelectedValues;
                     angular.forEach($scope.migrationTablesSelectedValues, function (x) {
                         selectedTables.push(x.value);
-                        if (x == WhS_BE_DBTableNameEnum.CarrierAccount)
+                        if (x == WhS_BE_DBTableNameEnum.CarrierAccount) {
                             selectedTables.push(WhS_BE_DBTableNameEnum.CarrierAccountStatusHistory.value);
+                        }
+
                     });
                     selectedTables.push(WhS_BE_DBTableNameEnum.CustomerCountry.value);
                     selectedTables.push(WhS_BE_DBTableNameEnum.File.value);

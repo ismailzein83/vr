@@ -235,6 +235,9 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.VRTimeZone:
                         iDBSyncDataManager = new VRTimeZoneDBSyncDataManager(context.UseTempTables);
                         break;
+                    case DBTableName.FinancialAccount:
+                        iDBSyncDataManager = new FinancialAccountDBSyncDataManager(context.UseTempTables);
+                        break;
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
 
@@ -395,6 +398,9 @@ namespace TOne.WhS.DBSync.Business
                     break;
                 case DBTableName.VRTimeZone:
                     migrator = new VRTimeZoneMigrator(context);
+                    break;
+                case DBTableName.FinancialAccount:
+                    migrator = new FinancialAccountMigrator(context);
                     break;
                 //Default Case for Table names that do not require migrator
                 default:

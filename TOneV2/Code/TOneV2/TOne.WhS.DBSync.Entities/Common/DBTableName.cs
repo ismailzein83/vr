@@ -79,6 +79,10 @@ namespace TOne.WhS.DBSync.Entities
         Rule = 23,
 
         [Description("CarrierAccountStatusHistory")]
-        CarrierAccountStatusHistory = 24
+        CarrierAccountStatusHistory = 24,
+
+        [Description("FinancialAccount")]
+        FinancialAccount = 25
+
     }
 }
