@@ -14,18 +14,18 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.SaleZone WHERE ID != @Id AND Name = @Name
 	Set Name = @Name
 	Where ID = @ID
 
-	Update [TOneV2_Dev].[TOneWhS_BE].[SalePricelistRateChange]
+	Update [TOneWhS_BE].[SalePricelistRateChange]
 	Set ZoneName = @Name
 	Where ZoneID = @ID
 
-	Update [TOneV2_Dev].[TOneWhS_BE].[SalePricelistCodeChange]
+	Update [TOneWhS_BE].[SalePricelistCodeChange]
+	Set ZoneName = @Name
+	Where ZoneID = @ID
+
+	Update [TOneWhS_BE].[SalePricelistRPChange]
 	Set ZoneName = @Name
 	Where ZoneID = @ID
 
 	COMMIT TRAN
-	END
-
-
-
-	
+	END	
 END
