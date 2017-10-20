@@ -117,14 +117,10 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="VR_AccountManager\Elements\AccountManager\Directives\" />
-    <Folder Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\" />
-    <Folder Include="VR_AccountManager\Elements\AccountManager\Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\AccountManagerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +132,10 @@
       <Project>{f6b69e54-b351-41f5-a845-5803900ba05f}</Project>
       <Name>Vanrise.AccountManager.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
@@ -143,6 +143,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_AccountManager\Constant\ModuleConfig.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionGridTemplate.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerGrid.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanager-grid.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-grid.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionEditorTemplate.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-editor.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Services\AccountManagerService.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerAPIService.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\AccountManagerManagement.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\AccountManagerManagementController.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\AssignmentDefinitionController.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\AssignmentDefinition.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

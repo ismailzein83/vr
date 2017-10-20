@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AccountManagerAssignmentManager.cs" />
     <Compile Include="AccountManagerBEDefinitionSettings.cs" />
+    <Compile Include="AMManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -56,9 +57,17 @@
       <Project>{f6b69e54-b351-41f5-a845-5803900ba05f}</Project>
       <Name>Vanrise.AccountManager.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
+      <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
+      <Name>Vanrise.Caching</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>

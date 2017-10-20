@@ -1,0 +1,24 @@
+﻿<vr-panel ng-controller="VR_AccountManager_AccountManagerManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-columns colnum="3">
+                    <vr-sec-user-selector on-ready="scopeModel.onUserSelectorReady" normal-col-num="2" ismultipleselection="true"></vr-sec-user-selector>
+                    </vr-columns>
+</vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addNewAccountManager"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns colnum="12" simplecol>
+                <vr-accountmanager-accountmanager-grid on-ready="scopeModel.onGridReady"></vr-accountmanager-accountmanager-grid>
+</vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

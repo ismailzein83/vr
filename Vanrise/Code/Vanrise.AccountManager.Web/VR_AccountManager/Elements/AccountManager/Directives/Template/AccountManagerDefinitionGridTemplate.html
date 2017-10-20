@@ -1,0 +1,8 @@
+﻿<vr-button type="Add" data-onclick="addNewAssignmentDefinition" standalone></vr-button>
+<vr-datagrid datasource="accountManagerDefinitions"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>
