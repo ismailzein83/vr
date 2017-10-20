@@ -1578,12 +1578,15 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<int, DateTime> customerCountriesByCountryId = new Dictionary<int, DateTime>();
             CustomerCountryManager customerCountryManager = new CustomerCountryManager();
 
-            List<CustomerCountry2> customerCountries = customerCountryManager.GetCustomerCountries(customerId).ToList();
-            foreach (var customerCountry in customerCountries)
+            IEnumerable<CustomerCountry2> customerCountries = customerCountryManager.GetCustomerCountries(customerId);
+            if (customerCountries != null)
             {
-                DateTime countrySellDate;
-                if (!customerCountriesByCountryId.TryGetValue(customerCountry.CountryId, out countrySellDate) || customerCountry.BED < countrySellDate)
-                    customerCountriesByCountryId.Add(customerCountry.CountryId, customerCountry.BED);
+                foreach (var customerCountry in customerCountries)
+                {
+                    DateTime countrySellDate;
+                    if (!customerCountriesByCountryId.TryGetValue(customerCountry.CountryId, out countrySellDate) || customerCountry.BED < countrySellDate)
+                        customerCountriesByCountryId.Add(customerCountry.CountryId, customerCountry.BED);
+                }
             }
 
             return customerCountriesByCountryId;
