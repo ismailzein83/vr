@@ -209,8 +209,6 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
 
                                         }
                                         function callActionMethod(invoiceAction) {
-                                            console.log(currentItem);
-
                                             var payload = {
                                                 generatorEntity: {
                                                     invoiceTypeId: invoiceTypeId,

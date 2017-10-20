@@ -86,6 +86,10 @@ namespace Vanrise.Invoice.Business
             long insertedInvoiceId = -1;
             try
             {
+                string datesValidationmessage;
+                if (!AreInvoiceDatesValid(createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, out datesValidationmessage))
+                    throw new InvoiceGeneratorException(datesValidationmessage);
+
                 var currentInvocie = GetInvoice(createInvoiceInput.InvoiceId.Value);
                 if (!currentInvocie.LockDate.HasValue)
                 {
@@ -131,6 +135,28 @@ namespace Vanrise.Invoice.Business
             }
             return updateOperationOutput;
         }
+
+        bool AreInvoiceDatesValid(DateTime from, DateTime to, DateTime issueDate, out string message)
+        {
+            message=null;
+
+            StringBuilder strBuilder = new StringBuilder();
+            if (issueDate.Date != issueDate)
+                strBuilder.AppendFormat("Invalid Issue Date: {0}", issueDate);
+
+            if (from.Date != from)
+                strBuilder.AppendFormat("Invalid From Date: {0}", from);
+
+            if (to < new DateTime(to.Year, to.Month, to.Day, 23, 59, 59, 995))
+                strBuilder.AppendFormat("Invalid To Date: {0}", to);
+
+            if (strBuilder.Length > 0)
+            {
+                message = strBuilder.ToString();
+                return false;
+            }
+            return true;
+        }
         public DateTime? CheckGeneratedInvoicePeriodGaP(DateTime fromDate, Guid invoiceTypeId, string partnerId)
         {
             BillingPeriodInfoManager billingPeriodInfoManager = new BillingPeriodInfoManager();
@@ -148,6 +174,10 @@ namespace Vanrise.Invoice.Business
 
             try
             {
+                string datesValidationmessage;
+                if (!AreInvoiceDatesValid(createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, out datesValidationmessage))
+                    throw new InvoiceGeneratorException(datesValidationmessage);
+
                 InvoiceTypeManager manager = new InvoiceTypeManager();
                 var invoiceType = manager.GetInvoiceType(createInvoiceInput.InvoiceTypeId);
                 DateTime fromDate = createInvoiceInput.FromDate;
