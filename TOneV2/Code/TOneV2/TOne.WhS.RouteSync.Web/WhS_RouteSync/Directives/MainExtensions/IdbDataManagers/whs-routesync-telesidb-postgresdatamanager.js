@@ -32,7 +32,7 @@
                     if ($scope.scopeModel.redundantConnectionStrings == undefined)
                         $scope.scopeModel.redundantConnectionStrings = [];
                     $scope.scopeModel.redundantConnectionStrings.push({});
-                }
+                };
 
                 defineAPI();
             }
