@@ -36,7 +36,7 @@
                             return ValidationMessagesEnum.invalidMinLength + " " + validationOptions.minLength + " characters.";
                     }
                     if (validationOptions.numberValidation) {
-                        var validationResult = validateNumber(value, validationOptions)
+                        var validationResult = validateNumber(value, validationOptions);
                         if (validationResult != undefined) {
                             if (validationResult.validmin == false)
                                 return ValidationMessagesEnum.invalidMin + " " + validationOptions.minNumber;
