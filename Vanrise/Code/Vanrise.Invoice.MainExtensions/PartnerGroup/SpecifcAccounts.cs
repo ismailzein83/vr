@@ -12,27 +12,7 @@ namespace Vanrise.Invoice.MainExtensions.PartnerGroup
 
         public override List<string> GetPartnerIds(IPartnerGroupContext context)
         {
-            if (this.AccountIds == null || this.AccountIds.Count == 0)
-                return null;
-
-            DateTime now = DateTime.Now;
-            List<string> matchingAccounts = new List<string>();
-            foreach (string accountId in this.AccountIds)
-            {
-                PartnerStatusFilterMatchingContext partnerStatusFilterMatchingContext = new PartnerStatusFilterMatchingContext()
-                {
-                    AccountId = accountId,
-                    EffectiveDate = context.EffectiveDate,
-                    InvoiceTypeId = context.InvoiceTypeId,
-                    IsEffectiveInFuture = context.IsEffectiveInFuture,
-                    Status = context.Status,
-                    CurrentDate = now
-                };
-                if (context.IsStatusFilterMatching(partnerStatusFilterMatchingContext))
-                    matchingAccounts.Add(accountId);
-            }
-
-            return matchingAccounts != null && matchingAccounts.Count > 0 ? matchingAccounts : null;
+            return this.AccountIds;
         }
     }
 }

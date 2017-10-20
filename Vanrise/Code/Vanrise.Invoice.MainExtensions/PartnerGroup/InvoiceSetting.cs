@@ -37,8 +37,6 @@ namespace Vanrise.Invoice.MainExtensions.PartnerGroup
 
             List<string> invoiceSettingPartnerIds = new List<string>();
 
-            DateTime now = DateTime.Now;
-
             foreach (string partnerId in partnerIds)
             {
                 var partnerSetting = partnerManager.GetInvoicePartnerSetting(context.InvoiceTypeId, partnerId);
@@ -59,18 +57,7 @@ namespace Vanrise.Invoice.MainExtensions.PartnerGroup
                 if (!isInvoicePartnerSettingMatching)
                     continue;
 
-                PartnerStatusFilterMatchingContext partnerStatusFilterMatchingContext = new PartnerStatusFilterMatchingContext()
-                {
-                    AccountId = partnerId,
-                    EffectiveDate = context.EffectiveDate,
-                    InvoiceTypeId = context.InvoiceTypeId,
-                    IsEffectiveInFuture = context.IsEffectiveInFuture,
-                    Status = context.Status,
-                    CurrentDate = now
-                };
-
-                if (context.IsStatusFilterMatching(partnerStatusFilterMatchingContext))
-                    invoiceSettingPartnerIds.Add(partnerId);
+                invoiceSettingPartnerIds.Add(partnerId);
             }
 
             return invoiceSettingPartnerIds.Count > 0 ? invoiceSettingPartnerIds : null;

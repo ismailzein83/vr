@@ -22,35 +22,13 @@ namespace Vanrise.Invoice.Business
 
             var invoiceTypePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
 
-            PartnerGroupContext partnerGroupContext = new PartnerGroupContext() { InvoiceTypeId = query.InvoiceTypeId, Status = query.Status, EffectiveDate = query.EffectiveDate, IsEffectiveInFuture = query.IsEffectiveInFuture, IsStatusFilterMatching = IsStatusFilterMatching };
+            PartnerGroupContext partnerGroupContext = new PartnerGroupContext() { InvoiceTypeId = query.InvoiceTypeId };
 
             IEnumerable<string> partnerIds;
             if (query.PartnerGroup != null)
-            {
                 partnerIds = query.PartnerGroup.GetPartnerIds(partnerGroupContext);
-            }
             else
-            {
-                //if (query.IsAutomatic)
-                //{
-                IEnumerable<string> allPartnerIds = invoiceType.Settings.ExtendedSettings.GetPartnerIds(new ExtendedSettingsPartnerIdsContext { InvoiceTypeId = query.InvoiceTypeId, PartnerRetrievalType = Entities.PartnerRetrievalType.GetAll });
-                List<string> matchingPartners = new List<string>();
-
-                if (allPartnerIds != null)
-                {
-                    DateTime now = DateTime.Now;
-                    foreach (string partnerId in allPartnerIds)
-                    {
-                        PartnerStatusFilterMatchingContext partnerStatusFilterMatchingContext = new PartnerStatusFilterMatchingContext() { AccountId = partnerId, EffectiveDate = query.EffectiveDate, InvoiceTypeId = query.InvoiceTypeId, IsEffectiveInFuture = query.IsEffectiveInFuture, Status = query.Status, CurrentDate = now };
-                        if (IsStatusFilterMatching(partnerStatusFilterMatchingContext))
-                            matchingPartners.Add(partnerId);
-                    }
-                }
-                partnerIds = matchingPartners.Count > 0 ? matchingPartners : null;
-                //}
-                //else
-                //    throw new NullReferenceException("PartnerGroup");
-            }
+                partnerIds = invoiceType.Settings.ExtendedSettings.GetPartnerIds(new ExtendedSettingsPartnerIdsContext { InvoiceTypeId = query.InvoiceTypeId, PartnerRetrievalType = Entities.PartnerRetrievalType.GetAll });
 
             if (partnerIds == null || partnerIds.Count() == 0)
                 return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "No partners found." };
@@ -60,9 +38,13 @@ namespace Vanrise.Invoice.Business
             int count = 0;
             DateTime minimumFrom = DateTime.MaxValue;
             DateTime maximumTo = DateTime.MinValue;
+            DateTime now = DateTime.Now;
 
             foreach (string partnerId in partnerIds)
             {
+                if (!IsStatusFilterMatching(query.InvoiceTypeId, partnerId, query.EffectiveDate, query.IsEffectiveInFuture, query.Status, now))
+                    continue;
+
                 DateTime? fromDate = null;
                 DateTime? toDate = null;
                 switch (query.Period)
@@ -132,9 +114,14 @@ namespace Vanrise.Invoice.Business
                 InsertOperationOutput<InvoiceGenerationDraft> insertedInvoiceGenerationDraft = InsertInvoiceGenerationDraft(invoiceGenerationDraft);
                 if (insertedInvoiceGenerationDraft.Result != InsertOperationResult.Succeeded)
                     return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Technical Error occured while trying to Add Records" };
+
                 count++;
             }
-            return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Succeeded, Count = count, MinimumFrom = minimumFrom, MaximumTo = maximumTo };
+
+            if (count == 0)
+                return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "No partners found." };
+            else
+                return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Succeeded, Count = count, MinimumFrom = minimumFrom, MaximumTo = maximumTo };
         }
 
         private bool CheckIFShouldGenerateInvoice(DateTime toDate, DateTime? maximumToDate)
@@ -142,20 +129,18 @@ namespace Vanrise.Invoice.Business
             return !maximumToDate.HasValue || toDate <= maximumToDate;
         }
 
-        private bool IsStatusFilterMatching(IPartnerStatusFilterMatchingContext context)
+        private bool IsStatusFilterMatching(Guid invoiceTypeId, string accountId, DateTime? effectiveDate, bool? isEffectiveInFuture, VRAccountStatus status, DateTime currentDate)
         {
             PartnerManager partnerManager = new PartnerManager();
-            VRInvoiceAccountData invoiceAccountData = partnerManager.GetInvoiceAccountData(context.InvoiceTypeId, context.AccountId);
+            VRInvoiceAccountData invoiceAccountData = partnerManager.GetInvoiceAccountData(invoiceTypeId, accountId);
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
 
-            DateTime? effectiveDate = context.EffectiveDate;
-            bool? isEffectiveInFuture = context.IsEffectiveInFuture;
             DateTime? bed = invoiceAccountData.BED;
             DateTime? eed = invoiceAccountData.EED;
 
-            if (invoiceAccountData.Status == context.Status
+            if (invoiceAccountData.Status == status
                 && (!effectiveDate.HasValue || ((!bed.HasValue || bed <= effectiveDate) && (!eed.HasValue || eed > effectiveDate)))
-                && (!isEffectiveInFuture.HasValue || (isEffectiveInFuture.Value && (!eed.HasValue || eed >= context.CurrentDate)) || (!isEffectiveInFuture.Value && eed.HasValue && eed <= context.CurrentDate)))
+                && (!isEffectiveInFuture.HasValue || (isEffectiveInFuture.Value && (!eed.HasValue || eed >= currentDate)) || (!isEffectiveInFuture.Value && eed.HasValue && eed <= currentDate)))
             {
                 return true;
             }
