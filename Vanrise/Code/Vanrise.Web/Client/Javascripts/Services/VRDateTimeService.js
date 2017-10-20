@@ -24,9 +24,16 @@
             return date;
         }
 
+        function getTodayDate() {
+            var date = getNowDateTime();
+            date.setHours(0, 0, 0, 0);
+            return date;
+        }
+
         return ({
             getNowDateTime: getNowDateTime,
-            getCurrentDateWithoutMilliseconds: getCurrentDateWithoutMilliseconds
+            getCurrentDateWithoutMilliseconds: getCurrentDateWithoutMilliseconds,
+            getTodayDate: getTodayDate
 
         });
     }

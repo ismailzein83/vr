@@ -193,7 +193,7 @@
             function loadStaticData() {
                 $scope.scopeModel.invoiceGenerationPeriods = UtilsService.getArrayEnum(VR_Invoice_InvoiceGenerationPeriodEnum);
                 $scope.scopeModel.selectedInvoiceGenerationPeriod = UtilsService.getEnum(VR_Invoice_InvoiceGenerationPeriodEnum, 'value', VR_Invoice_InvoiceGenerationPeriodEnum.FollowBillingCycle.value);
-                $scope.scopeModel.issueDate = VRDateTimeService.getNowDateTime();
+                $scope.scopeModel.issueDate = VRDateTimeService.getTodayDate();
             }
 
 
