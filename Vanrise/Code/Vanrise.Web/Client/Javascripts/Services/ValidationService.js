@@ -33,11 +33,18 @@
                     }
                     if (validationOptions.minlengthValidation) {
                         if (validateMinLength(value, validationOptions))
-                            return ValidationMessagesEnum.invalidMinLength + " " + validationOptions.minLength +" characters.";
+                            return ValidationMessagesEnum.invalidMinLength + " " + validationOptions.minLength + " characters.";
                     }
                     if (validationOptions.numberValidation) {
-                        if (!validateNumber(value, validationOptions))
-                            return ValidationMessagesEnum.invalidNumber;
+                        var validationResult = validateNumber(value, validationOptions)
+                        if (validationResult != undefined) {
+                            if (validationResult.validmin == false)
+                                return ValidationMessagesEnum.invalidMin + " " + validationOptions.minNumber;
+                            if (validationResult.validmax == false)
+                                return ValidationMessagesEnum.invalidMax + " " + validationOptions.maxNumber;
+                            if (validationResult.validmaxprec == false)
+                                return ValidationMessagesEnum.invalidPrec + " " + validationOptions.numberPrecision + " digit(s)";
+                        }
                     }
                 }
                 if ($attrs.customvalidate != undefined) {
@@ -68,21 +75,27 @@
             // return String(value).search(isIp_re) != -1;
         }
         function validateFileName(value) {
-            var rg1 = /^[^\\/:\*\?"<>\|]+$/ ;
-            var rg2 = /^\./ ; 
-            var rg3 = /^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i ;
+            var rg1 = /^[^\\/:\*\?"<>\|]+$/;
+            var rg2 = /^\./;
+            var rg3 = /^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i;
             return rg1.test(value) && !rg2.test(value) && !rg3.test(value);
         }
         function validateMinLength(value, validationOptions) {
             if (value == undefined || value == null || value == "") return false;
-            return validationOptions.minLength > value.length  ;
+            return validationOptions.minLength > value.length;
         }
         function validateNumber(value, validationOptions) {
+
             var decimalArray = String(value).split(".");
             var validmax = (validationOptions.maxNumber != undefined) ? parseFloat(value) <= validationOptions.maxNumber : true;
             var validmin = (validationOptions.minNumber != undefined) ? parseFloat(value) >= validationOptions.minNumber : true;
             var validmaxprec = (validationOptions.numberPrecision != undefined && decimalArray[1] != undefined) ? decimalArray[1].length <= validationOptions.numberPrecision : true;
-            return validmin && validmax && validmaxprec;
+            if (validmin && validmax && validmaxprec) return;
+            else return {
+                validmin: validmin,
+                validmax: validmax,
+                validmaxprec: validmaxprec
+            };
         }
 
         function validateTimeRange(fromDate, toDate) {
