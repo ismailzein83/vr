@@ -6,28 +6,28 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.30046in</Width>
+              <Width>0.62312cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.75508in</Width>
+              <Width>1.77786cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.91133in</Width>
+              <Width>2.17473cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.35254in</Width>
+              <Width>3.29541cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.38378in</Width>
+              <Width>3.37476cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.25509in</Width>
+              <Width>3.04788cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.80046in</Width>
+              <Width>1.89312cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.8477in</Width>
+              <Width>2.01311cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -942,7 +942,7 @@
         <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
         <DataSetName>MultiNetCDRs</DataSetName>
         <Height>1.04671in</Height>
-        <Width>7.60644in</Width>
+        <Width>18.2cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -953,7 +953,7 @@
     <Height>3.02905cm</Height>
     <Style />
   </Body>
-  <Width>19.32041cm</Width>
+  <Width>18.2cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
