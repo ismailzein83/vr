@@ -28,21 +28,19 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
         $scope.accountManagerDefinitions = [];
         function initializeController()
         {
-            $scope.addNewAssignmentDefinition = function ()
-            {
+            $scope.addNewAssignmentDefinition = function () {
                 var onAssignmentDefinitionAdded = function (assignmnetDefifniton) {
                     $scope.accountManagerDefinitions.push(assignmnetDefifniton);
                 };
                 VR_AccountManager_AccountManagerService.addNewAssignmentDefinition(onAssignmentDefinitionAdded);
-            }
+            };
            
-            $scope.onGridReady = function (api){
+            $scope.onGridReady = function (api) {
                 gridAPI = api;
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
-                {
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveAPI());
                 }
-                function getDirectiveAPI(){
+                function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
                         if (payload != undefined) {
@@ -51,11 +49,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
                     };
                     directiveAPI.getData = function () {
                         return ($scope.accountManagerDefinitions);
-                    }
+                    };
                     return directiveAPI;
                 };
 
-            }
+            };
             defineMenuActions();
         }
         function defineMenuActions() {

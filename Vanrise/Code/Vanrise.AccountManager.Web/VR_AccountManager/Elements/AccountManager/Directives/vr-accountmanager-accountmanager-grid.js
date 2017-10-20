@@ -43,7 +43,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
 
                     return directiveAPI;
                 }
-            }
+            };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VR_AccountManager_AccountManagerAPIService.GetFilteredAccountManagers(dataRetrievalInput)
                    .then(function (response) {

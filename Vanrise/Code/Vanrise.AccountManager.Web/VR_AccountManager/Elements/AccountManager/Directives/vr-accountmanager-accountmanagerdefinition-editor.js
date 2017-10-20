@@ -41,9 +41,9 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                     if(payload != undefined)
                     {
                         gridReadyPromise.promise.then(function () {
-                            assignmentdefinitons = payload.businessEntityDefinitionSettings. AssignmentDefinitions;
+                            assignmentdefinitons = payload.businessEntityDefinitionSettings.AssignmentDefinitions;
                             gridAPI.loadGrid(assignmentdefinitons);
-                        })
+                        });
                     }
                 };
                 api.getData = function () {
