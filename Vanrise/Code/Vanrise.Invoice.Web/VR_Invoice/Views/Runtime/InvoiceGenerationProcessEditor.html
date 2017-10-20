@@ -19,7 +19,7 @@
                     </vr-columns>
 
                     <vr-columns colnum="6">
-                        <vr-datetimepicker value="scopeModel.toDate" type="date" label="To" customvalidate="scopeModel.validateDates()" isrequired="scopeModel.areDatesRequired()"></vr-datetimepicker>
+                        <vr-datetimepicker value="scopeModel.toDate" type="date" label="To" customvalidate="scopeModel.validateDates()" isrequired="scopeModel.areDatesRequired()" applytimemax></vr-datetimepicker>
                     </vr-columns>
                     <vr-columns colnum="12" ng-if="!scopeModel.areDatesRequired()">
                         <vr-label isvalue style="text-align:center">From & To should be specified if some partners don't have billing cycle</vr-label>
