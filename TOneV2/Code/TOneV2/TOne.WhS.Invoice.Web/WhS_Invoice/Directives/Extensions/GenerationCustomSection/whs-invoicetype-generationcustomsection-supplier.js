@@ -135,6 +135,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSupplier", ["UtilsService", 
                                 loadTimeZonePromiseDeferred.reject(error);
                             });
                         } else {
+                            selectedTimeZoneReadyDeferred = UtilsService.createPromiseDeferred();
+
                             promises.push(loadTimeZoneSelector());
                         }
                     }
