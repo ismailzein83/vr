@@ -142,13 +142,13 @@ namespace Vanrise.Invoice.Business
 
             StringBuilder strBuilder = new StringBuilder();
             if (issueDate.Date != issueDate)
-                strBuilder.AppendFormat("Invalid Issue Date: {0}", issueDate);
+                strBuilder.AppendFormat("Invalid Issue Date: {0}. ", issueDate.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
             if (from.Date != from)
-                strBuilder.AppendFormat("Invalid From Date: {0}", from);
+                strBuilder.AppendFormat("Invalid From Date: {0}. ", from.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
             if (to < new DateTime(to.Year, to.Month, to.Day, 23, 59, 59, 995))
-                strBuilder.AppendFormat("Invalid To Date: {0}", to);
+                strBuilder.AppendFormat("Invalid To Date: {0}. ", to.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
             if (strBuilder.Length > 0)
             {
