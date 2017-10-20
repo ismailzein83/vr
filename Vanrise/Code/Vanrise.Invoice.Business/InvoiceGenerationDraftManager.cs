@@ -248,7 +248,11 @@ namespace Vanrise.Invoice.Business
                     if (!invoiceGenerationDraft.IsSelected)
                         dataManager.DeleteInvoiceGenerationDraft(invoiceGenerationDraft.InvoiceGenerationDraftId);
                     else
+                    {
+                        invoiceGenerationDraft.From = new DateTime(invoiceGenerationDraft.From.Year, invoiceGenerationDraft.From.Month, invoiceGenerationDraft.From.Day, 0, 0, 0);
+                        invoiceGenerationDraft.To = new DateTime(invoiceGenerationDraft.To.Year, invoiceGenerationDraft.To.Month, invoiceGenerationDraft.To.Day, 23, 59, 59, 997);
                         dataManager.UpdateInvoiceGenerationDraft(invoiceGenerationDraft);
+                    }
                 }
             }
             return dataManager.GetInvoiceGenerationDraftsSummary(invoiceGenerationIdentifier);

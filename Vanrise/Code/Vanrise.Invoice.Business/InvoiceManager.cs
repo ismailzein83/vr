@@ -963,7 +963,7 @@ namespace Vanrise.Invoice.Business
                 InvoiceGenerationIdentifier = invoiceGenerationIdentifier,
                 InvoiceTypeId = invoiceTypeId,
                 UserId = userId,
-                IssueDate = issueDate,
+                IssueDate = issueDate.Date,
                 MinimumFrom = invoiceGenerationDraftSummary.MinimumFrom,
                 MaximumTo = invoiceGenerationDraftSummary.MaximumTo
             };
