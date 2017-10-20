@@ -31,7 +31,7 @@
                 $scope.scopeModel.addRedundantConnectionString = function () {
                     if ($scope.scopeModel.redundantConnectionStrings == undefined)
                         $scope.scopeModel.redundantConnectionStrings = [];
-                    $scope.scopeModel.redundantConnectionStrings.push({});
+                    $scope.scopeModel.redundantConnectionStrings.push({ ConnectionString: undefined });
                 };
 
                 defineAPI();
