@@ -69,6 +69,14 @@ namespace Vanrise.Invoice.BP.Activities
             };
             InvoiceGenerationDraftOutput invoiceGenerationDraftOutput = new InvoiceGenerationDraftManager().GenerateFilteredInvoiceGenerationDrafts(query);
 
+            if (invoiceGenerationDraftOutput.Result == InvoiceGenerationDraftResult.Succeeded && invoiceGenerationDraftOutput.InvalidPartnerMessages != null)
+            {
+                foreach (string message in invoiceGenerationDraftOutput.InvalidPartnerMessages)
+                {
+                    context.ActivityContext.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Warning, message);
+                }
+            }
+
             this.IssueDate.Set(context.ActivityContext, issueDate);
             this.InvoiceGenerationIdentifier.Set(context.ActivityContext, invoiceGenerationIdentifier);
             this.InvoiceGenerationDraftOutput.Set(context.ActivityContext, invoiceGenerationDraftOutput);

@@ -14,6 +14,8 @@ namespace Vanrise.Invoice.Business
     {
         public InvoiceGenerationDraftOutput GenerateFilteredInvoiceGenerationDrafts(InvoiceGenerationDraftQuery query)
         {
+            List<string> invalidPartnerMessages = new List<string>();
+
             ClearInvoiceGenerationDrafts(query.InvoiceGenerationIdentifier);
 
             InvoiceTypeManager manager = new InvoiceTypeManager();
@@ -44,6 +46,9 @@ namespace Vanrise.Invoice.Business
             {
                 if (!IsStatusFilterMatching(query.InvoiceTypeId, partnerId, query.EffectiveDate, query.IsEffectiveInFuture, query.Status, now))
                     continue;
+
+                PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = partnerId };
+                var partnerName = invoiceTypePartnerManager.GetPartnerName(partnerNameManagerContext);
 
                 DateTime? fromDate = null;
                 DateTime? toDate = null;
@@ -78,14 +83,14 @@ namespace Vanrise.Invoice.Business
                     if (!query.IsAutomatic)
                         return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Billing cycle is not defined for some partners. Please fill the following fields: 'From' and 'To'" };
                     else
+                    {
+                        invalidPartnerMessages.Add(string.Format("Billing cycle is not defined for partner '{0}'", partnerName));
                         continue;
+                    }
                 }
 
                 if (!CheckIFShouldGenerateInvoice(toDate.Value, query.MaximumToDate))
                     continue;
-
-                PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = partnerId };
-                var partnerName = invoiceTypePartnerManager.GetPartnerName(partnerNameManagerContext);
 
                 dynamic generationCustomPayload = null;
                 if (generationCustomSection != null)
@@ -121,7 +126,7 @@ namespace Vanrise.Invoice.Business
             if (count == 0)
                 return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "No partners found." };
             else
-                return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Succeeded, Count = count, MinimumFrom = minimumFrom, MaximumTo = maximumTo };
+                return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Succeeded, Count = count, MinimumFrom = minimumFrom, MaximumTo = maximumTo, InvalidPartnerMessages = invalidPartnerMessages.Count > 0 ? invalidPartnerMessages : null };
         }
 
         private bool CheckIFShouldGenerateInvoice(DateTime toDate, DateTime? maximumToDate)

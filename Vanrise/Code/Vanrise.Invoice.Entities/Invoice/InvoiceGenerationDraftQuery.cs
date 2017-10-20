@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.Entities;
 
 namespace Vanrise.Invoice.Entities
@@ -28,5 +29,6 @@ namespace Vanrise.Invoice.Entities
         public int Count { get; set; }
         public DateTime MinimumFrom { get; set; }
         public DateTime MaximumTo { get; set; }
+        public List<string> InvalidPartnerMessages { get; set; }
     }
 }

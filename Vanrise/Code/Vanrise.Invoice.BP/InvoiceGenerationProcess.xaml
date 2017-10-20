@@ -62,13 +62,6 @@
       <Variable x:TypeArguments="x:Int32" Default="0" Name="TotalInvoices" />
       <Variable x:TypeArguments="x:Int32" Default="0" Name="TotalProcessedInvoices" />
     </Sequence.Variables>
-    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Invoice Generation Process.">
-      <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Severity>
-    </vbw:WriteTrackingMessage>
     <viba1:LoadInvoiceGenerationDrafts sap2010:WorkflowViewState.IdRef="LoadInvoiceGenerationDrafts_1">
       <viba1:LoadInvoiceGenerationDrafts.InvoiceGenerationDraftList>
         <OutArgument x:TypeArguments="scg:List(vie:InvoiceGenerationDraft)">
@@ -225,18 +218,10 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finished Invoice Generation Process.">
-      <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Severity>
-    </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlR2VuZXJhdGlvblByb2Nlc3MueGFtbC46A+wBDgIBAT0zPTYCAQQ+Mz42AgEDPzM/NgIBAkEFRyADAeoBSAVTKQMB2wFUBdMBCgIBHdQBBeMBDgIBDuQBBeoBIAIBBUQLRIUBAwHsAUFgQYYBAwHrAVALUGgDAeMBSwtLhAEDAdwBVwtXmQECAR5bCcgBFAIBLssBCdEBJAIBJdwBC+ABFAIBFtcBC9cBcgIBD+cBC+cBhQECAQfkAWDkAYYBAgEGXAtnFAMBzAFoC8cBFQIBL84BD84BdAIBJ8sBZMsBhwECASZkEWRrAwHUAV8RX2MDAc0BaxFriQEDAcUBcg/FARoCATB4EZcBMAMBggGYARGjARoCAWukARGvASwCAVSwARHEARYCATGAAReAAWcDAboBlAEXlAFnAwGvAYUBF4UBZgMBpAGPARePAWQDAZkBigEXigFwAwGOAXsXe30DAYMBoAEXoAFsAgF3mwEXmwFyAgFsrAEXrAF0AgFgpwEXpwHCAQIBVbMBF7MBXwIBMrcBFcIBHgIBPb8BG78BagIBSboBG7oBbgIBPg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlR2VuZXJhdGlvblByb2Nlc3MueGFtbCg6A94BDgIBAT0zPTYCAQQ+Mz42AgEDPzM/NgIBAkEFTCkDAdIBTQXMAQoCARTNAQXcAQ4CAQVJC0loAwHaAUQLRIQBAwHTAVALUJkBAgEVVAnBARQCASXEAQnKASQCARzVAQvZARQCAQ3QAQvQAXICAQZVC2AUAwHDAWELwAEVAgEmxwEPxwF0AgEexAFkxAGHAQIBHV0RXWsDAcsBWBFYYwMBxAFkEWSJAQMBvAFrD74BGgIBJ3ERkAEwAgF5kQERnAEaAgFinQERqAEsAgFLqQERvQEWAgEoeRd5ZwMBsQGNAReNAWcDAaYBfhd+ZgMBmwGIAReIAWQDAZABgwEXgwFwAwGFAXQXdH0CAXqZAReZAWwCAW6UAReUAXICAWOlARelAXQCAVegARegAcIBAgFMrAEXrAFfAgEpsAEVuwEeAgE0uAEbuAFqAgFAswEbswFuAgE1</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="763,22" />
       <sap2010:ViewStateData Id="LoadInvoiceGenerationDrafts_1" sap:VirtualizedContainerService.HintSize="763,22" />
       <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="516,62" />
       <sap2010:ViewStateData Id="GeneratePartnerInvoice_1" sap:VirtualizedContainerService.HintSize="464,22" />
@@ -262,15 +247,14 @@
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="763,1088" />
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="763,62" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="763,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1500">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="785,1376">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.InvoiceGenerationProcess_1" sap:VirtualizedContainerService.HintSize="825,1580" />
+      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.InvoiceGenerationProcess_1" sap:VirtualizedContainerService.HintSize="825,1456" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

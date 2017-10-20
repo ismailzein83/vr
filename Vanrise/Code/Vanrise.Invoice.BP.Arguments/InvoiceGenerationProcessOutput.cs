@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Vanrise.Invoice.BP.Arguments
 {
@@ -16,7 +17,14 @@ namespace Vanrise.Invoice.BP.Arguments
                 else
                 {
                     int totalFailed = TotalInvoices - TotalSucceeded;
-                    return string.Format("Number of successful invoices: {0}, Number of failed invoices: {1}", TotalSucceeded, totalFailed);
+                    StringBuilder strBuilder = new StringBuilder("Invoice generation completed");
+                    if (TotalSucceeded > 0)
+                        strBuilder.AppendFormat(", {0} Invoices successfully generated", TotalSucceeded);
+
+                    if (totalFailed > 0)
+                        strBuilder.AppendFormat(", {0} Invoices failed", totalFailed);
+
+                    return strBuilder.ToString();
                 }
             }
         }

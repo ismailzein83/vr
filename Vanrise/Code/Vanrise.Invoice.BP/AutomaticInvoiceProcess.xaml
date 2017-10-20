@@ -66,13 +66,6 @@
       <Variable x:TypeArguments="viba:InvoiceGenerationProcessOutput" Name="InvoiceGenerationProcessOutput" />
       <Variable x:TypeArguments="vie:InvoiceGenerationDraftOutput" Name="InvoiceGenerationDraftOutput" />
     </Sequence.Variables>
-    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Automatic Invoice Generation Process.">
-      <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Severity>
-    </vbw:WriteTrackingMessage>
     <viba1:GenerateAutomaticInvoiceGenerationDrafts sap2010:WorkflowViewState.IdRef="GenerateAutomaticInvoiceGenerationDrafts_1">
       <viba1:GenerateAutomaticInvoiceGenerationDrafts.EffectiveDate>
         <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
@@ -136,7 +129,7 @@
           <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_6">
             <vbw:WriteTrackingMessage.Message>
               <InArgument x:TypeArguments="x:String">
-                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Number of automatic invoices to be generated: {0}. Check Child Processes for more tracking messages", InvoiceGenerationDraftOutput.Count)</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:String">string.Format("Started generating {0} invoices. Check child processes for details", InvoiceGenerationDraftOutput.Count)</mca:CSharpValue>
               </InArgument>
             </vbw:WriteTrackingMessage.Message>
             <vbw:WriteTrackingMessage.Severity>
@@ -206,18 +199,10 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2" Message="Finished Automatic Invoice Generation Process.">
-      <vbw:WriteTrackingMessage.Severity>
-        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
-          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
-        </InArgument>
-      </vbw:WriteTrackingMessage.Severity>
-    </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sJz0D2QEOAgEBRQVLIAMBqQFMBX82AgFigAEF0AEKAgEL0QEF1wEgAgECSAtIhQEDAasBRWBFkAEDAaoBVAtUZAMBogFjC2NaAwGbAVkLWYUBAwGUAXILcmYDAY0BXgteagMBhgFtC21cAgF/aAtobwIBeE8LT2oCAXF8C3xfAgFqdwt3YwIBY4MBC4MBlwECAQyHAQnAARQCASLDAQnOASQCARPUAQvUAYUBAgEE0QFg0QGQAQIBA4gBC5MBJgIBU5QBC6cBHAIBQagBC7MBFAIBMrQBC78BJgIBI8sBD8sBhQECARvGAQ/GAXECARSQARGQAYsBAgFbiwERiwHnAQIBVJQBeZQBfwIBUpcBEZ8BFAIBS5QBkwGUAcYBAgFKpAERpAGEAQIBQ5QB3AGUAeIBAgFCsAERsAGwAQIBOqsBEasBkAECATO8ARG8AYsBAgErtwERtwF1AgEk</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sIT0DywEOAgEBRQV4NgIBWXkFyQEKAgECTQtNZAMBmQFcC1xaAwGSAVILUoUBAwGLAWsLa2YDAYQBVwtXagIBfWYLZlwCAXZhC2FvAgFvSAtIagIBaHULdV8CAWFwC3BjAgFafAt8lwECAQOAAQm5ARQCARm8AQnHASQCAQqBAQuMASYCAUqNAQugARwCATihAQusARQCASmtAQu4ASYCARrEAQ/EAYUBAgESvwEPvwFxAgELiQERiQGLAQIBUoQBEYQBxgECAUuNAXmNAX8CAUmQARGYARQCAUKNAZMBjQHGAQIBQZ0BEZ0BhAECATqNAdwBjQHiAQIBOakBEakBsAECATGkARGkAZABAgEqtQERtQGLAQIBIrABEbABdQIBGw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="GenerateAutomaticInvoiceGenerationDrafts_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_6" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="242,22" />
@@ -232,15 +217,14 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_5" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="489,522" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="489,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="511,832">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="511,708">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.AutomaticInvoiceProcess_1" sap:VirtualizedContainerService.HintSize="551,912" />
+      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.AutomaticInvoiceProcess_1" sap:VirtualizedContainerService.HintSize="551,788" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
