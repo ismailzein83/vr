@@ -26,11 +26,10 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.redundantConnectionStrings = [];
                 $scope.scopeModel.isLoading = false;
 
                 $scope.scopeModel.addRedundantConnectionString = function () {
-                    if ($scope.scopeModel.redundantConnectionStrings == undefined)
-                        $scope.scopeModel.redundantConnectionStrings = [];
                     $scope.scopeModel.redundantConnectionStrings.push({ ConnectionString: undefined });
                 };
 
@@ -44,7 +43,9 @@
 
                     if (payload != undefined) {
                         $scope.scopeModel.connectionString = payload.idbDataManagersSettings.ConnectionString.ConnectionString;
-                        $scope.scopeModel.redundantConnectionStrings = payload.idbDataManagersSettings.RedundantConnectionStrings;
+
+                        if (payload.idbDataManagersSettings.RedundantConnectionStrings != undefined)
+                            $scope.scopeModel.redundantConnectionStrings = payload.idbDataManagersSettings.RedundantConnectionStrings;
                     }
                 };
 

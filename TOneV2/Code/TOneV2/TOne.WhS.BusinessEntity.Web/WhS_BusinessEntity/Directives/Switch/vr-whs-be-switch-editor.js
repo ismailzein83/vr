@@ -176,9 +176,6 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
                 var updateSwitchPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 WhS_BE_SwitchAPIService.UpdateSwitch(buildSwitchObjFromScope()).then(function (response) {
-
-                    console.log(response);
-
                     if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                         if (ctrl.onswitchupdated != undefined) {
                             ctrl.onswitchupdated(response.UpdatedObject);
