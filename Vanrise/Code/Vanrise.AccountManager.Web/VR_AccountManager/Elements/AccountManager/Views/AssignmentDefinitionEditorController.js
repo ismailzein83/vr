@@ -77,5 +77,5 @@
             $scope.modalContext.closeModal();
         }
     }
-    appControllers.controller("VR_AccountManager_AssignmentDefinitionController", assignmentDefinitionController);
+    appControllers.controller("VR_AccountManager_AssignmentDefinitionEditorController", assignmentDefinitionController);
 })(appControllers);

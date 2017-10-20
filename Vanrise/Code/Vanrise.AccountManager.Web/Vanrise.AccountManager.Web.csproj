@@ -117,7 +117,9 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
@@ -151,10 +153,10 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-editor.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\AccountManagerService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerAPIService.js" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\AccountManagerManagement.html" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\AccountManagerManagementController.js" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\AssignmentDefinitionController.js" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\AssignmentDefinition.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerManagement.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerManagementController.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AssignmentDefinitionEditorController.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AssignmentDefinitionEditor.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
