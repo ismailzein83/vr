@@ -53,7 +53,7 @@
                     var data = {
                         $type: "TOne.WhS.RouteSync.TelesIdb.Postgres.IdbPostgresDataManager, TOne.WhS.RouteSync.TelesIdb.Postgres",
                         ConnectionString: { ConnectionString: $scope.scopeModel.connectionString },
-                        RedundantConnectionStrings: $scope.scopeModel.redundantConnectionString
+                        RedundantConnectionStrings: $scope.scopeModel.redundantConnectionStrings
                     };
                     return data;
                 };
