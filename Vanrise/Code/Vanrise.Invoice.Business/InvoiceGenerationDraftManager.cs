@@ -55,8 +55,8 @@ namespace Vanrise.Invoice.Business
                 switch (query.Period)
                 {
                     case InvoicePartnerPeriod.FixedDates:
-                        fromDate = query.FromDate;
-                        toDate = query.ToDate;
+                        fromDate = query.FromDate.HasValue ? query.FromDate.Value.Date : default(DateTime?);
+                        toDate = query.ToDate.HasValue ? new DateTime(query.ToDate.Value.Year, query.ToDate.Value.Month, query.ToDate.Value.Day, 23, 59, 59, 997) : default(DateTime?);
                         break;
 
                     case InvoicePartnerPeriod.FollowBillingCycle:
@@ -70,8 +70,8 @@ namespace Vanrise.Invoice.Business
                         {
                             if (!query.IsAutomatic)
                             {
-                                fromDate = query.FromDate;
-                                toDate = query.ToDate;
+                                fromDate = query.FromDate.HasValue ? query.FromDate.Value.Date : default(DateTime?);
+                                toDate = query.ToDate.HasValue ? new DateTime(query.ToDate.Value.Year, query.ToDate.Value.Month, query.ToDate.Value.Day, 23, 59, 59, 997) : default(DateTime?);
                             }
                         }
                         break;

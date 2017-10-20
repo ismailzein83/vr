@@ -138,7 +138,7 @@ namespace Vanrise.Invoice.Business
 
         bool AreInvoiceDatesValid(DateTime from, DateTime to, DateTime issueDate, out string message)
         {
-            message=null;
+            message = null;
 
             StringBuilder strBuilder = new StringBuilder();
             if (issueDate.Date != issueDate)
@@ -354,7 +354,7 @@ namespace Vanrise.Invoice.Business
                 billingPeriodContext.PreviousPeriodEndDate = billingPeriodInfo.NextPeriodStart;
             }
             billingInterval = billingperiod.GetPeriod(billingPeriodContext);
-            billingInterval.ToDate = new DateTime(billingInterval.ToDate.Year, billingInterval.ToDate.Month, billingInterval.ToDate.Day, 23, 59, 59);
+            billingInterval.ToDate = new DateTime(billingInterval.ToDate.Year, billingInterval.ToDate.Month, billingInterval.ToDate.Day, 23, 59, 59, 997);
             var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceTypeId, partnerId);
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
 
@@ -367,7 +367,7 @@ namespace Vanrise.Invoice.Business
                 if ((invoiceAccountData.EED.HasValue && billingInterval.ToDate > invoiceAccountData.EED.Value))
                 {
                     var toDate = invoiceAccountData.EED.Value.AddDays(-1);
-                    billingInterval.ToDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59);
+                    billingInterval.ToDate = new DateTime(toDate.Year, toDate.Month, toDate.Day, 23, 59, 59, 997);
                 }
             }
             else
