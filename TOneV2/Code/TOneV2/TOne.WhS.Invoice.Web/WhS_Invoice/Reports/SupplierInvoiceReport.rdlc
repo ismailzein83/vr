@@ -2485,7 +2485,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Fields!TotalNumberOfCalls.Value, 0)</Value>
+                              <Value>=Round(Fields!TotalNumberOfCalls.Value, 2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2555,7 +2555,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Fields!Duration.Value, 2)</Value>
+                              <Value>=Round(Fields!Duration.Value, 2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2625,7 +2625,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Fields!CostAmount.Value, 0)</Value>
+                              <Value>=Round(Fields!CostAmount.Value, 2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2765,7 +2765,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Fields!AmountAfterCommission.Value, 0)</Value>
+                              <Value>=Round(Fields!AmountAfterCommission.Value, 2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3075,7 +3075,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalDuration.Value, 2)</Value>
+                              <Value>=FormatNumber(Parameters!TotalDuration.Value, 2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3147,7 +3147,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Interaction.iif(Parameters!DisplayCommission.Value = True, Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalSaleAmount.Value, 0), Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalAmountAfterCommission.Value, 0))</Value>
+                              <Value>=Microsoft.VisualBasic.Interaction.iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalSaleAmount.Value, 2), FormatNumber(Parameters!TotalAmountAfterCommission.Value, 2))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3219,7 +3219,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalAmountAfterCommission.Value, 0)</Value>
+                              <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>

@@ -721,7 +721,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!Duration.Value,2)</Value>
+                              <Value>=Round(Fields!Duration.Value,2)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -783,7 +783,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SupplierRate.Value,4)</Value>
+                              <Value>=Round(Fields!SupplierRate.Value,4)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -845,7 +845,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!OriginalCostAmount.Value,2)</Value>
+                              <Value>=Round(Fields!OriginalCostAmount.Value,2)</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -876,7 +876,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!AmountAfterCommission.Value</Value>
+                              <Value>=Round(Fields!AmountAfterCommission.Value,2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1234,7 +1234,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalDuration.Value, 2)</Value>
+                <Value>=FormatNumber(Parameters!TotalDuration.Value, 2)</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -1296,7 +1296,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalAmount.Value, 2)</Value>
+                <Value>=FormatNumber(Parameters!TotalAmount.Value, 2)</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -1360,7 +1360,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalAmountAfterCommission.Value, 0)</Value>
+                <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>

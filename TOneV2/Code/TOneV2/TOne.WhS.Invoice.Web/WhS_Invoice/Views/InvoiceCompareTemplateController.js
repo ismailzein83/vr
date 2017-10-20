@@ -2,9 +2,9 @@
 
     'use strict';
 
-    invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService','VR_ExcelConversion_FieldTypeEnum','VR_Invoice_InvoiceTypeAPIService','WhS_Invoice_InvoiceAPIService','WhS_Invoice_ComparisonResultEnum','LabelColorsEnum','WhS_Invoice_ComparisonCriteriaEnum'];
+    invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService','VR_ExcelConversion_FieldTypeEnum','VR_Invoice_InvoiceTypeAPIService','WhS_Invoice_InvoiceAPIService','WhS_Invoice_ComparisonResultEnum','LabelColorsEnum','WhS_Invoice_ComparisonCriteriaEnum','UISettingsService'];
 
-    function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum) {
+    function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum, UISettingsService) {
 
         var invoiceAccountEntity;
         var invoiceId;
@@ -16,6 +16,7 @@
         var mainListAPI;
         var mainListMappingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var gridAPI;
+        var gridPromiseDeferred = UtilsService.createPromiseDeferred();
         var inputWorkBookApi;
         loadParameters();
         defineScope();
@@ -34,6 +35,7 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.threshold = 5;
+            $scope.scopeModel.decimalDigits = 2;
             $scope.scopeModel.comparisonResults = [];
             $scope.scopeModel.dateTimeFormat = "yyyy-MM-dd";
             $scope.scopeModel.comparisonResult = [];
@@ -70,13 +72,14 @@
             };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
+                gridPromiseDeferred.resolve();
             };
             $scope.scopeModel.onReadyWoorkBook = function (api) {
                 inputWorkBookApi = api;
             };
             $scope.scopeModel.compare = function () {
                 $scope.scopeModel.comparisonResults.length = 0;
-               return startCompare();
+                  return   startCompare();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
@@ -142,6 +145,7 @@
                 invoiceEntity = response;
                 if(invoiceEntity != undefined)
                 {
+                    var normalPrecision = UISettingsService.getNormalPrecision();
                     $scope.scopeModel.issuedBy = invoiceEntity.UserName;
 
                     $scope.scopeModel.to = invoiceEntity.PartnerName;
@@ -152,9 +156,9 @@
                         
                     $scope.scopeModel.serialNumber = invoiceEntity.Entity.SerialNumber;
                     $scope.scopeModel.timeZone = invoiceEntity.TimeZoneName;
-                    $scope.scopeModel.calls = invoiceEntity.Entity.Details.TotalNumberOfCalls;
-                    $scope.scopeModel.duration = invoiceEntity.Entity.Details.Duration;
-                    $scope.scopeModel.totalAmount = invoiceEntity.Entity.Details.TotalAmount;
+                    $scope.scopeModel.calls = invoiceEntity.Entity.Details.TotalNumberOfCalls.toLocaleString();
+                    $scope.scopeModel.duration = Number(invoiceEntity.Entity.Details.Duration.toFixed(normalPrecision)).toLocaleString();
+                    $scope.scopeModel.totalAmount = Number(invoiceEntity.Entity.Details.TotalAmount.toFixed(normalPrecision)).toLocaleString();
                     $scope.scopeModel.isLocked = invoiceEntity.Lock;
                     $scope.scopeModel.isPaid = invoiceEntity.Paid;
 
@@ -319,9 +323,20 @@
 
         function startCompare()
         {
-            var comparisonInput = buildInvoiceCompareObjFromScope();
-           return    gridAPI.retrieveData(comparisonInput);
-            
+            $scope.scopeModel.showGrid = false;
+            var loadPromiseDeferred = UtilsService.createPromiseDeferred();
+            setTimeout(function () {
+                $scope.scopeModel.showGrid = true;
+                gridPromiseDeferred = UtilsService.createPromiseDeferred();
+                gridPromiseDeferred.promise.then(function () {
+                    gridPromiseDeferred = undefined;
+                    var comparisonInput = buildInvoiceCompareObjFromScope();
+                    gridAPI.retrieveData(comparisonInput).then(function () {
+                        loadPromiseDeferred.resolve();
+                    });
+                });
+            });
+            return loadPromiseDeferred.promise;
         }
     }
 

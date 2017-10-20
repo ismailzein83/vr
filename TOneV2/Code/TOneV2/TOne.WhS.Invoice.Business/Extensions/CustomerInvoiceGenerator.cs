@@ -348,8 +348,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SupplierZoneId = Convert.ToInt32(supplierZone.Value),
 
                         };
-
-                        invoiceBillingRecord.SaleRate = invoiceBillingRecord.SaleRate + ((invoiceBillingRecord.SaleRate * commission) / 100);
+                        if (commissionType.HasValue && commissionType.Value == CommissionType.Display)
+                             invoiceBillingRecord.SaleRate = invoiceBillingRecord.SaleRate + ((invoiceBillingRecord.SaleRate * commission) / 100);
                         invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr * commission) / 100);
 
                         AddItemToDictionary(itemSetNamesDic, "GroupedBySaleZone", invoiceBillingRecord);

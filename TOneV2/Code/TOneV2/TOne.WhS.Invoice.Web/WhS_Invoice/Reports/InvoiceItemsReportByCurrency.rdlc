@@ -561,7 +561,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Fields!Duration.Value, 2)</Value>
+                              <Value>=Round(Fields!Duration.Value, 2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -627,7 +627,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Fields!SaleRate.Value, 4)</Value>
+                              <Value>=Round(Fields!SaleRate.Value, 4)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -660,7 +660,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Fields!OriginalSaleAmount.Value, 2)</Value>
+                              <Value>=Round(Fields!OriginalSaleAmount.Value, 2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -693,7 +693,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!AmountAfterCommission.Value</Value>
+                              <Value>=Round(Fields!AmountAfterCommission.Value,2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -754,7 +754,7 @@
         <Top>0.84895in</Top>
         <Left>0.02627in</Left>
         <Height>0.46875in</Height>
-        <Width>7.82483in</Width>
+        <Width>7.82482in</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -841,7 +841,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalAmount.Value,0), FormatNumber(Parameters!TotalAmountAfterCommission.Value,0))</Value>
+                <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalAmount.Value,2), FormatNumber(Parameters!TotalAmountAfterCommission.Value,2))</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontWeight>Bold</FontWeight>
@@ -1016,7 +1016,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 0)</Value>
+                <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontWeight>Bold</FontWeight>

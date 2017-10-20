@@ -332,7 +332,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             }
 
                         };
-                        invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission) / 100);
+                        if (commissionType.HasValue && commissionType.Value == CommissionType.Display)
+                             invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission) / 100);
                         invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * commission) / 100);
 
                         AddItemToDictionary(itemSetNamesDic, "GroupedByCostZone", invoiceBillingRecord);

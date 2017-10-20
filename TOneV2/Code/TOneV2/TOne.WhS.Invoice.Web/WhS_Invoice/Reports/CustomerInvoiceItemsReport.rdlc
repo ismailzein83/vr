@@ -299,7 +299,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatNumber(Parameters!TotalCalls.Value,0)</Value>
+                <Value>=FormatNumber(Parameters!TotalCalls.Value,2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -333,7 +333,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalAmount.Value,0), FormatNumber(Parameters!TotalAmountAfterCommission.Value,0))</Value>
+                <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalAmount.Value,2), FormatNumber(Parameters!TotalAmountAfterCommission.Value,2))</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -919,7 +919,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!Duration.Value,2)</Value>
+                              <Value>=Round(Fields!Duration.Value,2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -985,7 +985,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SaleRate.Value,4)</Value>
+                              <Value>=Round(Fields!SaleRate.Value,4)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1051,7 +1051,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!OriginalSaleAmount.Value</Value>
+                              <Value>=Round(Fields!OriginalSaleAmount.Value,2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1084,7 +1084,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!AmountAfterCommission.Value</Value>
+                              <Value>=Round(Fields!AmountAfterCommission.Value,2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1213,7 +1213,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 0)</Value>
+                <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>

@@ -2136,7 +2136,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!TotalNumberOfCalls.Value,0)</Value>
+                              <Value>=Round(Fields!TotalNumberOfCalls.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2206,7 +2206,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!Duration.Value,2)</Value>
+                              <Value>=Round(Fields!Duration.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2276,7 +2276,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SaleAmount.Value,0)</Value>
+                              <Value>=Round(Fields!SaleAmount.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2416,7 +2416,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!AmountAfterCommission.Value,0)</Value>
+                              <Value>=Round(Fields!AmountAfterCommission.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3003,7 +3003,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalNumberOfCalls.Value,0)</Value>
+                              <Value>=FormatNumber(Parameters!TotalNumberOfCalls.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3147,7 +3147,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalSaleAmount.Value,0), FormatNumber(Parameters!TotalAmountAfterCommission.Value,0))</Value>
+                              <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalSaleAmount.Value,2), FormatNumber(Parameters!TotalAmountAfterCommission.Value,2))</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3219,7 +3219,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 0)</Value>
+                              <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>

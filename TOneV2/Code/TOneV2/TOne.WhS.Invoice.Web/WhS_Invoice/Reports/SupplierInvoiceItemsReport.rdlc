@@ -311,10 +311,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
-        <Top>3.04979in</Top>
-        <Left>4.29353in</Left>
+        <Top>3.03591in</Top>
+        <Left>4.17895in</Left>
         <Height>0.20833in</Height>
-        <Width>0.92658in</Width>
+        <Width>0.86965in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -333,7 +333,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalAmount.Value,0), FormatNumber(Parameters!TotalAmountAfterCommission.Value,0))</Value>
+                <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalAmount.Value,2), FormatNumber(Parameters!TotalAmountAfterCommission.Value,2))</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -346,9 +346,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>3.04979in</Top>
-        <Left>6.04888in</Left>
+        <Left>5.99332in</Left>
         <Height>0.20833in</Height>
-        <Width>0.81792in</Width>
+        <Width>0.87348in</Width>
         <ZIndex>10</ZIndex>
         <Style>
           <Border>
@@ -919,7 +919,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!Duration.Value,2)</Value>
+                              <Value>=Round(Fields!Duration.Value,2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -985,7 +985,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!SupplierRate.Value,4)</Value>
+                              <Value>=Round(Fields!SupplierRate.Value,4)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1051,7 +1051,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Fields!OriginalCostAmount.Value,2)</Value>
+                              <Value>=Round(Fields!OriginalCostAmount.Value,2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1084,7 +1084,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!AmountAfterCommission.Value</Value>
+                              <Value>=Round(Fields!AmountAfterCommission.Value,2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1192,9 +1192,9 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>3.04979in</Top>
-        <Left>5.5963in</Left>
+        <Left>5.48172in</Left>
         <Height>0.20833in</Height>
-        <Width>0.43869in</Width>
+        <Width>0.49772in</Width>
         <ZIndex>13</ZIndex>
         <Style>
           <Border>
@@ -1213,7 +1213,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 0)</Value>
+                <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
