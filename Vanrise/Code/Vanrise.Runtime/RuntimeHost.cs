@@ -32,11 +32,11 @@ namespace Vanrise.Runtime
                 InitializeRuntimeManager();
 
             TimeSpan timerInterval = TimeSpan.FromSeconds(1);
-            if (services != null && services.Count > 0)
-            {
-                if (services.Min(itm => itm.Interval) < timerInterval)
-                    timerInterval = services.Min(itm => itm.Interval);
-            }
+            //if (services != null && services.Count > 0)
+            //{
+            //    if (services.Min(itm => itm.Interval) < timerInterval)
+            //        timerInterval = services.Min(itm => itm.Interval);
+            //}
             _timer = new Timer(timerInterval.TotalMilliseconds);
             _timer.Elapsed += timer_Elapsed;
 
