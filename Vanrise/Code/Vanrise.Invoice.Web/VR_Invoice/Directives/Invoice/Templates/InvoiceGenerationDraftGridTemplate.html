@@ -12,17 +12,13 @@
 
             <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'PartnerName'" disablesorting="true" widthfactor="'2'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'From'" type="'Date'" disablesorting="true" fixedwidth="100">
-                <vr-columns width="fullrow" haschildcolumns withemptyline>
-                    <div style="height:42px;">
-                        <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateDates()"></vr-datetimepicker>
-                    </div>
+                <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}" >
+                    <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateDates()"></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'To'" type="'Date'" disablesorting="true" fixedwidth="100">
-                <vr-columns width="fullrow" haschildcolumns withemptyline>
-                    <div style="height:42px;">
-                        <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateDates()"></vr-datetimepicker>
-                    </div>
+                <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}">
+                    <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateDates()"></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
 
@@ -32,7 +28,7 @@
                 </span>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Actions'" disablesorting="true" columnindex="6" widthfactor="'1'" invisibleheader fixedwidth="30">
-                <vr-columns width="fullrow" haschildcolumns withemptyline>
+                <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}">
                     <span ng-repeat="action in dataItem.menuActions" ng-if="dataItem.menuActions.length > 0">
                         <vr-directivewrapper directive="'vr-button'" type="{{action.type}}" data-onclick="action.onclick" standalone menuactions="action.menuActions" vr-disabled="dataItem.isInvalid()"></vr-directivewrapper>
                     </span>
