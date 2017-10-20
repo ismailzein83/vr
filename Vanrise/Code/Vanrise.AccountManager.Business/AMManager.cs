@@ -9,8 +9,6 @@ using Vanrise.AccountManager.Data;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Common;
 
-
-
 namespace Vanrise.AccountManager.Business
 {
    public class AMManager
@@ -20,7 +18,11 @@ namespace Vanrise.AccountManager.Business
            var allAccountManagers = this.GetCachedAccountManagers();
 
            Func<Vanrise.AccountManager.Entities.AccountManager, bool> filterExpression = (prod) =>
-            (input.Query.UserIds == null || input.Query.UserIds.Contains(prod.UserId));
+           {
+               if (input.Query.UserIds != null && !input.Query.UserIds.Contains(prod.UserId))
+                   return false;
+               return true;
+           };
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
        }
        private AccountManagerDetail AccountManagerDetailMapper(Vanrise.AccountManager.Entities.AccountManager accountManager)

@@ -117,9 +117,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_AccountManager\Elements\AccountManager\Views\AccountManager\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
