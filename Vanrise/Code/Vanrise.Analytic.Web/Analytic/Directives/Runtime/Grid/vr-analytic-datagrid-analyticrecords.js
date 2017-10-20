@@ -658,16 +658,15 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                         });
                     }
 
-                    for (var i = 0; i < parentDimensions.length; i++) {
-                        var parentDimension = parentDimensions[i];
-                        var dimensionFilter = UtilsService.getItemByVal(dimensionFilters, parentDimension.DimensionName, "Dimension");
-                        if (dimensionFilter != undefined && UtilsService.getItemByVal(dimensionValues, parentDimension.DimensionName, "Dimension") == undefined) {
+                    for (var i = 0; i < dimensionFilters.length; i++) {
+                        var currentDimension = dimensionFilters[i];
+                        if (currentDimension == undefined)
+                            continue;
 
-                            dimensionValues.push({
-                                Dimension: parentDimension.DimensionName,
-                                FilterValues: dimensionFilter.FilterValues
-                            });
-                        }
+                        dimensionValues.push({
+                            Dimension: currentDimension.Dimension,
+                            FilterValues: currentDimension.FilterValues
+                        });
                     }
 
                     //if parentDimensions.length > 0 all groupingDimensions are already added to dimensionValues by selectedDimensions and dimensionFilters
