@@ -10,7 +10,7 @@
                                ng-init="signs=[{text:'&plus;',value:''},{text:'&minus;',value:'-'}]" datasource="signs" selectedvalues="sign" isrequired="true"></vr-select>
                 </vr-columns>
                 <vr-columns width="1/3row">
-                    <vr-datetimepicker type="time" label="Time Shift" value="time" isrequired></vr-datetimepicker>
+                    <vr-common-timeoffset-selector on-ready="onTimeOffsetSeletorReady" isrequired="true"></vr-common-timeoffset-selector>
                 </vr-columns>
                
             </vr-row>

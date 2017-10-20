@@ -2,14 +2,15 @@
 
     "use strict";
 
-    vrTimeZoneEditorController.$inject = ['$scope', 'VRCommon_VRTimeZoneAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService'];
+    vrTimeZoneEditorController.$inject = ['$scope', 'VRCommon_VRTimeZoneAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function vrTimeZoneEditorController($scope, VRCommon_VRTimeZoneAPIService, VRNotificationService, VRNavigationService ,UtilsService) {
-        
+    function vrTimeZoneEditorController($scope, VRCommon_VRTimeZoneAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+
         var vrTimeZonetId;
         var editMode;
         var vrTimeZoneEntity;
-
+        var timeOffsetSelectorAPI;
+        var timeOffsetSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -22,15 +23,18 @@
             editMode = (vrTimeZonetId != undefined);
         }
         function defineScope() {
-
-
-            //$scope.signs = [{ text: '+', value: '' }, { text: '-', value: '-' }];
             $scope.saveVRTimeZone = function () {
                 if (editMode)
                     return updateVRTimeZone();
                 else
                     return insertVRTimeZone();
             };
+
+            $scope.onTimeOffsetSeletorReady = function (api) {
+                timeOffsetSelectorAPI = api;
+                timeOffsetSelectorReadyDeferred.resolve();
+            };
+
             $scope.hasSaveVRTimeZonePermission = function () {
                 if (editMode) {
                     return VRCommon_VRTimeZoneAPIService.HasEditVRTimeZonePermission();
@@ -49,7 +53,7 @@
             $scope.isLoading = true;
 
             if (editMode) {
-                getVRTimeZone().then(function(){
+                getVRTimeZone().then(function () {
                     loadAllControls().finally(function () {
                         vrTimeZoneEntity = undefined;
                     }).catch(function (error) {
@@ -61,7 +65,7 @@
             else {
                 loadAllControls();
                 $scope.isLoading = false;
-                
+
             }
 
         }
@@ -73,7 +77,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTimeOffsetSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -83,7 +87,7 @@
         }
 
         function setTitle() {
-           
+
             if (editMode && vrTimeZoneEntity != undefined)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(vrTimeZoneEntity.Name, "Time Zone");
             else
@@ -95,7 +99,7 @@
                 TimeZoneId: (vrTimeZonetId != null) ? vrTimeZonetId : 0,
                 Name: $scope.name,
                 Settings: {
-                    Offset:$scope.sign.value+ $scope.time.Hour + ":" + $scope.time.Minute + ":00"
+                    Offset: $scope.sign.value + timeOffsetSelectorAPI.getSelectedIds()
                 }
             };
             return obj;
@@ -110,26 +114,34 @@
                 };
                 return;
             }
-               
+
             $scope.name = vrTimeZoneEntity.Name;
-            $scope.sign = vrTimeZoneEntity.Settings.Offset[0] == '-' ? $scope.signs[1] : $scope.signs[0];
-            var timetab = vrTimeZoneEntity.Settings.Offset.split(":");
-            var hours = timetab[0];
-            var minutes = timetab[1];
-            if (timetab[0][0] == '-')
-                hours = timetab[0].substring(1);
-            $scope.time = {
-                Hour: hours,
-                Minute: minutes
-            };
-           
+            $scope.sign = vrTimeZoneEntity.Settings.Offset[0] == '-' ? $scope.signs[1] : $scope.signs[0];   
+        }
+
+        function loadTimeOffsetSelector() {
+            var timeOffsetSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            timeOffsetSelectorReadyDeferred.promise.then(function () {
+                var timevalue ;
+                if (vrTimeZoneEntity != undefined && vrTimeZoneEntity.Settings != undefined && vrTimeZoneEntity.Settings.Offset != undefined) {
+                    timevalue = vrTimeZoneEntity.Settings.Offset;
+                    if (timevalue[0] == '-')
+                        timevalue = timevalue.substring(1);
+                }
+                  
+                var payload = {
+                    selectedIds: timevalue
+                };
+                VRUIUtilsService.callDirectiveLoad(timeOffsetSelectorAPI, payload, timeOffsetSelectorLoadDeferred);
+            });
+            return timeOffsetSelectorLoadDeferred.promise;
         }
         function insertVRTimeZone() {
             $scope.isLoading = true;
 
             var vrTimeZoneObject = buildVRTimeZoneObjFromScope();
             return VRCommon_VRTimeZoneAPIService.AddVRTimeZone(vrTimeZoneObject).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded("Time Zone", response ,"Name")) {
+                if (VRNotificationService.notifyOnItemAdded("Time Zone", response, "Name")) {
                     if ($scope.onVRTimeZoneAdded != undefined)
                         $scope.onVRTimeZoneAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();

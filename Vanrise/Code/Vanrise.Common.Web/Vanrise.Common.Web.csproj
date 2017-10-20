@@ -203,6 +203,7 @@
     <Content Include="Common\Constant\ProductInfoPropertyEnum.js" />
     <Content Include="Common\Constant\StartingFromEnum.js" />
     <Content Include="Common\Constant\TextFilterTypeEnum.js" />
+    <Content Include="Common\Constant\TimeOffsetEnum.js" />
     <Content Include="Common\Constant\TimeunitEnum.js" />
     <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditGridTemplate.html" />
     <Content Include="Common\Directives\ActionAudit\Templates\ActionAuditLKUPSelector.html" />
@@ -267,6 +268,7 @@
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-grid.js" />
     <Content Include="Common\Directives\StatusDefinition\vr-common-statusdefinition-selector.js" />
     <Content Include="Common\Directives\TimeUnit\vr-common-timeunit-selector.js" />
+    <Content Include="Common\Directives\TimeZone\vr-common-timeoffset-selector.js" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisibilityGridTemplate.html" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRModuleVisibilityEditor.html" />
     <Content Include="Common\Directives\VRApplicationVisibility\Templates\VRApplicationVisibilitySettingsTemplate.html" />
