@@ -19,6 +19,8 @@ namespace NP.IVSwitch.Business
             var switches = switchManager.GetAllSwitches();
             foreach (var switchelt in switches)
             {
+                if (switchelt.Settings == null) continue;
+
                 BuiltInIVSwitchSWSync routeSync = switchelt.Settings.RouteSynchronizer as BuiltInIVSwitchSWSync;
                 if (routeSync != null)
                 {

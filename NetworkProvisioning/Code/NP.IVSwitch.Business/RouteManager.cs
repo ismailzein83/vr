@@ -35,7 +35,7 @@ namespace NP.IVSwitch.Business
 
         public Route GetRoute(int routeId)
         {
-            return GetRoute(routeId,false);
+            return GetRoute(routeId, false);
         }
 
         public string GetRouteDescription(Route route)
@@ -127,8 +127,8 @@ namespace NP.IVSwitch.Business
             if (routeCarrierAccountExtension.RouteInfo == null)
                 routeCarrierAccountExtension.RouteInfo = new List<RouteInfo>();
             foreach (var route in routes)
-            {  
-                routeCarrierAccountExtension.RouteInfo.Add(new RouteInfo { RouteId=route.RouteId });
+            {
+                routeCarrierAccountExtension.RouteInfo.Add(new RouteInfo { RouteId = route.RouteId });
             }
 
             carrierAccountManager.UpdateCarrierAccountExtendedSetting<RouteCarrierAccountExtension>(
@@ -437,7 +437,11 @@ namespace NP.IVSwitch.Business
         {
             IRouteDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IRouteDataManager>();
             Helper.SetSwitchConfig(dataManager);
-            Dictionary<int, Route> routes = dataManager.GetRoutes().ToDictionary(x => x.RouteId, x => x);
+            Dictionary<int, Route> routes = new Dictionary<int, Route>();
+
+            if (dataManager.IvSwitchSync == null) return routes;
+
+            routes = dataManager.GetRoutes().ToDictionary(x => x.RouteId, x => x);
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             var suppliers = carrierAccountManager.GetAllSuppliers();
 
@@ -462,7 +466,7 @@ namespace NP.IVSwitch.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOne.WhS.BusinessEntity.Business.CarrierAccountManager.CacheManager>().GetOrCreateObject("IVSwitch_GetCarrierAccountIdsByRouteId",
                 () =>
                 {
-                    Dictionary<int, int> mappeDictionary = new Dictionary<int, int>();                    
+                    Dictionary<int, int> mappeDictionary = new Dictionary<int, int>();
                     CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                     var suppliers = carrierAccountManager.GetAllSuppliers();
 
@@ -498,7 +502,8 @@ namespace NP.IVSwitch.Business
             return routeDetail;
         }
 
-        public RouteEntityInfo RouteEntityInfoMapper(Route route){
+        public RouteEntityInfo RouteEntityInfoMapper(Route route)
+        {
 
             RouteEntityInfo routeInfo = new RouteEntityInfo()
             {

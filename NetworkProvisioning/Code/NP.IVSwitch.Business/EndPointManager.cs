@@ -45,7 +45,7 @@ namespace NP.IVSwitch.Business
 
         public string GetEndPointDescription(EndPoint endPoint)
         {
-            switch(endPoint.EndPointType)
+            switch (endPoint.EndPointType)
             {
                 case UserType.ACL: return String.Format("ACL - {0}", endPoint.Host);
                 case UserType.SIP: return String.Format("SIP - {0}", endPoint.SipLogin);
@@ -69,20 +69,21 @@ namespace NP.IVSwitch.Business
                 int? carrierAccountSWCustomerAccountId = null;
                 HashSet<int> assignedEndPointIds = null;
                 HashSet<int> alreadyAssignedSWCustomerAccountIds = null;
-                HashSet<int> customerIds=null;
-                HashSet<int> endPointIds = new  HashSet<int>();
-                if(filter.CustomerIds!=null)
-                {customerIds=new HashSet<int>(filter.CustomerIds);
-                foreach (var Id in customerIds)
+                HashSet<int> customerIds = null;
+                HashSet<int> endPointIds = new HashSet<int>();
+                if (filter.CustomerIds != null)
                 {
-                    var customerEndpointIds = (GetCarrierAccountEndPointIds(Id) != null) ? GetCarrierAccountEndPointIds(Id) : null;
-                    if (customerEndpointIds != null)
+                    customerIds = new HashSet<int>(filter.CustomerIds);
+                    foreach (var Id in customerIds)
                     {
-                        foreach (int endpointId in customerEndpointIds)
-                        { endPointIds.Add(endpointId); }
+                        var customerEndpointIds = (GetCarrierAccountEndPointIds(Id) != null) ? GetCarrierAccountEndPointIds(Id) : null;
+                        if (customerEndpointIds != null)
+                        {
+                            foreach (int endpointId in customerEndpointIds)
+                            { endPointIds.Add(endpointId); }
+                        }
+
                     }
-                    
-                }   
                 }
                 if (filter.AssignableToCarrierAccountId.HasValue)
                 {
@@ -245,8 +246,8 @@ namespace NP.IVSwitch.Business
                 throw new ArgumentNullException("endPointIds");
             List<EndPoint> endPoints = new List<EndPoint>();
             int? customerAccountId = null;
-            foreach(var endPointId in endPointIds)
-            {                
+            foreach (var endPointId in endPointIds)
+            {
                 var endPoint = GetEndPoint(endPointId);
                 endPoint.ThrowIfNull("endPoint", endPointId);
                 endPoints.Add(endPoint);
@@ -260,16 +261,16 @@ namespace NP.IVSwitch.Business
             EndPointCarrierAccountExtension endPointCarrierAccountExtension = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(carrierAccountId);
             if (endPointCarrierAccountExtension == null)
                 endPointCarrierAccountExtension = new EndPointCarrierAccountExtension();
-            foreach(var endPoint in endPoints)
+            foreach (var endPoint in endPoints)
             {
-                switch(endPoint.EndPointType)
+                switch (endPoint.EndPointType)
                 {
                     case UserType.ACL:
                         {
                             if (endPointCarrierAccountExtension.AclEndPointInfo == null)
                                 endPointCarrierAccountExtension.AclEndPointInfo = new List<EndPointInfo>();
                             endPointCarrierAccountExtension.AclEndPointInfo.Add(new EndPointInfo { EndPointId = endPoint.EndPointId });
-                        }break;
+                        } break;
                     case UserType.SIP:
                         {
                             if (endPointCarrierAccountExtension.UserEndPointInfo == null)
@@ -511,16 +512,18 @@ namespace NP.IVSwitch.Business
                 {
                     IEndPointDataManager dataManager = IVSwitchDataManagerFactory.GetDataManager<IEndPointDataManager>();
                     Helper.SetSwitchConfig(dataManager);
-                    return dataManager.GetEndPoints().ToDictionary(x => x.EndPointId, x => x);
+                    return dataManager.IvSwitchSync != null
+                        ? dataManager.GetEndPoints().ToDictionary(x => x.EndPointId, x => x)
+                        : new Dictionary<int, EndPoint>();
                 });
         }
-        
+
         public Dictionary<int, int> GetCarrierAccountIdsByEndPointId()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOne.WhS.BusinessEntity.Business.CarrierAccountManager.CacheManager>().GetOrCreateObject("IVSwitch_GetCarrierAccountIdsByEndPointId", 
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<TOne.WhS.BusinessEntity.Business.CarrierAccountManager.CacheManager>().GetOrCreateObject("IVSwitch_GetCarrierAccountIdsByEndPointId",
                 () =>
                 {
-                    Dictionary<int, int> result = new Dictionary<int, int>();                   
+                    Dictionary<int, int> result = new Dictionary<int, int>();
                     CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                     var customers = carrierAccountManager.GetAllCustomers();
                     foreach (var customerItem in customers)
@@ -535,7 +538,7 @@ namespace NP.IVSwitch.Business
                         }
                     }
                     return result;
-                });            
+                });
         }
 
         #endregion
@@ -558,9 +561,9 @@ namespace NP.IVSwitch.Business
         {
             EndPointEntityInfo endPointEntityInfo = new EndPointEntityInfo
             {
-               EndPointId = endPoint.EndPointId,
-               Description = GetEndPointDescription(endPoint),
-               AccountId = endPoint.AccountId
+                EndPointId = endPoint.EndPointId,
+                Description = GetEndPointDescription(endPoint),
+                AccountId = endPoint.AccountId
             };
 
             return endPointEntityInfo;
