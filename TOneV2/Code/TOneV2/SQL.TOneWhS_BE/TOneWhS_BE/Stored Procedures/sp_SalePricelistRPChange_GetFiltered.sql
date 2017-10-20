@@ -16,6 +16,7 @@ SELECT SpRP.[ZoneName]
       ,SpRP.[EED]
       ,SpRP.[PriceListId]
       ,SpRP.[CountryId]
+	  ,SpRP.[CustomerId]
   FROM [TOneWhS_BE].[SalePricelistRPChange] SpRP WITH(NOLOCK)
   WHERE SpRP.PricelistId = @PriceListID
 		AND (@CountryIDs  is null or SpRP.CountryID in (select CountryID from @CountryIDsTable))

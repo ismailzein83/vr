@@ -71,10 +71,10 @@ BEGIN
 				from [TOneWhS_BE].[SalePricelistRateChange_New] sprc WITH(NOLOCK)
 				where sprc.ProcessInstanceID = @ProcessInstanceID
 
-				INSERT INTO [TOneWhS_BE].[SalePricelistRPChange]  ([ZoneName],[ZoneID],[RoutingProductId],[RecentRoutingProductId],[BED],[EED],[PriceListId],[CountryId])
-				SELECT sprpc.[ZoneName],sprpc.[ZoneID],sprpc.[RoutingProductId],sprpc.[RecentRoutingProductId],sprpc.[BED],sprpc.[EED],sprpc.[PriceListId],sprpc.[CountryId]
+				INSERT INTO [TOneWhS_BE].[SalePricelistRPChange]  ([ZoneName],[ZoneID],[RoutingProductId],[RecentRoutingProductId],[BED],[EED],[PriceListId],[CountryId], [CustomerId])
+				SELECT sprpc.[ZoneName],sprpc.[ZoneID],sprpc.[RoutingProductId],sprpc.[RecentRoutingProductId],sprpc.[BED],sprpc.[EED],sprpc.[PriceListId],sprpc.[CountryId], sprpc.CustomerId
 				FROM [TOneWhS_BE].[SalePricelistRPChange_New] sprpc with(nolock)
-				where sprpc.ProcessInstanceID = @ProcessInstanceID and CustomerId is null
+				where sprpc.ProcessInstanceID = @ProcessInstanceID
 
 			-- Sync default routing product
 			

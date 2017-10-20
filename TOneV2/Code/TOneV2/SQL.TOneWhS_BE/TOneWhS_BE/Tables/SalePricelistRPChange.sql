@@ -6,8 +6,11 @@
     [BED]                    DATETIME       NULL,
     [EED]                    DATETIME       NULL,
     [PriceListId]            BIGINT         NULL,
-    [CountryId]              INT            NULL
+    [CountryId]              INT            NULL,
+    [CustomerId]             INT            NULL
 );
+
+
 
 
 

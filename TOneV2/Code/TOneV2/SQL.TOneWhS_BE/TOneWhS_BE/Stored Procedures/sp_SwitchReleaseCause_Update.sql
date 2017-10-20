@@ -10,9 +10,12 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SwitchReleaseCause_Update]
 @Settings NVARCHAR(MAX)
 AS
 BEGIN
-Update [TOneWhS_BE].SwitchReleaseCause
-	SET ReleaseCode = @ReleaseCode,
-		SwitchId = @SwitchId,
-		Settings = @Settings
-	WHERE ID = @ID
+	IF NOT EXISTS(select 1 from [TOneWhS_BE].SwitchReleaseCause WHERE ReleaseCode = @ReleaseCode and SwitchId = @SwitchId and Id!=@ID) 
+	BEGIN
+		Update [TOneWhS_BE].SwitchReleaseCause
+		SET ReleaseCode = @ReleaseCode,
+			SwitchId = @SwitchId,
+			Settings = @Settings
+		WHERE ID = @ID
+	END
 END

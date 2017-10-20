@@ -10,7 +10,10 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_SwitchReleaseCause_Insert]
 @ID INT OUT
 AS
 BEGIN
-	INSERT INTO SwitchReleaseCause (SwitchId,ReleaseCode,Settings)
-	VALUES (@SwitchId,@ReleaseCode,@Settings)
-	SET  @ID = scope_identity()
+IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.SwitchReleaseCause WHERE SwitchId = @SwitchId and ReleaseCode = @ReleaseCode)
+	BEGIN
+		INSERT INTO [TOneWhS_BE].SwitchReleaseCause (SwitchId,ReleaseCode,Settings)
+		VALUES (@SwitchId,@ReleaseCode,@Settings)
+		SET  @ID = scope_identity()
+	END
 END

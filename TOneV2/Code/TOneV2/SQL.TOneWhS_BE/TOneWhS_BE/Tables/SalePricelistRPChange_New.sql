@@ -8,8 +8,10 @@
     [PriceListId]            BIGINT         NULL,
     [CountryId]              INT            NULL,
     [ProcessInstanceID]      INT            NULL,
-    [CustomerId]             INT            NULL
+    [CustomerId]             INT            NOT NULL
 );
+
+
 
 
 

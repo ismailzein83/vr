@@ -7,8 +7,11 @@
     [NewRate]                DECIMAL (20, 8) NULL,
     [ChangeType]             INT             NOT NULL,
     [EffectiveOn]            DATETIME        NULL,
-    [EffectiveUntil]         DATETIME        NULL
+    [EffectiveUntil]         DATETIME        NULL,
+    [CurrencyId]             INT             NOT NULL
 );
+
+
 
 
 

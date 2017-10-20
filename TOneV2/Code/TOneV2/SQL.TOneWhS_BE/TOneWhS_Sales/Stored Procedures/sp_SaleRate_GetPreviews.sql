@@ -17,7 +17,7 @@ SELECT @ProcessInstanceId  = @ProcessInstanceId_IN,
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;	
 	
-	select ZoneName, RateTypeID, CurrentRate, IsCurrentRateInherited, NewRate, ChangeType, EffectiveOn, EffectiveUntil
+	select ZoneName, RateTypeID, CurrentRate, IsCurrentRateInherited, NewRate, ChangeType, EffectiveOn, EffectiveUntil, CurrencyId
 	from TOneWhS_Sales.RP_SaleRate_Preview WITH(NOLOCK) 
 	where ProcessInstanceID = @ProcessInstanceID
 		and ((@ZoneName is null and RateTypeID is null) or (@ZoneName is not null and ZoneName = @ZoneName and RateTypeID is not null))
