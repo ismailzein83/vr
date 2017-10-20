@@ -45,8 +45,19 @@
                 invoiceGenerationPeriodAPI = api;
             };
 
-            $scope.scopeModel.validateDates = function () {
+            $scope.scopeModel.validateFromDate = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
+            };
+
+            $scope.scopeModel.validateToDate = function () {
+                var result = VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
+                if (result != null)
+                    return result;
+
+                if ($scope.scopeModel.toDate != undefined && $scope.scopeModel.toDate >= VRDateTimeService.getTodayDate()) {
+                    return 'To should be less than today date';
+                }
+                return null;
             };
 
             $scope.scopeModel.areDatesRequired = function () {

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VRValidationService", "VR_Invoice_InvoiceActionService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService, VRValidationService, VR_Invoice_InvoiceActionService) {
+app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VRValidationService", "VR_Invoice_InvoiceActionService","VRDateTimeService",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService, VRValidationService, VR_Invoice_InvoiceActionService, VRDateTimeService) {
 
         var directiveDefinitionObject = {
 
@@ -117,8 +117,19 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                     function extendInvoicePartner(currentItem) {
                                         var extendInvoicePartnerPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                                        currentItem.validateDates = function () {
+                                        currentItem.validateFromDate = function () {
                                             return VRValidationService.validateTimeRange(currentItem.From, currentItem.To);
+                                        };
+
+                                        currentItem.validateToDate = function () {
+                                            var result = VRValidationService.validateTimeRange(currentItem.From, currentItem.To);
+                                            if (result != null)
+                                                return result;
+
+                                            if (currentItem.To != undefined && currentItem.To >= VRDateTimeService.getTodayDate()) {
+                                                return 'To should be less than today date';
+                                            }
+                                            return null;
                                         };
 
                                         currentItem.onItemChanged = function () {

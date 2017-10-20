@@ -13,12 +13,12 @@
             <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'PartnerName'" disablesorting="true" widthfactor="'2'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'From'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}" >
-                    <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateDates()"></vr-datetimepicker>
+                    <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateFromDate()"></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'To'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}">
-                    <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateDates()"></vr-datetimepicker>
+                    <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateToDate()"></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
 
