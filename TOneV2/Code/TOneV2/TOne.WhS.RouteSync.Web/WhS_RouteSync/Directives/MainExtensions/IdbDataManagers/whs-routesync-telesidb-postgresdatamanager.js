@@ -28,6 +28,12 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.isLoading = false;
 
+                $scope.scopeModel.addRedundantConnectionString = function () {
+                    if ($scope.scopeModel.redundantConnectionStrings == undefined)
+                        $scope.scopeModel.redundantConnectionStrings = [];
+                    $scope.scopeModel.redundantConnectionStrings.push({});
+                }
+
                 defineAPI();
             }
 
@@ -38,23 +44,16 @@
 
                     if (payload != undefined) {
                         $scope.scopeModel.connectionString = payload.idbDataManagersSettings.ConnectionString.ConnectionString;
-                        $scope.scopeModel.redundantConnectionString = payload.idbDataManagersSettings.RedundantConnectionStrings != undefined ? payload.idbDataManagersSettings.RedundantConnectionStrings[0].ConnectionString : null;
+                        $scope.scopeModel.redundantConnectionStrings = payload.idbDataManagersSettings.RedundantConnectionStrings;
                     }
                 };
 
                 api.getData = function getData() {
 
-                    var redundantConnectionStrings;
-
-                    if ($scope.scopeModel.redundantConnectionString != undefined) {
-                        redundantConnectionStrings = [];
-                        redundantConnectionStrings.push({ ConnectionString: $scope.scopeModel.redundantConnectionString });
-                    }
-
                     var data = {
                         $type: "TOne.WhS.RouteSync.TelesIdb.Postgres.IdbPostgresDataManager, TOne.WhS.RouteSync.TelesIdb.Postgres",
                         ConnectionString: { ConnectionString: $scope.scopeModel.connectionString },
-                        RedundantConnectionStrings: redundantConnectionStrings
+                        RedundantConnectionStrings: $scope.scopeModel.redundantConnectionString
                     };
                     return data;
                 };

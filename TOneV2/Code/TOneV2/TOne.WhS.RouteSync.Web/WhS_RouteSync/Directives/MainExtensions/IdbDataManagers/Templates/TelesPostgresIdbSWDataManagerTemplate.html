@@ -8,7 +8,15 @@
 <vr-row removeline>
     <vr-columns colnum="12">
         <vr-section title="Secondary" collapsible>
-            <vr-textbox label="Secondary Connection String" type="text" value="scopeModel.redundantConnectionString"></vr-textbox>
+            <vr-row>
+                <vr-columns colnum="12">
+                    <vr-button type="Add" data-onclick="scopeModel.addRedundantConnectionString" standalone></vr-button>
+                </vr-columns>
+            </vr-row>
+
+            <vr-datalist maxitemsperrow="1" datasource="scopeModel.redundantConnectionStrings" autoremoveitem="true">
+                <vr-textbox label="Connection String" type="text" value="dataItem.ConnectionString" isrequired></vr-textbox>
+            </vr-datalist>
         </vr-section>
     </vr-columns>
 </vr-row>
