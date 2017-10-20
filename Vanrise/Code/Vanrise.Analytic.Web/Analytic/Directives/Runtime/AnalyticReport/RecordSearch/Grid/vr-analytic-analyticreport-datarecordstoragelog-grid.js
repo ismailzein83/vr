@@ -64,8 +64,9 @@
                         if (response && response.Data) {
                             for (var z = 0; z < response.Data.length; z++) {
                                 var currentData = response.Data[z];
-                                currentData.details = itemDetails;
-                                if (currentData.details != undefined) {
+                                if (itemDetails != undefined) {
+                                    currentData.details = UtilsService.cloneObject(itemDetails, false);
+
                                     for (var x = 0; x < currentData.details.length; x++) {
                                         var currentDetail = currentData.details[x];
 
@@ -111,7 +112,7 @@
                             FilterGroup: query.FilterGroup,
                             LimitResult: query.LimitResult,
                             Direction: query.Direction,
-                            Filters:query.Filters
+                            Filters: query.Filters
                         };
 
                         fillQueryColumns(searchQuery, query.GridColumns, query.ItemDetails);
