@@ -206,8 +206,14 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         }
 
                     });
-                    selectedTables.push(WhS_BE_DBTableNameEnum.CustomerCountry.value);
+
+                    if (UtilsService.contains(selectedTables, WhS_BE_DBTableNameEnum.SalePriceList.value)
+                        && UtilsService.contains(selectedTables, WhS_BE_DBTableNameEnum.SaleRate.value)
+                        && UtilsService.contains(selectedTables, WhS_BE_DBTableNameEnum.SaleZone.value))
+                        selectedTables.push(WhS_BE_DBTableNameEnum.CustomerCountry.value);
+
                     selectedTables.push(WhS_BE_DBTableNameEnum.File.value);
+
                     schedulerTaskAction.MigrationRequestedTables = selectedTables;
                     schedulerTaskAction.ParameterDefinitions = getParameterDefinitions();
                     return schedulerTaskAction;
