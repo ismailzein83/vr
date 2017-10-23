@@ -66,8 +66,11 @@ namespace TOne.WhS.DBSync.Business
             foreach (var sourceTimeZone in list)
             {
                 VRTimeZoneByProfile vrTimeZoneByProfile = result.GetOrCreateItem(sourceTimeZone.CarrierProfileId.ToString());
-                vrTimeZoneByProfile.CustomerVRTimeZones.Add(allTimeZones[sourceTimeZone.CustomerTimeZoneId.ToString()]);
-                vrTimeZoneByProfile.SupplierVRTimeZones.Add(allTimeZones[sourceTimeZone.SupplierTimeZoneId.ToString()]);
+
+                if (allTimeZones.ContainsKey(sourceTimeZone.CustomerTimeZoneId.ToString()))
+                    vrTimeZoneByProfile.CustomerVRTimeZones.Add(allTimeZones[sourceTimeZone.CustomerTimeZoneId.ToString()]);
+                if (allTimeZones.ContainsKey(sourceTimeZone.SupplierTimeZoneId.ToString()))
+                    vrTimeZoneByProfile.SupplierVRTimeZones.Add(allTimeZones[sourceTimeZone.SupplierTimeZoneId.ToString()]);
             }
 
             return result;
