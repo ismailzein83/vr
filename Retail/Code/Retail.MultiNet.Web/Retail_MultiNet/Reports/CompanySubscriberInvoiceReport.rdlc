@@ -341,7 +341,7 @@
         <Top>5.97681in</Top>
         <Left>0.44125in</Left>
         <Height>0.8in</Height>
-        <Width>7.24187in</Width>
+        <Width>7.24186in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -837,7 +837,7 @@
         <DataSetName>RDLCRetail</DataSetName>
         <Top>2.70175in</Top>
         <Left>3.74562in</Left>
-        <Height>1.11827in</Height>
+        <Height>1.11829in</Height>
         <Width>3.9375in</Width>
         <ZIndex>3</ZIndex>
         <Style>
@@ -1218,7 +1218,7 @@
         <DataSetName>RDLCRetail</DataSetName>
         <Top>3.9cm</Top>
         <Left>2.7in</Left>
-        <Height>0.95833in</Height>
+        <Height>0.95835in</Height>
         <Width>3.21848in</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -1611,7 +1611,7 @@
         <Top>5.37542in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
-        <Width>7.24187in</Width>
+        <Width>7.24185in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -1874,7 +1874,7 @@
         <Top>6.92125in</Top>
         <Left>0.44125in</Left>
         <Height>1.13206in</Height>
-        <Width>7.24187in</Width>
+        <Width>7.24186in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -1942,7 +1942,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                               <Value>=Fields!BranchName.Value</Value>
                             </Parameter>
                             <Parameter Name="AccountNumber">
-                              <Value>=Fields!BranchName.Value</Value>
+                              <Value>=Parameters!AccountNumber.Value</Value>
                             </Parameter>
                             <Parameter Name="Email">
                               <Value>=Parameters!Email.Value</Value>
@@ -1971,7 +1971,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
                           </Parameters>
                           <Top>0.01041in</Top>
                           <Height>0.3125in</Height>
-                          <Width>7.24187in</Width>
+                          <Width>7.24185in</Width>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2406,7 +2406,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <Top>4.69459in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
-        <Width>7.24187in</Width>
+        <Width>7.24185in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -3308,6 +3308,12 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="RegAddress">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="AccountNumber">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

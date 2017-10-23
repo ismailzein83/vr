@@ -575,7 +575,7 @@
         <Top>5.97681in</Top>
         <Left>0.44125in</Left>
         <Height>1.4in</Height>
-        <Width>7.24187in</Width>
+        <Width>7.24186in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1071,7 +1071,7 @@
         <DataSetName>RDLCRetail</DataSetName>
         <Top>2.70175in</Top>
         <Left>3.74562in</Left>
-        <Height>1.11827in</Height>
+        <Height>1.11829in</Height>
         <Width>3.9375in</Width>
         <ZIndex>3</ZIndex>
         <Style>
@@ -1461,7 +1461,7 @@
         <DataSetName>RDLCRetail</DataSetName>
         <Top>3.9cm</Top>
         <Left>2.7in</Left>
-        <Height>0.95833in</Height>
+        <Height>0.95835in</Height>
         <Width>3.20806in</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -1854,7 +1854,7 @@
         <Top>5.37542in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
-        <Width>7.24187in</Width>
+        <Width>7.24185in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -1862,28 +1862,6 @@
           </Border>
         </Style>
       </Tablix>
-      <Subreport Name="SubscriberInvoiceItemsReportName">
-        <ReportName>SubscriberInvoiceItemsReport</ReportName>
-        <Parameters>
-          <Parameter Name="BranchName">
-            <Value>=Parameters!AccountName.Value</Value>
-          </Parameter>
-          <Parameter Name="Email">
-            <Value>=Parameters!Email.Value</Value>
-          </Parameter>
-        </Parameters>
-        <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
-        <Top>9.52306in</Top>
-        <Left>0.44125in</Left>
-        <Height>0.4375in</Height>
-        <Width>7.24187in</Width>
-        <ZIndex>6</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Subreport>
       <Image Name="CompanyLogo">
         <Source>Database</Source>
         <Value>=Parameters!Image.Value</Value>
@@ -1893,7 +1871,7 @@
         <Left>1.12077cm</Left>
         <Height>2.16958cm</Height>
         <Width>5.60104cm</Width>
-        <ZIndex>7</ZIndex>
+        <ZIndex>6</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2285,7 +2263,7 @@
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
         <Width>7.24187in</Width>
-        <ZIndex>8</ZIndex>
+        <ZIndex>7</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2547,8 +2525,8 @@
         <Top>7.53062in</Top>
         <Left>0.44125in</Left>
         <Height>1.1081in</Height>
-        <Width>7.24187in</Width>
-        <ZIndex>9</ZIndex>
+        <Width>7.24186in</Width>
+        <ZIndex>8</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2939,8 +2917,8 @@
         <Top>4.69459in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
-        <Width>7.24187in</Width>
-        <ZIndex>10</ZIndex>
+        <Width>7.24185in</Width>
+        <ZIndex>9</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2972,7 +2950,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <Left>0.44125in</Left>
         <Height>0.68752in</Height>
         <Width>7.24187in</Width>
-        <ZIndex>11</ZIndex>
+        <ZIndex>10</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2984,8 +2962,49 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
+      <Rectangle Name="Rectangle2">
+        <ReportItems>
+          <Subreport Name="SubscriberInvoiceItemsReportName">
+            <ReportName>SubscriberInvoiceItemsReport</ReportName>
+            <Parameters>
+              <Parameter Name="BranchName">
+                <Value>=Parameters!AccountName.Value</Value>
+              </Parameter>
+              <Parameter Name="Email">
+                <Value>=Parameters!Email.Value</Value>
+              </Parameter>
+              <Parameter Name="AccountNumber">
+                <Value>=Parameters!AccountNumber.Value</Value>
+              </Parameter>
+            </Parameters>
+            <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
+            <Top>0.0254in</Top>
+            <Height>0.4375in</Height>
+            <Width>7.34185in</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Subreport>
+        </ReportItems>
+        <PageBreak>
+          <BreakLocation>Start</BreakLocation>
+        </PageBreak>
+        <KeepTogether>true</KeepTogether>
+        <Top>24.44155cm</Top>
+        <Left>1.12077cm</Left>
+        <Height>1.17578cm</Height>
+        <Width>18.6483cm</Width>
+        <ZIndex>11</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Rectangle>
     </ReportItems>
-    <Height>26.11121cm</Height>
+    <Height>27.05016cm</Height>
     <Style />
   </Body>
   <Width>21cm</Width>
@@ -3474,6 +3493,12 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="RegAddress">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="AccountNumber">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
