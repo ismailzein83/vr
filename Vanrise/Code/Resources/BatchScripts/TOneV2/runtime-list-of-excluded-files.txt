@@ -1,0 +1,3 @@
+\TOne.WhS.Runtime.exe.config
+.aspx\
+.cs\

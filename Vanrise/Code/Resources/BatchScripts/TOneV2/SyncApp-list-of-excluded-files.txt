@@ -1,0 +1,1 @@
+TOne.WhS.DBSync.App.vshost.exe.config

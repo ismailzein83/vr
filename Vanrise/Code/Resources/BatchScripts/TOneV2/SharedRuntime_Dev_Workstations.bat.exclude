@@ -1,0 +1,66 @@
+ECHO OFF
+::Make Directory from current date as YYYYMMDD
+
+Set CURRDATE=%TEMP%\CURRDATE.TMP
+DATE /T > %CURRDATE%
+Set PARSEARG="eol=; tokens=1,2,3,4* delims=/, "
+For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
+
+ECHO.
+ECHO TOneV2 Runtime distribution on Development workstation
+
+ECHO Sara workstation 192.168.25.1
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.1\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.1\SharedRuntime\TOneRuntime\"
+
+ECHO Zeinab workstation 192.168.25.2
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.2\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.2\SharedRuntime\TOneRuntime\"
+
+ECHO Wissam workstation 192.168.25.3
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.3\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.3\SharedRuntime\TOneRuntime\"
+
+ECHO Ismail workstation 192.168.25.11
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.11\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.11\SharedRuntime\TOneRuntime\"
+
+ECHO Samer workstation 192.168.25.4
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.4\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.4\SharedRuntime\TOneRuntime\"
+
+ECHO Mustafa workstation 192.168.25.5
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.5\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.5\SharedRuntime\TOneRuntime\"
+
+ECHO Ali Ballouk workstation
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.6\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.6\SharedRuntime\TOneRuntime\"
+
+ECHO Hadi workstation 192.168.25.7
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.7\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.7\SharedRuntime\TOneRuntime\"
+
+ECHO Rabih workstation 192.168.25.9
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.9\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.9\SharedRuntime\TOneRuntime\"
+
+ECHO Anthony workstation 192.168.25.10
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.10\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.10\SharedRuntime\TOneRuntime\"
+
+ECHO Mohamad workstation 192.168.25.15
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.15\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.15\SharedRuntime\TOneRuntime\"
+
+ECHO Ali Atoui workstation 192.168.25.16
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.16\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.16\SharedRuntime\TOneRuntime\"
+
+ECHO Mortada workstation 192.168.25.13
+xcopy "C:\TFS\TOneV2\Code\TOneV2\TestRuntime\bin\x64\Release" /y /v /z /i /Q /R  	"\\192.168.25.13\SharedRuntime\TOneRuntime\"
+xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R 		"\\192.168.25.13\SharedRuntime\TOneRuntime\"
+
+ECHO TOneV2 Runtime distribution is completed
+pause
+exit
