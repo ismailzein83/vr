@@ -20,8 +20,14 @@ namespace Vanrise.ExcelConversion.MainExtensions
         public override object GetFieldValue(IGetFieldValueContext context)
         {
             var rowFieldValue = context.FieldValueByFieldName[RowFieldName];
-            
-            var matched = Choices.FindRecord(x => x.RowFieldValue.Equals(rowFieldValue.ToString(), StringComparison.InvariantCultureIgnoreCase));
+
+            if (rowFieldValue == null)
+            {
+                var emptyMatched = Choices.FirstOrDefault(x => x.RowFieldValue == null);
+                if (emptyMatched != null) return emptyMatched.FieldMappingChoice.GetFieldValue(context);
+            }
+
+            var matched = Choices.FindRecord(x => x.RowFieldValue.Equals(rowFieldValue.ToString().Trim(), StringComparison.InvariantCultureIgnoreCase));
 
 
             if (matched == null) return null;
