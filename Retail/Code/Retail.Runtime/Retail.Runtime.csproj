@@ -143,6 +143,24 @@
     <Reference Include="Vanrise.AccountBalance.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountManager.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountManager.Data">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountManager.Data.SQL">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountManager.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountManager.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountManager.Web">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Analytic.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.dll</HintPath>
     </Reference>
