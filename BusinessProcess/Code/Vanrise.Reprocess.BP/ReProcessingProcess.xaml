@@ -58,6 +58,8 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
@@ -133,6 +135,24 @@
         </InArgument>
       </vrba1:GetReprocessDefinition.ReprocessDefinitionId>
     </vrba1:GetReprocessDefinition>
+    <vrba1:ValidateReprocessInput>
+      <vrba1:ValidateReprocessInput.ReprocessDefinition>
+        <InArgument x:TypeArguments="vre:ReprocessDefinition">
+          <mca:CSharpValue x:TypeArguments="vre:ReprocessDefinition">ReprocessDefintion</mca:CSharpValue>
+        </InArgument>
+      </vrba1:ValidateReprocessInput.ReprocessDefinition>
+      <vrba1:ValidateReprocessInput.ReprocessDefinitionId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.ReprocessDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </vrba1:ValidateReprocessInput.ReprocessDefinitionId>
+      <vrba1:ValidateReprocessInput.UseTempStorageInput>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.UseTempStorage</mca:CSharpValue>
+        </InArgument>
+      </vrba1:ValidateReprocessInput.UseTempStorageInput>
+      <sap2010:WorkflowViewState.IdRef>ValidateReprocessInput_1</sap2010:WorkflowViewState.IdRef>
+    </vrba1:ValidateReprocessInput>
     <Assign sap2010:WorkflowViewState.IdRef="Assign_9">
       <Assign.To>
         <OutArgument x:TypeArguments="vrba1:StageManager">
@@ -552,7 +572,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1seEQDrAQOAgEBSDNINgIBDUkzSTYCAQxPC0+KAQIBAlMFWSADAcMGWgVvIgMBmgZwBXsOAwGFBnwFhwEkAwHwBYgBBZMBDgMB2wWUAQXEAQoDAZUFxQEFwwIXAwGeA8QCBfEDCgIBafIDBaMECgIBGqQEBaoEIAIBDlYLVoUBAwHFBlNgU4ABAwHEBmwLbFcDAbkGYgtiWQMBrwZdC114AwGlBmcLZ9gBAwGbBngLeF4DAZAGcwtzYAMBhgaEAQuEAWIDAfsFfwt/cgMB8QWQAQuQAXcDAeYFiwELiwFnAwHcBZcBC5cBXgMBlgWbAQnCARQDAaAFyAELyAF6AwGLBc8BCcECFAMBnwPHAgvHAmACAWrLAgnvAxQCAXT1Awv1A14CARv5AwmhBBsCASWnBAunBIUBAgEQpARgpASAAQIBD5wBC6IBJgMBzwWjAQu6ARUDAa0FuwELwQEmAwGhBdUBC+ABJgMB7gThAQv5ARwDAcEE+gELhQIUAwGkBIYCC8ACEAMBoAPMAgvuAx0CAXX8Aw/8A44BAgFfgwQNnwQYAgEmnwERnwF6AwHRBZwBZ5wBhwEDAdAFpgERpgGQAQMBxQWtAQ+4AScDAa4FvgERvgF6AwGjBbsBZ7sBiAEDAaIF3QER3QGLAQMB/QTYARHYAdMBAwHvBOEBeeEBfwMB7QTkARHsASADAd8E9gER9gGbAQMB0QTxARHxAYQBAwHDBOEBlQHhAZsBAwHCBIICEYICZAMBswT9ARH9AWoDAaUEiQIRiQKxAQMBoQONAg++AhoDAa8DzwIRzwKQAQMBlAPWAg/sAxoCAXaEBA+eBCUCASewARWwAYgBAwG6BbUBFbUBZAMBrwWOAhGZAhoDAYcEmgIRpQIaAwHqA6YCEbECGgMBzQOyAhG9AiwDAbAD2QI/2QJCAgF32wIR5gIsAwH5AucCEfwCLgMBxAL9AhGIAywDAakCiQMR6wMWAgF4jAQVjASIAQIBVJsEFZsEYQIBSZEEFZEEhwECAT6WBBWWBGQCATOHBBWHBGMCASiWAheWArABAwGWBJECF5ECkgEDAYgEogIXogJ7AwH5A50CF50CawMB6wOuAheuAnUDAdwDqQIXqQJrAwHOA7oCF7oCkQEDAb8DtQIXtQLtAgMBsQPjAhfjApEBAwGHA94CF94CnwEDAfoC9AIX9AKGAQMB7AL5Ahf5AmMDAd8C7wIX7wJmAwHSAuoCF+oCZQMBxQKFAxeFA5EBAwG3AoADF4ADnwEDAaoCjAMXjANtAgF5kAMV6QMnAwGGAZMDG5MDjAEDAZwCmgMZ5wMkAwGHAZsDG6YDNgMB/wGnAxu6AywDAeEBuwMb5gMgAwGIAaMDIaMDmwEDAY4CngMhngO6AQMBgAKqAyGyAyADAfEBtwMhtwOcAQMB4wGnA8cBpwPNAQMB4gG+AyG+A8sBAwGJAcIDH8gDMwMB0gHLAx/kAyoDAZcBxQMlxQODAgMB0wHMAyHXAyoDAbUB2AMh4wM8AwGYAdQDJ9QDfQMBxAHPAyfPA4EBAwG2AeADJ+ADoQEDAacB2wMn2wOLAgMBmQE=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nUHJvY2Vzcy54YW1sfEYDwAQOAgEBSjNKNgIBDUszSzYCAQxRC1GKAQIBAlUFWyADAeIGXAVxIgMBuQZyBX0OAwGkBn4FiQEkAwGPBooBBZsBJAMB8AWcAQWnAQ4DAdsFqAEF2AEKAwGVBdkBBdcCFwMBngPYAgWFBAoCAWmGBAW3BAoCARq4BAW+BCACAQ5YC1iFAQMB5AZVYFWAAQMB4wZuC25XAwHYBmQLZFkDAc4GXwtfeAMBxAZpC2nYAQMBugZ6C3peAwGvBnULdWADAaUGhgELhgFiAwGaBoEBC4EBcgMBkAaSAQuSAWIDAYUGjQELjQFqAwH7BZcBC5cBXgMB8QWkAQukAXcDAeYFnwELnwFnAwHcBasBC6sBXgMBlgWvAQnWARQDAaAF3AEL3AF6AwGLBeMBCdUCFAMBnwPbAgvbAmACAWrfAgmDBBQCAXSJBAuJBF4CARuNBAm1BBsCASW7BAu7BIUBAgEQuARguASAAQIBD7ABC7YBJgMBzwW3AQvOARUDAa0FzwEL1QEmAwGhBekBC/QBJgMB7gT1AQuNAhwDAcEEjgILmQIUAwGkBJoCC9QCEAMBoAPgAguCBB0CAXWQBA+QBI4BAgFflwQNswQYAgEmswERswF6AwHRBbABZ7ABhwEDAdAFugERugGQAQMBxQXBAQ/MAScDAa4F0gER0gF6AwGjBc8BZ88BiAEDAaIF8QER8QGLAQMB/QTsARHsAdMBAwHvBPUBefUBfwMB7QT4ARGAAiADAd8EigIRigKbAQMB0QSFAhGFAoQBAwHDBPUBlQH1AZsBAwHCBJYCEZYCZAMBswSRAhGRAmoDAaUEnQIRnQKxAQMBoQOhAg/SAhoDAa8D4wIR4wKQAQMBlAPqAg+ABBoCAXaYBA+yBCUCASfEARXEAYgBAwG6BckBFckBZAMBrwWiAhGtAhoDAYcErgIRuQIaAwHqA7oCEcUCGgMBzQPGAhHRAiwDAbAD7QI/7QJCAgF37wIR+gIsAwH5AvsCEZADLgMBxAKRAxGcAywDAakCnQMR/wMWAgF4oAQVoASIAQIBVK8EFa8EYQIBSaUEFaUEhwECAT6qBBWqBGQCATObBBWbBGMCASiqAheqArABAwGWBKUCF6UCkgEDAYgEtgIXtgJ7AwH5A7ECF7ECawMB6wPCAhfCAnUDAdwDvQIXvQJrAwHOA84CF84CkQEDAb8DyQIXyQLtAgMBsQP3Ahf3ApEBAwGHA/ICF/ICnwEDAfoCiAMXiAOGAQMB7AKNAxeNA2MDAd8CgwMXgwNmAwHSAv4CF/4CZQMBxQKZAxeZA5EBAwG3ApQDF5QDnwEDAaoCoAMXoANtAgF5pAMV/QMnAwGGAacDG6cDjAEDAZwCrgMZ+wMkAwGHAa8DG7oDNgMB/wG7AxvOAywDAeEBzwMb+gMgAwGIAbcDIbcDmwEDAY4CsgMhsgO6AQMBgAK+AyHGAyADAfEBywMhywOcAQMB4wG7A8cBuwPNAQMB4gHSAyHSA8sBAwGJAdYDH9wDMwMB0gHfAx/4AyoDAZcB2QMl2QODAgMB0wHgAyHrAyoDAbUB7AMh9wM8AwGYAegDJ+gDfQMBxAHjAyfjA4EBAwG2AfQDJ/QDoQEDAacB7wMn7wOLAgMBmQE=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -560,6 +580,7 @@
       <sap2010:ViewStateData Id="GenerateDateTimeRanges_1" sap:VirtualizedContainerService.HintSize="865,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="865,62" />
       <sap2010:ViewStateData Id="GetReprocessDefinition_3" sap:VirtualizedContainerService.HintSize="865,22" />
+      <sap2010:ViewStateData Id="ValidateReprocessInput_1" sap:VirtualizedContainerService.HintSize="865,22" />
       <sap2010:ViewStateData Id="Assign_9" sap:VirtualizedContainerService.HintSize="865,62" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_11" sap:VirtualizedContainerService.HintSize="287,22" />
       <sap2010:ViewStateData Id="InitializeStage_1" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -648,14 +669,14 @@
       <sap2010:ViewStateData Id="ParallelForEach`1_6" sap:VirtualizedContainerService.HintSize="287,296" />
       <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="865,446" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="865,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="887,4532">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="887,4594">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingProcess_1" sap:VirtualizedContainerService.HintSize="927,4612" />
+      <sap2010:ViewStateData Id="Vanrise.Reprocess.BP.ReProcessingProcess_1" sap:VirtualizedContainerService.HintSize="927,4674" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

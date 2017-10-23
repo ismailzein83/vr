@@ -35,23 +35,22 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
             var chunkTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-
-                $scope.onReprocessDefinitionSelectorReady = function (api) {
+                $scope.scopeModel = {};
+                $scope.scopeModel.onReprocessDefinitionSelectorReady = function (api) {
                     reprocessDefinitionSelectorAPI = api;
                     reprocessDefinitionSelectorReadyDeferred.resolve();
                 };
 
-                $scope.onChunkTimeSelectorReady = function (api) {
+                $scope.scopeModel.onChunkTimeSelectorReady = function (api) {
                     chunkTimeSelectorAPI = api;
                     chunkTimeSelectorReadyDeferred.resolve();
                 };
 
-                $scope.isValid = function () {
-                    if ($scope.daysBack != undefined && $scope.numberOfDays != undefined) {
-                        if (parseFloat($scope.numberOfDays) > parseFloat($scope.daysBack)) {
+                $scope.scopeModel.isValid = function () {
+                    if ($scope.scopeModel.daysBack != undefined && $scope.scopeModel.numberOfDays != undefined) {
+                        if (parseFloat($scope.scopeModel.numberOfDays) > parseFloat($scope.scopeModel.daysBack)) {
                             return 'Number Of Days should be less than or equal to Days Back.';
                         }
-
                     }
                     return null;
                 };
@@ -67,12 +66,12 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
 
                     if (payload != undefined) {
                         if (payload.rawExpressions != undefined) {
-                            $scope.daysBack = payload.rawExpressions.DaysBack;
-                            $scope.numberOfDays = payload.rawExpressions.NumberOfDays;
+                            $scope.scopeModel.daysBack = payload.rawExpressions.DaysBack;
+                            $scope.scopeModel.numberOfDays = payload.rawExpressions.NumberOfDays;
                         }
 
                         if (payload.data != undefined) {
-                            $scope.useTempStorage = payload.data.UseTempStorage;
+                            $scope.scopeModel.useTempStorage = payload.data.UseTempStorage;
                         }
                     }
 
@@ -107,7 +106,7 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                 };
 
                 api.getExpressionsData = function () {
-                    return { "ScheduleTime": "ScheduleTime", "DaysBack": $scope.daysBack, "NumberOfDays": $scope.numberOfDays };
+                    return { "ScheduleTime": "ScheduleTime", "DaysBack": $scope.scopeModel.daysBack, "NumberOfDays": $scope.scopeModel.numberOfDays };
                 };
 
                 api.getData = function () {
@@ -116,7 +115,7 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                         $type: "Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput, Vanrise.Reprocess.BP.Arguments",
                         ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
                         ChunkTime: chunkTimeSelectorAPI.getSelectedIds(),
-                        UseTempStorage: $scope.useTempStorage
+                        UseTempStorage: $scope.scopeModel.selectedReprocessDefinition.ForceUseTempStorage ? true : $scope.scopeModel.useTempStorage
                     };
                 };
 

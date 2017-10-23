@@ -1,21 +1,22 @@
 ﻿<vr-row removeline>
-<vr-row>
-    <vr-columns colnum="4">
-        <reprocess-reprocessdefinition-selector isrequired="true" on-ready="onReprocessDefinitionSelectorReady"></reprocess-reprocessdefinition-selector>
-    </vr-columns>
+    <vr-row>
+        <vr-columns colnum="4">
+            <reprocess-reprocessdefinition-selector isrequired="true" on-ready="scopeModel.onReprocessDefinitionSelectorReady" selectedvalues="scopeModel.selectedReprocessDefinition"></reprocess-reprocessdefinition-selector>
+        </vr-columns>
 
-    <vr-columns colnum="4">
-        <vr-datetimepicker label="From" isrequired="true" value="fromDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
-    </vr-columns>
+        <vr-columns colnum="4">
+            <vr-datetimepicker label="From" isrequired="true" value="scopeModel.fromDate" type="date" customvalidate="scopeModel.validateTimeRange()"></vr-datetimepicker>
+        </vr-columns>
 
-    <vr-columns colnum="4">
-        <vr-datetimepicker label="To" isrequired="true" value="toDate" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker>
-    </vr-columns>
-</vr-row>
-<vr-row>
-    <reprocess-chunktime-selector on-ready="onChunkTimeSelectorReady" normal-col-num="4" isrequired="true"></reprocess-chunktime-selector>
+        <vr-columns colnum="4">
+            <vr-datetimepicker label="To" isrequired="true" value="scopeModel.toDate" type="date" customvalidate="scopeModel.validateTimeRange()"></vr-datetimepicker>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <reprocess-chunktime-selector on-ready="scopeModel.onChunkTimeSelectorReady" normal-col-num="4" isrequired="true"></reprocess-chunktime-selector>
 
-    <vr-columns colnum="4">
-        <vr-switch value="useTempStorage" label="Use Temporary Storage"></vr-switch>
-    </vr-columns>
+        <vr-columns colnum="4" ng-if="scopeModel.selectedReprocessDefinition!=undefined && !scopeModel.selectedReprocessDefinition.ForceUseTempStorage">
+            <vr-switch value="scopeModel.useTempStorage" label="Use Temporary Storage"></vr-switch>
+        </vr-columns>
+    </vr-row>
 </vr-row>

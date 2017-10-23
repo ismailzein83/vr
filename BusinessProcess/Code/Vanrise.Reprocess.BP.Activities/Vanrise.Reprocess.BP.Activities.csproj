@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="CommitChanges.cs" />
     <Compile Include="EvaluateStagesStatus.cs" />
+    <Compile Include="ValidateReprocessInput.cs" />
     <Compile Include="GetStageActivator.cs" />
     <Compile Include="GetStageBatchRecords.cs" />
     <Compile Include="FinalizeStage.cs" />

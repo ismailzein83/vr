@@ -32,6 +32,8 @@ namespace Vanrise.Reprocess.Entities
 
         public int RecordCountPerTransaction { get; set; }
 
+        public bool ForceUseTempStorage { get; set; }
+
         //public List<ReprocessDefinitionStage> Stages { get; set; }
 
         //public ReprocessFilterDefinition FilterDefinition { get; set; }

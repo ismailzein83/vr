@@ -35,19 +35,19 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
             var chunkTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-
-                $scope.onReprocessDefinitionSelectorReady = function (api) {
+                $scope.scopeModel = {};
+                $scope.scopeModel.onReprocessDefinitionSelectorReady = function (api) {
                     reprocessDefinitionSelectorAPI = api;
                     reprocessDefinitionSelectorReadyDeferred.resolve();
                 };
 
-                $scope.onChunkTimeSelectorReady = function (api) {
+                $scope.scopeModel.onChunkTimeSelectorReady = function (api) {
                     chunkTimeSelectorAPI = api;
                     chunkTimeSelectorReadyDeferred.resolve();
                 };
 
-                $scope.validateTimeRange = function () {
-                    return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+                $scope.scopeModel.validateTimeRange = function () {
+                    return VRValidationService.validateTimeRange($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
                 };
 
                 defineAPI();
@@ -80,10 +80,10 @@ app.directive("reprocessReprocessprocess", ['UtilsService', 'VRUIUtilsService', 
                         InputArguments: {
                             $type: "Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput, Vanrise.Reprocess.BP.Arguments",
                             ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
-                            FromTime: $scope.fromDate,
-                            ToTime: new Date($scope.toDate.setDate($scope.toDate.getDate() + 1)),
+                            FromTime: $scope.scopeModel.fromDate,
+                            ToTime: new Date($scope.scopeModel.toDate.setDate($scope.scopeModel.toDate.getDate() + 1)),
                             ChunkTime: chunkTimeSelectorAPI.getSelectedIds(),
-                            UseTempStorage: $scope.useTempStorage
+                            UseTempStorage: $scope.scopeModel.selectedReprocessDefinition.ForceUseTempStorage ? true : $scope.scopeModel.useTempStorage
                         }
                     };
                 };

@@ -6,5 +6,7 @@ namespace Vanrise.Reprocess.Entities
         public Guid ReprocessDefinitionId { get; set; }
 
         public string Name { get; set; }
+
+        public bool ForceUseTempStorage { get; set; }
     }
 }
