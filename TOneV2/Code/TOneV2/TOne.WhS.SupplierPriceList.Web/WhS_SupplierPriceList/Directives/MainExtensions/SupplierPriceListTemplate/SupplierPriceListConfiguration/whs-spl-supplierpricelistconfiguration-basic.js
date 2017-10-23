@@ -67,7 +67,7 @@
                     rateTabsAPI.setTabSelected(0);
                 };
 
-                $scope.scopeModel.ratePrecicionType = WhS_SupPL_RatePrecisionTypeEnum.RateRound;
+                $scope.scopeModel.ratePrecicionType = WhS_SupPL_RatePrecisionTypeEnum.RoundRate;
                 $scope.scopeModel.ratePrecisionTypes = UtilsService.getArrayEnum(WhS_SupPL_RatePrecisionTypeEnum);
 
                 $scope.scopeModel.precisionValidate = function () {
@@ -526,7 +526,7 @@
                         HasCodeRange: $scope.scopeModel.hasCodeRange,
                         IsCommaDecimalSeparator: $scope.scopeModel.isCommaDecimalSeparator,
                         Precision: $scope.scopeModel.precisionValue,
-                        RatePrecicionType: $scope.scopeModel.ratePrecicionType.value,
+                            RatePrecicionType: ($scope.scopeModel.ratePrecicionType != null) ? $scope.scopeModel.ratePrecicionType.value: WhS_SupPL_RatePrecisionTypeEnum.RoundRate,
                     };
 
                     if ($scope.scopeModel.selectedCodeLayout != undefined && $scope.scopeModel.selectedCodeLayout.value == WhS_SupPL_CodeLayoutEnum.Delimitedcode.value) {
