@@ -46,7 +46,7 @@ app.directive('partnerportalCustomeraccessRetailusersubaccountsdefinitionEditor'
                     {
                         if (payload.businessEntityDefinitionSettings != undefined && payload.businessEntityDefinitionSettings.AccountTypeIds != undefined)
                         {
-                            $scope.scopeModel.accountType = payload.businessEntityDefinitionSettings.AccountTypeIds[0];
+                            $scope.scopeModel.accountType = payload.businessEntityDefinitionSettings.AccountTypeIds;
                         }
                     }
 
@@ -70,10 +70,15 @@ app.directive('partnerportalCustomeraccessRetailusersubaccountsdefinitionEditor'
                 };
 
                 api.getData = function () {
+                    var accountTypes;
+                    if ($scope.scopeModel.accountType != undefined)
+                    {
+                         accountTypes = $scope.scopeModel.accountType.split(",");
+                    }
                     var obj = {
                         $type: "PartnerPortal.CustomerAccess.Business.RetailUserSubaccountsBEDefinition, PartnerPortal.CustomerAccess.Business",
                         VRConnectionId: connectionSelectorApi.getSelectedIds(),
-                        AccountTypeIds: $scope.scopeModel.accountType != undefined?[$scope.scopeModel.accountType]:undefined
+                        AccountTypeIds: accountTypes
                     };
                     return obj;
                 };
