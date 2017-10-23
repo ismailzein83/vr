@@ -78,7 +78,8 @@ as (select * from (values
 ('12371BE0-CF2C-4CDD-9F4C-E809D912A716','Partner Invoice Query','Partner Invoice Query','PartnerPortal_Invoice_InvoiceQueryInterceptor','{"Editor":"partnerportal-invoice-partnerinvoicequeryinterceptor"}'),
 ('3efaf2e0-bcd2-4c98-890e-6ec5b4e4dd10','DIDTileDefinition','DID Tile','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-didtiledefinitionsettings"}'),
 ('ff8e7752-9df7-4017-83ab-6fa8a9cdb30f','RetailAccountInfoTileDefinition','Retail Account InfoTile','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-retailaccountinfotiledefinitionsettings"}'),
-('138b9459-67a5-4031-aea7-d86093f731d5','RetailSubAccountsInfoTileDefinition','Retail Sub Accounts Info Tile','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-retailsubaccountsinfotiledefinitionsettings"}')
+('138b9459-67a5-4031-aea7-d86093f731d5','RetailSubAccountsInfoTileDefinition','Retail Sub Accounts Info Tile','VRCommon_VRTileExtendedSettings','{"Editor":"partnerportal-customeraccess-retailsubaccountsinfotiledefinitionsettings"}'),
+('cbf7ef73-0d80-43a6-adc6-edc037542165','RetailUserSubaccountsBE','Retail User Sub Accounts BE','VR_GenericData_BusinessEntityDefinitionSettingsConfig','{"Editor":"partnerportal-customeraccess-retailusersubaccountsdefinition-editor"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
