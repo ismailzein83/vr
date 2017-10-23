@@ -67,6 +67,10 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
@@ -98,6 +102,7 @@
     <Compile Include="RetailAccountInfoTileDefinitionSettings.cs" />
     <Compile Include="RetailAccountUserManager.cs" />
     <Compile Include="RetailSubAccountsInfoTileDefinitionSettings.cs" />
+    <Compile Include="RetailUserSubaccountsBEDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PartnerPortal.CustomerAccess.Entities\PartnerPortal.CustomerAccess.Entities.csproj">

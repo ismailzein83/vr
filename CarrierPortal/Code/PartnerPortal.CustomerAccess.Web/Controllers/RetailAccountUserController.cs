@@ -1,5 +1,7 @@
 ﻿using PartnerPortal.CustomerAccess.Business;
 using PartnerPortal.CustomerAccess.Entities;
+using Retail.BusinessEntity.APIEntities;
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Security.Entities;
@@ -27,6 +29,14 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
         {
             RetailAccountUserManager _manager = new RetailAccountUserManager();
             return _manager.ResetPassword(resetPasswordInput.UserId, resetPasswordInput.Password);
+        }
+
+        [HttpGet]
+        [Route("GetClientChildAccountsInfo")]
+        public IEnumerable<ClientChildAccountInfo> GetClientChildAccountsInfo(Guid businessEntityDefinitionId)
+        {
+            RetailAccountUserManager _manager = new RetailAccountUserManager();
+            return _manager.GetClientChildAccountsInfo(businessEntityDefinitionId);
         }
     }
 }
