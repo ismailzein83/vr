@@ -120,6 +120,7 @@
     <Compile Include="Migrators\Rules\SwitchRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\TariffRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\TodRuleMigrator.cs" />
+    <Compile Include="Migrators\SwitchReleaseCauseMigrator.cs" />
     <Compile Include="Migrators\VRTimeZoneMigrator.cs" />
     <Compile Include="Migrators\CustomerZoneMigrator.cs" />
     <Compile Include="Migrators\CarrierAccountMigrator.cs" />

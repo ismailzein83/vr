@@ -12,6 +12,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int SwitchId { get; set; }
         public string ReleaseCode { get; set; }
         public SwitchReleaseCauseSetting Settings { get; set; }
+        public string SourceId { get; set; }
 
     }
     public class SwitchReleaseCauseSetting

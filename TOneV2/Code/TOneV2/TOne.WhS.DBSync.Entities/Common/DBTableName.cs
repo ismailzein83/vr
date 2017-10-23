@@ -82,7 +82,10 @@ namespace TOne.WhS.DBSync.Entities
         CarrierAccountStatusHistory = 24,
 
         [Description("FinancialAccount")]
-        FinancialAccount = 25
+        FinancialAccount = 25,
+
+        [Description("SwitchReleaseCause")]
+        SwitchReleaseCause = 26
 
     }
 }

@@ -23,6 +23,7 @@
     SupplierZoneServices: { value: 21, description: "Supplier Zone Services", defaultMigrate: true },
     SaleEntityServices: { value: 22, description: "Sale Entity Services", defaultMigrate: true },
     Rule: { value: 23, description: "Rules", defaultMigrate: true },
-    CarrierAccountStatusHistory: { value: 24, description: "CarrierAccountStatusHistory ", defaultMigrate: false },
-    FinancialAccount: { value: 25, description: "Financial Account ", defaultMigrate: true }
+    CarrierAccountStatusHistory: { value: 24, description: "CarrierAccountStatusHistory", defaultMigrate: false },
+    FinancialAccount: { value: 25, description: "Financial Account", defaultMigrate: true },
+    SwitchReleaseCause: { value: 26, description: "Switch Release Cause", defaultMigrate: true }
 });

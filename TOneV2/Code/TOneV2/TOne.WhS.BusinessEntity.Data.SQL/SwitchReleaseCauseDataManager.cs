@@ -12,11 +12,11 @@ using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Data.SQL
 {
-    public class SwitchReleaseCauseDataManager:BaseSQLDataManager,ISwitchReleaseCauseDataManager
+    public class SwitchReleaseCauseDataManager : BaseSQLDataManager, ISwitchReleaseCauseDataManager
     {
         public SwitchReleaseCauseDataManager()
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
-    {}
+        { }
 
         public List<SwitchReleaseCause> GetSwitchReleaseCauses()
         {
@@ -25,19 +25,19 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool AddSwitchReleaseCause(SwitchReleaseCause switchReleaseCause, out int insertedId)
         {
             object switchReleaseCauseId;
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SwitchReleaseCause_Insert]", out switchReleaseCauseId, switchReleaseCause.SwitchId, switchReleaseCause.ReleaseCode, Serializer.Serialize(switchReleaseCause.Settings));
-           bool insertedSuccesfully = (recordsEffected > 0);
-           if (insertedSuccesfully)
-               insertedId = (int)switchReleaseCauseId;
-           else
-               insertedId = 0;
-           return insertedSuccesfully;
-           
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SwitchReleaseCause_Insert]", out switchReleaseCauseId, switchReleaseCause.SwitchId, switchReleaseCause.ReleaseCode, Serializer.Serialize(switchReleaseCause.Settings), switchReleaseCause.SourceId);
+            bool insertedSuccesfully = (recordsEffected > 0);
+            if (insertedSuccesfully)
+                insertedId = (int)switchReleaseCauseId;
+            else
+                insertedId = 0;
+            return insertedSuccesfully;
+
         }
         public bool UpdateSwitchReleaseCause(SwitchReleaseCause switchReleaseCause)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SwitchReleaseCause_Update]", switchReleaseCause.SwitchReleaseCauseId, switchReleaseCause.SwitchId, switchReleaseCause.ReleaseCode, Serializer.Serialize(switchReleaseCause.Settings));
-          return (recordsEffected > 0);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SwitchReleaseCause_Update]", switchReleaseCause.SwitchReleaseCauseId, switchReleaseCause.SwitchId, switchReleaseCause.ReleaseCode, Serializer.Serialize(switchReleaseCause.Settings), switchReleaseCause.SourceId);
+            return (recordsEffected > 0);
         }
         SwitchReleaseCause SwitchReleaseCauseMapper(IDataReader reader)
         {
@@ -46,7 +46,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 ReleaseCode = reader["ReleaseCode"] as string,
                 SwitchReleaseCauseId = (int)reader["ID"],
                 SwitchId = (int)reader["SwitchID"],
-                Settings = Serializer.Deserialize<SwitchReleaseCauseSetting>(reader["Settings"] as string)
+                Settings = Serializer.Deserialize<SwitchReleaseCauseSetting>(reader["Settings"] as string),
+                SourceId = reader["SourceID"] as string
             };
         }
         public bool AreSwitchReleaseCausesUpdated(ref object updateHandle)

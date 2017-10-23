@@ -89,6 +89,7 @@
     <Compile Include="DBSyncDataManager\PreDataDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\PostDataDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SaleEntityRoutingProductDBSyncDataManager.cs" />
+    <Compile Include="DBSyncDataManager\SwitchReleaseCauseDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\VRTimeZoneDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SaleZoneServicesDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\SupplierZoneServicesDBSyncDataManager.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="SourceDataManger\SourceCarrierProfileDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCodeDataManager.cs" />
     <Compile Include="SourceDataManger\SourceCustomTimeZoneInfoDataManager.cs" />
+    <Compile Include="SourceDataManger\SourceSwitchReleaseCauseDataManager.cs" />
     <Compile Include="SourceDataManger\SourceZoneServiceDataManager.cs" />
     <Compile Include="SourceDataManger\SourceFlaggedServiceDataManager.cs" />
     <Compile Include="SourceDataManger\SourcePriceListDataManager.cs" />

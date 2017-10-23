@@ -62,9 +62,9 @@ namespace TOne.WhS.DBSync.Business
             //TruncateTables(context, migrationManager);
             TransferData(_context);
             //CreateForeignKeys(context, migrationManager);
-            FinalizeMigration(_context, migrationManager);
-            _context.WriteInformation("Database Sync Task Action Executed");
+            FinalizeMigration(_context, migrationManager);          
             ApplyPostData();
+            _context.WriteInformation("Database Sync Task Action Executed");
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {
                 Result = ExecuteOutputResult.Completed
@@ -238,6 +238,9 @@ namespace TOne.WhS.DBSync.Business
                     case DBTableName.FinancialAccount:
                         iDBSyncDataManager = new FinancialAccountDBSyncDataManager(context.UseTempTables);
                         break;
+                    case DBTableName.SwitchReleaseCause:
+                        iDBSyncDataManager = new SwitchReleaseCauseDBSyncDataManager(context.UseTempTables);
+                        break;
                 }
                 AddDBTable(dtTables, table, iDBSyncDataManager.GetConnection(), iDBSyncDataManager.GetSchema(), migrationRequested);
 
@@ -401,6 +404,9 @@ namespace TOne.WhS.DBSync.Business
                     break;
                 case DBTableName.FinancialAccount:
                     migrator = new FinancialAccountMigrator(context);
+                    break;
+                case DBTableName.SwitchReleaseCause:
+                    migrator = new SwitchReleaseCauseMigrator(context);
                     break;
                 //Default Case for Table names that do not require migrator
                 default:
