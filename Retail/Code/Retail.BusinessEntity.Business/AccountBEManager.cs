@@ -647,7 +647,14 @@ namespace Retail.BusinessEntity.Business
                 return null;
             }
         }
-
+        public IEnumerable<ClientChildAccountInfo> GetClientChildAccountsInfo(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
+        {
+            var childAccounts = GetChildAccounts(accountBEDefinitionId, accountId, withSubChildren);
+            if (childAccounts == null)
+                return null;
+            return childAccounts.MapRecords(ClientChildAccountInfoMapper);
+           
+        }
         public List<long> GetChildAccountIds(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
         {
             List<Account> accounts = GetChildAccounts(accountBEDefinitionId, accountId, withSubChildren);
@@ -1484,7 +1491,15 @@ namespace Retail.BusinessEntity.Business
             }
             return name;
         }
-
+        private ClientChildAccountInfo ClientChildAccountInfoMapper(Account account)
+        {
+            return new ClientChildAccountInfo
+            {
+                AccountId = account.AccountId,
+                Name = GetAccountName(account),
+                TypeId = account.TypeId
+            };
+        }
         #endregion
 
         #region IBusinessEntityManager

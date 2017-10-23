@@ -1,4 +1,5 @@
-﻿using Retail.BusinessEntity.Business;
+﻿using Retail.BusinessEntity.APIEntities;
+using Retail.BusinessEntity.Business;
 using Retail.BusinessEntity.Entities;
 using System;
 using System.Collections.Generic;
@@ -108,6 +109,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         public List<long> GetChildAccountIds(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
         {
             return _manager.GetChildAccountIds(accountBEDefinitionId, accountId, withSubChildren);
+        }
+        [HttpGet]
+        [Route("GetClientChildAccountsInfo")]
+        public IEnumerable<ClientChildAccountInfo> GetClientChildAccountsInfo(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
+        {
+            return _manager.GetClientChildAccountsInfo(accountBEDefinitionId, accountId, withSubChildren);
         }
     }
 
