@@ -86,7 +86,7 @@ where	[SellingNumberPlanID]=@SellingNumberPlanId --default used in migration
 order by [BED]
 
 update	TOneWhS_BE.SaleEntityRoutingProduct
-set		BED=dateadd(year,-1,@BEDSaleZone)
+set		BED= isnull(dateadd(year,-1,@BEDSaleZone),'2000-01-01')
 where	(OwnerType = 0) AND (OwnerID = @SellingProductID) 
 		AND (ZoneID IS NULL)
 ";
