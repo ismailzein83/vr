@@ -37,8 +37,11 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             {
                 DataByZone zoneData = dataByZoneId.GetRecord(countryZone.ZoneId);
 
-                if (zoneData != null && zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED == countryToAdd.BED)
-                    continue;
+                if (zoneData != null && zoneData.NormalRateToChange != null)
+                {
+                    if (zoneData.NormalRateToChange.BED == Utilities.Max(countryToAdd.BED, countryZone.BED))
+                        continue;
+                }
 
                 ZoneInheritedRates zoneRates = ratePlanContext.InheritedRatesByZoneId.GetRecord(countryZone.ZoneId);
                 IEnumerable<SaleRate> zoneNormalRates = (zoneRates != null) ? zoneRates.NormalRates : null;
