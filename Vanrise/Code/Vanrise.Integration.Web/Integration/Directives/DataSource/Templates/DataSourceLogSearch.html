@@ -1,7 +1,7 @@
-﻿<vr-form name="formFilter">
+﻿<vr-form  validationcontext="logSearchEditorGroup">
     <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
         <vr-row removeline>
-            <vr-columns width="normal" haschildcolumns>
+            <vr-columns width="normal" haschildcolumns ng-hide="usedInDrillDown">
                 <vr-integration-datasource-selector on-ready="onDataSourceSelectorReady" selectedvalues="selectedDataSource" isrequired="true"></vr-integration-datasource-selector>
             </vr-columns>
             <vr-columns width="normal">
@@ -14,13 +14,16 @@
             <vr-columns width="normal">
                 <vr-datetimepicker label="To" type="dateTime" value="selectedToDateTime" customvalidate="validateDateTime()"></vr-datetimepicker>
             </vr-columns>
+            <vr-columns width="normal" ng-show="usedInDrillDown" withemptyline>
+                <vr-button type="Search"  data-onclick="searchClicked" isasynchronous="true" standalone vr-disabled="logSearchEditorGroup.validate() != null"></vr-button>
+            </vr-columns>
         </vr-row>
     </div>
 </vr-form>
-<vr-row removeline>
+<vr-row removeline ng-hide="usedInDrillDown">
     <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
         <div transclude-to="buttons">
-            <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" isasynchronous="true"></vr-button>
+            <vr-button type="Search" vr-disabled="logSearchEditorGroup.validate() != null" data-onclick="searchClicked" isasynchronous="true"></vr-button>
         </div>
     </vr-actionbar>
 </vr-row>

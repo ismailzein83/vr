@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService","VRUIUtilsService","VRValidationService",'VRDateTimeService','$filter',
+app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRValidationService", 'VRDateTimeService', '$filter',
 function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService, $filter) {
 
     var directiveDefinitionObject = {
@@ -28,13 +28,14 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
 
         var gridApi;
         var dataSourceDirectiveAPI;
+        var dataSourceId;
         var dataSourceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         defineScope();
 
 
         this.initializeController = initializeController;
         function initializeController() {
-            
+
             defineScope();
 
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -42,8 +43,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
             function getDirectiveAPI() {
 
                 var directiveAPI = {};
-                directiveAPI.load = function () {
-                    return load();
+                directiveAPI.load = function (payload) {
+                    if (payload != undefined) {
+                        dataSourceId = payload.dataSourceId;
+                        $scope.usedInDrillDown = dataSourceId != undefined;
+                    }
+                    return load().then(function () {
+                        if (dataSourceId != undefined)
+                            return $scope.searchClicked();
+                    });
                 };
                 return directiveAPI;
             }
@@ -52,6 +60,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
 
         function defineScope() {
             $scope.showGrid = false;
+            $scope.usedInDrillDown = false;
             $scope.dataSources = [];
             $scope.severities = [];
             $scope.selectedSeverities = [];
@@ -83,8 +92,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
         }
 
         function loadAllControls() {
-         
-            return UtilsService.waitMultipleAsyncOperations([loadSeverities, loadDatasourceSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadSeverities, loadDatasourceSelector]).then(function () {
+              
+            }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;
             }).finally(function () {
@@ -97,15 +107,17 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
 
             dataSourceReadyPromiseDeferred.promise
                 .then(function () {
-                   // periodReadyPromiseDeferred = undefined;
-                    VRUIUtilsService.callDirectiveLoad(dataSourceDirectiveAPI, undefined, dataSourceLoadPromiseDeferred);
+                    var selectorPayload;
+                    if (dataSourceId != undefined)
+                        selectorPayload = { selectedIds: dataSourceId };
+                    VRUIUtilsService.callDirectiveLoad(dataSourceDirectiveAPI, selectorPayload, dataSourceLoadPromiseDeferred);
                 });
             return dataSourceLoadPromiseDeferred.promise;
         }
 
         function getQueryGrid() {
             var query = {
-                DataSourceId: ($scope.selectedDataSource != undefined) ? $scope.selectedDataSource.DataSourceID : null,
+                DataSourceId:dataSourceDirectiveAPI.getSelectedIds(),
                 Severities: getMappedSelectedSeverities(),
                 From: ($scope.selectedFromDateTime != undefined) ? $scope.selectedFromDateTime : null,
                 To: ($scope.selectedToDateTime != undefined) ? $scope.selectedToDateTime : null

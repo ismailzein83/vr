@@ -16,7 +16,10 @@
             deleteDataSource: deleteDataSource,
             registerObjectTrackingDrillDownToDataSource:registerObjectTrackingDrillDownToDataSource,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerHistoryViewAction: registerHistoryViewAction
+            registerHistoryViewAction: registerHistoryViewAction,
+            registerLogToDataSource: registerLogToDataSource,
+            registerImportedBatchToDataSource: registerImportedBatchToDataSource
+
         };
 
 
@@ -144,6 +147,48 @@
             
             addDrillDownDefinition(drillDownDefinition);
            
+        }
+
+        function registerLogToDataSource() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Data Source Log";
+            drillDownDefinition.directive = "vr-integration-log-search";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, dataSourceItem) {
+                dataSourceItem.logPanelAPI = directiveAPI;
+
+                var payload = {
+                    dataSourceId: dataSourceItem.Entity.DataSourceId
+
+                };
+                return dataSourceItem.logPanelAPI.load(payload);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
+        }
+
+        function registerImportedBatchToDataSource() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Imported Batch";
+            drillDownDefinition.directive = "vr-integration-importedbatch-search";
+
+
+            drillDownDefinition.loadDirective = function (directiveAPI, dataSourceItem) {
+                dataSourceItem.importedBatchPanelAPI = directiveAPI;
+
+                var payload = {
+                    dataSourceId: dataSourceItem.Entity.DataSourceId
+
+                };
+                return dataSourceItem.importedBatchPanelAPI.load(payload);
+            };
+
+            addDrillDownDefinition(drillDownDefinition);
+
         }
         function addDrillDownDefinition(drillDownDefinition) {
           

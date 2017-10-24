@@ -25,7 +25,7 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
 
     function LogSearch($scope, ctrl, $attrs) {
 
-
+        var dataSourceId;
         var gridApi;
         var dataSourceDirectiveAPI;
         var dataSourceReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -42,8 +42,15 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
             function getDirectiveAPI() {
 
                 var directiveAPI = {};
-                directiveAPI.load = function () {
-                    return load();
+                directiveAPI.load = function (payload) {
+                    if (payload != undefined) {
+                        dataSourceId = payload.dataSourceId;
+                        $scope.usedInDrillDown = dataSourceId != undefined;
+                    }
+                    return load().then(function () {
+                        if (dataSourceId != undefined)
+                            return $scope.searchClicked();
+                    });
                 };
                 return directiveAPI;
             }
@@ -51,6 +58,7 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
         }
 
         function defineScope() {
+            $scope.usedInDrillDown = false;
             $scope.mappingResults = [];
             $scope.selectedMappingResults = [];
             $scope.importedBatches = [];
@@ -112,7 +120,10 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
 
             dataSourceReadyPromiseDeferred.promise
                 .then(function () {
-                    VRUIUtilsService.callDirectiveLoad(dataSourceDirectiveAPI, undefined, dataSourceLoadPromiseDeferred);
+                    var selectorPayload;
+                    if (dataSourceId != undefined)
+                        selectorPayload = { selectedIds: dataSourceId };
+                    VRUIUtilsService.callDirectiveLoad(dataSourceDirectiveAPI, selectorPayload, dataSourceLoadPromiseDeferred);
                 });
             return dataSourceLoadPromiseDeferred.promise;
         }
