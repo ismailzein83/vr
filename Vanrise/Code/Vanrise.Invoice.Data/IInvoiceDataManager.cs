@@ -30,5 +30,6 @@ namespace Vanrise.Invoice.Data
         List<Entities.Invoice> GetInvoicesBySerialNumbers(Guid invoiceTypeId,IEnumerable<string> serialNumbers);
         bool UpdateInvoicePaidDateById(Guid invoiceTypeId, long invoiceId, DateTime paidDate);
         bool UpdateInvoiceSettings(long invoiceId, InvoiceSettings invoiceSettings);
+        bool SetInvoiceSentDate(long invoiceId, DateTime? sentDate);
     }
 }

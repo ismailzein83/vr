@@ -49,6 +49,11 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceLock", invoiceId, lockedDate);
             return (affectedRows > -1);
         }
+        public bool  SetInvoiceSentDate(long invoiceId, DateTime? sentDate)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceSentDate", invoiceId, sentDate);
+            return (affectedRows > -1);
+        }
         public Entities.Invoice GetInvoice(long invoiceId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_Get", InvoiceMapper, invoiceId);
@@ -105,7 +110,8 @@ namespace Vanrise.Invoice.Data.SQL
                                                                          invoice.LockDate,
                                                                          invoice.Note,
                                                                          invoice.SourceId,
-                                                                         invoice.InvoiceSettingId) > 0;
+                                                                         invoice.InvoiceSettingId,
+                                                                         invoice.SentDate) > 0;
         }
         public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
         {
@@ -141,7 +147,8 @@ namespace Vanrise.Invoice.Data.SQL
                 true,
                 invoiceEntity.IsAutomatic,
                 serializedSettings,
-                invoiceEntity.InvoiceSettingId
+                invoiceEntity.InvoiceSettingId,
+                invoiceEntity.SentDate
             );
 
             insertedInvoiceId = Convert.ToInt64(invoiceId);
@@ -241,12 +248,10 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return GetItemSP("VR_Invoice.sp_Invoice_GetPopulatedPeriod", VRPopulatedPeriodMapper, invoiceTypeId, partnerId);
         }
-
         public bool CheckPartnerIfHasInvoices(Guid invoiceTypeId, string partnerId)
         {
             return GetItemSP("VR_Invoice.sp_Invoice_CheckIfHasInvoices", (reader) => { return (bool)reader["HasInvoices"]; }, invoiceTypeId, partnerId);
         }
-
         public List<Entities.Invoice> GetInvoicesBySerialNumbers(Guid invoiceTypeId, IEnumerable<string> serialNumbers)
         {
             return GetItemsSP("[VR_Invoice].[sp_Invoice_GetBySerialNumbers]", InvoiceMapper, invoiceTypeId, string.Join(",", serialNumbers));
@@ -310,6 +315,7 @@ namespace Vanrise.Invoice.Data.SQL
                 IsAutomatic = GetReaderValue<Boolean>(reader, "IsAutomatic"),
                 Settings = Vanrise.Common.Serializer.Deserialize<InvoiceSettings>(reader["Settings"] as string),
                 InvoiceSettingId =  GetReaderValue<Guid>(reader, "InvoiceSettingId"),
+                SentDate = GetReaderValue<DateTime?>(reader, "SentDate"),
             };
             return invoice;
         }

@@ -29,6 +29,7 @@ namespace Vanrise.Invoice.Entities
         public string Note { get; set; }
         public string SourceId { get; set; }
         public Boolean IsAutomatic { get; set; }
+        public DateTime? SentDate { get; set; }
         public InvoiceSettings Settings { get; set; }
         public Invoice() { }
         public IEnumerable<Invoice> GetInvoiceRDLCSchema()

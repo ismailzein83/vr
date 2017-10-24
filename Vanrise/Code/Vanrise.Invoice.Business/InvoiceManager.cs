@@ -314,6 +314,14 @@ namespace Vanrise.Invoice.Business
                 lockedDate = DateTime.Now;
             return dataManager.SetInvoiceLocked(invoiceId, lockedDate);
         }
+        public bool SetInvoiceSentDate(long invoiceId, bool isInvoiceSent)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            DateTime? sentDate = null;
+            if (isInvoiceSent)
+                sentDate = DateTime.Now;
+            return dataManager.SetInvoiceSentDate(invoiceId, sentDate);
+        }
         public int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
@@ -541,6 +549,7 @@ namespace Vanrise.Invoice.Business
                 Lock = invoice.LockDate.HasValue,
                 UserName = userManager.GetUserName(invoice.UserId),
                 HasNote = invoice.Note != null,
+                IsSent = invoice.SentDate.HasValue
             };
 
             FillNeededDetailData(invoiceDetail, invoiceType, includeAllFields);
