@@ -340,6 +340,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountType\retail-be-overriddenconfiguration-accounttype.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\AccountTypeSettings.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountType\Templates\OverriddenConfigurationAccountType.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountmanagerassignment-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accounthistory-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountidentificationrules-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-accountinfo-view.js" />
@@ -351,6 +352,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-financialtransactions-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-portalaccount-view.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\retail-be-subaccounts-view.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountManagerAssignmentViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountHistoryViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountIdentificationRulesViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\AccountPackagesViewTemplate.html" />

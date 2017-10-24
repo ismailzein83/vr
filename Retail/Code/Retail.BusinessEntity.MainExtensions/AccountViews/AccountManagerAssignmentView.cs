@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountViews
 {
-    public class AccountManagerView : AccountViewDefinitionSettings
+    public class AccountManagerAssignmentView : AccountViewDefinitionSettings
     {
         public override Guid ConfigId
         {
@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
         {
             get
             {
-                return "retail-be-accountmanager-view";
+                return "retail-be-accountmanagerassignment-view";
             }
             set
             {
