@@ -7,12 +7,14 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
             scope: {
                 onReady: '=',
                 normalColNum: '@',
-                isrequired: '='
+                isrequired: '=',
+                ismultipleselection: "@"
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 var ctor = new carriersCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
+                ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
 
             },
             controllerAs: 'financialAccountCtrl',
@@ -30,7 +32,11 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
         };
 
         function getTemplate(attrs) {
-            return '<retail-be-account-selector isrequired="financialAccountCtrl.isrequired" normal-col-num="{{financialAccountCtrl.normalColNum}}" on-ready="financialAccountCtrl.onDirectiveReady" hideremoveicon onselectionchanged="financialAccountCtrl.onSelectionChanged"></retail-be-account-selector>';
+            var multipleselection = "";
+            if (attrs.ismultipleselection != undefined) {
+                multipleselection = "ismultipleselection";
+            }
+            return '<retail-be-account-selector isrequired="financialAccountCtrl.isrequired" ' + multipleselection + ' normal-col-num="{{financialAccountCtrl.normalColNum}}" on-ready="financialAccountCtrl.onDirectiveReady" hideremoveicon onselectionchanged="financialAccountCtrl.onSelectionChanged"></retail-be-account-selector>';
         }
 
         function carriersCtor(ctrl, $scope, attrs) {
