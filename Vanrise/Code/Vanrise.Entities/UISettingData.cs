@@ -47,7 +47,19 @@ namespace Vanrise.Entities
     public class CompanySettingDefinition
     {
         public List<CompanyContactType> ContactTypes { get; set; }
+        public Dictionary<Guid, CompanyDefinitionSetting> ExtendedSettings { get; set; }
 
+    }
+    public class CompanyDefinitionSetting
+    {
+        public Guid CompanyDefinitionSettingId { get; set; }
+        public string Name  { get; set; }
+        public BaseCompanyDefinitionExtendedSetting Setting { get; set; }
+    }
+    public abstract class  BaseCompanyDefinitionExtendedSetting
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract string RuntimeEditor { get; }
     }
     public class CompanyContactType
     {
