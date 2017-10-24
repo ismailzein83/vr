@@ -8,6 +8,9 @@ namespace Vanrise.AccountManager.Entities
 {
   public  class AccountManagerDetail
     {
+      public Guid AccountManagerDefinitionId { get; set; }
+      public long AccountManagerId { get; set; }
       public string UserName { get; set; }
+      public int UserId { get; set; }
     }
 }

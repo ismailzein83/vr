@@ -10,5 +10,7 @@ namespace Vanrise.AccountManager.Data
     {
         List<Entities.AccountManager> GetAccountManagers();
         bool AreAccountManagersUpdated(ref object updateHandle);
+        bool AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager, out int insertedId);
+        bool UpdateAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager);
     }
 }

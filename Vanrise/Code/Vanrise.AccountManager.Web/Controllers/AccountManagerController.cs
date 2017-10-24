@@ -22,5 +22,18 @@ namespace Vanrise.AccountManager.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredAccountManagers(input));
         }
+        [HttpPost]
+        [Route("AddAccountManager")]
+        public InsertOperationOutput<AccountManagerDetail> AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
+        {
+            return _manager.AddAccountManager(accountManager);
+
+        }
+        [HttpPost]
+        [Route("UpdateAccountManager")]
+        public UpdateOperationOutput<AccountManagerDetail> UpdateAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
+        {
+            return _manager.UpdateAccountManager(accountManager);
+        }
     }
 }

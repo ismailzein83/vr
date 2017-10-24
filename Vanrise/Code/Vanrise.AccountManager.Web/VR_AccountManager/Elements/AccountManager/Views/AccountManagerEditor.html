@@ -1,9 +1,9 @@
-﻿<div vr-modalcontent ng-controller="VR_AccountManager_AssignmentDefinitionEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="VR_AccountManager_AccountManagerEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formFilter">
             <vr-row>
-                <vr-columns colnum="3">
-                    <vr-textbox value="scopeModel.assignmentName" label="Name" isrequired="true"></vr-textbox>
+                <vr-columns colnum="2">
+                    <vr-sec-user-selector on-ready="scopeModel.onUserSelectorReady" normal-col-num="2" ></vr-sec-user-selector>
                 </vr-columns>
             </vr-row>
         </vr-form>

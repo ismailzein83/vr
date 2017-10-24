@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAccountmanagerAccountmanagerGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "VR_AccountManager_AccountManagerAPIService",
-function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_ObjectTrackingService, VR_AccountManager_AccountManagerAPIService) {
+app.directive("vrAccountmanagerAccountmanagerGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "VR_AccountManager_AccountManagerAPIService", "VR_AccountManager_AccountManagerService",
+function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_ObjectTrackingService, VR_AccountManager_AccountManagerAPIService, VR_AccountManager_AccountManagerService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -22,12 +22,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
     };
 
     function AccountManagerGrid($scope, ctrl, $attrs) {
-
+        var gridAPI;
         this.initializeController = initializeController;
         
         function initializeController()
         {
-            var gridAPI;
+            
             $scope.accountManagers = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -39,6 +39,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
 
                     directiveAPI.loadGrid = function (query) {
                         return gridAPI.retrieveData(query);
+                    };
+                    directiveAPI.onAccountManagerAdded = function (accountManagerObject) {
+                        gridAPI.itemAdded(accountManagerObject);
                     };
 
                     return directiveAPI;
@@ -63,8 +66,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
             }];
         }
 
-        function editAccountmanager() {
-          
+        function editAccountmanager(accountManagerObject) {
+            var onAccountManagerUpdated = function (updatedItem) {
+                gridAPI.itemUpdated(updatedItem);
+            };
+
+            VR_AccountManager_AccountManagerService.editAccountmanager(accountManagerObject, onAccountManagerUpdated);
         }
     }
     return directiveDefinitionObject;

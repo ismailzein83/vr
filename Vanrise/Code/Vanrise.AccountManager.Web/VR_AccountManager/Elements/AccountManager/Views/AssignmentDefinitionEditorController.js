@@ -6,7 +6,7 @@
 
     function assignmentDefinitionController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
-        var AssignementDefinitionEntity;
+        var assignmentDefinitionEntity;
         loadParameters();
         defineScope();
         load();
@@ -14,16 +14,15 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                AssignementDefinitionEntity = parameters;
+                assignmentDefinitionEntity = parameters.assignmentDefinitionEntity;
             };
-            isEditMode = (AssignementDefinitionEntity != undefined);
+            isEditMode = (assignmentDefinitionEntity != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-            $scope.scopeModel.assignmentName = accountManagerAssignementDefinitionName;
             $scope.scopeModel.save = function () {
                 if (!isEditMode) {
                     addAssignmentDefinition();
@@ -46,7 +45,7 @@
                       $scope.title = UtilsService.buildTitleForUpdateEditor('Assignment Definition');
 
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle]).catch(function (error) {
+                return UtilsService.waitMultipleAsyncOperations([setTitle,loadStaticData]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -61,11 +60,16 @@
             }
             else {
                 var assignmentDefiniton = {
-                    AccountManagerAssignementDefinitionId: AssignementDefinitionEntity.AccountManagerAssignementDefinitionId,
+                    AccountManagerAssignementDefinitionId: assignmentDefinitionEntity.AccountManagerAssignementDefinitionId,
                     Name: $scope.scopeModel.assignmentName
                 };
             }
             return assignmentDefiniton;
+        }
+        function loadStaticData() {
+            if (assignmentDefinitionEntity != undefined) {
+                $scope.scopeModel.assignmentName = assignmentDefinitionEntity.Name;
+            }
         }
         function addAssignmentDefinition() {
             var assignmentDefinition = buildObjectFromScope();

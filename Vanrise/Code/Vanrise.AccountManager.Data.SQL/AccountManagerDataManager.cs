@@ -17,6 +17,23 @@ namespace Vanrise.AccountManager.Data.SQL
        {
            return GetItemsSP("[VR_AccountManager].[sp_AccountManager_GetAll]", AccountManagerMapper);
        }
+       public bool AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager, out int insertedId)
+       {
+           object acountManagerId;
+           int recordsEffected = ExecuteNonQuerySP("[VR_AccountManager].[sp_AccountManager_Insert]", out acountManagerId, accountManager.AccountManagerDefinitionId, accountManager.UserId);
+           bool insertedSuccesfully = (recordsEffected > 0);
+           if (insertedSuccesfully)
+               insertedId = (int)acountManagerId;
+           else
+               insertedId = 0;
+           return insertedSuccesfully;
+
+       }
+       public bool UpdateAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
+       {
+           int recordsEffected = ExecuteNonQuerySP("[VR_AccountManager].[sp_AccountManager_Update]", accountManager.AccountManagerId, accountManager.UserId,accountManager.AccountManagerDefinitionId);
+           return (recordsEffected > 0);
+       }
        public bool AreAccountManagersUpdated(ref object updateHandle)
        {
            return base.IsDataUpdated("VR_AccountManager.AccountManager", ref updateHandle);
@@ -25,6 +42,8 @@ namespace Vanrise.AccountManager.Data.SQL
        {
            return new Vanrise.AccountManager.Entities.AccountManager()
            {
+               AccountManagerDefinitionId = (Guid)reader["AccountManagerDefinitionId"],
+               AccountManagerId = (long)reader["ID"],
                UserId = (int)reader["UserID"],
            };
        }

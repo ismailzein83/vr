@@ -149,8 +149,11 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-grid.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionEditorTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-editor.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-selector.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\AccountManagerService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerAPIService.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerEditor.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerEditorController.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerManagement.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerManagementController.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AssignmentDefinitionEditorController.js" />
@@ -170,7 +173,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>21866</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

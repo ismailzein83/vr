@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Vanrise.AccountManager.Data;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Security.Business;
 
 
@@ -29,6 +30,45 @@ namespace Vanrise.AccountManager.Business
            };
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
        }
+       public Vanrise.Entities.InsertOperationOutput<AccountManagerDetail> AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
+       {
+           int accountManagerId = -1;
+           InsertOperationOutput<AccountManagerDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountManagerDetail>();
+           insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+           insertOperationOutput.InsertedObject = null;
+           IAccountManagerDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerDataManager>();
+           bool insertActionSucc = dataManager.AddAccountManager(accountManager, out accountManagerId);
+           if (insertActionSucc)
+           {
+               accountManager.AccountManagerId = accountManagerId;
+               insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+               insertOperationOutput.InsertedObject = AccountManagerDetailMapper(accountManager);
+               Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+           }
+           else
+               insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+           return insertOperationOutput;
+       }
+       public Vanrise.Entities.UpdateOperationOutput<AccountManagerDetail> UpdateAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
+       {
+           UpdateOperationOutput<AccountManagerDetail> updateOperationOutput = new UpdateOperationOutput<AccountManagerDetail>();
+           updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+           updateOperationOutput.UpdatedObject = null;
+           IAccountManagerDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerDataManager>();
+           bool updateActionSucc = dataManager.UpdateAccountManager(accountManager);
+           if (updateActionSucc)
+           {
+               updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+               updateOperationOutput.UpdatedObject = AccountManagerDetailMapper(accountManager);
+               Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+           }
+           else
+           {
+               updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+           }
+
+           return updateOperationOutput;
+       }
        #endregion
 
        #region Mappers
@@ -36,7 +76,10 @@ namespace Vanrise.AccountManager.Business
        {
            var accountManagerDetail = new AccountManagerDetail()
            {
+               AccountManagerId = accountManager.AccountManagerId,
                UserName = userManager.GetUserName(accountManager.UserId),
+               UserId = accountManager.UserId,
+               AccountManagerDefinitionId = accountManager.AccountManagerDefinitionId
            };
            return accountManagerDetail;
        }
