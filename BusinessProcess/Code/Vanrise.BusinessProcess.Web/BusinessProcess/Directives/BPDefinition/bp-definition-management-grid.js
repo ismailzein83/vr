@@ -56,33 +56,23 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
                 };
                 drillDownDefinitions.push(drillDownDefinition);
 
-
-
-
                 var taskdrillDownDefinition = {};
 
                 taskdrillDownDefinition.title = "Scheduled Instances";
-                taskdrillDownDefinition.directive = "vr-runtime-schedulertask-grid";
+                taskdrillDownDefinition.directive = "vr-runtime-schedulertask-panel";
                 taskdrillDownDefinition.hideDrillDownFunction = function (dataItem) {
                     return (dataItem.Entity.Configuration.ScheduledExecEditor == undefined || dataItem.Entity.Configuration.ScheduledExecEditor == "");
                 };
                 taskdrillDownDefinition.loadDirective = function (directiveAPI, bpDefinitionItem) {
-                    bpDefinitionItem.bpInstanceGridAPI = directiveAPI;
-                    
-                    var filter = {
-                        $type: "Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.WFTaskBPDefinitionFilter, Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments",
-                        BPDefinitionId: bpDefinitionItem.Entity.BPDefinitionID
+                    bpDefinitionItem.bpInstanceGridAPI = directiveAPI;                    
+                    var payload = {
+                        bpDefinitionId: bpDefinitionItem.Entity.BPDefinitionID,
+                        showAddSchedulerTask: bpDefinitionItem.ScheduleTaskAccess == true && bpDefinitionItem.Entity.Configuration.ScheduledExecEditor != undefined && bpDefinitionItem.Entity.Configuration.ScheduledExecEditor != ""
                     };
-                    var payload = { Filters: [] };
-                    payload.Filters.push(filter);
-                   
-                    return bpDefinitionItem.bpInstanceGridAPI.loadGrid(payload);
+
+                    return bpDefinitionItem.bpInstanceGridAPI.loadPanel(payload);
                 };
                 drillDownDefinitions.push(taskdrillDownDefinition);
-
-
-
-
 
 
                 gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
@@ -119,10 +109,6 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
         function attachPromis(dataItem) {
             
         }
-
-
-        
-       
        
         function defineMenuActions() {
            
@@ -133,33 +119,21 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
                     clicked: startNewInstance,
                     haspermission: hasStartNewInstancePermission
                 };
-                var schedualTaskMenu = {
-                    name: "Schedule a Task",
-                    clicked: scheduleTask,
-                    haspermission: hasScheduleTaskPermission
-                };
                 var menuActions = [];
                 if (dataItem.Entity.Configuration.ManualExecEditor != undefined && dataItem.Entity.Configuration.ManualExecEditor != "") {
                     menuActions.push(startNewInstanceMenu);
-                }
-                if (dataItem.Entity.Configuration.ScheduledExecEditor != undefined && dataItem.Entity.Configuration.ScheduledExecEditor != "") {
-                    menuActions.push(schedualTaskMenu);
                 }
                 return menuActions;
             };
 
         }
-        function hasScheduleTaskPermission(bpDefinitionObj) {
-            var actionPromise = UtilsService.createPromiseDeferred();
-            actionPromise.resolve(bpDefinitionObj.ScheduleTaskAccess);
-            return actionPromise.promise;
-
-        }
+      
         function hasStartNewInstancePermission(bpDefinitionObj) {
             var actionPromise = UtilsService.createPromiseDeferred();
             actionPromise.resolve(bpDefinitionObj.StartNewInstanceAccess);
             return actionPromise.promise;
         }
+
         function startNewInstance(bpDefinitionObj) {
             var onProcessInputCreated = function (processInstanceId) {
                 BusinessProcess_BPInstanceService.openProcessTracking(processInstanceId);
@@ -169,16 +143,6 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
                 VRNotificationService.showSuccess("Business Instances created succesfully;  Open nested grid to see the created instances");
             };
             BusinessProcess_BPInstanceService.startNewInstance(bpDefinitionObj, onProcessInputCreated, onProcessInputsCreated);
-        };
-
-        function scheduleTask(bpDefinitionObj) {
-            var onScheduleTaskAdded = function (scheduleTaskObj) {
-                if (bpDefinitionObj.bpInstanceGridAPI != undefined) {
-                    bpDefinitionObj.bpInstanceGridAPI.onTaskAdded(scheduleTaskObj);
-                }
-            };
-
-            BusinessProcess_BPSchedulerTaskService.showAddTaskModal(bpDefinitionObj, onScheduleTaskAdded);
         };
     }
 
