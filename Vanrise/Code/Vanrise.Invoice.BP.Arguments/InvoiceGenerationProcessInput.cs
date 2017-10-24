@@ -17,7 +17,7 @@ namespace Vanrise.Invoice.BP.Arguments
         public Guid InvoiceGenerationIdentifier { get; set; }
         public bool IsAutomatic { get; set; }
         public DateTime IssueDate { get; set; }
-        public DateTime? MinimumFrom { get; set; }
-        public DateTime? MaximumTo { get; set; }
+        public DateTime MinimumFrom { get; set; }
+        public DateTime MaximumTo { get; set; }
     }
 }

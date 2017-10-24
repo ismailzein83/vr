@@ -964,8 +964,14 @@ namespace Vanrise.Invoice.Business
 
             int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
 
-            //if (invoiceGenerationDraftSummary.TotalCount == 0)
-            //    return new GenerateInvoicesOutput { Succeed = false, OutputMessage = "At least one invoice should be selected for generation process" };
+            if (invoiceGenerationDraftSummary.TotalCount == 0)
+                return new GenerateInvoicesOutput { Succeed = false, OutputMessage = "At least one invoice should be selected for generation process" };
+
+            if (!invoiceGenerationDraftSummary.MinimumFrom.HasValue)
+                throw new NullReferenceException("invoiceGenerationDraftSummary.MinimumFrom");
+
+            if (!invoiceGenerationDraftSummary.MaximumTo.HasValue)
+                throw new NullReferenceException("invoiceGenerationDraftSummary.MaximumTo");
 
             InvoiceGenerationProcessInput invoiceGenerationProcessInput = new InvoiceGenerationProcessInput()
             {
@@ -973,8 +979,8 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeId = invoiceTypeId,
                 UserId = userId,
                 IssueDate = issueDate.Date,
-                MinimumFrom = invoiceGenerationDraftSummary.MinimumFrom,
-                MaximumTo = invoiceGenerationDraftSummary.MaximumTo
+                MinimumFrom = invoiceGenerationDraftSummary.MinimumFrom.Value,
+                MaximumTo = invoiceGenerationDraftSummary.MaximumTo.Value
             };
 
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput

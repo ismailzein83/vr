@@ -10,7 +10,7 @@
                 <vr-check value="dataItem.IsSelected" onvaluechanged="dataItem.onItemChanged"></vr-check>
             </vr-datagridcolumn>
 
-            <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'PartnerName'" disablesorting="true" widthfactor="'2'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'PartnerName'" widthfactor="'2'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'From'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}" >
                     <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateFromDate()"></vr-datetimepicker>

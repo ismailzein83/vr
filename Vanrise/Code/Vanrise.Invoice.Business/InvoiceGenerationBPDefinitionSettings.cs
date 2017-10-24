@@ -27,47 +27,44 @@ namespace Vanrise.Invoice.Business
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
             InvoiceGenerationProcessInput invoiceGenerationProcessInput = context.IntanceToRun.InputArgument.CastWithValidate<InvoiceGenerationProcessInput>("context.IntanceToRun.InputArgument");
 
-            if (invoiceGenerationProcessInput.MinimumFrom.HasValue && invoiceGenerationProcessInput.MaximumTo.HasValue)
+            DateTime invoiceMinimumFrom = invoiceGenerationProcessInput.MinimumFrom;
+            DateTime invoiceMaximumTo = invoiceGenerationProcessInput.MaximumTo.AddDays(1);
+
+            foreach (var startedBPInstance in context.GetStartedBPInstances())
             {
-                DateTime invoiceMinimumFrom = invoiceGenerationProcessInput.MinimumFrom.Value;
-                DateTime invoiceMaximumTo = invoiceGenerationProcessInput.MaximumTo.Value.AddDays(1);
-
-                foreach (var startedBPInstance in context.GetStartedBPInstances())
+                InvoiceGenerationProcessInput startedInvoiceGenerationBPArg = startedBPInstance.InputArgument as InvoiceGenerationProcessInput;
+                if (startedInvoiceGenerationBPArg != null)
                 {
-                    InvoiceGenerationProcessInput startedInvoiceGenerationBPArg = startedBPInstance.InputArgument as InvoiceGenerationProcessInput;
-                    if (startedInvoiceGenerationBPArg != null && startedInvoiceGenerationBPArg.MinimumFrom.HasValue && startedInvoiceGenerationBPArg.MaximumTo.HasValue)
-                    {
-                        DateTime instanceMinimumFrom = startedInvoiceGenerationBPArg.MinimumFrom.Value;
-                        DateTime instanceMaximumTo = startedInvoiceGenerationBPArg.MaximumTo.Value.AddDays(1);
+                    DateTime instanceMinimumFrom = startedInvoiceGenerationBPArg.MinimumFrom;
+                    DateTime instanceMaximumTo = startedInvoiceGenerationBPArg.MaximumTo.AddDays(1);
 
-                        if (Utilities.AreTimePeriodsOverlapped(invoiceMinimumFrom, invoiceMaximumTo, instanceMinimumFrom, instanceMaximumTo))
-                        {
-                            context.Reason = String.Format("Another invoice generation instance is running from {0:yyyy-MM-dd} to {1:yyyy-MM-dd}", startedInvoiceGenerationBPArg.MinimumFrom, startedInvoiceGenerationBPArg.MaximumTo);
-                            return false;
-                        }
+                    if (Utilities.AreTimePeriodsOverlapped(invoiceMinimumFrom, invoiceMaximumTo, instanceMinimumFrom, instanceMaximumTo))
+                    {
+                        context.Reason = String.Format("Another invoice generation instance is running from {0:yyyy-MM-dd} to {1:yyyy-MM-dd}", startedInvoiceGenerationBPArg.MinimumFrom, startedInvoiceGenerationBPArg.MaximumTo);
+                        return false;
                     }
                 }
+            }
 
-                HoldRequestManager holdRequestManager = new HoldRequestManager();
-                InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
-                InvoiceType invoiceType = invoiceTypeManager.GetInvoiceType(invoiceGenerationProcessInput.InvoiceTypeId);
-                invoiceType.ThrowIfNull("invoiceType", invoiceGenerationProcessInput.InvoiceTypeId);
-                invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceGenerationProcessInput.InvoiceTypeId);
+            HoldRequestManager holdRequestManager = new HoldRequestManager();
+            InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+            InvoiceType invoiceType = invoiceTypeManager.GetInvoiceType(invoiceGenerationProcessInput.InvoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", invoiceGenerationProcessInput.InvoiceTypeId);
+            invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceGenerationProcessInput.InvoiceTypeId);
 
-                HoldRequest existingHoldRequest = holdRequestManager.GetHoldRequest(context.IntanceToRun.ProcessInstanceID);
-                if (existingHoldRequest == null)
-                {
-                    holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, invoiceType.Settings.ExecutionFlowDefinitionId, invoiceMinimumFrom, invoiceMaximumTo,
-                      invoiceType.Settings.StagesToHoldNames, invoiceType.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
+            HoldRequest existingHoldRequest = holdRequestManager.GetHoldRequest(context.IntanceToRun.ProcessInstanceID);
+            if (existingHoldRequest == null)
+            {
+                holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, invoiceType.Settings.ExecutionFlowDefinitionId, invoiceMinimumFrom, invoiceMaximumTo,
+                  invoiceType.Settings.StagesToHoldNames, invoiceType.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
 
-                    context.Reason = "Waiting CDR Import";
-                    return false;
-                }
-                else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
-                {
-                    context.Reason = "Waiting CDR Import";
-                    return false;
-                }
+                context.Reason = "Waiting CDR Import";
+                return false;
+            }
+            else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
+            {
+                context.Reason = "Waiting CDR Import";
+                return false;
             }
 
             return true;

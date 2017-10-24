@@ -128,19 +128,26 @@
 
 
                 $scope.scopeModel.generateInvoice = function () {
-                    var changedItems = invoiceGenerationDraftGridAPI.getChangedItems();
+                    var invoiceGenerationData = invoiceGenerationDraftGridAPI.getData();
+                    var changedItems = invoiceGenerationData.changedItems;
 
-                    var input = { InvoiceGenerationIdentifier: invoiceGenerationIdentifier, IssueDate: issueDate, ChangedItems: changedItems, InvoiceTypeId: invoiceTypeId };
+                    var allItemsExcluded = invoiceGenerationData.allItemsExcluded;
+                    if (allItemsExcluded) {
+                        VRNotificationService.showError('At least one invoice should be selected for generation process', $scope);
+                    }
+                    else {
+                        var input = { InvoiceGenerationIdentifier: invoiceGenerationIdentifier, IssueDate: issueDate, ChangedItems: changedItems, InvoiceTypeId: invoiceTypeId };
 
-                    return VR_Invoice_InvoiceAPIService.GenerateInvoices(input).then(function (response) {
-                        if (response.Succeed) {
-                            $scope.modalContext.closeModal();
-                            BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
-                        }
-                        else {
-                            VRNotificationService.showError(response.OutputMessage, $scope);
-                        }
-                    });
+                        return VR_Invoice_InvoiceAPIService.GenerateInvoices(input).then(function (response) {
+                            if (response.Succeed) {
+                                $scope.modalContext.closeModal();
+                                BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId);
+                            }
+                            else {
+                                VRNotificationService.showError(response.OutputMessage, $scope);
+                            }
+                        });
+                    }
                 };
             };
 
