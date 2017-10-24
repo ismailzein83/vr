@@ -105,7 +105,9 @@
     <Content Include="Runtime\Constants\ModuleConfig.js" />
     <Content Include="Runtime\Constants\SchedulerTaskStatusEnum.js" />
     <Content Include="Runtime\Constants\TimeSchedulerTypeEnum.js" />
+    <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskPanelTemplate.html" />
     <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
+    <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-panel.js" />
     <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-selector.js" />
     <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-grid.js" />
     <Content Include="Runtime\Directives\TaskAction\Templates\TaskActionScheduleDailyRepricing.html" />
