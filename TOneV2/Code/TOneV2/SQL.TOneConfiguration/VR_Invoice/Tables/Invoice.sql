@@ -12,6 +12,7 @@
     [Details]          NVARCHAR (MAX)   NULL,
     [PaidDate]         DATETIME         NULL,
     [LockDate]         DATETIME         NULL,
+    [SentDate]         DATETIME         NULL,
     [IsDeleted]        BIT              CONSTRAINT [DF_Invoice_IsDeleted] DEFAULT ((0)) NOT NULL,
     [Notes]            NVARCHAR (MAX)   NULL,
     [Settings]         NVARCHAR (MAX)   NULL,
@@ -21,6 +22,8 @@
     [CreatedTime]      DATETIME         CONSTRAINT [DF_Invoice_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_Invoice] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

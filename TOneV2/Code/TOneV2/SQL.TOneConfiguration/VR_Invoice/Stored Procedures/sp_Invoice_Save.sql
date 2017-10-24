@@ -14,10 +14,11 @@
 	@IsAutomatic bit,
 	@Settings nvarchar(MAX),
 	@InvoiceSettingId uniqueidentifier,
+	@SentDate datetime = null,
 	@ID bigint out
 AS
 BEGIN
-	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,Notes, SourceId,IsDraft,IsAutomatic,Settings,InvoiceSettingID)
-	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details,@Notes, @SourceID,@IsDraft,@IsAutomatic,@Settings,@InvoiceSettingId)
+	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,Notes, SourceId,IsDraft,IsAutomatic,Settings,InvoiceSettingID,SentDate)
+	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details,@Notes, @SourceID,@IsDraft,@IsAutomatic,@Settings,@InvoiceSettingId,@SentDate)
 	SET @ID = @@Identity
 END

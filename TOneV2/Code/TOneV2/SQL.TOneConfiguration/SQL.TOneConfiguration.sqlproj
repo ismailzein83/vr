@@ -677,6 +677,7 @@
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_Release.sql" />
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_InsertIfNotExists.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_GetSummary.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoiceSentDate.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

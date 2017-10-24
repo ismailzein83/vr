@@ -12,7 +12,8 @@
 	@LockDate datetime,
 	@Notes nvarchar(MAX),
 	@SourceID nvarchar(255),
-	@InvoiceSettingId uniqueidentifier
+	@InvoiceSettingId uniqueidentifier,
+	@SentDate datetime = null
 AS
 BEGIN
 	
@@ -30,5 +31,6 @@ BEGIN
       ,[Notes] = @Notes
 	  ,SourceId = @SourceID
 	  ,InvoiceSettingID = @InvoiceSettingId
+	  ,SentDate = @SentDate
  WHERE ID = @ID
 END

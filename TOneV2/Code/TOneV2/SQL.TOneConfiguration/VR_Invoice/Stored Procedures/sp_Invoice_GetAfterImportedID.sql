@@ -26,7 +26,8 @@ BEGIN
 			SourceId,
 			Settings,
 			IsAutomatic,
-			InvoiceSettingID
+			InvoiceSettingID,
+			SentDate
 	FROM	VR_Invoice.Invoice with(nolock)
 	where	(InvoiceTypeId = @InvoiceTypeId) 
 			AND (@LastImportedId is Null or ID > @LastImportedId)
