@@ -192,7 +192,30 @@ namespace Vanrise.Common.Business
             }
             return null;
         }
-        #endregion
+
+        public T GetCompanyExtendedSettings<T>(Guid companySettingId) 
+            where T : BaseCompanyExtendedSettings
+        {
+            CompanySetting companySetting = GetCompanySettingById(companySettingId);
+            return companySetting != null ? GetCompanyExtendedSettings<T>(companySetting) : default(T);
+        }
+        public T GetCompanyExtendedSettings<T>(CompanySetting companySetting)
+            where T : BaseCompanyExtendedSettings
+        {
+
+            var extendedObject = Activator.CreateInstance<T>() as BaseCompanyExtendedSettings;
+            BaseCompanyExtendedSettings exitingExtendedSettings;
+            if (companySetting.ExtendedSettings != null)
+            {
+                companySetting.ExtendedSettings.TryGetValue(extendedObject.ConfigId, out exitingExtendedSettings);
+                if (exitingExtendedSettings != null)
+                    return exitingExtendedSettings as T;
+                else return default(T);
+            }
+            else
+                return default(T);
+        }
+         #endregion
 
 
         #region Mappers

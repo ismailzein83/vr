@@ -24,6 +24,7 @@ namespace Vanrise.Entities
         public string BillingEmails { get; set; }
         public List<Guid> BankDetails { get; set; }
         public Dictionary<string, CompanyContact> Contacts { get; set; }
+        public Dictionary<Guid, BaseCompanyExtendedSettings> ExtendedSettings { get; set; }
 
     }
 
@@ -32,5 +33,9 @@ namespace Vanrise.Entities
         public string ContactName { get; set; }
         public string Title { get; set; }
         public string Email { get; set; }
+    }
+    public abstract class BaseCompanyExtendedSettings
+    {
+        public abstract Guid ConfigId { get; }
     }
 }
