@@ -22,10 +22,8 @@ namespace Vanrise.Rules
         where T : BaseRule
         where Q : class
     {
-
         #region Public Methods
 
-        public virtual bool ValidateBeforeAdd(T rule) { return true; }
         public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
         {
             InsertOperationOutput<Q> insertOperationOutput = new InsertOperationOutput<Q>();
@@ -44,11 +42,6 @@ namespace Vanrise.Rules
             return insertOperationOutput;
         }
 
-        protected virtual void TrackAndLogRuleAdded(T rule)
-        {
-            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectAdded(GetLoggableEntity(rule), rule);
-        }
-
         public bool TryAdd(T rule)
         {
             int ruleTypeId = GetRuleTypeId();
@@ -59,7 +52,7 @@ namespace Vanrise.Rules
                 BED = rule.BeginEffectiveTime,
                 EED = rule.EndEffectiveTime,
             };
-           
+
             if (ValidateBeforeAdd(rule))
             {
                 IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
@@ -73,7 +66,16 @@ namespace Vanrise.Rules
             return false;
         }
 
-        public virtual bool ValidateBeforeUpdate(T rule) { return true; }
+        public virtual bool ValidateBeforeAdd(T rule) 
+        { 
+            return true; 
+        }
+
+        protected virtual void TrackAndLogRuleAdded(T rule)
+        {
+            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectAdded(GetLoggableEntity(rule), rule);
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<Q> UpdateRule(T rule)
         {            
             UpdateOperationOutput<Q> updateOperationOutput = new UpdateOperationOutput<Q>();
@@ -89,11 +91,6 @@ namespace Vanrise.Rules
                 updateOperationOutput.Result = UpdateOperationResult.SameExists;
             }
             return updateOperationOutput;
-        }
-
-        protected virtual void TrackAndLogRuleUpdated(T rule)
-        {
-            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectUpdated(GetLoggableEntity(rule), rule);
         }
 
         public bool TryUpdateRule(T rule)
@@ -116,6 +113,16 @@ namespace Vanrise.Rules
                 }
             }
             return false;
+        }
+
+        public virtual bool ValidateBeforeUpdate(T rule) 
+        { 
+            return true; 
+        }
+
+        protected virtual void TrackAndLogRuleUpdated(T rule)
+        {
+            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectUpdated(GetLoggableEntity(rule), rule);
         }
 
         public Vanrise.Entities.DeleteOperationOutput<Q> DeleteRule(int ruleId)
@@ -212,38 +219,11 @@ namespace Vanrise.Rules
 
         #endregion
 
-        #region Caching
-
-        protected R GetCachedOrCreate<R>(Object cacheName, Func<R> createObject)
-        {
-            return GetCacheManager().GetOrCreateObject(cacheName, GetRuleTypeId(), createObject);
-        }
-
-        public bool IsCacheExpired(ref DateTime? lastCheckTime)
-        {
-            return GetCacheManager().IsCacheExpired(GetRuleTypeId(), ref lastCheckTime);
-        }
-
-        static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
-        CacheManager GetCacheManager()
-        {
-            return s_cacheManager;
-        }
-
-        public void AddRuleCachingExpirationChecker(RuleCachingExpirationChecker ruleCachingExpirationChecker)
-        {
-            lock (GetCacheManager().ruleCachingExpirationCheckerDict)
-            {
-                GetCacheManager().ruleCachingExpirationCheckerDict.Add(GetRuleTypeId(), ruleCachingExpirationChecker);
-            }
-        }
-
-        #endregion
-
         #region Private Methods
 
         static VRDictionary<string, int> s_ruleTypesIds = new VRDictionary<string, int>(true);
         static VRDictionary<Type, string> s_ruleTypes = new VRDictionary<Type, string>(true);
+
         public int GetRuleTypeId()
         {
             string ruleType;
@@ -265,7 +245,31 @@ namespace Vanrise.Rules
 
         #endregion
 
-        #region Private Classes
+        #region Caching
+
+        static CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>();
+        CacheManager GetCacheManager()
+        {
+            return s_cacheManager;
+        }
+
+        protected R GetCachedOrCreate<R>(Object cacheName, Func<R> createObject)
+        {
+            return GetCacheManager().GetOrCreateObject(cacheName, GetRuleTypeId(), createObject);
+        }
+
+        public bool IsCacheExpired(ref DateTime? lastCheckTime)
+        {
+            return GetCacheManager().IsCacheExpired(GetRuleTypeId(), ref lastCheckTime);
+        }
+
+        public void AddRuleCachingExpirationChecker(RuleCachingExpirationChecker ruleCachingExpirationChecker)
+        {
+            lock (GetCacheManager().ruleCachingExpirationCheckerDict)
+            {
+                GetCacheManager().ruleCachingExpirationCheckerDict.Add(GetRuleTypeId(), ruleCachingExpirationChecker);
+            }
+        }
 
         #endregion
     }
