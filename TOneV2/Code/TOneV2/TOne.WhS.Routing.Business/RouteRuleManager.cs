@@ -14,6 +14,7 @@ namespace TOne.WhS.Routing.Business
     public class RouteRuleManager : Vanrise.Rules.RuleManager<RouteRule, RouteRuleDetail>
     {
         #region Public Methods
+
         public IEnumerable<RouteRuleCriteriaConfig> GetRouteRuleCriteriaTemplates()
         {
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
@@ -39,6 +40,7 @@ namespace TOne.WhS.Routing.Business
             var routeRule = s_vrObjectTrackingManager.GetObjectDetailById(routeRuleHistoryId);
             return routeRule.CastWithValidate<RouteRule>("RouteRule : historyId ", routeRuleHistoryId);
         }
+
         public RouteRule BuildLinkedRouteRule(int ruleId, int? customerId, string code, List<RouteOption> routeOptions)
         {
             RouteRule relatedRouteRule = base.GetRule(ruleId);
@@ -132,7 +134,6 @@ namespace TOne.WhS.Routing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails), handler);
         }
 
-
         public RouteRule GetMatchRule(RouteRuleTarget target, int? routingProductId)
         {
             var ruleTrees = GetRuleTreesByPriority(routingProductId);
@@ -220,7 +221,6 @@ namespace TOne.WhS.Routing.Business
 
         #endregion
 
-
         #region Private Methods
 
         private IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
@@ -236,50 +236,6 @@ namespace TOne.WhS.Routing.Business
         private int GetRuleTypePriority(RouteRuleSettingsConfig ruleTypeConfig)
         {
             return ruleTypeConfig.Priority.HasValue ? ruleTypeConfig.Priority.Value : int.MaxValue;
-        }
-
-        private bool CheckIfCodeCriteriaSettingsContains(RouteRule routeRule, string code)
-        {
-            CodeCriteriaGroupSettings codeCriteriaGroupSettings = routeRule.Criteria.GetCodeCriteriaGroupSettings();
-            if (codeCriteriaGroupSettings != null)
-            {
-                IRuleCodeCriteria ruleCode = routeRule as IRuleCodeCriteria;
-                if (ruleCode.CodeCriterias != null && ruleCode.CodeCriterias.Any(x => x.Code.StartsWith(code)))
-                    return true;
-            }
-
-            return false;
-        }
-        private bool CheckIfCustomerSettingsContains(RouteRule routeRule, IEnumerable<int> customerIds)
-        {
-            CustomerGroupSettings customerGroupSettings = routeRule.Criteria.GetCustomerGroupSettings();
-            if (customerGroupSettings != null)
-            {
-                IRuleCustomerCriteria ruleCode = routeRule as IRuleCustomerCriteria;
-                if (ruleCode.CustomerIds != null && ruleCode.CustomerIds.Intersect(customerIds).Count() > 0)
-                    return true;
-            }
-
-            return false;
-        }
-        private bool CheckIfSaleZoneSettingsContains(RouteRule routeRule, IEnumerable<long> saleZoneIds)
-        {
-            SaleZoneGroupSettings saleZoneGroupSettings = routeRule.Criteria.GetSaleZoneGroupSettings();
-            if (saleZoneGroupSettings != null)
-            {
-                IRuleSaleZoneCriteria ruleCode = routeRule as IRuleSaleZoneCriteria;
-                if (ruleCode.SaleZoneIds != null && ruleCode.SaleZoneIds.Intersect(saleZoneIds).Count() > 0)
-                    return true;
-            }
-
-            return false;
-        }
-        private bool CheckIfSameRouteRuleSettingsConfigId(RouteRule routeRule, List<Guid> RouteRuleSettingsConfigIds)
-        {
-            if (RouteRuleSettingsConfigIds.Contains(routeRule.Settings.ConfigId))
-                return true;
-
-            return false;
         }
 
         private Dictionary<RouteRuleIdentifier, List<RouteRule>> GetCachedLinkedRouteRules()
@@ -356,6 +312,54 @@ namespace TOne.WhS.Routing.Business
 
             return code;
         }
+
+        private bool CheckIfCodeCriteriaSettingsContains(RouteRule routeRule, string code)
+        {
+            CodeCriteriaGroupSettings codeCriteriaGroupSettings = routeRule.Criteria.GetCodeCriteriaGroupSettings();
+            if (codeCriteriaGroupSettings != null)
+            {
+                IRuleCodeCriteria ruleCode = routeRule as IRuleCodeCriteria;
+                if (ruleCode.CodeCriterias != null && ruleCode.CodeCriterias.Any(x => x.Code.StartsWith(code)))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool CheckIfCustomerSettingsContains(RouteRule routeRule, IEnumerable<int> customerIds)
+        {
+            CustomerGroupSettings customerGroupSettings = routeRule.Criteria.GetCustomerGroupSettings();
+            if (customerGroupSettings != null)
+            {
+                IRuleCustomerCriteria ruleCode = routeRule as IRuleCustomerCriteria;
+                if (ruleCode.CustomerIds != null && ruleCode.CustomerIds.Intersect(customerIds).Count() > 0)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool CheckIfSaleZoneSettingsContains(RouteRule routeRule, IEnumerable<long> saleZoneIds)
+        {
+            SaleZoneGroupSettings saleZoneGroupSettings = routeRule.Criteria.GetSaleZoneGroupSettings();
+            if (saleZoneGroupSettings != null)
+            {
+                IRuleSaleZoneCriteria ruleCode = routeRule as IRuleSaleZoneCriteria;
+                if (ruleCode.SaleZoneIds != null && ruleCode.SaleZoneIds.Intersect(saleZoneIds).Count() > 0)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool CheckIfSameRouteRuleSettingsConfigId(RouteRule routeRule, List<Guid> RouteRuleSettingsConfigIds)
+        {
+            if (RouteRuleSettingsConfigIds.Contains(routeRule.Settings.ConfigId))
+                return true;
+
+            return false;
+        }
+
         #endregion
 
         #region Private Classes
