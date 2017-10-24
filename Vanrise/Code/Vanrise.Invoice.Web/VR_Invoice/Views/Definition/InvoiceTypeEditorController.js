@@ -2,7 +2,7 @@
 
     "use strict";
 
-    invoiceTypeEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService','VR_GenericData_DataRecordTypeAPIService'];
+    invoiceTypeEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_InvoiceTypeAPIService', 'VR_GenericData_DataRecordTypeAPIService'];
 
     function invoiceTypeEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_GenericData_DataRecordTypeAPIService) {
         var isEditMode;
@@ -89,6 +89,11 @@
         var filesAttachmentsAPI;
         var filesAttachmentsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var executionFlowDefinitionAPI;
+        var executionFlowDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var stagesToHoldAPI;
+        var stagesToProcessAPI;
+
         var dataRecordTypeEntity;
 
         defineScope();
@@ -129,6 +134,10 @@
                 itemGroupingsDirectiveAPI = api;
                 itemGroupingsReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.onExecutionFlowDefinitionSelectorReady = function (api) {
+                executionFlowDefinitionAPI = api;
+                executionFlowDefinitionSelectorReadyDeferred.resolve();
+            };
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function () {
                 $scope.scopeModel.isLoading = true;
                 var dataRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
@@ -140,15 +149,14 @@
 
                     if (selectedDataRecordTypeSelectorReadyPromiseDeferred != undefined)
                         selectedDataRecordTypeSelectorReadyPromiseDeferred.resolve();
-                    else
-                    {
+                    else {
                         var setLoader = function (value) { $scope.scopeModel.isLoadAmountField = value };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, amountFieldAPI, { dataRecordTypeId: dataRecordTypeId }, setLoader);
 
                         var setLoader = function (value) { $scope.scopeModel.isLoadCurrencyField = value };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currencyFieldAPI, { dataRecordTypeId: dataRecordTypeId }, setLoader);
                     }
-                   
+
                 }
             };
             $scope.scopeModel.onItemSetNameStorageRuleReady = function (api) {
@@ -195,7 +203,7 @@
                 invoiceGeneratorActionAPI = api;
                 invoiceGeneratorActionReadyPromiseDeferred.resolve();
             };
-          
+
             $scope.scopeModel.onInvoiceActionsReady = function (api) {
                 invoiceActionsAPI = api;
                 invoiceActionsReadyPromiseDeferred.resolve();
@@ -253,11 +261,50 @@
                 $scope.modalContext.closeModal();
             };
 
+            $scope.scopeModel.onExecutionFlowDefinitionSelectionChanged = function (selectedItem) {
+                if (selectedItem != undefined) {
+                    loadStagesToHoldSelector(selectedItem.ID);
+                    loadStagesToProcessSelector(selectedItem.ID);
+                }
+            };
+
+            $scope.scopeModel.onStagesToHoldSelectorReady = function (api) {
+                stagesToHoldAPI = api;
+            };
+
+            $scope.scopeModel.onStagesToProcessSelectorReady = function (api) {
+                stagesToProcessAPI = api;
+            };
+
+            function loadStagesToHoldSelector(executionFlowDefinitionId) {
+                var stagesToHoldPayload = {
+                    executionFlowDefinitionId: executionFlowDefinitionId
+                };
+                if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined) {
+                    stagesToHoldPayload.selectedIds = invoiceTypeEntity.Settings.StagesToHoldNames;
+                };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToHold = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToHoldAPI, stagesToHoldPayload, setLoader);
+            }
+            function loadStagesToProcessSelector(executionFlowDefinitionId) {
+                var stagesToProcessPayload = {
+                    executionFlowDefinitionId: executionFlowDefinitionId
+                };
+                if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined) {
+                    stagesToProcessPayload.selectedIds = invoiceTypeEntity.Settings.StagesToProcessNames;
+                };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToProcess = value };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToProcessAPI, stagesToProcessPayload, setLoader);
+            }
+
             function buildInvoiceTypeObjFromScope() {
                 var obj = {
                     InvoiceTypeId: invoiceTypeId,
                     Name: $scope.scopeModel.name,
                     Settings: {
+                        ExecutionFlowDefinitionId: executionFlowDefinitionAPI.getSelectedIds(),
+                        StagesToHoldNames: stagesToHoldAPI.getSelectedIds(),
+                        StagesToProcessNames: stagesToProcessAPI.getSelectedIds(),
                         InvoiceDetailsRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         InvoiceActions: invoiceActionsAPI.getData(),
                         InvoiceGeneratorActions: invoiceGeneratorActionAPI.getData(),
@@ -277,20 +324,20 @@
                         Security: {
                             ViewRequiredPermission: viewPermissionAPI.getData(),
                             GenerateRequiredPermission: generatePermissionAPI.getData(),
-                            ViewSettingsRequiredPermission:viewSettingsPermissionAPI.getData(),
-                            AddSettingsRequiredPermission:addSettingsPermissionAPI.getData(),
+                            ViewSettingsRequiredPermission: viewSettingsPermissionAPI.getData(),
+                            AddSettingsRequiredPermission: addSettingsPermissionAPI.getData(),
                             EditSettingsRequiredPermission: editSettingsPermissionAPI.getData(),
                             AssignPartnerRequiredPermission: assignPartnerPermissionAPI.getData()
                         },
                         ItemGroupings: itemGroupingsDirectiveAPI.getData(),
-                        StartDateCalculationMethod:startCalculationMethodAPI.getData(),
+                        StartDateCalculationMethod: startCalculationMethodAPI.getData(),
                         InvoiceSettingPartUISections: invoiceSettingDefinitionDirectiveAPI.getData(),
                         AutomaticInvoiceActions: automaticInvoiceActionsAPI.getData(),
                         InvoiceAttachments: invoiceAttachmentsAPI.getData(),
                         AmountFieldName: amountFieldAPI.getSelectedIds(),
                         CurrencyFieldName: currencyFieldAPI.getSelectedIds(),
                         ItemSetNamesStorageRules: itemSetNameStorageRuleAPI.getData(),
-                        InvToAccBalanceRelationId:relationDefinitionSelectorAPI.getSelectedIds()
+                        InvToAccBalanceRelationId: relationDefinitionSelectorAPI.getSelectedIds()
                     }
                 };
                 return obj;
@@ -371,7 +418,7 @@
 
                 function loadDataRecordTypeSelector() {
                     if (invoiceTypeEntity != undefined)
-                      selectedDataRecordTypeSelectorReadyPromiseDeferred  = UtilsService.createPromiseDeferred();
+                        selectedDataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     var dataRecordTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     dataRecordTypeSelectorReadyPromiseDeferred.promise.then(function () {
@@ -513,7 +560,7 @@
 
                 function loadViewSettingsRequiredPermission() {
                     var viewSettingPermissionLoadDeferred = UtilsService.createPromiseDeferred();
-                   viewSettingsPermissionReadyDeferred.promise.then(function () {
+                    viewSettingsPermissionReadyDeferred.promise.then(function () {
                         var payload;
 
                         if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.Security != undefined && invoiceTypeEntity.Settings.Security.ViewSettingsRequiredPermission != null) {
@@ -596,7 +643,7 @@
                     var startCalculationMethodLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     startCalculationMethodPromiseDeferred.promise.then(function () {
-                        var startCalculationMethodPayload = invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined? { startDateCalculationMethodEntity: invoiceTypeEntity.Settings.StartDateCalculationMethod } : undefined;
+                        var startCalculationMethodPayload = invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined ? { startDateCalculationMethodEntity: invoiceTypeEntity.Settings.StartDateCalculationMethod } : undefined;
                         VRUIUtilsService.callDirectiveLoad(startCalculationMethodAPI, startCalculationMethodPayload, startCalculationMethodLoadPromiseDeferred);
                     });
                     return startCalculationMethodLoadPromiseDeferred.promise;
@@ -635,7 +682,7 @@
                 }
 
                 function loadCurrencyFieldSelector() {
-                    if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined &&  invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId != undefined) {
+                    if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId != undefined) {
                         var currencyFieldLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         currencyFieldReadyPromiseDeferred.promise.then(function () {
@@ -647,8 +694,7 @@
                 }
 
                 function loadAmountFieldSelector() {
-                    if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId != undefined)
-                    {
+                    if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined && invoiceTypeEntity.Settings.InvoiceDetailsRecordTypeId != undefined) {
                         var amountFieldLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         amountFieldReadyPromiseDeferred.promise.then(function () {
@@ -657,7 +703,7 @@
                         });
                         return amountFieldLoadPromiseDeferred.promise;
                     }
-                  
+
                 }
 
                 function loadItemSetNameStorageRules() {
@@ -683,7 +729,22 @@
                     });
                     return filesAttachmentsDeferredLoadPromiseDeferred.promise;
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection,loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector])
+
+                function loadExecutionFlowDefinitionSelector() {
+                    var executionFlowDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    executionFlowDefinitionSelectorReadyDeferred.promise.then(function () {
+                        var executionFlowDefinitionSelectorPayload;
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined) {
+                            executionFlowDefinitionSelectorPayload = {
+                                selectedIds: invoiceTypeEntity.Settings.ExecutionFlowDefinitionId
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionAPI, executionFlowDefinitionSelectorPayload, executionFlowDefinitionSelectorLoadDeferred);
+                    });
+                    return executionFlowDefinitionSelectorLoadDeferred.promise;
+                };
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })
@@ -693,8 +754,7 @@
             }
         }
 
-        function getContext()
-        {
+        function getContext() {
             var context = {
                 getFields: function () {
                     var fields = [];
@@ -710,7 +770,7 @@
                 getParts: function () {
                     return concatenatedPartsAPI.getData();
                 },
-               
+
                 getExtensionType: function () {
                     return "VR_InvoiceType_SerialNumberParts";
                 },
@@ -730,14 +790,11 @@
                     return invoiceActionsInfo;
                 },
 
-                getItemGroupingsInfo: function ()
-                {
+                getItemGroupingsInfo: function () {
                     var itemGroupingsInfo = [];
                     var itemGroupings = itemGroupingsDirectiveAPI.getData();
-                    if(itemGroupings != undefined)
-                    {
-                        for(var i=0;i<itemGroupings.length;i++)
-                        {
+                    if (itemGroupings != undefined) {
+                        for (var i = 0; i < itemGroupings.length; i++) {
                             var itemGrouping = itemGroupings[i];
                             itemGroupingsInfo.push({
                                 Name: itemGrouping.ItemSetName,
@@ -748,8 +805,7 @@
                     return itemGroupingsInfo;
                 },
 
-                getGroupingDimensions: function (itemGroupingId)
-                {
+                getGroupingDimensions: function (itemGroupingId) {
                     var groupingDimensions = [];
                     var itemGroupings = itemGroupingsDirectiveAPI.getData();
                     if (itemGroupings != undefined) {
@@ -760,20 +816,17 @@
                     return groupingDimensions;
                 },
 
-                getGroupingMeasures: function (itemGroupingId)
-                {
+                getGroupingMeasures: function (itemGroupingId) {
                     var groupingMeasures = [];
                     var itemGroupings = itemGroupingsDirectiveAPI.getData();
                     if (itemGroupings != undefined) {
                         var itemGrouping = UtilsService.getItemByVal(itemGroupings, itemGroupingId, "ItemGroupingId");
-                        if (itemGrouping.AggregateItemFields != undefined)
-                        {
-                            for(var i=0;i<itemGrouping.AggregateItemFields.length;i++)
-                            {
+                        if (itemGrouping.AggregateItemFields != undefined) {
+                            for (var i = 0; i < itemGrouping.AggregateItemFields.length; i++) {
                                 var aggregateItem = itemGrouping.AggregateItemFields[i];
                                 groupingMeasures.push({
-                                    MeasureItemFieldId:aggregateItem.AggregateItemFieldId,
-                                    FieldName:aggregateItem.FieldName,
+                                    MeasureItemFieldId: aggregateItem.AggregateItemFieldId,
+                                    FieldName: aggregateItem.FieldName,
                                     FieldDescription: aggregateItem.FieldDescription,
                                     FieldType: aggregateItem.FieldType
                                 });
@@ -783,16 +836,13 @@
                     return groupingMeasures;
                 },
 
-                getActionsInfoByActionTypeName: function (actionTypeName)
-                {
-                    var actionsInfo =[];
+                getActionsInfoByActionTypeName: function (actionTypeName) {
+                    var actionsInfo = [];
                     var invoiceActions = invoiceActionsAPI.getData();
-                    if(invoiceActions != undefined)
-                    {
+                    if (invoiceActions != undefined) {
                         for (var i = 0; i < invoiceActions.length; i++) {
                             var action = invoiceActions[i];
-                            if (action.Settings.ActionTypeName == actionTypeName)
-                            {
+                            if (action.Settings.ActionTypeName == actionTypeName) {
                                 actionsInfo.push({
                                     Title: action.Title,
                                     InvoiceActionId: action.InvoiceActionId
@@ -802,8 +852,7 @@
                     }
                     return actionsInfo;
                 },
-                getInvoiceAttachmentsInfo:function()
-                {
+                getInvoiceAttachmentsInfo: function () {
                     var invoiceAttchamentsInfo = [];
                     var invoiceAttchaments = invoiceAttachmentsAPI.getData();
                     if (invoiceAttchaments != undefined && invoiceAttchaments.length > 0) {

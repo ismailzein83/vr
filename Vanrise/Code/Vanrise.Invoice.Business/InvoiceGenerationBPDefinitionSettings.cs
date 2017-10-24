@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Invoice.BP.Arguments;
+using Vanrise.Invoice.Entities;
+using Vanrise.Queueing;
+using Vanrise.Queueing.Entities;
 
 namespace Vanrise.Invoice.Business
 {
@@ -13,6 +16,8 @@ namespace Vanrise.Invoice.Business
         public override void OnBPExecutionCompleted(BusinessProcess.Entities.IBPDefinitionBPExecutionCompletedContext context)
         {
             context.BPInstance.ThrowIfNull("context.BPInstance");
+            new HoldRequestManager().DeleteHoldRequestByBPInstanceId(context.BPInstance.ProcessInstanceID);
+
             InvoiceGenerationProcessInput invoiceGenerationProcessInput = context.BPInstance.InputArgument.CastWithValidate<InvoiceGenerationProcessInput>("context.IntanceToRun.InputArgument");
             new InvoiceGenerationDraftManager().ClearInvoiceGenerationDrafts(invoiceGenerationProcessInput.InvoiceGenerationIdentifier);
         }
@@ -41,6 +46,27 @@ namespace Vanrise.Invoice.Business
                             return false;
                         }
                     }
+                }
+
+                HoldRequestManager holdRequestManager = new HoldRequestManager();
+                InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
+                InvoiceType invoiceType = invoiceTypeManager.GetInvoiceType(invoiceGenerationProcessInput.InvoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType", invoiceGenerationProcessInput.InvoiceTypeId);
+                invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceGenerationProcessInput.InvoiceTypeId);
+
+                HoldRequest existingHoldRequest = holdRequestManager.GetHoldRequest(context.IntanceToRun.ProcessInstanceID);
+                if (existingHoldRequest == null)
+                {
+                    holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, invoiceType.Settings.ExecutionFlowDefinitionId, invoiceMinimumFrom, invoiceMaximumTo,
+                      invoiceType.Settings.StagesToHoldNames, invoiceType.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
+
+                    context.Reason = "Waiting CDR Import";
+                    return false;
+                }
+                else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
+                {
+                    context.Reason = "Waiting CDR Import";
+                    return false;
                 }
             }
 

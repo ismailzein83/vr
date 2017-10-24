@@ -29,6 +29,9 @@ namespace Vanrise.Invoice.Entities
         public Guid? InvToAccBalanceRelationId { get; set; }
         public string AmountFieldName { get; set; }
         public string CurrencyFieldName { get; set; }
+        public Guid ExecutionFlowDefinitionId { get; set; }
+        public List<string> StagesToHoldNames { get; set; }
+        public List<string> StagesToProcessNames { get; set; }
         public List<ItemSetNameStorageRule> ItemSetNamesStorageRules { get; set; }
     }
 
