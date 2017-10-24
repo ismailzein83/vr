@@ -10,6 +10,7 @@ using Vanrise.AccountManager.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
+using Vanrise.AccountManager.Entities;
 
 
 namespace Vanrise.AccountManager.Business
@@ -69,20 +70,29 @@ namespace Vanrise.AccountManager.Business
 
            return updateOperationOutput;
        }
+       public Vanrise.AccountManager.Entities.AccountManager GetAccountManager(long accountManagerId)
+       {
+           var allAccountManagers = this.GetCachedAccountManagers();
+           Vanrise.AccountManager.Entities.AccountManager accountManager = new Vanrise.AccountManager.Entities.AccountManager();
+           if (allAccountManagers.TryGetValue(accountManagerId,out accountManager))
+               return accountManager;
+           else return null;
+       }
        #endregion
 
        #region Mappers
        private AccountManagerDetail AccountManagerDetailMapper(Vanrise.AccountManager.Entities.AccountManager accountManager)
        {
-           var accountManagerDetail = new AccountManagerDetail()
+           return  new AccountManagerDetail()
            {
                AccountManagerId = accountManager.AccountManagerId,
                UserName = userManager.GetUserName(accountManager.UserId),
                UserId = accountManager.UserId,
                AccountManagerDefinitionId = accountManager.AccountManagerDefinitionId
            };
-           return accountManagerDetail;
+          
        }
+       
        #endregion
 
        #region Private Classes
@@ -99,14 +109,14 @@ namespace Vanrise.AccountManager.Business
        #endregion
 
        #region Private Methods
-       Dictionary<int, Vanrise.AccountManager.Entities.AccountManager> GetCachedAccountManagers()
+       Dictionary<long, Vanrise.AccountManager.Entities.AccountManager> GetCachedAccountManagers()
        {
            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountManagers",
               () =>
               {
                   IAccountManagerDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerDataManager>();
                   IEnumerable<Vanrise.AccountManager.Entities.AccountManager> accountManagers = dataManager.GetAccountManagers();
-                  return accountManagers.ToDictionary(cn => cn.UserId, cn => cn);
+                  return accountManagers.ToDictionary(cn => cn.AccountManagerId, cn => cn);
               });
        }
        #endregion

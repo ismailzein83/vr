@@ -9,7 +9,8 @@
         var genericAccountManagerDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
         var genericAccountmanagerDefinitionSelectorApi;
         var gridReadyPromise = UtilsService.createPromiseDeferred();
-        var accountDefinitionId;
+        var accountManagerDefinitionId;
+        var selectorChangePromise = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -33,21 +34,30 @@
                 genericAccountmanagerDefinitionSelectorApi = api;
                 genericAccountManagerDefinitionSelectorPromiseDeferred.resolve();
             };
-            $scope.scopeModel.onAccountManagerDefinitionSelectorSelectionChange = function () {
-                accountDefinitionId = genericAccountmanagerDefinitionSelectorApi.getSelectedIds();
-                loadAllControls();
+            $scope.scopeModel.onAccountManagerDefinitionSelectorSelectionChange = function (value) {
+                if (value != undefined) {
+                    if (selectorChangePromise != undefined) {
+                        accountManagerDefinitionId = genericAccountmanagerDefinitionSelectorApi.getSelectedIds();
+                        selectorChangePromise.resolve();
+                    }
+                    else {
+                        accountManagerDefinitionId = genericAccountmanagerDefinitionSelectorApi.getSelectedIds();
+                        loadAllControls();
+                    }
+                }
+              
             };
             $scope.scopeModel.addNewAccountManager = function () {
                 var onAccountManagerAdded = function (addedItem) {
                     gridAPI.onAccountManagerAdded(addedItem); 
                 };
-                VR_AccountManager_AccountManagerService.addNewAccountManager(onAccountManagerAdded, accountDefinitionId);
+                VR_AccountManager_AccountManagerService.addAccountManager(onAccountManagerAdded, accountManagerDefinitionId);
             };
         };
         function load() {
             $scope.scopeModel.isLoading = true;
             loadGenericAccountManagerDefinitionSelector().then(function () {
-                accountDefinitionId = genericAccountmanagerDefinitionSelectorApi.getSelectedIds();
+                accountManagerDefinitionId = genericAccountmanagerDefinitionSelectorApi.getSelectedIds();
                 $scope.scopeModel.hideAccountDefinition = genericAccountmanagerDefinitionSelectorApi.hasSingleItem();
 
                 loadAllControls();
@@ -62,6 +72,7 @@
                     gridAPI.loadGrid(getGridFilter());
                 });
             });
+            selectorChangePromise = undefined;
         }
         function getGridFilter() {
             var query = {

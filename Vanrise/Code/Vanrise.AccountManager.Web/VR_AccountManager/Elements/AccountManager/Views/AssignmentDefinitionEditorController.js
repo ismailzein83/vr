@@ -52,17 +52,15 @@
                 });
         }
         function buildObjectFromScope() {
-            if (!isEditMode) {
-                var assignmentDefiniton = {
-                    AccountManagerAssignementDefinitionId: UtilsService.guid(),
-                    Name: $scope.scopeModel.assignmentName
-                };
+            var assignmentDefiniton = {
+                Name: $scope.scopeModel.assignmentName
+            };
+            if (isEditMode) {
+                assignmentDefiniton.AccountManagerAssignementDefinitionId = assignmentDefinitionEntity.AccountManagerAssignementDefinitionId;
+
             }
             else {
-                var assignmentDefiniton = {
-                    AccountManagerAssignementDefinitionId: assignmentDefinitionEntity.AccountManagerAssignementDefinitionId,
-                    Name: $scope.scopeModel.assignmentName
-                };
+                assignmentDefiniton.AccountManagerAssignementDefinitionId = UtilsService.guid();
             }
             return assignmentDefiniton;
         }
@@ -73,13 +71,18 @@
         }
         function addAssignmentDefinition() {
             var assignmentDefinition = buildObjectFromScope();
-            $scope.onAssignmentDefinitionAdded(assignmentDefinition);
-            $scope.modalContext.closeModal();
+            if ($scope.onAssignmentDefinitionAdded != undefined)
+            {
+                $scope.onAssignmentDefinitionAdded(assignmentDefinition);
+                $scope.modalContext.closeModal();
+            }
         }
         function updateAssignmnetDefinition() {
             var assignmentDefinition = buildObjectFromScope();
-            $scope.onAssignmentDefinitionUpdated(assignmentDefinition);
-            $scope.modalContext.closeModal();
+            if ($scope.onAssignmentDefinitionUpdated != undefined) {
+                $scope.onAssignmentDefinitionUpdated(assignmentDefinition);
+                $scope.modalContext.closeModal();
+            }
         }
     }
     appControllers.controller("VR_AccountManager_AssignmentDefinitionEditorController", assignmentDefinitionController);

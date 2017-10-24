@@ -8,12 +8,12 @@
     {
 
         return ({
-            addNewAssignmentDefinition: addNewAssignmentDefinition,
+            addAssignmentDefinition: addAssignmentDefinition,
             editAssignmentDefinition: editAssignmentDefinition,
-            addNewAccountManager: addNewAccountManager,
+            addAccountManager: addAccountManager,
             editAccountmanager: editAccountmanager
         });
-        function addNewAssignmentDefinition(onAssignmentDefinitionAdded)
+        function addAssignmentDefinition(onAssignmentDefinitionAdded)
        {
             var settings = {
             };
@@ -25,7 +25,7 @@
             };
             VRModalService.showModal('/Client/Modules/VR_AccountManager/Elements/AccountManager/Views/AssignmentDefinitionEditor.html', parameters, settings);
         }
-        function addNewAccountManager(onAccountManagerAdded, accountDefinitionId) {
+        function addAccountManager(onAccountManagerAdded, accountDefinitionId) {
             var settings = {
             };
 
@@ -43,8 +43,6 @@
             var settings = {
             };
             var parameters = {
-                UserID: accountManagerObject.UserId,
-                UserName: accountManagerObject.UserName,
                 AccountManagerDefinitionId: accountManagerObject.AccountManagerDefinitionId,
                 AccountManagerId:accountManagerObject.AccountManagerId
 

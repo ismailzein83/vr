@@ -12,10 +12,14 @@
         function UpdateAccountManager(accountManager) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "UpdateAccountManager"), accountManager);
         }
+        function GetAccountManager(accountManagerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAccountManager"), { accountManagerId: accountManagerId });
+        }
         return ({
             GetFilteredAccountManagers: GetFilteredAccountManagers,
             AddAccountManager: AddAccountManager,
-            UpdateAccountManager: UpdateAccountManager
+            UpdateAccountManager: UpdateAccountManager,
+            GetAccountManager: GetAccountManager
         });
     }
     appControllers.service("VR_AccountManager_AccountManagerAPIService", accountManagerAPIService);

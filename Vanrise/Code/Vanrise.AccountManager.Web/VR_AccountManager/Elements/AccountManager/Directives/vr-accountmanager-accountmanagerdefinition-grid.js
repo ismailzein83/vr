@@ -25,14 +25,14 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
     {
         this.initializeController = initializeController;
         var gridAPI;
-        $scope.accountManagerDefinitions = [];
         function initializeController()
         {
+            $scope.assignmentDefinitions = [];
             $scope.addNewAssignmentDefinition = function () {
                 var onAssignmentDefinitionAdded = function (assignmnetDefifniton) {
-                    $scope.accountManagerDefinitions.push(assignmnetDefifniton);
+                    $scope.assignmentDefinitions.push({Entity: assignmnetDefifniton});
                 };
-                VR_AccountManager_AccountManagerService.addNewAssignmentDefinition(onAssignmentDefinitionAdded);
+                VR_AccountManager_AccountManagerService.addAssignmentDefinition(onAssignmentDefinitionAdded);
             };
            
             $scope.onGridReady = function (api) {
@@ -44,11 +44,26 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
                         if (payload != undefined) {
-                            $scope.accountManagerDefinitions = payload;
+                            if (payload.assignmentdefinitons != undefined)
+                            {
+                                for(var i= 0;i< payload.assignmentdefinitons.length;i++)
+                                {
+                                    var assignmentdefiniton = payload.assignmentdefinitons[i];
+                                    $scope.assignmentDefinitions.push({ Entity: assignmentdefiniton });
+                                }
+                            }
                         }
                     };
                     directiveAPI.getData = function () {
-                        return ($scope.accountManagerDefinitions);
+                        var assignmentDefinitions = [];
+                        if ($scope.assignmentDefinitions != undefined)
+                        {
+                            for (var i = 0; i < $scope.assignmentDefinitions.length; i++) {
+                                var assignmentDefinition = $scope.assignmentDefinitions[i];
+                                assignmentDefinitions.push(assignmentDefinition.Entity);
+                            }
+                        }
+                        return assignmentDefinitions;
                     };
                     return directiveAPI;
                 };
@@ -64,10 +79,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
         }
         function editAssignmentDefinition(assignmentDefinitionObj) {
             var onAssignmentDefinitionUpdated = function (assignmentDefinition) {
-                var index =$scope.accountManagerDefinitions.indexOf(assignmentDefinitionObj);
-                $scope.accountManagerDefinitions[index] = assignmentDefinition;
+                var index = $scope.assignmentDefinitions.indexOf(assignmentDefinitionObj);
+                $scope.assignmentDefinitions[index] = {Entity:assignmentDefinition};
             };
-            VR_AccountManager_AccountManagerService.editAssignmentDefinition(assignmentDefinitionObj, onAssignmentDefinitionUpdated, $scope.accountManagerDefinitions);
+            VR_AccountManager_AccountManagerService.editAssignmentDefinition(assignmentDefinitionObj.Entity, onAssignmentDefinitionUpdated, $scope.assignmentDefinitions);
         }
     }
     return directiveDefinitionObject;

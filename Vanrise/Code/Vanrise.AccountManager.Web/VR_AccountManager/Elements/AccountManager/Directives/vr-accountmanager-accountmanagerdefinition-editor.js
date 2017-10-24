@@ -38,11 +38,14 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                 var api = {};
 
                 api.load = function (payload) {
-                    if(payload != undefined)
-                    {
+                    if (payload != undefined) {
                         gridReadyPromise.promise.then(function () {
-                            assignmentdefinitons = payload.businessEntityDefinitionSettings.AssignmentDefinitions;
-                            gridAPI.loadGrid(assignmentdefinitons);
+                            var gridPayload;
+                            if (payload.businessEntityDefinitionSettings != undefined)
+                                gridPayload = {
+                                    assignmentdefinitons: payload.businessEntityDefinitionSettings.AssignmentDefinitions
+                                };
+                            gridAPI.loadGrid(gridPayload);
                         });
                     }
                 };

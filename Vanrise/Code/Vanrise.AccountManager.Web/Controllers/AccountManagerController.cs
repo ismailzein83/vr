@@ -35,5 +35,12 @@ namespace Vanrise.AccountManager.Web.Controllers
         {
             return _manager.UpdateAccountManager(accountManager);
         }
+        [HttpGet]
+        [Route("GetAccountManager")]
+        public Vanrise.AccountManager.Entities.AccountManager GetAccountManager(long accountManagerId)
+        {
+            return _manager.GetAccountManager(accountManagerId);
+        }
+
     }
 }

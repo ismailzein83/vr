@@ -7,11 +7,10 @@
     function accountManagerEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_AccountManager_AccountManagerAPIService) {
         var accountDefinitionId;
         var isEditMode;
-        var userId;
-        var userName;
         var accountManagerId;
         var userSelectorAPI;
         var accountManagerDefinitionId;
+        var accountManagerEntity;
         var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
@@ -20,12 +19,10 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                userId = parameters.UserID;
-                userName = parameters.UserName;
                 accountManagerId = parameters.AccountManagerId;
                 accountManagerDefinitionId = parameters.AccountManagerDefinitionId;
             };
-            isEditMode = (userId != undefined);
+            isEditMode = (accountManagerId != undefined);
         }
         function defineScope() {
             $scope.scopeModel = {};
@@ -47,7 +44,13 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            loadAllControls();
+            if (isEditMode) {
+                getAccountManager().then(function () {
+                    loadAllControls();
+                });
+            }
+            else
+                loadAllControls();
         }
 
         function loadAllControls() {
@@ -55,7 +58,7 @@
                 if (!isEditMode)
                     $scope.title = UtilsService.buildTitleForAddEditor('Account Manager');
                 else
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(userName, 'Account Manager');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(accountManagerEntity.UserName, 'Account Manager');
 
             }
             return UtilsService.waitMultipleAsyncOperations([loadUserSelector, setTitle]).catch(function (error) {
@@ -95,29 +98,27 @@
 
         }
         function buildObjectFromScope() {
-            if (!isEditMode) {
-                var accountManagerObject = {
-                    UserId: userSelectorAPI.getSelectedIds(),
-                    AccountManagerDefinitionId: accountManagerDefinitionId
-
-                };
-            }
-            else {
-                var accountManagerObject = {
-                    AccountManagerId: accountManagerId,
-                    UserId: userSelectorAPI.getSelectedIds(),
-                    AccountManagerDefinitionId: accountManagerDefinitionId
-                }
+            var accountManagerObject = {
+                UserId: userSelectorAPI.getSelectedIds(),
+                AccountManagerDefinitionId: accountManagerDefinitionId
+            };
+            if (isEditMode) {
+            accountManagerObject.AccountManagerId=accountManagerId
             }
             return accountManagerObject;
         }
         function loadUserSelector() {
             var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             userSelectorReadyDeferred.promise.then(function () {
-                var payload = (userName != undefined) ? { selectedIds: userId } : undefined;
+                var payload = (accountManagerEntity != undefined) ? { selectedIds: accountManagerEntity.UserId } : undefined;
                 VRUIUtilsService.callDirectiveLoad(userSelectorAPI, payload, userSelectorLoadDeferred);
             });
             return userSelectorLoadDeferred.promise;
+        }
+        function getAccountManager() {
+            return VR_AccountManager_AccountManagerAPIService.GetAccountManager(accountManagerId).then(function (response) {
+                accountManagerEntity = response;
+            });
         }
     }
     appControllers.controller("VR_AccountManager_AccountManagerEditorController", accountManagerEditorController);
