@@ -65,8 +65,20 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public string BackupAllDataBySupplierId(long stateBackupId, string backupDatabase, int supplierId)
         {
             return String.Format(@"INSERT INTO [{0}].[TOneWhS_BE_Bkup].[SupplierPriceList] WITH (TABLOCK)
-                                            SELECT [ID] ,[SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID],[UserID],  {1} AS StateBackupID  FROM [TOneWhS_BE].[SupplierPriceList]
-                                            WITH (NOLOCK) Where SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
+                                            ([ID]
+                                           ,[SupplierID]
+                                           ,[CurrencyID]
+                                           ,[FileID]
+                                           ,[EffectiveOn]
+                                           ,[CreatedTime]
+                                           ,[SourceID]
+                                           ,[ProcessInstanceID]
+                                           ,[SPLStateBackupID]
+                                           ,[UserID]
+                                           ,[StateBackupID])
+                                            SELECT [ID] ,[SupplierID], [CurrencyID], [FileID], [EffectiveOn], [CreatedTime], [SourceID],[ProcessInstanceID],[SPLStateBackupID],[UserID],  {1} AS StateBackupID  
+                                  FROM [TOneWhS_BE].[SupplierPriceList]  WITH (NOLOCK) 
+                                  Where SupplierID = {2}", backupDatabase, stateBackupId, supplierId);
         }
 
         public string GetRestoreCommands(long stateBackupId, string backupDatabase)
