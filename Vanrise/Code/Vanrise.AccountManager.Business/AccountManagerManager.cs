@@ -11,7 +11,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
 using Vanrise.AccountManager.Entities;
-
+using Vanrise.Common;
 
 namespace Vanrise.AccountManager.Business
 {
@@ -73,10 +73,7 @@ namespace Vanrise.AccountManager.Business
        public Vanrise.AccountManager.Entities.AccountManager GetAccountManager(long accountManagerId)
        {
            var allAccountManagers = this.GetCachedAccountManagers();
-           Vanrise.AccountManager.Entities.AccountManager accountManager = new Vanrise.AccountManager.Entities.AccountManager();
-           if (allAccountManagers.TryGetValue(accountManagerId,out accountManager))
-               return accountManager;
-           else return null;
+           return allAccountManagers.GetRecord(accountManagerId);
        }
        #endregion
 
