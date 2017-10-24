@@ -12,10 +12,10 @@ namespace Retail.Cost.Entities
 
         public DateTime AttemptDateTime { get; set; }
 
+        public decimal Duration { get; set; }
+
         public string CGPN { get; set; }
 
         public string CDPN { get; set; }
-
-        public decimal Duration { get; set; }
     }
 }

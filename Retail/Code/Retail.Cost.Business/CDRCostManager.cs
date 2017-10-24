@@ -60,9 +60,9 @@ namespace Retail.Cost.Business
                 {
                     OriginalCDR = cdr,
                     AttemptDateTime = cdr.GetFieldValue(attemptDateTimeFieldName),
+                    Duration = cdr.GetFieldValue(durationInSecondsFieldName),
                     CGPN = cdr.GetFieldValue(cgpnFieldName),
-                    CDPN = cdr.GetFieldValue(cdpnFieldName),
-                    Duration = cdr.GetFieldValue(durationInSecondsFieldName)
+                    CDPN = cdr.GetFieldValue(cdpnFieldName)
                 };
 
                 cdrCostRequests.Add(cdrCostRequest);
@@ -111,7 +111,6 @@ namespace Retail.Cost.Business
 
             ICDRCostDataManager cdrCostDataManager = CostDataManagerFactory.GetDataManager<ICDRCostDataManager>();
 
-
             foreach (var cdrCostBatchRequest in cdrCostBatchRequests)
             {
                 List<CDRCost> cdrCostList = cdrCostDataManager.GetCDRCostByCDPNs(cdrCostBatchRequest);
@@ -125,14 +124,27 @@ namespace Retail.Cost.Business
                     if (!uniqueCDRCostKeysDict.TryGetValue(new UniqueCDRCostKeys() { CGPN = cdrCostRequest.CGPN, CDPN = cdrCostRequest.CDPN }, out tempCDRCostList))
                         continue;
 
-                    CDRCost matchingCDRCost = null; ;
+                    CDRCost matchingCDRCost = null;
+                    int minAttemptDateTimeDiffInMilliseconds = int.MaxValue;
+
                     foreach (var cdrCostItem in tempCDRCostList)
                     {
                         if (!IsCDRCostMatch(cdrCostItem, cdrCostRequest, durationMarginInSeconds, attemptDateTimeMargin))
                             continue;
 
-                        if (matchingCDRCost == null || cdrCostItem.CDRCostId > matchingCDRCost.CDRCostId)
-                            matchingCDRCost = cdrCostItem;
+                        TimeSpan attemptDateTimeDiff = cdrCostItem.AttemptDateTime.Value - cdrCostRequest.AttemptDateTime;
+                        int attemptDateTimeDiffInMilliseconds = (int)Math.Abs(attemptDateTimeDiff.TotalMilliseconds);
+
+                        if (matchingCDRCost != null && attemptDateTimeDiffInMilliseconds > minAttemptDateTimeDiffInMilliseconds)
+                            continue;
+
+                        if (matchingCDRCost != null && (attemptDateTimeDiffInMilliseconds == minAttemptDateTimeDiffInMilliseconds && cdrCostItem.CDRCostId < matchingCDRCost.CDRCostId))
+                            continue;
+
+                        //matchingCDRCost == null or attemptDateTimeDiffInMilliseconds < minAttemptDateTimeDiffInMilliseconds or 
+                        //(attemptDateTimeDiffInMilliseconds == minAttemptDateTimeDiffInMilliseconds and cdrCostItem.CDRCostId > matchingCDRCost.CDRCostId)
+                        matchingCDRCost = cdrCostItem;
+                        minAttemptDateTimeDiffInMilliseconds = attemptDateTimeDiffInMilliseconds;
                     }
 
                     if (matchingCDRCost != null) //matching cost is found
@@ -221,7 +233,7 @@ namespace Retail.Cost.Business
                 {
                     batchRequest = new CDRCostBatchRequest()
                     {
-                        CDPNs = new List<string>() { cdrCostRequest.CDPN },
+                        CDPNs = new HashSet<string>() { cdrCostRequest.CDPN },
                         BatchStart = cdrCostRequest.AttemptDateTime.Subtract(attemptDateTimeMargin),
                         BatchEnd = cdrCostRequest.AttemptDateTime.Add(attemptDateTimeMargin),
                         CDRCostRequests = new List<CDRCostRequest>() { cdrCostRequest }
