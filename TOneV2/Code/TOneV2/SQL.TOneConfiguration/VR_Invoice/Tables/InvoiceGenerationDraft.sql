@@ -11,3 +11,10 @@
     CONSTRAINT [PK_InvoiceGenerationDraft] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_InvoiceGenerationDraft_InvoiceGenerationIdentifier]
+    ON [VR_Invoice].[InvoiceGenerationDraft]([InvoiceGenerationIdentifier] ASC);
+
