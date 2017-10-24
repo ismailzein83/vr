@@ -88,6 +88,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                             }
                             var emailTemplateEvaluator = invoiceEmailActionManager.GetEmailTemplate(context.Invoice, mailMessageTemplateId);
                             vrMailManager.SendMail(emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body, vrMailAttachments);
+                            new InvoiceManager().SetInvoiceSentDate(context.Invoice.InvoiceId, true);
                         }
                     }
            

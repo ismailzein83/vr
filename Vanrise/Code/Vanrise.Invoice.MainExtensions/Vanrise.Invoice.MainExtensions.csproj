@@ -70,6 +70,7 @@
     <Compile Include="FilterCondition\FilterGroupCondition.cs" />
     <Compile Include="FilterCondition\AccountActivationCondition.cs" />
     <Compile Include="FilterCondition\IsLockedGridFilterCondition.cs" />
+    <Compile Include="FilterCondition\IsSentInvoiceFilterCondition.cs" />
     <Compile Include="FilterCondition\IsPaidFilterCondition.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceEmailActionController.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceEmailActionManager.cs" />

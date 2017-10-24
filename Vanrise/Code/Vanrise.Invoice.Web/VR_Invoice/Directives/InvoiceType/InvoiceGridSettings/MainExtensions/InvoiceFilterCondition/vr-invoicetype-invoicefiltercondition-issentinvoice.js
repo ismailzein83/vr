@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeInvoicefilterconditionIslockedinvoice", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
+app.directive("vrInvoicetypeInvoicefilterconditionIssentinvoice", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
     function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeInvoicefilterconditionIslockedinvoice", ["UtilsServi
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new IsLockedInvoiceFilterCondition($scope, ctrl, $attrs);
+                var ctor = new IsSentInvoiceFilterCondition($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,11 +21,11 @@ app.directive("vrInvoicetypeInvoicefilterconditionIslockedinvoice", ["UtilsServi
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGridSettings/MainExtensions/InvoiceFilterCondition/Templates/IsLockedInvoiceFilterConditionTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/InvoiceGridSettings/MainExtensions/InvoiceFilterCondition/Templates/IsSentInvoiceFilterConditionTemplate.html"
 
         };
 
-        function IsLockedInvoiceFilterCondition($scope, ctrl, $attrs) {
+        function IsSentInvoiceFilterCondition($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var context;
@@ -45,7 +45,7 @@ app.directive("vrInvoicetypeInvoicefilterconditionIslockedinvoice", ["UtilsServi
                         context = payload.context;
                     }
                     if (invoiceFilterConditionEntity != undefined) {
-                        $scope.scopeModel.isLocked = invoiceFilterConditionEntity.IsLocked;
+                        $scope.scopeModel.isSent = invoiceFilterConditionEntity.IsSent;
                     }
                     var promises = [];
 
@@ -54,8 +54,8 @@ app.directive("vrInvoicetypeInvoicefilterconditionIslockedinvoice", ["UtilsServi
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Invoice.MainExtensions.IsLockedGridFilterCondition ,Vanrise.Invoice.MainExtensions",
-                        IsLocked: $scope.scopeModel.isLocked
+                        $type: "Vanrise.Invoice.MainExtensions.IsSentInvoiceFilterCondition ,Vanrise.Invoice.MainExtensions",
+                        IsSent: $scope.scopeModel.isSent
                     };
                 };
 
