@@ -15,11 +15,11 @@
     [ChargingPolicyId]       INT              NULL,
     [SaleRate]               DECIMAL (20, 8)  NULL,
     [SaleCurrencyId]         INT              NULL,
+    [NumberOfCDRs]           INT              NULL,
     [TotalDuration]          DECIMAL (20, 4)  NULL,
     [TotalSaleDuration]      DECIMAL (20, 4)  NULL,
     [TotalChargedDuration]   DECIMAL (20, 4)  NULL,
     [TotalSaleAmount]        DECIMAL (26, 10) NULL,
-    [NumberOfCDRs]           INT              NULL,
     [SupplierName]           NVARCHAR (255)   NULL,
     [CostRate]               DECIMAL (20, 8)  NULL,
     [CostAmount]             DECIMAL (22, 6)  NULL,
@@ -27,6 +27,8 @@
     [CostAvailable]          BIT              NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

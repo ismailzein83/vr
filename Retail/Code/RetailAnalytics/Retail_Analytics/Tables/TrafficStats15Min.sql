@@ -15,12 +15,14 @@
     [ChargingPolicyId]       INT              NULL,
     [SaleRate]               DECIMAL (20, 8)  NULL,
     [SaleCurrencyId]         INT              NULL,
+    [NumberOfCDRs]           INT              NULL,
     [TotalDuration]          DECIMAL (20, 4)  NULL,
     [TotalSaleDuration]      DECIMAL (20, 4)  NULL,
     [TotalSaleAmount]        DECIMAL (26, 10) NULL,
-    [NumberOfCDRs]           INT              NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
