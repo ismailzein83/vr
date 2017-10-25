@@ -63,46 +63,28 @@ namespace TOne.WhS.DBSync.Business.Migrators
             var sellingRules = commissions.FindAllRecords(s => s.SupplierId.Equals("SYS"));
             var purchaseRules = commissions.FindAllRecords(s => !s.SupplierId.Equals("SYS"));
 
-            result.AddRange(GenerateRules(sellingRules, RuleType.Sale));
-            result.AddRange(GenerateRules(purchaseRules, RuleType.Purchase));
+            var rulesDictionary = GroupCommissionRules(sellingRules, RuleType.Sale);
+
+            foreach (var key in rulesDictionary.Keys)
+            {
+                var commissionRules = rulesDictionary[key];
+                var rule = GetSellingSourceRule(commissionRules, true);
+                if (rule != null)
+                    result.Add(rule);
+            }
+
+            rulesDictionary = GroupCommissionRules(purchaseRules, RuleType.Purchase);
+            foreach (var key in rulesDictionary.Keys)
+            {
+                var commissionRules = rulesDictionary[key];
+                var rule = GetPurchaseSourceRule(commissionRules, true);
+                if (rule != null)
+                    result.Add(rule);
+            }
 
             return result;
         }
 
-        private List<SourceRule> GenerateRules(IEnumerable<SourceCommission> commissionRules, RuleType ruleType)
-        {
-            List<SourceRule> sourceRules = new List<SourceRule>();
-
-            Dictionary<string, CommissionRulesByKeyWithMaxCount> commissionRulesByKeyWithMaxCounts;
-
-            var rulesDictionary = GroupCommissionRules(commissionRules, ruleType, out commissionRulesByKeyWithMaxCounts);
-
-            foreach (var item in rulesDictionary)
-            {
-                CommissionRulesByKeyWithMaxCount commissionRulesByKeyWithMaxCount;
-                string carrierId = item.Key;
-
-                if (commissionRulesByKeyWithMaxCounts.TryGetValue(carrierId, out commissionRulesByKeyWithMaxCount))
-                {
-                    sourceRules.Add(ruleType == RuleType.Sale
-                                    ? GetSellingSourceRule(commissionRulesByKeyWithMaxCount.CommissionRulesByKey.CommissionRules, false)
-                                    : GetPurchaseSourceRule(commissionRulesByKeyWithMaxCount.CommissionRulesByKey.CommissionRules, false));
-                }
-
-                foreach (var commissionByKey in item.Value)
-                {
-                    if (commissionByKey.Value == commissionRulesByKeyWithMaxCount.CommissionRulesByKey)
-                        continue;
-                    var rule = ruleType == RuleType.Sale
-                                        ? GetSellingSourceRule(commissionByKey.Value.CommissionRules, true)
-                                        : GetPurchaseSourceRule(commissionByKey.Value.CommissionRules, true);
-                    if (rule != null)
-                        sourceRules.Add(rule);
-                }
-            }
-
-            return sourceRules;
-        }
         SourceRule GetPurchaseSourceRule(List<SourceCommission> commissionRules, bool includeZonesCriteria)
         {
             List<long> zoneIds = new List<long>();
@@ -266,34 +248,19 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 }
             };
         }
-        Dictionary<string, Dictionary<string, CommissionRulesByKey>> GroupCommissionRules(IEnumerable<SourceCommission> sourceRules, RuleType type, out Dictionary<string, CommissionRulesByKeyWithMaxCount> commissionRulesByKeyWithMaxCounts)
+        Dictionary<string, List<SourceCommission>> GroupCommissionRules(IEnumerable<SourceCommission> sellingRules, RuleType type)
         {
-            commissionRulesByKeyWithMaxCounts = new Dictionary<string, CommissionRulesByKeyWithMaxCount>();
-
-            Dictionary<string, Dictionary<string, CommissionRulesByKey>> commissions = new Dictionary<string, Dictionary<string, CommissionRulesByKey>>();
-
-            foreach (var sorceRule in sourceRules)
+            Dictionary<string, List<SourceCommission>> commissions = new Dictionary<string, List<SourceCommission>>();
+            List<SourceCommission> sourceCommissions;
+            foreach (SourceCommission commission in sellingRules)
             {
-                string carrierId = type == RuleType.Sale ? sorceRule.CustomerId : sorceRule.SupplierId;
-                CommissionRulesByKeyWithMaxCount commissionRulesByKeyWithMaxCount = commissionRulesByKeyWithMaxCounts.GetOrCreateItem(carrierId);
-
-                Dictionary<string, CommissionRulesByKey> dicCommissionRulesByKey = commissions.GetOrCreateItem(carrierId);
-
-                string key = GetCommissionKey(sorceRule, type);
-
-                CommissionRulesByKey lstRules;
-                if (!dicCommissionRulesByKey.TryGetValue(key, out lstRules))
+                string key = GetCommissionKey(commission, type);
+                if (!commissions.TryGetValue(key, out sourceCommissions))
                 {
-                    lstRules = new CommissionRulesByKey();
-                    dicCommissionRulesByKey.Add(key, lstRules);
+                    sourceCommissions = new List<SourceCommission>();
+                    commissions.Add(key, sourceCommissions);
                 }
-                lstRules.CommissionRules.Add(sorceRule);
-                lstRules.Counter++;
-                if (commissionRulesByKeyWithMaxCount.MaxCount < lstRules.Counter)
-                {
-                    commissionRulesByKeyWithMaxCount.MaxCount = lstRules.Counter;
-                    commissionRulesByKeyWithMaxCount.CommissionRulesByKey = lstRules;
-                }
+                sourceCommissions.Add(commission);
             }
 
             return commissions;
@@ -314,22 +281,6 @@ namespace TOne.WhS.DBSync.Business.Migrators
             return "";
         }
 
-    }
-    class CommissionRulesByKey
-    {
-        public CommissionRulesByKey()
-        {
-            this.CommissionRules = new List<SourceCommission>();
-        }
-        public List<SourceCommission> CommissionRules { get; set; }
-        public int Counter { get; set; }
-        public string CarrierId { get; set; }
-    }
-
-    class CommissionRulesByKeyWithMaxCount
-    {
-        public CommissionRulesByKey CommissionRulesByKey { get; set; }
-        public int MaxCount { get; set; }
     }
 
 }
