@@ -248,6 +248,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                                 Measures: ctrl.measures,
                                 FromTime: fromTime,
                                 ToTime: toTime,
+                                Period:payLoad.Period,
                                 DrillDownDimensions: drillDownDimensions,
                                 TableId: payLoad.TableId,
                                 InitialQueryOrderType: initialQueryOrderType,
