@@ -104,7 +104,7 @@ namespace TOne.WhS.DBSync.Business
                             }
                         }
                     }
-                    else
+                    else if (profile.Customers.Count > 0)
                     {
                         hasCustomerFinancialAccount = true;
                         WHSFinancialAccount customerFinancialAccount = GetFinancialAccount(profile.CustomerActivateDate, profile.CustomerDeactivateDate, carrierProfile.CarrierProfileId, AccountType.Profile);
@@ -135,7 +135,7 @@ namespace TOne.WhS.DBSync.Business
                             }
                         }
                     }
-                    else
+                    else if (profile.Suppliers.Count > 0)
                     {
                         hasSupplierFinancialAccount = true;
                         WHSFinancialAccount supplierFinancialAccount = GetFinancialAccount(profile.SupplierActivateDate, profile.SupplierDeactivateDate, carrierProfile.CarrierProfileId, AccountType.Profile);
@@ -192,9 +192,9 @@ namespace TOne.WhS.DBSync.Business
                     }
                 }
 
-                if (!hasSupplierFinancialAccount)
+                if (!hasSupplierFinancialAccount && profile.Suppliers.Count > 0)
                 {
-                    if (profile.InvoiceByProfile && profile.Suppliers.Count > 0)
+                    if (profile.InvoiceByProfile)
                     {
                         WHSFinancialAccount supplierFinancialAccount = GetFinancialAccount(profile.SupplierActivateDate, profile.SupplierDeactivateDate, carrierProfile.CarrierProfileId, AccountType.Profile);
                         UpdateFinancialSettings(supplierFinancialAccount, SourceAccountType.Termination, profile.SupplierPaymentType, profile.SupplierCreditLimit);
