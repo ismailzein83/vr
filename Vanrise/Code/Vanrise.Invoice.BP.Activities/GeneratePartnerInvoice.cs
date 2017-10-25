@@ -5,6 +5,7 @@ using Vanrise.Invoice.Business;
 using Vanrise.BusinessProcess;
 using Vanrise.Invoice.Entities;
 using Vanrise.Invoice.Business.Context;
+using System.Collections.Generic;
 
 namespace Vanrise.Invoice.BP.Activities
 {
@@ -25,10 +26,13 @@ namespace Vanrise.Invoice.BP.Activities
         public OutArgument<bool> Succeeded { get; set; }
 
         [RequiredArgument]
-        public OutArgument<string> Message { get; set; }
+        public OutArgument<List<InvoiceGenerationMessageOutput>> Messages { get; set; }
 
         [RequiredArgument]
-        public OutArgument<LogEntryType> LogEntryType { get; set; }
+        public OutArgument<bool> GenerationErrorOccured { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<string> GenerationErrorMessage { get; set; }
 
         #endregion
 
@@ -39,11 +43,11 @@ namespace Vanrise.Invoice.BP.Activities
             var invoiceTypeId = invoiceGenerationDraft.InvoiceTypeId;
             var isAutomatic = context.ActivityContext.GetValue(this.IsAutomatic);
             var issueDate = context.ActivityContext.GetValue(this.IssueDate);
-
+            List<InvoiceGenerationMessageOutput> messages = new List<InvoiceGenerationMessageOutput>();
             InvoiceManager invoiceManager = new InvoiceManager();
             InvoiceSettingManager invoiceSettingManager = new Business.InvoiceSettingManager();
             InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
-
+           
             if (partnerId != null)
             {
                 var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
@@ -84,17 +88,19 @@ namespace Vanrise.Invoice.BP.Activities
                     var billingPeriod = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, partnerIssueDate);
                     if (billingPeriod == null || billingPeriod.FromDate != invoiceGenerationDraft.From || billingPeriod.ToDate != invoiceGenerationDraft.To)
                     {
+
                         this.Succeeded.Set(context.ActivityContext, false);
-                        this.LogEntryType.Set(context.ActivityContext, Vanrise.Entities.LogEntryType.Warning);
-                        this.Message.Set(context.ActivityContext, string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Invalid Billing Period'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To));
+                        messages.Add(new InvoiceGenerationMessageOutput
+                        {
+                            LogEntryType = Vanrise.Entities.LogEntryType.Warning,
+                            Message = string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Invalid Billing Period'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To)
+                        });
+                        this.Messages.Set(context.ActivityContext, messages);
                         return;
                     }
                 }
 
                 bool succeeded;
-                LogEntryType logentryType;
-                string message;
-
                 var generatedInvoice = invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
                 {
                     InvoiceTypeId = invoiceTypeId,
@@ -108,6 +114,14 @@ namespace Vanrise.Invoice.BP.Activities
 
                 if (generatedInvoice.Result == InsertOperationResult.Succeeded)
                 {
+                    succeeded = true;
+
+                    messages.Add(new InvoiceGenerationMessageOutput
+                    {
+                        LogEntryType = Vanrise.Entities.LogEntryType.Information,
+                        Message = string.Format("Invoice generated for '{0}' from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To)
+                    });
+                   
                     if (isAutomatic)
                     {
                         AutomaticInvoiceActionsPart automaticInvoiceActionsPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceActionsPart>(
@@ -119,31 +133,50 @@ namespace Vanrise.Invoice.BP.Activities
                             });
                         if (automaticInvoiceActionsPart != null && automaticInvoiceActionsPart.Actions != null)
                         {
-                            foreach (var action in automaticInvoiceActionsPart.Actions)
+                            try
                             {
-                                AutomaticSendEmailActionRuntimeSettingsContext automaticSendEmailActionContext = new Business.Context.AutomaticSendEmailActionRuntimeSettingsContext
-                                {
-                                    Invoice = generatedInvoice.InsertedObject.Entity,
-                                    AutomaticInvoiceActionId = action.AutomaticInvoiceActionId
-                                };
-                                action.Settings.Execute(automaticSendEmailActionContext);
-                            };
+                                 foreach (var action in automaticInvoiceActionsPart.Actions)
+                                 {
+                                
+                                    AutomaticActionRuntimeSettingsContext automaticActionContext = new Business.Context.AutomaticActionRuntimeSettingsContext
+                                    {
+                                        Invoice = generatedInvoice.InsertedObject.Entity,
+                                        AutomaticInvoiceActionId = action.AutomaticInvoiceActionId
+                                    };
+                                    action.Settings.Execute(automaticActionContext);
+                                    if (automaticActionContext.ErrorMessage != null)
+                                    {
+                                        messages.Add(new InvoiceGenerationMessageOutput
+                                        {
+                                            LogEntryType = Vanrise.Entities.LogEntryType.Warning,
+                                            Message = automaticActionContext.ErrorMessage
+                                        });
+                                    }
+                                 }
+                            }
+                            catch(Exception ex)
+                            {
+                                this.Messages.Set(context.ActivityContext, messages);
+                                this.GenerationErrorOccured.Set(context.ActivityContext, true);
+                                this.GenerationErrorMessage.Set(context.ActivityContext, ex.Message);
+                                return;
+                            }
                         }
                     }
-                    succeeded = true;
-                    logentryType = Vanrise.Entities.LogEntryType.Information;
-                    message = string.Format("Invoice generated for '{0}' from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To);
+                   
                 }
                 else
                 {
                     succeeded = false;
-                    logentryType = Vanrise.Entities.LogEntryType.Warning;
-                    message = string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : {3}", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To, generatedInvoice.Message);
+                    messages.Add(new InvoiceGenerationMessageOutput
+                    {
+                        LogEntryType = Vanrise.Entities.LogEntryType.Warning,
+                        Message = string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : {3}", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To, generatedInvoice.Message)
+                    });
                 }
 
                 this.Succeeded.Set(context.ActivityContext, succeeded);
-                this.LogEntryType.Set(context.ActivityContext, logentryType);
-                this.Message.Set(context.ActivityContext, message);
+                this.Messages.Set(context.ActivityContext, messages);
             }
         }
     }

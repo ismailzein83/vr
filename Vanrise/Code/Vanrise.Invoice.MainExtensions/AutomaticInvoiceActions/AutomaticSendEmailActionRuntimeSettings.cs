@@ -16,7 +16,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
     {
         public List<EmailActionAttachmentSetRuntime> EmailActionAttachmentSets { get; set; }
         public Guid? MailMessageTemplateId { get; set; }
-        public override void Execute(IAutomaticSendEmailActionRuntimeSettingsContext context)
+        public override void Execute(IAutomaticActionRuntimeSettingsContext context)
         {
             if (this.EmailActionAttachmentSets != null)
             {
@@ -86,7 +86,13 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                             {
                                 continue;
                             }
+                            
                             var emailTemplateEvaluator = invoiceEmailActionManager.GetEmailTemplate(context.Invoice, mailMessageTemplateId);
+                            if (emailTemplateEvaluator.To == null)
+                            {
+                                context.ErrorMessage = "Cannot sent invoice email. Reason: 'Email' is empty.";
+                                return;
+                            }
                             vrMailManager.SendMail(emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body, vrMailAttachments);
                             new InvoiceManager().SetInvoiceSentDate(context.Invoice.InvoiceId, true);
                         }

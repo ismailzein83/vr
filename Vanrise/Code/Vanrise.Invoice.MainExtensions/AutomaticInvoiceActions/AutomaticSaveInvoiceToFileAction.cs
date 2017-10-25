@@ -14,13 +14,14 @@ namespace Vanrise.Invoice.MainExtensions.AutoGenerateInvoiceActions
             get { return new Guid("C5F9CDCC-FC61-4F0B-9B72-B5DE53D8520B"); }
         }
         public List<InvoiceToFileActionSet> InvoiceToFileActionSets { get; set; }
+
         public override void Execute(IAutomaticInvoiceActionSettingsContext contex)
         {
             throw new NotImplementedException();
         }
         public override string RuntimeEditor
         {
-            get { return "vr-invoicetype-automaticinvoiceaction-savetofile-runtime"; }
+            get { return "vr-invoicetype-automaticinvoiceaction-saveinvoicetofile-runtime"; }
         }
     }
     public class InvoiceToFileActionSet

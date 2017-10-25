@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Invoice.Entities
 {
-    public interface IAutomaticSendEmailActionRuntimeSettingsContext
+    public interface IAutomaticActionRuntimeSettingsContext
     {
         Invoice Invoice { get;  }
         Guid AutomaticInvoiceActionId { get;  }
+         string ErrorMessage { set; }
     }
 }

@@ -148,7 +148,9 @@
     IsAutomatic = true,
     IssueDate = IssueDate,
     UserId = Input.UserId,
-    EntityId = Input.EntityId
+    EntityId = Input.EntityId,
+    MinimumFrom = InvoiceGenerationDraftOutput.MinimumFrom,
+    MaximumTo = InvoiceGenerationDraftOutput.MaximumTo
 }</mca:CSharpValue>
               </InArgument>
             </vbw:RunProcess.Input>
@@ -199,7 +201,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sIT0DywEOAgEBRQV4NgIBWXkFyQEKAgECTQtNZAMBmQFcC1xaAwGSAVILUoUBAwGLAWsLa2YDAYQBVwtXagIBfWYLZlwCAXZhC2FvAgFvSAtIagIBaHULdV8CAWFwC3BjAgFafAt8lwECAQOAAQm5ARQCARm8AQnHASQCAQqBAQuMASYCAUqNAQugARwCATihAQusARQCASmtAQu4ASYCARrEAQ/EAYUBAgESvwEPvwFxAgELiQERiQGLAQIBUoQBEYQBxgECAUuNAXmNAX8CAUmQARGYARQCAUKNAZMBjQHGAQIBQZ0BEZ0BhAECATqNAdwBjQHiAQIBOakBEakBsAECATGkARGkAZABAgEqtQERtQGLAQIBIrABEbABdQIBGw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sIT0DzQEOAgEBRQV4NgIBWXkFywEKAgECTQtNZAMBmQFcC1xaAwGSAVILUoUBAwGLAWsLa2YDAYQBVwtXagIBfWYLZlwCAXZhC2FvAgFvSAtIagIBaHULdV8CAWFwC3BjAgFafAt8lwECAQOAAQm7ARQCARm+AQnJASQCAQqBAQuMASYCAUqNAQuiARwCATijAQuuARQCASmvAQu6ASYCARrGAQ/GAYUBAgESwQEPwQFxAgELiQERiQGLAQIBUoQBEYQBxgECAUuNAXmNAX8CAUmQARGaARQCAUKNAZMBjQHGAQIBQZ8BEZ8BhAECATqNAdwBjQHiAQIBOasBEasBsAECATGmARGmAZABAgEqtwERtwGLAQIBIrIBEbIBdQIBGw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

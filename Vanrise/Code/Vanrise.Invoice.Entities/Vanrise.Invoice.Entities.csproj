@@ -54,6 +54,7 @@
     <Compile Include="BusinessManagers\IInvoiceTypeManager.cs" />
     <Compile Include="BusinessManagers\IPartnerInvoiceSettingManager.cs" />
     <Compile Include="DataSourceBankDetails.cs" />
+    <Compile Include="ErrorMessageOutput.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoiceBillingTransaction.cs" />
     <Compile Include="GeneratedInvoice\GenerateInvoiceInput.cs" />
     <Compile Include="GeneratedInvoice\GeneratedInvoice.cs" />

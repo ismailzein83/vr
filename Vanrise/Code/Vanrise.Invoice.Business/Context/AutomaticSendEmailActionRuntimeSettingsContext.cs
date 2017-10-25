@@ -7,9 +7,10 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Business.Context
 {
-    public class AutomaticSendEmailActionRuntimeSettingsContext : IAutomaticSendEmailActionRuntimeSettingsContext
+    public class AutomaticActionRuntimeSettingsContext : IAutomaticActionRuntimeSettingsContext
     {
         public Guid AutomaticInvoiceActionId  { get; set; }
         public Entities.Invoice Invoice { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailEmailattachments", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_Invoice_InvoiceGenerationActionService",
+app.directive("vrInvoicetypeAutomaticinvoiceactionSaveinvoicetofile", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_Invoice_InvoiceGenerationActionService",
     function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_InvoiceGenerationActionService) {
 
         var directiveDefinitionObject = {
@@ -13,7 +13,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailEmailattachments", ["
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new SendEmailAction($scope, ctrl, $attrs);
+                var ctor = new SaveInvoiceToFileAction($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
@@ -21,27 +21,26 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailEmailattachments", ["
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/AutomaticInvoiceAction/MainExtensions/Templates/EmailAttachmentsTemplate.html"
+            templateUrl: "/Client/Modules/VR_Invoice/Directives/InvoiceType/AutomaticInvoiceAction/MainExtensions/Templates/AutomaticSaveInvoiceToFileActionTemplate.html"
 
         };
 
-        function SendEmailAction($scope, ctrl, $attrs) {
+        function SaveInvoiceToFileAction($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
             var gridAPI;
             var context;
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
-                ctrl.addEmailAttachment = function () {
-                    var onEmailAttachmentAdded = function (emailAttachment) {
-                        ctrl.datasource.push({ Entity: emailAttachment });
+                ctrl.addInvoiceToFileActionSet = function () {
+                    var onInvoiceToFileActionSetAdded = function (invoiceToFileActionSet) {
+                        ctrl.datasource.push({ Entity: invoiceToFileActionSet });
                     };
 
-                    VR_Invoice_InvoiceGenerationActionService.addEmailAttachment(onEmailAttachmentAdded, getContext());
+                    VR_Invoice_InvoiceGenerationActionService.addInvoiceToFileActionSet(onInvoiceToFileActionSetAdded, getContext());
                 };
-
-                ctrl.removeEmailAttachment = function (dataItem) {
+              
+                ctrl.removeInvoiceToFileActionSet = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -53,33 +52,35 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailEmailattachments", ["
                 var api = {};
 
                 api.load = function (payload) {
-                    var emailAttachmentsEntity;
+                    var automaticInvoiceActionEntity;
                     if (payload != undefined) {
-                        emailAttachmentsEntity = payload.emailAttachmentsEntity;
+                        automaticInvoiceActionEntity = payload.automaticInvoiceActionEntity;
                         context = payload.context;
-                        if (emailAttachmentsEntity != undefined) {
-                            for (var i = 0; i < emailAttachmentsEntity.length; i++) {
-                                var emailAttachment = emailAttachmentsEntity[i];
-                                ctrl.datasource.push({ Entity: emailAttachment });
+                        if (automaticInvoiceActionEntity != undefined && automaticInvoiceActionEntity.InvoiceToFileActionSets != undefined) {
+                            for (var i = 0; i < automaticInvoiceActionEntity.InvoiceToFileActionSets.length; i++) {
+                                var anvoiceToFileActionSet = automaticInvoiceActionEntity.InvoiceToFileActionSets[i];
+                                ctrl.datasource.push({ Entity: anvoiceToFileActionSet });
                             }
                         }
                     }
 
                     var promises = [];
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
-                    var emailAttachments;
+                    var anvoiceToFileActionSets;
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        emailAttachments = [];
+                        anvoiceToFileActionSets = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            emailAttachments.push(currentItem.Entity);
+                            anvoiceToFileActionSets.push(currentItem.Entity);
                         }
                     }
-                    return emailAttachments;
+                    return {
+                        $type: "Vanrise.Invoice.MainExtensions.AutoGenerateInvoiceActions.AutomaticSaveInvoiceToFileAction ,Vanrise.Invoice.MainExtensions",
+                        InvoiceToFileActionSets: anvoiceToFileActionSets,
+                    };
                 };
 
                 if (ctrl.onReady != null)
@@ -96,7 +97,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailEmailattachments", ["
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editEmailAttachment,
+                    clicked: editInvoiceToFileActionSet,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -104,12 +105,12 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailEmailattachments", ["
                 };
             }
 
-            function editEmailAttachment(emailAttachmentObj) {
-                var onEmailAttachmentUpdated = function (emailAttachment) {
-                    var index = ctrl.datasource.indexOf(emailAttachmentObj);
-                    ctrl.datasource[index] = { Entity: emailAttachment };
+            function editInvoiceToFileActionSet(invoiceToFileActionSetObj) {
+                var onInvoiceToFileActionSetUpdated = function (invoiceToFileActionSet) {
+                    var index = ctrl.datasource.indexOf(invoiceToFileActionSetObj);
+                    ctrl.datasource[index] = { Entity: invoiceToFileActionSet };
                 };
-                VR_Invoice_InvoiceGenerationActionService.editEmailAttachment(emailAttachmentObj.Entity, onEmailAttachmentUpdated, getContext());
+                VR_Invoice_InvoiceGenerationActionService.editInvoiceToFileActionSet(invoiceToFileActionSetObj.Entity, onInvoiceToFileActionSetUpdated, getContext());
             }
         }
 

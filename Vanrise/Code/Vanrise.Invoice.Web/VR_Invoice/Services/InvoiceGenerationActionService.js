@@ -1,5 +1,5 @@
 ﻿"use strict";
-app.service('VR_Invoice_InvoiceEmailActionService', ['VRModalService',
+app.service('VR_Invoice_InvoiceGenerationActionService', ['VRModalService',
     function (VRModalService) {
 
         function addEmailAttachment(onEmailAttachmentAdded, context) {
@@ -55,10 +55,40 @@ app.service('VR_Invoice_InvoiceEmailActionService', ['VRModalService',
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/AutomaticInvoiceAction/MainExtensions/Templates/EmailActionAttachmentSetEditor.html', parameters, settings);
         }
+
+        function addInvoiceToFileActionSet(onInvoiceToFileActionSetAdded, context) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onInvoiceToFileActionSetAdded = onInvoiceToFileActionSetAdded;
+            };
+            var parameters = {
+                context: context
+            };
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/AutomaticInvoiceAction/MainExtensions/Templates/SaveInvoiceToFileActionSetEditor.html', parameters, settings);
+        }
+        function editInvoiceToFileActionSet(invoiceToFileActionSetEntity, onInvoiceToFileActionSetUpdated, context) {
+            var settings = {
+
+            };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onInvoiceToFileActionSetUpdated = onInvoiceToFileActionSetUpdated;
+            };
+            var parameters = {
+                invoiceToFileActionSetEntity: invoiceToFileActionSetEntity,
+                context: context
+            };
+
+            VRModalService.showModal('/Client/Modules/VR_Invoice/Directives/InvoiceType/AutomaticInvoiceAction/MainExtensions/Templates/SaveInvoiceToFileActionSetEditor.html', parameters, settings);
+        }
+
         return ({
             addEmailAttachment: addEmailAttachment,
             editEmailAttachment: editEmailAttachment,
             addEmailAttachmentSet: addEmailAttachmentSet,
-            editEmailAttachmentSet: editEmailAttachmentSet
+            editEmailAttachmentSet: editEmailAttachmentSet,
+            editInvoiceToFileActionSet: editInvoiceToFileActionSet,
+            addInvoiceToFileActionSet: addInvoiceToFileActionSet
         });
     }]);

@@ -1,0 +1,11 @@
+﻿<vr-columns width="1/2row" >
+    <vr-button type="Add" data-onclick="ctrl.addInvoiceToFileActionSet" standalone></vr-button>
+</vr-columns>
+<vr-columns width="fullrow">
+    <vr-validator validate="ctrl.isValid()">
+        <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                        on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    ctrl.removeInvoiceToFileActionSet" hidegridmenu>
+            <vr-datagridcolumn headertext="'Invoice File Set Title'" field="'Entity.Name'" widthfactor="10" disablesorting></vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-validator>
+</vr-columns>

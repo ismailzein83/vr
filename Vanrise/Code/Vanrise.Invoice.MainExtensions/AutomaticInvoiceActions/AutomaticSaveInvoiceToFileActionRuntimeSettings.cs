@@ -10,12 +10,14 @@ using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.MainExtensions.AutoGenerateInvoiceActions;
+using System.IO;
 namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
 {
     public class AutomaticSaveInvoiceToFileActionRuntimeSettings : AutomaticInvoiceActionRuntimeSettings
     {
         public List<InvoiceToFileActionSetRuntime> InvoiceToFileActionSets { get; set; }
-        public override void Execute(IAutomaticSendEmailActionRuntimeSettingsContext context)
+        public string LocationPath { get; set; }
+        public override void Execute(IAutomaticActionRuntimeSettingsContext context)
         {
             if (this.InvoiceToFileActionSets != null)
             {
@@ -34,7 +36,6 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                 {
                     if (invoiceToFileActionSet.IsEnabled)
                     {
-                        List<VRMailAttachement> vrMailAttachments = new List<VRMailAttachement>();
                         invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
                         var emailActionAttachmentSetDefinition = automaticSaveInvoiceToFileActionSettings.InvoiceToFileActionSets.FindRecord(x => x.InvoiceToFileActionSetId == invoiceToFileActionSet.InvoiceToFileActionSetId);
                         var partnerInvoiceFilterConditionContext = new PartnerInvoiceFilterConditionContext
@@ -66,14 +67,22 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                                     var invoicefile = invoiceAttachment.InvoiceFileConverter.ConvertToInvoiceFile(invoiceRDLCFileConverterContext);
                                     if (invoicefile != null)
                                     {
-                                        vrMailAttachments.Add(invoicefile.ConvertToAttachment());
+                                        if (!string.IsNullOrEmpty(this.LocationPath))
+                                        {
+                                            string fileName = string.Format("{0}.{1}", invoicefile.Name, invoicefile.ExtensionType);
+                                            string fullpath = Path.Combine(this.LocationPath, fileName);
+                                            File.WriteAllBytes(fullpath, invoicefile.Content);
+
+                                        }
+                                        else
+                                        {
+                                            context.ErrorMessage = "Cannot save invoice to file. Reason: 'Location Path' is empty.";
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-           
-
                 }
             }
 

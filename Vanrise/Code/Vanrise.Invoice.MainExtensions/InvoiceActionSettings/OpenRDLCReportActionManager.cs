@@ -45,7 +45,7 @@ namespace Vanrise.Invoice.MainExtensions
                     InvoiceType = invoiceType
                 };
 
-                if (invoiceAction != null && (gridAction.FilterCondition == null || gridAction.FilterCondition.IsFilterMatch(context)))
+                if (invoiceAction != null && (gridAction == null || (gridAction.FilterCondition == null || gridAction.FilterCondition.IsFilterMatch(context))))
                 {
                     openRDLCReportAction = invoiceAction.Settings as OpenRDLCReportAction;
                 }

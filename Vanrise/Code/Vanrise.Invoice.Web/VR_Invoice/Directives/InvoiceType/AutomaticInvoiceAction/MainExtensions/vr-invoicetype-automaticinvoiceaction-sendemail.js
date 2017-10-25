@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_Invoice_InvoiceEmailActionService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_InvoiceEmailActionService) {
+app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_Invoice_InvoiceGenerationActionService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_InvoiceGenerationActionService) {
 
         var directiveDefinitionObject = {
 
@@ -39,7 +39,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "
                         ctrl.datasource.push({ Entity: emailAttachmentSet });
                     };
 
-                    VR_Invoice_InvoiceEmailActionService.addEmailAttachmentSet(onEmailAttachmentSetAdded, getContext());
+                    VR_Invoice_InvoiceGenerationActionService.addEmailAttachmentSet(onEmailAttachmentSetAdded, getContext());
                 };
                 $scope.onMailMessageTypeSelectorReady = function (api) {
                     mailMessageTypeAPI = api;
@@ -158,7 +158,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemail", ["UtilsService", "
                     var index = ctrl.datasource.indexOf(emailAttachmentSetObj);
                     ctrl.datasource[index] = { Entity: emailAttachmentSet };
                 };
-                VR_Invoice_InvoiceEmailActionService.editEmailAttachmentSet(emailAttachmentSetObj.Entity, onEmailAttachmentSetUpdated, getContext());
+                VR_Invoice_InvoiceGenerationActionService.editEmailAttachmentSet(emailAttachmentSetObj.Entity, onEmailAttachmentSetUpdated, getContext());
             }
         }
 
