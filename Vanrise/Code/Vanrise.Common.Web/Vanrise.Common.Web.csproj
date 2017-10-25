@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BankDetailController.cs" />
+    <Compile Include="Controllers\CompanyDefinitionsController.cs" />
     <Compile Include="Controllers\RegionController.cs" />
     <Compile Include="Controllers\GenericLKUPController.cs" />
     <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
@@ -214,9 +215,13 @@
     <Content Include="Common\Directives\BankDetail\vr-common-bank-detail-selector.js" />
     <Content Include="Common\Directives\Gender\vr-common-gender-selector.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\Templates\CompanyContactSettings.html" />
+    <Content Include="Common\Directives\GeneralTechnicalSettings\Templates\CompanyDefinitionSelective.html" />
+    <Content Include="Common\Directives\GeneralTechnicalSettings\Templates\CompanyDefinitionSettings.html" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\Templates\GATemplateSettings.html" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\Templates\GeneralTemplateTechnicalSettings.html" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companycontact-settings-editor.js" />
+    <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companydefinition-settings-editor.js" />
+    <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companydefinition-selective.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-ga-settings-editor.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-general-technical-settings-editor.js" />
     <Content Include="Common\Directives\Region\Templates\RegionGridTemplate.html" />
@@ -413,6 +418,7 @@
     <Content Include="Common\Services\APIServices\ActionAuditAPIService.js" />
     <Content Include="Common\Services\APIServices\ActionAuditLKUPAPIService.js" />
     <Content Include="Common\Services\APIServices\BankDetailAPIService.js" />
+    <Content Include="Common\Services\APIServices\CompanyDefinitionsAPIService.js" />
     <Content Include="Common\Services\APIServices\RegionAPIService.js" />
     <Content Include="Common\Services\APIServices\CompanySettingsAPIService.js" />
     <Content Include="Common\Services\APIServices\GenericLKUPAPIService.js" />
@@ -447,6 +453,7 @@
     <Content Include="Common\Services\APIServices\VRMailMessageTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\VRMailMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRObjectTypeDefinitionAPIService.js" />
+    <Content Include="Common\Services\CompanyDefinitionService.js" />
     <Content Include="Common\Services\RegionService.js" />
     <Content Include="Common\Services\CompanySettingService.js" />
     <Content Include="Common\Services\BankDetailService.js" />
@@ -484,6 +491,8 @@
     <Content Include="Common\Services\VRObjectVariableService.js" />
     <Content Include="Common\Views\ActionAudit\ActionAuditManagement.html" />
     <Content Include="Common\Views\ActionAudit\ActionAuditManagementController.js" />
+    <Content Include="Common\Views\CompanyDefinition\CompanyDefinitionEditor.html" />
+    <Content Include="Common\Views\CompanyDefinition\CompanyDefinitionEditorController.js" />
     <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditor.html" />
     <Content Include="Common\Views\CurrencyExchangeRate\ConnectionEditorController.js" />
     <Content Include="Common\Views\Region\RegionEditor.html" />

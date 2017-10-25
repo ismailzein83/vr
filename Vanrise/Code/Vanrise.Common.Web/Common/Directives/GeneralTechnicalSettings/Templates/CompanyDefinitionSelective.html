@@ -1,0 +1,11 @@
+﻿<vr-columns colnum="4">
+    <vr-select on-ready="scopeModel.onSelectorReady"
+               datasource="scopeModel.companyDefinitionConfigs"
+               selectedvalues="scopeModel.selectedCompanyDefinitionConfig"
+               datavaluefield="ExtensionConfigurationId"
+               datatextfield="Title" label="Setting"
+               isrequired="ctrl.isrequired"
+               hideremoveicon>
+    </vr-select>
+</vr-columns>
+<vr-directivewrapper directive="scopeModel.selectedCompanyDefinitionConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="4" isrequired="ctrl.isrequired"></vr-directivewrapper>

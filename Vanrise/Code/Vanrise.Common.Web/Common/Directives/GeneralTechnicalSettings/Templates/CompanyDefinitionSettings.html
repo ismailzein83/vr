@@ -1,0 +1,15 @@
+﻿<vr-tab header="'Company Definitions'">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-button type="Add" data-onclick="scopeModel.addCompanyDefinition" standalone></vr-button>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-validator validate="scopeModel.validateCompanyDefinitions()">
+                <vr-datagrid datasource="scopeModel.companyDefinitions" norowhighlightonclick="true" enabledraggablerow="true" menuactions="scopeModel.gridMenuActions"
+                             on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeCompanyDefinition" hidegridmenu>
+                    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-columns>
+    </vr-row>
+</vr-tab>

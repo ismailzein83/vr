@@ -1,0 +1,20 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_CompanyDefinitionEditorController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formCompanyDefinitionEditor">
+            <vr-row removeline>
+                <vr-columns colnum="4">
+                    <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+                </vr-columns>
+                <vr-common-companydefinitions-selective on-ready="scopeModel.onCompanyDefinitionSelectiveReady" isrequired="true" normal-col-num="6"></vr-common-companydefinitions-selective>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formCompanyDefinitionEditor" data-onclick="scopeModel.saveCompanyDefinition"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
