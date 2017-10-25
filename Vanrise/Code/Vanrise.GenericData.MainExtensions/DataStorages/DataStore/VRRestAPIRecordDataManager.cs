@@ -43,9 +43,7 @@ namespace Vanrise.GenericData.MainExtensions.DataStorages.DataStore
             clonedInput.IsAPICall = true;
 
             if (input.DataRetrievalResultType == DataRetrievalResultType.Excel)
-            {
                 return connectionSettings.Post<DataRetrievalInput<DataRecordQuery>, RemoteExcelResult<DataRecordDetail>>("/api/VR_GenericData/DataRecordStorageLog/GetFilteredDataRecordStorageLogs", clonedInput, true);
-            }
             else
                 return connectionSettings.Post<DataRetrievalInput<DataRecordQuery>, DataRecordDetailBigResult<DataRecordDetail>>("/api/VR_GenericData/DataRecordStorageLog/GetFilteredDataRecordStorageLogs", clonedInput, true);
         }

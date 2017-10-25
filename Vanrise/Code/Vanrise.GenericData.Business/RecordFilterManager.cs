@@ -23,6 +23,7 @@ namespace Vanrise.GenericData.Business
                 ApplyParametersToFilterGroup(filterGroup, parameterValues);
             return IsFilterGroupMatch(filterGroup, context);
         }
+
         public bool IsFilterGroupMatch(RecordFilterGroup filterGroup, IRecordFilterGenericFieldMatchContext context)
         {
             if (filterGroup == null)
@@ -83,7 +84,6 @@ namespace Vanrise.GenericData.Business
             var context = new RecordFilterSetValueFromParametersContext(parameterValues);
             filterGroup.SetValueFromParameters(context);
         }
-
 
         public RecordFilterGroup BuildRecordFilterGroup(Guid dataRecordTypeId, List<DataRecordFilter> filters,RecordFilter filterGroup)
         {
