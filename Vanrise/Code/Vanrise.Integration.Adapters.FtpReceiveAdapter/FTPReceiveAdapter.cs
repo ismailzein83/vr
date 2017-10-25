@@ -58,6 +58,10 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                             ftpListToPreccess.Add(ftpItem);
                         }
                     }
+                    else
+                    {
+                        ftpListToPreccess = ftpList;
+                    }
 
                     foreach (var fileObj in ftpListToPreccess.OrderBy(c => c.Modified).ThenBy(c => c.Name))
                     {
@@ -68,14 +72,15 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                             {
                                 if ((!localLastRetrievedFileTime.HasValue || DateTime.Compare(localLastRetrievedFileTime.Value, fileObj.Modified) != 0)
                                     && DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) >= 0)
-                                    continue;
+                                {
+                                    if (!string.IsNullOrEmpty(ftpAdapterState.LastRetrievedFileName) && ftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                        continue;
+                                }
                             }
 
                             if (!string.IsNullOrEmpty(ftpAdapterArgument.LastImportedFile) && ftpAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
                                 continue;
 
-                            if (!string.IsNullOrEmpty(ftpAdapterState.LastRetrievedFileName) && ftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
-                                continue;
 
                             ftpAdapterState.LastRetrievedFileName = fileObj.Name;
                             ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument, fileObj.Name);

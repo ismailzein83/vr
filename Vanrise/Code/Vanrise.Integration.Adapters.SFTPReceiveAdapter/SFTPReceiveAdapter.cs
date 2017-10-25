@@ -59,6 +59,10 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                             sftpCollectionToProcess.Add(sftpItem);
                         }
                     }
+                    else
+                    {
+                        sftpCollectionToProcess = sftpCollection;
+                    }
 
 
                     foreach (var fileObj in sftpCollection.OrderBy(c => c.Modified).ThenBy(c => c.Name))
@@ -69,13 +73,13 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                             {
                                 if ((!localLastRetrievedFileTime.HasValue || DateTime.Compare(localLastRetrievedFileTime.Value, fileObj.Modified) != 0)
                                     && DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) >= 0)
-                                    continue;
+                                {
+                                    if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                        continue;
+                                }
                             }
 
                             if (!string.IsNullOrEmpty(SFTPAdapterArgument.LastImportedFile) && SFTPAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
-                                continue;
-
-                            if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
                                 continue;
 
 
