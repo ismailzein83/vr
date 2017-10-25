@@ -404,7 +404,7 @@
                     $scope.title = UtilsService.buildTitleForUpdateEditor(response, 'Carrier Account', $scope);
                 });
             else if (isViewHistoryMode && carrierAccountEntity != undefined)
-                $scope.title = "View Carrier Account: " + carrierAccountEntity.Name;
+                $scope.title = "View Carrier Account: " + carrierAccountEntity.NameSuffix;
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Carrier Account');
         }
@@ -413,7 +413,7 @@
             return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadCarrierProfileSelector, loadCarrierActivationStatusSelector, loadCarrierAccountTypeSelector, loadCurrencySelector, loadCompanySettingSelector]);
         }
         function loadStaticData() {
-            if (!isEditMode) {
+            if (!isEditMode && !isViewHistoryMode) {
                 $scope.scopeModel.nominalCapacity = 1;
                 return;
             }
