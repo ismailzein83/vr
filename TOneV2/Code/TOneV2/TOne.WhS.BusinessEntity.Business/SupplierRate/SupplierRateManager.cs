@@ -175,7 +175,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 throw new NotImplementedException();
             }
-            private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate, int? systemCurrencyId)
+            private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate, int? systemCurrencyId,DateTime effectiveOn)
             {
                 SupplierPriceList priceList = _supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
                 supplierRate.PriceListFileId = priceList.FileId;
@@ -188,7 +188,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     Entity = supplierRate,
                     SupplierZoneName = _supplierRateManager.GetSupplierZoneName(supplierRate.ZoneId),
                     DisplayedCurrency = _currencyManager.GetCurrencySymbol(currencyValueId),
-                    DisplayedRate = (systemCurrencyId != null) ? _currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, currencyValueId, supplierRate.BED) : supplierRate.Rate,
+                    DisplayedRate = (systemCurrencyId != null) ? _currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, currencyValueId, effectiveOn) : supplierRate.Rate,
                 };
             }
             public override IEnumerable<SupplierRate> RetrieveAllData(DataRetrievalInput<BaseSupplierRateQueryHandler> input)
@@ -200,7 +200,8 @@ namespace TOne.WhS.BusinessEntity.Business
             protected override BigResult<SupplierRateDetail> AllRecordsToBigResult(DataRetrievalInput<BaseSupplierRateQueryHandler> input, IEnumerable<SupplierRate> allRecords)
             {
                 int? systemCurrencyId = (input.Query.IsSystemCurrency) ? (int?)new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId() : null;
-                return allRecords.ToBigResult(input, null, (entity) => SupplierRateDetailMapper(entity, systemCurrencyId));
+                var effectiveOn = input.Query.EffectiveOn;
+                return allRecords.ToBigResult(input, null, (entity) => SupplierRateDetailMapper(entity, systemCurrencyId, effectiveOn));
             }
             protected override ResultProcessingHandler<SupplierRateDetail> GetResultProcessingHandler(DataRetrievalInput<BaseSupplierRateQueryHandler> input, BigResult<SupplierRateDetail> bigResult)
             {

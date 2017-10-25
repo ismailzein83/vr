@@ -61,21 +61,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SupplierRate_GetBetweenPeriod", SupplierRateMapper, froDateTime, tillDateTime);
         }
 
-        public IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery query)
+        public IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery query, DateTime effectiveOn)
         {
             string countriesIds = null;
             if (query.CountriesIds != null && query.CountriesIds.Count() > 0)
                 countriesIds = string.Join<int>(",", query.CountriesIds);
 
-            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetFiltered]", SupplierRateMapper, query.SupplierId, countriesIds, query.SupplierZoneName, query.EffectiveOn);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetFiltered]", SupplierRateMapper, query.SupplierId, countriesIds, query.SupplierZoneName, effectiveOn);
         }
-        public IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery query)
+        public IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery query, DateTime effectiveOn)
         {
             string countriesIds = null;
             if (query.CountriesIds != null && query.CountriesIds.Count() > 0)
                 countriesIds = string.Join<int>(",", query.CountriesIds);
 
-            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetPending]", SupplierRateMapper, query.SupplierId, countriesIds, query.SupplierZoneName, query.EffectiveOn);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetPending]", SupplierRateMapper, query.SupplierId, countriesIds, query.SupplierZoneName, effectiveOn);
         }
         public IEnumerable<SupplierRate> GetSupplierRatesForZone(SupplierRateForZoneQuery query)
         {

@@ -87,9 +87,9 @@
             payload = {
                 $type: "TOne.WhS.BusinessEntity.Business.SupplierRateQueryHandler,TOne.WhS.BusinessEntity.Business",
                 IsSystemCurrency: $scope.isSystemCurrency,
+                EffectiveOn: $scope.effectiveOn,
                 Query: {
                     SupplierId: supplierDirectiveApi.getSelectedIds(),
-                    EffectiveOn: $scope.effectiveOn,
                     CountriesIds: countryDirectiveApi.getSelectedIds(),
                     SupplierZoneName: $scope.supplierZoneName,
                     ShowPending: $scope.IsPending

@@ -12,8 +12,8 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
             return Query.ShowPending
-                ? dataManager.GetFilteredSupplierPendingRates(Query)
-                : dataManager.GetFilteredSupplierRates(Query);
+                ? dataManager.GetFilteredSupplierPendingRates(Query, EffectiveOn)
+                : dataManager.GetFilteredSupplierRates(Query, EffectiveOn);
         }
     }
 }

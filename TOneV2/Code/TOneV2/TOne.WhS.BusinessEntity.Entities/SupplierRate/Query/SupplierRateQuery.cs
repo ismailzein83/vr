@@ -8,7 +8,6 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public class SupplierRateQuery
     {
-        public DateTime EffectiveOn { get; set; }
         public int SupplierId { get; set; }
         public bool ShowPending { get; set; }
         public List<int> CountriesIds { get; set; }

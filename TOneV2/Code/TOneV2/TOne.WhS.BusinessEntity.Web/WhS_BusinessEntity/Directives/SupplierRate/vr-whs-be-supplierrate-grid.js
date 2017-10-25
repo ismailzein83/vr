@@ -147,7 +147,8 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                         rateDataItem.historygRateGridAPI = directiveApi;
                         var historyRateGridPayload = {
                             $type: "TOne.WhS.BusinessEntity.Business.SupplierRateHistoryQueryHandler,TOne.WhS.BusinessEntity.Business",
-                            IsSystemCurrency:isSystemCurrency,
+                            IsSystemCurrency: isSystemCurrency,
+                            EffectiveOn: effectiveOn,
                             Query: {
                                 SupplierZoneName: rateDataItem.SupplierZoneName,
                                 SupplierId: supplierId,
