@@ -1,64 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
-using Vanrise.Entities;
 using Vanrise.Web.Base;
+
 namespace Vanrise.Analytic.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "AnalyticConfiguration")]
     public class AnalyticConfigurationController : Vanrise.Web.Base.BaseAPIController
     {
+        AnalyticConfigurationManager _manager = new AnalyticConfigurationManager();
 
         [HttpGet]
         [Route("GetAnalyticReportSettingsTemplateConfigs")]
         public IEnumerable<HistorySearchSetting> GetAnalyticReportSettingsTemplateConfigs()
         {
-            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
-            return manager.GetAnalyticReportSettingsTemplateConfigs();
+            return _manager.GetAnalyticReportSettingsTemplateConfigs();
         }
+
         [HttpGet] 
         [Route("GetWidgetsTemplateConfigs")]
         public IEnumerable<WidgetDefinitionSetting> GetWidgetsTemplateConfigs()
         {
-            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
-            return manager.GetWidgetsTemplateConfigs();
+            return _manager.GetWidgetsTemplateConfigs();
         }
 
         [HttpGet]
         [Route("GetRealTimeReportSettingsTemplateConfigs")]
         public IEnumerable<RealTimeSearchSetting> GetRealTimeReportSettingsTemplateConfigs()
         {
-            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
-            return manager.GetRealTimeReportSettingsTemplateConfigs();
+            return _manager.GetRealTimeReportSettingsTemplateConfigs();
         }
+
         [HttpGet]
         [Route("GetRealTimeWidgetsTemplateConfigs")]
         public IEnumerable<RealTimeWidgetSetting> GetRealTimeWidgetsTemplateConfigs()
         {
-            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
-            return manager.GetRealTimeWidgetsTemplateConfigs();
+            return _manager.GetRealTimeWidgetsTemplateConfigs();
         }
+
         [HttpGet]
         [Route("GetMeasureStyleRuleTemplateConfigs")]
         public IEnumerable<MeasureStyleRuleTemplate> GetMeasureStyleRuleTemplateConfigs()
         {
-            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
-            return manager.GetMeasureStyleRuleTemplateConfigs();
+            return _manager.GetMeasureStyleRuleTemplateConfigs();
         }
 
         [HttpGet]
         [Route("GetAnalyticDataProviderConfigs")]
         public IEnumerable<AnalyticDataProviderConfig> GetAnalyticDataProviderConfigs()
         {
-            AnalyticConfigurationManager manager = new AnalyticConfigurationManager();
-            return manager.GetAnalyticDataProviderConfigs();
+            return _manager.GetAnalyticDataProviderConfigs();
         }
-        
     }
 }
