@@ -35,6 +35,9 @@ app.directive('vrWhsBeRoutingproductpreviewGrid', ['WhS_BE_SalePriceListChangeAP
                 return WhS_BE_SalePriceListChangeAPIService.GetFilteredRoutingProductPreviews(dataRetrievalInput).then(function (response) {
                     if (response != null && response.Data != null) {
                         for (var i = 0; i < response.Data.length; i++) {
+                            addReadyCurrentSericeApi(response.Data[i]);
+                            addReadyNewSericeApi(response.Data[i]);
+
                         }
                     }
                     onResponseReady(response);
@@ -43,7 +46,18 @@ app.directive('vrWhsBeRoutingproductpreviewGrid', ['WhS_BE_SalePriceListChangeAP
                 });
             };
         }
-
+        var addReadyCurrentSericeApi = function (dataItem) {
+            dataItem.onCurrentServiceReady = function (api) {
+                dataItem.ServieApi = api;
+                dataItem.ServieApi.load({ selectedIds: dataItem.RecentRouringProductServicesId });
+            };
+        };
+        var addReadyNewSericeApi = function (dataItem) {
+            dataItem.onNewServiceReady = function (api) {
+                dataItem.ServieApi = api;
+                dataItem.ServieApi.load({ selectedIds: dataItem.RoutingProductServicesId });
+            };
+        };
         function defineAPI() {
             var api = {};
 

@@ -6,7 +6,13 @@
     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Current Routing Product'" field="'RecentRoutingProductName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Current Services'" field="'RecentRouringProductServicesId'" disablesorting>
+        <vr-whs-be-services-viewer on-ready="dataItem.onCurrentServiceReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'New Routing Product'" field="'RoutingProductName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'New Services'" field="'RoutingProductServicesId'" disablesorting>
+        <vr-whs-be-services-viewer on-ready="dataItem.onNewServiceReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Effective On'" field="'BED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
 </vr-datagrid>
