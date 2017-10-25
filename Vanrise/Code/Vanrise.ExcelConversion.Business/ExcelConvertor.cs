@@ -178,7 +178,7 @@ namespace Vanrise.ExcelConversion.Business
                     {
                         dateTimeFormat = dateTimeFormat.Replace("Y","y");
                     }
-                    if (DateTime.TryParseExact(fldValue.ToString(), dateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
+                    if (DateTime.TryParseExact(fldValue.ToString().Trim(), dateTimeFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
                     {
                         return result;
                     }
