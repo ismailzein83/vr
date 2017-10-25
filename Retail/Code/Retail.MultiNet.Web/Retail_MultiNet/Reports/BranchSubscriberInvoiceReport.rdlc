@@ -2,6 +2,18 @@
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
+      <Rectangle Name="Rectangle5">
+        <KeepTogether>true</KeepTogether>
+        <Top>2.17228cm</Top>
+        <Left>1.12077cm</Left>
+        <Height>2.16958cm</Height>
+        <Width>5.56084cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Rectangle>
       <Tablix Name="Tablix3">
         <TablixBody>
           <TablixColumns>
@@ -576,6 +588,7 @@
         <Left>0.44125in</Left>
         <Height>1.4in</Height>
         <Width>7.24186in</Width>
+        <ZIndex>1</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -607,7 +620,7 @@
         <Left>7.45cm</Left>
         <Height>0.375in</Height>
         <Width>2.33563in</Width>
-        <ZIndex>1</ZIndex>
+        <ZIndex>2</ZIndex>
         <Style>
           <Border />
           <PaddingLeft>2pt</PaddingLeft>
@@ -652,7 +665,7 @@
         <Left>0.44125in</Left>
         <Height>0.76411in</Height>
         <Width>2.54208in</Width>
-        <ZIndex>2</ZIndex>
+        <ZIndex>3</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1073,7 +1086,7 @@
         <Left>3.74562in</Left>
         <Height>1.11829in</Height>
         <Width>3.9375in</Width>
-        <ZIndex>3</ZIndex>
+        <ZIndex>4</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1463,7 +1476,7 @@
         <Left>2.7in</Left>
         <Height>0.95835in</Height>
         <Width>3.20806in</Width>
-        <ZIndex>4</ZIndex>
+        <ZIndex>5</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1855,7 +1868,7 @@
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
         <Width>7.24185in</Width>
-        <ZIndex>5</ZIndex>
+        <ZIndex>6</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1871,7 +1884,10 @@
         <Left>1.12077cm</Left>
         <Height>2.16958cm</Height>
         <Width>5.60104cm</Width>
-        <ZIndex>6</ZIndex>
+        <ZIndex>7</ZIndex>
+        <Visibility>
+          <Hidden>=IIf(Parameters!OnlyFirstPage.Value = "1",true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2263,7 +2279,7 @@
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
         <Width>7.24187in</Width>
-        <ZIndex>7</ZIndex>
+        <ZIndex>8</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2526,7 +2542,7 @@
         <Left>0.44125in</Left>
         <Height>1.1081in</Height>
         <Width>7.24186in</Width>
-        <ZIndex>8</ZIndex>
+        <ZIndex>9</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2918,7 +2934,7 @@
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
         <Width>7.24185in</Width>
-        <ZIndex>9</ZIndex>
+        <ZIndex>10</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2950,7 +2966,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <Left>0.44125in</Left>
         <Height>0.68752in</Height>
         <Width>7.24187in</Width>
-        <ZIndex>10</ZIndex>
+        <ZIndex>11</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2980,7 +2996,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
             <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
             <Top>0.0254in</Top>
             <Height>0.4375in</Height>
-            <Width>7.34185in</Width>
+            <Width>7.24185in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2995,8 +3011,11 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
         <Top>24.44155cm</Top>
         <Left>1.12077cm</Left>
         <Height>1.17578cm</Height>
-        <Width>18.6483cm</Width>
-        <ZIndex>11</ZIndex>
+        <Width>18.39435cm</Width>
+        <ZIndex>12</ZIndex>
+        <Visibility>
+          <Hidden>=IIf(Parameters!OnlyFirstPage.Value = "1",true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3499,6 +3518,12 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="AccountNumber">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="OnlyFirstPage">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
