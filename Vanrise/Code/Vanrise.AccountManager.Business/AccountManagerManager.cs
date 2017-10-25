@@ -25,10 +25,15 @@ namespace Vanrise.AccountManager.Business
 
            Func<Vanrise.AccountManager.Entities.AccountManager, bool> filterExpression = (prod) =>
            {
-               if (input.Query.UserIds != null && !input.Query.UserIds.Contains(prod.UserId))
+               if(input.Query.AccountManagerDefinitionId != prod.AccountManagerDefinitionId)
+               {
+                   return false;
+               }
+               if (input.Query.UserIds != null && !input.Query.UserIds.Contains(prod.UserId) )
                    return false;
                return true;
            };
+           var x = Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper)); 
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
        }
        public Vanrise.Entities.InsertOperationOutput<AccountManagerDetail> AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)

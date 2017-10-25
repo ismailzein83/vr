@@ -70,13 +70,15 @@
             }).then(function () {
                 gridReadyPromise.promise.then(function () {
                     gridAPI.loadGrid(getGridFilter());
+                    selectorChangePromise = undefined;
                 });
             });
-            selectorChangePromise = undefined;
+          
         }
         function getGridFilter() {
             var query = {
-                UserIds: userSelectorAPI.getSelectedIds()
+                UserIds: userSelectorAPI.getSelectedIds(),
+                AccountManagerDefinitionId: accountManagerDefinitionId
             };
             return query;
         }

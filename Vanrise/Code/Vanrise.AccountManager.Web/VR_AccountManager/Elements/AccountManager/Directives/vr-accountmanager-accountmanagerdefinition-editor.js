@@ -24,13 +24,22 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
 
         function AccountManagerDefinitionEditorCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
-            var gridAPI;
             var assignmentdefinitons;
+
+            var gridAPI;
             var gridReadyPromise = UtilsService.createPromiseDeferred();
+
+            var subViewGridAPI;
+            var subViewGridReady = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     gridReadyPromise.resolve();
+                };
+                $scope.onSubViewGridReady = function (api) {
+                    subViewGridAPI = api;
+                    subViewGridReady.resolve();
                 };
                 defineAPI();
             }
@@ -38,21 +47,30 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                 var api = {};
 
                 api.load = function (payload) {
-                    if (payload != undefined) {
                         gridReadyPromise.promise.then(function () {
                             var gridPayload;
+                            if(payload != undefined)
                             if (payload.businessEntityDefinitionSettings != undefined)
                                 gridPayload = {
                                     assignmentdefinitons: payload.businessEntityDefinitionSettings.AssignmentDefinitions
                                 };
                             gridAPI.loadGrid(gridPayload);
                         });
-                    }
+                        subViewGridReady.promise.then(function () {
+                            var gridPayload;
+                            if (payload != undefined)
+                                if (payload.businessEntityDefinitionSettings != undefined)
+                                    gridPayload = {
+                                        subViews: payload.businessEntityDefinitionSettings.SubViews
+                                    };
+                            subViewGridAPI.loadGrid(gridPayload);
+                        });
                 };
                 api.getData = function () {
                     var obj = {
                         $type: "Vanrise.AccountManager.Business.AccountManagerBEDefinitionSettings, Vanrise.AccountManager.Business",
-                        AssignmentDefinitions: gridAPI.getData()
+                        AssignmentDefinitions: gridAPI.getData(),
+                        SubViews: subViewGridAPI.getData()
                     };
 
                     return obj;

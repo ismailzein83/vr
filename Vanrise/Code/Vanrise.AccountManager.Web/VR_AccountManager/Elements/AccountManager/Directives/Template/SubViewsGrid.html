@@ -1,0 +1,8 @@
+﻿<vr-button type="Add" data-onclick="addNewSubView" standalone></vr-button>
+<vr-datagrid datasource="subViews"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

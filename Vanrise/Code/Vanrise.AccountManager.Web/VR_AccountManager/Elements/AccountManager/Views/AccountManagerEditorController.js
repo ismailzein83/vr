@@ -18,7 +18,7 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
-            if (parameters != undefined && parameters != null) {
+            if (parameters != undefined) {
                 accountManagerId = parameters.AccountManagerId;
                 accountManagerDefinitionId = parameters.AccountManagerDefinitionId;
             };
@@ -58,7 +58,7 @@
                 if (!isEditMode)
                     $scope.title = UtilsService.buildTitleForAddEditor('Account Manager');
                 else
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(accountManagerEntity.UserName, 'Account Manager');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor('Account Manager');
 
             }
             return UtilsService.waitMultipleAsyncOperations([loadUserSelector, setTitle]).catch(function (error) {

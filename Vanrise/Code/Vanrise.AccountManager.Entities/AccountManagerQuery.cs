@@ -9,5 +9,6 @@ namespace Vanrise.AccountManager.Entities
     public class AccountManagerQuery
     {
         public List <int> UserIds { get; set; }
+        public Guid AccountManagerDefinitionId { get; set; }
     }
 }
