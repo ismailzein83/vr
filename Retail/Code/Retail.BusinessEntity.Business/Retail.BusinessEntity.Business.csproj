@@ -160,7 +160,7 @@
     <Compile Include="Extensions\AccountDIDMemoryAnalyticDataManager.cs" />
     <Compile Include="Extensions\AccountManager\RetailAccountAssignmentRuntime.cs" />
     <Compile Include="Extensions\AccountManager\RetailAccountAssignmentDefinition.cs" />
-    <Compile Include="Extensions\AccountManager\RetailAccountManagerSubViewDefinition.cs" />
+    <Compile Include="Extensions\AccountManager\RetailAccountAccountManagerSubViewDefinition.cs" />
     <Compile Include="RecurChargeBalanceUpdateSummaryManager.cs" />
     <Compile Include="AccountPartDefinitionOverriddenConfiguration.cs" />
     <Compile Include="AccountRecurringChargeEvaluatorBPDefinitionSettings.cs" />

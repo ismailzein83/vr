@@ -7,7 +7,7 @@ using Vanrise.AccountManager.Entities;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class RetailAccountManagerSubViewDefinition : AccountManagerSubViewDefinitionSettings
+    public class RetailAccountAccountManagerSubViewDefinition : AccountManagerSubViewDefinitionSettings
     {
         public override Guid ConfigId
         {
