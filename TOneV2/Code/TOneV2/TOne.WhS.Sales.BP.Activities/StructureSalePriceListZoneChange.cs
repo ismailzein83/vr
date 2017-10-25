@@ -252,16 +252,17 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Get Pricelist Description
         private void GetPricelistDescription(List<NewCustomerPriceListChange> customerChanges, IEnumerable<CustomerCountryToAdd> customerCountriesToAdd, IEnumerable<CustomerCountryToChange> customerCountriesToClose)
-        {
-            int newCountriesCounter = 0;
-            int closedCountriesCounter = 0;
-            int newRatesCounter = 0;
-            int increasedRatesCounter = 0;
-            int decreasedRatesCounter = 0;
+        {            
             foreach (NewCustomerPriceListChange customerChange in customerChanges)
             {
                 foreach (PriceListChange pricelist in customerChange.PriceLists)
                 {
+                    int newCountriesCounter = 0;
+                    int closedCountriesCounter = 0;
+                    int newRatesCounter = 0;
+                    int increasedRatesCounter = 0;
+                    int decreasedRatesCounter = 0;
+
                     foreach (CountryChange countryChange in pricelist.CountryChanges)
                     {
                         if (customerCountriesToAdd.Where(item => item.CountryId == countryChange.CountryId && item.CustomerId == customerChange.CustomerId).Count() > 0)

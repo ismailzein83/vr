@@ -107,14 +107,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         #region Private Methods
 
         private void GetPricelistDescription(List<NewCustomerPriceListChange> customerChanges, ClosedExistingZones closedExistingZones, IEnumerable<StructuredCountryActions> structuredCountryActions)
-        {
-            int newZonesCounter = 0;
-            int closedZonesCounter = 0;
-            int newCodesCounter = 0;
-            int closedCodesCounter = 0;
-            int movedCodesCounter = 0;
-            int newRatesCounter = 0;
-            int closedRatesCounter = 0;
+        {            
             Dictionary<string, NewZoneToAdd> zoneToAddByZoneName = new Dictionary<string, NewZoneToAdd>();
 
             NewZoneToAdd newZoneToAdd = new NewZoneToAdd();
@@ -134,6 +127,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 foreach (PriceListChange pricelist in customerChange.PriceLists)
                 {
+                    int newZonesCounter = 0;
+                    int closedZonesCounter = 0;
+                    int newCodesCounter = 0;
+                    int closedCodesCounter = 0;
+                    int movedCodesCounter = 0;
+                    int newRatesCounter = 0;
+                    int closedRatesCounter = 0;
+
                     foreach (CountryChange countryChange in pricelist.CountryChanges)
                     {
                         foreach (SalePricelistZoneChange zoneChange in countryChange.ZoneChanges)
