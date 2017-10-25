@@ -19,7 +19,7 @@ namespace Vanrise.AccountManager.Entities
     {
         public abstract Guid ConfigId { get; }
 
-        public virtual string RuntimeEditor { get; set; }
+        public virtual string RuntimeEditor { get;}
 
         public virtual bool DoesUserHaveAccess(IAccountManagerSubViewDefinitionCheckAccessContext context)
         {

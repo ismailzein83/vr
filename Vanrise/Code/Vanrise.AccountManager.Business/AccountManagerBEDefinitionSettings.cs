@@ -29,5 +29,11 @@ namespace Vanrise.AccountManager.Business
         public List<AccountManagerAssignmentDefinition> AssignmentDefinitions { get; set; }
 
         public List<AccountManagerSubViewDefinition> SubViews { get; set; }
+        public AccountManagerDefinitionExtendedSettings ExtendedSettings { get; set; }
+    }
+    public abstract class AccountManagerDefinitionExtendedSettings
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract string RuntimeEditor { get; }
     }
 }

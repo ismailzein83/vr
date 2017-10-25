@@ -19,7 +19,10 @@ namespace Vanrise.AccountManager.Entities
 
     public class AccountManagerSettings
     {
-
+        public AccountManagerExtendedSettings ExtendedSettings { get; set; }
+    }
+    public abstract class AccountManagerExtendedSettings
+    {
     }
 
 }
