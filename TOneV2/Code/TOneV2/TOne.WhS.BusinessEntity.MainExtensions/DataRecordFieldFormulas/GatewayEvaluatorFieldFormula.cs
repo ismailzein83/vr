@@ -83,11 +83,10 @@ namespace TOne.WhS.BusinessEntity.MainExtensions.DataRecordFieldFormulas
                 Dictionary<int, List<string>> portsBySwitchId = new Dictionary<int, List<string>>();
                 List<string> ports;
 
-                foreach (var switchConnectivity in switchConnectivitiesBySwitchPortKey.Values)
+                foreach (SwitchPortKey switchPortKey in switchConnectivitiesBySwitchPortKey.Keys)
                 {
-                    ports = portsBySwitchId.GetOrCreateItem(switchConnectivity.SwitchId);
-                    if (switchConnectivity.Settings != null && switchConnectivity.Settings.Trunks != null)
-                        ports.AddRange(switchConnectivity.Settings.Trunks.Select(itm => itm.Name));
+                    ports = portsBySwitchId.GetOrCreateItem(switchPortKey.SwitchId);
+                    ports.Add(switchPortKey.Port);
                 }
 
                 RecordFilter recordFilter = BuildRecordFilter(portsBySwitchId, ListRecordFilterOperator.NotIn);
