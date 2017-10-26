@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 
-namespace TOne.WhS.BusinessEntity.MainExtensions
+namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class CompanyDefinitionPricelistSettings : BaseCompanyDefinitionExtendedSetting 
+    public class CompanyPricelistSettings : BaseCompanyExtendedSettings
     {
         public override Guid ConfigId { get { return new Guid("48AB58C0-8D37-4F6A-A5EC-5EAFE9AAA586"); } }
-        public override string RuntimeEditor { get { return "vr-whs-be-companypricelistsettings"; } }
+        public PricelistSettings PricelistSettings { get; set; }
 
     }
-
-    
 }

@@ -250,9 +250,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public PriceListExtensionFormat GetCustomerPriceListExtensionFormatId(int carrierAccountId)
         {
-            var sellingProductManager = new SellingProductManager();
-            var sellingProductId = GetSellingProductId(carrierAccountId);
-
             var customer = GetCarrierAccount(carrierAccountId);
 
             customer.ThrowIfNull("Customer", carrierAccountId);
@@ -265,13 +262,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     return customer.CustomerSettings.PricelistSettings.PriceListExtensionFormat.Value;
             }
 
-            return sellingProductManager.GetSellingProductPriceListExtensionFormatId(sellingProductId);
+            return GetCompanyPricelistSettingsByCustomerId(carrierAccountId).PriceListExtensionFormat.Value;
         }
         public SalePriceListType GetCustomerPriceListType(int carrierAccountId)
         {
-            var sellingProductManager = new SellingProductManager();
-            var sellingProductId = GetSellingProductId(carrierAccountId);
-
             var customer = GetCarrierAccount(carrierAccountId);
 
             customer.ThrowIfNull("Customer", carrierAccountId);
@@ -284,13 +278,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     return customer.CustomerSettings.PricelistSettings.PriceListType.Value;
             }
 
-            return sellingProductManager.GetSellingProductPriceListType(sellingProductId);
+            return GetCompanyPricelistSettingsByCustomerId(carrierAccountId).PriceListType.Value;
         }
         public int GetCustomerPriceListTemplateId(int carrierAccountId)
         {
-            var sellingProductManager = new SellingProductManager();
-            var sellingProductId = GetSellingProductId(carrierAccountId);
-
             var customer = GetCarrierAccount(carrierAccountId);
 
             customer.ThrowIfNull("Customer", carrierAccountId);
@@ -303,13 +294,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     return customer.CustomerSettings.PricelistSettings.DefaultSalePLTemplateId.Value;
             }
 
-            return sellingProductManager.GetSellingProductPriceListTemplateId(sellingProductId);
+            return GetCompanyPricelistSettingsByCustomerId(carrierAccountId).DefaultSalePLTemplateId.Value;
         }
         public Guid GetCustomerPriceListMailTemplateId(int carrierAccountId)
         {
-            var sellingProductManager = new SellingProductManager();
-            var sellingProductId = GetSellingProductId(carrierAccountId);
-
             var customer = GetCarrierAccount(carrierAccountId);
 
             customer.ThrowIfNull("Customer", carrierAccountId);
@@ -322,13 +310,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     return customer.CustomerSettings.PricelistSettings.DefaultSalePLMailTemplateId.Value;
             }
 
-            return sellingProductManager.GetSellingProductPriceListMailTemplateId(sellingProductId);
+            return GetCompanyPricelistSettingsByCustomerId(carrierAccountId).DefaultSalePLMailTemplateId.Value;
         }
         public bool GetCustomerCompressPriceListFileStatus(int carrierAccountId)
         {
-            var sellingProductManager = new SellingProductManager();
-            var sellingProductId = GetSellingProductId(carrierAccountId);
-
             var customer = GetCarrierAccount(carrierAccountId);
 
             customer.ThrowIfNull("Customer", carrierAccountId);
@@ -341,13 +326,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     return customer.CustomerSettings.PricelistSettings.CompressPriceListFile.Value;
             }
 
-            return sellingProductManager.GetSellingProductCompressPriceListFileStatus(sellingProductId);
+            return GetCompanyPricelistSettingsByCustomerId(carrierAccountId).CompressPriceListFile.Value;
         }
         public string GetCustomerPricelistFileNamePattern(int carrierAccountId)
         {
-            var sellingProductManager = new SellingProductManager();
-            var sellingProductId = GetSellingProductId(carrierAccountId);
-
             var customer = GetCarrierAccount(carrierAccountId);
 
             customer.ThrowIfNull("Customer", carrierAccountId);
@@ -358,49 +340,37 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (!string.IsNullOrEmpty(customer.CustomerSettings.PricelistSettings.SalePricelistFileNamePattern))
                     return customer.CustomerSettings.PricelistSettings.SalePricelistFileNamePattern;
             }
-            return sellingProductManager.GetSellingProductPricelistFileNamePattern(sellingProductId);
+            return GetCompanyPricelistSettingsByCustomerId(carrierAccountId).SalePricelistFileNamePattern;
         }
 
-        
-        
         public CodeChangeTypeDescriptions GetCustomerCodeChangeTypeSettings(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);
-
-            var sellingProductManager = new SellingProductManager();
-            int sellingProductId = GetSellingProductId(carrierAccountId);
-            var sellingProductCodeChangeTypeSettings = new CodeChangeTypeDescriptions();
             var configManager = new ConfigManager();
+            CodeChangeTypeDescriptions companyCodeChangeTypeDescriptions = GetCompanyPricelistSettingsByCustomerId(carrierAccountId).CodeChangeTypeDescriptions;
 
             carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
             carrierAccount.CustomerSettings.ThrowIfNull("carrierAccount.CustomerSettings", carrierAccountId);
 
-            sellingProductCodeChangeTypeSettings = sellingProductManager.GetSellingProductCodeChangeTypeSettings(sellingProductId);
-
             if (carrierAccount.CustomerSettings.PricelistSettings == null)
-                return sellingProductCodeChangeTypeSettings;
-
-            return configManager.MergeCodeChangeTypeDescriptions(sellingProductCodeChangeTypeSettings, carrierAccount.CustomerSettings.PricelistSettings.CodeChangeTypeDescriptions);
+                return companyCodeChangeTypeDescriptions;
+            return configManager.MergeCodeChangeTypeDescriptions(companyCodeChangeTypeDescriptions, carrierAccount.CustomerSettings.PricelistSettings.CodeChangeTypeDescriptions);
         }
         public RateChangeTypeDescriptions GetCustomerRateChangeTypeSettings(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);
-
-            var sellingProductManager = new SellingProductManager();
-            int sellingProductId = GetSellingProductId(carrierAccountId);
-            var sellingProductRateChangeTypeSettings = new RateChangeTypeDescriptions();
             var configManager = new ConfigManager();
+            RateChangeTypeDescriptions companyRateChangeTypeDescriptions = GetCompanyPricelistSettingsByCustomerId(carrierAccountId).RateChangeTypeDescriptions;
 
             carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
             carrierAccount.CustomerSettings.ThrowIfNull("carrierAccount.CustomerSettings", carrierAccountId);
 
-            sellingProductRateChangeTypeSettings = sellingProductManager.GetSellingProductRateChangeTypeSettings(sellingProductId);
-
             if (carrierAccount.CustomerSettings.PricelistSettings == null)
-                return sellingProductRateChangeTypeSettings;
+                return companyRateChangeTypeDescriptions;
 
-            return configManager.MergeRateChangeTypeDescriptions(sellingProductRateChangeTypeSettings, carrierAccount.CustomerSettings.PricelistSettings.RateChangeTypeDescriptions);
+            return configManager.MergeRateChangeTypeDescriptions(companyRateChangeTypeDescriptions, carrierAccount.CustomerSettings.PricelistSettings.RateChangeTypeDescriptions);
         }
+
 
         public PricingSettings GetCustomerPricingSettings(int carrierAccountId)
         {
@@ -423,19 +393,31 @@ namespace TOne.WhS.BusinessEntity.Business
         public PricelistSettings GetCustomerPricelistSettings(int carrierAccountId)
         {
             var carrierAccount = GetCarrierAccount(carrierAccountId);
-
-            var sellingProductPricelistSettings = new PricelistSettings();
-            var sellingProductManager = new SellingProductManager();
-            int sellingProductId = GetSellingProductId(carrierAccountId);
             var configManager = new ConfigManager();
+            var companyPricelistSettings = GetCompanyPricelistSettingsByCustomerId(carrierAccountId);
 
             carrierAccount.ThrowIfNull("carrierAccount", carrierAccountId);
             carrierAccount.CustomerSettings.ThrowIfNull("carrierAccount.CustomerSettings", carrierAccountId);
             //carrierAccount.CustomerSettings.PricelistSettings.ThrowIfNull("carrierAccount.CustomerSettings.PricelistSettings", carrierAccountId);
 
-            sellingProductPricelistSettings = sellingProductManager.GetSellingProductPricelistSettings(sellingProductId);
+            return configManager.MergePricelistSettings(companyPricelistSettings, carrierAccount.CustomerSettings.PricelistSettings);
+        }
+        
+        public PricelistSettings GetCompanyPricelistSettingsByCustomerId(int carrierAccountId)
+        {
+            var companySetting = GetCompanySetting(carrierAccountId);
+            return GetCompanyPricelistSettings(companySetting);
 
-            return configManager.MergePricelistSettings(sellingProductPricelistSettings, carrierAccount.CustomerSettings.PricelistSettings);
+        }
+        public PricelistSettings GetCompanyPricelistSettings(CompanySetting companySetting)
+        {
+            var configManager = new ConfigManager();
+
+            Vanrise.Common.Business.ConfigManager vanriseCommonBusinessConfigManager = new Vanrise.Common.Business.ConfigManager();
+            CompanyPricelistSettings companyPricelistSettingsObj = vanriseCommonBusinessConfigManager.GetCompanyExtendedSettings<CompanyPricelistSettings>(companySetting);
+            PricelistSettings companyPricelistSettings = (companyPricelistSettingsObj != null) ? companyPricelistSettingsObj.PricelistSettings : default(PricelistSettings);
+
+            return configManager.MergePricelistSettings(configManager.GetSaleAreaPricelistSettings(), companyPricelistSettings);
         }
 
         public int GetCustomerTimeZoneId(int carrierAccountId)
@@ -684,7 +666,7 @@ namespace TOne.WhS.BusinessEntity.Business
             ValidateCarrierAccountToEdit(carrierAccountToEdit, out carrierProfileId);
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
             CarrierAccount cachedAccount = this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
-            
+
             ActivationStatus previousActivationStatus = cachedAccount.CarrierAccountSettings.ActivationStatus;
             ActivationStatus activationStatus = carrierAccountToEdit.CarrierAccountSettings.ActivationStatus;
 

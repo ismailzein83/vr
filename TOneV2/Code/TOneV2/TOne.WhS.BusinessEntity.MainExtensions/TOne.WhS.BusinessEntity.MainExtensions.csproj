@@ -77,8 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeCriteriaGroups\SelectiveCodeCriteriaGroup.cs" />
-    <Compile Include="CompanyDefinition\CompanyDefinitionPricelistSettings.cs" />
-    <Compile Include="CompanyDefinition\CompanyPricelistSettings.cs" />
     <Compile Include="CustomerGroups\SelectiveCustomerGroup.cs" />
     <Compile Include="DataRecordFieldFormulas\GatewayEvaluatorFieldFormula.cs" />
     <Compile Include="FinancialAccountTypes\CustomerPostpaid\CustomerPostpaidDefinitionSettings.cs" />

@@ -120,6 +120,8 @@
     <Compile Include="CodeGroup\CodeGroupQuery.cs" />
     <Compile Include="CodeGroup\UploadCodeGroupLog.cs" />
     <Compile Include="CodePrefixInfo.cs" />
+    <Compile Include="CompanyDefinition\CompanyDefinitionPricelistSettings.cs" />
+    <Compile Include="CompanyDefinition\CompanyPricelistSettings.cs" />
     <Compile Include="CustomerInvoiceSettingInfo.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionInfoFilter.cs" />
     <Compile Include="FinancialAccount\WHSCarrierFinancialAccountData.cs" />

@@ -52,7 +52,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CompanyDefinitionPricelistSettings, TOne.WhS.BusinessEntity.MainExtensions",
+                        $type: "TOne.WhS.BusinessEntity.Entities.CompanyDefinitionPricelistSettings, TOne.WhS.BusinessEntity.MainExtensions",
                     };
                     return data;
                 }
@@ -60,6 +60,6 @@
         }
     }
 
-    app.directive('vrWhsBeCompanydefinitionPricelistsettings', companyDefinitionPricelistSettingsDirective);
+    app.directive('whsBeCompanypricelistsettingsDefinition', companyDefinitionPricelistSettingsDirective);
 
 })(app);

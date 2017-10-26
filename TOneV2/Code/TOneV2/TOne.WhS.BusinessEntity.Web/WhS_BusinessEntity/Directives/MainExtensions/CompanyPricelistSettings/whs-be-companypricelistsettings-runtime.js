@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBeCompanypricelistsettings', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SaleAreaSettingsContextEnum',
+app.directive('whsBeCompanypricelistsettingsRuntime', ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SaleAreaSettingsContextEnum',
     function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SaleAreaSettingsContextEnum) {
 
         var directiveDefinitionObject = {
@@ -55,7 +55,7 @@ app.directive('vrWhsBeCompanypricelistsettings', ['UtilsService', 'VRUIUtilsServ
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CompanyPricelistSettings, TOne.WhS.BusinessEntity.MainExtensions",
+                        $type: "TOne.WhS.BusinessEntity.Entities.CompanyPricelistSettings, TOne.WhS.BusinessEntity.MainExtensions",
                         PricelistSettings: priceListSettingsEditorAPI.getData(),
                     };
                 };

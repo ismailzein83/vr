@@ -244,7 +244,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return configManager.GetSaleAreaDecreasedRateDayOffset();
         }
-
+        //Delete
         public PriceListExtensionFormat GetSellingProductPriceListExtensionFormatId(int sellingProductId)
         {
             var configManager = new ConfigManager();
@@ -362,7 +362,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return configManager.MergeCodeChangeTypeDescriptions(saleAreaCodeChangeTypeSettings, sellingProduct.Settings.PricelistSettings.CodeChangeTypeDescriptions);
         }
-
         public RateChangeTypeDescriptions GetSellingProductRateChangeTypeSettings(int sellingProductId)
         {
             var configManager = new ConfigManager();
@@ -379,21 +378,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return configManager.MergeRateChangeTypeDescriptions(saleAreaRateChangeTypeSettings, sellingProduct.Settings.PricelistSettings.RateChangeTypeDescriptions);
         }
-
-        public PricingSettings GetSellingProductPricingSettings(int sellingProductId)
-        {
-            var configManager = new ConfigManager();
-            var sellingProduct = GetSellingProduct(sellingProductId);
-            var saleAreaPricingSettings = new PricingSettings();
-
-            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
-            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
-            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Setting.PricingSettings", sellingProductId);
-
-            saleAreaPricingSettings = configManager.GetSaleAreaPricingSettings();
-
-            return configManager.MergePricingSettings(saleAreaPricingSettings, sellingProduct.Settings.PricingSettings);
-        }
         public PricelistSettings GetSellingProductPricelistSettings(int sellingProductId)
         {
             var configManager = new ConfigManager();
@@ -407,6 +391,21 @@ namespace TOne.WhS.BusinessEntity.Business
             saleAreaPricelistSettings = configManager.GetSaleAreaPricelistSettings();
 
             return configManager.MergePricelistSettings(saleAreaPricelistSettings, sellingProduct.Settings.PricelistSettings);
+        }
+        //
+        public PricingSettings GetSellingProductPricingSettings(int sellingProductId)
+        {
+            var configManager = new ConfigManager();
+            var sellingProduct = GetSellingProduct(sellingProductId);
+            var saleAreaPricingSettings = new PricingSettings();
+
+            sellingProduct.ThrowIfNull("Selling Product", sellingProductId);
+            sellingProduct.Settings.ThrowIfNull("SellingProduct.Setting", sellingProductId);
+            //sellingProduct.Settings.PricingSettings.ThrowIfNull("SellingProduct.Setting.PricingSettings", sellingProductId);
+
+            saleAreaPricingSettings = configManager.GetSaleAreaPricingSettings();
+
+            return configManager.MergePricingSettings(saleAreaPricingSettings, sellingProduct.Settings.PricingSettings);
         }
 
         public string GetSellingProductName(int sellingProductId)
