@@ -26,22 +26,24 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
             var companyDefinitionSettingsAPI;
             var companyDefinitionSettingsReadyDeferred = UtilsService.createPromiseDeferred();
 
-            $scope.scopeModel = {};
-            $scope.scopeModel.onGaSettingsReady = function (api) {
-                gaSettingsAPI = api;
-                gaSettingsReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onCompanyContactSettingsReady = function (api) {
-                companyContactSettingsAPI = api;
-                companyContactSettingsReadyDeferred.resolve();
-            };
-            $scope.scopeModel.onCompanyDefinitionSettingsReady = function (api) {
-                companyDefinitionSettingsAPI = api;
-                companyDefinitionSettingsReadyDeferred.resolve();
-            };
-
             function initializeController() {
-                defineAPI();
+                $scope.scopeModel = {};
+                $scope.scopeModel.onGaSettingsReady = function (api) {
+                    gaSettingsAPI = api;
+                    gaSettingsReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onCompanyContactSettingsReady = function (api) {
+                    companyContactSettingsAPI = api;
+                    companyContactSettingsReadyDeferred.resolve();
+                };
+                $scope.scopeModel.onCompanyDefinitionSettingsReady = function (api) {
+                    companyDefinitionSettingsAPI = api;
+                    companyDefinitionSettingsReadyDeferred.resolve();
+                };
+                
+                UtilsService.waitMultiplePromises([gaSettingsReadyDeferred.promise, companyContactSettingsReadyDeferred.promise, companyDefinitionSettingsReadyDeferred.promise]).then(function () {
+                    defineAPI();
+                });
             }
 
             function defineAPI() {
@@ -52,36 +54,36 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
                     var promises = [];
                     var companySettingDefinition = payload != undefined && payload.data != undefined ? payload.data.CompanySettingDefinition : undefined;
 
-                    var gaSettingsLoadDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(gaSettingsLoadDeferred.promise);
-
-                    gaSettingsReadyDeferred.promise.then(function () {
-                        var gapayload = {
-                            data: payload != undefined && payload.data != undefined ? payload.data.GAData : undefined
+                    function loadGASettings() {
+                        var gaData;
+                        if (payload != undefined && payload.data != undefined)
+                            gaData = payload.data.GAData;
+                        var gaPayload = {
+                            data: gaData
                         };
-                        VRUIUtilsService.callDirectiveLoad(gaSettingsAPI, gapayload, gaSettingsLoadDeferred);
-                    });
+                        return gaSettingsAPI.load(gaPayload);
+                    }
 
-
-                    var companyContactSettingsLoadDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(companyContactSettingsLoadDeferred.promise);
-
-                    companyContactSettingsReadyDeferred.promise.then(function () {
-                        var companyContactpayload = {
-                            data: payload != undefined && payload.data != undefined ? payload.data.CompanySettingDefinition : undefined
+                    function loadCompanyContactSettings() {
+                        var companyContactPayload = {
+                            data: companySettingDefinition
                         };
-                        VRUIUtilsService.callDirectiveLoad(companyContactSettingsAPI, companyContactpayload, companyContactSettingsLoadDeferred);
-                    });
+                        return companyContactSettingsAPI.load(companyContactPayload);
+                    }
 
-                    var companyDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
-                    promises.push(companyDefinitionSettingsLoadDeferred.promise);
-
-                    companyDefinitionSettingsReadyDeferred.promise.then(function () {
-                        var companyDefinitionpayload = {
-                            extendedSettings: companySettingDefinition != undefined ? companySettingDefinition.ExtendedSettings : undefined
+                    function loadCompanyDefinitionSettings() {
+                        var extendedSettingsObj;
+                        if (companySettingDefinition != undefined)
+                            extendedSettingsObj = companySettingDefinition.ExtendedSettings;
+                        var companyDefinitionPayload = {
+                            extendedSettings: extendedSettingsObj
                         };
-                        VRUIUtilsService.callDirectiveLoad(companyDefinitionSettingsAPI, companyDefinitionpayload, companyDefinitionSettingsLoadDeferred);
-                    });
+                        return companyDefinitionSettingsAPI.load(companyDefinitionPayload);
+                    }
+
+                    promises.push(loadGASettings());
+                    promises.push(loadCompanyContactSettings());
+                    promises.push(loadCompanyDefinitionSettings());
 
                     return UtilsService.waitMultiplePromises(promises);
                 };

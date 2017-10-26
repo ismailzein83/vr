@@ -50,6 +50,34 @@
         }
 
         function loadAllControls() {
+            function setTitle() {
+                if (isEditMode && companyDefinitionEntity != undefined)
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(companyDefinitionEntity.Name, "Company Definition");
+                else
+                    $scope.title = UtilsService.buildTitleForAddEditor("Company Definition");
+            }
+
+            function loadStaticData() {
+
+                if (companyDefinitionEntity == undefined)
+                    return;
+                $scope.scopeModel.name = companyDefinitionEntity.Name;
+
+            }
+
+            function loadCompanyDefinitionSelective() {
+                var companyDefinitionSelectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                companyDefinitionSelelctiveReadyPromiseDeferred.promise
+                    .then(function () {
+                        var directivePayload = {
+                            selectedIds: companyDefinitionEntity != undefined ? companyDefinitionEntity.Setting : undefined
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(companyDefinitionSelelctiveApi, directivePayload, companyDefinitionSelectiveLoadPromiseDeferred);
+                    });
+                return companyDefinitionSelectiveLoadPromiseDeferred.promise;
+            }
+
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCompanyDefinitionSelective])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -58,35 +86,6 @@
                   $scope.scopeModel.isLoading = false;
               });
         }
-
-        function setTitle() {
-            if (isEditMode && companyDefinitionEntity != undefined)
-                $scope.title = UtilsService.buildTitleForUpdateEditor(companyDefinitionEntity.Name, "Company Definition");
-            else
-                $scope.title = UtilsService.buildTitleForAddEditor("Company Definition");
-        }
-
-        function loadStaticData() {
-
-            if (companyDefinitionEntity == undefined)
-                return;
-            $scope.scopeModel.name = companyDefinitionEntity.Name;
-
-        }
-
-        function loadCompanyDefinitionSelective() {
-            var companyDefinitionSelectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-            companyDefinitionSelelctiveReadyPromiseDeferred.promise
-                .then(function () {
-                    var directivePayload = {
-                        selectedIds: companyDefinitionEntity != undefined ? companyDefinitionEntity.Setting : undefined
-                    };
-
-                    VRUIUtilsService.callDirectiveLoad(companyDefinitionSelelctiveApi, directivePayload, companyDefinitionSelectiveLoadPromiseDeferred);
-                });
-            return companyDefinitionSelectiveLoadPromiseDeferred.promise;
-        }
-
         function buildCompanyDefinitionObjFromScope() {
             var obj = {
                 Name: $scope.scopeModel.name,

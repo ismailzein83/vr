@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsService', 'VRCommon_CompanySettingService',
-    function (UtilsService, VRUIUtilsService, VRCommon_CompanySettingService) {
+app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_CompanySettingService', 'VRCommon_CompanySettingsAPIService',
+    function (UtilsService, VRCommon_CompanySettingService, VRCommon_CompanySettingsAPIService) {
 
         return {
             restrict: 'E',
@@ -22,6 +22,7 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
         };
 
         function CompanySettingsEditor(ctrl, $scope, $attrs) {
+            var companyDefinitionSettings = {};
             this.initializeController = initializeController;
 
             var gridAPI;
@@ -30,18 +31,18 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
                     if (ctrl.datasource != undefined && ctrl.datasource.length > 0) {
-                        var defaultCount=0;
-                        for (var i = 0; i < ctrl.datasource.length; i++) {                           
-                            var item = ctrl.datasource[i];                                                   
-                             if (item.Entity.IsDefault ){
-                                 defaultCount++;
-                            }      
+                        var defaultCount = 0;
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var item = ctrl.datasource[i];
+                            if (item.Entity.IsDefault) {
+                                defaultCount++;
+                            }
                         }
-                        if (defaultCount==0)
+                        if (defaultCount == 0)
                             return "You Should add at least one default settings.";
                         if (defaultCount == 1)
                             return null;
-                        if(defaultCount > 1)
+                        if (defaultCount > 1)
                             return "Only one default settings is permitted.";
                     }
                     return "You Should add at least one settings.";
@@ -52,7 +53,7 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                         ctrl.datasource.push({ Entity: companySetting });
                     };
 
-                    VRCommon_CompanySettingService.addCompanySetting(onCompanySettingAdded, ctrl.datasource.length==0);
+                    VRCommon_CompanySettingService.addCompanySetting(onCompanySettingAdded, ctrl.datasource.length == 0, getCompanyDefinitionContext());
                 };
                 ctrl.removeCompanySetting = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
@@ -65,7 +66,14 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
 
                 };
                 defineMenuActions();
-                defineAPI();
+
+                VRCommon_CompanySettingsAPIService.GetCompanyDefinitionSettings().then(function (response) {
+                    if (response != undefined && response != null) {
+                        companyDefinitionSettings = response;
+                    }
+                    defineAPI();
+                });
+
             }
             function defineAPI() {
                 var api = {};
@@ -126,10 +134,20 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRUIUtilsServic
                     var index = ctrl.datasource.indexOf(companySettingObj);
                     ctrl.datasource[index] = { Entity: companySetting };
                 };
-                VRCommon_CompanySettingService.editCompanySetting(companySettingObj.Entity, onCompanySettingUpdated, ctrl.datasource);
+                VRCommon_CompanySettingService.editCompanySetting(companySettingObj.Entity, onCompanySettingUpdated, getCompanyDefinitionContext(), ctrl.datasource);
             }
             function viewCompanySetting(companySettingObj) {
-                 VRCommon_CompanySettingService.viewCompanySetting(companySettingObj.Entity);
+                VRCommon_CompanySettingService.viewCompanySetting(companySettingObj.Entity, getCompanyDefinitionContext());
+            }
+
+            function getCompanyDefinitionContext() {
+
+                var companyDefinitionContext = {
+                };
+                companyDefinitionContext.getCompanyDefinitionSettings = function () {
+                    return companyDefinitionSettings;
+                };
+                return companyDefinitionContext;
             }
         }
     }]);

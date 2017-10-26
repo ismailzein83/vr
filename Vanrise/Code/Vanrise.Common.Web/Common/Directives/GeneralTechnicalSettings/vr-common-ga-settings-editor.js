@@ -31,12 +31,14 @@ app.directive('vrCommonGaSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+                    var promiseDeferred = UtilsService.createPromiseDeferred();
                     $scope.scopeModel.clientCacheNumber = 0;
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.isEnabled = payload.data.IsEnabled;
                         $scope.scopeModel.account = payload.data.Account;
                     }
-
+                    promiseDeferred.resolve();
+                    return promiseDeferred.promise;
                 };
                
                 api.getData = function () {

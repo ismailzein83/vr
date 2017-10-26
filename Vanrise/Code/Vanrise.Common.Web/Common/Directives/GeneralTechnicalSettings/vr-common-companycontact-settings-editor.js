@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonCompanycontactSettingsEditor', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrCommonCompanycontactSettingsEditor', ['UtilsService',
+    function (UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -63,14 +63,14 @@ app.directive('vrCommonCompanycontactSettingsEditor', ['UtilsService', 'VRUIUtil
                         }
                     }
                     return true;
-                };
-
+                }
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promiseDeferred = UtilsService.createPromiseDeferred();
                     if (payload != undefined) {
                         $scope.scopeModel.contactTypes.length = 0;
                         if (payload.data != undefined && payload.data.ContactTypes != undefined) {
@@ -82,6 +82,8 @@ app.directive('vrCommonCompanycontactSettingsEditor', ['UtilsService', 'VRUIUtil
                             }
                         }
                     }
+                    promiseDeferred.resolve();
+                    return promiseDeferred.promise;
                 };
 
                 api.getData = function () {

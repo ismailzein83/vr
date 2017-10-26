@@ -56,7 +56,7 @@
                     </vr-section>
                 </vr-tab>
                 <vr-span ng-repeat="companyDefinition in scopeModel.companyDefinitions">
-                    <vr-directivewrapper directive="companyDefinition.Entity.Setting.RuntimeEditor" on-ready="companyDefinition.Entity.onDirectiveReady" isrequired="false"></vr-directivewrapper>
+                    <vr-directivewrapper directive="companyDefinition.runtimeEditor" on-ready="companyDefinition.onDirectiveReady" isrequired="false"></vr-directivewrapper>
                 </vr-span>
             </vr-tabs>
 

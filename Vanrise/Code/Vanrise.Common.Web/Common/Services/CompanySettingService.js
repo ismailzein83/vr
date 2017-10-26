@@ -2,7 +2,7 @@
 
     'use strict';
 
-    CompanySettingService.$inject = ['VRModalService','UtilsService'];
+    CompanySettingService.$inject = ['VRModalService', 'UtilsService'];
 
     function CompanySettingService(VRModalService, UtilsService) {
         return {
@@ -11,9 +11,10 @@
             viewCompanySetting: viewCompanySetting
         };
 
-        function addCompanySetting(onCompanySettingsAdded, setDefault) {
+        function addCompanySetting(onCompanySettingsAdded, setDefault, context) {
             var modalParameters = {
-                setDefault: setDefault
+                setDefault: setDefault,
+                context: context
             };
             var modalSettings = {};
 
@@ -24,9 +25,10 @@
             VRModalService.showModal('/Client/Modules/Common/Views/CompanySettings/CompanySettingsEditor.html', modalParameters, modalSettings);
         }
 
-        function editCompanySetting(companySettingEntity, onCompanySettingsUpdated) {
+        function editCompanySetting(companySettingEntity, onCompanySettingsUpdated, context) {
             var modalParameters = {
-                companySettingEntity: companySettingEntity
+                companySettingEntity: companySettingEntity,
+                context: context
             };
             var modalSettings = {};
 
@@ -37,9 +39,10 @@
             VRModalService.showModal('/Client/Modules/Common/Views/CompanySettings/CompanySettingsEditor.html', modalParameters, modalSettings);
         }
 
-        function viewCompanySetting(companySettingEntity) {
+        function viewCompanySetting(companySettingEntity, context) {
             var modalParameters = {
-                companySettingEntity: companySettingEntity
+                companySettingEntity: companySettingEntity,
+                context: context
             };
             var modalSettings = {};
 

@@ -9,6 +9,9 @@
         var isEditMode;
         var setDefault;
         var companySettingEntity;
+        var extendedSettings = {};
+        var context;
+        var companyDefinitionSettings = {};
 
         var contactsTypes = [];
 
@@ -24,6 +27,15 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 companySettingEntity = parameters.companySettingEntity;
+                context = parameters.context;
+
+                if (companySettingEntity != undefined && companySettingEntity.ExtendedSettings != undefined) {
+                    extendedSettings = companySettingEntity.ExtendedSettings;
+                }
+
+                if (context.getCompanyDefinitionSettings() != undefined) {
+                    companyDefinitionSettings = context.getCompanyDefinitionSettings();
+                }
                 setDefault = parameters.setDefault;
             }
             isEditMode = (companySettingEntity != undefined);
@@ -44,7 +56,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.onBankDirectiveReady = function (api) {
@@ -65,7 +77,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail, loadCompanyContacts, loadCompanyExtendedSettings])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail, loadCompanyContacts])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -83,57 +95,46 @@
         }
 
         function prepareCompanyDefinitions() {
-            var companyDefinitions = {};
-
-            var promise = VRCommon_CompanySettingsAPIService.GetCompanyDefinitionSettings().then(function (response) {
-                if (response != undefined && response != null) {
-                    companyDefinitions = response;
-                    for (var currentCompanyDefinitionId in companyDefinitions) {
-                        if (companyDefinitions[currentCompanyDefinitionId] != undefined && currentCompanyDefinitionId != "$type") {
-                            companyDefinitions[currentCompanyDefinitionId].Api = {};
-                            companyDefinitions[currentCompanyDefinitionId].readyPromise = UtilsService.createPromiseDeferred();
-                            companyDefinitions[currentCompanyDefinitionId].onDirectiveReady = function (api) {
-                                companyDefinitions[currentCompanyDefinitionId].Api = api;
-                                companyDefinitions[currentCompanyDefinitionId].readyPromise.resolve();
-                            };
-                            $scope.scopeModel.companyDefinitions.push({
-                                Entity: companyDefinitions[currentCompanyDefinitionId],
-                            });
-                        }
-                    }
+            var promises = [];
+            for (var currentCompanyDefinitionId in companyDefinitionSettings) {
+                if (companyDefinitionSettings[currentCompanyDefinitionId] != undefined && currentCompanyDefinitionId != "$type") {
+                    var directiveItem = {
+                        definition: companyDefinitionSettings[currentCompanyDefinitionId],
+                        directivePayload: extendedSettings[currentCompanyDefinitionId],
+                        directiveReadyDeferred: UtilsService.createPromiseDeferred(),
+                        directiveLoadDeferred: UtilsService.createPromiseDeferred(),
+                    };
+                    promises.push(directiveItem.directiveLoadDeferred.promise);
+                    addDirectiveAPI(directiveItem);
                 }
-            });
-            return promise;
+            }
+            return UtilsService.waitMultiplePromises(promises);
         }
 
-
-        function loadCompanyExtendedSettings() {
-            var extendedSettings = {};
-            if (companySettingEntity != undefined && companySettingEntity.ExtendedSettings != undefined) {
-                extendedSettings = companySettingEntity.ExtendedSettings;
-            }
-
-            for (var i = 0; i < $scope.scopeModel.companyDefinitions.length; i++) {
-                var currentComanyDefinition = $scope.scopeModel.companyDefinitions[i];
-                currentComanyDefinition.Entity.loadPromise = UtilsService.createPromiseDeferred();
-                
-                currentComanyDefinition.Entity.readyPromise.promise.then(function () {
-
-                    var directivePayload = extendedSettings[currentComanyDefinition.Entity.Setting.ConfigId];
-
-                    VRUIUtilsService.callDirectiveLoad(currentComanyDefinition.Entity.Api, directivePayload, currentComanyDefinition.Entity.loadPromise);
-                });
-            }
+        function addDirectiveAPI(directiveItem) {
+            var directive = {
+                directiveAPI: {},
+                runtimeEditor: directiveItem.definition.Setting.RuntimeEditor,
+                configId: directiveItem.definition.Setting.ConfigId,
+            };
+            directive.onDirectiveReady = function (api) {
+                directiveItem.directiveReadyDeferred.resolve();
+                directive.directiveAPI = api;
+            };
+            directiveItem.directiveReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(directive.directiveAPI, directiveItem.directivePayload, directiveItem.directiveLoadDeferred);
+            });
+            $scope.scopeModel.companyDefinitions.push(directive);
         }
 
         function getCompanyExtendedSettings() {
             var companyExtendedSettings = {};
             for (var i = 0; i < $scope.scopeModel.companyDefinitions.length; i++) {
                 var currentComanyDefinition = $scope.scopeModel.companyDefinitions[i];
-                if (currentComanyDefinition.Entity.Api != undefined) {
-                    if (companyExtendedSettings[currentComanyDefinition.Entity.Setting.ConfigId] == undefined) {
-                        var data = currentComanyDefinition.Entity.Api.getData();
-                        companyExtendedSettings[currentComanyDefinition.Entity.Setting.ConfigId] = data;
+                if (currentComanyDefinition.directiveAPI != undefined) {
+                    if (companyExtendedSettings[currentComanyDefinition.configId] == undefined) {
+                        var data = currentComanyDefinition.directiveAPI.getData();
+                        companyExtendedSettings[currentComanyDefinition.configId] = data;
                     }
                 }
             }

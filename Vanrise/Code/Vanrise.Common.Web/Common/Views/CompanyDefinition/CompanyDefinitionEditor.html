@@ -1,12 +1,16 @@
 ﻿<div vr-modalcontent ng-controller="VRCommon_CompanyDefinitionEditorController" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formCompanyDefinitionEditor">
-            <vr-row removeline>
-                <vr-columns colnum="4">
-                    <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
-                </vr-columns>
-                <vr-common-companydefinitions-selective on-ready="scopeModel.onCompanyDefinitionSelectiveReady" isrequired="true" normal-col-num="6"></vr-common-companydefinitions-selective>
-            </vr-row>
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-columns colnum="4">
+                        <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+                    </vr-columns>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-common-companydefinitions-selective on-ready="scopeModel.onCompanyDefinitionSelectiveReady" isrequired="true" normal-col-num="6"></vr-common-companydefinitions-selective>
+                </vr-tab>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>

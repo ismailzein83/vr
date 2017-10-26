@@ -46,14 +46,14 @@ app.directive('vrCommonCompanydefinitionSettingsEditor', ['VRCommon_CompanyDefin
 
                 $scope.scopeModel.validateCompanyDefinitions = function () {
                     if (!validateNameIdentity())
-                        return "Setting Definition name should be identical.";
+                        return "Setting definition name should be identical.";
                     if (!validateSettingIdentity())
-                        return "Setting Definition should be identical.";
+                        return "Same setting added before.";
                     return null;
                 };
 
                 $scope.scopeModel.removeCompanyDefinition = function (companyDefinitionObj) {
-                    $scope.scopeModel.companyDefinitions.splice($scope.scopeModel.companyDefinitions.indexOf({ Entity: companyDefinitionObj }), 1);
+                    $scope.scopeModel.companyDefinitions.splice($scope.scopeModel.companyDefinitions.indexOf(companyDefinitionObj), 1);
                 };
 
                 function validateSettingIdentity() {
@@ -87,17 +87,20 @@ app.directive('vrCommonCompanydefinitionSettingsEditor', ['VRCommon_CompanyDefin
                 var api = {};
 
                 api.load = function (payload) {
+                    var promiseDeferred = UtilsService.createPromiseDeferred();
                     if (payload != undefined) {
                         $scope.scopeModel.companyDefinitions.length = 0;
                         if (payload.extendedSettings != undefined) {
-
                             for (var currentCompanyDefinitionId in payload.extendedSettings) {
-                                if (payload.extendedSettings[currentCompanyDefinitionId] != undefined && currentCompanyDefinitionId != "$type") {
-                                    $scope.scopeModel.companyDefinitions.push({ Entity: payload.extendedSettings[currentCompanyDefinitionId] });
+                                var extendedSetting = payload.extendedSettings[currentCompanyDefinitionId];
+                                if (extendedSetting != undefined && currentCompanyDefinitionId != "$type") {
+                                    $scope.scopeModel.companyDefinitions.push({ Entity: extendedSetting });
                                 }
                             }
                         }
                     }
+                    promiseDeferred.resolve();
+                    return promiseDeferred.promise;
                 };
 
                 api.getData = function () {
@@ -105,11 +108,7 @@ app.directive('vrCommonCompanydefinitionSettingsEditor', ['VRCommon_CompanyDefin
                     for (var i = 0; i < $scope.scopeModel.companyDefinitions.length; i++) {
                         var companyDefinitionSetting = $scope.scopeModel.companyDefinitions[i];
                         if (companyDefinitionSettings[companyDefinitionSetting.Entity.Setting.ConfigId] == undefined) {
-                            companyDefinitionSettings[companyDefinitionSetting.Entity.Setting.ConfigId] = {
-                                CompanyDefinitionSettingId: UtilsService.guid(),
-                                Name: companyDefinitionSetting.Entity.Name,
-                                Setting: companyDefinitionSetting.Entity.Setting,
-                            };
+                            companyDefinitionSettings[companyDefinitionSetting.Entity.Setting.ConfigId] = companyDefinitionSetting.Entity;
                         }
                     }
                     return (companyDefinitionSettings);
