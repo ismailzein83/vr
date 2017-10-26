@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonCompanydefinitionSettingsEditor', ['VRCommon_CompanyDefinitionService','UtilsService', 'VRUIUtilsService',
-    function (VRCommon_CompanyDefinitionService,UtilsService, VRUIUtilsService) {
+app.directive('vrCommonCompanydefinitionSettingsEditor', ['VRCommon_CompanyDefinitionService', 'UtilsService', 'VRUIUtilsService',
+    function (VRCommon_CompanyDefinitionService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -26,6 +26,8 @@ app.directive('vrCommonCompanydefinitionSettingsEditor', ['VRCommon_CompanyDefin
                 $scope.scopeModel = {};
                 $scope.scopeModel.companyDefinitions = [];
 
+                defineMenuActions();
+
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -34,7 +36,7 @@ app.directive('vrCommonCompanydefinitionSettingsEditor', ['VRCommon_CompanyDefin
 
                 $scope.scopeModel.addCompanyDefinition = function () {
                     var onCompanyDefinitionAdded = function (companyDefinition) {
-                        $scope.scopeModel.companyDefinitions.push({Entity: companyDefinition});
+                        $scope.scopeModel.companyDefinitions.push({ Entity: companyDefinition });
                     };
                     VRCommon_CompanyDefinitionService.addCompanyDefinition(onCompanyDefinitionAdded);
                 };
@@ -79,8 +81,7 @@ app.directive('vrCommonCompanydefinitionSettingsEditor', ['VRCommon_CompanyDefin
                     }
                     return true;
                 }
-                defineMenuActions();
-                defineAPI();
+
             }
             function defineAPI() {
                 var api = {};
@@ -92,8 +93,7 @@ app.directive('vrCommonCompanydefinitionSettingsEditor', ['VRCommon_CompanyDefin
 
                             for (var currentCompanyDefinitionId in payload.extendedSettings) {
                                 if (payload.extendedSettings[currentCompanyDefinitionId] != undefined && currentCompanyDefinitionId != "$type") {
-                                    console.log(currentCompanyDefinitionId, payload.extendedSettings[currentCompanyDefinitionId]);
-                                    $scope.scopeModel.companyDefinitions.push({ Entity: payload.extendedSettings[currentCompanyDefinitionId]});
+                                    $scope.scopeModel.companyDefinitions.push({ Entity: payload.extendedSettings[currentCompanyDefinitionId] });
                                 }
                             }
                         }

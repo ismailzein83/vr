@@ -159,6 +159,15 @@ namespace Vanrise.Common.Business
                  companyContactTypes =  generalTechnicalSettingData.CompanySettingDefinition.ContactTypes;
             return companyContactTypes;
         }
+
+        public Dictionary<Guid, CompanyDefinitionSetting> GetCompanyDefinitionSettings()
+        {
+            var companyDefinitionSettings = new Dictionary<Guid, CompanyDefinitionSetting>();
+            var generalTechnicalSettingData = GetGeneralTechnicalSetting();
+            if (generalTechnicalSettingData != null && generalTechnicalSettingData.CompanySettingDefinition != null)
+                companyDefinitionSettings = generalTechnicalSettingData.CompanySettingDefinition.ExtendedSettings;
+            return companyDefinitionSettings;
+        }
         public IEnumerable<CompanySetting> GetCompanySetting()
         {
             SettingManager settingManager = new SettingManager();

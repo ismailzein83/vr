@@ -27,5 +27,13 @@ namespace Vanrise.Common.Web.Controllers
             ConfigManager manager = new ConfigManager();
             return manager.GetCompanyContactTypes();
         }
+
+        [HttpGet]
+        [Route("GetCompanyDefinitionSettings")]
+        public Dictionary<Guid, CompanyDefinitionSetting> GetCompanyDefinitionSettings()
+        {
+            ConfigManager manager = new ConfigManager();
+            return manager.GetCompanyDefinitionSettings();
+        }
     }
 }
