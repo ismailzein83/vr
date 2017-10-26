@@ -17,8 +17,8 @@ BEGIN
 				  ,[EventTime]				  
 				  ,[ExceptionDetail]
 	FROM [bp].[BPTracking] WITH(NOLOCK) 
-	WHERE ID < @LessThanID 
-	AND  ProcessInstanceID = @BPInstanceID
+	WHERE ProcessInstanceID = @BPInstanceID 
+	AND ID < @LessThanID
 	AND (@Severities is null or Severity in (select Severity from @SeveritiesTable))
 	ORDER BY ID DESC
 END

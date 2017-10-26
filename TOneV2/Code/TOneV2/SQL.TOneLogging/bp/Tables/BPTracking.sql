@@ -1,4 +1,4 @@
-﻿CREATE TABLE [bp].[BPTracking] (
+CREATE TABLE [bp].[BPTracking] (
     [ID]                BIGINT         IDENTITY (1, 1) NOT NULL,
     [ProcessInstanceID] BIGINT         NOT NULL,
     [ParentProcessID]   BIGINT         NULL,
@@ -14,16 +14,17 @@
 
 
 
+
+
+GO
+
+
+
 GO
 
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_BPTracking_Severity]
-    ON [bp].[BPTracking]([Severity] ASC);
-
-
-GO
-CREATE CLUSTERED INDEX [IX_BPTracking_ProcessInstanceEventTime]
-    ON [bp].[BPTracking]([ProcessInstanceID] ASC, [EventTime] ASC);
+CREATE CLUSTERED INDEX [IX_BPTracking_ProcessInstanceAndId]
+    ON [bp].[BPTracking]([ProcessInstanceID] ASC, [ID] ASC);
 
