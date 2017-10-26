@@ -202,6 +202,13 @@ namespace Vanrise.Common.Business
             return null;
         }
 
+        public T GetDefaultCompanyExtendedSettings<T>()
+           where T : BaseCompanyExtendedSettings
+        {
+            CompanySetting companySetting = GetDefaultCompanySetting();
+            return companySetting != null ? GetCompanyExtendedSettings<T>(companySetting) : default(T);
+        }
+
         public T GetCompanyExtendedSettings<T>(Guid companySettingId) 
             where T : BaseCompanyExtendedSettings
         {
