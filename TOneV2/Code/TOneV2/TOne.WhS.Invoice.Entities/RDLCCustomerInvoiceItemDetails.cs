@@ -29,6 +29,7 @@ namespace TOne.WhS.Invoice.Entities
         public DateTime ToDate { get; set; }
         public Decimal SaleRateAfterCommission { get; set; }
         public decimal AmountAfterCommission { get; set; }
+        public decimal OriginalAmountAfterCommission { get; set; }
         public RDLCCustomerInvoiceItemDetails() { }
         public IEnumerable<RDLCCustomerInvoiceItemDetails> GetRDLCCustomerInvoiceItemDetailsSchema()
         {

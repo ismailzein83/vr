@@ -24,7 +24,10 @@ namespace TOne.WhS.Invoice.Entities
         public int SupplierId { get; set; }
         public int SupplierZoneId { get; set; }
         public decimal AmountAfterCommission { get; set; }
+        public decimal OriginalAmountAfterCommission { get; set; }
+        
         public Decimal TotalAmountAfterCommission { get; set; }
+        public Decimal TotalOriginalAmountAfterCommission { get; set; }
         public CommissionType? CommissionType { get; set; }
         public decimal? Commission { get; set; }
         public bool DisplayComission { get; set; }

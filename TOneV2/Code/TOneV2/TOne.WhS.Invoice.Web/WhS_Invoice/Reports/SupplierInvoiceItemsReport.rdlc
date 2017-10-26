@@ -1084,7 +1084,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!AmountAfterCommission.Value,2)</Value>
+                              <Value>=Round(Fields!OriginalAmountAfterCommission.Value,2)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                               </Style>
@@ -1416,6 +1416,10 @@
         </Field>
         <Field Name="AmountAfterCommission">
           <DataField>AmountAfterCommission</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalAmountAfterCommission">
+          <DataField>OriginalAmountAfterCommission</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>

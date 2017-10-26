@@ -84,6 +84,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 supplierInvoiceDetails.TimeZoneId = timeZoneId;
                 supplierInvoiceDetails.TotalAmount = supplierInvoiceDetails.CostAmount;
                 supplierInvoiceDetails.TotalAmountAfterCommission = supplierInvoiceDetails.AmountAfterCommission;
+                supplierInvoiceDetails.TotalOriginalAmountAfterCommission = supplierInvoiceDetails.OriginalAmountAfterCommission;
+
                 supplierInvoiceDetails.Commission = commission;
                 supplierInvoiceDetails.CommissionType = commissionType;
                 supplierInvoiceDetails.Offset = offset;
@@ -92,6 +94,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     foreach (var tax in taxItemDetails)
                     {
                         supplierInvoiceDetails.TotalAmountAfterCommission += ((supplierInvoiceDetails.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+                        supplierInvoiceDetails.TotalOriginalAmountAfterCommission += ((supplierInvoiceDetails.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+
                         supplierInvoiceDetails.TotalAmount += ((supplierInvoiceDetails.CostAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
@@ -166,7 +170,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             supplierInvoiceDetails.OriginalSupplierCurrencyId = invoiceBillingRecord.OriginalSupplierCurrencyId;
                             supplierInvoiceDetails.SupplierCurrencyId = invoiceBillingRecord.SupplierCurrencyId;
                             supplierInvoiceDetails.AmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
-                           
+                            supplierInvoiceDetails.OriginalAmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
+
                         }
                         if (commissionType.HasValue)
                         {
@@ -221,6 +226,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             FromDate = item.InvoiceMeasures.BillingPeriodFrom,
                             ToDate = item.InvoiceMeasures.BillingPeriodTo,
                             AmountAfterCommission = item.InvoiceMeasures.AmountAfterCommission,
+                            OriginalAmountAfterCommission = item.InvoiceMeasures.OriginalAmountAfterCommission,
 
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
@@ -332,9 +338,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             }
 
                         };
-                        if (commissionType.HasValue && commissionType.Value == CommissionType.Display)
-                             invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission) / 100);
-                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * commission) / 100);
+                        if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
+                        {
+                            invoiceBillingRecord.SupplierRate = invoiceBillingRecord.SupplierRate + ((invoiceBillingRecord.SupplierRate * commission) / 100);
+                        }
+                        invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * commission) / 100);
+                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet + ((invoiceBillingRecord.InvoiceMeasures.CostNet * commission) / 100);
 
                         AddItemToDictionary(itemSetNamesDic, "GroupedByCostZone", invoiceBillingRecord);
 
@@ -370,6 +379,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             public DateTime BillingPeriodTo { get; set; }
             public DateTime BillingPeriodFrom { get; set; }
             public decimal AmountAfterCommission { get; set; }
+            public decimal OriginalAmountAfterCommission { get; set; }
 
 
         } 

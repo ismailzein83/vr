@@ -89,11 +89,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 customerInvoiceDetails.Offset = offset;
 
                 customerInvoiceDetails.TotalAmountAfterCommission = customerInvoiceDetails.AmountAfterCommission;
+                customerInvoiceDetails.TotalOriginalAmountAfterCommission = customerInvoiceDetails.OriginalAmountAfterCommission;
                 if (taxItemDetails != null)
                 {
                     foreach (var tax in taxItemDetails)
                     {
                         customerInvoiceDetails.TotalAmountAfterCommission += ((customerInvoiceDetails.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+                        customerInvoiceDetails.TotalOriginalAmountAfterCommission += ((customerInvoiceDetails.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
                         customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
@@ -173,6 +175,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             customerInvoiceDetails.SupplierId = invoiceBillingRecord.SupplierId;
                             customerInvoiceDetails.SupplierZoneId = invoiceBillingRecord.SupplierZoneId;
                             customerInvoiceDetails.AmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission;
+                            customerInvoiceDetails.OriginalAmountAfterCommission += invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
                         }
                         if (commissionType.HasValue)
                         {
@@ -230,7 +233,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SupplierId = item.SupplierId,
                             SupplierZoneId = item.SupplierZoneId,
                             AmountAfterCommission = item.InvoiceMeasures.AmountAfterCommission,
-
+                            OriginalAmountAfterCommission = item.InvoiceMeasures.OriginalAmountAfterCommission,
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -348,9 +351,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SupplierZoneId = Convert.ToInt32(supplierZone.Value),
 
                         };
-                        if (commissionType.HasValue && commissionType.Value == CommissionType.Display)
-                             invoiceBillingRecord.SaleRate = invoiceBillingRecord.SaleRate + ((invoiceBillingRecord.SaleRate * commission) / 100);
-                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr * commission) / 100);
+                        if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
+                        {
+                            invoiceBillingRecord.SaleRate = invoiceBillingRecord.SaleRate + ((invoiceBillingRecord.SaleRate * commission) / 100);
+                        }
+                             
+                        invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr * commission) / 100);
+                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet + ((invoiceBillingRecord.InvoiceMeasures.SaleNet * commission) / 100);
 
                         AddItemToDictionary(itemSetNamesDic, "GroupedBySaleZone", invoiceBillingRecord);
                     }
@@ -387,7 +394,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             public DateTime BillingPeriodTo { get; set; }
             public DateTime BillingPeriodFrom { get; set; }
             public decimal AmountAfterCommission { get; set; }
-
+            public decimal OriginalAmountAfterCommission { get; set; }
 
         }
         public class InvoiceBillingRecord
