@@ -104,6 +104,10 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<int, SaleEntityRateByCustomerWithMaxCount> saleEntityRateByCustomerMaxCount = new Dictionary<int, SaleEntityRateByCustomerWithMaxCount>();
             foreach (var sourceRate in sourceItems)
             {
+                if (sourceRate.SourceId == "2953866")
+                {
+                    string str = "";
+                }
                 CarrierAccount carrierAccount;
                 if (allCarrierAccounts.TryGetValue(sourceRate.CustomerId, out carrierAccount))
                 {
@@ -223,10 +227,19 @@ namespace TOne.WhS.DBSync.Business
             if (!_MatchedServicesBySourceId.TryGetValue(sourceId, out concatServiceIds))
             {
                 HashSet<int> serviceIds = new HashSet<int>();
-                foreach (KeyValuePair<string, ZoneServiceConfig> item in allZoneServicesConfig)
+                ZoneServiceConfig zoneServiceConfig;
+
+                if (allZoneServicesConfig.TryGetValue(sourceId, out zoneServiceConfig))
                 {
-                    if ((Convert.ToInt32(item.Value.SourceId) & Convert.ToInt32(sourceId)) == Convert.ToInt32(item.Value.SourceId))
-                        serviceIds.Add(item.Value.ZoneServiceConfigId);
+                    serviceIds.Add(zoneServiceConfig.ZoneServiceConfigId);
+                }
+                else
+                {
+                    foreach (KeyValuePair<string, ZoneServiceConfig> item in allZoneServicesConfig)
+                    {
+                        if ((Convert.ToInt32(item.Value.SourceId) & Convert.ToInt32(sourceId)) == Convert.ToInt32(item.Value.SourceId))
+                            serviceIds.Add(item.Value.ZoneServiceConfigId);
+                    }
                 }
                 concatServiceIds = string.Join(",", serviceIds.OrderBy(s => s));
             }
