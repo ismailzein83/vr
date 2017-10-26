@@ -2,16 +2,19 @@
 
     "use strict";
 
-    accountManagerEditorController.$inject = ["$scope", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService", "VR_AccountManager_AccountManagerAPIService"];
+    accountManagerEditorController.$inject = ["$scope", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService", "VR_AccountManager_AccountManagerAPIService", "VR_AccountManager_AccountManagerDefinitionAPIService"];
 
-    function accountManagerEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_AccountManager_AccountManagerAPIService) {
+    function accountManagerEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_AccountManager_AccountManagerAPIService, VR_AccountManager_AccountManagerDefinitionAPIService) {
         var accountDefinitionId;
         var isEditMode;
         var accountManagerId;
         var userSelectorAPI;
         var accountManagerDefinitionId;
+        var accountManagerDefintionEntity;
         var accountManagerEntity;
         var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var runtimeAPI;
+        var runtimeReadyPromise = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -41,16 +44,22 @@
                 userSelectorAPI = api;
                 userSelectorReadyDeferred.resolve();
             }
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                runtimeAPI = api;
+                runtimeReadyPromise.resolve();
+            }
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-            if (isEditMode) {
-                getAccountManager().then(function () {
+            getAccountManagerDefinitionId().then(function () {
+                if (isEditMode) {
+                    getAccountManager().then(function () {
+                        loadAllControls();
+                    });
+                }
+                else
                     loadAllControls();
-                });
-            }
-            else
-                loadAllControls();
+            })
         }
 
         function loadAllControls() {
@@ -61,7 +70,7 @@
                     $scope.title = UtilsService.buildTitleForUpdateEditor('Account Manager');
 
             }
-            return UtilsService.waitMultipleAsyncOperations([loadUserSelector, setTitle]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadUserSelector, setTitle, loadRuntimeDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -118,6 +127,21 @@
         function getAccountManager() {
             return VR_AccountManager_AccountManagerAPIService.GetAccountManager(accountManagerId).then(function (response) {
                 accountManagerEntity = response;
+            });
+        }
+        function loadRuntimeDirective() {
+            runtimeReadyPromise.promise.then(function () {
+                runtimeAPI.load();
+            })
+        }
+        function getAccountManagerDefinitionId() {
+            return VR_AccountManager_AccountManagerDefinitionAPIService.GetAccountManagerDefinition(accountManagerDefinitionId).then(function (response) {
+                accountManagerDefintionEntity = response;
+                var extendedSettings = accountManagerDefintionEntity.Settings.ExtendedSettings;
+                if (extendedSettings != null) {
+                    if (extendedSettings.RuntimeEditor != undefined)
+                        $scope.scopeModel.runtimeEditor = accountManagerDefintionEntity.Settings.ExtendedSettings.RuntimeEditor;
+                }
             });
         }
     }

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrAccountmanagerRegularextension', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrAccountmanagerRuntime', ['UtilsService', 'VRUIUtilsService',
 function (UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -11,7 +11,7 @@ function (UtilsService, VRUIUtilsService) {
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
-            var ctor = new AccountManagerRegularExtensionCtor(ctrl, $scope, $attrs);
+            var ctor = new AccountManagerRuntimeCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
         controllerAs: 'ctrl',
@@ -19,10 +19,10 @@ function (UtilsService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/VR_AccountManager/Elements/AccountManager/Directives/MainExtensions/Templates/RegularExtensionTemplate.html'
+        templateUrl: '/Client/Modules/VR_AccountManager/Elements/AccountManager/Directives/Template/RuntimeTemplate.html'
     };
 
-    function AccountManagerRegularExtensionCtor(ctrl, $scope, $attrs) {
+    function AccountManagerRuntimeCtor(ctrl, $scope, $attrs) {
         this.initializeController = initializeController;
         function initializeController() {
             defineAPI();
@@ -33,11 +33,11 @@ function (UtilsService, VRUIUtilsService) {
             api.load = function () {
                 var promises = []
                 UtilsService.waitMultiplePromises(promises);
-              
+
             };
             api.getData = function () {
                 var obj = {
-                    $type: "Vanrise.AccountManager.MainExtensions.RegularAccountManagerDefinitionSetting,Vanrise.AccountManager.MainExtensions",
+                    $type: "Vanrise.AccountManager.MainExtensions.RegularAccountManagerSettings,Vanrise.AccountManager.MainExtensions",
                 };
 
                 return obj;

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAccountmanagerAccountmanagerdefinitionGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_AccountManager_AccountManagerService",
+app.directive("vrAccountmanagerAccountmanagerdefinitionAssignmentdefinitionGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_AccountManager_AccountManagerService",
 function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManager_AccountManagerService) {
 
     var directiveDefinitionObject = {

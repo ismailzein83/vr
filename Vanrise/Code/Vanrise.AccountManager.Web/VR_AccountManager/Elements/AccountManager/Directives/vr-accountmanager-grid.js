@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAccountmanagerAccountmanagerGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "VR_AccountManager_AccountManagerAPIService", "VR_AccountManager_AccountManagerService",
+app.directive("vrAccountmanagerGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "VR_AccountManager_AccountManagerAPIService", "VR_AccountManager_AccountManagerService",
 function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_ObjectTrackingService, VR_AccountManager_AccountManagerAPIService, VR_AccountManager_AccountManagerService) {
 
     var directiveDefinitionObject = {
@@ -48,6 +48,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                 }
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                
                 return VR_AccountManager_AccountManagerAPIService.GetFilteredAccountManagers(dataRetrievalInput)
                    .then(function (response) {
                        onResponseReady(response);

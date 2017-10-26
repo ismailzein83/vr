@@ -121,6 +121,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
+    <Compile Include="Controllers\AccountManagerDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +137,22 @@
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
+      <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
+      <Name>Vanrise.GenericData.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data.SQL\Vanrise.GenericData.Data.SQL.csproj">
+      <Project>{00bce586-bffb-4679-92b7-9b65988fe346}</Project>
+      <Name>Vanrise.GenericData.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data\Vanrise.GenericData.Data.csproj">
+      <Project>{2c487e04-e583-411a-b116-f4485c78a572}</Project>
+      <Name>Vanrise.GenericData.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
@@ -148,16 +165,19 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionGridTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionSettings.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerGrid.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\RuntimeTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\SubViewsGrid.html" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanager-grid.js" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-grid.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-grid.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-assignmentdefinition-grid.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionEditorTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-editor.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-selector.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinitionsettings.js" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-subviews-grid.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-subviews-grid.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-runtime.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\AccountManagerService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerAPIService.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerDefintionAPIService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerEditor.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerEditorController.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerManagement.html" />
