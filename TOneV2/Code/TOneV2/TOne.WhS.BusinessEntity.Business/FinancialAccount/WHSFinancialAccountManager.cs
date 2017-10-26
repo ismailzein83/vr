@@ -340,8 +340,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         switch (filter.Status.Value)
                         {
-                            case VRAccountStatus.Active: if (!IsFinancialAccountActive(financialAccount)) return false; break;
-                            case VRAccountStatus.InActive: if (IsFinancialAccountActive(financialAccount)) return false; break;
+                            case VRAccountStatus.Active: if (!IsFinancialAccountActive(financialAccount, filter.InvoiceTypeId)) return false; break;
+                            case VRAccountStatus.InActive: if (IsFinancialAccountActive(financialAccount, filter.InvoiceTypeId)) return false; break;
                         }
                     }
 
@@ -1095,7 +1095,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return true;
         }
 
-        public bool IsFinancialAccountActive(WHSFinancialAccount financialAccount)
+        public bool IsFinancialAccountActive(WHSFinancialAccount financialAccount,Guid? invoiceTypeId  = null)
         {
             ValidateFinancialAccount(financialAccount);
             if (financialAccount.CarrierAccountId.HasValue)
@@ -1109,8 +1109,32 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 if (definitionSettings.ExtendedSettings.IsApplicableToCustomer && definitionSettings.ExtendedSettings.IsApplicableToSupplier)
                 {
-                    if (!s_carrierProfileManager.IsCarrierProfileCustomerActive(financialAccount.CarrierProfileId.Value) || !s_carrierProfileManager.IsCarrierProfileSupplierActive(financialAccount.CarrierProfileId.Value))
-                        return false;
+                    if (invoiceTypeId.HasValue)
+                    {
+                        if (definitionSettings.FinancialAccountInvoiceTypes != null)
+                        {
+                            var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == invoiceTypeId);
+                            if (financialAccountInvoiceType != null)
+                            {
+                                if (financialAccountInvoiceType.IsApplicableToCustomer)
+                                {
+                                    if (!s_carrierProfileManager.IsCarrierProfileCustomerActive(financialAccount.CarrierProfileId.Value))
+                                        return false;
+                                }
+                                if (financialAccountInvoiceType.IsApplicableToSupplier)
+                                {
+                                    if (!s_carrierProfileManager.IsCarrierProfileSupplierActive(financialAccount.CarrierProfileId.Value))
+                                        return false;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!s_carrierProfileManager.IsCarrierProfileCustomerActive(financialAccount.CarrierProfileId.Value) && !s_carrierProfileManager.IsCarrierProfileSupplierActive(financialAccount.CarrierProfileId.Value))
+                            return false;
+                    }
+                   
                 }
                 else if (definitionSettings.ExtendedSettings.IsApplicableToCustomer && !definitionSettings.ExtendedSettings.IsApplicableToSupplier)
                 {
@@ -1125,6 +1149,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return true;
             }
         }
+        
         private bool IsCarrierAccountActive(int carrierAccountId)
         {
           return !s_carrierAccountManager.IsCarrierAccountDeleted(carrierAccountId) && s_carrierAccountManager.IsCarrierAccountActive(carrierAccountId);

@@ -201,7 +201,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             customerActivationStatus = CarrierProfileActivationStatus.Active;
                         }
-                        else if (profileCarrierAccount.AccountType == CarrierAccountType.Supplier || profileCarrierAccount.AccountType == CarrierAccountType.Exchange)
+                        if (profileCarrierAccount.AccountType == CarrierAccountType.Supplier || profileCarrierAccount.AccountType == CarrierAccountType.Exchange)
                         {
                             supplierActivationStatus = CarrierProfileActivationStatus.Active;
                         }

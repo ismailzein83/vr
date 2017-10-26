@@ -121,8 +121,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         return rdlcReportParameters;
                         #endregion
                     }
-                
-                    
+
+
             }
             return null;
         }
@@ -167,23 +167,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         {
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
-
-            VRAccountStatus status = VRAccountStatus.InActive;
-            if (financialAccount.CarrierAccountId.HasValue)
-            {
-                if (new CarrierAccountManager().IsCarrierAccountActive(financialAccount.CarrierAccountId.Value))
-                {
-                    status = VRAccountStatus.Active;
-                }
-            }
-            else if (financialAccount.CarrierProfileId.HasValue)
-            {
-                if (new CarrierProfileManager().IsCarrierProfileActive(financialAccount.CarrierProfileId.Value))
-                {
-                    status = VRAccountStatus.Active;
-                }
-            }
-           
+            VRAccountStatus status = financialAccountManager.IsFinancialAccountActive(financialAccount, context.InvoiceTypeId) ? VRAccountStatus.Active : VRAccountStatus.InActive;
             return new VRInvoiceAccountData
             {
                 BED = financialAccount.BED,
@@ -192,5 +176,5 @@ namespace TOne.WhS.Invoice.Business.Extensions
             };
         }
     }
-      
+
 }
