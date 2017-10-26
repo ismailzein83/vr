@@ -30,9 +30,9 @@ namespace TOne.WhS.Analytics.Business
 
         public RepeatedNumberDetail RepeatedNumberDetailMapper(RepeatedNumber repeatedNumber)
         {
-            string customerName = _carrierAccountManager.GetCarrierAccountName(repeatedNumber.CustomerId);
-            string supplierName = _carrierAccountManager.GetCarrierAccountName(repeatedNumber.SupplierId);
-            string saleZoneName = _saleZoneManager.GetSaleZoneName(repeatedNumber.SaleZoneId);
+            string customerName = repeatedNumber.CustomerId.HasValue ? _carrierAccountManager.GetCarrierAccountName(repeatedNumber.CustomerId.Value) : null;
+            string supplierName = repeatedNumber.SupplierId.HasValue ? _carrierAccountManager.GetCarrierAccountName(repeatedNumber.SupplierId.Value) : null;
+            string saleZoneName = repeatedNumber.SaleZoneId.HasValue ? _saleZoneManager.GetSaleZoneName(repeatedNumber.SaleZoneId.Value) : null;
 
             RepeatedNumberDetail repeatedNumberDetail = new RepeatedNumberDetail
             {
@@ -78,8 +78,8 @@ namespace TOne.WhS.Analytics.Business
                     SheetName = "Repeated Numbers",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 50});
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Supplier", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Attempts" });

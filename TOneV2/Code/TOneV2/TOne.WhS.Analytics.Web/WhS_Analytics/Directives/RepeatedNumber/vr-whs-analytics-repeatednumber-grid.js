@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsAnalyticsRepeatednumberGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_RepeatedNumberAPIService", "WhS_Analytics_GenericAnalyticService","VR_Analytic_AnalyticItemActionService","WhS_Analytics_PhoneNumberEnum",
+app.directive("vrWhsAnalyticsRepeatednumberGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_RepeatedNumberAPIService", "WhS_Analytics_GenericAnalyticService", "VR_Analytic_AnalyticItemActionService", "WhS_Analytics_PhoneNumberEnum",
 function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPIService, WhS_Analytics_GenericAnalyticService, VR_Analytic_AnalyticItemActionService, WhS_Analytics_PhoneNumberEnum) {
 
     var directiveDefinitionObject = {
@@ -29,6 +29,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
         var gridAPI;
         var switchIds;
         var phoneNumber;
+        var payloadPeriod;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -50,6 +51,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
                             phoneNumber = query.PhoneNumber;
                             fromDate = query.From;
                             toDate = query.To;
+                            payloadPeriod = query.Period
                             if (query.Filter != undefined) {
                                 switchIds = query.Filter.SwitchIds;
                             }
@@ -74,7 +76,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
-           
+
             //$scope.gridMenuActions = [{
             //    name: "CDRs",
             //    clicked: function () {
@@ -102,20 +104,17 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
             }];
         }
         function openRecordSearch(dataItem) {
-            console.log(dataItem);
             var reportId = "c82daa2a-3fd8-432d-8811-7ba3e4cb3c58";
             var sourceName = "AllCDRs";
             var title = "CDRs";
-            var period = -1;
+            var period = payloadPeriod;
 
             var fieldFilters = [];
 
             var phoneNumberFieldName;
-            if (phoneNumber == WhS_Analytics_PhoneNumberEnum.CDPN.propertyName)
-            {
+            if (phoneNumber == WhS_Analytics_PhoneNumberEnum.CDPN.propertyName) {
                 phoneNumberFieldName = "CDPN";
-            } else
-            {
+            } else {
                 phoneNumberFieldName = "CGPN";
             }
             fieldFilters.push({
@@ -133,10 +132,10 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
 
             fieldFilters.push({
                 FieldName: "CustomerId",
-                FilterValues: [dataItem.Entity.CustomerId]
+                FilterValues: dataItem.Entity.CustomerId != null ? [dataItem.Entity.CustomerId] : []
             }, {
                 FieldName: "SupplierId",
-                FilterValues: [dataItem.Entity.SupplierId]
+                FilterValues: dataItem.Entity.SupplierId != null ? [dataItem.Entity.SupplierId] : []
             });
             var salezoneId = dataItem.Entity.SaleZoneId == 0 ? undefined : dataItem.Entity.SaleZoneId;
             fieldFilters.push({

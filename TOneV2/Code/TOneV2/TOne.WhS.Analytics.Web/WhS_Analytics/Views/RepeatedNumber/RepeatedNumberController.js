@@ -35,7 +35,7 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
         $scope.fromDate;
         $scope.toDate;
 
-        $scope.today = PeriodEnum.Today;
+        $scope.selectedPeriod = PeriodEnum.Today;
 
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
@@ -74,7 +74,8 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
             To: $scope.toDate,
             RepeatedMorethan: $scope.nRecords,
             CDRType: callStatusDirectiveAPI.getSelectedIds(),
-            PhoneNumber: phoneNumberDirectiveAPI.getSelectedValues()
+            PhoneNumber: phoneNumberDirectiveAPI.getSelectedValues(),
+            Period: $scope.selectedPeriod.value
         };
         return query;
     }

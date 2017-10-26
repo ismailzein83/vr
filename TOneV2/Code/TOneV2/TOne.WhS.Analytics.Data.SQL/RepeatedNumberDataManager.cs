@@ -157,9 +157,9 @@ namespace TOne.WhS.Analytics.Data.SQL
         private RepeatedNumber RepeatedNumberDataMapper(IDataReader reader)
         {
             RepeatedNumber repeatedNumber = new RepeatedNumber();
-            repeatedNumber.SaleZoneId = GetReaderValue<long>(reader, "SaleZoneID");
-            repeatedNumber.CustomerId = GetReaderValue<int>(reader, "CustomerID");
-            repeatedNumber.SupplierId = GetReaderValue<int>(reader, "SupplierID");
+            repeatedNumber.SaleZoneId = GetReaderValue<long?>(reader, "SaleZoneID");
+            repeatedNumber.CustomerId = GetReaderValue<int?>(reader, "CustomerID");
+            repeatedNumber.SupplierId = GetReaderValue<int?>(reader, "SupplierID");
             repeatedNumber.Attempt = GetReaderValue<int>(reader, "Attempt");
             repeatedNumber.DurationInMinutes = GetReaderValue<decimal>(reader, "DurationsInMinutes");
             repeatedNumber.PhoneNumber = reader["PhoneNumber"] as string;
