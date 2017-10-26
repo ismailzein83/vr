@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsAnalyticsRepeatednumberGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_RepeatedNumberAPIService", "WhS_Analytics_GenericAnalyticService", "VR_Analytic_AnalyticItemActionService", "WhS_Analytics_PhoneNumberEnum",
-function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPIService, WhS_Analytics_GenericAnalyticService, VR_Analytic_AnalyticItemActionService, WhS_Analytics_PhoneNumberEnum) {
+app.directive("vrWhsAnalyticsRepeatednumberGrid", ["UtilsService", "VRNotificationService", "WhS_Analytics_RepeatedNumberAPIService", "WhS_Analytics_GenericAnalyticService", "VR_Analytic_AnalyticItemActionService", "WhS_Analytics_PhoneNumberEnum",'WhS_Analytics_BillingCDROptionMeasureEnum',
+function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPIService, WhS_Analytics_GenericAnalyticService, VR_Analytic_AnalyticItemActionService, WhS_Analytics_PhoneNumberEnum, WhS_Analytics_BillingCDROptionMeasureEnum) {
 
     var directiveDefinitionObject = {
 
@@ -30,6 +30,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
         var switchIds;
         var phoneNumber;
         var payloadPeriod;
+        var sourceName;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -48,6 +49,15 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
                         if (query != undefined) {
+
+                            if (query.CDRType != undefined)
+                            {
+                                var cdrOption = UtilsService.getEnum(WhS_Analytics_BillingCDROptionMeasureEnum,"value",query.CDRType);
+                                if(cdrOption != undefined)
+                                {
+                                    sourceName = cdrOption.cdrSourceName;
+                                }
+                            }
                             phoneNumber = query.PhoneNumber;
                             fromDate = query.From;
                             toDate = query.To;
@@ -105,7 +115,8 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
         }
         function openRecordSearch(dataItem) {
             var reportId = "c82daa2a-3fd8-432d-8811-7ba3e4cb3c58";
-            var sourceName = "AllCDRs";
+            if (sourceName == undefined)
+                sourceName = "AllCDRs";
             var title = "CDRs";
             var period = payloadPeriod;
 
