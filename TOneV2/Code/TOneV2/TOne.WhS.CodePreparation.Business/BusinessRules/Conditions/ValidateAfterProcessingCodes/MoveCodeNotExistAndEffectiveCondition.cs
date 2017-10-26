@@ -24,7 +24,7 @@ namespace TOne.WhS.CodePreparation.Business
             foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
                 if (!(codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToMove.Code
-                         && item.ParentZone.ZoneEntity.Name.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase))))
+                         && item.ParentZone.ZoneEntity.Name.ToLower().Equals(codeToMove.OldZoneName.ToLower(), StringComparison.InvariantCultureIgnoreCase))))
                 {
                     context.Message = string.Format("Cannot move Code {0} because it belongs to a pending closed zone : {1}", codeToMove.Code, codeToMove.OldZoneName);
                     return false;
