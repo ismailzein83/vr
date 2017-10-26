@@ -55,7 +55,7 @@ app.directive('whsBeCompanypricelistsettingsRuntime', ['UtilsService', 'VRUIUtil
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.BusinessEntity.Entities.CompanyPricelistSettings, TOne.WhS.BusinessEntity.MainExtensions",
+                        $type: "TOne.WhS.BusinessEntity.Entities.CompanyPricelistSettings, TOne.WhS.BusinessEntity.Entities",
                         PricelistSettings: priceListSettingsEditorAPI.getData(),
                     };
                 };
