@@ -17,6 +17,8 @@ namespace Vanrise.AccountManager.Entities
 
     public abstract class AccountManagerAssignmentDefinitionSettings
     {
+        public abstract Guid ConfigId { get;  }
+        public abstract string RuntimeEditor { get; }
         public abstract string GetAccountName(string accountId);
     }
 }
