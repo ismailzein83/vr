@@ -22,8 +22,8 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined) {
-                accountManagerId = parameters.AccountManagerId;
-                accountManagerDefinitionId = parameters.AccountManagerDefinitionId;
+                accountManagerId = parameters.accountManagerId;
+                accountManagerDefinitionId = parameters.accountManagerDefinitionId;
             };
             isEditMode = (accountManagerId != undefined);
         }
@@ -43,11 +43,11 @@
             $scope.scopeModel.onUserSelectorReady = function (api) {
                 userSelectorAPI = api;
                 userSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onDirectiveReady = function (api) {
                 runtimeAPI = api;
                 runtimeReadyPromise.resolve();
-            }
+            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -59,7 +59,7 @@
                 }
                 else
                     loadAllControls();
-            })
+            });
         }
 
         function loadAllControls() {
@@ -69,6 +69,26 @@
                 else
                     $scope.title = UtilsService.buildTitleForUpdateEditor('Account Manager');
 
+            }
+            function loadRuntimeDirective() {
+                var directiveLoaddDeferred = UtilsService.createPromiseDeferred();
+                if ($scope.scopeModel.runtimeEditor != undefined) {
+                    runtimeReadyPromise.promise.then(function () {
+                        var payload;
+                        VRUIUtilsService.callDirectiveLoad(runtimeAPI, payload, directiveLoaddDeferred);
+                    });
+                }
+                else
+                    directiveLoaddDeferred.resolve();
+                return directiveLoaddDeferred.promise;
+            }
+            function loadUserSelector() {
+                var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                userSelectorReadyDeferred.promise.then(function () {
+                    var payload = (accountManagerEntity != undefined) ? { selectedIds: accountManagerEntity.UserId } : undefined;
+                    VRUIUtilsService.callDirectiveLoad(userSelectorAPI, payload, userSelectorLoadDeferred);
+                });
+                return userSelectorLoadDeferred.promise;
             }
             return UtilsService.waitMultipleAsyncOperations([loadUserSelector, setTitle, loadRuntimeDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -112,28 +132,17 @@
                 AccountManagerDefinitionId: accountManagerDefinitionId
             };
             if (isEditMode) {
-            accountManagerObject.AccountManagerId=accountManagerId
-            }
+                accountManagerObject.AccountManagerId = accountManagerId
+            };
             return accountManagerObject;
         }
-        function loadUserSelector() {
-            var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-            userSelectorReadyDeferred.promise.then(function () {
-                var payload = (accountManagerEntity != undefined) ? { selectedIds: accountManagerEntity.UserId } : undefined;
-                VRUIUtilsService.callDirectiveLoad(userSelectorAPI, payload, userSelectorLoadDeferred);
-            });
-            return userSelectorLoadDeferred.promise;
-        }
+       
         function getAccountManager() {
             return VR_AccountManager_AccountManagerAPIService.GetAccountManager(accountManagerId).then(function (response) {
                 accountManagerEntity = response;
             });
         }
-        function loadRuntimeDirective() {
-            runtimeReadyPromise.promise.then(function () {
-                runtimeAPI.load();
-            })
-        }
+      
         function getAccountManagerDefinitionId() {
             return VR_AccountManager_AccountManagerDefinitionAPIService.GetAccountManagerDefinition(accountManagerDefinitionId).then(function (response) {
                 accountManagerDefintionEntity = response;

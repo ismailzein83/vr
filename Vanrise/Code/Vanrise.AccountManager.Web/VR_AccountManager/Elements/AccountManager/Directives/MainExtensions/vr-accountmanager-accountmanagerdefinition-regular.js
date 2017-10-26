@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrAccountmanagerRegularextension', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrAccountmanagerAccountmanagerdefinitionRegular', ['UtilsService', 'VRUIUtilsService',
 function (UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {

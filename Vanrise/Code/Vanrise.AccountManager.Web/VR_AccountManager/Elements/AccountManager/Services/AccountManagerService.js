@@ -55,7 +55,7 @@
             };
 
             var parameters = {
-                AccountManagerDefinitionId: accountDefinitionId
+                accountManagerDefinitionId: accountDefinitionId
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -68,8 +68,8 @@
             var settings = {
             };
             var parameters = {
-                AccountManagerDefinitionId: accountManagerObject.AccountManagerDefinitionId,
-                AccountManagerId:accountManagerObject.AccountManagerId
+                accountManagerDefinitionId: accountManagerObject.AccountManagerDefinitionId,
+                accountManagerId:accountManagerObject.AccountManagerId
 
             };
 

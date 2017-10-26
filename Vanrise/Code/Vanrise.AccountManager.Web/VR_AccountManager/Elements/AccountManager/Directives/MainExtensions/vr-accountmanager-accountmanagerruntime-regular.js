@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrAccountmanagerRuntime', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrAccountmanagerAccountmanagerruntimeRegular', ['UtilsService', 'VRUIUtilsService',
 function (UtilsService, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
@@ -19,7 +19,7 @@ function (UtilsService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/VR_AccountManager/Elements/AccountManager/Directives/Template/RuntimeTemplate.html'
+        templateUrl: '/Client/Modules/VR_AccountManager/Elements/AccountManager/Directives/MainExtensions/Templates/RuntimeTemplate.html'
     };
 
     function AccountManagerRuntimeCtor(ctrl, $scope, $attrs) {

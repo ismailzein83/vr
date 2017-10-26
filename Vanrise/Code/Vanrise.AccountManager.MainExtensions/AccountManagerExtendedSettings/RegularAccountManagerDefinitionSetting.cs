@@ -16,7 +16,7 @@ namespace Vanrise.AccountManager.MainExtensions
 
         public override string RuntimeEditor
         {
-            get { return "vr-accountmanager-runtime"; }
+            get { return "vr-accountmanager-accountmanagerruntime-regular"; }
         }
     }
 }
