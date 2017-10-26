@@ -290,8 +290,10 @@
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-extendedsettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
-    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyDefinition\CompanyDefinitionPricelistSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyDefinition\Templates\CompanyDefinitionPricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyDefinition\vr-whs-be-companydefinition-pricelistsettings.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\Templates\CompanyPricelistSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\vr-whs-be-companypricelistsettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\Templates\CustomerGroupTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CustomerGroup\vr-whs-be-customergroup.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\DataRecordFieldFormulas\Templates\GatewayEvaluatorFieldFormulaTemplate.html" />

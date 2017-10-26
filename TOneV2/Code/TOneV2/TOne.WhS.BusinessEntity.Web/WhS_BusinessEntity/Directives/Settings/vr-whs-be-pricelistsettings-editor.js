@@ -287,27 +287,31 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
         }
 
         function prepareDirectivesViewForContext(directiveContext) {
+            var systemEnumValue = WhS_BE_SaleAreaSettingsContextEnum.System.value;
+            var companyEnumValue = WhS_BE_SaleAreaSettingsContextEnum.Company.value;
+            var customerEnumValue = WhS_BE_SaleAreaSettingsContextEnum.Customer.value;
 
-            ctrl.showPricelistTemplateSelector = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
-            ctrl.showPricelistEmailTemplateSelector = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.showPricelistExtensionFormatSelector = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
-            ctrl.showPricelistTypeSelector = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
-            ctrl.showCompressPriceListFile = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
-            ctrl.showCodeChangeTypeSettingsGrid = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
-            ctrl.showRateChangeTypeSettingsGrid = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
-            ctrl.showFileNamePattern = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
+            ctrl.showPricelistTemplateSelector = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
+            ctrl.showPricelistEmailTemplateSelector = (directiveContext == systemEnumValue || directiveContext == companyEnumValue);
+            ctrl.showPricelistExtensionFormatSelector = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
+            ctrl.showPricelistTypeSelector = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
+            ctrl.showCompressPriceListFile = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
+            ctrl.showCodeChangeTypeSettingsGrid = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
+            ctrl.showRateChangeTypeSettingsGrid = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
+            ctrl.showFileNamePattern = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
         }
 
         function prepareDirectivesRequiredForContext(directiveContext) {
+            var systemEnumValue = WhS_BE_SaleAreaSettingsContextEnum.System.value;
 
-            ctrl.isPricelistTemplateRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.isPricelistEmailTemplateRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.isPricelistExtensionFormatRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.isPricelistTypeRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.isCompressPriceListFileRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.isRateChangeTypeSettingsRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.isCodeChangeTypeSettingsRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-            ctrl.isFileNamePatternRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+            ctrl.isPricelistTemplateRequired = (directiveContext == systemEnumValue);
+            ctrl.isPricelistEmailTemplateRequired = (directiveContext == systemEnumValue);
+            ctrl.isPricelistExtensionFormatRequired = (directiveContext == systemEnumValue);
+            ctrl.isPricelistTypeRequired = (directiveContext == systemEnumValue);
+            ctrl.isCompressPriceListFileRequired = (directiveContext == systemEnumValue);
+            ctrl.isRateChangeTypeSettingsRequired = (directiveContext == systemEnumValue);
+            ctrl.isCodeChangeTypeSettingsRequired = (directiveContext == systemEnumValue);
+            ctrl.isFileNamePatternRequired = (directiveContext == systemEnumValue);
         }
 
     }

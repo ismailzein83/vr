@@ -94,27 +94,32 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
             }
 
             function prepareDirectivesViewForContext(directiveContext) {
+                var systemEnumValue = WhS_BE_SaleAreaSettingsContextEnum.System.value;
+                var sellingProductEnumValue = WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value;
+                var customerEnumValue = WhS_BE_SaleAreaSettingsContextEnum.Customer.value;
 
-                ctrl.showDefaultRate = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.showMaxSaleRate = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.showEffectiveDateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.showRetroactiveDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.showNewRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
-                ctrl.showEndCountryDayOffset = (directiveContext != WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value);
-                ctrl.showIncreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
-                ctrl.showDecreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.SellingProduct.value || directiveContext == WhS_BE_SaleAreaSettingsContextEnum.Customer.value);
+
+                ctrl.showDefaultRate = (directiveContext == systemEnumValue);
+                ctrl.showMaxSaleRate = (directiveContext == systemEnumValue);
+                ctrl.showEffectiveDateDayOffset = (directiveContext == systemEnumValue);
+                ctrl.showRetroactiveDayOffset = (directiveContext == systemEnumValue);
+                ctrl.showNewRateDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);
+                ctrl.showEndCountryDayOffset = (directiveContext != systemEnumValue);
+                ctrl.showIncreasedRateDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);
+                ctrl.showDecreasedRateDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);
             }
 
             function prepareDirectivesRequiredForContext(directiveContext) {
+                var systemEnumValue = WhS_BE_SaleAreaSettingsContextEnum.System.value;
 
-                ctrl.isDefaultRateRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.isMaxSaleRateRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.isEffectiveDateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.isRetroactiveDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.isNewRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.isEndCountryDayOffsetRequired = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.isIncreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
-                ctrl.isDecreasedRateDayOffset = (directiveContext == WhS_BE_SaleAreaSettingsContextEnum.System.value);
+                ctrl.isDefaultRateRequired = (directiveContext == systemEnumValue);
+                ctrl.isMaxSaleRateRequired = (directiveContext == systemEnumValue);
+                ctrl.isEffectiveDateDayOffset = (directiveContext == systemEnumValue);
+                ctrl.isRetroactiveDayOffset = (directiveContext == systemEnumValue);
+                ctrl.isNewRateDayOffset = (directiveContext == systemEnumValue);
+                ctrl.isEndCountryDayOffsetRequired = (directiveContext == systemEnumValue);
+                ctrl.isIncreasedRateDayOffset = (directiveContext == systemEnumValue);
+                ctrl.isDecreasedRateDayOffset = (directiveContext == systemEnumValue);
             }
         }
 

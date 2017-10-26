@@ -52,7 +52,7 @@
 
                 function getData() {
                     var data = {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CompanyDifinitionPricelistSettings, TOne.WhS.BusinessEntity.MainExtensions",
+                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CompanyDefinitionPricelistSettings, TOne.WhS.BusinessEntity.MainExtensions",
                     };
                     return data;
                 }
