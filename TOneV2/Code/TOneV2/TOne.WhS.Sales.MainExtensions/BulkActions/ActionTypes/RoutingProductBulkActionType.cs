@@ -37,7 +37,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
         {
-            return true;
+            return UtilitiesManager.IsActionApplicableToCountry(context, this.IsApplicableToZone);
         }
 
         public override void ValidateZone(IZoneValidationContext context)

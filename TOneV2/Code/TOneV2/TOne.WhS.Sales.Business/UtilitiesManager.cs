@@ -77,6 +77,8 @@ namespace TOne.WhS.Sales.Business
                 CountryBEDsByCountryId = context.CountryBEDsByCountryId,
                 GetSellingProductZoneRate = context.GetSellingProductZoneRate,
                 GetCustomerZoneRate = context.GetCustomerZoneRate,
+                GetCurrentSellingProductZoneRP = context.GetCurrentSellingProductZoneRP,
+                GetCurrentCustomerZoneRP = context.GetCurrentCustomerZoneRP,
                 GetRateBED = context.GetRateBED,
                 IsBulkActionApplicableToZone = isActionApplicableToZone
             };
