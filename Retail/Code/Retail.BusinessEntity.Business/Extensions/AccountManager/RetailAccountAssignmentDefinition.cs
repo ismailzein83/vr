@@ -15,5 +15,18 @@ namespace Retail.BusinessEntity.Business
         }
         public Guid AccountBEDefinitionId { get; set; }
         public Retail.BusinessEntity.Entities.AccountCondition AccountCondition { get; set; }
+
+        public override Guid ConfigId
+        {
+            get { return new Guid("5592F2FF-09CB-4BE0-A534-CCBB7631B00B"); }
+        }
+
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "";
+            }
+        }
     }
 }
