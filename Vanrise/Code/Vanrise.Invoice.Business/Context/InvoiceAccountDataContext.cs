@@ -10,5 +10,7 @@ namespace Vanrise.Invoice.Business.Context
     public class InvoiceAccountDataContext : IInvoiceAccountDataContext
     {
         public string PartnerId { get; set; }
+
+        public Guid InvoiceTypeId { get; set; }
     }
 }

@@ -57,7 +57,7 @@ namespace Vanrise.Invoice.Entities
     }
     public interface IInvoiceAccountDataContext : IBasePartnerManagerContext
     {
-
+        Guid InvoiceTypeId { get; }
     }
     public interface IInvoicePartnerSettingsContext : IBasePartnerManagerContext
     {

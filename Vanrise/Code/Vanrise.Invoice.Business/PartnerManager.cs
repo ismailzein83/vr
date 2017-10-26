@@ -16,13 +16,13 @@ namespace Vanrise.Invoice.Business
         {
             InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
-            if (invoiceType.Settings == null )
-               throw new NullReferenceException("invoiceType.Settings");
-             if (invoiceType.Settings.ExtendedSettings == null )
-               throw new NullReferenceException("invoiceType.Settings.ExtendedSettings");
+            if (invoiceType.Settings == null)
+                throw new NullReferenceException("invoiceType.Settings");
+            if (invoiceType.Settings.ExtendedSettings == null)
+                throw new NullReferenceException("invoiceType.Settings.ExtendedSettings");
             var invoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
-            if(invoicePartnerManager == null)
-                  throw new NullReferenceException("invoicePartnerManager");
+            if (invoicePartnerManager == null)
+                throw new NullReferenceException("invoicePartnerManager");
             return invoicePartnerManager;
         }
         public string GetPartnerName(Guid invoiceTypeId, string partnerId)
@@ -35,7 +35,7 @@ namespace Vanrise.Invoice.Business
             };
             return invoicePartnerManager.GetPartnerName(partnerNameManagerContext);
         }
-        public dynamic GetPartnerInfo(Guid invoiceTypeId, string partnerId,string infoType)
+        public dynamic GetPartnerInfo(Guid invoiceTypeId, string partnerId, string infoType)
         {
             var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
 
@@ -96,11 +96,11 @@ namespace Vanrise.Invoice.Business
         {
             var fileNamePattern = GetPartnerFileNamePattern(invoiceTypeId, partnerId);
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
-            invoiceType.ThrowIfNull("invoiceType",invoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
             if (invoiceType.Settings.InvoiceFileSettings != null)
             {
-                if(invoiceType.Settings.InvoiceFileSettings.InvoiceFileNameParts != null)
+                if (invoiceType.Settings.InvoiceFileSettings.InvoiceFileNameParts != null)
                 {
                     InvoiceFileNamePartContext invoiceFileNamePartContext = new InvoiceFileNamePartContext
                     {
@@ -133,7 +133,7 @@ namespace Vanrise.Invoice.Business
                 PartnerId = partnerId,
                 InvoiceSettingId = partnerSettings.InvoiceSetting.InvoiceSettingId
             };
-            return invoicePartnerManager.GetInvoicePartnerSettingPart<T>(invoicePartnerSettingPartContext) as T; 
+            return invoicePartnerManager.GetInvoicePartnerSettingPart<T>(invoicePartnerSettingPartContext) as T;
         }
         public string GetPartnerFileNamePattern(Guid invoiceTypeId, string partnerId)
         {
@@ -212,6 +212,7 @@ namespace Vanrise.Invoice.Business
             InvoiceAccountDataContext invoiceAccountDataContext = new InvoiceAccountDataContext
             {
                 PartnerId = partnerId,
+                InvoiceTypeId = invoiceTypeId
             };
             return invoicePartnerManager.GetInvoiceAccountData(invoiceAccountDataContext);
         }

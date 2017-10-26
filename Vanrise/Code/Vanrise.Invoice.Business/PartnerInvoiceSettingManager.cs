@@ -213,7 +213,8 @@ namespace Vanrise.Invoice.Business
                     partnerInvoiceSettingDetail.PartnerName = invoicePartnerSettingManager.GetPartnerName(context);
                 var invoiceAccountInfo = invoicePartnerSettingManager.GetInvoiceAccountData(new Context.InvoiceAccountDataContext
                 {
-                    PartnerId = partnerInvoiceSettingObject.PartnerId
+                    PartnerId = partnerInvoiceSettingObject.PartnerId,
+                    InvoiceTypeId= invoiceType.InvoiceTypeId
                 });
                 if(invoiceAccountInfo != null)
                 {
