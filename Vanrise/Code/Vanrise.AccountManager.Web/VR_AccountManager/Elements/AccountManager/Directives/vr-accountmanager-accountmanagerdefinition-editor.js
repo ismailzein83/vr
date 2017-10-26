@@ -32,6 +32,9 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
             var subViewGridAPI;
             var subViewGridReady = UtilsService.createPromiseDeferred();
 
+            var extensionDefinitionsSelectorAPI;
+            var extensionDefinitionsSelector = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -41,6 +44,11 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                     subViewGridAPI = api;
                     subViewGridReady.resolve();
                 };
+                $scope.onSelectiveReady = function (api) {
+                    extensionDefinitionsSelectorAPI = api;
+                    extensionDefinitionsSelector.resolve();
+
+                }
                 defineAPI();
             }
             function defineAPI() {
@@ -65,14 +73,23 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                                     };
                             subViewGridAPI.loadGrid(gridPayload);
                         });
+                        extensionDefinitionsSelector.promise.then(function () {
+                            if (payload != undefined)
+                            {
+                            var selectorPayload = {
+                                extendedSettings: payload.businessEntityDefinitionSettings.ExtendedSettings
+                            };
+                        }
+                            extensionDefinitionsSelectorAPI.load(selectorPayload);
+                        })
                 };
                 api.getData = function () {
                     var obj = {
                         $type: "Vanrise.AccountManager.Business.AccountManagerBEDefinitionSettings, Vanrise.AccountManager.Business",
                         AssignmentDefinitions: gridAPI.getData(),
-                        SubViews: subViewGridAPI.getData()
+                        SubViews: subViewGridAPI.getData(),
+                        ExtendedSettings: extensionDefinitionsSelectorAPI.getData()
                     };
-
                     return obj;
                 };
 

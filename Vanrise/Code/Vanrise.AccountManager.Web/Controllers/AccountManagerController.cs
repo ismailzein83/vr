@@ -41,6 +41,13 @@ namespace Vanrise.AccountManager.Web.Controllers
         {
             return _manager.GetAccountManager(accountManagerId);
         }
+        [HttpGet]
+        [Route("GetAccountManagerDefinitionConfigs")]
+        public IEnumerable<AccountManagerDefinitionConfig> GetAccountManagerDefinitionConfigs()
+        {
+            AccountManagerManager manager = new AccountManagerManager();
+            return manager.GetAccountManagerDefinitionConfigs();
+        }
 
     }
 }

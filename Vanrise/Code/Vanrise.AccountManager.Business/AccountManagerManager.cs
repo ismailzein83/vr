@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 using Vanrise.AccountManager.Data;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
-using Vanrise.AccountManager.Entities;
-using Vanrise.Common;
 
 namespace Vanrise.AccountManager.Business
 {
@@ -93,6 +92,11 @@ namespace Vanrise.AccountManager.Business
                AccountManagerDefinitionId = accountManager.AccountManagerDefinitionId
            };
           
+       }
+       public IEnumerable<AccountManagerDefinitionConfig> GetAccountManagerDefinitionConfigs()
+       {
+           ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+           return manager.GetExtensionConfigurations<AccountManagerDefinitionConfig>(AccountManagerDefinitionConfig.EXTENSION_TYPE).OrderByDescending(x => x.Name);
        }
        
        #endregion

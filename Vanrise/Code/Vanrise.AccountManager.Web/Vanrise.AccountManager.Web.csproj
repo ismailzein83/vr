@@ -117,9 +117,7 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="VR_AccountManager\Elements\AccountManager\Directives\MainExtensions\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
@@ -145,7 +143,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_AccountManager\Constant\ModuleConfig.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\MainExtensions\Templates\RegularExtensionTemplate.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\MainExtensions\vr-accountmanager-regularextension.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionGridTemplate.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionSettings.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerGrid.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\SubViewsGrid.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanager-grid.js" />
@@ -153,6 +154,7 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionEditorTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-editor.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-selector.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinitionsettings.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-subviews-grid.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\AccountManagerService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerAPIService.js" />

@@ -11,12 +11,12 @@ namespace Vanrise.AccountManager.MainExtensions
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("3041F5F3-484F-4F05-9A79-3C953A37E0B9"); }
         }
 
         public override string RuntimeEditor
         {
-            get { throw new NotImplementedException(); }
+            get { return ""; }
         }
     }
 }
