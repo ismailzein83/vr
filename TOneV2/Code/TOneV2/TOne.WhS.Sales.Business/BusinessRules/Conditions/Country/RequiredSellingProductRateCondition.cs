@@ -45,6 +45,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
                 DateTime effectiveOn = Utilities.Max(countryToAdd.BED, countryZone.BED);
 
+                if (countryZone.EED.HasValue && countryZone.EED.Value <= effectiveOn)
+                    continue;
+
                 if (zoneNormalRates == null || zoneNormalRates.Count() == 0 || !zoneNormalRates.Any(x => x.IsEffective(effectiveOn)))
                 {
                     context.Message = errorMessage;
