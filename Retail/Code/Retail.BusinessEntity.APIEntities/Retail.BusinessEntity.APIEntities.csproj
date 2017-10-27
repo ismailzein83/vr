@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="AccountClientDetail.cs" />
     <Compile Include="ClientBalanceAccountInfo.cs" />
-    <Compile Include="ClientChildAccountInfo.cs" />
+    <Compile Include="ClientAccountInfo.cs" />
     <Compile Include="ClientGenericFieldDefinitionInfo.cs" />
     <Compile Include="ClientInvoiceAccountInfo.cs" />
     <Compile Include="ClientRetailProfileAccountInfo.cs" />

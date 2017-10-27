@@ -647,7 +647,7 @@ namespace Retail.BusinessEntity.Business
                 return null;
             }
         }
-        public IEnumerable<ClientChildAccountInfo> GetClientChildAccountsInfo(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
+        public IEnumerable<ClientAccountInfo> GetClientChildAccountsInfo(Guid accountBEDefinitionId, long accountId, bool withSubChildren)
         {
             var childAccounts = GetChildAccounts(accountBEDefinitionId, accountId, withSubChildren);
             if (childAccounts == null)
@@ -1491,9 +1491,9 @@ namespace Retail.BusinessEntity.Business
             }
             return name;
         }
-        private ClientChildAccountInfo ClientChildAccountInfoMapper(Account account)
+        private ClientAccountInfo ClientChildAccountInfoMapper(Account account)
         {
-            return new ClientChildAccountInfo
+            return new ClientAccountInfo
             {
                 AccountId = account.AccountId,
                 Name = GetAccountName(account),

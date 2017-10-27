@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.BusinessEntity.APIEntities
 {
-    public class ClientChildAccountInfo
+    public class ClientAccountInfo
     {
         public long AccountId { get; set; }
         public string Name { get; set; }
