@@ -3,11 +3,11 @@
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             idfield="Entity.PriceListId" enableautoexport="true" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.defaultSortDirection">
+             enableautoexport="true" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.defaultSortDirection">
     <vr-datagridcolumn widthfactor="5" invisibleheader headertext="'Is Sent'" disablesorting="true" ng-show="!hideSelectedColumn" fixedwidth="'30'">
         <vr-check value="dataItem.isSelected" ng-if="!dataItem.Entity.IsSent"></vr-check>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.PriceListId'" type="'Text'" fixedwidth="'50'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Pricelist ID'" field="'Entity.PriceListId'" type="'Text'" fixedwidth="'80'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Customer Name'" field="'OwnerName'" type="'Text'" widthfactor="'3'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" type="'Text'" widthfactor="'5'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Pricelist Type'" field="'PriceListTypeName'" type="'Text'" fixedwidth="'80'"></vr-datagridcolumn>
