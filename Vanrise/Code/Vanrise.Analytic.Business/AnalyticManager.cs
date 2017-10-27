@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Analytic.Data;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Vanrise.GenericData.MainExtensions.DataRecordFields;
 using Vanrise.Security.Business;
 
 namespace Vanrise.Analytic.Business
@@ -21,31 +18,45 @@ namespace Vanrise.Analytic.Business
 
         public Vanrise.Entities.IDataRetrievalResult<AnalyticRecord> GetFilteredRecords(Vanrise.Entities.DataRetrievalInput<AnalyticQuery> input)
         {
-            // CheckAnalyticRequiredPermission(input);
+            //CheckAnalyticRequiredPermission(input);
             if (input.Query.FromTime == input.Query.ToTime)
                 return null;
-            SetQueryToTimeIfNull(input.Query);
-            if (!input.Query.CurrencyId.HasValue)
+
+            AnalyticTable analyticTable = new AnalyticTableManager().GetAnalyticTableById(input.Query.TableId);
+            analyticTable.ThrowIfNull("analyticTable", input.Query.TableId);
+            analyticTable.Settings.ThrowIfNull("analyticTable.Settings", input.Query.TableId);
+            analyticTable.Settings.DataProvider.ThrowIfNull("analyticTable.Settings.DataProvider", input.Query.TableId);
+
+            var analyticDataProvider = analyticTable.Settings.DataProvider.GetRemoteAnalyticDataProvider(new GetRemoteAnalyticDataProviderContext() { AnalyticTableId = input.Query.TableId });
+            if (analyticDataProvider != null)
             {
-                CurrencyManager currencyManager = new CurrencyManager();
-                input.Query.CurrencyId = currencyManager.GetSystemCurrency().CurrencyId;
+                return analyticDataProvider.GetFilteredRecords(input);
             }
-            if (input.SortByColumnName != null && input.SortByColumnName.Contains("MeasureValues"))
+            else
             {
-                string[] measureProperty = input.SortByColumnName.Split('.');
-                input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
-            }
-            if (input.Query.AdvancedOrderOptions != null)
-            {
-                input.Query.MeasureFields.ThrowIfNull("input.Query.MeasureFields");
-                List<string> additionalMeasureNames = input.Query.AdvancedOrderOptions.GetAdditionalMeasureNames();
-                foreach (var m in additionalMeasureNames)
+                SetQueryToTimeIfNull(input.Query);
+                if (!input.Query.CurrencyId.HasValue)
                 {
-                    if (!input.Query.MeasureFields.Contains(m))
-                        input.Query.MeasureFields.Add(m);
+                    CurrencyManager currencyManager = new CurrencyManager();
+                    input.Query.CurrencyId = currencyManager.GetSystemCurrency().CurrencyId;
                 }
+                if (input.SortByColumnName != null && input.SortByColumnName.Contains("MeasureValues"))
+                {
+                    string[] measureProperty = input.SortByColumnName.Split('.');
+                    input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", measureProperty[0], measureProperty[1]);
+                }
+                if (input.Query.AdvancedOrderOptions != null)
+                {
+                    input.Query.MeasureFields.ThrowIfNull("input.Query.MeasureFields");
+                    List<string> additionalMeasureNames = input.Query.AdvancedOrderOptions.GetAdditionalMeasureNames();
+                    foreach (var m in additionalMeasureNames)
+                    {
+                        if (!input.Query.MeasureFields.Contains(m))
+                            input.Query.MeasureFields.Add(m);
+                    }
+                }
+                return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler());
             }
-            return BigDataManager.Instance.RetrieveData(input, new AnalyticRecordRequestHandler());
         }
 
         public List<AnalyticRecord> GetAllFilteredRecords(AnalyticQuery query, out AnalyticRecord summaryRecord)

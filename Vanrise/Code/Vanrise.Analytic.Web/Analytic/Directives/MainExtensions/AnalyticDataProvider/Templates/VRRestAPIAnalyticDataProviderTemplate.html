@@ -1,0 +1,15 @@
+﻿<vr-common-connection-selector on-ready="scopeModel.onConnectionSelectorReady"
+                               onselectionchanged="scopeModel.onConnectionSelectionChanged"
+                               selectedvalues="scopeModel.selectedConnection"
+                               normal-col-num="{{restAPICtrl.normalColNum}}" isrequired="true">
+</vr-common-connection-selector>
+
+<vr-columns colnum="{{restAPICtrl.normalColNum}}" ng-show="scopeModel.selectedConnection != undefined">
+    <span vr-loader="scopeModel.isRemoteAnalyticTableSelectorLoading">
+        <vr-analytic-table-remoteselector on-ready="scopeModel.onAnalyticTableSelectorReady" isrequired="true"></vr-analytic-table-remoteselector>
+    </span>
+</vr-columns>
+
+<vr-analytic-restapianalyticqueryinterceptor-selective on-ready="scopeModel.onAnalyticQueryInterceptorSelectiveReady" 
+                                                       normal-col-num="{{restAPICtrl.normalColNum}}">
+</vr-analytic-restapianalyticqueryinterceptor-selective>

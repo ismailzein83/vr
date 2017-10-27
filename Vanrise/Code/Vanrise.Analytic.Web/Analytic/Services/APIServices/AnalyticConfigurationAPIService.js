@@ -5,6 +5,7 @@
     AnalyticConfigurationAPIService.$inject = ['BaseAPIService', 'VR_Analytic_ModuleConfig', 'UtilsService', 'SecurityService'];
 
     function AnalyticConfigurationAPIService(BaseAPIService, VR_Analytic_ModuleConfig, UtilsService, SecurityService) {
+
         var controllerName = 'AnalyticConfiguration';
 
         function GetAnalyticReportSettingsTemplateConfigs() {
@@ -31,13 +32,18 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetAnalyticDataProviderConfigs"));
         }
 
+        function GetVRRestAPIAnalyticQueryInterceptorConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetVRRestAPIAnalyticQueryInterceptorConfigs"));
+        }
+
         return ({
             GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
             GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs,
             GetRealTimeReportSettingsTemplateConfigs: GetRealTimeReportSettingsTemplateConfigs,
             GetRealTimeWidgetsTemplateConfigs: GetRealTimeWidgetsTemplateConfigs,
             GetMeasureStyleRuleTemplateConfigs: GetMeasureStyleRuleTemplateConfigs,
-            GetAnalyticDataProviderConfigs: GetAnalyticDataProviderConfigs
+            GetAnalyticDataProviderConfigs: GetAnalyticDataProviderConfigs,
+            GetVRRestAPIAnalyticQueryInterceptorConfigs: GetVRRestAPIAnalyticQueryInterceptorConfigs
         });
     }
 

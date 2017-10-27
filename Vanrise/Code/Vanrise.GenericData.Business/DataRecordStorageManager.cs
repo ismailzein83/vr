@@ -33,9 +33,6 @@ namespace Vanrise.GenericData.Business
             dataStore.ThrowIfNull("dataStore", dataRecordStorage.DataStoreId);
             dataStore.Settings.ThrowIfNull("dataStore.Settings", dataRecordStorage.DataStoreId);
 
-            if (input.Query.Filters != null)
-                input.Query.FilterGroup = new RecordFilterManager().BuildRecordFilterGroup(dataRecordStorage.DataRecordTypeId, input.Query.Filters, input.Query.FilterGroup);
-
             var remoteRecordDataManager = dataStore.Settings.GetRemoteRecordDataManager(new GetRemoteRecordStorageDataManagerContext() { DataStore = dataStore, DataRecordStorage = dataRecordStorage });
             if (remoteRecordDataManager != null)
             {
@@ -43,6 +40,9 @@ namespace Vanrise.GenericData.Business
             }
             else
             {
+                if (input.Query.Filters != null)
+                    input.Query.FilterGroup = new RecordFilterManager().BuildRecordFilterGroup(dataRecordStorage.DataRecordTypeId, input.Query.Filters, input.Query.FilterGroup);
+
                 input.Query.Columns.ThrowIfNull("input.Query.Columns");
                 input.Query.Columns = new HashSet<string>(input.Query.Columns).ToList();
 

@@ -53,5 +53,12 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             return _manager.GetAnalyticDataProviderConfigs();
         }
+
+        [HttpGet]
+        [Route("GetVRRestAPIAnalyticQueryInterceptorConfigs")]
+        public IEnumerable<VRRestAPIAnalyticQueryInterceptorConfig> GetVRRestAPIAnalyticQueryInterceptorConfigs()
+        {
+            return _manager.GetVRRestAPIAnalyticQueryInterceptorConfigs();
+        }
     }
 }

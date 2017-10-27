@@ -36,5 +36,9 @@ namespace Vanrise.Analytic.Business
         {
             return _templateConfigManager.GetExtensionConfigurations<AnalyticDataProviderConfig>(AnalyticDataProviderConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<VRRestAPIAnalyticQueryInterceptorConfig> GetVRRestAPIAnalyticQueryInterceptorConfigs()
+        {
+            return _templateConfigManager.GetExtensionConfigurations<VRRestAPIAnalyticQueryInterceptorConfig>(VRRestAPIAnalyticQueryInterceptorConfig.EXTENSION_TYPE);
+        }
     }
 }

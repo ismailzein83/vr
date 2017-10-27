@@ -35,21 +35,5 @@ namespace Vanrise.Analytic.Entities
         public AnalyticDataProvider DataProvider { get; set; }
     }
 
-    public abstract class AnalyticDataProvider
-    {
-        public abstract Guid ConfigId { get; }
 
-        public abstract IAnalyticDataManager CreateDataManager(IAnalyticTableQueryContext queryContext);
-    }
-
-    public class AnalyticDataProviderConfig : ExtensionConfiguration
-    {
-        public const string EXTENSION_TYPE = "VR_Analytic_AnalyticDataProviderSettings";
-        public string Editor { get; set; }
-    }
-
-    public interface IAnalyticDataManager
-    {
-        IEnumerable<DBAnalyticRecord> GetAnalyticRecords(AnalyticQuery query, out  HashSet<string> includedSQLDimensions);
-    }
 }

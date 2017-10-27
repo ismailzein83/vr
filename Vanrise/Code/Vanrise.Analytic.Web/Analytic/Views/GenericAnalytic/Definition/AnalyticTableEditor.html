@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="VR_Analytic_AnalyticTableEditorController" vr-loader="scopeModel.isLoading" width="'40%'">
+﻿<div vr-modalcontent ng-controller="VR_Analytic_AnalyticTableEditorController" vr-loader="scopeModel.isLoading" width="'60%'">
     <vr-modalbody maxheight="'600px'">
         <vr-form validationcontext="analyticTbleEditorGroup">
             <vr-tabs>
@@ -10,47 +10,38 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Settings'">
-
                     <vr-analytic-dataprovider-settings on-ready="onAnalyticDataProviderSettingsDirectiveReady" normal-col-num="6"></vr-analytic-dataprovider-settings>
                     <vr-row>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.tableName" label="Table Name" isrequired="true"></vr-textbox>
                         </vr-columns>
-
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.timeColumnName" label="Time Column Name" isrequired="true"></vr-textbox>
                         </vr-columns>
-
                         <!--<vr-columns width="fullrow">
-        <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired="true"></vr-textbox>
-    </vr-columns>-->
-
-
+                             <vr-textbox value="scopeModel.connectionString" label="Connection String" isrequired="true"></vr-textbox>
+                        </vr-columns>-->
                         <vr-columns width="1/2row">
-                            <vr-select label="Connection Type" datasource="scopeModel.connectionStringType" selectedvalues="scopeModel.selectedConnectionStringType"
-                                       datavaluefield="value" datatextfield="description" isrequired="true" onselectionchanged="scopeModel.onConnectionStringTypeSelectionChanged" hideremoveicon>
+                            <vr-select datasource="scopeModel.connectionStringType" selectedvalues="scopeModel.selectedConnectionStringType"
+                                       onselectionchanged="scopeModel.onConnectionStringTypeSelectionChanged" isrequired="true"
+                                       datavaluefield="value" datatextfield="description" label="Connection Type" hideremoveicon>
+                            </vr-select>
                         </vr-columns>
-
                         <vr-columns width="fullrow" ng-show="scopeModel.showConnectionStringName">
                             <vr-textbox value="scopeModel.connectionStringName" label="Connection String Name" isrequired="scopeModel.showConnectionStringName"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="fullrow" ng-show="scopeModel.showConnectionString">
                             <vr-textarea value="scopeModel.connectionString" label="Connection String" isrequired="scopeModel.showConnectionString"></vr-textarea>
                         </vr-columns>
-
                         <vr-columns width="1/2row">
-                            <vr-genericdata-datarecordtype-selector selectedvalues="scopeModel.selectedDataRecordType"
-                                                                    isrequired="true"
-                                                                    hideremoveicon
-                                                                    ismultipleselection
-                                                                    on-ready="scopeModel.onDataRecordTypeSelectorReady"
-                                                                    label="Mapping Record Types"></vr-genericdata-datarecordtype-selector>
+                            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModel.selectedDataRecordType"
+                                                                    isrequired="true" label="Mapping Record Types"
+                                                                    hideremoveicon ismultipleselection>
+                            </vr-genericdata-datarecordtype-selector>
                         </vr-columns>
                     </vr-row>
-                   
-
                 </vr-tab>
-
                 <vr-tab header="'Security'">
                     <vr-row>
                         <vr-columns width="fullrow">
@@ -59,8 +50,6 @@
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
-
-
         </vr-form>
     </vr-modalbody>
     <div>
@@ -70,6 +59,5 @@
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
-
     </div>
 </div>
