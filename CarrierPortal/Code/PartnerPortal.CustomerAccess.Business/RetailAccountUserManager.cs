@@ -2,21 +2,25 @@
 using Retail.BusinessEntity.APIEntities;
 using System;
 using System.Collections.Generic;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
-using Vanrise.Common;
-using Vanrise.Common.Business;
+
 namespace PartnerPortal.CustomerAccess.Business
 {
     public class RetailAccountUserManager
-    {        
+    {
         #region Ctor/Fields
 
         static BusinessEntityDefinitionManager s_businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
 
         #endregion
+
+        #region Public Methods
+
         public RetailAccountInfo GetRetailAccountInfo(int userId)
         {
             UserManager userManager = new UserManager();
@@ -24,13 +28,14 @@ namespace PartnerPortal.CustomerAccess.Business
 
             if (retailAccountSettings == null)
                 throw new NullReferenceException(string.Format("retailAccountSettings for userId: {0}", userId));
+
             return new RetailAccountInfo
             {
-                AccountBEDefinitionId =retailAccountSettings.AccountBEDefinitionId ,
+                AccountBEDefinitionId = retailAccountSettings.AccountBEDefinitionId,
                 AccountId = retailAccountSettings.AccountId
             };
         }
-      
+
         public InsertOperationOutput<Vanrise.Security.Entities.UserDetail> AddRetailAccountUser(RetailAccount retailAccount)
         {
             object userExtendedSettings;
@@ -45,8 +50,11 @@ namespace PartnerPortal.CustomerAccess.Business
                 TenantId = retailAccount.TenantId,
                 ExtendedSettings = new Dictionary<string, object>(),
             };
+
             string retailAccountSettingsFullName = typeof(RetailAccountSettings).FullName;
-            user.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId,
+            user.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings()
+            {
+                AccountId = retailAccount.AccountId,
                 AccountBEDefinitionId = retailAccount.AccountBEDefinitionId
             });
 
@@ -68,10 +76,15 @@ namespace PartnerPortal.CustomerAccess.Business
                             EnabledTill = retailAccount.EnabledTill,
                             TenantId = retailAccount.TenantId,
                             ExtendedSettings = new Dictionary<string, object>()
-                            
+
                         };
-                        userToUpdate.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings() { AccountId = retailAccount.AccountId,
-                        AccountBEDefinitionId = retailAccount.AccountBEDefinitionId});
+
+                        userToUpdate.ExtendedSettings.Add(retailAccountSettingsFullName, new RetailAccountSettings()
+                        {
+                            AccountId = retailAccount.AccountId,
+                            AccountBEDefinitionId = retailAccount.AccountBEDefinitionId
+                        });
+
                         Vanrise.Entities.UpdateOperationOutput<Vanrise.Security.Entities.UserDetail> updateOperationOutput = userManager.UpdateUser(userToUpdate);
                         if (updateOperationOutput.Result == Vanrise.Entities.UpdateOperationResult.Succeeded)
                         {
@@ -112,11 +125,14 @@ namespace PartnerPortal.CustomerAccess.Business
 
             return clientChildAccountsInfo != null ? clientChildAccountsInfo.FindAllRecords(filterExpression) : null; ;
         }
+
         public RetailUserSubaccountsBEDefinition GetRetailUserSubaccountsBEDefinition(Guid businessEntityDefinitionId)
         {
             var businessEntityDefinition = s_businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
             businessEntityDefinition.ThrowIfNull("businessEntityDefinition", businessEntityDefinitionId);
             return businessEntityDefinition.Settings.CastWithValidate<RetailUserSubaccountsBEDefinition>("businessEntityDefinition.Settings", businessEntityDefinitionId);
         }
+
+        #endregion
     }
 }
