@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeRoutingproductGrid", ["VRNotificationService", "WhS_BE_RoutingProductAPIService", "WhS_Routing_RouteRuleService", "WhS_BE_RoutingProductService", "VRUIUtilsService", "WhS_Routing_RouteRuleAPIService", "VRCommon_ObjectTrackingService",
-function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_RouteRuleService, WhS_BE_RoutingProductService, VRUIUtilsService, WhS_Routing_RouteRuleAPIService, VRCommon_ObjectTrackingService) {
+app.directive("vrWhsBeRoutingproductGrid", ["VRNotificationService", "WhS_BE_RoutingProductAPIService", "WhS_Routing_RouteRuleService", "WhS_BE_RoutingProductService", "UtilsService", "VRUIUtilsService", "WhS_Routing_RouteRuleAPIService", "VRCommon_ObjectTrackingService",
+function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_RouteRuleService, WhS_BE_RoutingProductService, UtilsService, VRUIUtilsService, WhS_Routing_RouteRuleAPIService, VRCommon_ObjectTrackingService) {
 
     var directiveDefinitionObject = {
 
@@ -54,11 +54,14 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                return WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
+                var serviceViewerLoadPromises = [];
+               WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
                    .then(function (response) {
                        if (response && response.Data) {
                            for (var i = 0; i < response.Data.length; i++) {
                                drillDownManager.setDrillDownExtensionObject(response.Data[i]);
+                               setService(response.Data[i]);
+                               serviceViewerLoadPromises.push(response.Data[i].serviceViewerLoadDeferred.promise);
                            }
                        }
                        onResponseReady(response);
@@ -66,9 +69,19 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    });
+                return UtilsService.waitMultiplePromises(serviceViewerLoadPromises);
             };
 
             defineMenuActions();
+        }
+
+        function setService(item) {
+            item.serviceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+            item.onServiceViewerReady = function (api) {
+                item.serviceViewerAPI = api;
+                var serviceViewerPayload = { selectedIds: item.Entity.Settings.DefaultServiceIds };
+                VRUIUtilsService.callDirectiveLoad(item.serviceViewerAPI, serviceViewerPayload, item.serviceViewerLoadDeferred);
+            };
         }
 
         function getDirectiveTabs() {
