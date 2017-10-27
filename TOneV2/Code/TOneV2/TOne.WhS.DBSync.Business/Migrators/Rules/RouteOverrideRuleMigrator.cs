@@ -44,7 +44,7 @@ namespace TOne.WhS.DBSync.Business
         {
             List<SourceRule> routeRules = new List<SourceRule>();
 
-            SourceRouteOverrideRuleDataManager dataManager = new SourceRouteOverrideRuleDataManager(Context.MigrationContext.ConnectionString, true);
+            SourceRouteOverrideRuleDataManager dataManager = new SourceRouteOverrideRuleDataManager(Context.MigrationContext.ConnectionString, Context.MigrationContext.EffectiveAfterDate, Context.MigrationContext.OnlyEffective);
             var overrideRules = dataManager.GetRouteOverrideRules();
 
             routeRules.Add(GetDefaultRule());
@@ -109,6 +109,7 @@ namespace TOne.WhS.DBSync.Business
         {
             Dictionary<int, List<RouteOptionFilterSettings>> filters = new Dictionary<int, List<RouteOptionFilterSettings>>();
             List<RouteOptionFilterSettings> supplierFilters;
+
             foreach (var option in sourceRule.SupplierOptions)
             {
                 var supplierId = _allCarrierAccounts[option.SupplierId].CarrierAccountId;

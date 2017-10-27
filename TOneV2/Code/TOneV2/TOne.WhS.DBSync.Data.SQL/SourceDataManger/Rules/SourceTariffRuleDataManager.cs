@@ -13,18 +13,17 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
     public class SourceTariffRuleDataManager : BaseSQLDataManager
     {
         readonly bool _getEffectiveOnly;
-        public SourceTariffRuleDataManager(string connectionString, bool getEffectiveOnly)
+        DateTime? _effectiveAfter;
+        public SourceTariffRuleDataManager(string connectionString, DateTime? effectiveAfter, bool getEffectiveOnly)
             : base(connectionString, false)
         {
+            _effectiveAfter = effectiveAfter;
             _getEffectiveOnly = getEffectiveOnly;
         }
 
         public IEnumerable<SourceTariffRule> GetTariffRules()
         {
-            return GetItemsText(query_getSourceTariffRules, SourceTariffRuleMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
-            });
+            return GetItemsText(string.Format(query_getSourceTariffRules, MigrationUtils.GetEffectiveQuery("t", _getEffectiveOnly, _effectiveAfter)), SourceTariffRuleMapper, null);
         }
 
         private SourceTariffRule SourceTariffRuleMapper(IDataReader reader)
@@ -58,9 +57,8 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                                                           ,[BeginEffectiveDate]
                                                           ,[EndEffectiveDate]
 														  ,ca.ProfileID
-                                                      FROM      [dbo].[Tariff]
+                                                      FROM      [dbo].[Tariff] t
 													  join CarrierAccount ca on ca.CarrierAccountID = SupplierID
-                                                      WHERE  ((@GetEffectiveOnly = 0 and BeginEffectiveDate <= getdate()) 
-                                                                or (@GetEffectiveOnly = 1 and IsEffective = 'Y'))";
+                                                      WHERE  1=1 {0}";
     }
 }

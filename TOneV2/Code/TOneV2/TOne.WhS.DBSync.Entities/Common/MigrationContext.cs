@@ -22,6 +22,7 @@ namespace TOne.WhS.DBSync.Entities
         public bool MigratePriceListData { get; set; }
         public bool OnlyEffective { get; set; }
         public decimal DefaultRate { get; set; }
+        public DateTime? EffectiveAfterDate { get; set; }
 
         public virtual void WriteException(Exception ex)
         {

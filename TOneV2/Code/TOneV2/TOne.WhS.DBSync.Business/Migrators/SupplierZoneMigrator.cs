@@ -21,7 +21,7 @@ namespace TOne.WhS.DBSync.Business
             : base(context)
         {
             dbSyncDataManager = new SupplierZoneDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourceZoneDataManager(Context.ConnectionString);
+            dataManager = new SourceZoneDataManager(Context.ConnectionString, Context.EffectiveAfterDate, Context.OnlyEffective);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
             var dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
@@ -46,7 +46,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceZone> GetSourceItems()
         {
-            return dataManager.GetSourceZones(false, _onlyEffective);
+            return dataManager.GetSourceZones(false);
         }
 
         public override SupplierZone BuildItemFromSource(SourceZone sourceItem)

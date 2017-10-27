@@ -13,18 +13,17 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
     public class SourceRouteOptionBlockRuleDataManager : BaseSQLDataManager
     {
         readonly bool _getEffectiveOnly;
-        public SourceRouteOptionBlockRuleDataManager(string connectionString, bool getEffectiveOnly)
+        DateTime? _effectiveAfter;
+        public SourceRouteOptionBlockRuleDataManager(string connectionString, DateTime? effectiveAfter, bool getEffectiveOnly)
             : base(connectionString, false)
         {
+            _effectiveAfter = effectiveAfter;
             _getEffectiveOnly = getEffectiveOnly;
         }
 
         public IEnumerable<SourceRouteOptionBlockRule> GetRouteOptionBlockRules()
         {
-            return GetItemsText(query_getRouteOptionBlockRules, SourceRouteOptionBlockRuleMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
-            });
+            return GetItemsText(string.Format(query_getRouteOptionBlockRules, MigrationUtils.GetEffectiveQuery("rb", _getEffectiveOnly, _effectiveAfter)), SourceRouteOptionBlockRuleMapper, null);
         }
 
         SourceRouteOptionBlockRule SourceRouteOptionBlockRuleMapper(IDataReader reader)
@@ -66,6 +65,6 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 		                                                    rb.Reason
 	                                                    FROM
 		                                                    RouteBlock rb 
-	                                                        where ((@GetEffectiveOnly = 0 and rb.BeginEffectiveDate <= getdate())or (@GetEffectiveOnly = 1 and rb.IsEffective = 'Y'))";
+	                                                        where 1=1 {0}";
     }
 }

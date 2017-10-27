@@ -14,17 +14,15 @@ namespace TOne.WhS.DBSync.Business
         SaleZoneDBSyncDataManager dbSyncDataManager;
         SourceZoneDataManager dataManager;
         Dictionary<string, CodeGroup> allCodeGroups;
-        bool _onlyEffective;
 
         public SaleZoneMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new SaleZoneDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourceZoneDataManager(Context.ConnectionString);
+            dataManager = new SourceZoneDataManager(Context.ConnectionString, Context.EffectiveAfterDate, Context.OnlyEffective);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableCodeGroup = Context.DBTables[DBTableName.CodeGroup];
             allCodeGroups = (Dictionary<string, CodeGroup>)dbTableCodeGroup.Records;
-            _onlyEffective = context.OnlyEffective;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -43,7 +41,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceZone> GetSourceItems()
         {
-            return dataManager.GetSourceZones(true, _onlyEffective);
+            return dataManager.GetSourceZones(true);
         }
 
         public override SaleZone BuildItemFromSource(SourceZone sourceItem)

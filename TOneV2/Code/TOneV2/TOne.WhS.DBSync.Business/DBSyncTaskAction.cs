@@ -52,6 +52,7 @@ namespace TOne.WhS.DBSync.Business
             _context.OnlyEffective = dbSyncTaskActionArgument.OnlyEffective;
             _context.MigrationRequestedTables = dbSyncTaskActionArgument.MigrationRequestedTables;
             _context.IsCustomerCommissionNegative = dbSyncTaskActionArgument.IsCustomerCommissionNegative;
+            _context.EffectiveAfterDate = dbSyncTaskActionArgument.EffectiveAfter;
             _context.ParameterDefinitions = dbSyncTaskActionArgument.ParameterDefinitions == null ? new Dictionary<string, ParameterValue>() : dbSyncTaskActionArgument.ParameterDefinitions;
             _context.DBTables = FillDBTables(_context);
             migrationManager = ConstructMigrationManager(_context);
@@ -59,10 +60,8 @@ namespace TOne.WhS.DBSync.Business
 
             ApplyPreData();
 
-            //TruncateTables(context, migrationManager);
             TransferData(_context);
-            //CreateForeignKeys(context, migrationManager);
-            FinalizeMigration(_context, migrationManager);          
+            FinalizeMigration(_context, migrationManager);
             ApplyPostData();
             _context.WriteInformation("Database Sync Task Action Executed");
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()

@@ -13,18 +13,17 @@ namespace TOne.WhS.DBSync.Data.SQL
     public class SourceTodDataManager : BaseSQLDataManager
     {
         readonly bool _getEffectiveOnly;
-        public SourceTodDataManager(string connectionString, bool getEffectiveOnly)
+        DateTime? _effectiveAfter;
+        public SourceTodDataManager(string connectionString, DateTime? effectiveAfter, bool getEffectiveOnly)
             : base(connectionString, false)
         {
+            _effectiveAfter = effectiveAfter;
             _getEffectiveOnly = getEffectiveOnly;
         }
 
         public IEnumerable<SourceTod> GetSourceTods()
         {
-            return GetItemsText(query_getTods, SourceTodMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
-            });
+            return GetItemsText(string.Format(query_getTods, MigrationUtils.GetEffectiveQuery("tod", _getEffectiveOnly, _effectiveAfter)), SourceTodMapper, null);
         }
 
 
@@ -61,8 +60,8 @@ namespace TOne.WhS.DBSync.Data.SQL
                                               ,[RateType]
                                               ,[BeginEffectiveDate]
                                               ,[EndEffectiveDate]
-                                          FROM [ToDConsideration]
-                                          WHERE  ((@GetEffectiveOnly = 0 and BeginEffectiveDate <= getdate()) or (@GetEffectiveOnly = 1 and IsEffective = 'Y'))
+                                          FROM [ToDConsideration] tod
+                                          WHERE 1=1 {0}
                                           order by CustomerId";
     }
 }

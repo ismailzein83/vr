@@ -39,7 +39,7 @@ namespace TOne.WhS.DBSync.Business
         public override IEnumerable<SourceRule> GetSourceRules()
         {
             List<SourceRule> rules = new List<SourceRule>();
-            SourceSpecialRequestDataManager dataManager = new SourceSpecialRequestDataManager(Context.MigrationContext.ConnectionString, Context.MigrationContext.OnlyEffective);
+            SourceSpecialRequestDataManager dataManager = new SourceSpecialRequestDataManager(Context.MigrationContext.ConnectionString,Context.MigrationContext.EffectiveAfterDate, Context.MigrationContext.OnlyEffective);
             IEnumerable<SourceSpecialRequest> sourceRules = dataManager.GetSpecialRequestRules();
 
             Dictionary<string, List<SourceSpecialRequest>> groupedSourceRules = GroupSpecialRequests(sourceRules);

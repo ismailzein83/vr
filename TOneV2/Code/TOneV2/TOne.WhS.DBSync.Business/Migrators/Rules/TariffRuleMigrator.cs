@@ -64,7 +64,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             sourceRules.Add(GetDefaultSaleTariffRule());
             sourceRules.Add(GetDefaultSupplierTariffRule());
 
-            SourceTariffRuleDataManager dataManager = new SourceTariffRuleDataManager(Context.MigrationContext.ConnectionString, true);
+            SourceTariffRuleDataManager dataManager = new SourceTariffRuleDataManager(Context.MigrationContext.ConnectionString, Context.MigrationContext.EffectiveAfterDate, Context.MigrationContext.OnlyEffective);
             var tariffRules = dataManager.GetTariffRules();
 
             sourceRules.AddRange(GetTariffRules(tariffRules.Where(t => t.SupplierId == "SYS"), RuleType.Sale));

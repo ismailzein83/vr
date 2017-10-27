@@ -8,25 +8,35 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SourcePriceListDataManager : BaseSQLDataManager
     {
-        public SourcePriceListDataManager(string connectionString)
+        DateTime? _effectiveFrom;
+        bool _onlyEffective;
+        public SourcePriceListDataManager(string connectionString, DateTime? effectiveFrom, bool onlyEffective)
             : base(connectionString, false)
         {
+            _effectiveFrom = effectiveFrom;
+            _onlyEffective = onlyEffective;
         }
 
         public List<SourcePriceList> GetSourcePriceLists(bool isSalePriceList, bool migratePriceListData)
         {
+            string query = null;
+
             if (isSalePriceList)
-                return GetItemsText(query_getSaleSourcePriceLists, SourcePriceListMapper, null);
+                query = query_getSaleSourcePriceLists;
 
-            if (migratePriceListData)
-                return GetItemsText(query_getSupplierSourcePriceListsWithData, SourcePriceListMapper, null);
+            if (migratePriceListData && string.IsNullOrEmpty(query))
+                query = query_getSupplierSourcePriceListsWithData;
 
-            return GetItemsText(query_getSupplierSourcePriceLists, SourcePriceListMapper, null);
+            if (string.IsNullOrEmpty(query))
+                query = query_getSupplierSourcePriceLists;
+
+            return GetItemsText(query + MigrationUtils.GetEffectiveQuery("p", _onlyEffective, _effectiveFrom), SourcePriceListMapper, null);
         }
 
         public void LoadSourceItems(bool isSalePriceList, bool migratePriceListData, Action<SourcePriceList> itemToAdd)
         {
-            string query_getSourceSupplierPriceLists = migratePriceListData ? query_getSupplierSourcePriceListsWithData : query_getSupplierSourcePriceLists;
+            string query_getSourceSupplierPriceLists = (migratePriceListData ? query_getSupplierSourcePriceListsWithData : query_getSupplierSourcePriceLists)
+                                                        + MigrationUtils.GetEffectiveQuery("p", _onlyEffective, _effectiveFrom);
             ExecuteReaderText(query_getSourceSupplierPriceLists, (reader) =>
                     {
                         while (reader.Read())

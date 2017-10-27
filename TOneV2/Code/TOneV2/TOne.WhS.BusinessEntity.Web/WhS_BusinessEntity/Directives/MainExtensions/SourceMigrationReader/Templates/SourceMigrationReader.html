@@ -30,41 +30,49 @@
         <vr-switch value="migratePriceListData" label="Pricelist Data"></vr-switch>
     </vr-columns>
     <vr-columns colnum="3">
-        <vr-switch value="onlyEffective" label="Effective Entities"></vr-switch>
-    </vr-columns>
-    <vr-columns colnum="3">
         <vr-switch value="isCustomerCommissionNegative" label="Negative Customer Commission"></vr-switch>
     </vr-columns>
-   
-        <vr-columns width="fullrow">
-            <vr-textarea label="Connection String" value="connectionString" isrequired />
-        </vr-columns>
-        <vr-columns width="fullrow">
-            <vr-section title="Parameter Definition">
-                <vr-columns colnum="6">
-                    <vr-select label="Parameter Definitions"
-                               datasource="parameterDefinitions"
-                               selectedvalues="selectedItems"
-                               onselectitem="onSelectParameterDefinition"
-                               ondeselectitem="onDeselectParameterDefinition"
-                               onselectionchanged="onOParameterDefinitionsChanged"
-                               datavaluefield="Name"
-                               hideselectedvaluessection
-                               datatextfield="DisplayName"
-                               hideremoveicon
-                               isrequired="false"
-                               ismultipleselection>
-                    </vr-select>
-                </vr-columns>
-                <vr-columns width="fullrow">
-                    <vr-datagrid datasource="selectedParameterDefinitions"
-                                 idfield="Name">
-                        <vr-datagridcolumn headertext="'Name'" field="'DisplayName'" type="'Text'" widthfactor="50"></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Value'" field="" widthfactor="50" disablesorting>
-                            <vr-textbox value="dataItem.Value" type="text" isrequired="true"></vr-textbox>
-                        </vr-datagridcolumn>
-                    </vr-datagrid>
-                </vr-columns>
-            </vr-section>
-        </vr-columns>
+    <vr-columns colnum="3">
+        <vr-select datasource="effectiveDateTypes"
+                   selectedvalues="selectedEffectiveDateType"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   label="Effective Date Type"
+                   hideremoveicon>
+        </vr-select>
+    </vr-columns>
+    <vr-columns colnum="3" ng-show="selectedEffectiveDateType.value == 1">
+        <vr-datetimepicker type="date" label="Effective After" value="effectiveAfter" isrequired="selectedEffectiveDateType.value == 1"></vr-datetimepicker>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-textarea label="Connection String" value="connectionString" isrequired />
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-section title="Parameter Definition">
+            <vr-columns colnum="6">
+                <vr-select label="Parameter Definitions"
+                           datasource="parameterDefinitions"
+                           selectedvalues="selectedItems"
+                           onselectitem="onSelectParameterDefinition"
+                           ondeselectitem="onDeselectParameterDefinition"
+                           onselectionchanged="onOParameterDefinitionsChanged"
+                           datavaluefield="Name"
+                           hideselectedvaluessection
+                           datatextfield="DisplayName"
+                           hideremoveicon
+                           isrequired="false"
+                           ismultipleselection>
+                </vr-select>
+            </vr-columns>
+            <vr-columns width="fullrow">
+                <vr-datagrid datasource="selectedParameterDefinitions"
+                             idfield="Name">
+                    <vr-datagridcolumn headertext="'Name'" field="'DisplayName'" type="'Text'" widthfactor="50"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Value'" field="" widthfactor="50" disablesorting>
+                        <vr-textbox value="dataItem.Value" type="text" isrequired="true"></vr-textbox>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-section>
+    </vr-columns>
 </vr-row>

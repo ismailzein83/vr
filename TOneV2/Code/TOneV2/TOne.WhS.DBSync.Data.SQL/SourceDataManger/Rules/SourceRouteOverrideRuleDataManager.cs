@@ -11,26 +11,23 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
     public class SourceRouteOverrideRuleDataManager : BaseSQLDataManager
     {
         readonly bool _getEffectiveOnly;
-        public SourceRouteOverrideRuleDataManager(string connectionString, bool getEffectiveOnly)
+        DateTime? _effectiveAfter;
+        public SourceRouteOverrideRuleDataManager(string connectionString, DateTime? effectiveAfter, bool getEffectiveOnly)
             : base(connectionString, false)
         {
+            _effectiveAfter = effectiveAfter;
             _getEffectiveOnly = getEffectiveOnly;
         }
 
         public IEnumerable<SourceRouteOverrideRule> GetRouteOverrideRules()
         {
-            return GetItemsText(query_getRouteOverrideRules, SourceRouteOverrideRuleMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
-            });
+            return GetItemsText(string.Format(query_getRouteOverrideRules, MigrationUtils.GetEffectiveQuery("ro", _getEffectiveOnly, _effectiveAfter)), SourceRouteOverrideRuleMapper, null);
         }
 
         public IEnumerable<SourceRouteOverrideRule> GetRouteOverrideOptionBlockRules()
         {
-            return GetItemsText(query_getRouteOverrideRules_BlockedSuppliers, SourceRouteOverrideRuleMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
-            });
+            return GetItemsText(string.Format(query_getRouteOverrideRules_BlockedSuppliers, MigrationUtils.GetEffectiveQuery("ro", _getEffectiveOnly, _effectiveAfter)), SourceRouteOverrideRuleMapper, null);
+
         }
 
         SourceRouteOverrideRule SourceRouteOverrideRuleMapper(IDataReader reader)
@@ -121,8 +118,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 		                                                        ro.ExcludedCodes,
 		                                                        ro.Reason
 	                                                    FROM    RouteOverride ro 
-	                                                    WHERE   ro.RouteOptions != 'BLK' AND ro.RouteOptions IS NOT NULL
-		                                                        and ((@GetEffectiveOnly = 0 and ro.BeginEffectiveDate <= getdate()) or (@GetEffectiveOnly = 1 and ro.IsEffective = 'Y'))";
+	                                                    WHERE   ro.RouteOptions != 'BLK' AND ro.RouteOptions IS NOT NULL AND ro.RouteOptions <> '' {0}";
 
         const string query_getRouteOverrideRules_BlockedSuppliers = @"	SELECT  ro.RouteOverrideID,
 		                                                        ro.CustomerID,
@@ -136,7 +132,6 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 		                                                        ro.ExcludedCodes,
 		                                                        ro.Reason
 	                                                    FROM    RouteOverride ro 
-	                                                    WHERE   ro.BlockedSuppliers IS NOT NULL and  ro.BlockedSuppliers<> ''
-		                                                        and ((@GetEffectiveOnly = 0 and ro.BeginEffectiveDate <= getdate()) or (@GetEffectiveOnly = 1 and ro.IsEffective = 'Y'))";
+	                                                    WHERE   ro.BlockedSuppliers IS NOT NULL and  ro.BlockedSuppliers<> '' {0}";
     }
 }

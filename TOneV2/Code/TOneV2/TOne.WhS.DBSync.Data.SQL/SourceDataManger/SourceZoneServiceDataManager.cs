@@ -11,28 +11,32 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SourceZoneServiceDataManager : BaseSQLDataManager
     {
-        public SourceZoneServiceDataManager(string connectionString)
+        DateTime? _effectiveFrom;
+        bool _onlyEffective;
+        public SourceZoneServiceDataManager(string connectionString, DateTime? effectiveFrom, bool onlyEffective)
             : base(connectionString, false)
         {
+            _effectiveFrom = effectiveFrom;
+            _onlyEffective = onlyEffective;
         }
 
-        public List<SourceRate> GetSourceZoneServices(bool isSaleZoneService, bool onlyEffective)
+        public List<SourceRate> GetSourceZoneServices(bool isSaleZoneService)
         {
-            string queryOnlyEffective = onlyEffective ? " and Rate.IsEffective = 'Y'" : string.Empty;
-            return GetItemsText((isSaleZoneService ? query_getSourceZonesServices_Sale : query_getSourceZonesServices_Purchase) + queryOnlyEffective, SourceRateMapper, null);
+
+            return GetItemsText((isSaleZoneService ? query_getSourceZonesServices_Sale : query_getSourceZonesServices_Purchase) + MigrationUtils.GetEffectiveQuery("Rate", _onlyEffective, _effectiveFrom), SourceRateMapper, null);
         }
 
 
-        public void LoadSourceItems(bool isSaleZoneService, bool onlyEffective, Action<SourceRate> itemToAdd)
+        public void LoadSourceItems(bool isSaleZoneService, Action<SourceRate> itemToAdd)
         {
-            string queryOnlyEffective = onlyEffective ? " and Rate.IsEffective = 'Y'" : string.Empty;
-            ExecuteReaderText((isSaleZoneService ? query_getSourceZonesServices_Sale : query_getSourceZonesServices_Purchase) + queryOnlyEffective, (reader) =>
+            ExecuteReaderText((isSaleZoneService ? query_getSourceZonesServices_Sale : query_getSourceZonesServices_Purchase) + MigrationUtils.GetEffectiveQuery("Rate", _onlyEffective, _effectiveFrom), (reader) =>
             {
                 while (reader.Read())
                     itemToAdd(SourceRateMapper(reader));
 
             }, null);
         }
+
 
         private SourceRate SourceRateMapper(IDataReader reader)
         {

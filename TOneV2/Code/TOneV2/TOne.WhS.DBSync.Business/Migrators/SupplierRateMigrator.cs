@@ -23,7 +23,7 @@ namespace TOne.WhS.DBSync.Business
             : base(context)
         {
             dbSyncDataManager = new SupplierRateDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourceRateDataManager(Context.ConnectionString);
+            dataManager = new SourceRateDataManager(Context.ConnectionString, Context.EffectiveAfterDate, Context.OnlyEffective);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
             var dbTableSupplierPriceList = Context.DBTables[DBTableName.SupplierPriceList];
@@ -50,7 +50,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceRate> GetSourceItems()
         {
-            return dataManager.GetSourceRates(false, _onlyEffective);
+            return dataManager.GetSourceRates(false);
         }
 
         public override SupplierRate BuildItemFromSource(SourceRate sourceItem)
@@ -98,7 +98,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void LoadSourceItems(Action<SourceRate> onItemLoaded)
         {
-            dataManager.LoadSourceItems(false,_onlyEffective, onItemLoaded);
+            dataManager.LoadSourceItems(false, onItemLoaded);
         }
 
         public override bool IsLoadItemsApproach

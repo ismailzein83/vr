@@ -214,6 +214,7 @@
     <Content Include="WhS_BusinessEntity\Constant\FinancialAccountCarrierTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\FinancialAccountPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\FinancialAccountStatusEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\MigrationEffectiveDateTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PriceListExtensionFormatEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PeriodTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ProfilePropertyEnum.js" />

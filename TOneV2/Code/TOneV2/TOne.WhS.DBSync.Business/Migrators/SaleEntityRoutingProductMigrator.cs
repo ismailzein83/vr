@@ -36,7 +36,7 @@ namespace TOne.WhS.DBSync.Business
             var dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
             allSaleZones = (Dictionary<string, SaleZone>)dbTableSaleZone.Records;
 
-            dataManager = new SourceRateDataManager(Context.ConnectionString);
+            dataManager = new SourceRateDataManager(Context.ConnectionString, Context.EffectiveAfterDate, Context.OnlyEffective);
 
             _MatchedServicesBySourceId = new Dictionary<string, string>();
             StructureRoutingProductsByServiceIds();
@@ -79,7 +79,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceRate> GetSourceItems()
         {
-            return dataManager.GetSourceRates(true, _onlyEffective);
+            return dataManager.GetSourceRates(true);
         }
 
         public override SaleEntityRoutingProduct BuildItemFromSource(SourceRate sourceItem)

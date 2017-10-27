@@ -16,13 +16,12 @@ namespace TOne.WhS.DBSync.Business
         Dictionary<string, SalePriceList> allSalePriceLists;
         int _offPeakRateTypeId;
         int _weekendRateTypeId;
-        bool _onlyEffective;
 
         public SaleRateMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new SaleRateDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourceRateDataManager(Context.ConnectionString);
+            dataManager = new SourceRateDataManager(Context.ConnectionString, Context.EffectiveAfterDate, Context.OnlyEffective);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
             var dbTableSalePriceList = Context.DBTables[DBTableName.SalePriceList];
@@ -30,7 +29,6 @@ namespace TOne.WhS.DBSync.Business
             allSalePriceLists = (Dictionary<string, SalePriceList>)dbTableSalePriceList.Records;
             _offPeakRateTypeId = context.OffPeakRateTypeId;
             _weekendRateTypeId = context.WeekendRateTypeId;
-            _onlyEffective = context.OnlyEffective;
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -50,7 +48,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceRate> GetSourceItems()
         {
-            return dataManager.GetSourceRates(true, _onlyEffective);
+            return dataManager.GetSourceRates(true);
         }
 
         public override SaleRate BuildItemFromSource(SourceRate sourceItem)
@@ -97,7 +95,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void LoadSourceItems(Action<SourceRate> onItemLoaded)
         {
-            dataManager.LoadSourceItems(true, _onlyEffective, onItemLoaded);
+            dataManager.LoadSourceItems(true, onItemLoaded);
         }
 
         public override bool IsLoadItemsApproach

@@ -21,7 +21,7 @@ namespace TOne.WhS.DBSync.Business
             : base(context)
         {
             dbSyncDataManager = new SupplierPriceListDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourcePriceListDataManager(Context.ConnectionString);
+            dataManager = new SourcePriceListDataManager(Context.ConnectionString, Context.EffectiveAfterDate, Context.OnlyEffective);
             fileDataManager = new FileDBSyncDataManager(context.UseTempTables);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableCurrency = Context.DBTables[DBTableName.Currency];
@@ -41,8 +41,8 @@ namespace TOne.WhS.DBSync.Business
 
         public override void AddItems(List<SupplierPriceList> itemsToAdd)
         {
-            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, TotalRowsSuccess+ 1);
-            TotalRowsSuccess  = TotalRowsSuccess + itemsToAdd.Count;
+            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, TotalRowsSuccess + 1);
+            TotalRowsSuccess = TotalRowsSuccess + itemsToAdd.Count;
         }
 
         public override IEnumerable<SourcePriceList> GetSourceItems()
@@ -74,8 +74,8 @@ namespace TOne.WhS.DBSync.Business
 
                 };
 
-                   fileId =  fileDataManager.ApplyFile(file);
-               
+                fileId = fileDataManager.ApplyFile(file);
+
             }
 
 
@@ -89,12 +89,13 @@ namespace TOne.WhS.DBSync.Business
                     CreateTime = sourceItem.BED,
                     EffectiveOn = sourceItem.BED
                 };
-            else {
+            else
+            {
                 TotalRowsFailed++;
                 //Context.WriteWarning(string.Format("Failed migrating Supplier Pricelist, Source Id: {0}", sourceItem.SourceId));
                 return null;
             }
-            
+
         }
 
         public override void FillTableInfo(bool useTempTables)

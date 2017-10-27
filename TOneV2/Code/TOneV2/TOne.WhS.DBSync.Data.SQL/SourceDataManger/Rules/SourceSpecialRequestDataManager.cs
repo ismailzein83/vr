@@ -13,17 +13,16 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
     public class SourceSpecialRequestDataManager : BaseSQLDataManager
     {
         readonly bool _getEffectiveOnly;
-        public SourceSpecialRequestDataManager(string connectionString, bool getEffectiveOnly)
+        DateTime? _effectiveAfter;
+        public SourceSpecialRequestDataManager(string connectionString, DateTime? effectiveAfter, bool getEffectiveOnly)
             : base(connectionString, false)
         {
+            _effectiveAfter = effectiveAfter;
             _getEffectiveOnly = getEffectiveOnly;
         }
         public IEnumerable<SourceSpecialRequest> GetSpecialRequestRules()
         {
-            return GetItemsText(query_getSpecialRequestRules, SourceSpecialRequestRuleMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
-            });
+            return GetItemsText(string.Format(query_getSpecialRequestRules, MigrationUtils.GetEffectiveQuery("sr", _getEffectiveOnly, _effectiveAfter)), SourceSpecialRequestRuleMapper, null);
         }
 
         private SourceSpecialRequest SourceSpecialRequestRuleMapper(IDataReader reader)
@@ -76,7 +75,7 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
                                                                   ,sr.[ExcludedCodes]
                                                                   ,sr.[IsEffective]
                                                            FROM   [SpecialRequest] sr
-                                                           WHERE  ((@GetEffectiveOnly = 0 and sr.BeginEffectiveDate <= getdate()) or (@GetEffectiveOnly = 1 and sr.IsEffective = 'Y'))
+                                                           WHERE  1=1 {0}
                                                            Order By sr.CustomerID, sr.Code, sr.BeginEffectiveDate desc";
 
     }

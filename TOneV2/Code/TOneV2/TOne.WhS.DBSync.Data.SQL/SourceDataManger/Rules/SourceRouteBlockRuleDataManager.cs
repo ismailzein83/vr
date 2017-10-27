@@ -13,17 +13,16 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
     public class SourceRouteBlockRuleDataManager : BaseSQLDataManager
     {
         readonly bool _getEffectiveOnly;
-        public SourceRouteBlockRuleDataManager(string connectionString, bool getEffectiveOnly)
+        DateTime? _effectiveAfter;
+        public SourceRouteBlockRuleDataManager(string connectionString, DateTime? effectiveAfter, bool getEffectiveOnly)
             : base(connectionString, false)
         {
+            _effectiveAfter = effectiveAfter;
             _getEffectiveOnly = getEffectiveOnly;
         }
         public IEnumerable<SourceRouteOverrideRule> GetRouteblockRules()
         {
-            return GetItemsText(query_getRouteBlockRules, SourceRouteOverrideRuleMapper, (cmd) =>
-            {
-                cmd.Parameters.Add(new SqlParameter("@GetEffectiveOnly", _getEffectiveOnly));
-            });
+            return GetItemsText(string.Format(query_getRouteBlockRules, MigrationUtils.GetEffectiveQuery("ro", _getEffectiveOnly, _effectiveAfter)), SourceRouteOverrideRuleMapper, null);
         }
 
         SourceRouteOverrideRule SourceRouteOverrideRuleMapper(IDataReader reader)
@@ -62,7 +61,6 @@ namespace TOne.WhS.DBSync.Data.SQL.SourceDataManger
 		                                                        ro.ExcludedCodes,
 		                                                        ro.Reason
 	                                                    FROM    RouteOverride ro 
-	                                                    WHERE   ro.RouteOptions = 'BLK' 
-		                                                        and ((@GetEffectiveOnly = 0 and ro.BeginEffectiveDate <= getdate()) or (@GetEffectiveOnly = 1 and ro.IsEffective = 'Y'))";
+	                                                    WHERE   ro.RouteOptions = 'BLK' {0}";
     }
 }

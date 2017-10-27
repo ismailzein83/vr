@@ -9,22 +9,24 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SourceRateDataManager : BaseSQLDataManager
     {
-        public SourceRateDataManager(string connectionString)
+        DateTime? _effectiveFrom;
+        bool _onlyEffective;
+        public SourceRateDataManager(string connectionString, DateTime? effectiveFrom, bool onlyEffective)
             : base(connectionString, false)
         {
+            _onlyEffective = onlyEffective;
+            _effectiveFrom = effectiveFrom;
         }
 
-        public List<SourceRate> GetSourceRates(bool isSaleRate, bool onlyEffective)
+        public List<SourceRate> GetSourceRates(bool isSaleRate)
         {
-            string queryOnlyEffective = onlyEffective ? " and Rate.IsEffective = 'Y'" : string.Empty;
-            return GetItemsText((isSaleRate ? query_getSourceRates_Sale : query_getSourceRates_Purchase) + queryOnlyEffective, SourceRateMapper, null);
+            return GetItemsText((isSaleRate ? query_getSourceRates_Sale : query_getSourceRates_Purchase) + MigrationUtils.GetEffectiveQuery("Rate", _onlyEffective, _effectiveFrom), SourceRateMapper, null);
         }
 
 
-        public void LoadSourceItems(bool isSaleRate, bool onlyEffective, Action<SourceRate> itemToAdd)
+        public void LoadSourceItems(bool isSaleRate, Action<SourceRate> itemToAdd)
         {
-            string queryOnlyEffective = onlyEffective ? "and Rate.IsEffective = 'Y'" : string.Empty;
-            ExecuteReaderText((isSaleRate ? query_getSourceRates_Sale : query_getSourceRates_Purchase) + queryOnlyEffective, (reader) =>
+            ExecuteReaderText((isSaleRate ? query_getSourceRates_Sale : query_getSourceRates_Purchase) + MigrationUtils.GetEffectiveQuery("Rate", _onlyEffective, _effectiveFrom), (reader) =>
             {
                 while (reader.Read())
                 {

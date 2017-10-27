@@ -43,7 +43,7 @@ namespace TOne.WhS.DBSync.Business
         {
             List<SourceRule> routeRules = new List<SourceRule>();
 
-            SourceRouteBlockRuleDataManager dataManager = new SourceRouteBlockRuleDataManager(Context.MigrationContext.ConnectionString, true);
+            SourceRouteBlockRuleDataManager dataManager = new SourceRouteBlockRuleDataManager(Context.MigrationContext.ConnectionString, Context.MigrationContext.EffectiveAfterDate, Context.MigrationContext.OnlyEffective);
             var overrideRules = dataManager.GetRouteblockRules();
 
             routeRules.AddRange(GetRulesWithCode(overrideRules.Where(o => !o.SaleZoneId.HasValue)));
@@ -83,7 +83,7 @@ namespace TOne.WhS.DBSync.Business
                 var rule = GetSourceRuleFromZones(rules);
                 if (rule != null)
                 {
-                   routeRules.Add(rule);
+                    routeRules.Add(rule);
                 }
             }
             return routeRules;

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService', 'WhS_BE_DBTableNameEnum',
-    function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_DBTableNameEnum) {
+app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SwitchAPIService', 'WhS_BE_DBTableNameEnum', 'WhS_BE_MigrationEffectiveDateTypeEnum',
+    function (UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SwitchAPIService, WhS_BE_DBTableNameEnum, WhS_BE_MigrationEffectiveDateTypeEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -51,12 +51,17 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
             function initializeController() {
                 $scope.defaultRate = 1;
                 $scope.useTempTables = true;
-                $scope.onlyEffective = false;
+                $scope.onlyEffective = true;
                 var migrationTablesBasetable = new Array();
                 $scope.migrationTables = [];
                 $scope.selectedParameterDefinitions = [];
                 $scope.selectedItems = [];
                 $scope.parameterDefinitions = loadParameterDefinitions();
+
+                $scope.effectiveDateTypes = UtilsService.getArrayEnum(WhS_BE_MigrationEffectiveDateTypeEnum);
+                $scope.selectedEffectiveDateType = UtilsService.getItemByVal($scope.effectiveDateTypes, WhS_BE_MigrationEffectiveDateTypeEnum.EffectiveOnly.value, 'value');
+
+
 
                 angular.forEach(UtilsService.getArrayEnum(WhS_BE_DBTableNameEnum), function (dbTable) {
                     if (dbTable.defaultMigrate)
@@ -194,8 +199,9 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     schedulerTaskAction.HolidayRateTypeId = holidayRateTypeSelectorAPI.getSelectedIds();
                     schedulerTaskAction.MigratePriceListData = $scope.migratePriceListData;
                     schedulerTaskAction.IsCustomerCommissionNegative = $scope.isCustomerCommissionNegative;
-                    schedulerTaskAction.OnlyEffective = $scope.onlyEffective;
+                    schedulerTaskAction.OnlyEffective = $scope.selectedEffectiveDateType.value == 0;
                     schedulerTaskAction.DefaultRate = $scope.defaultRate;
+                    schedulerTaskAction.EffectiveAfter = $scope.selectedEffectiveDateType.value == 0 ? undefined : $scope.effectiveAfter;
                     var selectedTables = [];
 
                     $scope.migrationTablesSelectedValues;
@@ -235,9 +241,16 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         $scope.migratePriceListData = payload.data.MigratePriceListData;
                         $scope.isCustomerCommissionNegative = payload.data.IsCustomerCommissionNegative;
                         $scope.onlyEffective = payload.data.OnlyEffective;
+                        $scope.effectiveAfter = payload.data.EffectiveAfter;
                         $scope.migrationTablesSelectedValues = [];
                         fillParameterDefinitions(payload.data.ParameterDefinitions);
                         $scope.defaultRate = payload.data.DefaultRate;
+                        if ($scope.onlyEffective) {
+                            $scope.selectedEffectiveDateType = WhS_BE_MigrationEffectiveDateTypeEnum.EffectiveOnly;
+                        }
+                        else {
+                            $scope.selectedEffectiveDateType = WhS_BE_MigrationEffectiveDateTypeEnum.EffectiveAfterDate;
+                        }
 
                         angular.forEach(payload.data.MigrationRequestedTables, function (x) {
                             if (x != WhS_BE_DBTableNameEnum.CustomerCountry.value && x != WhS_BE_DBTableNameEnum.File.value && x != WhS_BE_DBTableNameEnum.CarrierAccountStatusHistory.value)

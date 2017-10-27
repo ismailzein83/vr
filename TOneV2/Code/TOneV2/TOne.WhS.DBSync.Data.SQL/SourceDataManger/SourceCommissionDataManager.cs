@@ -11,15 +11,18 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SourceCommissionDataManager : BaseSQLDataManager
     {
-        public SourceCommissionDataManager(string connectionString)
+        DateTime? _effectiveFrom;
+        bool _onlyEffective;
+        public SourceCommissionDataManager(string connectionString, DateTime? effectiveFrom, bool onlyEffective)
             : base(connectionString, false)
         {
-
+            _effectiveFrom = effectiveFrom;
+            _onlyEffective = onlyEffective;
         }
 
         public IEnumerable<SourceCommission> GetSourceCommissions()
         {
-            return GetItemsText(query_getCommissions, SourceCommissionMapper, null);
+            return GetItemsText(query_getCommissions + MigrationUtils.GetEffectiveQuery("c", _onlyEffective, _effectiveFrom), SourceCommissionMapper, null);
         }
 
 
@@ -52,6 +55,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                                                       ,[BeginEffectiveDate]
                                                       ,[EndEffectiveDate]
                                                       ,[IsExtraCharge]      
-                                                  FROM [Commission] c";
+                                                  FROM [Commission] c where 1=1 ";
     }
 }

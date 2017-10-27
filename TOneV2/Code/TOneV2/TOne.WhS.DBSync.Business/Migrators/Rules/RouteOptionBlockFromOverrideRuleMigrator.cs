@@ -48,7 +48,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
         {
             List<SourceRule> routeRules = new List<SourceRule>();
 
-            SourceRouteOverrideRuleDataManager dataManager = new SourceRouteOverrideRuleDataManager(Context.MigrationContext.ConnectionString, true);
+            SourceRouteOverrideRuleDataManager dataManager = new SourceRouteOverrideRuleDataManager(Context.MigrationContext.ConnectionString, Context.MigrationContext.EffectiveAfterDate, Context.MigrationContext.OnlyEffective);
             var blockRules = dataManager.GetRouteOverrideOptionBlockRules();
 
             routeRules.AddRange(GetRules(blockRules));

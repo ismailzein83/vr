@@ -8,15 +8,18 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SourceZoneDataManager : BaseSQLDataManager
     {
-        public SourceZoneDataManager(string connectionString)
+        DateTime? _effectiveFrom;
+        bool _onlyEffective;
+        public SourceZoneDataManager(string connectionString, DateTime? effectiveFrom, bool onlyEffective)
             : base(connectionString, false)
         {
+            _effectiveFrom = effectiveFrom;
+            _onlyEffective = onlyEffective;
         }
 
-        public List<SourceZone> GetSourceZones(bool isSaleZone, bool onlyEffective)
+        public List<SourceZone> GetSourceZones(bool isSaleZone)
         {
-            string queryOnlyEffective = onlyEffective ? " and Zone.IsEffective = 'Y'" : string.Empty;
-            return GetItemsText((isSaleZone ? query_getSourceZones_Sale : query_getSourceZones_Purchase) + queryOnlyEffective, SourceZoneMapper, null);
+            return GetItemsText((isSaleZone ? query_getSourceZones_Sale : query_getSourceZones_Purchase) + MigrationUtils.GetEffectiveQuery("Zone", _onlyEffective, _effectiveFrom), SourceZoneMapper, null);
         }
 
         private SourceZone SourceZoneMapper(IDataReader arg)

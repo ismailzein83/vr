@@ -18,14 +18,13 @@ namespace TOne.WhS.DBSync.Business
         Dictionary<string, ZoneServiceConfig> allZoneServicesConfig;
         Dictionary<string, SupplierPriceList> allSupplierPriceLists;
         Dictionary<string, CarrierAccount> allCarrierAccounts;
-        bool _onlyEffective;
         internal static DateTime s_defaultServiceBED = DateTime.Parse("2000-01-01");
 
         public SupplierZoneServicesMigrator(MigrationContext context)
             : base(context)
         {
             dbSyncDataManager = new SupplierZoneServicesDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourceZoneServiceDataManager(Context.ConnectionString);
+            dataManager = new SourceZoneServiceDataManager(Context.ConnectionString, Context.EffectiveAfterDate, Context.OnlyEffective);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableSupplierZone = Context.DBTables[DBTableName.SupplierZone];
             allSupplierZones = (Dictionary<string, SupplierZone>)dbTableSupplierZone.Records;
@@ -35,8 +34,6 @@ namespace TOne.WhS.DBSync.Business
             allSupplierPriceLists = (Dictionary<string, SupplierPriceList>)dbTableSupplierPriceList.Records;
             var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
             allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
-            _onlyEffective = context.OnlyEffective;
-
         }
 
         public override void Migrate(MigrationInfoContext context)
@@ -77,7 +74,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceRate> GetSourceItems()
         {
-            return dataManager.GetSourceZoneServices(false, _onlyEffective);
+            return dataManager.GetSourceZoneServices(false);
         }
 
         public override SupplierZoneService BuildItemFromSource(SourceRate sourceItem)
@@ -136,7 +133,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void LoadSourceItems(Action<SourceRate> onItemLoaded)
         {
-            dataManager.LoadSourceItems(false, _onlyEffective, onItemLoaded);
+            dataManager.LoadSourceItems(false, onItemLoaded);
         }
 
         public override bool IsLoadItemsApproach

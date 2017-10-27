@@ -51,7 +51,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
         public override IEnumerable<SourceRule> GetSourceRules()
         {
             List<SourceRule> sourceRules = new List<SourceRule>();
-            SourceCommissionDataManager dataManager = new SourceCommissionDataManager(Context.MigrationContext.ConnectionString);
+            SourceCommissionDataManager dataManager = new SourceCommissionDataManager(Context.MigrationContext.ConnectionString, Context.MigrationContext.EffectiveAfterDate, Context.MigrationContext.OnlyEffective);
             var commissionRules = dataManager.GetSourceCommissions();
             sourceRules = GetRules(commissionRules);
             return sourceRules;

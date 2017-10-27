@@ -17,7 +17,7 @@ namespace TOne.WhS.DBSync.Business
             : base(context)
         {
             dbSyncDataManager = new SalePriceListDBSyncDataManager(Context.UseTempTables);
-            dataManager = new SourcePriceListDataManager(Context.ConnectionString);
+            dataManager = new SourcePriceListDataManager(Context.ConnectionString, Context.EffectiveAfterDate, Context.OnlyEffective);
             TableName = dbSyncDataManager.GetTableName();
             var dbTableCurrency = Context.DBTables[DBTableName.Currency];
             var dbTableCarrierAccount = Context.DBTables[DBTableName.CarrierAccount];
