@@ -24,6 +24,7 @@ Post-Deployment Script Template
 ('A72E2AAA-E837-47BD-8BF4-C41EA07893EA','FilterGroup','Filter Group','VR_Invoice_InvoiceType_InvoiceGeneratorFilterConditionConfig'								,'{"Editor":"vr-invoicetype-invoicegeneratorfiltercondition-filtergroup"}'),
 
 ('82230E8D-680B-4362-8C00-D14D6E8E8AC1','Set Lock','Set Lock','VR_Invoice_InvoiceType_InvoiceGridActionSettings'												,'{"Editor":"vr-invoicetype-gridactionsettings-setinvoicelock"}'),
+('ebf6d7eb-eec7-44b9-b1d4-f4a435680c14','Set Deleted','Set Deleted','VR_Invoice_InvoiceType_InvoiceGridActionSettings'												,'{"Editor":"vr-invoicetype-gridactionsettings-setinvoicedeleted"}'),
 ('6AB1BA29-F57F-439E-AEA6-7A98AF3FE184','Send Email','Send Email','VR_Invoice_InvoiceType_InvoiceGridActionSettings'											,'{"Editor":"vr-invoicetype-gridactionsettings-sendemail"}'),
 ('6B7841D1-8ECF-48CE-88D6-440342654ADC','Recreate','Recreate','VR_Invoice_InvoiceType_InvoiceGridActionSettings'												,'{"Editor":"vr-invoicetype-gridactionsettings-recreate"}'),
 ('56DB2DBA-3A2C-4D62-A782-5BE05B35EF46','Notes','Notes','VR_Invoice_InvoiceType_InvoiceGridActionSettings'														,'{"Editor":"vr-invoicetype-gridactionsettings-note"}'),
