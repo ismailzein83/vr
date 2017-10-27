@@ -1457,11 +1457,13 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Sale Pricelists",
                     Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
                 };
-
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer Name" ,Width=50});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Description" , Width = 100});
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Created By" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sent" });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -1472,9 +1474,12 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
                             row.Cells.Add(new ExportExcelCell() { Value = record.OwnerName });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CreatedTime });
-                            row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Description });
                             row.Cells.Add(new ExportExcelCell() { Value = record.PriceListTypeName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.UserName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CreatedTime });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.IsSent });
                             sheet.Rows.Add(row);
                         }
                     }
