@@ -901,7 +901,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.10764in</Top>
-        <Left>5.89124in</Left>
+        <Left>5.3054in</Left>
         <Height>0.25417in</Height>
         <Width>2.23709in</Width>
         <ZIndex>10</ZIndex>
@@ -934,7 +934,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.36875in</Top>
-        <Left>5.89124in</Left>
+        <Left>5.3054in</Left>
         <Height>0.19792in</Height>
         <Width>2.23709in</Width>
         <ZIndex>11</ZIndex>
@@ -968,7 +968,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.58612in</Top>
-        <Left>5.89124in</Left>
+        <Left>5.3054in</Left>
         <Height>0.375in</Height>
         <Width>2.23709in</Width>
         <ZIndex>12</ZIndex>
@@ -1003,7 +1003,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.96806in</Top>
-        <Left>5.89124in</Left>
+        <Left>5.3054in</Left>
         <Height>0.24652in</Height>
         <Width>0.96211in</Width>
         <ZIndex>13</ZIndex>
@@ -1036,7 +1036,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>0.96806in</Top>
-        <Left>6.92279in</Left>
+        <Left>6.33695in</Left>
         <Height>0.1875in</Height>
         <Width>1.20554in</Width>
         <ZIndex>14</ZIndex>
@@ -1071,7 +1071,7 @@
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
         <Top>1.16251in</Top>
-        <Left>6.92279in</Left>
+        <Left>6.33695in</Left>
         <Height>0.21875in</Height>
         <Width>1.20554in</Width>
         <ZIndex>15</ZIndex>
@@ -1608,7 +1608,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1645,7 +1645,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1724,7 +1724,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1759,7 +1759,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1794,7 +1794,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1829,7 +1829,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Right</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
