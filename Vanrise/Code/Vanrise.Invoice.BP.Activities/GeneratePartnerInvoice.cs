@@ -84,11 +84,10 @@ namespace Vanrise.Invoice.BP.Activities
 
                 if (billingPeriodInvoiceSettingPart != null && billingPeriodInvoiceSettingPart.FollowBillingPeriod)
                 {
-                    DateTime partnerIssueDate = invoiceGenerationDraft.To.AddDays(1);
+                    DateTime partnerIssueDate = invoiceGenerationDraft.To.Date.AddDays(1);
                     var billingPeriod = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, partnerIssueDate);
                     if (billingPeriod == null || billingPeriod.FromDate != invoiceGenerationDraft.From || billingPeriod.ToDate != invoiceGenerationDraft.To)
                     {
-
                         this.Succeeded.Set(context.ActivityContext, false);
                         messages.Add(new InvoiceGenerationMessageOutput
                         {

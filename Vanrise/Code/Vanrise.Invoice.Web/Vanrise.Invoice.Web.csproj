@@ -198,6 +198,8 @@
     <Content Include="VR_Invoice\Constants\LogicalOperatorEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
     <Content Include="VR_Invoice\Directives\AccountStatus\vr-invoice-accountstatus-selector.js" />
+    <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\Templates\AutomaticInvoiceProcessManualTemplate.html" />
+    <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\vr-invoice-automaticinvoiceprocess-manual.js" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Scheduled\Templates\AutomaticInvoiceProcessScheduledTemplate.html" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Scheduled\vr-invoice-automaticinvoiceprocess-scheduled.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\BillingPeriod\Templates\SemiMonthlyBillingPeriodTemplate .html" />
