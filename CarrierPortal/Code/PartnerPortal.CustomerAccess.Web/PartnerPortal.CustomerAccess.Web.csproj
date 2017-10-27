@@ -220,6 +220,8 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\SubAccountsGridTemplate.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Services\APIService\RetailAccountUserAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Services\APIService\RetailAccountInfoAPIService.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIAnalyticQueryInterceptorTemplate.html" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountanalyticqueryinterceptor.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountqueryinterceptor.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIRecordQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIRecordQueryInterceptorTemplate.html" />
   </ItemGroup>
