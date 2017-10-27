@@ -481,21 +481,21 @@ namespace TOne.WhS.Sales.Business
 
         #region Private Methods
 
-        public IEnumerable<SaleZone> GetSaleZones(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, bool isEffectiveInFuture)
+        public IEnumerable<SaleZone> GetSaleZones(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveAfter, bool isEffectiveInFuture)
         {
-            var saleZoneManager = new SaleZoneManager();
-            int sellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
-            IEnumerable<SaleZone> soldSaleZones = saleZoneManager.GetSaleZonesByOwner(ownerType, ownerId, sellingNumberPlanId, effectiveOn, isEffectiveInFuture);
-
-            IEnumerable<SaleZone> draftSoldSaleZones = null;
-            if (ownerType == SalePriceListOwnerType.Customer)
-                draftSoldSaleZones = GetCustomerDraftSaleZones(ownerId, sellingNumberPlanId, effectiveOn, isEffectiveInFuture);
-
-            var ownerSaleZones = new List<SaleZone>();
-            if (soldSaleZones != null) { ownerSaleZones.AddRange(soldSaleZones); }
-            if (draftSoldSaleZones != null) { ownerSaleZones.AddRange(draftSoldSaleZones); }
-
-            return (ownerSaleZones.Count > 0) ? ownerSaleZones : null;
+            if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                int? sellingNumberPlanId = new SellingProductManager().GetSellingNumberPlanId(ownerId);
+                if (!sellingNumberPlanId.HasValue)
+                    throw new NullReferenceException("sellingNumberPlanId");
+                return GetSellingProductZones(sellingNumberPlanId.Value, effectiveAfter);
+            }
+            else
+            {
+                int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
+                Dictionary<int, CountryDateConfig> countryDateConfigsByCountryId = GetCountryDateConfigsByCountryId(ownerId, effectiveAfter);
+                return GetCustomerZones(sellingNumberPlanId, countryDateConfigsByCountryId);
+            }
         }
         private IEnumerable<SaleZone> GetCustomerDraftSaleZones(int customerId, int sellingNumberPlanId, DateTime effectiveOn, bool includeFutureZones)
         {
@@ -1551,6 +1551,57 @@ namespace TOne.WhS.Sales.Business
         }
 
         #endregion
+
+        public IEnumerable<SaleZone> GetSellingProductZones(int sellingNumberPlanId, DateTime effectiveAfter)
+        {
+            IEnumerable<SaleZone> allZones = new SaleZoneManager().GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+            return allZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveAfter));
+        }
+        public IEnumerable<SaleZone> GetCustomerZones(int sellingNumberPlanId, Dictionary<int, CountryDateConfig> countryDateConfigsByCountryId)
+        {
+            IEnumerable<SaleZone> allZones = new SaleZoneManager().GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+
+            Func<SaleZone, bool> filterExpression = (saleZone) =>
+            {
+                CountryDateConfig countryDateConfig;
+                if (!countryDateConfigsByCountryId.TryGetValue(saleZone.CountryId, out countryDateConfig))
+                    return false;
+                return saleZone.IsOverlappedWith(countryDateConfig);
+            };
+
+            return allZones.FindAllRecords(filterExpression);
+        }
+        private Dictionary<int, CountryDateConfig> GetCountryDateConfigsByCountryId(int customerId, DateTime effectiveAfter)
+        {
+            var countryDateConfigsByCountryId = new Dictionary<int, CountryDateConfig>();
+
+            Changes draft = new RatePlanDraftManager().GetDraft(SalePriceListOwnerType.Customer, customerId);
+
+            if (draft != null && draft.CountryChanges != null && draft.CountryChanges.NewCountries != null)
+            {
+                foreach (DraftNewCountry newCountry in draft.CountryChanges.NewCountries)
+                    countryDateConfigsByCountryId.Add(newCountry.CountryId, new CountryDateConfig() { BED = newCountry.BED, EED = newCountry.EED });
+            }
+
+            IEnumerable<CustomerCountry2> soldCountries = new CustomerCountryManager().GetCustomerCountriesEffectiveAfter(customerId, effectiveAfter);
+
+            if (soldCountries != null)
+            {
+                foreach (CustomerCountry2 soldCountry in soldCountries)
+                {
+                    if (!countryDateConfigsByCountryId.ContainsKey(soldCountry.CountryId))
+                        countryDateConfigsByCountryId.Add(soldCountry.CountryId, new CountryDateConfig() { BED = soldCountry.BED, EED = soldCountry.EED });
+                }
+            }
+
+            return countryDateConfigsByCountryId;
+        }
+    }
+
+    public class CountryDateConfig : Vanrise.Entities.IDateEffectiveSettings
+    {
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
     }
 
     public class CountryToCloseFilter : ICountryFilter
