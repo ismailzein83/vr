@@ -511,7 +511,13 @@ namespace Vanrise.Invoice.Business
             return manager.GetExtensionConfigurations<PartnerGroupConfig>(PartnerGroupConfig.EXTENSION_TYPE);
         }
 
-
+        public bool DeleteGeneratedInvoice(long invoiceId)
+        {
+            var invoice = GetInvoice(invoiceId);
+            invoice.ThrowIfNull("invoice", invoiceId);
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.DeleteGeneratedInvoice(invoice.InvoiceId, invoice.InvoiceTypeId, invoice.PartnerId, invoice.FromDate);
+        }
 
         #endregion
 

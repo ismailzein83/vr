@@ -7,6 +7,7 @@
     VR_Invoice_InvoiceActionService.registerSendEmailAction();
     VR_Invoice_InvoiceTypeService.registerObjectTrackingDrillDownToInvoiceType();
     VR_Invoice_InvoiceActionService.registerDownloadFileInvoiceAction();
+    VR_Invoice_InvoiceActionService.registerSetInvoiceDeletedAction();
 }]);
 
       

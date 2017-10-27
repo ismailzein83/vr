@@ -31,5 +31,6 @@ namespace Vanrise.Invoice.Data
         bool UpdateInvoicePaidDateById(Guid invoiceTypeId, long invoiceId, DateTime paidDate);
         bool UpdateInvoiceSettings(long invoiceId, InvoiceSettings invoiceSettings);
         bool SetInvoiceSentDate(long invoiceId, DateTime? sentDate);
+        bool DeleteGeneratedInvoice(long invoiceId, Guid invoiceTypeId, string partnerId, DateTime fromDate);
     }
 }

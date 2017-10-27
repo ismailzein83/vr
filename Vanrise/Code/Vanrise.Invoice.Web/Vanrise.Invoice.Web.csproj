@@ -281,10 +281,12 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\DownloadFileActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\RecreateActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\SetInvoiceLockActionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\SetInvoiceDeletedActionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-note.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-downloadfile.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-recreate.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-setinvoicelock.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-setinvoicedeleted.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\Templates\InvoiceActionsGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\vr-invoicetype-invoiceactions-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\vr-invoicetype-invoiceactions.js" />

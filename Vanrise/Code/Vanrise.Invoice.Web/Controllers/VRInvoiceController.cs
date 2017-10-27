@@ -179,6 +179,13 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.GenerateInvoices(input.InvoiceTypeId, input.InvoiceGenerationIdentifier, input.IssueDate, input.ChangedItems);
         }
+        [HttpGet]
+        [Route("DeleteGeneratedInvoice")]
+        public bool DeleteGeneratedInvoice(long invoiceId)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            return manager.DeleteGeneratedInvoice(invoiceId);
+        }
     }
 
     public class GenerateInvoicesInput

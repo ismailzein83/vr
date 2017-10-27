@@ -211,6 +211,29 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_Delete", deletedInvoiceId);
             return affectedRows > 0;
         }
+        public bool DeleteGeneratedInvoice(long invoiceId, Guid invoiceTypeId, string partnerId, DateTime fromDate)
+        {
+            var transactionOptions = new TransactionOptions
+            {
+                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+                Timeout = TransactionManager.DefaultTimeout
+            };
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
+            {
+                var transactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
+                DeleteInvoice(invoiceId);
+                BillingPeriodInfoDataManager billingPeriodInfoDataManager = new SQL.BillingPeriodInfoDataManager();
+                billingPeriodInfoDataManager.InsertOrUpdateBillingPeriodInfo(new BillingPeriodInfo
+                {
+                    InvoiceTypeId = invoiceTypeId,
+                    NextPeriodStart = fromDate,
+                    PartnerId = partnerId
+                });
+                transactionDataManager.SetBillingTransactionsAsDeleted(invoiceId);
+                transactionScope.Complete();
+            }
+            return true;
+        }
         public void LoadInvoicesAfterImportedId(Guid invoiceTypeId, long lastImportedId, Action<Entities.Invoice> onInvoiceReady)
         {
             ExecuteReaderSP("VR_Invoice.sp_Invoice_GetAfterImportedID", (reader) =>
@@ -334,5 +357,8 @@ namespace Vanrise.Invoice.Data.SQL
 
 
 
+
+
+      
     }
 }

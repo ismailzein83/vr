@@ -130,19 +130,13 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             var actionType = {
                 ActionTypeName: "SendEmailAction",
                 actionMethod: function (payload) {
-                    var onInvoiceEmailSend = function (response) {
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
 
+                    var onInvoiceEmailSend = function (response) {
+                        promiseDeffered.resolve(true);
                     };
                     openEmailTemplate(onInvoiceEmailSend, payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceTypeId);
-                    //VRNotificationService.showConfirmation().then(function (response) {
-                    //    if (response) {
-                    //        VR_Invoice_InvoiceAPIService.SendEmail(payload.invoice.Entity.InvoiceId).then(function (response) {
-                    //            promiseDeffered.resolve(response);
-                    //        });
-                    //    } else {
-                    //        promiseDeffered.resolve(response);
-                    //    }
-                    //});
+                    return promiseDeffered.promise;
                 }
             };
             registerActionType(actionType);
@@ -258,7 +252,28 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceGenerationProcessEditor.html', parameters, settings);
         }
 
-
+        function registerSetInvoiceDeletedAction() {
+            var actionType = {
+                ActionTypeName: "SetInvoiceDeletedAction",
+                actionMethod: function (payload) {
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
+                    VRNotificationService.showConfirmation().then(function (response) {
+                        if (response) {
+                            VR_Invoice_InvoiceAPIService.DeleteGeneratedInvoice(payload.invoice.Entity.InvoiceId).then(function (response) {
+                                if (payload.onItemDeleted != undefined) {
+                                    payload.onItemDeleted(payload.invoice);
+                                }
+                                promiseDeffered.resolve(response);
+                            });
+                        } else {
+                            promiseDeffered.resolve(response);
+                        }
+                    });
+                    return promiseDeffered.promise;
+                }
+            };
+            registerActionType(actionType);
+        }
         return ({
             addInvoiceAction: addInvoiceAction,
             editInvoiceAction: editInvoiceAction,
@@ -273,6 +288,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             generateInvoices: generateInvoices,
             reGenerateInvoice: reGenerateInvoice,
             registerSendEmailAction: registerSendEmailAction,
-            registerDownloadFileInvoiceAction: registerDownloadFileInvoiceAction
+            registerDownloadFileInvoiceAction: registerDownloadFileInvoiceAction,
+            registerSetInvoiceDeletedAction: registerSetInvoiceDeletedAction
         });
     }]);
