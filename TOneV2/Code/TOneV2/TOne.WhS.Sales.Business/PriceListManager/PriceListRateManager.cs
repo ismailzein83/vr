@@ -94,7 +94,8 @@ namespace TOne.WhS.Sales.Business
                     if (countryRange == null)
                         throw new DataIntegrityValidationException(string.Format("The BED of country '{0}' was not found", countryName));
 
-                    ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones, inheritedRatesByZoneId, countryRange, newExplicitRates);
+                    if (countryRange.EED.VRGreaterThan(countryRange.BED))
+                        ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones, inheritedRatesByZoneId, countryRange, newExplicitRates);
                 }
             }
         }
@@ -266,7 +267,8 @@ namespace TOne.WhS.Sales.Business
                         };
                     }
                 }
-                AddZoneExplicitRates(existingZone, inheritedRatesByZoneId.GetRecord(existingZone.ZoneId), countryRange, newExplicitRates);
+                if (existingZone.BED < changedExistingCountry.EED.Value)
+                    AddZoneExplicitRates(existingZone, inheritedRatesByZoneId.GetRecord(existingZone.ZoneId), countryRange, newExplicitRates);
             }
         }
 
