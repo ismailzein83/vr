@@ -152,6 +152,7 @@
     <Compile Include="Controllers\CPAnalyticController.cs" />
     <Compile Include="Controllers\CPDIDController.cs" />
     <Compile Include="Controllers\LiveBalanceController.cs" />
+    <Compile Include="Controllers\RetailAccountBEController.cs" />
     <Compile Include="Controllers\RetailAccountInfoController.cs" />
     <Compile Include="Controllers\RetailAccountUserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -218,7 +219,7 @@
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\RetailAccountInfoTileRuntimeSettings.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\RetailUserSubaccountsBEDefinitionTemplate.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Directives\Templates\SubAccountsGridTemplate.html" />
-    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Services\APIService\RetailAccountUserAPIService.js" />
+    <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Services\APIService\RetailAccountBEAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\RetailAccountInfo\Services\APIService\RetailAccountInfoAPIService.js" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\Templates\RetailAccountVRRestAPIAnalyticQueryInterceptorTemplate.html" />
     <Content Include="PartnerPortal_CustomerAccess\Elements\VRRestAPIAnalyticQueryInterceptor\Directives\MainExtensions\partnerportal-customeraccess-retailaccountanalyticqueryinterceptor.js" />

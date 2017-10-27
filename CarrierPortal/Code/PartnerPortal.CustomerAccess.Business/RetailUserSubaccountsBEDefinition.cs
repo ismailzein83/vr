@@ -24,7 +24,7 @@ namespace PartnerPortal.CustomerAccess.Business
         }
         public override string ManagerFQTN
         {
-            get { return "PartnerPortal.CustomerAccess.Business.RetailAccountUserManager, PartnerPortal.CustomerAccess.Business"; }
+            get { return "PartnerPortal.CustomerAccess.Business.RetailAccountBEManager, PartnerPortal.CustomerAccess.Business"; }
         }
         public Guid VRConnectionId { get; set; }
         public List<Guid> AccountTypeIds { get; set; }

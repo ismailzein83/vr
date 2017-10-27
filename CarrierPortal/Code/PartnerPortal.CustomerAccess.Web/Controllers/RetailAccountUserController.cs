@@ -31,12 +31,5 @@ namespace PartnerPortal.CustomerAccess.Web.Controllers
             return _manager.ResetPassword(resetPasswordInput.UserId, resetPasswordInput.Password);
         }
 
-        [HttpGet]
-        [Route("GetClientChildAccountsInfo")]
-        public IEnumerable<ClientChildAccountInfo> GetClientChildAccountsInfo(Guid businessEntityDefinitionId)
-        {
-            RetailAccountUserManager _manager = new RetailAccountUserManager();
-            return _manager.GetClientChildAccountsInfo(businessEntityDefinitionId);
-        }
     }
 }

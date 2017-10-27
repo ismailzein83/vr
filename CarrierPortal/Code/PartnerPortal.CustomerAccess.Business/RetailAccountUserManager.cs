@@ -8,16 +8,12 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
-
+using System.Linq;
 namespace PartnerPortal.CustomerAccess.Business
 {
     public class RetailAccountUserManager
     {
-        #region Ctor/Fields
-
-        static BusinessEntityDefinitionManager s_businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
-
-        #endregion
+       
 
         #region Public Methods
 
@@ -103,36 +99,45 @@ namespace PartnerPortal.CustomerAccess.Business
             return new UserManager().ResetPassword(userId, password);
         }
 
-        public IEnumerable<ClientChildAccountInfo> GetClientChildAccountsInfo(Guid businessEntityDefinitionId)
+      
+       
+        #endregion
+
+        #region Private Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
-            var retailBusinessEntityDefinitionSettings = GetRetailUserSubaccountsBEDefinition(businessEntityDefinitionId);
-            retailBusinessEntityDefinitionSettings.ThrowIfNull("retailBusinessEntityDefinitionSettings");
+            protected override bool IsTimeExpirable
+            {
+                get { return true; }
+            }
+        }
+        public Dictionary<long, ClientAccountInfo> GetClientRetailAccountsInfo(Guid vrConnectionId)
+        {
             int userId = SecurityContext.Current.GetLoggedInUserId();
             var accountInfo = GetRetailAccountInfo(userId);
             accountInfo.ThrowIfNull("accountInfo", userId);
-            string accountId = accountInfo.AccountId.ToString();
-            VRConnectionManager connectionManager = new VRConnectionManager();
-            var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(retailBusinessEntityDefinitionSettings.VRConnectionId);
-            VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-            var clientChildAccountsInfo = connectionSettings.Get<IEnumerable<ClientChildAccountInfo>>(string.Format("/api/Retail_BE/AccountBE/GetClientChildAccountsInfo?accountBEDefinitionId={0}&accountId={1}&withSubChildren={2}", accountInfo.AccountBEDefinitionId, accountId, true));
-
-            Func<ClientChildAccountInfo, bool> filterExpression = (clientChildAccountInfo) =>
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(new RetailAccountCacheKey
             {
-                if (retailBusinessEntityDefinitionSettings.AccountTypeIds != null && !retailBusinessEntityDefinitionSettings.AccountTypeIds.Contains(clientChildAccountInfo.TypeId))
-                    return false;
-                return true;
-            };
-
-            return clientChildAccountsInfo != null ? clientChildAccountsInfo.FindAllRecords(filterExpression) : null; ;
+                AccountBEDefinitionId = accountInfo.AccountBEDefinitionId,
+                AccountId = accountInfo.AccountId,
+                VRConnectionId = vrConnectionId
+            },
+              () =>
+              {
+                  VRConnectionManager connectionManager = new VRConnectionManager();
+                  var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(vrConnectionId);
+                  VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+                  IEnumerable<ClientAccountInfo> clientAccountsInfo = connectionSettings.Get<IEnumerable<ClientAccountInfo>>(string.Format("/api/Retail_BE/AccountBE/GetClientChildAccountsInfo?accountBEDefinitionId={0}&accountId={1}&withSubChildren={2}", accountInfo.AccountBEDefinitionId, accountInfo.AccountId, true));
+                  return clientAccountsInfo == null ? null : clientAccountsInfo.ToDictionary(acc => acc.AccountId, acc => acc);
+              });
         }
-
-        public RetailUserSubaccountsBEDefinition GetRetailUserSubaccountsBEDefinition(Guid businessEntityDefinitionId)
+        public struct RetailAccountCacheKey
         {
-            var businessEntityDefinition = s_businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
-            businessEntityDefinition.ThrowIfNull("businessEntityDefinition", businessEntityDefinitionId);
-            return businessEntityDefinition.Settings.CastWithValidate<RetailUserSubaccountsBEDefinition>("businessEntityDefinition.Settings", businessEntityDefinitionId);
+            public long AccountId { get; set; }
+            public Guid AccountBEDefinitionId { get; set; }
+            public Guid VRConnectionId { get; set; }
         }
-
         #endregion
     }
 }

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('partnerportalCustomeraccessRetailsubaccountsSelector', ['PartnerPortal_CustomerAccess_RetailAccountUserAPIService', 'UtilsService', 'VRUIUtilsService',
-    function (PartnerPortal_CustomerAccess_RetailAccountUserAPIService, UtilsService, VRUIUtilsService) {
+app.directive('partnerportalCustomeraccessRetailsubaccountsSelector', ['PartnerPortal_CustomerAccess_RetailAccountBEAPIService', 'UtilsService', 'VRUIUtilsService',
+    function (PartnerPortal_CustomerAccess_RetailAccountBEAPIService, UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -88,7 +88,7 @@ app.directive('partnerportalCustomeraccessRetailsubaccountsSelector', ['PartnerP
                     }
                     if (businessEntityDefinitionId != undefined)
                     {
-                        return PartnerPortal_CustomerAccess_RetailAccountUserAPIService.GetClientChildAccountsInfo(businessEntityDefinitionId).then(function (response) {
+                        return PartnerPortal_CustomerAccess_RetailAccountBEAPIService.GetClientChildAccountsInfo(businessEntityDefinitionId).then(function (response) {
                             ctrl.datasource.length = 0;
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
