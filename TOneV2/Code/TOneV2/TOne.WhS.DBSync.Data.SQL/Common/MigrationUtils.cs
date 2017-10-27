@@ -13,7 +13,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         public static string GetEffectiveQuery(string entityName, bool onlyEffective, DateTime? effectiveFrom)
         {
             string queryOnlyEffective = onlyEffective ? " and {0}.IsEffective = 'Y' " : string.Empty;
-            queryOnlyEffective += effectiveFrom.HasValue ? " and {0}.BeginEffectiveDate >= '" + BaseDataManager.GetDateTimeForBCP(effectiveFrom.Value) + "'" : string.Empty;
+            queryOnlyEffective += effectiveFrom.HasValue ? " and ({0}.EndEffectiveDate >= '" + BaseDataManager.GetDateTimeForBCP(effectiveFrom.Value) + "' OR {0}.EndEffectiveDate is NULL)" : string.Empty;
             return string.Format(queryOnlyEffective, entityName);
         }
     }
