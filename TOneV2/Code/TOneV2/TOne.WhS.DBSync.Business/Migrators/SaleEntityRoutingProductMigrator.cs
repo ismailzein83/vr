@@ -104,10 +104,6 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<int, SaleEntityRateByCustomerWithMaxCount> saleEntityRateByCustomerMaxCount = new Dictionary<int, SaleEntityRateByCustomerWithMaxCount>();
             foreach (var sourceRate in sourceItems)
             {
-                if (sourceRate.SourceId == "2953866")
-                {
-                    string str = "";
-                }
                 CarrierAccount carrierAccount;
                 if (allCarrierAccounts.TryGetValue(sourceRate.CustomerId, out carrierAccount))
                 {
