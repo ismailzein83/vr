@@ -678,6 +678,10 @@
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_InsertIfNotExists.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_GetSummary.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoiceSentDate.sql" />
+    <Build Include="rules\Tables\RuleChanged.sql" />
+    <Build Include="rules\Stored Procedures\sp_RuleChanged_GetByRuleAndRuleTypeIds.sql" />
+    <Build Include="rules\Stored Procedures\sp_Rule_UpdateRuleAndRuleChanged.sql" />
+    <Build Include="rules\Stored Procedures\sp_Rule_InsertRuleAndRuleChanged.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
