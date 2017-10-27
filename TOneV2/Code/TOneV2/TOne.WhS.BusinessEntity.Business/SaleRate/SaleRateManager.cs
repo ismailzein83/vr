@@ -330,7 +330,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public override IEnumerable<SaleRateDetail> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleRateQuery> input)
             {
                 IEnumerable<long> saleZoneIds;
-                IEnumerable<SaleZone> saleZones = GetFilteredOwnerSaleZones(input.Query.SellingNumberPlanId, input.Query.OwnerType, input.Query.OwnerId, input.Query.EffectiveOn, input.Query.ZonesIds, out saleZoneIds);
+                IEnumerable<SaleZone> saleZones = GetFilteredOwnerSaleZones(input.Query.SellingNumberPlanId, input.Query.OwnerType, input.Query.OwnerId, input.Query.EffectiveOn, input.Query.CountriesIds, input.Query.SaleZoneName, out saleZoneIds);
 
                 if (saleZones == null || saleZones.Count() == 0)
                     return null;
@@ -352,7 +352,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             #region Private / Protected Methods
 
-            private IEnumerable<SaleZone> GetFilteredOwnerSaleZones(int? sellingNumberPlanId, SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, IEnumerable<long> saleZoneIds, out IEnumerable<long> filteredSaleZoneIds)
+            private IEnumerable<SaleZone> GetFilteredOwnerSaleZones(int? sellingNumberPlanId, SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, IEnumerable<int> countriesIds, string saleZoneName, out IEnumerable<long> filteredSaleZoneIds)
             {
                 var saleZoneManager = new SaleZoneManager();
                 filteredSaleZoneIds = null;
@@ -363,7 +363,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (saleZones == null || saleZones.Count() == 0)
                     return null;
 
-                IEnumerable<SaleZone> filteredSaleZones = saleZones.FindAllRecords(x => saleZoneIds == null || saleZoneIds.Contains(x.SaleZoneId));
+                IEnumerable<SaleZone> filteredSaleZones = saleZones.FindAllRecords(x =>
+                    (countriesIds == null || countriesIds.Contains(x.CountryId))
+                    && (saleZoneName == null || x.Name.ToLower().Contains(saleZoneName.ToLower()))
+                    );
 
                 if (filteredSaleZones == null || filteredSaleZones.Count() == 0)
                     return null;

@@ -28,15 +28,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemSP("TOneWhS_BE.sp_SaleRate_GetByID", SaleRateMapper, rateId);
         }
 
-        public IEnumerable<SaleRate> GetFilteredSaleRates(SaleRateQuery query)
-        {
-            string zonesids = null;
-            if (query.ZonesIds != null && query.ZonesIds.Count() > 0)
-                zonesids = string.Join<long>(",", query.ZonesIds);
-
-            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetFiltered", SaleRateMapper, query.EffectiveOn, query.SellingNumberPlanId, zonesids, query.OwnerType, query.OwnerId);
-        }
-
         public List<SaleRate> GetEffectiveSaleRates(DateTime effectiveOn)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetByEffective", SaleRateMapper, effectiveOn);

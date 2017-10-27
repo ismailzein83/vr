@@ -10,7 +10,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public DateTime EffectiveOn { get; set; }
 
-        public List<long> ZonesIds { get; set; }
+        public List<int> CountriesIds { get; set; }
+        
+        public string SaleZoneName { get; set; }
 
         public SalePriceListOwnerType OwnerType { get; set; }
 
