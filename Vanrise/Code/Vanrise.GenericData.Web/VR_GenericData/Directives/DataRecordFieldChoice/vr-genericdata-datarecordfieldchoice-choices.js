@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordfieldchoiceChoices', ['UtilsService', '$compile', 'VR_Rules_PricingRuleAPIService', 'VRUIUtilsService',
-function (UtilsService, $compile, VR_Rules_PricingRuleAPIService, VRUIUtilsService) {
+app.directive('vrGenericdataDatarecordfieldchoiceChoices', ['UtilsService', '$compile', 'VRUIUtilsService',
+function (UtilsService, $compile, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
