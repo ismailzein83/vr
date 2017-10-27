@@ -82,6 +82,7 @@
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceFileConvertor\InvoiceRDLCFileConverter.cs" />
     <Compile Include="Convertors\InvoiceToVRObjectConvertor.cs" />
     <Compile Include="InvoiceActionSettings\DownloadFileInvoiceAction.cs" />
+    <Compile Include="InvoiceActionSettings\SetInvoiceDeletedAction.cs" />
     <Compile Include="InvoiceDataSourceSettings\ItemGroupingDataSourceSettings.cs" />
     <Compile Include="InvoiceDataSourceSettings\LastInvoicesDataSourceSettings.cs" />
     <Compile Include="InvoiceDataSourceSettings\TaxesDataSourceSettings.cs" />
