@@ -3,9 +3,9 @@
         <vr-switch label="Nullable" value="ctrl.isNullable" isrequired="true"></vr-switch>
     </vr-columns>
     <vr-columns colnum="3">
-        <vr-genericdata-datarecordfieldchoice-selector on-ready="scopeModel.onDataRecordFieldChoiceSelectorReady" selectedvalues="scopeModel.selectedDataRecordFieldChoice"></vr-genericdata-datarecordfieldchoice-choices>
+        <vr-genericdata-datarecordfieldchoice-selector on-ready="scopeModel.onDataRecordFieldChoiceSelectorReady" selectedvalues="scopeModel.selectedDataRecordFieldChoice"></vr-genericdata-datarecordfieldchoice-selector>
 </vr-columns>
-    <vr-columns colnum="6" ng-if="scopeModel.selectedDataRecordFieldChoice == undefined" vr-loader="scopeModal.isLoadingDirective ">
+    <vr-columns colnum="6" ng-if="scopeModel.selectedDataRecordFieldChoice == undefined" vr-loader="scopeModel.isLoadingDirective">
         <vr-genericdata-datarecordfieldchoice-choices on-ready="scopeModel.onChoicesGridReady"></vr-genericdata-datarecordfieldchoice-choices>
     </vr-columns>
 </vr-columns>

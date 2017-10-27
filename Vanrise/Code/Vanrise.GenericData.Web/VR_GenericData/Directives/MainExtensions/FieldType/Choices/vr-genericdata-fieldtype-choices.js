@@ -68,7 +68,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService', 'VRUIUtilsServic
                         ctrl.isNullable = payload.IsNullable;
                     }
 
-                    if (payload != undefined && payload.ChoiceDefinitionId == undefined) {
+                    if (payload == undefined || payload.ChoiceDefinitionId == undefined) {
                         choicesGridReadyDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadChoicesGrid());
                     }
@@ -89,6 +89,7 @@ app.directive('vrGenericdataFieldtypeChoices', ['UtilsService', 'VRUIUtilsServic
                             }
                             VRUIUtilsService.callDirectiveLoad(choicesGridAPI, choicesGridPayLoad, loadChoicesGridPromiseDeferred);
                         });
+
                         return loadChoicesGridPromiseDeferred.promise;
                     }
                     function loadDataRecordFieldChoiceSelector() {
