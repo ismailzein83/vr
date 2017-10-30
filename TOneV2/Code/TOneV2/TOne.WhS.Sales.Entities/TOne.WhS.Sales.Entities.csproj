@@ -90,6 +90,7 @@
     <Compile Include="PricingTemplate\PricingTemplateSettings.cs" />
     <Compile Include="PricingTemplate\RatePricingTemplate.cs" />
     <Compile Include="PricingTemplate\ZonePricingTemplate.cs" />
+    <Compile Include="RateManagement\Actions\Country\AllCustomerCountriesToChange.cs" />
     <Compile Include="RateManagement\Zone\ZoneDataByCountryIds.cs" />
     <Compile Include="RatePlanning\CarrierAccount\AffectedCarrierAccountFilter.cs" />
     <Compile Include="SellingZonesWithDefaultRatesTaskData.cs" />
