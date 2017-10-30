@@ -7,3 +7,10 @@
     CONSTRAINT [PK_InvoiceDetails] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_InvoiceItem_InvoiceItemSetName]
+    ON [VR_Invoice].[InvoiceItem]([InvoiceID] ASC, [ItemSetName] ASC);
+
