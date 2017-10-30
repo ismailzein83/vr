@@ -67,9 +67,9 @@ IF (@TimestampAfter IS NULL)
 	  ,[timestamp]
             INTO #temp2_table
             FROM [BP].[BPInstance] WITH(NOLOCK) 
-            WHERE (@EntityIDs is null or EntityId in (select EntityId from @EntityIdsTable)) and (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))  
+            WHERE ([timestamp] > @TimestampAfter) --ONLY Updated records
+            AND (@EntityIDs is null or EntityId in (select EntityId from @EntityIdsTable)) and (@DefinitionsId is null or DefinitionID in (select BPDefinitionId from @BPDefinitionIDsTable))  
 		    AND (ViewRequiredPermissionSetId is null  or ViewRequiredPermissionSetId in (select ViewRequiredPermissionSetId from @ViewRequiredPermissionSetTable))
-            AND ([timestamp] > @TimestampAfter) --ONLY Updated records
             AND (@ParentId is null or ParentID = @ParentId)
             ORDER BY [timestamp]
             
