@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Business
 
         public override Guid ConfigId
         {
-            get { return new Guid("5592F2FF-09CB-4BE0-A534-CCBB7631B00B"); }
+            get { return new Guid("4CC58F9E-5ED1-4C12-8E3E-E38FC19DFF53"); }
         }
 
         public override string RuntimeEditor
