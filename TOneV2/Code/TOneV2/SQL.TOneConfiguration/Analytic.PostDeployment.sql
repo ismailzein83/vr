@@ -39,7 +39,8 @@ Post-Deployment Script Template
 
 ('10631F32-9116-4443-A73D-2D4B77111634','Postgres Data Provider','Postgres Data Provider','VR_Analytic_AnalyticDataProviderSettings'	,'{"Editor":"vr-analytic-postgres-dataprovider"}'),
 ('3CBA3F20-6535-4EBF-9704-DF65AC605671','Sql Data Provider','Sql Data Provider','VR_Analytic_AnalyticDataProviderSettings'				,'{"Editor":"vr-analytic-sql-dataprovider"}'),
-('4f72f80c-3928-460f-aaf5-cc18a78c8265','Memory Data Provider','Memory Data Provider','VR_Analytic_AnalyticDataProviderSettings'				,'{"Editor":"vr-analytic-memory-dataprovider"}')
+('4f72f80c-3928-460f-aaf5-cc18a78c8265','Memory Data Provider','Memory Data Provider','VR_Analytic_AnalyticDataProviderSettings'		,'{"Editor":"vr-analytic-memory-dataprovider"}'),
+('DD11C35D-3DA8-4094-9492-678D243EFE5A','Rest API Data Provider','Rest API Data Provider','VR_Analytic_AnalyticDataProviderSettings'	,'{"Editor":"vr-analytic-restapi-dataprovider"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[extensionconfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);----------------------------------------------------------------------------------------------------end
 
 --[sec].[Module]------------------------------1501 to 1600------------------------------------------------------
