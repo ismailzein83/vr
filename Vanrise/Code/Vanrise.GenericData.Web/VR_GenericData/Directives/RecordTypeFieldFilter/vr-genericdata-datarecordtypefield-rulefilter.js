@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_ConditionEnum',
-    function (VR_GenericData_DataRecordTypeAPIService, UtilsService, VRUIUtilsService, VR_GenericData_ConditionEnum) {
+app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_DataRecordTypeAPIService', 'UtilsService', 'VRUIUtilsService', 'VR_GenericData_ConditionEnum','$filter',
+    function (VR_GenericData_DataRecordTypeAPIService, UtilsService, VRUIUtilsService, VR_GenericData_ConditionEnum, $filter) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -74,7 +74,7 @@ app.directive('vrGenericdataDatarecordtypefieldRulefilter', ['VR_GenericData_Dat
                         $scope.scopeModel.conditions = UtilsService.getArrayEnum(VR_GenericData_ConditionEnum);
                         $scope.scopeModel.selectedCondition = $scope.scopeModel.conditions[0];
                         context = payload.context;
-                        $scope.scopeModel.datasource = context.getFields();
+                        $scope.scopeModel.datasource = $filter('orderBy')(context.getFields(), 'FieldTitle');
                         $scope.scopeModel.dataRecordTypeField = $scope.scopeModel.datasource[0];
                         filterObj = payload.filterObj;
 
