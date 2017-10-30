@@ -205,7 +205,7 @@
                         }
                     }
                     else {
-                        if (controller.selectedvalues.length > 0) {
+                        if (controller.selectedvalues.length > 0) {                           
                             var index = controller.getObjectValue(controller.selectedvalues[controller.selectedvalues.length - 1]);
                             var item = utilsService.getItemByVal(allDataItems, index, controller.datavaluefield);
                             if ($('#' + index).offset() != undefined) {
@@ -213,7 +213,9 @@
                                 $('#divDataSourceContainer' + controller.id).first().stop().animate({
                                     scrollTop: (parseInt($('#' + index).attr("dataindex")) * 24)
                                 }, 1);
-                            }
+                                if (allDataItems.length > 20)
+                                    addPageToBoundDataSource();
+                            }                          
                             else if (allDataItems.length < 300 && item != null && $('#' + index).offset() == undefined)
                                 addPageToBoundDataSource();
                         }
