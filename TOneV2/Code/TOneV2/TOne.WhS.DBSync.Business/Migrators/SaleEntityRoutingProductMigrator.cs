@@ -233,7 +233,8 @@ namespace TOne.WhS.DBSync.Business
                 {
                     foreach (KeyValuePair<string, ZoneServiceConfig> item in allZoneServicesConfig)
                     {
-                        if ((Convert.ToInt32(item.Value.SourceId) & Convert.ToInt32(sourceId)) == Convert.ToInt32(item.Value.SourceId))
+                        int serviceId = Convert.ToInt32(item.Value.SourceId);
+                        if ((serviceId & Convert.ToInt32(sourceId)) == serviceId)
                             serviceIds.Add(item.Value.ZoneServiceConfigId);
                     }
                 }

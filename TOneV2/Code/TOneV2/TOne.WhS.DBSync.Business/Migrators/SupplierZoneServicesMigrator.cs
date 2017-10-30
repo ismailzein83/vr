@@ -91,19 +91,27 @@ namespace TOne.WhS.DBSync.Business
             if (supplierZone != null && supplierPriceList != null && sourceItem.BeginEffectiveDate.HasValue)
             {
                 List<ZoneService> effectiveServices = new List<ZoneService>();
+                ZoneServiceConfig zoneServiceConfig;
 
-                if (allZoneServicesConfig != null)
+                if (allZoneServicesConfig.TryGetValue(sourceItem.ServicesFlag.Value.ToString(), out zoneServiceConfig))
+                {
+                    effectiveServices.Add(new ZoneService
+                    {
+                        ServiceId = zoneServiceConfig.ZoneServiceConfigId
+                    });
+                }
+                else
                 {
                     foreach (KeyValuePair<string, ZoneServiceConfig> item in allZoneServicesConfig)
                     {
-                        if ((Convert.ToInt32(item.Value.SourceId) & Convert.ToInt32(sourceItem.ServicesFlag.Value)) == Convert.ToInt32(item.Value.SourceId))
+                        int serviceId = Convert.ToInt32(item.Value.SourceId);
+                        if ((serviceId & Convert.ToInt32(sourceItem.ServicesFlag.Value)) == serviceId)
                             effectiveServices.Add(new ZoneService()
                             {
-                                ServiceId = Convert.ToInt32(item.Value.ZoneServiceConfigId)
+                                ServiceId = item.Value.ZoneServiceConfigId
                             });
                     }
                 }
-
 
                 return new SupplierZoneService
                 {
