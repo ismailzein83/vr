@@ -26,6 +26,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
         public override dynamic CalculateValue(IDataRecordFieldFormulaCalculateValueContext context)
         {
             dynamic fieldValue = context.GetFieldValue(this.FieldName);
+            if (fieldValue == null)
+                return null;
 
             switch (this.Operator)
             {
