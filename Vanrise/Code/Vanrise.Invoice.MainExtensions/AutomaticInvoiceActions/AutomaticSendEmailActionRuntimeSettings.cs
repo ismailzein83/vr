@@ -88,7 +88,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                             }
                             
                             var emailTemplateEvaluator = invoiceEmailActionManager.GetEmailTemplate(context.Invoice, mailMessageTemplateId);
-                            if (emailTemplateEvaluator.To == null)
+                            if (String.IsNullOrEmpty(emailTemplateEvaluator.To))
                             {
                                 context.ErrorMessage = "Cannot sent invoice email. Reason: 'Email' is empty.";
                                 return;
