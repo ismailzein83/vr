@@ -11,9 +11,9 @@ namespace Retail.BusinessEntity.Business
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("C16E8C1C-0072-4B80-832A-753F16E1054B"); }
         }
-        public override string RuntimeEditor { get { throw new NotImplementedException(); } }
+        public override string RuntimeEditor { get { return ""; } }
         public Guid AccountManagerAssignementDefinitionId { get; set; }
     }
 }
