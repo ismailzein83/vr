@@ -1,11 +1,18 @@
 ﻿<div vr-modalcontent ng-controller="VR_AccountManager_AssignmentDefinitionEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formFilter">
-            <vr-row>
-                <vr-columns colnum="3">
-                    <vr-textbox value="scopeModel.assignmentName" label="Name" isrequired="true"></vr-textbox>
-                </vr-columns>
-            </vr-row>
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns colnum="3">
+                            <vr-textbox value="scopeModel.assignmentName" label="Name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Setting'">
+                    <vr-accountmanager-assignmentdefinition-selective on-ready="scopeModel.onDirectiveReady"></vr-accountmanager-assignmentdefinition-selective>
+                </vr-tab>
+                <vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>

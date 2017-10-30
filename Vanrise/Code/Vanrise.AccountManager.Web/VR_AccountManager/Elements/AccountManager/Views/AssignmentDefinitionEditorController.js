@@ -7,6 +7,8 @@
     function assignmentDefinitionController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
         var assignmentDefinitionEntity;
+        var directiveAPI;
+        var directiveReadyDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -31,6 +33,10 @@
                     updateAssignmnetDefinition();
                 }
             };
+            $scope.scopeModel.onDirectiveReady = function (api) {
+                directiveAPI = api;
+                directiveReadyDeferred.resolve();
+            }
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -42,10 +48,9 @@
                   if(!isEditMode)
                       $scope.title = UtilsService.buildTitleForAddEditor('Assignment Definition');
                   else
-                      $scope.title = UtilsService.buildTitleForUpdateEditor('Assignment Definition');
-
+                      $scope.title = UtilsService.buildTitleForUpdateEditor(assignmentDefinitionEntity.Name, 'Assignment Definition');
                 }
-                return UtilsService.waitMultipleAsyncOperations([setTitle,loadStaticData]).catch(function (error) {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadDirective]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -53,11 +58,11 @@
         }
         function buildObjectFromScope() {
             var assignmentDefiniton = {
-                Name: $scope.scopeModel.assignmentName
+                Name: $scope.scopeModel.assignmentName,
+                Settings: directiveAPI.getData()
             };
             if (isEditMode) {
                 assignmentDefiniton.AccountManagerAssignementDefinitionId = assignmentDefinitionEntity.AccountManagerAssignementDefinitionId;
-
             }
             else {
                 assignmentDefiniton.AccountManagerAssignementDefinitionId = UtilsService.guid();
@@ -68,6 +73,19 @@
             if (assignmentDefinitionEntity != undefined) {
                 $scope.scopeModel.assignmentName = assignmentDefinitionEntity.Name;
             }
+        }
+        function loadDirective() {
+            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+            directiveReadyDeferred.promise.then(function () {
+                var payload;
+                if (assignmentDefinitionEntity != undefined) {
+                    payload = {
+                        assignmentDefinitionEntity: assignmentDefinitionEntity.Settings
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
+            });
+            return directiveLoadDeferred.promise;
         }
         function addAssignmentDefinition() {
             var assignmentDefinition = buildObjectFromScope();

@@ -167,7 +167,9 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionGridTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionSettings.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerGrid.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AssignmentDefinitionSelectiveTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\SubViewsGrid.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-assignmentdefinition-selective.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-grid.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-assignmentdefinition-grid.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionEditorTemplate.html" />
@@ -177,6 +179,7 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-subviews-grid.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\AccountManagerService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerAPIService.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerDefinitionAPIService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerDefintionAPIService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerEditor.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerEditorController.js" />

@@ -1,11 +1,11 @@
 ﻿<vr-columns colnum="4">
     <vr-select on-ready="scopeModel.onSelectorReady"
-               datasource="scopeModel.accountManagerDefinitionConfigs"
-               selectedvalues="scopeModel.selectedAccountManagerDefinitionConfig"
+               datasource="scopeModel.templateConfigs"
+               selectedvalues="scopeModel.selectedTemplateConfig"
                datavaluefield="ExtensionConfigurationId"
                datatextfield="Title" label="Setting"
                isrequired="true"
                hideremoveicon>
     </vr-select>
 </vr-columns>
-<vr-directivewrapper directive="scopeModel.selectedAccountManagerDefinitionConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="4" isrequired="ctrl.isrequired"></vr-directivewrapper>
+<vr-directivewrapper directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="4" isrequired="ctrl.isrequired"></vr-directivewrapper>

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    accountmanagerdefinitionsSelectiveDirective.$inject = ['VR_AccountManager_AccountManagerAPIService', 'UtilsService', 'VRUIUtilsService'];
+    assignmentdefinitionsSelectiveDirective.$inject = ['VR_AccountManager_AccountManagerDefinitionAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService'];
 
-    function accountmanagerdefinitionsSelectiveDirective(VR_AccountManager_AccountManagerAPIService, UtilsService, VRUIUtilsService) {
+    function assignmentdefinitionsSelectiveDirective(VR_AccountManager_AccountManagerDefinitionAPIService, UtilsService, VRUIUtilsService, VRNavigationService) {
         return {
             restrict: "E",
             scope: {
@@ -14,18 +14,19 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var accountmanagerdefinitionsSelective = new AccountmanagerdefinitionsSelective($scope, ctrl, $attrs);
-                accountmanagerdefinitionsSelective.initializeController();
+                var assignmentdefinitionsSelective = new AssignmentdefinitionsSelective($scope, ctrl, $attrs);
+                assignmentdefinitionsSelective.initializeController();
             },
 
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_AccountManager/Elements/AccountManager/Directives/Template/AccountManagerDefinitionSettings.html",
+            templateUrl: "/Client/Modules/VR_AccountManager/Elements/AccountManager/Directives/Template/AssignmentDefinitionSelectiveTemplate.html",
+
 
         };
 
 
-        function AccountmanagerdefinitionsSelective($scope, ctrl, $attrs) {
+        function AssignmentdefinitionsSelective($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
             var selectorAPI;
@@ -42,7 +43,6 @@
                     selectorAPI = api;
                     defineAPI();
                 };
-
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
                     var setLoader = function (value) {
@@ -50,35 +50,38 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
+              
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    selectorAPI.clearDataSource();
-                    var extendedSettings;
                     var promises = [];
-                    if (payload != undefined) {
-                        extendedSettings = payload.extendedSettings;
+                    var assignmentDefinitionEntity;
+                    selectorAPI.clearDataSource();
+
+                    if (payload != undefined)
+                    {
+                        assignmentDefinitionEntity = payload.assignmentDefinitionEntity;
                     }
-                    if (extendedSettings != undefined) {
+                    if (assignmentDefinitionEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
-                    var getAccountManagerDefinitionConfigsPromise = getAccountManagerDefinitionConfigs();
-                    promises.push(getAccountManagerDefinitionConfigsPromise);
 
-                    function getAccountManagerDefinitionConfigs() {
-                        return VR_AccountManager_AccountManagerAPIService.GetAccountManagerDefinitionConfigs().then(function (response) {
+
+                    var getAssignmentDefinitionConfigsPromise = getAssignmentDefinitionConfigs();
+                    promises.push(getAssignmentDefinitionConfigsPromise);
+                    function getAssignmentDefinitionConfigs() {
+                        return VR_AccountManager_AccountManagerDefinitionAPIService.GetAssignmentDefinitionConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (extendedSettings != undefined) {
-                                    $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, extendedSettings.ConfigId, 'ExtensionConfigurationId');
+                                if (assignmentDefinitionEntity != undefined) {
+                                    $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, assignmentDefinitionEntity.ConfigId, 'ExtensionConfigurationId');
                                 }
-
                             }
                         });
                     }
@@ -91,18 +94,17 @@
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var directivePayload = {
-                                extendedSettings: extendedSettings
+                                assignmentDefinitionEntity: assignmentDefinitionEntity
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
                         return directiveLoadDeferred.promise;
                     }
-
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
-                
+
                 api.getData = getData;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -111,12 +113,10 @@
 
                 function getData() {
                     var data;
-                    if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
-
                         data = directiveAPI.getData();
                         if (data != undefined) {
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                        }
+                    
                     }
                     return data;
                 }
@@ -126,6 +126,6 @@
         }
     }
 
-    app.directive('vrAccountmanagerAccountmanagerdefinitionsettings', accountmanagerdefinitionsSelectiveDirective);
+    app.directive('vrAccountmanagerAssignmentdefinitionSelective', assignmentdefinitionsSelectiveDirective);
 
 })(app);

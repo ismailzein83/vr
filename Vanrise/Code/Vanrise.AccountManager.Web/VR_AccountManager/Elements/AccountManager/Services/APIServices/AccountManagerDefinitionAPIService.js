@@ -6,9 +6,13 @@
         function GetAccountManagerDefinition(accountManagerDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAccountManagerDefinition"), { accountManagerDefinitionId: accountManagerDefinitionId });
         }
+        function GetAssignmentDefinitionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAssignmentDefinitionConfigs"));
+        }
        
         return ({
             GetAccountManagerDefinition: GetAccountManagerDefinition,
+            GetAssignmentDefinitionConfigs: GetAssignmentDefinitionConfigs
         });
     }
     appControllers.service("VR_AccountManager_AccountManagerDefinitionAPIService", accountManagerDefinitionAPIService);
