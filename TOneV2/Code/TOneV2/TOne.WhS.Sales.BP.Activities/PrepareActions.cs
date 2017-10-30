@@ -71,6 +71,9 @@ namespace TOne.WhS.Sales.BP.Activities
         public OutArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
 
         [RequiredArgument]
+        public OutArgument<AllCustomerCountriesToChange> AllCustomerCountriesToChange { get; set; }
+
+        [RequiredArgument]
         public OutArgument<DateTime> MinimumDate { get; set; }
 
         #endregion
@@ -126,6 +129,8 @@ namespace TOne.WhS.Sales.BP.Activities
 
             CustomerCountriesToAdd.Set(context, customerCountriesToAdd);
             CustomerCountriesToChange.Set(context, customerCountriesToChange);
+
+            AllCustomerCountriesToChange.Set(context, new AllCustomerCountriesToChange() { CustomerCountriesToChange = customerCountriesToChange });
 
             MinimumDate.Set(context, minDate);
         }

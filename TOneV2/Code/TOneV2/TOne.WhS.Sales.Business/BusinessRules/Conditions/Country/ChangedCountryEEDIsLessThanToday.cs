@@ -12,30 +12,37 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is CustomerCountryToChange;
+            return target is AllCustomerCountriesToChange;
         }
-
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
-            var countryToChange = context.Target as CustomerCountryToChange;
+            var allCountriesToChange = context.Target as AllCustomerCountriesToChange;
 
-            if (countryToChange.CloseEffectiveDate < DateTime.Today)
+            if (allCountriesToChange.CustomerCountriesToChange == null || allCountriesToChange.CustomerCountriesToChange.Count() == 0)
+                return true;
+
+            var invalidCountryNames = new List<string>();
+            var countryManager = new Vanrise.Common.Business.CountryManager();
+
+            DateTime today = DateTime.Today;
+
+            foreach (CustomerCountryToChange countryToChange in allCountriesToChange.CustomerCountriesToChange)
             {
-                string countryName = new CountryManager().GetCountryName(countryToChange.CountryId);
-                string closeEffectiveDate = UtilitiesManager.GetDateTimeAsString(countryToChange.CloseEffectiveDate);
-                context.Message = string.Format("EED '{0}' of Country '{1}' must be greater than or equal to today's date", closeEffectiveDate, countryName);
+                if (countryToChange.CloseEffectiveDate < today)
+                    invalidCountryNames.Add(countryManager.GetCountryName(countryToChange.CountryId));
+            }
+
+            if (invalidCountryNames.Count > 0)
+            {
+                context.Message = string.Format("Cannot end the following countries before the date of today: {0}", string.Join(", ", invalidCountryNames));
                 return false;
             }
 
             return true;
         }
-
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            var countryToChange = target as CustomerCountryToChange;
-            string countryName = new CountryManager().GetCountryName(countryToChange.CountryId);
-            string closeEffectiveDate = UtilitiesManager.GetDateTimeAsString(countryToChange.CloseEffectiveDate);
-            return string.Format("EED '{0}' of Country '{1}' must be greater than or equal to today's date", closeEffectiveDate, countryName);
+            throw new NotImplementedException();
         }
     }
 }

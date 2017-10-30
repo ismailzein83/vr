@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TOne.WhS.Sales.Entities.RateManagement.Actions.Country
+namespace TOne.WhS.Sales.Entities
 {
     public class AllCustomerCountriesToChange : Vanrise.BusinessProcess.Entities.IRuleTarget
     {
