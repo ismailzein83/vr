@@ -521,7 +521,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 zoneNotifictionByCurrencyId.Add(changesCurrency, salePlZoneNotifications);
             }
             else
-                salePlZoneNotifications.AddRange(salePlZoneNotifications);
+                saleNotifications.AddRange(salePlZoneNotifications);
 
             var rpChanges = countryChanges.SelectMany(it => it.ZoneChanges.Where(r => r.RPChange != null).Select(rp => rp.RPChange)).ToList();
             AddRPChangesToSalePLNotification(zoneNotifictionByCurrencyId.Values.SelectMany(z => z), rpChanges, customerId, sellingProductId);
