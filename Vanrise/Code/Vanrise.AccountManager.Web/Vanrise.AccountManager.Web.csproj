@@ -117,7 +117,10 @@
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="VR_AccountManager\Elements\AccountManager\Directives\AssignmentDefinition\Templates\" />
+    <Folder Include="VR_AccountManager\Elements\AccountManager\Directives\SubViews\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountManagerController.cs" />
@@ -180,7 +183,6 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\AccountManagerService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerDefinitionAPIService.js" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerDefintionAPIService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerEditor.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerEditorController.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerManagement.html" />
