@@ -116,6 +116,31 @@ namespace Vanrise.Common.Business
             return insertOperationOutput;
         }
 
+        public Vanrise.Entities.InsertOperationOutput<CompanySetting> AddCompany(CompanySetting Company)
+        {
+            Vanrise.Entities.InsertOperationOutput<CompanySetting> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<CompanySetting>();
+            SettingManager settingManager = new SettingManager();
+            CompanySettings companySettings = settingManager.GetSetting<CompanySettings>(CompanySettings.SETTING_TYPE);
+
+            SettingToEdit comapnySettingsToEdit = new SettingToEdit()
+            {
+                Name = "Company",
+                SettingId = new Guid("81f62ac3-bae4-4a2f-a60d-a655494625ea")
+            };
+            if (companySettings == null)
+                companySettings = new CompanySettings();
+            if (companySettings.Settings == null)
+                companySettings.Settings = new List<CompanySetting>();
+
+            companySettings.Settings.Add(Company);
+            comapnySettingsToEdit.Data = companySettings;
+            settingManager.UpdateSetting(comapnySettingsToEdit);
+
+            insertOperationOutput.InsertedObject = Company;
+            insertOperationOutput.Result = InsertOperationResult.Succeeded;
+            return insertOperationOutput;
+        }
+
         public IEnumerable<CompanySettingsInfo> GetCompanySettingsInfo()
         {
             IEnumerable<CompanySetting> companySettings = GetCompanySetting();

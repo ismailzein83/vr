@@ -12,6 +12,7 @@
         var extendedSettings = {};
         var context;
         var companyDefinitionSettings = {};
+        var isSingleInsert;
 
         var contactsTypes = [];
 
@@ -33,10 +34,8 @@
                     extendedSettings = companySettingEntity.ExtendedSettings;
                 }
 
-                if (context.getCompanyDefinitionSettings() != undefined) {
-                    companyDefinitionSettings = context.getCompanyDefinitionSettings();
-                }
                 setDefault = parameters.setDefault;
+                isSingleInsert = parameters.isSingleInsert;
             }
             isEditMode = (companySettingEntity != undefined);
         }
@@ -70,14 +69,14 @@
             $scope.scopeModel.isLoading = true;
             var promises = [];
             promises.push(loadContactsTypes());
-            promises.push(prepareCompanyDefinitions());
+            promises.push(loadDefinitionSettings());
             UtilsService.waitMultiplePromises(promises).then(function () {
                 loadAllControls();
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail, loadCompanyContacts])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadBankDetail, loadCompanyContacts, prepareCompanyDefinitions])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -160,6 +159,22 @@
                 }
             }
 
+        }
+
+        function loadDefinitionSettings() {
+            var promises = [];
+
+            if(context != undefined && context.getCompanyDefinitionSettings() != undefined)
+                companyDefinitionSettings = context.getCompanyDefinitionSettings();
+            else {
+                var promise = VRCommon_CompanySettingsAPIService.GetCompanyDefinitionSettings().then(function (response) {
+                    if (response != undefined && response != null) {
+                        companyDefinitionSettings = response;
+                    }
+                });
+                promises.push(promise);
+            }
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function addContact(contactType, settings) {
@@ -250,9 +265,27 @@
 
         function insertCompanySettings() {
             var companySettingsObject = buildCompanySettingsObjFromScope();
-            if ($scope.onCompanySettingsAdded != undefined)
-                $scope.onCompanySettingsAdded(companySettingsObject);
-            $scope.modalContext.closeModal();
+            if (isSingleInsert == true) {
+                $scope.scopeModel.isLoading = true;
+                return VRCommon_CompanySettingsAPIService.AddCompany(companySettingsObject)
+                   .then(function (response) {
+                       if (VRNotificationService.notifyOnItemAdded("Company", response, "Company")) {
+                           if ($scope.onCompanySettingsAdded != undefined)
+                               $scope.onCompanySettingsAdded(companySettingsObject);
+                           $scope.modalContext.closeModal();
+                       }
+                   }).catch(function (error) {
+                       VRNotificationService.notifyException(error, $scope);
+                   }).finally(function () {
+                       $scope.scopeModel.isLoading = false;
+                   });
+            }
+            else {
+                if ($scope.onCompanySettingsAdded != undefined)
+                    $scope.onCompanySettingsAdded(companySettingsObject);
+                $scope.modalContext.closeModal();
+            }
+
         }
         function updateCompanySettings() {
             var companySettingsObject = buildCompanySettingsObjFromScope();

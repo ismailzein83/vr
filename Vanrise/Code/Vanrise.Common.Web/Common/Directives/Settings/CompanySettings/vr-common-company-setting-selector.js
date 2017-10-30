@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonCompanySettingSelector', ['VRCommon_CompanySettingsAPIService', 'UtilsService', 'VRUIUtilsService',
-function (VRCommon_CompanySettingsAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrCommonCompanySettingSelector', ['VRCommon_CompanySettingsAPIService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_CompanySettingService',
+function (VRCommon_CompanySettingsAPIService, UtilsService, VRUIUtilsService, VRCommon_CompanySettingService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -23,6 +23,19 @@ function (VRCommon_CompanySettingsAPIService, UtilsService, VRUIUtilsService) {
                 ctrl.selectedvalues = [];
 
             ctrl.datasource = [];
+
+
+            $scope.addNewCompany = function () {
+                var isDefault = ctrl.datasource.length == 0;
+                var onCompanyAdded = function (companyObj) {
+                    ctrl.datasource.push(companyObj);
+                    if ($attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.push(companyObj);
+                    else
+                        ctrl.selectedvalues = companyObj;
+                };
+                VRCommon_CompanySettingService.addCompanySetting(onCompanyAdded, isDefault, undefined, true);
+            };
             var ctor = new CompanySettingsCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
@@ -54,9 +67,12 @@ function (VRCommon_CompanySettingsAPIService, UtilsService, VRUIUtilsService) {
         var required = "";
         if (attrs.isrequired != undefined)
             required = "isrequired";
+        var addCliked = '';
+        if (attrs.showaddbutton != undefined)
+            addCliked = 'onaddclicked="addNewCompany"';
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
-            + '<vr-select ' + multipleselection + '  datatextfield="CompanyName" datavaluefield="CompanySettingId" '
+            + '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="CompanyName" datavaluefield="CompanySettingId" '
         + required + ' label="' + label + '" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues"   onselectionchanged="ctrl.onselectionchanged" vr-disabled="ctrl.isdisabled"></vr-select>'
            + '</vr-columns>';
     }

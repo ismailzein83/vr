@@ -11,10 +11,11 @@
             viewCompanySetting: viewCompanySetting
         };
 
-        function addCompanySetting(onCompanySettingsAdded, setDefault, context) {
+        function addCompanySetting(onCompanySettingsAdded, setDefault, context, isSingleInsert) {
             var modalParameters = {
                 setDefault: setDefault,
-                context: context
+                context: context,
+                isSingleInsert: isSingleInsert
             };
             var modalSettings = {};
 

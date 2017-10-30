@@ -35,5 +35,13 @@ namespace Vanrise.Common.Web.Controllers
             ConfigManager manager = new ConfigManager();
             return manager.GetCompanyDefinitionSettings();
         }
+
+        [HttpPost]
+        [Route("AddCompany")]
+        public Vanrise.Entities.InsertOperationOutput<CompanySetting> AddCompany(CompanySetting Company)
+        {
+            ConfigManager manager = new ConfigManager();
+            return manager.AddCompany(Company);
+        }
     }
 }
