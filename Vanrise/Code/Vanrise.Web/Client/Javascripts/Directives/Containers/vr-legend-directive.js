@@ -64,7 +64,7 @@ app.directive('vrLegend', ['$compile', 'UtilsService', function ($compile, Utils
                 var top = 0;
                 var basetop = selfOffset.top - $(window).scrollTop() + selfHeight - 10;
                 var baseleft = selfOffset.left - $(window).scrollLeft();
-                top = (innerHeight - basetop < legendHeigth + 200) ? basetop - (legendHeigth) - selfHeight : basetop;
+                top = (innerHeight - basetop < legendHeigth ) ? basetop - (legendHeigth) - selfHeight : basetop;
                 $(legend).css({position: 'fixed',top: top ,left: baseleft, width: self.width()});
             };
 
