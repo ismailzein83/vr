@@ -20,6 +20,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<int> UserId { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<long> StateBackupId { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
@@ -33,8 +36,10 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             };
 
             StateBackupManager manager = new StateBackupManager();
-            manager.BackupData(backupAllCustomers);
-
+            object stateBackupId;
+            stateBackupId = manager.BackupData(backupAllCustomers);
+            if (stateBackupId != null)
+                StateBackupId.Set(context, (long)stateBackupId);
         }
     }
 }

@@ -39,9 +39,9 @@ namespace TOne.WhS.CodePreparation.Data.SQL
 
 
 
-        public bool AddPriceListAndSyncImportedDataWithDB(long processInstanceID, int sellingNumberPlanId)
+        public bool AddPriceListAndSyncImportedDataWithDB(long processInstanceID, int sellingNumberPlanId, long stateBackupId)
         {
-            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_SyncWithImportedData", processInstanceID, sellingNumberPlanId);
+            int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_SyncWithImportedData", processInstanceID, sellingNumberPlanId, stateBackupId);
             return (recordesEffected > 0);
         }
 

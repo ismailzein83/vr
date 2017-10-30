@@ -153,6 +153,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SourceId = GetReaderValue<string>(reader, "SourceID"),
                 UserId = GetReaderValue<int>(reader, "UserID"),
                 Description = GetReaderValue<string>(reader,"Description"),
+                PricelistStateBackupId = GetReaderValue<long?>(reader, "PricelistStateBackupID"),
+                PricelistSource = (SalePricelistSource?)GetReaderValue<byte?>(reader, "PricelistSource"),
             };
 
             return salePriceList;
@@ -177,7 +179,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                    ,[IsSent]
                                                    ,[UserID]
                                                    ,[CreatedTime]
-                                                    ,[Description]
+                                                   ,[Description]
+                                                   ,[PricelistStateBackupID]
+                                                   ,[PricelistSource]
                                                    ,[StateBackupID])
                                             SELECT 
                                                      sp.[ID]
@@ -190,9 +194,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 		                                            ,sp.[ProcessInstanceID]
 		                                            ,sp.[FileID]
                                                     ,sp.IsSent
-                                                   ,sp.[UserID]
+                                                    ,sp.[UserID]
 		                                            ,sp.[CreatedTime]
                                                     ,sp.[Description]
+                                                    ,sp.[PricelistStateBackupID]
+                                                    ,sp.[PricelistSource]
                                                     ,{1} AS StateBackupID  
                                             FROM [TOneWhS_BE].[SalePriceList] sp WITH (NOLOCK) 
                                             Inner Join [TOneWhS_BE].CarrierAccount ca WITH (NOLOCK) on sp.OwnerID = ca.ID
@@ -213,6 +219,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                     ,sp.[UserID] 
 		                                            ,sp.[CreatedTime]
                                                     ,sp.[Description]
+                                                    ,sp.[PricelistStateBackupID]
+                                                    ,sp.[PricelistSource]
                                                     ,{1} AS StateBackupID 
                                            FROM [TOneWhS_BE].[SalePriceList] sp WITH (NOLOCK) 
                                            Inner Join [TOneWhS_BE].SellingProduct sellp WITH (NOLOCK) on sp.OwnerID = sellp.ID
@@ -241,7 +249,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                    ,[IsSent]
                                                    ,[CreatedTime]
                                                    ,[UserID]
-                                                    ,[Description]
+                                                   ,[Description]
+                                                   ,[PricelistStateBackupID]
+                                                   ,[PricelistSource]
                                                    ,[StateBackupID])
                                             SELECT  [ID]
                                                    ,[OwnerType]
@@ -255,7 +265,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                    ,[IsSent]
                                                    ,[CreatedTime]
                                                    ,[UserID]
-                                                    ,[Description]
+                                                   ,[Description]
+                                                   ,[PricelistStateBackupID]
+                                                   ,[PricelistSource]
                                                    ,{1} AS StateBackupID 
                                             FROM [TOneWhS_BE].[SalePriceList]
                                             WITH (NOLOCK) Where OwnerId IN({2}) and OwnerType = {3}", backupDatabase, stateBackupId, ownerIdsString, ownerType);
@@ -276,7 +288,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                     ,[CreatedTime]
                                                     ,[IsSent]
                                                     ,[UserID]
-                                                        ,[Description])
+                                                    ,[Description]
+                                                    ,[PricelistStateBackupID]
+                                                    ,[PricelistSource])
                                                                                                
                                             SELECT   [ID] 
                                                     ,[OwnerType] 
@@ -291,6 +305,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                                                     ,[IsSent]
                                                     ,[UserID]
                                                     ,[Description]
+                                                    ,[PricelistStateBackupID]
+                                                    ,[PricelistSource]
                                             FROM [{0}].[TOneWhS_BE_Bkup].[SalePriceList]
                                             WITH (NOLOCK) Where StateBackupID = {1} ", backupDatabase, stateBackupId);
         }

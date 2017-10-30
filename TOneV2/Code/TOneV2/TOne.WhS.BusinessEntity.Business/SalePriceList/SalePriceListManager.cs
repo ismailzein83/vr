@@ -1517,7 +1517,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 OwnerType = Vanrise.Common.Utilities.GetEnumDescription(priceList.OwnerType),
                 PriceListTypeName = priceList.PriceListType.HasValue
                     ? Vanrise.Common.Utilities.GetEnumDescription(priceList.PriceListType.Value)
-                    : null
+                    : null,
+                PricelistSourceName = priceList.PricelistSource.HasValue
+                ? Vanrise.Common.Utilities.GetEnumDescription(priceList.PricelistSource.Value)
+                : null,
             };
 
             if (priceList.OwnerType != SalePriceListOwnerType.Customer)

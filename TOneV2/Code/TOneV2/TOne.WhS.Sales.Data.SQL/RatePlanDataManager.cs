@@ -86,9 +86,9 @@ namespace TOne.WhS.Sales.Data.SQL
             return affectedRows > 0;
         }
 
-        public bool SyncImportedDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn)
+        public bool SyncImportedDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn, long stateBackupId)
         {
-            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SalePriceList_SyncWithImportedData", processInstanceId, salePriceListId, ownerType, ownerId, currencyId, effectiveOn);
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SalePriceList_SyncWithImportedData", processInstanceId, salePriceListId, ownerType, ownerId, currencyId, effectiveOn, stateBackupId);
             return (affectedRows > 0);
         }
 

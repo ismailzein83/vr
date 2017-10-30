@@ -29,6 +29,9 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> EffectiveOn { get; set; }
 
+        [RequiredArgument]
+        public InArgument<long> StateBackupId { get; set; }
+
         #endregion
 
         protected override void Execute(CodeActivityContext context)
@@ -38,11 +41,11 @@ namespace TOne.WhS.Sales.BP.Activities
             int ownerId = OwnerId.Get(context);
             int currencyId = CurrencyId.Get(context);
             DateTime effectiveOn = EffectiveOn.Get(context);
-
+            long stateBackupId = StateBackupId.Get(context);
             var ratePlanManager = new RatePlanManager();
             
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-            ratePlanManager.SyncImportedDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn);
+            ratePlanManager.SyncImportedDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn, stateBackupId);
         }
     }
 }

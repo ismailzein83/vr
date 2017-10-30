@@ -13,14 +13,19 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<int> SellingNumberPlanId { get; set; }
 
+        [RequiredArgument]
+        public InArgument<long> StateBackupId { get; set; }
+
 
         protected override void Execute(CodeActivityContext context)
         {
 
             int sellingNumberPlanId = this.SellingNumberPlanId.Get(context);
             long processInstanceID = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            long stateBackupId = this.StateBackupId.Get(context);
+
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
-            dataManager.AddPriceListAndSyncImportedDataWithDB(processInstanceID, sellingNumberPlanId);
+            dataManager.AddPriceListAndSyncImportedDataWithDB(processInstanceID, sellingNumberPlanId, stateBackupId);
         }
     }
 }

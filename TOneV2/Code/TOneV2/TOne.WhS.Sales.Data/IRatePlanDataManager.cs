@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Data
         bool InsertOrUpdateChanges(SalePriceListOwnerType ownerType, int ownerId, Changes changes, RatePlanStatus status);
         bool UpdateRatePlanStatus(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus existingStatus, RatePlanStatus newStatus);
         bool CancelRatePlanChanges(SalePriceListOwnerType ownerType, int ownerId);
-        bool SyncImportedDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn);
+        bool SyncImportedDataWithDB(long processInstanceId, int? salePriceListId, SalePriceListOwnerType ownerType, int ownerId, int currencyId, DateTime effectiveOn, long stateBackupId);
         bool DeleteRatePlanDraft(SalePriceListOwnerType ownerType, int ownerId);
         DraftTaskData GetDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
         bool InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status);

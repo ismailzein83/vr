@@ -18,6 +18,12 @@ namespace TOne.WhS.BusinessEntity.Entities
         RateChange = 2
     }
 
+    public enum SalePricelistSource
+    {
+        RatePlan = 0,
+        NumberingPlan = 1
+    }
+
     public class SalePriceList
     {
         public int PriceListId { get; set; }
@@ -34,5 +40,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime CreatedTime { get; set; }
         public bool IsSent { get; set; }
         public string Description { get; set; }
+        public long? PricelistStateBackupId { get; set; }
+        public SalePricelistSource? PricelistSource { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace TOne.WhS.CodePreparation.Data
         bool UpdateCodePreparationStatus(int sellingNumberPlanId, CodePreparationStatus status);
 
         #region New Method
-        bool AddPriceListAndSyncImportedDataWithDB(long processInstanceID, int sellingNumberPlanId);
+        bool AddPriceListAndSyncImportedDataWithDB(long processInstanceID, int sellingNumberPlanId, long stateBackupId);
         #endregion
 
         bool CheckCodePreparationState(int sellingNumberPlanId);
