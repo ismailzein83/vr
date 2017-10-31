@@ -5,8 +5,6 @@ using System.Linq;
 using TestRuntime;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.Deal.Business;
-using TOne.WhS.Deal.Entities;
 using TOne.WhS.Routing.Data.SQL;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
@@ -46,7 +44,7 @@ namespace TOne.WhS.Runtime.Tasks
             //string serializedOptionsByPolicy = "6d584c11-ce52-4385-a871-3b59505d0f57~75$0.13000000$100$0$11451$0$4$False|cb8cc5ed-afda-4ed7-882d-1377666c141e~75$0.13000000$100$0$11451$0$4$False|e85f9e2f-1ce6-4cc3-9df9-b664e63826f5~75$0.13000000$100$0$11451$0$4$False";
             //string serializedSupplierZodeMatchesWithRate = "88$31089$48$~0.01690000~7#4#8#3~7#4~79~396015~|66$10765$48$~0.01230000~7#4#8#3~7#4~79~130519~|68$12438$48$~0.01230000~7#4#8#3~7#4~79~151274~|57$5292$48$~0.01050000~1#6#7#5#4#8#3#2#9~1#2#5~20~63520~|60$9110$48$~0.01050000~7#4#8#3~7#4~79~110510~|69$14923$48$~0.01050000~7#4#8#3~7#4~79~182340~|70$16037$48$~0.00980000~7#4#8#3~7#4~79~204973~|75$22505$48$~0.00950000~1#6#7#5#4#8#3#2#9~1#2~4~299772~";
 
-            Deserialize deserialize = new Deserialize();
+            //Deserialize deserialize = new Deserialize();
             //string optionsDetailsBySupplierAsJSON = deserialize.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
             //string OptionsByPolicyAsJSON = deserialize.DeserializeOptionsByPolicy(serializedOptionsByPolicy);
             //string supplierZodeMatchesWithRateAsJSON = deserialize.DeserializeSupplierZodeMatchesWithRate(serializedSupplierZodeMatchesWithRate);
