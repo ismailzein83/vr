@@ -9,7 +9,7 @@ namespace Vanrise.Rules.Pricing
     public abstract class PricingRuleTariffSettings
     {
         public abstract Guid ConfigId { get; }
-        
+
         public int CurrencyId { get; set; }
 
         protected abstract void Execute(IPricingRuleTariffContext context);
@@ -20,5 +20,6 @@ namespace Vanrise.Rules.Pricing
         }
 
         public abstract string GetDescription();
+        public abstract string GetPricingDescription();
     }
 }

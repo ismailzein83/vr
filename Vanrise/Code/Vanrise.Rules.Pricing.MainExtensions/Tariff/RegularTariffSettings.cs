@@ -130,5 +130,11 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
             description.Append(String.Format("Pricing Unit: {0}", PricingUnit));
             return description.ToString();
         }
+
+        public override string GetPricingDescription()
+        {
+            return String.Format("{0}/{1}", FirstPeriod, FractionUnit);
+        }
     }
+
 }
