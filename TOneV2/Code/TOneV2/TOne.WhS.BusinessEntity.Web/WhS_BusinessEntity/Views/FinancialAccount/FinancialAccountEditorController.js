@@ -457,14 +457,15 @@
         }
         function evaluatePeriodEndsAt(currentDate)
         {
+           
             if (currentDate != undefined) {
-                var clonedDate = UtilsService.cloneObject(currentDate);
-                var date = UtilsService.createDateFromString(clonedDate);
+                var date = new Date(currentDate);
                 date.setDate(date.getDate() - 1);
                 date.setHours(23);
                 date.setMinutes(59);
                 date.setSeconds(59);
                 $scope.scopeModel.periodEndsAt = date;
+               
             } else {
                 $scope.scopeModel.periodEndsAt = undefined;
             }
