@@ -5,12 +5,12 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-Create PROCEDURE [rules].[sp_RuleChanged_GetByRuleAndRuleTypeIds]
+CREATE PROCEDURE [rules].[sp_RuleChanged_GetByRuleAndType]
 	@RuleID INT,
 	@RuleTypeID INT
 AS
 BEGIN
-	SELECT [ID], [RuleID], [RuleTypeID], [Data], [CreatedTime]
+	SELECT [ID], [RuleID], [RuleTypeID], [ActionType], [InitialRule],[AdditionalInformation], [CreatedTime]
 	FROM [TOneConfiguration].[rules].[RuleChanged]
 	WHERE [RuleID] = @RuleID and [RuleTypeID] = @RuleTypeID
 END

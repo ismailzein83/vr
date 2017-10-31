@@ -11,8 +11,10 @@ CREATE PROCEDURE [rules].[sp_Rule_UpdateRuleAndRuleChanged]
 	@RuleDetails VARCHAR(MAX),
 	@BED Datetime,
 	@EED Datetime,
-	@RuleChangedData varchar(MAX),
+	@ActionType INT,
+	@InitialRule varchar(MAX),
 	@AdditionalInformation varchar(MAX)
+
 AS
 BEGIN
 	Begin Try
@@ -26,8 +28,8 @@ BEGIN
 
 			IF NOT EXISTS(SELECT 1 FROM  [rules].[RuleChanged]  WHERE RuleID = @RuleID and RuleTypeId = @RuleTypeID)
 				Begin
-					Insert into [rules].[RuleChanged] (RuleID, RuleTypeID, Data, AdditionalInformation)
-					values(@RuleID, @RuleTypeID, @RuleChangedData, @AdditionalInformation)
+					Insert into [rules].[RuleChanged] ([RuleID], [RuleTypeID], [ActionType], [InitialRule], [AdditionalInformation])
+					values(@RuleID, @RuleTypeID, @ActionType, @InitialRule, @AdditionalInformation)
 				END
 			ELSE
 				BEGIN
