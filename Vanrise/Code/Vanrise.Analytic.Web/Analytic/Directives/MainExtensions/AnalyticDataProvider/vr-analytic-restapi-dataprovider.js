@@ -71,7 +71,7 @@
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, analyticTableDirectiveAPI, directivePayload, setLoader);
                         }
                     }
-                }
+                };
 
                 defineAPI();
             };
@@ -157,7 +157,7 @@
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
-                }
+                };
 
                 api.getData = function () {
                     var data = {
