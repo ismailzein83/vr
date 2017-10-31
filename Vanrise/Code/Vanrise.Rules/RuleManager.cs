@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Rules.Data;
+using Vanrise.Rules.Entities;
 
 namespace Vanrise.Rules
 {
@@ -27,18 +28,20 @@ namespace Vanrise.Rules
         public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
         {
             InsertOperationOutput<Q> insertOperationOutput = new InsertOperationOutput<Q>();
+
             if (TryAdd(rule))
             {
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 GetCacheManager().SetCacheExpired(GetRuleTypeId());
                 TrackAndLogRuleAdded(rule);
-               
+
                 insertOperationOutput.InsertedObject = MapToDetails(rule);
             }
             else
             {
                 insertOperationOutput.Result = InsertOperationResult.SameExists;
             }
+
             return insertOperationOutput;
         }
 
@@ -55,9 +58,24 @@ namespace Vanrise.Rules
 
             if (ValidateBeforeAdd(rule))
             {
-                IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
                 int ruleId;
-                if (ruleDataManager.AddRule(ruleEntity, out ruleId))
+                IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+
+                if (rule.HasAdditionalInformation)
+                {
+                    string serializedRule = Vanrise.Common.Serializer.Serialize(rule);
+
+                    AdditionalInformation additionalInformation = null;
+                    rule.UpdateAdditionalInformation(null, ref additionalInformation);
+                    string serializedAdditionalInformation = Vanrise.Common.Serializer.Serialize(additionalInformation);
+
+                    if (ruleDataManager.AddRuleAndRuleChanged(ruleEntity, ActionType.AddedRule, serializedRule, serializedAdditionalInformation, out ruleId))
+                    {
+                        rule.RuleId = ruleId;
+                        return true;
+                    }
+                }
+                else if (ruleDataManager.AddRule(ruleEntity, out ruleId))
                 {
                     rule.RuleId = ruleId;
                     return true;
@@ -66,9 +84,9 @@ namespace Vanrise.Rules
             return false;
         }
 
-        public virtual bool ValidateBeforeAdd(T rule) 
-        { 
-            return true; 
+        public virtual bool ValidateBeforeAdd(T rule)
+        {
+            return true;
         }
 
         protected virtual void TrackAndLogRuleAdded(T rule)
@@ -77,7 +95,7 @@ namespace Vanrise.Rules
         }
 
         public Vanrise.Entities.UpdateOperationOutput<Q> UpdateRule(T rule)
-        {            
+        {
             UpdateOperationOutput<Q> updateOperationOutput = new UpdateOperationOutput<Q>();
             if (TryUpdateRule(rule))
             {
@@ -104,10 +122,31 @@ namespace Vanrise.Rules
                 EED = rule.EndEffectiveTime,
                 BED = rule.BeginEffectiveTime
             };
+
             if (ValidateBeforeUpdate(rule))
             {
                 IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-                if (ruleDataManager.UpdateRule(ruleEntity))
+
+                if (rule.HasAdditionalInformation)
+                {
+                    AdditionalInformation additionalInformation = null;
+                    string serializedRule = null;
+
+                    RuleChanged ruleChanged = this.GetRuleChanged(rule.RuleId, ruleTypeId);
+
+                    if (ruleChanged != null)
+                        additionalInformation = Vanrise.Common.Serializer.Deserialize<AdditionalInformation>(ruleChanged.AdditionalInformation);
+                    else
+                        serializedRule = Vanrise.Common.Serializer.Serialize(rule);
+
+                    T existingRule = this.GetRule(rule.RuleId);
+                    rule.UpdateAdditionalInformation(existingRule, ref additionalInformation);
+                    string serializedAdditionalInformation = Vanrise.Common.Serializer.Serialize(additionalInformation);
+
+                    if (ruleDataManager.UpdateRuleAndRuleChanged(ruleEntity, ActionType.UpdatedRule, serializedRule, serializedAdditionalInformation))
+                        return true;
+                }
+                else if (ruleDataManager.UpdateRule(ruleEntity))
                 {
                     return true;
                 }
@@ -115,9 +154,9 @@ namespace Vanrise.Rules
             return false;
         }
 
-        public virtual bool ValidateBeforeUpdate(T rule) 
-        { 
-            return true; 
+        public virtual bool ValidateBeforeUpdate(T rule)
+        {
+            return true;
         }
 
         protected virtual void TrackAndLogRuleUpdated(T rule)
@@ -130,7 +169,7 @@ namespace Vanrise.Rules
             DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
             T rule = GetRule(ruleId);
-           
+
             if (ruleDataManager.DeleteRule(ruleId))
             {
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
@@ -138,7 +177,7 @@ namespace Vanrise.Rules
                 GetCacheManager().SetCacheExpired(ruleTypeId);
                 if (rule != null)
                     TrackAndLogRuleDeleted(rule);
-                
+
             }
 
             return deleteOperationOutput;
@@ -243,6 +282,18 @@ namespace Vanrise.Rules
             return ruleTypeId;
         }
 
+        private RuleChanged GetRuleChanged(int ruleId, int ruleTypeId)
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            return ruleDataManager.GetRuleChanged(ruleId, ruleTypeId);
+        }
+
+        private List<RuleChanged> GetRulesChanged(int ruleTypeId)
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            return ruleDataManager.GetRulesChanged(ruleTypeId);
+        }
+
         #endregion
 
         #region Caching
@@ -274,7 +325,7 @@ namespace Vanrise.Rules
         #endregion
     }
 
-    public abstract class RuleLoggableEntity :  VRLoggableEntityBase
+    public abstract class RuleLoggableEntity : VRLoggableEntityBase
     {
         public override string ModuleName
         {
@@ -333,5 +384,9 @@ namespace Vanrise.Rules
     public abstract class RuleCachingExpirationChecker
     {
         public abstract bool IsRuleDependenciesCacheExpired();
+    }
+
+    public abstract class AdditionalInformation
+    {
     }
 }

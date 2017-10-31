@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Vanrise.Rules.Entities;
 
 namespace Vanrise.Rules.Data
@@ -13,12 +9,20 @@ namespace Vanrise.Rules.Data
 
         bool UpdateRule(Rule ruleEntity);
 
+        bool AddRuleAndRuleChanged(Rule rule, ActionType actionType, string initialRule, string additionalInformation, out int ruleId);
+
+        bool UpdateRuleAndRuleChanged(Rule rule, ActionType actionType, string initialRule, string additionalInformation);  
+
         bool DeleteRule(int ruleId);
 
         IEnumerable<Rule> GetRulesByType(int ruleTypeId);
-        
+
         bool AreRulesUpdated(int ruleTypeId, ref object updateHandle);
 
         int GetRuleTypeId(string ruleType);
+
+        RuleChanged GetRuleChanged(int ruleId, int ruleTypeId);
+
+        List<RuleChanged> GetRulesChanged(int ruleTypeId);
     }
 }

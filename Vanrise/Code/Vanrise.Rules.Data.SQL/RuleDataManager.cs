@@ -5,16 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Rules.Entities;
 
 namespace Vanrise.Rules.Data.SQL
 {
     public class RuleDataManager : BaseSQLDataManager, IRuleDataManager
     {
+        #region Properties/Ctor
+
         public RuleDataManager()
             : base(GetConnectionStringName("RulesDBConnStringKey", "RulesDBConnString"))
         {
 
         }
+
+        #endregion
+
+        #region Public Methods
 
         public bool AddRule(Entities.Rule rule, out int ruleId)
         {
@@ -30,6 +37,20 @@ namespace Vanrise.Rules.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool AddRuleAndRuleChanged(Entities.Rule rule, ActionType actionType, string initialRule, string additionalInformation, out int ruleId)
+        {
+            object insertedId;
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_InsertRuleAndRuleChanged", out insertedId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED, actionType, initialRule, additionalInformation);
+            ruleId = (recordesEffected > 0) ? (int)insertedId : -1;
+            return (recordesEffected > 0);
+        }
+
+        public bool UpdateRuleAndRuleChanged(Entities.Rule rule, ActionType actionType, string initialRule, string additionalInformation)
+        {
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_UpdateRuleAndRuleChanged", rule.RuleId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED, actionType, initialRule, additionalInformation);
+            return (recordesEffected > 0);
+        }
+
         public bool DeleteRule(int ruleId)
         {
             int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Delete", ruleId);
@@ -38,13 +59,32 @@ namespace Vanrise.Rules.Data.SQL
 
         public IEnumerable<Entities.Rule> GetRulesByType(int ruleTypeId)
         {
-            return GetItemsSP("rules.sp_Rule_GetByType",RuleMapper, ruleTypeId);
+            return GetItemsSP("rules.sp_Rule_GetByType", RuleMapper, ruleTypeId);
         }
 
         public bool AreRulesUpdated(int ruleTypeId, ref object updateHandle)
         {
             return base.IsDataUpdated("rules.[Rule]", "TypeID", ruleTypeId, ref updateHandle);
         }
+
+        public int GetRuleTypeId(string ruleType)
+        {
+            return (int)ExecuteScalarSP("rules.sp_RuleType_InsertIfNotExistsAndGetID", ruleType);
+        }
+
+        public RuleChanged GetRuleChanged(int ruleId, int ruleTypeId)
+        {
+            return GetItemSP("rules.sp_RuleChanged_GetByRuleAndType", RuleChangedMapper, ruleId, ruleTypeId);
+        }
+
+        public List<RuleChanged> GetRulesChanged(int ruleTypeId)
+        { 
+            return GetItemsSP("rules.sp_RuleChanged_GetByType", RuleChangedMapper, ruleTypeId);
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private Entities.Rule RuleMapper(IDataReader reader)
         {
@@ -54,15 +94,26 @@ namespace Vanrise.Rules.Data.SQL
                 TypeId = GetReaderValue<int>(reader, "TypeID"),
                 RuleDetails = reader["RuleDetails"] as string,
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED=  GetReaderValue<DateTime?>(reader, "EED"),
+                EED = GetReaderValue<DateTime?>(reader, "EED"),
             };
             return instance;
         }
 
-
-        public int GetRuleTypeId(string ruleType)
+        private RuleChanged RuleChangedMapper(IDataReader reader)
         {
-            return (int)ExecuteScalarSP("rules.sp_RuleType_InsertIfNotExistsAndGetID", ruleType);
+            RuleChanged ruleChanged = new RuleChanged
+            {
+                RuleChangedId = GetReaderValue<int>(reader, "ID"),
+                RuleId = GetReaderValue<int>(reader, "RuleId"),
+                RuleTypeId = GetReaderValue<int>(reader, "RuleTypeId"),
+                ActionType = GetReaderValue<ActionType>(reader, "ActionType"),
+                InitialRule = reader["InitialRule"] as string,
+                AdditionalInformation = reader["AdditionalInformation"] as string,
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+            };
+            return ruleChanged;
         }
+
+        #endregion
     }
 }

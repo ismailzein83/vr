@@ -6,11 +6,6 @@ namespace Vanrise.Rules
     {
         public int RuleId { get; set; }
 
-        public virtual bool IsAnyCriteriaExcluded(object target)
-        {
-            return false;
-        }
-
         public string Description { get; set; }
 
         public DateTime BeginEffectiveTime { get; set; }
@@ -21,7 +16,20 @@ namespace Vanrise.Rules
 
         public virtual TimeSpan RefreshTimeSpan { get { return new TimeSpan(1, 0, 0); } }
 
-        public virtual void RefreshRuleState(IRefreshRuleStateContext context) { }
+        public virtual bool HasAdditionalInformation { get { return false; } }
+
+        public virtual void RefreshRuleState(IRefreshRuleStateContext context)
+        {
+        }
+
+        public virtual bool IsAnyCriteriaExcluded(object target)
+        {
+            return false;
+        }
+
+        public virtual void UpdateAdditionalInformation(BaseRule existingRule, ref AdditionalInformation additionalInformation)
+        {
+        }
     }
 
     public interface IVRRule
