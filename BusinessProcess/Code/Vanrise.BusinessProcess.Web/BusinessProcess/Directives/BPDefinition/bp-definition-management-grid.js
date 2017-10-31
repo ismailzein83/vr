@@ -64,13 +64,13 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
                     return (dataItem.Entity.Configuration.ScheduledExecEditor == undefined || dataItem.Entity.Configuration.ScheduledExecEditor == "");
                 };
                 taskdrillDownDefinition.loadDirective = function (directiveAPI, bpDefinitionItem) {
-                    bpDefinitionItem.bpInstanceGridAPI = directiveAPI;                    
+                    bpDefinitionItem.bpSchedulerTaskAPI = directiveAPI;
                     var payload = {
                         bpDefinitionId: bpDefinitionItem.Entity.BPDefinitionID,
                         showAddSchedulerTask: bpDefinitionItem.ScheduleTaskAccess == true && bpDefinitionItem.Entity.Configuration.ScheduledExecEditor != undefined && bpDefinitionItem.Entity.Configuration.ScheduledExecEditor != ""
                     };
 
-                    return bpDefinitionItem.bpInstanceGridAPI.loadPanel(payload);
+                    return bpDefinitionItem.bpSchedulerTaskAPI.loadPanel(payload);
                 };
                 drillDownDefinitions.push(taskdrillDownDefinition);
 
