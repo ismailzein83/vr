@@ -50,7 +50,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
                 }
             };
             $scope.onClickReleaseCode = function (dataItem) {
-                WhS_BE_SwitchReleaseCauseService.openReleaseCodeDescriptions(dataItem.ReleaseCode);
+                WhS_BE_SwitchReleaseCauseService.openReleaseCodeDescriptions(dataItem.Entity.ReleaseCode);
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 ctrl.showGrid = true;
