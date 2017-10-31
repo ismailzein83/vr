@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SaleAreaTechnicalSettings
+    public class SaleAreaTechnicalSettings : SettingData
     {
+        public SaleAreaTechnicalConfiguration SaleAreaTechnicalSettingData { get; set; }
+    }
+    public class SaleAreaTechnicalConfiguration
+    {
+        public Guid TariffRuleDefinitionGuid { get; set; }
     }
 }

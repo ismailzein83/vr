@@ -113,6 +113,9 @@
     <Reference Include="Vanrise.Rules.Normalization">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Normalization.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Pricing">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Pricing.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>

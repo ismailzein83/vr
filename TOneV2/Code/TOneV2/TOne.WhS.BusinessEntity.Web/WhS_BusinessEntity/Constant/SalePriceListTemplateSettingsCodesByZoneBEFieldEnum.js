@@ -7,5 +7,6 @@
     RateEED: { value: 5, description: "Rate EED" },
     Services: { value: 6, description: "Services" },
     RateChangeType: { value: 7, description: "Rate Change Type" },
-    Currency: { value: 8, description: "Currency" }
+    Currency: { value: 8, description: "Currency" },
+    Increment: { value: 9, description: "Increment" }
 });

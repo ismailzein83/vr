@@ -21,5 +21,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         int? CurrencyId { get; set; }
         int CustomerId { get; set; }
         CodeChange CodeChangeType { get; set; }
+        string Increment { get; set; }
     }
 }

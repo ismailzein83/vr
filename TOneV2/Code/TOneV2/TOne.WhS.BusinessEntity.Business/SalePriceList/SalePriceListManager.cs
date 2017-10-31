@@ -10,6 +10,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Pricing;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
@@ -668,11 +669,13 @@ namespace TOne.WhS.BusinessEntity.Business
                             EED = rateChange.EED,
                             CurrencyId = rateChange.CurrencyId
                         };
+                        salePlZoneNotification.Increment = GetIncrementDescription(customerId, zoneId, rateChange.BED);
+
                     }
-                    else
+                    else if (existingSaleZone != null)
                     {
-                        if (existingSaleZone != null)
-                            salePlZoneNotification.Rate = GetRateNotificationFromExistingData(customerId, sellingProductId, existingSaleZone.ZoneId, existingSaleZone.ZoneName, futureLocator, countrySellDate);
+                        salePlZoneNotification.Rate = GetRateNotificationFromExistingData(customerId, sellingProductId, existingSaleZone.ZoneId, existingSaleZone.ZoneName, futureLocator, countrySellDate);
+                        salePlZoneNotification.Increment = GetIncrementDescription(customerId, zoneId, salePlZoneNotification.Rate.BED);
                     }
                 }
                 List<SalePLZoneNotification> countrySaleNotifications = countryZoneNotificationsByZoneId.Values.ToList();
@@ -728,6 +731,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
                 zoneNotification.Codes.AddRange(existingZone.Codes.Select(item => ExistingCodeToSalePLCodeNotificationMapper(item, countrySellDate)));
                 zoneNotification.Rate = this.GetRateNotificationFromExistingData(customerId, sellingProductId, existingZone.ZoneId, existingZone.ZoneName, futureLocator, countrySellDate);
+                zoneNotification.Increment = GetIncrementDescription(customerId, existingZone.ZoneId, zoneNotification.Rate.BED);
 
                 salePlZoneNotifications.Add(zoneNotification);
             }
@@ -759,14 +763,16 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 if (changedZoneNames.Contains(existingZone.ZoneName))
                     continue;
+
                 SalePLZoneNotification zoneNotification = new SalePLZoneNotification()
                 {
                     ZoneId = existingZone.ZoneId,
                     ZoneName = existingZone.ZoneName
                 };
+
                 zoneNotification.Codes.AddRange(existingZone.Codes.Select(item => ExistingCodeToSalePLCodeNotificationMapper(item, countrySellDate)));
                 zoneNotification.Rate = this.GetRateNotificationFromExistingData(customerId, sellingProductId, existingZone.ZoneId, existingZone.ZoneName, futureLocator, countrySellDate);
-
+                zoneNotification.Increment = GetIncrementDescription(customerId, existingZone.ZoneId, zoneNotification.Rate.BED);
                 salePlZoneNotifications.Add(zoneNotification);
             }
 
@@ -774,6 +780,28 @@ namespace TOne.WhS.BusinessEntity.Business
             return salePlZoneNotifications;
         }
 
+        private string GetIncrementDescription(int customerId, long saleZoneId, DateTime pricelistDate)
+        {
+            var tariffRuleManager = new TariffRuleManager();
+            var configManager = new ConfigManager();
+            var ruleDefinitionId = configManager.GetCustomerTariffRuleDefinitionId();
+
+            Dictionary<string, object> targetFieldsValue = new Dictionary<string, object>
+            {
+                {"CustomerId", customerId},
+                {"SaleZoneId", saleZoneId}
+            };
+
+            Vanrise.GenericData.Entities.GenericRuleTarget target = new Vanrise.GenericData.Entities.GenericRuleTarget
+            {
+                EffectiveOn = pricelistDate,
+                IsEffectiveInFuture = false,
+                TargetFieldValues = targetFieldsValue
+            };
+
+            TariffRule tariffRule = tariffRuleManager.GetMatchRule(ruleDefinitionId, target);
+            return tariffRule.Settings.GetPricingDescription();
+        }
         #endregion
 
         #region Pricelist Management
@@ -1078,30 +1106,30 @@ namespace TOne.WhS.BusinessEntity.Business
             foreach (var rate in countryGroup.RateChanges)
             {
                 SalePricelistZoneChange zone = new SalePricelistZoneChange
-                 {
-                     ZoneId = rate.ZoneId.Value,
-                     ZoneName = rate.ZoneName,
-                     RateChange = rate
-                 };
+                {
+                    ZoneId = rate.ZoneId.Value,
+                    ZoneName = rate.ZoneName,
+                    RateChange = rate
+                };
                 zone = zoneChanges.TryAddValue(zone);
             }
             foreach (var code in countryGroup.CodeChanges)
             {
                 SalePricelistZoneChange zone = new SalePricelistZoneChange
-                    {
-                        ZoneId = code.ZoneId.Value,
-                        ZoneName = code.ZoneName
-                    };
+                {
+                    ZoneId = code.ZoneId.Value,
+                    ZoneName = code.ZoneName
+                };
                 zone = zoneChanges.TryAddValue(zone);
                 zone.CodeChanges.Add(code);
             }
             foreach (var rp in countryGroup.RPChanges)
             {
                 SalePricelistZoneChange zone = new SalePricelistZoneChange
-                    {
-                        ZoneId = rp.ZoneId.Value,
-                        ZoneName = rp.ZoneName
-                    };
+                {
+                    ZoneId = rp.ZoneId.Value,
+                    ZoneName = rp.ZoneName
+                };
                 zone = zoneChanges.TryAddValue(zone);
                 zone.RPChange = rp;
             }
@@ -1457,8 +1485,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Sale Pricelists",
                     Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer Name" ,Width=50});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Description" , Width = 100});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer Name", Width = 50 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Description", Width = 100 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Type" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Created By" });

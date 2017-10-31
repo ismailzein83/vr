@@ -3,6 +3,7 @@
     public static class Constants
     {
         public const string SaleAreaSettings = "WhS_BE_SaleArea_Settings";
+        public const string SaleAreaTechnicalSettings = "WhS_BE_SaleArea_TechnicalSettings";
 
         public const string PurchaseAreaSettings = "WhS_BE_PurchaseArea_Settings";
 

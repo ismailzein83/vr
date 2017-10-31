@@ -28,6 +28,13 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettingsData = GetSaleAreaSettingsData();
             return saleAreaSettingsData.PrimarySaleEntity;
         }
+        public Guid GetCustomerTariffRuleDefinitionId()
+        {
+            SaleAreaTechnicalSettings setting = GetSaleAreaTechnicalSetting();
+            if (setting.SaleAreaTechnicalSettingData == null)
+                throw new NullReferenceException("setting.SaleAreaTechnicalSettingData");
+            return setting.SaleAreaTechnicalSettingData.TariffRuleDefinitionGuid;
+        }
         public Guid GetCustomerRuleDefinitionId()
         {
             CDRImportTechnicalSettings settingData = GetCdrImportTechnicalSetting();
@@ -287,7 +294,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return result;
         }
 
-        public CodeChangeTypeDescriptions MergeCodeChangeTypeDescriptions (CodeChangeTypeDescriptions parentCodeChangeTypeDescriptions , CodeChangeTypeDescriptions childCodeChangeTypeDescriptions)
+        public CodeChangeTypeDescriptions MergeCodeChangeTypeDescriptions(CodeChangeTypeDescriptions parentCodeChangeTypeDescriptions, CodeChangeTypeDescriptions childCodeChangeTypeDescriptions)
         {
             CodeChangeTypeDescriptions result = new CodeChangeTypeDescriptions();
             result.NewCode = parentCodeChangeTypeDescriptions.NewCode;
@@ -302,7 +309,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 result.ClosedCode = childCodeChangeTypeDescriptions.ClosedCode;
             if (!string.IsNullOrEmpty(childCodeChangeTypeDescriptions.NotChangedCode))
                 result.NotChangedCode = childCodeChangeTypeDescriptions.NotChangedCode;
-            
+
             return result;
         }
 
@@ -369,6 +376,15 @@ namespace TOne.WhS.BusinessEntity.Business
             if (cdrSettingData == null)
                 throw new NullReferenceException("CDRImportTechnicalSettingData");
             return cdrSettingData;
+        }
+        private SaleAreaTechnicalSettings GetSaleAreaTechnicalSetting()
+        {
+            SettingManager manager = new SettingManager();
+            SaleAreaTechnicalSettings saleareaSettingData =
+                manager.GetSetting<SaleAreaTechnicalSettings>(Constants.SaleAreaTechnicalSettings);
+            if (saleareaSettingData == null)
+                throw new NullReferenceException("SaleAreaTechnicalSettingsData");
+            return saleareaSettingData;
         }
         private SaleAreaSettingsData GetSaleAreaSettingsData()
         {

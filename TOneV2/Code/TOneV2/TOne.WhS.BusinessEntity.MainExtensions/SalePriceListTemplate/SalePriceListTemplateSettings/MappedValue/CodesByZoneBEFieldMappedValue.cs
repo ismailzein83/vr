@@ -19,7 +19,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         RateEED = 5,
         Services = 6,
         RateChangeType = 7,
-        Currency = 8
+        Currency = 8,
+        Increment = 9
     }
 
     public class CodesByZoneBEFieldMappedValue : CodesByZoneMappedValue
@@ -41,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     context.Value = GetCodesValue(context);
                     break;
                 case CodesByZoneBEFieldType.EffectiveDate:
-                    context.Value = GetEffectiveDate(context.ZoneNotification.Codes,context.ZoneNotification.Rate);
+                    context.Value = GetEffectiveDate(context.ZoneNotification.Codes, context.ZoneNotification.Rate);
                     break;
                 case CodesByZoneBEFieldType.Rate:
                     if (context.ZoneNotification.Rate != null)
@@ -66,7 +67,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
                 case CodesByZoneBEFieldType.RateChangeType:
                     if (context.ZoneNotification.Rate != null)
-                        context.Value = GetRateChange(context.ZoneNotification.Rate.RateChangeType,context.CustomerId);
+                        context.Value = GetRateChange(context.ZoneNotification.Rate.RateChangeType, context.CustomerId);
                     break;
                 case CodesByZoneBEFieldType.Currency:
                     if (context.ZoneNotification.Rate != null && context.ZoneNotification.Rate.CurrencyId.HasValue)
@@ -74,6 +75,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                         var currencyManager = new CurrencyManager();
                         context.Value = currencyManager.GetCurrencySymbol(context.ZoneNotification.Rate.CurrencyId.Value);
                     }
+                    break;
+                case CodesByZoneBEFieldType.Increment:
+                    context.Value = context.ZoneNotification.Increment;
                     break;
             }
         }
@@ -116,9 +120,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             return string.Join(context.Delimiter.ToString(), codes);
         }
 
-        private DateTime GetEffectiveDate(IEnumerable<SalePLCodeNotification> codesNotificatons,SalePLRateNotification rate)
+        private DateTime GetEffectiveDate(IEnumerable<SalePLCodeNotification> codesNotificatons, SalePLRateNotification rate)
         {
-            DateTime maxCodeBED=codesNotificatons.Select(item => item.BED).Max();
+            DateTime maxCodeBED = codesNotificatons.Select(item => item.BED).Max();
             return maxCodeBED > rate.BED ? maxCodeBED : rate.BED;
         }
 

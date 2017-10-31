@@ -21,7 +21,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         Services = 7,
         RateChangeType = 8,
         Currency = 9,
-        CodeChangeType=10
+        CodeChangeType = 10,
+        Increment = 11
     }
 
     public class CodeOnEachRowBEFieldMappedValue : CodeOnEachRowMappedValue
@@ -64,7 +65,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     context.Value = servicesSymbol;
                     break;
                 case CodeOnEachRowBEFieldType.RateChangeType:
-                    context.Value = GetRateChange(context.RateChangeType,context.CustomerId);
+                    context.Value = GetRateChange(context.RateChangeType, context.CustomerId);
                     break;
                 case CodeOnEachRowBEFieldType.CodeChangeType:
                     context.Value = GetCodeChange(context.CodeChangeType, context.CustomerId);
@@ -75,6 +76,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                         CurrencyManager currencyManager = new CurrencyManager();
                         context.Value = currencyManager.GetCurrencySymbol(context.CurrencyId.Value);
                     }
+                    break;
+                case CodeOnEachRowBEFieldType.Increment:
+                    context.Value = context.Increment;
                     break;
             }
         }

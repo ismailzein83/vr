@@ -74,7 +74,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 mappedValueContext.ServicesIds = rate.ServicesIds;
                 mappedValueContext.RateChangeType = rate.RateChangeType;
                 mappedValueContext.CurrencyId = rate.CurrencyId;
-
+                mappedValueContext.Increment = zone.Increment;
             }
 
             mappedCol.MappedValue.Execute(mappedValueContext);

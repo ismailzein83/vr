@@ -9,12 +9,11 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SalePLZoneNotification : IBaseRates
     {
         public long? ZoneId { get; set; }
-
         public string ZoneName { get; set; }
+        public string Increment { get; set; }
 
         private List<SalePLCodeNotification> _codes = new List<SalePLCodeNotification>();
         public List<SalePLCodeNotification> Codes { get { return this._codes; } }
-
         public SalePLRateNotification Rate { get; set; }
 
 

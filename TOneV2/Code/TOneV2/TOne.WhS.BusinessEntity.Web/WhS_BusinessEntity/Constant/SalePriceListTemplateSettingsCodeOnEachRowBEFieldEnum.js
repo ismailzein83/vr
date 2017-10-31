@@ -10,4 +10,5 @@
     RateChangeType: { value: 8, description: "Rate Change Type" },
     Currency: { value: 9, description: "Currency" },
     CodeChangeType: { value: 10, description: "Code Change Type" },
+    Increment: { value: 11, description: "Increment" }
 });

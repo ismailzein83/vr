@@ -534,6 +534,7 @@
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />
     <Content Include="WhS_BusinessEntity\Services\FinancialAccountService.js" />
     <Content Include="WhS_BusinessEntity\Services\RoutingProductZoneServiceService.js" />
+    <Content Include="WhS_BusinessEntity\Services\SaleAreaTechnicalSettingsService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListChangeService.js" />
     <Content Include="WhS_BusinessEntity\Services\SalePriceListTemplateService.js" />
     <Content Include="WhS_BusinessEntity\Services\SupplierPriceListService.js" />
