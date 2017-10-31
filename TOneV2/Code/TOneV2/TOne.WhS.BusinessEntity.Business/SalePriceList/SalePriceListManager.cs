@@ -800,7 +800,7 @@ namespace TOne.WhS.BusinessEntity.Business
             };
 
             TariffRule tariffRule = tariffRuleManager.GetMatchRule(ruleDefinitionId, target);
-            return tariffRule.Settings.GetPricingDescription();
+            return tariffRule != null ? tariffRule.Settings.GetPricingDescription() : string.Empty;
         }
         #endregion
 
