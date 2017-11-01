@@ -52,9 +52,9 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                   var payload = {
-                       context: getContext()
-                   }
+                    var payload = {
+                        context: getContext()
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
                 };
                
@@ -83,7 +83,7 @@
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
-                                }
+                                };
                                 if (subViewDefinitionEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, subViewDefinitionEntity.ConfigId, 'ExtensionConfigurationId');
                                 }

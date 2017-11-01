@@ -56,10 +56,10 @@
             function loadSubViewSelective() {
                 var selectiveLoadDeferred = UtilsService.createPromiseDeferred();
                 selectiveReadyDeferred.promise.then(function () {
-                    var payload = { context: getContext() }
+                    var payload = { context: getContext() };
                     if (subViewEntity != undefined) {
                         payload.subViewEntity = subViewEntity.Settings;
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(selectiveAPI, payload, selectiveLoadDeferred);
                 });
                 return selectiveLoadDeferred.promise;
@@ -96,14 +96,14 @@
             if ($scope.onSubViewAdded != undefined) {
                 $scope.onSubViewAdded(subView);
                 $scope.modalContext.closeModal();
-            }
+            };
         }
         function updateSubView() {
             var subView = buildObjectFromScope();
             if ($scope.onSubViewUpdated != undefined) {
                 $scope.onSubViewUpdated(subView);
                 $scope.modalContext.closeModal();
-            }
+            };
         }
         function getContext() {
             var currentContext = context;
