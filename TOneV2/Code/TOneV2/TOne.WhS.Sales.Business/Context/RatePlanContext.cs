@@ -30,6 +30,7 @@ namespace TOne.WhS.Sales.Business
                 throw new DataIntegrityValidationException("System Currency was not found");
             _systemCurrencyId = systemCurrency.CurrencyId;
             LongPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+            DateFormat = new Vanrise.Common.Business.GeneralSettingsManager().GetDateFormat();
         }
 
         #endregion
@@ -76,6 +77,7 @@ namespace TOne.WhS.Sales.Business
         public int LongPrecision { get; set; }
         public bool? IsFirstSellingProductOffer { get; set; }
         public IEnumerable<DataByZone> DataByZoneList { get; set; }
+        public string DateFormat { get; set; }
 
         #endregion
 
@@ -141,6 +143,7 @@ namespace TOne.WhS.Sales.Business
         int LongPrecision { get; }
         bool? IsFirstSellingProductOffer { get; }
         IEnumerable<DataByZone> DataByZoneList { get; }
+        string DateFormat { get; }
 
         #endregion
 

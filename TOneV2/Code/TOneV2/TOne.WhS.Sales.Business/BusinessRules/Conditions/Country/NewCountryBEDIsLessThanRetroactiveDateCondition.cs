@@ -13,19 +13,31 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is CustomerCountryToAdd;
+            return target is AllCustomerCountriesToAdd;
         }
 
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
-            var countryToAdd = context.Target as CustomerCountryToAdd;
+            var allCountriesToAdd = context.Target as AllCustomerCountriesToAdd;
+
+            if (allCountriesToAdd.CustomerCountriesToAdd == null || allCountriesToAdd.CustomerCountriesToAdd.Count() == 0)
+                return true;
+
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
-            if (countryToAdd.BED < ratePlanContext.RetroactiveDate)
+            var invalidCountryNames = new List<string>();
+            var countryManager = new Vanrise.Common.Business.CountryManager();
+
+            foreach (CustomerCountryToAdd countryToAdd in allCountriesToAdd.CustomerCountriesToAdd)
             {
-                string countryName = new CountryManager().GetCountryName(countryToAdd.CountryId);
-                string beginEffectiveDate = UtilitiesManager.GetDateTimeAsString(countryToAdd.BED);
-                context.Message = string.Format("BED '{0}' of Country '{1}' must be greater than or equal to the Retroactive date", beginEffectiveDate, countryName);
+                if (countryToAdd.BED < ratePlanContext.RetroactiveDate)
+                    invalidCountryNames.Add(countryManager.GetCountryName(countryToAdd.CountryId));
+            }
+
+            if (invalidCountryNames.Count > 0)
+            {
+                string retroactiveDateString = ratePlanContext.RetroactiveDate.ToString(ratePlanContext.DateFormat);
+                context.Message = string.Format("BEDs of the following countries must be greater than or equal to the retroactive date '{0}': {1}", retroactiveDateString, string.Join(", ", invalidCountryNames));
                 return false;
             }
 
