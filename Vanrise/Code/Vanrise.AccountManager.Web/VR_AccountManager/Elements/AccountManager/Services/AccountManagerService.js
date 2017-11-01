@@ -27,20 +27,22 @@
             };
             VRModalService.showModal('/Client/Modules/VR_AccountManager/Elements/AccountManager/Views/AssignmentDefinitionEditor.html', parameters, settings);
         }
-        function addSubView(onSubViewAdded) {
+        function addSubView(onSubViewAdded,context) {
             var settings = {
             };
 
             var parameters = {
+                context : context
             };
             settings.onScopeReady = function (modalScope) {
                 modalScope.onSubViewAdded = onSubViewAdded;
             };
             VRModalService.showModal('/Client/Modules/VR_AccountManager/Elements/AccountManager/Views/SubViewEditor.html', parameters, settings);
         }
-        function editSubView(subViewEntity, onSubViewUpdated) {
+        function editSubView(subViewEntity, onSubViewUpdated,subViews, context) {
             var parameters = {
-                subViewEntity: subViewEntity
+                subViewEntity: subViewEntity,
+                context:context
             };
             var settings = {};
 

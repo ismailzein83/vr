@@ -18,21 +18,27 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/VR_AccountManager/Elements/AccountManager/Directives/Template/SubViewsGrid.html'
+        templateUrl: '/Client/Modules/VR_AccountManager/Elements/AccountManager/Directives/Template/AccountManagerSubViewsGrid.html'
     };
 
     function SubViewsGrid($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
         var gridAPI;
+        var context;
         function initializeController() {
             $scope.subViews = [];
+            var subviewsArray;
             $scope.addNewSubView = function () {
                 var onSubViewnAdded = function (subView) {
-                    $scope.subViews.push({ Entity: subView });
+                    $scope.subViews.push( {Entity:subView} );
+                    subviewsArray = $scope.subViews;
                 };
-                VR_AccountManager_AccountManagerService.addSubView(onSubViewnAdded);
+                VR_AccountManager_AccountManagerService.addSubView(onSubViewnAdded, context);
             };
-
+            $scope.removerow = function (dataItem) {
+                        var index = $scope.subViews.indexOf(dataItem);
+                        $scope.subViews.splice(index, 1);
+            s};
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
@@ -41,7 +47,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
+                        
                         if (payload != undefined) {
+                            if (payload.context != undefined) {
+                                context = payload.context;
+                            }
                             if (payload.subViews != undefined) {
                                 for (var i = 0; i < payload.subViews.length; i++) {
                                     var subView = payload.subViews[i];
@@ -51,14 +61,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
                         }
                     };
                     directiveAPI.getData = function () {
-                        var subViews = [];
-                        if ($scope.subViews != undefined) {
-                            for (var i = 0; i < $scope.subViews.length; i++) {
-                                var subView = $scope.subViews[i];
-                                subViews.push(subView.Entity);
-                            }
-                        }
-                        return subViews;
+                        return getSubviewsData();
                     };
                     return directiveAPI;
                 };
@@ -72,12 +75,23 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
                 clicked: editSubView,
             }];
         }
+        function getSubviewsData() {
+            var subViews = [];
+            if ($scope.subViews != undefined) {
+                for (var i = 0; i < $scope.subViews.length; i++) {
+                    var subView = $scope.subViews[i];
+                    subViews.push(subView.Entity);
+                }
+            }
+            return subViews;
+        }
+        
         function editSubView(subViewObject) {
             var onSubViewUpdated = function (subView) {
                 var index = $scope.subViews.indexOf(subViewObject);
                 $scope.subViews[index] = { Entity: subView };
             };
-            VR_AccountManager_AccountManagerService.editSubView(subViewObject.Entity, onSubViewUpdated, $scope.subViews);
+            VR_AccountManager_AccountManagerService.editSubView(subViewObject.Entity, onSubViewUpdated,$scope.subViews, context);
         }
     }
     return directiveDefinitionObject;

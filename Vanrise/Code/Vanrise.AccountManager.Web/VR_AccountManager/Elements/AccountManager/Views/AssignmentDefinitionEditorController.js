@@ -36,7 +36,7 @@
             $scope.scopeModel.onDirectiveReady = function (api) {
                 directiveAPI = api;
                 directiveReadyDeferred.resolve();
-            }
+            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -49,6 +49,24 @@
                       $scope.title = UtilsService.buildTitleForAddEditor('Assignment Definition');
                   else
                       $scope.title = UtilsService.buildTitleForUpdateEditor(assignmentDefinitionEntity.Name, 'Assignment Definition');
+                }
+                function loadStaticData() {
+                    if (assignmentDefinitionEntity != undefined) {
+                        $scope.scopeModel.assignmentName = assignmentDefinitionEntity.Name;
+                    }
+                }
+                function loadDirective() {
+                    var directiveLoadDeferred = UtilsService.createPromiseDeferred();
+                    directiveReadyDeferred.promise.then(function () {
+                        var payload;
+                        if (assignmentDefinitionEntity != undefined) {
+                            payload = {
+                                assignmentDefinitionEntity: assignmentDefinitionEntity.Settings
+                            };
+                        }
+                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
+                    });
+                    return directiveLoadDeferred.promise;
                 }
                 return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadDirective]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -68,24 +86,6 @@
                 assignmentDefiniton.AccountManagerAssignementDefinitionId = UtilsService.guid();
             }
             return assignmentDefiniton;
-        }
-        function loadStaticData() {
-            if (assignmentDefinitionEntity != undefined) {
-                $scope.scopeModel.assignmentName = assignmentDefinitionEntity.Name;
-            }
-        }
-        function loadDirective() {
-            var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-            directiveReadyDeferred.promise.then(function () {
-                var payload;
-                if (assignmentDefinitionEntity != undefined) {
-                    payload = {
-                        assignmentDefinitionEntity: assignmentDefinitionEntity.Settings
-                    };
-                }
-                VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
-            });
-            return directiveLoadDeferred.promise;
         }
         function addAssignmentDefinition() {
             var assignmentDefinition = buildObjectFromScope();

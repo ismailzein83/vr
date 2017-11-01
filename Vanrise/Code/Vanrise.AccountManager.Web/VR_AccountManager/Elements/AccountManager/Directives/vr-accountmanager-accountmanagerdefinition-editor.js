@@ -35,6 +35,8 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
             var extensionDefinitionsSelectorAPI;
             var extensionDefinitionsSelector = UtilsService.createPromiseDeferred();
 
+            var context=[];
+
             function initializeController() {
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
@@ -48,9 +50,10 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                     extensionDefinitionsSelectorAPI = api;
                     extensionDefinitionsSelector.resolve();
 
-                }
+                };
                 defineAPI();
             }
+            
             function defineAPI() {
                 var api = {};
 
@@ -58,10 +61,19 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                         gridReadyPromise.promise.then(function () {
                             var gridPayload;
                             if(payload != undefined)
-                            if (payload.businessEntityDefinitionSettings != undefined)
-                                gridPayload = {
-                                    assignmentdefinitons: payload.businessEntityDefinitionSettings.AssignmentDefinitions
-                                };
+                                if (payload.businessEntityDefinitionSettings != undefined) {
+                                    gridPayload = {
+                                        assignmentdefinitons: payload.businessEntityDefinitionSettings.AssignmentDefinitions
+                                    };
+                                    for (var i = 0 ;i<payload.businessEntityDefinitionSettings.AssignmentDefinitions.length;i++)
+                                    {
+                                        var assignmentDefinition = {
+                                            AccountManagerAssignementDefinitionId: payload.businessEntityDefinitionSettings.AssignmentDefinitions[i].AccountManagerAssignementDefinitionId,
+                                            Name: payload.businessEntityDefinitionSettings.AssignmentDefinitions[i].Name,
+                                        }
+                                        context.push(assignmentDefinition);
+                                    }
+                                }
                             gridAPI.loadGrid(gridPayload);
                         });
                         subViewGridReady.promise.then(function () {
@@ -69,7 +81,8 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                             if (payload != undefined)
                                 if (payload.businessEntityDefinitionSettings != undefined)
                                     gridPayload = {
-                                        subViews: payload.businessEntityDefinitionSettings.SubViews
+                                        subViews: payload.businessEntityDefinitionSettings.SubViews,
+                                        context: getContext()
                                     };
                             subViewGridAPI.loadGrid(gridPayload);
                         });
@@ -96,7 +109,12 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-        
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
+            }
         }
 
         return directiveDefinitionObject;

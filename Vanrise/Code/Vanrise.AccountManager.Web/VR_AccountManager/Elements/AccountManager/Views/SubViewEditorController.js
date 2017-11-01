@@ -7,6 +7,11 @@
     function subViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
         var subViewEntity
+        var context;
+
+        var selectiveAPI;
+        var selectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -15,6 +20,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 subViewEntity = parameters.subViewEntity;
+                context = parameters.context;
             };
             isEditMode = (subViewEntity != undefined);
         }
@@ -31,6 +37,10 @@
                     updateSubView();
                 }
             };
+            $scope.scopeModel.onSelectiveReady = function (api) {
+                selectiveAPI = api;
+                selectiveReadyDeferred.resolve();
+            }
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -38,6 +48,22 @@
         }
 
         function loadAllControls() {
+            function loadStaticData() {
+                if (subViewEntity != undefined) {
+                    $scope.scopeModel.subViewName = subViewEntity.Name;
+                }
+            }
+            function loadSubViewSelective() {
+                var selectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                selectiveReadyDeferred.promise.then(function () {
+                    var payload = { context: getContext() }
+                    if (subViewEntity != undefined) {
+                        payload.subViewEntity = subViewEntity.Settings;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(selectiveAPI, payload, selectiveLoadDeferred);
+                });
+                return selectiveLoadDeferred.promise;
+            }
             function setTitle() {
                 if (!isEditMode)
                     $scope.title = UtilsService.buildTitleForAddEditor('Sub View');
@@ -45,7 +71,7 @@
                     $scope.title = UtilsService.buildTitleForUpdateEditor('Sub View');
 
             }
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadSubViewSelective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -53,22 +79,18 @@
         }
         function buildObjectFromScope() {
             var subView = {
-                Name: $scope.scopeModel.subViewName
+                Name: $scope.scopeModel.subViewName,
+                Settings: selectiveAPI.getData()
             };
             if (isEditMode) {
                 subView.AccountViewDefinitionId = subViewEntity.AccountViewDefinitionId;
-
             }
             else {
                 subView.AccountViewDefinitionId = UtilsService.guid();
             }
             return subView;
         }
-        function loadStaticData() {
-            if (subViewEntity != undefined) {
-                $scope.scopeModel.subViewName = subViewEntity.Name;
-            }
-        }
+      
         function addSubView() {
             var subView = buildObjectFromScope();
             if ($scope.onSubViewAdded != undefined) {
@@ -82,6 +104,12 @@
                 $scope.onSubViewUpdated(subView);
                 $scope.modalContext.closeModal();
             }
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
     }
     appControllers.controller("VR_AccountManager_SubViewEditorController", subViewEditorController);

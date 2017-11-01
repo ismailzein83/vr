@@ -1,5 +1,6 @@
 ﻿<vr-button type="Add" data-onclick="addNewSubView" standalone></vr-button>
 <vr-datagrid datasource="subViews"
+             ondeleterow="removerow"
              on-ready="onGridReady"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"

@@ -9,10 +9,13 @@
         function GetAssignmentDefinitionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAssignmentDefinitionConfigs"));
         }
-       
+        function GetSubViewsDefinitionConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetSubViewsDefinitionConfigs"));
+        }
         return ({
             GetAccountManagerDefinition: GetAccountManagerDefinition,
-            GetAssignmentDefinitionConfigs: GetAssignmentDefinitionConfigs
+            GetAssignmentDefinitionConfigs: GetAssignmentDefinitionConfigs,
+            GetSubViewsDefinitionConfigs: GetSubViewsDefinitionConfigs
         });
     }
     appControllers.service("VR_AccountManager_AccountManagerDefinitionAPIService", accountManagerDefinitionAPIService);

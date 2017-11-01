@@ -30,6 +30,12 @@ namespace Vanrise.AccountManager.Web.Controllers
             AccountManagerDefinitionManager manager = new AccountManagerDefinitionManager();
             return manager.GetAssignmentDefinitionConfigs();
         }
-
+        [HttpGet]
+        [Route("GetSubViewsDefinitionConfigs")]
+        public IEnumerable<AccountManagerSubViewsConfigs> GetSubViewsDefinitionConfigs()
+        {
+            AccountManagerDefinitionManager manager = new AccountManagerDefinitionManager();
+            return manager.GetSubViewsDefinitionConfigs();
+        }
     }
 }

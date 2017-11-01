@@ -23,6 +23,11 @@ namespace Vanrise.AccountManager.Business
            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
            return manager.GetExtensionConfigurations<AccountManagerAssignmentConfigs>(AccountManagerAssignmentConfigs.EXTENSION_TYPE).OrderByDescending(x => x.Name);
        }
+       public IEnumerable<AccountManagerSubViewsConfigs> GetSubViewsDefinitionConfigs()
+       {
+           ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+           return manager.GetExtensionConfigurations<AccountManagerSubViewsConfigs>(AccountManagerSubViewsConfigs.EXTENSION_TYPE).OrderByDescending(x => x.Name);
+       }
 
     }
     #endregion

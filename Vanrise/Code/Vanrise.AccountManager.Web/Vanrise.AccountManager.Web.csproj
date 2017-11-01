@@ -119,7 +119,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="VR_AccountManager\Elements\AccountManager\Directives\AssignmentDefinition\Templates\" />
-    <Folder Include="VR_AccountManager\Elements\AccountManager\Directives\SubViews\Templates\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -167,11 +166,13 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\MainExtensions\Templates\RuntimeTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\MainExtensions\vr-accountmanager-accountmanagerdefinition-regular.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\MainExtensions\vr-accountmanager-accountmanagerruntime-regular.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\SubViews\Templates\subViewSelectiveTemplate.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\SubViews\vr-accountmanager-subview-selective.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionGridTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionSettings.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerGrid.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AssignmentDefinitionSelectiveTemplate.html" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\SubViewsGrid.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerSubViewsGrid.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-assignmentdefinition-selective.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-grid.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-assignmentdefinition-grid.js" />
