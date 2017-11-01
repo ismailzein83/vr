@@ -387,7 +387,9 @@
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDAccountRelationsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDSynchronizerEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountassignmentdefinition.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountsubviewdefinition.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountAssignmentDefinitionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccount-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccountdefinition-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccount.html" />
