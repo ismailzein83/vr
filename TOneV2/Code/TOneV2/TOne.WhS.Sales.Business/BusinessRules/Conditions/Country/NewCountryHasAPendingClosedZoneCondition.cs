@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is CustomerCountryToAdd;
+            return target is AllCustomerCountriesToAdd;
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
@@ -22,16 +22,28 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
-            CustomerCountryToAdd newCountry = context.Target as CustomerCountryToAdd;
-            List<ExistingZone> countryZones;
+            var allCountriesToAdd = context.Target as AllCustomerCountriesToAdd;
 
-            if (!ratePlanContext.EffectiveAndFutureExistingZonesByCountry.TryGetValue(newCountry.CountryId, out countryZones))
-                throw new Vanrise.Entities.VRBusinessException(string.Format("No existing zones were found for country '{0}'", newCountry.CountryId));
+            if (allCountriesToAdd.CustomerCountriesToAdd == null || allCountriesToAdd.CustomerCountriesToAdd.Count() == 0)
+                return true;
 
-            if (countryZones.FindAllRecords(x => x.IsEffectiveOrFuture(newCountry.BED)).Any(x => x.EED.HasValue))
+            var invalidCountryNames = new List<string>();
+            var countryManager = new Vanrise.Common.Business.CountryManager();
+
+            foreach (CustomerCountryToAdd countryToAdd in allCountriesToAdd.CustomerCountriesToAdd)
             {
-                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(newCountry.CountryId);
-                context.Message = string.Format("Country '{0}' cannot be sold to the customer because it has at least one pending closed zone", countryName);
+                List<ExistingZone> countryZones;
+
+                if (!ratePlanContext.EffectiveAndFutureExistingZonesByCountry.TryGetValue(countryToAdd.CountryId, out countryZones))
+                    throw new Vanrise.Entities.VRBusinessException(string.Format("No existing zones were found for country '{0}'", countryToAdd.CountryId));
+
+                if (countryZones.FindAllRecords(x => x.IsEffectiveOrFuture(countryToAdd.BED)).Any(x => x.EED.HasValue))
+                    invalidCountryNames.Add(countryManager.GetCountryName(countryToAdd.CountryId));
+            }
+
+            if (invalidCountryNames.Count > 0)
+            {
+                context.Message = string.Format("The following countries cannot be sold on their specified BEDs because they have at least one pending ended zone: {0}", string.Join(", ", invalidCountryNames));
                 return false;
             }
 
