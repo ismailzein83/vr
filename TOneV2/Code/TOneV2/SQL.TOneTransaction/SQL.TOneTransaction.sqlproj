@@ -234,6 +234,7 @@
     <Build Include="bp\Stored Procedures\sp_BPInstance_HasRunningInstance.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetAfterID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetInstanceIdsHavingChildren.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPDefinitionSummary_GetUpdated.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
