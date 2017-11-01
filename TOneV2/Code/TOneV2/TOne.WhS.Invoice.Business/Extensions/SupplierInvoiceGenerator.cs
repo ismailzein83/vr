@@ -75,7 +75,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 throw new InvoiceGeneratorException("No data available between the selected period.");
             }
-            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType);
+            Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
             #region BuildSupplierInvoiceDetails
             SupplierInvoiceDetails supplierInvoiceDetails = BuilSupplierInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType);
@@ -227,7 +227,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             ToDate = item.InvoiceMeasures.BillingPeriodTo,
                             AmountAfterCommission = item.InvoiceMeasures.AmountAfterCommission,
                             OriginalAmountAfterCommission = item.InvoiceMeasures.OriginalAmountAfterCommission,
-
+                            AmountAfterCommissionWithTaxes = item.InvoiceMeasures.AmountAfterCommissionWithTaxes,
+                            OriginalAmountAfterCommissionWithTaxes = item.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes,
+                            OriginalSupplierAmountWithTaxes = item.InvoiceMeasures.CostNet_OrigCurrWithTaxes,
+                            SupplierAmountWithTaxes = item.InvoiceMeasures.CostNetWithTaxes,
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -293,7 +296,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
-        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId, decimal? commission, CommissionType? commissionType)
+        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
         {
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
             if (analyticRecords != null)
@@ -352,7 +355,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
                             invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet;
                         }
-                        
+                        if (taxItemDetails != null)
+                        {
+                            foreach (var tax in taxItemDetails)
+                            {
+                                invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission+((invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+
+                                invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission+((invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+
+                                invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr+((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * Convert.ToDecimal(tax.Value)) / 100);
+
+                                invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet+((invoiceBillingRecord.InvoiceMeasures.CostNet * Convert.ToDecimal(tax.Value)) / 100);
+                            }
+                        }
 
                         AddItemToDictionary(itemSetNamesDic, "GroupedByCostZone", invoiceBillingRecord);
 
@@ -382,14 +397,17 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public class InvoiceMeasures
         {
             public decimal CostNet { get; set; }
+            public decimal CostNetWithTaxes { get; set; }
             public decimal CostNet_OrigCurr { get; set; }
+            public decimal CostNet_OrigCurrWithTaxes { get; set; }
             public int NumberOfCalls { get; set; }
             public Decimal CostDuration { get; set; }
             public DateTime BillingPeriodTo { get; set; }
             public DateTime BillingPeriodFrom { get; set; }
             public decimal AmountAfterCommission { get; set; }
             public decimal OriginalAmountAfterCommission { get; set; }
-
+            public decimal AmountAfterCommissionWithTaxes { get; set; }
+            public decimal OriginalAmountAfterCommissionWithTaxes { get; set; }
 
         } 
         public  class InvoiceBillingRecord

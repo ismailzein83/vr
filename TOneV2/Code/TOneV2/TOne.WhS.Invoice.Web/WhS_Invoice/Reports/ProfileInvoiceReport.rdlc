@@ -2734,6 +2734,22 @@
           <DataField>OriginalAmountAfterCommission</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="AmountAfterCommissionWithTaxes">
+          <DataField>AmountAfterCommissionWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalAmountAfterCommissionWithTaxes">
+          <DataField>OriginalAmountAfterCommissionWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleAmountWithTaxes">
+          <DataField>OriginalSaleAmountWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SaleAmountWithTaxes">
+          <DataField>SaleAmountWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>TOne.WhS.Invoice.Entities</rd:DataSetName>

@@ -1323,7 +1323,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2733,6 +2732,22 @@
         </Field>
         <Field Name="OriginalAmountAfterCommission">
           <DataField>OriginalAmountAfterCommission</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="AmountAfterCommissionWithTaxes">
+          <DataField>AmountAfterCommissionWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalAmountAfterCommissionWithTaxes">
+          <DataField>OriginalAmountAfterCommissionWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSupplierAmountWithTaxes">
+          <DataField>OriginalSupplierAmountWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SupplierAmountWithTaxes">
+          <DataField>SupplierAmountWithTaxes</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>

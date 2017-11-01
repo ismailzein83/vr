@@ -25,6 +25,10 @@ namespace TOne.WhS.Invoice.Entities
         public DateTime ToDate { get; set; }
         public decimal AmountAfterCommission { get; set; }
         public decimal OriginalAmountAfterCommission { get; set; }
+        public decimal AmountAfterCommissionWithTaxes { get; set; }
+        public decimal OriginalAmountAfterCommissionWithTaxes { get; set; }
+        public decimal OriginalSupplierAmountWithTaxes { get; set; }
+        public decimal SupplierAmountWithTaxes { get; set; }
         public SupplierInvoiceItemDetails() { }
         public IEnumerable<SupplierInvoiceItemDetails> GetSupplierInvoiceItemDetailsRDLCSchema()
         {

@@ -1785,7 +1785,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!OriginalSaleAmount.Value,2)</Value>
+                              <Value>=Round(Fields!OriginalSaleAmountWithTaxes.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1820,7 +1820,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!OriginalAmountAfterCommission.Value,2)</Value>
+                              <Value>=Round(Fields!AmountAfterCommissionWithTaxes.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2522,6 +2522,22 @@
         </Field>
         <Field Name="OriginalAmountAfterCommission">
           <DataField>OriginalAmountAfterCommission</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="AmountAfterCommissionWithTaxes">
+          <DataField>AmountAfterCommissionWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalAmountAfterCommissionWithTaxes">
+          <DataField>OriginalAmountAfterCommissionWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="OriginalSaleAmountWithTaxes">
+          <DataField>OriginalSaleAmountWithTaxes</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="SaleAmountWithTaxes">
+          <DataField>SaleAmountWithTaxes</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>
