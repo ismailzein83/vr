@@ -15,5 +15,7 @@ namespace Retail.Cost.Entities
         public TimeSpan AttemptDateTimeOffset { get; set; }
 
         public int MaxBatchDurationInMinutes { get; set; }
+
+        public int? ProfitPrecision { get; set; }
     }
 }

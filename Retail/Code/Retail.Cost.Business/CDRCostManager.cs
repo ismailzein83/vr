@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Retail.Cost.Data;
+using Retail.Cost.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Retail.Cost.Data;
-using Retail.Cost.Entities;
 
 namespace Retail.Cost.Business
 {
+    public enum ProfitStatus { NoProfit = 0, Profitable = 1, Lossy = 2 }
+
     public class CDRCostManager
     {
         #region Public Methods
@@ -16,7 +19,8 @@ namespace Retail.Cost.Business
         /// <summary>
         /// used in data transformation
         /// </summary>
-        public void AssignCostToCDR(List<dynamic> cdrs, string attemptDateTimeFieldName, string cgpnFieldName, string cdpnFieldName, string durationInSecondsFieldName, CDRCostFieldNames cdrCostFieldNames)
+        public void AssignCostToCDR(List<dynamic> cdrs, string attemptDateTimeFieldName, string cgpnFieldName, string cdpnFieldName, string durationInSecondsFieldName,
+            CDRCostFieldNames cdrCostFieldNames, CDRProfitFieldNames cdrProfitFieldNames)
         {
             if (cdrCostFieldNames == null)
                 return;
@@ -39,7 +43,7 @@ namespace Retail.Cost.Business
 
             foreach (var cdr in cdrs)
             {
-                RemoveCDRCostData(cdr, cdrCostFieldNames);
+                RemoveCDRCostData(cdr, cdrCostFieldNames, cdrProfitFieldNames);
 
                 DataRecordFilterGenericFieldMatchContext filterContext = new DataRecordFilterGenericFieldMatchContext(cdr, dataRecordTypeId);
                 if (!recordFilterManager.IsFilterGroupMatch(recordFilterGroup, filterContext))
@@ -68,7 +72,7 @@ namespace Retail.Cost.Business
                 cdrCostRequests.Add(cdrCostRequest);
             }
 
-            FillCost(cdrCostRequests, cdrCostFieldNames);
+            FillCost(cdrCostRequests, cdrCostFieldNames, cdrProfitFieldNames);
         }
 
         public void UpadeOverridenCostCDRAfterDate(DateTime? fromTime)
@@ -93,7 +97,36 @@ namespace Retail.Cost.Business
 
         #region Private Methods
 
-        private void FillCost(List<CDRCostRequest> cdrCostRequests, CDRCostFieldNames cdrCostFieldNames)
+        private void RemoveCDRCostData(dynamic cdr, CDRCostFieldNames cdrCostFieldNames, CDRProfitFieldNames cdrProfitFieldNames)
+        {
+            //Cost Fields
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CDRCostId))
+                cdr.SetFieldValue(cdrCostFieldNames.CDRCostId, null);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostRate))
+                cdr.SetFieldValue(cdrCostFieldNames.CostRate, null);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostAmount))
+                cdr.SetFieldValue(cdrCostFieldNames.CostAmount, null);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostCurrency))
+                cdr.SetFieldValue(cdrCostFieldNames.CostCurrency, null);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.SupplierName))
+                cdr.SetFieldValue(cdrCostFieldNames.SupplierName, null);
+
+            //Profit Fields
+            if (cdrProfitFieldNames != null)
+            {
+                if (!string.IsNullOrEmpty(cdrProfitFieldNames.Profit))
+                    cdr.SetFieldValue(cdrProfitFieldNames.Profit, null);
+
+                if (!string.IsNullOrEmpty(cdrProfitFieldNames.ProfitStatus))
+                    cdr.SetFieldValue(cdrProfitFieldNames.ProfitStatus, null);
+            }
+        }
+
+        private void FillCost(List<CDRCostRequest> cdrCostRequests, CDRCostFieldNames cdrCostFieldNames, CDRProfitFieldNames cdrProfitFieldNames)
         {
             if (cdrCostRequests == null || cdrCostRequests.Count == 0)
                 return;
@@ -104,6 +137,7 @@ namespace Retail.Cost.Business
             TimeSpan attemptDateTimeOffset = configManager.GetAttemptDateTimeOffset();
             TimeSpan durationMargin = configManager.GetDurationMargin();
             decimal durationMarginInSeconds = Convert.ToDecimal(durationMargin.TotalSeconds);
+            int? profitPrecision = configManager.GetProfitPrecision();
 
             IOrderedEnumerable<CDRCostRequest> orderedCDRCostRequests = cdrCostRequests.Select(itm => BuildCDRCostRequest(itm, attemptDateTimeOffset)).OrderBy(itm => itm.AttemptDateTime);
 
@@ -148,59 +182,12 @@ namespace Retail.Cost.Business
                     }
 
                     if (matchingCDRCost != null) //matching cost is found
+                    {
                         FillCDRCostData(cdrCostRequest.OriginalCDR, matchingCDRCost, cdrCostFieldNames);
+                        FillCDRProfitData(cdrCostRequest.OriginalCDR, matchingCDRCost, cdrCostFieldNames, cdrProfitFieldNames, cdrCostRequest.AttemptDateTime, profitPrecision);
+                    }
                 }
             }
-        }
-
-        private Dictionary<UniqueCDRCostKeys, List<CDRCost>> BuildUniqueCDRCostKeysDict(List<CDRCost> cdrCostList)
-        {
-            Dictionary<UniqueCDRCostKeys, List<CDRCost>> uniqueCDRCostKeysDict = new Dictionary<UniqueCDRCostKeys, List<CDRCost>>();
-
-            foreach (var cdrCost in cdrCostList)
-            {
-                UniqueCDRCostKeys uniqueCDRCostKey = new UniqueCDRCostKeys() { CDPN = cdrCost.CDPN, CGPN = cdrCost.CGPN };
-                List<CDRCost> cdrCosts = uniqueCDRCostKeysDict.GetOrCreateItem(uniqueCDRCostKey);
-                cdrCosts.Add(cdrCost);
-            }
-
-            return uniqueCDRCostKeysDict;
-        }
-
-        private void FillCDRCostData(dynamic cdr, CDRCost cdrCost, CDRCostFieldNames cdrCostFieldNames)
-        {
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostAmount))
-                cdr.SetFieldValue(cdrCostFieldNames.CostAmount, cdrCost.Amount);
-
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostRate))
-                cdr.SetFieldValue(cdrCostFieldNames.CostRate, cdrCost.Rate);
-
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.SupplierName))
-                cdr.SetFieldValue(cdrCostFieldNames.SupplierName, cdrCost.SupplierName);
-
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostCurrency))
-                cdr.SetFieldValue(cdrCostFieldNames.CostCurrency, cdrCost.CurrencyId);
-
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.CDRCostId))
-                cdr.SetFieldValue(cdrCostFieldNames.CDRCostId, cdrCost.CDRCostId);
-        }
-
-        private void RemoveCDRCostData(dynamic cdr, CDRCostFieldNames cdrCostFieldNames)
-        {
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostAmount))
-                cdr.SetFieldValue(cdrCostFieldNames.CostAmount, null);
-
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostRate))
-                cdr.SetFieldValue(cdrCostFieldNames.CostRate, null);
-
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.SupplierName))
-                cdr.SetFieldValue(cdrCostFieldNames.SupplierName, null);
-
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostCurrency))
-                cdr.SetFieldValue(cdrCostFieldNames.CostCurrency, null);
-
-            if (!string.IsNullOrEmpty(cdrCostFieldNames.CDRCostId))
-                cdr.SetFieldValue(cdrCostFieldNames.CDRCostId, null);
         }
 
         private CDRCostRequest BuildCDRCostRequest(CDRCostRequest itm, TimeSpan attemptDateTimeOffset)
@@ -246,6 +233,20 @@ namespace Retail.Cost.Business
             return cdrCostBatchRequests;
         }
 
+        private Dictionary<UniqueCDRCostKeys, List<CDRCost>> BuildUniqueCDRCostKeysDict(List<CDRCost> cdrCostList)
+        {
+            Dictionary<UniqueCDRCostKeys, List<CDRCost>> uniqueCDRCostKeysDict = new Dictionary<UniqueCDRCostKeys, List<CDRCost>>();
+
+            foreach (var cdrCost in cdrCostList)
+            {
+                UniqueCDRCostKeys uniqueCDRCostKey = new UniqueCDRCostKeys() { CDPN = cdrCost.CDPN, CGPN = cdrCost.CGPN };
+                List<CDRCost> cdrCosts = uniqueCDRCostKeysDict.GetOrCreateItem(uniqueCDRCostKey);
+                cdrCosts.Add(cdrCost);
+            }
+
+            return uniqueCDRCostKeysDict;
+        }
+
         private bool IsCDRCostMatch(CDRCost cdrCost, CDRCostRequest cdrCostRequest, decimal durationMarginInSeconds, TimeSpan attemptDateTimeMargin)
         {
             if (!cdrCost.AttemptDateTime.HasValue || !cdrCost.DurationInSeconds.HasValue)
@@ -256,6 +257,65 @@ namespace Retail.Cost.Business
                 return false;
 
             return true;
+        }
+
+        private void FillCDRCostData(dynamic cdr, CDRCost cdrCost, CDRCostFieldNames cdrCostFieldNames)
+        {
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CDRCostId))
+                cdr.SetFieldValue(cdrCostFieldNames.CDRCostId, cdrCost.CDRCostId);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostRate))
+                cdr.SetFieldValue(cdrCostFieldNames.CostRate, cdrCost.Rate);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostAmount))
+                cdr.SetFieldValue(cdrCostFieldNames.CostAmount, cdrCost.Amount);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.CostCurrency))
+                cdr.SetFieldValue(cdrCostFieldNames.CostCurrency, cdrCost.CurrencyId);
+
+            if (!string.IsNullOrEmpty(cdrCostFieldNames.SupplierName))
+                cdr.SetFieldValue(cdrCostFieldNames.SupplierName, cdrCost.SupplierName);
+        }
+
+        private void FillCDRProfitData(dynamic cdr, CDRCost cdrCost, CDRCostFieldNames cdrCostFieldNames, CDRProfitFieldNames cdrProfitFieldNames, DateTime attemptDateTime, int? profitPrecision)
+        {
+            if (!cdrCost.Amount.HasValue || !cdrCost.CurrencyId.HasValue)
+                return;
+
+            if (cdrProfitFieldNames == null || string.IsNullOrEmpty(cdrProfitFieldNames.SaleAmount) || string.IsNullOrEmpty(cdrProfitFieldNames.SaleCurrency))
+                return;
+
+            decimal? saleAmount = cdr.GetFieldValue(cdrProfitFieldNames.SaleAmount);
+            if (!saleAmount.HasValue)
+                throw new NullReferenceException("saleAmount");
+
+            int? saleCurrencyId = cdr.GetFieldValue(cdrProfitFieldNames.SaleCurrency);
+            if (!saleCurrencyId.HasValue)
+                throw new NullReferenceException("saleCurrencyId");
+
+            decimal convertedCostAmount = new CurrencyExchangeRateManager().ConvertValueToCurrency(cdrCost.Amount.Value, cdrCost.CurrencyId.Value, saleCurrencyId.Value, attemptDateTime);
+            decimal profitValue = saleAmount.Value - convertedCostAmount;
+            ProfitStatus profitStatus = this.GetProfitStatus(profitValue, profitPrecision);
+
+            if (!string.IsNullOrEmpty(cdrProfitFieldNames.Profit))
+                cdr.SetFieldValue(cdrProfitFieldNames.Profit, profitValue);
+
+            if (!string.IsNullOrEmpty(cdrProfitFieldNames.ProfitStatus))
+                cdr.SetFieldValue(cdrProfitFieldNames.ProfitStatus, profitStatus);
+        }
+
+        private ProfitStatus GetProfitStatus(decimal profitValue, int? profitPrecision)
+        {
+            if (profitPrecision.HasValue)
+                profitValue = decimal.Round(profitValue, profitPrecision.Value);
+
+            if (Math.Abs(profitValue) == 0)
+                return ProfitStatus.NoProfit;
+
+            if (profitValue < 0)
+                return ProfitStatus.Lossy;
+
+            return ProfitStatus.Profitable;
         }
 
         #endregion
@@ -275,9 +335,17 @@ namespace Retail.Cost.Business
     public class CDRCostFieldNames
     {
         public string CDRCostId { get; set; }
-        public string SupplierName { get; set; }
         public string CostRate { get; set; }
         public string CostAmount { get; set; }
         public string CostCurrency { get; set; }
+        public string SupplierName { get; set; }
+    }
+
+    public class CDRProfitFieldNames
+    {
+        public string SaleAmount { get; set; }
+        public string SaleCurrency { get; set; }
+        public string Profit { get; set; }
+        public string ProfitStatus { get; set; }
     }
 }

@@ -38,6 +38,7 @@ app.directive('retailCostCdrcostsettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         $scope.scopeModel.attemptDateTimeMargin = payload.data.AttemptDateTimeMargin;
                         $scope.scopeModel.attemptDateTimeOffset = payload.data.AttemptDateTimeOffset;
                         $scope.scopeModel.maxBatchDurationInMinutes = payload.data.MaxBatchDurationInMinutes;
+                        $scope.scopeModel.profitPrecision = payload.data.ProfitPrecision;
                     }
                 };
 
@@ -48,7 +49,8 @@ app.directive('retailCostCdrcostsettingsEditor', ['UtilsService', 'VRUIUtilsServ
                         DurationMargin: $scope.scopeModel.durationMargin,
                         AttemptDateTimeMargin: $scope.scopeModel.attemptDateTimeMargin,
                         AttemptDateTimeOffset: $scope.scopeModel.attemptDateTimeOffset,
-                        MaxBatchDurationInMinutes: $scope.scopeModel.maxBatchDurationInMinutes
+                        MaxBatchDurationInMinutes: $scope.scopeModel.maxBatchDurationInMinutes,
+                        ProfitPrecision: $scope.scopeModel.profitPrecision
                     };
 
                     return data;

@@ -10,7 +10,10 @@
             <vr-timespan value="scopeModel.attemptDateTimeOffset" label="Attempt DateTime Offset" isrequired></vr-timespan>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.maxBatchDurationInMinutes" label="Max Batch Duration (Min)" type="number" decimalprecision="0" isrequired="true"></vr-textbox>
+            <vr-textbox value="scopeModel.maxBatchDurationInMinutes" label="Max Batch Duration (Min)" type="number" decimalprecision="0" minvalue="1" isrequired="true"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.profitPrecision" label="Profit Precision" type="number" decimalprecision="0" minvalue="0"></vr-textbox>
         </vr-columns>
     </vr-tab>
 </vr-tabs>

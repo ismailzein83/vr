@@ -44,6 +44,16 @@ namespace Retail.Cost.Business
             return cdrCostSettingData.MaxBatchDurationInMinutes;
         }
 
+        public int? GetProfitPrecision()
+        {
+            CDRCostSettingData cdrCostSettingData = GetCDRCostSettingData();
+            int? ProfitPrecision = cdrCostSettingData.ProfitPrecision;
+            if(ProfitPrecision.HasValue && ProfitPrecision.Value < 0)
+                throw new Vanrise.Entities.VRBusinessException("Profit Precision should be greater than or equal zero");
+
+            return ProfitPrecision;
+        }
+
         public Guid? GetCostCDRReprocessDefinitionId()
         {
             CDRCostTechnicalSettingData cdrCostTechnicalSettingData = GetCDRCostTechnicalSettingData();
@@ -67,6 +77,7 @@ namespace Retail.Cost.Business
             CDRCostTechnicalSettingData cdrCostTechnicalSettingData = GetCDRCostTechnicalSettingData();
             return cdrCostTechnicalSettingData.ChunkTime;
         }
+
         #endregion
 
         #region private methods
