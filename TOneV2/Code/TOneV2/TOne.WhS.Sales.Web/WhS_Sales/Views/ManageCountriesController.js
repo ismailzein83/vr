@@ -81,7 +81,7 @@
             $scope.scopeModel.isCountryToSellBEDValid = function (dataItem) {
                 if (dataItem.entity.beginEffectiveDate == null)
                     return 'BED is a required field';
-                if (dataItem.entity.beginEffectiveDate < retroactiveDate)
+                if (UtilsService.createDateFromString(dataItem.entity.beginEffectiveDate) < retroactiveDate)
                     return 'Retroactive Date: ' + UtilsService.getShortDate(retroactiveDate);
                 return null;
             };
