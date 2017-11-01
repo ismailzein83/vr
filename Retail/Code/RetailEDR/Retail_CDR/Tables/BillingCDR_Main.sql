@@ -37,9 +37,13 @@
     [CostRate]                 DECIMAL (20, 8)  NULL,
     [CostAmount]               DECIMAL (22, 6)  NULL,
     [CostCurrencyId]           INT              NULL,
+    [Profit]                   DECIMAL (22, 6)  NULL,
+    [ProfitStatus]             INT              NULL,
     [Extension]                VARCHAR (20)     NULL,
     [QueueItemId]              BIGINT           NULL
 );
+
+
 
 
 

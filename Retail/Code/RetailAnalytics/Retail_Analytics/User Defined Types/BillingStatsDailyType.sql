@@ -24,7 +24,11 @@
     [CostRate]               DECIMAL (20, 8)  NULL,
     [CostAmount]             DECIMAL (22, 6)  NULL,
     [CostCurrencyId]         INT              NULL,
-    [CostAvailable]          BIT              NULL);
+    [CostAvailable]          BIT              NULL,
+    [TotalProfit]            DECIMAL (26, 10) NULL,
+    [ProfitStatus]           INT              NULL);
+
+
 
 
 

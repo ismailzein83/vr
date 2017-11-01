@@ -25,8 +25,12 @@
     [CostAmount]             DECIMAL (22, 6)  NULL,
     [CostCurrencyId]         INT              NULL,
     [CostAvailable]          BIT              NULL,
+    [TotalProfit]            DECIMAL (26, 10) NULL,
+    [ProfitStatus]           INT              NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
