@@ -13,9 +13,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is CustomerCountryToAdd;
+            return target is AllCustomerCountriesToAdd;
         }
-
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
@@ -23,44 +22,50 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
-            var countryToAdd = context.Target as CustomerCountryToAdd;
+            var countriesToAdd = context.Target as AllCustomerCountriesToAdd;
 
-            IEnumerable<ExistingZone> countryZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryToAdd.CountryId);
+            if (countriesToAdd.CustomerCountriesToAdd == null || countriesToAdd.CustomerCountriesToAdd.Count() == 0)
+                return true;
 
-            if (countryZones == null || countryZones.Count() == 0)
-                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Zones of Country '{0}' were not found"));
+            var invalidCountryNames = new List<string>();
+            var countryManager = new Vanrise.Common.Business.CountryManager();
 
-            string errorMessage = "The Zones of newly sold Countries must all have Rates at the level of the assigned Selling Products";
-
-            if (ratePlanContext.InheritedRatesByZoneId.Count == 0)
+            foreach (CustomerCountryToAdd countryToAdd in countriesToAdd.CustomerCountriesToAdd)
             {
-                context.Message = errorMessage;
-                return false;
+                IEnumerable<ExistingZone> countryZones = ratePlanContext.EffectiveAndFutureExistingZonesByCountry.GetRecord(countryToAdd.CountryId);
+                string countryName = countryManager.GetCountryName(countryToAdd.CountryId);
+
+                if (countryZones == null || countryZones.Count() == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The existing zones of country '{0}' were not found", countryName));
+
+                foreach (ExistingZone countryZone in countryZones)
+                {
+                    DateTime effectiveOn = Utilities.Max(countryToAdd.BED, countryZone.BED);
+
+                    if (countryZone.EED.HasValue && countryZone.EED.Value <= effectiveOn)
+                        continue;
+
+                    ZoneInheritedRates zoneRates = ratePlanContext.InheritedRatesByZoneId.GetRecord(countryZone.ZoneId);
+
+                    if (zoneRates == null || zoneRates.NormalRates == null || zoneRates.NormalRates.Count == 0 || !zoneRates.NormalRates.Any(x => x.IsEffective(effectiveOn)))
+                    {
+                        invalidCountryNames.Add(countryName);
+                        break;
+                    }
+                }
             }
 
-            foreach (ExistingZone countryZone in countryZones)
+            if (invalidCountryNames.Count > 0)
             {
-                ZoneInheritedRates zoneRates = ratePlanContext.InheritedRatesByZoneId.GetRecord(countryZone.ZoneId);
-                IEnumerable<SaleRate> zoneNormalRates = (zoneRates != null) ? zoneRates.NormalRates : null;
-
-                DateTime effectiveOn = Utilities.Max(countryToAdd.BED, countryZone.BED);
-
-                if (countryZone.EED.HasValue && countryZone.EED.Value <= effectiveOn)
-                    continue;
-
-                if (zoneNormalRates == null || zoneNormalRates.Count() == 0 || !zoneNormalRates.Any(x => x.IsEffective(effectiveOn)))
-                {
-                    context.Message = errorMessage;
-                    return false;
-                }
+                context.Message = string.Format("The following countries must have inherited rates for all of their zones: {0}", string.Join(", ", invalidCountryNames));
+                return false;
             }
 
             return true;
         }
-
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return "The Zones of newly sold Countries must all have Rates at the level of the assigned Selling Products";
+            throw new NotImplementedException();
         }
     }
 }
