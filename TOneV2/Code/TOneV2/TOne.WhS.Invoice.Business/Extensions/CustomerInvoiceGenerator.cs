@@ -25,7 +25,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             var customerGenerationCustomSectionPayload = context.CustomSectionPayload as CustomerGenerationCustomSectionPayload;
             int? timeZoneId = null;
-            decimal commission = 0;
+            decimal? commission = null;
             CommissionType? commissionType = null;
             if (customerGenerationCustomSectionPayload != null && customerGenerationCustomSectionPayload.TimeZoneId.HasValue)
             {
@@ -148,7 +148,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
 
         }
-        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType, DateTime fromDate, DateTime toDate,decimal commission, CommissionType? commissionType)
+        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType, DateTime fromDate, DateTime toDate,decimal? commission, CommissionType? commissionType)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             CustomerInvoiceDetails customerInvoiceDetails = null;
@@ -300,7 +300,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             analyticRecord.MeasureValues.TryGetValue(measureName, out measureValue);
             return measureValue;
         }
-        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId,decimal commission, CommissionType? commissionType)
+        private Dictionary<string, List<InvoiceBillingRecord>> ConvertAnalyticDataToDictionary(IEnumerable<AnalyticRecord> analyticRecords, int currencyId,decimal? commission, CommissionType? commissionType)
         {
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = new Dictionary<string, List<InvoiceBillingRecord>>();
             if (analyticRecords != null)
@@ -351,13 +351,21 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             SupplierZoneId = Convert.ToInt32(supplierZone.Value),
 
                         };
-                        if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
+                        if (commission.HasValue)
                         {
-                            invoiceBillingRecord.SaleRate = invoiceBillingRecord.SaleRate + ((invoiceBillingRecord.SaleRate * commission) / 100);
+                            if (commissionType.HasValue && commissionType.Value == CommissionType.DoNotDisplay)
+                            {
+                                invoiceBillingRecord.SaleRate = invoiceBillingRecord.SaleRate + ((invoiceBillingRecord.SaleRate * commission.Value) / 100);
+                            }
+
+                            invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr * commission.Value) / 100);
+                            invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet + ((invoiceBillingRecord.InvoiceMeasures.SaleNet * commission.Value) / 100);
+                        }else
+                        {
+                            invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr;
+                            invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet;
                         }
-                             
-                        invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr + ((invoiceBillingRecord.InvoiceMeasures.SaleNet_OrigCurr * commission) / 100);
-                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.SaleNet + ((invoiceBillingRecord.InvoiceMeasures.SaleNet * commission) / 100);
+                     
 
                         AddItemToDictionary(itemSetNamesDic, "GroupedBySaleZone", invoiceBillingRecord);
                     }
