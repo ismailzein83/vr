@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService","VRNotificationService", "BusinessProcess_BPDefinitionAPIService", "BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService", "VRUIUtilsService", "BusinessProcess_BPSchedulerTaskService",
-function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, VRUIUtilsService, BusinessProcess_BPSchedulerTaskService) {
+app.directive("businessprocessBpDefinitionManagementGrid", ["UtilsService", "VRNotificationService", "BusinessProcess_BPDefinitionAPIService", "BusinessProcess_BPInstanceAPIService", "BusinessProcess_BPInstanceService", "VRUIUtilsService", "BusinessProcess_BPSchedulerTaskService", "VRTimerService",
+function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceAPIService, BusinessProcess_BPInstanceService, VRUIUtilsService, BusinessProcess_BPSchedulerTaskService, VRTimerService) {
 
     var directiveDefinitionObject = {
 
@@ -87,6 +87,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
                     };
                     return directiveAPI;
                 }
+                createTimer();
             };
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -107,11 +108,44 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
         }
 
         function attachPromis(dataItem) {
-            
+
         }
-       
+
+
+        function createTimer() {
+            if ($scope.job) {
+                VRTimerService.unregisterJob($scope.job);
+            }
+            VRTimerService.registerJob(onTimerElapsed, $scope);
+        }
+
+        function onTimerElapsed() {
+            return BusinessProcess_BPInstanceAPIService.GetBPDefinitionSummary().then(function (response) {
+                manipulateDataUpdated(response);
+                $scope.isLoading = false;
+            },
+            function (excpetion) {
+                $scope.isLoading = false;
+            });
+        }
+
+        function manipulateDataUpdated(response) {
+            if (response != undefined) {
+                for (var i = 0; i < response.length; i++) {
+                    var bpDefinitionSummary = response[i];
+                    for (var j = 0; j < $scope.bfDefinitions.length; j++) {
+                        if ($scope.bfDefinitions[j].Entity.BPDefinitionID == bpDefinitionSummary.BPDefinitionID) {
+                            $scope.bfDefinitions[j].RunningProcessNumber = bpDefinitionSummary.RunningProcessNumber;
+                            $scope.bfDefinitions[j].LastProcessCreatedTime = bpDefinitionSummary.LastProcessCreatedTime;
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+
         function defineMenuActions() {
-           
+
 
             $scope.gridMenuActions = function (dataItem) {
                 var startNewInstanceMenu = {
@@ -127,7 +161,7 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
             };
 
         }
-      
+
         function hasStartNewInstancePermission(bpDefinitionObj) {
             var actionPromise = UtilsService.createPromiseDeferred();
             actionPromise.resolve(bpDefinitionObj.StartNewInstanceAccess);

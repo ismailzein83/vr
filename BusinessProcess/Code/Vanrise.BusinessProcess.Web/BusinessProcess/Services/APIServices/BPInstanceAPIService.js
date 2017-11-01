@@ -30,7 +30,9 @@
         function CreateNewProcess(createProcessInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "CreateNewProcess"), createProcessInput);
         }
-
+        function GetBPDefinitionSummary() {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "GetBPDefinitionSummary"));
+        }
         return ({
             GetUpdated: GetUpdated,
             GetBeforeId: GetBeforeId,
@@ -38,7 +40,8 @@
             HasViewFilteredBPInstancesPermission:HasViewFilteredBPInstancesPermission,
             GetBPInstance: GetBPInstance,
             CreateNewProcess: CreateNewProcess,
-            HasRunningInstances: HasRunningInstances
+            HasRunningInstances: HasRunningInstances,
+            GetBPDefinitionSummary: GetBPDefinitionSummary
         });
     }
 

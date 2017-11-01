@@ -67,6 +67,7 @@
     <Compile Include="BPDefinitionInfo.cs" />
     <Compile Include="BPDefinitionInfoFilter.cs" />
     <Compile Include="BPDefinitionQuery.cs" />
+    <Compile Include="BPDefinitionSummary.cs" />
     <Compile Include="BPEvent.cs" />
     <Compile Include="BPInstance.cs" />
     <Compile Include="BPInstanceProgressView.cs" />

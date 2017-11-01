@@ -66,6 +66,14 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return manager.HasRunningInstances(hasRunningInstancesInput.definitionId, hasRunningInstancesInput.entityIds);
         }
 
+        [HttpGet]
+        [Route("GetBPDefinitionSummary")]
+        public List<BPDefinitionSummary> GetBPDefinitionSummary()
+        {
+            BPInstanceManager manager = new BPInstanceManager();
+            return manager.GetBPDefinitionSummary();
+        }
+
         
     }
     public class HasRunningInstancesInput

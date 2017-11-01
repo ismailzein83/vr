@@ -154,6 +154,17 @@ namespace Vanrise.BusinessProcess.Data.SQL
             }
         }
 
+
+        public List<BPDefinitionSummary> GetBPDefinitionSummary(IEnumerable<BPInstanceStatus> executionStatus)
+        {
+           
+            string excutionStatusIdsAsString = null;
+            if (executionStatus != null && executionStatus.Count() > 0)
+                excutionStatusIdsAsString = string.Join<int>(",", executionStatus.Select(itm=>(int)itm));
+
+            return GetItemsSP("[bp].[sp_BPDefinitionSummary_GetUpdated]", BPDefinitionSummaryMapper,  excutionStatusIdsAsString);
+
+        }
         #endregion
 
         #region mapper
@@ -188,6 +199,14 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return instance;
         }
 
+        private BPDefinitionSummary BPDefinitionSummaryMapper(IDataReader reader)
+        {
+            return new BPDefinitionSummary() {
+                RunningProcessNumber = GetReaderValue<int>(reader, "RunningProcessNumber"),
+                LastProcessCreatedTime = GetReaderValue<DateTime>(reader, "LastProcessCreatedTime"),
+                BPDefinitionID = GetReaderValue<Guid>(reader, "DefinitionID")
+            };
+        }
         #endregion
     }
 }

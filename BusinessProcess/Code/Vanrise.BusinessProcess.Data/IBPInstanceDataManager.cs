@@ -32,5 +32,7 @@ namespace Vanrise.BusinessProcess.Data
         void SetServiceInstancesOfBPInstances(List<BPInstance> pendingInstancesToUpdate);
 
         bool HasRunningInstances(Guid definitionId, List<string> entityIds, IEnumerable<BPInstanceStatus> statuses);
+
+        List<BPDefinitionSummary> GetBPDefinitionSummary(IEnumerable<BPInstanceStatus> executionStatus);
     }
 }

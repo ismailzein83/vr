@@ -249,6 +249,12 @@ namespace Vanrise.BusinessProcess.Business
                 return s_bpInstanceManager.GetBPInstanceName(bpInstance);
             }
         }
+
+        public List<BPDefinitionSummary> GetBPDefinitionSummary()
+        {
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            return dataManager.GetBPDefinitionSummary(BPInstanceStatusAttribute.GetNonClosedStatuses());
+        }
         #endregion
 
         #region mapper
