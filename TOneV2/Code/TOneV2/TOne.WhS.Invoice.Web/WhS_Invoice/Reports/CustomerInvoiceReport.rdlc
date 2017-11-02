@@ -2654,7 +2654,7 @@
                 <Value>=Parameters!TotalDuration.Value</Value>
               </Parameter>
               <Parameter Name="TotalAmount">
-                <Value>=Parameters!TotalSaleAmount.Value</Value>
+                <Value>=Parameters!SaleAmount.Value</Value>
               </Parameter>
               <Parameter Name="Image">
                 <Value>=Parameters!Image.Value</Value>
@@ -2674,8 +2674,8 @@
               <Parameter Name="DisplayCommission">
                 <Value>=Parameters!DisplayCommission.Value</Value>
               </Parameter>
-              <Parameter Name="TotalAmountAfterCommission">
-                <Value>=Parameters!TotalAmountAfterCommission.Value</Value>
+              <Parameter Name="AmountAfterCommission">
+                <Value>=Parameters!AmountAfterCommission.Value</Value>
               </Parameter>
             </Parameters>
             <Top>0.14722in</Top>
@@ -3770,6 +3770,18 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="TotalAmountAfterCommission">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="AmountAfterCommission">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="SaleAmount">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

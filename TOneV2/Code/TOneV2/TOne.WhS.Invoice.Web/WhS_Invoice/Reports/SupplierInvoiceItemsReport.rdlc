@@ -333,7 +333,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalAmount.Value,2), FormatNumber(Parameters!TotalAmountAfterCommission.Value,2))</Value>
+                <Value>=iif(Parameters!DisplayCommission.Value = True, FormatNumber(Parameters!TotalAmount.Value,2), FormatNumber(Parameters!AmountAfterCommission.Value,2))</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -1213,7 +1213,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=FormatNumber(Parameters!TotalAmountAfterCommission.Value, 2)</Value>
+                <Value>=FormatNumber(Parameters!AmountAfterCommission.Value, 2)</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                 </Style>
@@ -1502,7 +1502,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="TotalAmountAfterCommission">
+    <ReportParameter Name="AmountAfterCommission">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

@@ -1299,7 +1299,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!CostAmount.Value,2)</Value>
+                              <Value>=Round(Fields!SupplierAmountWithTaxes.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1334,7 +1334,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!AmountAfterCommission.Value,2)</Value>
+                              <Value>=Round(Fields!AmountAfterCommissionWithTaxes.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1580,13 +1580,13 @@
                               <Value>=Parameters!Minutes.Value</Value>
                             </Parameter>
                             <Parameter Name="TotalAmount">
-                              <Value>=Parameters!Total.Value</Value>
+                              <Value>=Fields!SupplierAmountWithTaxes.Value</Value>
                             </Parameter>
                             <Parameter Name="Currency">
                               <Value>=Parameters!Currency.Value</Value>
                             </Parameter>
                             <Parameter Name="TotalAmountAfterCommission">
-                              <Value>=Parameters!TotalAmountAfterCommission.Value</Value>
+                              <Value>=Fields!AmountAfterCommissionWithTaxes.Value</Value>
                             </Parameter>
                             <Parameter Name="DisplayCommission">
                               <Value>=Parameters!DisplayCommission.Value</Value>

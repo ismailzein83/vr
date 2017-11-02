@@ -2118,7 +2118,7 @@
                               <Value>=Fields!NumberOfCalls.Value</Value>
                             </Parameter>
                             <Parameter Name="TotalAmount">
-                              <Value>=Fields!SaleAmount.Value</Value>
+                              <Value>=Fields!OriginalSaleAmountWithTaxes.Value</Value>
                             </Parameter>
                             <Parameter Name="Customer">
                               <Value>=Parameters!Carrier.Value</Value>
@@ -2130,7 +2130,7 @@
                               <Value>=Parameters!DisplayCommission.Value</Value>
                             </Parameter>
                             <Parameter Name="TotalAmountAfterCommission">
-                              <Value>=Parameters!TotalAmountAfterCommission.Value</Value>
+                              <Value>=Fields!AmountAfterCommissionWithTaxes.Value</Value>
                             </Parameter>
                           </Parameters>
                           <Top>0.15625in</Top>
