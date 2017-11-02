@@ -52,6 +52,9 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<DataByZone>> DataByZone { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<AllDataByZone> AllDataByZone { get; set; }
+
         #endregion
 
         protected override void Execute(CodeActivityContext context)
@@ -162,6 +165,7 @@ namespace TOne.WhS.Sales.BP.Activities
             }
 
             this.DataByZone.Set(context, dataByZoneName.Values);
+            AllDataByZone.Set(context, new AllDataByZone() { DataByZoneList = dataByZoneName.Values });
         }
 
         #region Private Members
