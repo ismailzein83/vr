@@ -25,3 +25,5 @@ System.Web.Razor
 
 make sure that below DLLs has reference from C:\TFS\Vanrise\Code\Resources\DLLs\ path
 Newtonsoft.Json.dll
+
+Add reference to protobuf-net.dll
