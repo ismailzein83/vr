@@ -7,7 +7,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.Common.Business;
 using Vanrise.AccountManager.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.AccountManager.Business
 {
     #region Public Methods
@@ -17,6 +17,18 @@ namespace Vanrise.AccountManager.Business
        {
            BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
            return manager.GetBusinessEntityDefinition(accountManagerDefinitionId);
+       }
+       public AccountManagerBEDefinitionSettings GetAccountManagerDefinitionSettings(Guid accountManagerDefinitionId)
+       {
+           var accountManagerDefinition = GetAccountManagerDefinition(accountManagerDefinitionId);
+           accountManagerDefinition.ThrowIfNull("accountManagerDefinition", accountManagerDefinitionId);
+           accountManagerDefinition.Settings.ThrowIfNull("accountManagerDefinition.Settings");
+           return accountManagerDefinition.Settings.CastWithValidate<AccountManagerBEDefinitionSettings>("accountManagerDefinition.Settings");
+       }
+       public IEnumerable<AccountManagerSubViewDefinition> GetAccountManagerSubViewsDefinition(Guid accountManagerDefinitionId)
+       {
+           var accountManagerDefinitionSettings = GetAccountManagerDefinitionSettings(accountManagerDefinitionId);
+           return accountManagerDefinitionSettings.SubViews;
        }
        public IEnumerable<AccountManagerAssignmentConfigs> GetAssignmentDefinitionConfigs()
        {
