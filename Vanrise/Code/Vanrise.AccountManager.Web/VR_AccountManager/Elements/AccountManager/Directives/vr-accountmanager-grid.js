@@ -66,20 +66,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                             gridLoadDeferred.reject(error);
                         });
                         function getAccountManagerSubViewsDefinitionLoadPromise() {
-                            var accountManagerSubViewDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                            VR_AccountManager_AccountManagerDefinitionAPIService.GetAccountManagerSubViewsDefinition(accountManagerDefinitionId).then(function (response) {
+                            return VR_AccountManager_AccountManagerDefinitionAPIService.GetAccountManagerSubViewsDefinition(accountManagerDefinitionId).then(function (response) {
                                 accountManagerSubViewsDefinitions = response;
-                                accountManagerSubViewDefinitionsLoadPromiseDeferred.resolve();
-                            }).catch(function (error) {
-                                accountManagerSubViewDefinitionsLoadPromiseDeferred.reject(error);
-                            });
 
-                            return accountManagerSubViewDefinitionsLoadPromiseDeferred.promise;
+                            });
                         }
                         return gridLoadDeferred.promise;
                     };
                     directiveAPI.onAccountManagerAdded = function (accountManagerObject) {
+                        VR_AccountManager_AccountManagerService.defineAccountManagerSubViewTabs(accountManagerDefinitionId, accountManagerObject, gridAPI, accountManagerSubViewsDefinitions);
                         gridAPI.itemAdded(accountManagerObject);
                     };
 
@@ -115,6 +110,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
 
         function editAccountmanager(accountManagerObject) {
             var onAccountManagerUpdated = function (updatedItem) {
+                VR_AccountManager_AccountManagerService.defineAccountManagerSubViewTabs(accountManagerDefinitionId, updatedItem, gridAPI, accountManagerSubViewsDefinitions);
                 gridAPI.itemUpdated(updatedItem);
             };
 
