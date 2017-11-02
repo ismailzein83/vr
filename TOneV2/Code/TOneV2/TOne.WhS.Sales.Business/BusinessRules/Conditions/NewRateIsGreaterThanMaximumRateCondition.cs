@@ -13,7 +13,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             return (target is DataByZone);
         }
-
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
             DataByZone zoneData = context.Target as DataByZone;
@@ -54,7 +53,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             return true;
         }
-
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
             throw new NotImplementedException();
