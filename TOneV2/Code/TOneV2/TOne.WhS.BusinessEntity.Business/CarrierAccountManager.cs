@@ -402,7 +402,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return configManager.MergePricelistSettings(companyPricelistSettings, carrierAccount.CustomerSettings.PricelistSettings);
         }
-        
+
         public PricelistSettings GetCompanyPricelistSettingsByCustomerId(int carrierAccountId)
         {
             var companySetting = GetCompanySetting(carrierAccountId);
@@ -818,6 +818,18 @@ namespace TOne.WhS.BusinessEntity.Business
             Func<CarrierAccount, bool> filterExpression = (item) => (item.CarrierAccountSettings != null && item.CustomerSettings != null && (item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Active || item.CarrierAccountSettings.ActivationStatus == ActivationStatus.Testing) && item.CustomerSettings.RoutingStatus == RoutingStatus.Enabled);
             return carrierAccounts.MapRecords(RoutingCustomerInfoMapper, filterExpression);
         }
+
+        public IEnumerable<RoutingCustomerInfo> GetRoutingCustomerInfos(HashSet<int> customerIds)
+        {
+            if (customerIds == null)
+                return null;
+
+            IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(true, false, null, null);
+
+            Func<CarrierAccount, bool> filterExpression = (item) => (customerIds.Contains(item.CarrierAccountId));
+            return carrierAccounts.MapRecords(RoutingCustomerInfoMapper, filterExpression);
+        }
+
         public IEnumerable<RoutingSupplierInfo> GetRoutingActiveSuppliers()
         {
             IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(false, true, null, null);
