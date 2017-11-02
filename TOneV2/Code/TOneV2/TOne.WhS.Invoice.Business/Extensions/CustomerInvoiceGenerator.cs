@@ -128,7 +128,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     AccountTypeId = balanceAccountTypeId.Value,
                     AccountId = context.PartnerId,
                     TransactionTypeId = invoiceSettings.InvoiceTransactionTypeId,
-                    Amount = invoiceDetails.TotalAmount,
+                    Amount = invoiceDetails.TotalAmountAfterCommission,
                     CurrencyId = invoiceDetails.SaleCurrencyId,
                     FromDate = fromDate,
                     ToDate = toDate
@@ -286,7 +286,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     ToTime = toDate,
                     ParentDimensions = new List<string>(),
                     Filters = new List<DimensionFilter>(),
-                    CurrencyId = currencyId
+                    CurrencyId = currencyId,
+                    OrderType =AnalyticQueryOrderType.ByAllDimensions
                 },
                 SortByColumnName = "DimensionValues[0].Name"
             };

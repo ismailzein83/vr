@@ -2707,10 +2707,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.26861in</Width>
+              <Width>1.2in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.54539in</Width>
+              <Width>0.8in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2808,9 +2808,9 @@
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
         <Top>4.77652in</Top>
-        <Left>3.40735in</Left>
+        <Left>3.47596in</Left>
         <Height>0.36458in</Height>
-        <Width>2.814in</Width>
+        <Width>2in</Width>
         <ZIndex>33</ZIndex>
         <Style>
           <Border>
@@ -3003,7 +3003,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!TotalNumberOfCalls.Value,2)</Value>
+                              <Value>=FormatNumber(Parameters!TotalNumberOfCalls.Value,0)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
