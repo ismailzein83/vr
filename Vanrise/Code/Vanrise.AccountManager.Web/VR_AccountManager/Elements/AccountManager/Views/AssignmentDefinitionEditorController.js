@@ -7,8 +7,8 @@
     function assignmentDefinitionController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
         var assignmentDefinitionEntity;
-        var directiveAPI;
-        var directiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var assignmentDefinitionAPI;
+        var assignmentDefinitionReadyDeferred = UtilsService.createPromiseDeferred();
         loadParameters();
         defineScope();
         load();
@@ -33,9 +33,9 @@
                     updateAssignmnetDefinition();
                 }
             };
-            $scope.scopeModel.onDirectiveReady = function (api) {
-                directiveAPI = api;
-                directiveReadyDeferred.resolve();
+            $scope.scopeModel.onAssignmentDefinitionSelectorReady = function (api) {
+                assignmentDefinitionAPI = api;
+                assignmentDefinitionReadyDeferred.resolve();
             };
         }
         function load() {
@@ -57,14 +57,14 @@
                 }
                 function loadDirective() {
                     var directiveLoadDeferred = UtilsService.createPromiseDeferred();
-                    directiveReadyDeferred.promise.then(function () {
+                    assignmentDefinitionReadyDeferred.promise.then(function () {
                         var payload;
                         if (assignmentDefinitionEntity != undefined) {
                             payload = {
                                 assignmentDefinitionEntity: assignmentDefinitionEntity.Settings
                             };
                         }
-                        VRUIUtilsService.callDirectiveLoad(directiveAPI, payload, directiveLoadDeferred);
+                        VRUIUtilsService.callDirectiveLoad(assignmentDefinitionAPI, payload, directiveLoadDeferred);
                     });
                     return directiveLoadDeferred.promise;
                 }
@@ -77,7 +77,7 @@
         function buildObjectFromScope() {
             var assignmentDefiniton = {
                 Name: $scope.scopeModel.assignmentName,
-                Settings: directiveAPI.getData()
+                Settings: assignmentDefinitionAPI.getData()
             };
             if (isEditMode) {
                 assignmentDefiniton.AccountManagerAssignementDefinitionId = assignmentDefinitionEntity.AccountManagerAssignementDefinitionId;

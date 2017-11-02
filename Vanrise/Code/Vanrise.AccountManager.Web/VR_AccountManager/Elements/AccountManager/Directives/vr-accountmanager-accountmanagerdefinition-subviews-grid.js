@@ -33,7 +33,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
                     $scope.subViews.push( {Entity:subView} );
                     subviewsArray = $scope.subViews;
                 };
-                VR_AccountManager_AccountManagerService.addSubView(onSubViewnAdded, context);
+                VR_AccountManager_AccountManagerService.addSubView(onSubViewnAdded, getContext());
             };
             $scope.removerow = function (dataItem) {
                         var index = $scope.subViews.indexOf(dataItem);
@@ -92,6 +92,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
                 $scope.subViews[index] = { Entity: subView };
             };
             VR_AccountManager_AccountManagerService.editSubView(subViewObject.Entity, onSubViewUpdated,$scope.subViews, context);
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
     }
     return directiveDefinitionObject;

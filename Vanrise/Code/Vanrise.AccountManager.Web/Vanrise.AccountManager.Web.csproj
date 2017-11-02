@@ -190,8 +190,8 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerManagementController.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AssignmentDefinitionEditorController.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Views\AssignmentDefinitionEditor.html" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Views\SubViewEditor.html" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Views\SubViewEditorController.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerSubViewDefinitionEditor.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Views\AccountManagerSubViewDefinitionEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

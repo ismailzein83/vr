@@ -9,8 +9,8 @@
         var subViewEntity
         var context;
 
-        var selectiveAPI;
-        var selectiveReadyDeferred = UtilsService.createPromiseDeferred();
+        var subViewDefinitionSettingAPI;
+        var subViewDefinitionSettingReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -37,9 +37,9 @@
                     updateSubView();
                 }
             };
-            $scope.scopeModel.onSelectiveReady = function (api) {
-                selectiveAPI = api;
-                selectiveReadyDeferred.resolve();
+            $scope.scopeModel.onSubViewSelectorReady = function (api) {
+                subViewDefinitionSettingAPI = api;
+                subViewDefinitionSettingReadyDeferred.resolve();
             }
         }
         function load() {
@@ -55,12 +55,12 @@
             }
             function loadSubViewSelective() {
                 var selectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                selectiveReadyDeferred.promise.then(function () {
+                subViewDefinitionSettingReadyDeferred.promise.then(function () {
                     var payload = { context: getContext() };
                     if (subViewEntity != undefined) {
                         payload.subViewEntity = subViewEntity.Settings;
                     };
-                    VRUIUtilsService.callDirectiveLoad(selectiveAPI, payload, selectiveLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(subViewDefinitionSettingAPI, payload, selectiveLoadDeferred);
                 });
                 return selectiveLoadDeferred.promise;
             }
@@ -80,7 +80,7 @@
         function buildObjectFromScope() {
             var subView = {
                 Name: $scope.scopeModel.subViewName,
-                Settings: selectiveAPI.getData()
+                Settings: subViewDefinitionSettingAPI.getData()
             };
             if (isEditMode) {
                 subView.AccountViewDefinitionId = subViewEntity.AccountViewDefinitionId;
@@ -112,5 +112,5 @@
             return currentContext;
         }
     }
-    appControllers.controller("VR_AccountManager_SubViewEditorController", subViewEditorController);
+    appControllers.controller("VR_AccountManager_AccountManagerSubViewDefinitionEditorController", subViewEditorController);
 })(appControllers);

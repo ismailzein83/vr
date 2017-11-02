@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="VR_AccountManager_SubViewEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
+﻿<div vr-modalcontent ng-controller="VR_AccountManager_AccountManagerSubViewDefinitionEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formFilter">
             <vr-tabs>
@@ -10,7 +10,7 @@
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Setting'">
-                    <vr-accountmanager-subview-selective on-ready="scopeModel.onSelectiveReady"></vr-accountmanager-subview-selective>
+                    <vr-accountmanager-subview-selective on-ready="scopeModel.onSubViewSelectorReady"></vr-accountmanager-subview-selective>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

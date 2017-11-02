@@ -37,7 +37,7 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onSubViewAdded = onSubViewAdded;
             };
-            VRModalService.showModal('/Client/Modules/VR_AccountManager/Elements/AccountManager/Views/SubViewEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_AccountManager/Elements/AccountManager/Views/AccountManagerSubViewDefinitionEditor.html', parameters, settings);
         }
         function editSubView(subViewEntity, onSubViewUpdated,subViews, context) {
             var parameters = {
@@ -50,7 +50,7 @@
                 modalScope.onSubViewUpdated = onSubViewUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/VR_AccountManager/Elements/AccountManager/Views/SubViewEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/VR_AccountManager/Elements/AccountManager/Views/AccountManagerSubViewDefinitionEditor.html', parameters, settings);
         }
         function addAccountManager(onAccountManagerAdded, accountDefinitionId) {
             var settings = {

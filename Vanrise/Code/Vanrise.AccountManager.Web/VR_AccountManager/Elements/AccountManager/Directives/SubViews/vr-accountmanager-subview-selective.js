@@ -33,7 +33,7 @@
 
             var context;
 
-            var subViewDefinitionEntity;
+            var subViewDefinitionSettings;
 
             var directiveAPI;
             var directiveReadyDeferred;
@@ -57,9 +57,7 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, payload, setLoader, directiveReadyDeferred);
                 };
-               
             }
-
             function defineAPI() {
                 var api = {};
 
@@ -68,13 +66,13 @@
                     selectorAPI.clearDataSource();
                     if (payload != undefined) {
                         context = payload.context;
-                        subViewDefinitionEntity = payload.subViewEntity;
+                        subViewDefinitionSettings = payload.subViewEntity;
 
                     };
                     var getSubViewsDefinitionConfigsPromise = getSubViewsDefinitionConfigs();
                     promises.push(getSubViewsDefinitionConfigsPromise);
 
-                    if (subViewDefinitionEntity != undefined) {
+                    if (subViewDefinitionSettings != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     };
@@ -84,8 +82,8 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 };
-                                if (subViewDefinitionEntity != undefined) {
-                                    $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, subViewDefinitionEntity.ConfigId, 'ExtensionConfigurationId');
+                                if (subViewDefinitionSettings != undefined) {
+                                    $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, subViewDefinitionSettings.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -99,7 +97,7 @@
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var directivePayload = {
-                                assignmentDefinitionId:subViewDefinitionEntity.AccountManagerAssignementDefinitionId,
+                                subViewEntity: subViewDefinitionSettings,
                                 context: getContext()
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
@@ -108,9 +106,7 @@
                         return directiveLoadDeferred.promise;
                     }
                     return UtilsService.waitMultiplePromises(promises);
-
                 };
-
                 api.getData = getData;
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

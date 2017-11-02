@@ -35,10 +35,8 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
             var extensionDefinitionsSelectorAPI;
             var extensionDefinitionsSelector = UtilsService.createPromiseDeferred();
 
-            var context=[];
-
             function initializeController() {
-                $scope.onGridReady = function (api) {
+                $scope.onAssignmentDefinitionGridReady = function (api) {
                     gridAPI = api;
                     gridReadyPromise.resolve();
                 };
@@ -46,7 +44,7 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                     subViewGridAPI = api;
                     subViewGridReady.resolve();
                 };
-                $scope.onSelectiveReady = function (api) {
+                $scope.onAccountManagerDefinitionReady = function (api) {
                     extensionDefinitionsSelectorAPI = api;
                     extensionDefinitionsSelector.resolve();
 
@@ -58,43 +56,36 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                 var api = {};
 
                 api.load = function (payload) {
-                        gridReadyPromise.promise.then(function () {
-                            var gridPayload;
-                            if(payload != undefined)
-                                if (payload.businessEntityDefinitionSettings != undefined) {
-                                    gridPayload = {
-                                        assignmentdefinitons: payload.businessEntityDefinitionSettings.AssignmentDefinitions
-                                    };
-                                    for (var i = 0 ;i<payload.businessEntityDefinitionSettings.AssignmentDefinitions.length;i++)
-                                    {
-                                        var assignmentDefinition = {
-                                            AccountManagerAssignementDefinitionId: payload.businessEntityDefinitionSettings.AssignmentDefinitions[i].AccountManagerAssignementDefinitionId,
-                                            Name: payload.businessEntityDefinitionSettings.AssignmentDefinitions[i].Name,
-                                        }
-                                        context.push(assignmentDefinition);
-                                    }
-                                }
-                            gridAPI.loadGrid(gridPayload);
-                        });
-                        subViewGridReady.promise.then(function () {
-                            var gridPayload;
-                            if (payload != undefined)
-                                if (payload.businessEntityDefinitionSettings != undefined)
-                                    gridPayload = {
-                                        subViews: payload.businessEntityDefinitionSettings.SubViews,
-                                        context: getContext()
-                                    };
-                            subViewGridAPI.loadGrid(gridPayload);
-                        });
-                        extensionDefinitionsSelector.promise.then(function () {
-                            if (payload != undefined)
-                            {
+                    gridReadyPromise.promise.then(function () {
+                       
+                        var gridPayload;
+                        if(payload != undefined)
+                            if (payload.businessEntityDefinitionSettings != undefined) {
+                                gridPayload = {
+                                    assignmentdefinitons: payload.businessEntityDefinitionSettings.AssignmentDefinitions
+                                };
+                            }
+                        gridAPI.loadGrid(gridPayload);
+                    });
+                    subViewGridReady.promise.then(function () {
+                        var gridPayload = {
+                            context: getContext()
+                        };
+                        if (payload != undefined)
+                            if (payload.businessEntityDefinitionSettings != undefined)
+                                gridPayload.subViews = payload.businessEntityDefinitionSettings.SubViews
+                        subViewGridAPI.loadGrid(gridPayload);
+                    });
+                    extensionDefinitionsSelector.promise.then(function () {
+                        if (payload != undefined)
+                        {
                             var selectorPayload = {
                                 extendedSettings: payload.businessEntityDefinitionSettings.ExtendedSettings
                             };
                         }
-                            extensionDefinitionsSelectorAPI.load(selectorPayload);
-                        })
+                        extensionDefinitionsSelectorAPI.load(selectorPayload);
+                    })
+                   
                 };
                 api.getData = function () {
                     var obj = {
@@ -109,11 +100,28 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-            function getContext() {
-                var currentContext = context;
-                if (currentContext == undefined)
-                    currentContext = {};
-                return currentContext;
+            function getContext()
+            {
+                var assignmentDefinitionsInfo = [];
+                var context =
+                    {
+                        getAssignmentDefinitionInfo: function () {
+                            var assignmentDefinitions = gridAPI.getData();
+                            if (assignmentDefinitions != undefined) {
+                                for (var i = 0; i < assignmentDefinitions.length; i++) {
+                                    var assignmentDefinition =
+                                        {
+                                            AccountManagerAssignementDefinitionId: assignmentDefinitions[i].AccountManagerAssignementDefinitionId,
+                                            Name: assignmentDefinitions[i].Name
+                                        }
+                                    assignmentDefinitionsInfo.push(assignmentDefinition);
+                                }
+
+                            };
+                            return assignmentDefinitionsInfo;
+                        }
+                    };
+                return context;
             }
         }
 
