@@ -44,7 +44,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 			{
 				if (zoneData.NormalRateToClose.CloseEffectiveDate < sellingProductRate.Rate.BED)
 				{
-					context.Message = string.Format("Normal rate of zone '{0}' is closed on a date '{1}' that's different from the BED '{2}' of its inherited normal rate", zoneData.ZoneName, UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToClose.CloseEffectiveDate), UtilitiesManager.GetDateTimeAsString(sellingProductRate.Rate.BED));
+					context.Message = string.Format("Normal rate of zone '{0}' is closed on a date '{1}' that's different from the BED '{2}' of its last inherited normal rate", zoneData.ZoneName, UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToClose.CloseEffectiveDate), UtilitiesManager.GetDateTimeAsString(sellingProductRate.Rate.BED));
 					return false;
 				}
 			}
