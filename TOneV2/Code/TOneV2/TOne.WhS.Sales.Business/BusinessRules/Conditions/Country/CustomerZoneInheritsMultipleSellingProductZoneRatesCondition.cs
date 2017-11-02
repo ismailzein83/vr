@@ -16,7 +16,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             return target is CustomerCountryToAdd;
         }
-
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
@@ -67,13 +66,11 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             return true;
         }
-
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            var countryToAdd = target as CustomerCountryToAdd;
-            return string.Format("One or more SaleZones of Country '{0}' inherit multiple SaleRates from the assigned SellingProducts", countryToAdd.CountryId);
+            throw new NotImplementedException();
         }
-
+        #region Private Methods
         private Dictionary<long, DataByZone> GetDataByZoneId(IEnumerable<DataByZone> zoneDataList)
         {
             var dataByZoneId = new Dictionary<long, DataByZone>();
@@ -89,5 +86,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             return dataByZoneId;
         }
+        #endregion
     }
 }
