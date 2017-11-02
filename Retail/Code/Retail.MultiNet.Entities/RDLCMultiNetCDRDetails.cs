@@ -10,6 +10,11 @@ namespace Retail.MultiNet.Entities
     {
         public string SubItemIdentifier { get; set; }
         public DateTime AttemptDateTime { get; set; }
+
+        public string FormattedAttemptDate { get; set; }
+
+        public string FormattedAttemptTime { get; set; }
+
         public decimal DurationInSeconds { get; set; }
         public string DurationDescription { get; set; }
         public string CallingNumber { get; set; }

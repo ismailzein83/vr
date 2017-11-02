@@ -1065,6 +1065,29 @@ namespace Retail.MultiNet.Business
     {
         public string SubItemIdentifier { get; set; }
         public DateTime AttemptDateTime { get; set; }
+
+        public string FormattedAttemptDate
+        {
+            get
+            {
+                return this.AttemptDateTime.ToString("yyyy-MM-dd");
+            }
+            set
+            {
+            }
+        }
+
+        public string FormattedAttemptTime
+        {
+            get
+            {
+                return this.AttemptDateTime.ToString("HH:mm:ss");
+            }
+            set
+            {
+            }
+        }
+
         public decimal DurationInSeconds { get; set; }
         public string DurationDescription { get; set; }
         public string CallingNumber { get; set; }

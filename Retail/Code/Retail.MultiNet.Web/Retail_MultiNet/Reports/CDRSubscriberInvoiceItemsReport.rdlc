@@ -534,7 +534,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!AttemptDateTime.Value).ToString("yyyy-mm-dd")</Value>
+                              <Value>=Fields!FormattedAttemptDate.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>5pt</FontSize>
@@ -570,7 +570,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=CDate(Fields!AttemptDateTime.Value).ToString("HH:mm:ss")</Value>
+                              <Value>=Fields!FormattedAttemptTime.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>6pt</FontSize>
@@ -595,6 +595,7 @@
                         <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -942,7 +943,7 @@
         <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
         <DataSetName>MultiNetCDRs</DataSetName>
         <Height>1.04671in</Height>
-        <Width>18.2cm</Width>
+        <Width>18.19999cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -988,6 +989,14 @@
         <Field Name="AttemptDateTime">
           <DataField>AttemptDateTime</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="FormattedAttemptDate">
+          <DataField>FormattedAttemptDate</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="FormattedAttemptTime">
+          <DataField>FormattedAttemptTime</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="DurationInSeconds">
           <DataField>DurationInSeconds</DataField>
