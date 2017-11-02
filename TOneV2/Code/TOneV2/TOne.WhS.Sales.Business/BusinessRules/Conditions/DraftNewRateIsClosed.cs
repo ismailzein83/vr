@@ -13,7 +13,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             return target is DataByZone;
         }
-
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
             var zoneData = context.Target as DataByZone;
@@ -22,7 +21,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
             if (ratePlanContext.IsFirstSellingProductOffer.HasValue && ratePlanContext.IsFirstSellingProductOffer.Value)
-               
+
                 return true;
             if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.EED.HasValue)
             {
@@ -53,11 +52,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             return true;
         }
-
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            var zoneData = target as DataByZone;
-            return string.Format("New rates of zone '{0}' cannot be closed", zoneData.ZoneName);
+            throw new NotImplementedException();
         }
     }
 }
