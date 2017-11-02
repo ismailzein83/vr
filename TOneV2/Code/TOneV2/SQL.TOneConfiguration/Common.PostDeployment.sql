@@ -127,6 +127,7 @@ as (select * from (values
 ('9B73765C-BDD7-487B-8D32-E386288DB79B','Security',null				,'50624672-CD25-44FD-8580-0E3AC8E34C71',null,15,0),
 
 ('1037157D-BBC9-4B28-B53F-908936CEC137','System Processes'			,null,null,'/Client/Images/menu-icons/SystemProcesses.png',10,null),
+('B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','Business Processes'		,null,'1037157D-BBC9-4B28-B53F-908936CEC137',null,20,0),
 
 ('E73C4ABA-FD03-4137-B047-F3FB4F7EED03','Business Entities'			,null,null,'/Client/Images/menu-icons/Business Entities.png',15,0),
 ('937F4A80-74FD-43BA-BCC1-F674445170BB','Business Partner'			,null,null,'/Client/Images/menu-icons/Business Entities.png',15,0),

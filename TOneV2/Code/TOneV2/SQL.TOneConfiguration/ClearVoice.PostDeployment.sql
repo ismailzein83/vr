@@ -48,7 +48,6 @@ set nocount on;
 ;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','Business Processes',null,'1037157D-BBC9-4B28-B53F-908936CEC137',null,20,0),
 ('21e542bb-6bfb-4dbb-b359-ea50e3b42c57','Quality Measurement','Quality Measurement',null,'/images/menu-icons/CLITester.png',25,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))

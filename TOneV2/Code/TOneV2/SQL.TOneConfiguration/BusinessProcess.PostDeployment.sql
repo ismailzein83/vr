@@ -34,27 +34,6 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
---[sec].[Module]---------------------------601 to 700---------------------------------------------------------
-begin
-set nocount on;
-;with cte_data([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-as (select * from (values
---//////////////////////////////////////////////////////////////////////////////////////////////////
-('B7D68911-9501-48F4-A3ED-8AF7CDBB1A2B','Business Processes',null,'1037157D-BBC9-4B28-B53F-908936CEC137',null,20,0)
---\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic]))
-merge	[sec].[Module] as t
-using	cte_data as s
-on		1=1 and t.[Id] = s.[Id]
-when matched then
-	update set
-	[Name] = s.[Name],[Url] = s.[Url],[ParentId] = s.[ParentId],[Icon] = s.[Icon],[Rank] = s.[Rank],[AllowDynamic] = s.[AllowDynamic]
-when not matched by target then
-	insert([Id],[Name],[Url],[ParentId],[Icon],[Rank],[AllowDynamic])
-	values(s.[Id],s.[Name],s.[Url],s.[ParentId],s.[Icon],s.[Rank],s.[AllowDynamic]);
---------------------------------------------------------------------------------------------------------------
-end
-
 --[sec].[View]-----------------------------6001 to 7000-------------------------------------------------------
 begin
 set nocount on;
