@@ -14,7 +14,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             return target is DataByZone;
         }
-
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             var zone = context.Target as DataByZone;
@@ -33,11 +32,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             return true;
         }
-
         public override string GetMessage(IRuleTarget target)
         {
-            var zone = target as DataByZone;
-            return String.Format("The rate of zone '{0}' must be greater than 0", zone.ZoneName);
+            throw new NotImplementedException();
         }
     }
 }
