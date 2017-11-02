@@ -12,21 +12,35 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target is DataByZone;
+            return target is AllDataByZone;
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var zone = context.Target as DataByZone;
+            var allDataByZone = context.Target as AllDataByZone;
 
-            if (zone.NormalRateToChange != null && zone.NormalRateToChange.NormalRate <= 0)
+            if (allDataByZone.DataByZoneList == null || allDataByZone.DataByZoneList.Count() == 0)
+                return true;
+
+            var invalidCountryNames = new HashSet<string>();
+            var countryManager = new Vanrise.Common.Business.CountryManager();
+
+            foreach (DataByZone zoneData in allDataByZone.DataByZoneList)
             {
-                context.Message = String.Format("The rate of zone '{0}' must be greater than 0", zone.ZoneName);
-                return false;
+                string countryName = countryManager.GetCountryName(zoneData.CountryId);
+
+                if (invalidCountryNames.Contains(countryName))
+                    continue;
+
+                if ((zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.NormalRate <= 0) || (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Any(x => x.NormalRate <= 0)))
+                {
+                    invalidCountryNames.Add(countryName);
+                    continue;
+                }
             }
 
-            if (zone.OtherRatesToChange != null && zone.OtherRatesToChange.Any(x => x.NormalRate <= 0))
+            if (invalidCountryNames.Count > 0)
             {
-                context.Message = String.Format("The other rate of zone '{0}' must be greater than 0", zone.ZoneName);
+                context.Message = string.Format("The rates of the following countries must be greater than zero: {0}", string.Join(", ", invalidCountryNames));
                 return false;
             }
 
