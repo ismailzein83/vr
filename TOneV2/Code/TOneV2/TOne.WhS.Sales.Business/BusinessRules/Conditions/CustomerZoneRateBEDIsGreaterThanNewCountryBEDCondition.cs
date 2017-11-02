@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.Business.BusinessRules
 {
@@ -12,7 +13,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is DataByZone;
+            return target is CountryData;
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
@@ -21,57 +22,59 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
-            var zoneData = context.Target as DataByZone;
+            var countryData = context.Target as CountryData;
 
-            if (!zoneData.IsCustomerCountryNew.HasValue || !zoneData.IsCustomerCountryNew.Value)
+            if (countryData.ZoneDataByZoneId == null || countryData.ZoneDataByZoneId.Count == 0)
                 return true;
 
-            string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(zoneData.CountryId);
+            var invalidEffectiveZoneNames = new List<string>();
+            var invalidFutureZoneNamesByZoneBED = new Dictionary<DateTime, List<string>>();
 
-            if (!zoneData.SoldOn.HasValue)
-                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("BED of country '{0}' of zone '{0}' was not found", countryName, zoneData.ZoneName));
-
-            DateTime validRateBED;
-            string partialErrorMessage;
-
-            if (zoneData.BED > zoneData.SoldOn.Value)
+            foreach (DataByZone zoneData in countryData.ZoneDataByZoneId.Values)
             {
-                validRateBED = zoneData.BED;
-                partialErrorMessage = string.Format("zone '{0}'", zoneData.ZoneName);
-            }
-            else
-            {
-                validRateBED = zoneData.SoldOn.Value;
-                partialErrorMessage = string.Format("new country '{0}'", countryName);
-            }
+                if (!zoneData.IsCustomerCountryNew.HasValue || !zoneData.IsCustomerCountryNew.Value)
+                    continue;
 
-            var errorMessages = new List<string>();
+                DateTime validRateBED = Vanrise.Common.Utilities.Max(countryData.CountryBED, zoneData.BED);
 
-            if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED > validRateBED)
-                errorMessages.Add(string.Format("normal rate BED '{0}'", UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToChange.BED)));
-
-            if (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count > 0)
-            {
-                var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
-
-                foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
+                if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED > validRateBED)
                 {
-                    if (otherRateToChange.BED > validRateBED)
+                    AddInvalidZoneName(zoneData, invalidEffectiveZoneNames, invalidFutureZoneNamesByZoneBED);
+                    continue;
+                }
+
+                if (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count > 0)
+                {
+                    foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
                     {
-                        string rateTypeName = rateTypeManager.GetRateTypeName(otherRateToChange.RateTypeId.Value);
-                        string formattedRateTypeName = (!string.IsNullOrWhiteSpace(rateTypeName)) ? rateTypeName.ToLower() : null;
-                        errorMessages.Add(string.Format("{0} rate BED: '{1}'", formattedRateTypeName, UtilitiesManager.GetDateTimeAsString(otherRateToChange.BED)));
+                        if (otherRateToChange.BED > validRateBED)
+                        {
+                            AddInvalidZoneName(zoneData, invalidEffectiveZoneNames, invalidFutureZoneNamesByZoneBED);
+                            break;
+                        }
                     }
                 }
             }
 
-            if (errorMessages.Count > 0)
+            if (invalidEffectiveZoneNames.Count > 0 || invalidFutureZoneNamesByZoneBED.Count > 0)
             {
-                string validRateBEDAsString = UtilitiesManager.GetDateTimeAsString(validRateBED);
-                string errorMessagesAsString = string.Join(", ", errorMessages);
+                var messageBuilder = new StringBuilder();
 
-                context.Message = string.Format("The following rates of zone '{0}' must have a BED that is equal to the BED of the {1} '{2}': {3}", zoneData.ZoneName, partialErrorMessage, validRateBEDAsString, errorMessagesAsString);
+                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryData.CountryId);
+                string countryBEDString = countryData.CountryBED.ToString(ratePlanContext.DateFormat);
+                messageBuilder.AppendFormat("Rate BEDs of country to sell '{0}' must be equal to its BED '{1}'", countryName, countryBEDString);
 
+                if (invalidFutureZoneNamesByZoneBED.Count > 0)
+                {
+                    foreach (KeyValuePair<DateTime, List<string>> kvp in invalidFutureZoneNamesByZoneBED)
+                    {
+                        string zoneBEDString = kvp.Key.ToString(ratePlanContext.DateFormat);
+                        string invalidFutureZoneNamesString = string.Join(", ", kvp.Value);
+                        messageBuilder.AppendFormat(". Rate BEDs of the following zones must be equal to the their BED '{0}': {1}", zoneBEDString, invalidFutureZoneNamesString);
+                    }
+                }
+
+                context.Message = messageBuilder.ToString();
                 return false;
             }
 
@@ -81,5 +84,18 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             throw new NotImplementedException();
         }
+
+        #region Private Methods
+        private void AddInvalidZoneName(DataByZone zoneData, List<string> invalidEffectiveZoneNames, Dictionary<DateTime, List<string>> invalidFutureZoneNamesByZoneBED)
+        {
+            if (zoneData.BED <= DateTime.Today)
+                invalidEffectiveZoneNames.Add(zoneData.ZoneName);
+            else
+            {
+                List<string> invalidFutureZoneNames = invalidFutureZoneNamesByZoneBED.GetOrCreateItem(zoneData.BED, () => { return new List<string>(); });
+                invalidFutureZoneNames.Add(zoneData.ZoneName);
+            }
+        }
+        #endregion
     }
 }
