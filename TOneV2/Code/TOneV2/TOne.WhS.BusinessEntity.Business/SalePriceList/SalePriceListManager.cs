@@ -627,7 +627,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             if (codeChange.ChangeType == CodeChange.Moved)
                             {
-                                ExistingSaleZone recentZone = existingSaleZones.FirstOrDefault(z => z.ZoneName.Equals(codeChange.RecentZoneName));
+                                ExistingSaleZone recentZone = existingSaleZones.FirstOrDefault(z => z.ZoneName.ToLower().Equals(codeChange.RecentZoneName.ToLower()));
                                 IEnumerable<ExistingSaleCode> existingCodes = recentZone.Codes.FindAllRecords(x => x.Code == codeChange.Code);
                                 ExistingSaleCode existingCode = existingCodes.FirstOrDefault();
                                 if (existingCode == null)
