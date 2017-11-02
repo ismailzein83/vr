@@ -1620,8 +1620,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 foreach (var customerCountry in customerCountries)
                 {
                     DateTime countrySellDate;
-                    if (!customerCountriesByCountryId.TryGetValue(customerCountry.CountryId, out countrySellDate) || customerCountry.BED < countrySellDate)
+                    if (!customerCountriesByCountryId.TryGetValue(customerCountry.CountryId, out countrySellDate))
                         customerCountriesByCountryId.Add(customerCountry.CountryId, customerCountry.BED);
+                    else if (customerCountry.BED < countrySellDate)
+                        customerCountriesByCountryId[customerCountry.CountryId] = customerCountry.BED;
                 }
             }
 
