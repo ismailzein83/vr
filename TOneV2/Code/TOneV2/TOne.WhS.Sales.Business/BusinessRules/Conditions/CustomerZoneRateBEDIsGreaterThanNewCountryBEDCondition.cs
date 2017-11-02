@@ -14,7 +14,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             return target is DataByZone;
         }
-
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
@@ -78,13 +77,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             return true;
         }
-
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            var zoneData = target as DataByZone;
-            string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(zoneData.CountryId);
-            string soldOnAsString = (zoneData.SoldOn.HasValue) ? UtilitiesManager.GetDateTimeAsString(zoneData.SoldOn.Value) : null;
-            return string.Format("Rates of zone '{0}' of new country '{1}' must have the same BED '{2}' as that of the country", zoneData.ZoneName, countryName, soldOnAsString);
+            throw new NotImplementedException();
         }
     }
 }
