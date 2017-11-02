@@ -26,7 +26,7 @@ function (UtilsService, VRUIUtilsService, VRNavigationService) {
         this.initializeController = initializeController;
 
         var context;
-        var assignmentDefinitionId;
+        var subViewEntity;
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -40,17 +40,17 @@ function (UtilsService, VRUIUtilsService, VRNavigationService) {
                 var promises = [];
                 if (payload != undefined) {
                     context = payload.context;
-                    if (payload.assignmentDefinitionId != undefined) {
+                    if (payload.subViewEntity != undefined) {
 
-                        assignmentDefinitionId = payload.assignmentDefinitionId;
+                        subViewEntity = payload.subViewEntity;
                     }
                 }
                 if (context != undefined) {
-                    for (var i = 0 ; i < context.length; i++) {
-                        $scope.scopeModel.assignmentDefinitions.push(context[i]);
-                    }
-                    if (assignmentDefinitionId != undefined) {
-                        $scope.scopeModel.selectedAssignmentDefinition = UtilsService.getItemByVal($scope.scopeModel.assignmentDefinitions, assignmentDefinitionId, 'AccountManagerAssignementDefinitionId');
+                    
+                    $scope.scopeModel.assignmentDefinitions = context.getAssignmentDefinitionInfo();
+                    
+                    if (subViewEntity != undefined) {
+                        $scope.scopeModel.selectedAssignmentDefinition = UtilsService.getItemByVal($scope.scopeModel.assignmentDefinitions, subViewEntity.AccountManagerAssignementDefinitionId, 'AccountManagerAssignementDefinitionId');
                     }
 
                 }
