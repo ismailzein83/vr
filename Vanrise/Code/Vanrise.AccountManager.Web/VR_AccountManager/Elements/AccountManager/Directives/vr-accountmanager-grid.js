@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAccountmanagerGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "VR_AccountManager_AccountManagerAPIService", "VR_AccountManager_AccountManagerService",
-function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_ObjectTrackingService, VR_AccountManager_AccountManagerAPIService, VR_AccountManager_AccountManagerService) {
+app.directive("vrAccountmanagerGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRCommon_ObjectTrackingService", "VR_AccountManager_AccountManagerAPIService", "VR_AccountManager_AccountManagerService","VR_AccountManager_AccountManagerDefinitionAPIService",
+function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_ObjectTrackingService, VR_AccountManager_AccountManagerAPIService, VR_AccountManager_AccountManagerService, VR_AccountManager_AccountManagerDefinitionAPIService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -22,7 +22,13 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
     };
 
     function AccountManagerGrid($scope, ctrl, $attrs) {
+
         var gridAPI;
+
+        var accountManagerDefinitionId;
+
+        var accountManagerSubViewsDefinitions;
+
         this.initializeController = initializeController;
         
         function initializeController()
@@ -34,11 +40,44 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveAPI());
                 }
+
                 function getDirectiveAPI() {
                     var directiveAPI = {};
 
-                    directiveAPI.loadGrid = function (query) {
-                        return gridAPI.retrieveData(query);
+                    directiveAPI.loadGrid = function (payload) {
+                        var promises = [];
+                        var gridQuery;
+                        if (payload != undefined) {
+                            accountManagerDefinitionId = payload.accountManagerDefinitionId;
+                            gridQuery = payload.query;
+                        }
+                        var accountManagerSubViewsDefinitionsLoadPromise = getAccountManagerSubViewsDefinitionLoadPromise();
+                        promises.push(accountManagerSubViewsDefinitionsLoadPromise);
+                        var gridLoadDeferred = UtilsService.createPromiseDeferred();
+                        UtilsService.waitMultiplePromises(promises).then(function () {
+
+                            gridAPI.retrieveData(gridQuery).then(function () {
+                                gridLoadDeferred.resolve();
+                            }).catch(function (error) {
+                                gridLoadDeferred.reject(error);
+                            });
+
+                        }).catch(function (error) {
+                            gridLoadDeferred.reject(error);
+                        });
+                        function getAccountManagerSubViewsDefinitionLoadPromise() {
+                            var accountManagerSubViewDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                            VR_AccountManager_AccountManagerDefinitionAPIService.GetAccountManagerSubViewsDefinition(accountManagerDefinitionId).then(function (response) {
+                                accountManagerSubViewsDefinitions = response;
+                                accountManagerSubViewDefinitionsLoadPromiseDeferred.resolve();
+                            }).catch(function (error) {
+                                accountManagerSubViewDefinitionsLoadPromiseDeferred.reject(error);
+                            });
+
+                            return accountManagerSubViewDefinitionsLoadPromiseDeferred.promise;
+                        }
+                        return gridLoadDeferred.promise;
                     };
                     directiveAPI.onAccountManagerAdded = function (accountManagerObject) {
                         gridAPI.itemAdded(accountManagerObject);
@@ -47,10 +86,17 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                     return directiveAPI;
                 }
             };
+
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 
                 return VR_AccountManager_AccountManagerAPIService.GetFilteredAccountManagers(dataRetrievalInput)
                    .then(function (response) {
+                       if (response && response.Data) {
+                           for (var i = 0; i < response.Data.length; i++) {
+                               var accountManager = response.Data[i];
+                               VR_AccountManager_AccountManagerService.defineAccountManagerSubViewTabs(accountManagerDefinitionId, accountManager, gridAPI, accountManagerSubViewsDefinitions);
+                           }
+                       }
                        onResponseReady(response);
                    })
                    .catch(function (error) {

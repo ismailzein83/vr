@@ -12,10 +12,14 @@
         function GetSubViewsDefinitionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetSubViewsDefinitionConfigs"));
         }
+        function GetAccountManagerSubViewsDefinition(accountManagerDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAccountManagerSubViewsDefinition"), { accountManagerDefinitionId: accountManagerDefinitionId });
+        }
         return ({
             GetAccountManagerDefinition: GetAccountManagerDefinition,
             GetAssignmentDefinitionConfigs: GetAssignmentDefinitionConfigs,
-            GetSubViewsDefinitionConfigs: GetSubViewsDefinitionConfigs
+            GetSubViewsDefinitionConfigs: GetSubViewsDefinitionConfigs,
+            GetAccountManagerSubViewsDefinition: GetAccountManagerSubViewsDefinition
         });
     }
     appControllers.service("VR_AccountManager_AccountManagerDefinitionAPIService", accountManagerDefinitionAPIService);

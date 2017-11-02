@@ -76,11 +76,14 @@
           
         }
         function getGridFilter() {
-            var query = {
-                UserIds: userSelectorAPI.getSelectedIds(),
-                AccountManagerDefinitionId: accountManagerDefinitionId
+            var gridPayload = {
+                query: {
+                    UserIds: userSelectorAPI.getSelectedIds(),
+                    AccountManagerDefinitionId: accountManagerDefinitionId
+                },
+                accountManagerDefinitionId: accountManagerDefinitionId
             };
-            return query;
+            return gridPayload;
         }
         function loadUserSelector() {
             var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();

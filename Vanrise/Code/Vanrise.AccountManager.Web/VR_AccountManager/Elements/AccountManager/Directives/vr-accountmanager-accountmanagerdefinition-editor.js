@@ -102,17 +102,19 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
             }
             function getContext()
             {
-                var assignmentDefinitionsInfo = [];
+               
                 var context =
                     {
                         getAssignmentDefinitionInfo: function () {
+                            var assignmentDefinitionsInfo = [];
                             var assignmentDefinitions = gridAPI.getData();
                             if (assignmentDefinitions != undefined) {
                                 for (var i = 0; i < assignmentDefinitions.length; i++) {
+                                   var assignmentDefinitionInfo = assignmentDefinitions[i];
                                     var assignmentDefinition =
                                         {
-                                            AccountManagerAssignementDefinitionId: assignmentDefinitions[i].AccountManagerAssignementDefinitionId,
-                                            Name: assignmentDefinitions[i].Name
+                                            AccountManagerAssignementDefinitionId: assignmentDefinitionInfo.AccountManagerAssignementDefinitionId,
+                                            Name: assignmentDefinitionInfo.Name
                                         }
                                     assignmentDefinitionsInfo.push(assignmentDefinition);
                                 }

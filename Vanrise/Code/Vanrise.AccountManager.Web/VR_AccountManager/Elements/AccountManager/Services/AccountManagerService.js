@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountManagerService.$inject = ['VRModalService'];
+    AccountManagerService.$inject = ['VRModalService', 'VRUIUtilsService'];
 
-    function AccountManagerService(VRModalService)
+    function AccountManagerService(VRModalService, VRUIUtilsService)
     {
 
         return ({
@@ -13,7 +13,8 @@
             addAccountManager: addAccountManager,
             editAccountmanager: editAccountmanager,
             addSubView: addSubView,
-            editSubView: editSubView
+            editSubView: editSubView,
+            defineAccountManagerSubViewTabs: defineAccountManagerSubViewTabs
         });
         function addAssignmentDefinition(onAssignmentDefinitionAdded)
        {
@@ -93,6 +94,49 @@
 
             VRModalService.showModal('/Client/Modules/VR_AccountManager/Elements/AccountManager/Views/AssignmentDefinitionEditor.html', parameters, settings);
         }
+
+        function defineAccountManagerSubViewTabs(accountManagerDefinitionId, accountManager, gridAPI, accountManagerSubViewsDefinitions) {
+
+            var drillDownTabs = [];
+
+            for (var index = 0; index < accountManagerSubViewsDefinitions.length; index++) {
+                var accountManagerSubViewDefinition = accountManagerSubViewsDefinitions[index];
+                addDrillDownTab(accountManagerSubViewDefinition);
+            }
+
+            setDrillDownTabs();
+
+            function addDrillDownTab(accountManagerSubViewDefinition) {
+
+                var drillDownTab = {};
+
+                drillDownTab.title = accountManagerSubViewDefinition.Name;
+                drillDownTab.directive = accountManagerSubViewDefinition.Settings.RuntimeEditor;
+
+                drillDownTab.loadDirective = function (accountManagerSubViewGridAPI, accountManager) {
+                    accountManager.accountManagerSubViewGridAPI = accountManagerSubViewGridAPI;
+
+                    return accountManager.accountManagerSubViewGridAPI.load(buildAccountViewPayload());
+                };
+
+                function buildAccountViewPayload() {
+
+                    var payload = {
+                        accountManagerSubViewDefinition: accountManagerSubViewDefinition,
+                        accountManagerDefinitionId: accountManagerDefinitionId,
+                        accountManagerId: accountManager.AccountManagerId
+                    };
+                    return payload;
+                }
+
+                drillDownTabs.push(drillDownTab);
+            }
+            function setDrillDownTabs() {
+                var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
+                drillDownManager.setDrillDownExtensionObject(accountManager);
+            }
+        }
+
 
     }
 
