@@ -132,7 +132,8 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
 
                     if (dataItem != undefined) {
                         var entity = dataItem.Entity;
-                        if (entity.IsEnabled == true && entity.NextRunTime != undefined && !isSchedulerTaskRunning(entity.StatusDescription) && entity.AllowRun == true) {
+
+                        if (entity.IsEnabled == true && entity.NextRunTime != undefined && !isSchedulerTaskRunning(entity.StatusDescription) && dataItem.AllowRun == true) {
                             menuActions.push({
                                 name: "Run",
                                 clicked: runSchedulerTask
