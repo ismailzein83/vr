@@ -29,7 +29,8 @@ namespace Retail.MultiNet.Business
         Email = 11,
         NTN = 12,
         AccountType = 13,
-        AccountNumber= 14
+        AccountNumber= 14,
+        Attn = 15
     }
 
     public class MultiNetSubscriberPartnerSettings : InvoicePartnerManager
@@ -162,7 +163,12 @@ namespace Retail.MultiNet.Business
                                         string accountNumbers = string.Join(",", accountCompanyContact.PhoneNumbers);
                                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountNumber, accountNumbers, true);
                                     }
+                                    if(accountCompanyContact.ContactName  != null)
+                                    {
+                                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Attn, accountCompanyContact.ContactName, true);
+                                    }
 
+                                    
                                 }
                             }
                         }
