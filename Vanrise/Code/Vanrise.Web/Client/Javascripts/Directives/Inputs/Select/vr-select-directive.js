@@ -194,7 +194,7 @@
                                 found = true;
                                 $('#' + index).find('a').first().addClass('mark-select-selected');
                                 $('#divDataSourceContainer' + controller.id).first().stop().animate({
-                                    scrollTop: parseInt($('#' + index).attr("dataindex")) * 25
+                                    scrollTop: parseInt($('#' + index).attr("dataindex")) * 21
                                 }, 1);
                                 $('.mark-select').mouseover(function () {
                                     $('.mark-select').removeClass('mark-select-selected');
