@@ -110,7 +110,6 @@
     <Compile Include="BusinessRules\Conditions\Country\NewCountryHasAPendingClosedZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\RequiredSellingProductRateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\SetRateInPastForSPCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\CustomerZoneHavingPendingClosedRateIsModified.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateBEDIsGreaterThanNewCountryBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateBEDIsGreaterThanSellingProductZoneRateBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateHasInvalidEEDCondition.cs" />
