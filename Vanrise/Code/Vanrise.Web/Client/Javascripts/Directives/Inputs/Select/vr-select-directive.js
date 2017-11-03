@@ -494,9 +494,11 @@
 
                 };
                 var afterHideDropdown = function (id) {
+                     controller.filtername ='';
+                     controller.searchLocal();
                     $('div[name=' + id + ']').find('#filterInput').blur();
                     if (controller.onblurdropdown != null) {
-                        controller.onblurdropdown()
+                        controller.onblurdropdown();
                     }
                     vrSelectSharedObject.onCloseDropDown(id);
                     found = false;
