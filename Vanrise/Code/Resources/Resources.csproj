@@ -317,10 +317,10 @@
     <None Include="BatchScripts\CloudXPointV2\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CloudXPointV2\02-Runtime.bat" />
     <None Include="BatchScripts\CloudXPointV2\03-WebSite.bat" />
-    <None Include="BatchScripts\CloudXPointV2\04-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CloudXPointV2\05-CompressFiles.bat" />
     <None Include="BatchScripts\CloudXPointV2\06-GroupJSFiles.bat" />
     <None Include="BatchScripts\CloudXPointV2\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\CloudXPointV2\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CloudXPointV2\All.bat" />
     <None Include="BatchScripts\CloudXPoint\All.bat" />
     <None Include="BatchScripts\CloudXPoint\WebSite.bat" />
@@ -568,6 +568,7 @@
     <None Include="BatchScripts\TOne_Class4\DLL_TOne.AMU.bat" />
     <None Include="BatchScripts\TOne_Class4\DLL_TOne.AutomaticPricelistImport.bat" />
     <None Include="BatchScripts\TOne_Class4\DLL_TOne.ClearVoiceIntegration.bat" />
+    <None Include="BatchScripts\TOne_Class4\DLL_TOne.Excel.bat" />
     <None Include="BatchScripts\TOne_Class4\DLL_TOne.ImportPriceList.bat" />
     <None Include="BatchScripts\TOne_Class4\DLL_TOne.MarginControl.bat" />
     <None Include="BatchScripts\TOne_Class4\DLL_TOne.RatePlanning.bat" />
