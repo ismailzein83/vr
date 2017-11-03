@@ -26,8 +26,8 @@ namespace TOne.WhS.Runtime.Tasks
         public void Execute()
         {
             #region TelesIdbSWSyncTask
-            TelesIdbSWSyncTask telesIdbSWSyncTask = new TelesIdbSWSyncTask();
-            telesIdbSWSyncTask.TelesIdbSWSync_Main();
+            //TelesIdbSWSyncTask telesIdbSWSyncTask = new TelesIdbSWSyncTask();
+            //telesIdbSWSyncTask.TelesIdbSWSync_Main();
             #endregion
 
             #region DeserializeTask
