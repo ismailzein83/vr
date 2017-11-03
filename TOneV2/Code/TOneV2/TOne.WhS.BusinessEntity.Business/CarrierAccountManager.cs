@@ -784,6 +784,29 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccount.CarrierAccountSettings.IsInterconnectSwitch;
         }
 
+        public bool CheckCustomerValidity(int carrierAccountId)
+        {
+            CarrierAccount carrierAccount = this.GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                return false;
+
+            if (carrierAccount.AccountType == CarrierAccountType.Supplier)
+                return false;
+
+            return true;
+        }
+        public bool CheckSupplierValidity(int carrierAccountId)
+        {
+            CarrierAccount carrierAccount = this.GetCarrierAccount(carrierAccountId);
+            if (carrierAccount == null)
+                return false;
+
+            if (carrierAccount.AccountType == CarrierAccountType.Customer)
+                return false;
+
+            return true;
+        }
+
         #endregion
 
         #region ExtensionConfiguration

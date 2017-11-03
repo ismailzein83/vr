@@ -41,7 +41,7 @@ namespace TOne.WhS.DBSync.Business
                 MappingSeparator = ";",
                 NumberOfOptions = GetNumberOfOptions(parametersNode),
                 SupplierOptionsSeparator = GetSupplierOptionsSeparator(parametersNode),
-                UseTwoSuppliersMapping = GetUseTwoSuppliersMapping(parametersNode)
+                NumberOfMappings = CheckUseTwoSuppliersMapping(parametersNode) ? 2 : default(int?)
             };
 
             string connectionString;
@@ -165,17 +165,16 @@ namespace TOne.WhS.DBSync.Business
             return supplierOptionsSeparatorNode.FirstChild.Value;
         }
 
-        private bool GetUseTwoSuppliersMapping(XmlNode parametersNode)
+        private bool CheckUseTwoSuppliersMapping(XmlNode parametersNode)
         {
             XmlNode useTwoSuppliersMappingsNode = GetXmlNodeByParameterName(parametersNode, "$Use_Two_Suppliers_Mappings");
-
             if (useTwoSuppliersMappingsNode == null)
                 return false;
 
-            if (string.Compare(useTwoSuppliersMappingsNode.FirstChild.Value, "yes", true) == 0)
-                return true;
+            if (string.Compare(useTwoSuppliersMappingsNode.FirstChild.Value, "yes", true) != 0)
+                return false;
 
-            return false;
+            return true;
         }
 
         private void GetConnectionStrings(XmlNode parametersNode, out string connectionString, out string redundantConnectionString)

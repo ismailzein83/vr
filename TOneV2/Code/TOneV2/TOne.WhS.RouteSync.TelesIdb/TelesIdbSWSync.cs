@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Idb;
 using Vanrise.Common;
@@ -19,11 +20,11 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
         public string MappingSeparator { get; set; }
 
-        public int NumberOfOptions { get; set; }
+        public int? NumberOfMappings { get; set; }
 
         public string SupplierOptionsSeparator { get; set; }
 
-        public bool UseTwoSuppliersMapping { get; set; }
+        public int NumberOfOptions { get; set; }
 
         /// <summary>
         /// Key = Carrier Account Id
@@ -44,6 +45,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
             List<string> invalidRoutes = new List<string>();
             CarrierMapping carrierMapping;
             List<ConvertedRoute> idbRoutes = new List<ConvertedRoute>();
+
             foreach (var route in context.Routes)
             {
                 if (CarrierMappings.TryGetValue(route.CustomerId, out carrierMapping))
@@ -51,7 +53,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
                     if (carrierMapping.CustomerMapping == null)
                         continue;
 
-                    string supplierOptionsSeparator = !string.IsNullOrEmpty(SupplierOptionsSeparator) ? SupplierOptionsSeparator : string.Empty;
+                    string supplierOptionsSeparator = !string.IsNullOrEmpty(this.SupplierOptionsSeparator) ? this.SupplierOptionsSeparator : string.Empty;
                     string concatenatedOptions = BuildOptions(route, invalidRoutes, supplierOptionsSeparator);
 
                     foreach (string customerMapping in carrierMapping.CustomerMapping)
@@ -68,19 +70,22 @@ namespace TOne.WhS.RouteSync.TelesIdb
                     }
                 }
             }
+
             context.InvalidRoutes = invalidRoutes.Count > 0 ? invalidRoutes : null;
             context.ConvertedRoutes = idbRoutes;
         }
 
+
+        //Private Methods
         public string BuildOptions(Route route, List<string> invalidRoutes, string supplierOptionsSeparator)
         {
             if (route.Options == null || route.Options.Count == 0)
                 return "BLK";
 
-            List<RouteOption> routeOptions = route.Options;
-
-            bool isPercentageOption = routeOptions.FirstOrDefault(itm => itm.Percentage.HasValue && itm.Percentage.Value > 0) != null;
             StringBuilder strBuilder = new StringBuilder();
+
+            List<RouteOption> routeOptions = route.Options;
+            bool isPercentageOption = routeOptions.FirstOrDefault(itm => itm.Percentage.HasValue && itm.Percentage.Value > 0) != null;
 
             int numberOfAddedOptions = 0;
             CarrierMapping carrierMapping;
@@ -112,13 +117,13 @@ namespace TOne.WhS.RouteSync.TelesIdb
             else
             {
                 RouteOption nextRouteOption = null;
+
                 for (var x = 0; x < routeOptions.Count; x++)
                 {
                     if (numberOfAddedOptions == NumberOfOptions)
                         break;
 
                     RouteOption routeOption = routeOptions[x];
-
                     if (!routeOption.Percentage.HasValue || routeOption.Percentage.Value == 0 || !routeOption.IsValid)// routeOption is a backUp option
                         continue;
 
@@ -172,19 +177,20 @@ namespace TOne.WhS.RouteSync.TelesIdb
                         }
                     }
 
-                    string concatSupplierMapping = string.Join(string.Empty, routeOptionMapping.SupplierMapping);
-                    if (UseTwoSuppliersMapping && concatSupplierMapping.Length == SupplierMappingLength)
-                        concatSupplierMapping = concatSupplierMapping + "XXXX";
+                    string concatSupplierMapping = this.ConcatenateSupplierMappings(routeOptionMapping.SupplierMapping);
                     concatSupplierMapping = GetPercentage(routeOption.Percentage) + concatSupplierMapping;
+                    //string concatSupplierMapping = string.Join(string.Empty, routeOptionMapping.SupplierMapping);
+                    //if (UseTwoSuppliersMapping && concatSupplierMapping.Length == SupplierMappingLength)
+                    //    concatSupplierMapping = concatSupplierMapping + "XXXX";
 
                     string concatBackUpSupplierMapping = string.Empty;
-
                     if (backUpRouteOptionMapping != null)
                     {
-                        concatBackUpSupplierMapping = string.Join(string.Empty, backUpRouteOptionMapping.SupplierMapping);
-                        if (UseTwoSuppliersMapping && concatBackUpSupplierMapping.Length == SupplierMappingLength)
-                            concatBackUpSupplierMapping = concatBackUpSupplierMapping + "XXXX";
+                        concatBackUpSupplierMapping = this.ConcatenateSupplierMappings(backUpRouteOptionMapping.SupplierMapping);
                         concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
+                        //concatBackUpSupplierMapping = string.Join(string.Empty, backUpRouteOptionMapping.SupplierMapping);
+                        //if (UseTwoSuppliersMapping && concatBackUpSupplierMapping.Length == SupplierMappingLength)
+                        //    concatBackUpSupplierMapping = concatBackUpSupplierMapping + "XXXX";
                     }
 
                     //for (int i = 1; i <= routeOption.NumberOfTries; i++)
@@ -198,6 +204,23 @@ namespace TOne.WhS.RouteSync.TelesIdb
                 }
             }
             return strBuilder.Length > 0 ? strBuilder.ToString() : "BLK";
+        }
+
+        private string ConcatenateSupplierMappings(List<string> supplierMappings)
+        {
+            if (!this.NumberOfMappings.HasValue)
+                return string.Join(string.Empty, supplierMappings);
+
+            string concatSupplierMapping = string.Join(string.Empty, supplierMappings.Take(this.NumberOfMappings.Value));
+
+            int numberOfSupplierMappings = supplierMappings.Count;
+            if (numberOfSupplierMappings < this.NumberOfMappings.Value)
+            {
+                int numberOfXToAdd = (this.NumberOfMappings.Value - numberOfSupplierMappings) * SupplierMappingLength;
+                concatSupplierMapping = string.Format("{0}{1}", concatSupplierMapping, new StringBuilder(numberOfXToAdd).Insert(0, "X", numberOfXToAdd).ToString());
+            }
+
+            return concatSupplierMapping;
         }
 
         private string GetPercentage(int? percentage)
@@ -214,6 +237,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
             string percentageAsString = percentage.ToString();
             return percentageAsString.Length == 1 ? percentageAsString.Insert(0, "0") : percentageAsString;
         }
+
 
         public override Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
         {
@@ -311,7 +335,6 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
             List<string> validationMessages = new List<string>();
 
-            StringBuilder validationMessage = new StringBuilder();
             if (duplicateCustomerMappings.Count > 0)
                 validationMessages.Add(string.Format("Duplicate Customer Mappings: {0}", string.Join(", ", duplicateCustomerMappings)));
 
@@ -321,12 +344,17 @@ namespace TOne.WhS.RouteSync.TelesIdb
             if (invalidMappingSupplierIds.Count > 0)
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                List<string> invalidMappingSupplierNames = new List<string>();
+                List<string> invalidMappingSuppliers = new List<string>();
 
                 foreach (var supplierId in invalidMappingSupplierIds)
-                    invalidMappingSupplierNames.Add(carrierAccountManager.GetCarrierAccountName(supplierId));
+                {
+                    //CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(supplierId);
+                    //string sourceIdDesc = carrierAccount != null && !string.IsNullOrEmpty(carrierAccount.SourceId) ? string.Format(" - SourceID: {0}", carrierAccount.SourceId) : string.Empty;
 
-                validationMessages.Add(string.Format("Invalid Mappings for Suppliers: {0}", string.Join(", ", invalidMappingSupplierNames)));
+                    invalidMappingSuppliers.Add(string.Format("'{0}'", carrierAccountManager.GetCarrierAccountName(supplierId)));
+                }
+
+                validationMessages.Add(string.Format("Invalid Mappings for Suppliers: {0}", string.Join(", ", invalidMappingSuppliers)));
             }
 
             context.ValidationMessages = validationMessages;

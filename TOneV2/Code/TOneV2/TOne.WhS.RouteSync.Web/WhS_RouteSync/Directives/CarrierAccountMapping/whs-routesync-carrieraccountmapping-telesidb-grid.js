@@ -57,11 +57,11 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
                     if (supplierMappingValue.length == oneSupplierMappingLength)
                         return null;
 
-                    var useTwoSuppliersMapping = context.getUseTwoSuppliersMapping();
-                    if (useTwoSuppliersMapping && supplierMappingValue.length == (2 * oneSupplierMappingLength + mappingSeparator.length)) {
-                        var supplierMappingValues = supplierMappingValue.split(mappingSeparator);
-                        if (supplierMappingValues.length == 2) {
+                    var supplierMappingValues = supplierMappingValue.split(mappingSeparator);
+                    var supplierMappingWithoutSeparatorsLength = supplierMappingValue.length - (mappingSeparator.length * (supplierMappingValues.length - 1));
 
+                    if (supplierMappingWithoutSeparatorsLength % oneSupplierMappingLength == 0) {
+                        if (supplierMappingValues.length >= 2) {
                             var isValid = true;
 
                             for (var index = 0; index < supplierMappingValues.length; index++) {

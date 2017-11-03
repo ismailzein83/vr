@@ -61,9 +61,9 @@
 
                         if (telesIdbSWSync != undefined) {
                             $scope.scopeModel.mappingSeparator = telesIdbSWSync.MappingSeparator;
-                            $scope.scopeModel.numberOfOptions = telesIdbSWSync.NumberOfOptions;
-                            $scope.scopeModel.useTwoSuppliersMapping = telesIdbSWSync.UseTwoSuppliersMapping;
+                            $scope.scopeModel.numberOfMappings = telesIdbSWSync.NumberOfMappings;
                             $scope.scopeModel.supplierOptionsSeparator = telesIdbSWSync.SupplierOptionsSeparator;
+                            $scope.scopeModel.numberOfOptions = telesIdbSWSync.NumberOfOptions;
                             idbDataManager = telesIdbSWSync.DataManager;
                             carrierMappings = telesIdbSWSync.CarrierMappings;
                         }
@@ -84,9 +84,9 @@
                         $type: "TOne.WhS.RouteSync.TelesIdb.TelesIdbSWSync, TOne.WhS.RouteSync.TelesIdb",
                         DataManager: idbDataManagerSettingsDirectiveAPI.getData(),
                         MappingSeparator: $scope.scopeModel.mappingSeparator,
-                        NumberOfOptions: $scope.scopeModel.numberOfOptions,
-                        UseTwoSuppliersMapping: $scope.scopeModel.useTwoSuppliersMapping,
+                        NumberOfMappings: $scope.scopeModel.numberOfMappings,
                         SupplierOptionsSeparator: $scope.scopeModel.supplierOptionsSeparator,
+                        NumberOfOptions: $scope.scopeModel.numberOfOptions,
                         CarrierMappings: telesIdbCarrierAccountMappingGridAPI.getData(),
                     };
                     return data;
@@ -128,9 +128,6 @@
 
             function buildContext() {
                 var context = {
-                    getUseTwoSuppliersMapping: function () {
-                        return $scope.scopeModel.useTwoSuppliersMapping;
-                    },
                     getMappingSeparator: function () {
                         return $scope.scopeModel.mappingSeparator;
                     }
