@@ -472,7 +472,7 @@ namespace Vanrise.Common
 
         public static T CastWithValidateStruct<T>(this Object obj, string objectName) where T : struct
         {
-            if(!(obj is T))
+            if (!(obj is T))
                 throw new Exception(String.Format("{0} '{1}' is not of type {2}. it is of type {3}", objectName, obj, typeof(T), obj.GetType()));
             T castedObject = (T)obj;
             return castedObject;
@@ -481,6 +481,70 @@ namespace Vanrise.Common
         public static void SkipBytes(this Stream stream, int numberOfBytes)
         {
             stream.Seek(numberOfBytes, SeekOrigin.Current);
+        }
+
+        public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (selector == null) throw new ArgumentNullException("selector");
+            if (comparer == null) throw new ArgumentNullException("comparer");
+            using (var sourceIterator = source.GetEnumerator())
+            {
+                if (!sourceIterator.MoveNext())
+                {
+                    throw new InvalidOperationException("Sequence contains no elements");
+                }
+                var min = sourceIterator.Current;
+                var minKey = selector(min);
+                while (sourceIterator.MoveNext())
+                {
+                    var candidate = sourceIterator.Current;
+                    var candidateProjected = selector(candidate);
+                    if (comparer.Compare(candidateProjected, minKey) < 0)
+                    {
+                        min = candidate;
+                        minKey = candidateProjected;
+                    }
+                }
+                return min;
+            }
+        }
+
+        public static TSource MinBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        {
+            return source.MinBy(selector, Comparer<TKey>.Default);
+        }
+
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IComparer<TKey> comparer)
+        {
+            if (source == null) throw new ArgumentNullException("source");
+            if (selector == null) throw new ArgumentNullException("selector");
+            if (comparer == null) throw new ArgumentNullException("comparer");
+            using (var sourceIterator = source.GetEnumerator())
+            {
+                if (!sourceIterator.MoveNext())
+                {
+                    throw new InvalidOperationException("Sequence contains no elements");
+                }
+                var max = sourceIterator.Current;
+                var maxKey = selector(max);
+                while (sourceIterator.MoveNext())
+                {
+                    var candidate = sourceIterator.Current;
+                    var candidateProjected = selector(candidate);
+                    if (comparer.Compare(candidateProjected, maxKey) > 0)
+                    {
+                        max = candidate;
+                        maxKey = candidateProjected;
+                    }
+                }
+                return max;
+            }
+        }
+
+        public static TSource MaxBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        {
+            return source.MaxBy(selector, Comparer<TKey>.Default);
         }
 
         #endregion
@@ -495,5 +559,6 @@ namespace Vanrise.Common
         }
 
         #endregion
+        
     }
 }

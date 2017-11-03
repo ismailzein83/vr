@@ -129,6 +129,7 @@ namespace Vanrise.GenericData.Transformation
                 using System.IO;
                 using System.Data;
                 using System.Linq;
+                using Vanrise.Common;
 
                 namespace #NAMESPACE#
                 {
