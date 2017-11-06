@@ -24,7 +24,10 @@
     [called_last_ci]                  INT              NULL,
     [intermediate_charging_indicator] INT              NULL,
     [intermediate_record_number]      INT              NULL,
-    [global_call_reference]           NVARCHAR (50)    NULL);
+    [global_call_reference]           NVARCHAR (50)    NULL,
+    [cause_for_termination]           INT              NULL);
+
+
 
 
 
