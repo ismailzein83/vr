@@ -261,6 +261,10 @@
                 $scope.scopeModel.process.Status = response.StatusDescription;
                 bpInstanceStatusValue = response.Status;
 
+                if (context != undefined && context.automaticCloseWhenCompleted && response.Status == BPInstanceStatusEnum.Completed.value) {
+                    $scope.modalContext.closeModal();
+                }
+
                 if (response.Status == BPInstanceStatusEnum.Completed.value && completionViewURL != undefined)
                     $scope.scopeModel.showCompletionViewLink = true;
 
