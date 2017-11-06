@@ -991,6 +991,9 @@ when not matched by target then
 end
 
 delete [genericdata].[BusinessEntityDefinition] where ID = '4652ABE7-81F7-4129-A222-31933747018D' -- WhS_BE_SwitchReleaseCode
+
+DELETE	[genericdata].[BusinessEntityDefinition]
+WHERE   Settings LIKE '%TOne.WhS.AccountBalance.Business.FinancialAccountBESettings%'
 --[genericdata].[BusinessEntityDefinition]------------------------------------------------------------
 begin
 set nocount on;
