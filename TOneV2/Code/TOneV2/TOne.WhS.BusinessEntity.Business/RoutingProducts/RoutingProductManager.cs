@@ -141,7 +141,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     !currentRoutingProduct.Settings.CheckIfDefaultServiceIdsAreSame(routingProduct.Settings)||
                     !currentRoutingProduct.Settings.CheckIfZonesAreSame(routingProduct.Settings) ||
                     !currentRoutingProduct.Settings.CheckIfZoneServicesAreSame(routingProduct.Settings))
-                    throw new Vanrise.Entities.VRBusinessException(string.Format("Cannot edit Routing Product '{0}' because it is is use.", routingProduct.Name));
+                    throw new Vanrise.Entities.VRBusinessException(string.Format("Cannot edit Routing Product '{0}' because it is in use.", routingProduct.Name));
             }
             
             ValidateRoutingProductToEdit(routingProduct);
