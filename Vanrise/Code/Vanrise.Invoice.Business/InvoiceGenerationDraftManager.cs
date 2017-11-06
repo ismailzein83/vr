@@ -25,6 +25,7 @@ namespace Vanrise.Invoice.Business
             var invoiceTypePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
 
             PartnerGroupContext partnerGroupContext = new PartnerGroupContext() { InvoiceTypeId = query.InvoiceTypeId };
+            PartnerManager partnerManager = new PartnerManager();
 
             IEnumerable<string> partnerIds;
             if (query.PartnerGroup != null)
@@ -46,6 +47,17 @@ namespace Vanrise.Invoice.Business
             {
                 if (!IsStatusFilterMatching(query.InvoiceTypeId, partnerId, query.EffectiveDate, query.IsEffectiveInFuture, query.Status, now))
                     continue;
+
+                if (query.IsAutomatic)
+                {
+                    var partnerSetting = partnerManager.GetInvoicePartnerSetting(query.InvoiceTypeId, partnerId);
+                    if (partnerSetting == null || partnerSetting.InvoiceSetting == null)
+                        continue;
+
+                    AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceSettingPart>(new InvoicePartnerSettingPartContext() { InvoiceSettingId = partnerSetting.InvoiceSetting.InvoiceSettingId, InvoiceTypeId = query.InvoiceTypeId, PartnerId = partnerId });
+                    if (!automaticInvoiceSettingPart.IsEnabled)
+                        continue;
+                }
 
                 PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = partnerId };
                 var partnerName = invoiceTypePartnerManager.GetPartnerName(partnerNameManagerContext);
