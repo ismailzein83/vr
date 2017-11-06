@@ -680,10 +680,11 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                CarrierAccount updatedCA = this.GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
                 if (withTracking)
                 {
                     var carrierAccount = GetCarrierAccount(carrierAccountToEdit.CarrierAccountId);
-                    VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, cachedAccount);
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(CarrierAccountLoggableEntity.Instance, updatedCA);
                 }
                 if (previousActivationStatus != activationStatus)
                 {
@@ -692,7 +693,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     if (withTracking)
                     {
                         string actionDescription = string.Format("Status Changed from '{0}' to '{1}'", previousActivationStatus, activationStatus);
-                        VRActionLogger.Current.LogObjectCustomAction(CarrierAccountLoggableEntity.Instance, "Status Changed", true, cachedAccount, actionDescription);
+                        VRActionLogger.Current.LogObjectCustomAction(CarrierAccountLoggableEntity.Instance, "Status Changed", true, updatedCA, actionDescription);
                     }
                     VREventManager vrEventManager = new VREventManager();
                     vrEventManager.ExecuteEventHandlersAsync(new CarrierAccountStatusChangedEventPayload { CarrierAccountId = carrierAccountToEdit.CarrierAccountId });
