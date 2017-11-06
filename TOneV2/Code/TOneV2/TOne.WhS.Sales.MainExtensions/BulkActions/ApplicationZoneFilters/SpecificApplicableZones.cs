@@ -64,7 +64,8 @@ namespace TOne.WhS.Sales.MainExtensions
                             GetCurrentSellingProductZoneRP = getSellingProductZoneCurrentRP,
                             GetCurrentCustomerZoneRP = getCustomerZoneCurrentRP,
                             GetSellingProductZoneRate = getSellingProductZoneRate,
-                            GetCustomerZoneRate = getCustomerZoneRate
+                            GetCustomerZoneRate = getCustomerZoneRate,
+                            CountryBEDsByCountryId = countryBEDsByCountryId
                         };
                         if (UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))
                             applicableZoneIds.Add(saleZone.SaleZoneId);
