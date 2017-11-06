@@ -118,16 +118,66 @@
                 api.load = function (payload) {
                     var promises = [];
 
+                    var isEditMode;
+
                     if (payload != undefined) {
                         tableIds = payload.tableIds;
 
                         if (payload.widgetEntity != undefined) {
+                            isEditMode = true;
+
                             widgetEntity = payload.widgetEntity;
                             $scope.scopeModel.widgetTitle = widgetEntity.WidgetTitle;
                             $scope.scopeModel.selectedColumnWidth = UtilsService.getItemByVal($scope.scopeModel.columnWidth, widgetEntity.ColumnWidth, "value");
                             $scope.scopeModel.showTitle = widgetEntity.ShowTitle;
+                        }
 
+                        //Loading Table Selector 
+                        var tableSelectorLoadPromise = getTableSelectorLoadPromise();
+                        promises.push(tableSelectorLoadPromise);
+
+                        //Loading Widgets Selector
+                        var getWidgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
+                        promises.push(getWidgetsTemplateConfigsPromise);
+
+                        if (isEditMode) {
                             //Loading DirectiveWrapper
+                            var directiveWrapperLoadPromise = getDirectiveWrapperLoadPromise();
+                            promises.push(directiveWrapperLoadPromise);
+                        }
+
+                        function getTableSelectorLoadPromise() {
+                            var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                            tableSelectorReadyDeferred.promise.then(function () {
+
+                                var payLoadTableSelector = {
+                                    filter: { OnlySelectedIds: tableIds },
+                                    selectedIds: widgetEntity != undefined ? widgetEntity.AnalyticTableId : undefined
+                                };
+                                VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoadTableSelector, loadTableSelectorPromiseDeferred);
+                            });
+
+                            return loadTableSelectorPromiseDeferred.promise;
+                        }
+                        function getWidgetsTemplateConfigs() {
+                            return VR_Analytic_AnalyticConfigurationAPIService.GetRealTimeWidgetsTemplateConfigs().then(function (response) {
+                                if (selectorAPI != undefined) {
+                                    selectorAPI.clearDataSource();
+                                }
+
+                                if (response != null) {
+                                    for (var i = 0; i < response.length; i++) {
+                                        $scope.scopeModel.templateConfigs.push(response[i]);
+                                    }
+
+                                    if (widgetEntity != undefined) {
+                                        $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, widgetEntity.ConfigId, 'ExtensionConfigurationId');
+                                    }
+                                }
+                            });
+                        }
+                        function getDirectiveWrapperLoadPromise() {
                             var loadDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
                             directiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -140,22 +190,9 @@
                                 };
                                 VRUIUtilsService.callDirectiveLoad(directiveAPI, payloadDirective, loadDirectivePromiseDeferred);
                             });
-                            promises.push(loadDirectivePromiseDeferred.promise);
+
+                            return loadDirectivePromiseDeferred.promise;
                         }
-
-                        var loadTableSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
-                        tableSelectorReadyDeferred.promise.then(function () {
-
-                            var payLoadTableSelector = {
-                                filter: { OnlySelectedIds: tableIds },
-                                selectedIds: widgetEntity != undefined ? widgetEntity.AnalyticTableId : undefined
-                            };
-                            VRUIUtilsService.callDirectiveLoad(tableSelectorAPI, payLoadTableSelector, loadTableSelectorPromiseDeferred);
-                        });
-                        promises.push(loadTableSelectorPromiseDeferred.promise);
-
-                        var getWidgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
-                        promises.push(getWidgetsTemplateConfigsPromise);
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -183,23 +220,6 @@
                 }
             }
 
-            function getWidgetsTemplateConfigs() {
-                return VR_Analytic_AnalyticConfigurationAPIService.GetRealTimeWidgetsTemplateConfigs().then(function (response) {
-                    if (selectorAPI != undefined) {
-                        selectorAPI.clearDataSource();
-                    }
-
-                    if (response != null) {
-                        for (var i = 0; i < response.length; i++) {
-                            $scope.scopeModel.templateConfigs.push(response[i]);
-                        }
-
-                        if (widgetEntity != undefined) {
-                            $scope.scopeModel.selectedTemplateConfig = UtilsService.getItemByVal($scope.scopeModel.templateConfigs, widgetEntity.ConfigId, 'ExtensionConfigurationId');
-                        }
-                    }
-                });
-            }
             function defineColumnWidth() {
                 $scope.scopeModel.columnWidth = [];
                 for (var td in ColumnWidthEnum)
