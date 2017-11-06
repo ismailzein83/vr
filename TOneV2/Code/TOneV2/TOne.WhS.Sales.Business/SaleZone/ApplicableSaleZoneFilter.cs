@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
+using TOne.WhS.Sales.Business.Reader;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
@@ -55,6 +56,7 @@ namespace TOne.WhS.Sales.Business
 
         private class CustomData
         {
+            private SaleEntityZoneRateLocator _currentRateLocator;
             private SaleEntityZoneRateLocator _futureRateLocator;
             private SaleEntityZoneRoutingProductLocator _routingProductLocator;
 
@@ -79,6 +81,8 @@ namespace TOne.WhS.Sales.Business
                 SetRateBEDs(ownerType, ownerId);
                 SetRPRouteDetails();
                 SetClosedCountryIds(ownerType, ownerId, effectiveOn);
+
+                SetCurrentRateLocator(ownerType, ownerId, effectiveOn);
             }
 
             public SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId)
@@ -93,12 +97,12 @@ namespace TOne.WhS.Sales.Business
 
             public SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate)
             {
-                return _futureRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId);
+                return (getFutureRate) ? _futureRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId) : _currentRateLocator.GetSellingProductZoneRate(sellingProductId, zoneId);
             }
 
             public SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate)
             {
-                return _futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+                return (getFutureRate) ? _futureRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId) : _currentRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
             }
 
             public DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue)
@@ -140,6 +144,19 @@ namespace TOne.WhS.Sales.Business
                 {
                     Changes draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
                     ClosedCountryIds = UtilitiesManager.GetClosedCountryIds(ownerId, draft, effectiveOn);
+                }
+            }
+
+            private void SetCurrentRateLocator(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
+            {
+                if (ownerType == SalePriceListOwnerType.SellingProduct)
+                    _currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveOn));
+                else
+                {
+                    int sellingProductId = new CarrierAccountManager().GetSellingProductId(ownerId);
+                    IEnumerable<SaleZone> saleZones = new RatePlanManager().GetSaleZones(ownerType, ownerId, effectiveOn, true);
+                    Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones, CountryBEDsByCountryId);
+                    _currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadRPChanges(ownerId, sellingProductId, zoneEffectiveDatesByZoneId.Keys, effectiveOn, zoneEffectiveDatesByZoneId));
                 }
             }
         }
