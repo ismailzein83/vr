@@ -86,14 +86,14 @@
                             ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value,
                         };
 
-                        loadDimensions(input).then(function (response) {
+                        loadDimensions(input).then(function () {
+
+                            var recordFilterDirectivePayload = {};
+                            recordFilterDirectivePayload.context = buildContext();
 
                             var setLoader = function (value) {
                                 $scope.scopeModel.isRecordFilterDirectiveLoading = value;
                             };
-                            var recordFilterDirectivePayload = {};
-                            recordFilterDirectivePayload.context = buildContext();
-
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterDirectivePayload, setLoader, tableSelectorSelectionChanged);
                         });
                     }
@@ -107,8 +107,8 @@
 
 
                 api.load = function (payload) {
-
                     var promises = [];
+
                     if (payload != undefined) {
                         tableIds = payload.tableIds;
 

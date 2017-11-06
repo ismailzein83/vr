@@ -11,7 +11,7 @@
             </vr-columns>
 
             <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">
-                <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" 
+                <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady"
                                             selectedvalues="scopeModel.selectedTable"
                                             onselectitem="scopeModel.onSelectionTableChanged"
                                             onselectionchanged="scopeModel.onAnalyticTableSelectorChanged"
@@ -39,10 +39,10 @@
         <vr-directivewrapper directive="scopeModel.selectedTemplateConfig.Editor" on-ready="scopeModel.onDirectiveReady" normal-col-num="{{searchSettingsCtrl.normalColNum}}" isrequired="searchSettingsCtrl.isrequired" customvalidate="searchSettingsCtrl.customvalidate" type="searchSettingsCtrl.type"></vr-directivewrapper>
     </vr-tab>
     <vr-tab header="'Filters'">
-        <vr-section title="Record Filter" vr-loader="scopeModel.isRecordFilterDirectiveLoading" collapsible>
+        <vr-section title="Record Filter" ng-show="scopeModel.selectedTable != undefined" vr-loader="scopeModel.isRecordFilterDirectiveLoading" collapsible>
             <vr-row>
                 <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
             </vr-row>
-        </vr-section>
+        </vr-section> 
     </vr-tab>
 </vr-tabs>
