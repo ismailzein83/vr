@@ -259,7 +259,7 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                         bulkAction = bulkActionContext.getSelectedBulkAction();
                 }
 
-
+                //The CountrySoldToCustomerFilter must be executed first because the others depend on it
                 if (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                     var countrySoldToCustomerFilter = {
                         $type: 'TOne.WhS.Sales.Business.CountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
@@ -340,15 +340,7 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                     if (bulkActionContext.getSelectedBulkAction != undefined)
                         bulkAction = bulkActionContext.getSelectedBulkAction();
                 }
-
-                var applicableSaleZoneFilter = {
-                    $type: 'TOne.WhS.Sales.Business.ApplicableSaleZoneFilter, TOne.WhS.Sales.Business',
-                    OwnerType: ownerType,
-                    OwnerId: ownerId,
-                    ActionType: bulkAction
-                };
-                saleZoneSelectorFilters.push(applicableSaleZoneFilter);
-
+                //The SaleZoneCountrySoldToCustomerFilter must be executed first because the others depend on it
                 if (ownerType != undefined && ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                     var countrySoldToCustomerFilter = {
                         $type: 'TOne.WhS.Sales.Business.SaleZoneCountrySoldToCustomerFilter, TOne.WhS.Sales.Business',
@@ -358,6 +350,13 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                     };
                     saleZoneSelectorFilters.push(countrySoldToCustomerFilter);
                 }
+                  var applicableSaleZoneFilter = {
+                    $type: 'TOne.WhS.Sales.Business.ApplicableSaleZoneFilter, TOne.WhS.Sales.Business',
+                        OwnerType: ownerType,
+                        OwnerId: ownerId,
+                        ActionType: bulkAction
+                };
+                saleZoneSelectorFilters.push(applicableSaleZoneFilter);
 
                 return saleZoneSelectorFilters;
             }
