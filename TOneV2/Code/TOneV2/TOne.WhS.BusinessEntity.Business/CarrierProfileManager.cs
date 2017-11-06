@@ -10,6 +10,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -487,6 +488,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 Name = carrierProfile.Name,
             };
         }
+
         private CarrierProfileDetail CarrierProfileDetailMapper(CarrierProfile carrierProfile)
         {
             CarrierProfileDetail carrierProfileDetail = new CarrierProfileDetail();
@@ -495,7 +497,23 @@ namespace TOne.WhS.BusinessEntity.Business
             CountryManager countryManager = new CountryManager();
             if (carrierProfile.Settings != null && carrierProfile.Settings.CountryId.HasValue)
                 carrierProfileDetail.CountryName = countryManager.GetCountryName(carrierProfile.Settings.CountryId.Value);
+         
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
 
+            var financialAccountsData = financialAccountManager.GetEffectiveFinancialAccountsDataByCarrierProfileId(carrierProfile.CarrierProfileId, DateTime.Now);
+            if (financialAccountsData != null && financialAccountsData.Count() > 0)
+            {
+                var financialAccountData = financialAccountsData.FindRecord(x => x.FinancialAccount.CarrierProfileId.HasValue);
+                if(financialAccountData != null)
+                {
+                    carrierProfileDetail.InvoiceSettingName = financialAccountManager.GetFinancialInvoiceSettingName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId, financialAccountData.FinancialAccount.FinancialAccountId.ToString(), financialAccountData.InvoiceData.InvoiceTypeId);
+                    carrierProfileDetail.InvoiceTypeDescription = "Profile";
+
+                }else
+                {
+                    carrierProfileDetail.InvoiceTypeDescription = "Account";
+                }
+            }
             return carrierProfileDetail;
         }
         #endregion

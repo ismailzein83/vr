@@ -1417,20 +1417,20 @@ namespace TOne.WhS.BusinessEntity.Business
                 carrierAccountDetail.Services = carrierAccount.SupplierSettings.DefaultServices.Select(x => x.ServiceId).ToList();
                 carrierAccountDetail.ServicesNames = ZoneServiceConfigManager.GetZoneServicesNames(carrierAccountDetail.Services);
             }
-            //WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
-            //string invoiceSettingName;
-            //string invoiceTypeName;
-            //if (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange)
-            //{
-            //    financialAccountManager.GetCustInvoiceData(carrierAccount.CarrierAccountId, DateTime.Now, out invoiceSettingName, out invoiceTypeName);
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+            string invoiceSettingName;
+            string invoiceTypeName;
+            if (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange)
+            {
+                financialAccountManager.GetCustInvoiceData(carrierAccount.CarrierAccountId, DateTime.Now, out invoiceSettingName, out invoiceTypeName);
 
-            //}
-            //else
-            //{
-            //    financialAccountManager.GetSuppInvoiceData(carrierAccount.CarrierAccountId, DateTime.Now, out invoiceSettingName, out invoiceTypeName);
-            //}
-            //carrierAccountDetail.InvoiceSettingName = invoiceSettingName;
-            //carrierAccountDetail.InvoiceTypeDescription = invoiceTypeName;
+            }
+            else
+            {
+                financialAccountManager.GetSuppInvoiceData(carrierAccount.CarrierAccountId, DateTime.Now, out invoiceSettingName, out invoiceTypeName);
+            }
+            carrierAccountDetail.InvoiceSettingName = invoiceSettingName;
+            carrierAccountDetail.InvoiceTypeDescription = invoiceTypeName;
             return carrierAccountDetail;
         }
 

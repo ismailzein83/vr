@@ -192,75 +192,75 @@ namespace TOne.WhS.BusinessEntity.Business
             carrierFinancialAccountData.ThrowIfNull("carrierFinancialAccountData", financialAccountId);
             return carrierFinancialAccountData;
         }
-        //public void GetCustInvoiceData(int customerAccountId, DateTime effectiveOn, out string invoiceSettingName, out string invoiceTypeName)
-        //{
-        //    invoiceTypeName = null;
-        //    invoiceSettingName = null;
-        //    var financialAccounts = GetFinancialAccountsByCarrierAccountId(customerAccountId);
-        //    if (financialAccounts != null)
-        //    {
-        //        foreach (var financialAccount in financialAccounts)
-        //        {
-        //            if (financialAccount.IsEffective(effectiveOn))
-        //            {
-        //                WHSCarrierFinancialAccountData financialAccountData;
-        //                if (TryCreateCustomerFinancialAccountData(financialAccount, out  financialAccountData))
-        //                {
-        //                    if (financialAccountData.InvoiceData != null)
-        //                    {
-        //                        invoiceTypeName = new InvoiceTypeManager().GetInvoiceTypeName(financialAccountData.InvoiceData.InvoiceTypeId);
-        //                        invoiceSettingName = GetFinancialInvoiceSettingName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId, financialAccountData.FinancialAccount.FinancialAccountId.ToString(), financialAccountData.InvoiceData.InvoiceTypeId);
-        //                    }
-        //                }
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
-        //public void GetSuppInvoiceData(int supplierAccountId, DateTime effectiveOn, out string invoiceSettingName, out string invoiceTypeName)
-        //{
-        //    invoiceTypeName = null;
-        //    invoiceSettingName = null;
-        //    var financialAccounts = GetFinancialAccountsByCarrierAccountId(supplierAccountId);
-        //    if (financialAccounts != null)
-        //    {
-        //        foreach (var financialAccount in financialAccounts)
-        //        {
-        //            if (financialAccount.IsEffective(effectiveOn))
-        //            {
-        //                WHSCarrierFinancialAccountData financialAccountData;
-        //                if (TryCreateSupplierFinancialAccountData(financialAccount, out  financialAccountData))
-        //                {
-        //                    if (financialAccountData.InvoiceData != null)
-        //                    {
-        //                        invoiceTypeName = new InvoiceTypeManager().GetInvoiceTypeName(financialAccountData.InvoiceData.InvoiceTypeId);
-        //                        invoiceSettingName = GetFinancialInvoiceSettingName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId, financialAccountData.FinancialAccount.FinancialAccountId.ToString(), financialAccountData.InvoiceData.InvoiceTypeId);
-        //                    }
-        //                }
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
+        public void GetCustInvoiceData(int customerAccountId, DateTime effectiveOn, out string invoiceSettingName, out string invoiceTypeName)
+        {
+            invoiceTypeName = null;
+            invoiceSettingName = null;
+            var financialAccounts = GetFinancialAccountsByCarrierAccountId(customerAccountId);
+            if (financialAccounts != null)
+            {
+                foreach (var financialAccount in financialAccounts)
+                {
+                    if (financialAccount.IsEffective(effectiveOn))
+                    {
+                        WHSCarrierFinancialAccountData financialAccountData;
+                        if (TryCreateCustomerFinancialAccountData(financialAccount, out  financialAccountData))
+                        {
+                            if (financialAccountData.InvoiceData != null)
+                            {
+                                invoiceTypeName = new InvoiceTypeManager().GetInvoiceTypeName(financialAccountData.InvoiceData.InvoiceTypeId);
+                                invoiceSettingName = GetFinancialInvoiceSettingName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId, financialAccountData.FinancialAccount.FinancialAccountId.ToString(), financialAccountData.InvoiceData.InvoiceTypeId);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        public void GetSuppInvoiceData(int supplierAccountId, DateTime effectiveOn, out string invoiceSettingName, out string invoiceTypeName)
+        {
+            invoiceTypeName = null;
+            invoiceSettingName = null;
+            var financialAccounts = GetFinancialAccountsByCarrierAccountId(supplierAccountId);
+            if (financialAccounts != null)
+            {
+                foreach (var financialAccount in financialAccounts)
+                {
+                    if (financialAccount.IsEffective(effectiveOn))
+                    {
+                        WHSCarrierFinancialAccountData financialAccountData;
+                        if (TryCreateSupplierFinancialAccountData(financialAccount, out  financialAccountData))
+                        {
+                            if (financialAccountData.InvoiceData != null)
+                            {
+                                invoiceTypeName = new InvoiceTypeManager().GetInvoiceTypeName(financialAccountData.InvoiceData.InvoiceTypeId);
+                                invoiceSettingName = GetFinancialInvoiceSettingName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId, financialAccountData.FinancialAccount.FinancialAccountId.ToString(), financialAccountData.InvoiceData.InvoiceTypeId);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
 
-        //private string GetFinancialInvoiceSettingName(Guid financialAccountDefinitionId, string financialAccountId,Guid invoiceTypeId)
-        //{
-        //    WHSFinancialAccountDefinitionManager financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
-        //    var financialAccountDefinitionSetting = financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
-        //    if (financialAccountDefinitionSetting.FinancialAccountInvoiceTypes != null && financialAccountDefinitionSetting.FinancialAccountInvoiceTypes.Count > 0)
-        //    {
-        //        foreach (var financialAccountInvoiceType in financialAccountDefinitionSetting.FinancialAccountInvoiceTypes)
-        //        {
-        //            if (financialAccountInvoiceType.InvoiceTypeId == invoiceTypeId)
-        //            {
-        //                var partnerInvoiceSetting = new PartnerInvoiceSettingManager().GetPartnerInvoiceSettingByPartnerId(financialAccountId, financialAccountInvoiceType.InvoiceTypeId);
-        //                if (partnerInvoiceSetting != null)
-        //                  return new InvoiceSettingManager().GetInvoiceSettingName(partnerInvoiceSetting.InvoiceSettingID);
-        //            }
-        //        }
-        //    }
-        //    return null;
-        //}
+        public string GetFinancialInvoiceSettingName(Guid financialAccountDefinitionId, string financialAccountId, Guid invoiceTypeId)
+        {
+            WHSFinancialAccountDefinitionManager financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
+            var financialAccountDefinitionSetting = financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountDefinitionId);
+            if (financialAccountDefinitionSetting.FinancialAccountInvoiceTypes != null && financialAccountDefinitionSetting.FinancialAccountInvoiceTypes.Count > 0)
+            {
+                foreach (var financialAccountInvoiceType in financialAccountDefinitionSetting.FinancialAccountInvoiceTypes)
+                {
+                    if (financialAccountInvoiceType.InvoiceTypeId == invoiceTypeId)
+                    {
+                        var partnerInvoiceSetting = new PartnerManager().GetInvoicePartnerSetting(financialAccountInvoiceType.InvoiceTypeId, financialAccountId);
+                        if (partnerInvoiceSetting != null)
+                            return new InvoiceSettingManager().GetInvoiceSettingName(partnerInvoiceSetting.InvoiceSetting.InvoiceSettingId);
+                    }
+                }
+            }
+            return null;
+        }
         public bool TryGetCustAccFinancialAccountData(int customerAccountId, DateTime effectiveOn, out WHSCarrierFinancialAccountData financialAccountData)
         {
             IOrderedEnumerable<WHSCarrierFinancialAccountData> carrierFinancialAccounts = GetCachedCustCarrierFinancialsByCarrAccId().GetRecord(customerAccountId);
@@ -371,7 +371,16 @@ namespace TOne.WhS.BusinessEntity.Business
             var financialAccounts = GetCachedFinancialAccounts();
             return financialAccounts.Values.FindAllRecords(x => x.CarrierProfileId.HasValue && x.CarrierProfileId.Value == carrierProfileId);
         }
-
+        public IEnumerable<WHSCarrierFinancialAccountData> GetEffectiveFinancialAccountsDataByCarrierProfileId(int carrierProfileId,DateTime effectiveDate)
+        {
+            var financialAccountsData =  GetFinancialAccountsDataByCarrierProfileId(carrierProfileId);
+            return financialAccountsData.FindAllRecords(x=>x.FinancialAccount.IsEffective(effectiveDate));
+        }
+        public IEnumerable<WHSCarrierFinancialAccountData> GetFinancialAccountsDataByCarrierProfileId(int carrierProfileId)
+        {
+            var financialAccountsData = GetCachedCustCarrierFinancialsByCarrProfId();
+            return financialAccountsData.GetRecord(carrierProfileId);
+        }
         public List<WHSFinancialAccount> GetFinancialAccountsByDefinitionId(Guid financialAccountDefinitionId)
         {
             return GetCachedFinancialAccountsByDefinitionId().GetRecord(financialAccountDefinitionId);
@@ -635,6 +644,8 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
+
+
         /// <summary>
         /// Used In DataTransformation
         /// </summary>
@@ -776,6 +787,44 @@ namespace TOne.WhS.BusinessEntity.Business
                  }
                  return carrierDataByFinancialAccountId;
              });
+        }
+
+        private Dictionary<int, IOrderedEnumerable<WHSCarrierFinancialAccountData>> GetCachedCustCarrierFinancialsByCarrProfId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCustCarrierFinancialsByCarrProfId",
+            () =>
+            {
+                Dictionary<int, List<WHSCarrierFinancialAccountData>> financialAccountsDataDict = new Dictionary<int, List<WHSCarrierFinancialAccountData>>();
+                Dictionary<int, WHSCarrierFinancialAccountData> customerFinancialAccountsData = GetCachedCustCarrierFinancialsByFinAccId();
+                if (customerFinancialAccountsData != null)
+                {
+                    foreach (var financialAccountData in customerFinancialAccountsData.Values)
+                    {
+                        if (financialAccountData.FinancialAccount.CarrierAccountId.HasValue)
+                        {
+                            var carrierProfileId = new CarrierAccountManager().GetCarrierProfileId(financialAccountData.FinancialAccount.CarrierAccountId.Value);
+                            if (carrierProfileId.HasValue)
+                            {
+                                financialAccountsDataDict.GetOrCreateItem(carrierProfileId.Value).Add(financialAccountData);
+                            }
+                        }
+                        else // so financialAccount.CarrierProfileId.HasValue = true
+                        {
+                            financialAccountsDataDict.GetOrCreateItem(financialAccountData.FinancialAccount.CarrierProfileId.Value).Add(financialAccountData);
+                            var customerAccounts = new CarrierAccountManager().GetCarriersByProfileId(financialAccountData.FinancialAccount.CarrierProfileId.Value, true, false);
+                            if (customerAccounts != null)
+                            {
+                                foreach (var customerAccount in customerAccounts)
+                                {
+                                    financialAccountsDataDict.GetOrCreateItem(customerAccount.CarrierProfileId).Add(financialAccountData);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return financialAccountsDataDict.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(financialAccountData => financialAccountData.FinancialAccount.BED));
+            });
         }
 
         private Dictionary<int, IOrderedEnumerable<WHSCarrierFinancialAccountData>> GetCachedCustCarrierFinancialsByCarrAccId()

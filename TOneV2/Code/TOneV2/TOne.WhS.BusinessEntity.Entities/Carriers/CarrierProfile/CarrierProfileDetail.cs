@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CarrierProfile Entity { get; set; }
 
         public String CountryName { get; set; }
-        public bool InvoiceByProfile { get; set; }
+        public string InvoiceTypeDescription { get; set; }
         public string InvoiceSettingName { get; set; }
     }
 }
