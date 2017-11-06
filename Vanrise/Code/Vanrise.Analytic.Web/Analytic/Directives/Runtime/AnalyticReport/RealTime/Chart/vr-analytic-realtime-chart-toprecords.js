@@ -5,8 +5,7 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
 
         var directiveDefinitionObject = {
             restrict: 'E',
-            scope:
-            {
+            scope: {
                 onReady: '=',
             },
             controller: function ($scope, $element, $attrs) {
@@ -23,16 +22,20 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
 
         function AnalyticTopRecordsChart($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
+            var fromTime;
+            var toTime;
+            var lastHours;
+
             ctrl.dimensions = [];
             ctrl.groupingDimensions = [];
             ctrl.measures = [];
             ctrl.dimensionsConfig = [];
+            ctrl.sortField = "";
+
             var directiveAPI = {};
             var chartReadyDeferred = UtilsService.createPromiseDeferred();
-            ctrl.sortField = "";
-            var fromTime;
-            var toTime;
-            var lastHours;
+
             function initializeController() {
 
                 ctrl.chartReady = function (api) {
@@ -41,7 +44,6 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
 
                     if (ctrl.onReady && typeof (ctrl.onReady) == 'function')
                         ctrl.onReady(getDirectiveAPI());
-
 
                     function getDirectiveAPI() {
 
@@ -55,12 +57,11 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                                 SortByColumnName: ctrl.sortField,
                                 Query: query
                             };
-                            return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput)
-                                .then(function (response) {
-   
-                                    renderCharts(response, payload.Settings.ChartType);
-                                    ctrl.showlaoder = false;
-                                });
+
+                            return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput).then(function (response) {
+                                renderCharts(response, payload.Settings.ChartType);
+                                ctrl.showlaoder = false;
+                            });
 
                             function renderCharts(response, chartType) {
                                 var chartData = new Array();
@@ -105,21 +106,21 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                         };
                         return directiveAPI;
                     }
-
                 };
-
             };
 
             function getQuery(payLoad) {
                 lastHours = payLoad.LastHours;
                 fromTime = payLoad.FromTime;
                 toTime = payLoad.ToTime;
+
                 ctrl.groupingDimensions.length = 0;
                 ctrl.measures.length = 0;
 
                 if (payLoad.Dimensions != undefined) {
                     ctrl.dimensions = payLoad.Dimensions;
                 }
+
                 if (payLoad.DimensionsConfig != undefined) {
                     ctrl.dimensionsConfig = payLoad.DimensionsConfig;
                 }
@@ -152,25 +153,29 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                         }
                     }
                 }
+
                 if (payLoad.GroupingDimensions != undefined) {
                     for (var i = 0; i < payLoad.GroupingDimensions.length; i++) {
                         ctrl.groupingDimensions.push(UtilsService.getItemByVal(ctrl.dimensions, payLoad.GroupingDimensions[i].DimensionName, 'Name'));
                     }
                 }
+
                 if (ctrl.groupingDimensions.length > 0)
                     ctrl.sortField = 'DimensionValues[0].Name';
                 else
                     ctrl.sortField = 'MeasureValues.' + ctrl.measures[0].MeasureName;
+
                 var queryFinalized = {
                     Filters: payLoad.DimensionFilters,
                     DimensionFields: UtilsService.getPropValuesFromArray(ctrl.groupingDimensions, 'Name'),
                     MeasureFields: UtilsService.getPropValuesFromArray(ctrl.measures, 'MeasureName'),
                     FromTime: fromTime,
                     LastHours: lastHours,
-                 //   ToTime: toTime,
+                    //ToTime: toTime,
                     FilterGroup: payLoad.FilterGroup,
                     TableId: payLoad.TableId
                 };
+
                 return queryFinalized;
             }
         }
