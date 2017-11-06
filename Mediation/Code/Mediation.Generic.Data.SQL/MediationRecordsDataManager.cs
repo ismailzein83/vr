@@ -57,7 +57,7 @@ namespace Mediation.Generic.Data.SQL
             ApplyMediationRecordToDB(preparedMediationRecords);
         }
 
-        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, long lastCommittedId, Action<string> onSessionIdLoaded)
+        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, long lastCommittedId, DateTime? sessionTimeout, Action<string> onSessionIdLoaded)
         {
             ExecuteReaderSP("[Mediation_Generic].[sp_MediationRecord_GetSessionIdByStatus]", (reader) =>
             {
@@ -65,7 +65,7 @@ namespace Mediation.Generic.Data.SQL
                 {
                     onSessionIdLoaded(MediationRecordSessionIdMapper(reader));
                 }
-            }, mediationDefinitionId, (short)status, lastCommittedId);
+            }, mediationDefinitionId, (short)status, lastCommittedId, sessionTimeout);
         }
 
         string MediationRecordSessionIdMapper(IDataReader reader)

@@ -176,11 +176,11 @@
             <mca:CSharpValue x:TypeArguments="mge:EventStatus">EventStatus.Stop</mca:CSharpValue>
           </InArgument>
         </mgba1:LoadMediationRecordsByStatus.EventStatus>
-        <mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
-          <InArgument x:TypeArguments="s:Guid">
-            <mca:CSharpValue x:TypeArguments="s:Guid">mediationDefinition.MediationDefinitionId</mca:CSharpValue>
+        <mgba1:LoadMediationRecordsByStatus.MediationDefinition>
+          <InArgument x:TypeArguments="mge:MediationDefinition">
+            <mca:CSharpValue x:TypeArguments="mge:MediationDefinition">mediationDefinition</mca:CSharpValue>
           </InArgument>
-        </mgba1:LoadMediationRecordsByStatus.MediationDefinitionId>
+        </mgba1:LoadMediationRecordsByStatus.MediationDefinition>
         <mgba1:LoadMediationRecordsByStatus.SessionIds>
           <OutArgument x:TypeArguments="vq:BaseQueue(mge:SessionIdsBatch)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(mge:SessionIdsBatch)">queueSessionIds</mca:CSharpReference>
@@ -304,7 +304,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0BDOlxURlNcTWVkaWF0aW9uXENvZGVcTWVkaWF0aW9uLkdlbmVyaWMuQlBcTWVkaWF0aW9uUHJvY2Vzcy54YW1sN0cDtAIOAgEBTQtNmQECAQJRBVGSAQMBtQNSBV0kAwGqA14FZCADAaQDZQVwLAMBmQNxBYsBDwMBhQOMAQWrAhACAQ2sAgWyAiACAQdRdFGPAQMBtgNaC1piAwGwA1ULVXMDAasDYQthlwEDAaUDbQttkgEDAZ8DaAtohgEDAZoDdAt0mAEDAZQDewmJARQDAYYDkQENkQGWAQIBOJcBDZcBlgECASqdAQ2dAXgCARyjAQ2jAYwBAgEOqAEHwgEsAwG+AsMBB90BKQMB9wHeAQf9ASwDAaIB/gEHqgISAgFGrwILrwJ7AgEIfAuIAR0DAYcDqwENqwFvAwH3ArABDbABYgMB6QK1AQ21AXIDAdsCugENugF7AwHNAr8BDb8BfQMBvwLLAQ3LAYsBAwGwAtUBDdUBcwMBogLQAQ3QAXUDAZQC2gEN2gF7AwGGAsYBDcYBbQMB+AHwAQ3wAYsBAwHpAesBDesBgwEDAdsB4QEN4QGAAQMBzQH1AQ31AXMDAb8B+gEN+gF+AwGxAeYBDeYBbQMBowH/AQmdAhsCAWSeAgmpAhICAUeGAQ+GAZQBAwGOA38RggEgAwGIA4ICD4IClAEDAZQBiQINmwIYAgFlpgIPpgKdAQIBVqECD6ECfgIBSIoCD5oCLAIBZpcCFZcCfgMBhQGNAhWNAnUCAXaSAhWSAocBAgFn</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0BDOlxURlNcTWVkaWF0aW9uXENvZGVcTWVkaWF0aW9uLkdlbmVyaWMuQlBcTWVkaWF0aW9uUHJvY2Vzcy54YW1sOEcDuQIOAgEBTQtNmQECAQJRBVGSAQMBwwNSBV0kAwG4A14FZCADAbIDZQVwLAMBpwNxBYsBDwMBkwOMAQWwAhACAQ2xAgW3AiACAQdRdFGPAQMBxANaC1piAwG+A1ULVXMDAbkDYQthlwEDAbMDbQttkgEDAa0DaAtohgEDAagDdAt0mAEDAaIDewmJARQDAZQDkQENkQGWAQIBOJcBDZcBlgECASqdAQ2dAXgCARyjAQ2jAYwBAgEOqAEHxwEsAwG+AsgBB+IBKQMB9wHjAQeCAiwDAaIBgwIHrwISAgFGtAILtAJ7AgEIfAuIAR0DAZUDqwENqwFvAwGFA7ABDbABYgMB9wK6AQ26AXIDAekCvwENvwF7AwHbAsQBDcQBfQMBzQK1AQ21AW0DAb8C0AEN0AGLAQMBsALaAQ3aAXMDAaIC1QEN1QF1AwGUAt8BDd8BewMBhgLLAQ3LAW0DAfgB9QEN9QGLAQMB6QHwAQ3wAYMBAwHbAeYBDeYBgAEDAc0B+gEN+gFzAwG/Af8BDf8BfgMBsQHrAQ3rAW0DAaMBhAIJogIbAgFkowIJrgISAgFHhgEPhgGUAQMBnAN/EYIBIAMBlgOHAg+HApQBAwGUAY4CDaACGAIBZasCD6sCnQECAVamAg+mAn4CAUiPAg+fAiwCAWacAhWcAn4DAYUBkgIVkgJ1AgF2lwIVlwKHAQIBZw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

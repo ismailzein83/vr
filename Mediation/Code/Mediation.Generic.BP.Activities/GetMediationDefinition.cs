@@ -25,6 +25,7 @@ namespace Mediation.Generic.BP.Activities
             var mediationDefinition = mediationDefinitionManager.GetMediationDefinition(mediationDefinitionId);
             mediationDefinition.ThrowIfNull("mediationDefinition", mediationDefinitionId);
             mediationDefinition.OutputHandlers.ThrowIfNull("mediationDefinition.OutputHandlers", mediationDefinitionId);
+            mediationDefinition.ParsedRecordIdentificationSetting.ThrowIfNull("mediationDefinition.ParsedRecordIdentificationSetting", mediationDefinitionId);
             MediationDefinition.Set(context, mediationDefinition);
         }
     }

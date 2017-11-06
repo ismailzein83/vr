@@ -61,6 +61,7 @@ namespace Mediation.Generic.BP.Activities
                               SessionRecords sessionRecords = recordsBySessionId.GetOrCreateItem(stagingRecord.SessionId,
                                   () => new SessionRecords { MinEventId = stagingRecord.EventId, Records = new List<MediationRecord>() });
                               sessionRecords.Records.Add(stagingRecord);
+                             
                               if (stagingRecord.EventId < sessionRecords.MinEventId)
                                   sessionRecords.MinEventId = stagingRecord.EventId;//MinEventId is required to ensure sequential processing before feeding any second stage mediation
                           }

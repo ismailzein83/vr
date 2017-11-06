@@ -16,7 +16,7 @@ namespace Mediation.Generic.BP.Activities
     {
         public EventStatus EventStatus { get; set; }
         public Guid DataRecordTypeId { get; set; }
-        public Guid MediationDefinitionId { get; set; }
+        public MediationDefinition MediationDefinition { get; set; }
         public BaseQueue<SessionIdsBatch> SessionIds { get; set; }
     }
     public sealed class LoadMediationRecordsByStatus : DependentAsyncActivity<LoadMediationRecordsByStatusInput>
@@ -28,7 +28,7 @@ namespace Mediation.Generic.BP.Activities
         public InArgument<Guid> DataRecordTypeId { get; set; }
 
         [RequiredArgument]
-        public InArgument<Guid> MediationDefinitionId { get; set; }
+        public InArgument<MediationDefinition> MediationDefinition { get; set; }
 
         [RequiredArgument]
         public OutArgument<BaseQueue<SessionIdsBatch>> SessionIds { get; set; }
@@ -39,13 +39,13 @@ namespace Mediation.Generic.BP.Activities
             dataManager.DataRecordTypeId = inputArgument.DataRecordTypeId;
             MediationRecordsManager manager = new MediationRecordsManager();
             SessionIdsBatch batch = new SessionIdsBatch();
-            long? lastCommittedId = new MediationCommittedIdManager().GetLastCommittedId(inputArgument.MediationDefinitionId);
+            long? lastCommittedId = new MediationCommittedIdManager().GetLastCommittedId(inputArgument.MediationDefinition.MediationDefinitionId);
 
             if (lastCommittedId.HasValue)
             {
                 handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Last Committed Id: {0}", lastCommittedId);
-
-                manager.GetMediationRecordsByStatus(inputArgument.MediationDefinitionId, inputArgument.EventStatus, inputArgument.DataRecordTypeId, lastCommittedId.Value, (sessionIdLoaded) =>
+                DateTime? sessionTimeout = inputArgument.MediationDefinition.ParsedRecordIdentificationSetting.TimeOutInterval.HasValue ? DateTime.Now - inputArgument.MediationDefinition.ParsedRecordIdentificationSetting.TimeOutInterval.Value : default(DateTime?);
+                manager.GetMediationRecordsByStatus(inputArgument.MediationDefinition.MediationDefinitionId, inputArgument.EventStatus, inputArgument.DataRecordTypeId, lastCommittedId.Value, sessionTimeout, (sessionIdLoaded) =>
                 {
                     batch.SessionIds.Add(sessionIdLoaded);
                     if (batch.SessionIds.Count >= 50000)
@@ -69,9 +69,9 @@ namespace Mediation.Generic.BP.Activities
             return new LoadMediationRecordsByStatusInput
             {
                 DataRecordTypeId = this.DataRecordTypeId.Get(context),
-                MediationDefinitionId = this.MediationDefinitionId.Get(context),
                 SessionIds = this.SessionIds.Get(context),
-                EventStatus = this.EventStatus.Get(context)
+                EventStatus = this.EventStatus.Get(context),
+                MediationDefinition = this.MediationDefinition.Get(context)
             };
         }
 

@@ -4192,6 +4192,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
+            parsers.Add("9E", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CauseForTermination",
+                    NumberType = NumberType.Int
+                }
+            });
+
             return parsers;
         }
         private Dictionary<string, HexTLVFieldParser> Get_A1_FieldParsers_Huawei_Iraq()
@@ -4444,6 +4453,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "CallReference",
                     NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("9B", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CauseForTermination",
+                    NumberType = NumberType.Int
                 }
             });
 
@@ -4939,6 +4957,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "CallReference",
                     NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("8C", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CauseForTermination",
+                    NumberType = NumberType.Int
                 }
             });
 
@@ -5591,6 +5618,15 @@ namespace Mediation.Runtime.DataParser
                 {
                     FieldName = "CallReference",
                     NumberType = NumberType.BigInt
+                }
+            });
+
+            parsers.Add("9E", new HexTLVFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "CauseForTermination",
+                    NumberType = NumberType.Int
                 }
             });
 

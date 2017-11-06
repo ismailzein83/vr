@@ -12,12 +12,12 @@ namespace Mediation.Generic.Business
     public class MediationRecordsManager
     {
 
-        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, Guid dataRecordTypeId, long lastCommittedId, Action<string> onSessionIdLoaded)
+        public void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, Guid dataRecordTypeId, long lastCommittedId, DateTime? sessionTimeout, Action<string> onSessionIdLoaded)
         {
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             IMediationRecordsDataManager dataManager = MediationGenericDataManagerFactory.GetDataManager<IMediationRecordsDataManager>();
             dataManager.DataRecordTypeId = dataRecordTypeId;
-            dataManager.GetMediationRecordsByStatus(mediationDefinitionId, status, lastCommittedId, onSessionIdLoaded);
+            dataManager.GetMediationRecordsByStatus(mediationDefinitionId, status, lastCommittedId, sessionTimeout, onSessionIdLoaded);
         }
         public IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds, Guid dataRecordTypeId, long lastCommittedId)
         {

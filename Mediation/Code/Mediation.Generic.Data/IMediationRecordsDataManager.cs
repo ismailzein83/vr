@@ -9,7 +9,7 @@ namespace Mediation.Generic.Data
     {
         void SaveMediationRecordsToDB(List<MediationRecord> mediationRecords);
 
-        void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, long lastCommittedId, Action<string> onSessionIdLoaded);
+        void GetMediationRecordsByStatus(Guid mediationDefinitionId, EventStatus status, long lastCommittedId, DateTime? sessionTimeout, Action<string> onSessionIdLoaded);
 
         IEnumerable<MediationRecord> GetMediationRecordsByIds(Guid mediationDefinitionId, IEnumerable<string> sessionIds, long lastCommittedId);
 
