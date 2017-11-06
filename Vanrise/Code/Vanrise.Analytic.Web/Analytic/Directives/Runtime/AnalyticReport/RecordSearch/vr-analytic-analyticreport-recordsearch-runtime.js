@@ -18,7 +18,6 @@
             controllerAs: "Ctrl",
             bindToController: true,
             templateUrl: "/Client/Modules/Analytic/Directives/Runtime/AnalyticReport/RecordSearch/Templates/RecordSearchAnalyticReportRuntimeTemplates.html"
-
         };
         function RecordSearchAnalyticReport($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
@@ -28,6 +27,12 @@
             var autoSearch;
             var itemActionSettings;
             var preDefinedFilter;
+
+            var fromDate;
+            var toDate;
+            var period;
+            var sourceName;
+
             var fields = [];
             var fieldTypes = [];
 
@@ -37,10 +42,7 @@
             var timeRangeReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var selectedDRSearchPageStorageSource = UtilsService.createPromiseDeferred();
-            var fromDate;
-            var toDate;
-            var period;
-            var sourceName;
+
             function initializeController() {
                 $scope.showSourceSelector = false;
                 $scope.filters = [];
@@ -61,8 +63,7 @@
                     if ($scope.selectedDRSearchPageStorageSource != undefined) {
                         if (selectedDRSearchPageStorageSource != undefined)
                             selectedDRSearchPageStorageSource.resolve();
-                        else
-                        {
+                        else {
                             $scope.isloadingFilter = true;
                             loadFields().then(function () {
                                 loadFilters().then(function () {
@@ -70,7 +71,7 @@
                                 });
                             });
                         }
-                       
+
                     }
 
                 };
@@ -108,28 +109,26 @@
                 $scope.validateTimeRange = function () {
                     return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
                 };
-
-                
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
 
+                    console.log(payload);
+
                     if (payload != undefined) {
                         settings = payload.settings;
                         autoSearch = payload.autoSearch;
                         itemActionSettings = payload.itemActionSettings;
 
-                        if (itemActionSettings != undefined)
-                        {
+                        if (itemActionSettings != undefined) {
                             fromDate = itemActionSettings.FromDate;
                             toDate = itemActionSettings.ToDate;
                             period = itemActionSettings.Period;
                             sourceName = itemActionSettings.SourceName;
                         }
-                        else
-                        {
+                        else {
                             preDefinedFilter = payload.preDefinedFilter;
                             if (preDefinedFilter != undefined) {
                                 fromDate = preDefinedFilter.FromDate;
@@ -177,12 +176,10 @@
                                     loadPromiseDeffer.resolve();
                                 }
                             });
-                            
+
                         });
-                        function buildRecordFilterGroupExpression()
-                        {
-                            if (filterObj != undefined)
-                            {
+                        function buildRecordFilterGroupExpression() {
+                            if (filterObj != undefined) {
                                 var buildRecordFilterGroupExpressionInput = {
                                     RecordFilterFieldInfosByFieldName: buildRecordFilterFieldInfosByFieldName(fields),
                                     FilterGroup: filterObj
@@ -193,12 +190,11 @@
                                 }).catch(function (error) {
                                     loadPromiseDeffer.reject(error);
                                 });
-                            }else
-                            {
+                            } else {
                                 loadPromiseDeffer.resolve();
                             }
                         }
-                        
+
                     }).catch(function (error) {
                         loadPromiseDeffer.reject(error);
                     });
@@ -210,8 +206,7 @@
                     });
                     return loadPromiseDeffer.promise;
                 };
-               
-               
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
@@ -226,15 +221,12 @@
                 });
             }
 
-
             function loadFilters() {
                 var filterPromises = [];
                 $scope.filters.length = 0;
-                if ($scope.selectedDRSearchPageStorageSource != undefined && settings != undefined && settings.Sources != undefined)
-                {
+                if ($scope.selectedDRSearchPageStorageSource != undefined && settings != undefined && settings.Sources != undefined) {
                     var source = UtilsService.getItemByVal(settings.Sources, $scope.selectedDRSearchPageStorageSource.Name, "Name");
-                    if (source != undefined && source.Filters != undefined)
-                    {
+                    if (source != undefined && source.Filters != undefined) {
                         for (var i = 0; i < source.Filters.length; i++) {
                             var filterConfiguration = source.Filters[i];
                             var filter = getFilter(filterConfiguration);
@@ -367,7 +359,8 @@
                         }
                     }
                 }
-               return {
+
+                return {
                     DataRecordStorageIds: $scope.selectedDRSearchPageStorageSource.RecordStorageIds,
                     FromTime: $scope.fromDate,
                     ToTime: $scope.toDate,
