@@ -34,7 +34,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("Cannot end the following countries before the date of today: {0}", string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("EEDs of the following countries are before today: {0}", string.Join(", ", invalidCountryNames));
                 return false;
             }
 
