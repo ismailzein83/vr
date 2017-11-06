@@ -82,6 +82,15 @@ namespace Vanrise.Rules.Data.SQL
             return GetItemsSP("rules.sp_RuleChanged_GetByType", RuleChangedMapper, ruleTypeId);
         }
 
+        public void DeleteRuleChanged(int ruleId, int ruleTypeId)
+        {
+            ExecuteNonQuerySP("rules.sp_RuleChanged_DeleteByRuleAndType", ruleId, ruleTypeId);
+        }
+
+        public void DeleteRulesChanged(int ruleTypeId)
+        {
+            ExecuteNonQuerySP("rules.sp_RuleChanged_DeleteByType",  ruleTypeId);
+        }
         #endregion
 
         #region Private Methods

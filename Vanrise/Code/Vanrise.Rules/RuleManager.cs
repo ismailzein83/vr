@@ -132,14 +132,14 @@ namespace Vanrise.Rules
                     AdditionalInformation additionalInformation = null;
                     string serializedRule = null;
 
-                    RuleChanged ruleChanged = this.GetRuleChanged(rule.RuleId, ruleTypeId);
+                    T existingRule = this.GetRule(rule.RuleId);
+                    RuleChangedData<T> ruleChanged = this.GetRuleChanged(rule.RuleId);
 
                     if (ruleChanged != null)
-                        additionalInformation = Vanrise.Common.Serializer.Deserialize<AdditionalInformation>(ruleChanged.AdditionalInformation);
+                        additionalInformation = ruleChanged.AdditionalInformation;
                     else
-                        serializedRule = Vanrise.Common.Serializer.Serialize(rule);
+                        serializedRule = Vanrise.Common.Serializer.Serialize(existingRule);
 
-                    T existingRule = this.GetRule(rule.RuleId);
                     rule.UpdateAdditionalInformation(existingRule, ref additionalInformation);
                     string serializedAdditionalInformation = Vanrise.Common.Serializer.Serialize(additionalInformation);
 
@@ -152,6 +152,56 @@ namespace Vanrise.Rules
                 }
             }
             return false;
+        }
+
+        public RuleChangedData<T> GetRuleChanged(int ruleId)
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            return RuleChangedDataMapper(ruleDataManager.GetRuleChanged(ruleId, GetRuleTypeId()));
+        }
+
+        public List<RuleChangedData<T>> GetRulesChanged()
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            List<RuleChanged> ruleChangedList = ruleDataManager.GetRulesChanged(GetRuleTypeId());
+            if (ruleChangedList == null)
+                return null;
+
+            List<RuleChangedData<T>> result = new List<RuleChangedData<T>>();
+            foreach (RuleChanged ruleChanged in ruleChangedList)
+            {
+                result.Add(RuleChangedDataMapper(ruleChanged));
+            }
+            return result;
+        }
+
+        public void DeleteRuleChanged(int ruleId)
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            ruleDataManager.DeleteRuleChanged(ruleId, GetRuleTypeId());
+        }
+
+        public void DeleteRulesChanged()
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            ruleDataManager.DeleteRulesChanged(GetRuleTypeId());
+        }
+
+        private RuleChangedData<T> RuleChangedDataMapper(RuleChanged ruleChanged)
+        {
+            if (ruleChanged == null)
+                return null;
+
+            return new RuleChangedData<T>()
+            {
+                ActionType = ruleChanged.ActionType,
+                AdditionalInformation = Vanrise.Common.Serializer.Deserialize<AdditionalInformation>(ruleChanged.AdditionalInformation),
+                CreatedTime = ruleChanged.CreatedTime,
+                InitialRule = Vanrise.Common.Serializer.Deserialize<T>(ruleChanged.InitialRule),
+                RuleChangedId = ruleChanged.RuleChangedId,
+                RuleId = ruleChanged.RuleId,
+                RuleTypeId = ruleChanged.RuleTypeId
+            };
         }
 
         public virtual bool ValidateBeforeUpdate(T rule)
@@ -280,18 +330,6 @@ namespace Vanrise.Rules
             }
 
             return ruleTypeId;
-        }
-
-        private RuleChanged GetRuleChanged(int ruleId, int ruleTypeId)
-        {
-            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            return ruleDataManager.GetRuleChanged(ruleId, ruleTypeId);
-        }
-
-        private List<RuleChanged> GetRulesChanged(int ruleTypeId)
-        {
-            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            return ruleDataManager.GetRulesChanged(ruleTypeId);
         }
 
         #endregion

@@ -24,5 +24,9 @@ namespace Vanrise.Rules.Data
         RuleChanged GetRuleChanged(int ruleId, int ruleTypeId);
 
         List<RuleChanged> GetRulesChanged(int ruleTypeId);
+
+        void DeleteRuleChanged(int ruleId, int ruleTypeId);
+
+        void DeleteRulesChanged(int ruleTypeId);
     }
 }
