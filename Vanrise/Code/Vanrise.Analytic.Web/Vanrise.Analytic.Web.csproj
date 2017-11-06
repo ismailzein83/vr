@@ -201,6 +201,7 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\SearchSettings\vr-analytic-realtime-searchsettings-selective.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Templates\RealTimeAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\vr-analytic-analyticreport-realtime-definition.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Widgets\Templates\RealTimeWidgetsSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Widgets\vr-analytic-realtime-widgets-selective.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\Templates\DataRecordSourceGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\vr-analytic-datarecordsource-grid.js" />
