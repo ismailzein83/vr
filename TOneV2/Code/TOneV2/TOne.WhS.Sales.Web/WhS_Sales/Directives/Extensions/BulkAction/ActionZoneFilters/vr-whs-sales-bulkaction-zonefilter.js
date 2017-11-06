@@ -204,7 +204,7 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                 bulkActionContext.onBulkActionChanged = function () {
                     $scope.scopeModel.gridDataSource.length = 0;
                     $scope.scopeModel.isLoading = true;
-                    UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadMultipleCountrySelector, loadSaleZoneSelector]).finally(function () {
+                    return UtilsService.waitMultipleAsyncOperations([loadCountrySelector, loadMultipleCountrySelector, loadSaleZoneSelector]).finally(function () {
                         $scope.scopeModel.isLoading = false;
                     });
                 };
@@ -259,13 +259,6 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                         bulkAction = bulkActionContext.getSelectedBulkAction();
                 }
 
-                var bulkActionApplicableToCountryFilter = {
-                    $type: 'TOne.WhS.Sales.Business.BulkActionApplicableToCountryFilter, TOne.WhS.Sales.Business',
-                    OwnerType: ownerType,
-                    OwnerId: ownerId,
-                    BulkAction: bulkAction
-                };
-                countrySelectorFilters.push(bulkActionApplicableToCountryFilter);
 
                 if (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                     var countrySoldToCustomerFilter = {
@@ -276,6 +269,14 @@ app.directive('vrWhsSalesBulkactionZonefilter', ['WhS_BE_SalePriceListOwnerTypeE
                     };
                     countrySelectorFilters.push(countrySoldToCustomerFilter);
                 }
+
+                var bulkActionApplicableToCountryFilter = {
+                    $type: 'TOne.WhS.Sales.Business.BulkActionApplicableToCountryFilter, TOne.WhS.Sales.Business',
+                    OwnerType: ownerType,
+                    OwnerId: ownerId,
+                    BulkAction: bulkAction
+                };
+                countrySelectorFilters.push(bulkActionApplicableToCountryFilter);
 
                 return countrySelectorFilters;
             }
