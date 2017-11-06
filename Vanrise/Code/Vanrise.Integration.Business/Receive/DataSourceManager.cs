@@ -118,8 +118,8 @@ namespace Vanrise.Integration.Business
 
                 if (dataSourceInsertActionSucc)
                 {
-                    var dataSourceDetail = GetDataSourceDetail(dataSourceObject.DataSourceId);
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    var dataSourceDetail = GetDataSourceDetail(dataSourceObject.DataSourceId); 
                     VRActionLogger.Current.TrackAndLogObjectAdded(DataSourceLoggableEntity.Instance, dataSourceDetail);
                     insertOperationOutput.Result = InsertOperationResult.Succeeded;
                     insertOperationOutput.InsertedObject = GetDataSourceDetail(dataSourceObject.DataSourceId);
@@ -148,8 +148,8 @@ namespace Vanrise.Integration.Business
             {
                 if (dataSourceUpdateActionSucc)
                 {
-                    var dataSourceDetail = GetDataSourceDetail(dataSourceObject.DataSourceId);
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    var dataSourceDetail = GetDataSourceDetail(dataSourceObject.DataSourceId);
                     VRActionLogger.Current.TrackAndLogObjectUpdated(DataSourceLoggableEntity.Instance, dataSourceDetail);
                     updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                     updateOperationOutput.UpdatedObject = GetDataSourceDetail(dataSourceObject.DataSourceId);
