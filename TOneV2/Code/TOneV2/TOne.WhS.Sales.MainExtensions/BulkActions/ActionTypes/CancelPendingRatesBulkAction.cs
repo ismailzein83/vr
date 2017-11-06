@@ -35,6 +35,9 @@ namespace TOne.WhS.Sales.MainExtensions
             if (context.OwnerType == SalePriceListOwnerType.SellingProduct)
                 throw new Vanrise.Entities.VRBusinessException("Cannot apply the cancel pending rates bulk action on the zones of a selling product");
 
+            if (context.SaleZone.EED.HasValue)
+                return false;
+
             DateTime today = DateTime.Today;
 
             if (context.SaleZone.BED > today)
@@ -47,12 +50,21 @@ namespace TOne.WhS.Sales.MainExtensions
             if (!_sellingProductId.HasValue)
                 _sellingProductId = new CarrierAccountManager().GetSellingProductId(context.OwnerId);
 
+            SaleEntityZoneRate effectiveRate = context.GetCustomerZoneRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, false);
+
+            if (effectiveRate == null)
+                throw new Vanrise.Entities.VRBusinessException(string.Format("The effective rate of zone '{0}' was not found", context.SaleZone.Name));
+
+            if (effectiveRate.Source == SalePriceListOwnerType.Customer)
+            {
+                if (!effectiveRate.Rate.EED.HasValue)
+                    return false;
+                else if (effectiveRate.Rate.EED.Value > today)
+                    return true;
+            }
+
             SaleEntityZoneRate futureRate = context.GetCustomerZoneRate(context.OwnerId, _sellingProductId.Value, context.SaleZone.SaleZoneId, true);
-
-            if (futureRate == null || futureRate.Rate == null || futureRate.Source == SalePriceListOwnerType.SellingProduct)
-                return false;
-
-            if (!futureRate.Rate.EED.HasValue && futureRate.Rate.BED <= today)
+            if (futureRate == null || futureRate.Source == SalePriceListOwnerType.SellingProduct)
                 return false;
 
             return true;
