@@ -1418,19 +1418,31 @@ namespace TOne.WhS.BusinessEntity.Business
                 carrierAccountDetail.ServicesNames = ZoneServiceConfigManager.GetZoneServicesNames(carrierAccountDetail.Services);
             }
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
-            string invoiceSettingName;
-            string invoiceTypeName;
+            WHSCarrierFinancialAccountData financialAccountData;
             if (carrierAccount.AccountType == CarrierAccountType.Customer || carrierAccount.AccountType == CarrierAccountType.Exchange)
             {
-                financialAccountManager.GetCustInvoiceData(carrierAccount.CarrierAccountId, DateTime.Now, out invoiceSettingName, out invoiceTypeName);
+                //financialAccountManager.GetCustInvoiceData(carrierAccount.CarrierAccountId, DateTime.Now, out invoiceSettingName, out invoiceTypeName);
+                financialAccountManager.TryGetCustAccFinancialAccountData(carrierAccount.CarrierAccountId, DateTime.Now, out financialAccountData);
 
             }
             else
             {
-                financialAccountManager.GetSuppInvoiceData(carrierAccount.CarrierAccountId, DateTime.Now, out invoiceSettingName, out invoiceTypeName);
+                financialAccountManager.TryGetSuppAccFinancialAccountData(carrierAccount.CarrierAccountId, DateTime.Now, out financialAccountData);
+                //financialAccountManager.GetSuppInvoiceData(carrierAccount.CarrierAccountId, DateTime.Now, out invoiceSettingName, out invoiceTypeName);
             }
-            carrierAccountDetail.InvoiceSettingName = invoiceSettingName;
-            carrierAccountDetail.InvoiceTypeDescription = invoiceTypeName;
+
+            if (financialAccountData != null)
+            {
+                if (financialAccountData.FinancialAccount.CarrierAccountId.HasValue)
+                {
+                    carrierAccountDetail.InvoiceTypeDescription = "Account";
+                }
+                else
+                {
+                    carrierAccountDetail.InvoiceTypeDescription = "Profile";
+                }
+                carrierAccountDetail.InvoiceSettingName = financialAccountManager.GetFinancialInvoiceSettingName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId, financialAccountData.FinancialAccount.FinancialAccountId.ToString(), financialAccountData.InvoiceData.InvoiceTypeId);
+            }
             return carrierAccountDetail;
         }
 
