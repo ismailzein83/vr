@@ -131,14 +131,22 @@ function (UtilsService, VRNotificationService, BusinessProcess_BPDefinitionAPISe
 
         function manipulateDataUpdated(response) {
             if (response != undefined) {
-                for (var i = 0; i < response.length; i++) {
-                    var bpDefinitionSummary = response[i];
-                    for (var j = 0; j < $scope.bfDefinitions.length; j++) {
-                        if ($scope.bfDefinitions[j].Entity.BPDefinitionID == bpDefinitionSummary.BPDefinitionID) {
-                            $scope.bfDefinitions[j].RunningProcessNumber = bpDefinitionSummary.RunningProcessNumber;
-                            $scope.bfDefinitions[j].LastProcessCreatedTime = bpDefinitionSummary.LastProcessCreatedTime;
+                for (var j = 0; j < $scope.bfDefinitions.length; j++) {
+                    var currentBPDefition = $scope.bfDefinitions[j];
+                    var isFound = false;
+                    for (var i = 0; i < response.length; i++) {
+                        var bpDefinitionSummary = response[i];
+
+                        if (currentBPDefition.Entity.BPDefinitionID == bpDefinitionSummary.BPDefinitionID) {
+                            currentBPDefition.RunningProcessNumber = bpDefinitionSummary.RunningProcessNumber;
+                            currentBPDefition.LastProcessCreatedTime = bpDefinitionSummary.LastProcessCreatedTime;
+                            isFound = true;
                             continue;
                         }
+                    }
+                    if (!isFound) {
+                        currentBPDefition.RunningProcessNumber = undefined;
+                        currentBPDefition.LastProcessCreatedTime = undefined;
                     }
                 }
             }
