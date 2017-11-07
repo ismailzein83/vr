@@ -7,6 +7,7 @@ using System.Web.Http;
 using Vanrise.Web.Base;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Entities;
+using Retail.BusinessEntity.Entities;
 
 namespace Retail.BusinessEntity.Web.Controllers
 {
@@ -18,9 +19,9 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         [HttpPost]
         [Route("GetAccountManagerAssignments")]
-        public List<AccountManagerAssignmentDetail> GetAccountManagerAssignments()
+        public object GetAccountManagerAssignments(Vanrise.Entities.DataRetrievalInput<AccountManagerAssignmentQuery> input)
         {
-            return _manager.GetAccountManagerAssignments();
+            return GetWebResponse(input, _manager.GetFilteredAccountManagerAssignments(input));
         }
         [HttpPost]
         [Route("AddAccountManagerAssignment")]
@@ -35,6 +36,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.UpdateAccountManagerAssignment(accountManagerAssignment);
 
+        }
+        [HttpPost]
+        [Route("GetAccountManagerAssignmentRuntimeEditor")]
+        public AccountManagerAssignmentRuntime GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentInput)
+        {
+            return _manager.GetAccountManagerAssignmentRuntimeEditor(accountManagerAssignmentInput);
         }
     }
 }

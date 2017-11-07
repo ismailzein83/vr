@@ -24,7 +24,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
     function SubViewsRuntimeSearch($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
         var accountManagerAssignmentGridAPI;
-        var subViewDefinitionEntity;
+        var gridPayload;
         
         function initializeController() {
            
@@ -38,8 +38,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.load = function (payload) {
-                        subViewDefinitionEntity = payload
-                        accountManagerAssignmentGridAPI.loadGrid(payload);
+                        gridPayload = payload;
+                        accountManagerAssignmentGridAPI.loadGrid(getGridPayload());
                     };
                     directiveAPI.getData = function () {
                        
@@ -52,13 +52,21 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                         accountManagerAssignmentGridAPI.onAccountManagerAssignmentAdded(accountManagerAssignment);
                     }
 
-                    Retail_BE_AccountManagerAssignmentService.addAccountManagerAssignments(subViewDefinitionEntity, onAccountManagerAssignmentAdded);
+                    Retail_BE_AccountManagerAssignmentService.addAccountManagerAssignments(gridPayload.accountManagerDefinitionId, gridPayload.accountManagerId, gridPayload.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId, onAccountManagerAssignmentAdded);
 
                 };
 
 
             };
-         
+            function getGridPayload() {
+                var payload = {
+                    accountManagerDefinitionId: gridPayload.accountManagerDefinitionId,
+                    accountManagerId: gridPayload.accountManagerDefinitionId,
+                    accountManagerSubViewDefinition: gridPayload.accountManagerSubViewDefinition
+
+                }
+                return payload;
+            }
         }
     }
     return directiveDefinitionObject;

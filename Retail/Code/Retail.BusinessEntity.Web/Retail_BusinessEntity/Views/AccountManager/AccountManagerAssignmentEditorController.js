@@ -2,9 +2,9 @@
 
     "use strict";
 
-    accountManagerAssignmentEditor.$inject = ["$scope", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService", "VR_AccountManager_AccountManagerDefinitionAPIService", "Retail_BE_AccountManagerAssignmentAPIService"];
+    accountManagerAssignmentEditor.$inject = ["$scope", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService",  "Retail_BE_AccountManagerAssignmentAPIService"];
 
-    function accountManagerAssignmentEditor($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_AccountManager_AccountManagerDefinitionAPIService, Retail_BE_AccountManagerAssignmentAPIService) {
+    function accountManagerAssignmentEditor($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentAPIService) {
         var isEditMode;
         var subViewDefinitionEntity
 
@@ -24,7 +24,6 @@
         loadParameters();
         defineScope();
         load();
-       
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -55,15 +54,15 @@
             }
         }
         function load() {
-            
+            $scope.scopeModel.isLoading = true;
                 getAccountManagerAssignmentRuntimeEditor().then(function () {
                     loadAllControls();
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                }).finally(function () {
+                    $scope.scopeModel.isLoading = false;
                 });
-          
-            $scope.scopeModel.isLoading = true;
-          
         }
-
         function loadAllControls() {
             function setTitle() {
                 if (!isEditMode)
@@ -75,7 +74,6 @@
                 var accountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 accountSelectorReadyDeferred.promise.then(function () {
-                        
                         var payload = {
                             AccountBEDefinitionId: accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings.AccountBEDefinitionId
                         };
@@ -87,6 +85,7 @@
                 return accountSelectorLoadDeferred.promise;
             }
             function loadStaticData() {
+                if (accountManagerAssignmentRuntime != undefined)
                 var accountManagerAssignment = accountManagerAssignmentRuntime.AccountManagerAssignment;
                 if (accountManagerAssignment != undefined) {
 
@@ -99,8 +98,6 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-
-            
         }
         function buildObjectFromScope() {
             var accountmanagerAssignment = {
@@ -108,7 +105,7 @@
                 AccountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId,
                 AccountManagerId: accountManagerId,
                 AccountId: accountSelectorAPI.getSelectedIds(),
-                Settings:"",
+                Settings: {},
                 BED: $scope.scopeModel.bed,
                 EED: $scope.scopeModel.eed
             }
@@ -120,10 +117,9 @@
                 AccountManagerDefinitionId: accountManagerDefinitionId,
                 AssignmentDefinitionId: accountManagerAssignementDefinitionId
             }
-            return VR_AccountManager_AccountManagerDefinitionAPIService.GetAccountManagerAssignmentRuntimeEditor(accountManagerRuntimeInput).then(function (response) {
+            return Retail_BE_AccountManagerAssignmentAPIService.GetAccountManagerAssignmentRuntimeEditor(accountManagerRuntimeInput).then(function (response) {
                 accountManagerAssignmentRuntime = response;
             });
-
         }
         function addAccountManagerAssignment() {
           
@@ -147,7 +143,7 @@
             return Retail_BE_AccountManagerAssignmentAPIService.UpdateAccountManagerAssignment(accountmanagerAssignment).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Account Manager Assignment", response)) {
                     if ($scope.onAccountManagerAssignmentUpdated != undefined)
-                    $scope.onAccountManagerAssignmentUpdated(response.UpdatedObject);
+                        $scope.onAccountManagerAssignmentUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -158,5 +154,5 @@
         }
       
     }
-    appControllers.controller("Retail_BE_AccountManagerAssignmentEditor", accountManagerAssignmentEditor);
+    appControllers.controller("Retail_BE_AccountManagerAssignmentEditorController", accountManagerAssignmentEditor);
 })(appControllers);

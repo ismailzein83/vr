@@ -7,8 +7,8 @@
     function AccountManagerAssignmentAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
         var controllerName = 'AccountManagerAssignment';
 
-        function GetAccountManagerAssignments() {
-            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountManagerAssignments"));
+        function GetAccountManagerAssignments(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountManagerAssignments"),input);
         }
         function AddAccountManagerAssignment(accountmanagerAssignment) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "AddAccountManagerAssignment"), accountmanagerAssignment);
@@ -16,10 +16,14 @@
         function UpdateAccountManagerAssignment(accountmanagerAssignment) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "UpdateAccountManagerAssignment"), accountmanagerAssignment);
         }
+        function GetAccountManagerAssignmentRuntimeEditor(accountManagerRuntimeInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountManagerAssignmentRuntimeEditor"), accountManagerRuntimeInput);
+        }
         return {
             GetAccountManagerAssignments: GetAccountManagerAssignments,
             AddAccountManagerAssignment: AddAccountManagerAssignment,
-            UpdateAccountManagerAssignment: UpdateAccountManagerAssignment
+            UpdateAccountManagerAssignment: UpdateAccountManagerAssignment,
+            GetAccountManagerAssignmentRuntimeEditor: GetAccountManagerAssignmentRuntimeEditor
         };
     }
 

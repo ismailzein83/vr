@@ -24,7 +24,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
     function AccountmanagrassignmentGrid($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
         var gridAPI;
-        var subViewEntity;
+        var searchPayload;
 
 
         function initializeController() {
@@ -37,10 +37,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
-                        subViewEntity = payload;
-                        return Retail_BE_AccountManagerAssignmentAPIService.GetAccountManagerAssignments().then(function (response) {
-                            $scope.accountManagerAssignments = response;
-                        });
+                        searchPayload = payload;
+                        var query = {};
+                        return gridAPI.retrieveData(query);
 
                     };
                     directiveAPI.onAccountManagerAssignmentAdded = function (accountManagerAssignment) {
@@ -52,6 +51,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                     return directiveAPI;
                 };
 
+            };
+            $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                return Retail_BE_AccountManagerAssignmentAPIService.GetAccountManagerAssignments(dataRetrievalInput)
+                   .then(function (response) {
+                       onResponseReady(response);
+                   })
+                   .catch(function (error) {
+                       VRNotificationService.notifyExceptionWithClose(error, $scope);
+                   });
             };
             defineMenuActions();
         }
@@ -67,7 +75,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                 gridAPI.itemUpdated(updatedItem);
             };
             var accountManagerAssignmentId = accountManagerAssignment.AccountManagerAssignementId;
-            Retail_BE_AccountManagerAssignmentService.editAccountManagerAssignment(accountManagerAssignmentId, onAccountManagerAssignmentUpdated, subViewEntity);
+            Retail_BE_AccountManagerAssignmentService.editAccountManagerAssignment(accountManagerAssignmentId, onAccountManagerAssignmentUpdated, searchPayload.accountManagerDefinitionId, searchPayload.accountManagerId, searchPayload.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId);
         }
     
 

@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.AccountManager.Entities
 {
-    public class AccountManagerSubViewsConfigs : ExtensionConfiguration
+    public class AccountManagerAssignmentConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "VR_AccountManager_AccountManagerSubviewDefinition";
+        public const string EXTENSION_TYPE = "VR_AccountManager_AccountManagerAssignmentDefinition";
         public string Editor { get; set; }
     }
 }

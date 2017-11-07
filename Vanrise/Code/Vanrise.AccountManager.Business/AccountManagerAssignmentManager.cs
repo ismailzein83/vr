@@ -19,18 +19,16 @@ namespace Vanrise.AccountManager.Business
         public AccountManagerAssignment GetAccountManagerAssignment(long accountManagerAssignmentId)
         {
             var allAccountManagerAssignments = this.GetCachedAccountManagerAssignments();
-            var accountManagerAssignment = allAccountManagerAssignments.GetRecord(accountManagerAssignmentId);
-
-            return accountManagerAssignment;
+            return allAccountManagerAssignments.GetRecord(accountManagerAssignmentId);
         }
         public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignments()
         {
              return this.GetCachedAccountManagerAssignments().Values;
         }
-        public bool TryAddAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment,out int insertedID,out string errorMessage)
+        public bool TryAddAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment, out int insertedID, out string errorMessage)
         {
             insertedID = -1;
-             errorMessage=null;
+            errorMessage = null;
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
             bool isAdded = dataManager.AddAccountManagerAssignment(accountManagerAssignment, out insertedID);
             if (isAdded)
@@ -42,7 +40,6 @@ namespace Vanrise.AccountManager.Business
         }
         public bool TryUpdateAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment, out string errorMessage)
         {
-            
             errorMessage = null;
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
             bool isUpdated = dataManager.UpdateAccountManagerAssignment(accountManagerAssignment);
@@ -52,13 +49,10 @@ namespace Vanrise.AccountManager.Business
             }
             return isUpdated;
         }
-
-      
         public void AssignAccountManagerToAccounts(AssignAccountManagerToAccountsInput input)
         {
             throw new NotImplementedException();
         }
-
         public void UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput input)
         {
             throw new NotImplementedException();
@@ -99,17 +93,6 @@ namespace Vanrise.AccountManager.Business
         }
         #endregion
         #region Mappers
-
-        private AccountManagerAssignmentDetail AccountManagerDetailMapper(Vanrise.AccountManager.Entities.AccountManagerAssignment accountManagerAssignment)
-        {
-            return new AccountManagerAssignmentDetail()
-            {
-                AccountManagerAssignementDefinitionId = accountManagerAssignment.AccountManagerAssignementDefinitionId,
-                BED = accountManagerAssignment.BED,
-                EED = accountManagerAssignment.EED
-            };
-
-        }
 
         #endregion
     }

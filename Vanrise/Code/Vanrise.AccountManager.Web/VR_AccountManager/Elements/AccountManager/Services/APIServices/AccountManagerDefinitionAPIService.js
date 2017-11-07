@@ -15,16 +15,11 @@
         function GetAccountManagerSubViewsDefinition(accountManagerDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAccountManagerSubViewsDefinition"), { accountManagerDefinitionId: accountManagerDefinitionId });
         }
-        function GetAccountManagerAssignmentRuntimeEditor(accountManagerRuntimeInput) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAccountManagerAssignmentRuntimeEditor"),  accountManagerRuntimeInput);
-        }
         return ({
             GetAccountManagerDefinition: GetAccountManagerDefinition,
             GetAssignmentDefinitionConfigs: GetAssignmentDefinitionConfigs,
             GetSubViewsDefinitionConfigs: GetSubViewsDefinitionConfigs,
             GetAccountManagerSubViewsDefinition: GetAccountManagerSubViewsDefinition,
-            GetAccountManagerAssignmentRuntimeEditor: GetAccountManagerAssignmentRuntimeEditor
-
         });
     }
     appControllers.service("VR_AccountManager_AccountManagerDefinitionAPIService", accountManagerDefinitionAPIService);

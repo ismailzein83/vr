@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountManager.Entities;
 
-namespace Retail.BusinessEntity.Entities.AccountManager
+namespace Retail.BusinessEntity.Entities
 {
-   public class AccountManagerAssignmentRuntime
+    public class AccountManagerAssignmentRuntime
     {
-       public AccountManagerAssignmentDefinition AccountManagrAssignmentDefinition;
-       public AccountManagerAssignment AccountManagerAssignment;
+        public AccountManagerAssignmentDefinition AccountManagrAssignmentDefinition { get; set; }
+        public AccountManagerAssignment AccountManagerAssignment { get; set; }
     }
 }

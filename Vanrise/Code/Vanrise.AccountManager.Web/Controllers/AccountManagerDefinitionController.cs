@@ -25,14 +25,14 @@ namespace Vanrise.AccountManager.Web.Controllers
         }
         [HttpGet]
         [Route("GetAssignmentDefinitionConfigs")]
-        public IEnumerable<AccountManagerAssignmentConfigs> GetAssignmentDefinitionConfigs()
+        public IEnumerable<AccountManagerAssignmentConfig> GetAssignmentDefinitionConfigs()
         {
             AccountManagerDefinitionManager manager = new AccountManagerDefinitionManager();
             return manager.GetAssignmentDefinitionConfigs();
         }
         [HttpGet]
         [Route("GetSubViewsDefinitionConfigs")]
-        public IEnumerable<AccountManagerSubViewsConfigs> GetSubViewsDefinitionConfigs()
+        public IEnumerable<AccountManagerSubViewsConfig> GetSubViewsDefinitionConfigs()
         {
             AccountManagerDefinitionManager manager = new AccountManagerDefinitionManager();
             return manager.GetSubViewsDefinitionConfigs();
@@ -44,12 +44,5 @@ namespace Vanrise.AccountManager.Web.Controllers
             AccountManagerDefinitionManager manager = new AccountManagerDefinitionManager();
             return manager.GetAccountManagerSubViewsDefinition(accountManagerDefinitionId);
         }
-        //[HttpPost]
-        //[Route("GetAccountManagerAssignmentRuntimeEditor")]
-        //public AccountManagerAssignmentRuntime GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentInput)
-        //{
-        //    AccountManagerDefinitionManager manager = new AccountManagerDefinitionManager();
-        //    return manager.GetAccountManagerAssignmentRuntimeEditor(accountManagerAssignmentInput);
-        //}
     }
 }

@@ -109,10 +109,10 @@
             function addDrillDownTab(accountManagerSubViewDefinition) {
 
                 var drillDownTab = {};
-
-                drillDownTab.title = accountManagerSubViewDefinition.Name;
-                drillDownTab.directive = accountManagerSubViewDefinition.Settings.RuntimeEditor;
-
+                if (accountManagerSubViewDefinition != undefined && accountManagerSubViewDefinition.Settings != undefined) {
+                    drillDownTab.title = accountManagerSubViewDefinition.Name;
+                    drillDownTab.directive = accountManagerSubViewDefinition.Settings.RuntimeEditor;
+                }
                 drillDownTab.loadDirective = function (accountManagerSubViewGridAPI, accountManager) {
                     accountManager.accountManagerSubViewGridAPI = accountManagerSubViewGridAPI;
 

@@ -6,11 +6,11 @@
 
     function AccountManagerAssignmentService(VRModalService, VRNotificationService) {
 
-        function addAccountManagerAssignments(subViewDefinitionEntity, onAccountManagerAssignmentAdded) {
+        function addAccountManagerAssignments(accountManagerDefinitionId, accountManagerId, accountManagerAssignementDefinitionId, onAccountManagerAssignmentAdded) {
             var parameters = {
-                accountManagerAssignementDefinitionId: subViewDefinitionEntity.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId,
-                accountManagerDefinitionId: subViewDefinitionEntity.accountManagerDefinitionId,
-                accountManagerId: subViewDefinitionEntity.accountManagerId,
+                accountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId,
+                accountManagerDefinitionId: accountManagerDefinitionId,
+                accountManagerId: accountManagerId,
             };
            
             var settings = {};
@@ -18,15 +18,15 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onAccountManagerAssignmentAdded = onAccountManagerAssignmentAdded;
             };
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountManager/AccountManagerAssignmentEditorTemplate.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountManager/AccountManagerAssignmentEditor.html', parameters, settings);
         }
-        function editAccountManagerAssignment(accountManagerAssignmentId, onAccountManagerAssignmentUpdated, subViewDefinitionEntity) {
+        function editAccountManagerAssignment(accountManagerAssignmentId, onAccountManagerAssignmentUpdated, accountManagerDefinitionId, accountManagerId, accountManagerAssignementDefinitionId) {
             var modalSettings = {
             };
             var parameters = {
-                accountManagerAssignementDefinitionId: subViewDefinitionEntity.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId,
-                accountManagerDefinitionId: subViewDefinitionEntity.accountManagerDefinitionId,
-                accountManagerId: subViewDefinitionEntity.accountManagerId,
+                accountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId,
+                accountManagerDefinitionId: accountManagerDefinitionId,
+                accountManagerId: accountManagerId,
                 accountManagerAssignmentId: accountManagerAssignmentId
             };
 
@@ -34,7 +34,7 @@
                 modalScope.onAccountManagerAssignmentUpdated = onAccountManagerAssignmentUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountManager/AccountManagerAssignmentEditorTemplate.html', parameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountManager/AccountManagerAssignmentEditor.html', parameters, modalSettings);
         }
 
         return {

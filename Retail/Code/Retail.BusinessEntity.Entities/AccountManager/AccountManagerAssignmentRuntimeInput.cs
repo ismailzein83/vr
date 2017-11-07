@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.Entities.AccountManager
+namespace Retail.BusinessEntity.Entities
 {
-   public class AccountManagerAssignmentRuntimeInput
+    public class AccountManagerAssignmentRuntimeInput
     {
-       public long? AccountManagerAssignementId;
-       public Guid AssignmentDefinitionId;
-       public Guid AccountManagerDefinitionId;
+        public long? AccountManagerAssignementId { get; set; }
+        public Guid AssignmentDefinitionId { get; set; }
+        public Guid AccountManagerDefinitionId { get; set; }
     }
 }
