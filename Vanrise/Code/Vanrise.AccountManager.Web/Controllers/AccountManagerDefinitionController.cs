@@ -45,12 +45,12 @@ namespace Vanrise.AccountManager.Web.Controllers
             AccountManagerDefinitionManager manager = new AccountManagerDefinitionManager();
             return manager.GetAccountManagerSubViewsDefinition(accountManagerDefinitionId);
         }
-        [HttpPost]
-        [Route("GetAccountManagerAssignmentRuntimeEditor")]
-        public AccountManagerAssignmentRuntime GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentInput)
-        {
-            AccountManagerDefinitionManager manager = new AccountManagerDefinitionManager();
-            return manager.GetAccountManagerAssignmentRuntimeEditor(accountManagerAssignmentInput);
-        }
+        //[HttpPost]
+        //[Route("GetAccountManagerAssignmentRuntimeEditor")]
+        //public AccountManagerAssignmentRuntime GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentInput)
+        //{
+        //    AccountManagerDefinitionManager manager = new AccountManagerDefinitionManager();
+        //    return manager.GetAccountManagerAssignmentRuntimeEditor(accountManagerAssignmentInput);
+        //}
     }
 }

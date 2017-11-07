@@ -43,29 +43,29 @@ namespace Vanrise.AccountManager.Business
            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
            return manager.GetExtensionConfigurations<AccountManagerSubViewsConfigs>(AccountManagerSubViewsConfigs.EXTENSION_TYPE).OrderByDescending(x => x.Name);
        }
-       public AccountManagerAssignmentRuntime GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentRuntimeInput)
-       {
+       //public AccountManagerAssignmentRuntime GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentRuntimeInput)
+       //{
            
-           AccountManagerAssignmentRuntime accountManagerAssignmentRuntime = new AccountManagerAssignmentRuntime();
-           var accountManagerDefinitionSettings = GetAccountManagerDefinitionSettings(accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId);
-           var assignmentDefinitions = accountManagerDefinitionSettings.AssignmentDefinitions;
-           foreach (var assignmentDefinition in assignmentDefinitions)
-           {
+       //    AccountManagerAssignmentRuntime accountManagerAssignmentRuntime = new AccountManagerAssignmentRuntime();
+       //    var accountManagerDefinitionSettings = GetAccountManagerDefinitionSettings(accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId);
+       //    var assignmentDefinitions = accountManagerDefinitionSettings.AssignmentDefinitions;
+       //    foreach (var assignmentDefinition in assignmentDefinitions)
+       //    {
              
-               if (assignmentDefinition.AccountManagerAssignementDefinitionId == accountManagerAssignmentRuntimeInput.AssignmentDefinitionId)
-               {
-                   accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition = assignmentDefinition;
-               }
-           }
-           if (accountManagerAssignmentRuntimeInput.AccountManagerAssignementId != null)
-           {
-               AccountManagerAssignmentManager assignmentManager = new AccountManagerAssignmentManager();
-               var accountManagerAssignmentId = accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.Value;
-               accountManagerAssignmentRuntime.AccountManagerAssignment = assignmentManager.GetAccountManagerAssignment(accountManagerAssignmentId);
+       //        if (assignmentDefinition.AccountManagerAssignementDefinitionId == accountManagerAssignmentRuntimeInput.AssignmentDefinitionId)
+       //        {
+       //            accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition = assignmentDefinition;
+       //        }
+       //    }
+       //    if (accountManagerAssignmentRuntimeInput.AccountManagerAssignementId != null)
+       //    {
+       //        AccountManagerAssignmentManager assignmentManager = new AccountManagerAssignmentManager();
+       //        var accountManagerAssignmentId = accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.Value;
+       //        accountManagerAssignmentRuntime.AccountManagerAssignment = assignmentManager.GetAccountManagerAssignment(accountManagerAssignmentId);
 
-           }
-           return accountManagerAssignmentRuntime;
-       }
+       //    }
+       //    return accountManagerAssignmentRuntime;
+       //}
 
     }
     #endregion

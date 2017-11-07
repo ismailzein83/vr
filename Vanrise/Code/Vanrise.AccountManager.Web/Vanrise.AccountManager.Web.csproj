@@ -49,9 +49,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Retail.BusinessEntity.Entities">
-      <HintPath>..\..\..\Retail\Code\Output\Retail.BusinessEntity.Entities.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
