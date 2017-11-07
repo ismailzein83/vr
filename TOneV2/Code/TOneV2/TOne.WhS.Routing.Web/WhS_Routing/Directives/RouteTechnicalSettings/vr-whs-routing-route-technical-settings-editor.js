@@ -64,10 +64,15 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                     var supplierTransformationPayload;
 
                     if (payload != undefined && payload.data != undefined) {
-                        customerTransformationPayload = { selectedIds: payload.data.RouteRuleDataTransformation.CustomerTransformationId };
-                        supplierTransformationPayload = { selectedIds: payload.data.RouteRuleDataTransformation.SupplierTransformationId };
-                        $scope.scopeModel.partialRoutesPercentageLimit = payload.data.RouteRuleDataTransformation.PartialRoutesPercentageLimit;
-                        $scope.scopeModel.partialRoutesUpdateBatchSize = payload.data.RouteRuleDataTransformation.PartialRoutesUpdateBatchSize;
+                        if (payload.data.RouteRuleDataTransformation != undefined) {
+                            customerTransformationPayload = { selectedIds: payload.data.RouteRuleDataTransformation.CustomerTransformationId };
+                            supplierTransformationPayload = { selectedIds: payload.data.RouteRuleDataTransformation.SupplierTransformationId };
+                        }
+
+                        if (payload.data.TechnicalPartialRouting != undefined) {
+                            $scope.scopeModel.partialRoutesPercentageLimit = payload.data.TechnicalPartialRouting.PartialRoutesPercentageLimit;
+                            $scope.scopeModel.partialRoutesUpdateBatchSize = payload.data.TechnicalPartialRouting.PartialRoutesUpdateBatchSize;
+                        }
                     }
 
                     var customerTransformationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -108,6 +113,8 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                         RouteRuleDataTransformation: {
                             CustomerTransformationId: customerTransformationSelectorAPI.getSelectedIds(),
                             SupplierTransformationId: supplierTransformationSelectorAPI.getSelectedIds(),
+                        },
+                        TechnicalPartialRouting: {
                             PartialRoutesPercentageLimit: $scope.scopeModel.partialRoutesPercentageLimit,
                             PartialRoutesUpdateBatchSize: $scope.scopeModel.partialRoutesUpdateBatchSize
                         },

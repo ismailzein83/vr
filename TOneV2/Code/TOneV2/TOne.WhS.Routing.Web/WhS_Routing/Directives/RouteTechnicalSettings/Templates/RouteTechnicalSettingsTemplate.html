@@ -15,7 +15,9 @@
                     </vr-genericdata-datatransformationdefinition-selector>
                 </vr-columns>
             </vr-section>
-            <vr-section header="Partial Routing">
+        </vr-tab>
+        <vr-tab header="'Partial Routing'">
+            <vr-row>
                 <vr-columns width="1/2row">
                     <vr-textbox value="scopeModel.partialRoutesPercentageLimit" type="number" label="Routes Percentage Limit" isrequired minvalue="0" maxvalue="100" decimalprecision="0"
                                 hint="Full Route Build will be triggered in case of affected routes percentage exceeds this limit during Partial Route Build"></vr-textbox>
@@ -24,7 +26,7 @@
                     <vr-textbox value="scopeModel.partialRoutesUpdateBatchSize" type="number" label="Update Batch Size" isrequired minvalue="0" decimalprecision="0"
                                 hint="Maximum number of routes in a batch when updating affected routes"></vr-textbox>
                 </vr-columns>
-            </vr-section>
+            </vr-row>
         </vr-tab>
         <vr-tab header="'Quality Configuration'">
             <vr-row>

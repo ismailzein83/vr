@@ -28,12 +28,12 @@ namespace TOne.WhS.Routing.Business
 
         public int GetPartialRoutesPercentageLimit()
         {
-            return GetRouteRuleDataTransformation().PartialRoutesPercentageLimit;
+            return GetTechnicalPartialRouting().PartialRoutesPercentageLimit;
         }
 
         public int GetPartialRoutesUpdateBatchSize()
         {
-            return GetRouteRuleDataTransformation().PartialRoutesUpdateBatchSize;
+            return GetTechnicalPartialRouting().PartialRoutesUpdateBatchSize;
         }
 
         public int GetProductRouteIndexesCommandTimeoutInSeconds()
@@ -170,6 +170,16 @@ namespace TOne.WhS.Routing.Business
                 throw new NullReferenceException("routeTechnicalSettingData.RouteRuleDataTransformation");
 
             return routeTechnicalSettingData.RouteRuleDataTransformation;
+        }
+
+        private TechnicalPartialRouting GetTechnicalPartialRouting() 
+        {
+            RouteTechnicalSettingData routeTechnicalSettingData = GetRouteTechnicalSettingData();
+
+            if (routeTechnicalSettingData.TechnicalPartialRouting == null)
+                throw new NullReferenceException("routeTechnicalSettingData.TechnicalPartialRouting");
+
+            return routeTechnicalSettingData.TechnicalPartialRouting;
         }
 
         private RouteTechnicalSettingData GetRouteTechnicalSettingData()
