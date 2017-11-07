@@ -1,22 +1,22 @@
 ﻿using Retail.BusinessEntity.APIEntities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Security.Business;
 using Vanrise.Common;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+
 namespace PartnerPortal.CustomerAccess.Business
 {
     public class RetailAccountBEManager : IBusinessEntityManager
     { 
-        
         #region Ctor/Fields
+
         static BusinessEntityDefinitionManager s_businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+
         #endregion
-        
+
+        #region Public Methods
+
         public IEnumerable<ClientAccountInfo> GetClientChildAccountsInfo(Guid businessEntityDefinitionId)
         {
             var retailBusinessEntityDefinitionSettings = GetRetailUserSubaccountsBEDefinition(businessEntityDefinitionId);
@@ -32,17 +32,20 @@ namespace PartnerPortal.CustomerAccess.Business
 
             return clientChildAccountsInfo != null ? clientChildAccountsInfo.FindAllRecords(filterExpression) : null; ;
         }
+
         public RetailUserSubaccountsBEDefinition GetRetailUserSubaccountsBEDefinition(Guid businessEntityDefinitionId)
         {
             var businessEntityDefinition = s_businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
             businessEntityDefinition.ThrowIfNull("businessEntityDefinition", businessEntityDefinitionId);
             return businessEntityDefinition.Settings.CastWithValidate<RetailUserSubaccountsBEDefinition>("businessEntityDefinition.Settings", businessEntityDefinitionId);
         }
+
         public ClientAccountInfo GetClientAccountInfo(Guid businessEntityDefinitionId, long accountId)
         {
             var clientAccountsInfo = GetClientChildAccountsInfo(businessEntityDefinitionId);
             return clientAccountsInfo == null ? null : clientAccountsInfo.FindRecord(x => x.AccountId == accountId);
         }
+
         public string GetClientAccountInfoName(Guid businessEntityDefinitionId, long accountId)
         {
             var clientAccountInfo = GetClientAccountInfo(businessEntityDefinitionId, accountId);
@@ -51,6 +54,10 @@ namespace PartnerPortal.CustomerAccess.Business
             else
                 return null;
         }
+
+        #endregion
+
+        #region IBusinessEntityManager
 
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
@@ -91,5 +98,7 @@ namespace PartnerPortal.CustomerAccess.Business
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

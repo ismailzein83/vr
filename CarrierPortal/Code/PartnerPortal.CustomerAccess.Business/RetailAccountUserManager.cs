@@ -2,19 +2,17 @@
 using Retail.BusinessEntity.APIEntities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using Vanrise.GenericData.Business;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
-using System.Linq;
+
 namespace PartnerPortal.CustomerAccess.Business
 {
     public class RetailAccountUserManager
     {
-       
-
         #region Public Methods
 
         public RetailAccountInfo GetRetailAccountInfo(int userId)
@@ -99,8 +97,30 @@ namespace PartnerPortal.CustomerAccess.Business
             return new UserManager().ResetPassword(userId, password);
         }
 
-      
-       
+        public Dictionary<long, ClientAccountInfo> GetClientRetailAccountsInfo(Guid vrConnectionId)
+        {
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            var accountInfo = GetRetailAccountInfo(userId);
+            accountInfo.ThrowIfNull("accountInfo", userId);
+
+            var retailAccountCacheKey = new RetailAccountCacheKey
+            {
+                AccountBEDefinitionId = accountInfo.AccountBEDefinitionId,
+                AccountId = accountInfo.AccountId,
+                VRConnectionId = vrConnectionId
+            };
+
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(retailAccountCacheKey,
+              () =>
+              {
+                  VRConnectionManager connectionManager = new VRConnectionManager();
+                  var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(vrConnectionId);
+                  VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+                  IEnumerable<ClientAccountInfo> clientAccountsInfo = connectionSettings.Get<IEnumerable<ClientAccountInfo>>(string.Format("/api/Retail_BE/AccountBE/GetClientChildAccountsInfo?accountBEDefinitionId={0}&accountId={1}&withSubChildren={2}", accountInfo.AccountBEDefinitionId, accountInfo.AccountId, true));
+                  return clientAccountsInfo == null ? null : clientAccountsInfo.ToDictionary(acc => acc.AccountId, acc => acc);
+              });
+        }
+
         #endregion
 
         #region Private Classes
@@ -112,32 +132,14 @@ namespace PartnerPortal.CustomerAccess.Business
                 get { return true; }
             }
         }
-        public Dictionary<long, ClientAccountInfo> GetClientRetailAccountsInfo(Guid vrConnectionId)
-        {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            var accountInfo = GetRetailAccountInfo(userId);
-            accountInfo.ThrowIfNull("accountInfo", userId);
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(new RetailAccountCacheKey
-            {
-                AccountBEDefinitionId = accountInfo.AccountBEDefinitionId,
-                AccountId = accountInfo.AccountId,
-                VRConnectionId = vrConnectionId
-            },
-              () =>
-              {
-                  VRConnectionManager connectionManager = new VRConnectionManager();
-                  var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(vrConnectionId);
-                  VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
-                  IEnumerable<ClientAccountInfo> clientAccountsInfo = connectionSettings.Get<IEnumerable<ClientAccountInfo>>(string.Format("/api/Retail_BE/AccountBE/GetClientChildAccountsInfo?accountBEDefinitionId={0}&accountId={1}&withSubChildren={2}", accountInfo.AccountBEDefinitionId, accountInfo.AccountId, true));
-                  return clientAccountsInfo == null ? null : clientAccountsInfo.ToDictionary(acc => acc.AccountId, acc => acc);
-              });
-        }
+
         public struct RetailAccountCacheKey
         {
             public long AccountId { get; set; }
             public Guid AccountBEDefinitionId { get; set; }
             public Guid VRConnectionId { get; set; }
         }
+
         #endregion
     }
 }
