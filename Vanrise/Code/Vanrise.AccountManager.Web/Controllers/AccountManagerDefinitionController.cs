@@ -9,7 +9,6 @@ using Vanrise.GenericData.Data;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.AccountManager.Entities;
-using Retail.BusinessEntity.Entities.AccountManager;
 
 namespace Vanrise.AccountManager.Web.Controllers
 {

@@ -8,7 +8,6 @@ using Vanrise.GenericData.Business;
 using Vanrise.Common.Business;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Common;
-using Retail.BusinessEntity.Entities.AccountManager;
 using Vanrise.AccountManager.Data;
 
 namespace Vanrise.AccountManager.Business
