@@ -1000,7 +1000,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
-        #region ICarrierAccountManager Memebers
+        #region ICarrierAccountManager Members
 
         public List<CarrierAccount> GetAllSuppliers()
         {
@@ -1095,21 +1095,6 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Methods
-
-
-        public class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            DateTime? _carrierProfileLastCheck;
-
-            ICarrierAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle)
-                    | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierProfileManager.CacheManager>().IsCacheExpired(ref _carrierProfileLastCheck);
-            }
-        }
 
         private IEnumerable<CarrierAccount> GetCarrierAccountsByIds(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
@@ -1238,6 +1223,39 @@ namespace TOne.WhS.BusinessEntity.Business
             return string.Format("{0}{1}", profileName, string.IsNullOrEmpty(nameSuffix) ? string.Empty : " (" + nameSuffix + ")");
         }
 
+        private CarrierAccountToEdit ConvertCarrierAccountToEdit(CarrierAccount carrierAccount)
+        {
+            return new CarrierAccountToEdit
+            {
+                CarrierAccountId = carrierAccount.CarrierAccountId,
+                SourceId = carrierAccount.SourceId,
+                SupplierSettings = carrierAccount.SupplierSettings,
+                CarrierAccountSettings = carrierAccount.CarrierAccountSettings,
+                CustomerSettings = carrierAccount.CustomerSettings,
+                NameSuffix = carrierAccount.NameSuffix,
+                CreatedTime = carrierAccount.CreatedTime,
+                SellingProductId = carrierAccount.SellingProductId
+            };
+        }
+
+        #endregion
+
+        #region Classes
+
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            DateTime? _carrierProfileLastCheck;
+
+            ICarrierAccountDataManager _dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreCarrierAccountsUpdated(ref _updateHandle)
+                    | Vanrise.Caching.CacheManagerFactory.GetCacheManager<CarrierProfileManager.CacheManager>().IsCacheExpired(ref _carrierProfileLastCheck);
+            }
+        }
+
         private class CarrierAccountDetailExportExcelHandler : ExcelExportHandler<CarrierAccountDetail>
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<CarrierAccountDetail> context)
@@ -1279,24 +1297,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 context.MainSheet = sheet;
             }
         }
-        private CarrierAccountToEdit ConvertCarrierAccountToEdit(CarrierAccount carrierAccount)
-        {
-            return new CarrierAccountToEdit
-            {
-                CarrierAccountId = carrierAccount.CarrierAccountId,
-                SourceId = carrierAccount.SourceId,
-                SupplierSettings = carrierAccount.SupplierSettings,
-                CarrierAccountSettings = carrierAccount.CarrierAccountSettings,
-                CustomerSettings = carrierAccount.CustomerSettings,
-                NameSuffix = carrierAccount.NameSuffix,
-                CreatedTime = carrierAccount.CreatedTime,
-                SellingProductId = carrierAccount.SellingProductId
-            };
-        }
-
-        #endregion
-
-        #region Private Classes
 
         public class CarrierAccountLoggableEntity : VRLoggableEntityBase
         {
