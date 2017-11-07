@@ -61,21 +61,26 @@ namespace TOne.WhS.Analytics.Data.SQL
             StringBuilder selectColumnBuilder = new StringBuilder();
             StringBuilder groupByBuilder = new StringBuilder();
             StringBuilder havingBuilder = new StringBuilder();
+            
             AddSelectColumnToQuery(selectColumnBuilder, aliasTableName);
             AddGroupingToQuery(groupByBuilder, aliasTableName);
             AddHavingToQuery(havingBuilder, aliasTableName, repeatedMorethan);
+
+            string invalidCDRTableAppendedFilter = string.Format("{0}.[Type] != 6", invalidCDRTableAlias);
+
             string queryData = "";
+
             switch (cdrType)
             {
                 case CDRType.All:
                     queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2} UNION ALL {3}",
                         GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex, repeatedMorethan, phoneNumber),
-                        GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumber),
+                        GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumber, invalidCDRTableAppendedFilter),
                         GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex, repeatedMorethan, phoneNumber),
                         GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex, repeatedMorethan, phoneNumber));
                     break;
                 case CDRType.Invalid:
-                    queryData = GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumber);
+                    queryData = GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumber, invalidCDRTableAppendedFilter);
                     break;
                 case CDRType.Failed:
                     queryData = GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex, repeatedMorethan, phoneNumber);
@@ -92,13 +97,15 @@ namespace TOne.WhS.Analytics.Data.SQL
                                                                 FROM (#Query#) {0}
                                                                 GROUP BY #GROUPBYPART#
                                                                 HAVING #HAVINGPART# ", aliasTableName));
+
             queryBuilder.Replace("#SELECTCOLUMNPART#", selectColumnBuilder.ToString());
             queryBuilder.Replace("#Query#", queryData);
             queryBuilder.Replace("#GROUPBYPART#", groupByBuilder.ToString());
             queryBuilder.Replace("#HAVINGPART#", havingBuilder.ToString());
+
             return queryBuilder.ToString();
         }
-        private string GetSingleQuery(string tableName, string alias, RepeatedNumberFilter filter, string tableIndex, int repeatedMorethan, string phoneNumber)
+        private string GetSingleQuery(string tableName, string alias, RepeatedNumberFilter filter, string tableIndex, int repeatedMorethan, string phoneNumber, string appendedFilter = null)
         {
             StringBuilder queryBuilder = new StringBuilder();
             StringBuilder selectQueryPart = new StringBuilder();
@@ -106,6 +113,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             StringBuilder groupByBuilder = new StringBuilder();
             StringBuilder havingBuilder = new StringBuilder();
             AddFilterToQuery(filter, whereBuilder);
+
             queryBuilder.Append(String.Format(@"SELECT 
                                                #SELECTPART#
                                                FROM {0} {1} WITH(NOLOCK ,INDEX(#TABLEINDEX#))
@@ -119,6 +127,8 @@ namespace TOne.WhS.Analytics.Data.SQL
                                                     CONVERT(DECIMAL(10,2),SUM({0}.DurationInSeconds)/60.) AS DurationsInMinutes,
 		                                            {0}.{1}  AS PhoneNumber ", alias, phoneNumber));
 
+            AddAppendedFilter(whereBuilder, appendedFilter);
+
             queryBuilder.Replace("#SELECTPART#", selectQueryPart.ToString());
             queryBuilder.Replace("#WHEREPART#", whereBuilder.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupByBuilder.ToString());
@@ -127,6 +137,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             return queryBuilder.ToString();
         }
+
         private void AddSelectColumnToQuery(StringBuilder selectColumnBuilder, string aliasTableName)
         {
             selectColumnBuilder.Append(String.Format(@" {0}.SaleZoneID, {0}.CustomerID, {0}.SupplierID, SUM({0}.Attempt) AS Attempt,
@@ -153,6 +164,16 @@ namespace TOne.WhS.Analytics.Data.SQL
                 else
                     whereBuilder.AppendFormat(" {0} IN ({1}) AND ", column, String.Join(", ", values));
             }
+        }
+        private void AddAppendedFilter(StringBuilder whereBuilder, string appendedFilter)
+        {
+            if (string.IsNullOrEmpty(appendedFilter))
+                return;
+
+            if (whereBuilder.Length > 0)
+                whereBuilder.Append(string.Format(" AND {0} ", appendedFilter));
+            else
+                whereBuilder.Append(appendedFilter);
         }
         private RepeatedNumber RepeatedNumberDataMapper(IDataReader reader)
         {

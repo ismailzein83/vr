@@ -14,6 +14,7 @@ namespace TOne.WhS.Analytics.Data.SQL
     public class ReleaseCodeDataManager : BaseTOneDataManager, IReleaseCodeDataManager
     {
         #region ctor/Local Variables
+
         private string mainCDRTableName = "[TOneWhS_CDR].[BillingCDR_Main]";
         private string mainCDRTableAlias = "MainCDR";
         private string mainCDRTableIndex = "IX_BillingCDR_Main_AttemptDateTime";
@@ -31,13 +32,17 @@ namespace TOne.WhS.Analytics.Data.SQL
         private string partialPricedCDRTableIndex = "IX_BillingCDR_PartialPriced_AttemptDateTime";
 
         private int totalCount;
+
+        private ReleaseCodeQuery query;
+        // private List<string> codes;
+
         public ReleaseCodeDataManager()
             : base(GetConnectionStringName("TOneWhS_CDR_DBConnStringKey", "TOneWhS_CDR_DBConnString"))
         {
         }
+
         #endregion
-        private ReleaseCodeQuery query;
-       // private List<string> codes;
+
         #region Public Methods
 
         public List<ReleaseCodeStat> GetAllFilteredReleaseCodes(Vanrise.Entities.DataRetrievalInput<Entities.ReleaseCodeQuery> input)
@@ -66,7 +71,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                         releaseCode.FailedAttempt = releaseCode.Attempt - (int)reader["SuccessfulAttempts"];
                         releaseCode.FirstAttempt = GetReaderValue<DateTime?>(reader, "FirstAttempt");
                         releaseCode.LastAttempt = GetReaderValue<DateTime?>(reader, "LastAttempt");
-                        releaseCode.Percentage = GetReaderValue<int>(reader, "Attempt") * 100 / (decimal)totalCount ;
+                        releaseCode.Percentage = GetReaderValue<int>(reader, "Attempt") * 100 / (decimal)totalCount;
                         if (query.Filter.Dimession != null && query.Filter.Dimession.Count() > 0)
                         {
                             if (query.Filter.Dimession.Contains(ReleaseCodeDimension.Supplier))
@@ -103,15 +108,19 @@ namespace TOne.WhS.Analytics.Data.SQL
         #endregion
 
         #region Private Methods
+
         private string GetQuery(ReleaseCodeFilter filter)
         {
             string aliasTableName = "newtable";
             StringBuilder selectColumnBuilder = new StringBuilder();
             StringBuilder groupByBuilder = new StringBuilder();
             StringBuilder havingBuilder = new StringBuilder();
+
+            string invalidCDRTableAppendedFilter = string.Format("{0}.[Type] != 6", invalidCDRTableAlias);
+
             string queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2} UNION ALL {3}",
                         GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex),
-                        GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex),
+                        GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, invalidCDRTableAppendedFilter),
                         GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex),
                         GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex));
 
@@ -138,14 +147,16 @@ namespace TOne.WhS.Analytics.Data.SQL
             queryBuilder.Replace("#Query#", queryData);
             return queryBuilder.ToString();
         }
-        private string GetSingleQuery(string tableName, string alias, ReleaseCodeFilter filter, string tableIndex)
+        private string GetSingleQuery(string tableName, string alias, ReleaseCodeFilter filter, string tableIndex, string appendedFilter = null)
         {
             StringBuilder queryBuilder = new StringBuilder();
             StringBuilder selectQueryPart = new StringBuilder();
             StringBuilder whereBuilder = new StringBuilder();
             StringBuilder groupByBuilder = new StringBuilder();
             StringBuilder havingBuilder = new StringBuilder();
+
             AddFilterToQuery(filter, whereBuilder);
+
             queryBuilder.Append(String.Format(@"SELECT                                                
                                                #SELECTPART#                                              
                                                FROM {0} {1} WITH(NOLOCK ,INDEX(#TABLEINDEX#))
@@ -156,6 +167,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             whereBuilder.Append(String.Format(@"{0}.AttemptDateTime>= @FromDate ", alias));
             if (query.To.HasValue)
                 whereBuilder.AppendFormat("AND {0}.AttemptDateTime<= @ToDate  ", alias);
+
             groupByBuilder.Append(String.Format(@"{0}.SwitchId, {0}.ReleaseCode,{0}.ReleaseSource", alias));
             selectQueryPart.Append(String.Format(@"         {0}.SwitchId,
                                                             {0}.ReleaseCode,{0}.ReleaseSource,
@@ -164,8 +176,12 @@ namespace TOne.WhS.Analytics.Data.SQL
 			                                                Min({0}.AttemptDateTime) FirstAttempt,	
 			                                                Max({0}.AttemptDateTime) LastAttempt,
                                                             SUM({0}.DurationInSeconds)/60. AS DurationsInMinutes  ", alias, tableIndex));
+
             AddSelectColumnToQuery(selectQueryPart, alias);
             AddGroupingToQuery(groupByBuilder, alias);
+
+            AddAppendedFilter(whereBuilder, appendedFilter);
+
             queryBuilder.Replace("#SELECTPART#", selectQueryPart.ToString());
             queryBuilder.Replace("#WHEREPART#", whereBuilder.ToString());
             queryBuilder.Replace("#GROUPBYPART#", groupByBuilder.ToString());
@@ -206,8 +222,6 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             }
         }
-
-
 
         private void AddSelectColumnToQuery(StringBuilder selectColumnBuilder, string aliasTableName)
         {
@@ -250,7 +264,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             AddFilter(whereBuilder, filter.MasterSaleZoneIds, "MasterPlanZoneID");
             AddFilter(whereBuilder, filter.CountryIds, "CountryID");
 
-          //  AddFilter(whereBuilder, codes, "SaleCode");
+            //  AddFilter(whereBuilder, codes, "SaleCode");
 
 
         }
@@ -270,6 +284,17 @@ namespace TOne.WhS.Analytics.Data.SQL
                     whereBuilder.AppendFormat(" 0 = 1 AND ");
                 }
             }
+        }
+
+        private void AddAppendedFilter(StringBuilder whereBuilder, string appendedFilter)
+        {
+            if (string.IsNullOrEmpty(appendedFilter))
+                return;
+
+            if (whereBuilder.Length > 0)
+                whereBuilder.Append(string.Format(" AND {0} ", appendedFilter));
+            else
+                whereBuilder.Append(appendedFilter);
         }
 
         #endregion
