@@ -423,6 +423,11 @@ vr-columns[withemptyline="false"] .empty-line-col{
     padding-right: 0px !important;
 }
 
+vr-columns[medium-spacing] >div[class^="col"]{
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
 vr-row[singleitemrow]>.row{
     margin: 0px !important;
     padding: 10px 0px!important;
