@@ -684,6 +684,8 @@
     <Build Include="rules\Stored Procedures\sp_RuleChanged_GetByType.sql" />
     <Build Include="rules\Stored Procedures\sp_RuleChanged_GetByRuleAndType.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceSetting_Delete.sql" />
+    <Build Include="rules\Stored Procedures\sp_RuleChanged_DeleteByType.sql" />
+    <Build Include="rules\Stored Procedures\sp_RuleChanged_DeleteByRuleAndType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

@@ -11,6 +11,6 @@ CREATE PROCEDURE [rules].[sp_RuleChanged_GetByRuleAndType]
 AS
 BEGIN
 	SELECT [ID], [RuleID], [RuleTypeID], [ActionType], [InitialRule],[AdditionalInformation], [CreatedTime]
-	FROM [TOneConfiguration].[rules].[RuleChanged]
+	FROM [rules].[RuleChanged]
 	WHERE [RuleID] = @RuleID and [RuleTypeID] = @RuleTypeID
 END

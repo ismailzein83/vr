@@ -5,11 +5,9 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [rules].[sp_RuleChanged_GetByType]
+CREATE PROCEDURE [rules].[sp_RuleChanged_DeleteByType]
 	@RuleTypeID INT
 AS
 BEGIN
-	SELECT [ID], [RuleID], [RuleTypeID], [ActionType], [InitialRule], [AdditionalInformation], [CreatedTime]
-	FROM [rules].[RuleChanged]
-	WHERE [RuleTypeID] = @RuleTypeID
+	DELETE FROM [rules].[RuleChanged] WHERE [RuleTypeID] = @RuleTypeID
 END
