@@ -11,4 +11,4 @@ xcopy "C:\TFS\TOne.Projects3.5\TOneServices\SwitchManagment\SwitchHistoryService
 xcopy "C:\TFS\TOne.Projects3.5\TOneServices\SwitchManagment\SwitchHistoryServiceInstaller\Release\SwitchHistoryServiceInstaller.msi" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\SwitchHistory\%YYYYMMDD%\"
 
 xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\SwitchHistory\%YYYYMMDD%\WebSiteBin\"
-xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\SwitchHistory\%YYYYMMDD%\WebSiteBin\"
+::xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\SwitchHistory\%YYYYMMDD%\WebSiteBin\"

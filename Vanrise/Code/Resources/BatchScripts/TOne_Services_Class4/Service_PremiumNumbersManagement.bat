@@ -11,4 +11,4 @@ xcopy "C:\TFS\TOne.Projects3.5\TOneServices\PremiumNumbersManagement\ProjectInst
 xcopy "C:\TFS\TOne.Projects3.5\TOneServices\PremiumNumbersManagement\ProjectInstaller\Release\ProjectInstaller.msi" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\PremiumNumbersManagement\%YYYYMMDD%\"
 
 xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\PremiumNumbersManagement\%YYYYMMDD%\WebSiteBin\"
-xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\PremiumNumbersManagement\%YYYYMMDD%\WebSiteBin\"
+::xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\PremiumNumbersManagement\%YYYYMMDD%\WebSiteBin\"

@@ -8,4 +8,4 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO.
 ECHO Addon DMS300
 xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.DMS300\bin\Release\TABS.Plugins.DMS300.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\DMS300\%YYYYMMDD%\"
-xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.DMS300\bin\Release\TABS.Plugins.DMS300.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\DMS300\%YYYYMMDD%\"
+::xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.DMS300\bin\Release\TABS.Plugins.DMS300.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\DMS300\%YYYYMMDD%\"

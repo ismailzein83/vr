@@ -8,4 +8,4 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO.
 ECHO GISAD
 xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.GISAD\bin\Release\TABS.Plugins.Framework.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\GISAD\%YYYYMMDD%\"
-xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.GISAD\bin\Release\TABS.Plugins.GISAD.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\GISAD\%YYYYMMDD%\"
+::xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.GISAD\bin\Release\TABS.Plugins.GISAD.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\GISAD\%YYYYMMDD%\"

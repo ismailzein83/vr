@@ -11,4 +11,4 @@ xcopy "C:\TFS\TOne.Projects3.5\TOneServices\TOne.WCFRepricing\Tone.RepricingWCFS
 xcopy "C:\TFS\TOne.Projects3.5\TOneServices\TOne.WCFRepricing\Tone.RepricingWCFSetup\Release\Tone.RepricingWCFSetup.msi" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\WCFRepricing\%YYYYMMDD%\"
 
 xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\WCFRepricing\%YYYYMMDD%\WebSiteBin\"
-xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\WCFRepricing\%YYYYMMDD%\WebSiteBin\"
+::xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\WCFRepricing\%YYYYMMDD%\WebSiteBin\"

@@ -11,4 +11,4 @@ xcopy "C:\TFS\TOne.Projects3.5\TOneServices\MediationBridge\Mediation Bridge Set
 xcopy "C:\TFS\TOne.Projects3.5\TOneServices\MediationBridge\Mediation Bridge Setup\Release\Mediation Bridge Setup.msi" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\MediationBridge\%YYYYMMDD%\"
 
 xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\MediationBridge\%YYYYMMDD%\WebSiteBin\"
-xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\MediationBridge\%YYYYMMDD%\WebSiteBin\"
+::xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.Services\bin\Release\TABS.Plugins.Services.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Services\Class4\MediationBridge\%YYYYMMDD%\WebSiteBin\"

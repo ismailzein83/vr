@@ -8,4 +8,4 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO.
 ECHO VolumesAndCommitments
 xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.VolumesAndCommitments\bin\Release\TABS.Plugins.VolumesAndCommitments.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\VolumesAndCommitments\%YYYYMMDD%\"
-xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.VolumesAndCommitments\bin\Release\TABS.Plugins.VolumesAndCommitments.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\VolumesAndCommitments\%YYYYMMDD%\"
+::xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.VolumesAndCommitments\bin\Release\TABS.Plugins.VolumesAndCommitments.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\VolumesAndCommitments\%YYYYMMDD%\"

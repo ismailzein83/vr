@@ -8,4 +8,4 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO.
 ECHO BilingBridge
 xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.BillingBridge\bin\Release\TABS.Plugins.BillingBridge.dll" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\BilingBridge\%YYYYMMDD%\"
-xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.BillingBridge\bin\Release\TABS.Plugins.BillingBridge.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\BilingBridge\%YYYYMMDD%\"
+::xcopy "C:\TFS\TOne.Projects3.5\TOne_Solution\TABS.Plugins.BillingBridge\bin\Release\TABS.Plugins.BillingBridge.pdb" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\Plugins\BilingBridge\%YYYYMMDD%\"
