@@ -8,6 +8,9 @@ using Vanrise.GenericData.Business;
 using Vanrise.Common.Business;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Common;
+using Retail.BusinessEntity.Entities.AccountManager;
+using Vanrise.AccountManager.Data;
+
 namespace Vanrise.AccountManager.Business
 {
     #region Public Methods
@@ -39,6 +42,29 @@ namespace Vanrise.AccountManager.Business
        {
            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
            return manager.GetExtensionConfigurations<AccountManagerSubViewsConfigs>(AccountManagerSubViewsConfigs.EXTENSION_TYPE).OrderByDescending(x => x.Name);
+       }
+       public AccountManagerAssignmentRuntime GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentRuntimeInput)
+       {
+           
+           AccountManagerAssignmentRuntime accountManagerAssignmentRuntime = new AccountManagerAssignmentRuntime();
+           var accountManagerDefinitionSettings = GetAccountManagerDefinitionSettings(accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId);
+           var assignmentDefinitions = accountManagerDefinitionSettings.AssignmentDefinitions;
+           foreach (var assignmentDefinition in assignmentDefinitions)
+           {
+             
+               if (assignmentDefinition.AccountManagerAssignementDefinitionId == accountManagerAssignmentRuntimeInput.AssignmentDefinitionId)
+               {
+                   accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition = assignmentDefinition;
+               }
+           }
+           if (accountManagerAssignmentRuntimeInput.AccountManagerAssignementId != null)
+           {
+               AccountManagerAssignmentManager assignmentManager = new AccountManagerAssignmentManager();
+               var accountManagerAssignmentId = accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.Value;
+               accountManagerAssignmentRuntime.AccountManagerAssignment = assignmentManager.GetAccountManagerAssignment(accountManagerAssignmentId);
+
+           }
+           return accountManagerAssignmentRuntime;
        }
 
     }

@@ -1,14 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountManager.Data;
 using Vanrise.AccountManager.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace Vanrise.AccountManager.Business
 {
     public class AccountManagerAssignmentManager
     {
+        public AccountManagerAssignment GetAccountManagerAssignment(long accountManagerAssignmentId)
+        {
+            var allAccountManagerAssignments = this.GetCachedAccountManagerAssignments();
+            var accountManagerAssignment = allAccountManagerAssignments.GetRecord(accountManagerAssignmentId);
+
+            return accountManagerAssignment;
+        }
+        public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignments()
+        {
+             return this.GetCachedAccountManagerAssignments().Values;
+        }
+        public bool TryAddAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment,out int insertedID,out string errorMessage)
+        {
+            insertedID = -1;
+             errorMessage=null;
+            IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
+            bool isAdded = dataManager.AddAccountManagerAssignment(accountManagerAssignment, out insertedID);
+            if (isAdded)
+            {
+                accountManagerAssignment.AccountManagerAssignementId = insertedID;
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            return isAdded;
+        }
+        public bool TryUpdateAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment, out string errorMessage)
+        {
+            
+            errorMessage = null;
+            IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
+            bool isUpdated = dataManager.UpdateAccountManagerAssignment(accountManagerAssignment);
+            if (isUpdated)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            return isUpdated;
+        }
+
+      
         public void AssignAccountManagerToAccounts(AssignAccountManagerToAccountsInput input)
         {
             throw new NotImplementedException();
@@ -28,6 +73,45 @@ namespace Vanrise.AccountManager.Business
         {
             throw new NotImplementedException();
         }
+        #region Private Classes
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return dataManager.AreAccountManagerAssignmentsUpdated(ref _updateHandle);
+            }
+        }
+        #endregion
+
+        #region Private Methods
+        Dictionary<long,AccountManagerAssignment> GetCachedAccountManagerAssignments()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountManagerAssignments",
+               () =>
+               {
+                   IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
+                   IEnumerable<Vanrise.AccountManager.Entities.AccountManagerAssignment> accountManagerAssignments = dataManager.GetAccountManagerAssignments();
+                   return accountManagerAssignments.ToDictionary(cn => cn.AccountManagerAssignementId, cn => cn);
+               });
+        }
+        #endregion
+        #region Mappers
+
+        private AccountManagerAssignmentDetail AccountManagerDetailMapper(Vanrise.AccountManager.Entities.AccountManagerAssignment accountManagerAssignment)
+        {
+            return new AccountManagerAssignmentDetail()
+            {
+                AccountManagerAssignementDefinitionId = accountManagerAssignment.AccountManagerAssignementDefinitionId,
+                BED = accountManagerAssignment.BED,
+                EED = accountManagerAssignment.EED
+            };
+
+        }
+
+        #endregion
     }
 
     public class AssignAccountManagerToAccountsInput
@@ -70,4 +154,6 @@ namespace Vanrise.AccountManager.Business
 
         public AccountManagerAssignmentSettings AssignementSettings { get; set; }
     }
+     
+
 }

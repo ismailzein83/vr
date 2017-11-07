@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountManagerDataManagerFactory.cs" />
+    <Compile Include="IAccountManagerAssignmentDataManager.cs" />
     <Compile Include="IAccountManagerDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
