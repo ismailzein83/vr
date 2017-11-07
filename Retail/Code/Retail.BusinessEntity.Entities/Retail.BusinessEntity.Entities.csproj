@@ -41,6 +41,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.AccountManager.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.AccountManager.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BEBridge.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
     </Reference>
@@ -81,6 +87,8 @@
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
     <Compile Include="AccountDefinition\AccountExtraFieldDefinitionConfig.cs" />
+    <Compile Include="AccountManager\AccountManagerAssignmentRuntime.cs" />
+    <Compile Include="AccountManager\AccountManagerAssignmentRuntimeInput.cs" />
     <Compile Include="AccountPartDefinition\AccountPartDefinitionFilter.cs" />
     <Compile Include="AccountProvisioner\AccountProvisioner.cs" />
     <Compile Include="AccountProvisioner\AccountProvisionerConfig.cs" />

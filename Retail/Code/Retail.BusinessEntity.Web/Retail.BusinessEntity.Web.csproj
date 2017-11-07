@@ -113,6 +113,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountManager.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -159,6 +163,7 @@
     <Compile Include="Controllers\AccountConditionController.cs" />
     <Compile Include="Controllers\AccountBEDefinitionController.cs" />
     <Compile Include="Controllers\AccountIdentificationController.cs" />
+    <Compile Include="Controllers\AccountManagerAssignmentsController.cs" />
     <Compile Include="Controllers\AccountPackageController.cs" />
     <Compile Include="Controllers\AccountPartDefinitionController.cs" />
     <Compile Include="Controllers\AccountServiceController.cs" />
@@ -386,10 +391,14 @@
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDAccountRelationsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDSynchronizerEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-accountmanager-accountmanagrassignment-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-accountmanager-accountsubviewruntime-search.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountassignmentdefinition.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountsubviewdefinition.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountAssignmentDefinitionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountManagerAccountManagerAssignmentGrid.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewDefinitionTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewRuntimeSearchTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccount-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccountdefinition-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccount.html" />
@@ -707,6 +716,7 @@
     <Content Include="Retail_BusinessEntity\Services\AccountBEDefinitionService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountBEService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountConditionService.js" />
+    <Content Include="Retail_BusinessEntity\Services\AccountManagerAssignmentService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPackageService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountIdentificationService.js" />
     <Content Include="Retail_BusinessEntity\Services\AccountPartDefinitionService.js" />
@@ -716,6 +726,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountConditionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\AccountBEDefinitionAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\AccountManagerAssignmentAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\ChangeStatusActionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
@@ -772,6 +783,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\Templates\AccountViewDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\AccountViewDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Services\VisibilityAccountDefinitionService.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditor.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionEditor.html" />

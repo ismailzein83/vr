@@ -1,0 +1,37 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_AccountManagerAssignmentEditor" vr-loader="scopeModel.isLoading" width="'50%'">
+    <vr-modalbody>
+        <vr-form name="formFilter">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns colnum="3">
+                            <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady"></retail-be-account-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Setting'">
+
+                </vr-tab>
+                <vr-tab header="'Time'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker label="Begin Effective Date" value="scopeModel.bed" type="date"></vr-datetimepicker>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-datetimepicker label="End Effective Date" value="scopeModel.eed" type="date"></vr-datetimepicker>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formFilter"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

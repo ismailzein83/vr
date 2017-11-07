@@ -54,6 +54,9 @@
     <Reference Include="Vanrise.AccountBalance.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountManager.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountManager.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Entities.dll</HintPath>
     </Reference>
@@ -158,6 +161,7 @@
     <Compile Include="AccountHandlers\BaseAccountEventPayload.cs" />
     <Compile Include="AccountPackageRecurChargeManager.cs" />
     <Compile Include="Extensions\AccountDIDMemoryAnalyticDataManager.cs" />
+    <Compile Include="Extensions\AccountManager\AccountManagerAssignmentManager.cs" />
     <Compile Include="Extensions\AccountManager\RetailAccountAssignmentDefinition.cs" />
     <Compile Include="Extensions\AccountManager\RetailAccountAccountManagerSubViewDefinition.cs" />
     <Compile Include="RecurChargeBalanceUpdateSummaryManager.cs" />
