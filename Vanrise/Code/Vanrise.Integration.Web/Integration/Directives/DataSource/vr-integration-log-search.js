@@ -48,10 +48,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
                         dataSourceId = payload.dataSourceId;
                         $scope.usedInDrillDown = dataSourceId != undefined;
                     }
-                    return load().then(function () {
-                        if (dataSourceId != undefined)
-                            return $scope.searchClicked();
-                    });
+                    return load();
                 };
                 return directiveAPI;
             }
@@ -71,6 +68,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
 
             $scope.gridReady = function (api) {
                 gridApi = api;
+                if (dataSourceId != undefined)
+                    return $scope.searchClicked();
             };
             $scope.searchClicked = function () {
                 $scope.showGrid = true;
