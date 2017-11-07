@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AnalyticRealtimeWidgetsSelective.$inject = ['VR_Analytic_AnalyticConfigurationAPIService', 'UtilsService', 'VRUIUtilsService', 'ColumnWidthEnum'];
+    AnalyticRealtimeWidgetsSelective.$inject = ['VR_Analytic_AnalyticConfigurationAPIService', 'UtilsService', 'VRUIUtilsService', 'ColumnWidthEnum', 'VR_Analytic_AnalyticItemConfigAPIService', 'VR_Analytic_AnalyticTypeEnum'];
 
-    function AnalyticRealtimeWidgetsSelective(VR_Analytic_AnalyticConfigurationAPIService, UtilsService, VRUIUtilsService, ColumnWidthEnum) {
+    function AnalyticRealtimeWidgetsSelective(VR_Analytic_AnalyticConfigurationAPIService, UtilsService, VRUIUtilsService, ColumnWidthEnum, VR_Analytic_AnalyticItemConfigAPIService, VR_Analytic_AnalyticTypeEnum) {
         return {
             restrict: "E",
             scope: {
@@ -72,6 +72,7 @@
 
             var widgetEntity;
             var tableIds;
+            var dimensions;
 
             var selectorAPI;
 
@@ -80,6 +81,10 @@
 
             var tableSelectorAPI;
             var tableSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var tableSelectorSelectionChanged;
+
+            var recordFilterDirectiveAPI;
+            var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -104,9 +109,37 @@
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
                 };
+                $scope.scopeModel.onRecordFilterDirectiveReady = function (api) {
+                    recordFilterDirectiveAPI = api;
+                    recordFilterDirectiveReadyDeferred.resolve();
+                };
 
-                $scope.scopeModel.onSelectionTableChanged = function () {
-                    $scope.scopeModel.selectedTemplateConfig = undefined;
+                $scope.scopeModel.onTableSelectorSelectionChanged = function (selectedItem) {
+                    //$scope.scopeModel.selectedTemplateConfig = undefined;
+
+                    if (selectedItem != undefined) {
+
+                        if (tableSelectorSelectionChanged != undefined) {
+                            tableSelectorSelectionChanged.resolve();
+                        }
+                        else {
+                            var input = {
+                                TableIds: [selectedItem.AnalyticTableId],
+                                ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value
+                            };
+
+                            loadDimensions(input).then(function () {
+
+                                var recordFilterDirectivePayload = {};
+                                recordFilterDirectivePayload.context = buildContext();
+
+                                var setLoader = function (value) {
+                                    $scope.scopeModel.isRecordFilterDirectiveLoading = value;
+                                };
+                                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterDirectiveAPI, recordFilterDirectivePayload, setLoader);
+                            });
+                        }
+                    }
                 };
 
                 defineColumnWidth();
@@ -137,13 +170,17 @@
                         promises.push(tableSelectorLoadPromise);
 
                         //Loading Widgets Selector
-                        var getWidgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
-                        promises.push(getWidgetsTemplateConfigsPromise);
+                        var widgetsTemplateConfigsPromise = getWidgetsTemplateConfigs();
+                        promises.push(widgetsTemplateConfigsPromise);
 
                         if (isEditMode) {
                             //Loading DirectiveWrapper
                             var directiveWrapperLoadPromise = getDirectiveWrapperLoadPromise();
                             promises.push(directiveWrapperLoadPromise);
+
+                            //Loading RecordFilter Directive
+                            var recordFilterDirectiveLoadPromise = getRecordFilterDirectiveLoadPromise();
+                            promises.push(recordFilterDirectiveLoadPromise);
                         }
 
                         function getTableSelectorLoadPromise() {
@@ -193,6 +230,34 @@
 
                             return loadDirectivePromiseDeferred.promise;
                         }
+                        function getRecordFilterDirectiveLoadPromise() {
+                            var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                            if (tableSelectorSelectionChanged == undefined)
+                                tableSelectorSelectionChanged = UtilsService.createPromiseDeferred();
+
+                            UtilsService.waitMultiplePromises([recordFilterDirectiveReadyDeferred.promise, tableSelectorSelectionChanged.promise]).then(function () {
+                                tableSelectorSelectionChanged = undefined;
+
+                                var input = {
+                                    TableIds: [$scope.scopeModel.selectedTable.AnalyticTableId],
+                                    ItemType: VR_Analytic_AnalyticTypeEnum.Dimension.value,
+                                };
+
+                                loadDimensions(input).then(function () {
+
+                                    var recordFilterDirectivePayload = {};
+                                    recordFilterDirectivePayload.context = buildContext();
+                                    if (widgetEntity != undefined && widgetEntity.RecordFilter != undefined) {
+                                        recordFilterDirectivePayload.FilterGroup = widgetEntity.RecordFilter;
+                                    }
+
+                                    VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+                                });
+                            });
+
+                            return recordFilterDirectiveLoadDeferred.promise;
+                        }
 
                         return UtilsService.waitMultiplePromises(promises);
                     }
@@ -209,7 +274,7 @@
                             data.WidgetTitle = $scope.scopeModel.widgetTitle;
                             data.ColumnWidth = $scope.scopeModel.selectedColumnWidth.value;
                             data.ShowTitle = $scope.scopeModel.showTitle;
-
+                            data.RecordFilter = recordFilterDirectiveAPI.getData().filterObj;
                         }
                     }
                     return data;
@@ -226,6 +291,32 @@
                     $scope.scopeModel.columnWidth.push(ColumnWidthEnum[td]);
                 $scope.scopeModel.selectedColumnWidth = ColumnWidthEnum.FullRow;
             }
+
+            function loadDimensions(input) {
+                return VR_Analytic_AnalyticItemConfigAPIService.GetAnalyticItemConfigs(input).then(function (response) {
+                    dimensions = response;
+                });
+            }
+            function buildContext() {
+                var context = {
+                    getFields: function () {
+                        var fields = [];
+                        if (dimensions != undefined) {
+                            for (var i = 0; i < dimensions.length; i++) {
+                                var dimension = dimensions[i];
+
+                                fields.push({
+                                    FieldName: dimension.Name,
+                                    FieldTitle: dimension.Title,
+                                    Type: dimension.Config.FieldType,
+                                });
+                            }
+                        }
+                        return fields;
+                    }
+                };
+                return context;
+            };
         }
     }
 

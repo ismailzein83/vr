@@ -37,6 +37,7 @@ namespace Vanrise.Analytic.Entities
         public List<DRSearchPageItemDetail> ItemDetails { get; set; }
         public List<DRSearchPageSortColumn> SortColumns { get; set; }
         public List<DRSearchPageFilter> Filters { get; set; }
+        public RecordFilterGroup RecordFilter { get; set; }
     }
 
     public class DRSearchPageFilter

@@ -13,7 +13,7 @@
 
             <vr-columns colnum="{{searchSettingsCtrl.normalColNum}}">
                 <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" selectedvalues="scopeModel.selectedTable"
-                                            onselectitem="scopeModel.onSelectionTableChanged" isrequired="true" hideremoveicon>
+                                            onselectionchanged="scopeModel.onTableSelectorSelectionChanged" isrequired="true" hideremoveicon>
                 </vr-analytic-table-selector>
             </vr-columns>
 

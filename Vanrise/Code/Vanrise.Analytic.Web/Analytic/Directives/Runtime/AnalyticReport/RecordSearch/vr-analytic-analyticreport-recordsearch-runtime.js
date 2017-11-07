@@ -115,8 +115,6 @@
 
                 api.load = function (payload) {
 
-                    console.log(payload);
-
                     if (payload != undefined) {
                         settings = payload.settings;
                         autoSearch = payload.autoSearch;
@@ -367,7 +365,7 @@
                     GridColumns: $scope.selectedDRSearchPageStorageSource.GridColumns,
                     ItemDetails: $scope.selectedDRSearchPageStorageSource.ItemDetails,
                     SortColumns: $scope.selectedDRSearchPageStorageSource.SortColumns,
-                    FilterGroup: filterObj,
+                    FilterGroup: buildFilterGroupObj(filterObj, $scope.selectedDRSearchPageStorageSource.RecordFilter),
                     LimitResult: $scope.limit,
                     Direction: $scope.selectedOrderDirection.value,
                     sortDirection: $scope.selectedOrderDirection.sortDirection,
@@ -376,6 +374,19 @@
                 };
             }
 
+            function buildFilterGroupObj(filterObj, sourceRecordFilter) {
+                if (sourceRecordFilter == undefined)
+                    return filterObj;
+
+                if (filterObj == undefined)
+                    return sourceRecordFilter;
+
+                return {
+                    $type: 'Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities',
+                    LogicalOperator: 0,
+                    Filters: [filterObj, sourceRecordFilter]
+                };
+            };
             function buildRecordFilterFieldInfosByFieldName(recordFields) {
                 if (recordFields == undefined)
                     return;

@@ -121,11 +121,16 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                     ctrl.dimensionsConfig = payLoad.DimensionsConfig;
                 }
 
+                var widgetRecordFilter;
+
                 if (payLoad.Settings != undefined) {
                     if (payLoad.Settings.Measures != undefined) {
                         for (var i = 0; i < payLoad.Settings.Measures.length; i++) {
                             ctrl.measures.push(payLoad.Settings.Measures[i]);
                         }
+                    }
+                    if (payLoad.Settings.RecordFilter != undefined) {
+                        widgetRecordFilter = payLoad.Settings.RecordFilter;
                     }
                 }
                 else {
@@ -144,11 +149,24 @@ app.directive("vrAnalyticRealtimeChartTimevariation", ['UtilsService', 'VRNotifi
                     LastHours: lastHours,
                     TableId: payLoad.TableId,
                     TimeGroupingUnit: payLoad.TimeGroupingUnit,
-                    FilterGroup: payLoad.FilterGroup
+                    FilterGroup: buildFilterGroupObj(payLoad.FilterGroup, widgetRecordFilter)
                 };
 
                 return queryFinalized;
             }
+            function buildFilterGroupObj(filterObj, widgetRecordFilter) {
+                if (widgetRecordFilter == undefined)
+                    return filterObj;
+
+                if (filterObj == undefined)
+                    return widgetRecordFilter;
+
+                return {
+                    $type: 'Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities',
+                    LogicalOperator: 0,
+                    Filters: [filterObj, widgetRecordFilter]
+                };
+            };
         }
 
         return directiveDefinitionObject;

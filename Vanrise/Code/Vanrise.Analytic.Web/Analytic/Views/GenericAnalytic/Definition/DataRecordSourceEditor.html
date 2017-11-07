@@ -1,117 +1,127 @@
 ﻿<div vr-modalcontent ng-controller="Analytic_DataRecordSourceEditorController" width="'60%'" vr-loader="isLoading">
     <vr-modalbody maxheight="'500px'">
         <vr-form name="formDataRecordStorageEditor">
-            <vr-row>
-                <vr-columns width="1/4row">
-                    <vr-textbox value="scopeModel.title" label="Title" isrequired="true"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/4row">
-                    <vr-textbox value="scopeModel.sourceName" label="Name" isrequired="true"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/4row">
-                    <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"
-                                                            selectedvalues="selectedDataRecordType"
-                                                            onselectionchanged="onDataRecordTypeSelectionChanged"
-                                                            isrequired="true"
-                                                            hideremoveicon>
-                    </vr-genericdata-datarecordtype-selector>
-                </vr-columns>
-
-                <vr-columns width="1/4row" vr-loader="isRecordStorageLoading">
-                    <vr-label>Data Storage Records</vr-label>
-                    <vr-genericdata-datarecordstorage-selector on-ready="onDataRecordStorageSelectorReady" selectedvalues="selectedDataRecordStorages"
-                                                               customvalidate="validateDataRecordStorageSelector" isrequired="true" ismultipleselection hidelable>
-                    </vr-genericdata-datarecordstorage-selector>
-                </vr-columns>
-            </vr-row>
-
             <vr-tabs>
-                <vr-tab header="'Grid Columns'">
-                    <vr-row removeline>
-                        <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
-                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFields" onselectitem="onSelectedField" ondeselectitem="onDeSelectedField"
-                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
-                            </vr-select>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/4row">
+                            <vr-textbox value="scopeModel.title" label="Title" isrequired="true"></vr-textbox>
                         </vr-columns>
-                        <vr-columns width="fullrow">
-                            <vr-validator validate="isFieldGridValid()">
-                                <vr-datagrid datasource="selectedFieldsGrid" norowhighlightonclick="true"
-                                             ondeleterow="removeField" hidegridmenu enabledraggablerow="true">
-                                    <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
-                                        <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
-                                    </vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                                        <vr-common-gridcolumnwidth-editor on-ready="dataItem.onGridWidthFactorSelectorReady" hidelabel></vr-common-gridcolumnwidth-editor>
-                                    </vr-datagridcolumn>
-                                </vr-datagrid>
-                            </vr-validator>
+                        <vr-columns width="1/4row">
+                            <vr-textbox value="scopeModel.sourceName" label="Name" isrequired="true"></vr-textbox>
                         </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Search Filters'">
-                    <vr-row removeline>
-                        <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
-                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFilters" onselectitem="onSelectedFilter" ondeselectitem="onDeSelectedFilter"
-                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
-                            </vr-select>
+                        <vr-columns width="1/4row">
+                            <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"
+                                                                    selectedvalues="scopeModel.selectedDataRecordType"
+                                                                    onselectionchanged="onDataRecordTypeSelectionChanged"
+                                                                    isrequired="true"
+                                                                    hideremoveicon>
+                            </vr-genericdata-datarecordtype-selector>
                         </vr-columns>
-                        <vr-columns width="fullrow">
-                                <vr-datagrid datasource="selectedFiltersGrid" norowhighlightonclick="true"
-                                             ondeleterow="removeFilter" hidegridmenu enabledraggablerow="true">
-                                    <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
-                                        <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
-                                    </vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Required'" widthfactor="3" disablesorting="true">
-                                        <vr-switch value="dataItem.IsRequired"></vr-switch>
-                                    </vr-datagridcolumn>
-                                </vr-datagrid>
+                        <vr-columns width="1/4row" vr-loader="isRecordStorageLoading">
+                            <vr-label>Data Storage Records</vr-label>
+                            <vr-genericdata-datarecordstorage-selector on-ready="onDataRecordStorageSelectorReady" selectedvalues="selectedDataRecordStorages"
+                                                                       customvalidate="validateDataRecordStorageSelector" isrequired="true" ismultipleselection hidelable>
+                            </vr-genericdata-datarecordstorage-selector>
                         </vr-columns>
                     </vr-row>
-                </vr-tab>
-                <vr-tab header="'Item Details'">
-                    <vr-row removeline>
-                        <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
-                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedDetails" onselectitem="onSelectedDetailItem" ondeselectitem="    onDeSelectedDetailItem"
-                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
-                            </vr-select>
-                        </vr-columns>
-                        <vr-columns width="fullrow">
-                            <vr-datagrid datasource="selectedDetailsGrid" norowhighlightonclick="true"
-                                         ondeleterow="removeDetail" hidegridmenu enabledraggablerow="true">
-                                <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
-                                    <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
-                                </vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
-                                    <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.detailWidths"
-                                               selectedvalues="dataItem.SelectedDetailWidth" isrequired="true" hideremoveicon>
+
+                    <vr-tabs>
+                        <vr-tab header="'Grid Columns'">
+                            <vr-row removeline>
+                                <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
+                                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFields" onselectitem="onSelectedField" ondeselectitem="onDeSelectedField"
+                                               datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
                                     </vr-select>
-                                </vr-datagridcolumn>
-                            </vr-datagrid>
-                        </vr-columns>
-                    </vr-row>
-                </vr-tab>
-                <vr-tab header="'Sort Columns'">
-                    <vr-row removeline>
-                        <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
-                            <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedSortColumns" onselectitem="onSelectedSortColumn" ondeselectitem="    onDeSelectedSortColumn"
-                                       datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
-                            </vr-select>
-                        </vr-columns>
-                        <vr-columns width="fullrow">
-                            <vr-datagrid datasource="selectedSortColumnsGrid" norowhighlightonclick="true"
-                                         ondeleterow="removeSortColumn" hidegridmenu enabledraggablerow="true">
-                                <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Order Direction'" widthfactor="4" disablesorting="true">
-                                    <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.orderDirectionList"
-                                               selectedvalues="dataItem.SelectedOrderDirection" isrequired="true" hideremoveicon>
+                                </vr-columns>
+                                <vr-columns width="fullrow">
+                                    <vr-validator validate="isFieldGridValid()">
+                                        <vr-datagrid datasource="selectedFieldsGrid" norowhighlightonclick="true"
+                                                     ondeleterow="removeField" hidegridmenu enabledraggablerow="true">
+                                            <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
+                                                <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
+                                            </vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
+                                                <vr-common-gridcolumnwidth-editor on-ready="dataItem.onGridWidthFactorSelectorReady" hidelabel></vr-common-gridcolumnwidth-editor>
+                                            </vr-datagridcolumn>
+                                        </vr-datagrid>
+                                    </vr-validator>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-tab>
+                        <vr-tab header="'Search Filters'">
+                            <vr-row removeline>
+                                <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
+                                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedFilters" onselectitem="onSelectedFilter" ondeselectitem="onDeSelectedFilter"
+                                               datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
                                     </vr-select>
-                                </vr-datagridcolumn>
-                            </vr-datagrid>
-                        </vr-columns>
-                    </vr-row>
+                                </vr-columns>
+                                <vr-columns width="fullrow">
+                                    <vr-datagrid datasource="selectedFiltersGrid" norowhighlightonclick="true"
+                                                 ondeleterow="removeFilter" hidegridmenu enabledraggablerow="true">
+                                        <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
+                                            <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
+                                        </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Required'" widthfactor="3" disablesorting="true">
+                                            <vr-switch value="dataItem.IsRequired"></vr-switch>
+                                        </vr-datagridcolumn>
+                                    </vr-datagrid>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-tab>
+                        <vr-tab header="'Item Details'">
+                            <vr-row removeline>
+                                <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
+                                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedDetails" onselectitem="onSelectedDetailItem" ondeselectitem="    onDeSelectedDetailItem"
+                                               datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
+                                    </vr-select>
+                                </vr-columns>
+                                <vr-columns width="fullrow">
+                                    <vr-datagrid datasource="selectedDetailsGrid" norowhighlightonclick="true"
+                                                 ondeleterow="removeDetail" hidegridmenu enabledraggablerow="true">
+                                        <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
+                                            <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
+                                        </vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
+                                            <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.detailWidths"
+                                                       selectedvalues="dataItem.SelectedDetailWidth" isrequired="true" hideremoveicon>
+                                            </vr-select>
+                                        </vr-datagridcolumn>
+                                    </vr-datagrid>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-tab>
+                        <vr-tab header="'Sort Columns'">
+                            <vr-row removeline>
+                                <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
+                                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedSortColumns" onselectitem="onSelectedSortColumn" ondeselectitem="    onDeSelectedSortColumn"
+                                               datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
+                                    </vr-select>
+                                </vr-columns>
+                                <vr-columns width="fullrow">
+                                    <vr-datagrid datasource="selectedSortColumnsGrid" norowhighlightonclick="true"
+                                                 ondeleterow="removeSortColumn" hidegridmenu enabledraggablerow="true">
+                                        <vr-datagridcolumn headertext="'Field Name'" widthfactor="5" field="'FieldName'" disablesorting="true"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Order Direction'" widthfactor="4" disablesorting="true">
+                                            <vr-select datatextfield="description" datavaluefield="value" datasource="viewScope.scopeModel.orderDirectionList"
+                                                       selectedvalues="dataItem.SelectedOrderDirection" isrequired="true" hideremoveicon>
+                                            </vr-select>
+                                        </vr-datagridcolumn>
+                                    </vr-datagrid>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-tab>
+                    </vr-tabs>
+                </vr-tab>
+                <vr-tab header="'Filters'">
+                    <vr-section title="Record Filter" ng-show="scopeModel.selectedDataRecordType != undefined" vr-loader="scopeModel.isRecordFilterDirectiveLoading" collapsible>
+                        <vr-row>
+                            <vr-genericdata-recordfilter on-ready="onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+                        </vr-row>
+                    </vr-section>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

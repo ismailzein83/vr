@@ -125,6 +125,8 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                     ctrl.dimensionsConfig = payLoad.DimensionsConfig;
                 }
 
+                var widgetRecordFilter;
+
                 if (payLoad.Settings != undefined) {
                     //if (payLoad.Settings.Dimensions != undefined) {
                     //    ctrl.dimensions = payLoad.Settings.Dimensions;
@@ -141,6 +143,9 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                         for (var i = 0; i < payLoad.Settings.Measures.length; i++) {
                             ctrl.measures.push(payLoad.Settings.Measures[i]);
                         }
+                    }
+                    if (payLoad.Settings.RecordFilter != undefined) {
+                        widgetRecordFilter = payLoad.Settings.RecordFilter;
                     }
                 }
                 else {
@@ -172,12 +177,25 @@ app.directive("vrAnalyticRealtimeChartToprecords", ['UtilsService', 'VRNotificat
                     FromTime: fromTime,
                     LastHours: lastHours,
                     //ToTime: toTime,
-                    FilterGroup: payLoad.FilterGroup,
+                    FilterGroup: buildFilterGroupObj(payLoad.FilterGroup, widgetRecordFilter),
                     TableId: payLoad.TableId
                 };
 
                 return queryFinalized;
             }
+            function buildFilterGroupObj(filterObj, widgetRecordFilter) {
+                if (widgetRecordFilter == undefined)
+                    return filterObj;
+
+                if (filterObj == undefined)
+                    return widgetRecordFilter;
+
+                return {
+                    $type: 'Vanrise.GenericData.Entities.RecordFilterGroup, Vanrise.GenericData.Entities',
+                    LogicalOperator: 0,
+                    Filters: [filterObj, widgetRecordFilter]
+                };
+            };
         }
 
         return directiveDefinitionObject;
