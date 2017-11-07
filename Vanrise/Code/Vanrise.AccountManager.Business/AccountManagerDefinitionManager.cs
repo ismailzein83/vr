@@ -32,6 +32,13 @@ namespace Vanrise.AccountManager.Business
            var accountManagerDefinitionSettings = GetAccountManagerDefinitionSettings(accountManagerDefinitionId);
            return accountManagerDefinitionSettings.SubViews;
        }
+       public AccountManagerAssignmentDefinition GetAccountManagerAssignmentDefinition(Guid accountManagerDefinitionId, Guid accountManagerAssignementDefinitionId)
+       {
+           var accountManagerDefinitionSettings = GetAccountManagerDefinitionSettings(accountManagerDefinitionId);
+           if(accountManagerDefinitionSettings.AssignmentDefinitions == null)
+               return null;
+           return accountManagerDefinitionSettings.AssignmentDefinitions.FindRecord(x=>x.AccountManagerAssignementDefinitionId == accountManagerAssignementDefinitionId);
+       }
        public IEnumerable<AccountManagerAssignmentConfig> GetAssignmentDefinitionConfigs()
        {
            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
