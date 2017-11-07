@@ -783,8 +783,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\Templates\AccountViewDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\AccountViewDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Services\VisibilityAccountDefinitionService.js" />
-    <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditor.js" />
-    <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountManager\AccountManagerAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountPackage\PackageAssignmentEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionEditor.html" />
