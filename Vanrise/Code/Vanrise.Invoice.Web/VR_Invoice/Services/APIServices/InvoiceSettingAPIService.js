@@ -58,7 +58,12 @@
                 invoiceTypeId: invoiceTypeId,
             });
         }
-        
+        function DeleteInvoiceSetting(invoiceTypeId, invoiceSettingId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "DeleteInvoiceSetting"), {
+                invoiceTypeId: invoiceTypeId,
+                invoiceSettingId: invoiceSettingId
+            });
+        }
 
         return ({
             GetInvoiceSetting: GetInvoiceSetting,
@@ -70,7 +75,8 @@
             GetInvoiceSettingsInfo: GetInvoiceSettingsInfo,
             SetInvoiceSettingDefault: SetInvoiceSettingDefault,
             GetOverridableInvoiceSetting: GetOverridableInvoiceSetting,
-            GetAutomaticInvoiceSettingPartRuntime: GetAutomaticInvoiceSettingPartRuntime
+            GetAutomaticInvoiceSettingPartRuntime: GetAutomaticInvoiceSettingPartRuntime,
+            DeleteInvoiceSetting: DeleteInvoiceSetting
         });
     }
 

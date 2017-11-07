@@ -92,5 +92,13 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetAutomaticInvoiceSettingPartRuntime(invoiceTypeId);
         }
+        [HttpGet]
+        [Route("DeleteInvoiceSetting")]
+        public object DeleteInvoiceSetting(Guid invoiceTypeId, Guid invoiceSettingId)
+        {
+            if (!DoesUserHaveEditSettingsAccess(invoiceTypeId))
+                return GetUnauthorizedResponse();
+            return _manager.DeleteInvoiceSetting(invoiceSettingId);
+        }
     }
 }

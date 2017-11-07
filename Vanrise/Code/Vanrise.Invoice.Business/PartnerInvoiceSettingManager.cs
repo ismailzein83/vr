@@ -143,6 +143,11 @@ namespace Vanrise.Invoice.Business
             var partnerInvoiceSettingsByInvoiceType = GetCachedPartnerInvoiceSettingsByInvoiceTypeId();
             return partnerInvoiceSettingsByInvoiceType.GetRecord(invoiceTypeId);
         }
+        public bool CheckIfInvoiceSettingHasLinkedPartners(Guid invoiceSettingId)
+        {
+            var cachedPartnerInvoiceSettings = GetCachedPartnerInvoiceSettings();
+            return cachedPartnerInvoiceSettings.Any(x => x.Value.InvoiceSettingID == invoiceSettingId);
+        }
         #endregion
 
         #region Private Classes

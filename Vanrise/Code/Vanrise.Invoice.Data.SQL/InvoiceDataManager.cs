@@ -211,7 +211,7 @@ namespace Vanrise.Invoice.Data.SQL
             int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_Delete", deletedInvoiceId);
             return affectedRows > 0;
         }
-        public bool DeleteGeneratedInvoice(long invoiceId, Guid invoiceTypeId, string partnerId, DateTime fromDate)
+        public bool DeleteGeneratedInvoice(long invoiceId, Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate)
         {
             var transactionOptions = new TransactionOptions
             {
@@ -223,12 +223,18 @@ namespace Vanrise.Invoice.Data.SQL
                 var transactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
                 DeleteInvoice(invoiceId);
                 BillingPeriodInfoDataManager billingPeriodInfoDataManager = new SQL.BillingPeriodInfoDataManager();
-                billingPeriodInfoDataManager.InsertOrUpdateBillingPeriodInfo(new BillingPeriodInfo
+
+                var billingPeriodInfo = billingPeriodInfoDataManager.GetBillingPeriodInfoById(partnerId, invoiceTypeId);
+                var nextPeriodStart = toDate.AddDays(1);
+                if (billingPeriodInfo.NextPeriodStart.Date == nextPeriodStart.Date)
                 {
-                    InvoiceTypeId = invoiceTypeId,
-                    NextPeriodStart = fromDate,
-                    PartnerId = partnerId
-                });
+                    billingPeriodInfoDataManager.InsertOrUpdateBillingPeriodInfo(new BillingPeriodInfo
+                    {
+                        InvoiceTypeId = invoiceTypeId,
+                        NextPeriodStart = fromDate,
+                        PartnerId = partnerId
+                    });
+                }
                 transactionDataManager.SetBillingTransactionsAsDeleted(invoiceId);
                 transactionScope.Complete();
             }

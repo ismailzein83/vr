@@ -51,6 +51,12 @@ namespace Vanrise.Invoice.Data.SQL
             return (affectedRows > -1);
         }
 
+        public bool DeleteInvoiceSetting(Guid invoiceSettingId)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_InvoiceSetting_Delete", invoiceSettingId);
+            return affectedRows > 0;
+        }
+
         #endregion
         
         #region Mappers

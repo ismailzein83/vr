@@ -137,6 +137,14 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                         var menuAction = $scope.menuActions[i];
                         menuActions.push(menuAction);
                     }
+                    if (dataItem.CanDeleteInvoiceSetting)
+                    {
+                        menuActions.push({
+                            name: "Delete",
+                            clicked: deleteInvoiceSetting,
+                            haspermission: hasUpdateInvoiceSettingPermission
+                        });
+                    }
                     return menuActions;
                 };
             }
@@ -158,6 +166,24 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                         });
                     }
                 });
+            }
+            function deleteInvoiceSetting(dataItem) {
+                var promiseDeffered = UtilsService.createPromiseDeferred();
+                VRNotificationService.showConfirmation().then(function (response) {
+                    if (response) {
+                        VR_Invoice_InvoiceSettingAPIService.DeleteInvoiceSetting(dataItem.Entity.InvoiceTypeId, dataItem.Entity.InvoiceSettingId).then(function (response) {
+                            if (VRNotificationService.notifyOnItemDeleted("Invoice Setting", response)) {
+                                gridAPI.itemDeleted(dataItem);
+                            }
+                            promiseDeffered.resolve();
+                        }).catch(function(error){
+                            promiseDeffered.reject(error);
+                        });
+                    } else {
+                        promiseDeffered.resolve();
+                    }
+                });
+                return promiseDeffered.promise;
             }
         }
 

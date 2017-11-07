@@ -516,7 +516,7 @@ namespace Vanrise.Invoice.Business
             var invoice = GetInvoice(invoiceId);
             invoice.ThrowIfNull("invoice", invoiceId);
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.DeleteGeneratedInvoice(invoice.InvoiceId, invoice.InvoiceTypeId, invoice.PartnerId, invoice.FromDate);
+            return dataManager.DeleteGeneratedInvoice(invoice.InvoiceId, invoice.InvoiceTypeId, invoice.PartnerId, invoice.FromDate,invoice.ToDate);
         }
 
         #endregion
