@@ -39,6 +39,9 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
         {
+            if (context.SaleZone.EED.HasValue)
+                return false;
+
             return true;
         }
 

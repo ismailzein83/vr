@@ -43,12 +43,14 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
             $scope.scopeModel.onBulkActionSelected = function (selectedBulkAction) {
                 if (bulkActionContext == undefined)
                     return;
-
                 if (bulkActionContext.selectDefaultBulkActionZoneFilter != undefined)
                     bulkActionContext.selectDefaultBulkActionZoneFilter(selectedBulkAction.DefaultBulkActionZoneFilterConfigId, selectedBulkAction.CanApplyZoneFilter);
 
                 if (bulkActionContext.onBulkActionChanged != undefined)
+                {
                     bulkActionContext.onBulkActionChanged();
+                }
+                   
             };
 
             $scope.scopeModel.onDirectiveReady = function (api) {

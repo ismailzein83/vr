@@ -5,7 +5,6 @@
                        label="Rate Calculation Method"
                        datasource="scopeModel.rateCalculationMethods"
                        selectedvalues="scopeModel.selectedRateCalculationMethod"
-                       onselectitem="scopeModel.onBulkActionChanged"
                        datavaluefield="ExtensionConfigurationId"
                        datatextfield="Title"
                        isrequired="rateBulkActionTypeCtrl.isrequired"
@@ -25,7 +24,7 @@
             <vr-datetimepicker type="date" label="BED" value="scopeModel.beginEffectiveDate" onvaluechanged="scopeModel.onBulkActionChanged"></vr-datetimepicker>
         </vr-columns>
         <vr-columns colnum="{{rateBulkActionTypeCtrl.normalColNum}}" ng-show="scopeModel.showRateSource">
-            <vr-whs-sales-ratesource-selector customelabel="Apply on Rates" ismultipleselection on-ready="scopeModel.onRateSourceSelectorReady"></vr-whs-sales-ratesource-selector>
+            <vr-whs-sales-ratesource-selector customelabel="Apply on Rates" ismultipleselection on-ready="scopeModel.onRateSourceSelectorReady" onselectionchanged="    scopeModel.onRateSourceChanged"></vr-whs-sales-ratesource-selector>
         </vr-columns>
     </div>
 </div>

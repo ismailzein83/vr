@@ -45,12 +45,15 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                 rateCalculationMethodSelectorAPI = api;
                 rateCalculationMethodSelectorReadyDeferred.resolve();
             };
-
+                
             $scope.scopeModel.onRateSourceSelectorReady = function (api) {
                 rateSourceSelectorAPI = api;
                 rateSourceSelectorReadyDeferred.resolve();
             };
-
+            $scope.scopeModel.onRateSourceChanged = function ()
+            {
+                WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
+            };
             $scope.scopeModel.onDirectiveReady = function (api) {
                 directiveAPI = api;
                 var directivePayload = {
@@ -60,10 +63,6 @@ app.directive('vrWhsSalesBulkactionTypeRate', ['WhS_Sales_RatePlanAPIService', '
                     $scope.scopeModel.isLoadingDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivePayload, setLoader, directiveReadyDeferred);
-            };
-
-            $scope.scopeModel.onBulkActionChanged = function () {
-                WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
             };
 
             UtilsService.waitMultiplePromises([rateCalculationMethodSelectorReadyDeferred.promise, rateSourceSelectorReadyDeferred.promise]).then(function () {

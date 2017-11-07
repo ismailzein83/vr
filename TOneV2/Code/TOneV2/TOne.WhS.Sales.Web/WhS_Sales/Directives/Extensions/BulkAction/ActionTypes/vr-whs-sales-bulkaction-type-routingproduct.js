@@ -27,9 +27,11 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
         var bulkActionContext;
 
         var routingProductSelectorAPI;
+        var _selectedRoutingProduct;
 
         var rateSourceSelectorAPI;
         var rateSourceSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+        var resetData = false;
 
         function initializeController() {
 
@@ -46,10 +48,9 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
                 rateSourceSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onRoutingProductSelected = function (selectedRoutingProduct) {
-                if (selectedRoutingProduct.IsDefinedForAllZones === false)
-                    VRNotificationService.showInformation("Routing product '" + selectedRoutingProduct.Name + "' is defined for specific zones");
-                WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
-            };
+                _selectedRoutingProduct = selectedRoutingProduct;
+                    WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
+            };          
         }
 
         function defineAPI() {
@@ -103,7 +104,7 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
             api.getData = function () {
                 return {
                     $type: 'TOne.WhS.Sales.MainExtensions.RoutingProductBulkActionType, TOne.WhS.Sales.MainExtensions',
-                    RoutingProductId: routingProductSelectorAPI.getSelectedIds(),
+                    RoutingProductId:(_selectedRoutingProduct != undefined) ? _selectedRoutingProduct.RoutingProductId : undefined,
                     ApplyNewNormalRateBED: $scope.scopeModel.followRateDate,
                     RateSources: rateSourceSelectorAPI.getSelectedIds()
                 };
@@ -133,6 +134,7 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
 					<vr-whs-be-routingproduct-selector on-ready="scopeModel.onSelectorReady"\
 						selectedvalues="scopeModel.selectedRoutingProduct"\
 						onselectitem="scopeModel.onRoutingProductSelected"\
+                        onbeforeselectionchanged="scopeModel.onRoutingProductBeforeSelectionChanged"\
 						isrequired="ctrl.isrequired"\
 						hideremoveicon="ctrl.isrequired">\
 					</vr-whs-be-routingproduct-selector>\

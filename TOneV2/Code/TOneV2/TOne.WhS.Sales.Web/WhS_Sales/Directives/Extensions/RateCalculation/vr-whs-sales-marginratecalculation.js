@@ -70,9 +70,6 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 }
             };
 
-            $scope.scopeModel.onMarginChanged = function () {
-                WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
-            };
 
 
             $scope.scopeModel.onCostColumnSelectorReady = function (api) {
@@ -85,10 +82,7 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
                 optionNumberSelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onOptionNumberChanged = function () {
-                WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
-            };
-
+           
             $scope.scopeModel.onSupplierSelectorReady = function (api) {
                 supplierSelectorAPI = api;
                 supplierSelectorReadyDeferred.resolve();

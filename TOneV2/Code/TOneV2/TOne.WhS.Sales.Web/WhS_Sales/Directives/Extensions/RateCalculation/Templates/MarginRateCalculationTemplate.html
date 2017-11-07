@@ -27,7 +27,6 @@
                    label="Option Number"
                    datasource="scopeModel.optionNumbers"
                    selectedvalues="scopeModel.selectedOptionNumber"
-                   onselectionchanged="scopeModel.onOptionNumberChanged"
                    datavaluefield="value"
                    datatextfield="description"
                    isrequired="scopeModel.showOptionNumberSelector"
@@ -44,10 +43,10 @@
     <vr-columns colnum="{{ctrl.normalColNum}}" haschildcolumns>
         <vr-validator validate="scopeModel.validateRequiredMargin()">
             <vr-columns width="1/2row">
-                <vr-textbox label="Margin" type="number" value="scopeModel.margin" onvaluechanged="scopeModel.onMarginChanged" customvalidate="scopeModel.validateMargin()"></vr-textbox>
+                <vr-textbox label="Margin" type="number" value="scopeModel.margin"  customvalidate="scopeModel.validateMargin()"></vr-textbox>
             </vr-columns>
             <vr-columns width="1/2row">
-                <vr-textbox label="Margin %" type="number" value="scopeModel.marginPercentage" onvaluechanged="scopeModel.onMarginChanged" customvalidate="scopeModel.validateMarginPercentage()"></vr-textbox>
+                <vr-textbox label="Margin %" type="number" value="scopeModel.marginPercentage" customvalidate="scopeModel.validateMarginPercentage()"></vr-textbox>
             </vr-columns>
         </vr-validator>
     </vr-columns>

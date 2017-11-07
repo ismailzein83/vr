@@ -33,8 +33,14 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
             $scope.scopeModel.headerRowExists = true;
             cacheObjectName = UtilsService.guid();
 
-            $scope.scopeModel.onFileChanged = function () {
+            $scope.scopeModel.onFileChanged = function (obj) {
                 cacheObjectName = UtilsService.guid();
+                if (obj != undefined)
+                    {
+                            $scope.scopeModel.file = { fileId: obj.fileId, fileName: obj.fileName};
+                         WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
+                    }
+                    
             };
 
             $scope.scopeModel.onSwitchValueChanged = function () {
@@ -77,6 +83,7 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
                 };
                 if ($scope.scopeModel.file != undefined) {
                     data.FileId = $scope.scopeModel.file.fileId;
+
                 }
                 if (bulkActionContext != undefined) {
                     data.OwnerType = bulkActionContext.ownerType;
