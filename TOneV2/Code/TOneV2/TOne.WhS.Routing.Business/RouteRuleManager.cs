@@ -134,6 +134,12 @@ namespace TOne.WhS.Routing.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, routeRules.ToBigResult(input, filterExpression, MapToDetails), handler);
         }
 
+        public RouteRule GetRouteRule(int routeRuleId)
+        {
+            var allRules = base.GetAllRules();
+            return allRules.GetRecord(routeRuleId);
+        }
+
         public RouteRule GetMatchRule(RouteRuleTarget target, int? routingProductId)
         {
             var ruleTrees = GetRuleTreesByPriority(routingProductId);

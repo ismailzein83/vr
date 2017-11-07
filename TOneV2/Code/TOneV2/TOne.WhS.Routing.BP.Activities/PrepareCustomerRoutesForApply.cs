@@ -23,7 +23,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public sealed class PrepareCustomerRoutesForApply : DependentAsyncActivity<PrepareCustomerRoutesForApplyInput>
     {
-        [RequiredArgument]        
+        [RequiredArgument]
         public InArgument<int> ParentWFRuntimeProcessId { get; set; }
 
 
@@ -38,7 +38,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             ICustomerRouteDataManager customeRoutesDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
             customeRoutesDataManager.ParentWFRuntimeProcessId = inputArgument.ParentWFRuntimeProcessId;
-            customeRoutesDataManager.ParentBPInstanceId = handle.SharedInstanceData.InstanceInfo.ParentProcessID.Value;
+            customeRoutesDataManager.ParentBPInstanceId = handle.SharedInstanceData.InstanceInfo != null && handle.SharedInstanceData.InstanceInfo.ParentProcessID.HasValue ? handle.SharedInstanceData.InstanceInfo.ParentProcessID.Value : default(long);
             customeRoutesDataManager.BPContext = new Vanrise.BusinessProcess.BPContext(handle);
             PrepareDataForDBApply(previousActivityStatus, handle, customeRoutesDataManager, inputArgument.InputQueue, inputArgument.OutputQueue, CustomerRoutesBatch => CustomerRoutesBatch.CustomerRoutes);
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Customer Routes For Apply is done", null);

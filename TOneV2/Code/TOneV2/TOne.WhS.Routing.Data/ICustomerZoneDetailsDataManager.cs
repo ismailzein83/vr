@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using TOne.WhS.Routing.Entities;
 using Vanrise.Data;
+using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Data
 {
@@ -12,5 +12,6 @@ namespace TOne.WhS.Routing.Data
         void ApplyCustomerZoneDetailsToDB(object preparedCustomerZoneDetails);
         IEnumerable<CustomerZoneDetail> GetCustomerZoneDetails();
         IEnumerable<CustomerZoneDetail> GetFilteredCustomerZoneDetailsByZone(IEnumerable<long> saleZoneIds);
+        List<CustomerZoneDetail> GetCustomerZoneDetails(HashSet<CustomerSaleZone> customerSaleZones);
     }
 }

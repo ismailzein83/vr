@@ -48,15 +48,15 @@ namespace TOne.WhS.Routing.Business
 
             List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
 
-            if (context.SaleCodeMatches != null)
+            if (context.SaleZoneDefintions != null)
             {
                 Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules = new Dictionary<RouteRule, List<RouteOptionRuleTarget>>();
                 RouteRuleManager routeRuleManager = new RouteRuleManager();
-                foreach (var saleCodeMatch in context.SaleCodeMatches)
+                foreach (var saleZoneDefintion in context.SaleZoneDefintions)
                 {
                     HashSet<int> soldCustomers = new HashSet<int>();
                     List<CustomerZoneDetail> matchCustomerZoneDetails = null;
-                    if (context.CustomerZoneDetails != null && context.CustomerZoneDetails.TryGetValue(saleCodeMatch.SaleZoneId, out matchCustomerZoneDetails))
+                    if (context.CustomerZoneDetails != null && context.CustomerZoneDetails.TryGetValue(saleZoneDefintion.SaleZoneId, out matchCustomerZoneDetails))
                     {
                         foreach (var customerZoneDetail in matchCustomerZoneDetails)
                         {
@@ -65,7 +65,7 @@ namespace TOne.WhS.Routing.Business
                             {
                                 CustomerId = customerZoneDetail.CustomerId,
                                 Code = routeCode,
-                                SaleZoneId = saleCodeMatch.SaleZoneId,
+                                SaleZoneId = saleZoneDefintion.SaleZoneId,
                                 RoutingProductId = customerZoneDetail.RoutingProductId,
                                 SaleRate = customerZoneDetail.EffectiveRateValue,
                                 EffectiveOn = context.EntitiesEffectiveOn,
@@ -79,13 +79,14 @@ namespace TOne.WhS.Routing.Business
 
                                 if (createCustomerRoute)
                                 {
-                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleCodeMatch, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, routeRuleTarget, routeRule);
+                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleZoneDefintion, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, routeRuleTarget, routeRule);
                                     route.CustomerId = customerZoneDetail.CustomerId;
+                                    route.VersionNumber = context.VersionNumber;
                                     customerRoutes.Add(route);
                                 }
                             }
                             else
-                                throw new NullReferenceException(string.Format("Missing Default Route Rule. Route Code: {0}. Customer Id: {1}. Sale Zone Id: {2}. Effective On:{3}.", routeCode, customerZoneDetail.CustomerId, saleCodeMatch.SaleZoneId, context.EntitiesEffectiveInFuture ? "Future" : context.EntitiesEffectiveOn.Value.ToString()));
+                                throw new NullReferenceException(string.Format("Missing Default Route Rule. Route Code: {0}. Customer Id: {1}. Sale Zone Id: {2}. Effective On:{3}.", routeCode, customerZoneDetail.CustomerId, saleZoneDefintion.SaleZoneId, context.EntitiesEffectiveInFuture ? "Future" : context.EntitiesEffectiveOn.Value.ToString()));
                         }
                     }
 
@@ -93,10 +94,10 @@ namespace TOne.WhS.Routing.Business
                     {
                         foreach (RoutingCustomerInfo routingCustomerInfo in context.ActiveRoutingCustomerInfos)
                         {
-                            if (saleCodeMatch.SellingNumberPlanId != routingCustomerInfo.SellingNumberPlanId || soldCustomers.Contains(routingCustomerInfo.CustomerId))
+                            if (saleZoneDefintion.SellingNumberPlanId != routingCustomerInfo.SellingNumberPlanId || soldCustomers.Contains(routingCustomerInfo.CustomerId))
                                 continue;
 
-                            CheckAndAddRouteToUnratedZone(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleCodeMatch, codeGroup.CountryId, isCountryIdsHavingParentCodeNotEmpty);
+                            CheckAndAddRouteToUnratedZone(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleZoneDefintion, codeGroup.CountryId, isCountryIdsHavingParentCodeNotEmpty, context.VersionNumber);
                         }
                     }
                 }
@@ -106,7 +107,8 @@ namespace TOne.WhS.Routing.Business
         }
 
         private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager,
-            List<CustomerRoute> customerRoutes, HashSet<int> countryIdsHavingParentCode, string routeCode, SaleCodeMatch saleCodeMatch, int routeCodeCountryId, bool isCountryIdsHavingParentCodeNotEmpty)
+            List<CustomerRoute> customerRoutes, HashSet<int> countryIdsHavingParentCode, string routeCode, SaleZoneDefintion saleZoneDefintion, int routeCodeCountryId, bool isCountryIdsHavingParentCodeNotEmpty,
+            int? versionNumber)
         {
             HashSet<int> soldCountries = context.CustomerCountries.GetOrCreateItem(customerId, () =>
             {
@@ -119,7 +121,7 @@ namespace TOne.WhS.Routing.Business
 
             if (soldCountries.Contains(routeCodeCountryId) || (isCountryIdsHavingParentCodeNotEmpty && countryIdsHavingParentCode.Any(soldCountries.Contains)))
             {
-                customerRoutes.Add(new CustomerRoute() { Code = routeCode, CorrespondentType = CorrespondentType.Other, CustomerId = customerId, SaleZoneId = saleCodeMatch.SaleZoneId });
+                customerRoutes.Add(new CustomerRoute() { Code = routeCode, CorrespondentType = CorrespondentType.Other, CustomerId = customerId, SaleZoneId = saleZoneDefintion.SaleZoneId, VersionNumber = versionNumber });
             }
         }
 
@@ -194,7 +196,7 @@ namespace TOne.WhS.Routing.Business
             return null;
         }
 
-        private T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleCodeMatch saleCodeMatch, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
+        private T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleZoneDefintion saleZoneDefintion, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
             where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
@@ -210,7 +212,7 @@ namespace TOne.WhS.Routing.Business
 
             T route = Activator.CreateInstance<T>();
             route.Code = routeCode;
-            route.SaleZoneId = saleCodeMatch.SaleZoneId;
+            route.SaleZoneId = saleZoneDefintion.SaleZoneId;
             route.ExecutedRuleId = routeRule.RuleId;
             route.Rate = customerZoneDetail.EffectiveRateValue;
             route.SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds;

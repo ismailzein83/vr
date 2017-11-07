@@ -1,23 +1,37 @@
 ﻿<vr-columns width="fullrow">
     <vr-tabs>
         <vr-tab header="'Route Rule'">
-            <vr-section title="Customer" vr-loader="isLoadingCustomerDataTransformationDefinition">
-                <vr-genericdata-datatransformationdefinition-selector on-ready="onCustomerDataTransformationDefinitionReady" selectedvalues="selectedCustomerDataTransformationDefinition"
-                                                                      isrequired="true" customlabel="'Customer Transformation'" hideremoveicon>
-                </vr-genericdata-datatransformationdefinition-selector>
+            <vr-section header="Customer" vr-loader="isLoadingCustomerDataTransformationDefinition">
+                <vr-columns width="1/2row">
+                    <vr-genericdata-datatransformationdefinition-selector on-ready="onCustomerDataTransformationDefinitionReady" selectedvalues="selectedCustomerDataTransformationDefinition"
+                                                                          isrequired="true" customlabel="'Customer Transformation'" hideremoveicon>
+                    </vr-genericdata-datatransformationdefinition-selector>
+                </vr-columns>
             </vr-section>
-            <vr-section title="Supplier" vr-loader="isLoadingSupplierDataTransformationDefinition">
-                <vr-genericdata-datatransformationdefinition-selector on-ready="onSupplierDataTransformationDefinitionReady" selectedvalues="selectedSupplierDataTransformationDefinition"
-                                                                      isrequired="true" customlabel="'Supplier Transformation'" hideremoveicon>
-                </vr-genericdata-datatransformationdefinition-selector>
+            <vr-section header="Supplier" vr-loader="isLoadingSupplierDataTransformationDefinition">
+                <vr-columns width="1/2row">
+                    <vr-genericdata-datatransformationdefinition-selector on-ready="onSupplierDataTransformationDefinitionReady" selectedvalues="selectedSupplierDataTransformationDefinition"
+                                                                          isrequired="true" customlabel="'Supplier Transformation'" hideremoveicon>
+                    </vr-genericdata-datatransformationdefinition-selector>
+                </vr-columns>
+            </vr-section>
+            <vr-section header="Partial Routing">
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.partialRoutesPercentageLimit" type="number" label="Routes Percentage Limit" isrequired minvalue="0" maxvalue="100" decimalprecision="0"
+                                hint="Full Route Build will be triggered in case of affected routes percentage exceeds this limit during Partial Route Build"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.partialRoutesUpdateBatchSize" type="number" label="Update Batch Size" isrequired minvalue="0" decimalprecision="0"
+                                hint="Maximum number of routes in a batch when updating affected routes"></vr-textbox>
+                </vr-columns>
             </vr-section>
         </vr-tab>
         <vr-tab header="'Quality Configuration'">
-               <vr-row>
-                    <vr-columns width="1/2row">
-                        <vr-analytic-table-selector on-ready="onQualityAnalyticTableReady" isrequired="true" customlabel="Quality Analytic" hideremoveicon></vr-analytic-table-selector>
-                    </vr-columns>
-                </vr-row>
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-analytic-table-selector on-ready="onQualityAnalyticTableReady" isrequired="true" customlabel="Quality Analytic" hideremoveicon></vr-analytic-table-selector>
+                </vr-columns>
+            </vr-row>
         </vr-tab>
     </vr-tabs>
 </vr-columns>

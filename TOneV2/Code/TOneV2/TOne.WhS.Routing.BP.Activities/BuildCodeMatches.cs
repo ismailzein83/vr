@@ -25,7 +25,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public BaseQueue<CodeMatchesBatch> OutputQueue_2 { get; set; }
 
-        public BaseQueue<CodeMatches> OutputQueueForCustomerRoutes { get; set; }
+        public BaseQueue<RoutingCodeMatches> OutputQueueForCustomerRoutes { get; set; }
 
         public bool IsCustomerRoutesProcess { get; set; }
     }
@@ -58,7 +58,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public InOutArgument<BaseQueue<CodeMatchesBatch>> OutputQueue_2 { get; set; }
 
-        public InOutArgument<BaseQueue<CodeMatches>> OutputQueueForCustomerRoutes { get; set; }
+        public InOutArgument<BaseQueue<RoutingCodeMatches>> OutputQueueForCustomerRoutes { get; set; }
 
         protected override void DoWork(BuildCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {            
@@ -83,7 +83,25 @@ namespace TOne.WhS.Routing.BP.Activities
                     codeMatch.CodePrefix = code.Code;
                     if (inputArgument.IsCustomerRoutesProcess && inputArgument.OutputQueueForCustomerRoutes != null && codeMatch.SaleCodeMatches!=null && codeMatch.SaleCodeMatches.Count > 0)
                     {
-                        inputArgument.OutputQueueForCustomerRoutes.Enqueue(codeMatch);
+                        RoutingCodeMatches routingCodeMatches = new RoutingCodeMatches()
+                        {
+                            Code = codeMatch.Code,
+                            CodePrefix = codeMatch.CodePrefix,
+                            SupplierCodeMatches = codeMatch.SupplierCodeMatches,
+                            SupplierCodeMatchesBySupplier = codeMatch.SupplierCodeMatchesBySupplier,
+                            SaleZoneDefintions = new List<SaleZoneDefintion>()
+                        };
+
+                        foreach (SaleCodeMatch saleCodeMatch in codeMatch.SaleCodeMatches)
+                        {
+                            SaleZoneDefintion saleZoneDefintion = new SaleZoneDefintion() 
+                            {
+                                SaleZoneId = saleCodeMatch.SaleZoneId,
+                                SellingNumberPlanId = saleCodeMatch.SellingNumberPlanId
+                            };
+                            routingCodeMatches.SaleZoneDefintions.Add(saleZoneDefintion);
+                        }
+                        inputArgument.OutputQueueForCustomerRoutes.Enqueue(routingCodeMatches);
                     }
 
                     if (codeMatchesBatch != null)

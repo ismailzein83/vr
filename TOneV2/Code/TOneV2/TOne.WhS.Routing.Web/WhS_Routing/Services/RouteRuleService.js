@@ -97,13 +97,14 @@
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
         };
 
-        function viewLinkedRouteRules(linkedRouteRuleIds, linkedCode) {
+        function viewLinkedRouteRules(linkedRouteRuleIds, linkedCode, onRouteRuleUpdated) {
             var settings = {
             };
 
             var parameters = {
                 linkedRouteRuleIds: linkedRouteRuleIds,
-                linkedCode: linkedCode
+                linkedCode: linkedCode,
+                onRouteRuleUpdated: onRouteRuleUpdated
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/LinkedRouteRuleEditor.html', parameters, settings);

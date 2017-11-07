@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService',
-function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService) {
+app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum',
+function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum) {
 
     var directiveDefinitionObject = {
 
@@ -150,11 +150,17 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
         };
 
         function viewLinkedRouteRules(dataItem) {
-            WhS_Routing_RouteRuleService.viewLinkedRouteRules(dataItem.LinkedRouteRuleIds, dataItem.Entity.Code);
+            var onRouteRuleUpdated = function (updatedItem) {
+                triggerPartialRoute(updatedItem.Entity.RuleId);
+            };
+            WhS_Routing_RouteRuleService.viewLinkedRouteRules(dataItem.LinkedRouteRuleIds, dataItem.Entity.Code, onRouteRuleUpdated);
         };
 
         function editLinkedRouteRule(dataItem) {
-            WhS_Routing_RouteRuleService.editLinkedRouteRule(dataItem.LinkedRouteRuleIds[0], dataItem.Entity.Code);
+            var onRouteRuleUpdated = function (updatedItem) {
+                triggerPartialRoute(updatedItem.Entity.RuleId);
+            };
+            WhS_Routing_RouteRuleService.editLinkedRouteRule(dataItem.LinkedRouteRuleIds[0], dataItem.Entity.Code, onRouteRuleUpdated);
         };
 
         function viewRouteRuleEditor(dataItem) {
@@ -177,10 +183,72 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                 extendCutomerRouteObject(newDataItem);
                 gridDrillDownTabsObj.setDrillDownExtensionObject(newDataItem);
                 gridAPI.itemUpdated(newDataItem);
+
+                triggerPartialRoute(addedItem.Entity.RuleId);
+
             };
 
             var linkedRouteRuleInput = { RuleId: dataItem.Entity.ExecutedRuleId, RouteOptions: dataItem.Entity.Options, CustomerId: dataItem.Entity.CustomerId, Code: dataItem.Entity.Code };
             WhS_Routing_RouteRuleService.addLinkedRouteRule(linkedRouteRuleInput, dataItem.Entity.Code, onRouteRuleAdded);
+        };
+
+        function triggerPartialRoute(ruleId) {
+            var inputArguments = {
+                $type: 'TOne.WhS.Routing.BP.Arguments.PartialRoutingProcessInput, TOne.WhS.Routing.BP.Arguments',
+                RouteRuleId: ruleId
+            };
+
+            var input = {
+                InputArguments: inputArguments
+            };
+            $scope.isLoading = true;
+            BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+                    var processTrackingContext = {
+                        automaticCloseWhenCompleted: true,
+                        onClose: function (bpInstanceClosureContext) {
+
+                            if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
+                                $scope.isLoading = true;
+
+                                var customerRouteDefinitions = [];
+                                for (var itemIndex = 0; itemIndex < $scope.customerRoutes.length; itemIndex++) {
+                                    var currentCustomerRoute = $scope.customerRoutes[itemIndex];
+                                    customerRouteDefinitions.push({ CustomerId: currentCustomerRoute.Entity.CustomerId, Code: currentCustomerRoute.Entity.Code });
+                                }
+
+                                WhS_Routing_CustomerRouteAPIService.GetUpdatedCustomerRoutes(customerRouteDefinitions).then(function (response) {
+                                    if (response != undefined) {
+                                        for (var x = 0; x < response.length; x++) {
+                                            var updatedCustomerRoute = response[x];
+                                            for (var y = 0; y < $scope.customerRoutes.length; y++) {
+                                                var currentCustomerRoute = $scope.customerRoutes[y];
+
+                                                if (updatedCustomerRoute.Entity.Code == currentCustomerRoute.Entity.Code
+                                                   && updatedCustomerRoute.Entity.CustomerId == currentCustomerRoute.Entity.CustomerId) {
+                                                    extendCutomerRouteObject(updatedCustomerRoute);
+                                                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedCustomerRoute);
+                                                    $scope.customerRoutes[y] = updatedCustomerRoute;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    $scope.isLoading = false;
+                                }).catch(function (error) {
+                                    $scope.isLoading = false;
+                                });
+                            }
+                            else {
+                                $scope.isLoading = false;
+                            }
+                        }
+                    };
+
+                    BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, processTrackingContext);
+                }
+            }).catch(function (error) {
+                $scope.isLoading = false;
+            });
         };
 
         function initDrillDownDefinitions() {

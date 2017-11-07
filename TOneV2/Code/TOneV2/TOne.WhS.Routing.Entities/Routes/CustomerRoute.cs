@@ -13,5 +13,13 @@ namespace TOne.WhS.Routing.Entities
         public string CustomerName { get; set; }
 
         public string SaleZoneName { get; set; }
+
+        public int? VersionNumber { get; set; }
+    }
+
+    public class CustomerRouteDefinition
+    {
+        public int CustomerId { get; set; }
+        public string Code { get; set; }
     }
 }

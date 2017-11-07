@@ -29,6 +29,7 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
         var gridDrillDownTabsObj;
         var areRulesLinked = false;
         var linkedCode = undefined;
+        var onLinkedRouteRuleUpdated;
 
         function initializeController() {
             $scope.routeRules = [];
@@ -48,6 +49,7 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                         var query = payload;
                         areRulesLinked = payload.areRulesLinked;
                         linkedCode = payload.linkedCode;
+                        onLinkedRouteRuleUpdated = payload.onRouteRuleUpdated;
                         if (query.loadedFromRoutingProduct) {
                             $scope.showCustomerColumn = false;
                             $scope.showIncludedCodesColumn = false;
@@ -55,7 +57,7 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                                 query = payload.query;
                         }
 
-                        if (query!=undefined && query.hideCustomerColumn) {
+                        if (query != undefined && query.hideCustomerColumn) {
                             $scope.showCustomerColumn = false;
                         }
 
@@ -133,6 +135,9 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
             var onRouteRuleUpdated = function (updatedItem) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItem);
                 gridAPI.itemUpdated(updatedItem);
+
+                if (onLinkedRouteRuleUpdated != undefined && typeof (onLinkedRouteRuleUpdated) == 'function')
+                    onLinkedRouteRuleUpdated(updatedItem);
             };
             if (areRulesLinked)
                 WhS_Routing_RouteRuleService.editLinkedRouteRule(routeRule.Entity.RuleId, linkedCode, onRouteRuleUpdated);

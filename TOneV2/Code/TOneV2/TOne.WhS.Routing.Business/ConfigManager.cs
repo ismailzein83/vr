@@ -26,6 +26,16 @@ namespace TOne.WhS.Routing.Business
             return GetCustomerRouteBuildConfiguration().IndexesCommandTimeoutInMinutes * 60;
         }
 
+        public int GetPartialRoutesPercentageLimit()
+        {
+            return GetRouteRuleDataTransformation().PartialRoutesPercentageLimit;
+        }
+
+        public int GetPartialRoutesUpdateBatchSize()
+        {
+            return GetRouteRuleDataTransformation().PartialRoutesUpdateBatchSize;
+        }
+
         public int GetProductRouteIndexesCommandTimeoutInSeconds()
         {
             return GetProductRouteBuildConfiguration().IndexesCommandTimeoutInMinutes * 60;

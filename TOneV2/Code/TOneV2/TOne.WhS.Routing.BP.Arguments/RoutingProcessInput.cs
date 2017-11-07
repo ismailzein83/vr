@@ -12,9 +12,7 @@ namespace TOne.WhS.Routing.BP.Arguments
         public RoutingProcessType RoutingProcessType { get; set; }
         public bool DivideProcessIntoSubProcesses { get; set; }
         public List<string> Switches { get; set; }
-        public bool StoreCodeMatches { get; set; }
         public int EffectiveAfterInMinutes { get; set; }
-         
 
         public override string GetTitle()
         {

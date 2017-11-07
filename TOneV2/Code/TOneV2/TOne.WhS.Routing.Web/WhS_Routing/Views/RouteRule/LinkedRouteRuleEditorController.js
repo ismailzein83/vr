@@ -8,6 +8,8 @@
 
         var linkedRouteRuleIds;
         var linkedCode;
+        var onRouteRuleUpdated;
+
         loadParameters();
         defineScope();
         load();
@@ -18,6 +20,7 @@
             if (parameters != undefined && parameters != null) {
                 linkedRouteRuleIds = parameters.linkedRouteRuleIds;
                 linkedCode = parameters.linkedCode;
+                onRouteRuleUpdated = parameters.onRouteRuleUpdated;
             }
         }
 
@@ -40,7 +43,8 @@
             var query = {
                 LinkedRouteRuleIds: linkedRouteRuleIds,
                 areRulesLinked: true,
-                linkedCode: linkedCode
+                linkedCode: linkedCode,
+                onRouteRuleUpdated: onRouteRuleUpdated
             };
             return query;
         }

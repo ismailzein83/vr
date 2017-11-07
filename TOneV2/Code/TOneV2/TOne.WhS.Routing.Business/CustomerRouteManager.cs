@@ -6,6 +6,9 @@ using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -29,6 +32,30 @@ namespace TOne.WhS.Routing.Business
         public Vanrise.Entities.IDataRetrievalResult<CustomerRouteDetail> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new CustomerRouteRequestHandler());
+        }
+
+        public List<CustomerRouteDetail> GetUpdatedCustomerRoutes(List<CustomerRouteDefinition> customerRouteDefinitions)
+        {
+            var routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
+            IPartialRouteInfoDataManager partialRouteInfoDataManager = RoutingDataManagerFactory.GetDataManager<IPartialRouteInfoDataManager>();
+            partialRouteInfoDataManager.RoutingDatabase = routingDatabase;
+
+            PartialRouteInfo partialRouteInfo = partialRouteInfoDataManager.GetPartialRouteInfo();
+            partialRouteInfo.ThrowIfNull("partialRouteInfo", partialRouteInfoDataManager.RoutingDatabase.ID);
+
+            ICustomerRouteDataManager customerRouteDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+            customerRouteDataManager.RoutingDatabase = routingDatabase;
+
+            List<CustomerRoute> updatedCustomerRoutes = customerRouteDataManager.GetUpdatedCustomerRoutes(customerRouteDefinitions, partialRouteInfo.LastVersionNumber);
+            if (updatedCustomerRoutes == null)
+                return null;
+
+            List<CustomerRouteDetail> result = new List<CustomerRouteDetail>();
+            foreach (CustomerRoute customerRoute in updatedCustomerRoutes)
+            {
+                result.Add(CustomerRouteDetailMapper(customerRoute));
+            }
+            return result;
         }
 
         internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)

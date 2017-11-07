@@ -56,7 +56,6 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
                         RoutingDatabaseType: $scope.selectedRoutingDatabaseType.value,
                         RoutingProcessType: WhS_Routing_RoutingProcessTypeEnum.CustomerRoute.value,
                         Switches: !$scope.isFuture ? switchSelectorAPI.getSelectedIds() : null,
-                        StoreCodeMatches: $scope.storeCodeMatches,
                         EffectiveAfterInMinutes: $scope.effectiveAfterInMinutes
                     };
                 };
@@ -70,7 +69,6 @@ app.directive("vrWhsRoutingBuildroutetask", ['UtilsService', 'WhS_Routing_Routin
 
                     if (payload != undefined && payload.data != undefined) {
                         $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', payload.data.RoutingDatabaseType);
-                        $scope.storeCodeMatches = payload.data.StoreCodeMatches;
                         $scope.effectiveAfterInMinutes = payload.data.EffectiveAfterInMinutes;
                     }
                     else {

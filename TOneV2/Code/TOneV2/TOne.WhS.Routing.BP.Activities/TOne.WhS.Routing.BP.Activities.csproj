@@ -73,6 +73,13 @@
     <Reference Include="Vanrise.Queueing">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
@@ -92,7 +99,16 @@
     <Compile Include="BuildCodeMatches.cs" />
     <Compile Include="BuildCustomerRoutes.cs" />
     <Compile Include="CodePrefixRequest.cs" />
-    <Compile Include="PartialRoute\CheckAffectedRulesImpact.cs" />
+    <Compile Include="DeleteRouteRuleChanged.cs" />
+    <Compile Include="GetLatestRoutingDatabase.cs" />
+    <Compile Include="PartialRoute\BuildAffectedRoutingCustomerInfo.cs" />
+    <Compile Include="PartialRoute\ApplyAffectedCustomerRoutesToDB.cs" />
+    <Compile Include="PartialRoute\GetAffectedRoutes.cs" />
+    <Compile Include="PartialRoute\ApplyPartialRouteInfo.cs" />
+    <Compile Include="PartialRoute\GetPartialRouteInfo.cs" />
+    <Compile Include="PartialRoute\LoadPartialCustomerZoneDetails.cs" />
+    <Compile Include="PartialRoute\LoadPartialCodeMatches.cs" />
+    <Compile Include="PartialRoute\GetAffectedRouteRule.cs" />
     <Compile Include="PartialRoute\LoadAffectedRules.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="FinalizeRouteProcess.cs" />
@@ -135,6 +151,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.MainExtensions\TOne.WhS.BusinessEntity.MainExtensions.csproj">
+      <Project>{31d4e637-c2d3-49b2-ae0a-0658aeddd9dd}</Project>
+      <Name>TOne.WhS.BusinessEntity.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.BP.Activities\TOne.WhS.RouteSync.BP.Activities.csproj">
       <Project>{6af7a0ad-f82d-4b4c-9085-0fe891b78863}</Project>

@@ -165,6 +165,11 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             });
         }
 
+        public List<CustomerZoneDetail> GetCustomerZoneDetails(HashSet<CustomerSaleZone> customerSaleZones)
+        {
+            throw new NotImplementedException();
+        }
+
         DataTable BuildZoneIdsTable(HashSet<long> zoneIds)
         {
             DataTable dtZoneInfo = new DataTable();

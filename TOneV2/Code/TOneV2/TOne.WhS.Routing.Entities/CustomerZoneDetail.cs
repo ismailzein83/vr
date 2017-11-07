@@ -35,4 +35,11 @@ namespace TOne.WhS.Routing.Entities
     {
         public List<CustomerZoneDetail> CustomerZoneDetails { get; set; }
     }
+
+    public struct CustomerSaleZone
+    {
+        public int CustomerId { get; set; }
+
+        public long SaleZoneId { get; set; }
+    }
 }

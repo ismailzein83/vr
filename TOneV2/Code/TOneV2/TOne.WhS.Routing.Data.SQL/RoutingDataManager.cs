@@ -130,12 +130,15 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_CustomerZoneDetailTable);
             query.AppendLine(query_CustomerRouteTable);
             query.AppendLine(query_CodeMatchTable);
-            //query.AppendLine(query_CodeSaleZoneTable);
             query.AppendLine(query_TableTypes);
+            query.AppendLine(query_CustomerZoneType);
+            query.AppendLine(query_CodeType);
+            query.AppendLine(query_CustomerRouteType);
             query.AppendLine(query_SaleZoneTable);
             query.AppendLine(query_CarrierAccountTable);
             query.AppendLine(query_CodeSaleZoneMatchTable);
             query.AppendLine(query_CodeSupplierZoneMatchTable);
+            query.AppendLine(query_PartialRouteInfoTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -224,17 +227,11 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [CustomerId] [int] NOT NULL,
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [SaleZoneId] [bigint] NOT NULL,
-	                                                    [Rate] [decimal](20, 8) NULL,
-                                                        [SaleZoneServiceIds] [varchar](max) NULL,
 	                                                    [IsBlocked] [bit] NOT NULL,
 	                                                    [ExecutedRuleId] [int] NULL,
-	                                                    [RouteOptions] [varchar](max) NULL/*,
-                                                    CONSTRAINT [PK_CustomerRoute] PRIMARY KEY CLUSTERED 
-                                                    (
-	                                                    [CustomerID] ASC,
-	                                                    [Code] ASC
-                                                    )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-                                                    */) ON [PRIMARY] ";
+	                                                    [RouteOptions] [varchar](max) NULL,
+                                                        [VersionNumber] [int] NULL
+                                                ) ON [PRIMARY] ";
 
         private const string query_CodeSaleZoneMatchTable = @"CREATE TABLE [dbo].[CodeSaleZoneMatch](
 																[Code] [varchar](20) NOT NULL,
@@ -246,6 +243,10 @@ namespace TOne.WhS.Routing.Data.SQL
 															(
 																[Code] ASC
 															);";
+        private const string query_PartialRouteInfoTable = @"CREATE TABLE [dbo].[PartialRouteInfo](
+																[Data] [nvarchar](MAX) NOT NULL
+															) ON [PRIMARY];";
+
 
         private const string query_CodeSupplierZoneMatchTable = @"CREATE TABLE [dbo].[CodeSupplierZoneMatch](
 																	[Code] [varchar](20) NOT NULL,
@@ -293,6 +294,23 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [ID] ASC
                                                     )WITH (IGNORE_DUP_KEY = OFF)
                                                     )";
+
+        const string query_CustomerZoneType = @"CREATE TYPE [CustomerZoneType] AS TABLE(
+	                                                    [CustomerId] [int] NOT NULL,
+                                                        [SaleZoneId] [bigint] NOT NULL)";
+
+        const string query_CodeType = @"CREATE TYPE [CodeType] AS TABLE(
+	                                           [Code] [varchar](20) NOT NULL)";
+
+        const string query_CustomerRouteType = @"CREATE TYPE [CustomerRouteType] AS TABLE(
+	                                            [CustomerId] [int] NOT NULL,
+	                                            [Code] [varchar](20) NOT NULL,
+	                                            [SaleZoneId] [bigint] NOT NULL,
+	                                            [IsBlocked] [bit] NOT NULL,
+	                                            [ExecutedRuleId] [int] NULL,
+	                                            [RouteOptions] [varchar](max) NULL,
+	                                            [VersionNumber] [int] NULL)";
+        
 
         const string query_RPZonesTableType = @"CREATE TYPE [RPZonesType] AS TABLE(
                                                     [RoutingProductId] [int] NOT NULL,                                                    

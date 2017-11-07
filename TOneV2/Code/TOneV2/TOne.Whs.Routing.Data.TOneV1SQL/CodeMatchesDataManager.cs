@@ -18,7 +18,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
     {
         readonly string[] columns = { "Code", "SupplierCodeID", "SupplierZoneID", "SupplierID" };
 
-		public bool ShouldApplyCodeZoneMatch { get; set; }
+        public bool ShouldApplyCodeZoneMatch { get; set; }
 
         CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
         SaleZoneManager _saleZoneManager = new SaleZoneManager();
@@ -80,7 +80,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         {
             throw new NotImplementedException();
         }
-
+        public List<PartialCodeMatches> GetPartialCodeMatchesByRouteCodes(HashSet<string> routeCodes)
+        {
+            throw new NotImplementedException();
+        }
 
         private void InitializeData()
         {

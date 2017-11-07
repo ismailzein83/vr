@@ -86,6 +86,18 @@ namespace TOne.WhS.Routing.Data.SQL
             });
         }
 
+        public List<CustomerZoneDetail> GetCustomerZoneDetails(HashSet<CustomerSaleZone> customerSaleZones)
+        {
+            DataTable dtCustomerZones = BuildCustomerZonesTable(customerSaleZones);
+            return GetItemsText(query_GetFilteredCustomerZoneDetailsByCustomerZone, CustomerZoneDetailMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@CustomerZoneList", SqlDbType.Structured);
+                dtPrm.TypeName = "CustomerZoneType";
+                dtPrm.Value = dtCustomerZones;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
+
         DataTable BuildZoneIdsTable(HashSet<long> zoneIds)
         {
             DataTable dtZoneInfo = new DataTable();
@@ -99,6 +111,23 @@ namespace TOne.WhS.Routing.Data.SQL
             }
             dtZoneInfo.EndLoadData();
             return dtZoneInfo;
+        }
+
+        DataTable BuildCustomerZonesTable(HashSet<CustomerSaleZone> customerSaleZones)
+        {
+            DataTable dtCustomerZones = new DataTable();
+            dtCustomerZones.Columns.Add("CustomerId", typeof(Int32));
+            dtCustomerZones.Columns.Add("SaleZoneId", typeof(Int64));
+            dtCustomerZones.BeginLoadData();
+            foreach (var customerSaleZone in customerSaleZones)
+            {
+                DataRow dr = dtCustomerZones.NewRow();
+                dr["CustomerId"] = customerSaleZone.CustomerId;
+                dr["SaleZoneId"] = customerSaleZone.SaleZoneId;
+                dtCustomerZones.Rows.Add(dr);
+            }
+            dtCustomerZones.EndLoadData();
+            return dtCustomerZones;
         }
 
         #region Queries
@@ -126,7 +155,18 @@ namespace TOne.WhS.Routing.Data.SQL
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @ZoneList z ON z.ID = zd.SaleZoneID";
 
-        #endregion
+        const string query_GetFilteredCustomerZoneDetailsByCustomerZone = @"                                                       
+                                            SELECT zd.[CustomerId]
+                                                  ,zd.[SaleZoneId]
+                                                  ,zd.[RoutingProductId]
+                                                  ,zd.[RoutingProductSource]
+                                                  ,zd.[SellingProductId]
+                                                  ,zd.[EffectiveRateValue]
+                                                  ,zd.[RateSource]
+                                                  ,zd.[SaleZoneServiceIds]
+                                              FROM [dbo].[CustomerZoneDetail] zd with(nolock)
+                                              JOIN @CustomerZoneList cz ON cz.CustomerId = zd.CustomerId and  cz.SaleZoneId = zd.SaleZoneId";
 
+        #endregion
     }
 }

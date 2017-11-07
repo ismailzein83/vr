@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
+using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
@@ -138,6 +139,34 @@ namespace TOne.WhS.Routing.Data.SQL
             });
         }
 
+        public List<PartialCodeMatches> GetPartialCodeMatchesByRouteCodes(HashSet<string> routeCodes)
+        {
+            DataTable dtCodes = BuildCodesTable(routeCodes);
+            return GetItemsText(query_GetCodeMatchesByCode.ToString(), PartialCodeMatchesMapper, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@Codes", SqlDbType.Structured);
+                dtPrm.TypeName = "CodeType";
+                dtPrm.Value = dtCodes;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
+
+
+        DataTable BuildCodesTable(HashSet<string> routeCodes)
+        {
+            DataTable dtCodes = new DataTable();
+            dtCodes.Columns.Add("Code", typeof(string));
+            dtCodes.BeginLoadData();
+            foreach (var routeCode in routeCodes)
+            {
+                DataRow dr = dtCodes.NewRow();
+                dr["Code"] = routeCode;
+                dtCodes.Rows.Add(dr);
+            }
+            dtCodes.EndLoadData();
+            return dtCodes;
+        }
+
         #endregion
 
         #region Private Methods
@@ -153,6 +182,28 @@ namespace TOne.WhS.Routing.Data.SQL
                 SaleZoneId = (long)reader["SaleZoneId"]
             };
         }
+
+        private PartialCodeMatches PartialCodeMatchesMapper(IDataReader reader)
+        {
+            PartialCodeMatches partialCodeMatches = new PartialCodeMatches()
+            {
+                Code = reader["Code"] as string,
+                CodePrefix = reader["CodePrefix"] as string,
+                SupplierCodeMatches = this.DeserializeSupplierCodeMatches(reader["Content"] as string),
+            };
+
+            if (partialCodeMatches.SupplierCodeMatches != null)
+            {
+                partialCodeMatches.SupplierCodeMatchesBySupplier = new SupplierCodeMatchWithRateBySupplier();
+                foreach (SupplierCodeMatchWithRate supplierCodeMatchWithRate in partialCodeMatches.SupplierCodeMatches)
+                {
+                    partialCodeMatches.SupplierCodeMatchesBySupplier.Add(supplierCodeMatchWithRate.CodeMatch.SupplierId, supplierCodeMatchWithRate);
+                }
+            }
+
+            return partialCodeMatches;
+        }
+
 
         /// <summary>
         /// CM~RateValue~ServiceId1#...#ServiceIdn~ExactServiceId1#...#ExactServiceIdn~...~SupplierRateEED|CM~RateValue~ServiceId1#...#ServiceIdn~ExactServiceId1#...#ExactServiceIdn~...~SupplierRateEED
@@ -260,6 +311,12 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     FROM    [dbo].[CodeMatch] cm with(nolock)
                                                     join    CodeSaleZone sz on sz.code = cm.code 
                                                     where   sz.SaleZoneId between @FromZoneId and @ToZoneId";
+
+        private StringBuilder query_GetCodeMatchesByCode = new StringBuilder(@"SELECT  [CodePrefix]
+                                                            ,cm.[Code]
+                                                            ,[Content]
+                                                    FROM    [dbo].[CodeMatch] cm with(nolock)
+                                                    JOIN @Codes c ON c.Code = cm.Code");
 
         #endregion
     }

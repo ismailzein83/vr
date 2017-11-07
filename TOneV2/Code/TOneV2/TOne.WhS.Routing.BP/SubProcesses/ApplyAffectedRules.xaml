@@ -1,16 +1,21 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
+ xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
  xmlns:twre="clr-namespace:TOne.WhS.Routing.Entities;assembly=TOne.WhS.Routing.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
-    <x:Property Name="AffectedRouteRules" Type="InArgument(twre:AffectedRouteRules)" />
-    <x:Property Name="AffectedRouteOptionRules" Type="InArgument(twre:AffectedRouteOptionRules)" />
+    <x:Property Name="AffectedCustomerRoutes" Type="InArgument(scg:List(twre:CustomerRoute))" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1</sap2010:WorkflowViewState.IdRef>
@@ -22,30 +27,220 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>TOne.WhS.Routing.Entities</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1" sads:DebugSymbol.Symbol="d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEFwcGx5QWZmZWN0ZWRSdWxlcy54YW1sASYDJoIBAgEB" />
+  <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vq:BaseQueue(twre:RoutingCodeMatches)" Name="RoutingCodeMatchesQueue" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)" Name="ActiveRoutingCustomerInfos" />
+      <Variable x:TypeArguments="twre:CustomerZoneDetailByZone" Name="CustomerZoneDetailByZone" />
+      <Variable x:TypeArguments="vq:BaseQueue(twre:CustomerRoutesBatch)" Name="CustomerRoutesQueue">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CustomerRoutesBatch)">new MemoryQueue&lt;CustomerRoutesBatch&gt;()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="twre:PartialRouteInfo" Name="PartialRouteInfo" />
+      <Variable x:TypeArguments="twre:RoutingDatabase" Name="RoutingDatabase" />
+      <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildCustomerRoutesStatus" />
+    </Sequence.Variables>
+    <twrba:GetLatestRoutingDatabase sap2010:WorkflowViewState.IdRef="GetLatestRoutingDatabase_1">
+      <twrba:GetLatestRoutingDatabase.RoutingDatabase>
+        <OutArgument x:TypeArguments="twre:RoutingDatabase">
+          <mca:CSharpReference x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpReference>
+        </OutArgument>
+      </twrba:GetLatestRoutingDatabase.RoutingDatabase>
+    </twrba:GetLatestRoutingDatabase>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <twrba:LoadPartialCodeMatches Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadPartialCodeMatches_1">
+        <twrba:LoadPartialCodeMatches.AffectedCustomerRoutes>
+          <InArgument x:TypeArguments="scg:List(twre:CustomerRoute)">
+            <mca:CSharpValue x:TypeArguments="scg:List(twre:CustomerRoute)">AffectedCustomerRoutes</mca:CSharpValue>
+          </InArgument>
+        </twrba:LoadPartialCodeMatches.AffectedCustomerRoutes>
+        <twrba:LoadPartialCodeMatches.CodeMatchesQueue>
+          <OutArgument x:TypeArguments="vq:BaseQueue(twre:RoutingCodeMatches)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:RoutingCodeMatches)">RoutingCodeMatchesQueue</mca:CSharpReference>
+          </OutArgument>
+        </twrba:LoadPartialCodeMatches.CodeMatchesQueue>
+        <twrba:LoadPartialCodeMatches.RoutingDatabase>
+          <InArgument x:TypeArguments="twre:RoutingDatabase">
+            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+          </InArgument>
+        </twrba:LoadPartialCodeMatches.RoutingDatabase>
+      </twrba:LoadPartialCodeMatches>
+      <twrba:BuildAffectedRoutingCustomerInfo Status="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildAffectedRoutingCustomerInfo_1">
+        <twrba:BuildAffectedRoutingCustomerInfo.ActiveRoutingCustomerInfos>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">ActiveRoutingCustomerInfos</mca:CSharpReference>
+          </OutArgument>
+        </twrba:BuildAffectedRoutingCustomerInfo.ActiveRoutingCustomerInfos>
+        <twrba:BuildAffectedRoutingCustomerInfo.AffectedCustomerRoutes>
+          <InArgument x:TypeArguments="scg:List(twre:CustomerRoute)">
+            <mca:CSharpValue x:TypeArguments="scg:List(twre:CustomerRoute)">AffectedCustomerRoutes</mca:CSharpValue>
+          </InArgument>
+        </twrba:BuildAffectedRoutingCustomerInfo.AffectedCustomerRoutes>
+      </twrba:BuildAffectedRoutingCustomerInfo>
+      <twrba:LoadPartialCustomerZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadPartialCustomerZoneDetails_1">
+        <twrba:LoadPartialCustomerZoneDetails.AffectedCustomerRoutes>
+          <InArgument x:TypeArguments="scg:List(twre:CustomerRoute)">
+            <mca:CSharpValue x:TypeArguments="scg:List(twre:CustomerRoute)">AffectedCustomerRoutes</mca:CSharpValue>
+          </InArgument>
+        </twrba:LoadPartialCustomerZoneDetails.AffectedCustomerRoutes>
+        <twrba:LoadPartialCustomerZoneDetails.CustomerZoneDetails>
+          <OutArgument x:TypeArguments="twre:CustomerZoneDetailByZone">
+            <mca:CSharpReference x:TypeArguments="twre:CustomerZoneDetailByZone">CustomerZoneDetailByZone</mca:CSharpReference>
+          </OutArgument>
+        </twrba:LoadPartialCustomerZoneDetails.CustomerZoneDetails>
+        <twrba:LoadPartialCustomerZoneDetails.RoutingDatabase>
+          <InArgument x:TypeArguments="twre:RoutingDatabase">
+            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+          </InArgument>
+        </twrba:LoadPartialCustomerZoneDetails.RoutingDatabase>
+      </twrba:LoadPartialCustomerZoneDetails>
+    </Parallel>
+    <twrba:GetPartialRouteInfo sap2010:WorkflowViewState.IdRef="GetPartialRouteInfo_1">
+      <twrba:GetPartialRouteInfo.PartialRouteInfo>
+        <OutArgument x:TypeArguments="twre:PartialRouteInfo">
+          <mca:CSharpReference x:TypeArguments="twre:PartialRouteInfo">PartialRouteInfo</mca:CSharpReference>
+        </OutArgument>
+      </twrba:GetPartialRouteInfo.PartialRouteInfo>
+      <twrba:GetPartialRouteInfo.RoutingDatabase>
+        <InArgument x:TypeArguments="twre:RoutingDatabase">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+        </InArgument>
+      </twrba:GetPartialRouteInfo.RoutingDatabase>
+    </twrba:GetPartialRouteInfo>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_3">
+      <twrba:BuildCustomerRoutes PreviousActivityStatus="{x:Null}" SwitchesInProcess="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCustomerRoutes_2" IsFuture="False">
+        <twrba:BuildCustomerRoutes.ActiveRoutingCustomerInfos>
+          <InArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">ActiveRoutingCustomerInfos</mca:CSharpValue>
+          </InArgument>
+        </twrba:BuildCustomerRoutes.ActiveRoutingCustomerInfos>
+        <twrba:BuildCustomerRoutes.CustomerZoneDetails>
+          <InArgument x:TypeArguments="twre:CustomerZoneDetailByZone">
+            <mca:CSharpValue x:TypeArguments="twre:CustomerZoneDetailByZone">CustomerZoneDetailByZone</mca:CSharpValue>
+          </InArgument>
+        </twrba:BuildCustomerRoutes.CustomerZoneDetails>
+        <twrba:BuildCustomerRoutes.EffectiveDate>
+          <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">DateTime.Now</mca:CSharpValue>
+          </InArgument>
+        </twrba:BuildCustomerRoutes.EffectiveDate>
+        <twrba:BuildCustomerRoutes.InputQueue>
+          <InArgument x:TypeArguments="vq:BaseQueue(twre:RoutingCodeMatches)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RoutingCodeMatches)">RoutingCodeMatchesQueue</mca:CSharpValue>
+          </InArgument>
+        </twrba:BuildCustomerRoutes.InputQueue>
+        <twrba:BuildCustomerRoutes.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(twre:CustomerRoutesBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CustomerRoutesBatch)">CustomerRoutesQueue</mca:CSharpReference>
+          </InOutArgument>
+        </twrba:BuildCustomerRoutes.OutputQueue>
+        <twrba:BuildCustomerRoutes.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">buildCustomerRoutesStatus</mca:CSharpReference>
+          </OutArgument>
+        </twrba:BuildCustomerRoutes.Status>
+        <twrba:BuildCustomerRoutes.VersionNumber>
+          <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+            <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">PartialRouteInfo.LastVersionNumber</mca:CSharpValue>
+          </InArgument>
+        </twrba:BuildCustomerRoutes.VersionNumber>
+      </twrba:BuildCustomerRoutes>
+      <twrba:ApplyAffectedCustomerRoutesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyAffectedCustomerRoutesToDB_1">
+        <twrba:ApplyAffectedCustomerRoutesToDB.CustomerRoutesBatchQueueInput>
+          <InArgument x:TypeArguments="vq:BaseQueue(twre:CustomerRoutesBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CustomerRoutesBatch)">CustomerRoutesQueue</mca:CSharpValue>
+          </InArgument>
+        </twrba:ApplyAffectedCustomerRoutesToDB.CustomerRoutesBatchQueueInput>
+        <twrba:ApplyAffectedCustomerRoutesToDB.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">buildCustomerRoutesStatus</mca:CSharpValue>
+          </InArgument>
+        </twrba:ApplyAffectedCustomerRoutesToDB.PreviousActivityStatus>
+        <twrba:ApplyAffectedCustomerRoutesToDB.RoutingDatabase>
+          <InArgument x:TypeArguments="twre:RoutingDatabase">
+            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+          </InArgument>
+        </twrba:ApplyAffectedCustomerRoutesToDB.RoutingDatabase>
+      </twrba:ApplyAffectedCustomerRoutesToDB>
+    </Parallel>
+    <twrba:ApplyPartialRouteInfo sap2010:WorkflowViewState.IdRef="ApplyPartialRouteInfo_1">
+      <twrba:ApplyPartialRouteInfo.PartialRouteInfo>
+        <InArgument x:TypeArguments="twre:PartialRouteInfo">
+          <mca:CSharpValue x:TypeArguments="twre:PartialRouteInfo">PartialRouteInfo</mca:CSharpValue>
+        </InArgument>
+      </twrba:ApplyPartialRouteInfo.PartialRouteInfo>
+      <twrba:ApplyPartialRouteInfo.RoutingDatabase>
+        <InArgument x:TypeArguments="twre:RoutingDatabase">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+        </InArgument>
+      </twrba:ApplyPartialRouteInfo.RoutingDatabase>
+    </twrba:ApplyPartialRouteInfo>
+    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEFwcGx5QWZmZWN0ZWRSdWxlcy54YW1sJEkD3wEOAgEBUAtQkwECAQJXBV0mAwHbAV4FjQEQAwGPAY4BBZkBIQIBfJoBBdEBEAIBHtIBBd0BIwIBC1oLWmwDAdwBXwdvJgMBvwFwB3swAwGsAXwHjAEuAwGQAZEBC5EBbgMBhgGWAQuWAWQCAX2bAQe/ASMCATvAAQfQAS8CAR/VAQvVAWYCARXaAQvaAWQCAQxiDWJ1AwHSAWcNZ4cBAwHJAWwNbGYDAcABeA14dQMBtgFzDXOOAQMBrQGEAQ2EAYABAwGjAX8Nf3UDAZoBiQENiQFmAwGRAaMBDaMBeAIBc54BDZ4BhgECAWqtAQ2tAX8CAWGoAQ2oAWUCAVi3AQ23AXoCAU+yAQ2yAYQBAgFGvAENvAF4AgE9mwGiAZsBqQECATzIAQ3IAXICATLNAQ3NAWYCASnDAQ3DAXwCASA=</sads:DebugSymbol.Symbol>
+  </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="200,99">
+      <sap2010:ViewStateData Id="GetLatestRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="LoadPartialCodeMatches_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="BuildAffectedRoutingCustomerInfo_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="LoadPartialCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="GetPartialRouteInfo_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="BuildCustomerRoutes_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="ApplyPartialRouteInfo_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,522">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap:VirtualizedContainerService.HintSize="240,179" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap:VirtualizedContainerService.HintSize="856,602" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

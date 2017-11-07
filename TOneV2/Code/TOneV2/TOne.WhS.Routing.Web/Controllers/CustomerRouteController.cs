@@ -19,5 +19,13 @@ namespace TOne.WhS.Routing.Web.Controllers
             CustomerRouteManager manager = new CustomerRouteManager();
             return GetWebResponse(input, manager.GetFilteredCustomerRoutes(input));
         }
+
+        [HttpPost]
+        [Route("GetUpdatedCustomerRoutes")]
+        public object GetUpdatedCustomerRoutes(List<CustomerRouteDefinition> customerRouteDefinitions)
+        {
+            CustomerRouteManager manager = new CustomerRouteManager();
+            return manager.GetUpdatedCustomerRoutes(customerRouteDefinitions);
+        }
     }
 }

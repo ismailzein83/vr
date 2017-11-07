@@ -8,11 +8,16 @@
         var controllerName = "CustomerRoute";
 
         function GetFilteredCustomerRoutes(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, "CustomerRoute", "GetFilteredCustomerRoutes"), input);
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetFilteredCustomerRoutes"), input);
+        }
+
+        function GetUpdatedCustomerRoutes(customerRouteDefinitions) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetUpdatedCustomerRoutes"), customerRouteDefinitions);
         }
 
         return ({
-            GetFilteredCustomerRoutes: GetFilteredCustomerRoutes
+            GetFilteredCustomerRoutes: GetFilteredCustomerRoutes,
+            GetUpdatedCustomerRoutes: GetUpdatedCustomerRoutes
         });
     }
 

@@ -25,4 +25,11 @@ namespace TOne.WhS.Routing.Entities
 
         public SaleCodeMatch MasterPlanCodeMatch { get; set; }
     }
+
+    public struct SaleZoneKey
+    {
+        public int SellingNumberPlanId { get; set; }
+
+        public long SaleZoneId { get; set; }
+    }
 }

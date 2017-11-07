@@ -1,4 +1,4 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.PartialRoutingProcess" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.PartialRoutingProcess_1"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.PartialRoutingProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:local="clr-namespace:TOne.WhS.Routing.BP.SubProcesses"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -9,13 +9,19 @@
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
- xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
+ xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Arguments;assembly=TOne.WhS.Routing.BP.Arguments"
+ xmlns:twrba1="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
  xmlns:twre="clr-namespace:TOne.WhS.Routing.Entities;assembly=TOne.WhS.Routing.Entities"
  xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
  xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
  xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
  xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(twrba:PartialRoutingProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.PartialRoutingProcess_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -26,6 +32,7 @@
       <x:String>TOne.WhS.Routing.Entities</x:String>
       <x:String>Vanrise.BusinessProcess.Entities</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>TOne.WhS.Routing.BP.Arguments</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -71,9 +78,9 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="twre:PartialRouteProcessState" Name="partialRouteProcessState" />
       <Variable x:TypeArguments="twre:AffectedRouteRules" Name="affectedRouteRules" />
-      <Variable x:TypeArguments="twre:AffectedRouteOptionRules" Name="affectedRouteOptionRules" />
       <Variable x:TypeArguments="x:Boolean" Name="shouldTriggerFullRouteProcess" />
       <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="routeBuildProcessEventPayload" />
+      <Variable x:TypeArguments="scg:List(twre:CustomerRoute)" Name="affectedCustomerRoutes" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Partial Routing Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -89,85 +96,102 @@
         </OutArgument>
       </vbw:GetDefinitionObjectState.Result>
     </vbw:GetDefinitionObjectState>
-    <twrba:LoadAffectedRules sap2010:WorkflowViewState.IdRef="LoadAffectedRules_1">
-      <twrba:LoadAffectedRules.AffectedRouteOptionRules>
-        <OutArgument x:TypeArguments="twre:AffectedRouteOptionRules">
-          <mca:CSharpReference x:TypeArguments="twre:AffectedRouteOptionRules">affectedRouteOptionRules</mca:CSharpReference>
-        </OutArgument>
-      </twrba:LoadAffectedRules.AffectedRouteOptionRules>
-      <twrba:LoadAffectedRules.AffectedRouteRules>
+    <twrba1:LoadAffectedRules sap2010:WorkflowViewState.IdRef="LoadAffectedRules_1">
+      <twrba1:LoadAffectedRules.AffectedRouteRules>
         <OutArgument x:TypeArguments="twre:AffectedRouteRules">
           <mca:CSharpReference x:TypeArguments="twre:AffectedRouteRules">affectedRouteRules</mca:CSharpReference>
         </OutArgument>
-      </twrba:LoadAffectedRules.AffectedRouteRules>
-      <twrba:LoadAffectedRules.PartialRouteProcessState>
+      </twrba1:LoadAffectedRules.AffectedRouteRules>
+      <twrba1:LoadAffectedRules.PartialRouteProcessState>
         <InArgument x:TypeArguments="twre:PartialRouteProcessState">
           <mca:CSharpValue x:TypeArguments="twre:PartialRouteProcessState">partialRouteProcessState</mca:CSharpValue>
         </InArgument>
-      </twrba:LoadAffectedRules.PartialRouteProcessState>
-    </twrba:LoadAffectedRules>
-    <twrba:CheckAffectedRulesImpact sap2010:WorkflowViewState.IdRef="CheckAffectedRulesImpact_1">
-      <twrba:CheckAffectedRulesImpact.AffectedRouteOptionRules>
-        <InArgument x:TypeArguments="twre:AffectedRouteOptionRules">
-          <mca:CSharpValue x:TypeArguments="twre:AffectedRouteOptionRules">affectedRouteOptionRules</mca:CSharpValue>
+      </twrba1:LoadAffectedRules.PartialRouteProcessState>
+      <twrba1:LoadAffectedRules.RouteRuleId>
+        <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.RouteRuleId</mca:CSharpValue>
         </InArgument>
-      </twrba:CheckAffectedRulesImpact.AffectedRouteOptionRules>
-      <twrba:CheckAffectedRulesImpact.AffectedRouteRules>
+      </twrba1:LoadAffectedRules.RouteRuleId>
+    </twrba1:LoadAffectedRules>
+    <twrba1:GetAffectedRoutes sap2010:WorkflowViewState.IdRef="GetAffectedRoutes_1">
+      <twrba1:GetAffectedRoutes.AffectedCustomerRoutes>
+        <OutArgument x:TypeArguments="scg:List(twre:CustomerRoute)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twre:CustomerRoute)">affectedCustomerRoutes</mca:CSharpReference>
+        </OutArgument>
+      </twrba1:GetAffectedRoutes.AffectedCustomerRoutes>
+      <twrba1:GetAffectedRoutes.AffectedRouteRules>
         <InArgument x:TypeArguments="twre:AffectedRouteRules">
           <mca:CSharpValue x:TypeArguments="twre:AffectedRouteRules">affectedRouteRules</mca:CSharpValue>
         </InArgument>
-      </twrba:CheckAffectedRulesImpact.AffectedRouteRules>
-      <twrba:CheckAffectedRulesImpact.ShouldTriggerFullRouteProcess>
+      </twrba1:GetAffectedRoutes.AffectedRouteRules>
+      <twrba1:GetAffectedRoutes.ShouldTriggerFullRouteProcess>
         <OutArgument x:TypeArguments="x:Boolean">
           <mca:CSharpReference x:TypeArguments="x:Boolean">shouldTriggerFullRouteProcess</mca:CSharpReference>
         </OutArgument>
-      </twrba:CheckAffectedRulesImpact.ShouldTriggerFullRouteProcess>
-    </twrba:CheckAffectedRulesImpact>
-    <If sap2010:WorkflowViewState.IdRef="If_1">
+      </twrba1:GetAffectedRoutes.ShouldTriggerFullRouteProcess>
+    </twrba1:GetAffectedRoutes>
+    <If sap2010:WorkflowViewState.IdRef="If_3">
       <If.Condition>
         <InArgument x:TypeArguments="x:Boolean">
           <mca:CSharpValue x:TypeArguments="x:Boolean">!shouldTriggerFullRouteProcess</mca:CSharpValue>
         </InArgument>
       </If.Condition>
       <If.Then>
-        <local:ApplyAffectedRules sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1">
-          <local:ApplyAffectedRules.AffectedRouteOptionRules>
-            <InArgument x:TypeArguments="twre:AffectedRouteOptionRules">
-              <mca:CSharpValue x:TypeArguments="twre:AffectedRouteOptionRules">affectedRouteOptionRules</mca:CSharpValue>
+        <If sap2010:WorkflowViewState.IdRef="If_2">
+          <If.Condition>
+            <InArgument x:TypeArguments="x:Boolean">
+              <mca:CSharpValue x:TypeArguments="x:Boolean">affectedCustomerRoutes != null &amp;&amp; affectedCustomerRoutes.Count &gt; 0</mca:CSharpValue>
             </InArgument>
-          </local:ApplyAffectedRules.AffectedRouteOptionRules>
-          <local:ApplyAffectedRules.AffectedRouteRules>
-            <InArgument x:TypeArguments="twre:AffectedRouteRules">
-              <mca:CSharpValue x:TypeArguments="twre:AffectedRouteRules">affectedRouteRules</mca:CSharpValue>
-            </InArgument>
-          </local:ApplyAffectedRules.AffectedRouteRules>
-          <sap2010:WorkflowViewState.ViewStateManager>
-            <sap2010:ViewStateManager>
-              <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
-              <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
-            </sap2010:ViewStateManager>
-          </sap2010:WorkflowViewState.ViewStateManager>
-        </local:ApplyAffectedRules>
+          </If.Condition>
+          <If.Then>
+            <Sequence sap2010:WorkflowViewState.IdRef="Sequence_2">
+              <local:ApplyAffectedRules sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1">
+                <local:ApplyAffectedRules.AffectedCustomerRoutes>
+                  <InArgument x:TypeArguments="scg:List(twre:CustomerRoute)">
+                    <mca:CSharpValue x:TypeArguments="scg:List(twre:CustomerRoute)">affectedCustomerRoutes</mca:CSharpValue>
+                  </InArgument>
+                </local:ApplyAffectedRules.AffectedCustomerRoutes>
+                <sap2010:WorkflowViewState.ViewStateManager>
+                  <sap2010:ViewStateManager>
+                    <sap2010:ViewStateData Id="GetLatestRoutingDatabase_1" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+                    <sap2010:ViewStateData Id="LoadPartialCodeMatches_1" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+                    <sap2010:ViewStateData Id="BuildAffectedRoutingCustomerInfo_1" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+                    <sap2010:ViewStateData Id="LoadPartialCustomerZoneDetails_1" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+                    <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+                    <sap2010:ViewStateData Id="GetPartialRouteInfo_1" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+                    <sap2010:ViewStateData Id="BuildCustomerRoutes_2" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+                    <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_1" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
+                    <sap2010:ViewStateData Id="Parallel_3" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
+                    <sap2010:ViewStateData Id="ApplyPartialRouteInfo_1" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
+                    <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
+                    <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
+                  </sap2010:ViewStateManager>
+                </sap2010:WorkflowViewState.ViewStateManager>
+              </local:ApplyAffectedRules>
+              <twrba1:DeleteRouteRuleChanged sap2010:WorkflowViewState.IdRef="DeleteRouteRuleChanged_1">
+                <twrba1:DeleteRouteRuleChanged.RouteRuleId>
+                  <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                    <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.RouteRuleId</mca:CSharpValue>
+                  </InArgument>
+                </twrba1:DeleteRouteRuleChanged.RouteRuleId>
+              </twrba1:DeleteRouteRuleChanged>
+            </Sequence>
+          </If.Then>
+        </If>
       </If.Then>
       <If.Else>
-        <vbw:RunProcess ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+        <vbw:RunProcess ProcessCompletedEventPayload="{x:Null}" ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
           <vbw:RunProcess.Input>
             <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
-              <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new TOne.WhS.Routing.BP.Arguments.RoutingProcessInput()
-            {
-                EffectiveTime = DateTime.Now,
-                IsFuture = false,
-                RoutingDatabaseType = RoutingDatabaseType.Current,
-                RoutingProcessType = RoutingProcessType.CustomerRoute,
-                StoreCodeMatches = true
-            }</mca:CSharpValue>
+              <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new RoutingProcessInput()
+{
+    EffectiveTime = DateTime.Now,
+    IsFuture = false,
+    RoutingDatabaseType = RoutingDatabaseType.Current,
+    RoutingProcessType = RoutingProcessType.CustomerRoute
+}</mca:CSharpValue>
             </InArgument>
           </vbw:RunProcess.Input>
-          <vbw:RunProcess.ProcessCompletedEventPayload>
-            <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
-              <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">routeBuildProcessEventPayload</mca:CSharpReference>
-            </OutArgument>
-          </vbw:RunProcess.ProcessCompletedEventPayload>
         </vbw:RunProcess>
       </If.Else>
     </If>
@@ -185,35 +209,54 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWwcRgO9AQ4CAQFOBVQgAgFgVQVbJAIBWVwFbB8CAUZtBX0mAgEzfgWtAQoCARGuAQW0ASUCAQq1AQW7ASACAQJRC1GFAQIBYk5gToMBAgFhWAtYfgIBWmQLZHICAVNfC19+AgFNaQtpdgIBR3ULdWoCAUBwC3B2AgE6egt6bwIBNIEBC4EBaAIBEoUBCZYBJAIBJpkBCasBGgIBGLEBC7EBYQIBC7gBC7gBhQECAQS1AWC1AYMBAgEDjQEPjQFuAgEtiAEPiAF6AgEnnAEPowEgAgEgqAEPqAGJAQIBGpkBtQGZAbsBAgEZ</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWwfTQPVAQ4CAQFVBVsgAgFxXAViJAIBaWMFcyACAVN0BYQBIAIBPYUBBcUBCgIBE8YBBcwBJQIBC80BBdMBIAIBAlgLWIUBAgFzVWBVgwECAXJfC19+AgFqZgtmcgIBYnALcGUCAVtrC2t2AgFUdwt3ewIBTHwLfGoCAUWBAQuBAW8CAT6IAQuIAWgCARSMAQm0AQ4CASS3AQnDARoCARvJAQvJAWECAQzQAQvQAYUBAgEEzQFgzQGDAQIBA48BD48BmwECASWTAQ2yARgCASy6AQ/AARQCAR23Ad0BtwHjAQIBHJQBD6oBKgIBNasBD7EBLwIBLZcBFZcBfQIBNq4BFa4BbwIBLg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="LoadAffectedRules_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="CheckAffectedRulesImpact_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="200,99">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="689,22" />
+      <sap2010:ViewStateData Id="GetDefinitionObjectState`1_1" sap:VirtualizedContainerService.HintSize="689,22" />
+      <sap2010:ViewStateData Id="LoadAffectedRules_1" sap:VirtualizedContainerService.HintSize="689,22" />
+      <sap2010:ViewStateData Id="GetAffectedRoutes_1" sap:VirtualizedContainerService.HintSize="689,22" />
+      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_9" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="ViewStateData_10" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="ViewStateData_11" sap:VirtualizedContainerService.HintSize="816,522">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="240,179" />
+      <sap2010:ViewStateData Id="ViewStateData_12" sap:VirtualizedContainerService.HintSize="856,602" />
       <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="464,210" />
-      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="464,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="486,706">
+      <sap2010:ViewStateData Id="DeleteRouteRuleChanged_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.PartialRoutingProcess_1" sap:VirtualizedContainerService.HintSize="262,412" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,358" />
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="689,508" />
+      <sap2010:ViewStateData Id="SaveDefinitionObjectState_1" sap:VirtualizedContainerService.HintSize="689,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="689,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="711,1004">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.PartialRoutingProcess_1" sap:VirtualizedContainerService.HintSize="751,1084" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

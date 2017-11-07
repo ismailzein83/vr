@@ -32,6 +32,8 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
             var qualityAnalyticTableReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+
+                $scope.scopeModel = {};
                 $scope.onCustomerDataTransformationDefinitionReady = function (api) {
                     customerTransformationSelectorAPI = api;
                     customerTransformationReadyPromiseDeferred.resolve();
@@ -50,7 +52,7 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                 UtilsService.waitMultiplePromises([qualityAnalyticTableReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
-               
+
             }
 
             function defineAPI() {
@@ -61,10 +63,11 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                     var customerTransformationPayload;
                     var supplierTransformationPayload;
 
-
                     if (payload != undefined && payload.data != undefined) {
                         customerTransformationPayload = { selectedIds: payload.data.RouteRuleDataTransformation.CustomerTransformationId };
                         supplierTransformationPayload = { selectedIds: payload.data.RouteRuleDataTransformation.SupplierTransformationId };
+                        $scope.scopeModel.partialRoutesPercentageLimit = payload.data.RouteRuleDataTransformation.PartialRoutesPercentageLimit;
+                        $scope.scopeModel.partialRoutesUpdateBatchSize = payload.data.RouteRuleDataTransformation.PartialRoutesUpdateBatchSize;
                     }
 
                     var customerTransformationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -105,6 +108,8 @@ app.directive('vrWhsRoutingRouteTechnicalSettingsEditor', ['UtilsService', 'VRUI
                         RouteRuleDataTransformation: {
                             CustomerTransformationId: customerTransformationSelectorAPI.getSelectedIds(),
                             SupplierTransformationId: supplierTransformationSelectorAPI.getSelectedIds(),
+                            PartialRoutesPercentageLimit: $scope.scopeModel.partialRoutesPercentageLimit,
+                            PartialRoutesUpdateBatchSize: $scope.scopeModel.partialRoutesUpdateBatchSize
                         },
                         TechnicalQualityConfiguration: {
                             QualityAnalyticTableId: qualityAnalyticTableSelectorAPI.getSelectedIds(),

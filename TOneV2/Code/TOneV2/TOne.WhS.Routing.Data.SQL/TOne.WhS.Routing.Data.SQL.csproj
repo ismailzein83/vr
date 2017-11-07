@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PartialRouteInfoDataManager.cs" />
     <Compile Include="CodeMatchesDataManager.cs" />
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="SaleZoneDataManager.cs" />

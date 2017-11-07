@@ -9,7 +9,7 @@ using Vanrise.Entities;
 using TOne.WhS.RouteSync.BP.Activities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.Routing.Business.Extensions;
-    using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -18,7 +18,7 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         public CustomerZoneDetailByZone CustomerZoneDetails { get; set; }
 
-        public BaseQueue<CodeMatches> InputQueue { get; set; }
+        public BaseQueue<RoutingCodeMatches> InputQueue { get; set; }
 
         public BaseQueue<CustomerRoutesBatch> OutputQueue { get; set; }
 
@@ -30,11 +30,13 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
 
+        public int? VersionNumber { get; set; }
+
     }
 
     public class BuildCustomerRoutesContext : IBuildCustomerRoutesContext
     {
-        public List<SaleCodeMatch> SaleCodeMatches { get; set; }
+        public List<SaleZoneDefintion> SaleZoneDefintions { get; set; }
 
         public CustomerZoneDetailByZone CustomerZoneDetails { get; set; }
 
@@ -49,18 +51,21 @@ namespace TOne.WhS.Routing.BP.Activities
         public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
 
         public Dictionary<int, HashSet<int>> CustomerCountries { get; set; }
+        
+        public int? VersionNumber { get; set; }
 
-        public BuildCustomerRoutesContext(CodeMatches codeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture,
-            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, HashSet<int>> customerCountries)
+        public BuildCustomerRoutesContext(RoutingCodeMatches routingCodeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture,
+            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, HashSet<int>> customerCountries, int? versionNumber)
         {
-            this.SaleCodeMatches = codeMatches.SaleCodeMatches;
-            this.SupplierCodeMatches = codeMatches.SupplierCodeMatches;
-            this.SupplierCodeMatchesBySupplier = codeMatches.SupplierCodeMatchesBySupplier;
+            this.SaleZoneDefintions = routingCodeMatches.SaleZoneDefintions;
+            this.SupplierCodeMatches = routingCodeMatches.SupplierCodeMatches;
+            this.SupplierCodeMatchesBySupplier = routingCodeMatches.SupplierCodeMatchesBySupplier;
             this.CustomerZoneDetails = customerZoneDetails;
             this.EntitiesEffectiveOn = effectiveDate;
             this.EntitiesEffectiveInFuture = isFuture;
             this.ActiveRoutingCustomerInfos = activeRoutingCustomerInfos;
             this.CustomerCountries = customerCountries;
+            this.VersionNumber = versionNumber;
         }
     }
 
@@ -71,7 +76,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<CustomerZoneDetailByZone> CustomerZoneDetails { get; set; }
 
         [RequiredArgument]
-        public InArgument<BaseQueue<CodeMatches>> InputQueue { get; set; }
+        public InArgument<BaseQueue<RoutingCodeMatches>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveDate { get; set; }
@@ -83,6 +88,9 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<IEnumerable<RoutingCustomerInfo>> ActiveRoutingCustomerInfos { get; set; }
 
         public InArgument<List<SwitchInProcess>> SwitchesInProcess { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int?> VersionNumber { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<CustomerRoutesBatch>> OutputQueue { get; set; }
@@ -110,8 +118,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 {
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
                     {
-                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate, 
-                            inputArgument.IsFuture, inputArgument.ActiveRoutingCustomerInfos, customerCountries);
+                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate,
+                            inputArgument.IsFuture, inputArgument.ActiveRoutingCustomerInfos, customerCountries, inputArgument.VersionNumber);
 
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code);
 
@@ -160,7 +168,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 EffectiveDate = this.EffectiveDate.Get(context),
                 IsFuture = this.IsFuture.Get(context),
                 SwitchesInProcess = this.SwitchesInProcess.Get(context),
-                ActiveRoutingCustomerInfos = this.ActiveRoutingCustomerInfos.Get(context)
+                ActiveRoutingCustomerInfos = this.ActiveRoutingCustomerInfos.Get(context),
+                VersionNumber = this.VersionNumber.Get(context)
             };
         }
 

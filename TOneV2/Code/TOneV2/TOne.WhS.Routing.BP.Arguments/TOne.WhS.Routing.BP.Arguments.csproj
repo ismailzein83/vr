@@ -54,6 +54,7 @@
     <Compile Include="LoadSupplierCodesInput.cs" />
     <Compile Include="LoadSupplierCodesOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PartialRoutingProcessInput.cs" />
     <Compile Include="RoutingProcessInput.cs" />
     <Compile Include="RPBuildCodeMatchesByCodePrefixInput.cs" />
     <Compile Include="RPBuildRoutingProductInput.cs" />
