@@ -11,7 +11,7 @@ CREATE PROCEDURE [VR_Invoice].[sp_InvoiceSetting_Update]
 	@Details nvarchar(MAX)
 AS
 BEGIN
-IF NOT EXISTS(select 1 from VR_Invoice.InvoiceSetting where Name = @Name and Id!=@InvoiceSettingId AND InvoiceTypeId =@InvoiceTypeId ) 
+IF NOT EXISTS(select 1 from VR_Invoice.InvoiceSetting where Name = @Name and Id!=@InvoiceSettingId AND InvoiceTypeId =@InvoiceTypeId AND ISNULL(IsDeleted, 0) = 0 ) 
 BEGIN
 	Update VR_Invoice.InvoiceSetting
 	Set  Name = @Name,

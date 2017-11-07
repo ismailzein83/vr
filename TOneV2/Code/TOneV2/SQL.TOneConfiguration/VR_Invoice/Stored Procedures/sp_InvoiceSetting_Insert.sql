@@ -12,7 +12,7 @@ CREATE PROCEDURE [VR_Invoice].[sp_InvoiceSetting_Insert]
 AS
 BEGIN
 
-IF NOT EXISTS(select 1 from VR_Invoice.InvoiceSetting where Name = @Name AND InvoiceTypeId =@InvoiceTypeId)
+IF NOT EXISTS(select 1 from VR_Invoice.InvoiceSetting where Name = @Name AND InvoiceTypeId = @InvoiceTypeId AND ISNULL(IsDeleted, 0) = 0)
 	BEGIN
 	Insert into VR_Invoice.InvoiceSetting(ID,[Name],[InvoiceTypeId],IsDefault, Details)
 	Values(@InvoiceSettingId,@Name,@InvoiceTypeId, @IsDefault,@Details)

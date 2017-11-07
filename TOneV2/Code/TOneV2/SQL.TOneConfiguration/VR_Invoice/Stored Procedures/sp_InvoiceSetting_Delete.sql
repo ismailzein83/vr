@@ -3,11 +3,11 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [VR_Invoice].[sp_InvoiceSetting_GetAll]
+create PROCEDURE [VR_Invoice].sp_InvoiceSetting_Delete
+	@InvoiceSettingId uniqueidentifier
 AS
 BEGIN
-	SELECT	ID,Name,InvoiceTypeId,IsDefault,Details
-	FROM	VR_Invoice.InvoiceSetting WITH(NOLOCK) 
-	WHERE   ISNULL(IsDeleted, 0) = 0
-	ORDER BY [Name]
+	update VR_Invoice.InvoiceSetting
+	set IsDeleted = 1
+	where ID = @InvoiceSettingId
 END
