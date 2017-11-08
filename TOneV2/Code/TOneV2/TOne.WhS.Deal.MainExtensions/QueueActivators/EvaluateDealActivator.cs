@@ -907,13 +907,11 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
                             decimal? recordSaleRateId = record.OrigSaleRateId;
                             decimal? recordSaleCurrencyId = record.OrigSaleCurrencyId;
-                            int? recordSaleFinancialAccount = record.SaleFinancialAccount;
                             decimal? recordCostRateId = record.OrigCostRateId;
                             decimal? recordCostCurrencyId = record.OrigCostCurrencyId;
-                            int? recordCostFinancialAccount = record.CostFinancialAccount;
 
-                            bool saleValid = recordSaleRateId.HasValue && recordSaleCurrencyId.HasValue && recordSaleFinancialAccount.HasValue;
-                            bool costValid = recordCostRateId.HasValue && recordCostCurrencyId.HasValue && recordCostFinancialAccount.HasValue;
+                            bool saleValid = recordSaleRateId.HasValue && recordSaleCurrencyId.HasValue;
+                            bool costValid = recordCostRateId.HasValue && recordCostCurrencyId.HasValue;
 
                             if (!saleValid && !costValid)
                                 throw new VRBusinessException(string.Format("Sale Part and Cost Part doesn't exist for CDR Id: {0}", record.CDRId));

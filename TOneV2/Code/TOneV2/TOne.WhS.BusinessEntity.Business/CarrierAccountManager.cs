@@ -785,7 +785,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccount.CarrierAccountSettings.IsInterconnectSwitch;
         }
 
-        public bool CheckCustomerValidity(int carrierAccountId)
+        /// <summary>
+        /// Used In DataTransformation
+        /// </summary>
+        /// <param name="carrierAccountId"></param>
+        /// <returns></returns>
+        public bool IsCustomerValideForCDR(int carrierAccountId)
         {
             CarrierAccount carrierAccount = this.GetCarrierAccount(carrierAccountId);
             if (carrierAccount == null)
@@ -796,7 +801,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return true;
         }
-        public bool CheckSupplierValidity(int carrierAccountId)
+
+        /// <summary>
+        /// Used In DataTransformation
+        /// </summary>
+        /// <param name="carrierAccountId"></param>
+        /// <returns></returns>
+        public bool IsSupplierValideForCDR(int carrierAccountId)
         {
             CarrierAccount carrierAccount = this.GetCarrierAccount(carrierAccountId);
             if (carrierAccount == null)
