@@ -271,7 +271,8 @@
                 var context = {
                     getSelectedCell: getSelectedCell,
                     setSelectedCell: selectCellAtSheet,
-                    getSelectedSheet: getSelectedSheet
+                    getSelectedSheet: getSelectedSheet,
+                    getFileId: getFileId
                 };
                 function selectCellAtSheet(row, col, s) {
                     var a = parseInt(row);
@@ -286,6 +287,11 @@
                 function getSelectedSheet() {
                     if (inputWorkBookApi != undefined)
                         return inputWorkBookApi.getSelectedSheet();
+                }
+                function getFileId()
+                {
+                    if ($scope.scopeModel.inPutFile != undefined)
+                        return $scope.scopeModel.inPutFile.fileId;
                 }
                 return context;
             }
