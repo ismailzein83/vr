@@ -38,7 +38,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
             $scope.removerow = function (dataItem) {
                         var index = $scope.subViews.indexOf(dataItem);
                         $scope.subViews.splice(index, 1);
-            s};
+            };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {

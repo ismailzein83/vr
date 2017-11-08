@@ -12,6 +12,6 @@ namespace Vanrise.AccountManager.Data
         List<Entities.AccountManagerAssignment> GetAccountManagerAssignments();
         bool AreAccountManagerAssignmentsUpdated(ref object updateHandle);
         bool AddAccountManagerAssignment( AccountManagerAssignment accountManagerAssignment, out int insertedId);
-        bool UpdateAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment);
+        bool UpdateAccountManagerAssignment(long accountManagerAssignmentId, DateTime bed, DateTime? eed, AccountManagerAssignmentSettings settings);
     }
 }

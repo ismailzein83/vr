@@ -34,7 +34,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManag
                 };
                 VR_AccountManager_AccountManagerService.addAssignmentDefinition(onAssignmentDefinitionAdded);
             };
-           
+            $scope.removerow = function (dataItem) {
+                var index = $scope.assignmentDefinitions.indexOf(dataItem);
+                $scope.assignmentDefinitions.splice(index, 1);
+            };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {

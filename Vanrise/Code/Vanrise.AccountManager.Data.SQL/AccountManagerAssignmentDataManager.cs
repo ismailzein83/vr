@@ -34,9 +34,9 @@ namespace Vanrise.AccountManager.Data.SQL
             }
             return insertedSuccesfully;
         }
-        public bool UpdateAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment)
+        public bool UpdateAccountManagerAssignment(long accountManagerAssignmentId, DateTime bed, DateTime? eed, AccountManagerAssignmentSettings settings)
         {
-            int recordsEffected = ExecuteNonQuerySP("[VR_AccountManager].[sp_AccountManagerAssignment_Update]", accountManagerAssignment.AccountManagerAssignementId, Serializer.Serialize(accountManagerAssignment.Settings), accountManagerAssignment.BED, accountManagerAssignment.EED);
+            int recordsEffected = ExecuteNonQuerySP("[VR_AccountManager].[sp_AccountManagerAssignment_Update]",accountManagerAssignmentId, Serializer.Serialize( settings), bed,eed);
             return (recordsEffected > 0);
         }
         public bool AreAccountManagerAssignmentsUpdated(ref object updateHandle)

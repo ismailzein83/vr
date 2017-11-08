@@ -1,5 +1,6 @@
 ﻿<vr-button type="Add" data-onclick="addNewAssignmentDefinition" standalone></vr-button>
 <vr-datagrid datasource="assignmentDefinitions"
+             ondeleterow="removerow"
              on-ready="onGridReady"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
