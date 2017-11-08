@@ -55,8 +55,8 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
 
         private List<ExistingZone> _existingZones = new List<ExistingZone>();
-        public List<ExistingZone> ExistingZones 
-        { 
+        public List<ExistingZone> ExistingZones
+        {
             get
             {
                 return this._existingZones;
@@ -87,12 +87,12 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         private List<NotImportedRate> _notImportedNormalRates = new List<NotImportedRate>();
 
-        public List<NotImportedRate> NotImportedNormalRates 
+        public List<NotImportedRate> NotImportedNormalRates
         {
             get
             {
                 return this._notImportedNormalRates;
-            } 
+            }
         }
 
         private List<NotImportedZoneRoutingProduct> _notImportedZoneRoutingProduct = new List<NotImportedZoneRoutingProduct>();
@@ -107,7 +107,7 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         public string RecentZoneName { get; set; }
         public string SplitByZoneName { get; set; }
-
+        public List<string> SourceZoneNames { get; set; }
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
