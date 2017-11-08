@@ -30,43 +30,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
 
-        public int? VersionNumber { get; set; }
+        public int VersionNumber { get; set; }
 
-    }
-
-    public class BuildCustomerRoutesContext : IBuildCustomerRoutesContext
-    {
-        public List<SaleZoneDefintion> SaleZoneDefintions { get; set; }
-
-        public CustomerZoneDetailByZone CustomerZoneDetails { get; set; }
-
-        public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
-
-        public SupplierCodeMatchWithRateBySupplier SupplierCodeMatchesBySupplier { get; set; }
-
-        public DateTime? EntitiesEffectiveOn { get; set; }
-
-        public bool EntitiesEffectiveInFuture { get; set; }
-
-        public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
-
-        public Dictionary<int, HashSet<int>> CustomerCountries { get; set; }
-        
-        public int? VersionNumber { get; set; }
-
-        public BuildCustomerRoutesContext(RoutingCodeMatches routingCodeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture,
-            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, HashSet<int>> customerCountries, int? versionNumber)
-        {
-            this.SaleZoneDefintions = routingCodeMatches.SaleZoneDefintions;
-            this.SupplierCodeMatches = routingCodeMatches.SupplierCodeMatches;
-            this.SupplierCodeMatchesBySupplier = routingCodeMatches.SupplierCodeMatchesBySupplier;
-            this.CustomerZoneDetails = customerZoneDetails;
-            this.EntitiesEffectiveOn = effectiveDate;
-            this.EntitiesEffectiveInFuture = isFuture;
-            this.ActiveRoutingCustomerInfos = activeRoutingCustomerInfos;
-            this.CustomerCountries = customerCountries;
-            this.VersionNumber = versionNumber;
-        }
     }
 
     public sealed class BuildCustomerRoutes : DependentAsyncActivity<BuildCustomerRoutesInput>
@@ -90,7 +55,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<List<SwitchInProcess>> SwitchesInProcess { get; set; }
 
         [RequiredArgument]
-        public InArgument<int?> VersionNumber { get; set; }
+        public InArgument<int> VersionNumber { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<CustomerRoutesBatch>> OutputQueue { get; set; }
@@ -119,7 +84,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
                     {
                         BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate,
-                            inputArgument.IsFuture, inputArgument.ActiveRoutingCustomerInfos, customerCountries, inputArgument.VersionNumber);
+                            inputArgument.IsFuture, inputArgument.ActiveRoutingCustomerInfos, customerCountries, inputArgument.VersionNumber, true);
 
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code);
 

@@ -90,14 +90,17 @@ namespace TOne.WhS.Routing.Business
                         }
                     }
 
-                    if (soldCustomers.Count != context.ActiveRoutingCustomerInfos.Count())
+                    if (context.IsFullRouteBuild)
                     {
-                        foreach (RoutingCustomerInfo routingCustomerInfo in context.ActiveRoutingCustomerInfos)
+                        if (soldCustomers.Count != context.ActiveRoutingCustomerInfos.Count())
                         {
-                            if (saleZoneDefintion.SellingNumberPlanId != routingCustomerInfo.SellingNumberPlanId || soldCustomers.Contains(routingCustomerInfo.CustomerId))
-                                continue;
+                            foreach (RoutingCustomerInfo routingCustomerInfo in context.ActiveRoutingCustomerInfos)
+                            {
+                                if (saleZoneDefintion.SellingNumberPlanId != routingCustomerInfo.SellingNumberPlanId || soldCustomers.Contains(routingCustomerInfo.CustomerId))
+                                    continue;
 
-                            CheckAndAddRouteToUnratedZone(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleZoneDefintion, codeGroup.CountryId, isCountryIdsHavingParentCodeNotEmpty, context.VersionNumber);
+                                CheckAndAddRouteToUnratedZone(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleZoneDefintion, codeGroup.CountryId, isCountryIdsHavingParentCodeNotEmpty, context.VersionNumber);
+                            }
                         }
                     }
                 }
@@ -108,7 +111,7 @@ namespace TOne.WhS.Routing.Business
 
         private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager,
             List<CustomerRoute> customerRoutes, HashSet<int> countryIdsHavingParentCode, string routeCode, SaleZoneDefintion saleZoneDefintion, int routeCodeCountryId, bool isCountryIdsHavingParentCodeNotEmpty,
-            int? versionNumber)
+            int versionNumber)
         {
             HashSet<int> soldCountries = context.CustomerCountries.GetOrCreateItem(customerId, () =>
             {

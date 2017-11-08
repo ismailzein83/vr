@@ -230,7 +230,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [IsBlocked] [bit] NOT NULL,
 	                                                    [ExecutedRuleId] [int] NULL,
 	                                                    [RouteOptions] [varchar](max) NULL,
-                                                        [VersionNumber] [int] NULL
+                                                        [VersionNumber] [int] NOT NULL
                                                 ) ON [PRIMARY] ";
 
         private const string query_CodeSaleZoneMatchTable = @"CREATE TABLE [dbo].[CodeSaleZoneMatch](

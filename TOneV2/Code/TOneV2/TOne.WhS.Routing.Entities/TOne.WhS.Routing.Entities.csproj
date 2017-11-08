@@ -74,7 +74,6 @@
     <Compile Include="PartialRoute\AffectedRouteOptionRules.cs" />
     <Compile Include="PartialRoute\AffectedRouteRules.cs" />
     <Compile Include="PartialRoute\PartialRouteInfo.cs" />
-    <Compile Include="PartialRoute\PartialRouteProcessState.cs" />
     <Compile Include="RouteBuildInterceptor\RouteBuildInterceptorSettings.cs" />
     <Compile Include="RouteRuleCriteria\RouteRuleCriteriaConfig.cs" />
     <Compile Include="RouteRuleCriteria\RouteRuleCriteria.cs" />

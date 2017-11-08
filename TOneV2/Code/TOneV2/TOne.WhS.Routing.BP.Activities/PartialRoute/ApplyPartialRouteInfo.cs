@@ -10,6 +10,9 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         [RequiredArgument]
         public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
+        
+        [RequiredArgument]
+        public InArgument<int> LastVersionNumber { get; set; }
 
         [RequiredArgument]
         public InArgument<PartialRouteInfo> PartialRouteInfo { get; set; }
@@ -17,6 +20,7 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void Execute(CodeActivityContext context)
         {
             PartialRouteInfo partialRouteInfo = this.PartialRouteInfo.Get(context);
+            partialRouteInfo.LastVersionNumber = this.LastVersionNumber.Get(context);
 
             RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
 

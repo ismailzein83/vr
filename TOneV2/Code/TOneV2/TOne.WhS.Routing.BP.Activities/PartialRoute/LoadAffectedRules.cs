@@ -14,8 +14,6 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<int?> RouteRuleId { get; set; }
 
-        [RequiredArgument]
-        public InArgument<PartialRouteProcessState> PartialRouteProcessState { get; set; }
 
         [RequiredArgument]
         public OutArgument<AffectedRouteRules> AffectedRouteRules { get; set; }
@@ -24,7 +22,6 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             int? routeRuleId = this.RouteRuleId.Get(context);
 
-            PartialRouteProcessState partialRouteProcessState = this.PartialRouteProcessState.Get(context);
             RouteRuleManager routeRuleManager = new RouteRuleManager();
             List<RuleChangedData<RouteRule>> ruleChangedList;
 

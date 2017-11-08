@@ -108,6 +108,22 @@ app.directive('vrWhsRoutingRoutingdatabaseSelector', ['WhS_Routing_RoutingDataba
                     return VRUIUtilsService.getIdSelectedIds('RoutingDatabaseId', $attrs, ctrl);
                 };
 
+                api.isDatabaseTypeCurrent = function () {
+                    if (ctrl.selectedvalues == undefined) {
+                        return false;
+                    }
+
+                    if (ctrl.selectedvalues instanceof Array) {
+                        return false;
+                    }
+
+                    if (ctrl.selectedvalues.Type != WhS_Routing_RoutingDatabaseTypeEnum.Current.value) {
+                        return false;
+                    }
+
+                    return true;
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

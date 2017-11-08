@@ -57,6 +57,7 @@
             function getFilterObject() {
 
                 var query = {
+                    isDatabaseTypeCurrent: routingDatabaseSelectorAPI.isDatabaseTypeCurrent(),
                     RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
                     SaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
                     Code: $scope.code,

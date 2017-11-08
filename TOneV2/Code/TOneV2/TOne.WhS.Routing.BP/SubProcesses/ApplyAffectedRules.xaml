@@ -16,6 +16,7 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="AffectedCustomerRoutes" Type="InArgument(scg:List(twre:CustomerRoute))" />
+    <x:Property Name="EffectiveDate" Type="InArgument(s:DateTime)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1</sap2010:WorkflowViewState.IdRef>
@@ -83,6 +84,7 @@
       <Variable x:TypeArguments="twre:PartialRouteInfo" Name="PartialRouteInfo" />
       <Variable x:TypeArguments="twre:RoutingDatabase" Name="RoutingDatabase" />
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="buildCustomerRoutesStatus" />
+      <Variable x:TypeArguments="x:Int32" Name="currentVersion" />
     </Sequence.Variables>
     <twrba:GetLatestRoutingDatabase sap2010:WorkflowViewState.IdRef="GetLatestRoutingDatabase_1">
       <twrba:GetLatestRoutingDatabase.RoutingDatabase>
@@ -90,6 +92,16 @@
           <mca:CSharpReference x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpReference>
         </OutArgument>
       </twrba:GetLatestRoutingDatabase.RoutingDatabase>
+      <twrba:GetLatestRoutingDatabase.RoutingDatabaseType>
+        <InArgument x:TypeArguments="twre:RoutingDatabaseType">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">RoutingDatabaseType.Current</mca:CSharpValue>
+        </InArgument>
+      </twrba:GetLatestRoutingDatabase.RoutingDatabaseType>
+      <twrba:GetLatestRoutingDatabase.RoutingProcessType>
+        <InArgument x:TypeArguments="twre:RoutingProcessType">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">RoutingProcessType.CustomerRoute</mca:CSharpValue>
+        </InArgument>
+      </twrba:GetLatestRoutingDatabase.RoutingProcessType>
     </twrba:GetLatestRoutingDatabase>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <twrba:LoadPartialCodeMatches Status="{x:Null}" sap2010:WorkflowViewState.IdRef="LoadPartialCodeMatches_1">
@@ -151,6 +163,18 @@
         </InArgument>
       </twrba:GetPartialRouteInfo.RoutingDatabase>
     </twrba:GetPartialRouteInfo>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+      <Assign.To>
+        <OutArgument x:TypeArguments="x:Int32">
+          <mca:CSharpReference x:TypeArguments="x:Int32">currentVersion</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">PartialRouteInfo.LastVersionNumber + 1</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_3">
       <twrba:BuildCustomerRoutes PreviousActivityStatus="{x:Null}" SwitchesInProcess="{x:Null}" sap2010:WorkflowViewState.IdRef="BuildCustomerRoutes_2" IsFuture="False">
         <twrba:BuildCustomerRoutes.ActiveRoutingCustomerInfos>
@@ -184,8 +208,8 @@
           </OutArgument>
         </twrba:BuildCustomerRoutes.Status>
         <twrba:BuildCustomerRoutes.VersionNumber>
-          <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-            <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">PartialRouteInfo.LastVersionNumber</mca:CSharpValue>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">currentVersion</mca:CSharpValue>
           </InArgument>
         </twrba:BuildCustomerRoutes.VersionNumber>
       </twrba:BuildCustomerRoutes>
@@ -208,6 +232,11 @@
       </twrba:ApplyAffectedCustomerRoutesToDB>
     </Parallel>
     <twrba:ApplyPartialRouteInfo sap2010:WorkflowViewState.IdRef="ApplyPartialRouteInfo_1">
+      <twrba:ApplyPartialRouteInfo.LastVersionNumber>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">currentVersion</mca:CSharpValue>
+        </InArgument>
+      </twrba:ApplyPartialRouteInfo.LastVersionNumber>
       <twrba:ApplyPartialRouteInfo.PartialRouteInfo>
         <InArgument x:TypeArguments="twre:PartialRouteInfo">
           <mca:CSharpValue x:TypeArguments="twre:PartialRouteInfo">PartialRouteInfo</mca:CSharpValue>
@@ -219,7 +248,7 @@
         </InArgument>
       </twrba:ApplyPartialRouteInfo.RoutingDatabase>
     </twrba:ApplyPartialRouteInfo>
-    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEFwcGx5QWZmZWN0ZWRSdWxlcy54YW1sJEkD3wEOAgEBUAtQkwECAQJXBV0mAwHbAV4FjQEQAwGPAY4BBZkBIQIBfJoBBdEBEAIBHtIBBd0BIwIBC1oLWmwDAdwBXwdvJgMBvwFwB3swAwGsAXwHjAEuAwGQAZEBC5EBbgMBhgGWAQuWAWQCAX2bAQe/ASMCATvAAQfQAS8CAR/VAQvVAWYCARXaAQvaAWQCAQxiDWJ1AwHSAWcNZ4cBAwHJAWwNbGYDAcABeA14dQMBtgFzDXOOAQMBrQGEAQ2EAYABAwGjAX8Nf3UDAZoBiQENiQFmAwGRAaMBDaMBeAIBc54BDZ4BhgECAWqtAQ2tAX8CAWGoAQ2oAWUCAVi3AQ23AXoCAU+yAQ2yAYQBAgFGvAENvAF4AgE9mwGiAZsBqQECATzIAQ3IAXICATLNAQ3NAWYCASnDAQ3DAXwCASA=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEFwcGx5QWZmZWN0ZWRSdWxlcy54YW1sKkoD/AEOAgEBUQtRkwECAQJZBWkmAwGrAmoFmQEQAwHPAZoBBaUBIQMBuAGmAQWxAQ4DAaEBsgEF6QEQAgEv6gEF+gEjAgENYQthdAMBwgJcC1xsAwG3AmYLZngDAawCawd7JgMBiQJ8B4cBMAMB8gGIAQeYAS4DAdABnQELnQFuAwHEAaIBC6IBZAMBuQGuAQuuAW4DAa0BqQELqQFeAwGiAbMBB9cBIwIBUtgBB+gBLwIBMPIBC/IBZgIBJO0BC+0BVgIBGfcBC/cBZAIBDm4NbnUDAaACcw1zhwEDAZUCeA14ZgMBigKEAQ2EAXUDAf4Bfw1/jgEDAfMBkAENkAGAAQMB5wGLAQ2LAXUDAdwBlQENlQFmAwHRAbsBDbsBeAMBlgG2AQ22AYYBAwGLAcUBDcUBfwMBgAHAAQ3AAWUCAXXPAQ3PAXoCAWrKAQ3KAYQBAgFf1AEN1AFYAgFUswGiAbMBqQECAVPgAQ3gAXICAUflAQ3lAWYCATzbAQ3bAXwCATE=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -229,18 +258,19 @@
       <sap2010:ViewStateData Id="LoadPartialCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />
       <sap2010:ViewStateData Id="GetPartialRouteInfo_1" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="794,62" />
       <sap2010:ViewStateData Id="BuildCustomerRoutes_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyAffectedCustomerRoutesToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="794,86" />
       <sap2010:ViewStateData Id="ApplyPartialRouteInfo_1" sap:VirtualizedContainerService.HintSize="794,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,522">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="816,624">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap:VirtualizedContainerService.HintSize="856,602" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1" sap:VirtualizedContainerService.HintSize="856,704" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

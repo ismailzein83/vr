@@ -25,6 +25,46 @@ namespace TOne.WhS.Routing.Entities
 
         Dictionary<int, HashSet<int>> CustomerCountries { get; set; }
 
-        int? VersionNumber { get; }
+        int VersionNumber { get; }
+
+        bool IsFullRouteBuild { get; }
+    }
+
+    public class BuildCustomerRoutesContext : IBuildCustomerRoutesContext
+    {
+        public List<SaleZoneDefintion> SaleZoneDefintions { get; set; }
+
+        public CustomerZoneDetailByZone CustomerZoneDetails { get; set; }
+
+        public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
+
+        public SupplierCodeMatchWithRateBySupplier SupplierCodeMatchesBySupplier { get; set; }
+
+        public DateTime? EntitiesEffectiveOn { get; set; }
+
+        public bool EntitiesEffectiveInFuture { get; set; }
+
+        public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
+
+        public Dictionary<int, HashSet<int>> CustomerCountries { get; set; }
+
+        public int VersionNumber { get; set; }
+
+        public bool IsFullRouteBuild { get; set; }
+
+        public BuildCustomerRoutesContext(RoutingCodeMatches routingCodeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture,
+            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, HashSet<int>> customerCountries, int versionNumber, bool isFullRouteBuild)
+        {
+            this.SaleZoneDefintions = routingCodeMatches.SaleZoneDefintions;
+            this.SupplierCodeMatches = routingCodeMatches.SupplierCodeMatches;
+            this.SupplierCodeMatchesBySupplier = routingCodeMatches.SupplierCodeMatchesBySupplier;
+            this.CustomerZoneDetails = customerZoneDetails;
+            this.EntitiesEffectiveOn = effectiveDate;
+            this.EntitiesEffectiveInFuture = isFuture;
+            this.ActiveRoutingCustomerInfos = activeRoutingCustomerInfos;
+            this.CustomerCountries = customerCountries;
+            this.VersionNumber = versionNumber;
+            this.IsFullRouteBuild = isFullRouteBuild;
+        }
     }
 }

@@ -27,6 +27,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
     function customerRouteGrid($scope, ctrl, $attrs) {
         var gridAPI;
         var gridDrillDownTabsObj;
+        var isDatabaseTypeCurrent;
 
         function initializeController() {
             $scope.showGrid = false;
@@ -44,6 +45,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                 function getDirectiveAPI() {
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
+                        isDatabaseTypeCurrent = query.isDatabaseTypeCurrent;
                         return gridAPI.retrieveData(query);
                     };
 
@@ -193,62 +195,64 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
         };
 
         function triggerPartialRoute(ruleId) {
-            var inputArguments = {
-                $type: 'TOne.WhS.Routing.BP.Arguments.PartialRoutingProcessInput, TOne.WhS.Routing.BP.Arguments',
-                RouteRuleId: ruleId
-            };
+            if (isDatabaseTypeCurrent) {
+                var inputArguments = {
+                    $type: 'TOne.WhS.Routing.BP.Arguments.PartialRoutingProcessInput, TOne.WhS.Routing.BP.Arguments',
+                    RouteRuleId: ruleId
+                };
 
-            var input = {
-                InputArguments: inputArguments
-            };
-            $scope.isLoading = true;
-            BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
-                if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
-                    var processTrackingContext = {
-                        automaticCloseWhenCompleted: true,
-                        onClose: function (bpInstanceClosureContext) {
+                var input = {
+                    InputArguments: inputArguments
+                };
+                $scope.isLoading = true;
+                BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                    if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+                        var processTrackingContext = {
+                            automaticCloseWhenCompleted: true,
+                            onClose: function (bpInstanceClosureContext) {
 
-                            if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
-                                $scope.isLoading = true;
+                                if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
+                                    $scope.isLoading = true;
 
-                                var customerRouteDefinitions = [];
-                                for (var itemIndex = 0; itemIndex < $scope.customerRoutes.length; itemIndex++) {
-                                    var currentCustomerRoute = $scope.customerRoutes[itemIndex];
-                                    customerRouteDefinitions.push({ CustomerId: currentCustomerRoute.Entity.CustomerId, Code: currentCustomerRoute.Entity.Code });
-                                }
+                                    var customerRouteDefinitions = [];
+                                    for (var itemIndex = 0; itemIndex < $scope.customerRoutes.length; itemIndex++) {
+                                        var currentCustomerRoute = $scope.customerRoutes[itemIndex];
+                                        customerRouteDefinitions.push({ CustomerId: currentCustomerRoute.Entity.CustomerId, Code: currentCustomerRoute.Entity.Code });
+                                    }
 
-                                WhS_Routing_CustomerRouteAPIService.GetUpdatedCustomerRoutes(customerRouteDefinitions).then(function (response) {
-                                    if (response != undefined) {
-                                        for (var x = 0; x < response.length; x++) {
-                                            var updatedCustomerRoute = response[x];
-                                            for (var y = 0; y < $scope.customerRoutes.length; y++) {
-                                                var currentCustomerRoute = $scope.customerRoutes[y];
+                                    WhS_Routing_CustomerRouteAPIService.GetUpdatedCustomerRoutes(customerRouteDefinitions).then(function (response) {
+                                        if (response != undefined) {
+                                            for (var x = 0; x < response.length; x++) {
+                                                var updatedCustomerRoute = response[x];
+                                                for (var y = 0; y < $scope.customerRoutes.length; y++) {
+                                                    var currentCustomerRoute = $scope.customerRoutes[y];
 
-                                                if (updatedCustomerRoute.Entity.Code == currentCustomerRoute.Entity.Code
-                                                   && updatedCustomerRoute.Entity.CustomerId == currentCustomerRoute.Entity.CustomerId) {
-                                                    extendCutomerRouteObject(updatedCustomerRoute);
-                                                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedCustomerRoute);
-                                                    $scope.customerRoutes[y] = updatedCustomerRoute;
+                                                    if (updatedCustomerRoute.Entity.Code == currentCustomerRoute.Entity.Code
+                                                       && updatedCustomerRoute.Entity.CustomerId == currentCustomerRoute.Entity.CustomerId) {
+                                                        extendCutomerRouteObject(updatedCustomerRoute);
+                                                        gridDrillDownTabsObj.setDrillDownExtensionObject(updatedCustomerRoute);
+                                                        $scope.customerRoutes[y] = updatedCustomerRoute;
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
+                                        $scope.isLoading = false;
+                                    }).catch(function (error) {
+                                        $scope.isLoading = false;
+                                    });
+                                }
+                                else {
                                     $scope.isLoading = false;
-                                }).catch(function (error) {
-                                    $scope.isLoading = false;
-                                });
+                                }
                             }
-                            else {
-                                $scope.isLoading = false;
-                            }
-                        }
-                    };
+                        };
 
-                    BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, processTrackingContext);
-                }
-            }).catch(function (error) {
-                $scope.isLoading = false;
-            });
+                        BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, processTrackingContext);
+                    }
+                }).catch(function (error) {
+                    $scope.isLoading = false;
+                });
+            }
         };
 
         function initDrillDownDefinitions() {

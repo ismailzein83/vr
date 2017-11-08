@@ -9,11 +9,17 @@ namespace TOne.WhS.Routing.BP.Activities
     public sealed class GetLatestRoutingDatabase : CodeActivity
     {
         [RequiredArgument]
+        public InArgument<RoutingProcessType> RoutingProcessType { get; set; }
+
+        [RequiredArgument]
+        public InArgument<RoutingDatabaseType> RoutingDatabaseType { get; set; }
+
+        [RequiredArgument]
         public OutArgument<RoutingDatabase> RoutingDatabase { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
-            RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
+            RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(this.RoutingProcessType.Get(context), this.RoutingDatabaseType.Get(context));
             this.RoutingDatabase.Set(context, routingDatabase);
         }
     }

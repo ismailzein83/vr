@@ -378,7 +378,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
                 Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null,
-                VersionNumber = GetReaderValue<int?>(reader, "VersionNumber")
+                VersionNumber = GetReaderValue<int>(reader, "VersionNumber")
             };
         }
 

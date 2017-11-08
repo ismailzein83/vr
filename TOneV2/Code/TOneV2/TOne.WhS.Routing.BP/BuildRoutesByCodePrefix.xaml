@@ -315,7 +315,7 @@
           </InArgument>
         </twrba2:BuildCodeMatches.SupplierZoneDetails>
       </twrba2:BuildCodeMatches>
-      <twrba2:BuildCustomerRoutes sap2010:WorkflowViewState.IdRef="BuildCustomerRoutes_1">
+      <twrba2:BuildCustomerRoutes sap2010:WorkflowViewState.IdRef="BuildCustomerRoutes_1" VersionNumber="0">
         <twrba2:BuildCustomerRoutes.ActiveRoutingCustomerInfos>
           <InArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">
             <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">ActiveRoutingCustomerInfos</mca:CSharpValue>
@@ -361,11 +361,6 @@
             <mca:CSharpValue x:TypeArguments="scg:List(twrba1:SwitchInProcess)">SwitchesInProcess</mca:CSharpValue>
           </InArgument>
         </twrba2:BuildCustomerRoutes.SwitchesInProcess>
-        <twrba2:BuildCustomerRoutes.VersionNumber>
-          <InArgument x:TypeArguments="s:Nullable(x:Int32)">
-            <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">null</mca:CSharpValue>
-          </InArgument>
-        </twrba2:BuildCustomerRoutes.VersionNumber>
       </twrba2:BuildCustomerRoutes>
       <twrba2:PrepareCustomerRoutesForApply sap2010:WorkflowViewState.IdRef="PrepareCustomerRoutesForApply_1">
         <twrba2:PrepareCustomerRoutesForApply.InputQueue>
@@ -499,7 +494,7 @@
         </If.Then>
       </If>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbF9RA/cDDgIBAVsFZg4DAZAJZwXVARADAckH1gEFggIKAwH/BoMCBfUDEAIBAmMLY4cBAwGbCV4LXnIDAZEJaAeXARIDAbwImAEH1AESAwHKB9kBC9kBXgMBgAfdAQmAAhQDAYoHiwINiwKTAQIBGJUCDZUCjwECAQOZAge9AiEDAeoFvgIH8QIkAwGXBPICB4wDLgMBrQONAwedAygDAe0CngMH0AMSAwGtAdEDB/QDDAIBLWkJbykDAYUJcAmFAR8DAdwIhgEJlgEpAwG9CJwBCaIBKQMBsAijAQnCASMDAe0HwwEJ0wEpAwHLB94BC/MBKgMBoAf0AQv/ATIDAYsHqwINqwJ1AwHqBqYCDaYCgwEDAdUGnAINnAJ4AwHABrACDbACdwMBqwahAg2hApcBAwGWBrUCDbUCfQMBgQaZAoYBmQKMAQMBgAa6Ag26AnMDAesFxgINxgJzAwHVBcECDcEChgEDAcAF3wIN3wJvAwGrBdACDdACjwEDAZYF6QIN6QJ0AwGBBcsCDcsCagMB7ATkAg3kAnoDAdcE2gIN2gKJAQMBwgTuAg3uAloDAa0E1QIN1QJaAwGYBIQDDYQDcgMBggT1Ag31AoEBAwHtA/8CDf8CaAMB2AOJAw2JA3wDAcMD+gIN+gJ8AwGuA5UDDZUDdAMBmAOQAw2QA3QDAYMDmgMNmgNhAwHuAp8DCbkDLQMBgwK6AwnPAycDAa4B1AMN1ANgAgEu2AML8gMpAgFDbA9skAEDAYYJfQ99bAMB+wh4D3h/AwHxCHMPc3oDAecIggEPggFcAwHdCIkBD4kBfQMB0giTAQ+TAXcDAcgIjgEPjgFjAwG+CJ8BD58BiAEDAbEIqwEPqwFsAwGlCKYBD6YBegMBmgi1AQ+1AZABAwGPCL8BD78BgAEDAYQIugEPugGHAQMB+QewAQ+wAVwDAe4HxgEPxgFjAwHiB8sBD8sBfwMB1wfQAQ/QAX0DAcwH6wER6wGoAQMBvwfmARHmAYABAwG1B+EBEeEBZwMBqwfwARHwAV0DAaEH/AER/AGjAQMBlgf3ARH3AWwDAYwHrAMPrANxAwHYAqIDD6IDfQMBwwKxAw+xA2wDAa4CtgMPtgN7AwGZAqcDD6cDewMBhALCAw/CA3MDAe4BvQMPvQNzAwHZAccDD8cDYwMBxAHMAw/MA2wDAa8B7wMR7wN4AwGYAeoDEeoDpAEDAYMB5QMR5QODAQIBbuADEeADdgIBWdsDEdsDmwECAUQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0pDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcQnVpbGRSb3V0ZXNCeUNvZGVQcmVmaXgueGFtbF9RA/IDDgIBAVsFZg4DAfwIZwXVARADAbUH1gEFggIKAwHrBoMCBfADEAIBAmMLY4cBAwGHCV4LXnIDAf0IaAeXARIDAagImAEH1AESAwG2B9kBC9kBXgMB7AbdAQmAAhQDAfYGiwINiwKTAQIBGJUCDZUCjwECAQOZAge9AiEDAdYFvgIH7AIkAwGXBO0CB4cDLgMBrQOIAweYAygDAe0CmQMHywMSAwGtAcwDB+8DDAIBLWkJbykDAfEIcAmFAR8DAcgIhgEJlgEpAwGpCJwBCaIBKQMBnAijAQnCASMDAdkHwwEJ0wEpAwG3B94BC/MBKgMBjAf0AQv/ATIDAfcGqwINqwJ1AwHWBqYCDaYCgwEDAcEGnAINnAJ4AwGsBrACDbACdwMBlwahAg2hApcBAwGCBrUCDbUCfQMB7QWZAoYBmQKMAQMB7AW6Ag26AnMDAdcFxgINxgJzAwHBBcECDcEChgEDAawF3wIN3wJvAwGXBdACDdACjwEDAYIF6QIN6QJ0AwHtBMsCDcsCagMB2ATkAg3kAnoDAcME2gIN2gKJAQMBrgS+Amm+AmwDAa0E1QIN1QJaAwGYBP8CDf8CcgMBggTwAg3wAoEBAwHtA/oCDfoCaAMB2AOEAw2EA3wDAcMD9QIN9QJ8AwGuA5ADDZADdAMBmAOLAw2LA3QDAYMDlQMNlQNhAwHuApoDCbQDLQMBgwK1AwnKAycDAa4BzwMNzwNgAgEu0wML7QMpAgFDbA9skAEDAfIIfQ99bAMB5wh4D3h/AwHdCHMPc3oDAdMIggEPggFcAwHJCIkBD4kBfQMBvgiTAQ+TAXcDAbQIjgEPjgFjAwGqCJ8BD58BiAEDAZ0IqwEPqwFsAwGRCKYBD6YBegMBhgi1AQ+1AZABAwH7B78BD78BgAEDAfAHugEPugGHAQMB5QewAQ+wAVwDAdoHxgEPxgFjAwHOB8sBD8sBfwMBwwfQAQ/QAX0DAbgH6wER6wGoAQMBqwfmARHmAYABAwGhB+EBEeEBZwMBlwfwARHwAV0DAY0H/AER/AGjAQMBggf3ARH3AWwDAfgGpwMPpwNxAwHYAp0DD50DfQMBwwKsAw+sA2wDAa4CsQMPsQN7AwGZAqIDD6IDewMBhAK9Aw+9A3MDAe4BuAMPuANzAwHZAcIDD8IDYwMBxAHHAw/HA2wDAa8B6gMR6gN4AwGYAeUDEeUDpAEDAYMB4AMR4AODAQIBbtsDEdsDdgIBWdYDEdYDmwECAUQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
