@@ -8,6 +8,11 @@ using Vanrise.Web.Base;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Entities;
 using Retail.BusinessEntity.Entities;
+using Vanrise.AccountManager.Entities;
+using Vanrise.Entities;
+using Vanrise.AccountManager.Entities;
+using Vanrise.AccountManager.Business;
+using Vanrise.Common;
 
 namespace Retail.BusinessEntity.Web.Controllers
 {
@@ -15,7 +20,7 @@ namespace Retail.BusinessEntity.Web.Controllers
     [JSONWithTypeAttribute]
     public class AccountManagerAssignmentsController : BaseAPIController
     {
-        AccountManagerAssignmentManager _manager = new AccountManagerAssignmentManager();
+        Retail.BusinessEntity.Business.AccountManagerAssignmentManager _manager = new Retail.BusinessEntity.Business.AccountManagerAssignmentManager();
 
         [HttpPost]
         [Route("GetAccountManagerAssignments")]
@@ -25,21 +30,21 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
         [HttpPost]
         [Route("AddAccountManagerAssignment")]
-        public InsertOperationOutput<AccountManagerAssignmentDetail> AddAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment)
+        public InsertOperationOutput<AccountManagerAssignmentDetail> AddAccountManagerAssignment(AssignAccountManagerToAccountsInput accountManagerAssignment)
         {
             return _manager.AddAccountManagerAssignment(accountManagerAssignment);
 
         }
         [HttpPost]
         [Route("UpdateAccountManagerAssignment")]
-        public UpdateOperationOutput<AccountManagerAssignmentDetail> UpdateAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment)
+        public UpdateOperationOutput<AccountManagerAssignmentDetail> UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput accountManagerAssignment)
         {
             return _manager.UpdateAccountManagerAssignment(accountManagerAssignment);
 
         }
         [HttpPost]
         [Route("GetAccountManagerAssignmentRuntimeEditor")]
-        public AccountManagerAssignmentRuntime GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentInput)
+        public AccountManagerAssignmentRuntimeEditor GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentInput)
         {
             return _manager.GetAccountManagerAssignmentRuntimeEditor(accountManagerAssignmentInput);
         }

@@ -11,6 +11,8 @@ namespace Retail.BusinessEntity.Business
     {
         public override string GetAccountName(string accountId)
         {
+            AccountBEManager accountBeManager = new AccountBEManager();
+            return accountBeManager.GetAccountName(this.AccountBEDefinitionId, Convert.ToInt64(accountId));
             throw new NotImplementedException();
         }
         public Guid AccountBEDefinitionId { get; set; }

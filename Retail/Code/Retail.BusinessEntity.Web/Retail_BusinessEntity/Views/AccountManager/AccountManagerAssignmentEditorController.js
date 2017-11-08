@@ -54,6 +54,9 @@
             }
         }
         function load() {
+            if (isEditMode)
+                 $scope.scopeModel.disable = true;
+            console.log($scope.scopeModel.disabel);
             $scope.scopeModel.isLoading = true;
                 getAccountManagerAssignmentRuntimeEditor().then(function () {
                     loadAllControls();
@@ -77,8 +80,11 @@
                         var payload = {
                             AccountBEDefinitionId: accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings.AccountBEDefinitionId
                         };
-                        if (accountManagerAssignmentRuntime != undefined && accountManagerAssignmentRuntime.AccountManagerAssignment != undefined)
-                            payload.selectedIds = accountManagerAssignmentRuntime.AccountManagerAssignment.AccountId;
+                        if (accountManagerAssignmentRuntime != undefined && accountManagerAssignmentRuntime.AccountManagerAssignment != undefined) {
+                            var selectedIds = [];
+                            selectedIds.push(accountManagerAssignmentRuntime.AccountManagerAssignment.AccountId);
+                            payload.selectedIds = selectedIds;
+                        }
                         VRUIUtilsService.callDirectiveLoad(accountSelectorAPI, payload, accountSelectorLoadDeferred);
                     });
 
@@ -100,15 +106,33 @@
             });
         }
         function buildObjectFromScope() {
-            var accountmanagerAssignment = {
-                AccountManagerAssignementId:accountManagerAssignmentId,
-                AccountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId,
-                AccountManagerId: accountManagerId,
-                AccountId: accountSelectorAPI.getSelectedIds(),
-                Settings: {},
-                BED: $scope.scopeModel.bed,
-                EED: $scope.scopeModel.eed
+            if (!isEditMode) {
+                var accounts = [];
+                var accountIds = accountSelectorAPI.getSelectedIds();
+                for (var i = 0; i < accountIds.length; i++) {
+                    var account = {
+                        AccountId: accountIds[i],
+                        AssignementSettings: {}
+                    }
+                    accounts.push(account);
+                }
+                var accountmanagerAssignment = {
+                    AccountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId,
+                    AccountManagerId: accountManagerId,
+                    Accounts: accounts,
+                    BED: $scope.scopeModel.bed,
+                    EED: $scope.scopeModel.eed
+                }
             }
+            else {
+                var accountmanagerAssignment = {
+                    AccountManagerAssignmentId: accountManagerAssignmentId,
+                    BED: $scope.scopeModel.bed,
+                    EED: $scope.scopeModel.eed,
+                    AssignementSettings: {}
+                }
+            }
+            console.log(accountmanagerAssignment)
             return accountmanagerAssignment;
         }
         function getAccountManagerAssignmentRuntimeEditor() {
@@ -128,7 +152,6 @@
             return Retail_BE_AccountManagerAssignmentAPIService.AddAccountManagerAssignment(accountmanagerAssignment).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Account Manager Assignment", response)) {
                     if ($scope.onAccountManagerAssignmentAdded != undefined)
-                        $scope.onAccountManagerAssignmentAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -143,7 +166,6 @@
             return Retail_BE_AccountManagerAssignmentAPIService.UpdateAccountManagerAssignment(accountmanagerAssignment).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Account Manager Assignment", response)) {
                     if ($scope.onAccountManagerAssignmentUpdated != undefined)
-                        $scope.onAccountManagerAssignmentUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

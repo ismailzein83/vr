@@ -5,7 +5,9 @@
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns colnum="3">
-                            <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady"></retail-be-account-selector>
+                            <span vr-disabled="scopeModel.disable">
+                                <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" isrequired="true" ismultipleselection="true"></retail-be-account-selector>
+                            </span>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -15,7 +17,7 @@
                 <vr-tab header="'Time'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-datetimepicker label="Begin Effective Date" value="scopeModel.bed" type="date"></vr-datetimepicker>
+                            <vr-datetimepicker label="Begin Effective Date" value="scopeModel.bed" type="date" isrequired="true"></vr-datetimepicker>
                         </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-datetimepicker label="End Effective Date" value="scopeModel.eed" type="date"></vr-datetimepicker>

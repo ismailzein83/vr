@@ -18,24 +18,18 @@ namespace Retail.BusinessEntity.Business
        public Vanrise.Entities.IDataRetrievalResult<AccountManagerAssignmentDetail> GetFilteredAccountManagerAssignments(Vanrise.Entities.DataRetrievalInput<AccountManagerAssignmentQuery> input)
        {
            var accountManagerAssignments = manager.GetAccountManagerAssignments();
-           Func<AccountManagerAssignment, bool> filterExpression = null;
+           Func<AccountManagerAssignment, bool> filterExpression = (prod) =>
+             (input.Query.AccountManagerId == null || prod.AccountManagerId.Equals(input.Query.AccountManagerId));
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountManagerAssignments.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
 
        }
-       public AccountManagerAssignmentRuntime GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentRuntimeInput)
+       public AccountManagerAssignmentRuntimeEditor GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentRuntimeInput)
        {
-           Vanrise.AccountManager.Business.AccountManagerDefinitionManager definitionManager = new Vanrise.AccountManager.Business.AccountManagerDefinitionManager();
-           AccountManagerAssignmentRuntime accountManagerAssignmentRuntime = new AccountManagerAssignmentRuntime();
-           var accountManagerDefinitionSettings = definitionManager.GetAccountManagerDefinitionSettings(accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId);
+           AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
+           AccountManagerAssignmentRuntimeEditor accountManagerAssignmentRuntime = new AccountManagerAssignmentRuntimeEditor();
+           var accountManagerDefinitionSettings = accountManagerDefinitionManager.GetAccountManagerDefinitionSettings(accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId);
            var assignmentDefinitions = accountManagerDefinitionSettings.AssignmentDefinitions;
-           foreach (var assignmentDefinition in assignmentDefinitions)
-           {
-
-               if (assignmentDefinition.AccountManagerAssignementDefinitionId == accountManagerAssignmentRuntimeInput.AssignmentDefinitionId)
-               {
-                   accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition = assignmentDefinition;
-               }
-           }
+           accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition = accountManagerDefinitionManager.GetAccountManagerAssignmentDefinition(accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId, accountManagerAssignmentRuntimeInput.AssignmentDefinitionId);
            if (accountManagerAssignmentRuntimeInput.AccountManagerAssignementId != null)
            {
                var accountManagerAssignmentId = accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.Value;
@@ -43,52 +37,45 @@ namespace Retail.BusinessEntity.Business
            }
            return accountManagerAssignmentRuntime;
        }
-       public Vanrise.Entities.InsertOperationOutput<AccountManagerAssignmentDetail> AddAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment)
+           public Vanrise.Entities.InsertOperationOutput<AccountManagerAssignmentDetail> AddAccountManagerAssignment(AssignAccountManagerToAccountsInput accountManagerAssignment)
        {
            string errorMessage;
-           int assignmentId;
            InsertOperationOutput<AccountManagerAssignmentDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountManagerAssignmentDetail>();
-           bool insertActionSucc = manager.TryAddAccountManagerAssignment(accountManagerAssignment, out assignmentId, out errorMessage);
-           if (insertActionSucc)
-           {
-               accountManagerAssignment.AccountManagerAssignementId = assignmentId;
-               insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-               insertOperationOutput.InsertedObject = null;
-               insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-               insertOperationOutput.InsertedObject = AccountManagerDetailMapper(accountManagerAssignment);
-           }
-           else
-           {
-               insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-           }
+           insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+           insertOperationOutput.InsertedObject = null;
+           bool insertActionSucc = manager.AssignAccountManagerToAccounts(accountManagerAssignment,out errorMessage);
            return insertOperationOutput;
-       }
-       public Vanrise.Entities.UpdateOperationOutput<AccountManagerAssignmentDetail> UpdateAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment)
+   }
+       public Vanrise.Entities.UpdateOperationOutput<AccountManagerAssignmentDetail> UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput accountManagerAssignment)
        {
            string errorMessage;
            UpdateOperationOutput<AccountManagerAssignmentDetail> updateOperationOutput = new UpdateOperationOutput<AccountManagerAssignmentDetail>();
-           bool updateActionSucc = manager.TryUpdateAccountManagerAssignment(accountManagerAssignment, out errorMessage);
-           if (updateActionSucc)
-           {
-               updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-               updateOperationOutput.UpdatedObject = AccountManagerDetailMapper(accountManagerAssignment);
-           }
-           else
-           {
-               updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-           }
+           updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+           updateOperationOutput.UpdatedObject = null;
+           manager.UpdateAccountManagerAssignment(accountManagerAssignment, out errorMessage);
            return updateOperationOutput;
        }
-       private AccountManagerAssignmentDetail AccountManagerDetailMapper(Vanrise.AccountManager.Entities.AccountManagerAssignment accountManagerAssignment)
+       private AccountManagerAssignmentDetail AccountManagerDetailMapper(AccountManagerAssignment accountManagerAssignment)
        {
-           return new AccountManagerAssignmentDetail()
+          
+           AccountManagerAssignmentDetail accountManagerAssignmentDetail = new AccountManagerAssignmentDetail
            {
                AccountManagerAssignementId = accountManagerAssignment.AccountManagerAssignementId,
                AccountManagerAssignementDefinitionId = accountManagerAssignment.AccountManagerAssignementDefinitionId,
+               AccountId = accountManagerAssignment.AccountId,
+               AccountManagerId = accountManagerAssignment.AccountManagerId,
                BED = accountManagerAssignment.BED,
                EED = accountManagerAssignment.EED
            };
-
+           AccountManagerManager accountManagerManager = new AccountManagerManager();
+           var accountManagerDefinitionId = accountManagerManager.GetAccountManagerDefinitionId(accountManagerAssignment.AccountManagerId);
+           AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
+           var accountManagerDefinitionSetting = accountManagerDefinitionManager.GetAccountManagerAssignmentDefinition(accountManagerDefinitionId, accountManagerAssignment.AccountManagerAssignementDefinitionId);
+           if (accountManagerDefinitionSetting != null)
+           {
+               accountManagerAssignmentDetail.AccountName = accountManagerDefinitionSetting.Settings.GetAccountName(accountManagerAssignment.AccountId);
+           }
+           return accountManagerAssignmentDetail;
        }
     }
 }

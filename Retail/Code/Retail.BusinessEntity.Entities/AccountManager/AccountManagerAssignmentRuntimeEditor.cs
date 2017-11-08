@@ -7,7 +7,7 @@ using Vanrise.AccountManager.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
-    public class AccountManagerAssignmentRuntime
+    public class AccountManagerAssignmentRuntimeEditor
     {
         public AccountManagerAssignmentDefinition AccountManagrAssignmentDefinition { get; set; }
         public AccountManagerAssignment AccountManagerAssignment { get; set; }

@@ -38,8 +38,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
                         searchPayload = payload;
-                        var query = {};
-                        return gridAPI.retrieveData(query);
+                        return gridAPI.retrieveData(getGridQuery());
 
                     };
                     directiveAPI.onAccountManagerAssignmentAdded = function (accountManagerAssignment) {
@@ -76,6 +75,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
             };
             var accountManagerAssignmentId = accountManagerAssignment.AccountManagerAssignementId;
             Retail_BE_AccountManagerAssignmentService.editAccountManagerAssignment(accountManagerAssignmentId, onAccountManagerAssignmentUpdated, searchPayload.accountManagerDefinitionId, searchPayload.accountManagerId, searchPayload.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId);
+        }
+        function getGridQuery() {
+            var Query = {
+                AccountManagerId: searchPayload.accountManagerId
+            }
+            return Query;
         }
     
 
