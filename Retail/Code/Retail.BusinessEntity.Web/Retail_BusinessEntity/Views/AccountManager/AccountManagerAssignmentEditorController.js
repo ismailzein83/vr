@@ -166,6 +166,7 @@
             return Retail_BE_AccountManagerAssignmentAPIService.UpdateAccountManagerAssignment(accountmanagerAssignment).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Account Manager Assignment", response)) {
                     if ($scope.onAccountManagerAssignmentUpdated != undefined)
+                        $scope.onAccountManagerAssignmentUpdated(response.UpdatedObject)
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {

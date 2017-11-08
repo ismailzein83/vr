@@ -20,7 +20,7 @@ namespace Retail.BusinessEntity.Web.Controllers
     [JSONWithTypeAttribute]
     public class AccountManagerAssignmentsController : BaseAPIController
     {
-        Retail.BusinessEntity.Business.AccountManagerAssignmentManager _manager = new Retail.BusinessEntity.Business.AccountManagerAssignmentManager();
+        Retail.BusinessEntity.Business.RetailAccountManagerAssignmentManager _manager = new Retail.BusinessEntity.Business.RetailAccountManagerAssignmentManager();
 
         [HttpPost]
         [Route("GetAccountManagerAssignments")]
