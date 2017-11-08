@@ -30,32 +30,55 @@ namespace Vanrise.AccountManager.Business
             insertedID = -1;
             errorMessage = null;
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
-            bool isAdded = dataManager.AddAccountManagerAssignment(accountManagerAssignment, out insertedID);
-            if (isAdded)
+            bool insertActionSucc = dataManager.AddAccountManagerAssignment(accountManagerAssignment, out insertedID);
+            if (insertActionSucc)
             {
                 accountManagerAssignment.AccountManagerAssignementId = insertedID;
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
-            return isAdded;
+            return insertActionSucc;
         }
-        public bool TryUpdateAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment, out string errorMessage)
+        internal bool TryUpdateAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment)
         {
-            errorMessage = null;
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
-            bool isUpdated = dataManager.UpdateAccountManagerAssignment(accountManagerAssignment);
-            if (isUpdated)
+            bool updateActionSucc = dataManager.UpdateAccountManagerAssignment(accountManagerAssignment);
+            if (updateActionSucc)
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             }
-            return isUpdated;
+            return updateActionSucc;
         }
-        public void AssignAccountManagerToAccounts(AssignAccountManagerToAccountsInput input)
+        public bool AssignAccountManagerToAccounts(AssignAccountManagerToAccountsInput input,out string  errorMessage)
         {
-            throw new NotImplementedException();
+            AccountManagerAssignment accountManagerAssignment = new AccountManagerAssignment();
+            accountManagerAssignment.AccountManagerAssignementDefinitionId = input.AccountManagerAssignementDefinitionId;
+            accountManagerAssignment.AccountManagerId = input.AccountManagerId;
+            accountManagerAssignment.BED = input.BED;
+            accountManagerAssignment.EED = input.EED;
+            int insertedID;
+            errorMessage = null;
+            bool insertActionSucc=false;
+            string errorString;
+            if (input.Accounts != null)
+            {
+                foreach (var account in input.Accounts)
+                {
+                    accountManagerAssignment.AccountId = account.AccountId;
+                    accountManagerAssignment.Settings = account.AssignementSettings;
+                    insertActionSucc = TryAddAccountManagerAssignment(accountManagerAssignment, out insertedID, out errorString);
+                }
+            }
+            return insertActionSucc;
         }
-        public void UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput input)
+        public void UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput input, out string errorMessage)
         {
-            throw new NotImplementedException();
+            errorMessage = null;
+            AccountManagerAssignment accountManagerAssignment = new AccountManagerAssignment();
+            accountManagerAssignment.AccountManagerAssignementId = input.AccountManagerAssignmentId;
+            accountManagerAssignment.BED = input.BED;
+            accountManagerAssignment.EED = input.EED;
+            accountManagerAssignment.Settings = input.AssignementSettings;
+            TryUpdateAccountManagerAssignment(accountManagerAssignment);
         }
 
         public bool IsAccountAssignableToAccountManager(Guid assignmentDefinitionId, string accountId)

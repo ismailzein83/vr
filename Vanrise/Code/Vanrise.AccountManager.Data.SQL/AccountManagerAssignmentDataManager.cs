@@ -36,7 +36,7 @@ namespace Vanrise.AccountManager.Data.SQL
         }
         public bool UpdateAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment)
         {
-            int recordsEffected = ExecuteNonQuerySP("[VR_AccountManager].[sp_AccountManagerAssignment_Update]", accountManagerAssignment.AccountManagerAssignementId, accountManagerAssignment.AccountManagerAssignementDefinitionId, accountManagerAssignment.AccountManagerId, accountManagerAssignment.AccountId, Serializer.Serialize(accountManagerAssignment.Settings), accountManagerAssignment.BED, accountManagerAssignment.EED);
+            int recordsEffected = ExecuteNonQuerySP("[VR_AccountManager].[sp_AccountManagerAssignment_Update]", accountManagerAssignment.AccountManagerAssignementId, Serializer.Serialize(accountManagerAssignment.Settings), accountManagerAssignment.BED, accountManagerAssignment.EED);
             return (recordsEffected > 0);
         }
         public bool AreAccountManagerAssignmentsUpdated(ref object updateHandle)

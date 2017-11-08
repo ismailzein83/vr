@@ -79,6 +79,17 @@ namespace Vanrise.AccountManager.Business
            var allAccountManagers = this.GetCachedAccountManagers();
            return allAccountManagers.GetRecord(accountManagerId);
        }
+       public Guid GetAccountManagerDefinitionId(long accountManagerId)
+       {
+           var accountManager = GetAccountManager( accountManagerId);
+           accountManager.ThrowIfNull("accountManager", accountManagerId);
+           return accountManager.AccountManagerDefinitionId;
+       }
+       public IEnumerable<AccountManagerDefinitionConfig> GetAccountManagerDefinitionConfigs()
+       {
+           ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+           return manager.GetExtensionConfigurations<AccountManagerDefinitionConfig>(AccountManagerDefinitionConfig.EXTENSION_TYPE).OrderByDescending(x => x.Name);
+       }
        #endregion
 
        #region Mappers
@@ -93,11 +104,7 @@ namespace Vanrise.AccountManager.Business
            };
           
        }
-       public IEnumerable<AccountManagerDefinitionConfig> GetAccountManagerDefinitionConfigs()
-       {
-           ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
-           return manager.GetExtensionConfigurations<AccountManagerDefinitionConfig>(AccountManagerDefinitionConfig.EXTENSION_TYPE).OrderByDescending(x => x.Name);
-       }
+     
        
        #endregion
 

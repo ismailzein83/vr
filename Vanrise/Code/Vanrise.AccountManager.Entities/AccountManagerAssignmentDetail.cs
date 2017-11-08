@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountManager.Entities
 {
-   public class AccountManagerAssignmentDetail
+    public class AccountManagerAssignmentDetail
     {
-       public long AccountManagerAssignementId { get; set; } 
+        public long AccountManagerAssignementId { get; set; }
         public Guid AccountManagerAssignementDefinitionId { get; set; }
+        public long AccountManagerId { get; set; }
+        public string AccountId { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
+        public string AccountName { get; set; }
     }
 }

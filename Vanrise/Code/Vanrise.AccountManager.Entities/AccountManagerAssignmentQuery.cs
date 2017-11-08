@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountManager.Entities
 {
-   public class AccountManagerAssignmentQuery
+    public class AccountManagerAssignmentQuery
     {
+        public long? AccountManagerId { get; set; }
     }
 }

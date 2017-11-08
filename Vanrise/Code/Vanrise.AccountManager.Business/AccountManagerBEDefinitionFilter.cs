@@ -7,17 +7,15 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.AccountManager.Business
 {
-  public class AccountManagerBEDefinitionFilter : IBusinessEntityDefinitionFilter
+    public class AccountManagerBEDefinitionFilter : IBusinessEntityDefinitionFilter
     {
-      public bool IsMatched(IBusinessEntityDefinitionFilterContext context)
-      {
-          if (context.entityDefinition == null || context.entityDefinition.Settings == null)
-              return false;
-
-          if (context.entityDefinition.Settings.ConfigId != AccountManagerBEDefinitionSettings.s_configId)
-              return false;
-
-          return true;
-      }
+        public bool IsMatched(IBusinessEntityDefinitionFilterContext context)
+        {
+            if (context.entityDefinition == null || context.entityDefinition.Settings == null)
+                return false;
+            if (context.entityDefinition.Settings.ConfigId != AccountManagerBEDefinitionSettings.s_configId)
+                return false;
+            return true;
+        }
     }
 }

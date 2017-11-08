@@ -12,10 +12,11 @@ using Vanrise.AccountManager.Data;
 
 namespace Vanrise.AccountManager.Business
 {
-    #region Public Methods
+   
     public class AccountManagerDefinitionManager
     {
-       public BusinessEntityDefinition GetAccountManagerDefinition(Guid accountManagerDefinitionId)
+        #region Public Methods
+        public BusinessEntityDefinition GetAccountManagerDefinition(Guid accountManagerDefinitionId)
        {
            BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
            return manager.GetBusinessEntityDefinition(accountManagerDefinitionId);
@@ -49,6 +50,7 @@ namespace Vanrise.AccountManager.Business
            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
            return manager.GetExtensionConfigurations<AccountManagerSubViewsConfig>(AccountManagerSubViewsConfig.EXTENSION_TYPE).OrderByDescending(x => x.Name);
        }
+        #endregion
     }
-    #endregion
+  
 }

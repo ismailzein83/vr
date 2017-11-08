@@ -107,29 +107,27 @@
             setDrillDownTabs();
 
             function addDrillDownTab(accountManagerSubViewDefinition) {
-
                 var drillDownTab = {};
                 if (accountManagerSubViewDefinition != undefined && accountManagerSubViewDefinition.Settings != undefined) {
                     drillDownTab.title = accountManagerSubViewDefinition.Name;
                     drillDownTab.directive = accountManagerSubViewDefinition.Settings.RuntimeEditor;
-                }
-                drillDownTab.loadDirective = function (accountManagerSubViewGridAPI, accountManager) {
-                    accountManager.accountManagerSubViewGridAPI = accountManagerSubViewGridAPI;
+                    drillDownTab.loadDirective = function (accountManagerSubViewGridAPI, accountManager) {
+                        accountManager.accountManagerSubViewGridAPI = accountManagerSubViewGridAPI;
 
-                    return accountManager.accountManagerSubViewGridAPI.load(buildAccountViewPayload());
-                };
-
-                function buildAccountViewPayload() {
-
-                    var payload = {
-                        accountManagerSubViewDefinition: accountManagerSubViewDefinition,
-                        accountManagerDefinitionId: accountManagerDefinitionId,
-                        accountManagerId: accountManager.AccountManagerId
+                        return accountManager.accountManagerSubViewGridAPI.load(buildAccountViewPayload());
                     };
-                    return payload;
-                }
+                    function buildAccountViewPayload() {
 
-                drillDownTabs.push(drillDownTab);
+                        var payload = {
+                            accountManagerSubViewDefinition: accountManagerSubViewDefinition,
+                            accountManagerDefinitionId: accountManagerDefinitionId,
+                            accountManagerId: accountManager.AccountManagerId
+                        };
+                        return payload;
+                    }
+
+                    drillDownTabs.push(drillDownTab);
+                }
             }
             function setDrillDownTabs() {
                 var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
