@@ -392,9 +392,7 @@ namespace Vanrise.Invoice.Business
                 var duePeriodPartItem = GetInvoiceSettingDetailByType<DuePeriodInvoiceSettingPart>(invoiceSettingObject.InvoiceSettingId);
                 if (duePeriodPartItem != null)
                 {
-                    var dayDescription = duePeriodPartItem.DuePeriod > 1 ? "Days" : "Day";
-                    invoiceSettingDetail.DuePeriodDescription = string.Format("{0} {1}", duePeriodPartItem.DuePeriod, dayDescription);
-
+                    invoiceSettingDetail.DuePeriodDescription = string.Format("{0}", duePeriodPartItem.DuePeriod);
                 }
             }
             invoiceSettingDetail.CanDeleteInvoiceSetting = CanDeleteInvoiceSetting(invoiceSettingObject.InvoiceSettingId);
