@@ -11,6 +11,7 @@ namespace Vanrise.Invoice.Entities
         public InvoiceSetting Entity { get; set; }
         public bool IsAutomatic { get; set; }
         public string BillingPeriodDescription { get; set; }
+        public string DuePeriodDescription { get; set; }
         public bool CanDeleteInvoiceSetting { get; set; }
     }
 }

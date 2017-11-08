@@ -384,9 +384,18 @@ namespace Vanrise.Invoice.Business
                 var automaticPartItem = GetInvoiceSettingDetailByType<AutomaticInvoiceSettingPart>(invoiceSettingObject.InvoiceSettingId);
                 if (automaticPartItem != null)
                     invoiceSettingDetail.IsAutomatic = automaticPartItem.IsEnabled;
+               
                 var billingPeriodPartItem = GetInvoiceSettingDetailByType<BillingPeriodInvoiceSettingPart>(invoiceSettingObject.InvoiceSettingId);
                 if (billingPeriodPartItem != null && billingPeriodPartItem.BillingPeriod != null)
                     invoiceSettingDetail.BillingPeriodDescription = billingPeriodPartItem.BillingPeriod.GetDescription();
+              
+                var duePeriodPartItem = GetInvoiceSettingDetailByType<DuePeriodInvoiceSettingPart>(invoiceSettingObject.InvoiceSettingId);
+                if (duePeriodPartItem != null)
+                {
+                    var dayDescription = duePeriodPartItem.DuePeriod > 1 ? "Days" : "Day";
+                    invoiceSettingDetail.DuePeriodDescription = string.Format("{0} {1}", duePeriodPartItem.DuePeriod, dayDescription);
+
+                }
             }
             invoiceSettingDetail.CanDeleteInvoiceSetting = CanDeleteInvoiceSetting(invoiceSettingObject.InvoiceSettingId);
             return invoiceSettingDetail;
