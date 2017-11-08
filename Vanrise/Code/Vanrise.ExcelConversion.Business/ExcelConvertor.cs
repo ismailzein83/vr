@@ -131,6 +131,16 @@ namespace Vanrise.ExcelConversion.Business
                     if (!manager.IsFilterGroupMatch(listMapping.Filter.FilterGroup, context))
                         markedAsFiltered = true;
                 }
+                //if(listMapping.RowFilters != null && listMapping.RowFilters.Count>0)
+                //{
+                //    RecordFilterManager manager = new RecordFilterManager();
+
+                //    foreach (var rowFilter in listMapping.RowFilters)
+                //    {
+                //        if (!manager.IsSingleFieldFilterMatch(rowFilter.RecordFilter, GetFieldValue(workbook, rowFilter.FieldMapping, dateTimeFormat, workSheet, row, isCommaDecimalSeparator, fieldValueByFieldName, conversionSettings.Precision, conversionSettings.RatePrecicionType, conversionSettings.ExtendedSettings), rowFilter.FieldType))
+                //            markedAsFiltered = true;
+                //    }
+                //}
 
                 var convertedRecord = new ConvertedExcelRecord { Fields = new ConvertedExcelFieldsByName() };
 

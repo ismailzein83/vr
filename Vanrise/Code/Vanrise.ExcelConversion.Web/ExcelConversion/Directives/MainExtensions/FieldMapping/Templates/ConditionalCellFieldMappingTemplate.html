@@ -1,32 +1,43 @@
 ﻿<vr-row>
-    <vr-columns width="2/3row">
-        <vr-select on-ready="onSelectorReady"
-                   datasource="ConditionalCellMappingCtrl.datasource"
-                   datatextfield="FieldName"
-                   datavaluefield="FieldName"
-                   selectedvalues="ConditionalCellMappingCtrl.selectedvalues"
-                   label="Rows Fields">
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.conditionalTypes"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   selectedvalues="scopeModel.selectedConditionalType"
+                   label="Type"
+                   hideremoveicon>
         </vr-select>
     </vr-columns>
-    <vr-columns width="1/3row" withemptyline>
-        <vr-button type="Add" data-onclick="ConditionalCellMappingCtrl.addConditionalCell" vr-disabled="ConditionalCellMappingCtrl.selectedvalues == undefined" standalone></vr-button>
+    <vr-excelconversion-fieldmapping-cellfieldmapping normal-col-num="4" onselectcellchanged="scopeModel.onSelectCellChanged" on-ready="    scopeModel.onCellFieldMappingReady" isrequired="true" ng-if="scopeModel.selectedConditionalType.value == 0" label="Conditional Field">
+    </vr-excelconversion-fieldmapping-cellfieldmapping>
+    <vr-columns colnum="8" ng-if="scopeModel.selectedConditionalType.value == 1">
+        <vr-select on-ready="onSelectorReady"
+                   datasource="scopeModel.datasource"
+                   datatextfield="FieldName"
+                   datavaluefield="FieldName"
+                   selectedvalues="scopeModel.selectedvalues"
+                   label="Rows Fields"
+                   isrequired="true"
+                   onselectionchanged="scopeModel.onRowFieldSelectionChanged">
+        </vr-select>
     </vr-columns>
 </vr-row>
 <vr-row>
     <vr-columns width="fullrow">
         <vr-datagrid on-ready="onGridReady"
-                     datasource="ConditionalCellMappingCtrl.datasourcemapping"
-                     maxheight="250px" ondeleterow="ConditionalCellMappingCtrl.removeField">
-            <vr-datagridcolumn headertext="'Row Field Value'" field="'FieldTitle'" widthfactor="10">
+                     datasource="scopeModel.datasourcemapping"
+                     maxheight="250px" ondeleterow="scopeModel.removeField">
+            <vr-datagridcolumn headertext="'Condition'" field="'FieldTitle'" widthfactor="10">
                 <vr-row>
                     <vr-columns width="fullrow">
                         <vr-textbox value="dataItem.RowFieldValue"></vr-textbox>
                     </vr-columns>
                 </vr-row>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Field Mapping'" widthfactor="15">
+            <vr-datagridcolumn headertext="'Value'" widthfactor="15">
                 <vr-excelconversion-fieldmapping-selective hidelabel="true" on-ready="dataItem.onFieldMappingReady" normal-col-num="{{dataItem.normalColNum}}" isrequired="true" customvalidate="dataItem.validate()" type="dataItem.type"> </vr-excelconversion-fieldmapping-selective>
             </vr-datagridcolumn>
         </vr-datagrid>
+        <a href="" ng-click="scopeModel.addConditionalCell()" >Add Condition</a>
     </vr-columns>    
 </vr-row>

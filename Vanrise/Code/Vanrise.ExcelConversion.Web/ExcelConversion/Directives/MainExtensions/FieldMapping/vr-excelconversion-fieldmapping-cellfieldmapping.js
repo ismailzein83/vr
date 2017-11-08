@@ -11,6 +11,7 @@
                 onReady: "=",
                 normalColNum: '@',
                 isrequired: '=',
+                onselectcellchanged:'=',
                 type: '='
             },
             controller: function ($scope, $element, $attrs) {
@@ -26,15 +27,19 @@
         };
         function getTamplate(attrs) {
             var label = "";
+            var withEmptyLine = "";
             if (attrs.label != undefined)
-                label = "label='"+attrs.label+"'";
+            {
+                label = "label='" + attrs.label + "'";
+                withEmptyLine = "withemptyline";
+            }
             return ' <vr-columns colnum="{{cellfieldmappingCtrl.normalColNum * 1.5}}" >'
                           + ' <vr-cellviewer ' + label + ' on-select="cellfieldmappingCtrl.selectCell" on-update="cellfieldmappingCtrl.updateRange" value="cellObject" customvalidate="cellfieldmappingCtrl.validate()" isrequired="cellfieldmappingCtrl.isrequired" type="cellfieldmappingCtrl.type"> </vr-cellviewer>'
                            + '</vr-columns>'
-                 + ' <vr-columns colnum="{{cellfieldmappingCtrl.normalColNum *0.5}}" >'
+                 + ' <vr-columns colnum="{{cellfieldmappingCtrl.normalColNum *0.5}}"  ' + withEmptyLine + ' >'
                  + ' <span class="glyphicon  glyphicon-edit" ng-click="cellfieldmappingCtrl.editCellManipulation()" ng-if="cellfieldmappingCtrl.showEditButton" style="font-size:15px;cursor:pointer"></span>'
                  + '</vr-columns>'
-                 + ' <vr-columns colnum="{{cellfieldmappingCtrl.normalColNum *0.5}}" >'
+                 + ' <vr-columns colnum="{{cellfieldmappingCtrl.normalColNum *0.5}}"  ' + withEmptyLine + '  >'
                 + ' <span class="glyphicon glyphicon-check" ng-click="cellfieldmappingCtrl.editCellManipulation()" ng-if="cellfieldmappingCtrl.showCheckButton" style="color:green;font-size:15px;cursor:pointer"></span>'
                  + '</vr-columns>';
         }
@@ -54,6 +59,8 @@
                                 sheet: context.getSelectedSheet(),
                             };
                         }
+                        if (ctrl.onselectcellchanged != undefined)
+                            ctrl.onselectcellchanged();
 
                     }
 
@@ -72,6 +79,7 @@
                 ctrl.selectCell = function () {
                     if (context != undefined && $scope.cellObject != undefined) {
                         context.setSelectedCell($scope.cellObject.row, $scope.cellObject.col, $scope.cellObject.sheet);
+                       
                     }
                 };
 

@@ -19,11 +19,16 @@
         function GetConcatenatedPartTemplateConfigs() {
             return baseApiService.get(utilsService.getServiceURL(moduleConfig.moduleName, controllerName, "GetConcatenatedPartTemplateConfigs"));
         }
+        function ReadConditionsFromFile(input) {
+            return baseApiService.post(utilsService.getServiceURL(moduleConfig.moduleName, controllerName, "ReadConditionsFromFile"), input);
+        }
+        
         return ({
             ReadExcelFile: ReadExcelFile,
             ReadExcelFilePage: ReadExcelFilePage,
             GetFieldMappingTemplateConfigs: GetFieldMappingTemplateConfigs,
-            GetConcatenatedPartTemplateConfigs: GetConcatenatedPartTemplateConfigs
+            GetConcatenatedPartTemplateConfigs: GetConcatenatedPartTemplateConfigs,
+            ReadConditionsFromFile: ReadConditionsFromFile
         });
     }
 

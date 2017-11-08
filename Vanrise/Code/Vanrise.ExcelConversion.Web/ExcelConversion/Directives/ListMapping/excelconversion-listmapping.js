@@ -30,8 +30,21 @@
             var recordFilterAPI;
             var recordFilterReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            //var filterFieldMappingAPI;
+            //var filterFieldMappingReadyPromiseDeferred;
+
             function initializeController() {
                 $scope.scopeModel = {};
+                //$scope.scopeModel.onFilterFieldMappingReady = function (api) {
+                //    filterFieldMappingAPI = api;
+                //    var setLoader = function (value) {
+                //        $scope.isLoadingDirective = value;
+                //    };
+                //    var directivePayload = { context: getContext() };
+
+                //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterFieldMappingAPI, directivePayload, setLoader, filterFieldMappingReadyPromiseDeferred);
+
+                //};
                 ctrl.fieldMappings = [];
                 ctrl.updateLastRowIndexRange = function () {
                     if (context != undefined) {
@@ -47,6 +60,7 @@
                     }
 
                 };
+                $scope.scopeModel.filterTypes = [{ value: 0, description: "Basic" }, { value: 1, description: "Advanced" }];
                 ctrl.selectLastRowIndex = function () {
                     if (context != undefined) {
                         context.setSelectedCell(ctrl.lastRowIndex.row, ctrl.lastRowIndex.col, ctrl.lastRowIndex.sheet);
@@ -77,6 +91,17 @@
                     recordFilterReadyPromiseDeferred.resolve();
                 };
 
+                //$scope.scopeModel.onFilterTypeSelectionChanged = function (value) {
+                //    if(value != undefined)
+                //    {
+                //        if($scope.scopeModel.selectedFilterType.value ==  $scope.scopeModel.filterTypes[1].value)
+                //        {
+                //            var directivePayload = { context: getRecordFilterContext() };
+                //            var setLoader = function (value) { ctrl.isLoadingDirective = value };
+                //            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, recordFilterAPI, directivePayload, setLoader);
+                //        }
+                //    }
+                //};
                 ctrl.filterFieldsMappings = [];
                 ctrl.addField = function () {
                     var dataItem =
@@ -123,9 +148,20 @@
                     }
                     return false;
                 };
+                //$scope.scopeModel.conditions = UtilsService.getArrayEnum(VR_GenericData_ConditionEnum);
+                //$scope.scopeModel.filterFieldMappings = [];
+                //$scope.scopeModel.addConditionalCell = function () {
+                //    var dataItem = {
+                //        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                //        loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                //        selectedCondition: $scope.scopeModel.conditions[0],
+                //        selectedDataTypes: ctrl.dataTypes[1]
+                //    };
+                //    addConditionalCellFieldMapping(dataItem);
+                //};
                 defineAPI();
             }
-
+      
             function addFilterAPIExtension(dataItem, payloadEntity) {
                 var payload = {
                     context: getContext()
@@ -148,7 +184,105 @@
               });
                 ctrl.filterFieldsMappings.push(dataItem);
             }
+            //function addConditionalCellFieldMapping(dataItem, payloadEntity) {
+            //    var payload = {
+            //        context: getContext()
+            //    };
+            //    if (payloadEntity != undefined) {
+            //        payload.fieldMapping = payloadEntity.FieldMapping;
+            //        payload.hideCell = true;
+            //        dataItem.selectedDataTypePromiseDeferred = UtilsService.createPromiseDeferred();
+            //        dataItem.selectedDataTypes = UtilsService.getItemByVal(ctrl.dataTypes, payloadEntity.FieldType.ConfigId, "value.ConfigId");
+            //        fillOperations(dataItem);
+            //        if (payloadEntity.RecordFilter != undefined)
+            //        {
+            //            dataItem.selectedConditionPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            //            dataItem.selectedCondition = UtilsService.getItemByVal($scope.scopeModel.conditions, payloadEntity.RecordFilter.$type, 'type');
+            //            if (!dataItem.selectedCondition != undefined) {
+            //                dataItem.selectedCondition = UtilsService.getItemByVal($scope.scopeModel.conditions, '', 'type');
+            //            }
+
+            //            dataItem.selectedConditionPromiseDeferred.promise.then(function () {
+            //                dataItem.selectedConditionPromiseDeferred = undefined;
+            //                if (!dataItem.selectedCondition != undefined) {
+            //                    dataItem.selectedOperation = UtilsService.getItemByVal(dataItem.operations, payloadEntity.RecordFilter.CompareOperator, "value");
+            //                    dataItem.showOperators = true;
+            //                }
+            //            });
+                       
+            //            dataItem.value = payloadEntity.RecordFilter.Value;
+            //        }
+            //    }
+            //    dataItem.onFilterFieldMappingReady = function (api) {
+            //        dataItem.fieldMappingAPI = api;
+            //        dataItem.readyPromiseDeferred.resolve();
+            //    };
+            //    dataItem.onDataRecordTypeFieldSelectionChanged = function (dataType) {
+            //        if (dataType != undefined) {
+            //            if (dataItem.selectedDataTypePromiseDeferred != undefined)
+            //            {
+            //                dataItem.selectedDataTypePromiseDeferred.resolve();
+            //                dataItem.selectedDataTypePromiseDeferred = undefined;
+            //            }
+            //            else
+            //            {
+            //                dataItem.value = undefined;
+            //                fillOperations(dataItem);
+            //            }
+            //        }
+            //    };
+            //    dataItem.onConditionSelectionChanged = function (selectedCondition) {
+            //        if (dataItem.selectedCondition != undefined) {
+            //            if (dataItem.selectedConditionPromiseDeferred != undefined)
+            //                dataItem.selectedConditionPromiseDeferred.resolve();
+            //            else
+            //            {
+            //                switch (dataItem.selectedCondition.description) {
+            //                    case VR_GenericData_ConditionEnum.Condition.description:
+            //                        dataItem.showOperators = true;
+            //                        break;
+            //                    default:
+            //                        dataItem.showOperators = false;
+            //                        break;
+            //                }
+            //                dataItem.selectedOperation = undefined;
+            //            }
+                        
+            //        }
+
+            //    };
+            //    dataItem.readyPromiseDeferred.promise
+            //  .then(function () {
+
+            //      VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
+            //  });
+            //    function  fillOperations(dataItem)
+            //    {
+            //        switch (dataItem.selectedDataTypes.value.ConfigId) {
+            //            case VR_GenericData_MappingFieldTypeEnum.DateTime.value.ConfigId:
+            //                dataItem.operations = UtilsService.getArrayEnum(VR_GenericData_DateTimeRecordFilterOperatorEnum);
+            //                dataItem.showDateTime = true;
+            //                dataItem.showTextBox = false;
+            //                dataItem.showNumber = false;
+
+            //                break;
+            //            case VR_GenericData_MappingFieldTypeEnum.Text.value.ConfigId:
+            //                dataItem.operations = UtilsService.getArrayEnum(VR_GenericData_StringRecordFilterOperatorEnum);
+            //                dataItem.showDateTime = false;
+            //                dataItem.showTextBox = true;
+            //                dataItem.showNumber = false;
+            //                break;
+            //            case VR_GenericData_MappingFieldTypeEnum.Number.value.ConfigId:
+            //                dataItem.operations = UtilsService.getArrayEnum(VR_GenericData_NumberRecordFilterOperatorEnum);
+            //                dataItem.showDateTime = false;
+            //                dataItem.showTextBox = false;
+            //                dataItem.showNumber = true;
+            //                break;
+            //        }
+            //    }
+            //    $scope.scopeModel.filterFieldMappings.push(dataItem);
+            //}
             function defineAPI() {
                 var api = {};
 
@@ -164,6 +298,7 @@
                         $scope.scopeModel.labelName = (payload.listTitle!=undefined)?payload.listTitle + " Date Time Format":undefined;
                         $scope.showDateFormat = payload.showDateFormat;
                         $scope.scopeModel.dateTimeFormat = (payload.listMappingData != undefined && payload.showDateFormat==true) ? payload.listMappingData.DateTimeFormat : undefined;
+                        //$scope.scopeModel.filterFieldMappings.length = 0;
                         if (listMappingData != undefined) {
 
                             if (listMappingData.FirstRowIndex != undefined) {
@@ -180,17 +315,36 @@
                                     sheet: listMappingData.SheetIndex
                                 };
                             }
-                            if (listMappingData.Filter != undefined && listMappingData.Filter.Fields != undefined) {
-                                for (var j = 0; j < listMappingData.Filter.Fields.length; j++) {
-                                    var filterItem = {
-                                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
-                                    };
-                                    var filterFieldsMappingEntity = listMappingData.Filter.Fields[j];
-                                    promises.push(filterItem.loadPromiseDeferred.promise);
-                                    addFilterAPIExtension(filterItem, filterFieldsMappingEntity);
+                            if (listMappingData.Filter != undefined)
+                            {
+                                $scope.scopeModel.selectedFilterType = $scope.scopeModel.filterTypes[1];
+                                
+                                if (listMappingData.Filter.Fields != undefined) {
+                                    for (var j = 0; j < listMappingData.Filter.Fields.length; j++) {
+                                        var filterItem = {
+                                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                        };
+                                        var filterFieldsMappingEntity = listMappingData.Filter.Fields[j];
+                                        promises.push(filterItem.loadPromiseDeferred.promise);
+                                        addFilterAPIExtension(filterItem, filterFieldsMappingEntity);
+                                    }
                                 }
                             }
+
+                            //if (listMappingData.RowFilters != undefined) {
+                            //    $scope.scopeModel.selectedFilterType = $scope.scopeModel.filterTypes[0];
+                            //    for (var j = 0; j < listMappingData.RowFilters.length; j++) {
+                            //        var rowFilterItem = {
+                            //            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                            //            loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                            //        };
+                            //        var rowFilter = listMappingData.RowFilters[j];
+                            //        promises.push(rowFilterItem.loadPromiseDeferred.promise);
+                            //        addConditionalCellFieldMapping(rowFilterItem, rowFilter);
+                            //    }
+
+                            //}
 
                         }
                         ctrl.fieldMappings = payload.fieldMappings;
@@ -203,9 +357,13 @@
                         }
 
 
-
+                        
+                    }
+                    if ($scope.scopeModel.selectedFilterType == undefined) {
+                        $scope.scopeModel.selectedFilterType = $scope.scopeModel.filterTypes[1];
                     }
                     promises.push(loadRecordFilterDirective());
+               //     promises.push(loadDataRecordFieldTypeConfig());
                     function loadRecordFilterDirective() {
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
                         recordFilterReadyPromiseDeferred.promise.then(function () {
@@ -243,6 +401,17 @@
                           VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
                       });
                     }
+                    //function loadFieldMappings()
+                    //{
+                    //    ctrl.fieldMappings = payload.fieldMappings;
+                    //    for (var i = 0; i < ctrl.fieldMappings.length; i++) {
+                    //        var item = ctrl.fieldMappings[i];
+                    //        item.readyPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //        item.loadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    //        promises.push(item.loadPromiseDeferred.promise);
+                    //        addAPIExtension(ctrl.fieldMappings[i]);
+                    //    }
+                    //}
 
                     return UtilsService.waitMultiplePromises(promises);
 
@@ -296,6 +465,18 @@
                         }
                     }
 
+                    //var rowFilters;
+                    //if ($scope.scopeModel.filterFieldMappings.length > 0) {
+                    //    rowFilters = [];
+                    //    for (var i = 0; i < $scope.scopeModel.filterFieldMappings.length; i++) {
+                    //        var filterField = $scope.scopeModel.filterFieldMappings[i];
+                    //        rowFilters.push({
+                    //            FieldMapping: filterField.fieldMappingAPI != undefined ? filterField.fieldMappingAPI.getData() : undefined,
+                    //            FieldType: filterField.selectedDataTypes != undefined ? filterField.selectedDataTypes.value : undefined,
+                    //            RecordFilter: getRecordFilter(filterField)
+                    //        });
+                    //    }
+                    //}
                     var data = {
                         ListName: listName,
                         SheetIndex: ctrl.firstRowIndex != undefined ? ctrl.firstRowIndex.sheet : undefined,
@@ -303,10 +484,63 @@
                         LastRowIndex: ctrl.lastRowIndex != undefined ? ctrl.lastRowIndex.row : undefined,
                         FieldMappings: fieldMappings,
                         Filter: filter,
+                       // RowFilters:rowFilters,
                         DateTimeFormat: ($scope.scopeModel.dateTimeFormat != undefined && $scope.scopeModel.showDateFormat==true) ? $scope.scopeModel.dateTimeFormat : undefined
                     };
                     return data;
                 }
+                //function getRecordFilter(dataItem)
+                //{
+                //    var recordFilter;
+                //    if (dataItem.selectedCondition != undefined)
+                //    {
+                //        switch (dataItem.selectedCondition.description) {
+                //            case VR_GenericData_ConditionEnum.Condition.description:
+                //                if (dataItem.selectedDataTypes != undefined && dataItem.selectedOperation != undefined)
+                //                {
+                //                    switch (dataItem.selectedDataTypes.value.ConfigId) {
+                //                        case VR_GenericData_MappingFieldTypeEnum.DateTime.value.ConfigId:
+                //                            recordFilter = {
+                //                                $type: "Vanrise.GenericData.Entities.DateTimeRecordFilter,Vanrise.GenericData.Entities",
+                //                                CompareOperator: dataItem.selectedOperation.value,
+                //                                Value: dataItem.value
+                //                            };
+                //                            break;
+                //                        case VR_GenericData_MappingFieldTypeEnum.Text.value.ConfigId:
+                //                            recordFilter = {
+                //                                $type: "Vanrise.GenericData.Entities.StringRecordFilter,Vanrise.GenericData.Entities",
+                //                                CompareOperator: dataItem.selectedOperation.value,
+                //                                Value: dataItem.value
+                //                            };
+                //                            break;
+                //                        case VR_GenericData_MappingFieldTypeEnum.Number.value.ConfigId:
+                //                            recordFilter = {
+                //                                $type: "Vanrise.GenericData.Entities.NumberRecordFilter,Vanrise.GenericData.Entities",
+                //                                CompareOperator: dataItem.selectedOperation.value,
+                //                                Value: dataItem.value
+                //                            };
+                //                            break;
+
+                //                    }
+                //                }
+
+                //                break;
+                //            case VR_GenericData_ConditionEnum.Empty.description:
+                //                recordFilter = {
+                //                    $type: VR_GenericData_ConditionEnum.Empty.type,
+                //                };
+                //                break;
+                //            case VR_GenericData_ConditionEnum.NonEmpty.description:
+                //                recordFilter = {
+                //                    $type: VR_GenericData_ConditionEnum.NonEmpty.type,
+                //                };
+                //                break;
+                //        }
+                //    }
+                   
+                  
+                //    return recordFilter;
+                //}
 
             }
             function getContext() {
@@ -318,10 +552,21 @@
                     currentContext.getFirstRowIndex = function () {
                         return ctrl.firstRowIndex;
                     };
+                    currentContext.getLastRowIndex = function () {
+                        return  ctrl.lastRowIndex;
+                    };
                     currentContext.getFilterFieldsMappings = function () {
                         return ctrl.filterFieldsMappings;
                     };
 
+                    currentContext.getFilterCellFieldMapping = function (fieldName) {
+                        if (fieldName != undefined)
+                        {
+                            var fieldMapping = UtilsService.getItemByVal(ctrl.filterFieldsMappings, fieldName, "FieldName");
+                            if (fieldMapping != undefined && fieldMapping.fieldMappingAPI != undefined)
+                                return fieldMapping.fieldMappingAPI.getData();
+                        }
+                    };
                     return currentContext;
                 }
             }
@@ -345,6 +590,22 @@
                     };
                 return context;
             }
+            //function getRuleFilterEditorByFieldType(configId) {
+            //    var dataRecordFieldTypeConfig = UtilsService.getItemByVal($scope.scopeModel.dataRecordFieldTypesConfig, configId, 'ExtensionConfigurationId');
+            //    if (dataRecordFieldTypeConfig != undefined) {
+            //        return dataRecordFieldTypeConfig.RuleFilterEditor;
+            //    }
+            //}
+            //function loadDataRecordFieldTypeConfig() {
+            //    $scope.scopeModel.dataRecordFieldTypesConfig = [];
+            //    return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
+            //        if (response) {
+            //            for (var i = 0; i < response.length; i++) {
+            //                $scope.scopeModel.dataRecordFieldTypesConfig.push(response[i]);
+            //            }
+            //        }
+            //    });
+            //}
         }
     }
 

@@ -20,10 +20,16 @@ namespace Vanrise.ExcelConversion.Entities
         public List<FieldMapping> FieldMappings { get; set; }
 
         public MappingFilter Filter { get; set; }
-
+      //  public List<RowFilter> RowFilters { get; set; }
         public string DateTimeFormat { get; set; }
     }
+    //public class RowFilter
+    //{
 
+    //    public FieldMapping FieldMapping { get; set; }
+    //    public DataRecordFieldType FieldType { get; set; }
+    //    public RecordFilter RecordFilter { get; set; }
+    //}
     public class MappingFilter
     {
         public string ConditionExpression { get; set; }

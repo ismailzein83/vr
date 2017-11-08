@@ -14,24 +14,28 @@ namespace Vanrise.ExcelConversion.MainExtensions
         public string RowFieldName { get; set; }
 
         //public Dictionary<string, FieldMapping> Choices { get; set; }
-
+        public FieldMappings.CellFieldMapping CellFieldMapping { get; set; }
+       
         public List<ConditionalCellFieldMappingChoices> Choices { get; set; }
 
         public override object GetFieldValue(IGetFieldValueContext context)
         {
-            var rowFieldValue = context.FieldValueByFieldName[RowFieldName];
-
+            Object rowFieldValue = null;
+            if (this.RowFieldName != null)
+            {
+                rowFieldValue = context.FieldValueByFieldName[RowFieldName];
+            }
+            else if (CellFieldMapping != null)
+            {
+                rowFieldValue = CellFieldMapping.GetFieldValue(context);
+            }
             if (rowFieldValue == null)
             {
-                var emptyMatched = Choices.FirstOrDefault(x => x.RowFieldValue == null);
+                var emptyMatched = Choices.FirstOrDefault(x => String.IsNullOrWhiteSpace(x.RowFieldValue));
                 if (emptyMatched != null) return emptyMatched.FieldMappingChoice.GetFieldValue(context);
             }
-
             var matched = Choices.FindRecord(x => x.RowFieldValue.Equals(rowFieldValue.ToString().Trim(), StringComparison.InvariantCultureIgnoreCase));
-
-
             if (matched == null) return null;
-
             return matched.FieldMappingChoice.GetFieldValue(context);
 
         }

@@ -33,11 +33,15 @@
                 label = "";
                 withemptyline = '';
             }
-
+            var hidecell="";
+            if (attrs.hidecell != undefined)
+            {
+                hidecell=' ng-show="false" '
+            }
 
             var template =
-                '<vr-row>'
-              + '<vr-columns colnum="{{fieldmappingCtrl.normalColNum * 2}}">'
+                '<vr-row ' + hidecell + ' >'
+              + '<vr-columns colnum="{{fieldmappingCtrl.normalColNum * 2}}"  >'
               + ' <vr-select on-ready="onSelectorReady"'
               + ' datasource="templateConfigs"'
               + ' selectedvalues="selectedTemplateConfig"'

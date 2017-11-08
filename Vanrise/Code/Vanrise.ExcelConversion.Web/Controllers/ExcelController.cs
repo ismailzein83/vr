@@ -42,5 +42,12 @@ namespace Vanrise.ExcelConversion.Web
             ExcelManager manager = new ExcelManager();
             return manager.GetConcatenatedPartTemplateConfigs();
         }
+        [HttpPost]
+        [Route("ReadConditionsFromFile")]
+        public IEnumerable<string> ReadConditionsFromFile(ReadConditionsFromFileInput input)
+        {
+            ExcelManager manager = new ExcelManager();
+            return manager.ReadConditionsFromFile(input);
+        }
     }
 }

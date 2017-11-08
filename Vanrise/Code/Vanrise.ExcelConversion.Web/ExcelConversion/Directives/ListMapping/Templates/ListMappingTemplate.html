@@ -50,14 +50,68 @@
             </vr-columns>
         </vr-row>
     </vr-tab>
-        <vr-tab header="'Row Filter'">
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-genericdata-recordfilter on-ready="listMappingCtrl.onRecordFilterReady" customvalidate="listMappingCtrl.isFilterFilled" validateedit="listMappingCtrl.addFilterValidate"></vr-genericdata-recordfilter>
-                </vr-columns>
-            </vr-row>
-        </vr-tab>
-    </vr-tabs>
+    <vr-tab header="'Row Filter'">
+        <vr-row ng-show="false">
+            <vr-columns width="1/3row">
+                <vr-select datasource="scopeModel.filterTypes"
+                           datatextfield="description"
+                           datavaluefield="value"
+                           selectedvalues="scopeModel.selectedFilterType"
+                           onselectionchanged="scopeModel.onFilterTypeSelectionChanged"
+                           label="Type"
+                           hideremoveicon>
+                </vr-select>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow" ng-if="scopeModel.selectedFilterType.value == 0">
+                <vr-datagrid on-ready="onGridReady"
+                             datasource="scopeModel.filterFieldMappings"
+                             maxheight="250px" ondeleterow="scopeModel.removeField" norowhighlightonclick="true">
+                    <vr-datagridcolumn headertext="'Value'" widthfactor="30">
+                        <vr-excelconversion-fieldmapping-selective hidecell hidelabel="true" on-ready="dataItem.onFilterFieldMappingReady" normal-col-num="12" isrequired="true" customvalidate="dataItem.validate()" type="dataItem.type"> </vr-excelconversion-fieldmapping-selective>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Field Type'" widthfactor="10" disablesorting="true">
+                        <vr-row>
+                            <vr-columns width="fullrow" medium-spacing>
+                                <vr-select datasource="viewScope.listMappingCtrl.dataTypes" hideremoveicon datatextfield="description" onselectionchanged="dataItem.onDataRecordTypeFieldSelectionChanged" datavaluefield="value" selectedvalues="dataItem.selectedDataTypes" isrequired="true"></vr-select>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Condition'" widthfactor="20">
+                        <vr-row>
+                            <vr-columns width="1/2row" medium-spacing>
+                                <vr-select datatextfield="description" datavaluefield="description"
+                                           datasource="viewScope.scopeModel.conditions" selectedvalues="dataItem.selectedCondition" onselectionchanged="dataItem.onConditionSelectionChanged" isrequired="true" hideremoveicon></vr-select>
+                            </vr-columns>
+                            <vr-columns width="1/2row" ng-if="dataItem.showOperators" medium-spacing>
+                                <vr-select datatextfield="description" datavaluefield="value"
+                                           datasource="dataItem.operations" selectedvalues="dataItem.selectedOperation" isrequired="true" hideremoveicon></vr-select>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Value'" widthfactor="15">
+                        <vr-row>
+                            <vr-columns width="fullrow" ng-if="dataItem.showDateTime" medium-spacing>
+                                <vr-datetimepicker type="dateTime" value="dataItem.value" isrequired></vr-datetimepicker>
+                            </vr-columns>
+                            <vr-columns width="fullrow" ng-if="dataItem.showTextBox" medium-spacing>
+                                <vr-textbox value="dataItem.value" isrequired></vr-textbox>
+                            </vr-columns>
+                            <vr-columns width="fullrow" ng-if="dataItem.showNumber" medium-spacing>
+                                <vr-textbox value="dataItem.value" type="number" isrequired></vr-textbox>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+                <a href="" ng-click="scopeModel.addConditionalCell()">Add Condition</a>
+            </vr-columns>
+            <vr-columns width="fullrow" ng-if="scopeModel.selectedFilterType.value == 1">
+                <vr-genericdata-recordfilter on-ready="listMappingCtrl.onRecordFilterReady" customvalidate="listMappingCtrl.isFilterFilled" validateedit="listMappingCtrl.addFilterValidate"></vr-genericdata-recordfilter>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+</vr-tabs>
 <vr-row ng-if="showDateFormat">
     <vr-timeformat label="{{scopeModel.labelName}}" value="scopeModel.dateTimeFormat" normal-col-num="6" isrequired="scopeModel.checkUsesOfEffectiveDate()"></vr-timeformat>
 </vr-row>

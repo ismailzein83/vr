@@ -2,9 +2,9 @@
 
     'use strict';
 
-    fieldmappingConditionalCellDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
+    fieldmappingConditionalCellDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_ExcelConversion_ExcelAPIService'];
 
-    function fieldmappingConditionalCellDirective(UtilsService, VRUIUtilsService) {
+    function fieldmappingConditionalCellDirective(UtilsService, VRUIUtilsService, VR_ExcelConversion_ExcelAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -18,7 +18,7 @@
                 var conditionalCell = new ConditionalCell($scope, ctrl, $attrs);
                 conditionalCell.initializeController();
             },
-            controllerAs: "ConditionalCellMappingCtrl",
+            controllerAs: "conditionalCellMappingCtrl",
             bindToController: true,
             templateUrl: "/Client/Modules/ExcelConversion/Directives/MainExtensions/FieldMapping/Templates/ConditionalCellFieldMappingTemplate.html"
         };
@@ -28,50 +28,76 @@
             this.initializeController = initializeController;
 
             var context;
-
             var selectorAPI;
-            var selectorReadyDeferred = UtilsService.createPromiseDeferred();
-
             var gridAPI;
             var gridReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var cellFieldMappingAPI;
+            var cellFieldMappingReadyDeferred;
             function initializeController() {
+                $scope.scopeModel = {};
+                $scope.scopeModel.conditionalTypes = [{
+                    value:0,
+                    description:"Cell Value"
+                }, {
+                    value:1,
+                    description:"Row Field"
+                }];
 
-                ctrl.datasource = [];
-                ctrl.datasourcemapping = [];
-                ctrl.removeField = function (dataItem) {
-                    var index = ctrl.datasourcemapping.indexOf(dataItem);
-                    ctrl.datasourcemapping.splice(index, 1);
+                $scope.scopeModel.onCellFieldMappingReady = function (api) {
+                    cellFieldMappingAPI = api;
+                    var setLoader = function (value) {
+                        $scope.isLoadingDirective = value;
+                    };
+                    var directivePayload = { context: getContext() };
+
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, cellFieldMappingAPI, directivePayload, setLoader, cellFieldMappingReadyDeferred);
                 };
-                ctrl.selectedvalues;
-                $scope.onSelectorReady = function (api) {
-                    selectorAPI = api;
-                    selectorReadyDeferred.resolve();
+                $scope.scopeModel.datasource = [];
+                $scope.scopeModel.datasourcemapping = [];
+                $scope.scopeModel.removeField = function (dataItem) {
+                    var index = $scope.scopeModel.datasourcemapping.indexOf(dataItem);
+                    $scope.scopeModel.datasourcemapping.splice(index, 1);
                 };
+               
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     gridReadyDeferred.resolve();
                 };
-
-                ctrl.addConditionalCell = function () {
-                    var dataItem =
-                        {
-                            readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                            loadPromiseDeferred: UtilsService.createPromiseDeferred()
-                        };
+            
+                $scope.scopeModel.addConditionalCell = function () {
+                    var dataItem = {
+                        readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                        loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                    };
                     addConditionalCellFieldMapping(dataItem);
                 };
-
-                UtilsService.waitMultiplePromises([selectorReadyDeferred.promise, gridReadyDeferred.promise]).then(function () {
-                    defineAPI();
-                });
+                $scope.scopeModel.onSelectCellChanged = function () {
+                    var cellField = cellFieldMappingAPI != undefined ? cellFieldMappingAPI.getData() : undefined;
+                    if (cellField != undefined)
+                        getDefaultConditions(cellField);
+                    else
+                        $scope.scopeModel.datasourcemapping.length = 0;
+                };
+                $scope.scopeModel.onRowFieldSelectionChanged = function () {
+                    if ($scope.scopeModel.selectedvalues != undefined)
+                    {
+                        var cellFieldMapping = context.getFilterCellFieldMapping($scope.scopeModel.selectedvalues.FieldName);
+                        if (cellFieldMapping != undefined) {
+                            getDefaultConditions(cellFieldMapping);
+                        } 
+                    }
+                    else
+                        $scope.scopeModel.datasourcemapping.length = 0;
+                };
+                defineAPI();
                 
             }
             function addConditionalCellFieldMapping(dataItem) {
                 var payload = {
                     context: getContext()
                 };
-                dataItem.normalColNum = ctrl.normalColNum;
+                dataItem.normalColNum = $scope.scopeModel.normalColNum;
                 dataItem.onFieldMappingReady = function (api) {
                     dataItem.fieldMappingAPI = api;
                     dataItem.readyPromiseDeferred.resolve();
@@ -81,23 +107,36 @@
 
                   VRUIUtilsService.callDirectiveLoad(dataItem.fieldMappingAPI, payload, dataItem.loadPromiseDeferred);
               });
-                ctrl.datasourcemapping.push(dataItem);
+                $scope.scopeModel.datasourcemapping.push(dataItem);
             }
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    console.log(payload);
                     var promises = [];
-
                     var parts;
                     var filterItems;
 
                     if (payload != undefined) {
                         context = payload.context;
-                        ctrl.datasource = context.getFilterFieldsMappings();
+                        $scope.scopeModel.datasource = context.getFilterFieldsMappings();
+                        if(payload.fieldMapping != undefined)
+                        {
+                            if(payload.fieldMapping.RowFieldName != undefined)
+                            {
+                                $scope.scopeModel.selectedConditionalType = $scope.scopeModel.conditionalTypes[1];
+                                $scope.scopeModel.selectedvalues = UtilsService.getItemByVal($scope.scopeModel.datasource, payload.fieldMapping.RowFieldName, 'FieldName');
+                            }
+                        }
                     }
-
-                    loadSelectorFieldMapping(payload);
+                   
+                    if ($scope.scopeModel.selectedConditionalType == undefined)
+                    {
+                        $scope.scopeModel.selectedConditionalType = $scope.scopeModel.conditionalTypes[0];
+                        cellFieldMappingReadyDeferred = UtilsService.createPromiseDeferred();
+                        promises.push(loadCellFieldMappingSelector(payload));
+                    }
 
                     var loadGrid = loadGridFieldMapping(payload);
                     promises.push(loadGrid);
@@ -111,12 +150,20 @@
                     ctrl.onReady(api);
                 }
             };
-            function loadSelectorFieldMapping(payload) {
-                if (payload != undefined && payload.fieldMapping != undefined && payload.fieldMapping.RowFieldName != undefined) {
-                    VRUIUtilsService.setSelectedValues(payload.fieldMapping.RowFieldName, 'FieldName', $attrs, ctrl);
-                }
-            }
 
+            function loadCellFieldMappingSelector(payload)
+            {
+                var cellFieldMappingLoadDeferred = UtilsService.createPromiseDeferred();
+                cellFieldMappingReadyDeferred.promise.then(function () {
+                    cellFieldMappingReadyDeferred = undefined;
+                    var directivePayload = { context: getContext() }
+                    if (payload != undefined && payload.fieldMapping != undefined) {
+                        directivePayload.fieldMapping = payload.fieldMapping.CellFieldMapping;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(cellFieldMappingAPI, directivePayload, cellFieldMappingLoadDeferred);
+                });
+                return cellFieldMappingLoadDeferred.promise;
+            }
             function loadGridFieldMapping(payload) {
                 var promises = [];
 
@@ -127,7 +174,7 @@
                         var dataItem = payload.fieldMapping.Choices[i];
                         extendDataItem(dataItem);
                         promises.push(dataItem.selectiveLoadDeferred.promise);
-                        ctrl.datasourcemapping.push(dataItem);
+                        $scope.scopeModel.datasourcemapping.push(dataItem);
                     }
                 }
 
@@ -149,10 +196,10 @@
 
             function getData() {
                 var data;
-                if (ctrl.datasourcemapping.length > 0) {
+                if ($scope.scopeModel.datasourcemapping.length > 0) {
                     var choices = [];
-                    for (var i = 0; i < ctrl.datasourcemapping.length; i++) {
-                        var fieldsMapping = ctrl.datasourcemapping[i];
+                    for (var i = 0; i < $scope.scopeModel.datasourcemapping.length; i++) {
+                        var fieldsMapping = $scope.scopeModel.datasourcemapping[i];
                         choices.push({
                             RowFieldValue: fieldsMapping.RowFieldValue,
                             FieldMappingChoice: fieldsMapping.fieldMappingAPI != undefined ? fieldsMapping.fieldMappingAPI.getData() : undefined
@@ -160,7 +207,8 @@
                     }
                     data = {
                         $type: "Vanrise.ExcelConversion.MainExtensions.ConditionalCellFieldMapping, Vanrise.ExcelConversion.MainExtensions",
-                        RowFieldName: (ctrl.selectedvalues != undefined) ? ctrl.selectedvalues.FieldName : undefined,
+                        RowFieldName: ($scope.scopeModel.selectedvalues != undefined) ? $scope.scopeModel.selectedvalues.FieldName : undefined,
+                        CellFieldMapping:cellFieldMappingAPI != undefined?cellFieldMappingAPI.getData():undefined,
                         Choices: choices
                     };
                 }
@@ -168,11 +216,60 @@
             }
 
             function getContext() {
-
+                var currentContext;
                 if (context != undefined) {
-                    var currentContext = UtilsService.cloneObject(context);
-                  
-                    return currentContext;
+                    currentContext = UtilsService.cloneObject(context);
+                }
+                if (currentContext == undefined)
+                    currentContext = {};
+                
+                return currentContext;
+            }
+
+            function getDefaultConditions(cellField)
+            {
+                $scope.scopeModel.datasourcemapping.length = 0;
+                if(context != undefined)
+                {
+                    if(context.getFileId != undefined)
+                    {
+                        var fileId = context.getFileId();
+                        if (fileId != undefined) {
+                            var firstRowIndex = context.getFirstRowIndex();
+                            var lastRowIndex = context.getLastRowIndex();
+
+                            if (cellField != undefined && firstRowIndex.row == cellField.RowIndex)
+                            {
+                                cellField.FieldName = "Condition";
+                                var input = {
+                                    FileId: fileId,
+                                    ConversionSettings: {
+                                        ListMappings: [{
+                                            ListName: "ConditionList",
+                                            SheetIndex: context.getSelectedSheet(),
+                                            FirstRowIndex: firstRowIndex != undefined ? firstRowIndex.row : undefined,
+                                            LastRowIndex: lastRowIndex != undefined ? lastRowIndex.row : undefined,
+                                            FieldMappings: [cellField]
+                                        }]
+                                    }
+                                };
+                                return VR_ExcelConversion_ExcelAPIService.ReadConditionsFromFile(input).then(function (response) {
+                                    if (response != undefined) {
+                                        for (var i = 0; i < response.length; i++) {
+                                            var item = response[i];
+                                            var dataItem = {
+                                                readyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                                loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                                RowFieldValue: item
+                                            };
+                                            addConditionalCellFieldMapping(dataItem);
+                                        }
+                                    }
+                                });
+                            }
+                                
+                        }
+                    }
                 }
             }
         }

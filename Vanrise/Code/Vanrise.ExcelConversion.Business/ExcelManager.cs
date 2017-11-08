@@ -215,5 +215,37 @@ namespace Vanrise.ExcelConversion.Business
             ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
             return manager.GetExtensionConfigurations<ConcatenatedPartConfig>(ConcatenatedPartConfig.EXTENSION_TYPE);
         }
+
+        public IEnumerable<string> ReadConditionsFromFile(ReadConditionsFromFileInput input)
+        {
+            HashSet<string> conditions = new HashSet<string>();
+            var excelConverted = new ExcelConvertor().ConvertExcelFile(input.FileId, input.ConversionSettings, true, false);
+            if (excelConverted != null)
+            {
+                ConvertedExcelList convertedExcelList;
+                if (excelConverted.Lists.TryGetValue("ConditionList", out convertedExcelList))
+                {
+                    if (convertedExcelList.Records != null)
+                    {
+                        var counter = 0;
+                        foreach (var record in convertedExcelList.Records)
+                        {
+                            counter++;
+                            ConvertedExcelField excelField;
+                            if (record.Fields.TryGetValue("Condition", out excelField))
+                            {
+                                if (excelField.FieldValue == null || String.IsNullOrWhiteSpace(excelField.FieldValue.ToString()))
+                                    conditions.Add("");
+                                else
+                                    conditions.Add(excelField.FieldValue.ToString());
+                            };
+                            if (counter == 20)
+                                break;
+                        }
+                    }
+                }
+            }
+            return conditions;
+        }
     }
 }
