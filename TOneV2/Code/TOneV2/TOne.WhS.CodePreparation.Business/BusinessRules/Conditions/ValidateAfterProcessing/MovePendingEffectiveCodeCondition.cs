@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
@@ -20,9 +21,11 @@ namespace TOne.WhS.CodePreparation.Business
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
             var invalidCodes = new List<string>();
+            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
 
             foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
+                if (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.BED > cpContext.EffectiveDate))
                 invalidCodes.Add(codeToMove.Code);
             }
 
