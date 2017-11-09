@@ -61,6 +61,14 @@ namespace TOne.WhS.Sales.Business
             }
             return false;
         }
+        public static bool IsAnyZoneRateNegative(DataByZone zoneData)
+        {
+            if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.NormalRate <= 0)
+                return true;
+            if (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Any(x => x.NormalRate <= 0))
+                return true;
+            return false;
+        }
 
         #region Private Methods
         private static void AddRateTypeName(List<string> rateTypeNames, int rateTypeId, Vanrise.Common.Business.RateTypeManager rateTypeManager)

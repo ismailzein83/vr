@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
-using Vanrise.BusinessProcess.Entities;
 
-namespace TOne.WhS.Sales.Business.BusinessRules
+namespace TOne.WhS.Sales.Business
 {
-    public class RateIsLessThanOrEqualToZeroCondition : BusinessRuleCondition
+    public class CountryToSellRateLessThanOrEqualToZeroCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
     {
-        public override bool ShouldValidate(IRuleTarget target)
+        public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
             return target is AllDataByZone;
         }
-        public override bool Validate(IBusinessRuleConditionValidateContext context)
+        public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
+            var ratePlanContext = context.GetExtension<IRatePlanContext>();
+
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
+                return true;
+
             var allDataByZone = context.Target as AllDataByZone;
 
             if (allDataByZone.DataByZoneList == null || allDataByZone.DataByZoneList.Count() == 0)
@@ -28,7 +33,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             {
                 string countryName = countryManager.GetCountryName(zoneData.CountryId);
 
-                if ((zoneData.IsCustomerCountryNew.HasValue && zoneData.IsCustomerCountryNew.Value) || invalidCountryNames.Contains(countryName))
+                if (!zoneData.IsCustomerCountryNew.HasValue || !zoneData.IsCustomerCountryNew.Value || invalidCountryNames.Contains(countryName))
                     continue;
 
                 if (BusinessRuleUtilities.IsAnyZoneRateNegative(zoneData))
@@ -37,13 +42,13 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("Rates of following sold country(ies) must be greater than zero: {0}", string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("Rates of following selling country(ies) must be greater than zero: {0}");
                 return false;
             }
 
             return true;
         }
-        public override string GetMessage(IRuleTarget target)
+        public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
             throw new NotImplementedException();
         }
