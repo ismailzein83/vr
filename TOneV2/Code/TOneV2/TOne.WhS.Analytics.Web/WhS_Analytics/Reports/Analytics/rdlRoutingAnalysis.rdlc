@@ -2093,7 +2093,8 @@
                   </Group>
                   <SortExpressions>
                     <SortExpression>
-                      <Value>=Fields!SaleZone.Value</Value>
+                      <Value>=Sum(Fields!Duration.Value, "RoutingAnalysis")</Value>
+                      <Direction>Descending</Direction>
                     </SortExpression>
                   </SortExpressions>
                   <TablixMembers>
