@@ -13,7 +13,6 @@ namespace Retail.BusinessEntity.Business
         {
             AccountBEManager accountBeManager = new AccountBEManager();
             return accountBeManager.GetAccountName(this.AccountBEDefinitionId, Convert.ToInt64(accountId));
-            throw new NotImplementedException();
         }
         public Guid AccountBEDefinitionId { get; set; }
         public Retail.BusinessEntity.Entities.AccountCondition AccountCondition { get; set; }
@@ -27,7 +26,7 @@ namespace Retail.BusinessEntity.Business
         {
             get
             {
-                return "";
+                return "retail-accountassignment-runtime";
             }
         }
     }

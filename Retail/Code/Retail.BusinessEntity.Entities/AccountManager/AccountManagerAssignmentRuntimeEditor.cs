@@ -11,5 +11,6 @@ namespace Retail.BusinessEntity.Entities
     {
         public AccountManagerAssignmentDefinition AccountManagrAssignmentDefinition { get; set; }
         public AccountManagerAssignment AccountManagerAssignment { get; set; }
+        public string AccountName;
     }
 }

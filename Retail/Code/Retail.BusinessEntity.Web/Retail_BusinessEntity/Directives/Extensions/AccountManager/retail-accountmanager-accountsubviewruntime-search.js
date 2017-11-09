@@ -53,7 +53,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
             function getGridPayload() {
                 var payload = {
                     accountManagerDefinitionId: gridPayload.accountManagerDefinitionId,
-                    accountManagerId: gridPayload.accountManagerDefinitionId,
+                    accountManagerId: gridPayload.accountManagerId,
                     accountManagerSubViewDefinition: gridPayload.accountManagerSubViewDefinition
                 }
                 return payload;

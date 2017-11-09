@@ -12,6 +12,9 @@
         var accountManagerAssignementDefinitionId;
         var accountManagerId;
 
+        var runtimeDirectiveAPI;
+        var runtimeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         var accountManagerAssignmentRuntime;
 
         var accountManagerAssignmentId;
@@ -52,26 +55,40 @@
                 accountSelectorAPI = api;
                 accountSelectorReadyDeferred.resolve();
             }
+            $scope.scopeModel.onRuntimeDirectiveReady = function (api) {
+                runtimeDirectiveAPI = api;
+                runtimeDirectiveReadyDeferred.resolve();
+            }
         }
         function load() {
             if (isEditMode)
-                 $scope.scopeModel.disable = true;
-            console.log($scope.scopeModel.disabel);
+                $scope.scopeModel.disable = true;
             $scope.scopeModel.isLoading = true;
-                getAccountManagerAssignmentRuntimeEditor().then(function () {
-                    loadAllControls();
-                }).catch(function (error) {
-                    VRNotificationService.notifyException(error, $scope);
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                });
+            getAccountManagerAssignmentRuntimeEditor().then(function () {
+                if (accountManagerAssignmentRuntime != undefined && accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition != undefined && accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings != undefined) {
+                    $scope.scopeModel.assignmentRuntime = accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings.RuntimeEditor;
+                }
+                loadAllControls();
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
         function loadAllControls() {
             function setTitle() {
                 if (!isEditMode)
-                    $scope.title = UtilsService.buildTitleForAddEditor('Account Manager');
+                    $scope.title = UtilsService.buildTitleForAddEditor('Account Manager Assignment');
                 else
-                    $scope.title = UtilsService.buildTitleForUpdateEditor('Account Manager');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(accountManagerAssignmentRuntime.AccountName, 'Account Manager Assignment');
+            }
+            function loadRuntimeDirective() {
+                var runtimeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                runtimeDirectiveReadyDeferred.promise.then(function () {
+                    var directivePayload;
+                    VRUIUtilsService.callDirectiveLoad(runtimeDirectiveAPI, directivePayload, runtimeDirectiveLoadDeferred);
+                })
+                return runtimeDirectiveLoadDeferred.promise;
             }
             function loadAccountSelector() {
                 var accountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -81,9 +98,7 @@
                             AccountBEDefinitionId: accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings.AccountBEDefinitionId
                         };
                         if (accountManagerAssignmentRuntime != undefined && accountManagerAssignmentRuntime.AccountManagerAssignment != undefined) {
-                            var selectedIds = [];
-                            selectedIds.push(accountManagerAssignmentRuntime.AccountManagerAssignment.AccountId);
-                            payload.selectedIds = selectedIds;
+                            payload.selectedIds = [accountManagerAssignmentRuntime.AccountManagerAssignment.AccountId];
                         }
                         VRUIUtilsService.callDirectiveLoad(accountSelectorAPI, payload, accountSelectorLoadDeferred);
                     });
@@ -99,7 +114,7 @@
                     $scope.scopeModel.eed = accountManagerAssignment.EED;
                 }
             }
-            return UtilsService.waitMultipleAsyncOperations([loadStaticData,loadAccountSelector, setTitle ]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadAccountSelector, setTitle, loadRuntimeDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -112,7 +127,9 @@
                 for (var i = 0; i < accountIds.length; i++) {
                     var account = {
                         AccountId: accountIds[i],
-                        AssignementSettings: {}
+                        AssignementSettings: {
+                            ExtendedSettings: runtimeDirectiveAPI.getData()
+                        }
                     }
                     accounts.push(account);
                 }
@@ -129,7 +146,9 @@
                     AccountManagerAssignmentId: accountManagerAssignmentId,
                     BED: $scope.scopeModel.bed,
                     EED: $scope.scopeModel.eed,
-                    AssignementSettings: {}
+                    AssignementSettings: {
+                        ExtendedSettings: runtimeDirectiveAPI.getData()
+                    }
                 }
             }
             console.log(accountmanagerAssignment)
