@@ -43,7 +43,7 @@ namespace TOne.WhS.CodePreparation.Business
             {
                 existingRateGroupByZoneName.TryGetValue(zoneToProcess.ZoneName, out existingRateGroup);
 
-                if (zoneToProcess.ChangeType == ZoneChangeType.New || zoneToProcess.ChangeType == ZoneChangeType.Renamed)
+                if (zoneToProcess.ChangeType == ZoneChangeType.New)
                     ManageRate(zoneToProcess, existingRates, existingZones, salePriceListsByOwner, effectiveDate);
                 else
                     PrepareDataForPreview(zoneToProcess, existingRateGroup);
@@ -80,7 +80,12 @@ namespace TOne.WhS.CodePreparation.Business
             }
             else
             {
-                IEnumerable<string> matchedZoneNames = GetMatchedZones(zoneToProcess, saleZoneType, zonesByType);
+                IEnumerable<string> matchedZoneNames;
+                if (zoneToProcess.SourceZoneNames != null && zoneToProcess.SourceZoneNames.Any())
+                    matchedZoneNames = zoneToProcess.SourceZoneNames;
+                else
+                    matchedZoneNames = GetMatchedZones(zoneToProcess, saleZoneType, zonesByType);
+
                 rates = GetHighestRatesFromZoneMatchesSaleEntities(matchedZoneNames, effectiveExistingRatesByZoneName);
             }
             AddRateToAddToZoneToProcess(zoneToProcess, effectiveDate, salePriceListsByOwner, rates);
@@ -91,7 +96,7 @@ namespace TOne.WhS.CodePreparation.Business
             List<string> matchedZoneNames = new List<string>();
             string recentZoneName = zoneToProcess.ChangeType == ZoneChangeType.Renamed
                 ? zoneToProcess.RecentZoneName
-                : zoneToProcess.SplitByZoneName;
+                : zoneToProcess.SplitFromZoneName;
 
             if (!string.IsNullOrEmpty(recentZoneName))
                 matchedZoneNames.Add(recentZoneName);

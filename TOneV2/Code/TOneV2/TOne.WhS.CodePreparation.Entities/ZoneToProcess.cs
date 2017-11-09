@@ -106,8 +106,10 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
         }
 
         public string RecentZoneName { get; set; }
-        public string SplitByZoneName { get; set; }
-        public List<string> SourceZoneNames { get; set; }
+        public string SplitFromZoneName { get; set; }
+        
+        //sourcezoneNames is used for merged zone to stroe all source zone names
+        public IEnumerable<string> SourceZoneNames { get; set; }
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }

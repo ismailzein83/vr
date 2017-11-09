@@ -105,40 +105,70 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 zoneToProcess.BED = GetZoneBED(zoneToProcess);
                 zoneToProcess.EED = GetZoneEED(zoneToProcess);
             }
-            CheckForRenamedOrSplitZones(zonesToProcess.Where(z => z.ChangeType == ZoneChangeType.New), closedExistingZones);
+            //CheckForRenamedOrSplitZones(zonesToProcess.Where(z => z.ChangeType == ZoneChangeType.New), closedExistingZones);
+            DefineSplitOrMergedZones(zonesToProcess.Where(z => z.ChangeType == ZoneChangeType.New), closedExistingZones);
         }
 
-        private void CheckForRenamedOrSplitZones(IEnumerable<ZoneToProcess> newZonesToProcess, ClosedExistingZones closedExistingZones)
+        private void DefineSplitOrMergedZones(IEnumerable<ZoneToProcess> newZones, ClosedExistingZones closedExistingZones)
         {
-            foreach (var newZone in newZonesToProcess)
+            foreach (var newZone in newZones)
             {
-                if (newZone.CodesToMove.Any() && !newZone.ExistingZones.Any())
-                {
-                    //Check if all codes are coming from the same original zone; otherwise we cannot consider it as renamed
-                    string originalZoneName = newZone.CodesToMove.First().OldZoneName;
-                    if (newZone.CodesToMove.All(itm => itm.OldZoneName.Equals(originalZoneName, StringComparison.InvariantCultureIgnoreCase)))
-                    {
-                        //Check if the original zone has been close, otherwise the original still exists change type of this zone cannot be considered as renamed
-                        List<ExistingZone> matchedRenamedExistingZones;
-                        if (closedExistingZones != null && closedExistingZones.TryGetValue(originalZoneName, out matchedRenamedExistingZones))
-                        {
-                         /*   //The last check is on the count of zones between original and new zone, in case they are not equal we cannot consider this zone as renamed
-                            HashSet<string> codesFromOriginalZone = NumberingPlanHelper.GetExistingCodes(matchedRenamedExistingZones);
-                            if (newZone.CodesToMove.Count == codesFromOriginalZone.Count)
-                            {
-                                newZone.RecentZoneName = originalZoneName;
-                                newZone.ChangeType = ZoneChangeType.Renamed;
-                            }*/
-                        }
-                        else
-                        {
-                            if (!newZone.CodesToAdd.Any())
-                                newZone.SplitByZoneName = originalZoneName;
-                        }
-                    }
-                }
+                if (!newZone.CodesToMove.Any() || newZone.ExistingZones.Any() || newZone.CodesToAdd.Any())
+                    continue;
 
+                Dictionary<string, List<string>> codesToMoveByZoneName = GroupCodesByZoneName(newZone.CodesToMove);
+
+                //split zone will be moved from only one origin zone
+                if (codesToMoveByZoneName.Count == 1)
+                    CheckSplitZone(newZone);
+                else //check merge zone and get source zone names
+                    newZone.SourceZoneNames = GetSourceZoneNames(codesToMoveByZoneName, closedExistingZones);
             }
+        }
+
+        private Dictionary<string, List<string>> GroupCodesByZoneName(List<CodeToMove> codesToMove)
+        {
+            // Group moved code by original zone name
+            var codeToMovebyZoneName = new Dictionary<string, List<string>>();
+            foreach (var codeToMove in codesToMove)
+            {
+                List<string> codes;
+                if (!codeToMovebyZoneName.TryGetValue(codeToMove.OldZoneName, out codes))
+                {
+                    codes = new List<string>();
+                    codeToMovebyZoneName.Add(codeToMove.OldZoneName, codes);
+                }
+                codes.Add(codeToMove.Code);
+            }
+            return codeToMovebyZoneName;
+        }
+
+        private void CheckSplitZone(ZoneToProcess zone)
+        {
+            string originalZoneName = zone.CodesToMove.First().OldZoneName;
+            if (zone.CodesToMove.All(itm => itm.OldZoneName.Equals(originalZoneName, StringComparison.InvariantCultureIgnoreCase)))
+                zone.SplitFromZoneName = originalZoneName;
+        }
+
+        private IEnumerable<string> GetSourceZoneNames(Dictionary<string, List<string>> codesToMoveByZoneName, ClosedExistingZones closedExistingZones)
+        {
+            // all source zones must be closed. all codes from source zone must be moved to the new merged one.
+
+            if (closedExistingZones == null) return null; // merged zone will result in closing all source zones, so if no closed zones return.
+
+            foreach (var zone in codesToMoveByZoneName)
+            {
+                List<ExistingZone> existingZones;
+                if (!closedExistingZones.TryGetValue(zone.Key, out existingZones)) // if at least one zone from origin zones is openned, the zone is not considered as merged.
+                    return null;
+
+                // Since the dictionary is groupped by origin zone name with their moved codes
+                // We will check the existing codes if all codes were moved from origin to merged.
+                HashSet<string> codesFromOriginalZone = NumberingPlanHelper.GetExistingCodes(existingZones);
+                if (zone.Value.Count != codesFromOriginalZone.Count)
+                    return null;
+            }
+            return codesToMoveByZoneName.Keys;
         }
         private IEnumerable<NotImportedZone> PrepareNotImportedZones(IEnumerable<ExistingZone> existingZones, HashSet<string> importedZoneNamesHashSet)
         {
