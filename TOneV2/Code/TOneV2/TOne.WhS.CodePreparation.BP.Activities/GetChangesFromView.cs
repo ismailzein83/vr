@@ -25,6 +25,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public OutArgument<Changes> Changes { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<AllNewZones> AllNewZones { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
 
@@ -55,6 +58,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             SaleCodesByZoneId.Set(context, saleCodesByZoneId);
             Changes.Set(context, changes);
+
+            AllNewZones.Set(context, new AllNewZones() { Zones = changes.NewZones });
         }
     }
 }

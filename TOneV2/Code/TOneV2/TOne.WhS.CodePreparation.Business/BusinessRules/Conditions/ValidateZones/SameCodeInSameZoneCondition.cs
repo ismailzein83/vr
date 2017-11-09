@@ -20,35 +20,32 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
+            var invalidCodes = new HashSet<string>();
 
             foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
             {
                 if (zoneToProcess.CodesToAdd.FindAllRecords(item => item.Code == codeToAdd.Code).Count() > 1)
-                {
-                    context.Message = string.Format("Cannot add Code {0} because Zone {1} contains this Code.", codeToAdd.Code, zoneToProcess.ZoneName);
-                    return false;
-                }
+                    invalidCodes.Add(codeToAdd.Code);
             }
 
             foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
                 if (zoneToProcess.CodesToClose.FindAllRecords(item => item.Code == codeToClose.Code).Count() > 1)
-                {
-                    context.Message = string.Format("Cannot close Code {0} because Zone {1} contains this Code.", codeToClose.Code, zoneToProcess.ZoneName);
-                    return false;
-                }
+                    invalidCodes.Add(codeToClose.Code);
             }
 
             foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
                 if (codeToMove.ZoneName.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    context.Message = string.Format("Cannot move Code {0} because Zone {1} contains this Code.", codeToMove.Code, zoneToProcess.ZoneName);
-                    return false;
-                }
+                    invalidCodes.Add(codeToMove.Code);
+
             }
-          
-            return true;
+            if (invalidCodes.Count > 0)
+            {
+                context.Message += string.Format("Performing same action more than one time on code(s) ({0}) of zone '{1}'.", string.Join(", ", invalidCodes),zoneToProcess.ZoneName);
+                return false;
+            }
+            return true; 
         }
 
         public override string GetMessage(IRuleTarget target)

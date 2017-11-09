@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.Business
             if (invalidZoneNames.Count > 0)
             {
                 string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryToProcess.CountryId);
-                context.Message = string.Format("The following zones of country '{0}' have been created without rates: {1}", countryName, string.Join(", ", invalidZoneNames));
+                context.Message = string.Format("The following zones of country '{0}' have been created without rates: {1}.", countryName, string.Join(", ", invalidZoneNames));
                 return false;
             }
 

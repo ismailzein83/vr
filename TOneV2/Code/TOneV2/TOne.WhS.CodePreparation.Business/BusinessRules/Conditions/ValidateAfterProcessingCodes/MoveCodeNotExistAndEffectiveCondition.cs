@@ -20,18 +20,19 @@ namespace TOne.WhS.CodePreparation.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
-
+            var invalidCodes = new List<string>();
             foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
                 if (!(codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToMove.Code
                          && item.ParentZone.ZoneEntity.Name.ToLower().Equals(codeToMove.OldZoneName.ToLower(), StringComparison.InvariantCultureIgnoreCase))))
-                {
-                    context.Message = string.Format("Cannot move Code {0} because it belongs to a pending closed zone : {1}", codeToMove.Code, codeToMove.OldZoneName);
-                    return false;
-                }
+                    invalidCodes.Add(codeToMove.Code);
 
             }
-
+            if (invalidCodes.Count > 0)
+            {
+                context.Message = string.Format("Can not move codes ({0}) to zone '{1}' because codes either do not exist or not effective.", string.Join(", ", invalidCodes), zoneToProcess.ZoneName);
+                return false;
+            }
             return true;
         }
 

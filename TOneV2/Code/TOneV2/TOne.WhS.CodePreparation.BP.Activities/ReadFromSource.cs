@@ -12,6 +12,7 @@ using Aspose.Cells;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
 using TOne.WhS.CodePreparation.Entities;
+using System.Collections;
 
 
 namespace TOne.WhS.CodePreparation.BP.Activities
@@ -31,6 +32,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<AllImportedCodes> AllImportedCodes { get; set; }
 
         [RequiredArgument]
         public OutArgument<DateTime> MinimumDate { get; set; }
@@ -95,6 +99,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             MinimumDate.Set(context, minimumDate);
             ImportedCodes.Set(context, importedCodes);
+
+            AllImportedCodes.Set(context, new AllImportedCodes() { ImportedCodes = importedCodes });
         }
 
         ImportType? GetStatusFromFile(string status)

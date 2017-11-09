@@ -31,7 +31,7 @@ namespace TOne.WhS.CodePreparation.Business
 
             if (invalidCodes.Count > 0)
             {
-                context.Message = string.Format("Cannot move codes ({0}) to zone '{1}' because they are pending effective", string.Join(",", invalidCodes), zoneToProcess.ZoneName);
+                context.Message = string.Format("Can not move codes ({0}) to zone '{1}' because codes are pending effective.", string.Join(",", invalidCodes), zoneToProcess.ZoneName);
                 return false;
             }
 
