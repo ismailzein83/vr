@@ -366,10 +366,9 @@ namespace TOne.WhS.CodePreparation.Business
 
             SalePriceListManager priceListManager = new SalePriceListManager();
             CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
             SellingProductManager sellingProductManager = new SellingProductManager();
             Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
-            BusinessEntity.Business.ConfigManager businessConfigmanager = new BusinessEntity.Business.ConfigManager();
+            var saleRateManager = new SaleRateManager();
 
             int systemCurrencyId = configManager.GetSystemCurrencyId();
 
@@ -385,7 +384,10 @@ namespace TOne.WhS.CodePreparation.Business
 
                         if (!defaultRates.ContainsKey(pricelist.OwnerId))
                         {
-                            int newRateCurrencyId = (pricelist.OwnerType == SalePriceListOwnerType.SellingProduct) ? sellingProductManager.GetSellingProductCurrencyId(pricelist.OwnerId) : carrierAccountManager.GetCarrierAccountCurrencyId(pricelist.OwnerId);
+                            int newRateCurrencyId = (pricelist.OwnerType == SalePriceListOwnerType.SellingProduct)
+                                ? sellingProductManager.GetSellingProductCurrencyId(pricelist.OwnerId)
+                                : saleRateManager.GetCurrencyId(effectiveRate.RateEntity);
+
                             var defaultRateConverted = currencyExchangeRateManager.ConvertValueToCurrency(defaultRate, systemCurrencyId, newRateCurrencyId, DateTime.Now);
                             NewZoneRateEntity rate = new NewZoneRateEntity
                             {
