@@ -246,7 +246,7 @@
                                     ConversionSettings: {
                                         ListMappings: [{
                                             ListName: "ConditionList",
-                                            SheetIndex: context.getSelectedSheet(),
+                                            SheetIndex: firstRowIndex.sheet,
                                             FirstRowIndex: firstRowIndex != undefined ? firstRowIndex.row : undefined,
                                             LastRowIndex: lastRowIndex != undefined ? lastRowIndex.row : undefined,
                                             FieldMappings: [cellField]
