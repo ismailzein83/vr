@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 
-namespace TOne.WhS.Sales.Business.BusinessRules
+namespace TOne.WhS.Sales.Business
 {
-    public class NewRateIsGreaterThanMaximumRateCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
+    public class CountryToSellRateGreaterThanMaxRate : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
@@ -15,21 +16,24 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
-            var allZoneData = context.Target as AllDataByZone;
+            var ratePlanContext = context.GetExtension<IRatePlanContext>();
 
-            if (allZoneData.DataByZoneList == null || allZoneData.DataByZoneList.Count() == 0)
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
-            IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
+            var allDataByZone = context.Target as AllDataByZone;
+
+            if (allDataByZone.DataByZoneList == null || allDataByZone.DataByZoneList.Count() == 0)
+                return true;
 
             var invalidCountryNames = new HashSet<string>();
             var countryManager = new Vanrise.Common.Business.CountryManager();
 
-            foreach (DataByZone zoneData in allZoneData.DataByZoneList)
+            foreach (DataByZone zoneData in allDataByZone.DataByZoneList)
             {
                 string countryName = countryManager.GetCountryName(zoneData.CountryId);
 
-                if ((zoneData.IsCustomerCountryNew.HasValue && zoneData.IsCustomerCountryNew.Value) || invalidCountryNames.Contains(countryName))
+                if (!zoneData.IsCustomerCountryNew.HasValue || !zoneData.IsCustomerCountryNew.Value || invalidCountryNames.Contains(countryName))
                     continue;
 
                 if (BusinessRuleUtilities.IsAnyZoneRateGreaterThanMaxRate(zoneData, ratePlanContext))
@@ -38,7 +42,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("New rates of following sold countries are greater than maximum rate '{0}': {1}", ratePlanContext.MaximumRate, string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("New rates of following selling countries are greater than maximum rate '{0}': {1}", ratePlanContext.MaximumRate, string.Join(", ", invalidCountryNames));
                 return false;
             }
 
@@ -48,9 +52,5 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             throw new NotImplementedException();
         }
-
-        #region Private Methods
-
-        #endregion
     }
 }
