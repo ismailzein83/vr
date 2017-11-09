@@ -42,7 +42,7 @@ namespace TOne.WhS.Sales.Business
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("Rates of following selling country(ies) must be greater than zero: {0}");
+                context.Message = string.Format("Rates of following selling country(ies) must be greater than zero: {0}", string.Join(", ", invalidCountryNames));
                 return false;
             }
 
