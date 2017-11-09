@@ -15,28 +15,36 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedDataByZone != null);
+            return (target as AllImportedDataByZone != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedDataByZone zone = context.Target as ImportedDataByZone;
+            AllImportedDataByZone allImportedDataByZone = context.Target as AllImportedDataByZone;
+            var invalidZones = new HashSet<string>();
 
-            foreach (var importedCode in zone.ImportedCodes)
+            foreach (var zone in allImportedDataByZone.ImportedDataByZoneList)
             {
-                if (string.IsNullOrEmpty(importedCode.Code))
+                foreach (var importedCode in zone.ImportedCodes)
                 {
-                    context.Message = string.Format("Can not add Zone {0} because it has a missing code", zone.ZoneName);
-                    return false;
+                    if (string.IsNullOrEmpty(importedCode.Code))
+                    {
+                        invalidZones.Add(zone.ZoneName);
+                        break;
+                    }
                 }
             }
-
-            return true;            
+            if (invalidZones.Count>0)
+            {
+                context.Message = string.Format("Codes are missing for the following zone(s): {0}.", string.Join(", ", invalidZones));
+                return false;
+            }
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a missing code", (target as ImportedDataByZone).ZoneName);
+            throw new NotImplementedException();
         }
 
     }

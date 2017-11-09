@@ -13,23 +13,31 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedCode != null);
+            return (target as AllImportedCodes != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCode importedCode = context.Target as ImportedCode;
-            var result = Vanrise.Common.Utilities.IsNumeric(importedCode.Code, 0);
+            AllImportedCodes allImportedCodes = context.Target as AllImportedCodes;
+            var invalidCodes = new HashSet<string>();
 
-            if(result == false)
-                context.Message = string.Format("Can not add Code {0} because it is not a positive number", importedCode.Code);
+            foreach (var importedCode in allImportedCodes.ImportedCodes)
+            {
+                if (!string.IsNullOrEmpty(importedCode.Code) && !Vanrise.Common.Utilities.IsNumeric(importedCode.Code, 0))
+                    invalidCodes.Add(importedCode.Code);
+            }
 
-            return result;
+            if (invalidCodes.Count > 0)
+            {
+                context.Message = string.Format("Codes have wrong format. Violated code(s): {0}.", string.Join(", ",invalidCodes));
+                return false;
+            }
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} must be a positive number", (target as ImportedCode).Code);
+            throw new NotImplementedException();
         }
     }
 }

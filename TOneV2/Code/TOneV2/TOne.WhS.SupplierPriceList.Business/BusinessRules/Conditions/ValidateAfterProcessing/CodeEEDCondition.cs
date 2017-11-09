@@ -21,21 +21,20 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (countryNotImportedCodes.NotImportedCodes == null || countryNotImportedCodes.NotImportedCodes.Count() == 0)
                 return true;
 
-            var invalidZoneNames = new HashSet<string>();
+            var invalidCodes = new HashSet<string>();
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
             DateTime codeClosureDate = DateTime.Today.AddDays(importSPLContext.CodeCloseDateOffset.Days);
 
             foreach (NotImportedCode notImportedCode in countryNotImportedCodes.NotImportedCodes)
             {
                 if (notImportedCode.HasChanged && notImportedCode.EED.HasValue && notImportedCode.EED.Value < codeClosureDate)
-                    invalidZoneNames.Add(notImportedCode.ZoneName);
+                    invalidCodes.Add(notImportedCode.ZoneName);
             }
 
-            if (invalidZoneNames.Count > 0)
+            if (invalidCodes.Count > 0)
             {
-                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryNotImportedCodes.CountryId);
                 string codeClosureDateString = codeClosureDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("EEDs of some of the codes of the following zones of country '{0}' are less than '{1}': {2}", countryName, codeClosureDateString, string.Join(", ", invalidZoneNames));
+                context.Message = string.Format("Closing code(s) of country '{0}' with a date less than '{1}'. Violated code(s): ({2}).", codeClosureDateString, string.Join(", ", invalidCodes));
                 return false;
             }
 

@@ -16,63 +16,52 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedDataByZone != null);
+            return (target as AllImportedDataByZone != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedDataByZone zone = context.Target as ImportedDataByZone;
+            AllImportedDataByZone allImportedDataByZone = context.Target as AllImportedDataByZone;
+            var invalidZones = new HashSet<string>();
 
-            foreach (var importedCode in zone.ImportedCodes)
+            foreach (var zone in allImportedDataByZone.ImportedDataByZoneList)
             {
-                if (importedCode.BED == DateTime.MinValue)
+                if (zone.ImportedCodes.Any(item => item.BED == DateTime.MinValue))
                 {
-                    context.Message = string.Format("Code {0} has a missing begin effective date", importedCode.Code);
-                    return false;
+                    invalidZones.Add(zone.ZoneName);
+                    continue;
                 }
-            }
 
-            foreach (var importedNormalRate in zone.ImportedNormalRates)
-            {
-                if (importedNormalRate.BED == DateTime.MinValue)
+                if (zone.ImportedNormalRates.Any(item => item.BED == DateTime.MinValue))
                 {
-                    context.Message = string.Format("The Normal Rate of Zone {0} has a missing begin effective date", zone.ZoneName);
-                    return false;
+                    invalidZones.Add(zone.ZoneName);
+                    continue;
                 }
-            }
 
-            foreach (var importedOtherRate in zone.ImportedOtherRates)
-            {
-                if (importedOtherRate.Value.Count > 0)
+                foreach (var importedOtherRate in zone.ImportedOtherRates)
                 {
-                    foreach (var otherRate in importedOtherRate.Value)
+                    if (importedOtherRate.Value.Any(item => item.BED == DateTime.MinValue))
                     {
-                        if (otherRate.BED == DateTime.MinValue)
-                        {
-                            RateTypeManager rateTypeManager = new RateTypeManager();
-                            string rateTypeName = rateTypeManager.GetRateTypeName(otherRate.RateTypeId.Value);
-                            context.Message = string.Format("The {0} Rate of Zone {1} has a missing begin effective date", rateTypeName, zone.ZoneName);
-                            return false;
-                        }
+                        invalidZones.Add(zone.ZoneName);
+                        break;
                     }
                 }
-            }
 
-            foreach (var importedZoneServiceGroup in zone.ImportedZoneServicesToValidate)
-            {
-                if (importedZoneServiceGroup.Value.Count > 0)
+                foreach (var importedZoneServiceGroup in zone.ImportedZoneServicesToValidate)
                 {
-                    foreach (var serviceGroup in importedZoneServiceGroup.Value)
+                    if (importedZoneServiceGroup.Value.Any(item => item.BED == DateTime.MinValue))
                     {
-                        if (serviceGroup.BED == DateTime.MinValue)
-                        {
-                            ZoneServiceConfigManager serviceConfigManager = new ZoneServiceConfigManager();
-                            string serviceSymbol = serviceConfigManager.GetServiceSymbol(serviceGroup.ServiceId);
-                            context.Message = string.Format("The {0} Service of Zone {1} has a missing begin effective date", serviceSymbol, zone.ZoneName);
-                            return false;
-                        }
+                        invalidZones.Add(zone.ZoneName);
+                        break;
                     }
                 }
+
+            }
+
+            if (invalidZones.Count > 0)
+            {
+                context.Message = string.Format("BED is missing for the following zone(s): {0}.", string.Join(", ", invalidZones));
+                return false;
             }
 
             return true;
@@ -80,7 +69,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has a missing begin effective date", (target as ImportedDataByZone).ZoneName);
+            throw new NotImplementedException();
         }
 
     }

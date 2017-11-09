@@ -13,23 +13,28 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedCode != null);
+            return (target as AllImportedCodes != null);
         }
-
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCode code = context.Target as ImportedCode;
-            var result =  code.CodeGroup != null;
-
-            if(result == false)
-                context.Message = string.Format("Can not add Code {0} because it is not assigned to a code group", code.Code);
-
-            return result;
+            AllImportedCodes allImportedCodes = context.Target as AllImportedCodes;
+            var invalidCodes = new HashSet<string>();
+            foreach (var importedCode in allImportedCodes.ImportedCodes)
+            {
+                if (!string.IsNullOrEmpty(importedCode.Code) && importedCode.CodeGroup == null)
+                    invalidCodes.Add(importedCode.Code);
+            }
+            if (invalidCodes.Count > 0)
+            {
+                context.Message = string.Format("No code group defined for the following code(s): {0}.", string.Join(", ", invalidCodes));
+                return false;
+            }
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Code {0} not assigned to a code group", (target as ImportedCode).Code);
+            throw new NotImplementedException();
         }
     }
 }

@@ -35,6 +35,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ImportedCode>> ImportedCodes { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<AllImportedCodes> AllImportedCodes { get; set; }
         
         [RequiredArgument]
         public OutArgument<IEnumerable<PriceListCode>> FilteredImportedCodes { get; set; }
@@ -208,6 +211,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             #endregion
 
             ImportedCodes.Set(context, importedCodesList);
+            AllImportedCodes.Set(context, new AllImportedCodes() { ImportedCodes = importedCodesList });
             FilteredImportedCodes.Set(context, convertedPriceList.FilteredPriceListCodes);
             ImportedZonesServices.Set(context, importedZonesServicesList);
             ImportedRates.Set(context, importedRatesList);

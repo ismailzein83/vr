@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -21,7 +22,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (importedCountry.ImportedCodes == null || importedCountry.ImportedCodes.Count == 0)
                 return true;
 
-            var invalidZoneNames = new HashSet<string>();
+            var invalidCodes = new HashSet<string>();
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
             foreach (ImportedCode importedCode in importedCountry.ImportedCodes)
@@ -29,15 +30,16 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if (importedCode.ChangeType == CodeChangeType.New || importedCode.ChangeType == CodeChangeType.Moved)
                 {
                     if (importedCode.BED > importSPLContext.CodeEffectiveDate)
-                        invalidZoneNames.Add(importedCode.ZoneName);
+                        invalidCodes.Add(importedCode.Code);
                 }
             }
 
-            if (invalidZoneNames.Count > 0)
+            if (invalidCodes.Count > 0)
             {
-                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(importedCountry.CountryId);
+                CountryManager countryManager = new CountryManager(); 
+                string countryName = countryManager.GetCountryName(importedCountry.CountryId);
                 string codeEffectiveDateString = importSPLContext.CodeEffectiveDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("BEDs of some of the codes of the following zones of country '{0}' are greater than '{1}': {2}", countryName, codeEffectiveDateString, string.Join(", ", invalidZoneNames));
+                context.Message = string.Format("Adding code(s) to country '{0}' with BED greater than '{1}'. Violated code(s): ({2}).", countryName, codeEffectiveDateString, string.Join(", ", invalidCodes));
                 return false;
             }
 

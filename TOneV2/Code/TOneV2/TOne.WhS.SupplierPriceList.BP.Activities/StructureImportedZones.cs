@@ -17,6 +17,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<AllImportedZones> AllImportedZones { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<ImportedDataByZone> importedDataByZones = ImportedDataByZone.Get(context);
@@ -50,6 +53,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             }
 
             this.ImportedZones.Set(context, importedZones);
+            this.AllImportedZones.Set(context, new AllImportedZones() { Zones = importedZones });
         }
     }
 }

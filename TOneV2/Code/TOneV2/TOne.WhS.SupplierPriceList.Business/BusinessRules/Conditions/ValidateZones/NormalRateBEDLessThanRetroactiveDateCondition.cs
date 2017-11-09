@@ -21,7 +21,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (allData.ImportedDataByZoneList == null || allData.ImportedDataByZoneList.Count() == 0)
                 return true;
 
-            var invalidZoneNames = new List<string>();
+            var invalidZoneNames = new HashSet<string>();
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
             foreach (ImportedDataByZone zoneData in allData.ImportedDataByZoneList)
@@ -39,7 +39,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (invalidZoneNames.Count > 0)
             {
                 string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("BEDs of the normal rates of the following zones are less than the retroactive date '{0}': {1}", retroactiveDateString, string.Join(", ", invalidZoneNames));
+                context.Message = string.Format("Rates are less than retroactive date {0} for the following zones: {1}.", retroactiveDateString, string.Join(", ", invalidZoneNames));
                 return false;
             }
 

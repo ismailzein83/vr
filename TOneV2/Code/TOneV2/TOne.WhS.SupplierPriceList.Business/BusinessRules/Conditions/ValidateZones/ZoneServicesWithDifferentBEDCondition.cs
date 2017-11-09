@@ -45,7 +45,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has services with different BED, minimum BED has been selected", (target as ImportedDataByZone).ZoneName);
+            throw new NotImplementedException();
         }
 
     }

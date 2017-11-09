@@ -22,22 +22,24 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
 
             ImportedDataByZone zone = context.Target as ImportedDataByZone;
-
+            var invalidCodes = new HashSet<string>();
             foreach (var importedCode in zone.ImportedCodes)
             {
-                if (zone.ImportedCodes.Where(x => x.Code == importedCode.Code).Count() > 1)
-                {
-                    context.Message = string.Format("Can not add Code {0} because Zone {1} contains this Code multiple times", importedCode.Code, zone.ZoneName);
-                    return false;
-                }
+                if (!string.IsNullOrEmpty(importedCode.Code) && zone.ImportedCodes.Where(x => x.Code == importedCode.Code).Count() > 1)
+                    invalidCodes.Add(importedCode.Code);  
             }
 
+            if (invalidCodes.Count>0)
+            {
+                context.Message = string.Format("Following codes are defined twice in zone {0}: {1}.", zone.ZoneName, string.Join(", ", invalidCodes));
+                return false;
+            }
             return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has one or more same code", (target as ImportedDataByZone).ZoneName);
+            throw new NotImplementedException();
         }
 
     }

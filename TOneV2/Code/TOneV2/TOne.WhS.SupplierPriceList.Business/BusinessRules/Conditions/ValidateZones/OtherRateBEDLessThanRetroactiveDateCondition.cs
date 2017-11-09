@@ -21,7 +21,10 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (allData.ImportedDataByZoneList == null || allData.ImportedDataByZoneList.Count() == 0)
                 return true;
 
-            var invalidZoneNames = new List<string>();
+            var invalidRateTypes = new HashSet<string>();
+            var invalidZoneNames = new HashSet<string>();
+            var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
+
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
             foreach (ImportedDataByZone zoneData in allData.ImportedDataByZoneList)
@@ -31,7 +34,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     if (importedOtherRate.BED < importSPLContext.RetroactiveDate)
                     {
                         invalidZoneNames.Add(zoneData.ZoneName);
-                        break;
+                        invalidRateTypes.Add(rateTypeManager.GetRateTypeName(importedOtherRate.RateTypeId.Value));
                     }
                 }
             }
@@ -39,8 +42,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (invalidZoneNames.Count > 0)
             {
                 string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("BEDs of some of the other rates of the following zones are less than the retroactive date '{0}': {1}", retroactiveDateString, string.Join(", ", invalidZoneNames));
+                if (invalidZoneNames.Count == 1)
+                    context.Message = string.Format("{0} is less than retroactive date '{1}' for the following zones: ({2}))", invalidRateTypes.First(), retroactiveDateString, string.Join(", ", invalidZoneNames));
+                else
+                    context.Message = string.Format("({0}) are less than retroactive date '{1}' for the following zones: ({2}))", string.Join(", ", invalidRateTypes), retroactiveDateString, string.Join(", ", invalidZoneNames));
                 return false;
+
             }
 
             return true;

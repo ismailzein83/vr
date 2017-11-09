@@ -20,19 +20,18 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (importedCountry.ImportedRates == null || importedCountry.ImportedRates.Count == 0)
                 return true;
 
-            var invalidZoneNames = new HashSet<string>();
-            IImportSPLContext importSplContext = context.GetExtension<IImportSPLContext>();
+            var numberOfIncreasedRates = 0;
 
             foreach (ImportedRate importedRate in importedCountry.ImportedRates)
             {
                 if (importedRate.ChangedExistingRates.Count() > 0 && importedRate.ChangedExistingRates.Any(x => importedRate.Rate > x.RateEntity.Rate))
-                    invalidZoneNames.Add(importedRate.ZoneName);
+                    numberOfIncreasedRates++;
             }
 
-            if (invalidZoneNames.Count > 0)
+            if (numberOfIncreasedRates > 0)
             {
                 string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(importedCountry.CountryId);
-                context.Message = string.Format("Some of the rates of some of the zones of country '{0}' have been increased: {1}", countryName, string.Join(", ", invalidZoneNames));
+                context.Message = string.Format("{0} increased rates in country '{1}'.", numberOfIncreasedRates, countryName);
                 return false;
             }
 

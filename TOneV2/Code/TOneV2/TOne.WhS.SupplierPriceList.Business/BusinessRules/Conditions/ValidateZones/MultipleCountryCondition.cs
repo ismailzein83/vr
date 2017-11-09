@@ -22,24 +22,18 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ImportedDataByZone zone = context.Target as ImportedDataByZone;
-
-            var firstCode = zone.ImportedCodes.FirstOrDefault();
-            if (firstCode != null)
+            var countries = new HashSet<string>();
+            CountryManager countryManager = new CountryManager ();
+            foreach (var importedCode in zone.ImportedCodes)
             {
-                int? firstCodeCountryId = firstCode.CodeGroup != null ? firstCode.CodeGroup.CountryId : (int?)null;
+                if (!string.IsNullOrEmpty(importedCode.Code) && importedCode.CodeGroup != null)
+                    countries.Add(countryManager.GetCountryName(importedCode.CodeGroup.CountryId));
+            }
 
-                foreach (ImportedCode importedCode in zone.ImportedCodes)
-                {
-                    if (importedCode.CodeGroup != null && firstCodeCountryId.HasValue && importedCode.CodeGroup.CountryId != firstCodeCountryId.Value)
-                    {
-                        CountryManager countryManager = new CountryManager();
-                        string firstCountryName = countryManager.GetCountryName(firstCodeCountryId.Value);
-                        string importedCodeCountryName = countryManager.GetCountryName(importedCode.CodeGroup.CountryId);
-
-                        context.Message = string.Format("Can not add Zone {0} because it has the codes {1}, {2} belongs to different countries {3} and {4}", zone.ZoneName, firstCode.Code, importedCode.Code, firstCountryName, importedCodeCountryName);
-                        return false;
-                    }
-                }
+            if (countries.Count>1)
+            {
+                context.Message = string.Format("Can not add zone '{0}' with codes belong to different countries: {1}.", zone.ZoneName, string.Join(", ", countries));
+                return false;
             }
 
             return true;
@@ -47,7 +41,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override string GetMessage(IRuleTarget target)
         {
-            return string.Format("Zone {0} has multiple codes that belong to different countries", (target as ImportedDataByZone).ZoneName);
+            throw new NotImplementedException();
         }
 
     }

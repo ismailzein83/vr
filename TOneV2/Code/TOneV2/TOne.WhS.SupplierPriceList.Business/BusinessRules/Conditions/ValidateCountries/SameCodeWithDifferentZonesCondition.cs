@@ -22,25 +22,42 @@ namespace TOne.WhS.SupplierPriceList.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ImportedCountry country = context.Target as ImportedCountry;
-
+            var messages = new List<string>();
+            var duplicatedCodes = new List<string>();
             foreach (var importedCode in country.ImportedCodes)
             {
-                if (country.ImportedCodes.Where(x => x.Code == importedCode.Code && !x.ZoneName.Equals(importedCode.ZoneName, StringComparison.InvariantCultureIgnoreCase)).Count() > 0)
+                if (!duplicatedCodes.Contains(importedCode.Code))
                 {
-                    CountryManager manager = new CountryManager();
-                    context.Message = string.Format("Can not add Code {0} because Country {1} has this code in different zones", importedCode.Code, manager.GetCountryName(country.CountryId));
-                    return false;
+                    var zones = country.ImportedCodes
+                        .Where(x => x.Code == importedCode.Code && !x.ZoneName.Equals(importedCode.ZoneName, StringComparison.InvariantCultureIgnoreCase))
+                        .Select(item => item.ZoneName);
+
+                    if (zones.Count() > 0)
+                    {
+                        var invalidZones = new List<string>();
+                        invalidZones.Add(importedCode.ZoneName);
+                        foreach (var zoneName in zones)
+                        {
+                            if (!invalidZones.Any(item => item.ToLower() == zoneName.ToLower()))
+                                invalidZones.Add(zoneName);
+                        }
+                        
+                        duplicatedCodes.Add(importedCode.Code);
+                        messages.Add(string.Format("Duplicate Code '{0}' found in ({1}).", importedCode.Code, string.Join(", ",invalidZones)));
+                    }
                 }
-
             }
-
+            if (messages.Count > 0)
+            {
+                context.Message = string.Join(" ", messages);
+                return false;
+            }
             return true;
         }
 
         public override string GetMessage(IRuleTarget target)
         {
-            CountryManager manager = new CountryManager();
-            return string.Format("Country {0} has same code in different zones", manager.GetCountryName((target as ImportedCountry).CountryId));
+            throw new NotImplementedException();
         }
 
     }
