@@ -42,7 +42,7 @@ namespace TOne.WhS.Sales.Business
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("New rates of following selling countries are greater than maximum rate '{0}': {1}", ratePlanContext.MaximumRate, string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("New rates of following selling country(ies) are greater than maximum rate '{0}': {1}", ratePlanContext.MaximumRate, string.Join(", ", invalidCountryNames));
                 return false;
             }
 
