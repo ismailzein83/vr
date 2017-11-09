@@ -33,12 +33,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             if (parameters.IsCost)
             {
                 listDimensions.Add("CostRateType");
-                listMeasures.Add("CostRate");
+                listMeasures.Add("CostRate_DurAvg");
             }
             else
             {
                 listDimensions.Add("SaleRateType");
-                listMeasures.Add("SaleRate");
+                listMeasures.Add("SaleRate_DurAvg");
             }
 
             if (parameters.GroupBySupplier)
@@ -52,15 +52,6 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     else
                         listDimensions.Add("Supplier");
 
-                }
-
-                else
-                {
-
-                    if (parameters.GroupByProfile)
-                        listDimensions.Add("CustomerProfile");
-                    else
-                        listDimensions.Add("Customer");
                 }
 
             }
@@ -139,8 +130,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                             summaryByZone.RateTypeFormatted = "Normal";
 
                     MeasureValue rate;
-                    analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostRate" : "SaleRate", out rate);
-                    summaryByZone.Rate =  Convert.ToDecimal(rate.Value ?? 0.0);
+                    analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostRate_DurAvg" : "SaleRate_DurAvg", out rate);
+                    summaryByZone.Rate = (rate == null) ? 0 : Convert.ToDecimal(rate.Value ?? 0.0);
                     summaryByZone.RateFormatted = ReportHelpers.FormatLongNumberDigit(summaryByZone.Rate);
 
 
