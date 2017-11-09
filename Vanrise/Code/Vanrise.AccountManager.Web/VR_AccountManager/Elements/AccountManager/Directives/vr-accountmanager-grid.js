@@ -113,7 +113,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                 VR_AccountManager_AccountManagerService.defineAccountManagerSubViewTabs(accountManagerDefinitionId, updatedItem, gridAPI, accountManagerSubViewsDefinitions);
                 gridAPI.itemUpdated(updatedItem);
             };
-
+            
             VR_AccountManager_AccountManagerService.editAccountmanager(accountManagerObject, onAccountManagerUpdated);
         }
     }
