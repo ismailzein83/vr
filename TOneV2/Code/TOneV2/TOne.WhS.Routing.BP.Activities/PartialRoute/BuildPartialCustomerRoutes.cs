@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Activities;
-using TOne.WhS.Routing.Entities;
+using System.Collections.Generic;
+using Vanrise.Common;
+using Vanrise.Entities;
 using Vanrise.Queueing;
 using Vanrise.BusinessProcess;
+using TOne.WhS.Routing.Entities;
 using TOne.WhS.Routing.Business;
-using Vanrise.Entities;
-using TOne.WhS.RouteSync.BP.Activities;
-using TOne.WhS.RouteSync.Entities;
-using TOne.WhS.Routing.Business.Extensions;
-using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-
     public class BuildPartialCustomerRoutesInput
     {
         public CustomerZoneDetailByZone CustomerZoneDetails { get; set; }
 
-        public BaseQueue<RoutingCodeMatches> InputQueue { get; set; }
+        public List<RoutingCodeMatches> RoutingCodeMatchesList { get; set; }
 
         public BaseQueue<CustomerRoutesBatch> OutputQueue { get; set; }
-
-        public IEnumerable<RoutingCustomerInfo> ActiveRoutingCustomerInfos { get; set; }
 
         public int VersionNumber { get; set; }
 
@@ -31,17 +25,14 @@ namespace TOne.WhS.Routing.BP.Activities
         public DateTime EffectiveDate { get; set; }
     }
 
-    public sealed class BuildPartialCustomerRoutes : DependentAsyncActivity<BuildPartialCustomerRoutesInput>
+    public sealed class BuildPartialCustomerRoutes : BaseAsyncActivity<BuildPartialCustomerRoutesInput>
     {
 
         [RequiredArgument]
         public InArgument<CustomerZoneDetailByZone> CustomerZoneDetails { get; set; }
 
         [RequiredArgument]
-        public InArgument<BaseQueue<RoutingCodeMatches>> InputQueue { get; set; }
-
-        [RequiredArgument]
-        public InArgument<IEnumerable<RoutingCustomerInfo>> ActiveRoutingCustomerInfos { get; set; }
+        public InArgument<List<RoutingCodeMatches>> RoutingCodeMatchesList { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
@@ -55,33 +46,58 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InOutArgument<BaseQueue<CustomerRoutesBatch>> OutputQueue { get; set; }
 
-        protected override void DoWork(BuildPartialCustomerRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        protected override void DoWork(BuildPartialCustomerRoutesInput inputArgument, AsyncActivityHandle handle)
         {
             CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
-            List<CustomerRoute> switchesInProcessRoutes = new List<CustomerRoute>();
             RouteBuilder builder = new RouteBuilder(RoutingProcessType.CustomerRoute);
 
-            Dictionary<int, HashSet<int>> customerCountries = new Dictionary<int, HashSet<int>>();
-
-            DoWhilePreviousRunning(previousActivityStatus, handle, () =>
+            Dictionary<string, CustomerZoneDetail> customerZoneDetailsDict = new Dictionary<string, CustomerZoneDetail>();
+            if (inputArgument.CustomerZoneDetails != null)
             {
-                bool hasItem = false;
-                do
+                foreach (var customerZoneDetailByZone in inputArgument.CustomerZoneDetails)
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue((preparedCodeMatch) =>
+                    List<CustomerZoneDetail> customerZoneDetails = customerZoneDetailByZone.Value;
+                    foreach (CustomerZoneDetail customerZoneDetail in customerZoneDetails)
                     {
-                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(preparedCodeMatch, inputArgument.CustomerZoneDetails, inputArgument.EffectiveDate,
-                            false, inputArgument.ActiveRoutingCustomerInfos, customerCountries, inputArgument.VersionNumber, false);
+                        string key = string.Concat(customerZoneDetail.CustomerId, "~", customerZoneDetail.SaleZoneId);
+                        customerZoneDetailsDict.Add(key, customerZoneDetail);
+                    }
+                }
+            }
 
-                        IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, preparedCodeMatch.Code);
+            Dictionary<string, CustomerZoneDetailByZone> zoneDetailsByCode = new Dictionary<string, CustomerZoneDetailByZone>();
+            if (inputArgument.AffectedCustomerRoutes != null && inputArgument.CustomerZoneDetails != null)
+            {
+                foreach (CustomerRoute customerRoute in inputArgument.AffectedCustomerRoutes)
+                {
+                    List<CustomerZoneDetail> matchZoneDetails = zoneDetailsByCode.GetOrCreateItem(customerRoute.Code).GetOrCreateItem(customerRoute.SaleZoneId);
+                    string key = string.Concat(customerRoute.CustomerId, "~", customerRoute.SaleZoneId);
+
+                    CustomerZoneDetail customerZoneDetail = customerZoneDetailsDict.GetRecord(key);
+                    if (customerZoneDetail != null)
+                        matchZoneDetails.Add(customerZoneDetail);
+                }
+            }
+
+            if (inputArgument.RoutingCodeMatchesList != null && inputArgument.RoutingCodeMatchesList.Count > 0)
+            {
+                foreach (RoutingCodeMatches routingCodeMatches in inputArgument.RoutingCodeMatchesList)
+                {
+                    string code = routingCodeMatches.Code;
+                    CustomerZoneDetailByZone customerZoneDetailByZone = zoneDetailsByCode.GetRecord(code);
+                    if (customerZoneDetailByZone != null)
+                    {
+                        BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(routingCodeMatches, customerZoneDetailByZone, inputArgument.EffectiveDate,
+                            false, null, null, inputArgument.VersionNumber, false);
+
+                        IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, routingCodeMatches.Code);
 
                         customerRoutesBatch.CustomerRoutes.AddRange(customerRoutes);
                         inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
                         customerRoutesBatch = new CustomerRoutesBatch();
-
-                    });
-                } while (!ShouldStop(handle) && hasItem);
-            });
+                    }
+                }
+            }
 
             if (customerRoutesBatch.CustomerRoutes.Count > 0)
                 inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
@@ -90,14 +106,13 @@ namespace TOne.WhS.Routing.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Customer Routes is done", null);
         }
 
-        protected override BuildPartialCustomerRoutesInput GetInputArgument2(AsyncCodeActivityContext context)
+        protected override BuildPartialCustomerRoutesInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new BuildPartialCustomerRoutesInput
             {
                 CustomerZoneDetails = this.CustomerZoneDetails.Get(context),
-                InputQueue = this.InputQueue.Get(context),
+                RoutingCodeMatchesList = this.RoutingCodeMatchesList.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
-                ActiveRoutingCustomerInfos = this.ActiveRoutingCustomerInfos.Get(context),
                 VersionNumber = this.VersionNumber.Get(context),
                 AffectedCustomerRoutes = this.AffectedCustomerRoutes.Get(context),
                 EffectiveDate = this.EffectiveDate.Get(context)

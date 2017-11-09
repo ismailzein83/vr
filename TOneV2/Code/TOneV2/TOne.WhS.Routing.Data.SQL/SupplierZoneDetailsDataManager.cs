@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.Data.SQL;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Caching;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
@@ -57,10 +58,17 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             InsertBulkToTable(preparedSupplierZoneDetails as BaseBulkInsertInfo);
         }
-        public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails()
+        public Dictionary<long, SupplierZoneDetail> GetCachedSupplierZoneDetails()
         {
-            return GetItemsText(query_GetSupplierZoneDetails, SupplierZoneDetailMapper, null);
+            var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneDetailsCacheManager>();
+
+            return cacheManager.GetOrCreateObject("SupplierZoneDetails", SupplierZoneDetailsCacheExpirationChecker.Instance, () =>
+           {
+               IEnumerable<SupplierZoneDetail> supplierZoneDetails = GetItemsText(query_GetSupplierZoneDetails, SupplierZoneDetailMapper, null);
+               return supplierZoneDetails.ToDictionary(itm => itm.SupplierZoneId, itm => itm);
+           });
         }
+
         public IEnumerable<SupplierZoneDetail> GetFilteredSupplierZoneDetailsBySupplierZone(IEnumerable<long> supplierZoneIds)
         {
             DataTable dtZoneIds = BuildZoneIdsTable(new HashSet<long>(supplierZoneIds));
@@ -134,5 +142,27 @@ namespace TOne.WhS.Routing.Data.SQL
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)
                                            JOIN @ZoneList z ON z.ID = zd.SupplierZoneId";
         #endregion
+        private class SupplierZoneDetailsCacheManager : BaseCacheManager
+        {
+
+        }
+        private class SupplierZoneDetailsCacheExpirationChecker : CacheExpirationChecker
+        {
+            static SupplierZoneDetailsCacheExpirationChecker s_instance = new SupplierZoneDetailsCacheExpirationChecker();
+            public static SupplierZoneDetailsCacheExpirationChecker Instance
+            {
+                get
+                {
+                    return s_instance;
+                }
+            }
+
+            public override bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context)
+            {
+                TimeSpan entitiesTimeSpan = TimeSpan.FromMinutes(5);
+                SlidingWindowCacheExpirationChecker slidingWindowCacheExpirationChecker = new SlidingWindowCacheExpirationChecker(entitiesTimeSpan);
+                return slidingWindowCacheExpirationChecker.IsCacheExpired(context);
+            }
+        }
     }
 }

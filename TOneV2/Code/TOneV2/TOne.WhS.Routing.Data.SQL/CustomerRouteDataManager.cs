@@ -156,12 +156,26 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 queryBuilder.Replace("#FILTER#", "");
             }
+            SupplierZoneDetailsDataManager supplierZoneDetailsDataManager = new SupplierZoneDetailsDataManager();
             ExecuteReaderText(queryBuilder.ToString(),
                 (reader) =>
                 {
                     while (reader.Read())
                     {
-                        onRouteLoaded(CustomerRouteMapper(reader));
+                        CustomerRoute customerRoute = CustomerRouteMapper(reader);
+
+                        if (customerRoute.Options != null && customerRoute.Options.Count > 0)
+                        {
+                            var cachedSupplierZoneDetails = supplierZoneDetailsDataManager.GetCachedSupplierZoneDetails();
+                            foreach (RouteOption routeOption in customerRoute.Options)
+                            {
+                                SupplierZoneDetail supplierZoneDetail = cachedSupplierZoneDetails.GetRecord(routeOption.SupplierZoneId);
+                                routeOption.SupplierId = supplierZoneDetail.SupplierId;
+                                routeOption.SupplierRate = supplierZoneDetail.EffectiveRateValue;
+                                routeOption.ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds;
+                            }
+                        }
+                        onRouteLoaded(customerRoute);
                     }
                 },
                 (cmd) =>
@@ -170,6 +184,7 @@ namespace TOne.WhS.Routing.Data.SQL
                         cmd.Parameters.Add(new SqlParameter("@CustomerID", customerId.Value));
                 });
         }
+
 
         public List<CustomerRoute> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, int partialRoutesNumberLimit, out bool maximumExceeded)
         {
@@ -233,10 +248,13 @@ namespace TOne.WhS.Routing.Data.SQL
             List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
             ExecuteReaderText(query_GetAffectedCustomerRoutes.ToString(), (reader) =>
                {
-                   while (reader.Read() && totalCount < partialRoutesNumberLimit)
+                   while (reader.Read())
                    {
                        totalCount++;
                        customerRoutes.Add(CustomerRouteMapper(reader));
+
+                       if (totalCount > partialRoutesNumberLimit)
+                           break;
                    }
                }, (cmd) => { });
 

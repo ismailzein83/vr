@@ -2,9 +2,6 @@
 using System.Activities;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups;
-using TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups;
-using TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
@@ -16,6 +13,8 @@ namespace TOne.WhS.Routing.BP.Activities
     public sealed class GetAffectedRoutes : CodeActivity
     {
         [RequiredArgument]
+        public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
+        [RequiredArgument]
         public InArgument<AffectedRouteRules> AffectedRouteRules { get; set; }
         [RequiredArgument]
         public OutArgument<List<CustomerRoute>> AffectedCustomerRoutes { get; set; }
@@ -24,78 +23,38 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            var routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
-            if (routingDatabase == null)
-            {
-                context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Warning, "No Routing Database is found", null);
-                return;
-            }
+            var routingDatabase = this.RoutingDatabase.Get(context);
 
             ICustomerRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
             dataManager.RoutingDatabase = routingDatabase;
-
 
             AffectedRouteRules affectedRouteRules = this.AffectedRouteRules.Get(context);
 
             bool shouldTriggerFullRouteProcess = false;
             List<AffectedRoutes> affectedRoutesList = new List<AffectedRoutes>();
-            List<CustomerRoute> affectedCustomerRoutes = null;
 
             if (affectedRouteRules != null)
             {
-                if (affectedRouteRules.AddedRouteRules != null)
-                {
-                    foreach (RouteRule routeRule in affectedRouteRules.AddedRouteRules)
-                    {
-                        RouteRuleCriteria criteria = routeRule.Criteria as RouteRuleCriteria;
-                        bool isCustomerGeneric;
-                        IEnumerable<int> affectedCustomers = GetAffectedCustomers(criteria, out isCustomerGeneric);
+                BuildAffectedRoutes(affectedRouteRules.AddedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
 
-                        IEnumerable<CodeCriteria> affectedCodes;
-                        IEnumerable<long> affectedZones;
+                if (!shouldTriggerFullRouteProcess)
+                    BuildAffectedRoutes(affectedRouteRules.UpdatedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
 
-                        bool areCodesAndZonesGeneric;
-                        GetAffectedCodesAndZones(criteria, out affectedCodes, out affectedZones, out areCodesAndZonesGeneric);
-
-                        if (isCustomerGeneric && areCodesAndZonesGeneric)
-                        {
-                            this.ShouldTriggerFullRouteProcess.Set(context, true);
-                            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Warning, "Full Route Build will be triggered", null);
-                            return;
-                        }
-
-                        AffectedRoutes affectedRoutes = new Entities.AffectedRoutes() { Codes = affectedCodes, CustomerIds = affectedCustomers, ExcludedCodes = criteria.ExcludedCodes, ZoneIds = affectedZones };
-                        affectedRoutesList.Add(affectedRoutes);
-                    }
-                }
-
-                if (affectedRouteRules.UpdatedRouteRules != null)
-                {
-                    foreach (RouteRule routeRule in affectedRouteRules.UpdatedRouteRules)
-                    {
-                        RouteRuleCriteria criteria = routeRule.Criteria as RouteRuleCriteria;
-                        bool isCustomerGeneric;
-                        IEnumerable<int> affectedCustomers = GetAffectedCustomers(criteria, out isCustomerGeneric);
-
-                        IEnumerable<CodeCriteria> affectedCodes;
-                        IEnumerable<long> affectedZones;
-
-                        bool areCodesAndZonesGeneric;
-                        GetAffectedCodesAndZones(criteria, out affectedCodes, out affectedZones, out areCodesAndZonesGeneric);
-
-                        if (isCustomerGeneric && areCodesAndZonesGeneric)
-                        {
-                            this.ShouldTriggerFullRouteProcess.Set(context, true);
-                            context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Warning, "Full Route Build will be triggered", null);
-                            return;
-                        }
-
-                        AffectedRoutes affectedRoutes = new Entities.AffectedRoutes() { Codes = affectedCodes, CustomerIds = affectedCustomers, ExcludedCodes = criteria.ExcludedCodes, ZoneIds = affectedZones };
-                        affectedRoutesList.Add(affectedRoutes);
-                    }
-                }
+                if (!shouldTriggerFullRouteProcess)
+                    BuildAffectedRoutes(affectedRouteRules.OpenedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
+                
+                if (!shouldTriggerFullRouteProcess)
+                    BuildAffectedRoutes(affectedRouteRules.ClosedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
             }
 
+            if (shouldTriggerFullRouteProcess)
+            {
+                this.ShouldTriggerFullRouteProcess.Set(context, true);
+                context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Warning, "Full Route Build will be triggered", null);
+                return;
+            }
+
+            List<CustomerRoute> affectedCustomerRoutes = null;
             if (affectedRoutesList.Count > 0)
             {
                 int customerRouteTotalCount = dataManager.GetTotalCount();
@@ -108,7 +67,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
                 if (maximumExceeded)
                 {
-                    shouldTriggerFullRouteProcess = true;
+                    this.ShouldTriggerFullRouteProcess.Set(context, true);
                     context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Warning, "Loading Affected Routes is done. Number of Affected Routes '{0}' exceeds Maximum Number of Routes for Partial Routing '{1}'. Full Route Build will be triggered", affectedCustomerRoutes.Count, partialRoutesNumberLimit);
                     return;
                 }
@@ -124,6 +83,34 @@ namespace TOne.WhS.Routing.BP.Activities
 
             this.AffectedCustomerRoutes.Set(context, affectedCustomerRoutes);
             this.ShouldTriggerFullRouteProcess.Set(context, shouldTriggerFullRouteProcess);
+        }
+
+        private void BuildAffectedRoutes(List<RouteRule> routeRules, List<AffectedRoutes> affectedRoutesList, out bool shouldTriggerFullRouteProcess)
+        {
+            shouldTriggerFullRouteProcess = false;
+            if (routeRules != null)
+            {
+                foreach (RouteRule routeRule in routeRules)
+                {
+                    RouteRuleCriteria criteria = routeRule.Criteria as RouteRuleCriteria;
+                    bool isCustomerGeneric;
+                    IEnumerable<int> affectedCustomers = GetAffectedCustomers(criteria, out isCustomerGeneric);
+
+                    IEnumerable<CodeCriteria> affectedCodes;
+                    IEnumerable<long> affectedZones;
+
+                    bool areCodesAndZonesGeneric;
+                    GetAffectedCodesAndZones(criteria, out affectedCodes, out affectedZones, out areCodesAndZonesGeneric);
+
+                    if (isCustomerGeneric && areCodesAndZonesGeneric)
+                    {
+                        shouldTriggerFullRouteProcess = true;
+                        return;
+                    }
+                    AffectedRoutes affectedRoutes = new Entities.AffectedRoutes() { Codes = affectedCodes, CustomerIds = affectedCustomers, ExcludedCodes = criteria.ExcludedCodes, ZoneIds = affectedZones };
+                    affectedRoutesList.Add(affectedRoutes);
+                }
+            }
         }
 
         private IEnumerable<int> GetAffectedCustomers(RouteRuleCriteria criteria, out bool isCustomerGeneric)

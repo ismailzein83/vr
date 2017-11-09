@@ -133,10 +133,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 }
             });
         }
-        public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails()
-        {
-            return GetItemsText(query_GetSupplierZoneDetails, SupplierZoneDetailMapper, null);
-        }
+
         public IEnumerable<SupplierZoneDetail> GetFilteredSupplierZoneDetailsBySupplierZone(IEnumerable<long> supplierZoneIds)
         {
             DataTable dtZoneIds = BuildZoneIdsTable(new HashSet<long>(supplierZoneIds));

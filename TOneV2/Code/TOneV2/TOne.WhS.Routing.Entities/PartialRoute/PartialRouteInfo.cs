@@ -9,5 +9,7 @@ namespace TOne.WhS.Routing.Entities
     public class PartialRouteInfo
     {
         public int LastVersionNumber { get; set; }
+
+        public DateTime LatestRoutingDate { get; set; }
     }
 }

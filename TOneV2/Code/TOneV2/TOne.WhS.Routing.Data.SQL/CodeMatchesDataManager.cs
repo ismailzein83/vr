@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
 using Vanrise.Common;
+using System.Globalization;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
@@ -25,6 +26,7 @@ namespace TOne.WhS.Routing.Data.SQL
         const char ExactSupplierServicesSeparator = '#';
         const string ExactSupplierServicesSeparatorAsString = "#";
 
+        const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
         #region Public Methods
 
         public bool ShouldApplyCodeZoneMatch { get; set; }
@@ -233,7 +235,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     serializedExactSupplierServiceIds = string.Join(ExactSupplierServicesSeparatorAsString, item.ExactSupplierServiceIds);
 
                 str.AppendFormat("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}", SupplierCodeMatchWithRatePropertiesSeparator, serializedSupplierCodeMatch, item.RateValue,
-                                    serializedSupplierServiceIds, serializedExactSupplierServiceIds, item.SupplierServiceWeight, item.SupplierRateId, item.SupplierRateEED);
+                    serializedSupplierServiceIds, serializedExactSupplierServiceIds, item.SupplierServiceWeight, item.SupplierRateId, item.SupplierRateEED.HasValue ? item.SupplierRateEED.Value.ToString(DateTimeFormat) : string.Empty);
             }
             return str.ToString();
         }
@@ -255,7 +257,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 supplierCodeMatchWithRate.RateValue = decimal.Parse(parts[1]);
                 supplierCodeMatchWithRate.SupplierServiceWeight = int.Parse(parts[4]);
                 supplierCodeMatchWithRate.SupplierRateId = long.Parse(parts[5]);
-                supplierCodeMatchWithRate.SupplierRateEED = !string.IsNullOrEmpty(parts[6]) ? DateTime.Parse(parts[6]) : default(DateTime?);
+                supplierCodeMatchWithRate.SupplierRateEED = !string.IsNullOrEmpty(parts[6]) ? DateTime.ParseExact(parts[6], DateTimeFormat, CultureInfo.InvariantCulture) : default(DateTime?);
 
                 string supplierCodeMatchAsString = parts[0];
                 if (!string.IsNullOrEmpty(supplierCodeMatchAsString))

@@ -12,14 +12,22 @@ namespace TOne.WhS.Routing.BP.Activities
     public sealed class LoadAffectedRules : CodeActivity
     {
         [RequiredArgument]
-        public InArgument<int?> RouteRuleId { get; set; }
+        public InArgument<DateTime> EffectiveDate { get; set; }
 
+        [RequiredArgument]
+        public InArgument<PartialRouteInfo> PartialRouteInfo { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int?> RouteRuleId { get; set; }
 
         [RequiredArgument]
         public OutArgument<AffectedRouteRules> AffectedRouteRules { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
+            DateTime effectiveDate = this.EffectiveDate.Get(context);
+            PartialRouteInfo partialRouteInfo = this.PartialRouteInfo.Get(context);
+
             int? routeRuleId = this.RouteRuleId.Get(context);
 
             RouteRuleManager routeRuleManager = new RouteRuleManager();
@@ -33,21 +41,31 @@ namespace TOne.WhS.Routing.BP.Activities
             AffectedRouteRules affectedRouteRules = new AffectedRouteRules()
             {
                 AddedRouteRules = new List<RouteRule>(),
-                UpdatedRouteRules = new List<RouteRule>()
+                UpdatedRouteRules = new List<RouteRule>(),
+                OpenedRouteRules = new List<RouteRule>(),
+                ClosedRouteRules = new List<RouteRule>()
             };
-
+            HashSet<int> affectedRuleIds = new HashSet<int>();
             if (ruleChangedList != null)
             {
                 foreach (var ruleChanged in ruleChangedList)
                 {
                     switch (ruleChanged.ActionType)
                     {
-                        case ActionType.AddedRule: affectedRouteRules.AddedRouteRules.Add(ruleChanged.InitialRule); break;
+                        case ActionType.AddedRule:
+                            affectedRuleIds.Add(ruleChanged.RuleId);
+
+                            if (ruleChanged.InitialRule.IsEffective(effectiveDate))
+                                affectedRouteRules.AddedRouteRules.Add(ruleChanged.InitialRule);
+                            break;
+
                         case ActionType.UpdatedRule:
-                            affectedRouteRules.UpdatedRouteRules = new List<RouteRule>() { ruleChanged.InitialRule };
+                            affectedRouteRules.UpdatedRouteRules.Add(ruleChanged.InitialRule);
+
                             RouteRuleAdditionalInformation routeRuleAdditionalInformation = ruleChanged.AdditionalInformation.CastWithValidate<RouteRuleAdditionalInformation>("ruleChanged.AdditionalInformation", ruleChanged.RuleId);
                             if (routeRuleAdditionalInformation.CriteriaHasChanged)
                             {
+                                affectedRuleIds.Add(ruleChanged.RuleId);
                                 RouteRule routeRule = routeRuleManager.GetRouteRule(ruleChanged.RuleId);
                                 affectedRouteRules.UpdatedRouteRules.Add(routeRule);
                             }
@@ -57,6 +75,28 @@ namespace TOne.WhS.Routing.BP.Activities
                     }
                 }
             }
+
+            if (effectiveDate > partialRouteInfo.LatestRoutingDate)
+            {
+                Dictionary<int, RouteRule> routeRules = routeRuleManager.GetAllRules();
+                if (routeRules != null)
+                {
+                    foreach (var routeRuleKvp in routeRules)
+                    {
+                        int ruleId = routeRuleKvp.Key;
+                        if (affectedRuleIds.Contains(ruleId))
+                            continue;
+
+                        RouteRule routeRule = routeRuleKvp.Value;
+                        if (routeRule.IsEffective(effectiveDate) && !routeRule.IsEffective(partialRouteInfo.LatestRoutingDate))
+                            affectedRouteRules.OpenedRouteRules.Add(routeRule);
+
+                        if (!routeRule.IsEffective(effectiveDate) && routeRule.IsEffective(partialRouteInfo.LatestRoutingDate))
+                            affectedRouteRules.ClosedRouteRules.Add(routeRule);
+                    }
+                }
+            }
+
             this.AffectedRouteRules.Set(context, affectedRouteRules);
         }
     }

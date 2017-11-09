@@ -10,7 +10,6 @@ namespace TOne.WhS.Routing.Data
         DateTime? EffectiveDate { get; set; }
         bool? IsFuture { get; set; }
         void ApplySupplierZoneDetailsForDB(object preparedSupplierZoneDetails);
-        IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails();
         IEnumerable<SupplierZoneDetail> GetFilteredSupplierZoneDetailsBySupplierZone(IEnumerable<long> supplierZoneIds);
     }
 }

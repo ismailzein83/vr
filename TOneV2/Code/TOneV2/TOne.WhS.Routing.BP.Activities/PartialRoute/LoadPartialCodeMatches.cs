@@ -21,7 +21,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
     public class LoadPartialCodeMatchesOutput
     {
-        public BaseQueue<RoutingCodeMatches> CodeMatchesQueue { get; set; }
+        public List<RoutingCodeMatches> RoutingCodeMatchesList { get; set; }
     }
 
     public sealed class LoadPartialCodeMatches : BaseAsyncActivity<LoadPartialCodeMatchesInput, LoadPartialCodeMatchesOutput>
@@ -33,7 +33,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<List<CustomerRoute>> AffectedCustomerRoutes { get; set; }
 
         [RequiredArgument]
-        public OutArgument<BaseQueue<RoutingCodeMatches>> CodeMatchesQueue { get; set; }
+        public OutArgument<List<RoutingCodeMatches>> RoutingCodeMatchesList { get; set; }
 
         protected override LoadPartialCodeMatchesOutput DoWorkWithResult(LoadPartialCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {
@@ -51,33 +51,33 @@ namespace TOne.WhS.Routing.BP.Activities
             dataManager.RoutingDatabase = inputArgument.RoutingDatabase;
 
             List<PartialCodeMatches> codeMatchesList = dataManager.GetPartialCodeMatchesByRouteCodes(codeSaleZones.Keys.ToHashSet());
-            MemoryQueue<RoutingCodeMatches> queue = new MemoryQueue<RoutingCodeMatches>();
+            List<RoutingCodeMatches> routingCodeMatchesList = new List<RoutingCodeMatches>();
 
             SaleZoneManager saleZoneManager = new SaleZoneManager();
 
-            foreach (PartialCodeMatches codeMatches in codeMatchesList)
+            foreach (PartialCodeMatches partialCodeMatches in codeMatchesList)
             {
                 RoutingCodeMatches routingCodeMatches = new Entities.RoutingCodeMatches()
                 {
-                    Code = codeMatches.Code,
-                    CodePrefix = codeMatches.CodePrefix,
-                    SupplierCodeMatches = codeMatches.SupplierCodeMatches,
-                    SupplierCodeMatchesBySupplier = codeMatches.SupplierCodeMatchesBySupplier,
+                    Code = partialCodeMatches.Code,
+                    CodePrefix = partialCodeMatches.CodePrefix,
+                    SupplierCodeMatches = partialCodeMatches.SupplierCodeMatches,
+                    SupplierCodeMatchesBySupplier = partialCodeMatches.SupplierCodeMatchesBySupplier,
                     SaleZoneDefintions = new List<SaleZoneDefintion>()
                 };
-                HashSet<long> saleZones = codeSaleZones.GetOrCreateItem(codeMatches.Code);
+                HashSet<long> saleZones = codeSaleZones.GetOrCreateItem(partialCodeMatches.Code);
                 foreach (long saleZoneId in saleZones)
                 {
                     SaleZone saleZone = saleZoneManager.GetSaleZone(saleZoneId);
                     routingCodeMatches.SaleZoneDefintions.Add(new SaleZoneDefintion() { SaleZoneId = saleZoneId, SellingNumberPlanId = saleZone.SellingNumberPlanId });
                 }
 
-                queue.Enqueue(routingCodeMatches);
+                routingCodeMatchesList.Add(routingCodeMatches);
             }
 
             return new LoadPartialCodeMatchesOutput()
             {
-                CodeMatchesQueue = queue
+                RoutingCodeMatchesList = routingCodeMatchesList
             };
         }
 
@@ -92,7 +92,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, LoadPartialCodeMatchesOutput result)
         {
-            this.CodeMatchesQueue.Set(context, result.CodeMatchesQueue);
+            this.RoutingCodeMatchesList.Set(context, result.RoutingCodeMatchesList);
             context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Information, "Loading Code Matches is done", null);
         }
     }
