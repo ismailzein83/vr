@@ -172,7 +172,9 @@
                     if ($scope.onAccountManagerAssignmentAdded != undefined)
                     $scope.modalContext.closeModal();
                 }
+                $scope.scopeModel.errorMessage ="* " + response.Message;
             }).catch(function (error) {
+               
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -187,6 +189,7 @@
                         $scope.onAccountManagerAssignmentUpdated(response.UpdatedObject)
                     $scope.modalContext.closeModal();
                 }
+                $scope.scopeModel.errorMessage = "* " + response.Message;
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {

@@ -13,6 +13,11 @@
                             <vr-directivewrapper directive="scopeModel.assignmentRuntime" on-ready="scopeModel.onRuntimeDirectiveReady" normal-col-num="4" isrequired="ctrl.isrequired"></vr-directivewrapper>
                         </vr-columns>
                     </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow" ng-if="scopeModel.errorMessage != undefined">
+                            <label class="alert alert-danger" vr-alert>{{scopeModel.errorMessage}}</label>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Time'">
                     <vr-row>
@@ -23,7 +28,13 @@
                             <vr-datetimepicker label="End Effective Date" value="scopeModel.eed" type="date"></vr-datetimepicker>
                         </vr-columns>
                     </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow" ng-if="scopeModel.errorMessage != undefined">
+                            <label class="alert alert-danger" vr-alert>{{scopeModel.errorMessage}}</label>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
+             
             </vr-tabs>
         </vr-form>
     </vr-modalbody>
