@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
@@ -126,6 +127,28 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return null;
         }
+        public override string GetFullPartnerName(IPartnerNameManagerContext context)
+        {
+            WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
+            var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
+            string fullName;
+            if (financialAccount.CarrierProfileId.HasValue)
+            {
+                CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+                string carrierProfileName = carrierProfileManager.GetCarrierProfileName(financialAccount.CarrierProfileId.Value);
+                string profilePrefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Profile);
+                fullName = string.Format("{1} ({0})", profilePrefix, carrierProfileName);
+            }
+            else
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                string carrierAccountName = carrierAccountManager.GetCarrierAccountName(financialAccount.CarrierAccountId.Value);
+                string accountPrefix = Utilities.GetEnumDescription<WHSFinancialAccountCarrierType>(WHSFinancialAccountCarrierType.Account);
+                fullName = string.Format("{1} ({0})", accountPrefix, carrierAccountName);
+            }
+            return fullName;
+        }
+
         public override string GetPartnerName(IPartnerNameManagerContext context)
         {
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
