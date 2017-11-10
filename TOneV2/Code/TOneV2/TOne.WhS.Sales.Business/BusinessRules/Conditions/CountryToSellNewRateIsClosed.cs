@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 
-namespace TOne.WhS.Sales.Business.BusinessRules
+namespace TOne.WhS.Sales.Business
 {
-    public class DraftNewRateIsClosed : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
+    public class CountryToSellNewRateIsClosed : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
@@ -18,7 +18,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
-            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct) // SellingProductZoneRateIsEndedCondition handles this case for selling products
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
                 return true;
 
             var countryData = context.Target as CountryData;
@@ -30,7 +30,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             foreach (DataByZone zoneData in countryData.ZoneDataByZoneId.Values)
             {
-                if (zoneData.IsCustomerCountryNew.HasValue && zoneData.IsCustomerCountryNew.Value)
+                if (!zoneData.IsCustomerCountryNew.HasValue || !zoneData.IsCustomerCountryNew.Value)
                     continue;
 
                 if (BusinessRuleUtilities.IsAnyZoneNewRateEnded(zoneData))
@@ -40,7 +40,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (invalidZoneNames.Count > 0)
             {
                 string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryData.CountryId);
-                context.Message = string.Format("Can not define a new rate with EED for sold country '{0}'. Violated zone(s): {1}", countryName, string.Join(",", invalidZoneNames));
+                context.Message = string.Format("Can not define a new rate with EED for selling country '{0}'. Violated zone(s): {1}", countryName, string.Join(",", invalidZoneNames));
                 return false;
             }
 

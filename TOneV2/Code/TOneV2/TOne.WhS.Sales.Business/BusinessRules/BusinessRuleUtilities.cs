@@ -69,6 +69,20 @@ namespace TOne.WhS.Sales.Business
                 return true;
             return false;
         }
+        public static bool IsAnyZoneNewRateEnded(DataByZone zoneData)
+        {
+            if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.EED.HasValue)
+                return true;
+            if (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count > 0)
+            {
+                foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
+                {
+                    if (otherRateToChange.EED.HasValue)
+                        return true;
+                }
+            }
+            return false;
+        }
 
         #region Private Methods
         private static void AddRateTypeName(List<string> rateTypeNames, int rateTypeId, Vanrise.Common.Business.RateTypeManager rateTypeManager)

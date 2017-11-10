@@ -104,6 +104,7 @@
     <Compile Include="BulkAction\Input\ContextZoneItemInput.cs" />
     <Compile Include="BusinessRules\BusinessRuleUtilities.cs" />
     <Compile Include="BusinessRules\Conditions\ConflictingRateCurrenciesCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\CountryToSellNewRateIsClosed.cs" />
     <Compile Include="BusinessRules\Conditions\CountryToSellRateGreaterThanMaxRate.cs" />
     <Compile Include="BusinessRules\Conditions\CountryToSellRateLessThanOrEqualToZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\ChangedCountryEEDIsLessThanToday.cs" />
