@@ -835,9 +835,13 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var salePriceListTemplateManager = new SalePriceListTemplateManager();
 
+            var customerName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
+            customerName.ThrowIfNull("customerName", carrierAccountId);               
+
             SalePriceListTemplate template = salePriceListTemplateManager.GetSalePriceListTemplate(salePriceListTemplateId);
+            
             if (template == null)
-                throw new DataIntegrityValidationException(string.Format("Customer with Id {0} does not have a Sale Price List Template", carrierAccountId));
+                throw new DataIntegrityValidationException(string.Format("Customer {0} is not assigned to any pricelist template", customerName));
 
             PriceListExtensionFormat priceListExtensionFormat = _carrierAccountManager.GetCustomerPriceListExtensionFormatId(carrierAccountId);
             ISalePriceListTemplateSettingsContext salePlTemplateSettingsContext = new SalePriceListTemplateSettingsContext

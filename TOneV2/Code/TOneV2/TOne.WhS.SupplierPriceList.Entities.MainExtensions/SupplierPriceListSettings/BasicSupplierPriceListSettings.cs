@@ -177,7 +177,10 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                         }
                                         else
                                         {
-                                            throw new NullReferenceException("Invalid code due to a wrong range separator.");
+                                            if(zone != null)
+                                                throw new Exception(String.Format("Invalid code found in zone {0} due to a wrong range separator.", zone));
+                                            else
+                                                throw new Exception(String.Format("Invalid code {0} due to a wrong range separator.", rangeCode));
                                         }
 
                                     }
