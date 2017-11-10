@@ -156,7 +156,7 @@
                 var cellFieldMappingLoadDeferred = UtilsService.createPromiseDeferred();
                 cellFieldMappingReadyDeferred.promise.then(function () {
                     cellFieldMappingReadyDeferred = undefined;
-                    var directivePayload = { context: getContext() }
+                    var directivePayload = { context: getContext() };
                     if (payload != undefined && payload.fieldMapping != undefined) {
                         directivePayload.fieldMapping = payload.fieldMapping.CellFieldMapping;
                     }
