@@ -36,6 +36,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
             var toTime;
             var gridWidths;
             var currencyId;
+            var withSummary;
 
             function initializeController() {
                 $scope.gridMenuActions = [];
@@ -111,7 +112,7 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     else
                         dataRetrievalInput.Query.OrderType = undefined;
 
-                    if (dataRetrievalInput.Query.WithSummary && retrieveDataContext.eventType != DataGridRetrieveDataEventType.ExternalTrigger)
+                    if (withSummary && retrieveDataContext.eventType != DataGridRetrieveDataEventType.ExternalTrigger && retrieveDataContext.eventType != DataGridRetrieveDataEventType.Export)
                         dataRetrievalInput.Query.WithSummary = false;
 
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput).then(function (response) {
@@ -159,10 +160,12 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
                     if (payLoad.Settings != undefined && payLoad.Settings.ItemActions != undefined) {
                         itemActions = payLoad.Settings.ItemActions;
                         parentDimensions = payLoad.SelectedGroupingDimensions;
+                        withSummary = payLoad.Settings.WithSummary;
                     }
                     else {
                         itemActions = payLoad.ItemActions;
                         parentDimensions = payLoad.ParentDimensions;
+                        withSummary = false;
                     }
 
                     var selectedDimensions = [];
