@@ -9,7 +9,8 @@ CREATE PROCEDURE [TOneWhS_Sales].[sp_SalePriceList_SyncWithImportedData]
 	@OwnerType int,
 	@OwnerId int,
 	@CurrencyId int,
-	@EffectiveOn datetime
+	@EffectiveOn datetime,
+	@PricelistStateBackupID BIGINT
 AS
 BEGIN
 	BEGIN TRY
@@ -19,7 +20,8 @@ BEGIN
 		@OwnerType = @OwnerType,
 		@OwnerId = @OwnerId,
 		@CurrencyId = @CurrencyId,
-		@EffectiveOn = @EffectiveOn
+		@EffectiveOn = @EffectiveOn,
+	    @PricelistStateBackupID = @PricelistStateBackupID
 	END TRY
 	BEGIN CATCH
 		if @@TranCount > 0

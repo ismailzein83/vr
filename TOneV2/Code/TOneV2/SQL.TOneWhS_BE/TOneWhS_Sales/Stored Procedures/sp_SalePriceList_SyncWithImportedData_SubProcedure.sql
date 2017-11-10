@@ -10,13 +10,14 @@ CREATE PROCEDURE [TOneWhS_Sales].[sp_SalePriceList_SyncWithImportedData_SubProce
 	@OwnerType int,
 	@OwnerId int,
 	@CurrencyId int,
-	@EffectiveOn datetime
+	@EffectiveOn datetime,
+	@PricelistStateBackupID Bigint
 AS
 BEGIN
 	begin try
 		begin tran
-			Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID,FileID, PriceListType,UserID,[Description])
-				Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType, UserID,splnew.[Description]
+			Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID,FileID, PriceListType,UserID,[Description],PricelistStateBackupID,PricelistSource)
+				Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType, UserID,splnew.[Description],@PricelistStateBackupID,0
 				from TOneWhS_BE.SalePriceList_New splnew WITH(NOLOCK) Where splnew.ProcessInstanceID = @ProcessInstanceID 
 	
 			if @ReservedSalePriceListId is not null

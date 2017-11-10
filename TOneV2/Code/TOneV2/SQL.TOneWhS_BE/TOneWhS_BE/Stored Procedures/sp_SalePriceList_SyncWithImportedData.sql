@@ -3,7 +3,8 @@
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_SyncWithImportedData]
 	@ProcessInstanceID Bigint,
-	@SellingNumberPlanId int
+	@SellingNumberPlanId int,
+	@PricelistStateBackupID BIGINT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -11,7 +12,8 @@ BEGIN
 BEGIN TRY
 	exec [TOneWhS_BE].[sp_SalePriceList_SyncWithImportedData_SubProcedure]	
 	@ProcessInstanceID = @ProcessInstanceID,
-	@SellingNumberPlanId = @SellingNumberPlanId
+	@SellingNumberPlanId = @SellingNumberPlanId,
+	@PricelistStateBackupID = @PricelistStateBackupID
 END TRY
 
 BEGIN CATCH

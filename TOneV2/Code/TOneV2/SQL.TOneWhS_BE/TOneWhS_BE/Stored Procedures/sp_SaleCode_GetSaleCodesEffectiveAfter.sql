@@ -16,7 +16,7 @@ SELECT  sc.[ID],sc.[Code],sc.[ZoneID],sc.[BED],sc.[EED],sc.[CodeGroupID],sc.[Sou
 FROM	[TOneWhS_BE].[SaleCode] sc WITH(NOLOCK) 
 		JOIN	[TOneWhS_BE].[SaleZone] sz WITH(NOLOCK) ON sc.ZoneID=sz.ID
 WHERE	sz.[SellingNumberPlanID]=@SellingNumberPlanId
-		and (sc.EED is null or sc.EED > @when)
+		and (sc.EED is null or (sc.EED<>sc.BED and sc.EED > @when))
 		and (@ProcessInstanceId is null or (sc.processInstanceID is null or sc.processInstanceID<@ProcessInstanceId))
         
 END

@@ -3,7 +3,8 @@
 -- =============================================
 CREATE PROCEDURE [TOneWhS_BE].[sp_SalePriceList_SyncWithImportedData_SubProcedure]
 	@ProcessInstanceID Bigint,
-	@SellingNumberPlanId int
+	@SellingNumberPlanId int,
+	@PricelistStateBackupID Bigint
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -11,8 +12,8 @@ BEGIN
 Begin Try
 	BEGIN TRAN
 	
-	Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID,FileID, PriceListType, UserID,[Description])
-	Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType,UserID,splnew.[Description]
+	Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID,FileID, PriceListType, UserID,[Description],PricelistStateBackupID,PricelistSource)
+	Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType,UserID,splnew.[Description],@PricelistStateBackupID,1
 	from TOneWhS_BE.SalePriceList_new splnew WITH(NOLOCK) Where splnew.ProcessInstanceID = @ProcessInstanceID 
 	
 	Insert into TOneWhS_BE.SaleZone (ID,SellingNumberPlanID, CountryID, Name, BED, EED,ProcessInstanceID)
