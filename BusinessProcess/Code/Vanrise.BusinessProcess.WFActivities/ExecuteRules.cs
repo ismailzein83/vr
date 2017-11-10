@@ -1,4 +1,5 @@
-﻿using System.Activities;
+﻿using System;
+using System.Activities;
 using System.Collections.Generic;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Business;
@@ -43,7 +44,13 @@ namespace Vanrise.BusinessProcess.WFActivities
             foreach (BPBusinessRuleDefinition bpBusinessRule in bpBusinessRules)
             {
                 BPBusinessRuleAction action = bpRuleActionManager.GetBusinessRuleAction(bpBusinessRule.BPBusinessRuleDefinitionId);
-                BusinessRule rule = new BusinessRule() { Condition = bpBusinessRule.Settings.Condition, Action = action.Details.Settings.Action };
+                BusinessRule rule = new BusinessRule() 
+                {
+                    BPBusinessRuleDefinitionId = bpBusinessRule.BPBusinessRuleDefinitionId,
+                    Condition = bpBusinessRule.Settings.Condition,
+                    Action = action.Details.Settings.Action,
+                    ExecutionDependsOnRules = bpBusinessRule.Settings.ExecutionDependsOnRules
+                };
                 rules.Add(rule);
             }
             return rules;
@@ -52,8 +59,17 @@ namespace Vanrise.BusinessProcess.WFActivities
         private void ExecuteValidation(IEnumerable<BusinessRule> rules, IEnumerable<IRuleTarget> targets, ActivityContext activityContext, List<BPViolatedRule> violatedBusinessRulesByTarget, out bool stopExecutionFlag)
         {
             stopExecutionFlag = false;
+            List<Guid> violatedRulesThatStopsExecution = new List<Guid>();
             foreach (BusinessRule rule in rules)
             {
+                if (violatedRulesThatStopsExecution.Count > 0 && 
+                    rule.ExecutionDependsOnRules != null &&
+                    rule.ExecutionDependsOnRules.Exists(ruleDefinitionId => violatedRulesThatStopsExecution.Contains(ruleDefinitionId)))
+                {
+                    violatedRulesThatStopsExecution.Add(rule.BPBusinessRuleDefinitionId);
+                    continue;
+                }
+
                 foreach (IRuleTarget target in targets)
                 {
                     if (!rule.Condition.ShouldValidate(target))
@@ -63,16 +79,16 @@ namespace Vanrise.BusinessProcess.WFActivities
                     if (rule.Condition.Validate(validationContext))
                         continue;
 
-
                     BusinessRuleActionExecutionContext actionContext = new BusinessRuleActionExecutionContext() { Target = target };
                     rule.Action.Execute(actionContext);
                     violatedBusinessRulesByTarget.Add(new BPViolatedRule() { Target = target, Rule = rule, Message = validationContext.Message });
                     if (actionContext.StopExecution)
                     {
                         stopExecutionFlag = true;
-                        return;
                     }
                 }
+                if (stopExecutionFlag == true)
+                    violatedRulesThatStopsExecution.Add(rule.BPBusinessRuleDefinitionId);
             }
         }
 
@@ -80,6 +96,8 @@ namespace Vanrise.BusinessProcess.WFActivities
         {
             long processIntanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             long? parentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID;
+
+            violatedBusinessRulesByTarget.Sort((x, y) => x.CompareTo(y));
 
             List<BPValidationMessage> messages = new List<BPValidationMessage>();
             foreach (BPViolatedRule violatedRule in violatedBusinessRulesByTarget)

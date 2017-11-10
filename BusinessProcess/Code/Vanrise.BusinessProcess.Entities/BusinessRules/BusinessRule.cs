@@ -10,9 +10,13 @@ namespace Vanrise.BusinessProcess.Entities
 
     public class BusinessRule
     {
+        public Guid BPBusinessRuleDefinitionId { get; set; }
+
         public BusinessRuleCondition Condition { get; set; }
 
         public BusinessRuleAction Action { get; set; }
+
+        public List<Guid> ExecutionDependsOnRules { get; set; }
         
     }
 }
