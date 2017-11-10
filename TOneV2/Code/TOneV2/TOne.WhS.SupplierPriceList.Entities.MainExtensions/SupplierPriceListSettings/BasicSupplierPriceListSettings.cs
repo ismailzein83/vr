@@ -160,6 +160,11 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                     var rangeCode = codeValueTrimmed.Split(this.RangeSeparator);
                                     if (rangeCode.Length > 0)
                                     {
+                                        IEnumerable<char> firstPrefix = rangeCode.FirstOrDefault().TakeWhile(item => item == '0');
+                                        IEnumerable<char> secondPrefix = rangeCode.LastOrDefault().TakeWhile(item => item == '0');
+                                        if(firstPrefix.Count()!=secondPrefix.Count())
+                                            throw new Exception(String.Format("Invalid code {0} due to a wrong range separator.", codeValueTrimmed));
+
                                         long firstCode;
                                         long lastCode;
                                         if (long.TryParse(rangeCode.FirstOrDefault(), out firstCode) && long.TryParse(rangeCode.LastOrDefault(), out lastCode))
@@ -169,7 +174,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                                 string increasedCode = (firstCode++).ToString().Trim();
                                                 priceListCodes.Add(new PriceListCode
                                                 {
-                                                    Code = codeGroup != null ? string.Concat(codeGroup, increasedCode) : increasedCode,
+                                                    Code = codeGroup != null ? string.Concat(codeGroup, string.Join("",firstPrefix), increasedCode) : increasedCode,
                                                     EffectiveDate = result,
                                                     ZoneName = zone,
                                                 });
