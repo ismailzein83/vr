@@ -48,6 +48,14 @@
     <Reference Include="Vanrise.Analytic.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
@@ -94,6 +102,7 @@
     <Compile Include="Extensions\RouteRuleCleanupTask.cs" />
     <Compile Include="Extensions\StateBackupRoutingCleanupManager.cs" />
     <Compile Include="Extensions\RouteSyncReader.cs" />
+    <Compile Include="PartialRoutingBPDefinitionSettings.cs" />
     <Compile Include="RouteOptionRules\MarketPriceRouteOptionRule.cs" />
     <Compile Include="RouteRules\Filters\RateOptionFilter.cs" />
     <Compile Include="RouteRules\Filters\ServiceOptionFilter.cs" />
@@ -102,6 +111,8 @@
     <Compile Include="RouteRules\LCRRouteRule.cs" />
     <Compile Include="RouteRules\OptionSettingsGroups\ExcludedOptions.cs" />
     <Compile Include="RouteRules\Orders\OptionOrderByService.cs" />
+    <Compile Include="RPRoutingBPDefinitionSettings.cs" />
+    <Compile Include="RoutingBPDefinitionSettings.cs" />
     <Compile Include="RoutingOptimizationManager.cs" />
     <Compile Include="TrafficStatsQualityMeasure\TrafficStatsQualityMeasureManager.cs" />
     <Compile Include="RouteOptionRuleManager.cs" />
@@ -148,9 +159,17 @@
       <Project>{31d4e637-c2d3-49b2-ae0a-0658aeddd9dd}</Project>
       <Name>TOne.WhS.BusinessEntity.MainExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.BP.Arguments\TOne.WhS.RouteSync.BP.Arguments.csproj">
+      <Project>{c5c38b71-3244-4bc0-bdbf-31b7a5e71c74}</Project>
+      <Name>TOne.WhS.RouteSync.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
       <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Routing.BP.Arguments\TOne.WhS.Routing.BP.Arguments.csproj">
+      <Project>{7b185135-b5a8-4416-8b8a-66a261d7dd31}</Project>
+      <Name>TOne.WhS.Routing.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Data\TOne.WhS.Routing.Data.csproj">
       <Project>{ad5a00af-b674-4f57-a5c1-85f78a351928}</Project>
