@@ -61,7 +61,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
                             phoneNumber = query.PhoneNumber;
                             fromDate = query.From;
                             toDate = query.To;
-                            payloadPeriod = query.Period
+                            payloadPeriod = query.Period;
                             if (query.Filter != undefined) {
                                 switchIds = query.Filter.SwitchIds;
                             }
