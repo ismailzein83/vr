@@ -13,9 +13,8 @@ namespace TOne.WhS.Sales.Business.BusinessRules
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target as DataByZone != null;
+            return target is DataByZone;
         }
-
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             var zoneData = context.Target as DataByZone;
@@ -51,29 +50,12 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             return true;
         }
-
         public override string GetMessage(IRuleTarget target)
         {
-            DataByZone zone = (target as DataByZone);
-            string zoneBED = UtilitiesManager.GetDateTimeAsString(zone.BED);
-
-            var messageBuilder = new StringBuilder(string.Format("BED of the Other Rate of Zone '{0}' must be greater than", zone.ZoneName));
-
-            if (zone.SoldOn.HasValue && zone.SoldOn > zone.BED)
-            {
-                string soldOn = UtilitiesManager.GetDateTimeAsString(zone.SoldOn.Value);
-                messageBuilder.Append(string.Format(" the date '{1}' when the Country was sold", soldOn));
-            }
-            else
-            {
-                messageBuilder.Append(string.Format(" the BED '{0}' of the Zone", zoneBED));
-            }
-
-            return messageBuilder.ToString();
+            throw new NotImplementedException();
         }
 
         #region Private Methods
-
         private DateTime GetMinimumOtherRateBED(DataByZone zoneData)
         {
             var beginEffectiveDates = new List<DateTime>();
@@ -95,7 +77,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             return beginEffectiveDates.Max();
         }
-
         #endregion
     }
 }
