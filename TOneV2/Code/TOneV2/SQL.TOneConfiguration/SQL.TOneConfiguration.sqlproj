@@ -754,6 +754,7 @@
     <None Include="Mediation_Datasource_Iraq.PostDeployment.sql" />
     <None Include="CarrierPortal.RetailPortal_Centrex.PostDeployment.sql" />
     <None Include="Sama.FlaggedService.sql" />
+    <None Include="TOne.NG.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
