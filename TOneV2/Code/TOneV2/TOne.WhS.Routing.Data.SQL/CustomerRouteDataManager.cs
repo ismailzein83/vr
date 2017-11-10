@@ -157,6 +157,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 queryBuilder.Replace("#FILTER#", "");
             }
             SupplierZoneDetailsDataManager supplierZoneDetailsDataManager = new SupplierZoneDetailsDataManager();
+            supplierZoneDetailsDataManager.RoutingDatabase = RoutingDatabase;
+
             ExecuteReaderText(queryBuilder.ToString(),
                 (reader) =>
                 {
