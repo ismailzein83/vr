@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
@@ -17,42 +18,55 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            bool result = true;
-            var zone = context.Target as DataByZone;
+            var zoneData = context.Target as DataByZone;
 
-            if (zone.NormalRateToChange != null)
+            if ((zoneData.IsCustomerCountryNew.HasValue && zoneData.IsCustomerCountryNew.Value) || zoneData.NormalRateToChange == null)
+                return true;
+
+            if (zoneData.NormalRateToChange.BED == default(DateTime))
+                throw new Vanrise.Entities.DataIntegrityValidationException("zoneData.NormalRateToChange.BED");
+
+            DateTime normalRateBED = zoneData.NormalRateToChange.BED;
+            var ratePlanContext = context.GetExtension<IRatePlanContext>();
+
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
             {
-                if (zone.NormalRateToChange.BED == default(DateTime))
-                    result = false;
+                if (normalRateBED < zoneData.BED)
+                {
+                    string zoneBEDString = zoneData.BED.ToString(ratePlanContext.DateFormat);
+                    context.Message = string.Format("Pricing zone '{0}' must be with date greater than or equal to '{1}'", zoneData.ZoneName, zoneBEDString);
+                    return false;
+                }
+            }
+            else
+            {
+                if (!zoneData.SoldOn.HasValue)
+                    throw new Vanrise.Entities.DataIntegrityValidationException("zoneData.SoldOn");
+
+                DateTime minNormalRateBED;
+                string partialErrorMessage;
+
+                if (zoneData.BED > zoneData.SoldOn.Value)
+                {
+                    string zoneBEDString = zoneData.BED.ToString(ratePlanContext.DateFormat);
+                    minNormalRateBED = zoneData.BED;
+                    partialErrorMessage = string.Format("zone BED '{0}'", zoneBEDString);
+                }
                 else
                 {
-                    var beginEffectiveDates = new List<DateTime?>() { zone.BED, zone.SoldOn };
-                    if (zone.NormalRateToChange.BED < UtilitiesManager.GetMaxDate(beginEffectiveDates).Value)
-                        result = false;
+                    string soldOnString = zoneData.SoldOn.Value.ToString(ratePlanContext.DateFormat);
+                    minNormalRateBED = zoneData.SoldOn.Value;
+                    partialErrorMessage = string.Format("sell date '{0}'", soldOnString);
+                }
+
+                if (normalRateBED < minNormalRateBED)
+                {
+                    context.Message = string.Format("Pricing zone '{0}' must be with date greater than or equal to {1}", zoneData.ZoneName, partialErrorMessage);
+                    return false;
                 }
             }
 
-            if (result == false)
-            {
-                string zoneBED = UtilitiesManager.GetDateTimeAsString(zone.BED);
-                string normalRateBED = UtilitiesManager.GetDateTimeAsString(zone.NormalRateToChange.BED);
-
-                var messageBuilder = new StringBuilder(string.Format("BED '{0}' of the Normal Rate of Zone '{1}' must be greater than", normalRateBED, zone.ZoneName));
-
-                if (zone.SoldOn.HasValue && zone.SoldOn > zone.BED)
-                {
-                    string soldOn = UtilitiesManager.GetDateTimeAsString(zone.SoldOn.Value);
-                    messageBuilder.Append(string.Format(" the date '{0}' when the Country was sold", soldOn));
-                }
-                else
-                {
-                    messageBuilder.Append(string.Format(" the BED '{0}' of the Zone", zoneBED));
-                }
-
-                context.Message = messageBuilder.ToString();
-            }
-
-            return result;
+            return true;
         }
         public override string GetMessage(IRuleTarget target)
         {
