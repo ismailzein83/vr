@@ -59,33 +59,32 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         
         public static string FormatNormalNumberDigit(Decimal? number)
         {
-            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", number);
+            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _normalprecision, MidpointRounding.AwayFromZero));
         }
         public static string FormatNormalNumberDigit(Double? number)
         {
-            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", number);
+            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _normalprecision, MidpointRounding.AwayFromZero));
         }
 
 
         public static string FormatLongNumberDigit(Decimal? number)
         {
-            return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", number);
+            return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _longprecision, MidpointRounding.AwayFromZero));
         }
         public static string FormatLongNumberDigit(Double? number)
         {
-            return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", number);
+            return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _longprecision, MidpointRounding.AwayFromZero));
         }
 
 
         public static string FormatNumberDigitRate(Decimal? number)
         {
-            int precision = 4;//Digit Rate 
-            return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", (number.HasValue) ? Math.Truncate(number.Value * 10000) / 10000 : number);
+            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", (number.HasValue) ? Math.Truncate(number.Value * 10000) / 10000 : number);
         }
         public static string FormatNumberDigitRate(Double? number)
         {
-            int precision = 4;//Digit Rate 
-            return String.Format("{0:#0." + "".PadLeft(precision, '0') + "}", number);
+
+            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _normalprecision, MidpointRounding.AwayFromZero));
         }
 
         public static string FormatNumber(Decimal? number)
