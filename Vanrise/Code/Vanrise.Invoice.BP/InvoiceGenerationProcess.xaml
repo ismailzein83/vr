@@ -107,16 +107,16 @@
               <Sequence DisplayName="Invoice_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_2">
                 <Sequence.Variables>
                   <Variable x:TypeArguments="x:Boolean" Name="succeeded" />
-                  <Variable x:TypeArguments="x:String" Name="generationErrorMessage" />
+                  <Variable x:TypeArguments="s:Exception" Name="generationErrorException" />
                   <Variable x:TypeArguments="x:Boolean" Name="generationErrorOccured" />
                   <Variable x:TypeArguments="scg:List(vie:InvoiceGenerationMessageOutput)" Name="messages" />
                 </Sequence.Variables>
                 <viba1:GeneratePartnerInvoice sap2010:WorkflowViewState.IdRef="GeneratePartnerInvoice_3">
-                  <viba1:GeneratePartnerInvoice.GenerationErrorMessage>
-                    <OutArgument x:TypeArguments="x:String">
-                      <mca:CSharpReference x:TypeArguments="x:String">generationErrorMessage</mca:CSharpReference>
+                  <viba1:GeneratePartnerInvoice.GenerationErrorException>
+                    <OutArgument x:TypeArguments="s:Exception">
+                      <mca:CSharpReference x:TypeArguments="s:Exception">generationErrorException</mca:CSharpReference>
                     </OutArgument>
-                  </viba1:GeneratePartnerInvoice.GenerationErrorMessage>
+                  </viba1:GeneratePartnerInvoice.GenerationErrorException>
                   <viba1:GeneratePartnerInvoice.GenerationErrorOccured>
                     <OutArgument x:TypeArguments="x:Boolean">
                       <mca:CSharpReference x:TypeArguments="x:Boolean">generationErrorOccured</mca:CSharpReference>
@@ -201,11 +201,11 @@
                   </If.Condition>
                   <If.Then>
                     <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
-                      <TerminateWorkflow.Reason>
-                        <InArgument x:TypeArguments="x:String">
-                          <mca:CSharpValue x:TypeArguments="x:String">generationErrorMessage</mca:CSharpValue>
+                      <TerminateWorkflow.Exception>
+                        <InArgument x:TypeArguments="s:Exception">
+                          <mca:CSharpValue x:TypeArguments="s:Exception">generationErrorException</mca:CSharpValue>
                         </InArgument>
-                      </TerminateWorkflow.Reason>
+                      </TerminateWorkflow.Exception>
                     </TerminateWorkflow>
                   </If.Then>
                 </If>
@@ -261,7 +261,7 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlR2VuZXJhdGlvblByb2Nlc3MueGFtbDE6A4kCDgIBAT0zPTYCAQQ+Mz42AgEDPzM/NgIBAkEFTCkDAaECTQX3AQoCART4AQWHAg4CAQVJC0loAwGpAkQLRIQBAwGiAlALUJkBAgEVVAnsARQCASXvAQn1ASQCARyAAguEAhQCAQ37AQv7AXICAQZVC2AUAwGSAmEL6wEVAgEm8gEP8gF0AgEe7wFk7wGHAQIBHV0RXWsDAZoCWBFYYwMBkwJkEWSJAQMBiwJrD+kBGgIBJ3IRlgEwAwG2AZcBEaIBGgMBnQGjARHDARYCAWjEARHTARYCAU7UARHoARYCASiEAReEAWcDAf8BkwEXkwFnAwHzAYkBF4kBZgMB5wF6F3p0AwHbAY4BF44BiQEDAc8Bfxd/fQMBwwF1F3VzAwG3AZ8BF58BbAMBqgGaAReaAXIDAZ4BpgEXpgFmAgFpqgEVwQEfAgF1xwEXxwF0AgFPywEV0QEpAgFb1wEX1wFfAgEp2wEV5gEeAgE1rQEbrQGMAQMBkQG0ARm/ATQCAXbOARvOAW8CAVzjARvjAWoCAULeARveAW4CATa8AR+8AYQBAwGEAbcBH7cB0gECAXc=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlR2VuZXJhdGlvblByb2Nlc3MueGFtbDE6A4kCDgIBAT0zPTYCAQQ+Mz42AgEDPzM/NgIBAkEFTCkDAaECTQX3AQoCART4AQWHAg4CAQVJC0loAwGpAkQLRIQBAwGiAlALUJkBAgEVVAnsARQCASXvAQn1ASQCARyAAguEAhQCAQ37AQv7AXICAQZVC2AUAwGSAmEL6wEVAgEm8gEP8gF0AgEe7wFk7wGHAQIBHV0RXWsDAZoCWBFYYwMBkwJkEWSJAQMBiwJrD+kBGgIBJ3IRlgEwAwG2AZcBEaIBGgMBnQGjARHDARYCAWjEARHTARYCAU7UARHoARYCASiEAReEAWcDAf8BkwEXkwFnAwHzAYkBF4kBZgMB5wF6F3p0AwHbAY4BF44BiQEDAc8BdRd1eAMBwwF/F399AwG3AZ8BF58BbAMBqgGaAReaAXIDAZ4BpgEXpgFmAgFpqgEVwQEfAgF1xwEXxwF0AgFPywEV0QEpAgFb1wEX1wFfAgEp2wEV5gEeAgE1rQEbrQGMAQMBkQG0ARm/ATQCAXbOARvOAXQCAVzjARvjAWoCAULeARveAW4CATa8AR+8AYQBAwGEAbcBH7cB0gECAXc=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -60,7 +60,7 @@ namespace Vanrise.Invoice.Business
                 }
 
                 PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = partnerId };
-                var partnerName = invoiceTypePartnerManager.GetPartnerName(partnerNameManagerContext);
+                var partnerName = invoiceTypePartnerManager.GetFullPartnerName(partnerNameManagerContext);
 
                 DateTime? fromDate = null;
                 DateTime? toDate = null;

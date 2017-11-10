@@ -32,7 +32,7 @@ namespace Vanrise.Invoice.BP.Activities
         public OutArgument<bool> GenerationErrorOccured { get; set; }
 
         [RequiredArgument]
-        public OutArgument<string> GenerationErrorMessage { get; set; }
+        public OutArgument<Exception> GenerationErrorException { get; set; }
 
         #endregion
 
@@ -157,7 +157,7 @@ namespace Vanrise.Invoice.BP.Activities
                             {
                                 this.Messages.Set(context.ActivityContext, messages);
                                 this.GenerationErrorOccured.Set(context.ActivityContext, true);
-                                this.GenerationErrorMessage.Set(context.ActivityContext, ex.Message);
+                                this.GenerationErrorException.Set(context.ActivityContext, ex);
                                 return;
                             }
                         }
