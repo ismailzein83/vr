@@ -2,7 +2,7 @@
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class SupplierCode : ICode, IBusinessEntity
+    public class SupplierCode : ICode, IBusinessEntity, Vanrise.Entities.IDateEffectiveSettings
     {
         public long SupplierCodeId { get; set; }
 

@@ -45,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     }
 
 
-    public class SupplierZoneService : IBusinessEntityInfo
+    public class SupplierZoneService : IBusinessEntityInfo, IBusinessEntity, Vanrise.Entities.IDateEffectiveSettings
     {
         public long SupplierZoneServiceId { get; set; }
 
