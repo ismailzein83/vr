@@ -27,7 +27,6 @@ function (UtilsService, VRUIUtilsService, VRNavigationService) {
         this.initializeController = initializeController;
 
         function initializeController() {
-            console.log("in controller");
             $scope.scopeModel = {};
             defineAPI();
         }

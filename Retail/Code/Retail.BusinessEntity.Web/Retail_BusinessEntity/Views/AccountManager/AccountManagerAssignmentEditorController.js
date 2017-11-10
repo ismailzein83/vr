@@ -151,7 +151,6 @@
                     }
                 }
             }
-            console.log(accountmanagerAssignment)
             return accountmanagerAssignment;
         }
         function getAccountManagerAssignmentRuntimeEditor() {

@@ -16,7 +16,7 @@ namespace Retail.BusinessEntity.Business
     {
         #region Public Methods
         Vanrise.AccountManager.Business.AccountManagerAssignmentManager manager = new Vanrise.AccountManager.Business.AccountManagerAssignmentManager();
-        public Vanrise.Entities.IDataRetrievalResult<AccountManagerAssignmentDetail> GetFilteredAccountManagerAssignments(Vanrise.Entities.DataRetrievalInput<AccountManagerAssignmentQuery> input)
+        public IDataRetrievalResult<AccountManagerAssignmentDetail> GetFilteredAccountManagerAssignments(DataRetrievalInput<AccountManagerAssignmentQuery> input)
         {
             var accountManagerAssignments = manager.GetAccountManagerAssignments();
             Func<AccountManagerAssignment, bool> filterExpression = (prod) =>
@@ -44,16 +44,25 @@ namespace Retail.BusinessEntity.Business
             }
             return accountManagerAssignmentRuntime;
         }
-        public Vanrise.Entities.InsertOperationOutput<AccountManagerAssignmentDetail> AddAccountManagerAssignment(AssignAccountManagerToAccountsInput accountManagerAssignment)
+        public InsertOperationOutput<AccountManagerAssignmentDetail> AddAccountManagerAssignment(AssignAccountManagerToAccountsInput accountManagerAssignment)
         {
             string errorMessage;
             InsertOperationOutput<AccountManagerAssignmentDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountManagerAssignmentDetail>();
-            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             bool insertActionSucc = manager.AssignAccountManagerToAccounts(accountManagerAssignment, out errorMessage);
+            if (insertActionSucc)
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+            }
+            else
+            {
+                insertOperationOutput.Message = errorMessage;
+                insertOperationOutput.ShowExactMessage = true;
+            }
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<AccountManagerAssignmentDetail> UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput accountManagerAssignment)
+        public UpdateOperationOutput<AccountManagerAssignmentDetail> UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput accountManagerAssignment)
         {
             string errorMessage;
             UpdateOperationOutput<AccountManagerAssignmentDetail> updateOperationOutput = new UpdateOperationOutput<AccountManagerAssignmentDetail>();
@@ -65,6 +74,12 @@ namespace Retail.BusinessEntity.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 var accountManagerAssignmentUpdated = manager.GetAccountManagerAssignment(accountManagerAssignment.AccountManagerAssignmentId);
                 updateOperationOutput.UpdatedObject = AccountManagerDetailMapper(accountManagerAssignmentUpdated);
+            }
+            else
+            {
+                updateOperationOutput.Message = errorMessage;
+                updateOperationOutput.ShowExactMessage = true;
+
             }
 
 
