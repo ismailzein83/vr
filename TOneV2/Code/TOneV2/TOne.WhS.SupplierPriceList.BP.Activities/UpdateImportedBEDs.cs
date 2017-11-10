@@ -101,6 +101,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
             foreach (var importedZone in importedZones)
             {
+                if (importedZone.ImportedZoneServiceGroup == null)
+                    continue;
                 List<SupplierZoneService> importedZoneExistingEntities = new List<SupplierZoneService>();
 
                 if (existingZoneServicesByZoneName.TryGetValue(importedZone.ZoneName, out importedZoneExistingEntities))
