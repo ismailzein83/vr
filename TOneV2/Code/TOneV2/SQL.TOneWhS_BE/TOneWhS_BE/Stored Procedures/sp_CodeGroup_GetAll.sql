@@ -11,6 +11,7 @@ BEGIN
 	SET NOCOUNT ON;
 	SELECT	cg.ID,
 			cg.Code,
-			cg.CountryID
+			cg.CountryID,
+			cg.Name
 	FROM	[TOneWhS_BE].CodeGroup  as cg WITH(NOLOCK) 
 END

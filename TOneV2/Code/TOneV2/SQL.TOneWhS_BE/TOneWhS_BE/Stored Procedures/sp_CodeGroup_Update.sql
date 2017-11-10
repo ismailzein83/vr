@@ -6,7 +6,8 @@
 CREATE PROCEDURE [TOneWhS_BE].[sp_CodeGroup_Update]
 	@ID int,	
 	@CountryID int,
-	@Code varchar(20)
+	@Code varchar(20),
+	@Name nvarchar(200)
 AS
 BEGIN
 
@@ -14,7 +15,8 @@ IF NOT EXISTS(SELECT 1 FROM TOneWhS_BE.[CodeGroup] WHERE ID != @ID AND Code = @C
 	BEGIN
 		Update TOneWhS_BE.CodeGroup
 	Set Code = @Code ,
-		CountryID = @CountryID
+		CountryID = @CountryID,
+		Name = 	@Name
 	Where ID = @ID
 	END
 END
