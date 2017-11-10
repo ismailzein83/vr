@@ -53,7 +53,7 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_Compan
                         ctrl.datasource.push({ Entity: companySetting });
                     };
 
-                    VRCommon_CompanySettingService.addCompanySetting(onCompanySettingAdded, ctrl.datasource.length == 0, getCompanyDefinitionContext());
+                    VRCommon_CompanySettingService.addCompanySetting(onCompanySettingAdded, ctrl.datasource.length == 0, getContext());
                 };
                 ctrl.removeCompanySetting = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
@@ -67,12 +67,7 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_Compan
                 };
                 defineMenuActions();
 
-                VRCommon_CompanySettingsAPIService.GetCompanyDefinitionSettings().then(function (response) {
-                    if (response != undefined && response != null) {
-                        companyDefinitionSettings = response;
-                    }
                     defineAPI();
-                });
 
             }
             function defineAPI() {
@@ -90,6 +85,11 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_Compan
                             ctrl.datasource.push({ Entity: companySetting });
                         }
                     }
+                    return VRCommon_CompanySettingsAPIService.GetCompanyDefinitionSettings().then(function (response) {
+                        if (response != undefined && response != null) {
+                            companyDefinitionSettings = response;
+                        }
+                    });
                 };
 
                 api.getData = function () {
@@ -134,20 +134,20 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_Compan
                     var index = ctrl.datasource.indexOf(companySettingObj);
                     ctrl.datasource[index] = { Entity: companySetting };
                 };
-                VRCommon_CompanySettingService.editCompanySetting(companySettingObj.Entity, onCompanySettingUpdated, getCompanyDefinitionContext(), ctrl.datasource);
+                VRCommon_CompanySettingService.editCompanySetting(companySettingObj.Entity, onCompanySettingUpdated, getContext(), ctrl.datasource);
             }
             function viewCompanySetting(companySettingObj) {
-                VRCommon_CompanySettingService.viewCompanySetting(companySettingObj.Entity, getCompanyDefinitionContext());
+                VRCommon_CompanySettingService.viewCompanySetting(companySettingObj.Entity, getContext());
             }
 
-            function getCompanyDefinitionContext() {
+            function getContext() {
 
-                var companyDefinitionContext = {
+                var context = {
                 };
-                companyDefinitionContext.getCompanyDefinitionSettings = function () {
+                context.getCompanyDefinitionSettings = function () {
                     return companyDefinitionSettings;
                 };
-                return companyDefinitionContext;
+                return context;
             }
         }
     }]);
