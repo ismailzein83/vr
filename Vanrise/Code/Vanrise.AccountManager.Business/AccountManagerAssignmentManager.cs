@@ -49,16 +49,16 @@ namespace Vanrise.AccountManager.Business
             }
             return updateActionSucc;
         }
-        public bool AssignAccountManagerToAccounts(AssignAccountManagerToAccountsInput input, out string errorMessage)
+        public bool AssignAccountManagerToAccounts(AssignAccountManagerToAccountsInput input, out string insertErrorMessage)
         {
-            List<string> overLappedAccountNames = new List<string>();
+            insertErrorMessage = null;
             int insertedID;
-            errorMessage = null;
+            string errorMessage = null;
             bool insertActionSucc = false;
             string errorString;
             if (input.Accounts != null)
             {
-                if (!AreAccountsOverLapped(input.Accounts, input.AccountManagerAssignementDefinitionId, input.BED, input.EED, out overLappedAccountNames))
+                if (!ValidateAccountManagerAssignmentInputs(input.Accounts, input.AccountManagerAssignementDefinitionId, input.BED, input.EED, out errorMessage))
                 {
                     foreach (var account in input.Accounts)
                     {
@@ -76,37 +76,44 @@ namespace Vanrise.AccountManager.Business
                 }
                 else
                 {
-                    errorMessage = string.Format("Specified Interval overlaps with other assignments of Account(s): {0}", string.Join(", ", overLappedAccountNames));
+                    insertErrorMessage = errorMessage;
                 }
             }
             return insertActionSucc;
         }
-        public bool UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput input, out string errorMessage)
+        public bool UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput input, out string updateErrorMessage)
         {
-            string overLappedAccountName;
+            string errorMessage;
             var accountManagerAssignment = GetAccountManagerAssignment(input.AccountManagerAssignmentId);
             bool updateActionSucc = false;
-            errorMessage = null;
+            updateErrorMessage = null;
             if (input != null)
             {
-                if (!IsAccountOverLapped(accountManagerAssignment.AccountId, accountManagerAssignment.AccountManagerAssignementDefinitionId, input.BED, input.EED, out overLappedAccountName))
+                if (!ValidateAccountManagerAssignmentInput(accountManagerAssignment.AccountId, accountManagerAssignment.AccountManagerAssignementDefinitionId, input.BED, input.EED, out errorMessage))
                 {
                     updateActionSucc = TryUpdateAccountManagerAssignment(input.AccountManagerAssignmentId, input.BED, input.EED, input.AssignementSettings);
                 }
                 else
                 {
-                    errorMessage = string.Format("Specified Interval overlaps with other assignments of Account: {0}", overLappedAccountName);
+                    updateErrorMessage = errorMessage;
                 }
             }
             return updateActionSucc;
         }
-        public bool AreAccountsOverLapped(List<AssignAccountManagerToAccountSetting> accounts, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, out List<string> overLappedAccountNames)
+        public bool ValidateAccountManagerAssignmentInputs(List<AssignAccountManagerToAccountSetting> accounts, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, out string errorMessage)
         {
-            overLappedAccountNames = new List<string>();
+            errorMessage = null;
+            List<string> overLappedAccountNames = new List<string>();
             string overLappedAccountName;
             bool areOverLapped = false;
             if (accounts != null)
             {
+                if (!ValidateDateTime(bed,eed))
+                {
+                    errorMessage = "BED cannot be greater than EED";
+                    return true;
+                }
+
                 foreach (var account in accounts)
                 {
                     if (IsAccountOverLapped(account.AccountId, accountManagerAssignementDefinitionId, bed, eed, out overLappedAccountName))
@@ -114,7 +121,10 @@ namespace Vanrise.AccountManager.Business
                         overLappedAccountNames.Add(overLappedAccountName);
                         areOverLapped = true;
                     }
-
+                }
+                if (areOverLapped == true)
+                {
+                    errorMessage = string.Format("Specified Interval overlaps with other assignments of Account(s): {0}", string.Join(", ", overLappedAccountNames));
                 }
             }
             return areOverLapped;
@@ -142,6 +152,20 @@ namespace Vanrise.AccountManager.Business
                 }
             }
             return isOverlapped;
+        }
+        public bool ValidateAccountManagerAssignmentInput(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, out string errorMessage)
+        {
+            string overLappedAccountName;
+            errorMessage = null;
+            if (!ValidateDateTime(bed, eed))
+            {
+                errorMessage = "BED cannot be greater than EED";
+                return true;
+            }
+            bool isOverLapped = IsAccountOverLapped(accountId, accountManagerAssignementDefinitionId, bed, eed, out overLappedAccountName);
+            if (isOverLapped)
+                errorMessage = string.Format("Specified Interval overlaps with other assignments of Account(s): {0}", overLappedAccountName);
+            return isOverLapped;
         }
         public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignmentsById(string accountId, Guid accountManagerAssignementDefinitionId)
         {
@@ -182,6 +206,17 @@ namespace Vanrise.AccountManager.Business
 
         #region Mappers
 
+        #endregion
+
+        #region Private Methods
+
+        private bool ValidateDateTime(DateTime bed, DateTime? eed)
+        {
+            if (bed > eed)
+                return false;
+            return true;
+        }
+        
         #endregion
     }
     #region Public Classes
