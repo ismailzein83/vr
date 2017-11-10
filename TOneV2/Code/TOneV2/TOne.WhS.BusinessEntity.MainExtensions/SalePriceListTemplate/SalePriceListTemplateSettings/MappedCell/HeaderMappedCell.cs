@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
@@ -16,6 +17,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         PricelistDate = 2,
         PricelistCurrency = 3,
         PricelistType = 4,
+        CustomerFaxes = 5,
+        CustomerPhoneNumbers = 6,
+        CustomerContactPerson = 7,
     }
 
     public class HeaderMappedCell : MappedCell
@@ -45,6 +49,15 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
                 case HeaderFiledType.PricelistType:
                     context.Value = getPricelistType(context.PricelistType);
+                    break;
+                case HeaderFiledType.CustomerFaxes:
+                    context.Value = getCustomerFaxes(context.CustomerId);
+                    break;
+                case HeaderFiledType.CustomerPhoneNumbers:
+                    context.Value = getCustomerPhoneNumbers(context.CustomerId);
+                    break;
+                case HeaderFiledType.CustomerContactPerson:
+                    context.Value = getCustomerPricingContactPerson(context.CustomerId);
                     break;
                 default:
                     context.Value = null;
@@ -81,5 +94,36 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             return null;
         }
 
+        private string getCustomerFaxes(int customerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+
+            var carrierProfileId = carrierAccountManager.GetCarrierProfileId(customerId);
+            if (!carrierProfileId.HasValue)
+                throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} does not have Carrier Profile", customerId)); 
+            var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
+            return String.Join(" , ", carrierProfile.Settings.Faxes);
+        }
+        private string getCustomerPhoneNumbers(int customerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            var carrierProfileId = carrierAccountManager.GetCarrierProfileId(customerId);
+            if (!carrierProfileId.HasValue)
+                throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} does not have Carrier Profile", customerId));
+            var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
+            return String.Join(" , ", carrierProfile.Settings.PhoneNumbers);
+        }
+        private string getCustomerPricingContactPerson(int customerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            var carrierProfileId = carrierAccountManager.GetCarrierProfileId(customerId);
+            if (!carrierProfileId.HasValue)
+                throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} does not have Carrier Profile", customerId));
+            var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
+            return carrierProfile.Settings.Contacts.FirstOrDefault(x => x.Type == CarrierContactType.PricingContactPerson).Description;
+        }
     }
 }

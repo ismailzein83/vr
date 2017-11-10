@@ -4,4 +4,7 @@
     PricelistDate: { value: 2, description: "Pricelist Date" },
     PricelistCurrency: { value: 3, description: "Pricelist Currency"},
     PricelistType: { value: 4, description: "Pricelist Type" },
+    CustomerFaxes: { value: 5, description: "Faxes" },
+    CustomerPhoneNumbers: { value: 6, description: "Phone Numbers" },
+    CustomerContactPerson: { value: 7, description: "Contact Person" },
 });
