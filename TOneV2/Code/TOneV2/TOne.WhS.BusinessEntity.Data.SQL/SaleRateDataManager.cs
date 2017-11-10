@@ -224,12 +224,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public string GetDeleteCommandsByOwner(IEnumerable<int> ownerIds, int ownerType)
         {
-            string ownerIdsString = null;
+            string deleteQuery = string.Empty;
             if (ownerIds != null && ownerIds.Any())
-                ownerIdsString = string.Join(",", ownerIds);
-
-            return String.Format(@"DELETE sr FROM [TOneWhS_BE].[SaleRate] sr Inner Join [TOneWhS_BE].[SalePriceList] pl  on sr.PriceListID = pl.ID
+            {
+                string ownerIdsString = string.Join(",", ownerIds);
+                deleteQuery = String.Format(@"DELETE sr FROM [TOneWhS_BE].[SaleRate] sr Inner Join [TOneWhS_BE].[SalePriceList] pl  on sr.PriceListID = pl.ID
                                            Where pl.OwnerId IN ( {0} ) and pl.OwnerType = {1}", ownerIdsString, ownerType);
+            }
+            return deleteQuery;
         }
 
         #endregion

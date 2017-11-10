@@ -138,11 +138,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public string GetDeleteCommandsByOwner(IEnumerable<int> customerIds)
         {
-            string customerIdsString = null;
+            string deleteQuery = string.Empty;
             if (customerIds != null && customerIds.Any())
-                customerIdsString = string.Join<int>(",", customerIds);
-            return String.Format(@"DELETE FROM [TOneWhS_BE].[CustomerCountry]
+            {
+                string customerIdsString = string.Join<int>(",", customerIds);
+                deleteQuery = String.Format(@"DELETE FROM [TOneWhS_BE].[CustomerCountry]
                                            Where CustomerID IN ({0})", customerIdsString);
+            }
+            return deleteQuery;
         }
         public string GetDeleteCommandsBySellingNumberPlanId(long sellingNumberPlanId)
         {

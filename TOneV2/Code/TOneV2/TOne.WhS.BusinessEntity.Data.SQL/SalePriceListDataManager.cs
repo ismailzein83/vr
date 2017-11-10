@@ -152,7 +152,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 IsSent = GetReaderValue<bool>(reader, "IsSent"),
                 SourceId = GetReaderValue<string>(reader, "SourceID"),
                 UserId = GetReaderValue<int>(reader, "UserID"),
-                Description = GetReaderValue<string>(reader,"Description"),
+                Description = GetReaderValue<string>(reader, "Description"),
                 PricelistStateBackupId = GetReaderValue<long?>(reader, "PricelistStateBackupID"),
                 PricelistSource = (SalePricelistSource?)GetReaderValue<byte?>(reader, "PricelistSource"),
             };
@@ -325,11 +325,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public string GetDeleteCommandsByOwner(IEnumerable<int> ownerIds, int ownerType)
         {
-            string ownerIdsString = null;
+            string deleteQuery = string.Empty;
+
             if (ownerIds != null && ownerIds.Any())
-                ownerIdsString = string.Join(",", ownerIds);
-            return String.Format(@"DELETE FROM [TOneWhS_BE].[SalePriceList]
+            {
+                string ownerIdsString = string.Join(",", ownerIds);
+                deleteQuery = String.Format(@"DELETE FROM [TOneWhS_BE].[SalePriceList]
                                            Where OwnerId IN ( {0} ) and OwnerType = {1}", ownerIdsString, ownerType);
+            }
+            return deleteQuery;
         }
 
 
