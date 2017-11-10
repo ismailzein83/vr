@@ -844,6 +844,26 @@ namespace Vanrise.Analytic.Business
 
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {
+                    var summary = ((AnalyticSummaryBigResult<AnalyticRecord>)(context.BigResult)).Summary;
+                    if (summary != null)
+                    {
+                        var totalrow = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        for (int k = 0; k < _query.DimensionFields.Count() ; k++)
+                            totalrow.Cells.Add(new ExportExcelCell() { Value = "" });
+
+                        if (_query.MeasureFields != null)
+                        {
+                            foreach (var measureName in _query.MeasureFields)
+                            {
+                                MeasureValue measureValue;
+                                if (!summary.MeasureValues.TryGetValue(measureName, out measureValue))
+                                    throw new NullReferenceException(String.Format("measureValue. measureName '{0}'", measureName));
+                                totalrow.Cells.Add(new ExportExcelCell { Value = measureValue.Value });
+                            }
+                        }
+                        sheet.Rows.Add(totalrow);
+                    }
+
                     foreach (var record in context.BigResult.Data)
                     {
                         var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
