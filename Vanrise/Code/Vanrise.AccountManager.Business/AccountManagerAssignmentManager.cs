@@ -51,42 +51,103 @@ namespace Vanrise.AccountManager.Business
         }
         public bool AssignAccountManagerToAccounts(AssignAccountManagerToAccountsInput input, out string errorMessage)
         {
-            AccountManagerAssignment accountManagerAssignment = new AccountManagerAssignment();
-            accountManagerAssignment.AccountManagerAssignementDefinitionId = input.AccountManagerAssignementDefinitionId;
-            accountManagerAssignment.AccountManagerId = input.AccountManagerId;
-            accountManagerAssignment.BED = input.BED;
-            accountManagerAssignment.EED = input.EED;
+            List<string> overLappedAccountNames = new List<string>();
             int insertedID;
             errorMessage = null;
             bool insertActionSucc = false;
             string errorString;
             if (input.Accounts != null)
             {
-                foreach (var account in input.Accounts)
+                if (!AreAccountsOverLapped(input.Accounts, input.AccountManagerAssignementDefinitionId, input.BED, input.EED, out overLappedAccountNames))
                 {
-                    accountManagerAssignment.AccountId = account.AccountId;
-                    accountManagerAssignment.Settings = account.AssignementSettings;
-                    insertActionSucc = TryAddAccountManagerAssignment(accountManagerAssignment, out insertedID, out errorString);
+                    foreach (var account in input.Accounts)
+                    {
+                        AccountManagerAssignment accountManagerAssignment = new AccountManagerAssignment()
+                        {
+                            AccountManagerAssignementDefinitionId = input.AccountManagerAssignementDefinitionId,
+                            AccountManagerId = input.AccountManagerId,
+                            BED = input.BED,
+                            EED = input.EED
+                        };
+                        accountManagerAssignment.AccountId = account.AccountId;
+                        accountManagerAssignment.Settings = account.AssignementSettings;
+                        insertActionSucc = TryAddAccountManagerAssignment(accountManagerAssignment, out insertedID, out errorString);
+                    }
+                }
+                else
+                {
+                    errorMessage = string.Format("Specified Interval overlaps with other assignments of Account(s): {0}", string.Join(", ", overLappedAccountNames));
                 }
             }
             return insertActionSucc;
         }
         public bool UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput input, out string errorMessage)
         {
+            string overLappedAccountName;
+            var accountManagerAssignment = GetAccountManagerAssignment(input.AccountManagerAssignmentId);
             bool updateActionSucc = false;
             errorMessage = null;
             if (input != null)
             {
-                updateActionSucc = TryUpdateAccountManagerAssignment(input.AccountManagerAssignmentId, input.BED, input.EED, input.AssignementSettings);
+                if (!IsAccountOverLapped(accountManagerAssignment.AccountId, accountManagerAssignment.AccountManagerAssignementDefinitionId, input.BED, input.EED, out overLappedAccountName))
+                {
+                    updateActionSucc = TryUpdateAccountManagerAssignment(input.AccountManagerAssignmentId, input.BED, input.EED, input.AssignementSettings);
+                }
+                else
+                {
+                    errorMessage = string.Format("Specified Interval overlaps with other assignments of Account: {0}", overLappedAccountName);
+                }
             }
             return updateActionSucc;
         }
+        public bool AreAccountsOverLapped(List<AssignAccountManagerToAccountSetting> accounts, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, out List<string> overLappedAccountNames)
+        {
+            overLappedAccountNames = new List<string>();
+            string overLappedAccountName;
+            bool areOverLapped = false;
+            if (accounts != null)
+            {
+                foreach (var account in accounts)
+                {
+                    if (IsAccountOverLapped(account.AccountId, accountManagerAssignementDefinitionId, bed, eed, out overLappedAccountName))
+                    {
+                        overLappedAccountNames.Add(overLappedAccountName);
+                        areOverLapped = true;
+                    }
 
-        public bool IsAccountAssignableToAccountManager(Guid assignmentDefinitionId, string accountId)
+                }
+            }
+            return areOverLapped;
+        }
+        public bool AreAccountAssignableToAccountManager(Guid assignmentDefinitionId, string accountId)
         {
             throw new NotImplementedException();
         }
-
+        public bool IsAccountOverLapped(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, out string overLappedAccountName)
+        {
+            AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
+            AccountManagerManager accountManagerManager = new AccountManagerManager();
+            bool isOverlapped = false;
+            overLappedAccountName = null;
+            IEnumerable<AccountManagerAssignment> accountManagerAssignments = new List<AccountManagerAssignment>();
+            accountManagerAssignments = GetAccountManagerAssignmentsById(accountId, accountManagerAssignementDefinitionId);
+            foreach (var accountManagerAssignment in accountManagerAssignments)
+            {
+                if (Utilities.AreTimePeriodsOverlapped(bed, eed, accountManagerAssignment.BED, accountManagerAssignment.EED))
+                {
+                    var accountManagerDefinitionId = accountManagerManager.GetAccountManager(accountManagerAssignment.AccountManagerId).AccountManagerDefinitionId;
+                    var accountManagerAssignmentDefinition = accountManagerDefinitionManager.GetAccountManagerAssignmentDefinition(accountManagerDefinitionId, accountManagerAssignementDefinitionId);
+                    overLappedAccountName = accountManagerAssignmentDefinition.Settings.GetAccountName(accountManagerAssignment.AccountId);
+                    return true;
+                }
+            }
+            return isOverlapped;
+        }
+        public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignmentsById(string accountId, Guid accountManagerAssignementDefinitionId)
+        {
+            var allAccountMaanagerAssignments = this.GetCachedAccountManagerAssignments().Values;
+            return allAccountMaanagerAssignments.FindAllRecords(item => item.AccountId == accountId && item.AccountManagerAssignementDefinitionId == accountManagerAssignementDefinitionId);
+        }
         public AccountManagerAssignment GetAccountAssignment(Guid assignmentDefinitionId, string accountId, DateTime effectiveOn)
         {
             throw new NotImplementedException();
