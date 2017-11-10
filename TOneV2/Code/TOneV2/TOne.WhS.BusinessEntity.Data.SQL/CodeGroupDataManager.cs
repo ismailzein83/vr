@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             : base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
         }
-        readonly string[] columns = { "CountryID", "Code" };
+        readonly string[] columns = { "CountryID", "Code", "Name" };
 
         #endregion
 
@@ -33,14 +33,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool Update(CodeGroupToEdit codeGroup)
         {
             codeGroup.Code = codeGroup.Code.Trim();
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Update", codeGroup.CodeGroupId, codeGroup.CountryId, codeGroup.Code);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Update", codeGroup.CodeGroupId, codeGroup.CountryId, codeGroup.Code, codeGroup.Name);
             return (recordsEffected > 0);
         }
         public bool Insert(CodeGroup codeGroup, out int insertedId)
         {
             object codeGroupId;
             codeGroup.Code = codeGroup.Code.Trim();
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Insert", out codeGroupId, codeGroup.Code, codeGroup.CountryId);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CodeGroup_Insert", out codeGroupId, codeGroup.Code, codeGroup.CountryId, codeGroup.Name);
             insertedId = (int)codeGroupId;
             return (recordsEffected > 0);
         }
@@ -70,9 +70,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         private void WriteRecordToStream(CodeGroup record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}",
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}",
                                      record.CountryId,
-                                     record.Code);
+                                     record.Code,
+                                     record.Name);
 
         }
         private void ApplyCodeGroupsToDB(Object preparedCodeGroups)
@@ -102,8 +103,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 CodeGroupId = (int)reader["ID"],
                 Code = GetReaderValue<string>(reader, "Code").Trim(),
-                CountryId = (int)reader["CountryID"]
-
+                CountryId = (int)reader["CountryID"],
+                Name = reader["Name"] as string
             };
 
             return codeGroup;

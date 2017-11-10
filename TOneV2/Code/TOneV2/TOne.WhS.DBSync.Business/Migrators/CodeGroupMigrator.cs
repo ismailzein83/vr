@@ -48,9 +48,10 @@ namespace TOne.WhS.DBSync.Business
             if (country != null)
                 return new CodeGroup
                             {
-                                Code = sourceItem.Code,
+                                Code = sourceItem.Code.Trim(),
                                 CountryId = country.CountryId,
-                                SourceId = sourceItem.SourceId
+                                SourceId = sourceItem.SourceId,
+                                Name = sourceItem.Name
                             };
             else
             {

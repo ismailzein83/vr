@@ -59,7 +59,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public bool CheckIfCodeGroupHasRelatedCodes(int codeGroupId)
         {
-       
+
             ICodeGroupDataManager dataManager = BEDataManagerFactory.GetDataManager<ICodeGroupDataManager>();
             return dataManager.CheckIfCodeGroupHasRelatedCodes(codeGroupId);
         }
@@ -89,10 +89,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Code Groups",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Code Group" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country", Width = 50});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country", Width = 50 });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -124,10 +124,10 @@ namespace TOne.WhS.BusinessEntity.Business
         public CodeGroup GetCodeGroup(int codeGroupId, bool isViewedFromUI)
         {
             var codeGroups = GetCachedCodeGroups();
-           CodeGroup codeGroup=codeGroups.GetRecord(codeGroupId);
-           if (codeGroup != null && isViewedFromUI)
-               VRActionLogger.Current.LogObjectViewed(CodeGroupLoggableEntity.Instance, codeGroup);
-           return codeGroup;
+            CodeGroup codeGroup = codeGroups.GetRecord(codeGroupId);
+            if (codeGroup != null && isViewedFromUI)
+                VRActionLogger.Current.LogObjectViewed(CodeGroupLoggableEntity.Instance, codeGroup);
+            return codeGroup;
         }
         public CodeGroup GetCodeGroup(int codeGroupId)
         {
@@ -140,7 +140,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public string GetCode(CodeGroup codeGroup)
         {
-            if(codeGroup==null)
+            if (codeGroup == null)
                 return null;
             return codeGroup.Code;
 
@@ -164,7 +164,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 codeGroup.CodeGroupId = coudeGroupId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(CodeGroupLoggableEntity.Instance, codeGroup);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-               
+
                 insertOperationOutput.InsertedObject = CodeGroupDetailMapper(codeGroup);
             }
             else
@@ -218,13 +218,18 @@ namespace TOne.WhS.BusinessEntity.Business
             headers.Add(worksheet.Cells[0, 1].StringValue);
             headers.Add("Result");
             headers.Add("Error Message");
-            Dictionary<string, string> addedCountriesByCodeGroup = new Dictionary<string, string>();
+            Dictionary<string, CodeGroupByCode> addedCountriesByCodeGroup = new Dictionary<string, CodeGroupByCode>();
             while (count < worksheet.Cells.Rows.Count)
             {
                 string codeGroup = worksheet.Cells[count, 0].StringValue.Trim();
                 string country = worksheet.Cells[count, 1].StringValue.Trim();
+                string name = worksheet.Cells[count, 2].StringValue.Trim();
                 if (!addedCountriesByCodeGroup.ContainsKey(codeGroup))
-                    addedCountriesByCodeGroup.Add(codeGroup, country);
+                    addedCountriesByCodeGroup.Add(codeGroup, new CodeGroupByCode
+                    {
+                        Country = country,
+                        Name = name
+                    });
                 count++;
             }
 
@@ -268,8 +273,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 RateWorkSheet.Cells[rowIndex, colIndex].PutValue(code.Value);
                 colIndex++;
 
-                Country country = countryManager.GetCountry(code.Value.ToLower());
-                CodeGroup codeGroup = null;
+                Country country = countryManager.GetCountry(code.Value.Country.ToLower());
+                CodeGroup codeGroup = country == null ? null : new CodeGroupManager().GetCountryCodeGroups(country.CountryId).FindRecord(c => c.Name == code.Value.Name || c.Code == code.Key);
 
                 if (country == null || String.IsNullOrEmpty(code.Key))
                 {
@@ -299,16 +304,17 @@ namespace TOne.WhS.BusinessEntity.Business
                     rowIndex++;
                 }
 
-                else if (!cachedCodeGroups.TryGetValue(code.Key, out codeGroup))
+                else if (codeGroup == null && !cachedCodeGroups.ContainsKey(code.Key))
                 {
                     importedCodeGroup.Add(new CodeGroup
                     {
                         Code = code.Key,
-                        CountryId = country.CountryId
+                        CountryId = country.CountryId,
+                        Name = code.Value.Name
                     });
                     uploadCodeGroupLog.CountOfCodeGroupsAdded++;
                     RateWorkSheet.Cells[rowIndex, colIndex].PutValue("Succeed");
-                    
+
                 }
                 else
                 {
@@ -447,8 +453,8 @@ namespace TOne.WhS.BusinessEntity.Business
              () =>
              {
                  var cachedCodeGroups = GetCachedCodeGroups();
-                 return new CodeIterator<CodeGroup>(cachedCodeGroups.Values); 
-             });            
+                 return new CodeIterator<CodeGroup>(cachedCodeGroups.Values);
+             });
         }
         #endregion
         private class CodeGroupLoggableEntity : VRLoggableEntityBase
@@ -506,13 +512,18 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private CodeGroupInfo CodeGroupInfoMapper(CodeGroup codeGroup)
         {
-            string countryName = _countryManager.GetCountryName(codeGroup.CountryId);
             return new CodeGroupInfo()
             {
                 CodeGroupId = codeGroup.CodeGroupId,
-                Name = string.Format(@"{0}{1}", countryName != null ? string.Format(@"{0} - ", countryName) : "", codeGroup.Code)
+                Name = string.Format(@"{0}{1}", codeGroup.Name, codeGroup.Code)
             };
         }
         #endregion
+
+        class CodeGroupByCode
+        {
+            public string Name { get; set; }
+            public string Country { get; set; }
+        }
     }
 }

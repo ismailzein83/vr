@@ -79,15 +79,14 @@
                         $scope.msgOfConnotEdit = "Cannot edit Code Group because it has related codes";
                     }
                 })
-               
+
             }
             else {
                 loadAllControls();
             }
 
         }
-        function checkIfCodeGroupHasRelatedCodes()
-        {
+        function checkIfCodeGroupHasRelatedCodes() {
             return WhS_BE_CodeGroupAPIService.CheckIfCodeGroupHasRelatedCodes(codeGroupId).then(function (hideEditorController) {
                 $scope.hideEditorController = hideEditorController;
             }).catch(function (error) {
@@ -140,6 +139,7 @@
                 return;
 
             $scope.code = codeGroupEntity.Code;
+            $scope.name = codeGroupEntity.Name;
         }
 
         function insertCodeGroup() {
@@ -178,7 +178,8 @@
             var obj = {
                 CodeGroupId: (codeGroupId != null) ? codeGroupId : 0,
                 Code: $scope.code,
-                CountryId: countryDirectiveApi.getSelectedIds()
+                CountryId: countryDirectiveApi.getSelectedIds(),
+                Name: $scope.name
             };
             return obj;
         }

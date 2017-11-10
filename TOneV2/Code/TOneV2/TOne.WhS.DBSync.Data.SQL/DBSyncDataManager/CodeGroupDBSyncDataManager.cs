@@ -27,7 +27,8 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("Code", typeof(string));
             dt.Columns.Add("SourceID", typeof(string));
             dt.Columns.Add("CountryID", typeof(int));
-           
+            dt.Columns.Add("Name", typeof(string));
+
             dt.BeginLoadData();
             foreach (var item in codeGroups)
             {
@@ -36,6 +37,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row[index++] = item.Code;
                 row[index++] = item.SourceId;
                 row[index++] = item.CountryId;
+                row[index++] = item.Name;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
@@ -44,7 +46,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, CodeGroup> GetCodeGroups(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID], [CountryID], [Code], [SourceID] FROM"
+            return GetItemsText("SELECT [ID], [CountryID], [Code],[Name], [SourceID] FROM"
                 + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CodeGroupMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
@@ -55,6 +57,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 CodeGroupId = (int)reader["ID"],
                 CountryId = (int)reader["CountryId"],
                 Code = reader["Code"] as string,
+                Name = reader["Name"] as string,
                 SourceId = reader["SourceID"] as string,
             };
 

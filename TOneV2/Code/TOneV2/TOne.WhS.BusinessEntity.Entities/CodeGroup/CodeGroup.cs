@@ -13,7 +13,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Code { get; set; }
 
         public int CountryId { get; set; }
-
+        public string Name { get; set; }
         public string SourceId { get; set; }
     }
 
