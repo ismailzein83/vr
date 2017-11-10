@@ -5,6 +5,7 @@
     [FinancialAccountId]     BIGINT           NULL,
     [ServiceTypeId]          UNIQUEIDENTIFIER NULL,
     [TrafficDirection]       INT              NULL,
+    [CallProgressState]      VARCHAR (100)    NULL,
     [InitiationCallType]     INT              NULL,
     [TerminationCallType]    INT              NULL,
     [InterconnectOperatorId] BIGINT           NULL,
@@ -29,6 +30,8 @@
     [ProfitStatus]           INT              NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

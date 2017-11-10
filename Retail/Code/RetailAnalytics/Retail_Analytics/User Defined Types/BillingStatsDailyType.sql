@@ -5,6 +5,7 @@
     [FinancialAccountId]     BIGINT           NULL,
     [ServiceTypeId]          UNIQUEIDENTIFIER NULL,
     [TrafficDirection]       INT              NULL,
+    [CallProgressState]      VARCHAR (100)    NULL,
     [InitiationCallType]     INT              NULL,
     [TerminationCallType]    INT              NULL,
     [InterconnectOperatorId] BIGINT           NULL,
@@ -27,6 +28,8 @@
     [CostAvailable]          BIT              NULL,
     [TotalProfit]            DECIMAL (26, 10) NULL,
     [ProfitStatus]           INT              NULL);
+
+
 
 
 
