@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
@@ -19,33 +20,30 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             var zoneData = context.Target as DataByZone;
 
-            if (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Count > 0)
+            if ((zoneData.IsCustomerCountryNew.HasValue && zoneData.IsCustomerCountryNew.Value) || (zoneData.OtherRatesToChange == null || zoneData.OtherRatesToChange.Count == 0))
+                return true;
+
+            var ratePlanContext = context.GetExtension<IRatePlanContext>();
+
+            string partialErrorMessage;
+            DateTime newOtherRateMinBED = GetNewOtherRateMinBED(zoneData, ratePlanContext, out partialErrorMessage);
+
+            var invalidRateTypeNames = new List<string>();
+            var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
+
+            foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
             {
-                DateTime minimumBED = GetMinimumOtherRateBED(zoneData);
+                if (otherRateToChange.BED == default(DateTime))
+                    throw new Vanrise.Entities.DataIntegrityValidationException("otherRateToChange.BED");
 
-                var invalidRateTypeNames = new List<string>();
-                var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
+                if (otherRateToChange.BED < newOtherRateMinBED)
+                    invalidRateTypeNames.Add(rateTypeManager.GetRateTypeName(otherRateToChange.RateTypeId.Value));
+            }
 
-                foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
-                {
-                    if (otherRateToChange.BED != default(DateTime) && otherRateToChange.BED >= minimumBED)
-                        continue;
-
-                    string rateTypeName = rateTypeManager.GetRateTypeName(otherRateToChange.RateTypeId.Value);
-
-                    if (rateTypeName == null)
-                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Name of rate type '{0}' was not found", otherRateToChange.RateTypeId.Value));
-
-                    invalidRateTypeNames.Add(rateTypeName);
-                }
-
-                if (invalidRateTypeNames.Count > 0)
-                {
-                    string minimumOtherRateBED = UtilitiesManager.GetDateTimeAsString(minimumBED);
-                    string invalidRateTypes = string.Join(",", invalidRateTypeNames);
-                    context.Message = string.Format("Other rates of type(s) '{0}' of zone '{1}' must have a BED that's greater than or equal to '{2}'", invalidRateTypes, zoneData.ZoneName, minimumOtherRateBED);
-                    return false;
-                }
+            if (invalidRateTypeNames.Count > 0)
+            {
+                context.Message = string.Format("Pricing other rates '{0}' for zone '{1}' must be with date greater than or equal to {2}", string.Join(", ", invalidRateTypeNames), zoneData.ZoneName, partialErrorMessage);
+                return false;
             }
 
             return true;
@@ -56,26 +54,39 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         }
 
         #region Private Methods
-        private DateTime GetMinimumOtherRateBED(DataByZone zoneData)
+        private DateTime GetNewOtherRateMinBED(DataByZone zoneData, IRatePlanContext ratePlanContext, out string partialErrorMessage)
         {
-            var beginEffectiveDates = new List<DateTime>();
+            DateTime newOtherRateMinBED;
 
-            beginEffectiveDates.Add(zoneData.BED);
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
+            {
+                newOtherRateMinBED = zoneData.BED;
 
-            if (zoneData.SoldOn.HasValue)
-                beginEffectiveDates.Add(zoneData.SoldOn.Value);
+                string zoneBEDString = zoneData.BED.ToString(ratePlanContext.DateFormat);
+                partialErrorMessage = string.Format("zone BED '{0}'", zoneBEDString);
+            }
+            else
+            {
+                if (!zoneData.SoldOn.HasValue)
+                    throw new Vanrise.Entities.DataIntegrityValidationException("zoneData.SoldOn");
 
-            ZoneRate currentRate = (zoneData.ZoneRateGroup != null) ? zoneData.ZoneRateGroup.NormalRate : null;
-            RateToChange newRate = zoneData.NormalRateToChange;
+                if (zoneData.BED > zoneData.SoldOn.Value)
+                {
+                    newOtherRateMinBED = zoneData.BED;
 
-            if (currentRate != null && newRate != null)
-                beginEffectiveDates.Add(Utilities.Min(currentRate.BED, newRate.BED));
-            else if (currentRate != null)
-                beginEffectiveDates.Add(currentRate.BED);
-            else if (newRate != null)
-                beginEffectiveDates.Add(newRate.BED);
+                    string zoneBEDString = zoneData.BED.ToString(ratePlanContext.DateFormat);
+                    partialErrorMessage = string.Format("zone BED '{0}'", zoneBEDString);
+                }
+                else
+                {
+                    newOtherRateMinBED = zoneData.SoldOn.Value;
 
-            return beginEffectiveDates.Max();
+                    string soldOnString = zoneData.SoldOn.Value.ToString(ratePlanContext.DateFormat);
+                    partialErrorMessage = string.Format("sell date '{0}'", soldOnString);
+                }
+            }
+
+            return newOtherRateMinBED;
         }
         #endregion
     }
