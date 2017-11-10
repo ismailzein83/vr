@@ -24,7 +24,7 @@ namespace TOne.WhS.Routing.Business
                 if (routingProcessInputArg.RoutingDatabaseType == Entities.RoutingDatabaseType.Current)
                 {
                     PartialRoutingProcessInput startedBPInstancePartialRoutingArg = startedBPInstance.InputArgument as PartialRoutingProcessInput;
-                    if (startedBPInstancePartialRoutingArg != null)
+                    if (startedBPInstancePartialRoutingArg != null && (!context.IntanceToRun.ParentProcessID.HasValue || context.IntanceToRun.ParentProcessID.Value != startedBPInstance.ProcessInstanceID))
                     {
                         context.Reason = "Partial Route Build instance is running";
                         return false;

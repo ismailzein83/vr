@@ -42,7 +42,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
                 if (!shouldTriggerFullRouteProcess)
                     BuildAffectedRoutes(affectedRouteRules.OpenedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
-                
+
                 if (!shouldTriggerFullRouteProcess)
                     BuildAffectedRoutes(affectedRouteRules.ClosedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
             }
@@ -68,7 +68,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 if (maximumExceeded)
                 {
                     this.ShouldTriggerFullRouteProcess.Set(context, true);
-                    context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Warning, "Loading Affected Routes is done. Number of Affected Routes '{0}' exceeds Maximum Number of Routes for Partial Routing '{1}'. Full Route Build will be triggered", affectedCustomerRoutes.Count, partialRoutesNumberLimit);
+                    context.GetSharedInstanceData().WriteTrackingMessage(LogEntryType.Warning, "Number of Affected Routes exceeds Maximum Number of Routes for Partial Routing '{0}'. Full Route Build will be triggered", partialRoutesNumberLimit);
                     return;
                 }
             }
