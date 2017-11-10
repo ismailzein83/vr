@@ -34,7 +34,8 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (invalidCodes.Count > 0)
             {
                 string codeClosureDateString = codeClosureDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("Closing code(s) of country '{0}' with a date less than '{1}'. Violated code(s): ({2}).", codeClosureDateString, string.Join(", ", invalidCodes));
+                string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryNotImportedCodes.CountryId);
+                context.Message = string.Format("Closing code(s) of country '{0}' with a date less than '{1}'. Violated code(s): ({2}).", countryName, codeClosureDateString, string.Join(", ", invalidCodes));
                 return false;
             }
 
