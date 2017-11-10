@@ -22,7 +22,14 @@
 
 
 
+
+
 GO
 CREATE CLUSTERED INDEX [IX_Retail_CDR_CDRCost_AttempteDateTime]
     ON [Retail_CDR].[CDRCost]([AttemptDateTime] ASC);
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_CDRCost_ID]
+    ON [Retail_CDR].[CDRCost]([ID] ASC);
 
