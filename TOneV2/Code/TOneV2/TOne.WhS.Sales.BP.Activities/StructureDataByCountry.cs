@@ -48,6 +48,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     CountryId = x.CountryId,
                     CountryBED = x.BED,
                     CountryEED = x.EED,
+                    IsCountryNew = false,
                     ZoneDataByZoneId = zoneDataByCountryId.GetRecord(x.CountryId)
                 }));
             }
@@ -59,6 +60,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     CountryId = x.CountryId,
                     CountryBED = x.BED,
                     CountryEED = x.EED,
+                    IsCountryNew = true,
                     ZoneDataByZoneId = zoneDataByCountryId.GetRecord(x.CountryId)
                 }));
             }

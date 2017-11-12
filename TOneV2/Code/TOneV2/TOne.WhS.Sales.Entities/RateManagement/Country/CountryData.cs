@@ -11,6 +11,7 @@ namespace TOne.WhS.Sales.Entities
         public int CountryId { get; set; }
         public DateTime CountryBED { get; set; }
         public DateTime? CountryEED { get; set; }
+        public bool IsCountryNew { get; set; }
         public Dictionary<long, DataByZone> ZoneDataByZoneId { get; set; }
 
         #region IRuleTarget

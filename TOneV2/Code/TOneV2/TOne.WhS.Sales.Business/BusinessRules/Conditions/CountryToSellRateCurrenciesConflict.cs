@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
-using Vanrise.Common;
-using Vanrise.Common.Business;
-using Vanrise.Entities;
 
-namespace TOne.WhS.Sales.Business.BusinessRules
+namespace TOne.WhS.Sales.Business
 {
-    public class ConflictingRateCurrenciesCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
+    public class CountryToSellRateCurrenciesConflict : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
@@ -23,7 +19,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             var ratePlanContext = context.GetExtension<IRatePlanContext>();
             var countryData = context.Target as CountryData;
 
-            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct || countryData.IsCountryNew)
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct || !countryData.IsCountryNew)
                 return true;
 
             string errorMessage;
