@@ -119,14 +119,10 @@
     <Compile Include="BusinessRules\Conditions\CustomerZoneRateHasInvalidEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\DraftNewRateIsClosed.cs" />
     <Compile Include="BusinessRules\Conditions\NewRateIsGreaterThanMaximumRateCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\SellingProductNormalRateDoesNotExistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateBEDLessThanValidBEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\NormalRateEEDGreaterThanZoneEED.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\RateIsLessThanOrEqualToZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductZoneRateIsEndedCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ServiceBEDLessThanValidBEDCondition.cs" />
-    <Compile Include="BusinessRules\Conditions\ServiceEEDGreaterThanZoneEED.cs" />
     <Compile Include="BusinessRules\Conditions\SPDefaultRPDoesNotExistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneCountryIsEndedAndZoneIsChangedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneIsPendingClosedAndChangedCondition.cs" />
