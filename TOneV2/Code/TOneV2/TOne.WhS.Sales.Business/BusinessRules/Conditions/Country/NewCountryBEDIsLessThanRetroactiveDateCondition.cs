@@ -37,7 +37,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (invalidCountryNames.Count > 0)
             {
                 string retroactiveDateString = ratePlanContext.RetroactiveDate.ToString(ratePlanContext.DateFormat);
-                context.Message = string.Format("BEDs of the following countries must be greater than or equal to the retroactive date '{0}': {1}", retroactiveDateString, string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("Sell dates of the following country(ies) must be greater than or equal to the retroactive date '{0}': {1}", retroactiveDateString, string.Join(", ", invalidCountryNames));
                 return false;
             }
 

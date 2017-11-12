@@ -62,7 +62,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
                 string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryData.CountryId);
                 string countryBEDString = countryData.CountryBED.ToString(ratePlanContext.DateFormat);
-                messageBuilder.AppendFormat("Rate BEDs of country to sell '{0}' must be equal to its BED '{1}'", countryName, countryBEDString);
+                messageBuilder.AppendFormat("Pricing zones of country '{0}' must be at the selling date '{1}'", countryName, countryBEDString);
 
                 if (invalidFutureZoneNamesByZoneBED.Count > 0)
                 {
@@ -70,7 +70,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     {
                         string zoneBEDString = kvp.Key.ToString(ratePlanContext.DateFormat);
                         string invalidFutureZoneNamesString = string.Join(", ", kvp.Value);
-                        messageBuilder.AppendFormat(". Rate BEDs of the following zones must be equal to the their BED '{0}': {1}", zoneBEDString, invalidFutureZoneNamesString);
+                        messageBuilder.AppendFormat(". Pricing pending zones must be at zones' BED '{0}'. Violated zone(s): {1}", zoneBEDString, invalidFutureZoneNamesString);
                     }
                 }
 

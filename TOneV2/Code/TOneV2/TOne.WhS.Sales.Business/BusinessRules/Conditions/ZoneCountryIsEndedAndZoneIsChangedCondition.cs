@@ -39,7 +39,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("Cannot modify the zones of the following ended countries: {0}", string.Join(",", invalidCountryNames));
+                context.Message = string.Format("Can not apply any changes on the following closed country(ies) : {0}", string.Join(",", invalidCountryNames));
                 return false;
             }
 

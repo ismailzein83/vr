@@ -43,7 +43,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("The following countries cannot be sold on their specified BEDs because they have at least one pending ended zone: {0}", string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("Can not sell country(ies) having pending closed zones. Violated country(ies): {0}", string.Join(", ", invalidCountryNames));
                 return false;
             }
 

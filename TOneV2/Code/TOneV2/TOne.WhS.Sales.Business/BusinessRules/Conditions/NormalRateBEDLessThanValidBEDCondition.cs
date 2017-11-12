@@ -34,7 +34,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 if (normalRateBED < zoneData.BED)
                 {
                     string zoneBEDString = zoneData.BED.ToString(ratePlanContext.DateFormat);
-                    context.Message = string.Format("Pricing zone '{0}' must be with date greater than or equal to '{1}'", zoneData.ZoneName, zoneBEDString);
+                    context.Message = string.Format("Pricing zone '{0}' must be with date greater than or equal to zone BED '{1}'", zoneData.ZoneName, zoneBEDString);
                     return false;
                 }
             }

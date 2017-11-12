@@ -53,7 +53,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("The following countries have zones with rates whose BED is less than today: {0}", string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("Changing rates before today is only allowed for the first offer. Violated country(ies): {0}", string.Join(", ", invalidCountryNames));
                 return false;
             }
 

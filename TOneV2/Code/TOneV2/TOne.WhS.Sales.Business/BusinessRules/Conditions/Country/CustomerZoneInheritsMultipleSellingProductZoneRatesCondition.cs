@@ -60,7 +60,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             {
                 var countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryToAdd.CountryId);
                 string validCountryBEDString = validCountryBED.Value.ToString(ratePlanContext.DateFormat);
-                context.Message = string.Format("BED of country '{0}' must be greater than or equal to the BED of the last inherited rate '{1}'", countryName, validCountryBEDString);
+                context.Message = string.Format("Sell date of country '{0}' must be greater than or equal to the BED of the last inherited rate '{1}'", countryName, validCountryBEDString);
                 return false;
             }
 
