@@ -151,35 +151,20 @@ namespace Retail.Cost.Business
                 if (cdrCostList == null || cdrCostList.Count == 0)
                     continue;
 
-                Dictionary<UniqueCDRCostKeys, List<CDRCost>> uniqueCDRCostKeysDict = BuildUniqueCDRCostKeysDict(cdrCostList);
+                Dictionary<string, CDRCostData> cdrCostDataByCDPN = this.BuildCDRCostDataByCDPN(cdrCostList);
                 foreach (CDRCostRequest cdrCostRequest in cdrCostBatchRequest.CDRCostRequests)
                 {
-                    List<CDRCost> tempCDRCostList;
-                    if (!uniqueCDRCostKeysDict.TryGetValue(new UniqueCDRCostKeys() { CGPN = cdrCostRequest.CGPN, CDPN = cdrCostRequest.CDPN }, out tempCDRCostList))
+                    CDRCostData tempCDRCostData;
+                    if (!cdrCostDataByCDPN.TryGetValue(cdrCostRequest.CDPN, out tempCDRCostData))
                         continue;
 
-                    CDRCost matchingCDRCost = null;
-                    int minAttemptDateTimeDiffInMilliseconds = int.MaxValue;
+                    List<CDRCost> cdrCostsByCGPN = null;
+                    if (!string.IsNullOrEmpty(cdrCostRequest.CGPN))
+                        tempCDRCostData.CDRCostsByCGPN.TryGetValue(cdrCostRequest.CGPN, out cdrCostsByCGPN);
 
-                    foreach (var cdrCostItem in tempCDRCostList)
-                    {
-                        if (!IsCDRCostMatch(cdrCostItem, cdrCostRequest, durationMarginInSeconds, attemptDateTimeMargin))
-                            continue;
-
-                        TimeSpan attemptDateTimeDiff = cdrCostItem.AttemptDateTime.Value - cdrCostRequest.AttemptDateTime;
-                        int attemptDateTimeDiffInMilliseconds = (int)Math.Abs(attemptDateTimeDiff.TotalMilliseconds);
-
-                        if (matchingCDRCost != null && attemptDateTimeDiffInMilliseconds > minAttemptDateTimeDiffInMilliseconds)
-                            continue;
-
-                        if (matchingCDRCost != null && (attemptDateTimeDiffInMilliseconds == minAttemptDateTimeDiffInMilliseconds && cdrCostItem.CDRCostId < matchingCDRCost.CDRCostId))
-                            continue;
-
-                        //matchingCDRCost == null or attemptDateTimeDiffInMilliseconds < minAttemptDateTimeDiffInMilliseconds or 
-                        //(attemptDateTimeDiffInMilliseconds == minAttemptDateTimeDiffInMilliseconds and cdrCostItem.CDRCostId > matchingCDRCost.CDRCostId)
-                        matchingCDRCost = cdrCostItem;
-                        minAttemptDateTimeDiffInMilliseconds = attemptDateTimeDiffInMilliseconds;
-                    }
+                    CDRCost matchingCDRCost = this.GetMatchingCDRCost(cdrCostsByCGPN, cdrCostRequest, durationMarginInSeconds, attemptDateTimeMargin, null);
+                    if (matchingCDRCost == null)
+                        matchingCDRCost = this.GetMatchingCDRCost(tempCDRCostData.CDRCosts, cdrCostRequest, durationMarginInSeconds, attemptDateTimeMargin, cdrCostRequest.CGPN);
 
                     if (matchingCDRCost != null) //matching cost is found
                     {
@@ -233,18 +218,60 @@ namespace Retail.Cost.Business
             return cdrCostBatchRequests;
         }
 
-        private Dictionary<UniqueCDRCostKeys, List<CDRCost>> BuildUniqueCDRCostKeysDict(List<CDRCost> cdrCostList)
+        private Dictionary<string, CDRCostData> BuildCDRCostDataByCDPN(List<CDRCost> cdrCostList)
         {
-            Dictionary<UniqueCDRCostKeys, List<CDRCost>> uniqueCDRCostKeysDict = new Dictionary<UniqueCDRCostKeys, List<CDRCost>>();
+            if (cdrCostList == null || cdrCostList.Count == 0)
+                return null;
+
+            Dictionary<string, CDRCostData> results = new Dictionary<string, CDRCostData>();
 
             foreach (var cdrCost in cdrCostList)
             {
-                UniqueCDRCostKeys uniqueCDRCostKey = new UniqueCDRCostKeys() { CDPN = cdrCost.CDPN, CGPN = cdrCost.CGPN };
-                List<CDRCost> cdrCosts = uniqueCDRCostKeysDict.GetOrCreateItem(uniqueCDRCostKey);
-                cdrCosts.Add(cdrCost);
+                CDRCostData cdrCostData = results.GetOrCreateItem(cdrCost.CDPN);
+                cdrCostData.CDRCosts.Add(cdrCost);
+
+                if (!string.IsNullOrEmpty(cdrCost.CGPN))
+                {
+                    List<CDRCost> cdrCosts = cdrCostData.CDRCostsByCGPN.GetOrCreateItem(cdrCost.CGPN);
+                    cdrCosts.Add(cdrCost);
+                }
             }
 
-            return uniqueCDRCostKeysDict;
+            return results;
+        }
+
+        private CDRCost GetMatchingCDRCost(List<CDRCost> cdrCosts, CDRCostRequest cdrCostRequest, decimal durationMarginInSeconds, TimeSpan attemptDateTimeMargin, string excludedCGPN)
+        {
+            if (cdrCosts == null)
+                return null;
+
+            CDRCost matchingCDRCost = null;
+            int minAttemptDateTimeDiffInMilliseconds = int.MaxValue;
+
+            foreach (var cdrCostItem in cdrCosts)
+            {
+                if (!string.IsNullOrEmpty(excludedCGPN) && !string.IsNullOrEmpty(cdrCostItem.CGPN) && excludedCGPN == cdrCostItem.CGPN)
+                    continue;
+
+                if (!IsCDRCostMatch(cdrCostItem, cdrCostRequest, durationMarginInSeconds, attemptDateTimeMargin))
+                    continue;
+
+                TimeSpan attemptDateTimeDiff = cdrCostItem.AttemptDateTime.Value - cdrCostRequest.AttemptDateTime;
+                int attemptDateTimeDiffInMilliseconds = (int)Math.Abs(attemptDateTimeDiff.TotalMilliseconds);
+
+                if (matchingCDRCost != null && attemptDateTimeDiffInMilliseconds > minAttemptDateTimeDiffInMilliseconds)
+                    continue;
+
+                if (matchingCDRCost != null && (attemptDateTimeDiffInMilliseconds == minAttemptDateTimeDiffInMilliseconds && cdrCostItem.CDRCostId < matchingCDRCost.CDRCostId))
+                    continue;
+
+                //matchingCDRCost == null or attemptDateTimeDiffInMilliseconds < minAttemptDateTimeDiffInMilliseconds or 
+                //(attemptDateTimeDiffInMilliseconds == minAttemptDateTimeDiffInMilliseconds and cdrCostItem.CDRCostId > matchingCDRCost.CDRCostId)
+                matchingCDRCost = cdrCostItem;
+                minAttemptDateTimeDiffInMilliseconds = attemptDateTimeDiffInMilliseconds;
+            }
+
+            return matchingCDRCost;
         }
 
         private bool IsCDRCostMatch(CDRCost cdrCost, CDRCostRequest cdrCostRequest, decimal durationMarginInSeconds, TimeSpan attemptDateTimeMargin)
@@ -322,11 +349,17 @@ namespace Retail.Cost.Business
 
         #region Private Classes
 
-        private struct UniqueCDRCostKeys
+        private class CDRCostData
         {
-            public string CGPN { get; set; }
+            public CDRCostData()
+            {
+                CDRCosts = new List<CDRCost>();
+                CDRCostsByCGPN = new Dictionary<string, List<CDRCost>>();
+            }
 
-            public string CDPN { get; set; }
+            public List<CDRCost> CDRCosts { get; set; }
+
+            public Dictionary<string, List<CDRCost>> CDRCostsByCGPN { get; set; }
         }
 
         #endregion
