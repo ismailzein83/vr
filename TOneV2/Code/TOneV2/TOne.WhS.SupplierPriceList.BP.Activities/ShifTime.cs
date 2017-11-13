@@ -47,7 +47,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 if (importedCode.BED == DateTime.MinValue)
                 {
-                    throw new Vanrise.Entities.VRBusinessException(string.Format("The BED of imported code mapped to invalid column"));
+                    throw new Vanrise.Entities.VRBusinessException(string.Format("BED of imported code '{0}' is mapped to an invalid column", importedCode.Code));
                 }
                 importedCode.BED = ShiftDateTime(importedCode.BED, supplierTimeZone.Settings.Offset).Value;
                 importedCode.EED = ShiftDateTime(importedCode.EED, supplierTimeZone.Settings.Offset);
@@ -56,7 +56,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 if (importedRate.BED == DateTime.MinValue)
                 {
-                    throw new Vanrise.Entities.VRBusinessException(string.Format("The BED of imported rate mapped to invalid column"));
+                    throw new Vanrise.Entities.VRBusinessException(string.Format("BED of imported rate for zone '{0}' mapped to an invalid column", importedRate.ZoneName));
                 }
                 importedRate.BED = ShiftDateTime(importedRate.BED, supplierTimeZone.Settings.Offset).Value;
                 importedRate.EED = ShiftDateTime(importedRate.EED, supplierTimeZone.Settings.Offset);
@@ -65,7 +65,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 if (importedZoneService.BED == DateTime.MinValue)
                 {
-                    throw new Vanrise.Entities.VRBusinessException(string.Format("The BED of imported service mapped to invalid column"));
+                    throw new Vanrise.Entities.VRBusinessException(string.Format("BED of imported service for zone '{0}' mapped to an invalid column", importedZoneService.ZoneName));
                 }
                 importedZoneService.BED = ShiftDateTime(importedZoneService.BED, supplierTimeZone.Settings.Offset).Value;
                 importedZoneService.EED = ShiftDateTime(importedZoneService.EED, supplierTimeZone.Settings.Offset);

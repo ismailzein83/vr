@@ -1742,7 +1742,7 @@
                   <If.Then>
                     <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
                       <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_7" Message="Syncing with existing entities..." />
-                      <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_9" Message="Backup Started">
+                      <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_9" Message="Backup started">
                         <vbw:WriteTrackingMessage.Severity>
                           <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
                             <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
@@ -1771,7 +1771,7 @@
                           </InArgument>
                         </twsba1:BackupData.UserId>
                       </twsba1:BackupData>
-                      <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_10" Message="Backup Ended">
+                      <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_10" Message="Backup ended">
                         <vbw:WriteTrackingMessage.Severity>
                           <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
                             <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>

@@ -1443,7 +1443,7 @@
               </InArgument>
             </twcba1:SavePricelistFiles.ZoneChanges>
           </twcba1:SavePricelistFiles>
-          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_8" Message="Backup Started">
+          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_8" Message="Backup started">
             <vbw:WriteTrackingMessage.Severity>
               <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
                 <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
@@ -1467,7 +1467,7 @@
               </InArgument>
             </twcba1:BackupData.UserId>
           </twcba1:BackupData>
-          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_9" Message="Backup Ended">
+          <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_9" Message="Backup ended">
             <vbw:WriteTrackingMessage.Severity>
               <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
                 <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>

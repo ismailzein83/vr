@@ -119,7 +119,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                 if (record.Fields.TryGetValue("CodeGroup", out codeGroupField))
                 {
                     if (codeGroupField.FieldValue == null || String.IsNullOrWhiteSpace(codeGroupField.FieldValue.ToString()))
-                        throw new Vanrise.Entities.VRBusinessException(string.Format("A code group is missing"));
+                        throw new Vanrise.Entities.VRBusinessException(string.Format("Missing code group(s) in the sheet"));
 
                     codeGroup = codeGroupField.FieldValue.ToString();
                 };
