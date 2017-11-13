@@ -78,6 +78,10 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 case "longDateTime": format = 'DD/MM/YYYY HH:mm:ss';
                     $scope.ctrl.isDateTime = true;
                     break;
+                case "yearMonth": format = 'MM/YYYY';
+                    $scope.ctrl.isDate = true;
+                    isDate = true;
+                    break;
                 default: format = 'DD/MM/YYYY HH:mm';
                     $scope.ctrl.isDateTime = true;
                     break;
@@ -187,6 +191,11 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     else if ($attrs.type == "dateHour") {
                         var date = new Date(selectedDate.setHours(selectedDate.getHours(), unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
                         //var date = moment.utc(selectedDate).format("L LT");
+                        $scope.ctrl.value = date;
+                    }
+                    else if ($attrs.type == "yearMonth") {
+                        selectedDate.setDate(1);
+                        var date = new Date(selectedDate.setHours(unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
                         $scope.ctrl.value = date;
                     }
                     else if ($attrs.type == "longDateTime") {
@@ -376,7 +385,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             if (attrs.label != undefined)
                 labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
             var icontemplate = "";
-            if (attrs.type == 'date' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime') {
+            if (attrs.type == 'date' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime' || attrs.type == 'yearMonth') {
                 n++;
                 icontemplate += ' <span   class="input-group-addon vr-small-addon vanrise-inpute" ng-click="::ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>';
 
