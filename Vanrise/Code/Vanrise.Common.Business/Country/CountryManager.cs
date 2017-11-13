@@ -236,8 +236,8 @@ namespace Vanrise.Common.Business
             {
                 Content = memoryStream.ToArray(),
                 Name = "CountryLog",
-                CreatedTime = DateTime.Now,
-                Extension = ".xlsx"
+                Extension = ".xlsx",
+                IsTemp = true
             };
             VRFileManager manager = new VRFileManager();
             uploadCountryLog.fileID = manager.AddFile(saveFile);

@@ -37,20 +37,34 @@ namespace Vanrise.Common.Business
                 file.UserId = userId;
             return _datamanager.AddFile(file);
         }
+        
 
-        public bool SetFileUsed(long fileId)
+        public void SetFileUsed(long fileId)
         {
-            return _datamanager.UpdateFileUsed(fileId, true);
+            _datamanager.SetFileUsed(fileId);
         }
 
-        public bool SetFileUnUsed(long fileId)
+        public void SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings)
         {
-            return _datamanager.UpdateFileUsed(fileId, false);
+            _datamanager.SetFileUsedAndUpdateSettings(fileId, fileSettings);
         }
 
         public VRFile GetFile(long fileId)
         {
             return _datamanager.GetFile(fileId);
+        }
+
+        public bool DoesUserHaveViewAccessToFile(VRFileInfo file)
+        {
+            if(file.Settings != null && file.Settings.ExtendedSettings != null)
+            {
+                var context = new VRFileDoesUserHaveViewAccessContext { UserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId() };
+                return file.Settings.ExtendedSettings.DoesUserHaveViewAccess(context);
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public VRFileInfo GetFileInfo(long fileId)
@@ -67,6 +81,20 @@ namespace Vanrise.Common.Business
             input.Query.UserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             return DataRetrievalManager.Instance.ProcessResult(input, _datamanager.GetFilteredRecentFiles(input));
         }
+
+        #endregion
+
+        #region Private Classes
+
+        private class VRFileDoesUserHaveViewAccessContext : IVRFileDoesUserHaveViewAccessContext
+        {
+            public int UserId
+            {
+                get;
+                set;
+            }
+        }
+
 
         #endregion
     }

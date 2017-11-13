@@ -227,8 +227,8 @@ namespace Vanrise.NumberingPlan.Business
             {
                 Content = memoryStream.ToArray(),
                 Name = "CodeGroupLog",
-                CreatedTime = DateTime.Now,
-                Extension = ".xlsx"
+                Extension = ".xlsx",
+                IsTemp = true
             };
             VRFileManager manager = new VRFileManager();
             uploadCodeGroupLog.fileID = manager.AddFile(saveFile);

@@ -6,19 +6,39 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
+    public class VRFile : VRFileInfo
+    {
+        public byte[] Content { get; set; }
+    }
+
     public class VRFileInfo
     {
         public long FileId { get; set; }
         public string Name { get; set; }
         public string Extension { get; set; }
-        public bool IsUsed { get; set; }
         public string ModuleName { get; set; }
         public int? UserId { get; set; }
+        public bool IsTemp { get; set; }
+        public VRFileSettings Settings { get; set; }
         public DateTime CreatedTime { get; set; }
+    } 
+
+    public class VRFileSettings
+    {
+        public VRFileExtendedSettings ExtendedSettings { get; set; }
     }
 
-    public class VRFile : VRFileInfo
+    public abstract class VRFileExtendedSettings
     {
-        public byte[] Content { get; set; }
+        public abstract Guid ConfigId { get; }
+
+        public abstract bool DoesUserHaveViewAccess(IVRFileDoesUserHaveViewAccessContext context);
     }
+
+    public interface IVRFileDoesUserHaveViewAccessContext
+    {
+        int UserId { get; }
+    }
+
+    
 }

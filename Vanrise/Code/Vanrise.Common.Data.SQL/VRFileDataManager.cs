@@ -35,7 +35,15 @@ namespace Vanrise.Common.Data.SQL
         {
             object fileId;
             long badresult = -1;
-            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.CreatedTime);
+            Guid? configId = null;
+            string settingAsString = null;
+            if(file.Settings != null)
+            {
+                settingAsString = Serializer.Serialize(file.Settings);
+                if (file.Settings.ExtendedSettings != null)
+                    configId = file.Settings.ExtendedSettings.ConfigId;
+            }
+            int id = ExecuteNonQuerySP("[common].[sp_File2_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime));
             return (id > 0) ? (long)fileId : badresult;
         }
 
@@ -55,10 +63,23 @@ namespace Vanrise.Common.Data.SQL
                 fileIdsAsString = string.Join<long>(",", fileIds);
             return GetItemsSP("[common].[sp_File_GetByFileIds]", FileInfoMapper, fileIdsAsString);
         }
-        public bool UpdateFileUsed(long fileId, bool isUsed)
+
+        public void SetFileUsed(long fileId)
         {
-            int recordesEffected = ExecuteNonQuerySP("[common].[sp_File_GetFileById]", fileId, isUsed);
-            return (recordesEffected > 0);
+            ExecuteNonQuerySP("[common].[sp_File_SetUsed]", fileId);
+        }
+
+        public void SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings)
+        {
+            Guid? configId = null;
+            string settingAsString = null;
+            if (fileSettings != null)
+            {
+                settingAsString = Serializer.Serialize(fileSettings);
+                if (fileSettings.ExtendedSettings != null)
+                    configId = fileSettings.ExtendedSettings.ConfigId;
+            }
+            ExecuteNonQuerySP("[common].[sp_File_SetUsedAndUpdateSettings]", fileId, configId, settingAsString);
         }
 
         public Vanrise.Entities.BigResult<VRFileInfo> GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input)
@@ -86,6 +107,9 @@ namespace Vanrise.Common.Data.SQL
                         [IsUsed],
                         [ModuleName],
                         [UserId],
+                        IsTemp, 
+                        ConfigID, 
+                        Settings,
                         [CreatedTime]
                     INTO #TEMPTABLENAME#
                     FROM [common].[File]
@@ -100,31 +124,33 @@ namespace Vanrise.Common.Data.SQL
 
         VRFile FileMapper(IDataReader reader)
         {
-            return new VRFile
+            var file = new VRFile
             {
-                FileId = GetReaderValue<long>(reader, "ID"),
-                Name = reader["Name"] as string,
-                Extension = reader["Extension"] as string,
-                Content = GetReaderValue<byte[]>(reader, "Content"),
-                IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
-                ModuleName = reader["ModuleName"] as string,
-                UserId = reader["UserID"] != DBNull.Value ? (int)reader["UserID"] : default(int?),
-                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                Content = GetReaderValue<byte[]>(reader, "Content")                
             };
+            FillFileInfoFromReader(file, reader);
+            return file;
         }
 
         VRFileInfo FileInfoMapper(IDataReader reader)
         {
-            return new VRFileInfo
-            {
-                FileId = GetReaderValue<long>(reader, "ID"),
-                Name = reader["Name"] as string,
-                Extension = reader["Extension"] as string,
-                IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
-                ModuleName = reader["ModuleName"] as string,
-                UserId = reader["UserID"] != DBNull.Value ? (int)reader["UserID"] : default(int?),
-                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
-            };
+            var fileInfo =new VRFileInfo();
+            FillFileInfoFromReader(fileInfo, reader);
+            return fileInfo;
+        }
+
+        void FillFileInfoFromReader(VRFileInfo fileInfo, IDataReader reader)
+        {
+            fileInfo.FileId = GetReaderValue<long>(reader, "ID");
+            fileInfo.Name = reader["Name"] as string;
+            fileInfo.Extension = reader["Extension"] as string;
+            fileInfo.ModuleName = reader["ModuleName"] as string;
+            fileInfo.UserId = reader["UserID"] != DBNull.Value ? (int)reader["UserID"] : default(int?);
+            fileInfo.CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime");
+            fileInfo.IsTemp = GetReaderValue<bool>(reader, "IsTemp");
+            string settingsAsString = reader["Settings"] as string;
+            if (settingsAsString != null)
+                fileInfo.Settings = Serializer.Deserialize<VRFileSettings>(settingsAsString);
         }
 
         #endregion
@@ -150,5 +176,6 @@ namespace Vanrise.Common.Data.SQL
             }
             return base.GetConnectionString();
         }
+
     }
 }

@@ -10,6 +10,7 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             value: '=',
             hint: '@',
             modulename: '@',
+            tempfile: '@',
             validationfunction: '='
         },
         controller: function ($scope, $element, $attrs, $timeout) {
@@ -64,7 +65,9 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
                     var moduleName = getModuleName();
                     if (moduleName != null) {
                         xhr.setRequestHeader('Module-Name', moduleName);
-                    }
+                    }                   
+                    if (ctrl.tempfile != undefined && (ctrl.tempfile == "true" || ctrl.tempfile == true))
+                        xhr.setRequestHeader('Temp-File', "true");
                 },
                 formData: function (form) { return form },
                 replaceFileInput: true,

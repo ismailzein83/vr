@@ -32,6 +32,7 @@ namespace Vanrise.Common.Web
                 string[] nameastab = postedFile.FileName.Split('.');
 
                 string moduleName = httpRequest.Headers["Module-Name"];
+                bool isTempFile = httpRequest.Headers["Temp-File"] == "true";
 
                 VRFile file = new VRFile()
                 {
@@ -39,7 +40,7 @@ namespace Vanrise.Common.Web
                     Name = postedFile.FileName,
                     Extension = nameastab[nameastab.Length - 1],
                     ModuleName = moduleName,
-                    CreatedTime = DateTime.Now
+                    IsTemp = isTempFile
                 };
 
                 // VRFileManager sets the UserId property via SecurityContext
@@ -65,51 +66,68 @@ namespace Vanrise.Common.Web
         [HttpGet]
         public HttpResponseMessage DownloadFile(long fileId, string moduleName = null)
         {
-
             VRFileManager manager = new VRFileManager(moduleName);
             VRFile file = manager.GetFile(fileId);
-            byte[] bytes = file.Content;
-
-            MemoryStream memStreamRate = new System.IO.MemoryStream();
-            memStreamRate.Write(bytes, 0, bytes.Length);
-            memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
-
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-            memStreamRate.Position = 0;
-            response.Content = new StreamContent(memStreamRate);
-
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileName = HttpUtility.UrlPathEncode(file.Name)
-            };
-            return response;
-
-        }
-        [Route("PreviewImage")]
-        [HttpGet]
-        public string PreviewImage(long fileId)
-        {
-
-            VRFileManager manager = new VRFileManager();
-            VRFile file = manager.GetFile(fileId);
-            //  HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            if (file.Extension == "jpg" || file.Extension == "png" || file.Extension == "jpeg" || file.Extension == "bmp" || file.Extension == "gif")
-            {
-                byte[] bytes = file.Content;
-
-                string base64String = "data:image/" + file.Extension + ";base64," + Convert.ToBase64String(bytes);
-                return base64String;
-
-
-            }
-            else
+            if (file == null)
             {
                 return null;
             }
+            else if (!manager.DoesUserHaveViewAccessToFile(file))
+            {
+                return GetUnauthorizedResponse();
+            }
+            else
+            {
+                byte[] bytes = file.Content;
+
+                MemoryStream memStreamRate = new System.IO.MemoryStream();
+                memStreamRate.Write(bytes, 0, bytes.Length);
+                memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
+
+                HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+                memStreamRate.Position = 0;
+                response.Content = new StreamContent(memStreamRate);
+
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = HttpUtility.UrlPathEncode(file.Name)
+                };
+                return response;
+            }
+        }
+
+        [Route("PreviewImage")]
+        [HttpGet]
+        public object PreviewImage(long fileId)
+        {
+            VRFileManager manager = new VRFileManager();
+            VRFile file = manager.GetFile(fileId);
+            //  HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            if (file == null)
+            {
+                return null;
+            }
+            else if (!manager.DoesUserHaveViewAccessToFile(file))
+            {
+                return GetUnauthorizedResponse();
+            }
+            else
+            {
+                if (file.Extension == "jpg" || file.Extension == "png" || file.Extension == "jpeg" || file.Extension == "bmp" || file.Extension == "gif")
+                {
+                    byte[] bytes = file.Content;
+
+                    string base64String = "data:image/" + file.Extension + ";base64," + Convert.ToBase64String(bytes);
+                    return base64String;
 
 
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         [Route("GetFileInfo")]
@@ -117,13 +135,22 @@ namespace Vanrise.Common.Web
         public VRFileInfo GetFileInfo(long fileId, string moduleName = null)
         {
             VRFileManager manager = new VRFileManager(moduleName);
-            return manager.GetFileInfo(fileId);
+            VRFileInfo fileInfo = manager.GetFileInfo(fileId);
+            if (fileInfo == null)
+            {
+                return null;
+            }
+            else
+            {
+                return fileInfo;
+            }
         }
 
         [HttpPost]
         [Route("GetFilteredRecentFiles")]
         public object GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input)
         {
+            //no need for security because it is returning the files of the logged in User
             VRFileManager manager = new VRFileManager(input.Query.ModuleName);
             return GetWebResponse(input, manager.GetFilteredRecentFiles(input));
         }

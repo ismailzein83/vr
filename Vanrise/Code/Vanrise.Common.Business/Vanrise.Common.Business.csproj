@@ -117,6 +117,10 @@
     <Compile Include="VREventHandler\VREventHandlerQuery.cs" />
     <Compile Include="VREventHandler\VREventManager.cs" />
     <Compile Include="VRExclusiveSession\VRExclusiveSessionManager.cs" />
+    <Compile Include="VRLocalization\VRLocalizationLanguageManager.cs" />
+    <Compile Include="VRLocalization\VRLocalizationManager.cs" />
+    <Compile Include="VRLocalization\VRLocalizationTextResourceManager.cs" />
+    <Compile Include="VRLocalization\VRLocalizationTextResourceTranslationManager.cs" />
     <Compile Include="VRMail\VRMailManager.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateManager.cs" />
     <Compile Include="VRMail\VRMailMessageTypeManager.cs" />
