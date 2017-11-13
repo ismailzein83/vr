@@ -278,7 +278,7 @@ namespace TOne.WhS.Sales.Business
 
                 if (context.ExistingZone.EED.HasValue)
                 {
-                    context.ErrorMessage = string.Format("Zone '{0}' will be closed on '{1}'. Cannot define new Rates for pending closed Zones", context.ExistingZone.SaleZoneId, UtilitiesManager.GetDateTimeAsString(context.ExistingZone.EED.Value));
+                    context.ErrorMessage = string.Format("Zone '{0}' will be closed on '{1}'. Cannot define new Rates for pending closed Zones", context.ExistingZone.Name, UtilitiesManager.GetDateTimeAsString(context.ExistingZone.EED.Value));
                     return false;
                 }
 
