@@ -31,7 +31,6 @@ namespace TOne.WhS.RouteSync.TelesIdb
         /// </summary>
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
-
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
             this.DataManager.PrepareTables(context);
@@ -75,9 +74,131 @@ namespace TOne.WhS.RouteSync.TelesIdb
             context.ConvertedRoutes = idbRoutes;
         }
 
+        public override Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
+        {
+            return this.DataManager.PrepareDataForApply(context.ConvertedRoutes);
+        }
 
-        //Private Methods
-        public string BuildOptions(Route route, List<string> invalidRoutes, string supplierOptionsSeparator)
+        public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
+        {
+            SwapTableContext swapTableContext = new SwapTableContext()
+            {
+                WriteTrackingMessage = context.WriteTrackingMessage,
+                SwitchName = context.SwitchName,
+                IndexesCommandTimeoutInSeconds = context.IndexesCommandTimeoutInSeconds,
+                SwitchId = context.SwitchId,
+                PreviousSwitchSyncOutput = context.PreviousSwitchSyncOutput,
+                WriteBusinessHandledException = context.WriteBusinessHandledException
+            };
+            this.DataManager.SwapTables(swapTableContext);
+            context.SwitchSyncOutput = swapTableContext.SwitchSyncOutput;
+        }
+
+        public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
+        {
+            this.DataManager.ApplySwitchRouteSyncRoutes(context);
+        }
+
+        public override bool TryBlockCustomer(ITryBlockCustomerContext context)
+        {
+            CarrierMapping customerMapping;
+            if (!CarrierMappings.TryGetValue(context.CustomerId, out customerMapping))
+                return false;
+
+            if (customerMapping.CustomerMapping == null || customerMapping.CustomerMapping.Count == 0)
+                return false;
+
+            IdbBlockCustomerContext blockCustomerContext = new IdbBlockCustomerContext() { CustomerMappings = customerMapping.CustomerMapping, SwitchName = context.SwitchName };
+
+            if (!this.DataManager.BlockCustomer(blockCustomerContext))
+                throw new Exception(blockCustomerContext.ErrorMessage);
+
+            return true;
+        }
+
+        public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
+        {
+            if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
+                return true;
+
+            HashSet<string> customerMappings = new HashSet<string>();
+            HashSet<string> supplierMappings = new HashSet<string>();
+
+            HashSet<string> duplicateCustomerMappings = new HashSet<string>();
+            HashSet<string> duplicateSupplierMappings = new HashSet<string>();
+            HashSet<int> invalidMappingSupplierIds = new HashSet<int>();
+
+            foreach (var mapping in this.CarrierMappings.Values)
+            {
+                if (mapping.CustomerMapping != null)
+                {
+                    foreach (var customerMapping in mapping.CustomerMapping)
+                    {
+                        if (customerMappings.Contains(customerMapping))
+                        {
+                            duplicateCustomerMappings.Add(customerMapping);
+                            continue;
+                        }
+
+                        customerMappings.Add(customerMapping);
+                    }
+                }
+
+                if (mapping.SupplierMapping != null)
+                {
+                    foreach (var supplierMapping in mapping.SupplierMapping)
+                    {
+                        if (supplierMapping.Length != SupplierMappingLength)
+                        {
+                            invalidMappingSupplierIds.Add(mapping.CarrierId);
+                            continue;
+                        }
+
+                        if (supplierMappings.Contains(supplierMapping))
+                        {
+                            duplicateSupplierMappings.Add(supplierMapping);
+                            continue;
+                        }
+
+                        supplierMappings.Add(supplierMapping);
+                    }
+                }
+            }
+
+            if (duplicateCustomerMappings.Count == 0 && duplicateSupplierMappings.Count == 0 && invalidMappingSupplierIds.Count == 0)
+                return true;
+
+            List<string> validationMessages = new List<string>();
+
+            if (duplicateCustomerMappings.Count > 0)
+                validationMessages.Add(string.Format("Duplicate Customer Mappings: {0}", string.Join(", ", duplicateCustomerMappings)));
+
+            if (duplicateSupplierMappings.Count > 0)
+                validationMessages.Add(string.Format("Duplicate Supplier Mappings: {0}", string.Join(", ", duplicateSupplierMappings)));
+
+            if (invalidMappingSupplierIds.Count > 0)
+            {
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                List<string> invalidMappingSuppliers = new List<string>();
+
+                foreach (var supplierId in invalidMappingSupplierIds)
+                {
+                    //CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(supplierId);
+                    //string sourceIdDesc = carrierAccount != null && !string.IsNullOrEmpty(carrierAccount.SourceId) ? string.Format(" - SourceID: {0}", carrierAccount.SourceId) : string.Empty;
+
+                    invalidMappingSuppliers.Add(string.Format("'{0}'", carrierAccountManager.GetCarrierAccountName(supplierId)));
+                }
+
+                validationMessages.Add(string.Format("Invalid Mappings for Suppliers: {0}", string.Join(", ", invalidMappingSuppliers)));
+            }
+
+            context.ValidationMessages = validationMessages;
+            return false;
+        }
+
+        #region Private Methods
+
+        private string BuildOptions(Route route, List<string> invalidRoutes, string supplierOptionsSeparator)
         {
             if (route.Options == null || route.Options.Count == 0)
                 return "BLK";
@@ -238,128 +359,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
             return percentageAsString.Length == 1 ? percentageAsString.Insert(0, "0") : percentageAsString;
         }
 
-
-        public override Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
-        {
-            return this.DataManager.PrepareDataForApply(context.ConvertedRoutes);
-        }
-
-        public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
-        {
-            SwapTableContext swapTableContext = new SwapTableContext()
-            {
-                WriteTrackingMessage = context.WriteTrackingMessage,
-                SwitchName = context.SwitchName,
-                IndexesCommandTimeoutInSeconds = context.IndexesCommandTimeoutInSeconds,
-                SwitchId = context.SwitchId,
-                PreviousSwitchSyncOutput = context.PreviousSwitchSyncOutput,
-                WriteBusinessHandledException = context.WriteBusinessHandledException
-            };
-            this.DataManager.SwapTables(swapTableContext);
-            context.SwitchSyncOutput = swapTableContext.SwitchSyncOutput;
-        }
-
-        public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
-        {
-            this.DataManager.ApplySwitchRouteSyncRoutes(context);
-        }
-
-        public override bool TryBlockCustomer(ITryBlockCustomerContext context)
-        {
-            CarrierMapping customerMapping;
-            if (!CarrierMappings.TryGetValue(context.CustomerId, out customerMapping))
-                return false;
-
-            if (customerMapping.CustomerMapping == null || customerMapping.CustomerMapping.Count == 0)
-                return false;
-
-            IdbBlockCustomerContext blockCustomerContext = new IdbBlockCustomerContext() { CustomerMappings = customerMapping.CustomerMapping, SwitchName = context.SwitchName };
-
-            if (!this.DataManager.BlockCustomer(blockCustomerContext))
-                throw new Exception(blockCustomerContext.ErrorMessage);
-
-            return true;
-        }
-
-        public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
-        {
-            if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
-                return true;
-
-            HashSet<string> customerMappings = new HashSet<string>();
-            HashSet<string> supplierMappings = new HashSet<string>();
-
-            HashSet<string> duplicateCustomerMappings = new HashSet<string>();
-            HashSet<string> duplicateSupplierMappings = new HashSet<string>();
-            HashSet<int> invalidMappingSupplierIds = new HashSet<int>();
-
-            foreach (var mapping in this.CarrierMappings.Values)
-            {
-                if (mapping.CustomerMapping != null)
-                {
-                    foreach (var customerMapping in mapping.CustomerMapping)
-                    {
-                        if (customerMappings.Contains(customerMapping))
-                        {
-                            duplicateCustomerMappings.Add(customerMapping);
-                            continue;
-                        }
-
-                        customerMappings.Add(customerMapping);
-                    }
-                }
-
-                if (mapping.SupplierMapping != null)
-                {
-                    foreach (var supplierMapping in mapping.SupplierMapping)
-                    {
-                        if (supplierMapping.Length != SupplierMappingLength)
-                        {
-                            invalidMappingSupplierIds.Add(mapping.CarrierId);
-                            continue;
-                        }
-
-                        if (supplierMappings.Contains(supplierMapping))
-                        {
-                            duplicateSupplierMappings.Add(supplierMapping);
-                            continue;
-                        }
-
-                        supplierMappings.Add(supplierMapping);
-                    }
-                }
-            }
-
-            if (duplicateCustomerMappings.Count == 0 && duplicateSupplierMappings.Count == 0 && invalidMappingSupplierIds.Count == 0)
-                return true;
-
-            List<string> validationMessages = new List<string>();
-
-            if (duplicateCustomerMappings.Count > 0)
-                validationMessages.Add(string.Format("Duplicate Customer Mappings: {0}", string.Join(", ", duplicateCustomerMappings)));
-
-            if (duplicateSupplierMappings.Count > 0)
-                validationMessages.Add(string.Format("Duplicate Supplier Mappings: {0}", string.Join(", ", duplicateSupplierMappings)));
-
-            if (invalidMappingSupplierIds.Count > 0)
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                List<string> invalidMappingSuppliers = new List<string>();
-
-                foreach (var supplierId in invalidMappingSupplierIds)
-                {
-                    //CarrierAccount carrierAccount = carrierAccountManager.GetCarrierAccount(supplierId);
-                    //string sourceIdDesc = carrierAccount != null && !string.IsNullOrEmpty(carrierAccount.SourceId) ? string.Format(" - SourceID: {0}", carrierAccount.SourceId) : string.Empty;
-
-                    invalidMappingSuppliers.Add(string.Format("'{0}'", carrierAccountManager.GetCarrierAccountName(supplierId)));
-                }
-
-                validationMessages.Add(string.Format("Invalid Mappings for Suppliers: {0}", string.Join(", ", invalidMappingSuppliers)));
-            }
-
-            context.ValidationMessages = validationMessages;
-            return false;
-        }
+        #endregion
     }
 
     public class CarrierMapping

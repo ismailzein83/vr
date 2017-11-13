@@ -178,7 +178,7 @@ namespace TOne.WhS.Runtime.Tasks
             telesIdbSWSync.SupplierOptionsSeparator = "|";
             telesIdbSWSync.CarrierMappings = carrierMappings;
 
-            string optionsAsString = telesIdbSWSync.BuildOptions(route, null, telesIdbSWSync.SupplierOptionsSeparator);
+            //string optionsAsString = telesIdbSWSync.BuildOptions(route, null, telesIdbSWSync.SupplierOptionsSeparator);
         }
     }
 
