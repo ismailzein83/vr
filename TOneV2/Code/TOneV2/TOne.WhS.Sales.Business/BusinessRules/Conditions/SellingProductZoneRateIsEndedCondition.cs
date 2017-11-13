@@ -20,7 +20,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
-            if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer || (ratePlanContext.IsFirstSellingProductOffer.HasValue && ratePlanContext.IsFirstSellingProductOffer.Value))
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer)
                 return true;
 
             var zoneData = context.Target as DataByZone;
@@ -34,7 +34,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if ((zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.EED.HasValue) || (zoneData.OtherRatesToChange != null && zoneData.OtherRatesToChange.Any(x => x.EED.HasValue)))
             {
                 string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(zoneData.CountryId);
-                context.Message = string.Format("Can not define a new rate with EED for country '{0}'. Violated zone(s): {1}", countryName, zoneData);
+                context.Message = string.Format("Can not define a new rate with EED for country '{0}'. Violated zone(s): {1}", countryName, zoneData.ZoneName);
                 return false;
             }
 
