@@ -227,10 +227,8 @@ namespace Vanrise.ExcelConversion.Business
                 {
                     if (convertedExcelList.Records != null)
                     {
-                        var counter = 0;
                         foreach (var record in convertedExcelList.Records)
                         {
-                            counter++;
                             ConvertedExcelField excelField;
                             if (record.Fields.TryGetValue("Condition", out excelField))
                             {
@@ -239,7 +237,7 @@ namespace Vanrise.ExcelConversion.Business
                                 else
                                     conditions.Add(excelField.FieldValue.ToString());
                             };
-                            if (counter == 20)
+                            if (conditions.Count == 20)
                                 break;
                         }
                     }
