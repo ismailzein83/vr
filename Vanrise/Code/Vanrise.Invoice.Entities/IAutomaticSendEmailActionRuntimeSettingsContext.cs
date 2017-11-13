@@ -9,7 +9,7 @@ namespace Vanrise.Invoice.Entities
     public interface IAutomaticActionRuntimeSettingsContext
     {
         Invoice Invoice { get;  }
-        Guid AutomaticInvoiceActionId { get;  }
-         string ErrorMessage { set; }
+        AutomaticInvoiceActionSettings DefinitionSettings { get;  }
+       string ErrorMessage { set; }
     }
 }

@@ -7,7 +7,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
-    public class AutomaticInvoiceSettingsConfig : ExtensionConfiguration
+    public class InvoiceBulkActionSettingsConfig : ExtensionConfiguration
     {
         public const string EXTENSION_TYPE = "VR_Invoice_InvoiceType_AutomaticInvoiceSettingsConfig";
         public string Editor { get; set; }

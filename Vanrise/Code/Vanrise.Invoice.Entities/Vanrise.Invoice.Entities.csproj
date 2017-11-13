@@ -62,6 +62,9 @@
     <Compile Include="GeneratedInvoice\GeneratedInvoiceItemSet.cs" />
     <Compile Include="IAutomaticSendEmailActionRuntimeSettingsContext.cs" />
     <Compile Include="IInvoicePartnerFilter.cs" />
+    <Compile Include="InvoiceBulkActionDefinitionEntity.cs" />
+    <Compile Include="InvoiceBulkActionDraftInput.cs" />
+    <Compile Include="InvoiceBulkActionRuntime.cs" />
     <Compile Include="InvoiceByPartnerInvoiceType.cs" />
     <Compile Include="InvoiceGeneratorException.cs" />
     <Compile Include="InvoiceItem\ConvertItemGroupingToGridColumnAttributeInput.cs" />

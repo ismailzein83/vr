@@ -23,6 +23,8 @@ namespace Vanrise.Invoice.Entities
         public List<ItemGrouping> ItemGroupings { get; set; }
         public InvoiceTypeSecurity Security { get; set; }
         public List<AutomaticInvoiceAction> AutomaticInvoiceActions { get; set; }
+        public List<InvoiceBulkAction> InvoiceBulkActions { get; set; }
+
         public List<InvoiceSettingPartUISection> InvoiceSettingPartUISections { get; set; }
         public List<InvoiceAttachment> InvoiceAttachments { get; set; }
 
@@ -33,9 +35,16 @@ namespace Vanrise.Invoice.Entities
         public List<string> StagesToHoldNames { get; set; }
         public List<string> StagesToProcessNames { get; set; }
         public List<ItemSetNameStorageRule> ItemSetNamesStorageRules { get; set; }
+        public List<InvoiceMenualBulkAction> InvoiceMenualBulkActions { get; set; }
+
     }
-
-
+    public class InvoiceMenualBulkAction
+    {
+        public Guid InvoiceMenualBulkActionId { get; set; }
+        public string Title { get; set; }
+        public Guid InvoiceBulkActionId { get; set; }
+    }
+   
     public class InvoiceFileSettings
     {
         public List<InvoiceFileNamePart> InvoiceFileNameParts { get; set; }
@@ -117,6 +126,12 @@ namespace Vanrise.Invoice.Entities
     public interface IAutomaticInvoiceActionSettingsContext
     {
 
+    }
+    public class InvoiceBulkAction
+    {
+        public Guid InvoiceBulkActionId { get; set; }
+        public string Title { get; set; }
+        public AutomaticInvoiceActionSettings Settings { get; set; }
     }
     public class ItemGrouping
     {
