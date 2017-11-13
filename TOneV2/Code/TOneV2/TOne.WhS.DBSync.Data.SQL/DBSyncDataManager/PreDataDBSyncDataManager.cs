@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 
@@ -26,17 +27,21 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         VRFile VRFileMapper(IDataReader reader)
         {
-            return new VRFile
+            var file = new VRFile
             {
-                FileId = GetReaderValue<long>(reader, "ID"),
-                Name = reader["Name"] as string,
-                Extension = reader["Extension"] as string,
-                Content = GetReaderValue<byte[]>(reader, "Content"),
-                IsUsed = GetReaderValue<bool>(reader, "IsUsed"),
-                ModuleName = reader["ModuleName"] as string,
-                UserId = reader["UserID"] != DBNull.Value ? (int)reader["UserID"] : default(int?),
-                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                Content = GetReaderValue<byte[]>(reader, "Content")
             };
+            file.FileId = GetReaderValue<long>(reader, "ID");
+            file.Name = reader["Name"] as string;
+            file.Extension = reader["Extension"] as string;
+            file.ModuleName = reader["ModuleName"] as string;
+            file.UserId = reader["UserID"] != DBNull.Value ? (int)reader["UserID"] : default(int?);
+            file.CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime");
+            file.IsTemp = GetReaderValue<bool>(reader, "IsTemp");
+            string settingsAsString = reader["Settings"] as string;
+            if (settingsAsString != null)
+                file.Settings = Serializer.Deserialize<VRFileSettings>(settingsAsString);
+            return file;
         }
 
         public string GetConnection()

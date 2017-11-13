@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Entities;
+using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
 
@@ -31,7 +32,15 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             object fileId;
             long badresult = -1;
-            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.CreatedTime);
+            Guid? configId = null;
+            string settingAsString = null;
+            if (file.Settings != null)
+            {
+                settingAsString = Serializer.Serialize(file.Settings);
+                if (file.Settings.ExtendedSettings != null)
+                    configId = file.Settings.ExtendedSettings.ConfigId;
+            }
+            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime));
             return (id > 0) ? (long)fileId : badresult;
         }
 
@@ -39,7 +48,15 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             object fileId;
             long badresult = -1;
-            int id = ExecuteNonQuerySP("[common].[sp_File_Insert_Temp]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.CreatedTime);
+            Guid? configId = null;
+            string settingAsString = null;
+            if (file.Settings != null)
+            {
+                settingAsString = Serializer.Serialize(file.Settings);
+                if (file.Settings.ExtendedSettings != null)
+                    configId = file.Settings.ExtendedSettings.ConfigId;
+            }
+            int id = ExecuteNonQuerySP("[common].[sp_File_Insert_Temp]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime));
             return (id > 0) ? (long)fileId : badresult;
         }
 
@@ -55,7 +72,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                     cmd.Parameters.Add(new SqlParameter("@Name", file.Name));
                     cmd.Parameters.Add(new SqlParameter("@Extension", file.Extension));
                     cmd.Parameters.Add(new SqlParameter("@Content", file.Content));
-                    cmd.Parameters.Add(new SqlParameter("@IsUsed", file.IsUsed));
 
                     if (string.IsNullOrEmpty(file.ModuleName))
                         cmd.Parameters.Add(new SqlParameter("@ModuleName", DBNull.Value));
@@ -67,15 +83,25 @@ namespace TOne.WhS.DBSync.Data.SQL
                     else
                         cmd.Parameters.Add(new SqlParameter("@UserID", DBNull.Value));
 
-
+                    cmd.Parameters.Add(new SqlParameter("@IsTemp", file.IsTemp));
+                    Guid? configId = null;
+                    string settingAsString = null;
+                    if (file.Settings != null)
+                    {
+                        settingAsString = Serializer.Serialize(file.Settings);
+                        if (file.Settings.ExtendedSettings != null)
+                            configId = file.Settings.ExtendedSettings.ConfigId;
+                    }
+                    cmd.Parameters.Add(new SqlParameter("@ConfigID", configId));
+                    cmd.Parameters.Add(new SqlParameter("@Settings", settingAsString));
                     cmd.Parameters.Add(new SqlParameter("@CreatedTime", file.CreatedTime));
                 });
             }
         }
 
         const string query_InsertFileWithIdentityOff = @"set identity_insert {0} on;
-	Insert into common.[File_Temp] (ID, [Name], [Extension], [Content], [ModuleName],[IsUsed], [UserID], [CreatedTime])
-	values(@ID, @Name, @Extension, @Content, @ModuleName,@IsUsed, @UserID, @CreatedTime)
+	Insert into common.[File_Temp] (ID, [Name], [Extension], [Content], [ModuleName],[UserID], IsTemp, ConfigID, Settings, [CreatedTime])
+	values(@ID, @Name, @Extension, @Content, @ModuleName,@UserID, @IsTemp, @ConfigID, @Settings, @CreatedTime)
 
 
 set identity_insert [common].[file_Temp] off;";

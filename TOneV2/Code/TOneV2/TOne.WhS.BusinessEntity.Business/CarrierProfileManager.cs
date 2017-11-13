@@ -85,9 +85,20 @@ namespace TOne.WhS.BusinessEntity.Business
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
             carrierProfile.Settings.CustomerActivationStatus = CarrierProfileActivationStatus.InActive;
             carrierProfile.Settings.SupplierActivationStatus = CarrierProfileActivationStatus.InActive;
+
+            List<long> fileIds = null;
+            if(carrierProfile.Settings != null && carrierProfile.Settings.Documents != null && carrierProfile.Settings.Documents.Count > 0)
+            {
+                fileIds = carrierProfile.Settings.Documents.Select(itm => itm.FileId).ToList();
+            }
+
+            if (fileIds != null)
+                SetFilesUsed(fileIds, null);
             bool insertActionSucc = dataManager.Insert(carrierProfile, out carrierProfileId);
             if (insertActionSucc)
             {
+                if (fileIds != null)
+                    SetFilesUsed(fileIds, carrierProfileId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 carrierProfile.CarrierProfileId = carrierProfileId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(CarrierProfileLoggableEntity.Instance, carrierProfile);
@@ -99,9 +110,28 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return insertOperationOutput;
         }
+
         public UpdateOperationOutput<CarrierProfileDetail> UpdateCarrierProfile(CarrierProfileToEdit carrierProfileToEdit)
         {
+            CarrierProfile existingCarrierProfile = GetCarrierProfile(carrierProfileToEdit.CarrierProfileId);
+            existingCarrierProfile.ThrowIfNull("existingCarrierProfile", carrierProfileToEdit.CarrierProfileId);
             ValidateCarrierProfileToEdit(carrierProfileToEdit);
+
+            List<long> newFileIds = null;
+            if (carrierProfileToEdit.Settings != null && carrierProfileToEdit.Settings.Documents != null && carrierProfileToEdit.Settings.Documents.Count > 0)
+            {
+                List<long> existingFileIds = null;
+                if (existingCarrierProfile.Settings != null && existingCarrierProfile.Settings.Documents != null && existingCarrierProfile.Settings.Documents.Count > 0)
+                {
+                    existingFileIds = existingCarrierProfile.Settings.Documents.Select(itm => itm.FileId).ToList();
+                }
+                newFileIds = carrierProfileToEdit.Settings.Documents.Where(doc => existingFileIds == null || !existingFileIds.Contains(doc.FileId)).Select(itm => itm.FileId).ToList();                
+                if(newFileIds.Count == 0)
+                    newFileIds = null;
+            }
+
+            if (newFileIds != null)
+                SetFilesUsed(newFileIds, carrierProfileToEdit.CarrierProfileId);
 
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
             carrierProfileToEdit.Settings.CustomerActivationStatus = GetCarrierProfileCustomerActivationStatus(carrierProfileToEdit.CarrierProfileId);
@@ -210,6 +240,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
         }
+        
         #endregion
 
         #region Special Methods
@@ -477,6 +508,19 @@ namespace TOne.WhS.BusinessEntity.Business
             return setting;
         }
 
+        void SetFilesUsed(List<long> fileIds, int? carrierProfileId)
+        {
+            if (fileIds != null && fileIds.Count > 0)
+            {
+                VRFileManager fileManager = new VRFileManager();
+                foreach (var fileId in fileIds)
+                {
+                    var fileSettings = new VRFileSettings { ExtendedSettings = new CarrierProfileFileSettings { CarrierProfileId = carrierProfileId } };
+                    fileManager.SetFileUsedAndUpdateSettings(fileId, fileSettings);
+                }
+            }
+        }
+
         #endregion
 
         #region  Mappers
@@ -609,4 +653,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
     }
+
+    public class CarrierProfileFileSettings : VRFileExtendedSettings
+    {
+        public override Guid ConfigId
+        {
+            get { return new Guid("871CFB3E-8957-44C2-A3F6-454F4465CDC7"); }
+        }
+
+        public int? CarrierProfileId { get; set; }
+
+        Vanrise.Security.Business.SecurityManager s_securityManager = new Vanrise.Security.Business.SecurityManager();
+        public override bool DoesUserHaveViewAccess(Vanrise.Entities.IVRFileDoesUserHaveViewAccessContext context)
+        {
+            return s_securityManager.HasPermissionToActions("WhS_BE/CarrierProfile/GetFilteredCarrierProfiles", context.UserId);
+        }
+    }
+
 }

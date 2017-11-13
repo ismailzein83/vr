@@ -339,7 +339,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 Content = memoryStream.ToArray(),
                 Name = "CodeGroupLog",
-                CreatedTime = DateTime.Now,
+                IsTemp = true,
                 Extension = ".xlsx"
             };
             VRFileManager manager = new VRFileManager();
