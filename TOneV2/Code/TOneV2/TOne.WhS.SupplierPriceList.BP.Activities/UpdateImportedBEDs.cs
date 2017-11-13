@@ -76,16 +76,16 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 if (!importedRate.RateTypeId.HasValue)
                 {
                     if (!existingNormalRates.TryGetValue(importedRate.ZoneName, out importedRateExistingEntities))
-                        break;
+                        continue;
                 }
 
                 else
                 {
                     Dictionary<int, List<SupplierRate>> importedOtherRatesExistingEntities = new Dictionary<int, List<SupplierRate>>();
                     if (!existingOtherRates.TryGetValue(importedRate.ZoneName, out importedOtherRatesExistingEntities))
-                        break;
+                        continue;
                     if (!importedOtherRatesExistingEntities.TryGetValue(importedRate.RateTypeId.Value, out importedRateExistingEntities))
-                        break;
+                        continue;
                 }
 
                 var matchedRate = importedRateExistingEntities.FindRecord(item => item.IsInTimeRange(importedRate.BED));
@@ -194,7 +194,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
         private bool SameServiceIds(List<ZoneService> zoneServices, List<int> serviceIds)
         {
-            if (!(zoneServices.Count == serviceIds.Count))
+            if (zoneServices.Count != serviceIds.Count)
                 return false;
 
             foreach (ZoneService zoneService in zoneServices)

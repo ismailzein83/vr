@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 
@@ -12,29 +13,24 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
-            return target is AllImportedDataByZone;
+            return target is ImportedCountry;
         }
         public override bool Validate(Vanrise.BusinessProcess.Entities.IBusinessRuleConditionValidateContext context)
         {
-            var allData = context.Target as AllImportedDataByZone;
-
-            if (allData.ImportedDataByZoneList == null || allData.ImportedDataByZoneList.Count() == 0)
-                return true;
-
+            var importedCountry = context.Target as ImportedCountry;
             var invalidRateTypes = new HashSet<string>();
             var invalidZoneNames = new HashSet<string>();
             var rateTypeManager = new Vanrise.Common.Business.RateTypeManager();
-
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
-            foreach (ImportedDataByZone zoneData in allData.ImportedDataByZoneList)
+            foreach (var importedZone in importedCountry.ImportedZones)
             {
-                foreach (ImportedRate importedOtherRate in zoneData.ImportedOtherRates.Values.SelectMany(x => x))
+                foreach (var importedRate in importedZone.ImportedOtherRates.Values)
                 {
-                    if (importedOtherRate.BED < importSPLContext.RetroactiveDate)
+                    if (importedRate.RateTypeId.HasValue && importedRate.BED < importSPLContext.RetroactiveDate && (importedRate.ChangeType == RateChangeType.New || importedRate.ChangeType == RateChangeType.Decrease || importedRate.ChangeType == RateChangeType.Increase))
                     {
-                        invalidZoneNames.Add(zoneData.ZoneName);
-                        invalidRateTypes.Add(rateTypeManager.GetRateTypeName(importedOtherRate.RateTypeId.Value));
+                        invalidZoneNames.Add(importedRate.ZoneName);
+                        invalidRateTypes.Add(rateTypeManager.GetRateTypeName(importedRate.RateTypeId.Value));
                     }
                 }
             }
@@ -43,9 +39,9 @@ namespace TOne.WhS.SupplierPriceList.Business
             {
                 string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
                 if (invalidZoneNames.Count == 1)
-                    context.Message = string.Format("{0} is less than retroactive date '{1}' for the following zones: ({2}))", invalidRateTypes.First(), retroactiveDateString, string.Join(", ", invalidZoneNames));
+                    context.Message = string.Format("{0} is less than retroactive date '{1}' for the following zones: ({2})", invalidRateTypes.First(), retroactiveDateString, string.Join(", ", invalidZoneNames));
                 else
-                    context.Message = string.Format("({0}) are less than retroactive date '{1}' for the following zones: ({2}))", string.Join(", ", invalidRateTypes), retroactiveDateString, string.Join(", ", invalidZoneNames));
+                    context.Message = string.Format("({0}) are less than retroactive date '{1}' for the following zones: ({2})", string.Join(", ", invalidRateTypes), retroactiveDateString, string.Join(", ", invalidZoneNames));
                 return false;
 
             }

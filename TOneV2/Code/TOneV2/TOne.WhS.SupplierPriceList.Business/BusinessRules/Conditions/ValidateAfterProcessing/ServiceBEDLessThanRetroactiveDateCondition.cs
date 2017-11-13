@@ -17,27 +17,21 @@ namespace TOne.WhS.SupplierPriceList.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return target is AllImportedDataByZone;
+            return target is ImportedCountry;
         }
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var allData = context.Target as AllImportedDataByZone;
-
-            if (allData.ImportedDataByZoneList == null || allData.ImportedDataByZoneList.Count() == 0)
-                return true;
+            var importedCountry = context.Target as ImportedCountry;
 
             var invalidZoneNames = new HashSet<string>();
             IImportSPLContext importSPLContext = context.GetExtension<IImportSPLContext>();
 
-            foreach (ImportedDataByZone zoneData in allData.ImportedDataByZoneList)
+            foreach (ImportedZone zoneData in importedCountry.ImportedZones)
             {
-                foreach (ImportedZoneService importedService in zoneData.ImportedZoneServicesToValidate.Values.SelectMany(x => x))
+                if (zoneData.ImportedZoneServiceGroup.BED < importSPLContext.RetroactiveDate && zoneData.ImportedZoneServiceGroup.ChangeType == ZoneServiceChangeType.New)
                 {
-                    if (importedService.BED < importSPLContext.RetroactiveDate)
-                    {
-                        invalidZoneNames.Add(zoneData.ZoneName);
-                        break;
-                    }
+                    invalidZoneNames.Add(zoneData.ZoneName);
+                    break;
                 }
             }
 
