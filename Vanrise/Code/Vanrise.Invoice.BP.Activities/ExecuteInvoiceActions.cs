@@ -29,10 +29,10 @@ namespace Vanrise.Invoice.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Entities.Invoice>> InputQueue { get; set; }
-       
+
         [RequiredArgument]
         public InArgument<List<InvoiceBulkActionRuntime>> InvoiceBulkActions { get; set; }
-      
+
         [RequiredArgument]
         public InArgument<Guid> InvoiceTypeId { get; set; }
         #endregion
@@ -49,7 +49,6 @@ namespace Vanrise.Invoice.BP.Activities
                         {
                             counter++;
                             ExecuteInvoiceActionsMethod(invoiceQueue, inputArgument.InvoiceTypeId, inputArgument.InvoiceBulkActions, handle);
-
                         });
                 } while (!ShouldStop(handle) && hasItems);
             });
@@ -70,14 +69,15 @@ namespace Vanrise.Invoice.BP.Activities
             invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
             invoiceType.Settings.InvoiceBulkActions.ThrowIfNull("invoiceType.Settings.InvoiceBulkActions");
+            PartnerManager partnerManager = new PartnerManager();
+            var partnerName = partnerManager.GetPartnerName(invoiceQueue.InvoiceTypeId, invoiceQueue.PartnerId);
             if (invoiceBulkActions != null)
             {
                 try
                 {
-
                     foreach (var invoiceBulkAction in invoiceBulkActions)
                     {
-                        var invoiceBulkActionDefinition= invoiceType.Settings.InvoiceBulkActions.FindRecord(x=>x.InvoiceBulkActionId ==invoiceBulkAction.InvoiceBulkActionId);
+                        var invoiceBulkActionDefinition = invoiceType.Settings.InvoiceBulkActions.FindRecord(x => x.InvoiceBulkActionId == invoiceBulkAction.InvoiceBulkActionId);
                         invoiceBulkActionDefinition.ThrowIfNull("invoiceBulkActionDefinition");
 
                         var actionContext = new AutomaticActionRuntimeSettingsContext
@@ -87,18 +87,15 @@ namespace Vanrise.Invoice.BP.Activities
                         };
                         invoiceBulkAction.Settings.Execute(actionContext);
                         if (actionContext.ErrorMessage != null)
-                        {
-                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Warning, string.Format("{0}", actionContext.ErrorMessage));
-
-                        }else
-                        {
-                            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully.", invoiceBulkActionDefinition.Title);
-                        }
+                            handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Warning, string.Format("{0}", actionContext.ErrorMessage));
+                        else
+                            handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully for {1}.", invoiceBulkActionDefinition.Title, partnerName);
                     }
                 }
                 catch (Exception ex)
                 {
-                    handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Error, string.Format("{0}", ex));
+                    handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Error, string.Format("Error occured while executing action for {0}, Reason: {1}", partnerName, ex.Message));
+                    handle.SharedInstanceData.WriteHandledException(ex, true);
                 }
             }
         }

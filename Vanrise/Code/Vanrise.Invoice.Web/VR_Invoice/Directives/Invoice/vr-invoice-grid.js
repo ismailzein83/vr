@@ -107,6 +107,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     subSectionConfigs = response;
                                 }
                                 if (payload != undefined) {
+                                    $scope.canSelectInvoices = payload.canSelectInvoices;
                                     context = payload.context;
                                     invoiceActions = payload.invoiceActions;
                                     mainGridColumns = payload.mainGridColumns;
@@ -204,6 +205,11 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     {
                                         if (!UtilsService.contains(targetInvoices, dataItem.Entity.InvoiceId))
                                         {
+                                            dataItem.isSelected = true;
+                                        }
+                                    } else
+                                    {
+                                        if (UtilsService.contains(targetInvoices, dataItem.Entity.InvoiceId)) {
                                             dataItem.isSelected = true;
                                         }
                                     }

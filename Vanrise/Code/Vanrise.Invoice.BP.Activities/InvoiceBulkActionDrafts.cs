@@ -39,7 +39,7 @@ namespace Vanrise.Invoice.BP.Activities
             {
                 inputArgument.OutputQueue.Enqueue(invoiceQueue);
                 var partnerName = partnerManager.GetPartnerName(invoiceQueue.InvoiceTypeId, invoiceQueue.PartnerId);
-                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Start execute actions for {0}.", partnerName));
+                handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, string.Format("Start execute actions for {0}.", partnerName));
             });
 
         }

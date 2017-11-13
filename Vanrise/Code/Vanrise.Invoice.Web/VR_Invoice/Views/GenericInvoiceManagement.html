@@ -20,9 +20,9 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="DeselectAll" formname="formFilter" data-onclick="scopeModel.deselectAllClicked" vr-disabled="scopeModel.disableDeselectAll" ></vr-button>
-                    <vr-button type="SelectAll" formname="formFilter" data-onclick="scopeModel.selectAllClicked" vr-disabled="scopeModel.disableSelectAll" ></vr-button>
-                    <vr-button type="BulkActions" formname="formFilter" data-onclick="scopeModel.bulkActionsClicked" vr-disabled="scopeModel.disableBulkActions"></vr-button>
+                    <vr-button type="DeselectAll" formname="formFilter" data-onclick="scopeModel.deselectAllClicked" vr-disabled="scopeModel.disableDeselectAll" ng-show="scopeModel.showActionButtons"></vr-button>
+                    <vr-button type="SelectAll" formname="formFilter" data-onclick="scopeModel.selectAllClicked" vr-disabled="scopeModel.disableSelectAll" ng-show="scopeModel.showActionButtons"></vr-button>
+                    <vr-button type="BulkActions" formname="formFilter" data-onclick="scopeModel.bulkActionsClicked" vr-disabled="scopeModel.disableBulkActions" ng-show="scopeModel.showActionButtons"></vr-button>
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
                     <!--<vr-button type="GenerateInvoice" data-onclick="generateInvoice" haspermission="hasGenerateInvoicePermission"></vr-button>-->
                     <vr-button type="GenerateInvoice" data-onclick="scopeModel.generateInvoices" haspermission="scopeModel.hasGenerateInvoicePermission"></vr-button>

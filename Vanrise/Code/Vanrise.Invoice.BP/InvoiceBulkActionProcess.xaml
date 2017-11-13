@@ -60,7 +60,7 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="vq:BaseQueue(vie:Invoice)" Name="OutputQueue" />
     </Sequence.Variables>
-    <Parallel>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadInvoiceBulkActionStatus" />
       </Parallel.Variables>
@@ -103,7 +103,6 @@
           </InArgument>
         </viba1:ExecuteInvoiceActions.PreviousActivityStatus>
       </viba1:ExecuteInvoiceActions>
-      <sap2010:WorkflowViewState.IdRef>Parallel_1</sap2010:WorkflowViewState.IdRef>
     </Parallel>
     <viba1:ClearInvoiceBulkActionDrafts sap2010:WorkflowViewState.IdRef="ClearInvoiceBulkActionDrafts_1">
       <viba1:ClearInvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
@@ -112,7 +111,7 @@
         </InArgument>
       </viba1:ClearInvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
     </viba1:ClearInvoiceBulkActionDrafts>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlQnVsa0FjdGlvblByb2Nlc3MueGFtbA07A3QOAgEBPwVrEAIBBmwFcioCAQJDB1MnAgEYVAdpJQIBB28Lb2gCAQNGDUZqAgEhUA1QfAIBHUsNS28CARlhDWFcAgEUZg1mdAIBEFcNV28CAQxcDVyBAQIBCA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlQnVsa0FjdGlvblByb2Nlc3MueGFtbA07A3MOAgEBPwVqEAIBBmsFcSoCAQJDB1MnAgEYVAdpJQIBB24LbmgCAQNGDUZqAgEhUA1QfAIBHUsNS28CARlhDWFcAgEUZg1mdAIBEFcNV28CAQxcDVyBAQIBCA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

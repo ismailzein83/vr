@@ -114,7 +114,8 @@
                 invoiceActions: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceActions,
                 InvoiceTypeId: invoiceTypeId,
                 invoiceItemGroupings: $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.ItemGroupings,
-                context:getContext(),
+                context: getContext(),
+                canSelectInvoices :$scope.scopeModel.showActionButtons,
                 query: {
                     FromTime: $scope.scopeModel.fromDate,
                     ToTime: $scope.scopeModel.toDate,
@@ -130,6 +131,7 @@
             return filter;
         }
         function loadAllControls() {
+
 
             function loadPartnerSelectorDirective() {
                 var partnerSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
@@ -173,6 +175,8 @@
         {
             return VR_Invoice_InvoiceTypeAPIService.GetInvoiceTypeRuntime(invoiceTypeId).then(function (response) {
                 $scope.scopeModel.invoiceTypeEntity = response;
+                if ($scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions != undefined && $scope.scopeModel.invoiceTypeEntity.InvoiceType.Settings.InvoiceMenualBulkActions.length > 0)
+                   $scope.scopeModel.showActionButtons = true;
             });
         }
 
