@@ -90,7 +90,7 @@ namespace Vanrise.Web.Controllers
             VRFile file = manager.GetFile(fileId);
           //  HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
 
-            if (file.Extension == "jpg" || file.Extension == "png" || file.Extension == "jpeg" || file.Extension == "bmp" || file.Extension == "gif")
+            if ( file != null && ( file.Extension == "jpg" || file.Extension == "png" || file.Extension == "jpeg" || file.Extension == "bmp" || file.Extension == "gif"))
             {
                 byte[] bytes = file.Content;
 
