@@ -143,7 +143,8 @@ namespace TOne.WhS.Sales.Business
                         Rate = ConvertToCurrencyAndRound(futureRate.Rate),
                         IsRateEditable = futureRate.Source == _ownerType,
                         BED = futureRate.Rate.BED,
-                        EED = futureRate.Rate.EED
+                        EED = futureRate.Rate.EED,
+                        RateChange = futureRate.Rate.RateChange,
                     };
                 }
 

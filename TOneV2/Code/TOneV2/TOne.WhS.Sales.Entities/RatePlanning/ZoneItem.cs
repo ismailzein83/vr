@@ -171,6 +171,7 @@ namespace TOne.WhS.Sales.Entities
         public bool IsRateEditable { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
+        public RateChangeType RateChange { get; set; }
     }
 
     public class RateType

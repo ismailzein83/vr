@@ -2,10 +2,9 @@
 
     'use strict';
 
-    FutureRateController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'WhS_BE_PrimarySaleEntityEnum'];
+    FutureRateController.$inject = ['$scope', 'UtilsService', 'VRNavigationService', 'WhS_BE_PrimarySaleEntityEnum', 'WhS_BE_RateChangeTypeEnum'];
 
-    function FutureRateController($scope, UtilsService, VRNavigationService, WhS_BE_PrimarySaleEntityEnum)
-    {
+    function FutureRateController($scope, UtilsService, VRNavigationService, WhS_BE_PrimarySaleEntityEnum, WhS_BE_RateChangeTypeEnum) {
         var zoneName;
         var futureRate;
         var primarySaleEntity;
@@ -15,12 +14,10 @@
         defineScope();
         load();
 
-        function loadParameters()
-        {
+        function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined)
-            {
+            if (parameters != undefined) {
                 zoneName = parameters.zoneName;
                 futureRate = parameters.futureRate;
                 primarySaleEntity = parameters.primarySaleEntity;
@@ -28,14 +25,12 @@
             }
         }
 
-        function defineScope()
-        {
+        function defineScope() {
             $scope.scopeModel = {};
 
             $scope.title = 'Future Rate of Zone ' + zoneName;
 
-            if (futureRate != undefined)
-            {
+            if (futureRate != undefined) {
                 var rateType = (futureRate.RateTypeId != null) ? 'Other' : 'Normal';
                 $scope.title = 'Future ' + rateType + ' Rate of Zone ' + zoneName;
                 $scope.scopeModel.rate = futureRate.Rate;
@@ -55,6 +50,7 @@
                         $scope.scopeModel.futureRateIconTooltip = 'Inherited';
                     }
                 }
+                $scope.scopeModel.rateChangeType = UtilsService.getEnum(WhS_BE_RateChangeTypeEnum, 'value', futureRate.RateChange);
             }
 
             $scope.close = function () {
@@ -63,7 +59,7 @@
         }
 
         function load() {
-            
+
         }
     }
 
