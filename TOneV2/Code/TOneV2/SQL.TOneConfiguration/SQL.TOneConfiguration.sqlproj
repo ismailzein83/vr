@@ -690,6 +690,7 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceBulkActionDraft_Update.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceBulkActionDraft_LoadInvoices.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceBulkActionDraft_Clear.sql" />
+    <Build Include="common\Stored Procedures\sp_File_SetUsedAndUpdateSettings.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
