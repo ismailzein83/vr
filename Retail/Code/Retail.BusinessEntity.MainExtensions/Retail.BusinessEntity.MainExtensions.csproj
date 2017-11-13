@@ -137,6 +137,7 @@
   <ItemGroup>
     <Compile Include="AccountBalanceAlertRule\PercentageBalanceAlertThreshold.cs" />
     <Compile Include="AccountBalanceFieldSource\FinancialAccountFieldSourceSetting.cs" />
+    <Compile Include="AccountBEActionTypes\AssignAccountManagerAccountActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\ExportRatesActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\ChangeStatusActionController.cs" />
     <Compile Include="AccountBEActionTypes\ChangeStatusActionManager.cs" />
