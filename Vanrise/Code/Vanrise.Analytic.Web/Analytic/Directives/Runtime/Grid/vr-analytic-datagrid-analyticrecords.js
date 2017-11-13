@@ -114,6 +114,8 @@ app.directive("vrAnalyticDatagridAnalyticrecords", ['UtilsService', 'VRNotificat
 
                     if (withSummary && retrieveDataContext.eventType != DataGridRetrieveDataEventType.ExternalTrigger && retrieveDataContext.eventType != DataGridRetrieveDataEventType.Export)
                         dataRetrievalInput.Query.WithSummary = false;
+                    else
+                        dataRetrievalInput.Query.WithSummary = withSummary;
 
                     return VR_Analytic_AnalyticAPIService.GetFilteredRecords(dataRetrievalInput).then(function (response) {
                         setTimeout(function () { ctrl.groupingDimensions = groupingDimensions; UtilsService.safeApply($scope); });
