@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InvoiceBulkActionProcessInput.cs" />
     <Compile Include="InvoiceGenerationProcessOutput.cs" />
     <Compile Include="InvoiceGenerationProcessInput.cs" />
     <Compile Include="AutomaticInvoiceProcessInput.cs" />
