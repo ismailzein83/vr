@@ -57,7 +57,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("The following countries must have inherited rates for all of their zones: {0}", string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("Selling countries must have inherited rates at sell dates. Violated countries: {0}", string.Join(", ", invalidCountryNames));
                 return false;
             }
 
