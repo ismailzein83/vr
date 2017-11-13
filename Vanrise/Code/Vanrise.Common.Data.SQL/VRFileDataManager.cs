@@ -43,7 +43,7 @@ namespace Vanrise.Common.Data.SQL
                 if (file.Settings.ExtendedSettings != null)
                     configId = file.Settings.ExtendedSettings.ConfigId;
             }
-            int id = ExecuteNonQuerySP("[common].[sp_File2_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime));
+            int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime));
             return (id > 0) ? (long)fileId : badresult;
         }
 
