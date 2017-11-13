@@ -25,7 +25,6 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if (importedCode.BED < importSPLContext.RetroactiveDate && (importedCode.ChangeType == CodeChangeType.New || importedCode.ChangeType == CodeChangeType.Moved))
                 {
                     invalidCodes.Add(importedCode.Code);
-                    break;
                 }
             }
 

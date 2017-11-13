@@ -31,7 +31,6 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if (zoneData.ImportedZoneServiceGroup != null && zoneData.ImportedZoneServiceGroup.BED < importSPLContext.RetroactiveDate && zoneData.ImportedZoneServiceGroup.ChangeType == ZoneServiceChangeType.New)
                 {
                     invalidZoneNames.Add(zoneData.ZoneName);
-                    break;
                 }
             }
 

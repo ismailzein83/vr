@@ -26,7 +26,6 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if (importedRate.RateTypeId == null && importedRate.BED < importSPLContext.RetroactiveDate && (importedRate.ChangeType == RateChangeType.New || importedRate.ChangeType == RateChangeType.Decrease || importedRate.ChangeType==RateChangeType.Increase)  )
                 {
                     invalidZoneNames.Add(importedRate.ZoneName);
-                    break;
                 }
             }
 
