@@ -30,6 +30,8 @@
         var countryToCloseSelectorAPI;
         var countryToCloseSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var today = UtilsService.getDateFromDateTime(new Date());
+
         loadParameters();
         defineScope();
         load();
@@ -138,6 +140,14 @@
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
+            };
+
+            $scope.scopeModel.isEEDValid = function () {
+                if ($scope.scopeModel.countriesToClose.length > 0) {
+                    if ($scope.scopeModel.endEffectiveDate != undefined && $scope.scopeModel.endEffectiveDate < today)
+                        return 'EED must be greater than or equal to today';
+                }
+                return null;
             };
 
             $scope.scopeModel.save = function () {
