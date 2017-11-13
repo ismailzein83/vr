@@ -24,11 +24,11 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                 var invoiceType = new InvoiceTypeManager().GetInvoiceType(context.Invoice.InvoiceTypeId);
                 invoiceType.ThrowIfNull("invoiceType", context.Invoice.InvoiceTypeId);
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
-                invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.AutomaticInvoiceActions");
+              //  invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.AutomaticInvoiceActions");
 
-                var automaticInvoiceAction = invoiceType.Settings.AutomaticInvoiceActions.FindRecord(x => x.AutomaticInvoiceActionId == context.AutomaticInvoiceActionId);
-                automaticInvoiceAction.ThrowIfNull("automaticInvoiceAction");
-                var automaticSaveInvoiceToFileActionSettings = automaticInvoiceAction.Settings as AutomaticSaveInvoiceToFileAction;
+               // var automaticInvoiceAction = invoiceType.Settings.AutomaticInvoiceActions.FindRecord(x => x.AutomaticInvoiceActionId == context.AutomaticInvoiceActionId);
+              //  automaticInvoiceAction.ThrowIfNull("automaticInvoiceAction");
+                var automaticSaveInvoiceToFileActionSettings = context.DefinitionSettings as AutomaticSaveInvoiceToFileAction;
                 automaticSaveInvoiceToFileActionSettings.ThrowIfNull("automaticSaveInvoiceToFileActionSettings");
                 InvoiceEmailActionManager invoiceEmailActionManager = new InvoiceEmailActionManager();
 
@@ -36,7 +36,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                 {
                     if (invoiceToFileActionSet.IsEnabled)
                     {
-                        invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
+                       // invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
                         var emailActionAttachmentSetDefinition = automaticSaveInvoiceToFileActionSettings.InvoiceToFileActionSets.FindRecord(x => x.InvoiceToFileActionSetId == invoiceToFileActionSet.InvoiceToFileActionSetId);
                         var partnerInvoiceFilterConditionContext = new PartnerInvoiceFilterConditionContext
                         {

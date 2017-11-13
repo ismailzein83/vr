@@ -6,7 +6,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Invoice.Entities;
 using Vanrise.Invoice.Business.Context;
 using System.Collections.Generic;
-
+using Vanrise.Common;
 namespace Vanrise.Invoice.BP.Activities
 {
     public sealed class GeneratePartnerInvoice : BaseCodeActivity
@@ -134,13 +134,19 @@ namespace Vanrise.Invoice.BP.Activities
                         {
                             try
                             {
+                                invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.AutomaticInvoiceActions");
+
                                  foreach (var action in automaticInvoiceActionsPart.Actions)
                                  {
-                                
+
+
+                                     var automaticInvoiceAction = invoiceType.Settings.AutomaticInvoiceActions.FindRecord(x => x.AutomaticInvoiceActionId == action.AutomaticInvoiceActionId);
+                                     automaticInvoiceAction.ThrowIfNull("automaticInvoiceAction");
+
                                     AutomaticActionRuntimeSettingsContext automaticActionContext = new Business.Context.AutomaticActionRuntimeSettingsContext
                                     {
                                         Invoice = generatedInvoice.InsertedObject.Entity,
-                                        AutomaticInvoiceActionId = action.AutomaticInvoiceActionId
+                                        DefinitionSettings = automaticInvoiceAction.Settings
                                     };
                                     action.Settings.Execute(automaticActionContext);
                                     if (automaticActionContext.ErrorMessage != null)

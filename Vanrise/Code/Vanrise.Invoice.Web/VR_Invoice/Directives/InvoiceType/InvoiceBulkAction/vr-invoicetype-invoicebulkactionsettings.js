@@ -63,14 +63,14 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var automaticInvoiceActionEntity;
+                    var invoiceBulkActionEntity;
 
                     if (payload != undefined) {
-                        automaticInvoiceActionEntity = payload.automaticInvoiceActionEntity;
+                        invoiceBulkActionEntity = payload.invoiceBulkActionEntity;
                         context = payload.context;
                     }
 
-                    if (automaticInvoiceActionEntity != undefined) {
+                    if (invoiceBulkActionEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
@@ -84,9 +84,9 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (automaticInvoiceActionEntity != undefined) {
+                                if (invoiceBulkActionEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, automaticInvoiceActionEntity.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, invoiceBulkActionEntity.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -98,7 +98,7 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = { context: getContext(), automaticInvoiceActionEntity: automaticInvoiceActionEntity };
+                            var directivePayload = { context: getContext(), automaticInvoiceActionEntity: invoiceBulkActionEntity };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -142,7 +142,7 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + 'label="Automatic Action Type"'
+                            + 'label="Action Type"'
 
                             + ' isrequired="true"'
                             + 'hideremoveicon>'
@@ -156,6 +156,6 @@
         }
     }
 
-    app.directive('vrInvoicetypeAutomaticinvoiceactionsettings', ActionSettingsDirective);
+    app.directive('vrInvoicetypeInvoicebulkactionsettings', ActionSettingsDirective);
 
 })(app);

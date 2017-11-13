@@ -1,7 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceTypeEditorController" vr-loader="scopeModel.isLoading" size="large">
     <vr-modalbody>
         <vr-form name="formInvoiceTypeEditor">
-            <vr-tabs vertical>
+            <vr-tabs >
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
                         <vr-columns width="1/3row">
@@ -39,10 +39,18 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Invoice Actions'">
+                <vr-tab header="'Actions'">
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-invoicetype-invoiceactions on-ready="scopeModel.onInvoiceActionsReady"></vr-invoicetype-invoiceactions>
+                        <vr-columns width="1/2row">
+                            <vr-section header="Invoice Actions" collapsible>
+                                <vr-invoicetype-invoiceactions on-ready="scopeModel.onInvoiceActionsReady"></vr-invoicetype-invoiceactions>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-section header="Invoice Bulk Actions" collapsible>
+
+                                <vr-invoicetype-invoicebulkactions on-ready="scopeModel.onInvoiceBulkActionsReady"></vr-invoicetype-invoicebulkactions>
+                            </vr-section>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -51,83 +59,86 @@
                         <vr-invtoaccbalancerelation-definition-selector on-ready="scopeModel.relationDefinitionSelectorReady" normal-col-num="3"></vr-invtoaccbalancerelation-definition-selector>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Invoice Attachments'">
+                <vr-tab header="'Attachments'">
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-invoicetype-invoiceattachments on-ready="scopeModel.onInvoiceAttachmentsReady"></vr-invoicetype-invoiceattachments>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Serial Number Settings'">
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-section title="Serial Number Parts">
-                                <vr-invoicetype-serialnumberparts on-ready="scopeModel.onConcatenatedPartsReady"></vr-invoicetype-serialnumberparts>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-
-                </vr-tab>
-                <vr-tab header="'Invoice File Settings'">
-                    <vr-row>
-                        <vr-columns width="1/2row">
-                            <vr-section title="Invoice File">
-                                <vr-invoicetype-filesattachments on-ready="scopeModel.onFilesAttachmentsReady"></vr-invoicetype-filesattachments>
-                            </vr-section>
-                        </vr-columns>
-                        <vr-columns width="1/2row">
-                            <vr-section title="File Name Parts">
-                                <vr-invoicetype-filenameparts on-ready="scopeModel.onFileNamePartsReady"></vr-invoicetype-filenameparts>
-                            </vr-section>
-                        </vr-columns>
-                    </vr-row>
-
-                </vr-tab>
-                <vr-tab header="'Invoice Pre-Generate Actions'">
+                
+                <vr-tab header="'Pre-Generate Actions'">
                     <vr-row>
                         <vr-columns width="fullrow">
                             <vr-invoicetype-invoicegeneratoractions on-ready="scopeModel.onInvoiceGeneratorActionsReady"></vr-invoicetype-invoicegeneratoractions>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Auto Generate Invoice Actions'">
+              
+                <vr-tab header="'Bulk Generation'">
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-invoicetype-automaticinvoiceactions on-ready="scopeModel.onAutomaticInvoiceActionsReady"></vr-invoicetype-automaticinvoiceactions>
+                        <vr-columns width="1/2row">
+                            <vr-section header="Auto Generate Actions" collapsible>
+                                <vr-invoicetype-automaticinvoiceactions on-ready="scopeModel.onAutomaticInvoiceActionsReady"></vr-invoicetype-automaticinvoiceactions>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-section title="Menual Actions" collapsible>
+                                <vr-invoicetype-menualbulkactions on-ready="scopeModel.onMenualActionsReady"></vr-invoicetype-menualbulkactions>
+                            </vr-section>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Invoice Setting Parts Definitions'">
+                <vr-tab header="'Invoice Setting'">
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-invoicetype-invoicesetting-definition-editor on-ready="scopeModel.onInvoiceSettingDefinitionReady"></vr-invoicetype-invoicesetting-definition-editor>
+                        <vr-columns width="1/3row">
+                            <vr-section title="Invoice File" collapsible>
+                                <vr-invoicetype-filesattachments on-ready="scopeModel.onFilesAttachmentsReady"></vr-invoicetype-filesattachments>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-section title="File Name Parts" collapsible>
+                                <vr-invoicetype-filenameparts on-ready="scopeModel.onFileNamePartsReady"></vr-invoicetype-filenameparts>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="1/3row">
+                            <vr-section title="Serial Number Parts" collapsible>
+                                <vr-invoicetype-serialnumberparts on-ready="scopeModel.onConcatenatedPartsReady"></vr-invoicetype-serialnumberparts>
+                            </vr-section>
                         </vr-columns>
                     </vr-row>
+
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-section header="Invoice Setting Parts Definitions" collapsible>
+                                <vr-invoicetype-invoicesetting-definition-editor on-ready="scopeModel.onInvoiceSettingDefinitionReady"></vr-invoicetype-invoicesetting-definition-editor>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                   
+
                 </vr-tab>
                 <vr-tab header="'Grid Settings'">
-                    <vr-section title="Grid Columns">
-                        <vr-row removeline>
-                            <vr-columns width="fullrow">
-                                <vr-invoicetype-maingridcolumns on-ready="scopeModel.onMainGridColumnsReady"></vr-invoicetype-maingridcolumns>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-section>
-                    <vr-section title="Grid Actions">
-                        <vr-row removeline>
-                            <vr-columns width="fullrow">
-                                <vr-invoicetype-invoicegridactions on-ready="scopeModel.onInvoiceGridActionsReady"></vr-invoicetype-invoicegridactions>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-section>
-                </vr-tab>
-                <vr-tab header="'Sub Sections Settings'">
                     <vr-row removeline>
-                        <vr-columns width="fullrow">
-                            <vr-invoicetype-subsections on-ready="scopeModel.onSubSectionsReady"></vr-invoicetype-subsections>
+                        <vr-columns width="1/2row">
+                            <vr-section title="Grid Columns" collapsible>
+                                <vr-invoicetype-maingridcolumns on-ready="scopeModel.onMainGridColumnsReady"></vr-invoicetype-maingridcolumns>
+                            </vr-section>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-section title="Grid Actions" collapsible>
+                                <vr-invoicetype-invoicegridactions on-ready="scopeModel.onInvoiceGridActionsReady"></vr-invoicetype-invoicegridactions>
+                            </vr-section>
                         </vr-columns>
                     </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <vr-section title="Grid Sub Sections" collapsible>
+                                 <vr-invoicetype-subsections on-ready="scopeModel.onSubSectionsReady"></vr-invoicetype-subsections>
+                            </vr-section>
+                        </vr-columns>
                 </vr-tab>
-                <vr-tab header="'Invoice Grouping Items'">
+                <vr-tab header="'Grouping Items'" >
                     <vr-row removeline>
                         <vr-columns width="fullrow">
                             <vr-invoice-itemgroupings on-ready="scopeModel.onItemGroupingsDirectiveReady"></vr-invoice-itemgroupings>
@@ -144,42 +155,42 @@
                 <vr-tab header="'Security'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-section title="View">
+                            <vr-section title="View" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section title="Generate Invoice">
+                        <vr-columns width="fullrow" >
+                            <vr-section title="Generate Invoice" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onGenerateRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section title="View Settings">
+                        <vr-columns width="fullrow" >
+                            <vr-section title="View Settings" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onViewSettingsRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section title="Add Settings">
+                        <vr-columns width="fullrow" >
+                            <vr-section title="Add Settings" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onAddSettingsRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="fullrow">
-                            <vr-section title="Edit Settings">
+                        <vr-columns width="fullrow" >
+                            <vr-section title="Edit Settings" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onEditSettingsRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-section title="Manage Partner">
+                            <vr-section title="Manage Partner" collapsible>
                                 <vr-sec-requiredpermission-grid on-ready="scopeModel.onAssignPartnerRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                             </vr-section>
                         </vr-columns>

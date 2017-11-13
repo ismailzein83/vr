@@ -95,7 +95,9 @@
                 invoiceId: invoiceId
             });
         }
-        
+        function ExecuteMenualInvoiceActions(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'ExecuteMenualInvoiceActions'), input);
+        }
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -114,7 +116,8 @@
             GenerateFilteredInvoiceGenerationDrafts: GenerateFilteredInvoiceGenerationDrafts,
             GetFilteredInvoiceGenerationDrafts: GetFilteredInvoiceGenerationDrafts,
             GenerateInvoices: GenerateInvoices,
-            DeleteGeneratedInvoice: DeleteGeneratedInvoice
+            DeleteGeneratedInvoice: DeleteGeneratedInvoice,
+            ExecuteMenualInvoiceActions: ExecuteMenualInvoiceActions
         });
     }
 

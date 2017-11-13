@@ -73,7 +73,7 @@ namespace Vanrise.Invoice.Data.SQL
             if (input.Query.PartnerIds != null && input.Query.PartnerIds.Count() > 0)
                 partnerIds = string.Join<string>(",", input.Query.PartnerIds);
 
-            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status);
+            return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status, input.Query.IsSelectAll, input.Query.InvoiceBulkActionIdentifier);
         }
         public IEnumerable<Entities.Invoice> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
         {

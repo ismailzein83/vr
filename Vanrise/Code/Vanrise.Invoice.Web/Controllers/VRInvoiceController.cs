@@ -186,8 +186,20 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.DeleteGeneratedInvoice(invoiceId);
         }
-    }
 
+        [HttpPost]
+        [Route("ExecuteMenualInvoiceActions")]
+        public object ExecuteMenualInvoiceActions(ExecuteMenualInvoiceActionsInput input)
+        {
+            if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.InvoiceTypeId))
+                return GetUnauthorizedResponse();
+            InvoiceManager manager = new InvoiceManager();
+            return manager.ExecuteMenualInvoiceActions(input);
+        }
+        
+        
+    }
+  
     public class GenerateInvoicesInput
     {
         public DateTime IssueDate { get; set; }

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="IBillingPeriodInfoDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IInvoiceBulkActionsDraftDataManager.cs" />
     <Compile Include="IInvoiceDataManager.cs" />
     <Compile Include="IInvoiceGenerationDraftDataManager.cs" />
     <Compile Include="IInvoiceItemDataManager.cs" />

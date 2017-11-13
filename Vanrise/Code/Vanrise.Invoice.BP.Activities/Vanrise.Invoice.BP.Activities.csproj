@@ -54,11 +54,22 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClearInvoiceBulkActionDrafts.cs" />
     <Compile Include="ClearInvoiceGenerationDrafts.cs" />
+    <Compile Include="ExecuteInvoiceActions.cs" />
     <Compile Include="GenerateAutomaticInvoiceGenerationDrafts.cs" />
     <Compile Include="GeneratePartnerInvoice.cs" />
+    <Compile Include="InvoiceBulkActionDrafts.cs" />
     <Compile Include="LoadInvoiceGenerationDrafts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

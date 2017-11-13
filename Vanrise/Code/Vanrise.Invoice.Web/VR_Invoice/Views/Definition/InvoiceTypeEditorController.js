@@ -32,6 +32,11 @@
         var invoiceActionsAPI;
         var invoiceActionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var invoiceBulkActionsAPI;
+        var invoiceBulkActionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+        
         var invoiceGeneratorActionAPI;
         var invoiceGeneratorActionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -91,6 +96,11 @@
 
         var executionFlowDefinitionAPI;
         var executionFlowDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var invoiceMenualActionsAPI;
+        var invoiceMenualActionsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         var stagesToHoldAPI;
         var stagesToProcessAPI;
 
@@ -110,6 +120,12 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.onMenualActionsReady = function (api) {
+                invoiceMenualActionsAPI = api;
+                invoiceMenualActionsReadyPromiseDeferred.resolve();
+            };
+
+
             $scope.scopeModel.onInvoiceAttachmentsReady = function (api) {
                 invoiceAttachmentsAPI = api;
                 invoiceAttachmentsReadyPromiseDeferred.resolve();
@@ -208,7 +224,10 @@
                 invoiceActionsAPI = api;
                 invoiceActionsReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.onInvoiceBulkActionsReady = function (api) {
+                invoiceBulkActionsAPI = api;
+                invoiceBulkActionsReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onViewRequiredPermissionReady = function (api) {
                 viewPermissionAPI = api;
                 viewPermissionReadyDeferred.resolve();
@@ -307,12 +326,14 @@
                         StagesToProcessNames: stagesToProcessAPI.getSelectedIds(),
                         InvoiceDetailsRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         InvoiceActions: invoiceActionsAPI.getData(),
+                        InvoiceBulkActions: invoiceBulkActionsAPI.getData(),
                         InvoiceGeneratorActions: invoiceGeneratorActionAPI.getData(),
                         ExtendedSettings: invoiceExtendedSettingsAPI.getData(),
                         InvoiceGridSettings: {
                             MainGridColumns: mainGridColumnsAPI.getData(),
                             InvoiceGridActions: invoiceGridActionsAPI.getData(),
                         },
+                        InvoiceMenualBulkActions: invoiceMenualActionsAPI.getData(),
                         InvoiceSerialNumberSettings: {
                             SerialNumberParts: concatenatedPartsAPI.getData(),
                         },
@@ -501,7 +522,18 @@
                     });
                     return invoiceActionsDeferredLoadPromiseDeferred.promise;
                 }
+                function loadInvoiceBulkActionsGrid() {
+                    var invoiceBulkActionsDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    invoiceBulkActionsReadyPromiseDeferred.promise.then(function () {
+                        var invoiceBulkActionsPayload = { context: getContext() };
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined)
+                            invoiceBulkActionsPayload.invoiceBulkActions = invoiceTypeEntity.Settings.InvoiceBulkActions;
+                        VRUIUtilsService.callDirectiveLoad(invoiceBulkActionsAPI, invoiceBulkActionsPayload, invoiceBulkActionsDeferredLoadPromiseDeferred);
+                    });
+                    return invoiceBulkActionsDeferredLoadPromiseDeferred.promise;
+                }
 
+                
                 function loadInvoiceGeneratorActionGrid() {
                     var invoiceGeneratorActionDeferredLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                     invoiceGeneratorActionReadyPromiseDeferred.promise.then(function () {
@@ -744,7 +776,21 @@
                     return executionFlowDefinitionSelectorLoadDeferred.promise;
                 };
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector])
+                function loadInvoiceMenualGridActionsSection() {
+                    var invoiceMenualActionsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    invoiceMenualActionsReadyPromiseDeferred.promise.then(function () {
+                        var invoiceMenualActionsPayload = { context: getContext() };
+                        if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings) {
+                            invoiceMenualActionsPayload.invoiceMenualBulkActions = invoiceTypeEntity.Settings.InvoiceMenualBulkActions;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(invoiceMenualActionsAPI, invoiceMenualActionsPayload, invoiceMenualActionsSectionLoadPromiseDeferred);
+                    });
+                    return invoiceMenualActionsSectionLoadPromiseDeferred.promise;
+                }
+
+
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadFilesAttachments, loadInvoiceAttachmentsGrid, loadAmountFieldSelector, loadCurrencyFieldSelector, loadDataRecordTypeSelector, loadMainGridColumnsSection, loadSubSectionsSection, loadInvoiceGridActionsSection, loadFileNameParts, loadConcatenatedParts, loadInvoiceActionsGrid, loadInvoiceGeneratorActionGrid, loadInvoiceExtendedSettings, loadViewRequiredPermission, loadGenerateRequiredPermission, loadViewSettingsRequiredPermission, loadAddSettingsRequiredPermission, loadEditSettingsRequiredPermission, loadAssignPartnerRequiredPermission, loadStartCalculationMethod, loadItemGroupingsDirective, loadInvoiceSettingDefinitionDirective, loadAutomaticInvoiceActionsGrid, loadItemSetNameStorageRules, loadRelationDefinitionSelector, loadExecutionFlowDefinitionSelector, loadInvoiceBulkActionsGrid, loadInvoiceMenualGridActionsSection])
                    .catch(function (error) {
                        VRNotificationService.notifyExceptionWithClose(error, $scope);
                    })
@@ -789,6 +835,22 @@
                     }
                     return invoiceActionsInfo;
                 },
+
+                getInvoiceBulkActionsInfo: function () {
+                    var invoiceBulkActionsInfo = [];
+                    var bulkActions = invoiceBulkActionsAPI.getData();
+                    if (bulkActions != undefined && bulkActions.length > 0) {
+                        for (var i = 0; i < bulkActions.length ; i++) {
+                            var bulkAction = bulkActions[i];
+                            invoiceBulkActionsInfo.push({
+                                Title: bulkAction.Title,
+                                InvoiceBulkActionId: bulkAction.InvoiceBulkActionId
+                            });
+                        }
+                    }
+                    return invoiceBulkActionsInfo;
+                },
+
 
                 getItemGroupingsInfo: function () {
                     var itemGroupingsInfo = [];
@@ -852,6 +914,7 @@
                     }
                     return actionsInfo;
                 },
+
                 getInvoiceAttachmentsInfo: function () {
                     var invoiceAttchamentsInfo = [];
                     var invoiceAttchaments = invoiceAttachmentsAPI.getData();
@@ -866,6 +929,7 @@
                     }
                     return invoiceAttchamentsInfo;
                 }
+
             };
             return context;
         }

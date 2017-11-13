@@ -1,34 +1,37 @@
 ﻿<vr-panel ng-controller="VR_Invoice_GenericInvoiceManagementController">
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+        <div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoadingFilters">
             <vr-row removeline>
-                <vr-invoice-accountstatus-selector hideremoveicon on-ready="onAccountStatusSelectorReady" normal-col-num="2" onselectionchanged="onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
+                <vr-invoice-accountstatus-selector hideremoveicon on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="2" onselectionchanged="    scopeModel.onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
 
-                <vr-directivewrapper vr-loader="isLoadingDirective" directive="invoiceTypeEntity.InvoicePartnerManager.PartnerFilterSelector" on-ready="onPartnerSelectorReady" normal-col-num="2" ismultipleselection></vr-directivewrapper>
+                <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective" directive="scopeModel.invoiceTypeEntity.InvoicePartnerManager.PartnerFilterSelector" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="2" ismultipleselection></vr-directivewrapper>
 
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="From" value="fromDate" isrequired="true"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="From" value="scopeModel.fromDate" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" applytimemax label="To" value="toDate"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" applytimemax label="To" value="scopeModel.toDate"></vr-datetimepicker>
                 </vr-columns>
                 <vr-columns width="normal">
-                    <vr-datetimepicker type="date" label="Issue Date" value="issueDate"></vr-datetimepicker>
+                    <vr-datetimepicker type="date" label="Issue Date" value="scopeModel.issueDate"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="DeselectAll" formname="formFilter" data-onclick="scopeModel.deselectAllClicked" vr-disabled="scopeModel.disableDeselectAll" ></vr-button>
+                    <vr-button type="SelectAll" formname="formFilter" data-onclick="scopeModel.selectAllClicked" vr-disabled="scopeModel.disableSelectAll" ></vr-button>
+                    <vr-button type="BulkActions" formname="formFilter" data-onclick="scopeModel.bulkActionsClicked" vr-disabled="scopeModel.disableBulkActions"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
                     <!--<vr-button type="GenerateInvoice" data-onclick="generateInvoice" haspermission="hasGenerateInvoicePermission"></vr-button>-->
-                    <vr-button type="GenerateInvoice" data-onclick="generateInvoices" haspermission="hasGenerateInvoicePermission"></vr-button>
+                    <vr-button type="GenerateInvoice" data-onclick="scopeModel.generateInvoices" haspermission="scopeModel.hasGenerateInvoicePermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-invoice-grid on-ready="onGridReady"></vr-invoice-grid>
+                <vr-invoice-grid on-ready="scopeModel.onGridReady"></vr-invoice-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

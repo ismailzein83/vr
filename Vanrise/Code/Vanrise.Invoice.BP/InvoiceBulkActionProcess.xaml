@@ -1,0 +1,133 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.Invoice.BP.InvoiceBulkActionProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:viba="clr-namespace:Vanrise.Invoice.BP.Arguments;assembly=Vanrise.Invoice.BP.Arguments"
+ xmlns:viba1="clr-namespace:Vanrise.Invoice.BP.Activities;assembly=Vanrise.Invoice.BP.Activities"
+ xmlns:vie="clr-namespace:Vanrise.Invoice.Entities;assembly=Vanrise.Invoice.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(viba:InvoiceBulkActionProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.Invoice.BP.InvoiceBulkActionProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.Invoice.BP.Arguments</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Invoice.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Invoice.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Invoice.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.Invoice.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="vq:BaseQueue(vie:Invoice)" Name="OutputQueue" />
+    </Sequence.Variables>
+    <Parallel>
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadInvoiceBulkActionStatus" />
+      </Parallel.Variables>
+      <viba1:InvoiceBulkActionDrafts sap2010:WorkflowViewState.IdRef="InvoiceBulkActionDrafts_1">
+        <viba1:InvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">Input.InvoiceBulkActionIdentifier</mca:CSharpValue>
+          </InArgument>
+        </viba1:InvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
+        <viba1:InvoiceBulkActionDrafts.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vie:Invoice)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vie:Invoice)">OutputQueue</mca:CSharpReference>
+          </InOutArgument>
+        </viba1:InvoiceBulkActionDrafts.OutputQueue>
+        <viba1:InvoiceBulkActionDrafts.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadInvoiceBulkActionStatus</mca:CSharpReference>
+          </OutArgument>
+        </viba1:InvoiceBulkActionDrafts.Status>
+      </viba1:InvoiceBulkActionDrafts>
+      <viba1:ExecuteInvoiceActions Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ExecuteInvoiceActions_1">
+        <viba1:ExecuteInvoiceActions.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vie:Invoice)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vie:Invoice)">OutputQueue</mca:CSharpReference>
+          </InOutArgument>
+        </viba1:ExecuteInvoiceActions.InputQueue>
+        <viba1:ExecuteInvoiceActions.InvoiceBulkActions>
+          <InArgument x:TypeArguments="scg:List(vie:InvoiceBulkActionRuntime)">
+            <mca:CSharpValue x:TypeArguments="scg:List(vie:InvoiceBulkActionRuntime)">Input.InvoiceBulkActions</mca:CSharpValue>
+          </InArgument>
+        </viba1:ExecuteInvoiceActions.InvoiceBulkActions>
+        <viba1:ExecuteInvoiceActions.InvoiceTypeId>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">Input.InvoiceTypeId</mca:CSharpValue>
+          </InArgument>
+        </viba1:ExecuteInvoiceActions.InvoiceTypeId>
+        <viba1:ExecuteInvoiceActions.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadInvoiceBulkActionStatus</mca:CSharpValue>
+          </InArgument>
+        </viba1:ExecuteInvoiceActions.PreviousActivityStatus>
+      </viba1:ExecuteInvoiceActions>
+      <sap2010:WorkflowViewState.IdRef>Parallel_1</sap2010:WorkflowViewState.IdRef>
+    </Parallel>
+    <viba1:ClearInvoiceBulkActionDrafts sap2010:WorkflowViewState.IdRef="ClearInvoiceBulkActionDrafts_1">
+      <viba1:ClearInvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.InvoiceBulkActionIdentifier</mca:CSharpValue>
+        </InArgument>
+      </viba1:ClearInvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
+    </viba1:ClearInvoiceBulkActionDrafts>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlQnVsa0FjdGlvblByb2Nlc3MueGFtbA07A3QOAgEBPwVrEAIBBmwFcioCAQJDB1MnAgEYVAdpJQIBB28Lb2gCAQNGDUZqAgEhUA1QfAIBHUsNS28CARlhDWFcAgEUZg1mdAIBEFcNV28CAQxcDVyBAQIBCA==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="InvoiceBulkActionDrafts_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ExecuteInvoiceActions_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="ClearInvoiceBulkActionDrafts_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,272">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.InvoiceBulkActionProcess_1" sap:VirtualizedContainerService.HintSize="616,352" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

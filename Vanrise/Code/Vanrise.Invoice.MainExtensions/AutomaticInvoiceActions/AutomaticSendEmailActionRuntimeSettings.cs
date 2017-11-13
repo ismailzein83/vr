@@ -25,9 +25,9 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
                 invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.AutomaticInvoiceActions");
 
-                var automaticInvoiceAction = invoiceType.Settings.AutomaticInvoiceActions.FindRecord(x => x.AutomaticInvoiceActionId == context.AutomaticInvoiceActionId);
-                automaticInvoiceAction.ThrowIfNull("automaticInvoiceAction");
-                var automaticSendEmailActionSettings = automaticInvoiceAction.Settings as AutomaticSendEmailAction;
+              //  var automaticInvoiceAction = invoiceType.Settings.AutomaticInvoiceActions.FindRecord(x => x.AutomaticInvoiceActionId == context.AutomaticInvoiceActionId);
+             //   automaticInvoiceAction.ThrowIfNull("automaticInvoiceAction");
+                var automaticSendEmailActionSettings = context.DefinitionSettings as AutomaticSendEmailAction;
                 automaticSendEmailActionSettings.ThrowIfNull("automaticSendEmailActionSettings");
                 VRMailManager vrMailManager = new VRMailManager();
                 InvoiceEmailActionManager invoiceEmailActionManager = new InvoiceEmailActionManager();

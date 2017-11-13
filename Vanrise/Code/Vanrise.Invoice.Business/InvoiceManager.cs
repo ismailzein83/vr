@@ -519,6 +519,7 @@ namespace Vanrise.Invoice.Business
             return dataManager.DeleteGeneratedInvoice(invoice.InvoiceId, invoice.InvoiceTypeId, invoice.PartnerId, invoice.FromDate,invoice.ToDate);
         }
 
+      
         #endregion
 
         #region Mappers
@@ -997,5 +998,34 @@ namespace Vanrise.Invoice.Business
             var result = new BPInstanceManager().CreateNewProcess(createProcessInput);
             return new GenerateInvoicesOutput { Succeed = true, ProcessInstanceId = result.ProcessInstanceId };
         }
+
+
+        public ExecuteMenualInvoiceActionsOutput ExecuteMenualInvoiceActions(ExecuteMenualInvoiceActionsInput input)
+        {
+            InvoiceBulkActionsDraftManager invoiceBulkActionsDraftManager = new InvoiceBulkActionsDraftManager();
+            invoiceBulkActionsDraftManager.UpdateInvoiceBulkActionDraft(input.InvoiceBulkActionIdentifier, input.InvoiceTypeId, input.IsAllInvoicesSelected, input.TargetInvoicesIds);
+            
+            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
+            if (input.InvoiceBulkActions == null || input.InvoiceBulkActions.Count == 0)
+                return new ExecuteMenualInvoiceActionsOutput { Succeed = false, OutputMessage = "At least one invoice action should be selected." };
+
+            InvoiceBulkActionProcessInput invoiceBulkActionProcessInput = new InvoiceBulkActionProcessInput()
+            {
+                InvoiceBulkActionIdentifier = input.InvoiceBulkActionIdentifier,
+                InvoiceTypeId = input.InvoiceTypeId,
+                UserId = userId,
+                InvoiceBulkActions = input.InvoiceBulkActions,
+            };
+
+            var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
+            {
+                InputArguments = invoiceBulkActionProcessInput
+            };
+
+            var result = new BPInstanceManager().CreateNewProcess(createProcessInput);
+            return new ExecuteMenualInvoiceActionsOutput { Succeed = true, ProcessInstanceId = result.ProcessInstanceId };
+        }
+
     }
 }

@@ -16,7 +16,7 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                 var invoiceGrid = new InvoiceGrid($scope, ctrl, $attrs);
                 invoiceGrid.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: "ctrlGrid",
             bindToController: true,
             compile: function (element, attrs) {
 
@@ -35,7 +35,13 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
             var invoiceGridActions = [];
             var mainGridColumns = [];
             var invoiceItemGroupings;
+            var context;
+            var targetInvoices = [];
+            var isAllInvoicesSelected;
+            var query;
+            var invoiceBulkActionIdentifier;
             function initializeController() {
+                $scope.scopeModel = {};
 
                 $scope.datastore = [];
                 $scope.gridMenuActions = [];
@@ -49,7 +55,38 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                     return menuActions;
                 };
 
+                $scope.scopeModel.onInvoiceSelect = function (dataItem) {
+                    var invoiceId = dataItem.Entity.InvoiceId;
+                    if (dataItem.isSelected) {
+                        if (isAllInvoicesSelected) {
+                            var index = targetInvoices.indexOf(invoiceId);
+                            if (index > -1) {
+                                targetInvoices.splice(index, 1);
+                            }
+                        }
+                        else {
+                            if (!UtilsService.contains(targetInvoices, invoiceId)) {
+                                targetInvoices.push(invoiceId);
+                            }
+                        }
 
+                    } else {
+                        if (isAllInvoicesSelected) {
+                            if (!UtilsService.contains(targetInvoices, invoiceId)) {
+                                targetInvoices.push(invoiceId);
+                            }
+                        }
+                        else {
+                            var index = targetInvoices.indexOf(invoiceId);
+                            if (index > -1) {
+                                targetInvoices.splice(index, 1);
+                            }
+                        }
+                    }
+                    if (context != undefined) {
+                        context.reEvaluateButtonsStatus();
+                    }
+                };
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
 
@@ -59,13 +96,18 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                     function getDirectiveAPI() {
                         var directiveAPI = {};
                         directiveAPI.loadGrid = function (payload) {
-                            var query;
+                       
+                            isAllInvoicesSelected = false;
+                            targetInvoices.length = 0;
+
+                
                             var promiseDeferred = UtilsService.createPromiseDeferred();
                             VR_Invoice_InvoiceTypeConfigsAPIService.GetInvoiceUISubSectionSettingsConfigs().then(function (response) {
                                 if (response != undefined) {
                                     subSectionConfigs = response;
                                 }
                                 if (payload != undefined) {
+                                    context = payload.context;
                                     invoiceActions = payload.invoiceActions;
                                     mainGridColumns = payload.mainGridColumns;
                                     subSections = payload.subSections;
@@ -74,6 +116,10 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                                     invoiceTypeId = payload.InvoiceTypeId;
                                     invoiceItemGroupings = payload.invoiceItemGroupings;
                                   
+                                }
+                                if (query != undefined) {
+                                    query.IsSelectAll = false;
+                                    query.InvoiceBulkActionIdentifier = invoiceBulkActionIdentifier;
                                 }
                                 gridAPI.retrieveData(query).then(function () {
                                     promiseDeferred.resolve();
@@ -92,6 +138,59 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                             gridAPI.itemAdded(invoice);
                         };
 
+                        directiveAPI.getTargetInvoicesEntity = function () {
+                            return {
+                                IsAllInvoicesSelected: isAllInvoicesSelected,
+                                TargetInvoicesIds: targetInvoices
+                            };
+                        };
+                        directiveAPI.getInvoiceBulkActionIdentifier = function () {
+                            return invoiceBulkActionIdentifier;
+                        };
+                        directiveAPI.anyInvoiceSelected = function () {
+                            return isAllInvoicesSelected || targetInvoices.length > 0;
+                        };
+
+                        directiveAPI.allInvoiceSelected = function () {
+                            return isAllInvoicesSelected && targetInvoices.length == 0;
+                        };
+
+                        directiveAPI.selectAllInvoices = function () {
+                            isAllInvoicesSelected = true;
+                            targetInvoices.length = 0;
+                            if (context != undefined) {
+                                context.reEvaluateButtonsStatus();
+                            }
+                            if (query != undefined)
+                            {
+                                query.IsSelectAll = true;
+                                if (invoiceBulkActionIdentifier == undefined)
+                                    invoiceBulkActionIdentifier = UtilsService.guid();
+                                query.InvoiceBulkActionIdentifier = invoiceBulkActionIdentifier;
+                            }
+                            
+                            return gridAPI.retrieveData(query);
+                        };
+
+                        directiveAPI.deselectAllInvoices = function () {
+                            isAllInvoicesSelected = false;
+                            targetInvoices.length = 0;
+                            if (context != undefined) {
+                                context.reEvaluateButtonsStatus();
+                            }
+                            if (query != undefined) {
+                                query.IsSelectAll = false;
+                                query.InvoiceBulkActionIdentifier = invoiceBulkActionIdentifier;
+                            }
+                            return gridAPI.retrieveData(query);
+                        };
+
+                        directiveAPI.hasInvoices = function () {
+                            return $scope.datastore.length > 0;
+                        };
+
+
+
                         return directiveAPI;
                     }
                 };
@@ -101,6 +200,13 @@ app.directive("vrInvoiceGrid", ["UtilsService", "VRNotificationService", "VR_Inv
                             if (response.Data != undefined) {
                                 for (var i = 0; i < response.Data.length; i++) {
                                     var dataItem = response.Data[i];
+                                    if (isAllInvoicesSelected)
+                                    {
+                                        if (!UtilsService.contains(targetInvoices, dataItem.Entity.InvoiceId))
+                                        {
+                                            dataItem.isSelected = true;
+                                        }
+                                    }
                                     if ($scope.gridFields == undefined || $scope.gridFields.length == 0)
                                         buildGridFields(dataItem);
                                     VR_Invoice_InvoiceService.defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);

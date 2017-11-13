@@ -117,5 +117,12 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetRemoteInvoiceTypeAttachmentsInfo(invoiceTypeId);
         }
+
+        [HttpGet]
+        [Route("GetMenualInvoiceBulkActionsDefinitions")]
+        public List<InvoiceBulkActionDefinitionEntity> GetMenualInvoiceBulkActionsDefinitions(Guid invoiceTypeId)
+        {
+            return _manager.GetMenualInvoiceBulkActionsDefinitions(invoiceTypeId);
+        }
     }
 }

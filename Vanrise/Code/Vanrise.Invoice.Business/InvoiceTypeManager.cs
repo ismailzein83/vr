@@ -401,6 +401,32 @@ namespace Vanrise.Invoice.Business
                 throw new NullReferenceException("invoiceAction");
             return invoiceAction;
         }
+        public List<InvoiceBulkActionDefinitionEntity> GetMenualInvoiceBulkActionsDefinitions(Guid invoiceTypeId)
+        {
+            var invoiceType = GetInvoiceType(invoiceTypeId);
+            var invoiceMenualBulkActions = invoiceType.Settings.InvoiceMenualBulkActions;
+            List<InvoiceBulkActionDefinitionEntity> invoiceBulkActionDefinitionEntities = null;
+
+            if (invoiceMenualBulkActions != null)
+            {
+                invoiceBulkActionDefinitionEntities = new List<InvoiceBulkActionDefinitionEntity>();
+
+                foreach (var invoiceMenualBulkAction in invoiceMenualBulkActions)
+                {
+                    var invoiceBulkAction = invoiceType.Settings.InvoiceBulkActions.FindRecord(x => x.InvoiceBulkActionId == invoiceMenualBulkAction.InvoiceBulkActionId);
+                    if (invoiceBulkAction != null)
+                    {
+                        invoiceBulkActionDefinitionEntities.Add(new InvoiceBulkActionDefinitionEntity
+                        {
+                            InvoiceBulkAction = invoiceBulkAction,
+                            InvoiceMenualBulkAction = invoiceMenualBulkAction,
+                            InvoiceAttachments = invoiceType.Settings.InvoiceAttachments
+                        });
+                    }
+                }
+            }
+            return invoiceBulkActionDefinitionEntities;
+        }
         public InvoiceAttachment GetInvoiceAttachment(Guid invoiceTypeId, Guid invoiceAttachmentId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);

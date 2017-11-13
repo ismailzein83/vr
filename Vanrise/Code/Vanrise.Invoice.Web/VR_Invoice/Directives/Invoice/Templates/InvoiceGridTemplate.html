@@ -1,4 +1,4 @@
-﻿<span vr-loader="ctrl.isLodingGrid">
+﻿<span vr-loader="ctrlGrid.isLodingGrid">
     <vr-datagrid datasource="datastore"
                  on-ready="onGridReady"
                  dataretrievalfunction="dataRetrievalFunction"
@@ -6,6 +6,9 @@
                  menuactions="menuActions"
                  idfield="Entity.InvoiceId"
                  defaultsortbyfieldname="'Entity.InvoiceId'" normalcell enableautoexport="true">
+        <vr-datagridcolumn widthfactor="3" disablesorting>
+            <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onInvoiceSelect(dataItem)"></vr-check>
+        </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceId'"></vr-datagridcolumn>
         <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field">
         </vr-datagridcolumn>

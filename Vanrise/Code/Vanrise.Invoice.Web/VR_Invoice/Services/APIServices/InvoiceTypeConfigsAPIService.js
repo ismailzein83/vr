@@ -42,8 +42,8 @@
         function GetInvoiceSettingPartsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceSettingPartsConfigs"));
         }
-        function GetAutomaticInvoiceActionSettingsConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetAutomaticInvoiceActionSettingsConfigs"));
+        function GetInvoiceBulkActionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceBulkActionSettingsConfigs"));
         }
         function GetItemSetNameStorageRuleConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetItemSetNameStorageRuleConfigs"));
@@ -60,7 +60,7 @@
             GetBillingPeriodTemplateConfigs: GetBillingPeriodTemplateConfigs,
             GetStartDateCalculationMethodConfigs: GetStartDateCalculationMethodConfigs,
             GetInvoiceSettingPartsConfigs: GetInvoiceSettingPartsConfigs,
-            GetAutomaticInvoiceActionSettingsConfigs: GetAutomaticInvoiceActionSettingsConfigs,
+            GetInvoiceBulkActionSettingsConfigs: GetInvoiceBulkActionSettingsConfigs,
             GetItemSetNameStorageRuleConfigs: GetItemSetNameStorageRuleConfigs
 
         });

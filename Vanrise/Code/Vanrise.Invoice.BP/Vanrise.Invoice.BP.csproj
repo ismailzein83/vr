@@ -61,6 +61,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,7 +96,7 @@
     </XamlAppDef>
   </ItemGroup>
   <ItemGroup>
-    <XamlAppDef Include="InvoiceActionProcess.xaml">
+    <XamlAppDef Include="InvoiceBulkActionProcess.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>
