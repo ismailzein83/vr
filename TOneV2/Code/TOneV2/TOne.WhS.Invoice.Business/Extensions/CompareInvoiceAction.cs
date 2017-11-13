@@ -20,7 +20,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public Guid RateTypeDimensionId { get; set; }
 
 
-
+        public Guid RateMeasureId { get; set; }
         public Guid NumberOfCallsMeasureId { get; set; }
         public Guid AmountMeasureId { get; set; }
         public Guid DurationMeasureId { get; set; }

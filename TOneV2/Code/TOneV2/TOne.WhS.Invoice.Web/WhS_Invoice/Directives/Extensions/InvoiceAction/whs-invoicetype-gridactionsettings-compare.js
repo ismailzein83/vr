@@ -89,6 +89,8 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                                 $scope.scopeModel.selectedNumberOfCallsMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.NumberOfCallsMeasureId, "MeasureItemFieldId");
                                 $scope.scopeModel.selectedAmountMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.AmountMeasureId, "MeasureItemFieldId");
                                 $scope.scopeModel.selectedDurationMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.DurationMeasureId, "MeasureItemFieldId");
+                                $scope.scopeModel.selectedRateMeasure = UtilsService.getItemByVal($scope.scopeModel.measuresItemGroupings, invoiceActionEntity.RateMeasureId, "MeasureItemFieldId");
+
                             });
                         }
                     }
@@ -112,6 +114,7 @@ app.directive("whsInvoicetypeGridactionsettingsCompare", ["UtilsService", "VRNot
                         NumberOfCallsMeasureId: $scope.scopeModel.selectedNumberOfCallsMeasure.MeasureItemFieldId,
                         AmountMeasureId: $scope.scopeModel.selectedAmountMeasure.MeasureItemFieldId,
                         DurationMeasureId: $scope.scopeModel.selectedDurationMeasure.MeasureItemFieldId,
+                        RateMeasureId: $scope.scopeModel.selectedRateMeasure.MeasureItemFieldId,
                         ItemGroupingId: $scope.scopeModel.selectedItemGrouping.ItemGroupingId
                     };
                 };

@@ -117,4 +117,14 @@
                    label="Duration Measure">
         </vr-select>
     </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.measuresItemGroupings"
+                   datatextfield="FieldDescription"
+                   datavaluefield="MeasureItemFieldId"
+                   selectedvalues="scopeModel.selectedRateMeasure"
+                   entityname="Measuer"
+                   isrequired="true"
+                   label="Rate Measure">
+        </vr-select>
+    </vr-columns>
 </vr-row>
