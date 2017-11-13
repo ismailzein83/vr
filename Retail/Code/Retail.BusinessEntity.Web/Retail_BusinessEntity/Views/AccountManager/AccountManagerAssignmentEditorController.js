@@ -2,9 +2,9 @@
 
     "use strict";
 
-    accountManagerAssignmentEditor.$inject = ["$scope", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService",  "Retail_BE_AccountManagerAssignmentAPIService"];
+    accountManagerAssignmentEditor.$inject = ["$scope", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentAPIService", "VRValidationService"];
 
-    function accountManagerAssignmentEditor($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentAPIService) {
+    function accountManagerAssignmentEditor($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentAPIService, VRValidationService) {
         var isEditMode;
         var subViewDefinitionEntity
 
@@ -42,6 +42,9 @@
             $scope.scopeModel = {};
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
+            };
+            $scope.scopeModel.validateEffectiveDate = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             };
             $scope.scopeModel.save = function () {
                 if (!isEditMode) {
