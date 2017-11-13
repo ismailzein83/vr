@@ -12,7 +12,9 @@ CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetFiltered]
 	@IssueDate datetime,
 	@EffectiveDate  datetime = null,
 	@IsEffectiveInFuture bit,
-	@Status int = null
+	@Status int = null,
+	@IsSelectAll bit = null,
+	@InvoiceBulkActionIdentifier uniqueidentifier = null
 AS
 BEGIN
 DECLARE @PartnerIdsTable TABLE (PartnerId nvarchar(50))
@@ -37,6 +39,7 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			vrIn.IsAutomatic,
 			vrIn.InvoiceSettingId,
 			vrIn.SentDate
+			into #InvoicesResult
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	Inner Join VR_Invoice.InvoiceAccount vrInAcc 
 	on vrIn.InvoiceTypeID = vrInAcc.InvoiceTypeId and 
@@ -53,4 +56,20 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			(@IssueDate is null OR vrIn.IssueDate =@IssueDate ) And 
 			 ISNULL( vrIn.IsDeleted,0) = 0 AND ISNULL(vrIn.IsDraft, 0) = 0
 			
+	IF(@IsSelectAll IS NOT NULL AND @IsSelectAll = 1 AND @InvoiceBulkActionIdentifier IS NOT NULL)
+	BEGIN
+
+		DELETE FROM [VR_Invoice].InvoiceBulkActionDraft
+		WHERE InvoiceBulkActionIdentifier = @InvoiceBulkActionIdentifier
+
+		INSERT INTO [VR_Invoice].InvoiceBulkActionDraft([InvoiceBulkActionIdentifier],[InvoiceTypeId],[InvoiceId])
+		SELECT @InvoiceBulkActionIdentifier,InvoiceTypeId, ID FROM  #InvoicesResult
+		
+	END
+	ELSE IF(@IsSelectAll IS NOT NULL AND @IsSelectAll =0 AND @InvoiceBulkActionIdentifier IS NOT NULL)
+	BEGIN
+		DELETE FROM [VR_Invoice].InvoiceBulkActionDraft
+		WHERE InvoiceBulkActionIdentifier = @InvoiceBulkActionIdentifier
+	END
+	SELECT * from #InvoicesResult
 END

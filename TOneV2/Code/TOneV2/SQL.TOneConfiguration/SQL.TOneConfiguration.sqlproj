@@ -686,6 +686,10 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceSetting_Delete.sql" />
     <Build Include="rules\Stored Procedures\sp_RuleChanged_DeleteByType.sql" />
     <Build Include="rules\Stored Procedures\sp_RuleChanged_DeleteByRuleAndType.sql" />
+    <Build Include="VR_Invoice\Tables\InvoiceBulkActionDraft.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceBulkActionDraft_Update.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceBulkActionDraft_LoadInvoices.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceBulkActionDraft_Clear.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
