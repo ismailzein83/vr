@@ -36,7 +36,7 @@
 			</vr-datagridcolumn>
 
 			<vr-datagridcolumn headertext="'BED'" widthfactor="10">
-				<span vr-disabled="viewScope.isCountryEnded || viewScope.isZonePendingClosed">
+				<span vr-disabled="viewScope.isCountryEnded || viewScope.isZonePendingClosed || viewScope.isCountryNew">
 					<span vr-disabled="!viewScope.areOtherRatesEditable()">
 						<span vr-disabled="dataItem.CurrentRate != null">
 							<vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null"></vr-datetimepicker>

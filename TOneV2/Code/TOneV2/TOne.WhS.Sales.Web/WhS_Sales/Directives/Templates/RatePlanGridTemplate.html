@@ -625,7 +625,7 @@
                                                                 <div style="display:inline-block;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
-                                                                            <span ng-show="dataItem.NewRate != null" vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed)}}">
+                                                                            <span ng-show="dataItem.NewRate != null" vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || dataItem.IsCountryNew)}}">
                                                                                 <vr-datetimepicker type="date" value="dataItem.NewRateBED" customvalidate="dataItem.validateNewRateDates()" isrequired="dataItem.NewRate != null" disablefocus></vr-datetimepicker>
                                                                             </span>
                                                                             <span ng-hide="dataItem.NewRate != null" vr-disabled="true">
