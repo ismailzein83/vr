@@ -436,7 +436,6 @@
                         }
                     }
                     if (carrierAccountEntity.SupplierSettings) {
-                        $scope.scopeModel.supIncludeProcessingTimeZone = carrierAccountEntity.SupplierSettings.IncludeProcessingTimeZone;
                         $scope.scopeModel.supplierEffectiveDateDayOffset = carrierAccountEntity.SupplierSettings.EffectiveDateDayOffset;
                     }
 
@@ -768,7 +767,6 @@
                     DefaultServices: zoneServiceConfigSelectorAPI != undefined ? getSelectedDefaultServices() : null,
                     TimeZoneId: supplierTimeZoneSelectorAPI != undefined ? supplierTimeZoneSelectorAPI.getSelectedIds() : undefined,
                     RoutingStatus: supplierRoutingStatusSelectorAPI != undefined ? supplierRoutingStatusSelectorAPI.getSelectedIds() : undefined,
-                    IncludeProcessingTimeZone: $scope.scopeModel.supIncludeProcessingTimeZone,
                     EffectiveDateDayOffset: $scope.scopeModel.supplierEffectiveDateDayOffset
                 },
                 CustomerSettings: {
