@@ -35,9 +35,9 @@
                         InvoiceBulkActionId: $scope.scopeModel.selectedMenualBulkAction.InvoiceBulkActionId,
                         Settings: directiveAPI.getData()
                     }],
-                    IsAllInvoicesSelected:getTargetInvoicesEntity!= undefined?getTargetInvoicesEntity.IsAllInvoicesSelected:undefined,
+                    IsAllInvoicesSelected: getTargetInvoicesEntity != undefined ? getTargetInvoicesEntity.IsAllInvoicesSelected : undefined,
                     TargetInvoicesIds: getTargetInvoicesEntity != undefined ? getTargetInvoicesEntity.TargetInvoicesIds : undefined,
-                }
+                };
                 return VR_Invoice_InvoiceAPIService.ExecuteMenualInvoiceActions(executeMenualInvoiceActionsInput).then(function (response) {
                     if (response.Succeed) {
                         $scope.modalContext.closeModal();

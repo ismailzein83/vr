@@ -166,10 +166,10 @@
                     if (selectedDataRecordTypeSelectorReadyPromiseDeferred != undefined)
                         selectedDataRecordTypeSelectorReadyPromiseDeferred.resolve();
                     else {
-                        var setLoader = function (value) { $scope.scopeModel.isLoadAmountField = value };
+                        var setLoader = function (value) { $scope.scopeModel.isLoadAmountField = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, amountFieldAPI, { dataRecordTypeId: dataRecordTypeId }, setLoader);
 
-                        var setLoader = function (value) { $scope.scopeModel.isLoadCurrencyField = value };
+                        var setLoader = function (value) { $scope.scopeModel.isLoadCurrencyField = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currencyFieldAPI, { dataRecordTypeId: dataRecordTypeId }, setLoader);
                     }
 
@@ -301,8 +301,8 @@
                 };
                 if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined) {
                     stagesToHoldPayload.selectedIds = invoiceTypeEntity.Settings.StagesToHoldNames;
-                };
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToHold = value };
+                }
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToHold = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToHoldAPI, stagesToHoldPayload, setLoader);
             }
             function loadStagesToProcessSelector(executionFlowDefinitionId) {
@@ -311,8 +311,8 @@
                 };
                 if (invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined) {
                     stagesToProcessPayload.selectedIds = invoiceTypeEntity.Settings.StagesToProcessNames;
-                };
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToProcess = value };
+                }
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToProcess = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToProcessAPI, stagesToProcessPayload, setLoader);
             }
 
@@ -774,7 +774,7 @@
                         VRUIUtilsService.callDirectiveLoad(executionFlowDefinitionAPI, executionFlowDefinitionSelectorPayload, executionFlowDefinitionSelectorLoadDeferred);
                     });
                     return executionFlowDefinitionSelectorLoadDeferred.promise;
-                };
+                }
 
                 function loadInvoiceMenualGridActionsSection() {
                     var invoiceMenualActionsSectionLoadPromiseDeferred = UtilsService.createPromiseDeferred();
