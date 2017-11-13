@@ -198,8 +198,17 @@ namespace TOne.WhS.Sales.Business
                         var newRates = new List<DraftRateToChange>();
 
                         DateTime newRateBED;
-                        if (!zoneEffectiveDatesByZoneId.TryGetValue(zone.SaleZoneId, out newRateBED))
-                            throw new DataIntegrityValidationException(string.Format("The effective date of zone '{0}' was not found", zone.Name));
+
+                        if (draft!=null && draft.CountryChanges!=null && draft.CountryChanges.NewCountries!=null && draft.CountryChanges.NewCountries.Any(item => item.CountryId == zone.CountryId))
+                        {
+                            if (!countryBEDsByCountryId.TryGetValue(zone.CountryId, out newRateBED))
+                                throw new DataIntegrityValidationException(string.Format("The effective date of zone '{0}' was not found", zone.Name));
+                        }
+                        else
+                        {
+                            if (!zoneEffectiveDatesByZoneId.TryGetValue(zone.SaleZoneId, out newRateBED))
+                                throw new DataIntegrityValidationException(string.Format("The effective date of zone '{0}' was not found", zone.Name));
+                        }
 
                         newRates.Add(new DraftRateToChange()
                         {
