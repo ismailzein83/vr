@@ -54,7 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutomaticInvoiceActions\RecreateInvoiceBulkActionSettings.cs" />
     <Compile Include="AutomaticInvoiceActions\AutomaticSaveInvoiceToFileAction.cs" />
+    <Compile Include="AutomaticInvoiceActions\RecreateInvoiceBulkActionRuntimeSettings.cs" />
     <Compile Include="AutomaticInvoiceActions\AutomaticSendEmailAction.cs" />
     <Compile Include="AutomaticInvoiceActions\AutomaticSaveInvoiceToFileActionRuntimeSettings.cs" />
     <Compile Include="AutomaticInvoiceActions\AutomaticSendEmailActionRuntimeSettings.cs" />

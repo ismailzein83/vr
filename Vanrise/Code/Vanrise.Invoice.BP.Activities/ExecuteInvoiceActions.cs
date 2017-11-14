@@ -89,12 +89,12 @@ namespace Vanrise.Invoice.BP.Activities
                         if (actionContext.ErrorMessage != null)
                             handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Warning, string.Format("{0}", actionContext.ErrorMessage));
                         else
-                            handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully for {1}.", invoiceBulkActionDefinition.Title, partnerName);
+                            handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully for invoice for account '{1}' having serial number '{2}' .", invoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber);
                     }
                 }
                 catch (Exception ex)
                 {
-                    handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Error, string.Format("Error occured while executing action for {0}, Reason: {1}", partnerName, ex.Message));
+                    handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Error, string.Format("Error occured while executing action for '{0}' having serial number '{1}' , Reason: {2}", partnerName, invoiceQueue.SerialNumber, ex.Message));
                     handle.SharedInstanceData.WriteHandledException(ex, true);
                 }
             }

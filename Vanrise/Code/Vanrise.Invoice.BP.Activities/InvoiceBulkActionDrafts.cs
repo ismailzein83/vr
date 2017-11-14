@@ -34,12 +34,9 @@ namespace Vanrise.Invoice.BP.Activities
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading Invoices ...");
 
             InvoiceBulkActionsDraftManager invoiceBulkActionsDraftManager = new InvoiceBulkActionsDraftManager();
-            PartnerManager partnerManager = new PartnerManager();
             invoiceBulkActionsDraftManager.LoadInvoicesFromInvoiceBulkActionDraft(inputArgument.InvoiceBulkActionIdentifier, (invoiceQueue) =>
             {
                 inputArgument.OutputQueue.Enqueue(invoiceQueue);
-                var partnerName = partnerManager.GetPartnerName(invoiceQueue.InvoiceTypeId, invoiceQueue.PartnerId);
-                handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, string.Format("Start execute actions for {0}.", partnerName));
             });
 
         }

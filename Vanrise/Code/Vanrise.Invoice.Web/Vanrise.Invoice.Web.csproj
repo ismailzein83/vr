@@ -254,6 +254,10 @@
     <Content Include="VR_Invoice\Directives\InvoiceSetting\Templates\InvoiceSettingGridTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoice-invoicesetting-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoicesetting-grid.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\RecreateInvoiceBulkActionRuntimeSettingsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\RecreateInvoiceBulkActionSettingsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-invoicebulkaction-recreateinvoice.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-invoicebulkaction-recreateinvoice-runtime .js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceBulkAction\InvoiceBulkActionEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceBulkAction\Templates\InvoiceBulkActionEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceBulkAction\Templates\InvoiceBulkActionsGridTemplate.html" />
