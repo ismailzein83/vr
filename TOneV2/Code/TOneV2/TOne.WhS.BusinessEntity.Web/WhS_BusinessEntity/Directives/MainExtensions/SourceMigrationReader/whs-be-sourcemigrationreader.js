@@ -114,7 +114,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     if ($scope.defaultRate <= 0)
                         return "Default Rate must be greater than zero";
                     return null;
-                }
+                };
 
                 $scope.validateWeekendRate = function () {
                     if (weekendRateTypeSelectorAPI != undefined && weekendRateTypeSelectorAPI.getSelectedIds() == undefined)
@@ -151,7 +151,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                 $scope.onSellingNumberPlanSelectionChanged = function () {
                     var selectedSellingNumberPlanId = sellingNumberPlanDirectiveAPI.getSelectedIds();
                     if (selectedSellingNumberPlanId != undefined) {
-                        var setLoader = function (value) { $scope.isLoadingSellingProduct = value };
+                        var setLoader = function (value) { $scope.isLoadingSellingProduct = value; };
 
                         var sellingProductPayload = {
                             filter: {
@@ -261,7 +261,7 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                         angular.forEach(payload.data.MigrationRequestedTables, function (x) {
                             if (x != WhS_BE_DBTableNameEnum.CustomerCountry.value && x != WhS_BE_DBTableNameEnum.File.value && x != WhS_BE_DBTableNameEnum.CarrierAccountStatusHistory.value)
                                 $scope.migrationTablesSelectedValues.push(UtilsService.getEnum(WhS_BE_DBTableNameEnum, 'value', x));
-                        })
+                        });
 
                     }
                     return UtilsService.waitMultipleAsyncOperations([loadSellingNumberPlanSelector, loadOffPeakRateTypeSelector, loadWeekendRateTypeSelector, loadHolidayRateTypeSelector])
