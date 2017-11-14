@@ -47,7 +47,7 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             if (messages.Count > 0)
             {
-                context.Message = string.Format("Zone '{0}' has different rates {1}.", zone.ZoneName, string.Join(", ", messages));
+                context.Message = string.Format("Zone '{0}' has different rates: {1}.", zone.ZoneName, string.Join(", ", messages));
                 return false;
             }
             return true;

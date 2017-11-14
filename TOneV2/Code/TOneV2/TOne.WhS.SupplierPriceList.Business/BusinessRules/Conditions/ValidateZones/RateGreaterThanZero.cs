@@ -31,7 +31,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
             if (invalidZones.Count > 0)
             {
-                context.Message = string.Format("Rate is negative for the following zone(s): {0}.", string.Join(", ", invalidZones));
+                context.Message = string.Format("Rate is negative or zero for the following zone(s): {0}.", string.Join(", ", invalidZones));
                 return false;
             }
             return true;

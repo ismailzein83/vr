@@ -34,7 +34,7 @@ namespace TOne.WhS.SupplierPriceList.Business.BusinessRules
 
             if (invalidZones.Count > 0)
             {
-                context.Message = string.Format("Can not have rates greater than maximum rate '{0}'. Violated zones are: '{1}'.", importSPLContext.MaximumRate, string.Join(", ", invalidZones));
+                context.Message = string.Format("Can not have rates greater than maximum rate '{0}'. Violated zone(s): '{1}'.", importSPLContext.MaximumRate, string.Join(", ", invalidZones));
                 return false;
             }
 
