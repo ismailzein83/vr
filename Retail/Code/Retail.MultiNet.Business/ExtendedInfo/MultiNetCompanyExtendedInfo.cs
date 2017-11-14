@@ -27,6 +27,7 @@ namespace Retail.MultiNet.Business
         public bool ExcludeSaleTaxes { get; set; }
         public MultiNetAccountType? AccountType { get; set; }
         public long CustomerLogo { get; set; }
+        public string AssignedNumber { get; set; }
 
         public override dynamic GetFieldValue(IAccountPartGetFieldValueContext context)
         {
@@ -41,6 +42,7 @@ namespace Retail.MultiNet.Business
                 case "ExcludeSaleTaxes": return this.ExcludeSaleTaxes;
                 case "BillingPeriod": return this.BillingPeriod;
                 case "DueDate": return this.DueDate;
+                case "AssignedNumber": return this.AssignedNumber;
                 default: return null;
             }
         }
