@@ -203,6 +203,7 @@ namespace TOne.WhS.Sales.Business
                         {
                             if (!countryBEDsByCountryId.TryGetValue(zone.CountryId, out newRateBED))
                                 throw new DataIntegrityValidationException(string.Format("The effective date of zone '{0}' was not found", zone.Name));
+                            newRateBED = Utilities.Max(newRateBED, zone.BED);
                         }
                         else
                         {
