@@ -40,6 +40,8 @@ namespace TOne.WhS.DBSync.Business
             _context.WriteInformation("Database Sync Task Action Started");
             DBSyncTaskActionArgument dbSyncTaskActionArgument = taskActionArgument as DBSyncTaskActionArgument;
             MigrationManager migrationManager;
+            if (dbSyncTaskActionArgument.DefaultRate <= 0)
+                throw new ArgumentException("Default Rate should be greater than zero");
             _context.DefaultRate = dbSyncTaskActionArgument.DefaultRate;
             _context.UseTempTables = dbSyncTaskActionArgument.UseTempTables;
             _context.ConnectionString = dbSyncTaskActionArgument.ConnectionString;

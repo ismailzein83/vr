@@ -87,7 +87,11 @@ namespace TOne.WhS.DBSync.Business
         {
             ServiceConfigSetting serviceConfigSetting = new ServiceConfigSetting()
             {
-                Color = sourceItem.ServiceColor != null ? string.Concat("#", sourceItem.ServiceColor) : S_ServiceColors[sourceItem.Symbol],
+                Color = sourceItem.ServiceColor != null
+                                                        ? sourceItem.ServiceColor.StartsWith("#") 
+                                                            ? sourceItem.ServiceColor 
+                                                            : string.Concat("#", sourceItem.ServiceColor)
+                                                        : S_ServiceColors[sourceItem.Symbol],
                 Name = sourceItem.Name,
                 Description = sourceItem.Description,
                 Weight = int.Parse(sourceItem.SourceId)

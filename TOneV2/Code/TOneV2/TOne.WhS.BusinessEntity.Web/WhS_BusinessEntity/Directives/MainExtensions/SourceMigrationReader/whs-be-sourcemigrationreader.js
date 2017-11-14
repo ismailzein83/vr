@@ -110,6 +110,12 @@ app.directive("whsBeSourcemigrationreader", ['UtilsService', 'VRUIUtilsService',
                     return null;
                 };
 
+                $scope.validateDefaultRateValue = function () {
+                    if ($scope.defaultRate <= 0)
+                        return "Default Rate must be greater than zero";
+                    return null;
+                }
+
                 $scope.validateWeekendRate = function () {
                     if (weekendRateTypeSelectorAPI != undefined && weekendRateTypeSelectorAPI.getSelectedIds() == undefined)
                         return "Required Field";
