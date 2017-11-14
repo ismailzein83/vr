@@ -286,19 +286,54 @@
               </Sequence>
             </If.Then>
             <If.Else>
-              <vbw:RunProcess ProcessCompletedEventPayload="{x:Null}" ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
-                <vbw:RunProcess.Input>
-                  <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
-                    <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new RoutingProcessInput()
+              <Sequence DisplayName="FullRoute_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_6">
+                <Sequence.Variables>
+                  <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="fullRouteProcessEventPayload" />
+                </Sequence.Variables>
+                <vbw:RunProcess ProcessInstanceId="{x:Null}" TerminateIfFailed="{x:Null}" TerminationMessage="{x:Null}" sap2010:WorkflowViewState.IdRef="RunProcess_1" WaitProcessCompleted="True">
+                  <vbw:RunProcess.Input>
+                    <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
+                      <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new RoutingProcessInput()
 {
     EffectiveTime = DateTime.Now,
     IsFuture = false,
     RoutingDatabaseType = RoutingDatabaseType.Current,
     RoutingProcessType = RoutingProcessType.CustomerRoute
 }</mca:CSharpValue>
-                  </InArgument>
-                </vbw:RunProcess.Input>
-              </vbw:RunProcess>
+                    </InArgument>
+                  </vbw:RunProcess.Input>
+                  <vbw:RunProcess.ProcessCompletedEventPayload>
+                    <OutArgument x:TypeArguments="vb:ProcessCompletedEventPayload">
+                      <mca:CSharpReference x:TypeArguments="vb:ProcessCompletedEventPayload">fullRouteProcessEventPayload</mca:CSharpReference>
+                    </OutArgument>
+                  </vbw:RunProcess.ProcessCompletedEventPayload>
+                </vbw:RunProcess>
+                <If sap2010:WorkflowViewState.IdRef="If_5">
+                  <If.Condition>
+                    <InArgument x:TypeArguments="x:Boolean">
+                      <mca:CSharpValue x:TypeArguments="x:Boolean">fullRouteProcessEventPayload.ProcessStatus != Vanrise.BusinessProcess.Entities.BPInstanceStatus.Completed</mca:CSharpValue>
+                    </InArgument>
+                  </If.Condition>
+                  <If.Then>
+                    <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1">
+                      <TerminateWorkflow.Reason>
+                        <InArgument x:TypeArguments="x:String">
+                          <mca:CSharpValue x:TypeArguments="x:String">String.Format("Full Route Build failed due to error: {0}", fullRouteProcessEventPayload.LastProcessMessage)</mca:CSharpValue>
+                        </InArgument>
+                      </TerminateWorkflow.Reason>
+                    </TerminateWorkflow>
+                  </If.Then>
+                  <If.Else>
+                    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Full Route Build process completed">
+                      <vbw:WriteTrackingMessage.Severity>
+                        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+                          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+                        </InArgument>
+                      </vbw:WriteTrackingMessage.Severity>
+                    </vbw:WriteTrackingMessage>
+                  </If.Else>
+                </If>
+              </Sequence>
             </If.Else>
           </If>
         </Sequence>
@@ -320,16 +355,16 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWw5TgPEAg4CAQFWC1ZXAgECXgVkIAMBgQNlBXUnAwHfAnYFuwIKAgEavAIFwgIgAgENYQthhQEDAYMDXmBegwEDAYIDbQttdAMB9gJoC2hsAwHrAnILcngDAeACeQt5XwIBG30JsAIUAgEzswIJuQIkAgEmvwILvwKFAQIBD7wCYLwCgwECAQ5+C4kBKAMByAKKAQuVARQDAbEClgELsAEmAwH5AbEBC8sBJgMBwQHMAQuvAhACATS2Ag+2AoUBAgEoswJkswKCAQIBJ4EBEYEBdAMB1AKGARGGAWoDAckCkgERkgF0AwG9Ao0BEY0BZAMBsgKoARGoAWwDAaYCngERngF4AwGbAq0BEa0BawMBkAKZARGZAYQBAwGFAqMBEaMBXgMB+gG0ARG0AY4BAwHuAb4BEb4BcAMB4wG5ARG5AXwDAdgByAERyAF1AwHNAcMBEcMBagMBwgHPARHPAW4CATXTAQ+eAhoCAU2hAg+tAiACAUDUARGWAhYCAVqXAhGdAjECAU6kAhWqAhQCAUKhAuMBoQLpAQIBQdcBF9cBowECAVvbARWUAiACAWaaAheaAnECAU/cARf9ATIDAZQB/gEXkwI2AgFn3wEd3wGSAQMBtgHkAR3kAWoDAasB6QEd6QF2AwGgAe4BHe4BaAMBlQGLAh2LAngDAYkBhgIdhgJoAgF+gQIdgQJqAgFzkAIdkAJ2AgFo</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWxCTgPnAg4CAQFWC1ZXAgECXgVkIAMBtwNlBXUnAwGVA3YF3gIKAgEa3wIF5QIgAgENYQthhQEDAbkDXmBegwEDAbgDbQttdAMBrANoC2hsAwGhA3ILcngDAZYDeQt5XwIBG30J0wIUAgEz1gIJ3AIkAgEm4gIL4gKFAQIBD98CYN8CgwECAQ5+C4kBKAMB/gKKAQuVARQDAecClgELsAEmAwGvArEBC8sBJgMB9wHMAQvSAhACATTZAg/ZAoUBAgEo1gJk1gKCAQIBJ4EBEYEBdAMBigOGARGGAWoDAf8CkgERkgF0AwHzAo0BEY0BZAMB6AKoARGoAWwDAdwCngERngF4AwHRAq0BEa0BawMBxgKZARGZAYQBAwG7AqMBEaMBXgMBsAK0ARG0AY4BAwGkAr4BEb4BcAMBmQK5ARG5AXwDAY4CyAERyAF1AwGDAsMBEcMBagMB+AHPARHPAW4CATXTAQ+eAhoDAYMBoQIP0AIaAgFA1AERlgIWAwGQAZcCEZ0CMQMBhAGlAhG2AiICAWm3AhHPAhYCAUHXARfXAaMBAwGRAdsBFZQCIAMBnAGaAheaAnEDAYUBqAIXrgIUAgF3swIXswKQAQIBa6UCvQGlAsMBAgFqugIXugK/AQIBQr4CFcQCKQIBXMcCFc0CMAIBTtwBF/0BMgMBygH+AReTAjYDAZ0BwQIbwQLEAQIBXcoCG8oClQECAVDHAnDHApQBAgFP3wEd3wGSAQMB7AHkAR3kAWoDAeEB6QEd6QF2AwHWAe4BHe4BaAMBywGLAh2LAngDAb8BhgIdhgJoAwG0AYECHYECagMBqQGQAh2QAnYDAZ4B</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="958,22" />
-      <sap2010:ViewStateData Id="GetLatestRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="958,22" />
-      <sap2010:ViewStateData Id="GetPartialRouteInfo_1" sap:VirtualizedContainerService.HintSize="711,22" />
-      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="711,62" />
-      <sap2010:ViewStateData Id="LoadAffectedRules_1" sap:VirtualizedContainerService.HintSize="711,22" />
-      <sap2010:ViewStateData Id="GetAffectedRoutes_1" sap:VirtualizedContainerService.HintSize="711,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="1244,22" />
+      <sap2010:ViewStateData Id="GetLatestRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="1244,22" />
+      <sap2010:ViewStateData Id="GetPartialRouteInfo_1" sap:VirtualizedContainerService.HintSize="997,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="997,62" />
+      <sap2010:ViewStateData Id="LoadAffectedRules_1" sap:VirtualizedContainerService.HintSize="997,22" />
+      <sap2010:ViewStateData Id="GetAffectedRoutes_1" sap:VirtualizedContainerService.HintSize="997,22" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="554,86" />
@@ -362,9 +397,19 @@
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="711,694" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="733,1106">
+      <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="464,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="486,396">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg1:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="997,694" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="1019,1106">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -372,16 +417,16 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="958,1256" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="958,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="980,1566">
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="1244,1256" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1244,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1266,1566">
         <sap:WorkflowViewStateService.ViewState>
           <scg1:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg1:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.PartialRoutingProcess_1" sap:VirtualizedContainerService.HintSize="1020,1646" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.PartialRoutingProcess_1" sap:VirtualizedContainerService.HintSize="1306,1646" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

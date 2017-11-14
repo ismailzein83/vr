@@ -219,7 +219,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             throw new NotImplementedException();
         }
 
-        public HashSet<CustomerRouteDefinition> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, int partialRoutesNumberLimit, out bool maximumExceeded)
+        public HashSet<CustomerRouteDefinition> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit, out bool maximumExceeded)
         {
             throw new NotImplementedException();
         }
@@ -565,7 +565,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             get;
         }
 
-        public int GetTotalCount()
+        public long GetTotalCount()
         {
             throw new NotImplementedException();
         }

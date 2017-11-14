@@ -188,17 +188,18 @@ namespace TOne.WhS.Routing.Data.SQL
         }
 
 
-        public HashSet<CustomerRouteDefinition> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, int partialRoutesNumberLimit, out bool maximumExceeded)
+        public HashSet<CustomerRouteDefinition> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit, out bool maximumExceeded)
         {
             HashSet<string> addedCustomerRouteDefinitions = new HashSet<string>();
             HashSet<CustomerRouteDefinition> customerRouteDefinitions = new HashSet<CustomerRouteDefinition>();
             maximumExceeded = false;
+            long addedItems = 0;
 
             List<string> routesConditions = BuildAffectedRoutes(affectedRoutesList);
             if (routesConditions != null)
             {
                 string query1 = query_GetAffectedCustomerRoutes.Replace("#AFFECTEDROUTES#", string.Join(" or ", routesConditions)).Replace("#CODESUPPLIERZONEMATCH#", string.Empty);
-                ExecuteGetAffectedCustomerRoutesQuery(query1, addedCustomerRouteDefinitions, customerRouteDefinitions, partialRoutesNumberLimit, out maximumExceeded);
+                addedItems = ExecuteGetAffectedCustomerRoutesQuery(query1, addedCustomerRouteDefinitions, customerRouteDefinitions, partialRoutesNumberLimit, addedItems, out maximumExceeded);
             }
 
             if (maximumExceeded)
@@ -216,7 +217,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
                 query2 = query2.Replace("#AFFECTEDROUTES#", string.Join(" or ", routeOptionsConditions));
 
-                ExecuteGetAffectedCustomerRoutesQuery(query2, addedCustomerRouteDefinitions, customerRouteDefinitions, partialRoutesNumberLimit, out maximumExceeded);
+                addedItems = ExecuteGetAffectedCustomerRoutesQuery(query2, addedCustomerRouteDefinitions, customerRouteDefinitions, partialRoutesNumberLimit, addedItems, out maximumExceeded);
             }
 
             if (maximumExceeded)
@@ -226,8 +227,8 @@ namespace TOne.WhS.Routing.Data.SQL
         }
 
 
-        public void ExecuteGetAffectedCustomerRoutesQuery(string query, HashSet<string> addedCustomerRouteDefinitions, HashSet<CustomerRouteDefinition> customerRouteDefinitions,
-            int partialRoutesNumberLimit, out bool maximumExceeded)
+        public long ExecuteGetAffectedCustomerRoutesQuery(string query, HashSet<string> addedCustomerRouteDefinitions, HashSet<CustomerRouteDefinition> customerRouteDefinitions,
+            long partialRoutesNumberLimit, long addedItems, out bool maximumExceeded)
         {
             maximumExceeded = false;
             ExecuteReaderText(query, (reader) =>
@@ -241,15 +242,17 @@ namespace TOne.WhS.Routing.Data.SQL
                     {
                         addedCustomerRouteDefinitions.Add(customerRouteDefinitionAsString);
                         customerRouteDefinitions.Add(customerRouteDefinition);
-
-                        if (customerRouteDefinitions.Count > partialRoutesNumberLimit)
+                        addedItems++;
+                        if (addedItems > partialRoutesNumberLimit)
                             break;
                     }
                 }
             }, (cmd) => { });
 
-            if (customerRouteDefinitions.Count > partialRoutesNumberLimit)
+            if (addedItems > partialRoutesNumberLimit)
                 maximumExceeded = true;
+
+            return addedItems;
         }
 
         private List<string> BuildAffectedRouteOptions(List<AffectedRouteOptions> affectedRouteOptionsList, out bool hasSupplierZoneCriteria)
@@ -380,11 +383,11 @@ namespace TOne.WhS.Routing.Data.SQL
             return conditions;
         }
 
-        public int GetTotalCount()
+        public long GetTotalCount()
         {
-            return (int)ExecuteScalarText(@"IF OBJECT_ID('[dbo].[CustomerRoute]', N'U') IS NOT NULL 
+            return (long)ExecuteScalarText(@"IF OBJECT_ID('[dbo].[CustomerRoute]', N'U') IS NOT NULL 
                                 Begin
-                                    SELECT CAST(p.rows AS int)
+                                    SELECT CAST(p.rows AS bigint)
                                     FROM sys.tables AS tbl
                                     INNER JOIN sys.indexes AS idx ON idx.object_id = tbl.object_id and idx.index_id < 2
                                     INNER JOIN sys.partitions AS p ON p.object_id = CAST(tbl.object_id AS int) and p.index_id = idx.index_id

@@ -35,6 +35,9 @@ namespace TOne.WhS.Routing.BP.Activities
             ICustomerRouteDataManager customerRouteDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
             customerRouteDataManager.RoutingDatabase = inputArgument.RoutingDatabase;
             List<CustomerRoute> customerRoutesToUpdate = new List<CustomerRoute>();
+
+            int partialRoutesUpdateBatchSize = new ConfigManager().GetPartialRoutesUpdateBatchSize();
+
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItem = false;
@@ -45,22 +48,21 @@ namespace TOne.WhS.Routing.BP.Activities
                         if (customerRoutesBatch != null && customerRoutesBatch.CustomerRoutes != null)
                         {
                             customerRoutesToUpdate.AddRange(customerRoutesBatch.CustomerRoutes);
+
+                            while (customerRoutesToUpdate.Count > partialRoutesUpdateBatchSize)
+                            {
+                                IEnumerable<CustomerRoute> customerRoutesBatchForUpdate = customerRoutesToUpdate.Take(partialRoutesUpdateBatchSize);
+                                customerRoutesToUpdate.RemoveRange(0, partialRoutesUpdateBatchSize);
+                                customerRouteDataManager.UpdateCustomerRoutes(customerRoutesBatchForUpdate.ToList());
+                            }
                         }
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
 
             if (customerRoutesToUpdate.Count > 0)
-            {
-                int partialRoutesUpdateBatchSize = new ConfigManager().GetPartialRoutesUpdateBatchSize();
-                int updatedDataCount = 0;
-                do
-                {
-                    customerRouteDataManager.UpdateCustomerRoutes(customerRoutesToUpdate.Skip(updatedDataCount).Take(partialRoutesUpdateBatchSize).ToList());
-                    updatedDataCount += partialRoutesUpdateBatchSize;
-                } 
-                while (updatedDataCount < customerRoutesToUpdate.Count);
-            }
+                customerRouteDataManager.UpdateCustomerRoutes(customerRoutesToUpdate);
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Updating Affected Routes is done", null);
         }
 

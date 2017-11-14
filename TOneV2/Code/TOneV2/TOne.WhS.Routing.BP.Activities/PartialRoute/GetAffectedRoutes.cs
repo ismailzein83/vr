@@ -75,9 +75,9 @@ namespace TOne.WhS.Routing.BP.Activities
             HashSet<CustomerRouteDefinition> affectedCustomerRoutes = null;
             if (affectedRoutesList.Count > 0 || affectedRouteOptionsList.Count > 0)
             {
-                int customerRouteTotalCount = dataManager.GetTotalCount();
+                long customerRouteTotalCount = dataManager.GetTotalCount();
                 int partialRoutesPercentageLimit = new ConfigManager().GetPartialRoutesPercentageLimit();
-                int partialRoutesNumberLimit = partialRoutesPercentageLimit * customerRouteTotalCount / 100;
+                long partialRoutesNumberLimit = partialRoutesPercentageLimit * customerRouteTotalCount / 100;
 
                 bool maximumExceeded;
 
