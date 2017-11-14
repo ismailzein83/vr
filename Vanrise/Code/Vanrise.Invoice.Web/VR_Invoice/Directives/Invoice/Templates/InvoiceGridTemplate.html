@@ -6,8 +6,10 @@
                  menuactions="menuActions"
                  idfield="Entity.InvoiceId"
                  defaultsortbyfieldname="'Entity.InvoiceId'" normalcell enableautoexport="true">
-        <vr-datagridcolumn widthfactor="3" disablesorting ng-show="canSelectInvoices">
-            <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onInvoiceSelect(dataItem)"></vr-check>
+        <vr-datagridcolumn widthfactor="3" disablesorting ng-show="canSelectInvoices" isfielddynamic="true">
+            <span vr-disabled="dataItem.isDeleted">
+                <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onInvoiceSelect(dataItem)"></vr-check>
+            </span>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceId'"></vr-datagridcolumn>
         <vr-datagridcolumn ng-repeat="field in gridFields" columnattributes="field">

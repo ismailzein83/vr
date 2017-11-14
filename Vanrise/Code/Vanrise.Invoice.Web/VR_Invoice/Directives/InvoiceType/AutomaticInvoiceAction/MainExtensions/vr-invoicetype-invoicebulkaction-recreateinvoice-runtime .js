@@ -43,6 +43,12 @@ app.directive("vrInvoicetypeInvoicebulkactionRecreateinvoiceRuntime", ["UtilsSer
                     if (payload != undefined) {
                         emailActionSettings = payload.emailActionSettings;
                         actionValueSettings = payload.actionValueSettings;
+                        if(actionValueSettings != undefined)
+                        {
+                            $scope.scopeModel.includeSentInvoices = actionValueSettings.IncludeSentInvoices;
+                            $scope.scopeModel.includePaidInvoices = actionValueSettings.IncludePaidInvoices;
+
+                        }
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -50,6 +56,9 @@ app.directive("vrInvoicetypeInvoicebulkactionRecreateinvoiceRuntime", ["UtilsSer
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions.RecreateInvoiceBulkActionRuntimeSettings ,Vanrise.Invoice.MainExtensions",
+                        IncludeSentInvoices: $scope.scopeModel.includeSentInvoices,
+                        IncludePaidInvoices: $scope.scopeModel.includePaidInvoices
+
                     };
 
                 };

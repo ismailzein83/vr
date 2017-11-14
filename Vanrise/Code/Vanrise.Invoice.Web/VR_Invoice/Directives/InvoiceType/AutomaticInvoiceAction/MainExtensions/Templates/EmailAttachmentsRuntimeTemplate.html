@@ -2,20 +2,22 @@
     <vr-columns width="1/2row" ng-if="scopeModel.showMailMessageTemplateSelector">
         <vr-common-mailmessagetemplate-selector on-ready="scopeModel.onMailMessageTemplateDirectiveReady"></vr-common-mailmessagetemplate-selector>
     </vr-columns>
-
-        <vr-columns width="fullrow">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" maxheight="300px"
-                         on-ready="onGridReady" hidegridmenu>
-                <vr-datagridcolumn fixedwidth="'50'" headertext="'Enabled'" disablesorting="true" invisibleheader>
-                    <vr-check value="dataItem.Entity.IsEnabled"></vr-check>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Type'" field="'Entity.SetName'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Mail Template'" field="'Entity.Title'" widthfactor="10" disablesorting ng-show="scopeModel.showMaileTypeColumn">
-                    <vr-common-mailmessagetemplate-selector ng-if="dataItem.Entity.showMailMessageTemplateSelector" isrequired="dataItem.Entity.IsEnabled" on-ready="dataItem.Entity.onMailMessageTemplateDirectiveReady" hidelabel></vr-common-mailmessagetemplate-selector>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Attachments'" widthfactor="10" disablesorting>
-                    <vr-invoicetype-invoiceattachments-selector on-ready="dataItem.Entity.onInvoiceAttachmentSelectorReady" normal-col-num="12" hidelabel ismultipleselection></vr-invoicetype-invoiceattachments-selector>
-                </vr-datagridcolumn>
-            </vr-datagrid>
-        </vr-columns>
+    <vr-columns width="1/2row" ng-if="scopeModel.showIncludeSentInvocies">
+        <vr-switch value="scopeModel.includeSentInvoices" label="Inculde Sent Invoices"></vr-switch>
+    </vr-columns>
+    <vr-columns width="fullrow" >
+        <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" maxheight="300px"
+                     on-ready="onGridReady" hidegridmenu>
+            <vr-datagridcolumn fixedwidth="'50'" headertext="'Enabled'" disablesorting="true" invisibleheader>
+                <vr-check value="dataItem.Entity.IsEnabled"></vr-check>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Type'" field="'Entity.SetName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Mail Template'" field="'Entity.Title'" widthfactor="10" disablesorting ng-show="scopeModel.showMaileTypeColumn">
+                <vr-common-mailmessagetemplate-selector ng-if="dataItem.Entity.showMailMessageTemplateSelector" isrequired="dataItem.Entity.IsEnabled" on-ready="dataItem.Entity.onMailMessageTemplateDirectiveReady" hidelabel></vr-common-mailmessagetemplate-selector>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Attachments'" widthfactor="10" disablesorting>
+                <vr-invoicetype-invoiceattachments-selector on-ready="dataItem.Entity.onInvoiceAttachmentSelectorReady" normal-col-num="12" hidelabel ismultipleselection></vr-invoicetype-invoiceattachments-selector>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
 </vr-row>

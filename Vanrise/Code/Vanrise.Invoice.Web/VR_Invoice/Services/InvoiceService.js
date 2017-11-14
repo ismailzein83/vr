@@ -3,7 +3,7 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', '
     function (VRModalService, SecurityService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, VR_Invoice_InvoiceActionService) {
 
 
-        function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings) {
+        function defineInvoiceTabsAndMenuActions(dataItem, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings,context) {
             if (subSections == null)
                 return;
 
@@ -76,15 +76,19 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', '
                                 invoice: dataItem,
                                 invoiceAction: invoiceAction,
                                 onItemAdded: function (item) {
-                                    defineInvoiceTabsAndMenuActions(item, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
-                                    gridAPI.itemAdded(item);
+                                   // defineInvoiceTabsAndMenuActions(item, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
+                                    if (context != undefined)
+                                    context.onItemAdded(item);
                                 },
                                 onItemUpdated: function (item) {
-                                    defineInvoiceTabsAndMenuActions(item, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
-                                    gridAPI.itemUpdated(item);
+                                    if (context != undefined)
+                                        context.onItemUpdated(item);
+                                   // defineInvoiceTabsAndMenuActions(item, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
+                          
                                 },
                                 onItemDeleted: function (item) {
-                                    gridAPI.itemDeleted(item);
+                                    if (context != undefined)
+                                    context.onItemDeleted(item);
                                 }
                             };
                             var promiseDeffered = UtilsService.createPromiseDeferred();
@@ -96,8 +100,9 @@ app.service('VR_Invoice_InvoiceService', ['VRModalService', 'SecurityService', '
                                         gridAPI.showLoader();
                                         var invoiceId = dataItem.Entity.InvoiceId;
                                         return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
-                                            gridAPI.itemUpdated(response);
-                                            defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
+                                            if (context != undefined)
+                                              context.onItemUpdated(response);
+                                           // defineInvoiceTabsAndMenuActions(response, gridAPI, subSections, subSectionConfigs, invoiceTypeId, invoiceActions, invoiceItemGroupings);
                                             promiseDeffered.resolve();
                                         }).catch(function (error) {
                                             promiseDeffered.reject(error);

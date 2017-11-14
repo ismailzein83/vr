@@ -16,7 +16,30 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
     {
         public List<EmailActionAttachmentSetRuntime> EmailActionAttachmentSets { get; set; }
         public Guid? MailMessageTemplateId { get; set; }
+        public bool IncludeSentInvoices { get; set; }
         public override void Execute(IAutomaticActionRuntimeSettingsContext context)
+        {
+            string errorMessage;
+            if (ValidateSendEmailAction(context.Invoice, out  errorMessage))
+            {
+                ExecuteSendEmailAction(context);
+            }
+            else
+            {
+                context.ErrorMessage = errorMessage;
+            }
+        }
+        bool ValidateSendEmailAction(Entities.Invoice invoice, out string errorMessage)
+        {
+            errorMessage = null;
+            if (invoice.SentDate.HasValue && !IncludeSentInvoices)
+            {
+                errorMessage = "Cannot sent invoice email. Reason: 'Email' already sent.";
+                return false;
+            }
+            return true;
+        }
+        private void ExecuteSendEmailAction(IAutomaticActionRuntimeSettingsContext context)
         {
             if (this.EmailActionAttachmentSets != null)
             {
@@ -25,8 +48,8 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                 invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
                 invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.AutomaticInvoiceActions");
 
-              //  var automaticInvoiceAction = invoiceType.Settings.AutomaticInvoiceActions.FindRecord(x => x.AutomaticInvoiceActionId == context.AutomaticInvoiceActionId);
-             //   automaticInvoiceAction.ThrowIfNull("automaticInvoiceAction");
+                //  var automaticInvoiceAction = invoiceType.Settings.AutomaticInvoiceActions.FindRecord(x => x.AutomaticInvoiceActionId == context.AutomaticInvoiceActionId);
+                //   automaticInvoiceAction.ThrowIfNull("automaticInvoiceAction");
                 var automaticSendEmailActionSettings = context.DefinitionSettings as AutomaticSendEmailAction;
                 automaticSendEmailActionSettings.ThrowIfNull("automaticSendEmailActionSettings");
                 VRMailManager vrMailManager = new VRMailManager();
@@ -35,7 +58,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
 
                 foreach (var emailActionAttachmentSet in EmailActionAttachmentSets)
                 {
-                    if(emailActionAttachmentSet.IsEnabled)
+                    if (emailActionAttachmentSet.IsEnabled)
                     {
                         List<VRMailAttachement> vrMailAttachments = new List<VRMailAttachement>();
                         invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
@@ -86,7 +109,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                             {
                                 continue;
                             }
-                            
+
                             var emailTemplateEvaluator = invoiceEmailActionManager.GetEmailTemplate(context.Invoice, mailMessageTemplateId);
                             if (String.IsNullOrEmpty(emailTemplateEvaluator.To))
                             {
@@ -97,11 +120,10 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                             new InvoiceManager().SetInvoiceSentDate(context.Invoice.InvoiceId, true);
                         }
                     }
-           
+
 
                 }
             }
-
         }
     }
     public class EmailActionAttachmentSetRuntime

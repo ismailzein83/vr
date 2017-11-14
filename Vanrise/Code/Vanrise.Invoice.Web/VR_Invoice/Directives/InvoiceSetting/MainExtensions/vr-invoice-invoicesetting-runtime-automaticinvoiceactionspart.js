@@ -145,7 +145,8 @@ app.directive('vrInvoiceInvoicesettingRuntimeAutomaticinvoiceactionspart', ['Uti
                                     emailActionSettings: sectionPayload.payload.Settings,
                                     invoiceTypeId: invoiceTypeId,
                                     invoiceAttachments: sectionPayload.invoiceAttachments,
-                                    actionValueSettings: sectionPayload.actionValue != undefined ? sectionPayload.actionValue.Settings : undefined
+                                    actionValueSettings: sectionPayload.actionValue != undefined ? sectionPayload.actionValue.Settings : undefined,
+                                    isAutmatic: true
                                 };
                                 VRUIUtilsService.callDirectiveLoad(section.directiveAPI, directivePayload, sectionPayload.loadPromiseDeferred);
                             });
@@ -214,7 +215,8 @@ app.directive('vrInvoiceInvoicesettingRuntimeAutomaticinvoiceactionspart', ['Uti
                         emailActionSettings: sectionPayload.payload.Settings,
                         invoiceTypeId: invoiceTypeId,
                         invoiceAttachments: sectionPayload.invoiceAttachments,
-                        actionValueSettings: sectionPayload.actionValue != undefined ? sectionPayload.actionValue.Settings : undefined
+                        actionValueSettings: sectionPayload.actionValue != undefined ? sectionPayload.actionValue.Settings : undefined,
+                        isAutmatic:true
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, section.directiveAPI, directivePayload, setLoader);
                 };

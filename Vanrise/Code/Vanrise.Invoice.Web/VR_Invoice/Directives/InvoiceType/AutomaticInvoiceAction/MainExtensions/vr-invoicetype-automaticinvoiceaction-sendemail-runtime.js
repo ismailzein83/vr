@@ -33,6 +33,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
             var invoiceAttachments;
             var mailMessageTemplateSelectorAPI;
             var mailMessageTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var isAutmatic;
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
@@ -41,7 +42,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                     mailMessageTemplateSelectorReadyDeferred.resolve();
                 };
                 $scope.scopeModel.showMaileTypeColumn = false;
-
+                $scope.scopeModel.showIncludeSentInvocies = true;
                 defineAPI();
             }
 
@@ -54,6 +55,9 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                     var actionValueSettings;
                     if (payload != undefined) {
                         invoiceAttachments = payload.invoiceAttachments;
+                        isAutmatic = payload.isAutmatic;
+                        if (isAutmatic)
+                            $scope.scopeModel.showIncludeSentInvocies = false;
                         emailActionSettings = payload.emailActionSettings;
                         actionValueSettings = payload.actionValueSettings;
                         context = payload.context;
@@ -102,6 +106,10 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                                     return mailMessageTemplateSelectorLoadPromiseDeferred.promise;
                                 }
                                 promises.push(loadMailMessageTypeSelector());
+                            }
+                            if(actionValueSettings != undefined)
+                            {
+                                $scope.scopeModel.includeSentInvoices = actionValueSettings.IncludeSentInvoices;
                             }
                         }
                        
@@ -183,7 +191,8 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions.AutomaticSendEmailActionRuntimeSettings ,Vanrise.Invoice.MainExtensions",
                         EmailActionAttachmentSets:emailActionAttachmentSets,
-                        MailMessageTemplateId: mailMessageTemplateSelectorAPI != undefined? mailMessageTemplateSelectorAPI.getSelectedIds():undefined
+                        MailMessageTemplateId: mailMessageTemplateSelectorAPI != undefined ? mailMessageTemplateSelectorAPI.getSelectedIds() : undefined,
+                        IncludeSentInvoices: $scope.scopeModel.includeSentInvoices
                     };
 
                 };
