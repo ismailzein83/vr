@@ -30,7 +30,8 @@ namespace Retail.MultiNet.Business
         NTN = 12,
         AccountType = 13,
         AccountNumber= 14,
-        Attn = 15
+        Attn = 15,
+        AssignedNumber = 16
     }
 
     public class MultiNetSubscriberPartnerSettings : InvoicePartnerManager
@@ -103,6 +104,8 @@ namespace Retail.MultiNet.Business
                                     var accountType = Utilities.GetEnumDescription<MultiNetAccountType>(multiNetCompanyExtendedInfo.AccountType.Value);
                                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountType, accountType, true);
                                 }
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.AssignedNumber, multiNetCompanyExtendedInfo.AssignedNumber, true);
+                                break;
                             }
                         }
                     }else if(financialAccountData.Account.TypeId ==_branchTypeId )
@@ -119,6 +122,7 @@ namespace Retail.MultiNet.Business
                                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountType, accountType, true);
                                 }
                                 address = multiNetBranchExtendedInfo.BillingAddress;
+                                AddRDLCParameter(rdlcReportParameters, RDLCParameter.AssignedNumber, multiNetBranchExtendedInfo.AssignedNumber, true);
                                 break;
                             }
                         }
