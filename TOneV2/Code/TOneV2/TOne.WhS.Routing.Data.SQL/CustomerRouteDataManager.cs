@@ -190,32 +190,19 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public HashSet<CustomerRouteDefinition> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, int partialRoutesNumberLimit, out bool maximumExceeded)
         {
+            HashSet<string> addedCustomerRouteDefinitions = new HashSet<string>();
             HashSet<CustomerRouteDefinition> customerRouteDefinitions = new HashSet<CustomerRouteDefinition>();
             maximumExceeded = false;
-            int totalCount = 0;
 
             List<string> routesConditions = BuildAffectedRoutes(affectedRoutesList);
             if (routesConditions != null)
             {
                 string query1 = query_GetAffectedCustomerRoutes.Replace("#AFFECTEDROUTES#", string.Join(" or ", routesConditions)).Replace("#CODESUPPLIERZONEMATCH#", string.Empty);
-                ExecuteReaderText(query1, (reader) =>
-                   {
-                       while (reader.Read())
-                       {
-                           totalCount++;
-                           customerRouteDefinitions.Add(CustomerRouteDefinitionMapper(reader));
-
-                           if (totalCount > partialRoutesNumberLimit)
-                               break;
-                       }
-                   }, (cmd) => { });
-
-                if (totalCount > partialRoutesNumberLimit)
-                {
-                    maximumExceeded = true;
-                    return null;
-                }
+                ExecuteGetAffectedCustomerRoutesQuery(query1, addedCustomerRouteDefinitions, customerRouteDefinitions, partialRoutesNumberLimit, out maximumExceeded);
             }
+
+            if (maximumExceeded)
+                return null;
 
             bool hasSupplierZoneCriteria;
             List<string> routeOptionsConditions = BuildAffectedRouteOptions(affectedRouteOptionsList, out hasSupplierZoneCriteria);
@@ -228,26 +215,41 @@ namespace TOne.WhS.Routing.Data.SQL
                     query2 = query_GetAffectedCustomerRoutes.Replace("#CODESUPPLIERZONEMATCH#", "JOIN [dbo].[CodeSupplierZoneMatch] as cszm ON cr.Code = cszm.Code");
 
                 query2 = query2.Replace("#AFFECTEDROUTES#", string.Join(" or ", routeOptionsConditions));
-                ExecuteReaderText(query2, (reader) =>
-                {
-                    while (reader.Read())
-                    {
-                        totalCount++;
-                        customerRouteDefinitions.Add(CustomerRouteDefinitionMapper(reader));
 
-                        if (totalCount > partialRoutesNumberLimit)
-                            break;
-                    }
-                }, (cmd) => { });
-
-                if (totalCount > partialRoutesNumberLimit)
-                {
-                    maximumExceeded = true;
-                    return null;
-                }
+                ExecuteGetAffectedCustomerRoutesQuery(query2, addedCustomerRouteDefinitions, customerRouteDefinitions, partialRoutesNumberLimit, out maximumExceeded);
             }
 
+            if (maximumExceeded)
+                return null;
+
             return customerRouteDefinitions.Count > 0 ? customerRouteDefinitions : null;
+        }
+
+
+        public void ExecuteGetAffectedCustomerRoutesQuery(string query, HashSet<string> addedCustomerRouteDefinitions, HashSet<CustomerRouteDefinition> customerRouteDefinitions,
+            int partialRoutesNumberLimit, out bool maximumExceeded)
+        {
+            maximumExceeded = false;
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    CustomerRouteDefinition customerRouteDefinition = CustomerRouteDefinitionMapper(reader);
+                    string customerRouteDefinitionAsString = string.Concat(customerRouteDefinition.CustomerId, "~", customerRouteDefinition.SaleZoneId, "~", customerRouteDefinition.Code);
+
+                    if (!addedCustomerRouteDefinitions.Contains(customerRouteDefinitionAsString))
+                    {
+                        addedCustomerRouteDefinitions.Add(customerRouteDefinitionAsString);
+                        customerRouteDefinitions.Add(customerRouteDefinition);
+
+                        if (customerRouteDefinitions.Count > partialRoutesNumberLimit)
+                            break;
+                    }
+                }
+            }, (cmd) => { });
+
+            if (customerRouteDefinitions.Count > partialRoutesNumberLimit)
+                maximumExceeded = true;
         }
 
         private List<string> BuildAffectedRouteOptions(List<AffectedRouteOptions> affectedRouteOptionsList, out bool hasSupplierZoneCriteria)
@@ -267,7 +269,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     hasSupplierZoneCriteria = true;
                     List<string> supplierWithZonesConditions = new List<string>();
                     HashSet<int> supplierIds = new HashSet<int>();
-                    
+
                     foreach (SupplierWithZones supplierWithZones in affectedRouteOptions.SupplierWithZones)
                     {
                         if (supplierWithZones.SupplierZoneIds != null && supplierWithZones.SupplierZoneIds.Count > 0)
@@ -603,7 +605,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                             JOIN [dbo].[CustomerZoneDetail] as czd ON czd.SaleZoneId = cr.SaleZoneID and czd.CustomerId = cr.CustomerID
                                                             Where (@Code is null or Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) #CUSTOMERIDS# #SALEZONEIDS#");
 
-        private string query_GetAffectedCustomerRoutes = @" SELECT distinct cr.CustomerID, cr.Code, cr.SaleZoneID
+        private string query_GetAffectedCustomerRoutes = @" SELECT cr.CustomerID, cr.Code, cr.SaleZoneID
                                                             FROM [dbo].[CustomerRoute] cr with(nolock) 
                                                             #CODESUPPLIERZONEMATCH#
                                                             Where #AFFECTEDROUTES#";
