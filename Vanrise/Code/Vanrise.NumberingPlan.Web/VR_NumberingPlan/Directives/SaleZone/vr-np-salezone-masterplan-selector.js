@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIService', 'Vr_NP_SaleZoneAPIService', 'UtilsService', 'VRUIUtilsService',
     function (Vr_NP_SellingNumberPlanAPIService, Vr_NP_SaleZoneAPIService, UtilsService, VRUIUtilsService) {
 
@@ -24,39 +25,29 @@ app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIServ
         };
 
         function getBeSaleZoneTemplate(attrs) {
-            var label = "Sale Zone Master Plan";
-            var multipleselection = "";
-            if (attrs.ismultipleselection != undefined) {
-                label = "Sale Zone Master Plan";
-                multipleselection = "ismultipleselection";
-            }
 
-            return '<vr-np-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" ismultipleselection>'
-            + '</vr-np-salezone-selector>';
+            return '<vr-np-salezone-selector on-ready="scopeModal.onSaleZoneSelectorReady" selectedvalues="ctrl.selectedvalues" normal-col-num="{{ctrl.normalColNum}}" ismultipleselection>' +
+                   '</vr-np-salezone-selector>';
         }
 
-
         function saleZoneMasterPlanCtor(saleZoneSelectorCtrl, $scope, attrs) {
+            this.initializeController = initializeController;
+
+            var sellingNumberPlanId;
+            var npSalezoneSelectorCustomLabel;
 
             var saleZoneDirectiveAPI;
             var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var sellingNumberPlanId = undefined;
-
             function initializeController() {
                 $scope.scopeModal = {};
-
-                saleZoneSelectorCtrl.selectedvalues;
-
-                if (attrs.ismultipleselection != undefined)
-                    saleZoneSelectorCtrl.selectedvalues = [];
-
                 $scope.scopeModal.SellingNumberPlanId;
+
                 $scope.scopeModal.onSaleZoneSelectorReady = function (api) {
                     saleZoneDirectiveAPI = api;
                     saleZoneReadyPromiseDeferred.resolve();
-
                 };
+
                 defineAPI();
             }
 
@@ -64,14 +55,20 @@ app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIServ
                 var api = {};
 
                 api.load = function (payload) {
+
                     var selectedIds;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+
+                        if (payload.fieldTitle != undefined){
+                            npSalezoneSelectorCustomLabel = payload.fieldTitle;
+                        }
                     }
 
-                    var promiseDeferredLoadSelector = UtilsService.createPromiseDeferred();
                     var promises = [];
+
+                    var promiseDeferredLoadSelector = UtilsService.createPromiseDeferred();
                     promises.push(promiseDeferredLoadSelector.promise);
 
                     var masterPlanPromise = GetMasterPlan().then(function () {
@@ -83,26 +80,11 @@ app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIServ
                     }).catch(function (error) {
                         promiseDeferredLoadSelector.reject(error);
                     });
+
                     promises.push(masterPlanPromise);
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
-
-                function loadSaleZoneSelectorSelector(selectedIds) {
-
-                    var saleZonePlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    saleZoneReadyPromiseDeferred.promise
-                            .then(function () {
-                                var directivePayload = {
-                                    sellingNumberPlanId: $scope.scopeModal.SellingNumberPlanId,
-                                    selectedIds: selectedIds
-                                };
-
-                                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, directivePayload, saleZonePlanLoadPromiseDeferred);
-                            });
-                    return saleZonePlanLoadPromiseDeferred.promise;
-                }
-
-
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SaleZoneId', attrs, saleZoneSelectorCtrl);
@@ -111,15 +93,28 @@ app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIServ
                 if (saleZoneSelectorCtrl.onReady != null)
                     saleZoneSelectorCtrl.onReady(api);
 
-                function GetMasterPlan() {
-
-                    return Vr_NP_SellingNumberPlanAPIService.GetMasterSellingNumberPlan().then(function (response) {
-                        $scope.scopeModal.SellingNumberPlanId = response.SellingNumberPlanId;
-                    });
-                }
             }
 
-            this.initializeController = initializeController;
+            function loadSaleZoneSelectorSelector(selectedIds) {
+                var saleZonePlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                saleZoneReadyPromiseDeferred.promise.then(function () {
+                    var directivePayload = {
+                        sellingNumberPlanId: $scope.scopeModal.SellingNumberPlanId,
+                        selectedIds: selectedIds,
+                        customLabel: npSalezoneSelectorCustomLabel
+                    };
+                    VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, directivePayload, saleZonePlanLoadPromiseDeferred);
+                });
+
+                return saleZonePlanLoadPromiseDeferred.promise;
+            }
+
+            function GetMasterPlan() {
+                return Vr_NP_SellingNumberPlanAPIService.GetMasterSellingNumberPlan().then(function (response) {
+                    $scope.scopeModal.SellingNumberPlanId = response.SellingNumberPlanId;
+                });
+            }
         }
 
         return directiveDefinitionObject;

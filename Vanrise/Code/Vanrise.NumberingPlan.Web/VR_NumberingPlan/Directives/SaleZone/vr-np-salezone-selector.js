@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService', 'VRUIUtilsService',
     function (Vr_NP_SaleZoneAPIService, UtilsService, VRUIUtilsService) {
 
@@ -17,11 +18,19 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                 normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
+
+                ctrl.selectedvalues;
+                if ($attrs.ismultipleselection != undefined)
+                    ctrl.selectedvalues = [];
+
+                ctrl.label = "Sale Zone";
+                if ($attrs.ismultipleselection != undefined) {
+                    ctrl.label = "Sale Zones";
+                }
+
                 var ctor = new saleZoneCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -35,15 +44,12 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
             template: function (element, attrs) {
                 return getBeSaleZoneTemplate(attrs);
             }
-
         };
 
-
         function getBeSaleZoneTemplate(attrs) {
-            var label = "Sale Zone";
             var multipleselection = "";
+
             if (attrs.ismultipleselection != undefined) {
-                label = "Sale Zones";
                 multipleselection = "ismultipleselection";
             }
 
@@ -64,16 +70,19 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                    + '  vr-disabled="ctrl.isdisabled"'
                    + '  onselectitem="ctrl.onselectitem"'
                    + '  ondeselectitem="ctrl.ondeselectitem"'
-                   + '  label="' + label + '"'
-                   + '  >'
+                   + '  label="{{ctrl.label}}">'
                    + '</vr-select>'
                    + '</vr-columns>';
         }
 
         function saleZoneCtor(saleZoneSelectorCtrl, $scope, attrs) {
+            this.initializeController = initializeController;
+
             var filter;
             var availableZoneIds;
             var excludedZoneIds;
+            var sellingNumberPlanId;
+            var oldsellingNumberPlanId;
 
             var selectorApi;
             var selectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -81,29 +90,16 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
             var sellingDirectiveApi;
             var sellingReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var sellingNumberPlanId;
-            var oldsellingNumberPlanId;
-
-
             function initializeController() {
-
-                saleZoneSelectorCtrl.selectedvalues;
-
-                if (attrs.ismultipleselection != undefined)
-                    saleZoneSelectorCtrl.selectedvalues = [];
-
-
                 saleZoneSelectorCtrl.onSellingNumberReady = function (api) {
                     sellingDirectiveApi = api;
                     sellingReadyPromiseDeferred.resolve();
                 };
 
-
                 saleZoneSelectorCtrl.onSelectorReady = function (api) {
                     selectorApi = api;
                     selectorReadyPromiseDeferred.resolve();
                 };
-
 
                 saleZoneSelectorCtrl.onSellingNumberPlanSelectionchanged = function () {
 
@@ -114,7 +110,6 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                     if (sellingNumberPlanId == undefined)
                         sellingNumberPlanId = oldsellingNumberPlanId;
                 };
-
 
                 saleZoneSelectorCtrl.search = function (nameFilter) {
                     if (sellingNumberPlanId == undefined)
@@ -148,15 +143,14 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                 UtilsService.waitMultiplePromises([sellingReadyPromiseDeferred.promise, selectorReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
-
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-
                     selectorApi.clearDataSource();
+
                     var selectedIds;
                     var payloadSellingNumberPlanId;
 
@@ -166,6 +160,10 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                         filter = payload.filter;
                         availableZoneIds = payload.availableZoneIds;
                         excludedZoneIds = payload.excludedZoneIds;
+
+                        if (payload.customLabel != undefined) {
+                            saleZoneSelectorCtrl.label = payload.customLabel;
+                        }
                     }
 
                     if (payloadSellingNumberPlanId != undefined) {
@@ -181,7 +179,6 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                             return GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input);
                         }
                     }
-
                     else {
                         saleZoneSelectorCtrl.isSellingNumberPlanVisible = true;
 
@@ -249,7 +246,6 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
                             return loadSellingNumberPlanSectionPromiseDeferred.promise;
 
                         }
-
                         else {
                             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
                             sellingReadyPromiseDeferred.promise.then(function () {
@@ -270,8 +266,6 @@ app.directive('vrNpSalezoneSelector', ['Vr_NP_SaleZoneAPIService', 'UtilsService
 
                 return api;
             }
-
-            this.initializeController = initializeController;
         }
 
         function GetSaleZonesInfo(attrs, saleZoneSelectorCtrl, selectedIds, input) {
