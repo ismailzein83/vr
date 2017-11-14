@@ -7,7 +7,7 @@
                  idfield="Entity.InvoiceId"
                  defaultsortbyfieldname="'Entity.InvoiceId'" normalcell enableautoexport="true">
         <vr-datagridcolumn widthfactor="3" disablesorting ng-show="canSelectInvoices" isfielddynamic="true">
-            <span vr-disabled="dataItem.isDeleted">
+            <span ng-hide="dataItem.isDeleted">
                 <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onInvoiceSelect(dataItem)"></vr-check>
             </span>
         </vr-datagridcolumn>
