@@ -92,8 +92,8 @@ namespace TOne.WhS.DBSync.Data.SQL
                         if (file.Settings.ExtendedSettings != null)
                             configId = file.Settings.ExtendedSettings.ConfigId;
                     }
-                    cmd.Parameters.Add(new SqlParameter("@ConfigID", configId));
-                    cmd.Parameters.Add(new SqlParameter("@Settings", settingAsString));
+                    cmd.Parameters.Add(new SqlParameter("@ConfigID", configId.HasValue ? (Object)configId.Value : DBNull.Value));
+                    cmd.Parameters.Add(new SqlParameter("@Settings", settingAsString != null ? (Object)settingAsString : DBNull.Value));
                     cmd.Parameters.Add(new SqlParameter("@CreatedTime", file.CreatedTime));
                 });
             }
