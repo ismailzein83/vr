@@ -32,15 +32,17 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             CustomerCountryDataManager customerCountryDataManager = new CustomerCountryDataManager();
 
-            if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.SellingProduct && backupSaleEntityData.SellingProductCustomerIds.Any())
+            if (backupSaleEntityData.OwnerType == SalePriceListOwnerType.Customer)
+            {
+                backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, ownerIds));
+            }
+            else if (backupSaleEntityData.SellingProductCustomerIds.Any())
             {
                 var customerIds = backupSaleEntityData.SellingProductCustomerIds;
                 backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, customerIds));
                 backupCommand.AppendLine(salePriceListDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer));
                 backupCommand.AppendLine(saleRateDataManager.BackupAllDataByOwner(stateBackupId, base.BackupDatabaseName, customerIds, (int)SalePriceListOwnerType.Customer));
             }
-            else
-                backupCommand.AppendLine(customerCountryDataManager.BackupSaleEntityCustomerCountryByOwner(stateBackupId, BackupDatabaseName, ownerIds));
 
             return backupCommand.ToString();
         }
