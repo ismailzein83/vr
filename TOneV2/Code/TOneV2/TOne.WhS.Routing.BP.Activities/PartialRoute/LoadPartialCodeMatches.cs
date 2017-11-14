@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.BP.Activities
     public class LoadPartialCodeMatchesInput
     {
         public RoutingDatabase RoutingDatabase { get; set; }
-        public List<CustomerRoute> AffectedCustomerRoutes { get; set; }
+        public HashSet<CustomerRouteDefinition> AffectedCustomerRoutes { get; set; }
     }
 
     public class LoadPartialCodeMatchesOutput
@@ -30,21 +30,21 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
 
         [RequiredArgument]
-        public InArgument<List<CustomerRoute>> AffectedCustomerRoutes { get; set; }
+        public InArgument<HashSet<CustomerRouteDefinition>> AffectedCustomerRoutes { get; set; }
 
         [RequiredArgument]
         public OutArgument<List<RoutingCodeMatches>> RoutingCodeMatchesList { get; set; }
 
         protected override LoadPartialCodeMatchesOutput DoWorkWithResult(LoadPartialCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {
-            List<CustomerRoute> affectedCustomerRoutes = inputArgument.AffectedCustomerRoutes;
+            HashSet<CustomerRouteDefinition> affectedCustomerRoutes = inputArgument.AffectedCustomerRoutes;
 
             Dictionary<string, HashSet<long>> codeSaleZones = new Dictionary<string, HashSet<long>>();
 
-            foreach (CustomerRoute customerRoute in affectedCustomerRoutes)
+            foreach (CustomerRouteDefinition customerRouteDefinition in affectedCustomerRoutes)
             {
-                HashSet<long> saleZones = codeSaleZones.GetOrCreateItem(customerRoute.Code);
-                saleZones.Add(customerRoute.SaleZoneId);
+                HashSet<long> saleZones = codeSaleZones.GetOrCreateItem(customerRouteDefinition.Code);
+                saleZones.Add(customerRouteDefinition.SaleZoneId);
             }
 
             ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();

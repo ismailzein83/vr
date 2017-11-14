@@ -24,7 +24,7 @@ namespace TOne.WhS.Routing.Data
 
         void LoadRoutes(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded);
 
-        List<CustomerRoute> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, int partialRoutesNumberLimit, out bool maximumExceeded);
+        HashSet<CustomerRouteDefinition> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, int partialRoutesNumberLimit, out bool maximumExceeded);
 
         void UpdateCustomerRoutes(List<CustomerRoute> customerRoutes);
 

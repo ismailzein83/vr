@@ -102,14 +102,12 @@
     <Compile Include="CodePrefixRequest.cs" />
     <Compile Include="DeleteRouteRuleChanged.cs" />
     <Compile Include="GetLatestRoutingDatabase.cs" />
-    <Compile Include="PartialRoute\BuildAffectedRoutingCustomerInfo.cs" />
     <Compile Include="PartialRoute\ApplyAffectedCustomerRoutesToDB.cs" />
     <Compile Include="PartialRoute\GetAffectedRoutes.cs" />
     <Compile Include="PartialRoute\ApplyPartialRouteInfo.cs" />
     <Compile Include="PartialRoute\GetPartialRouteInfo.cs" />
     <Compile Include="PartialRoute\LoadPartialCustomerZoneDetails.cs" />
     <Compile Include="PartialRoute\LoadPartialCodeMatches.cs" />
-    <Compile Include="PartialRoute\GetAffectedRouteRule.cs" />
     <Compile Include="PartialRoute\LoadAffectedRules.cs" />
     <Compile Include="CreateRoutingDatabase.cs" />
     <Compile Include="FinalizeRouteProcess.cs" />

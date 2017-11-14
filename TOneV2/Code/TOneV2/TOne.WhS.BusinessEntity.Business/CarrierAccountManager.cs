@@ -854,17 +854,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierAccounts.MapRecords(RoutingCustomerInfoMapper, filterExpression);
         }
 
-        public IEnumerable<RoutingCustomerInfo> GetRoutingCustomerInfos(HashSet<int> customerIds)
-        {
-            if (customerIds == null)
-                return null;
-
-            IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(true, false, null, null);
-
-            Func<CarrierAccount, bool> filterExpression = (item) => (customerIds.Contains(item.CarrierAccountId));
-            return carrierAccounts.MapRecords(RoutingCustomerInfoMapper, filterExpression);
-        }
-
         public IEnumerable<RoutingSupplierInfo> GetRoutingActiveSuppliers()
         {
             IEnumerable<CarrierAccount> carrierAccounts = GetCarrierAccountsByType(false, true, null, null);

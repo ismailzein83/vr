@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         public RoutingDatabase RoutingDatabase { get; set; }
 
-        public List<CustomerRoute> AffectedCustomerRoutes { get; set; }
+        public HashSet<CustomerRouteDefinition> AffectedCustomerRoutes { get; set; }
     }
 
     public class LoadPartialCustomerZoneDetailsOutput
@@ -30,14 +30,14 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
 
         [RequiredArgument]
-        public InArgument<List<CustomerRoute>> AffectedCustomerRoutes { get; set; }
+        public InArgument<HashSet<CustomerRouteDefinition>> AffectedCustomerRoutes { get; set; }
 
         [RequiredArgument]
         public OutArgument<CustomerZoneDetailByZone> CustomerZoneDetails { get; set; }
 
         protected override LoadPartialCustomerZoneDetailsOutput DoWorkWithResult(LoadPartialCustomerZoneDetailsInput inputArgument, AsyncActivityHandle handle)
         {
-            List<CustomerRoute> affectedCustomerRoutes = inputArgument.AffectedCustomerRoutes;
+            HashSet<CustomerRouteDefinition> affectedCustomerRoutes = inputArgument.AffectedCustomerRoutes;
 
             HashSet<CustomerSaleZone> customerSaleZones = affectedCustomerRoutes.Select(itm => new CustomerSaleZone() { CustomerId = itm.CustomerId, SaleZoneId = itm.SaleZoneId }).ToHashSet();
             ICustomerZoneDetailsDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerZoneDetailsDataManager>();

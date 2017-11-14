@@ -188,10 +188,144 @@ namespace TOne.WhS.Routing.Data.SQL
         }
 
 
-        public List<CustomerRoute> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, int partialRoutesNumberLimit, out bool maximumExceeded)
+        public HashSet<CustomerRouteDefinition> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, int partialRoutesNumberLimit, out bool maximumExceeded)
         {
+            HashSet<CustomerRouteDefinition> customerRouteDefinitions = new HashSet<CustomerRouteDefinition>();
             maximumExceeded = false;
+            int totalCount = 0;
 
+            if ((affectedRouteOptionsList == null || affectedRouteOptionsList.Count == 0))
+                return null;
+
+            List<string> routesConditions = BuildAffectedRoutes(affectedRoutesList);
+            if (routesConditions != null)
+            {
+                string query1 = query_GetAffectedCustomerRoutes.Replace("#AFFECTEDROUTES#", string.Join(" or ", routesConditions));
+                ExecuteReaderText(query1, (reader) =>
+                   {
+                       while (reader.Read())
+                       {
+                           totalCount++;
+                           customerRouteDefinitions.Add(CustomerRouteDefinitionMapper(reader));
+
+                           if (totalCount > partialRoutesNumberLimit)
+                               break;
+                       }
+                   }, (cmd) => { });
+
+                if (totalCount > partialRoutesNumberLimit)
+                {
+                    maximumExceeded = true;
+                    return null;
+                }
+            }
+
+            bool hasSupplierZoneCriteria;
+            List<string> routeOptionsConditions = BuildAffectedRouteOptions(affectedRouteOptionsList, out hasSupplierZoneCriteria);
+            if (routeOptionsConditions != null)
+            {
+                string query2;
+                if (!hasSupplierZoneCriteria)
+                    query2 = query_GetAffectedCustomerRoutes.Replace("#CODESUPPLIERZONEMATCH#", string.Empty);
+                else
+                    query2 = query_GetAffectedCustomerRoutes.Replace("#CODESUPPLIERZONEMATCH#", "JOIN [dbo].[CodeSupplierZoneMatch] as cszm ON cr.Code = cszm.Code");
+
+                query2 = query2.Replace("#AFFECTEDROUTES#", string.Join(" or ", routeOptionsConditions));
+                ExecuteReaderText(query2, (reader) =>
+                {
+                    while (reader.Read())
+                    {
+                        totalCount++;
+                        customerRouteDefinitions.Add(CustomerRouteDefinitionMapper(reader));
+
+                        if (totalCount > partialRoutesNumberLimit)
+                            break;
+                    }
+                }, (cmd) => { });
+
+                if (totalCount > partialRoutesNumberLimit)
+                {
+                    maximumExceeded = true;
+                    return null;
+                }
+            }
+
+            return customerRouteDefinitions.Count > 0 ? customerRouteDefinitions : null;
+        }
+
+        private List<string> BuildAffectedRouteOptions(List<AffectedRouteOptions> affectedRouteOptionsList, out bool hasSupplierZoneCriteria)
+        {
+            hasSupplierZoneCriteria = false;
+
+            if (affectedRouteOptionsList == null || affectedRouteOptionsList.Count == 0)
+                return null;
+
+            List<string> conditions = new List<string>();
+            foreach (AffectedRouteOptions affectedRouteOptions in affectedRouteOptionsList)
+            {
+                List<string> subConditions = new List<string>();
+
+                if (affectedRouteOptions.SupplierWithZones != null && affectedRouteOptions.SupplierWithZones.Count() > 0)
+                {
+                    hasSupplierZoneCriteria = true;
+                    List<string> supplierWithZonesConditions = new List<string>();
+                    HashSet<int> supplierIds = new HashSet<int>();
+                    
+                    foreach (SupplierWithZones supplierWithZones in affectedRouteOptions.SupplierWithZones)
+                    {
+                        if (supplierWithZones.SupplierZoneIds != null && supplierWithZones.SupplierZoneIds.Count > 0)
+                            supplierWithZonesConditions.Add(string.Format("(cszm.SupplierId = {0} and cszm.SupplierZoneID in ({1}))", supplierWithZones.SupplierId, string.Join<long>(",", supplierWithZones.SupplierZoneIds)));
+                        else
+                            supplierIds.Add(supplierWithZones.SupplierId);
+                    }
+
+                    if (supplierIds.Count > 0)
+                        supplierWithZonesConditions.Add(string.Format("cszm.SupplierId in ({0})", string.Join<int>(",", supplierIds)));
+
+                    subConditions.Add(string.Format("({0})", string.Join<string>(" or ", supplierWithZonesConditions)));
+                }
+
+                if (affectedRouteOptions.CustomerIds != null && affectedRouteOptions.CustomerIds.Count() > 0)
+                {
+                    subConditions.Add(string.Format("cr.CustomerID in ({0})", string.Join<int>(",", affectedRouteOptions.CustomerIds)));
+                }
+
+                if (affectedRouteOptions.ZoneIds != null && affectedRouteOptions.ZoneIds.Count() > 0)
+                {
+                    subConditions.Add(string.Format("cr.SaleZoneID in ({0})", string.Join<long>(",", affectedRouteOptions.ZoneIds)));
+                }
+
+                if (affectedRouteOptions.Codes != null && affectedRouteOptions.Codes.Count() > 0)
+                {
+                    List<string> codesConditions = new List<string>();
+
+                    List<string> codesWithoutSubCodes = new List<string>();
+                    List<string> codesWithSubCodes = new List<string>();
+                    foreach (CodeCriteria codeCriteria in affectedRouteOptions.Codes)
+                    {
+                        if (codeCriteria.WithSubCodes)
+                            codesConditions.Add(string.Format("cr.Code like ('{0}%')", codeCriteria.Code));
+                        else
+                            codesWithoutSubCodes.Add(codeCriteria.Code);
+                    }
+
+                    if (codesWithoutSubCodes.Count > 0)
+                        codesConditions.Add(string.Format("cr.Code in ('{0}')", string.Join<string>("','", codesWithoutSubCodes)));
+
+                    subConditions.Add(string.Format("({0})", string.Join<string>(" or ", codesConditions)));
+                }
+
+                if (affectedRouteOptions.ExcludedCodes != null && affectedRouteOptions.ExcludedCodes.Count > 0)
+                {
+                    subConditions.Add(string.Format("cr.Code not in ('{0}')", string.Join<string>("','", affectedRouteOptions.ExcludedCodes)));
+                }
+                conditions.Add(string.Format("({0})", string.Join<string>(" and ", subConditions)));
+            }
+            return conditions;
+        }
+
+        private List<string> BuildAffectedRoutes(List<AffectedRoutes> affectedRoutesList)
+        {
             if (affectedRoutesList == null || affectedRoutesList.Count == 0)
                 return null;
 
@@ -244,30 +378,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 }
                 conditions.Add(string.Format("({0})", string.Join<string>(" and ", subConditions)));
             }
-            query_GetAffectedCustomerRoutes.Replace("#AFFECTEDROUTES#", string.Join(" or ", conditions));
-
-            int totalCount = 0;
-            List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
-            ExecuteReaderText(query_GetAffectedCustomerRoutes.ToString(), (reader) =>
-               {
-                   while (reader.Read())
-                   {
-                       totalCount++;
-                       customerRoutes.Add(CustomerRouteMapper(reader));
-
-                       if (totalCount > partialRoutesNumberLimit)
-                           break;
-                   }
-               }, (cmd) => { });
-
-            if (totalCount > partialRoutesNumberLimit)
-            {
-                maximumExceeded = true;
-                return null;
-            }
-
-            CompleteSupplierData(customerRoutes);
-            return customerRoutes;
+            return conditions;
         }
 
         public int GetTotalCount()
@@ -346,8 +457,8 @@ namespace TOne.WhS.Routing.Data.SQL
 
             string concatenedQuery = string.Format("({0}) and cr.VersionNumber = {1}", string.Join<string>(" or ", conditions), versionNumber);
 
-            query_GetAffectedCustomerRoutes.Replace("#AFFECTEDROUTES#", concatenedQuery);
-            List<CustomerRoute> customerRoutes = GetItemsText(query_GetAffectedCustomerRoutes.ToString(), CustomerRouteMapper, (cmd) => { });
+            query_GetUpdatedCustomerRoutes.Replace("#UPDATEDROUTES#", concatenedQuery);
+            List<CustomerRoute> customerRoutes = GetItemsText(query_GetUpdatedCustomerRoutes.ToString(), CustomerRouteMapper, (cmd) => { });
             CompleteSupplierData(customerRoutes);
             return customerRoutes;
         }
@@ -389,16 +500,26 @@ namespace TOne.WhS.Routing.Data.SQL
             return new CustomerRoute()
             {
                 CustomerId = (int)reader["CustomerID"],
-                CustomerName = reader["CustomerName"].ToString(),
-                Code = reader["Code"].ToString(),
+                CustomerName = reader["CustomerName"] as string,
+                Code = reader["Code"] as string,
                 SaleZoneId = (long)reader["SaleZoneID"],
-                SaleZoneName = reader["SaleZoneName"].ToString(),
+                SaleZoneName = reader["SaleZoneName"] as string,
                 Rate = GetReaderValue<decimal?>(reader, "Rate"),
                 SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
                 Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null,
                 VersionNumber = GetReaderValue<int>(reader, "VersionNumber")
+            };
+        }
+
+        private CustomerRouteDefinition CustomerRouteDefinitionMapper(IDataReader reader)
+        {
+            return new CustomerRouteDefinition()
+            {
+                CustomerId = (int)reader["CustomerID"],
+                Code = reader["Code"] as string,
+                SaleZoneId = (long)reader["SaleZoneID"]
             };
         }
 
@@ -485,23 +606,28 @@ namespace TOne.WhS.Routing.Data.SQL
                                                             JOIN [dbo].[CustomerZoneDetail] as czd ON czd.SaleZoneId = cr.SaleZoneID and czd.CustomerId = cr.CustomerID
                                                             Where (@Code is null or Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) #CUSTOMERIDS# #SALEZONEIDS#");
 
-        private StringBuilder query_GetAffectedCustomerRoutes = new StringBuilder(@"
-                                                            SELECT  cr.CustomerID
-                                                                   ,cr.Code
-                                                                   ,sz.Name as SaleZoneName
-                                                                   ,ca.Name as  CustomerName
-                                                                   ,cr.SaleZoneID
-                                                                   ,czd.EffectiveRateValue as Rate
-                                                                   ,czd.SaleZoneServiceIds
-                                                                   ,cr.IsBlocked
-                                                                   ,cr.ExecutedRuleId
-                                                                   ,cr.RouteOptions
-                                                                   ,cr.VersionNumber
+        private string query_GetAffectedCustomerRoutes = @" SELECT distinct cr.CustomerID, cr.Code, cr.SaleZoneID
                                                             FROM [dbo].[CustomerRoute] cr with(nolock) 
-                                                            JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId = sz.ID 
-                                                            JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID = ca.ID
-                                                            JOIN [dbo].[CustomerZoneDetail] as czd ON czd.SaleZoneId = cr.SaleZoneID and czd.CustomerId = cr.CustomerID
-                                                            Where #AFFECTEDROUTES#");
+                                                            #CODESUPPLIERZONEMATCH#
+                                                            Where #AFFECTEDROUTES#";
+
+        private StringBuilder query_GetUpdatedCustomerRoutes = new StringBuilder(@"
+                                                                SELECT  cr.CustomerID
+                                                                       ,cr.Code
+                                                                       ,sz.Name as SaleZoneName
+                                                                       ,ca.Name as  CustomerName
+                                                                       ,cr.SaleZoneID
+                                                                       ,czd.EffectiveRateValue as Rate
+                                                                       ,czd.SaleZoneServiceIds
+                                                                       ,cr.IsBlocked
+                                                                       ,cr.ExecutedRuleId
+                                                                       ,cr.RouteOptions
+                                                                       ,cr.VersionNumber
+                                                                FROM [dbo].[CustomerRoute] cr with(nolock) 
+                                                                JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId = sz.ID 
+                                                                JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID = ca.ID
+                                                                JOIN [dbo].[CustomerZoneDetail] as czd ON czd.SaleZoneId = cr.SaleZoneID and czd.CustomerId = cr.CustomerID
+                                                                Where #UPDATEDROUTES#");
 
         const string query_LoadCustomerRoutes = @"SELECT cr.CustomerID
                                                         ,cr.Code

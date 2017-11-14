@@ -20,7 +20,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public int VersionNumber { get; set; }
 
-        public List<CustomerRoute> AffectedCustomerRoutes { get; set; }
+        public HashSet<CustomerRouteDefinition> AffectedCustomerRoutes { get; set; }
 
         public DateTime EffectiveDate { get; set; }
     }
@@ -38,7 +38,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
-        public InArgument<List<CustomerRoute>> AffectedCustomerRoutes { get; set; }
+        public InArgument<HashSet<CustomerRouteDefinition>> AffectedCustomerRoutes { get; set; }
 
         [RequiredArgument]
         public InArgument<int> VersionNumber { get; set; }
@@ -68,7 +68,7 @@ namespace TOne.WhS.Routing.BP.Activities
             Dictionary<string, CustomerZoneDetailByZone> zoneDetailsByCode = new Dictionary<string, CustomerZoneDetailByZone>();
             if (inputArgument.AffectedCustomerRoutes != null && inputArgument.CustomerZoneDetails != null)
             {
-                foreach (CustomerRoute customerRoute in inputArgument.AffectedCustomerRoutes)
+                foreach (CustomerRouteDefinition customerRoute in inputArgument.AffectedCustomerRoutes)
                 {
                     List<CustomerZoneDetail> matchZoneDetails = zoneDetailsByCode.GetOrCreateItem(customerRoute.Code).GetOrCreateItem(customerRoute.SaleZoneId);
                     string key = string.Concat(customerRoute.CustomerId, "~", customerRoute.SaleZoneId);

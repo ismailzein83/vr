@@ -21,5 +21,7 @@ namespace TOne.WhS.Routing.Entities
     {
         public int CustomerId { get; set; }
         public string Code { get; set; }
+        public long SaleZoneId { get; set; }
     }
+
 }

@@ -217,7 +217,7 @@ function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_Cus
                                     var customerRouteDefinitions = [];
                                     for (var itemIndex = 0; itemIndex < $scope.customerRoutes.length; itemIndex++) {
                                         var currentCustomerRoute = $scope.customerRoutes[itemIndex];
-                                        customerRouteDefinitions.push({ CustomerId: currentCustomerRoute.Entity.CustomerId, Code: currentCustomerRoute.Entity.Code });
+                                        customerRouteDefinitions.push({ CustomerId: currentCustomerRoute.Entity.CustomerId, Code: currentCustomerRoute.Entity.Code, SaleZoneId: currentCustomerRoute.Entity.SaleZoneId });
                                     }
 
                                     WhS_Routing_CustomerRouteAPIService.GetUpdatedCustomerRoutes(customerRouteDefinitions).then(function (response) {

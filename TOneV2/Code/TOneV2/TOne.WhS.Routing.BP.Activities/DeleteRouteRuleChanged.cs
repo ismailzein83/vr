@@ -16,6 +16,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             int? routeRuleId = this.RouteRuleId.Get(context);
             RouteRuleManager routeRuleManager = new RouteRuleManager();
+            RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
             if (routeRuleId.HasValue)
             {
                 routeRuleManager.DeleteRuleChanged(routeRuleId.Value);
@@ -23,6 +24,7 @@ namespace TOne.WhS.Routing.BP.Activities
             else
             {
                 routeRuleManager.DeleteRulesChanged();
+                routeOptionRuleManager.DeleteRulesChanged();
             }
         }
     }

@@ -5,17 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Entities
 {
     public struct RouteOptionRuleIdentifier
     {
         public int CustomerId { get; set; }
-        
+
         public string Code { get; set; }
-        
+
         public int SupplierId { get; set; }
-     
+
         public long SupplierZoneId { get; set; }
     }
 
@@ -26,6 +27,39 @@ namespace TOne.WhS.Routing.Entities
         public RouteOptionRuleCriteria Criteria { get; set; }
 
         public RouteOptionRuleSettings Settings { get; set; }
+
+        public override bool HasAdditionalInformation { get { return true; } }
+
+        public override void UpdateAdditionalInformation(Vanrise.Rules.BaseRule existingRule, ref Vanrise.Rules.AdditionalInformation additionalInformation)
+        {
+            RouteOptionRuleAdditionalInformation routeOptionRuleAdditionalInformation;
+            if (additionalInformation != null)
+                routeOptionRuleAdditionalInformation = additionalInformation.CastWithValidate<RouteOptionRuleAdditionalInformation>("additionalInformation");
+            else
+                routeOptionRuleAdditionalInformation = new RouteOptionRuleAdditionalInformation();
+
+            if (existingRule != null)
+            {
+                RouteOptionRule existingRouteOptionRule = existingRule.CastWithValidate<RouteOptionRule>("existingRule", existingRule.RuleId);
+
+                string existingBaseRouteOptionRuleCriteria = Vanrise.Common.Serializer.Serialize(existingRouteOptionRule.Criteria);
+                string newBaseRouteOptionRuleCriteria = Vanrise.Common.Serializer.Serialize(this.Criteria);
+                if (string.Compare(existingBaseRouteOptionRuleCriteria, newBaseRouteOptionRuleCriteria) != 0)
+                    routeOptionRuleAdditionalInformation.CriteriaHasChanged = true;
+
+                string existingSettings = Vanrise.Common.Serializer.Serialize(existingRouteOptionRule.Settings);
+                string newSettings = Vanrise.Common.Serializer.Serialize(this.Settings);
+                if (string.Compare(existingSettings, newSettings) != 0)
+                    routeOptionRuleAdditionalInformation.SettingsHasChanged = true;
+            }
+            else
+            {
+                routeOptionRuleAdditionalInformation.CriteriaHasChanged = true;
+                routeOptionRuleAdditionalInformation.SettingsHasChanged = true;
+            }
+
+            additionalInformation = routeOptionRuleAdditionalInformation;
+        }
 
         public override bool IsAnyCriteriaExcluded(object target)
         {
@@ -222,5 +256,12 @@ namespace TOne.WhS.Routing.Entities
 
     public class LinkedRouteOptionRuleContext : ILinkedRouteOptionRuleContext
     {
+    }
+
+    public class RouteOptionRuleAdditionalInformation : Vanrise.Rules.AdditionalInformation
+    {
+        public bool CriteriaHasChanged { get; set; }
+
+        public bool SettingsHasChanged { get; set; }
     }
 }
