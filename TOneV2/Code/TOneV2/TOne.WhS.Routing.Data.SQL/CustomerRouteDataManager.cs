@@ -197,7 +197,7 @@ namespace TOne.WhS.Routing.Data.SQL
             List<string> routesConditions = BuildAffectedRoutes(affectedRoutesList);
             if (routesConditions != null)
             {
-                string query1 = query_GetAffectedCustomerRoutes.Replace("#AFFECTEDROUTES#", string.Join(" or ", routesConditions));
+                string query1 = query_GetAffectedCustomerRoutes.Replace("#AFFECTEDROUTES#", string.Join(" or ", routesConditions)).Replace("#CODESUPPLIERZONEMATCH#", string.Empty);
                 ExecuteReaderText(query1, (reader) =>
                    {
                        while (reader.Read())
