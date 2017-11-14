@@ -14,7 +14,9 @@ CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetFiltered]
 	@IsEffectiveInFuture bit,
 	@Status int = null,
 	@IsSelectAll bit = null,
-	@InvoiceBulkActionIdentifier uniqueidentifier = null
+	@InvoiceBulkActionIdentifier uniqueidentifier = null,
+	@IsSent bit = null,
+	@IsPaid bit = null
 AS
 BEGIN
 DECLARE @PartnerIdsTable TABLE (PartnerId nvarchar(50))
@@ -55,7 +57,9 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			(@ToDate is null OR vrIn.ToDate <= @ToDate)   AND 
 			(@IssueDate is null OR vrIn.IssueDate =@IssueDate ) And 
 			 ISNULL( vrIn.IsDeleted,0) = 0 AND ISNULL(vrIn.IsDraft, 0) = 0
-			
+			 AND (@IsPaid IS NULL OR (vrIn.PaidDate IS NULL AND  @IsPaid = 0) OR (vrIn.PaidDate IS NOT NULL AND  @IsPaid = 1))
+			 AND (@IsSent IS NULL OR (vrIn.SentDate IS NULL AND  @IsSent = 0) OR (vrIn.SentDate IS NOT NULL AND  @IsSent = 1))
+
 	IF(@IsSelectAll IS NOT NULL AND @IsSelectAll = 1 AND @InvoiceBulkActionIdentifier IS NOT NULL)
 	BEGIN
 
