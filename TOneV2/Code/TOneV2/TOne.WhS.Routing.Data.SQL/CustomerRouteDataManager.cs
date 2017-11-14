@@ -194,9 +194,6 @@ namespace TOne.WhS.Routing.Data.SQL
             maximumExceeded = false;
             int totalCount = 0;
 
-            if ((affectedRouteOptionsList == null || affectedRouteOptionsList.Count == 0))
-                return null;
-
             List<string> routesConditions = BuildAffectedRoutes(affectedRoutesList);
             if (routesConditions != null)
             {
