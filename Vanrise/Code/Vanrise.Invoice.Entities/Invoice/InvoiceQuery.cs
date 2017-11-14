@@ -22,7 +22,8 @@ namespace Vanrise.Invoice.Entities
 
         public bool? IsSelectAll { get; set; }
         public Guid? InvoiceBulkActionIdentifier { get; set; }
-
+        public bool? IsPaid { get; set; }
+        public bool? IsSent { get; set; }
 
     }
 }

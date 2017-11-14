@@ -15,6 +15,12 @@
         var partnerSelectorAPI;
         var partnerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var invoicePaidSelectorAPI;
+        var invoicePaidSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var invoiceSentSelectorAPI;
+        var invoiceSentSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var gridAPI;
         loadParameters();
         defineScope();
@@ -89,6 +95,18 @@
                 };
                 VR_Invoice_InvoiceBulkActionService.openMenualInvoiceBulkActions(onBulkActionExecuted, invoiceTypeId, getContext());
             };
+
+            $scope.scopeModel.onInvoicePaidSelectorReady = function (api) {
+                invoicePaidSelectorAPI = api;
+                invoicePaidSelectorReadyDeferred.resolve();
+            };
+
+
+            $scope.scopeModel.onInvoiceSentSelectorReady = function (api) {
+                invoiceSentSelectorAPI = api;
+                invoiceSentSelectorReadyDeferred.resolve();
+            };
+
         }
 
         function load() {
@@ -126,6 +144,8 @@
                     EffectiveDate: accountStatusObj != undefined ? accountStatusObj.EffectiveDate : undefined,
                     IsEffectiveInFuture: accountStatusObj != undefined ? accountStatusObj.IsEffectiveInFuture : undefined,
                     Status: accountStatusObj != undefined ? accountStatusObj.Status : undefined,
+                    IsSent:invoiceSentSelectorAPI.getSelectedIds(),
+                    IsPaid: invoicePaidSelectorAPI.getSelectedIds()
                 }
             };
             return filter;
@@ -156,7 +176,22 @@
                 return accountStatusSelectorPayloadLoadDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective, loadAccountStatusSelectorDirective]).then(function ()
+            function loadInvoiceSentSelectorDirective() {
+                var invoiceSentSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+                invoiceSentSelectorReadyDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(invoiceSentSelectorAPI, undefined, invoiceSentSelectorPayloadLoadDeferred);
+                });
+                return invoiceSentSelectorPayloadLoadDeferred.promise;
+            }
+            function loadInvoicePaidSelectorDirective() {
+                var invoicePaidSelectorPayloadLoadDeferred = UtilsService.createPromiseDeferred();
+                invoicePaidSelectorReadyDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(invoicePaidSelectorAPI, undefined, invoicePaidSelectorPayloadLoadDeferred);
+                });
+                return invoicePaidSelectorPayloadLoadDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([loadPartnerSelectorDirective, loadAccountStatusSelectorDirective, loadInvoicePaidSelectorDirective, loadInvoiceSentSelectorDirective]).then(function ()
             {
                 if(gridAPI != undefined)
                 {
