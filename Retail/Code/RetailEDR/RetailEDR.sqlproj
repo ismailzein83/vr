@@ -84,6 +84,10 @@
     <Folder Include="VR_Invoice\Stored Procedures\" />
     <Folder Include="VR_Invoice\User Defined Types\" />
     <Folder Include="Retail_CDR\Views\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="COMMON\" />
+    <Folder Include="COMMON\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Retail_Event\Tables\VoiceEvent.sql" />
@@ -146,5 +150,9 @@
     <Build Include="Retail_CDR\Views\vw_BillingCDR.sql" />
     <Build Include="Retail_CDR\Tables\ReceivedCDRCost.sql" />
     <Build Include="Retail_CDR\User Defined Types\ReceivedCDRCostType.sql" />
+    <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="COMMON\Functions\getExchangeRates.sql" />
+    <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
+    <Build Include="Security\COMMON.sql" />
   </ItemGroup>
 </Project>
