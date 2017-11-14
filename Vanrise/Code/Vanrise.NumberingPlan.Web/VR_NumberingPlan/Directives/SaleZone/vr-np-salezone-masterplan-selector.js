@@ -99,11 +99,14 @@ app.directive('vrNpSalezoneMasterplanSelector', ['Vr_NP_SellingNumberPlanAPIServ
                 var saleZonePlanLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 saleZoneReadyPromiseDeferred.promise.then(function () {
+
                     var directivePayload = {
                         sellingNumberPlanId: $scope.scopeModal.SellingNumberPlanId,
-                        selectedIds: selectedIds,
-                        customLabel: npSalezoneSelectorCustomLabel
+                        selectedIds: selectedIds
                     };
+                    if (npSalezoneSelectorCustomLabel != undefined)
+                        directivePayload.customLabel = npSalezoneSelectorCustomLabel;
+
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, directivePayload, saleZonePlanLoadPromiseDeferred);
                 });
 
