@@ -584,7 +584,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
-        <Top>5.97681in</Top>
+        <Top>6.22681in</Top>
         <Left>0.44125in</Left>
         <Height>1.4in</Height>
         <Width>7.24186in</Width>
@@ -1064,6 +1064,81 @@
                 </TablixCell>
               </TablixCells>
             </TablixRow>
+            <TablixRow>
+              <Height>0.23622in</Height>
+              <TablixCells>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox6">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>Assigned Number:</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox6</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.5pt</Width>
+                        </Border>
+                        <BackgroundColor>#e2eaf5</BackgroundColor>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox7">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Parameters!AssignedNumber.Value</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style />
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox7</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>Solid</Style>
+                          <Width>0.5pt</Width>
+                        </Border>
+                        <VerticalAlign>Middle</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+              </TablixCells>
+            </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
@@ -1079,12 +1154,13 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
+            <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
         <Top>2.70175in</Top>
         <Left>3.74562in</Left>
-        <Height>1.11829in</Height>
+        <Height>1.35451in</Height>
         <Width>3.9375in</Width>
         <ZIndex>4</ZIndex>
         <Style>
@@ -1864,7 +1940,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
-        <Top>5.37542in</Top>
+        <Top>5.62542in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
         <Width>7.24185in</Width>
@@ -2275,7 +2351,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>PaymentDetails</DataSetName>
-        <Top>4.02792in</Top>
+        <Top>4.27792in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
         <Width>7.24187in</Width>
@@ -2538,7 +2614,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>7.53062in</Top>
+        <Top>7.78062in</Top>
         <Left>0.44125in</Left>
         <Height>1.1081in</Height>
         <Width>7.24186in</Width>
@@ -2930,7 +3006,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>LastInvoices</DataSetName>
-        <Top>4.69459in</Top>
+        <Top>4.94459in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
         <Width>7.24185in</Width>
@@ -2962,7 +3038,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>8.75458in</Top>
+        <Top>9.00458in</Top>
         <Left>0.44125in</Left>
         <Height>0.68752in</Height>
         <Width>7.24187in</Width>
@@ -3008,7 +3084,7 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>24.44155cm</Top>
+        <Top>25.07655cm</Top>
         <Left>1.12077cm</Left>
         <Height>1.17578cm</Height>
         <Width>18.39435cm</Width>
@@ -3524,6 +3600,12 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="OnlyFirstPage">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="AssignedNumber">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
