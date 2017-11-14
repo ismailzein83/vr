@@ -32,7 +32,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (invalidZoneNames.Count > 0)
             {
                 string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("Rates are less than retroactive date {0} for the following zones: {1}.", retroactiveDateString, string.Join(", ", invalidZoneNames));
+                context.Message = string.Format("Changing rates with dates less than retroactive date {0} for the following zone(s): {1}.", retroactiveDateString, string.Join(", ", invalidZoneNames));
                 return false;
             }
 

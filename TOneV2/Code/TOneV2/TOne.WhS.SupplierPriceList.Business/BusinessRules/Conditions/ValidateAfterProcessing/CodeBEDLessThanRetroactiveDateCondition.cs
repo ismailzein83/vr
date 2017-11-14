@@ -31,7 +31,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             if (invalidCodes.Count > 0)
             {
                 string retroactiveDateString = importSPLContext.RetroactiveDate.ToString(importSPLContext.DateFormat);
-                context.Message = string.Format("Adding codes with BED less than the retroactive date '{0}'. Following are violated codes: ({1}).", retroactiveDateString, string.Join(", ", invalidCodes));
+                context.Message = string.Format("Adding or moving codes with BED less than the retroactive date '{0}'. Violated code(s): ({1}).", retroactiveDateString, string.Join(", ", invalidCodes));
                 return false;
             }
 
