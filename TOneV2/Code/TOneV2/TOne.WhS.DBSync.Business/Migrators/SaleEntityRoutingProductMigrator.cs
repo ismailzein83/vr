@@ -51,10 +51,12 @@ namespace TOne.WhS.DBSync.Business
         {
             allRoutingProductsByServiceIds = new Dictionary<string, RoutingProduct>();
             RoutingProductManager routingProductManager = new RoutingProductManager();
-            Dictionary<int, RoutingProduct> routingProducts = routingProductManager.GetAllRoutingProducts();
-            foreach (var routingProduct in routingProducts.Values)
+            var routingProducts = routingProductManager.GetRoutingProductsBySellingNumberPlan(Context.DefaultSellingNumberPlanId);
+            foreach (var routingProduct in routingProducts)
             {
-                allRoutingProductsByServiceIds.Add(string.Join(",", routingProduct.Settings.DefaultServiceIds.OrderBy(s => s)), routingProduct);
+                string servicesKey = string.Join(",", routingProduct.Settings.DefaultServiceIds.OrderBy(s => s));
+                if (!allRoutingProductsByServiceIds.ContainsKey(servicesKey))
+                    allRoutingProductsByServiceIds.Add(servicesKey, routingProduct);
             }
 
         }

@@ -38,6 +38,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return routingProducts.MapRecords(RoutingProductInfoMapper, x => x.SellingNumberPlanId == sellingNumberPlanId);
         }
 
+        public IEnumerable<RoutingProduct> GetRoutingProductsBySellingNumberPlan(int sellingNumberPlanId)
+        {
+            var routingProducts = GetAllRoutingProducts();
+            return routingProducts.FindAllRecords(x => x.SellingNumberPlanId == sellingNumberPlanId);
+        }
+
         public IEnumerable<RoutingProductInfo> GetRoutingProductInfo(RoutingProductInfoFilter filter)
         {
             var routingProducts = GetAllRoutingProducts();
@@ -138,12 +144,12 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 RoutingProduct currentRoutingProduct = this.GetRoutingProduct(routingProduct.RoutingProductId);
                 if (currentRoutingProduct.Settings.ZoneRelationType != routingProduct.Settings.ZoneRelationType ||
-                    !currentRoutingProduct.Settings.CheckIfDefaultServiceIdsAreSame(routingProduct.Settings)||
+                    !currentRoutingProduct.Settings.CheckIfDefaultServiceIdsAreSame(routingProduct.Settings) ||
                     !currentRoutingProduct.Settings.CheckIfZonesAreSame(routingProduct.Settings) ||
                     !currentRoutingProduct.Settings.CheckIfZoneServicesAreSame(routingProduct.Settings))
                     throw new Vanrise.Entities.VRBusinessException(string.Format("Cannot edit Routing Product '{0}' because it is in use.", routingProduct.Name));
             }
-            
+
             ValidateRoutingProductToEdit(routingProduct);
 
             IRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<IRoutingProductDataManager>();
