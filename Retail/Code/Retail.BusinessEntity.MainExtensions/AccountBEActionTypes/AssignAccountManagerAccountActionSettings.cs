@@ -11,13 +11,12 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("1504D308-2BC5-48F9-80B9-2AC0BE536288"); }
         }
         public override string ClientActionName
         {
             get { return "AssignAccountManagerAccountAction"; }
         }
-        public Guid AccountManagerDefinitionId { get; set; }
 
     }
 }
