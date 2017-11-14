@@ -63,13 +63,7 @@ namespace Vanrise.Rules
 
                 if (rule.HasAdditionalInformation)
                 {
-                    string serializedRule = Vanrise.Common.Serializer.Serialize(rule);
-
-                    AdditionalInformation additionalInformation = null;
-                    rule.UpdateAdditionalInformation(null, ref additionalInformation);
-                    string serializedAdditionalInformation = Vanrise.Common.Serializer.Serialize(additionalInformation);
-
-                    if (ruleDataManager.AddRuleAndRuleChanged(ruleEntity, ActionType.AddedRule, serializedRule, serializedAdditionalInformation, out ruleId))
+                    if (ruleDataManager.AddRuleAndRuleChanged(ruleEntity, ActionType.AddedRule, out ruleId))
                     {
                         rule.RuleId = ruleId;
                         return true;
@@ -135,16 +129,31 @@ namespace Vanrise.Rules
                     T existingRule = this.GetRule(rule.RuleId);
                     RuleChangedData<T> ruleChanged = this.GetRuleChanged(rule.RuleId);
 
+                    bool ruleAdded = false;
                     if (ruleChanged != null)
+                    {
+                        ruleAdded = ruleChanged.ActionType == ActionType.AddedRule;
                         additionalInformation = ruleChanged.AdditionalInformation;
+                    }
                     else
+                    {
                         serializedRule = Vanrise.Common.Serializer.Serialize(existingRule);
+                    }
 
-                    rule.UpdateAdditionalInformation(existingRule, ref additionalInformation);
-                    string serializedAdditionalInformation = Vanrise.Common.Serializer.Serialize(additionalInformation);
+                    if (ruleAdded)
+                    {
+                        if (ruleDataManager.UpdateRule(ruleEntity))
+                            return true;
+                    }
+                    else
+                    {
+                        rule.UpdateAdditionalInformation(existingRule, ref additionalInformation);
+                        string serializedAdditionalInformation = Vanrise.Common.Serializer.Serialize(additionalInformation);
 
-                    if (ruleDataManager.UpdateRuleAndRuleChanged(ruleEntity, ActionType.UpdatedRule, serializedRule, serializedAdditionalInformation))
-                        return true;
+                        if (ruleDataManager.UpdateRuleAndRuleChanged(ruleEntity, ActionType.UpdatedRule, serializedRule, serializedAdditionalInformation))
+                            return true;
+                    }
+
                 }
                 else if (ruleDataManager.UpdateRule(ruleEntity))
                 {
@@ -195,9 +204,9 @@ namespace Vanrise.Rules
             return new RuleChangedData<T>()
             {
                 ActionType = ruleChanged.ActionType,
-                AdditionalInformation = Vanrise.Common.Serializer.Deserialize<AdditionalInformation>(ruleChanged.AdditionalInformation),
+                AdditionalInformation = !string.IsNullOrEmpty(ruleChanged.AdditionalInformation) ? Vanrise.Common.Serializer.Deserialize<AdditionalInformation>(ruleChanged.AdditionalInformation) : null,
                 CreatedTime = ruleChanged.CreatedTime,
-                InitialRule = Vanrise.Common.Serializer.Deserialize<T>(ruleChanged.InitialRule),
+                InitialRule = !string.IsNullOrEmpty(ruleChanged.InitialRule) ? Vanrise.Common.Serializer.Deserialize<T>(ruleChanged.InitialRule) : null,
                 RuleChangedId = ruleChanged.RuleChangedId,
                 RuleId = ruleChanged.RuleId,
                 RuleTypeId = ruleChanged.RuleTypeId

@@ -37,10 +37,10 @@ namespace Vanrise.Rules.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool AddRuleAndRuleChanged(Entities.Rule rule, ActionType actionType, string initialRule, string additionalInformation, out int ruleId)
+        public bool AddRuleAndRuleChanged(Entities.Rule rule, ActionType actionType, out int ruleId)
         {
             object insertedId;
-            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_InsertRuleAndRuleChanged", out insertedId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED, actionType, initialRule, additionalInformation);
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_InsertRuleAndRuleChanged", out insertedId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED, actionType);
             ruleId = (recordesEffected > 0) ? (int)insertedId : -1;
             return (recordesEffected > 0);
         }
@@ -78,7 +78,7 @@ namespace Vanrise.Rules.Data.SQL
         }
 
         public List<RuleChanged> GetRulesChanged(int ruleTypeId)
-        { 
+        {
             return GetItemsSP("rules.sp_RuleChanged_GetByType", RuleChangedMapper, ruleTypeId);
         }
 
@@ -89,7 +89,7 @@ namespace Vanrise.Rules.Data.SQL
 
         public void DeleteRulesChanged(int ruleTypeId)
         {
-            ExecuteNonQuerySP("rules.sp_RuleChanged_DeleteByType",  ruleTypeId);
+            ExecuteNonQuerySP("rules.sp_RuleChanged_DeleteByType", ruleTypeId);
         }
         #endregion
 

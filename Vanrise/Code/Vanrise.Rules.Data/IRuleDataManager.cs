@@ -9,9 +9,9 @@ namespace Vanrise.Rules.Data
 
         bool UpdateRule(Rule ruleEntity);
 
-        bool AddRuleAndRuleChanged(Rule rule, ActionType actionType, string initialRule, string additionalInformation, out int ruleId);
+        bool AddRuleAndRuleChanged(Rule rule, ActionType actionType, out int ruleId);
 
-        bool UpdateRuleAndRuleChanged(Rule rule, ActionType actionType, string initialRule, string additionalInformation);  
+        bool UpdateRuleAndRuleChanged(Rule rule, ActionType actionType, string initialRule, string additionalInformation);
 
         bool DeleteRule(int ruleId);
 
