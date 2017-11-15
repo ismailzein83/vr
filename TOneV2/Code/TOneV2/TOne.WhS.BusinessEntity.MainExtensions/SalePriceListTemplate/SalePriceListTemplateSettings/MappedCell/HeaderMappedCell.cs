@@ -32,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public override void Execute(Entities.IMappedCellContext context)
         {
-           
+
             switch (HeaderField)
             {
                 case HeaderFiledType.CompanyName:
@@ -101,7 +101,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             var carrierProfileId = carrierAccountManager.GetCarrierProfileId(customerId);
             if (!carrierProfileId.HasValue)
-                throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} does not have Carrier Profile", customerId)); 
+                throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} does not have Carrier Profile", customerId));
             var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
             return String.Join(" , ", carrierProfile.Settings.Faxes);
         }
@@ -123,7 +123,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             if (!carrierProfileId.HasValue)
                 throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} does not have Carrier Profile", customerId));
             var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
-            return carrierProfile.Settings.Contacts.FirstOrDefault(x => x.Type == CarrierContactType.PricingContactPerson).Description;
+            CarrierContact pricingContact = carrierProfile.Settings.Contacts.FirstOrDefault(x => x.Type == CarrierContactType.PricingContactPerson);
+
+            return pricingContact != null ? pricingContact.Description : string.Empty;
         }
     }
 }
