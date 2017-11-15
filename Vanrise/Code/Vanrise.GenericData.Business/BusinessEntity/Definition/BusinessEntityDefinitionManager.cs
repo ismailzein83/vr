@@ -306,7 +306,7 @@ namespace Vanrise.GenericData.Business
             return s_cacheManager.GetOrCreateObject(cacheName, createObject);
         }
 
-        internal class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IBusinessEntityDefinitionDataManager _dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityDefinitionDataManager>();
             object _updateHandle;

@@ -20,15 +20,29 @@ namespace Vanrise.Invoice.MainExtensions
 
                 BillingInterval nextBillingInterval = new Entities.BillingInterval();
                 nextBillingInterval.FromDate = context.PreviousPeriodEndDate.Value;
+                nextBillingInterval.ToDate = nextBillingInterval.FromDate;
                 if (nextBillingInterval.FromDate.DayOfWeek != DailyType)
                 {
-                    while (nextBillingInterval.FromDate.DayOfWeek != DailyType)
+                    if(this.SplitInvoice)
                     {
-                        nextBillingInterval.FromDate = nextBillingInterval.FromDate.AddDays(1);
+                        while (nextBillingInterval.ToDate.DayOfWeek != DailyType)
+                        {
+                            nextBillingInterval.ToDate = nextBillingInterval.ToDate.AddDays(1);
+                        }
+                        nextBillingInterval.ToDate = nextBillingInterval.ToDate.AddDays(-1);
                     }
+                    else
+                    {
+                        while (nextBillingInterval.FromDate.DayOfWeek != DailyType)
+                        {
+                            nextBillingInterval.FromDate = nextBillingInterval.FromDate.AddDays(1);
+                        }
+                    }
+                    
+                }else
+                {
+                    nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(6);
                 }
-
-                nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(6);
                 UpdateToDateIfExcludeOtherMonth(nextBillingInterval);
 
                 if (nextBillingInterval.ToDate > context.IssueDate)
