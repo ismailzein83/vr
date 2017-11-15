@@ -101,9 +101,13 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             var carrierProfileId = carrierAccountManager.GetCarrierProfileId(customerId);
             if (!carrierProfileId.HasValue)
-                throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} does not have Carrier Profile", customerId));
+                throw new DataIntegrityValidationException(string.Format("Carrier account with Id {0} does not have carrier profile", customerId));
             var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
-            return String.Join(" , ", carrierProfile.Settings.Faxes);
+            
+            if(carrierProfile.Settings != null && carrierProfile.Settings.Faxes != null)
+                return String.Join(" , ", carrierProfile.Settings.Faxes);
+
+            return string.Empty;
         }
         private string getCustomerPhoneNumbers(int customerId)
         {
@@ -113,7 +117,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             if (!carrierProfileId.HasValue)
                 throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} does not have Carrier Profile", customerId));
             var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
-            return String.Join(" , ", carrierProfile.Settings.PhoneNumbers);
+
+            if (carrierProfile.Settings != null && carrierProfile.Settings.Faxes != null)
+                return String.Join(" , ", carrierProfile.Settings.PhoneNumbers);
+
+            return string.Empty;
         }
         private string getCustomerPricingContactPerson(int customerId)
         {
