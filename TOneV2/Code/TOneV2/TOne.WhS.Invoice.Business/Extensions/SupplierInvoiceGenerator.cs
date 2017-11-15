@@ -356,6 +356,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
                             invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission = invoiceBillingRecord.InvoiceMeasures.CostNet;
                         }
+                       
+                        invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission ;
+                        invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission;
+                        invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr;
+                        invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet;
+
                         if (taxItemDetails != null)
                         {
                             foreach (var tax in taxItemDetails)
