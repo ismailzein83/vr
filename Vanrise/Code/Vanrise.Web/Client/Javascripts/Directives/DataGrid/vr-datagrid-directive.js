@@ -364,6 +364,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         template = UtilsService.replaceAll(template, "#CELLFILTER#", " | date:'yyyy-MM-dd HH:mm'");
                     else if (colDef.type == "Date")
                         template = UtilsService.replaceAll(template, "#CELLFILTER#", " | date:'yyyy-MM-dd'");
+                    else if (colDef.type == "Yearmonth")
+                        template = UtilsService.replaceAll(template, "#CELLFILTER#", " | date:'yyyy-MM'");
                     else
                         template = UtilsService.replaceAll(template, "#CELLFILTER#", "");
 
@@ -745,6 +747,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                                 tooltipFilter = " | date:'yyyy-MM-dd HH:mm'";
                             else if (currentColumn.type == "Date")
                                 tooltipFilter = " | date:'yyyy-MM-dd'";
+                            else if (currentColumn.type == "Yearmonth")
+                                tooltipFilter = " | date:'yyyy-MM'";
 
                         }
 
