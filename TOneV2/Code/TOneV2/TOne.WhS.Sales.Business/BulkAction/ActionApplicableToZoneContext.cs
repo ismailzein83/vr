@@ -26,7 +26,9 @@ namespace TOne.WhS.Sales.Business
 
         private Dictionary<int, DateTime> _countryBEDsByCountryId;
 
-        public ActionApplicableToZoneContext(Func<int, long, SaleEntityZoneRoutingProduct> getCurrentSellingProductZoneRP, Func<int, int, long, SaleEntityZoneRoutingProduct> getCurrentCustomerZoneRP, Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, Func<decimal?, decimal, DateTime> getRateBED, Dictionary<int, DateTime> countryBEDsByCountryId)
+        private Dictionary<int, DateTime> _countryEEDsByCountryId;
+
+        public ActionApplicableToZoneContext(Func<int, long, SaleEntityZoneRoutingProduct> getCurrentSellingProductZoneRP, Func<int, int, long, SaleEntityZoneRoutingProduct> getCurrentCustomerZoneRP, Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, Func<decimal?, decimal, DateTime> getRateBED, Dictionary<int, DateTime> countryBEDsByCountryId, Dictionary<int, DateTime> countryEEDsByCountryId)
         {
             _getCurrentSellingProductZoneRP = getCurrentSellingProductZoneRP;
             _getCurrentCustomerZoneRP = getCurrentCustomerZoneRP;
@@ -34,6 +36,7 @@ namespace TOne.WhS.Sales.Business
             _getCustomerZoneRate = getCustomerZoneRate;
             _getRateBED = getRateBED;
             _countryBEDsByCountryId = countryBEDsByCountryId;
+            _countryEEDsByCountryId = countryEEDsByCountryId;
         }
 
         #endregion
@@ -77,6 +80,14 @@ namespace TOne.WhS.Sales.Business
             if (_countryBEDsByCountryId != null)
                 countryBED = _countryBEDsByCountryId.GetRecord(countryId);
             return countryBED;
+        }
+
+        public DateTime? GetCountryEED(int countryId)
+        {
+            DateTime? countryEED = null;
+            if (_countryEEDsByCountryId != null && _countryEEDsByCountryId.ContainsKey(countryId))
+                countryEED = _countryEEDsByCountryId.GetRecord(countryId);
+            return countryEED;
         }
     }
 }

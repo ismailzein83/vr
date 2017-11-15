@@ -46,6 +46,8 @@ namespace TOne.WhS.Sales.Business
 
         public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
 
+        public Dictionary<int, DateTime> CountryEEDsByCountryId { get; set; }
+
         public SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId)
         {
             return _getCurrentSellingProductZoneRP(sellingProductId, saleZoneId);

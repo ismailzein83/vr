@@ -35,7 +35,8 @@ namespace TOne.WhS.Sales.Business
                 OwnerType = OwnerType,
                 OwnerId = OwnerId,
                 ZoneDraftsByZoneId = customObject.ZoneDraftsByZoneId,
-                CountryBEDsByCountryId = customObject.CountryBEDsByCountryId
+                CountryBEDsByCountryId = customObject.CountryBEDsByCountryId,
+                CountryEEDsByCountryId = customObject.CountryEEDsByCountryId
             };
 
             return !BulkAction.IsApplicableToCountry(bulkActionApplicableToCountryContext);
@@ -58,14 +59,21 @@ namespace TOne.WhS.Sales.Business
             public CustomObject(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
             {
                 OwnerSellingNumberPlanId = new RatePlanManager().GetOwnerSellingNumberPlanId(ownerType, ownerId);
-                CountryBEDsByCountryId = (ownerType == SalePriceListOwnerType.Customer) ? UtilitiesManager.GetDatesByCountry(ownerId, effectiveOn, true) : null;
+                Changes draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
+
+                if (ownerType == SalePriceListOwnerType.Customer)
+                {
+                    CountryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(ownerId, effectiveOn, true);
+                    DraftChangedCountries draftChangedCountries = (draft != null && draft.CountryChanges != null) ? draft.CountryChanges.ChangedCountries : null;
+                    CountryEEDsByCountryId = UtilitiesManager.GetCountryEEDsByCountryId(ownerId, draftChangedCountries, effectiveOn);
+                }
 
                 DateTime today = DateTime.Today;
                 _currentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(today));
                 _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
                 _routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(today));
 
-                SetZoneDraftsByZoneId(ownerType, ownerId);
+                SetZoneDraftsByZoneId(draft != null ? draft.ZoneChanges : null);
                 SetRateBEDs(ownerType, ownerId);
                 SetClosedCountryIds(ownerType, ownerId, effectiveOn);
             }
@@ -79,6 +87,8 @@ namespace TOne.WhS.Sales.Business
             public IEnumerable<int> ClosedCountryIds { get; set; }
 
             public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
+
+            public Dictionary<int, DateTime> CountryEEDsByCountryId { get; set; }
 
             public SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId)
             {
@@ -107,18 +117,17 @@ namespace TOne.WhS.Sales.Business
 
             #region Private Methods
 
-            private void SetZoneDraftsByZoneId(SalePriceListOwnerType ownerType, int ownerId)
+            private void SetZoneDraftsByZoneId(IEnumerable<ZoneChanges> zoneDrafts)
             {
                 ZoneDraftsByZoneId = new Dictionary<long, ZoneChanges>();
-                Changes draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
 
-                if (draft != null && draft.ZoneChanges != null)
+                if (zoneDrafts == null || zoneDrafts.Count() == 0)
+                    return;
+
+                foreach (ZoneChanges zoneDraft in zoneDrafts)
                 {
-                    foreach (ZoneChanges zoneDraft in draft.ZoneChanges)
-                    {
-                        if (!ZoneDraftsByZoneId.ContainsKey(zoneDraft.ZoneId))
-                            ZoneDraftsByZoneId.Add(zoneDraft.ZoneId, zoneDraft);
-                    }
+                    if (!ZoneDraftsByZoneId.ContainsKey(zoneDraft.ZoneId))
+                        ZoneDraftsByZoneId.Add(zoneDraft.ZoneId, zoneDraft);
                 }
             }
 

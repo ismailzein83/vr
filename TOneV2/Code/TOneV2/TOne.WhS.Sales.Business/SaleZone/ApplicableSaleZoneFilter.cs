@@ -46,7 +46,8 @@ namespace TOne.WhS.Sales.Business
                 GetSellingProductZoneRate = customData.GetSellingProductZoneRate,
                 GetCustomerZoneRate = customData.GetCustomerZoneRate,
                 GetRateBED = customData.GetRateBED,
-                CountryBEDsByCountryId = customData.CountryBEDsByCountryId
+                CountryBEDsByCountryId = customData.CountryBEDsByCountryId,
+                CountryEEDsByCountryId = customData.CountryEEDsByCountryId
             };
 
             return !UtilitiesManager.IsActionApplicableToZone(IsActionApplicableToZoneInput);
@@ -69,14 +70,22 @@ namespace TOne.WhS.Sales.Business
             public Changes Draft { get; set; }
             public IEnumerable<int> ClosedCountryIds { get; set; }
             public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
+            public Dictionary<int, DateTime> CountryEEDsByCountryId { get; set; }
 
             public CustomData(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn)
             {
                 _futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
                 _routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Today));
 
-                Draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
-                CountryBEDsByCountryId = (ownerType == SalePriceListOwnerType.Customer) ? UtilitiesManager.GetDatesByCountry(ownerId, effectiveOn, true) : null;
+                Changes draft = new RatePlanDraftManager().GetDraft(ownerType, ownerId);
+                Draft = draft;
+
+                if (ownerType == SalePriceListOwnerType.Customer)
+                {
+                    CountryBEDsByCountryId = UtilitiesManager.GetDatesByCountry(ownerId, effectiveOn, true);
+                    DraftChangedCountries draftChangedCountries = (draft != null && draft.CountryChanges != null && draft.CountryChanges.ChangedCountries != null) ? draft.CountryChanges.ChangedCountries : null;
+                    CountryEEDsByCountryId = UtilitiesManager.GetCountryEEDsByCountryId(ownerId, draftChangedCountries, effectiveOn);
+                }
 
                 SetRateBEDs(ownerType, ownerId);
                 SetRPRouteDetails();
