@@ -1002,6 +1002,7 @@
                 gridAPI.clearDataSource();
             showRatePlan(false);
             showActionBarButtons(false);
+            countryChanges = undefined;
         }
         function resetZoneLetters() {
             $scope.zoneLetters.length = 0;
