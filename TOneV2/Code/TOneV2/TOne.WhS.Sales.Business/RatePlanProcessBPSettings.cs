@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.BP.Arguments;
+using TOne.WhS.Sales.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 
@@ -34,6 +35,17 @@ namespace TOne.WhS.Sales.Business
 
             context.Reason = reason;
             return canRunBPInstance;
+        }
+
+        public override void OnBPExecutionCompleted(Vanrise.BusinessProcess.Entities.IBPDefinitionBPExecutionCompletedContext context)
+        {
+            if (context.BPInstance.Status != BPInstanceStatus.Completed)
+            {
+                long processInstanceId = context.BPInstance.ProcessInstanceID;
+                RatePlanManager ratePlanManager = new RatePlanManager();
+                ratePlanManager.CleanTemporaryTables(processInstanceId);
+            }
+            base.OnBPExecutionCompleted(context);
         }
 
         #region Private Methods

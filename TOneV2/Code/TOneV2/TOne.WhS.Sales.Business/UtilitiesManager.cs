@@ -75,6 +75,7 @@ namespace TOne.WhS.Sales.Business
                 OwnerId = context.OwnerId,
                 ZoneDraftsByZoneId = context.ZoneDraftsByZoneId,
                 CountryBEDsByCountryId = context.CountryBEDsByCountryId,
+                CountryEEDsByCountryId = context.CountryEEDsByCountryId,
                 GetSellingProductZoneRate = context.GetSellingProductZoneRate,
                 GetCustomerZoneRate = context.GetCustomerZoneRate,
                 GetCurrentSellingProductZoneRP = context.GetCurrentSellingProductZoneRP,
@@ -92,7 +93,7 @@ namespace TOne.WhS.Sales.Business
             if (input.Draft != null && input.Draft.ZoneChanges != null)
                 zoneDraft = input.Draft.ZoneChanges.FindRecord(x => x.ZoneId == input.SaleZone.SaleZoneId);
 
-            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId)
+            var actionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId)
             {
                 OwnerType = input.OwnerType,
                 OwnerId = input.OwnerId,
@@ -184,7 +185,7 @@ namespace TOne.WhS.Sales.Business
 
             foreach (SaleZone saleZone in saleZones)
             {
-                var bulkActionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId)
+                var bulkActionApplicableToZoneContext = new ActionApplicableToZoneContext(input.GetCurrentSellingProductZoneRP, input.GetCurrentCustomerZoneRP, input.GetSellingProductZoneRate, input.GetCustomerZoneRate, input.GetRateBED, input.CountryBEDsByCountryId, input.CountryEEDsByCountryId)
                 {
                     OwnerType = input.OwnerType,
                     OwnerId = input.OwnerId,
@@ -282,7 +283,7 @@ namespace TOne.WhS.Sales.Business
             getCustomerZoneRate = (customerId, sellingProductId, zoneId) => { return rateLocatorValue.GetCustomerZoneRate(customerId, sellingProductId, zoneId); };
         }
 
-        public static void SetBulkActionContextHelpers(SalePriceListOwnerType ownerType, int ownerId, Func<int, long, SaleEntityZoneRate> getSellingProductZoneCurrentRate, Func<int, int, long, SaleEntityZoneRate> getCustomerZoneCurrentRate, out Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, out Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, out Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP, out Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP, out Dictionary<int, DateTime> countryBEDsByCountryId)
+        public static void SetBulkActionContextHelpers(SalePriceListOwnerType ownerType, int ownerId, Func<int, long, SaleEntityZoneRate> getSellingProductZoneCurrentRate, Func<int, int, long, SaleEntityZoneRate> getCustomerZoneCurrentRate, out Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate, out Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate, out Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP, out Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP, out Dictionary<int, DateTime> countryBEDsByCountryId, out Dictionary<int, DateTime> countryEEDsByCountryId)
         {
             var futureRateLocator = new SaleEntityZoneRateLocator(new FutureSaleRateReadWithCache());
             var routingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithCache(DateTime.Today));
@@ -307,7 +308,18 @@ namespace TOne.WhS.Sales.Business
                 return routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneId);
             };
 
-            countryBEDsByCountryId = (ownerType == SalePriceListOwnerType.Customer) ? GetDatesByCountry(ownerId, DateTime.Today, true) : null;
+            if (ownerType == SalePriceListOwnerType.Customer)
+            {
+                countryBEDsByCountryId = GetDatesByCountry(ownerId, DateTime.Today, true);
+                Changes draft = new RatePlanDraftManager().GetDraft(SalePriceListOwnerType.Customer, ownerId);
+                DraftChangedCountries draftChangedCountries = (draft != null && draft.CountryChanges != null) ? draft.CountryChanges.ChangedCountries : null;
+                countryEEDsByCountryId = GetCountryEEDsByCountryId(ownerId, draftChangedCountries, DateTime.Today);
+            }
+            else
+            {
+                countryBEDsByCountryId = null;
+                countryEEDsByCountryId = null;
+            }
         }
 
         public static decimal ConvertToCurrencyAndRound(decimal value, int fromCurrencyId, int toCurrencyId, DateTime exchangeRateDate, int decimalPrecision, Vanrise.Common.Business.CurrencyExchangeRateManager exchangeRateManager)
@@ -327,6 +339,33 @@ namespace TOne.WhS.Sales.Business
                 return false;
 
             return true;
+        }
+
+        public static Dictionary<int, DateTime> GetCountryEEDsByCountryId(int customerId, DraftChangedCountries draftChangedCountries, DateTime effectiveAfter)
+        {
+            var countryEEDsByCountryId = new Dictionary<int, DateTime>();
+
+            if (draftChangedCountries != null && draftChangedCountries.Countries != null)
+            {
+                foreach (DraftChangedCountry draftChangedCountry in draftChangedCountries.Countries)
+                {
+                    if (!countryEEDsByCountryId.ContainsKey(draftChangedCountry.CountryId))
+                        countryEEDsByCountryId.Add(draftChangedCountry.CountryId, draftChangedCountries.EED);
+                }
+            }
+
+            IEnumerable<CustomerCountry2> soldCountries = new CustomerCountryManager().GetEndedCustomerCountriesEffectiveAfter(customerId, effectiveAfter);
+
+            if (soldCountries != null && soldCountries.Count() >= 0)
+            {
+                foreach (CustomerCountry2 soldCountry in soldCountries)
+                {
+                    if (!countryEEDsByCountryId.ContainsKey(soldCountry.CountryId))
+                        countryEEDsByCountryId.Add(soldCountry.CountryId, soldCountry.EED.Value);
+                }
+            }
+
+            return countryEEDsByCountryId;
         }
 
         #endregion
@@ -362,6 +401,8 @@ namespace TOne.WhS.Sales.Business
 
         public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
 
+        public Dictionary<int, DateTime> CountryEEDsByCountryId { get; set; }
+
         public Func<int, long, SaleEntityZoneRoutingProduct> GetCurrentSellingProductZoneRP { get; set; }
 
         public Func<int, int, long, SaleEntityZoneRoutingProduct> GetCurrentCustomerZoneRP { get; set; }
@@ -388,6 +429,8 @@ namespace TOne.WhS.Sales.Business
         public Changes Draft { get; set; }
 
         public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
+
+        public Dictionary<int, DateTime> CountryEEDsByCountryId { get; set; }
 
         public Func<int, long, SaleEntityZoneRoutingProduct> GetCurrentSellingProductZoneRP { get; set; }
 

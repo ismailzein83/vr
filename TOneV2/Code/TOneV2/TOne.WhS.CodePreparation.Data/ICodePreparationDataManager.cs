@@ -20,5 +20,7 @@ namespace TOne.WhS.CodePreparation.Data
         #endregion
 
         bool CheckCodePreparationState(int sellingNumberPlanId);
+
+        bool CleanTemporaryTables(long processInstanceId);
     }
 }

@@ -26,7 +26,11 @@ namespace TOne.WhS.Sales.Business
         #endregion
 
         #region Public Methods
-
+        public void CleanTemporaryTables(long processInstanceId)
+        {
+            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            ratePlanDataManager.CleanTemporaryTables(processInstanceId);
+        }
         public bool ValidateCustomer(int customerId, DateTime effectiveOn)
         {
             int? sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);

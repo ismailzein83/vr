@@ -94,6 +94,7 @@
     <Compile Include="ApplyPreviewOtherRatesToDB.cs" />
     <Compile Include="ApplyPreviewZonesRatesToDB.cs" />
     <Compile Include="BackupData.cs" />
+    <Compile Include="CleanTemporaryTables.cs" />
     <Compile Include="GenerateCodesPreview.cs" />
     <Compile Include="ApplyNewCodesToDB.cs" />
     <Compile Include="ApplyNewRatesToDB.cs" />

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.BP.Arguments;
+using TOne.WhS.CodePreparation.Data;
+using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 namespace TOne.WhS.CodePreparation.Business
 {
@@ -27,6 +29,19 @@ namespace TOne.WhS.CodePreparation.Business
             }
             return true;
         }
+
+         public override void OnBPExecutionCompleted(Vanrise.BusinessProcess.Entities.IBPDefinitionBPExecutionCompletedContext context)
+       {
+           if (context.BPInstance.Status != BPInstanceStatus.Completed)
+           {
+               long processInstanceId = context.BPInstance.ProcessInstanceID;
+               CodePreparationManager codePreparationManager = new CodePreparationManager();
+               codePreparationManager.CleanTemporaryTables(processInstanceId);
+             
+           }
+           base.OnBPExecutionCompleted(context);
+       }
+
 
     }
     

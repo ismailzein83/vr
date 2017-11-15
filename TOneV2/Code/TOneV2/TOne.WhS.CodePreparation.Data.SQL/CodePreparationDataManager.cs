@@ -37,8 +37,11 @@ namespace TOne.WhS.CodePreparation.Data.SQL
             return Vanrise.Common.Serializer.Deserialize<Changes>(reader["Changes"] as string);
         }
 
-
-
+        public bool CleanTemporaryTables(long processInstanceId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("TOneWhs_CP.sp_CleanTemporaryTablesCP", processInstanceId);
+            return (recordesEffected > 0);
+        }
         public bool AddPriceListAndSyncImportedDataWithDB(long processInstanceID, int sellingNumberPlanId, long stateBackupId)
         {
             int recordesEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SalePriceList_SyncWithImportedData", processInstanceID, sellingNumberPlanId, stateBackupId);

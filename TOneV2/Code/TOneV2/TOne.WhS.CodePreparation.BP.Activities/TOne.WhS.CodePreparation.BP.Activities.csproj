@@ -101,6 +101,7 @@
     <Compile Include="ApplyPreviewZonesRPsToDB.cs" />
     <Compile Include="ApplyPreviewZonesToDB.cs" />
     <Compile Include="BackupData.cs" />
+    <Compile Include="CleanTemporaryTables.cs" />
     <Compile Include="GenerateZonesRPsPreview.cs" />
     <Compile Include="LogCustomersToNotify.cs" />
     <Compile Include="NotificationContext.cs" />

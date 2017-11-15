@@ -26,7 +26,11 @@ namespace TOne.WhS.CodePreparation.Business
                 changes = new Changes();
             return changes;
         }
-
+        public void CleanTemporaryTables(long processInstanceId)
+        {
+            ICodePreparationDataManager cpDataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
+            cpDataManager.CleanTemporaryTables(processInstanceId);
+        }
         public bool CheckCodePreparationState(int sellingNumberPlanId)
         {
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.BP.Arguments;
-using  Vanrise.Common;
+using TOne.WhS.SupplierPriceList.Data;
+using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common;
 namespace TOne.WhS.SupplierPriceList.Business
 {
     public class SupplierPriceListProcessBPSettings : Vanrise.BusinessProcess.Business.DefaultBPDefinitionExtendedSettings
@@ -26,6 +28,17 @@ namespace TOne.WhS.SupplierPriceList.Business
                }
            }
            return true;
+       }
+
+       public override void OnBPExecutionCompleted(Vanrise.BusinessProcess.Entities.IBPDefinitionBPExecutionCompletedContext context)
+       {
+           if (context.BPInstance.Status != BPInstanceStatus.Completed)
+           {
+               long processInstanceId = context.BPInstance.ProcessInstanceID;
+               SupplierPriceListManager SupplierPriceListManager = new SupplierPriceListManager();
+               SupplierPriceListManager.CleanTemporaryTables(processInstanceId);
+           }
+           base.OnBPExecutionCompleted(context);  
        }
 
     }

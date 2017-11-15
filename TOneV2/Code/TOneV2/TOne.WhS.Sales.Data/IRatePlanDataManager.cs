@@ -17,5 +17,6 @@ namespace TOne.WhS.Sales.Data
         bool DeleteRatePlanDraft(SalePriceListOwnerType ownerType, int ownerId);
         DraftTaskData GetDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
         bool InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status);
+        bool CleanTemporaryTables(long processInstanceId);
     }
 }

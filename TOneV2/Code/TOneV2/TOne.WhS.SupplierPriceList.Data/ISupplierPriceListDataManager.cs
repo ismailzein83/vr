@@ -11,5 +11,7 @@ namespace TOne.WhS.SupplierPriceList.Data
         bool AddSupplierPriceList(int supplierAccountId, int? currencyId, out int supplierPriceListId);
 
         bool AddPriceListAndSyncImportedDataWithDB(int priceListId, long processInstanceId, long splStateBackupId, int supplierId, int currencyId, long fileId, DateTime effectiveOn,int userId);
+
+        bool CleanTemporaryTables(long processInstanceId);
     }
 }

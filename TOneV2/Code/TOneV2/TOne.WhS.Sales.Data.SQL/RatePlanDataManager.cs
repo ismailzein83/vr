@@ -97,5 +97,12 @@ namespace TOne.WhS.Sales.Data.SQL
             int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_RatePlan_Delete", ownerType, ownerId);
             return affectedRows > 0;
         }
+
+        public bool CleanTemporaryTables(long processInstanceId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("TOneWhS_Sales.sp_CleanTemporaryTableRP", processInstanceId);
+            return (recordesEffected > 0);
+        }
+
     }
 }

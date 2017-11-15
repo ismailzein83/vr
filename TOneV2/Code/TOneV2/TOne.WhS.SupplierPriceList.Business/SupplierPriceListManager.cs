@@ -17,7 +17,12 @@ namespace TOne.WhS.SupplierPriceList.Business
             ISupplierPriceListDataManager dataManager = SupPLDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
             return dataManager.AddSupplierPriceList(supplierAccountId,currencyId, out supplierPriceListId);
         }
-       
+
+        public void CleanTemporaryTables(long processInstanceId)
+        {
+            ISupplierPriceListDataManager splDataManager = SupPLDataManagerFactory.GetDataManager<ISupplierPriceListDataManager>();
+            splDataManager.CleanTemporaryTables(processInstanceId);
+        }
 
         public bool AddPriceListAndSyncImportedDataWithDB(int priceListId, long processInstanceId, long splStateBackupId, int supplierId, int currencyId, long fileId, DateTime effectiveOn, int userId)
         {
