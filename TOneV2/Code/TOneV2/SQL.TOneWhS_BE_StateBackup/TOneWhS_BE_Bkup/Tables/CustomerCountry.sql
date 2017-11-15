@@ -10,3 +10,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_CustomerCountry_StateBackupID]
+    ON [TOneWhS_BE_Bkup].[CustomerCountry]([StateBackupID] ASC);
+
