@@ -13,3 +13,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SaleRate_Preview_ProcessInstanceID]
+    ON [TOneWhs_CP].[SaleRate_Preview]([ProcessInstanceID] ASC);
+

@@ -7,3 +7,15 @@
     [EffectiveOn]                              DATETIME       NOT NULL
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_RP_SaleZoneRoutingProduct_Preview_ZoneName]
+    ON [TOneWhS_Sales].[RP_SaleZoneRoutingProduct_Preview]([ZoneName] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RP_SaleZoneRoutingProduct_Preview_ProcessInstanceID]
+    ON [TOneWhS_Sales].[RP_SaleZoneRoutingProduct_Preview]([ProcessInstanceID] ASC);
+

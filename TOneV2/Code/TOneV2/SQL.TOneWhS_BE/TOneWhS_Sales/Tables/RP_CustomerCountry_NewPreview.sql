@@ -5,3 +5,10 @@
     [EED]               DATETIME NULL
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RP_CustomerCountry_NewPreview_ProcessInstanceID]
+    ON [TOneWhS_Sales].[RP_CustomerCountry_NewPreview]([ProcessInstanceID] ASC);
+

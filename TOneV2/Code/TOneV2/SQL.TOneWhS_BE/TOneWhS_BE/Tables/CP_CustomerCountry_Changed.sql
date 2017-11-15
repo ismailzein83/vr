@@ -4,3 +4,10 @@
     [EED]               DATETIME NULL
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_CP_CustomerCountry_Changed_ProcessInstanceID]
+    ON [TOneWhS_BE].[CP_CustomerCountry_Changed]([ProcessInstanceID] ASC);
+

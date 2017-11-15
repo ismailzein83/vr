@@ -7,3 +7,10 @@
     [EffectiveUntil]            DATETIME       NULL
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RP_DefaultService_Preview_ProcessInstanceID]
+    ON [TOneWhS_Sales].[RP_DefaultService_Preview]([ProcessInstanceID] ASC);
+

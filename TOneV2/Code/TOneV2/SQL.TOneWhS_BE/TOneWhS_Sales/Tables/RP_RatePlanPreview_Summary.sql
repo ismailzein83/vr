@@ -22,3 +22,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RP_RatePlanPreview_Summary_ProcessInstanceID]
+    ON [TOneWhS_Sales].[RP_RatePlanPreview_Summary]([ProcessInstanceID] ASC);
+

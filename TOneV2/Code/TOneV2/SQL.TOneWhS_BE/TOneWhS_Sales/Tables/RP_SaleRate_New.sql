@@ -18,3 +18,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RP_SaleRate_New_ProcessInstanceID]
+    ON [TOneWhS_Sales].[RP_SaleRate_New]([ProcessInstanceID] ASC);
+

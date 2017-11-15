@@ -11,3 +11,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SaleZoneRoutingProduct_Preview_ProcessInstanceID]
+    ON [TOneWhs_CP].[SaleZoneRoutingProduct_Preview]([ProcessInstanceID] ASC);
+

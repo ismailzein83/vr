@@ -10,3 +10,10 @@
     [RateChangeType]    INT             NOT NULL
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SupplierOtherRate_Preview_ProcessInstanceID]
+    ON [TOneWhS_SPL].[SupplierOtherRate_Preview]([ProcessInstanceID] ASC);
+

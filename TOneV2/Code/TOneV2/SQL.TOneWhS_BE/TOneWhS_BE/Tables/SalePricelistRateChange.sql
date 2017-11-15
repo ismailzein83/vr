@@ -18,3 +18,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SalePricelistRateChange_PriceListID]
+    ON [TOneWhS_BE].[SalePricelistRateChange]([PricelistId] ASC);
+

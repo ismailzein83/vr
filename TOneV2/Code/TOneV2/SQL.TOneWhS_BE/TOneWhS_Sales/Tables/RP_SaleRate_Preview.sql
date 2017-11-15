@@ -21,3 +21,15 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_RP_SaleRate_Preview_ZoneName]
+    ON [TOneWhS_Sales].[RP_SaleRate_Preview]([ZoneName] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_RP_SaleRate_Preview_ProcessInstanceID]
+    ON [TOneWhS_Sales].[RP_SaleRate_Preview]([ProcessInstanceID] ASC);
+

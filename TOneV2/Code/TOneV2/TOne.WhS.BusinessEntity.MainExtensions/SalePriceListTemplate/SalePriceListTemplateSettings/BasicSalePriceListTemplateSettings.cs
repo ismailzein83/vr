@@ -105,11 +105,16 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         private void SetSheetData(Worksheet worksheet, IEnumerable<SalePricelistTemplateTableRow> sheet, int currentRow)
         {
-                foreach (SalePricelistTemplateTableRow row in sheet)
-                {
-                    SetRowData(worksheet, row, currentRow);
-                    worksheet.Cells.InsertRow(++currentRow);
-                }
+            int rowCount = sheet.Count();
+            if (rowCount > 1)
+                worksheet.Cells.InsertRows(currentRow + 1, rowCount - 1);
+            
+            foreach (SalePricelistTemplateTableRow row in sheet)
+            {
+                SetRowData(worksheet, row, currentRow);
+                currentRow++;
+                //worksheet.Cells.InsertRow(++currentRow);
+            }
         }
         private void SetRowData(Worksheet worksheet, SalePricelistTemplateTableRow row,int currentRow)
         {

@@ -19,3 +19,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SalePriceList_New_ProcessInstanceID]
+    ON [TOneWhS_BE].[SalePriceList_New]([ProcessInstanceID] ASC);
+

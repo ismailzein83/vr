@@ -5,3 +5,10 @@
     [CustomerID]  INT NOT NULL
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SalePricelistCustomerChange_New_BatchID]
+    ON [TOneWhS_BE].[SalePricelistCustomerChange_New]([BatchID] ASC);
+

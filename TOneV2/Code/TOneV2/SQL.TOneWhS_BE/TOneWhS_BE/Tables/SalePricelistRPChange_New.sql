@@ -17,3 +17,15 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SalePricelistRPChange_New_Zone]
+    ON [TOneWhS_BE].[SalePricelistRPChange_New]([ZoneID] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SalePricelistRPChange_New_ProcessInstanceID]
+    ON [TOneWhS_BE].[SalePricelistRPChange_New]([ProcessInstanceID] ASC);
+

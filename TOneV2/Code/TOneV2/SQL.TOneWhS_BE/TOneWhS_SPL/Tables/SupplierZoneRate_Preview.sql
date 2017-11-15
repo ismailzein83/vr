@@ -26,3 +26,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SupplierZoneRate_Preview_ProcessInstanceID]
+    ON [TOneWhS_SPL].[SupplierZoneRate_Preview]([ProcessInstanceID] ASC);
+

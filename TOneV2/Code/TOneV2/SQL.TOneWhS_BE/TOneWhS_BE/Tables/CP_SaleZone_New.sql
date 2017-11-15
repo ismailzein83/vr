@@ -8,3 +8,10 @@
     [EED]                 DATETIME       NULL
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_CP_SaleZone_New_ProcessInstanceID]
+    ON [TOneWhS_BE].[CP_SaleZone_New]([ProcessInstanceID] ASC);
+

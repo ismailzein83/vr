@@ -10,3 +10,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SupplierCode_Preview_ProcessInstanceID]
+    ON [TOneWhS_SPL].[SupplierCode_Preview]([ProcessInstanceID] ASC);
+

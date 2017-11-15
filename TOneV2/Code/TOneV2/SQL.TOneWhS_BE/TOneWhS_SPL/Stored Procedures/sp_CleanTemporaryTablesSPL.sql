@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_CleanTemporaryTableSPL]
+CREATE PROCEDURE [TOneWhS_SPL].[sp_CleanTemporaryTablesSPL]
 @ProcessInstanceId bigint
 AS
 BEGIN

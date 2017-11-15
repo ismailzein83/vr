@@ -524,8 +524,8 @@
     <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistRateChangesNew_GetAffectedCustomerIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllZoneRPs.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPs.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_CleanTemporaryTableSPL.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_CleanTemporaryTableCP.sql" />
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_CleanTemporaryTableRP.sql" />
+    <Build Include="TOneWhS_SPL\Stored Procedures\sp_CleanTemporaryTablesSPL.sql" />
+    <Build Include="TOneWhs_CP\Stored Procedures\sp_CleanTemporaryTablesCP.sql" />
   </ItemGroup>
 </Project>

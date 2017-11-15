@@ -14,3 +14,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SalePricelistCodeChange_BatchID]
+    ON [TOneWhS_BE].[SalePricelistCodeChange]([BatchID] ASC);
+

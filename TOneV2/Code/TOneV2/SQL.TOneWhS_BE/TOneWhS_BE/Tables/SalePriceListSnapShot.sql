@@ -6,3 +6,10 @@
 
 
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_SalePriceListSnapShot_PriceListID]
+    ON [TOneWhS_BE].[SalePriceListSnapShot]([PriceListID] ASC);
+
