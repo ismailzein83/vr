@@ -27,13 +27,17 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<ZonePreview>>> PreviewZonesQueue { get; set; }
 
+        [RequiredArgument]
+        public InArgument<int> CountryId { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             BaseQueue<IEnumerable<ZonePreview>> previewZonesQueue = this.PreviewZonesQueue.Get(context);
             IEnumerable<ZoneToProcess> zonesToProcess = this.ZonesToProcess.Get(context);
             IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
             ClosedExistingZones closedExistingZones = ClosedExistingZones.Get(context);
-            
+            int countryId = CountryId.Get(context);
+
             List<ZonePreview> zonesPreview = new List<ZonePreview>();
 
 
@@ -41,9 +45,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 foreach (ZoneToProcess zoneToProcess in zonesToProcess)
                 {
-                    List<ExistingZone> matchedClosedZones;
-                    if (zoneToProcess.ChangeType == ZoneChangeType.Deleted && closedExistingZones.TryGetValue(zoneToProcess.ZoneName, out matchedClosedZones))
-                        continue;
                     zonesPreview.Add(new ZonePreview
                     {
                         CountryId = GetCountryId(zoneToProcess),
@@ -95,7 +96,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                      //   continue;
 
                     //avoid adding deleted zones from zonesToProcess to the list of deleted zones
-                    if (!zonesToProcess.Any(item => item.ZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)))
+                    if (closedExistingZone.Value.First().CountryId==countryId && !zonesToProcess.Any(item => item.ZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)))
                     {
                         DateTime? ClosedZoneEED = closedExistingZone.Value.Select(item => item.EED).VRMaximumDate();
                         zonesPreview.Add(new ZonePreview()
