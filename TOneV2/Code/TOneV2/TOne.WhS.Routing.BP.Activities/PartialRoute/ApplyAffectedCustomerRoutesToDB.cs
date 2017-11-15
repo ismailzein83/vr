@@ -49,11 +49,10 @@ namespace TOne.WhS.Routing.BP.Activities
                         {
                             customerRoutesToUpdate.AddRange(customerRoutesBatch.CustomerRoutes);
 
-                            while (customerRoutesToUpdate.Count > partialRoutesUpdateBatchSize)
+                            if (customerRoutesToUpdate.Count > partialRoutesUpdateBatchSize)
                             {
-                                IEnumerable<CustomerRoute> customerRoutesBatchForUpdate = customerRoutesToUpdate.Take(partialRoutesUpdateBatchSize);
-                                customerRoutesToUpdate.RemoveRange(0, partialRoutesUpdateBatchSize);
-                                customerRouteDataManager.UpdateCustomerRoutes(customerRoutesBatchForUpdate.ToList());
+                                customerRouteDataManager.UpdateCustomerRoutes(customerRoutesToUpdate.ToList());
+                                customerRoutesToUpdate = new List<CustomerRoute>();
                             }
                         }
                     });
