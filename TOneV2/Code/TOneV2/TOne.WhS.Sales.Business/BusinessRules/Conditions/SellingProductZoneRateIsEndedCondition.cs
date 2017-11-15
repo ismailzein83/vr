@@ -20,7 +20,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         {
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
 
-            if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer)
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer || (ratePlanContext.IsFirstSellingProductOffer.HasValue && ratePlanContext.IsFirstSellingProductOffer.Value))
                 return true;
 
             var zoneData = context.Target as DataByZone;
