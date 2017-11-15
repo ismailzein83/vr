@@ -41,6 +41,9 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             {
                 foreach (ZoneToProcess zoneToProcess in zonesToProcess)
                 {
+                    List<ExistingZone> matchedClosedZones;
+                    if (zoneToProcess.ChangeType == ZoneChangeType.Deleted && closedExistingZones.TryGetValue(zoneToProcess.ZoneName, out matchedClosedZones))
+                        continue;
                     zonesPreview.Add(new ZonePreview
                     {
                         CountryId = GetCountryId(zoneToProcess),
