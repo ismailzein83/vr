@@ -16,7 +16,6 @@ namespace TOne.WhS.CodePreparation.Business
         public void ProcessCountryCodes(IProcessCountryCodesContext context)
         {
             ZonesByName newAndExistingZones = new ZonesByName();
-            ClosedExistingZones closedExistingZones;
 
             ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
 
@@ -27,9 +26,8 @@ namespace TOne.WhS.CodePreparation.Business
             HashSet<string> codesToCloseHashSet;
 
             ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones,existingCodesByCodeValue,
-                out closedExistingZones, out codesToAddHashSet, out codesToMoveHashSet, out codesToCloseHashSet);
+                context.ClosedExistingZones, out codesToAddHashSet, out codesToMoveHashSet, out codesToCloseHashSet);
 
-            context.ClosedExistingZones = closedExistingZones;
             context.NewCodes = context.CodesToAdd.SelectMany(itm => itm.AddedCodes).Union(context.CodesToMove.SelectMany(itm => itm.AddedCodes));
             context.NewZones = newAndExistingZones.GetNewZones();
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
@@ -39,7 +37,7 @@ namespace TOne.WhS.CodePreparation.Business
         }
 
         private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones,
-            IEnumerable<ExistingZone> existingZones, ExistingCodesByCodeValue existingCodesByCodeValue, out ClosedExistingZones closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
+            IEnumerable<ExistingZone> existingZones, ExistingCodesByCodeValue existingCodesByCodeValue, ClosedExistingZones closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             StructureExistingCodesByCodeValue(existingCodesByCodeValue, existingCodes);
@@ -83,12 +81,11 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
 
-            CloseZonesWithNoCodes(existingZones, out closedExistingZones);
+            CloseZonesWithNoCodes(existingZones, closedExistingZones);
 
         }
-        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones, out ClosedExistingZones closedExistingZones)
+        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones, ClosedExistingZones closedExistingZones)
         {
-            closedExistingZones = new ClosedExistingZones();
             foreach (var existingZone in existingZones)
             {
                 DateTime? maxCodeEED = DateTime.MinValue;

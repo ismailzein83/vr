@@ -26,6 +26,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
 
+        public ClosedExistingZones ClosedExistingZones { get; set; }
+
 
     }
     public class ProcessCountryCodesOutput
@@ -39,8 +41,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public IEnumerable<AddedCode> NewCodes { get; set; }
 
         public IEnumerable<ChangedCode> ChangedCodes { get; set; }
-
-        public ClosedExistingZones ClosedExistingZones { get; set; }
 
         public IEnumerable<NotImportedCode> NotImportedCodes { get; set; }
     }
@@ -78,7 +78,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InOutArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
        
         [RequiredArgument]
-        public OutArgument<ClosedExistingZones> ClosedExistingZones { get; set; }
+        public InArgument<ClosedExistingZones> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<NotImportedCode>> NotImportedCodes { get; set; }
@@ -92,7 +92,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 CodesToClose = this.CodesToClose.Get(context),
                 CodesToMove = this.CodesToMove.Get(context),
                 ExistingCodes = this.ExistingCodes.Get(context),
-                ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context)
+                ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
+                ClosedExistingZones = this.ClosedExistingZones.Get(context)
             };
         }
         protected override ProcessCountryCodesOutput DoWorkWithResult(ProcessCountryCodesInput inputArgument, AsyncActivityHandle handle)
@@ -110,6 +111,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 CodesToClose = inputArgument.CodesToClose,
                 ExistingCodes = inputArgument.ExistingCodes,
                 ExistingZones = existingZones,
+                ClosedExistingZones = inputArgument.ClosedExistingZones
             };
 
             PriceListCodeManager plCodeManager = new PriceListCodeManager();
@@ -122,7 +124,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 NewAndExistingZones= processCountryCodesContext.NewAndExistingZones,
                 NewCodes = processCountryCodesContext.NewCodes,
                 ChangedCodes = processCountryCodesContext.ChangedCodes,
-                ClosedExistingZones = processCountryCodesContext.ClosedExistingZones,
                 NotImportedCodes = processCountryCodesContext.NotImportedCodes
             };
         }
@@ -134,7 +135,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             this.ChangedZones.Set(context, result.ChangedZones);
             this.NewCodes.Set(context, result.NewCodes);
             this.ChangedCodes.Set(context, result.ChangedCodes);
-            this.ClosedExistingZones.Set(context, result.ClosedExistingZones);
             this.NotImportedCodes.Set(context, result.NotImportedCodes);
         }
     }
