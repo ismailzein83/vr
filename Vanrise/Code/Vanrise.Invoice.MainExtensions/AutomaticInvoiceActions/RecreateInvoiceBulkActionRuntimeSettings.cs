@@ -17,6 +17,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
     {
         public bool IncludeSentInvoices { get; set; }
         public bool IncludePaidInvoices { get; set; }
+        public override bool ShouldWaitImport { get { return true; } }
         public override void Execute(IAutomaticActionRuntimeSettingsContext context)
         {
             string errorMessage;

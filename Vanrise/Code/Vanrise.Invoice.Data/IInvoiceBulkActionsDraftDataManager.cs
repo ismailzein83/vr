@@ -10,7 +10,7 @@ namespace Vanrise.Invoice.Data
     public interface IInvoiceBulkActionsDraftDataManager:IDataManager
     {
         void LoadInvoicesFromInvoiceBulkActionDraft(Guid invoiceBulkActionIdentifier, Action<Entities.Invoice> onInvoiceReady);
-        void UpdateInvoiceBulkActionDraft(Guid invoiceBulkActionIdentifier, Guid invoiceTypeId, bool isAllInvoicesSelected, List<long> targetInvoicesIds);
+        InvoiceBulkActionsDraftSummary UpdateInvoiceBulkActionDraft(Guid invoiceBulkActionIdentifier, Guid invoiceTypeId, bool isAllInvoicesSelected, List<long> targetInvoicesIds);
         void ClearInvoiceBulkActionDrafts(Guid invoiceBulkActionIdentifier);
     }
 }

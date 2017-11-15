@@ -104,29 +104,21 @@
         </viba1:ExecuteInvoiceActions.PreviousActivityStatus>
       </viba1:ExecuteInvoiceActions>
     </Parallel>
-    <viba1:ClearInvoiceBulkActionDrafts sap2010:WorkflowViewState.IdRef="ClearInvoiceBulkActionDrafts_1">
-      <viba1:ClearInvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
-        <InArgument x:TypeArguments="s:Guid">
-          <mca:CSharpValue x:TypeArguments="s:Guid">Input.InvoiceBulkActionIdentifier</mca:CSharpValue>
-        </InArgument>
-      </viba1:ClearInvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
-    </viba1:ClearInvoiceBulkActionDrafts>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlQnVsa0FjdGlvblByb2Nlc3MueGFtbA07A3MOAgEBPwVqEAIBBmsFcSoCAQJDB1MnAgEYVAdpJQIBB24LbmgCAQNGDUZqAgEhUA1QfAIBHUsNS28CARlhDWFcAgEUZg1mdAIBEFcNV28CAQxcDVyBAQIBCA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlQnVsa0FjdGlvblByb2Nlc3MueGFtbAs7A2wOAgEBPwVqEAIBAkMHUycCARRUB2klAgEDRg1GagIBHVANUHwCARlLDUtvAgEVYQ1hXAIBEGYNZnQCAQxXDVdvAgEIXA1cgQECAQQ=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="InvoiceBulkActionDrafts_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ExecuteInvoiceActions_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="ClearInvoiceBulkActionDrafts_1" sap:VirtualizedContainerService.HintSize="554,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,272">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,210">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.InvoiceBulkActionProcess_1" sap:VirtualizedContainerService.HintSize="616,352" />
+      <sap2010:ViewStateData Id="Vanrise.Invoice.BP.InvoiceBulkActionProcess_1" sap:VirtualizedContainerService.HintSize="616,290" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

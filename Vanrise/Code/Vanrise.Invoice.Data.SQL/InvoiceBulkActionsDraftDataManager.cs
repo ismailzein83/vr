@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Data.SQL
 {
@@ -33,12 +35,13 @@ namespace Vanrise.Invoice.Data.SQL
         }
 
 
-        public void UpdateInvoiceBulkActionDraft(Guid invoiceBulkActionIdentifier, Guid invoiceTypeId,bool isAllInvoicesSelected, List<long> targetInvoicesIds)
+        public InvoiceBulkActionsDraftSummary UpdateInvoiceBulkActionDraft(Guid invoiceBulkActionIdentifier, Guid invoiceTypeId, bool isAllInvoicesSelected, List<long> targetInvoicesIds)
         {
             string targetInvoicesIdsAsString = null;
             if (targetInvoicesIds != null)
                 targetInvoicesIdsAsString = string.Join(",", targetInvoicesIds);
-            ExecuteNonQuerySP("VR_Invoice.sp_InvoiceBulkActionDraft_Update", invoiceBulkActionIdentifier, invoiceTypeId, isAllInvoicesSelected, targetInvoicesIdsAsString);
+
+            return GetItemSP("VR_Invoice.sp_InvoiceBulkActionDraft_Update", InvoiceBulkActionsDraftSummary, invoiceBulkActionIdentifier, invoiceTypeId, isAllInvoicesSelected, targetInvoicesIdsAsString);
         }
 
 
@@ -46,5 +49,16 @@ namespace Vanrise.Invoice.Data.SQL
         {
             ExecuteNonQuerySP("VR_Invoice.sp_InvoiceBulkActionDraft_Clear", invoiceBulkActionIdentifier);
         }
+
+        private InvoiceBulkActionsDraftSummary InvoiceBulkActionsDraftSummary(IDataReader reader)
+        {
+            return new InvoiceBulkActionsDraftSummary()
+            {
+                TotalCount = (int)reader["TotalCount"],
+                MinimumFrom = GetReaderValue<DateTime?>(reader, "MinimumFrom"),
+                MaximumTo = GetReaderValue<DateTime?>(reader, "MaximumTo"),
+            };
+        }
+
     }
 }

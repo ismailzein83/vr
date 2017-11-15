@@ -35,13 +35,15 @@ namespace Vanrise.Invoice.Business
                 InvoiceGenerationProcessInput startedInvoiceGenerationBPArg = startedBPInstance.InputArgument as InvoiceGenerationProcessInput;
                 if (startedInvoiceGenerationBPArg != null)
                 {
-                    DateTime instanceMinimumFrom = startedInvoiceGenerationBPArg.MinimumFrom;
-                    DateTime instanceMaximumTo = startedInvoiceGenerationBPArg.MaximumTo.AddDays(1);
-
-                    if (Utilities.AreTimePeriodsOverlapped(invoiceMinimumFrom, invoiceMaximumTo, instanceMinimumFrom, instanceMaximumTo))
+                    if (startedInvoiceGenerationBPArg.InvoiceTypeId == invoiceGenerationProcessInput.InvoiceTypeId)
                     {
-                        context.Reason = String.Format("Another invoice generation instance is running from {0:yyyy-MM-dd} to {1:yyyy-MM-dd}", startedInvoiceGenerationBPArg.MinimumFrom, startedInvoiceGenerationBPArg.MaximumTo);
-                        return false;
+                        DateTime instanceMinimumFrom = startedInvoiceGenerationBPArg.MinimumFrom;
+                        DateTime instanceMaximumTo = startedInvoiceGenerationBPArg.MaximumTo.AddDays(1);
+                        if (Utilities.AreTimePeriodsOverlapped(invoiceMinimumFrom, invoiceMaximumTo, instanceMinimumFrom, instanceMaximumTo))
+                        {
+                            context.Reason = String.Format("Another invoice generation instance is running from {0:yyyy-MM-dd} to {1:yyyy-MM-dd}", startedInvoiceGenerationBPArg.MinimumFrom, startedInvoiceGenerationBPArg.MaximumTo);
+                            return false;
+                        }
                     }
                 }
             }

@@ -89,6 +89,7 @@
     <Compile Include="Extensions\InvoiceSynchronizer.cs" />
     <Compile Include="Extensions\InvoiceTypeExtendedSettingsInfoContext.cs" />
     <Compile Include="InvoiceBulkActionsDraftManager.cs" />
+    <Compile Include="InvoiceBulkActionsBPDefinitionSettings.cs" />
     <Compile Include="InvoiceGenerationBPDefinitionSettings.cs" />
     <Compile Include="InvoiceItemGroupingManager.cs" />
     <Compile Include="InvoiceItemManager.cs" />

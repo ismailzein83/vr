@@ -17,10 +17,10 @@ namespace Vanrise.Invoice.Business
             dataManager.LoadInvoicesFromInvoiceBulkActionDraft(invoiceBulkActionIdentifier, onInvoiceReady);
         }
 
-        public void UpdateInvoiceBulkActionDraft(Guid invoiceBulkActionIdentifier,Guid invoiceTypeId, bool isAllInvoicesSelected, List<long> targetInvoicesIds)
+        public InvoiceBulkActionsDraftSummary UpdateInvoiceBulkActionDraft(Guid invoiceBulkActionIdentifier, Guid invoiceTypeId, bool isAllInvoicesSelected, List<long> targetInvoicesIds)
         {
             IInvoiceBulkActionsDraftDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceBulkActionsDraftDataManager>();
-            dataManager.UpdateInvoiceBulkActionDraft(invoiceBulkActionIdentifier,invoiceTypeId, isAllInvoicesSelected, targetInvoicesIds);
+            return dataManager.UpdateInvoiceBulkActionDraft(invoiceBulkActionIdentifier,invoiceTypeId, isAllInvoicesSelected, targetInvoicesIds);
         }
         public void ClearInvoiceBulkActionDrafts(Guid invoiceBulkActionIdentifier)
         {

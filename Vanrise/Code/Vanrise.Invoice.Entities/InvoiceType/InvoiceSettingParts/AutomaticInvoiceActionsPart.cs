@@ -21,6 +21,7 @@ namespace Vanrise.Invoice.Entities
     }
     public abstract class AutomaticInvoiceActionRuntimeSettings
     {
+        public virtual bool ShouldWaitImport { get { return false; } }
         public abstract void Execute(IAutomaticActionRuntimeSettingsContext context);
     }
 }

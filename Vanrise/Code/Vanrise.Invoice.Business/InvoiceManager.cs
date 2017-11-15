@@ -1003,8 +1003,17 @@ namespace Vanrise.Invoice.Business
         public ExecuteMenualInvoiceActionsOutput ExecuteMenualInvoiceActions(ExecuteMenualInvoiceActionsInput input)
         {
             InvoiceBulkActionsDraftManager invoiceBulkActionsDraftManager = new InvoiceBulkActionsDraftManager();
-            invoiceBulkActionsDraftManager.UpdateInvoiceBulkActionDraft(input.InvoiceBulkActionIdentifier, input.InvoiceTypeId, input.IsAllInvoicesSelected, input.TargetInvoicesIds);
-            
+            InvoiceBulkActionsDraftSummary invoiceBulkActionsDraftSummary = invoiceBulkActionsDraftManager.UpdateInvoiceBulkActionDraft(input.InvoiceBulkActionIdentifier, input.InvoiceTypeId, input.IsAllInvoicesSelected, input.TargetInvoicesIds);
+
+            if (invoiceBulkActionsDraftSummary.TotalCount == 0)
+                return new ExecuteMenualInvoiceActionsOutput { Succeed = false, OutputMessage = "At least one invoice should be selected for action process" };
+
+            if (!invoiceBulkActionsDraftSummary.MinimumFrom.HasValue)
+                throw new NullReferenceException("invoiceBulkActionsDraftSummary.MinimumFrom");
+
+            if (!invoiceBulkActionsDraftSummary.MaximumTo.HasValue)
+                throw new NullReferenceException("invoiceBulkActionsDraftSummary.MaximumTo");
+
             int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
 
             if (input.InvoiceBulkActions == null || input.InvoiceBulkActions.Count == 0)
@@ -1016,6 +1025,8 @@ namespace Vanrise.Invoice.Business
                 InvoiceTypeId = input.InvoiceTypeId,
                 UserId = userId,
                 InvoiceBulkActions = input.InvoiceBulkActions,
+                MinimumFrom = invoiceBulkActionsDraftSummary.MinimumFrom.Value,
+                MaximumTo = invoiceBulkActionsDraftSummary.MaximumTo.Value
             };
 
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
