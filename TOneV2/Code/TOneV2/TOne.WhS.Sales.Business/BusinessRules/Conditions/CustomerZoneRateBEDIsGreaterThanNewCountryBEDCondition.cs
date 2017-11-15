@@ -37,7 +37,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
                 DateTime validRateBED = Vanrise.Common.Utilities.Max(countryData.CountryBED, zoneData.BED);
 
-                if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED > validRateBED)
+                if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED != validRateBED)
                 {
                     AddInvalidZoneName(zoneData, invalidEffectiveZoneNames, invalidFutureZoneNamesByZoneBED);
                     continue;
@@ -47,7 +47,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                 {
                     foreach (RateToChange otherRateToChange in zoneData.OtherRatesToChange)
                     {
-                        if (otherRateToChange.BED > validRateBED)
+                        if (otherRateToChange.BED != validRateBED)
                         {
                             AddInvalidZoneName(zoneData, invalidEffectiveZoneNames, invalidFutureZoneNamesByZoneBED);
                             break;

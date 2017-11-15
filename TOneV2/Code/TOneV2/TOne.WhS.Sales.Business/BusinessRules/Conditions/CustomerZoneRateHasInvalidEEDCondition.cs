@@ -44,7 +44,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             {
                 if (zoneData.NormalRateToClose.CloseEffectiveDate < sellingProductRate.Rate.BED)
                 {
-                    context.Message = string.Format("Rate of zone '{0}' must inherit the last rate defined for the selling product. EED of the rate must be greater than or equal to '{1}'", zoneData.ZoneName, UtilitiesManager.GetDateTimeAsString(zoneData.NormalRateToClose.CloseEffectiveDate), UtilitiesManager.GetDateTimeAsString(sellingProductRate.Rate.BED));
+                    context.Message = string.Format("Rate of zone '{0}' must inherit the last rate defined for the selling product. EED of the rate must be greater than or equal to '{1}'", zoneData.ZoneName, UtilitiesManager.GetDateTimeAsString(sellingProductRate.Rate.BED));
                     return false;
                 }
             }
