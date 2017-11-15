@@ -49,6 +49,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSaveinvoicetofileRuntime", ["U
                         emailActionSettings = payload.emailActionSettings;
                         actionValueSettings = payload.actionValueSettings;
                         context = payload.context;
+                        $scope.scopeModel.isPathRequired = !payload.isAutomatic;
                         if (emailActionSettings != undefined)
                         {
                             if (emailActionSettings.InvoiceToFileActionSets != undefined) {

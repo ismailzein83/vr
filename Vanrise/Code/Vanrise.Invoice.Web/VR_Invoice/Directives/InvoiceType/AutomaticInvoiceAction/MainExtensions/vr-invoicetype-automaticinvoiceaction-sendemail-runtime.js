@@ -33,7 +33,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
             var invoiceAttachments;
             var mailMessageTemplateSelectorAPI;
             var mailMessageTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-            var isAutmatic;
+            var isAutomatic;
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
@@ -55,9 +55,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                     var actionValueSettings;
                     if (payload != undefined) {
                         invoiceAttachments = payload.invoiceAttachments;
-                        isAutmatic = payload.isAutmatic;
-                        if (isAutmatic)
-                            $scope.scopeModel.showIncludeSentInvocies = false;
+                        $scope.scopeModel.showIncludeSentInvocies = !payload.isAutomatic;
                         emailActionSettings = payload.emailActionSettings;
                         actionValueSettings = payload.actionValueSettings;
                         context = payload.context;
