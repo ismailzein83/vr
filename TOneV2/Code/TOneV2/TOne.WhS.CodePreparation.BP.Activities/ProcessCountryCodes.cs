@@ -23,11 +23,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public IEnumerable<ExistingCode> ExistingCodes { get; set; }
 
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
-
-        public int CountryId { get; set; }
-
-        public ClosedExistingZonesByCountry ClosedExistingZonesByCountry { get; set; }
-
     }
     public class ProcessCountryCodesOutput
     {
@@ -48,9 +43,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
     public sealed class ProcessCountryCodes : BaseAsyncActivity<ProcessCountryCodesInput, ProcessCountryCodesOutput>
     {
-        [RequiredArgument]
-        public InArgument<int> CountryId { get; set; }
-
         [RequiredArgument]
         public InArgument<IEnumerable<CodeToAdd>> CodesToAdd { get; set; }
 
@@ -82,9 +74,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InOutArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<ClosedExistingZonesByCountry> ClosedExistingZonesByCountry { get; set; }
-
-        [RequiredArgument]
         public OutArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
@@ -100,8 +89,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 CodesToMove = this.CodesToMove.Get(context),
                 ExistingCodes = this.ExistingCodes.Get(context),
                 ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
-                CountryId = this.CountryId.Get(context),
-                ClosedExistingZonesByCountry = this.ClosedExistingZonesByCountry.Get(context),
             };
         }
         protected override ProcessCountryCodesOutput DoWorkWithResult(ProcessCountryCodesInput inputArgument, AsyncActivityHandle handle)
@@ -123,7 +110,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             PriceListCodeManager plCodeManager = new PriceListCodeManager();
             plCodeManager.ProcessCountryCodes(processCountryCodesContext);
-            inputArgument.ClosedExistingZonesByCountry.TryAddValue(inputArgument.CountryId, processCountryCodesContext.ClosedExistingZones);
             return new ProcessCountryCodesOutput()
             {
                 NewZones = processCountryCodesContext.NewZones,

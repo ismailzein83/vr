@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddCountryClosedExistingZonesToAllClosedExistingZones.cs" />
     <Compile Include="ApplyChangedCountriesToDB.cs" />
     <Compile Include="ApplyChangedZonesRoutingProductsToDB.cs" />
     <Compile Include="ApplyChangedZonesServicesToDB.cs" />

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Entities;
 
-namespace TOne.WhS.CodePreparation.Entities
+namespace TOne.WhS.CodePreparation.Business
 {
     public class ClosedExistingZonesByCountry
     {
-        private Dictionary<int,Dictionary<string,List<ExistingZone>>> _closedExistingZonesByCountry;
+        private Dictionary<int, Dictionary<string, List<ExistingZone>>> _closedExistingZonesByCountry;
 
         public ClosedExistingZonesByCountry()
         {
@@ -22,15 +22,12 @@ namespace TOne.WhS.CodePreparation.Entities
             Dictionary<string, List<ExistingZone>> closedExistingZones;
 
             if (this._closedExistingZonesByCountry.TryGetValue(countryId, out closedExistingZones))
-                throw new DataIntegrityValidationException(string.Format("Could not have two countries with the same ID : {0}", countryId));
-
+                return closedExistingZones;
 
             lock (_closedExistingZonesByCountry)
             {
                 if (this._closedExistingZonesByCountry.TryGetValue(countryId, out closedExistingZones))
-                {
-                    throw new DataIntegrityValidationException(string.Format("Could not have two zones with the same name : {0}", countryId));
-                }
+                    return closedExistingZones;
                 else
                 {
                     this._closedExistingZonesByCountry.Add(countryId, countryClosedExistingZones);
@@ -41,8 +38,8 @@ namespace TOne.WhS.CodePreparation.Entities
         public bool TryGetValue(int countryId, out Dictionary<string, List<ExistingZone>> countryClosedExistingZones)
         {
             return this._closedExistingZonesByCountry.TryGetValue(countryId, out countryClosedExistingZones);
-       }
-        public Dictionary<int,Dictionary<string, List<ExistingZone>>> GetClosedExistingZones()
+        }
+        public Dictionary<int, Dictionary<string, List<ExistingZone>>> GetClosedExistingZones()
         {
             return this._closedExistingZonesByCountry;
         }

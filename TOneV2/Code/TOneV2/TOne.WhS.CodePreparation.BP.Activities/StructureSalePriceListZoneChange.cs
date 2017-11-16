@@ -107,7 +107,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         #region Private Methods
 
         private void GetPricelistDescription(List<NewCustomerPriceListChange> customerChanges, ClosedExistingZonesByCountry closedExistingZonesByCountry, IEnumerable<StructuredCountryActions> structuredCountryActions)
-        {            
+        {
             Dictionary<string, NewZoneToAdd> zoneToAddByZoneName = new Dictionary<string, NewZoneToAdd>();
 
             NewZoneToAdd newZoneToAdd = new NewZoneToAdd();
@@ -137,12 +137,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
                     foreach (CountryChange countryChange in pricelist.CountryChanges)
                     {
-                        Dictionary<string, List<ExistingZone>> countryClosedExistingZones ;
-                        closedExistingZonesByCountry.TryGetValue(countryChange.CountryId,out countryClosedExistingZones);
+                        Dictionary<string, List<ExistingZone>> countryClosedExistingZones;
+                        closedExistingZonesByCountry.TryGetValue(countryChange.CountryId, out countryClosedExistingZones);
 
                         foreach (SalePricelistZoneChange zoneChange in countryChange.ZoneChanges)
                         {
-                            if (countryClosedExistingZones!=null && countryClosedExistingZones.TryGetValue(zoneChange.ZoneName, out existingZone))
+                            if (countryClosedExistingZones != null && countryClosedExistingZones.TryGetValue(zoneChange.ZoneName, out existingZone))
                                 closedZonesCounter++;
                             else if (zoneToAddByZoneName.TryGetValue(zoneChange.ZoneName, out newZoneToAdd))
                                 newZonesCounter++;
@@ -237,24 +237,20 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         private IEnumerable<StructuredCountryActions> GetCountryActions(IEnumerable<CountryToProcess> countriesToProcess, ClosedExistingZonesByCountry closedExistingZonesByCountry, DateTime processEffectiveDate)
         {
             List<StructuredCountryActions> allCountryActions = new List<StructuredCountryActions>();
-            
+
 
             foreach (CountryToProcess countryData in countriesToProcess)
             {
                 StructuredCountryActions actionsForThisCountry = new StructuredCountryActions();
 
                 Dictionary<string, List<ExistingZone>> countryClosedExistingZones;
-                List<ExistingZone> closedExistingZonesFotThisCountry = new List<ExistingZone>();
+                List<ExistingZone> closedExistingZonesForThisCountry = new List<ExistingZone>();
 
                 if (closedExistingZonesByCountry.TryGetValue(countryData.CountryId, out countryClosedExistingZones))
-                {
-                    //closedExistingZonesFotThisCountry.AddRange(countryClosedExistingZone.SelectMany(item => item.Value));
-                    foreach (var closedExistingZone in countryClosedExistingZones)
-                        closedExistingZonesFotThisCountry.AddRange(closedExistingZone.Value.ToList()); 
-                }
+                    closedExistingZonesForThisCountry.AddRange(countryClosedExistingZones.SelectMany(item => item.Value));
 
-                if (closedExistingZonesFotThisCountry != null)
-                    actionsForThisCountry.ZonesToClose.AddRange(GetZoneToCloseFromClosedExistingZones(closedExistingZonesFotThisCountry, processEffectiveDate));
+                if (closedExistingZonesForThisCountry != null)
+                    actionsForThisCountry.ZonesToClose.AddRange(GetZoneToCloseFromClosedExistingZones(closedExistingZonesForThisCountry, processEffectiveDate));
 
                 actionsForThisCountry.CountryId = countryData.CountryId;
                 actionsForThisCountry.CodesToAdd.AddRange(countryData.CodesToAdd);
