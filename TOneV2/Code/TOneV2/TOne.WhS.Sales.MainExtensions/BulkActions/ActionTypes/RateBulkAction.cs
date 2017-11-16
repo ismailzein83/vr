@@ -83,8 +83,11 @@ namespace TOne.WhS.Sales.MainExtensions
                 }
                 else if (contextZoneItem.CurrentRate.HasValue && context.GetRoundedRate(contextZoneItem.CurrentRate.Value) == roundedCalculatedRate)
                 {
-                    validationResultType = RateBulkActionValidationResultType.EqualsCurrentNormalRate;
-                    targetInvalidRates = validationResult.DuplicateRates;
+                    if (contextZoneItem.IsCurrentRateEditable.HasValue && contextZoneItem.IsCurrentRateEditable.Value)
+                    {
+                        validationResultType = RateBulkActionValidationResultType.EqualsCurrentNormalRate;
+                        targetInvalidRates = validationResult.DuplicateRates;
+                    }
                 }
             }
 

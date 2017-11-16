@@ -99,6 +99,8 @@
             if (dataItem.CurrentRate != null) {
                 var currentRate = parseFloat(dataItem.CurrentRate);
                 if (currentRate == newRate) {
+                    if (dataItem.IsCurrentRateEditable === false)
+                        return null;
                     if (dataItem.IsNewRateCancelling)
                         return null;
                     if (dataItem.CurrentRateCurrencyId == ownerCurrencyId)
