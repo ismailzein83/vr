@@ -80,6 +80,11 @@ namespace Vanrise.BusinessProcess.Entities
         {
             return null;
         }
+
+        public virtual bool ShouldCreateScheduledInstance(IBPDefinitionShouldCreateScheduledInstanceContext context) 
+        {
+            return true;
+        }
     }
 
     //public interface IBPDefinitionShouldRestrictBPInstanceCreationContext

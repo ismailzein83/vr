@@ -4,6 +4,7 @@ using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
 using Vanrise.Runtime.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
 {
@@ -22,16 +23,25 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
             BaseProcessInputArgument inputArguments = wfTaskActionArgument.ProcessInputArguments;
             inputArguments.UserId = task.OwnerId;
 
-            //bool haveScheduleAccess = new BPDefinitionManager().DoesUserHaveScheduleSpecificTaskAccess(inputArguments.UserId, inputArguments);
 
-            //if (!haveScheduleAccess)
-            //    throw new Exception(); 
-           
+            BPDefinitionManager bpDefinitionManager = new BPDefinitionManager();
+            BPDefinition bpDefinition = bpDefinitionManager.GetDefinition(inputArguments.ProcessName);
+            bpDefinition.ThrowIfNull("bpDefinition", inputArguments.ProcessName);
+            bpDefinition.ThrowIfNull("bpDefinition.Configuration", inputArguments.ProcessName);
+            bpDefinition.ThrowIfNull("bpDefinition.Configuration.ExtendedSettings", inputArguments.ProcessName);
+
+            BPDefinitionShouldCreateScheduledInstanceContext context = new BPDefinitionShouldCreateScheduledInstanceContext() { BaseProcessInputArgument = inputArguments };
+
+            if (!bpDefinition.Configuration.ExtendedSettings.ShouldCreateScheduledInstance(context))
+            {
+                LoggerFactory.GetLogger().WriteInformation("The scheduled task '{0}' didn't need to start a process.", task.Name);
+                return null;
+            }
 
             var createProcessOutput = bpInstanceManager.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
             {
                 InputArguments = inputArguments
-            },false);
+            }, false);
 
             Console.WriteLine("WFSchedulerTaskAction finished...");
 
@@ -40,7 +50,7 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
                 return new SchedulerTaskExecuteOutput()
                 {
                     Result = ExecuteOutputResult.WaitingEvent,
-                    ExecutionInfo = new WFSchedulerTaskActionExecInfo {  BPInstanceId = createProcessOutput.ProcessInstanceId} 
+                    ExecutionInfo = new WFSchedulerTaskActionExecInfo { BPInstanceId = createProcessOutput.ProcessInstanceId }
                 };
             }
             else

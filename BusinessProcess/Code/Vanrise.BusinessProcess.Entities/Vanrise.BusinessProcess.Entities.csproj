@@ -61,6 +61,7 @@
     <Compile Include="BPDefinition.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionBPExecutionCompletedContext.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionCanRunBPInstanceContext.cs" />
+    <Compile Include="BPDefinitionContexts\IBPDefinitionShouldCreateScheduledInstanceContext.cs" />
     <Compile Include="BPDefinitionContexts\IGetBPInstanceProgressViewsContext.cs" />
     <Compile Include="BPDefinitionContexts\SecurityContexts.cs" />
     <Compile Include="BPDefinitionDetail.cs" />
