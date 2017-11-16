@@ -90,6 +90,7 @@
             SupplierPriceListPreviewSectionReadyPromiseDeferred.promise.then(function () {
                 var SupplierPriceListPreviewSectionPayload = {
                     processInstanceId: processInstanceId,
+                    requireWarningConfirmation: true,
                 };
                 VRUIUtilsService.callDirectiveLoad(SupplierPriceListPreviewSectionApi, SupplierPriceListPreviewSectionPayload, loadSupplierPriceListPreviewSectionPromiseDeferred);
 

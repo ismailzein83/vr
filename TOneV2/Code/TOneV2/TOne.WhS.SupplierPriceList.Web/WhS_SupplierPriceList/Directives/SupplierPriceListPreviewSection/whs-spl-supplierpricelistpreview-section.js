@@ -23,6 +23,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
     function SupplierPriceListPreviewSection($scope, ctrl, $attrs) {
 
         var processInstanceId;
+        var requireWarningConfirmation;
         var changeType = true;
 
         var validationMessageHistoryGridAPI;
@@ -96,8 +97,10 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
             api.load = function (payload) {
 
-                if (payload != null)
-                processInstanceId = payload.processInstanceId;
+                if (payload != null) {
+                    processInstanceId = payload.processInstanceId;
+                    requireWarningConfirmation = payload.requireWarningConfirmation;
+                }
                 return UtilsService.waitMultipleAsyncOperations([loadViewChangeTypeSelector, loadGroupedBySelector, loadPreviewDataSection, loadValidationMessageHistory,loadSupplierPricelistPreviewSummary])
                           .catch(function (error) {
                               VRNotificationService.notifyException(error);
@@ -174,7 +177,7 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
 
                 var payload = {
                     BPInstanceID: processInstanceId,
-                    requireWarningConfirmation: true
+                    requireWarningConfirmation: requireWarningConfirmation,
                 };
 
                 VRUIUtilsService.callDirectiveLoad(validationMessageHistoryGridAPI, payload, loadValidationMessageHistoryPromiseDeferred);
