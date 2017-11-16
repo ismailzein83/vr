@@ -8,43 +8,43 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.CodePreparation.Entities
 {
-    public class ClosedExistingZones
+    public class ClosedExistingZonesByCountry
     {
-        private Dictionary<string, List<ExistingZone>> _closedExistingZones;
+        private Dictionary<int,Dictionary<string,List<ExistingZone>>> _closedExistingZonesByCountry;
 
-        public ClosedExistingZones()
+        public ClosedExistingZonesByCountry()
         {
-            _closedExistingZones = new Dictionary<string, List<ExistingZone>>();
+            _closedExistingZonesByCountry = new Dictionary<int, Dictionary<string, List<ExistingZone>>>();
         }
 
-        public List<ExistingZone> TryAddValue(string zoneName, List<ExistingZone> existingZoneToAdd)
+        public Dictionary<string, List<ExistingZone>> TryAddValue(int countryId, Dictionary<string, List<ExistingZone>> countryClosedExistingZones)
         {
-            List<ExistingZone> existingZone;
+            Dictionary<string, List<ExistingZone>> closedExistingZones;
 
-            if (this._closedExistingZones.TryGetValue(zoneName, out existingZone))
-                throw new DataIntegrityValidationException(string.Format("Could not have two zones with the same name : {0}", zoneName));
+            if (this._closedExistingZonesByCountry.TryGetValue(countryId, out closedExistingZones))
+                throw new DataIntegrityValidationException(string.Format("Could not have two countries with the same ID : {0}", countryId));
 
 
-            lock (_closedExistingZones)
+            lock (_closedExistingZonesByCountry)
             {
-                if (this._closedExistingZones.TryGetValue(zoneName, out existingZone))
+                if (this._closedExistingZonesByCountry.TryGetValue(countryId, out closedExistingZones))
                 {
-                    throw new DataIntegrityValidationException(string.Format("Could not have two zones with the same name : {0}", zoneName));
+                    throw new DataIntegrityValidationException(string.Format("Could not have two zones with the same name : {0}", countryId));
                 }
                 else
                 {
-                    this._closedExistingZones.Add(zoneName, existingZoneToAdd);
-                    return existingZone;
+                    this._closedExistingZonesByCountry.Add(countryId, countryClosedExistingZones);
+                    return countryClosedExistingZones;
                 }
             }
         }
-        public bool TryGetValue(string zoneName, out List<ExistingZone>  existingZone)
+        public bool TryGetValue(int countryId, out Dictionary<string, List<ExistingZone>> countryClosedExistingZones)
         {
-            return this._closedExistingZones.TryGetValue(zoneName, out existingZone);
+            return this._closedExistingZonesByCountry.TryGetValue(countryId, out countryClosedExistingZones);
        }
-        public Dictionary<string, List<ExistingZone>> GetClosedExistingZones()
+        public Dictionary<int,Dictionary<string, List<ExistingZone>>> GetClosedExistingZones()
         {
-            return this._closedExistingZones;
+            return this._closedExistingZonesByCountry;
         }
 
     }

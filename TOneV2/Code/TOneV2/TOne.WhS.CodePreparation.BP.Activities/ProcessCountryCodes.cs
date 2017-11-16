@@ -14,20 +14,19 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 {
     public class ProcessCountryCodesInput
     {
-
         public IEnumerable<CodeToAdd> CodesToAdd { get; set; }
 
         public IEnumerable<CodeToMove> CodesToMove { get; set; }
 
         public IEnumerable<CodeToClose> CodesToClose { get; set; }
 
-
         public IEnumerable<ExistingCode> ExistingCodes { get; set; }
 
         public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
 
-        public ClosedExistingZones ClosedExistingZones { get; set; }
+        public int CountryId { get; set; }
 
+        public ClosedExistingZonesByCountry ClosedExistingZonesByCountry { get; set; }
 
     }
     public class ProcessCountryCodesOutput
@@ -42,17 +41,22 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         public IEnumerable<ChangedCode> ChangedCodes { get; set; }
 
+        public Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
+
         public IEnumerable<NotImportedCode> NotImportedCodes { get; set; }
     }
 
     public sealed class ProcessCountryCodes : BaseAsyncActivity<ProcessCountryCodesInput, ProcessCountryCodesOutput>
     {
         [RequiredArgument]
+        public InArgument<int> CountryId { get; set; }
+
+        [RequiredArgument]
         public InArgument<IEnumerable<CodeToAdd>> CodesToAdd { get; set; }
-        
+
         [RequiredArgument]
         public InArgument<IEnumerable<CodeToMove>> CodesToMove { get; set; }
-        
+
         [RequiredArgument]
         public InArgument<IEnumerable<CodeToClose>> CodesToClose { get; set; }
 
@@ -76,9 +80,12 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         [RequiredArgument]
         public InOutArgument<IEnumerable<ChangedCode>> ChangedCodes { get; set; }
-       
+
         [RequiredArgument]
-        public InArgument<ClosedExistingZones> ClosedExistingZones { get; set; }
+        public InOutArgument<ClosedExistingZonesByCountry> ClosedExistingZonesByCountry { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<NotImportedCode>> NotImportedCodes { get; set; }
@@ -93,7 +100,8 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 CodesToMove = this.CodesToMove.Get(context),
                 ExistingCodes = this.ExistingCodes.Get(context),
                 ExistingZonesByZoneId = this.ExistingZonesByZoneId.Get(context),
-                ClosedExistingZones = this.ClosedExistingZones.Get(context)
+                CountryId = this.CountryId.Get(context),
+                ClosedExistingZonesByCountry = this.ClosedExistingZonesByCountry.Get(context),
             };
         }
         protected override ProcessCountryCodesOutput DoWorkWithResult(ProcessCountryCodesInput inputArgument, AsyncActivityHandle handle)
@@ -111,20 +119,20 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 CodesToClose = inputArgument.CodesToClose,
                 ExistingCodes = inputArgument.ExistingCodes,
                 ExistingZones = existingZones,
-                ClosedExistingZones = inputArgument.ClosedExistingZones
             };
 
             PriceListCodeManager plCodeManager = new PriceListCodeManager();
             plCodeManager.ProcessCountryCodes(processCountryCodesContext);
-
+            inputArgument.ClosedExistingZonesByCountry.TryAddValue(inputArgument.CountryId, processCountryCodesContext.ClosedExistingZones);
             return new ProcessCountryCodesOutput()
             {
                 NewZones = processCountryCodesContext.NewZones,
                 ChangedZones = processCountryCodesContext.ChangedZones,
-                NewAndExistingZones= processCountryCodesContext.NewAndExistingZones,
+                NewAndExistingZones = processCountryCodesContext.NewAndExistingZones,
                 NewCodes = processCountryCodesContext.NewCodes,
                 ChangedCodes = processCountryCodesContext.ChangedCodes,
-                NotImportedCodes = processCountryCodesContext.NotImportedCodes
+                ClosedExistingZones = processCountryCodesContext.ClosedExistingZones,
+                NotImportedCodes = processCountryCodesContext.NotImportedCodes,
             };
         }
 
@@ -135,6 +143,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             this.ChangedZones.Set(context, result.ChangedZones);
             this.NewCodes.Set(context, result.NewCodes);
             this.ChangedCodes.Set(context, result.ChangedCodes);
+            this.ClosedExistingZones.Set(context, result.ClosedExistingZones);
             this.NotImportedCodes.Set(context, result.NotImportedCodes);
         }
     }

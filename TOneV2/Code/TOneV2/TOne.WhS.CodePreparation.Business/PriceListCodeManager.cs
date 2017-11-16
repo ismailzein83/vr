@@ -16,28 +16,30 @@ namespace TOne.WhS.CodePreparation.Business
         public void ProcessCountryCodes(IProcessCountryCodesContext context)
         {
             ZonesByName newAndExistingZones = new ZonesByName();
+            Dictionary<string, List<ExistingZone>> closedExistingZones;
 
             ExistingCodesByCodeValue existingCodesByCodeValue = new ExistingCodesByCodeValue();
 
             context.NewAndExistingZones = newAndExistingZones;
-            
+
             HashSet<string> codesToAddHashSet;
             HashSet<string> codesToMoveHashSet;
             HashSet<string> codesToCloseHashSet;
 
             ProcessCountryCodes(context.CodesToAdd, context.CodesToMove, context.CodesToClose, context.ExistingCodes, newAndExistingZones, context.ExistingZones,existingCodesByCodeValue,
-                context.ClosedExistingZones, out codesToAddHashSet, out codesToMoveHashSet, out codesToCloseHashSet);
+                out closedExistingZones, out codesToAddHashSet, out codesToMoveHashSet, out codesToCloseHashSet);
 
+            context.ClosedExistingZones = closedExistingZones;
             context.NewCodes = context.CodesToAdd.SelectMany(itm => itm.AddedCodes).Union(context.CodesToMove.SelectMany(itm => itm.AddedCodes));
             context.NewZones = newAndExistingZones.GetNewZones();
             context.ChangedZones = context.ExistingZones.Where(itm => itm.ChangedZone != null).Select(itm => itm.ChangedZone);
             context.ChangedCodes = context.ExistingCodes.Where(itm => itm.ChangedCode != null).Select(itm => itm.ChangedCode);
 
-           context.NotImportedCodes = PrepareNotImportedCodes(existingCodesByCodeValue, codesToAddHashSet, codesToMoveHashSet, codesToCloseHashSet);
+            context.NotImportedCodes = PrepareNotImportedCodes(existingCodesByCodeValue, codesToAddHashSet, codesToMoveHashSet, codesToCloseHashSet);
         }
 
         private void ProcessCountryCodes(IEnumerable<CodeToAdd> codesToAdd, IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToClose> codesToClose, IEnumerable<ExistingCode> existingCodes, ZonesByName newAndExistingZones,
-            IEnumerable<ExistingZone> existingZones, ExistingCodesByCodeValue existingCodesByCodeValue, ClosedExistingZones closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
+            IEnumerable<ExistingZone> existingZones,ExistingCodesByCodeValue existingCodesByCodeValue, out Dictionary<string, List<ExistingZone>> closedExistingZones, out HashSet<string> codesToAddHashSet, out HashSet<string> codesToMoveHashSet, out HashSet<string> codesToCloseHashSet)
         {
             ExistingZonesByName existingZonesByName = StructureExistingZonesByName(existingZones);
             StructureExistingCodesByCodeValue(existingCodesByCodeValue, existingCodes);
@@ -81,11 +83,12 @@ namespace TOne.WhS.CodePreparation.Business
                 }
             }
 
-            CloseZonesWithNoCodes(existingZones, closedExistingZones);
+            CloseZonesWithNoCodes(existingZones, out closedExistingZones);
 
         }
-        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones, ClosedExistingZones closedExistingZones)
+        private void CloseZonesWithNoCodes(IEnumerable<ExistingZone> existingZones, out Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
+            closedExistingZones = new Dictionary<string, List<ExistingZone>>();
             foreach (var existingZone in existingZones)
             {
                 DateTime? maxCodeEED = DateTime.MinValue;
@@ -136,16 +139,18 @@ namespace TOne.WhS.CodePreparation.Business
                             EED = maxCodeEED.Value
                         };
 
-                        List<ExistingZone> matchedExistingZones;
+                        /*List<ExistingZone> matchedExistingZones;
                         if (closedExistingZones.TryGetValue(existingZone.ZoneEntity.Name, out matchedExistingZones))
                             matchedExistingZones.Add(existingZone);
                         else
                         {
                             matchedExistingZones = new List<ExistingZone>();
                             matchedExistingZones.Add(existingZone);
-                            closedExistingZones.TryAddValue(existingZone.ZoneEntity.Name, matchedExistingZones);
-                        }
+                            closedExistingZones.Add(existingZone.ZoneEntity.Name, matchedExistingZones);
+                        }*/
 
+                        List<ExistingZone> matchedExistingZones = closedExistingZones.GetOrCreateItem(existingZone.ZoneEntity.Name);
+                        matchedExistingZones.Add(existingZone);
                     }
                 }
             }

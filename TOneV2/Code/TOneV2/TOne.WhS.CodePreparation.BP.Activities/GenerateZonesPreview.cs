@@ -22,21 +22,17 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         [RequiredArgument]
-        public InArgument<ClosedExistingZones> ClosedExistingZones { get; set; }
+        public InArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
         public InArgument<BaseQueue<IEnumerable<ZonePreview>>> PreviewZonesQueue { get; set; }
-
-        [RequiredArgument]
-        public InArgument<int> CountryId { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             BaseQueue<IEnumerable<ZonePreview>> previewZonesQueue = this.PreviewZonesQueue.Get(context);
             IEnumerable<ZoneToProcess> zonesToProcess = this.ZonesToProcess.Get(context);
             IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
-            ClosedExistingZones closedExistingZones = ClosedExistingZones.Get(context);
-            int countryId = CountryId.Get(context);
+            Dictionary<string, List<ExistingZone>> closedExistingZones = ClosedExistingZones.Get(context);
 
             List<ZonePreview> zonesPreview = new List<ZonePreview>();
 
@@ -87,16 +83,14 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             if (closedExistingZones != null)
             {
-                Dictionary<string, List<ExistingZone>> closedExistingZonesDictionary = (closedExistingZones != null) ? closedExistingZones.GetClosedExistingZones() : new Dictionary<string, List<ExistingZone>>();
-
-                foreach (KeyValuePair<string, List<ExistingZone>> closedExistingZone in closedExistingZonesDictionary)
+                foreach (KeyValuePair<string, List<ExistingZone>> closedExistingZone in closedExistingZones)
                 {
                     //If a zone is renamed, do not show it in preview screen as an not imported zone
                     //if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)) != null)
                      //   continue;
 
                     //avoid adding deleted zones from zonesToProcess to the list of deleted zones
-                    if (closedExistingZone.Value.First().CountryId==countryId && !zonesToProcess.Any(item => item.ZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)))
+                    if (!zonesToProcess.Any(item => item.ZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)))
                     {
                         DateTime? ClosedZoneEED = closedExistingZone.Value.Select(item => item.EED).VRMaximumDate();
                         zonesPreview.Add(new ZonePreview()

@@ -25,7 +25,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
         public IEnumerable<ExistingCode> ExistingCodes { get; set; }
 
-        public ClosedExistingZones ClosedExistingZones { get; set; }
+        public Dictionary<string, List<ExistingZone>> ClosedExistingZones { get; set; }
 
     }
     public class ProcessCountryZonesOutput
@@ -48,7 +48,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         public InArgument<IEnumerable<ExistingCode>> ExistingCodes { get; set; }
 
         [RequiredArgument]
-        public InArgument<ClosedExistingZones> ClosedExistingZones { get; set; }
+        public InArgument<Dictionary<string, List<ExistingZone>>> ClosedExistingZones { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
@@ -87,7 +87,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         #region Private Methods
 
         private void UpdateImportedZonesInfo(IEnumerable<ZoneToProcess> zonesToProcess, ZonesByName newAndExistingZones, IEnumerable<ExistingZone> existingZones,
-            HashSet<string> zonesToProcessNamesHashSet, ClosedExistingZones closedExistingZones)
+            HashSet<string> zonesToProcessNamesHashSet, Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
             foreach (ZoneToProcess zoneToProcess in zonesToProcess)
             {
@@ -109,7 +109,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             DefineSplitOrMergedZones(zonesToProcess.Where(z => z.ChangeType == ZoneChangeType.New), closedExistingZones);
         }
 
-        private void DefineSplitOrMergedZones(IEnumerable<ZoneToProcess> newZones, ClosedExistingZones closedExistingZones)
+        private void DefineSplitOrMergedZones(IEnumerable<ZoneToProcess> newZones, Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
             foreach (var newZone in newZones)
             {
@@ -150,7 +150,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 zone.SplitFromZoneName = originalZoneName;
         }
 
-        private IEnumerable<string> GetSourceZoneNames(Dictionary<string, List<string>> codesToMoveByZoneName, ClosedExistingZones closedExistingZones)
+        private IEnumerable<string> GetSourceZoneNames(Dictionary<string, List<string>> codesToMoveByZoneName, Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
             // all source zones must be closed. all codes from source zone must be moved to the new merged one.
 
@@ -230,7 +230,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             return null;
         }
 
-        private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, ClosedExistingZones closedExistingZones)
+        private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
             List<ExistingZone> matchedExistingZones;
             if (closedExistingZones != null && closedExistingZones.TryGetValue(zoneToProcess.ZoneName, out matchedExistingZones))
