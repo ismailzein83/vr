@@ -10,6 +10,11 @@ namespace TOne.WhS.Routing.Entities
     {
         public int CustomerId { get; set; }
         public string Code { get; set; }
+
+        public override int GetHashCode()
+        {
+            return CustomerId.GetHashCode() + Code.GetHashCode();
+        }
     }
 
     public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings
@@ -62,7 +67,7 @@ namespace TOne.WhS.Routing.Entities
         public override void UpdateAdditionalInformation(Vanrise.Rules.BaseRule existingRule, ref Vanrise.Rules.AdditionalInformation additionalInformation)
         {
             RouteRuleAdditionalInformation routeRuleAdditionalInformation = new RouteRuleAdditionalInformation();
-            if(additionalInformation != null)
+            if (additionalInformation != null)
             {
                 RouteRuleAdditionalInformation existingAdditionalInformation = additionalInformation.CastWithValidate<RouteRuleAdditionalInformation>("RouteRuleAdditionalInformation");
                 routeRuleAdditionalInformation.CriteriaHasChanged = existingAdditionalInformation.CriteriaHasChanged;
