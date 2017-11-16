@@ -21,18 +21,22 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
         public override void Execute(IAutomaticActionRuntimeSettingsContext context)
         {
             string errorMessage;
-            if (ValidateCanRecreate(context.Invoice, out  errorMessage))
+            bool isErrorOccured;
+
+            if (ValidateCanRecreate(context.Invoice, out  errorMessage, out isErrorOccured))
             {
                 ExecuteRecreateAction(context);
             }else
             {
+                context.IsErrorOccured = isErrorOccured;
                 context.ErrorMessage = errorMessage;
             }
         }
 
-        bool ValidateCanRecreate(Entities.Invoice invoice,out string errorMessage)
+        bool ValidateCanRecreate(Entities.Invoice invoice, out string errorMessage, out bool isErrorOccured)
         {
             errorMessage = null;
+            isErrorOccured = false;
             if (invoice.PaidDate.HasValue && !IncludePaidInvoices)
             {
                 errorMessage = "Cannot recreate invoice. Reason: 'Invoice' already paid.";
@@ -74,6 +78,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
             if (regenerateOutput.Result == UpdateOperationResult.Failed)
             {
                 context.ErrorMessage = regenerateOutput.Message;
+                context.IsErrorOccured = true;
             }
         }
     }

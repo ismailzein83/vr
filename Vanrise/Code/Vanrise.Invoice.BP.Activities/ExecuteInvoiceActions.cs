@@ -11,6 +11,7 @@ using Vanrise.Invoice.Entities;
 using Vanrise.Queueing;
 using Vanrise.Common;
 using Vanrise.Invoice.BP.Arguments;
+using Vanrise.Entities;
 namespace Vanrise.Invoice.BP.Activities
 {
     #region Argument Classes
@@ -94,38 +95,58 @@ namespace Vanrise.Invoice.BP.Activities
         {
             PartnerManager partnerManager = new PartnerManager();
             var partnerName = partnerManager.GetPartnerName(invoiceQueue.InvoiceTypeId, invoiceQueue.PartnerId);
-            try
-            {
 
-                foreach (var invoiceBulkActionPreparedEntity in invoiceBulkActionPreparedEntities)
+
+            foreach (var invoiceBulkActionPreparedEntity in invoiceBulkActionPreparedEntities)
+            {
+                var actionContext = new AutomaticActionRuntimeSettingsContext
                 {
-                    var actionContext = new AutomaticActionRuntimeSettingsContext
-                    {
-                        Invoice = invoiceQueue,
-                        DefinitionSettings = invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Settings
-                    };
+                    Invoice = invoiceQueue,
+                    DefinitionSettings = invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Settings
+                };
+
+                try
+                {
                     invoiceBulkActionPreparedEntity.InvoiceBulkActionRuntime.Settings.Execute(actionContext);
-                    if (actionContext.ErrorMessage != null)
+                }
+                catch (Exception ex)
+                {
+                    string errorMessage = string.Format("{0} not executed for invoice '{1}' of account '{2}'.", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber);
+                    var exception = Utilities.WrapException(ex, errorMessage);
+                    switch (handlingErrorOption)
                     {
-                        throw new Exception(actionContext.ErrorMessage);
+                        case Entities.HandlingErrorOption.Skip:
+                            handle.SharedInstanceData.WriteBusinessHandledException(exception);
+                            continue;
+                        case Entities.HandlingErrorOption.Stop:
+                            throw exception;
+                    }
+                }
+
+
+                if (actionContext.ErrorMessage != null)
+                {
+                    string errorMessage = string.Format("{0} not executed for invoice '{1}' of account '{2}'. Reason '{3}'.", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber, actionContext.ErrorMessage);
+                    if (!actionContext.IsErrorOccured)
+                    {
+                        handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, errorMessage);
                     }
                     else
-                        handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully for invoice for account '{1}' having serial number '{2}' .", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber);
+                    {
+                        switch (handlingErrorOption)
+                        {
+                            case Entities.HandlingErrorOption.Skip:
+                                handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Warning, errorMessage);
+                                break;
+                            case Entities.HandlingErrorOption.Stop:
+                                throw new VRBusinessException(errorMessage);
+                        }
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                switch (handlingErrorOption)
-                {
-                    case Entities.HandlingErrorOption.Skip:
-                        handle.SharedInstanceData.WriteBusinessHandledException(Utilities.WrapException(ex, string.Format("'{0}' of serial number '{1}'.", partnerName, invoiceQueue.SerialNumber)));
-                        break;
-                    case Entities.HandlingErrorOption.Stop:
-                        handle.SharedInstanceData.WriteBusinessHandledException(Utilities.WrapException(ex, string.Format("'{0}' of serial number '{1}'.", partnerName, invoiceQueue.SerialNumber)), true);
-                        throw ex;
-                }
-            }
+                else
+                    handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully for invoice '{1}' of account '{2}'.", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber);
 
+            }
         }
 
         internal class InvoiceBulkActionPreparedEntity

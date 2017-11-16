@@ -20,18 +20,21 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
         public override void Execute(IAutomaticActionRuntimeSettingsContext context)
         {
             string errorMessage;
-            if (ValidateSendEmailAction(context.Invoice, out  errorMessage))
+            bool isErrorOccured;
+            if (ValidateSendEmailAction(context.Invoice, out  errorMessage, out isErrorOccured))
             {
                 ExecuteSendEmailAction(context);
             }
             else
             {
+                context.IsErrorOccured = isErrorOccured;
                 context.ErrorMessage = errorMessage;
             }
         }
-        bool ValidateSendEmailAction(Entities.Invoice invoice, out string errorMessage)
+        bool ValidateSendEmailAction(Entities.Invoice invoice, out string errorMessage, out bool isErrorOccured)
         {
             errorMessage = null;
+            isErrorOccured = false;
             if (invoice.SentDate.HasValue && !IncludeSentInvoices)
             {
                 errorMessage = "Cannot sent invoice email. Reason: 'Email' already sent.";
@@ -113,6 +116,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                             var emailTemplateEvaluator = invoiceEmailActionManager.GetEmailTemplate(context.Invoice, mailMessageTemplateId);
                             if (String.IsNullOrEmpty(emailTemplateEvaluator.To))
                             {
+                                context.IsErrorOccured = false;
                                 context.ErrorMessage = "Cannot sent invoice email. Reason: 'Email' is empty.";
                                 return;
                             }

@@ -77,6 +77,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                                         else
                                         {
                                             context.ErrorMessage = "Cannot save invoice to file. Reason: 'Location Path' is empty.";
+                                            context.IsErrorOccured = false;
                                         }
                                     }
                                 }

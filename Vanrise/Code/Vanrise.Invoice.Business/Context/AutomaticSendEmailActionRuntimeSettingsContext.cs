@@ -11,6 +11,7 @@ namespace Vanrise.Invoice.Business.Context
     {
         public Entities.Invoice Invoice { get; set; }
         public string ErrorMessage { get; set; }
+        public bool IsErrorOccured { get; set; }
         public AutomaticInvoiceActionSettings DefinitionSettings { get; set; }
     }
 }
