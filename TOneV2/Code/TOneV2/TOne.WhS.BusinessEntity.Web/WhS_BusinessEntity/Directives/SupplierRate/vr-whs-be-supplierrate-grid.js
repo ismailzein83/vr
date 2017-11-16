@@ -48,7 +48,7 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierRateAPIService, VR
                     directiveAPI.loadGrid = function (input) {
                         hideHistory = input.Query.HideHistory;
                         isExpandable = input.Query.IsChild;
-                        effectiveOn = input.Query.EffectiveOn;
+                        effectiveOn = input.EffectiveOn;
                         supplierId = input.Query.SupplierId;
                         isSystemCurrency = input.IsSystemCurrency;
                         drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(getDirectiveTabs(), gridAPI);
