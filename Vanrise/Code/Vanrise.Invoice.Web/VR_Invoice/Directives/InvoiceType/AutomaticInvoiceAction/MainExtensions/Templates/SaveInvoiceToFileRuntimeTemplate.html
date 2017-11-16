@@ -11,7 +11,7 @@
                 </vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Type'" field="'Entity.SetName'" widthfactor="10" disablesorting></vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Attachments'" widthfactor="10" disablesorting>
-                    <vr-invoicetype-invoiceattachments-selector on-ready="dataItem.Entity.onInvoiceAttachmentSelectorReady" normal-col-num="12" hidelabel ismultipleselection></vr-invoicetype-invoiceattachments-selector>
+                    <vr-invoicetype-invoiceattachments-selector on-ready="dataItem.Entity.onInvoiceAttachmentSelectorReady" normal-col-num="12" hidelabel ismultipleselection isrequired="dataItem.Entity.IsEnabled"></vr-invoicetype-invoiceattachments-selector>
                 </vr-datagridcolumn>
             </vr-datagrid>
         </vr-columns>
