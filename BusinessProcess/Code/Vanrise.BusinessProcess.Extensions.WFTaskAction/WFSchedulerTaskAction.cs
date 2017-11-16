@@ -27,12 +27,13 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
             BPDefinitionManager bpDefinitionManager = new BPDefinitionManager();
             BPDefinition bpDefinition = bpDefinitionManager.GetDefinition(inputArguments.ProcessName);
             bpDefinition.ThrowIfNull("bpDefinition", inputArguments.ProcessName);
-            bpDefinition.ThrowIfNull("bpDefinition.Configuration", inputArguments.ProcessName);
-            bpDefinition.ThrowIfNull("bpDefinition.Configuration.ExtendedSettings", inputArguments.ProcessName);
+
+            BPDefinitionExtendedSettings bpDefinitionExtendedSettings = bpDefinitionManager.GetBPDefinitionExtendedSettings(bpDefinition);
+            bpDefinitionExtendedSettings.ThrowIfNull("bpDefinitionExtendedSettings", inputArguments.ProcessName);
 
             BPDefinitionShouldCreateScheduledInstanceContext context = new BPDefinitionShouldCreateScheduledInstanceContext() { BaseProcessInputArgument = inputArguments };
 
-            if (!bpDefinition.Configuration.ExtendedSettings.ShouldCreateScheduledInstance(context))
+            if (!bpDefinitionExtendedSettings.ShouldCreateScheduledInstance(context))
             {
                 LoggerFactory.GetLogger().WriteInformation("The scheduled task '{0}' didn't need to start a process.", task.Name);
                 return null;
