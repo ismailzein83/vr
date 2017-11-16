@@ -65,18 +65,18 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
             switch (dataItem.ChangeType) {
                 case whSBeCodeChangeTypeEnum.New.value:
                     dataItem.CodeChangeTypeIcon = whSBeCodeChangeTypeEnum.New.iconUrl;
-                    dataItem.CodeChangeTypeIconTooltip = whSBeCodeChangeTypeEnum.New.description;
+                    dataItem.CodeChangeTypeIconTooltip = whSBeCodeChangeTypeEnum.New.label;
                     dataItem.CodeChangeTypeIconType = whSBeCodeChangeTypeEnum.New.iconType;
                     break;
                 case whSBeCodeChangeTypeEnum.Closed.value:
                     dataItem.CodeChangeTypeIcon = whSBeCodeChangeTypeEnum.Closed.iconUrl;
-                    dataItem.CodeChangeTypeIconTooltip = whSBeCodeChangeTypeEnum.Closed.description;
+                    dataItem.CodeChangeTypeIconTooltip = whSBeCodeChangeTypeEnum.Closed.label;
                     dataItem.CodeChangeTypeIconType = whSBeCodeChangeTypeEnum.Closed.iconType;
                     break;
 
                 case whSBeCodeChangeTypeEnum.Moved.value:
                     dataItem.CodeChangeTypeIcon = whSBeCodeChangeTypeEnum.Moved.iconUrl;
-                    dataItem.CodeChangeTypeIconTooltip = whSBeCodeChangeTypeEnum.Moved.description;
+                    dataItem.CodeChangeTypeIconTooltip = "Moved from "+dataItem.RecentZoneName;
                     dataItem.CodeChangeTypeIconType = whSBeCodeChangeTypeEnum.Moved.iconType;
                     break;
             }
