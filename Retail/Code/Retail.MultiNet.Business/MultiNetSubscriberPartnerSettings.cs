@@ -176,10 +176,6 @@ namespace Retail.MultiNet.Business
                                 }
                             }
                         }
-                        if (accountProfile.CityId.HasValue)
-                        {
-                            address += string.Format(" {0}", cityManager.GetCityName(accountProfile.CityId.Value));
-                        }
                     }
                     AddRDLCParameter(rdlcReportParameters, RDLCParameter.Address, address, true);
                     if (companySetting != null)
