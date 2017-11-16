@@ -5,6 +5,7 @@
     [FinancialAccountId]     BIGINT           NULL,
     [ServiceTypeId]          UNIQUEIDENTIFIER NULL,
     [TrafficDirection]       INT              NULL,
+    [CallProgressState]      VARCHAR (100)    NULL,
     [InitiationCallType]     INT              NULL,
     [TerminationCallType]    INT              NULL,
     [InterconnectOperatorId] BIGINT           NULL,
@@ -21,6 +22,8 @@
     [TotalSaleAmount]        DECIMAL (26, 10) NULL,
     CONSTRAINT [IX_TrafficStats15Min_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
