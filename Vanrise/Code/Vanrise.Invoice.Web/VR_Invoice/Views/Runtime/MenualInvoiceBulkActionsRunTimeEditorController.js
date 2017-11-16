@@ -2,9 +2,9 @@
 
     "use strict";
 
-    menualInvoiceBulkActionsRunTimeEditorController.$inject = ['$scope', 'VRNotificationService','VRUIUtilsService', 'VRNavigationService', 'UtilsService', 'VR_Invoice_InvoiceAPIService','VR_Invoice_InvoiceTypeAPIService','BusinessProcess_BPInstanceService'];
+    menualInvoiceBulkActionsRunTimeEditorController.$inject = ['$scope', 'VRNotificationService','VRUIUtilsService', 'VRNavigationService', 'UtilsService', 'VR_Invoice_InvoiceAPIService','VR_Invoice_InvoiceTypeAPIService','BusinessProcess_BPInstanceService','VR_Invoice_HandlingErrorOptionsEnum'];
 
-    function menualInvoiceBulkActionsRunTimeEditorController($scope, VRNotificationService, VRUIUtilsService, VRNavigationService, UtilsService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceTypeAPIService, BusinessProcess_BPInstanceService) {
+    function menualInvoiceBulkActionsRunTimeEditorController($scope, VRNotificationService, VRUIUtilsService, VRNavigationService, UtilsService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceTypeAPIService, BusinessProcess_BPInstanceService, VR_Invoice_HandlingErrorOptionsEnum) {
         var invoiceTypeId;
         var menualInvoiceBulkActionsDefinitions;
         var selectedMenualInvoiceBulkAction;
@@ -25,7 +25,8 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.menualBulkActions = [];
-
+            $scope.scopeModel.handlingOnErrorOptions = UtilsService.getArrayEnum(VR_Invoice_HandlingErrorOptionsEnum);
+            $scope.scopeModel.selectedHandlingOnError = VR_Invoice_HandlingErrorOptionsEnum.Skip;
             $scope.scopeModel.execute = function () {
                 var getTargetInvoicesEntity = context.getTargetInvoicesEntity();
                 var executeMenualInvoiceActionsInput = {
@@ -37,6 +38,7 @@
                     }],
                     IsAllInvoicesSelected: getTargetInvoicesEntity != undefined ? getTargetInvoicesEntity.IsAllInvoicesSelected : undefined,
                     TargetInvoicesIds: getTargetInvoicesEntity != undefined ? getTargetInvoicesEntity.TargetInvoicesIds : undefined,
+                    HandlingErrorOption: $scope.scopeModel.selectedHandlingOnError.value
                 };
                 return VR_Invoice_InvoiceAPIService.ExecuteMenualInvoiceActions(executeMenualInvoiceActionsInput).then(function (response) {
                     if (response.Succeed) {

@@ -14,6 +14,7 @@ namespace Vanrise.Invoice.BP.Arguments
         public List<InvoiceBulkActionRuntime> InvoiceBulkActions { get; set; }
         public DateTime MinimumFrom { get; set; }
         public DateTime MaximumTo { get; set; }
+        public HandlingErrorOption HandlingErrorOption { get; set; }
         public override string GetTitle()
         {
             return "Invoice Bulk Action Process";

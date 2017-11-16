@@ -48,10 +48,10 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP</AssemblyReference>
     </sco:Collection>
@@ -64,24 +64,29 @@
       <Parallel.Variables>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadInvoiceBulkActionStatus" />
       </Parallel.Variables>
-      <viba1:InvoiceBulkActionDrafts sap2010:WorkflowViewState.IdRef="InvoiceBulkActionDrafts_1">
-        <viba1:InvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
+      <viba1:LoadInvoiceBulkActionDrafts sap2010:WorkflowViewState.IdRef="LoadInvoiceBulkActionDrafts_1">
+        <viba1:LoadInvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
           <InArgument x:TypeArguments="s:Guid">
             <mca:CSharpValue x:TypeArguments="s:Guid">Input.InvoiceBulkActionIdentifier</mca:CSharpValue>
           </InArgument>
-        </viba1:InvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
-        <viba1:InvoiceBulkActionDrafts.OutputQueue>
+        </viba1:LoadInvoiceBulkActionDrafts.InvoiceBulkActionIdentifier>
+        <viba1:LoadInvoiceBulkActionDrafts.OutputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vie:Invoice)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vie:Invoice)">OutputQueue</mca:CSharpReference>
           </InOutArgument>
-        </viba1:InvoiceBulkActionDrafts.OutputQueue>
-        <viba1:InvoiceBulkActionDrafts.Status>
+        </viba1:LoadInvoiceBulkActionDrafts.OutputQueue>
+        <viba1:LoadInvoiceBulkActionDrafts.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadInvoiceBulkActionStatus</mca:CSharpReference>
           </OutArgument>
-        </viba1:InvoiceBulkActionDrafts.Status>
-      </viba1:InvoiceBulkActionDrafts>
-      <viba1:ExecuteInvoiceActions Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ExecuteInvoiceActions_1">
+        </viba1:LoadInvoiceBulkActionDrafts.Status>
+      </viba1:LoadInvoiceBulkActionDrafts>
+      <viba1:ExecuteInvoiceActions Status="{x:Null}">
+        <viba1:ExecuteInvoiceActions.HandlingErrorOption>
+          <InArgument x:TypeArguments="vie:HandlingErrorOption">
+            <mca:CSharpValue x:TypeArguments="vie:HandlingErrorOption">Input.HandlingErrorOption</mca:CSharpValue>
+          </InArgument>
+        </viba1:ExecuteInvoiceActions.HandlingErrorOption>
         <viba1:ExecuteInvoiceActions.InputQueue>
           <InOutArgument x:TypeArguments="vq:BaseQueue(vie:Invoice)">
             <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vie:Invoice)">OutputQueue</mca:CSharpReference>
@@ -102,14 +107,15 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadInvoiceBulkActionStatus</mca:CSharpValue>
           </InArgument>
         </viba1:ExecuteInvoiceActions.PreviousActivityStatus>
+        <sap2010:WorkflowViewState.IdRef>ExecuteInvoiceActions_2</sap2010:WorkflowViewState.IdRef>
       </viba1:ExecuteInvoiceActions>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlQnVsa0FjdGlvblByb2Nlc3MueGFtbAs7A2wOAgEBPwVqEAIBAkMHUycCARRUB2klAgEDRg1GagIBHVANUHwCARlLDUtvAgEVYQ1hXAIBEGYNZnQCAQxXDVdvAgEIXA1cgQECAQQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlQnVsa0FjdGlvblByb2Nlc3MueGFtbAw7A3IOAgEBPwVwEAIBAkMHUysCARhUB28lAgEDRg1GagIBIVANUHwCAR1LDUtvAgEZZg1mXAIBFGsNa3QCARBcDVxvAgEMYQ1hgQECAQhXDVdzAgEE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="InvoiceBulkActionDrafts_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="ExecuteInvoiceActions_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="LoadInvoiceBulkActionDrafts_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ExecuteInvoiceActions_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,210">
         <sap:WorkflowViewStateService.ViewState>

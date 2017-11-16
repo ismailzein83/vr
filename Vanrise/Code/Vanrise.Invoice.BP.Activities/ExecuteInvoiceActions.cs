@@ -10,6 +10,7 @@ using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 using Vanrise.Queueing;
 using Vanrise.Common;
+using Vanrise.Invoice.BP.Arguments;
 namespace Vanrise.Invoice.BP.Activities
 {
     #region Argument Classes
@@ -19,6 +20,8 @@ namespace Vanrise.Invoice.BP.Activities
         public BaseQueue<Entities.Invoice> InputQueue { get; set; }
         public List<InvoiceBulkActionRuntime> InvoiceBulkActions { get; set; }
         public Guid InvoiceTypeId { get; set; }
+        public HandlingErrorOption HandlingErrorOption { get; set; }
+
     }
 
     #endregion
@@ -35,9 +38,33 @@ namespace Vanrise.Invoice.BP.Activities
 
         [RequiredArgument]
         public InArgument<Guid> InvoiceTypeId { get; set; }
+     
+        [RequiredArgument]
+        public InArgument<HandlingErrorOption> HandlingErrorOption { get; set; }
         #endregion
         protected override void DoWork(ExecuteInvoiceActionsInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
+            var invoiceTypeManager = new InvoiceTypeManager();
+            var invoiceType = invoiceTypeManager.GetInvoiceType(inputArgument.InvoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", inputArgument.InvoiceTypeId);
+            invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
+            invoiceType.Settings.InvoiceBulkActions.ThrowIfNull("invoiceType.Settings.InvoiceBulkActions");
+            List<InvoiceBulkActionPreparedEntity> invoiceBulkActionPreparedEntities = new List<InvoiceBulkActionPreparedEntity>();
+            if (inputArgument.InvoiceBulkActions != null)
+            {
+                foreach (var invoiceBulkAction in inputArgument.InvoiceBulkActions)
+                {
+                    var invoiceBulkActionDefinition = invoiceType.Settings.InvoiceBulkActions.FindRecord(x => x.InvoiceBulkActionId == invoiceBulkAction.InvoiceBulkActionId);
+                    invoiceBulkActionDefinition.ThrowIfNull("invoiceBulkActionDefinition");
+                    invoiceBulkActionPreparedEntities.Add(new InvoiceBulkActionPreparedEntity
+                    {
+                        InvoiceBulkActionDefinition = invoiceBulkActionDefinition,
+                        InvoiceBulkActionRuntime = invoiceBulkAction
+                    });
+                }
+            }
+
+
             var counter = 0;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -48,7 +75,7 @@ namespace Vanrise.Invoice.BP.Activities
                         (invoiceQueue) =>
                         {
                             counter++;
-                            ExecuteInvoiceActionsMethod(invoiceQueue, inputArgument.InvoiceTypeId, inputArgument.InvoiceBulkActions, handle);
+                            ExecuteInvoiceActionsMethod(invoiceQueue, invoiceBulkActionPreparedEntities,inputArgument.HandlingErrorOption, handle);
                         });
                 } while (!ShouldStop(handle) && hasItems);
             });
@@ -60,44 +87,52 @@ namespace Vanrise.Invoice.BP.Activities
                 InputQueue = this.InputQueue.Get(context),
                 InvoiceBulkActions = this.InvoiceBulkActions.Get(context),
                 InvoiceTypeId = this.InvoiceTypeId.Get(context),
+                HandlingErrorOption = this.HandlingErrorOption.Get(context),
             };
         }
-        private void ExecuteInvoiceActionsMethod(Entities.Invoice invoiceQueue, Guid invoiceTypeId, List<InvoiceBulkActionRuntime> invoiceBulkActions, AsyncActivityHandle handle)
+        private void ExecuteInvoiceActionsMethod(Entities.Invoice invoiceQueue, List<InvoiceBulkActionPreparedEntity> invoiceBulkActionPreparedEntities, HandlingErrorOption handlingErrorOption, AsyncActivityHandle handle)
         {
-            var invoiceTypeManager = new InvoiceTypeManager();
-            var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
-            invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
-            invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
-            invoiceType.Settings.InvoiceBulkActions.ThrowIfNull("invoiceType.Settings.InvoiceBulkActions");
             PartnerManager partnerManager = new PartnerManager();
             var partnerName = partnerManager.GetPartnerName(invoiceQueue.InvoiceTypeId, invoiceQueue.PartnerId);
-            if (invoiceBulkActions != null)
+            try
             {
-                try
-                {
-                    foreach (var invoiceBulkAction in invoiceBulkActions)
-                    {
-                        var invoiceBulkActionDefinition = invoiceType.Settings.InvoiceBulkActions.FindRecord(x => x.InvoiceBulkActionId == invoiceBulkAction.InvoiceBulkActionId);
-                        invoiceBulkActionDefinition.ThrowIfNull("invoiceBulkActionDefinition");
 
-                        var actionContext = new AutomaticActionRuntimeSettingsContext
-                        {
-                            Invoice = invoiceQueue,
-                            DefinitionSettings = invoiceBulkActionDefinition.Settings
-                        };
-                        invoiceBulkAction.Settings.Execute(actionContext);
-                        if (actionContext.ErrorMessage != null)
-                            handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Warning, string.Format("{0}", actionContext.ErrorMessage));
-                        else
-                            handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully for invoice for account '{1}' having serial number '{2}' .", invoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber);
-                    }
-                }
-                catch (Exception ex)
+                foreach (var invoiceBulkActionPreparedEntity in invoiceBulkActionPreparedEntities)
                 {
-                    handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Error, string.Format("Error occured while executing action for '{0}' having serial number '{1}' , Reason: {2}", partnerName, invoiceQueue.SerialNumber, ex.Message));
-                    handle.SharedInstanceData.WriteHandledException(ex, true);
+                    var actionContext = new AutomaticActionRuntimeSettingsContext
+                    {
+                        Invoice = invoiceQueue,
+                        DefinitionSettings = invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Settings
+                    };
+                    invoiceBulkActionPreparedEntity.InvoiceBulkActionRuntime.Settings.Execute(actionContext);
+                    if (actionContext.ErrorMessage != null)
+                    {
+                        throw new Exception(actionContext.ErrorMessage);
+                    }
+                    else
+                        handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully for invoice for account '{1}' having serial number '{2}' .", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber);
                 }
             }
+            catch (Exception ex)
+            {
+                switch (handlingErrorOption)
+                {
+                    case Entities.HandlingErrorOption.Skip:
+                        handle.SharedInstanceData.WriteBusinessHandledException(Utilities.WrapException(ex, string.Format("'{0}' of serial number '{1}'.", partnerName, invoiceQueue.SerialNumber)));
+                        break;
+                    case Entities.HandlingErrorOption.Stop:
+                        handle.SharedInstanceData.WriteBusinessHandledException(Utilities.WrapException(ex, string.Format("'{0}' of serial number '{1}'.", partnerName, invoiceQueue.SerialNumber)), true);
+                        throw ex;
+                }
+            }
+
+        }
+
+        internal class InvoiceBulkActionPreparedEntity
+        {
+            public InvoiceBulkAction InvoiceBulkActionDefinition { get; set; }
+            public InvoiceBulkActionRuntime InvoiceBulkActionRuntime { get; set; }
         }
     }
+  
 }

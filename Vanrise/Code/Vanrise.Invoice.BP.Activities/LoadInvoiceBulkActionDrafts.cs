@@ -10,14 +10,14 @@ using Vanrise.Invoice.Business;
 namespace Vanrise.Invoice.BP.Activities
 {
     #region Argument Classes
-    public class InvoiceBulkActionDraftInput
+    public class LoadInvoiceBulkActionDraftInput
     {
         public Guid InvoiceBulkActionIdentifier { get; set; }
         public BaseQueue<Entities.Invoice> OutputQueue { get; set; }
     }
     #endregion
 
-    public sealed class InvoiceBulkActionDrafts : Vanrise.BusinessProcess.BaseAsyncActivity<InvoiceBulkActionDraftInput>
+    public sealed class LoadInvoiceBulkActionDrafts : Vanrise.BusinessProcess.BaseAsyncActivity<LoadInvoiceBulkActionDraftInput>
     {
         
         #region Arguments
@@ -29,7 +29,7 @@ namespace Vanrise.Invoice.BP.Activities
 
         #endregion
 
-        protected override void DoWork(InvoiceBulkActionDraftInput inputArgument, AsyncActivityHandle handle)
+        protected override void DoWork(LoadInvoiceBulkActionDraftInput inputArgument, AsyncActivityHandle handle)
         {
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading Invoices ...");
 
@@ -46,9 +46,9 @@ namespace Vanrise.Invoice.BP.Activities
                 this.OutputQueue.Set(context, new MemoryQueue<Entities.Invoice>());
             base.OnBeforeExecute(context, handle);
         }
-        protected override InvoiceBulkActionDraftInput GetInputArgument(AsyncCodeActivityContext context)
+        protected override LoadInvoiceBulkActionDraftInput GetInputArgument(AsyncCodeActivityContext context)
         {
-            return new InvoiceBulkActionDraftInput()
+            return new LoadInvoiceBulkActionDraftInput()
             {
                 InvoiceBulkActionIdentifier = this.InvoiceBulkActionIdentifier.Get(context),
                 OutputQueue = this.OutputQueue.Get(context)

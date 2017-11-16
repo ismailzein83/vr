@@ -185,6 +185,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="VR_Invoice\Constants\HandlingErrorOptionsEnum.js" />
     <Content Include="VR_Invoice\Constants\AggregateTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\CounterTypeEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceGenerationSettingEnum.js" />

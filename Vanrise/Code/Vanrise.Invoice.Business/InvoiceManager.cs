@@ -1026,7 +1026,8 @@ namespace Vanrise.Invoice.Business
                 UserId = userId,
                 InvoiceBulkActions = input.InvoiceBulkActions,
                 MinimumFrom = invoiceBulkActionsDraftSummary.MinimumFrom.Value,
-                MaximumTo = invoiceBulkActionsDraftSummary.MaximumTo.Value
+                MaximumTo = invoiceBulkActionsDraftSummary.MaximumTo.Value,
+                HandlingErrorOption = input.HandlingErrorOption
             };
 
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput

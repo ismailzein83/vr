@@ -15,11 +15,11 @@ namespace Vanrise.Invoice.Business
     {
         public override void OnBPExecutionCompleted(BusinessProcess.Entities.IBPDefinitionBPExecutionCompletedContext context)
         {
-            context.BPInstance.ThrowIfNull("context.BPInstance");
-            new HoldRequestManager().DeleteHoldRequestByBPInstanceId(context.BPInstance.ProcessInstanceID);
+            //context.BPInstance.ThrowIfNull("context.BPInstance");
+            //new HoldRequestManager().DeleteHoldRequestByBPInstanceId(context.BPInstance.ProcessInstanceID);
 
-            InvoiceBulkActionProcessInput invoiceBulkActionProcessInput = context.BPInstance.InputArgument.CastWithValidate<InvoiceBulkActionProcessInput>("context.IntanceToRun.InputArgument");
-            new InvoiceBulkActionsDraftManager().ClearInvoiceBulkActionDrafts(invoiceBulkActionProcessInput.InvoiceBulkActionIdentifier);
+            //InvoiceBulkActionProcessInput invoiceBulkActionProcessInput = context.BPInstance.InputArgument.CastWithValidate<InvoiceBulkActionProcessInput>("context.IntanceToRun.InputArgument");
+            //new InvoiceBulkActionsDraftManager().ClearInvoiceBulkActionDrafts(invoiceBulkActionProcessInput.InvoiceBulkActionIdentifier);
         }
 
         public override bool CanRunBPInstance(BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)

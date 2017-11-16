@@ -12,13 +12,26 @@
                                label="Action"
                                onselectionchanged="scopeModel.onMenualBulkActionSelectionChanged">
                     </vr-select>
+
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-select datasource="scopeModel.handlingOnErrorOptions"
+                               datatextfield="description"
+                               datavaluefield="value"
+                               selectedvalues="scopeModel.selectedHandlingOnError"
+                               entityname="Handling"
+                               isrequired="true"
+                               label="Handling On Error"
+                               hideremoveicon
+                               onselectionchanged="scopeModel.onMenualBulkActionSelectionChanged">
+                    </vr-select>
                 </vr-columns>
             </vr-row>
-            <vr-row>
-                <vr-directivewrapper ng-if="scopeModel.selectedMenualBulkAction != undefined" directive="scopeModel.runtimeEditor" vr-loader="scopeModel.isLoadingDirective"
-                                     on-ready="scopeModel.onDirectiveReady">
-                </vr-directivewrapper> 
-            </vr-row>
+            
+            <vr-directivewrapper ng-if="scopeModel.selectedMenualBulkAction != undefined" directive="scopeModel.runtimeEditor" vr-loader="scopeModel.isLoadingDirective"
+                                    on-ready="scopeModel.onDirectiveReady">
+            </vr-directivewrapper> 
+           
         </vr-form>
     </vr-modalbody>
     <div>

@@ -64,12 +64,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClearInvoiceBulkActionDrafts.cs" />
     <Compile Include="ClearInvoiceGenerationDrafts.cs" />
     <Compile Include="ExecuteInvoiceActions.cs" />
     <Compile Include="GenerateAutomaticInvoiceGenerationDrafts.cs" />
     <Compile Include="GeneratePartnerInvoice.cs" />
-    <Compile Include="InvoiceBulkActionDrafts.cs" />
+    <Compile Include="LoadInvoiceBulkActionDrafts.cs" />
     <Compile Include="LoadInvoiceGenerationDrafts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -81,6 +80,10 @@
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Invoice.BP.Arguments\Vanrise.Invoice.BP.Arguments.csproj">
+      <Project>{73d64484-43b6-4e3a-8bd8-b30f86d45c36}</Project>
+      <Name>Vanrise.Invoice.BP.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Invoice.Business\Vanrise.Invoice.Business.csproj">
       <Project>{3fc94003-b550-4f8d-b31e-0d389dccc801}</Project>
