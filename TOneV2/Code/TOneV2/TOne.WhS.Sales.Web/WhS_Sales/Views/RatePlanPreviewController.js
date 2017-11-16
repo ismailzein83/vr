@@ -87,7 +87,8 @@
                 var ratePreviewGridPayload = {
                     ProcessInstanceId: processInstanceId,
                     ZoneName: null,
-                    CustomerIds: selectedCustomerIds
+                    CustomerIds: selectedCustomerIds,
+                    ShowCustomerName: (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) ? false: true,
                 };
                 var query = {
                     ProcessInstanceId: processInstanceId,
@@ -305,7 +306,8 @@
             customeRatePreviewGridReadyDeferred.promise.then(function () {
                 var ratePreviewGridPayload = {
                     ProcessInstanceId: processInstanceId,
-                    CustomerIds: (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) ? ownerIds : null
+                    CustomerIds: (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) ? ownerIds : null,
+                    ShowCustomerName: (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) ? false : true,
                 };
                 var query = {
                     ProcessInstanceId: processInstanceId,

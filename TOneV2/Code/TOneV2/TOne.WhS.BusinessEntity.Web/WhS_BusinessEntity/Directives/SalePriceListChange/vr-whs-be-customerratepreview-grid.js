@@ -13,7 +13,7 @@ app.directive('vrWhsBeCustomerratepreviewGrid', ['WhS_BE_SalePriceListChangeAPIS
         },
         controllerAs: 'ctrl',
         bindToController: true,
-            templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListChange/Templates/CustomerRatePreviewGrid.html'
+        templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/SalePriceListChange/Templates/CustomerRatePreviewGrid.html'
     };
 
     function CustomerRatePreviewGrid($scope, ctrl, $attrs) {
@@ -56,13 +56,15 @@ app.directive('vrWhsBeCustomerratepreviewGrid', ['WhS_BE_SalePriceListChangeAPIS
 
             api.load = function (query) {
                 processInstanceId = query.ProcessInstanceId;
+                if (query != null)
+                    $scope.scopeModel.showCustomerName = query.ShowCustomerName;
                 return gridAPI.retrieveData(query);
             };
             api.gridHasData = function () {
                 return ($scope.scopeModel.ratePreviews.length != 0) ? true : false;
             };
             api.cleanGrid = function () {
-                $scope.scopeModel.ratePreviews.length = 0
+                $scope.scopeModel.ratePreviews.length = 0;
             };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
