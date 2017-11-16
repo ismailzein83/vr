@@ -1,1 +1,11 @@
-﻿
+﻿<vr-datagrid datasource="scopeModel.vrLocalizationLanguages"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="VRLanguageId">
+    <vr-datagridcolumn headertext="'Id'" field="'VRLanguageId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Parent Language Id'" field="'ParentLanguageId'"></vr-datagridcolumn>
+
+</vr-datagrid>

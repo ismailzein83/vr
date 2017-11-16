@@ -597,7 +597,7 @@
     <Content Include="Common\Views\VRLocalizationLanguage\VRLocalizationLanguageEditor.html" />
     <Content Include="Common\Views\VRLocalizationLanguage\VRLocalizationLanguageEditorController.js" />
     <Content Include="Common\Views\VRLocalizationLanguage\VRLocalizationLanguageManagement.html" />
-    <Content Include="Common\Views\VRLocalizationLanguage\VRLocalizationLanguageManagementControler.js" />
+    <Content Include="Common\Views\VRLocalizationLanguage\VRLocalizationLanguageManagementController.js" />
     <Content Include="Common\Views\VRMail\VRMailMessageEvaluator.html" />
     <Content Include="Common\Views\VRMail\VRMailMessageEvaluatorController.js" />
     <Content Include="Common\Views\VRTile\VRTileManagement.html" />
