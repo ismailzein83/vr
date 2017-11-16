@@ -216,7 +216,11 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [CodePrefix] [varchar](20) NOT NULL,
 	                                                    [Code] [varchar](20) NOT NULL,
 	                                                    [Content] [nvarchar](max) NULL
-                                                    ) ON [PRIMARY]";
+                                                    ) ON [PRIMARY];
+                                                    CREATE CLUSTERED INDEX [IX_CodeMatch_Code] ON [dbo].[CodeMatch]
+                                                    (
+                                                    	[Code] ASC
+                                                    );";
 
         const string query_CodeSaleZoneTable = @"CREATE TABLE [dbo].[CodeSaleZone](
 	                                                    [Code] [varchar](20) NOT NULL,
