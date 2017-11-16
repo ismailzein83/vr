@@ -1,10 +1,10 @@
-﻿<vr-datagrid defaultsortbyfieldname="'ID'" defaultsortdirection="'DESC'"
+﻿<vr-datagrid defaultsortbyfieldname="'LogEntryTime'" defaultsortdirection="'DESC'"
              datasource="logs"
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
              on-ready="gridReady" normalcell="true" enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" field="'ID'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Time'" field="'LogEntryTime'" fixedwidth="'120'" type="'LongDatetime'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Severity'" field="'SeverityDescription'" widthfactor="10" getcolor="getSeverityColor"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Message'" field="'Message'" widthfactor="70" expendablecolumn></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Event Time'" field="'LogEntryTime'" widthfactor="20" type="'LongDatetime'"></vr-datagridcolumn>
 </vr-datagrid>
