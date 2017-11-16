@@ -19,5 +19,6 @@ namespace Vanrise.AccountBalance.Data
         IEnumerable<BillingTransaction> GetBillingTransactionsByAccountId(Guid accountTypeId, String accountId, VRAccountStatus? status, DateTime? effectiveDate, bool? isEffectiveInFuture);
         IEnumerable<BillingTransaction> GetBillingTransactions(List<Guid> accountTypeIds, List<string> accountIds, List<Guid> transactionTypeIds, DateTime fromDate, DateTime? toDate);
         BillingTransaction GetLastBillingTransaction(Guid accountTypeId, string accountId);
+        bool HasBillingTransactionData(Guid accountTypeId);
     }
 }

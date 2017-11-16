@@ -20,12 +20,10 @@ namespace Vanrise.AccountBalance.Data.SQL
             new CorrectUsageBalancePayload();
         }
 
-
-
         #endregion
 
         #region Public Methods
-        public void LoadUsageBalance<T>(Guid accountTypeId,BalanceUsageQueueType balanceUsageQueueType, Action<BalanceUsageQueue<T>> onUsageBalanceUpdateReady)
+        public void LoadUsageBalance<T>(Guid accountTypeId, BalanceUsageQueueType balanceUsageQueueType, Action<BalanceUsageQueue<T>> onUsageBalanceUpdateReady)
         {
             ExecuteReaderSP("[VR_AccountBalance].[sp_BalanceUsageQueue_GetByQueueType]",
                 (reader) =>
@@ -36,7 +34,8 @@ namespace Vanrise.AccountBalance.Data.SQL
                     }
                 }, accountTypeId, balanceUsageQueueType);
         }
-        public bool UpdateUsageBalance<T>(Guid accountTypeId,BalanceUsageQueueType balanceUsageQueueType, T balanceUsageDetail)
+
+        public bool UpdateUsageBalance<T>(Guid accountTypeId, BalanceUsageQueueType balanceUsageQueueType, T balanceUsageDetail)
         {
             byte[] binaryArray = null;
             if (balanceUsageDetail != null)
@@ -44,8 +43,14 @@ namespace Vanrise.AccountBalance.Data.SQL
                 binaryArray = Common.ProtoBufSerializer.Serialize(balanceUsageDetail);
                 binaryArray = Common.Compressor.Compress(binaryArray);
             }
-            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceUsageQueue_Update]", accountTypeId,balanceUsageQueueType, binaryArray) > 0);
+            return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceUsageQueue_Update]", accountTypeId, balanceUsageQueueType, binaryArray) > 0);
         }
+
+        public bool HasUsageBalanceData(Guid accountTypeId)
+        {
+            return Convert.ToBoolean(ExecuteScalarSP("[VR_AccountBalance].[sp_BalanceUsageQueue_HasData]", accountTypeId));
+        }
+
         public bool DeleteBalanceUsageQueue(long balanceUsageQueueId)
         {
             return (ExecuteNonQuerySP("[VR_AccountBalance].[sp_BalanceUsageQueue_Delete]", balanceUsageQueueId) > 0);
@@ -65,8 +70,5 @@ namespace Vanrise.AccountBalance.Data.SQL
         }
 
         #endregion
-
-
-       
     }
 }

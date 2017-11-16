@@ -13,7 +13,7 @@ namespace Vanrise.AccountBalance.Business
         public void UpdateUsageBalance(Guid accountTypeId, UpdateUsageBalancePayload updateUsageBalancePayload)
         {
             IBalanceUsageQueueDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBalanceUsageQueueDataManager>();
-            dataManager.UpdateUsageBalance(accountTypeId,BalanceUsageQueueType.UpdateUsageBalance, updateUsageBalancePayload);
+            dataManager.UpdateUsageBalance(accountTypeId, BalanceUsageQueueType.UpdateUsageBalance, updateUsageBalancePayload);
         }
         public Guid InitializeUpdateUsageBalance()
         {
@@ -22,7 +22,7 @@ namespace Vanrise.AccountBalance.Business
         public void CorrectUsageBalance(Guid accountTypeId, CorrectUsageBalancePayload correctUsageBalancePayload)
         {
             IBalanceUsageQueueDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBalanceUsageQueueDataManager>();
-            dataManager.UpdateUsageBalance(accountTypeId,BalanceUsageQueueType.CorrectUsageBalance , correctUsageBalancePayload);
+            dataManager.UpdateUsageBalance(accountTypeId, BalanceUsageQueueType.CorrectUsageBalance, correctUsageBalancePayload);
         }
         public void LoadUpdatesUsageBalance(Guid accountTypeId, Action<BalanceUsageQueue<UpdateUsageBalancePayload>> onUsageBalanceUpdateReady)
         {
@@ -34,6 +34,10 @@ namespace Vanrise.AccountBalance.Business
             IBalanceUsageQueueDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBalanceUsageQueueDataManager>();
             dataManager.LoadUsageBalance<CorrectUsageBalancePayload>(accountTypeId, BalanceUsageQueueType.CorrectUsageBalance, onUsageBalanceUpdateReady);
         }
-
+        public bool HasUsageBalanceData(Guid accountTypeId)
+        {
+            IBalanceUsageQueueDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBalanceUsageQueueDataManager>();
+            return dataManager.HasUsageBalanceData(accountTypeId);
+        }
     }
 }

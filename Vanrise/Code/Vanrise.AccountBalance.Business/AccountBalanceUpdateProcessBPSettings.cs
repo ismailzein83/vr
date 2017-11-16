@@ -28,5 +28,24 @@ namespace Vanrise.AccountBalance.Business
             }
             return true;
         }
+
+        public override bool ShouldCreateScheduledInstance(BusinessProcess.Entities.IBPDefinitionShouldCreateScheduledInstanceContext context)
+        {
+            AccountBalanceUpdateProcessInput inputArg = context.BaseProcessInputArgument.CastWithValidate<AccountBalanceUpdateProcessInput>("context.BaseProcessInputArgument");
+
+            UsageBalanceManager usageBalanceManager = new UsageBalanceManager();
+            bool hasUsageBalanceData = usageBalanceManager.HasUsageBalanceData(inputArg.AccountTypeId);
+
+            if (hasUsageBalanceData)
+                return true;
+
+            BillingTransactionManager billingTransactionManager = new BillingTransactionManager();
+            bool hasBillingTransactionData = billingTransactionManager.HasBillingTransactionData(inputArg.AccountTypeId);
+
+            if (hasBillingTransactionData)
+                return true;
+
+            return false;
+        }
     }
 }

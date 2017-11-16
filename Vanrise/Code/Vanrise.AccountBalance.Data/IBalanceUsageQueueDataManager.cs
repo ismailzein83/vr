@@ -11,5 +11,6 @@ namespace Vanrise.AccountBalance.Data
     {
         void LoadUsageBalance<T>(Guid accountTypeId,BalanceUsageQueueType balanceUsageQueueType, Action<BalanceUsageQueue<T>> onUsageBalanceUpdateReady);
         bool UpdateUsageBalance<T>(Guid accountTypeId, BalanceUsageQueueType balanceUsageQueueType , T updateUsageBalancePayload);
+        bool HasUsageBalanceData(Guid accountTypeId);
     }
 }

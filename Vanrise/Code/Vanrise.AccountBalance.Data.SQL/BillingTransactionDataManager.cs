@@ -125,6 +125,12 @@ namespace Vanrise.AccountBalance.Data.SQL
                     }
                 }, accountTypeId);
         }
+
+        public bool HasBillingTransactionData(Guid accountTypeId)
+        {
+            return Convert.ToBoolean(ExecuteScalarSP("[VR_AccountBalance].[sp_BillingTransaction_HasData]", accountTypeId));
+        }
+
         public bool Insert(BillingTransaction billingTransaction, out long billingTransactionId)
         {
             return Insert(billingTransaction, null, out billingTransactionId);
