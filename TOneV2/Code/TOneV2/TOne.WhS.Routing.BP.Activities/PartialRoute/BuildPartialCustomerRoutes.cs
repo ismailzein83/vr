@@ -16,11 +16,11 @@ namespace TOne.WhS.Routing.BP.Activities
 
         public List<RoutingCodeMatches> RoutingCodeMatchesList { get; set; }
 
-        public BaseQueue<CustomerRoutesBatch> OutputQueue { get; set; }
+        public BaseQueue<PartialCustomerRoutesBatch> OutputQueue { get; set; }
 
         public int VersionNumber { get; set; }
 
-        public HashSet<CustomerRouteDefinition> AffectedCustomerRoutes { get; set; }
+        public List<CustomerRouteData> AffectedCustomerRoutes { get; set; }
 
         public DateTime EffectiveDate { get; set; }
     }
@@ -38,17 +38,17 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
-        public InArgument<HashSet<CustomerRouteDefinition>> AffectedCustomerRoutes { get; set; }
+        public InArgument<List<CustomerRouteData>> AffectedCustomerRoutes { get; set; }
 
         [RequiredArgument]
         public InArgument<int> VersionNumber { get; set; }
 
         [RequiredArgument]
-        public InOutArgument<BaseQueue<CustomerRoutesBatch>> OutputQueue { get; set; }
+        public InOutArgument<BaseQueue<PartialCustomerRoutesBatch>> OutputQueue { get; set; }
 
         protected override void DoWork(BuildPartialCustomerRoutesInput inputArgument, AsyncActivityHandle handle)
         {
-            CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
+            PartialCustomerRoutesBatch customerRoutesBatch = new PartialCustomerRoutesBatch();
             RouteBuilder builder = new RouteBuilder(RoutingProcessType.CustomerRoute);
 
             Dictionary<string, CustomerZoneDetail> customerZoneDetailsDict = new Dictionary<string, CustomerZoneDetail>();
@@ -65,11 +65,16 @@ namespace TOne.WhS.Routing.BP.Activities
                 }
             }
 
+            Dictionary<string, Dictionary<int, CustomerRouteData>> customerRoutesByCode = new Dictionary<string, Dictionary<int, CustomerRouteData>>();
+
             Dictionary<string, CustomerZoneDetailByZone> zoneDetailsByCode = new Dictionary<string, CustomerZoneDetailByZone>();
             if (inputArgument.AffectedCustomerRoutes != null && inputArgument.CustomerZoneDetails != null)
             {
-                foreach (CustomerRouteDefinition customerRoute in inputArgument.AffectedCustomerRoutes)
+                foreach (CustomerRouteData customerRoute in inputArgument.AffectedCustomerRoutes)
                 {
+                    Dictionary<int, CustomerRouteData> customerRoutesByCustomer = customerRoutesByCode.GetOrCreateItem(customerRoute.Code);
+                    customerRoutesByCustomer.Add(customerRoute.CustomerId, customerRoute);
+
                     List<CustomerZoneDetail> matchZoneDetails = zoneDetailsByCode.GetOrCreateItem(customerRoute.Code).GetOrCreateItem(customerRoute.SaleZoneId);
                     string key = string.Concat(customerRoute.CustomerId, "~", customerRoute.SaleZoneId);
 
@@ -93,8 +98,9 @@ namespace TOne.WhS.Routing.BP.Activities
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, routingCodeMatches.Code);
 
                         customerRoutesBatch.CustomerRoutes.AddRange(customerRoutes);
+                        customerRoutesBatch.AffectedCustomerRoutes = customerRoutesByCode.GetRecord(code);
                         inputArgument.OutputQueue.Enqueue(customerRoutesBatch);
-                        customerRoutesBatch = new CustomerRoutesBatch();
+                        customerRoutesBatch = new PartialCustomerRoutesBatch();
                     }
                 }
             }
@@ -122,7 +128,7 @@ namespace TOne.WhS.Routing.BP.Activities
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
-                this.OutputQueue.Set(context, new MemoryQueue<CustomerRoutesBatch>());
+                this.OutputQueue.Set(context, new MemoryQueue<PartialCustomerRoutesBatch>());
 
             base.OnBeforeExecute(context, handle);
         }

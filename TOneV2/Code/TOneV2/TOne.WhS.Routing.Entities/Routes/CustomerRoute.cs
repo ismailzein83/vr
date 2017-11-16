@@ -24,4 +24,14 @@ namespace TOne.WhS.Routing.Entities
         public long SaleZoneId { get; set; }
     }
 
+    public class CustomerRouteData
+    {
+        public int CustomerId { get; set; }
+        public string Code { get; set; }
+        public long SaleZoneId { get; set; }
+        public bool IsBlocked { get; set; }
+        public int? ExecutedRuleId { get; set; }
+        public string Options { get; set; }
+        public int VersionNumber { get; set; }
+    }
 }

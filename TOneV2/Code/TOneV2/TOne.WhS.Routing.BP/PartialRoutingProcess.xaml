@@ -7,8 +7,7 @@
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
- xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Core"
- xmlns:scg1="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
  xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Arguments;assembly=TOne.WhS.Routing.BP.Arguments"
  xmlns:twrba1="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
@@ -80,7 +79,7 @@
       <Variable x:TypeArguments="twre:AffectedRouteRules" Name="affectedRouteRules" />
       <Variable x:TypeArguments="x:Boolean" Name="shouldTriggerFullRouteProcess" />
       <Variable x:TypeArguments="vb:ProcessCompletedEventPayload" Name="routeBuildProcessEventPayload" />
-      <Variable x:TypeArguments="scg:HashSet(twre:CustomerRouteDefinition)" Name="affectedCustomerRoutes" />
+      <Variable x:TypeArguments="scg:List(twre:CustomerRouteData)" Name="affectedCustomerRoutes" />
       <Variable x:TypeArguments="s:DateTime" Name="EffectiveDate">
         <Variable.Default>
           <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
@@ -176,8 +175,8 @@
           </twrba1:LoadAffectedRules>
           <twrba1:GetAffectedRoutes sap2010:WorkflowViewState.IdRef="GetAffectedRoutes_1">
             <twrba1:GetAffectedRoutes.AffectedCustomerRoutes>
-              <OutArgument x:TypeArguments="scg:HashSet(twre:CustomerRouteDefinition)">
-                <mca:CSharpReference x:TypeArguments="scg:HashSet(twre:CustomerRouteDefinition)">affectedCustomerRoutes</mca:CSharpReference>
+              <OutArgument x:TypeArguments="scg:List(twre:CustomerRouteData)">
+                <mca:CSharpReference x:TypeArguments="scg:List(twre:CustomerRouteData)">affectedCustomerRoutes</mca:CSharpReference>
               </OutArgument>
             </twrba1:GetAffectedRoutes.AffectedCustomerRoutes>
             <twrba1:GetAffectedRoutes.AffectedRouteOptionRules>
@@ -219,8 +218,8 @@
                     <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
                       <local:ApplyAffectedRules sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.SubProcesses.ApplyAffectedRules_1">
                         <local:ApplyAffectedRules.AffectedCustomerRoutes>
-                          <InArgument x:TypeArguments="scg:HashSet(twre:CustomerRouteDefinition)">
-                            <mca:CSharpValue x:TypeArguments="scg:HashSet(twre:CustomerRouteDefinition)">affectedCustomerRoutes</mca:CSharpValue>
+                          <InArgument x:TypeArguments="scg:List(twre:CustomerRouteData)">
+                            <mca:CSharpValue x:TypeArguments="scg:List(twre:CustomerRouteData)">affectedCustomerRoutes</mca:CSharpValue>
                           </InArgument>
                         </local:ApplyAffectedRules.AffectedCustomerRoutes>
                         <local:ApplyAffectedRules.EffectiveDate>
@@ -355,7 +354,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWxCTgPnAg4CAQFWC1ZXAgECXgVkIAMBtwNlBXUnAwGVA3YF3gIKAgEa3wIF5QIgAgENYQthhQEDAbkDXmBegwEDAbgDbQttdAMBrANoC2hsAwGhA3ILcngDAZYDeQt5XwIBG30J0wIUAgEz1gIJ3AIkAgEm4gIL4gKFAQIBD98CYN8CgwECAQ5+C4kBKAMB/gKKAQuVARQDAecClgELsAEmAwGvArEBC8sBJgMB9wHMAQvSAhACATTZAg/ZAoUBAgEo1gJk1gKCAQIBJ4EBEYEBdAMBigOGARGGAWoDAf8CkgERkgF0AwHzAo0BEY0BZAMB6AKoARGoAWwDAdwCngERngF4AwHRAq0BEa0BawMBxgKZARGZAYQBAwG7AqMBEaMBXgMBsAK0ARG0AY4BAwGkAr4BEb4BcAMBmQK5ARG5AXwDAY4CyAERyAF1AwGDAsMBEcMBagMB+AHPARHPAW4CATXTAQ+eAhoDAYMBoQIP0AIaAgFA1AERlgIWAwGQAZcCEZ0CMQMBhAGlAhG2AiICAWm3AhHPAhYCAUHXARfXAaMBAwGRAdsBFZQCIAMBnAGaAheaAnEDAYUBqAIXrgIUAgF3swIXswKQAQIBa6UCvQGlAsMBAgFqugIXugK/AQIBQr4CFcQCKQIBXMcCFc0CMAIBTtwBF/0BMgMBygH+AReTAjYDAZ0BwQIbwQLEAQIBXcoCG8oClQECAVDHAnDHApQBAgFP3wEd3wGSAQMB7AHkAR3kAWoDAeEB6QEd6QF2AwHWAe4BHe4BaAMBywGLAh2LAngDAb8BhgIdhgJoAwG0AYECHYECagMBqQGQAh2QAnYDAZ4B</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWxCTQPmAg4CAQFVC1VXAgECXQVjIAMBtwNkBXQnAwGVA3UF3QIKAgEa3gIF5AIgAgENYAtghQEDAbkDXWBdgwEDAbgDbAtsdAMBrANnC2dsAwGhA3ELcXgDAZYDeAt4XwIBG3wJ0gIUAgEz1QIJ2wIkAgEm4QIL4QKFAQIBD94CYN4CgwECAQ59C4gBKAMB/gKJAQuUARQDAecClQELrwEmAwGvArABC8oBJgMB9wHLAQvRAhACATTYAg/YAoUBAgEo1QJk1QKCAQIBJ4ABEYABdAMBigOFARGFAWoDAf8CkQERkQF0AwHzAowBEYwBZAMB6AKnARGnAWwDAdwCnQERnQF4AwHRAqwBEawBawMBxgKYARGYAYQBAwG7AqIBEaIBXgMBsAKzARGzAYUBAwGkAr0BEb0BcAMBmQK4ARG4AXwDAY4CxwERxwF1AwGDAsIBEcIBagMB+AHOARHOAW4CATXSAQ+dAhoDAYMBoAIPzwIaAgFA0wERlQIWAwGQAZYCEZwCMQMBhAGkAhG1AiICAWm2AhHOAhYCAUHWARfWAaMBAwGRAdoBFZMCIAMBnAGZAheZAnEDAYUBpwIXrQIUAgF3sgIXsgKQAQIBa6QCvQGkAsMBAgFquQIXuQK/AQIBQr0CFcMCKQIBXMYCFcwCMAIBTtsBF/wBMgMBygH9AReSAjYDAZ0BwAIbwALEAQIBXckCG8kClQECAVDGAnDGApQBAgFP3gEd3gGJAQMB7AHjAR3jAWoDAeEB6AEd6AF2AwHWAe0BHe0BaAMBywGKAh2KAngDAb8BhQIdhQJoAwG0AYACHYACagMBqQGPAh2PAnYDAZ4B</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -373,9 +372,9 @@
       <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="554,86" />
       <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="576,336">
         <sap:WorkflowViewStateService.ViewState>
-          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg1:Dictionary>
+          </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="616,416" />
@@ -383,18 +382,18 @@
       <sap2010:ViewStateData Id="ApplyPartialRouteInfo_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
-          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg1:Dictionary>
+          </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="464,358" />
       <sap2010:ViewStateData Id="DeleteRouteRuleChanged_1" sap:VirtualizedContainerService.HintSize="464,22" />
       <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="486,544">
         <sap:WorkflowViewStateService.ViewState>
-          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg1:Dictionary>
+          </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="464,22" />
@@ -403,17 +402,17 @@
       <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="464,210" />
       <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="486,396">
         <sap:WorkflowViewStateService.ViewState>
-          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg1:Dictionary>
+          </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="997,694" />
       <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="1019,1106">
         <sap:WorkflowViewStateService.ViewState>
-          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg1:Dictionary>
+          </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
@@ -421,9 +420,9 @@
       <sap2010:ViewStateData Id="WriteTrackingMessage_2" sap:VirtualizedContainerService.HintSize="1244,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1266,1566">
         <sap:WorkflowViewStateService.ViewState>
-          <scg1:Dictionary x:TypeArguments="x:String, x:Object">
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg1:Dictionary>
+          </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.PartialRoutingProcess_1" sap:VirtualizedContainerService.HintSize="1306,1646" />

@@ -19,7 +19,7 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         public RoutingDatabase RoutingDatabase { get; set; }
 
-        public BaseQueue<CustomerRoutesBatch> CustomerRoutesBatchQueueInput { get; set; }
+        public BaseQueue<List<CustomerRouteData>> CustomerRoutesDataQueueInput { get; set; }
     }
 
     public sealed class ApplyAffectedCustomerRoutesToDB : DependentAsyncActivity<ApplyAffectedCustomerRoutesToDBInput>
@@ -28,13 +28,13 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
 
         [RequiredArgument]
-        public InArgument<BaseQueue<CustomerRoutesBatch>> CustomerRoutesBatchQueueInput { get; set; }
+        public InArgument<BaseQueue<List<CustomerRouteData>>> CustomerRoutesDataQueueInput { get; set; }
 
         protected override void DoWork(ApplyAffectedCustomerRoutesToDBInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             ICustomerRouteDataManager customerRouteDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
             customerRouteDataManager.RoutingDatabase = inputArgument.RoutingDatabase;
-            List<CustomerRoute> customerRoutesToUpdate = new List<CustomerRoute>();
+            List<CustomerRouteData> customerRoutesToUpdate = new List<CustomerRouteData>();
 
             int partialRoutesUpdateBatchSize = new ConfigManager().GetPartialRoutesUpdateBatchSize();
 
@@ -43,16 +43,16 @@ namespace TOne.WhS.Routing.BP.Activities
                 bool hasItem = false;
                 do
                 {
-                    hasItem = inputArgument.CustomerRoutesBatchQueueInput.TryDequeue((customerRoutesBatch) =>
+                    hasItem = inputArgument.CustomerRoutesDataQueueInput.TryDequeue((customerRoutesDataList) =>
                     {
-                        if (customerRoutesBatch != null && customerRoutesBatch.CustomerRoutes != null)
+                        if (customerRoutesDataList != null)
                         {
-                            customerRoutesToUpdate.AddRange(customerRoutesBatch.CustomerRoutes);
+                            customerRoutesToUpdate.AddRange(customerRoutesDataList);
 
                             if (customerRoutesToUpdate.Count > partialRoutesUpdateBatchSize)
                             {
                                 customerRouteDataManager.UpdateCustomerRoutes(customerRoutesToUpdate.ToList());
-                                customerRoutesToUpdate = new List<CustomerRoute>();
+                                customerRoutesToUpdate = new List<CustomerRouteData>();
                             }
                         }
                     });
@@ -69,7 +69,7 @@ namespace TOne.WhS.Routing.BP.Activities
         {
             return new ApplyAffectedCustomerRoutesToDBInput
             {
-                CustomerRoutesBatchQueueInput = this.CustomerRoutesBatchQueueInput.Get(context),
+                CustomerRoutesDataQueueInput = this.CustomerRoutesDataQueueInput.Get(context),
                 RoutingDatabase = this.RoutingDatabase.Get(context)
             };
         }

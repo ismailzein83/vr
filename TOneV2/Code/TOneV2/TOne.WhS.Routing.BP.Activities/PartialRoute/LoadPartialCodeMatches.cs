@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.BP.Activities
     public class LoadPartialCodeMatchesInput
     {
         public RoutingDatabase RoutingDatabase { get; set; }
-        public HashSet<CustomerRouteDefinition> AffectedCustomerRoutes { get; set; }
+        public List<CustomerRouteData> AffectedCustomerRoutes { get; set; }
     }
 
     public class LoadPartialCodeMatchesOutput
@@ -30,18 +30,18 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
 
         [RequiredArgument]
-        public InArgument<HashSet<CustomerRouteDefinition>> AffectedCustomerRoutes { get; set; }
+        public InArgument<List<CustomerRouteData>> AffectedCustomerRoutes { get; set; }
 
         [RequiredArgument]
         public OutArgument<List<RoutingCodeMatches>> RoutingCodeMatchesList { get; set; }
 
         protected override LoadPartialCodeMatchesOutput DoWorkWithResult(LoadPartialCodeMatchesInput inputArgument, AsyncActivityHandle handle)
         {
-            HashSet<CustomerRouteDefinition> affectedCustomerRoutes = inputArgument.AffectedCustomerRoutes;
+            List<CustomerRouteData> affectedCustomerRoutes = inputArgument.AffectedCustomerRoutes;
 
             Dictionary<string, HashSet<long>> codeSaleZones = new Dictionary<string, HashSet<long>>();
 
-            foreach (CustomerRouteDefinition customerRouteDefinition in affectedCustomerRoutes)
+            foreach (CustomerRouteData customerRouteDefinition in affectedCustomerRoutes)
             {
                 HashSet<long> saleZones = codeSaleZones.GetOrCreateItem(customerRouteDefinition.Code);
                 saleZones.Add(customerRouteDefinition.SaleZoneId);

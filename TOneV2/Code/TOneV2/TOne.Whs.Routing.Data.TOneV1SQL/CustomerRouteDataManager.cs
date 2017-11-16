@@ -219,12 +219,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             throw new NotImplementedException();
         }
 
-        public HashSet<CustomerRouteDefinition> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit, out bool maximumExceeded)
+        public List<CustomerRouteData> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit, out bool maximumExceeded)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateCustomerRoutes(List<CustomerRoute> customerRoutes)
+        public void UpdateCustomerRoutes(List<CustomerRouteData> customerRouteDataList)
         {
             throw new NotImplementedException();
         }

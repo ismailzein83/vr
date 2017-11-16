@@ -19,7 +19,7 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<AffectedRouteOptionRules> AffectedRouteOptionRules { get; set; }
         [RequiredArgument]
-        public OutArgument<HashSet<CustomerRouteDefinition>> AffectedCustomerRoutes { get; set; }
+        public OutArgument<List<CustomerRouteData>> AffectedCustomerRoutes { get; set; }
         [RequiredArgument]
         public OutArgument<bool> ShouldTriggerFullRouteProcess { get; set; }
 
@@ -72,7 +72,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 return;
             }
 
-            HashSet<CustomerRouteDefinition> affectedCustomerRoutes = null;
+            List<CustomerRouteData> affectedCustomerRoutes = null;
             if (affectedRoutesList.Count > 0 || affectedRouteOptionsList.Count > 0)
             {
                 long customerRouteTotalCount = dataManager.GetTotalCount();
