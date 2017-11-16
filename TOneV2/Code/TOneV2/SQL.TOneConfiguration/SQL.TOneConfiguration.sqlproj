@@ -691,6 +691,8 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceBulkActionDraft_LoadInvoices.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceBulkActionDraft_Clear.sql" />
     <Build Include="common\Stored Procedures\sp_File_SetUsedAndUpdateSettings.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_HasData.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceUsageQueue_HasData.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
