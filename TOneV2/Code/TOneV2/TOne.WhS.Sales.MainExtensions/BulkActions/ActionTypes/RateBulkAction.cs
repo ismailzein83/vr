@@ -175,7 +175,7 @@ namespace TOne.WhS.Sales.MainExtensions
             RateCalculationMethod.CalculateRate(rateCalculationContext);
 
             newNormalRate.Rate = context.GetRoundedRate(rateCalculationContext.Rate.Value);
-            newNormalRate.BED = GetNewNormalRateBED(zoneItem, newNormalRate.Rate,context.OwnerType, context.NewRateDayOffset, context.IncreasedRateDayOffset, context.DecreasedRateDayOffset);
+            newNormalRate.BED = GetNewNormalRateBED(zoneItem, newNormalRate.Rate, context.OwnerType, context.NewRateDayOffset, context.IncreasedRateDayOffset, context.DecreasedRateDayOffset);
 
             newRates.Add(newNormalRate);
             context.ZoneItem.NewRates = newRates;
@@ -231,10 +231,11 @@ namespace TOne.WhS.Sales.MainExtensions
 
         private DateTime GetNewNormalRateBED(ZoneItem zoneItem, decimal newRate, SalePriceListOwnerType ownerType, int newRateDayOffset, int increasedRateDayOffset, int decreasedRateDayOffset)
         {
-            if (BED.HasValue)
-                return BED.Value;
             if (zoneItem.IsCountryNew)
                 return zoneItem.CountryBED.Value;
+
+            if (BED.HasValue)
+                return BED.Value;
 
             DateTime newNormalRateBED;
             DateTime todayPlusOffset = GetTodayPlusOffset(zoneItem.CurrentRate, newRate, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset);
