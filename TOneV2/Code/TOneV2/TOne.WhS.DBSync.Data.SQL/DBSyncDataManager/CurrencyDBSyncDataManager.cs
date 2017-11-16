@@ -26,7 +26,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("Symbol", typeof(string));
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("SourceID", typeof(string));
-           
+
             dt.BeginLoadData();
             foreach (var item in currencies)
             {
@@ -43,8 +43,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, Currency> GetCurrencies(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] ,[Symbol]  ,[Name] ,[SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CurrencyMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] ,[Symbol]  ,[Name] ,[SourceID] FROM {0} where SourceID is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), CurrencyMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public Currency CurrencyMapper(IDataReader reader)
