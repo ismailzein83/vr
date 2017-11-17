@@ -119,11 +119,6 @@ namespace Vanrise.Common.Business
         {
             Func<VRLocalizationModule, bool> filterExpression = (item) =>
             {
-                if (filter != null)
-                {
-                    if (filter.ExcludedIds != null && filter.ExcludedIds.Contains(item.VRLocalizationModuleId))
-                        return false;
-                }
                 return true;
             };
             return this.GetCachedVRLocalizationModules().MapRecords(VRLocalizationModuleInfoMapper, filterExpression).OrderBy(item => item.Name);

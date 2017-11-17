@@ -13,7 +13,7 @@ namespace Vanrise.Common.Data.SQL
     public class VRLocalizationLanguageDataManager:BaseSQLDataManager,IVRLocalizationLanguageDataManager
     {
         public VRLocalizationLanguageDataManager()
-            : base(GetConnectionStringName("VRLocalizationDBDBConnStringKey", "VRLocalizationDBDBConnString"))
+            : base(GetConnectionStringName("VRLocalizationDBConnStringKey", "VRLocalizationDBConnString"))
         {
 
         }

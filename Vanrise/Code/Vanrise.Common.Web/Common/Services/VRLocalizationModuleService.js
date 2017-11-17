@@ -29,10 +29,6 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRLocalization/Module/VRLocalizationModuleEditor.html', parameters, settings);
         }
 
-        function getEntityUniqueName() {
-            return "VR_Common_Connection";
-        }
-
         return {
             addVRLocalizationModule: addVRLocalizationModule,
             editVRLocalizationModule: editVRLocalizationModule

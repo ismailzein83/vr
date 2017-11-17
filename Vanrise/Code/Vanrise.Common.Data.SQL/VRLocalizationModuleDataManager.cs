@@ -9,10 +9,10 @@ using System.Data;
 
 namespace Vanrise.Common.Data.SQL
 {
-    class VRLocalizationModuleDataManager: BaseSQLDataManager,IVRLocalizationModuleDataManager
+    public class VRLocalizationModuleDataManager: BaseSQLDataManager,IVRLocalizationModuleDataManager
     {
                 public VRLocalizationModuleDataManager()
-            : base(GetConnectionStringName("VRLocalizationDBDBConnStringKey", "VRLocalizationDBDBConnString"))
+            : base(GetConnectionStringName("VRLocalizationDBConnStringKey", "VRLocalizationDBConnString"))
         {
 
         }

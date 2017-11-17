@@ -52,7 +52,6 @@ app.directive("vrCommonLocalizationmoduleSelector", ['VRCommon_VRLocalizationMod
                     var filter;
 
                     if (payload != undefined) {
-                        console.log(payload);
 
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;

@@ -8,7 +8,5 @@ namespace Vanrise.Entities
 {
     public class VRLocalizationModuleInfoFilter
     {
-        public List<Guid> ExcludedIds { get; set; }
-
     }
 }

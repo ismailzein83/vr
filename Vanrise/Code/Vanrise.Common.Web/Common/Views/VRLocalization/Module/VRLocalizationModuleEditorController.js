@@ -11,8 +11,6 @@
         var vrLocalizationModuleId;
         var vrLocalizationModuleEntity;
 
-        var localizationModuleSelectorAPI;
-        var localizationModuleSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -29,11 +27,6 @@
         function defineScope() {
 
             $scope.scopeModel = {};
-
-            $scope.scopeModel.onLocalizationModuleSelectorReady = function (api) {
-                localizationModuleSelectorAPI = api;
-                localizationModuleSelectorReadyDeferred.resolve();
-            };
 
             $scope.saveVRLocalizationModule = function () {
                 if (isEditMode)
@@ -86,24 +79,6 @@
                 if (vrLocalizationModuleEntity != undefined) {
                     $scope.scopeModel.name = vrLocalizationModuleEntity.Name;
                 }
-            }
-
-            function loadLocalizationModuleSelector() {
-                var localizationModuleSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                localizationModuleSelectorReadyDeferred.promise.then(function () {
-                    var localizationModuleSelectorPayload;
-                    if (vrLocalizationModuleEntity != undefined) {
-
-                        localizationModuleSelectorPayload = {
-                            selectedIds: undefined,
-                            filter: {
-                                ExcludedIds: [vrLocalizationModuleId]
-                            }
-                        };
-                    }
-                    VRUIUtilsService.callDirectiveLoad(localizationModuleSelectorAPI, localizationModuleSelectorPayload, localizationModuleSelectorLoadDeferred);
-                });
-                return localizationModuleSelectorLoadDeferred.promise;
             }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
