@@ -60,6 +60,7 @@
     <Compile Include="IVREventHandlerDataManager.cs" />
     <Compile Include="IVRExclusiveSessionDataManager.cs" />
     <Compile Include="IVRLocalizationLanguageDataManager.cs" />
+    <Compile Include="IVRLocalizationTextResourceDataManager.cs" />
     <Compile Include="IVRLoggableEntityDataManager.cs" />
     <Compile Include="IVRObjectTrackingDataManager.cs" />
     <Compile Include="IVRRuleDataManager.cs" />
