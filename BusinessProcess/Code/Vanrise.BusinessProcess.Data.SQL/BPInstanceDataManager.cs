@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Text;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
@@ -102,17 +103,39 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId)
         {
-            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsByDefinitionId]", BPInstanceMapper, definitionId, String.Join(",", acceptableBPStatuses.Select(itm => (int)itm)), maxCounts, serviceInstanceId);
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.Append("SELECT TOP(");
+            queryBuilder.Append(maxCounts);
+            queryBuilder.Append(") ");
+            queryBuilder.Append(BPInstanceSELECTCOLUMNS);
+            queryBuilder.Append(" FROM bp.[BPInstance] bp WITH(NOLOCK) WHERE [DefinitionID] = '");
+            queryBuilder.Append(definitionId);
+            queryBuilder.Append("' AND ServiceInstanceID = '");
+            queryBuilder.Append(serviceInstanceId);
+            queryBuilder.Append("' AND ");
+            queryBuilder.Append(BuildStatusesFilter(acceptableBPStatuses));
+            queryBuilder.Append(" ORDER BY bp.[ID]");
+            return GetItemsText(queryBuilder.ToString(), BPInstanceMapper, null);
         }
 
         public List<BPInstance> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses)
         {
-            return GetItemsSP("[bp].[sp_BPInstance_GetPendingsInfo]", BPInstanceMapper, String.Join(",", statuses.Select(itm => (int)itm)));
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.Append("SELECT ");
+            queryBuilder.Append(BPInstanceSELECTCOLUMNS);
+            queryBuilder.Append(" FROM bp.[BPInstance] bp WHERE ");
+            queryBuilder.Append(BuildStatusesFilter(statuses));
+            queryBuilder.Append(" ORDER BY bp.[ID]");
+            return GetItemsText(queryBuilder.ToString(), BPInstanceMapper, null);
         }
 
         public List<long> GetInstanceIdsHavingChildren(IEnumerable<BPInstanceStatus> statuses)
         {
-            return GetItemsSP("bp.sp_BPInstance_GetInstanceIdsHavingChildren", (reader) => (long)reader["ParentID"], String.Join(",", statuses.Select(itm => (int)itm)));
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.Append("SELECT bp.[ParentID] FROM bp.[BPInstance] bp WITH(NOLOCK) WHERE bp.[ParentID] IS NOT NULL AND ");
+            queryBuilder.Append(BuildStatusesFilter(statuses));
+            queryBuilder.Append(" GROUP by bp.[ParentID] ");
+            return GetItemsText(queryBuilder.ToString(), (reader) => (long)reader["ParentID"], null);
         }
 
         public void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, Guid? workflowInstanceId)
@@ -169,6 +192,22 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         #region mapper
 
+        const string BPInstanceSELECTCOLUMNS = @" bp.[ID]
+	  ,[Title]
+      ,[ParentID]
+      ,[DefinitionID]
+      ,[WorkflowInstanceID]
+      ,[InputArgument]
+	  , [CompletionNotifier]
+      ,[ExecutionStatus]
+      ,[LastMessage]
+	   ,EntityID
+      ,[ViewRequiredPermissionSetId]
+      ,[CreatedTime]
+      ,[StatusUpdatedTime]      
+      ,[InitiatorUserId]
+	  ,[ServiceInstanceID] ";
+
         private BPInstance BPInstanceMapper(IDataReader reader)
         {
             BPInstance instance = new BPInstance
@@ -207,6 +246,15 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 BPDefinitionID = GetReaderValue<Guid>(reader, "DefinitionID")
             };
         }
+
+        private string BuildStatusesFilter(IEnumerable<BPInstanceStatus> statuses)
+        {
+            if (statuses == null || statuses.Count() == 0)
+                return null;
+            else
+                return String.Concat(" bp.ExecutionStatus in (", String.Join(",", statuses.Select(itm => (int)itm)), ") ");
+        }
+
         #endregion
     }
 }
