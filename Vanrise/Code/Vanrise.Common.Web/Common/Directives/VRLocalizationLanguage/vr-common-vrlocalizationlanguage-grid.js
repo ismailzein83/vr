@@ -69,7 +69,7 @@ app.directive("vrCommonLocalizationlanguageGrid", ["VRNotificationService", 'VRC
             function editVRLocalizationLanguage(vrLocalizationLanguageItem) {
                 var onVRLocalizationLanguageUpdated = function (updatedvrLocalizationLanguage) {
                     gridAPI.itemUpdated(updatedvrLocalizationLanguage);
-                }
+                };
                 VRCommon_VRLocalizationLanguageService.editVRLocalizationLanguage(vrLocalizationLanguageItem.VRLanguageId, onVRLocalizationLanguageUpdated);
             }
         }
