@@ -129,8 +129,12 @@
                         </vr-validator>
                     </vr-row>
                 </vr-tab>
-                <vr-tab ng-show="false" header="'Bad Record Settings'">
-                    <div><p>Under Construction</p></div>
+                <vr-tab header="'Bad Record Settings'">
+                    <vr-columns width="fullrow">
+                        <vr-section title="Bad CDR Criteria" collapsible>
+                            <vr-genericdata-recordfilter on-ready="scopeModel.onBadRecordRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
+                        </vr-section>
+                    </vr-columns>
                 </vr-tab>
 
             </vr-tabs>

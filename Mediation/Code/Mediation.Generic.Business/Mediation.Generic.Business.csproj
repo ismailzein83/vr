@@ -91,6 +91,7 @@
     <Compile Include="MediationCommittedIdManager.cs" />
     <Compile Include="MediationDefinitionManager.cs" />
     <Compile Include="MediationProcessContext.cs" />
+    <Compile Include="BadMediationRecordsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MediationRecordsManager.cs" />
   </ItemGroup>

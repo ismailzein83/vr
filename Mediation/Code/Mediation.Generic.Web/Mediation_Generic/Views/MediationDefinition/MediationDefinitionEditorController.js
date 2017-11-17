@@ -9,6 +9,7 @@
         var isEditMode;
         var mediationDefinitionId;
         var mediationDefinitionEntity;
+        var badFilterGroup;
         var gridAPI;
         var configTypes = [];
         //#region Definition Tab
@@ -41,6 +42,9 @@
         var dataTransformationDefinitionRecordParsedSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         //#endregion
+
+        var badRecordFilterDirectiveAPI;
+        var badRecordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -88,6 +92,8 @@
                         dataRecordTypeId: selectedParsedDataRecordTypeId
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataParsedRecordTypeFieldsTimeSelectorAPI, timePayload, setTimeLoader, dataParsedRecordTypeSelectedPromiseDeferred);
+
+                    loadBadRecordFilterDirective();
                 }
             };
 
@@ -174,6 +180,14 @@
             };
 
             //#endregion 
+
+            //#region
+            $scope.scopeModel.onBadRecordRecordFilterDirectiveReady = function (api) {
+                badRecordFilterDirectiveAPI = api;
+                badRecordFilterDirectiveReadyDeferred.resolve();
+            };
+            //#endregion
+
             $scope.hasSaveMediationDefinition = function () {
                 if (isEditMode) {
                     return Mediation_Generic_MediationDefinitionAPIService.HasUpdateMediationDefinition();
@@ -223,7 +237,6 @@
                 return null;
             };
 
-
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
             };
@@ -238,8 +251,10 @@
             if (isEditMode) {
                 getMediationDefinition().then(function () {
                     loadDataRecordTypes().then(function () {
-                        loadAllControls().finally(function () {
-                            mediationDefinitionEntity = undefined;
+                        loadAllControls().then(function () {
+                            loadBadRecordFilterDirective();
+                        }).finally(function () {
+                            //mediationDefinitionEntity = undefined;
                         });
                     });
 
@@ -386,6 +401,27 @@
             return UtilsService.waitMultiplePromises(promises);
         }
 
+        function loadBadRecordFilterDirective() {
+            var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+            UtilsService.waitMultiplePromises([badRecordFilterDirectiveReadyDeferred.promise]).then(function () {
+
+                VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataParsedRecordTypeSelectorAPI.getSelectedIds()).then(function (response) {
+                    var dataRecordFieldsInfo = response;
+
+                    var recordFilterDirectivePayload = {
+                        context: buildContext(dataRecordFieldsInfo)
+                    };
+
+                    recordFilterDirectivePayload.FilterGroup = mediationDefinitionEntity != undefined && mediationDefinitionEntity.BadCDRIdentificationSettings != undefined ? mediationDefinitionEntity.BadCDRIdentificationSettings.BadCDRFilterGroup : undefined;
+
+                    VRUIUtilsService.callDirectiveLoad(badRecordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
+                });
+            });
+
+            return recordFilterDirectiveLoadDeferred.promise;
+        }
+
         function loadParsedIdentificationSection() {
 
         }
@@ -463,6 +499,7 @@
                 ParsedRecordTypeId: dataParsedRecordTypeSelectorAPI.getSelectedIds(),
                 ParsedRecordIdentificationSetting: getParsedRecordIdentificationSetting(),
                 ParsedTransformationSettings: getParsedTransformationSettings(),
+                BadCDRIdentificationSettings: getBadCDRIdentificationSettings(),
                 OutputHandlers: buildHandlersGridData($scope.scopeModel.handlers)
             };
             return item;
@@ -484,6 +521,27 @@
                 Handler: rec.Handler,
                 HandlerType: handlerTypeConfig != null && handlerTypeConfig.Title || null
             };
+        }
+
+        function buildContext(dataRecordFieldsInfo) {
+            var context = {
+                getFields: function () {
+                    var fields = [];
+                    if (dataRecordFieldsInfo != undefined) {
+                        for (var i = 0; i < dataRecordFieldsInfo.length; i++) {
+                            var dataRecordField = dataRecordFieldsInfo[i].Entity;
+
+                            fields.push({
+                                FieldName: dataRecordField.Name,
+                                FieldTitle: dataRecordField.Title,
+                                Type: dataRecordField.Type
+                            });
+                        }
+                    }
+                    return fields;
+                }
+            };
+            return context;
         }
 
         function addFilter(dataItem) {
@@ -534,8 +592,7 @@
         }
 
         function loadFields() {
-            var obj = { DataRecordTypeId: dataParsedRecordTypeSelectorAPI.getSelectedIds() };
-            var serializedFilter = UtilsService.serializetoJson(obj);
+
             return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataParsedRecordTypeSelectorAPI.getSelectedIds(), undefined);
         }
 
@@ -555,6 +612,11 @@
             };
         }
 
+        function getBadCDRIdentificationSettings() {
+            return {
+                BadCDRFilterGroup: badRecordFilterDirectiveAPI.getData().filterObj
+            };
+        }
         function getCookedCDRDataStoreSetting() {
             return {
                 DataRecordStorageId: dataStoreSelectorAPI.getSelectedIds()

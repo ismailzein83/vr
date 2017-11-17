@@ -78,6 +78,7 @@
     <Compile Include="MediationDefinition\MediationOutputHandler.cs" />
     <Compile Include="MediationDefinition\MediationOutputHandlerConfig.cs" />
     <Compile Include="Managers\MediationManagerFactory.cs" />
+    <Compile Include="BadRecord.cs" />
     <Compile Include="MultiLegSessionIdEntity.cs" />
     <Compile Include="OutputHandlerExecutionEntity.cs" />
     <Compile Include="PreparedRecordsBatch.cs" />

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Data;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Queueing;
 
 namespace Mediation.Generic.Entities
@@ -16,10 +17,11 @@ namespace Mediation.Generic.Entities
         public string Name { get; set; }
         public Guid ParsedRecordTypeId { get; set; }
         public Guid CookedRecordTypeId { get; set; }
-        public ParsedRecordIdentificationSetting ParsedRecordIdentificationSetting { get; set; }
-        public ParsedTransformationSettings ParsedTransformationSettings { get; set; }
         public List<MediationOutputHandlerDefinition> OutputHandlers { get; set; }
         public Guid ExecutionFlowDefinitionId { get; set; }
+        public ParsedRecordIdentificationSetting ParsedRecordIdentificationSetting { get; set; }
+        public ParsedTransformationSettings ParsedTransformationSettings { get; set; }
+        public BadCDRIdentificationSettings BadCDRIdentificationSettings { get; set; }
     }
 
     public class ParsedRecordIdentificationSetting
@@ -43,5 +45,10 @@ namespace Mediation.Generic.Entities
         public string OutputRecordName { get; set; }
 
         public MediationOutputHandler Handler { get; set; }
+    }
+
+    public class BadCDRIdentificationSettings
+    {
+        public RecordFilterGroup BadCDRFilterGroup { get; set; }
     }
 }

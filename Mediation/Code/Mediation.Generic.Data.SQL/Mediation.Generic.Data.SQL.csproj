@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="MediationCommittedIdDataManager.cs" />
     <Compile Include="MediationDefinitionDataManager.cs" />
+    <Compile Include="BadMediationRecordsDataManager.cs" />
     <Compile Include="MultiLegSessionIdDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MediationRecordsDataManager.cs" />
