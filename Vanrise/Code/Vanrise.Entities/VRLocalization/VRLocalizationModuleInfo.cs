@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    class VRLocalizationModuleInfo
+    public class VRLocalizationModuleInfo
     {
+        public Guid LocalizationModuleId { get; set; }
+
+        public string Name { get; set; }
     }
 }

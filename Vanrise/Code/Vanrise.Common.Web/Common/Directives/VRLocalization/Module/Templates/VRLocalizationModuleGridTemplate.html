@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <title></title>
-</head>
-<body>
+﻿<vr-datagrid datasource="scopeModel.vrLocalizationModules"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="VRModuleId">
+    <vr-datagridcolumn headertext="'Id'" field="'VRLocalizationModuleId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
 
-</body>
-</html>
+</vr-datagrid>

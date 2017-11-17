@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    class VRLocalizationModuleInfoFilter
+    public class VRLocalizationModuleInfoFilter
     {
+        public List<Guid> ExcludedIds { get; set; }
+
     }
 }

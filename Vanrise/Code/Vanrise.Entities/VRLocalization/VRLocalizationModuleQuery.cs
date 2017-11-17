@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    class VRLocalizationModuleQuery
+    public class VRLocalizationModuleQuery
     {
+        public string Name { get; set; }
+
     }
 }
