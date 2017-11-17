@@ -92,6 +92,14 @@ namespace Vanrise.AccountBalance.Business.Extensions
             dataManager.GetLiveBalancesToClearAlert(ruleTypeSettings.AccountTypeId, (liveBalance) => context.OnBalanceInfoLoaded(new AlertRuleEntityBalanceInfo(liveBalance)));
         }
 
+        public override bool HasLiveBalancesUpdateData(IVRBalanceAlertRuleHasLiveBalancesUpdateDataContext context)
+        {
+            AccountBalanceAlertRuleTypeSettings ruleTypeSettings = GetRuleTypeSettings(context);
+
+            ILiveBalanceDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<ILiveBalanceDataManager>();
+            return dataManager.HasLiveBalancesUpdateData(ruleTypeSettings.AccountTypeId);
+        }
+
         public override string GetEntityName(IVRBalanceAlertRuleGetEntityNameContext context)
         {
             AccountBalanceAlertRuleTypeSettings ruleTypeSettings = GetRuleTypeSettings(context);

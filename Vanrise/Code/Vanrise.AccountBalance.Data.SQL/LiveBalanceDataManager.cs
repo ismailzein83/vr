@@ -102,6 +102,12 @@ namespace Vanrise.AccountBalance.Data.SQL
                      }
                  }, accountTypeId);
         }
+
+        public bool HasLiveBalancesUpdateData(Guid accountTypeId)
+        {
+            return Convert.ToBoolean(ExecuteScalarSP("[VR_AccountBalance].[sp_LiveBalance_HasBalancesUpdateData]", accountTypeId));
+        }
+
         public void UpdateBalanceLastAlertInfos(List<LiveBalanceLastThresholdUpdateEntity> updateEntities)
         {
             DataTable lastThresholdToUpdate = GetLastThresholdUpdateTable();
@@ -242,7 +248,7 @@ namespace Vanrise.AccountBalance.Data.SQL
                 CurrencyId = GetReaderValue<int>(reader, "CurrencyID"),
                 BED = GetReaderValue<DateTime?>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
-                Status=GetReaderValue<VRAccountStatus>(reader, "Status"),
+                Status = GetReaderValue<VRAccountStatus>(reader, "Status"),
             };
         }
 
@@ -343,7 +349,7 @@ namespace Vanrise.AccountBalance.Data.SQL
 
             if (query.Sign != null)
                 whereBuilder.Append(String.Format(@" AND  lb.CurrentBalance {0} {1}", query.Sign, query.Balance));
-           
+
             if (query.Status.HasValue)
                 whereBuilder.Append(String.Format(@" AND  lb.[Status] = {0} ", (int)query.Status.Value));
 
@@ -370,6 +376,6 @@ namespace Vanrise.AccountBalance.Data.SQL
         #endregion
 
 
-      
+
     }
 }
