@@ -76,7 +76,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (customerZoneNotifications.Any())
                         {
                             int salePricelistTemplateId = _carrierAccountManager.GetCustomerPriceListTemplateId(customerId);
-                            long fileId = AddPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, pricelistType, salePricelistTemplateId, customerPriceList.CurrencyId);
+                            long fileId = AddPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, customerPriceList.PriceList.PriceListType.Value, salePricelistTemplateId, customerPriceList.CurrencyId);
                             customerPriceList.PriceList.FileId = fileId;
                             pricelistIds.Add(customerPriceList.PriceList.PriceListId);
                         }
