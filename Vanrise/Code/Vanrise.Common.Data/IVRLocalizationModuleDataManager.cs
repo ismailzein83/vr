@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.Entities
+namespace Vanrise.Common.Data
 {
-    public class VRLocalizationLanguageFilter
+    interface IVRLocalizationModuleDataManager
     {
-        public List<Guid> ExcludedIds { get; set; }
     }
 }

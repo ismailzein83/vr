@@ -163,9 +163,14 @@
     <Compile Include="VRExclusiveSession\VRExclusiveSessionTypeSettings.cs" />
     <Compile Include="VRLocalization\VRLocalizationLanguage.cs" />
     <Compile Include="VRLocalization\VRLocalizationLanguageDetail.cs" />
-    <Compile Include="VRLocalization\VRLocalizationLanguageFilter.cs" />
+    <Compile Include="VRLocalization\VRLocalizationLanguageInfoFilter.cs" />
     <Compile Include="VRLocalization\VRLocalizationLanguageInfo.cs" />
     <Compile Include="VRLocalization\VRLocalizationLanguageQuery.cs" />
+    <Compile Include="VRLocalization\VRLocalizationModule.cs" />
+    <Compile Include="VRLocalization\VRLocalizationModuleDetail.cs" />
+    <Compile Include="VRLocalization\VRLocalizationModuleInfoFilter.cs" />
+    <Compile Include="VRLocalization\VRLocalizationModuleInfo.cs" />
+    <Compile Include="VRLocalization\VRLocalizationModuleQuery.cs" />
     <Compile Include="VRLocalization\VRLocalizationTextResource.cs" />
     <Compile Include="VRLocalization\VRLocalizationTextResourceTranslation.cs" />
     <Compile Include="VRMail\VRMail.cs" />

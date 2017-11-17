@@ -61,6 +61,7 @@
     <Compile Include="VREventHandlerDataManager.cs" />
     <Compile Include="VRExclusiveSessionDataManager.cs" />
     <Compile Include="VRLocalizationLanguageDataManager.cs" />
+    <Compile Include="VRLocalizationModuleDataManager.cs" />
     <Compile Include="VRLocalizationTextResourceDataManager.cs" />
     <Compile Include="VRLoggableEntityDataManager.cs" />
     <Compile Include="VRObjectTrackingDataManager.cs" />

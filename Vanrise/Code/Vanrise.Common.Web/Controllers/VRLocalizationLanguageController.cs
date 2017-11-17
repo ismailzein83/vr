@@ -49,7 +49,7 @@ namespace Vanrise.Common.Web.Controllers
         public IEnumerable<VRLocalizationLanguageInfo> GetVRLocalizationLanguageInfo(string filter = null)
         {
 
-            VRLocalizationLanguageFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRLocalizationLanguageFilter>(filter) : null;
+            VRLocalizationLanguageInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRLocalizationLanguageInfoFilter>(filter) : null;
             return _manager.GetVRLocalizationLanguagesInfo(deserializedFilter);
         }
 

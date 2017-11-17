@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Vanrise.Common.Business.VRLocalization
+namespace Vanrise.Common.Business
 {
     public class VRLocalizationTextResourceManager
     {

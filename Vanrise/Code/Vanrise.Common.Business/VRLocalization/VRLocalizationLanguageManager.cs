@@ -127,7 +127,7 @@ namespace Vanrise.Common.Business
             return vrLocalizationLanguageDetail;
         }
 
-        public IEnumerable<VRLocalizationLanguageInfo> GetVRLocalizationLanguagesInfo(VRLocalizationLanguageFilter filter)
+        public IEnumerable<VRLocalizationLanguageInfo> GetVRLocalizationLanguagesInfo(VRLocalizationLanguageInfoFilter filter)
         {
             Func<VRLocalizationLanguage, bool> filterExpression = (x) =>
             {
