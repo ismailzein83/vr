@@ -85,11 +85,11 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, WhS_BE_Zon
 
             switch (display) {
 
-                case WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value: return currentItem.title;
+                case WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value: currentItem.isNumber = false; return currentItem.title;
 
-                case WhS_BE_ZoneRouteOptionsEnum.SupplierRate.value: return currentItem.ConvertedSupplierRate;
+                case WhS_BE_ZoneRouteOptionsEnum.SupplierRate.value: currentItem.isNumber = true; return currentItem.ConvertedSupplierRate;
 
-                default: return currentItem.ConvertedSupplierRate;
+                default: currentItem.isNumber = true; return currentItem.ConvertedSupplierRate;
             }
         }
 
