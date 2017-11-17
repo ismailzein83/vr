@@ -31,7 +31,12 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                 var automaticSaveInvoiceToFileActionSettings = context.DefinitionSettings as AutomaticSaveInvoiceToFileAction;
                 automaticSaveInvoiceToFileActionSettings.ThrowIfNull("automaticSaveInvoiceToFileActionSettings");
                 InvoiceEmailActionManager invoiceEmailActionManager = new InvoiceEmailActionManager();
-
+                if (InvoiceToFileActionSets == null || InvoiceToFileActionSets.Count == 0 || !InvoiceToFileActionSets.Any(x => x.IsEnabled))
+                {
+                    context.ErrorMessage = "Cannot save invoice to file. Reason: no file options specified.";
+                    context.IsErrorOccured = false;
+                }
+                bool actionExecuted = false;
                 foreach (var invoiceToFileActionSet in InvoiceToFileActionSets)
                 {
                     if (invoiceToFileActionSet.IsEnabled)
@@ -54,6 +59,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                         {
                             if (invoiceToFileActionSet.Attachments != null)
                             {
+                              
                                 invoiceType.Settings.InvoiceAttachments.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
                                 foreach (var attachment in invoiceToFileActionSet.Attachments)
                                 {
@@ -72,7 +78,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                                             string fileName = string.Format("{0}.{1}", invoicefile.Name, invoicefile.ExtensionType);
                                             string fullpath = Path.Combine(this.LocationPath, fileName);
                                             File.WriteAllBytes(fullpath, invoicefile.Content);
-
+                                           
                                         }
                                         else
                                         {
@@ -81,9 +87,15 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                                         }
                                     }
                                 }
+                                actionExecuted = true;
                             }
                         }
                     }
+                }
+                if (!actionExecuted)
+                {
+                    context.ErrorMessage = "Cannot save invoice to file. Reason: no file option specified.";
+                    context.IsErrorOccured = false;
                 }
             }
 

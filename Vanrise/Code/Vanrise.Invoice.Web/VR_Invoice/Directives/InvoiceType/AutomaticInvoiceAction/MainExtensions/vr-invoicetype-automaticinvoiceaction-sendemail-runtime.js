@@ -41,6 +41,19 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                     mailMessageTemplateSelectorAPI = api;
                     mailMessageTemplateSelectorReadyDeferred.resolve();
                 };
+                $scope.scopeModel.validateEmailAttachments = function () {
+                    if(!isAutomatic)
+                    {
+                        for(var i=0;i< ctrl.datasource.length;i++)
+                        {
+                            var dataItem = ctrl.datasource[i];
+                            if (dataItem.Entity.IsEnabled)
+                                return null;
+                        }
+                        return "Options not specified.";
+                    }
+                    return null;
+                };
                 $scope.scopeModel.showMaileTypeColumn = false;
                 $scope.scopeModel.showIncludeSentInvocies = true;
                 defineAPI();
@@ -58,6 +71,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSendemailRuntime", ["UtilsServ
                         $scope.scopeModel.showIncludeSentInvocies = !payload.isAutomatic;
                         emailActionSettings = payload.emailActionSettings;
                         actionValueSettings = payload.actionValueSettings;
+                        isAutomatic = payload.isAutomatic;
                         context = payload.context;
                         if (emailActionSettings != undefined)
                         {

@@ -4,15 +4,18 @@
     </vr-columns>
 
         <vr-columns width="fullrow">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" maxheight="300px"
-                         on-ready="onGridReady" hidegridmenu>
-                <vr-datagridcolumn fixedwidth="'50'" headertext="'Enabled'" disablesorting="true" invisibleheader>
-                    <vr-check value="dataItem.Entity.IsEnabled"></vr-check>
-                </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Type'" field="'Entity.SetName'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Attachments'" widthfactor="10" disablesorting>
-                    <vr-invoicetype-invoiceattachments-selector on-ready="dataItem.Entity.onInvoiceAttachmentSelectorReady" normal-col-num="12" hidelabel ismultipleselection isrequired="dataItem.Entity.IsEnabled"></vr-invoicetype-invoiceattachments-selector>
-                </vr-datagridcolumn>
-            </vr-datagrid>
-        </vr-columns>
+            <vr-validator validate="scopeModel.validateAttachments()">
+
+                <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" maxheight="300px"
+                             on-ready="onGridReady" hidegridmenu>
+                    <vr-datagridcolumn fixedwidth="'50'" headertext="'Enabled'" disablesorting="true" invisibleheader>
+                        <vr-check value="dataItem.Entity.IsEnabled"></vr-check>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Type'" field="'Entity.SetName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Attachments'" widthfactor="10" disablesorting>
+                        <vr-invoicetype-invoiceattachments-selector on-ready="dataItem.Entity.onInvoiceAttachmentSelectorReady" isrequired="dataItem.Entity.IsEnabled" ng-show="dataItem.Entity.IsEnabled" normal-col-num="12" hidelabel ismultipleselection isrequired="dataItem.Entity.IsEnabled"></vr-invoicetype-invoiceattachments-selector>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+</vr-columns>
 </vr-row>

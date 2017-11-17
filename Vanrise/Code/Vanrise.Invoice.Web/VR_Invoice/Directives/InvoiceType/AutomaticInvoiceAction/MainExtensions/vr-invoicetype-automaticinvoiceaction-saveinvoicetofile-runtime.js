@@ -31,9 +31,21 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSaveinvoicetofileRuntime", ["U
             var gridAPI;
             var context;
             var invoiceAttachments;
+            var isAutomatic;
             function initializeController() {
                 $scope.scopeModel = {};
                 ctrl.datasource = [];
+                $scope.scopeModel.validateAttachments = function () {
+                    if (!isAutomatic) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var dataItem = ctrl.datasource[i];
+                            if (dataItem.Entity.IsEnabled)
+                                return null;
+                        }
+                        return "Options not specified.";
+                    }
+                    return null;
+                };
                 defineAPI();
             }
 
@@ -49,6 +61,7 @@ app.directive("vrInvoicetypeAutomaticinvoiceactionSaveinvoicetofileRuntime", ["U
                         emailActionSettings = payload.emailActionSettings;
                         actionValueSettings = payload.actionValueSettings;
                         context = payload.context;
+                        isAutomatic = payload.isAutomatic;
                         $scope.scopeModel.isPathRequired = !payload.isAutomatic;
                         if (emailActionSettings != undefined)
                         {

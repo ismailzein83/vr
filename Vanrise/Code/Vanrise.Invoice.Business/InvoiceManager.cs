@@ -1005,6 +1005,7 @@ namespace Vanrise.Invoice.Business
             InvoiceBulkActionsDraftManager invoiceBulkActionsDraftManager = new InvoiceBulkActionsDraftManager();
             InvoiceBulkActionsDraftSummary invoiceBulkActionsDraftSummary = invoiceBulkActionsDraftManager.UpdateInvoiceBulkActionDraft(input.InvoiceBulkActionIdentifier, input.InvoiceTypeId, input.IsAllInvoicesSelected, input.TargetInvoicesIds);
 
+            invoiceBulkActionsDraftSummary.ThrowIfNull("invoiceBulkActionsDraftSummary");
             if (invoiceBulkActionsDraftSummary.TotalCount == 0)
                 return new ExecuteMenualInvoiceActionsOutput { Succeed = false, OutputMessage = "At least one invoice should be selected for action process" };
 

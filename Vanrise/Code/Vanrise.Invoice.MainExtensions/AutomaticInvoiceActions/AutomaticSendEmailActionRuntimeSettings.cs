@@ -58,7 +58,12 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                 VRMailManager vrMailManager = new VRMailManager();
                 InvoiceEmailActionManager invoiceEmailActionManager = new InvoiceEmailActionManager();
 
-
+                if (EmailActionAttachmentSets == null || EmailActionAttachmentSets.Count == 0 || !EmailActionAttachmentSets.Any(x=>x.IsEnabled))
+                {
+                    context.ErrorMessage = "Cannot sent invoice email. Reason: no email options specified.";
+                    context.IsErrorOccured = false;
+                }
+                bool actionExecuted = false;
                 foreach (var emailActionAttachmentSet in EmailActionAttachmentSets)
                 {
                     if (emailActionAttachmentSet.IsEnabled)
@@ -80,6 +85,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                         };
                         if (emailActionAttachmentSetDefinition.FilterCondition == null || emailActionAttachmentSetDefinition.FilterCondition.IsFilterMatch(partnerInvoiceFilterConditionContext))
                         {
+                            actionExecuted = true;
                             if (emailActionAttachmentSet.Attachments != null)
                             {
                                 invoiceType.Settings.InvoiceAttachments.ThrowIfNull("invoiceType.Settings.InvoiceAttachments");
@@ -126,6 +132,11 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                     }
 
 
+                }
+                if (!actionExecuted)
+                {
+                    context.ErrorMessage = "Cannot sent invoice email. Reason: no email option specified.";
+                    context.IsErrorOccured = false;
                 }
             }
         }
