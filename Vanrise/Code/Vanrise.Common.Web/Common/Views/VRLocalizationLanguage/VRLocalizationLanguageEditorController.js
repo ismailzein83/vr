@@ -11,6 +11,9 @@
         var vrLocalizationLanguageId;
         var vrLocalizationLanguageEntity;
 
+        var localizationLanguageSelectorAPI;
+        var localizationLanguageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -26,6 +29,11 @@
         function defineScope() {
 
             $scope.scopeModel = {};
+
+            $scope.scopeModel.onLocalizationLanguageSelectorReady = function (api) {
+                localizationLanguageSelectorAPI = api;
+                localizationLanguageSelectorReadyDeferred.resolve();
+            };
 
             $scope.saveVRLocalizationLanguage = function () {
                 if (isEditMode)
@@ -75,11 +83,30 @@
             }
 
             function loadStaticData() {
-                if (vrLocalizationLanguageEntity != undefined)
+                if (vrLocalizationLanguageEntity != undefined) {
                     $scope.scopeModel.name = vrLocalizationLanguageEntity.Name;
+                }
             }
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData])
+            function loadLocalizationLanguageSelector() {
+                var localizationLanguageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                localizationLanguageSelectorReadyDeferred.promise.then(function () {
+                    var localizationLanguageSelectorPayload;
+                    if (vrLocalizationLanguageEntity != undefined) {
+
+                        localizationLanguageSelectorPayload = {
+                            selectedIds: vrLocalizationLanguageEntity.ParentLanguageId,
+                            filter: {
+                                ExcludedIds: [vrLocalizationLanguageId]
+                            }
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(localizationLanguageSelectorAPI, localizationLanguageSelectorPayload, localizationLanguageSelectorLoadDeferred);
+                });
+                return localizationLanguageSelectorLoadDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadLocalizationLanguageSelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -91,7 +118,8 @@
         function buildVRLocalizationLanguageObjFromScope() {
             return {
                 VRLanguageId: vrLocalizationLanguageId,
-                Name: $scope.scopeModel.name
+                Name: $scope.scopeModel.name,
+                ParentLanguageId: localizationLanguageSelectorAPI.getSelectedIds()
             };
         }
 

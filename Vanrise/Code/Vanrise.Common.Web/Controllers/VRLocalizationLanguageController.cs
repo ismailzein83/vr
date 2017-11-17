@@ -43,5 +43,15 @@ namespace Vanrise.Common.Web.Controllers
         {
             return _manager.UpdateVRLocalizationLanguage(vrLocalizationLanguageItem);
         }
+
+        [HttpGet]
+        [Route("GetVRLocalizationLanguageInfo")]
+        public IEnumerable<VRLocalizationLanguageInfo> GetVRLocalizationLanguageInfo(string filter = null)
+        {
+
+            VRLocalizationLanguageFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRLocalizationLanguageFilter>(filter) : null;
+            return _manager.GetVRLocalizationLanguagesInfo(deserializedFilter);
+        }
+
     }
 }

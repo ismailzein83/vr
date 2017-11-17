@@ -15,7 +15,7 @@
                 modalScope.onVRLocalizationLanguageAdded = onVRLocalizationLanguageAdded;
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRLocalizationLanguage/VRLocalizationLanguageEditor.html', parameters, settings);
-        };
+        }
 
         function editVRLocalizationLanguage(vrLocalizationLanguageId, onVRLocalizationLanguageUpdated) {
             var settings = {};
@@ -29,6 +29,7 @@
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRLocalizationLanguage/VRLocalizationLanguageEditor.html', parameters, settings);
         }
+
         function getEntityUniqueName() {
             return "VR_Common_Connection";
         }

@@ -29,7 +29,13 @@ namespace Vanrise.Common.Business
                 return null;
             return vrLocalizationLanguages.GetRecord(vrLocalizationLanguageId);
         }
-
+        public string GetVRLocalizationLanguageName(Guid vrLocalizationLanguageId)
+        {
+            var vrLocalizationLanguage = GetVRLocalizationLanguage(vrLocalizationLanguageId);
+            if (vrLocalizationLanguage == null)
+                return null;
+            return vrLocalizationLanguage.Name;
+        }
         public InsertOperationOutput<VRLocalizationLanguageDetail> AddVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguage)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRLocalizationLanguageDetail>();
@@ -54,6 +60,7 @@ namespace Vanrise.Common.Business
 
             return insertOperationOutput;
         }
+
         public UpdateOperationOutput<VRLocalizationLanguageDetail> UpdateVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguage)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRLocalizationLanguageDetail>();
@@ -76,6 +83,7 @@ namespace Vanrise.Common.Business
 
             return updateOperationOutput;
         }
+
         public Dictionary<Guid, VRLocalizationLanguage>  GetAllLanguages()
         {
             return GetCachedVRLocalizationLanguages();
@@ -91,6 +99,7 @@ namespace Vanrise.Common.Business
                    return vrLocalizationLanguages.ToDictionary(itm => itm.VRLanguageId, itm => itm);
                });
         }
+
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRLocalizationLanguageDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRLocalizationLanguageDataManager>();
@@ -101,14 +110,45 @@ namespace Vanrise.Common.Business
                 return _dataManager.AreVRLocalizationLanguagesUpdated(ref _updateHandle);
             }
         }
+
         VRLocalizationLanguageDetail VRLocalizationLanguageDetailMapper(VRLocalizationLanguage localizationLanguage)
         {
-            return new VRLocalizationLanguageDetail()
+
+            VRLocalizationLanguageDetail vrLocalizationLanguageDetail = new Entities.VRLocalizationLanguageDetail
             {
-               VRLanguageId = localizationLanguage.VRLanguageId,
-               Name = localizationLanguage.Name,
-               ParentLanguageId = localizationLanguage.ParentLanguageId
+                VRLanguageId = localizationLanguage.VRLanguageId,
+                Name = localizationLanguage.Name,
+                ParentLanguageId = localizationLanguage.ParentLanguageId,
             };
+            if (localizationLanguage.ParentLanguageId.HasValue)
+            {
+                vrLocalizationLanguageDetail.ParentLanguageName = GetVRLocalizationLanguageName(localizationLanguage.ParentLanguageId.Value);
+            }
+            return vrLocalizationLanguageDetail;
+        }
+
+        public IEnumerable<VRLocalizationLanguageInfo> GetVRLocalizationLanguagesInfo(VRLocalizationLanguageFilter filter)
+        {
+            Func<VRLocalizationLanguage, bool> filterExpression = (x) =>
+            {
+                if(filter != null)
+                {
+                    if (filter.ExcludedIds != null && filter.ExcludedIds.Contains(x.VRLanguageId))
+                        return false;
+                }
+                return true;
+            };
+            return this.GetCachedVRLocalizationLanguages().MapRecords(VRLocalizationLanguageInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
+        public VRLocalizationLanguageInfo VRLocalizationLanguageInfoMapper(VRLocalizationLanguage vrLocalizationLanguage)
+        {
+            VRLocalizationLanguageInfo vrLocalizationLanguageInfo = new VRLocalizationLanguageInfo()
+            {
+                LocalizationLanguageId = vrLocalizationLanguage.VRLanguageId,
+                Name = vrLocalizationLanguage.Name
+            };
+            return vrLocalizationLanguageInfo;
         }
     }
 }

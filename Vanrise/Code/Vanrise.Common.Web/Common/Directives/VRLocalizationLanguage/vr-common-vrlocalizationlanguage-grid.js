@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrCommonLocalizationLanguageGrid", ["VRNotificationService", 'VRCommon_VRLocalizationLanguageAPIService', 'VRCommon_VRLocalizationLanguageService',
+app.directive("vrCommonLocalizationlanguageGrid", ["VRNotificationService", 'VRCommon_VRLocalizationLanguageAPIService', 'VRCommon_VRLocalizationLanguageService',
     function (VRNotificationService, VRCommon_VRLocalizationLanguageAPIService, VRCommon_VRLocalizationLanguageService) {
         var directiveDefinitionObject = {
             restrict: "E",
@@ -21,6 +21,7 @@ app.directive("vrCommonLocalizationLanguageGrid", ["VRNotificationService", 'VRC
         function VRLocalizationLanguageGrid($scope, ctrl, $attrs) {
             var gridAPI;
             this.initializeController = initializeController;
+
             function initializeController() {
 
                 $scope.scopeModel = {};
@@ -42,6 +43,7 @@ app.directive("vrCommonLocalizationLanguageGrid", ["VRNotificationService", 'VRC
                 };
                 defineMenuActions();
             }
+
             function defineAPI() {
                 var api = {};
 
@@ -56,6 +58,7 @@ app.directive("vrCommonLocalizationLanguageGrid", ["VRNotificationService", 'VRC
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
             function defineMenuActions() {
                 $scope.scopeModel.menuActions = [{
                     name: "Edit",
@@ -72,7 +75,5 @@ app.directive("vrCommonLocalizationLanguageGrid", ["VRNotificationService", 'VRC
         }
 
         return directiveDefinitionObject;
-
     }
-]
-    );
+]);

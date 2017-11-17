@@ -11,18 +11,23 @@
         function GetFilteredVRLocalizationLanguages(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetFilteredVRLocalizationLanguages'), input);
         }
+
         function GetVRLocalizationLanguage(vrLocalizationLanguageId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetVRLocalizationLanguage'), {
                 vrLocalizationLanguage: vrLocalizationLanguageId
             });
         }
+
         function GetVRLocalizationLanguageInfo(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRLocalizationLanguageInfo"));
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRLocalizationLanguageInfo"), {
+                filter: filter
+            });
         }
 
         function AddVRLocalizationLanguage(vrLocalizationLanguageItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "AddVRLocalizationLanguage"), vrLocalizationLanguageItem);
         }
+
         function UpdateVRLocalizationLanguage(vrLocalizationLanguageItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UpdateVRLocalizationLanguage"), vrLocalizationLanguageItem);
         }

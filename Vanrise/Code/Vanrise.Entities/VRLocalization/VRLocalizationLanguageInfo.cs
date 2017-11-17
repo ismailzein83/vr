@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class VRLocalizationLanguageDetail
+    public class VRLocalizationLanguageInfo
     {
-        public Guid VRLanguageId { get; set; }
+        public Guid LocalizationLanguageId { get; set; }
 
         public string Name { get; set; }
-
-        public Guid? ParentLanguageId { get; set; }
-
-        public string ParentLanguageName { get; set; }
     }
 }

@@ -17,20 +17,23 @@ namespace Vanrise.Common.Data.SQL
         {
 
         }
+
         public List<VRLocalizationLanguage> GetVRLocalizationLanguages()
         {
             return GetItemsSP("[VRLocalization].[sp_Language_GetAll]", VRLocalizationLanguageMapper);
         }
-         public bool Update(VRLocalizationLanguage localizationLanguage)
+
+        public bool Update(VRLocalizationLanguage localizationLanguage)
         {
-             return ExecuteNonQuerySP("[VRLocalization].[sp_Language_Update]", localizationLanguage.VRLanguageId, localizationLanguage.Name) > 0;
+            string serializedSettings = localizationLanguage.Settings != null ? Vanrise.Common.Serializer.Serialize(localizationLanguage.Settings) : null;
+             return ExecuteNonQuerySP("[VRLocalization].[sp_Language_Update]", localizationLanguage.VRLanguageId, localizationLanguage.Name, localizationLanguage.ParentLanguageId, serializedSettings) > 0;
         }
 
         public bool Insert(VRLocalizationLanguage localizationLanguage)
         {
-            return ExecuteNonQuerySP("[VRLocalization].[sp_Language_Insert]", localizationLanguage.VRLanguageId, localizationLanguage.Name) > 0;
+            string serializedSettings = localizationLanguage.Settings != null ? Vanrise.Common.Serializer.Serialize(localizationLanguage.Settings) : null;
+            return ExecuteNonQuerySP("[VRLocalization].[sp_Language_Insert]", localizationLanguage.VRLanguageId, localizationLanguage.Name, localizationLanguage.ParentLanguageId, serializedSettings) > 0;
         }
-
 
         public bool AreVRLocalizationLanguagesUpdated(ref object updateHandle)
         {
@@ -43,7 +46,8 @@ namespace Vanrise.Common.Data.SQL
             {
                 VRLanguageId = (Guid)reader["ID"],
                 Name = reader["Name"] as string,
-                ParentLanguageId = GetReaderValue<Guid?>(reader,"ParentLanguageID")        
+                ParentLanguageId = GetReaderValue<Guid?>(reader, "ParentLanguageID"),
+                Settings = Vanrise.Common.Serializer.Deserialize<VRLocalizationLanguageSettings>(reader["Settings"] as string)
             };
 
             return vrLocalizationLanguage;

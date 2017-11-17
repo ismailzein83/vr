@@ -9,15 +9,15 @@
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons">
+                <div transclude-to="buttons">                    
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
-                    <vr-button type="Add" data-onclick="scopeModel.add"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addLocalizationLanguage"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-common-localization-language-grid on-ready="scopeModel.onGridReady"></vr-common-localization-language-grid>
+                <vr-common-localizationlanguage-grid on-ready="scopeModel.onGridReady"></vr-common-localizationlanguage-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

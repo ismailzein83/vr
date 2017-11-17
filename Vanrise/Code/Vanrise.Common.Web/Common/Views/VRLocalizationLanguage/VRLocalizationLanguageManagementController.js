@@ -9,6 +9,7 @@
         var gridAPI;
 
         defineScope();
+
         load();
 
         function defineScope() {
@@ -19,7 +20,7 @@
                 gridAPI.load(buildGridQuery());
             };
 
-            $scope.scopeModel.add = function () {
+            $scope.scopeModel.addLocalizationLanguage = function () {
                 var onVRLocalizationLanguageAdded = function (addedItem) {
                     gridAPI.onVRLocalizationLanguageAdded(addedItem);
                 };
@@ -32,6 +33,7 @@
             };
 
         }
+
         function load() {
         }
 
