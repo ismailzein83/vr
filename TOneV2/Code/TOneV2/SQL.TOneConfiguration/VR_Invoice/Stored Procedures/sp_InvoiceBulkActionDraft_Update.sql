@@ -25,5 +25,9 @@ BEGIN
 		SELECT @InvoiceBulkActionIdentifier,@InvoiceTypeId,InvoiceId FROM @TargetInvoicesIdsTable
 	END
 	
+	Select Count(*) as TotalCount, min(FromDate) as MinimumFrom, max(ToDate) as MaximumTo
+	FROM [VR_Invoice].InvoiceBulkActionDraft  ibad with(nolock)
+	join [VR_Invoice].Invoice inv on ibad.InvoiceId = inv.ID
+	WHERE InvoiceBulkActionIdentifier = @InvoiceBulkActionIdentifier
 
 END

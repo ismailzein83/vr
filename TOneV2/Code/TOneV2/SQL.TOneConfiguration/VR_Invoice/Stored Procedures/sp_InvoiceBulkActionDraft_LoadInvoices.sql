@@ -1,4 +1,4 @@
-﻿create PROCEDURE [VR_Invoice].sp_InvoiceBulkActionDraft_LoadInvoices
+﻿CREATE PROCEDURE [VR_Invoice].[sp_InvoiceBulkActionDraft_LoadInvoices]
 	@InvoiceBulkActionIdentifier uniqueidentifier
 AS
 BEGIN
@@ -24,4 +24,5 @@ BEGIN
 	JOIN    [VR_Invoice].InvoiceBulkActionDraft ibad 
 	ON      inv.ID = ibad.InvoiceId 
 	AND     InvoiceBulkActionIdentifier = @InvoiceBulkActionIdentifier
+	where   ISNULL(inv.IsDeleted,0) = 0 AND ISNULL(inv.IsDraft, 0) = 0
 END
