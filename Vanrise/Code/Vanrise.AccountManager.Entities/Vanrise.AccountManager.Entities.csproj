@@ -48,6 +48,8 @@
     <Compile Include="AccountManagerAssignmentConfig.cs" />
     <Compile Include="AccountManagerDefinitionConfig.cs" />
     <Compile Include="AccountManagerDetail.cs" />
+    <Compile Include="AccountManagerFilter.cs" />
+    <Compile Include="AccountManagerInfo.cs" />
     <Compile Include="AccountManagerQuery.cs" />
     <Compile Include="AccountManagerSubViewsConfig.cs" />
     <Compile Include="Definition\AccountManagerAssignmentDefinition.cs" />

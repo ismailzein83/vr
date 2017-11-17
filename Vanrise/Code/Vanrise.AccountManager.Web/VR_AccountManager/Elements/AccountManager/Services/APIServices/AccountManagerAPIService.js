@@ -18,12 +18,16 @@
         function GetAccountManagerDefinitionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAccountManagerDefinitionConfigs"));
         }
+        function GetAccountManagerInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAccountManagerInfo"), { filter: filter });
+        }
         return ({
             GetFilteredAccountManagers: GetFilteredAccountManagers,
             AddAccountManager: AddAccountManager,
             UpdateAccountManager: UpdateAccountManager,
             GetAccountManager: GetAccountManager,
-            GetAccountManagerDefinitionConfigs: GetAccountManagerDefinitionConfigs
+            GetAccountManagerDefinitionConfigs: GetAccountManagerDefinitionConfigs,
+            GetAccountManagerInfo: GetAccountManagerInfo
         });
     }
     appControllers.service("VR_AccountManager_AccountManagerAPIService", accountManagerAPIService);

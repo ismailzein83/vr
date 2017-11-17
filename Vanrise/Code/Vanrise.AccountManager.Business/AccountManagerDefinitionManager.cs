@@ -21,6 +21,20 @@ namespace Vanrise.AccountManager.Business
            BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
            return manager.GetBusinessEntityDefinition(accountManagerDefinitionId);
        }
+        public Dictionary<Guid, AccountManagerBEDefinitionSettings> GetAccountManagerDefinitionSettings()
+        {
+            BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
+            var accountManagerDefinitions = manager.GetBusinessEntityDefinitionsByConfigId(AccountManagerBEDefinitionSettings.s_configId);
+            Dictionary<Guid, AccountManagerBEDefinitionSettings> accountManagerBEDefinitionSettings = new Dictionary<Guid, AccountManagerBEDefinitionSettings>();
+            foreach (var accountManagerDefinition in accountManagerDefinitions)
+            {
+                var accountManagerDefinitionSettings = accountManagerDefinition.Value.Settings as AccountManagerBEDefinitionSettings;
+                
+              if(  accountManagerDefinitionSettings != null)
+                accountManagerBEDefinitionSettings.Add(accountManagerDefinition.Key, accountManagerDefinitionSettings);
+            }
+            return accountManagerBEDefinitionSettings;
+        }
        public AccountManagerBEDefinitionSettings GetAccountManagerDefinitionSettings(Guid accountManagerDefinitionId)
        {
            var accountManagerDefinition = GetAccountManagerDefinition(accountManagerDefinitionId);

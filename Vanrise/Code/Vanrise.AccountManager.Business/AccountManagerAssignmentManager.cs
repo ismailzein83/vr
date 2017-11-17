@@ -89,7 +89,7 @@ namespace Vanrise.AccountManager.Business
             updateErrorMessage = null;
             if (input != null)
             {
-                if (!ValidateAccountManagerAssignmentInput(accountManagerAssignment.AccountId, accountManagerAssignment.AccountManagerAssignementDefinitionId, input.BED, input.EED, out errorMessage))
+                if (!ValidateAccountManagerAssignmentInput(accountManagerAssignment.AccountId, accountManagerAssignment.AccountManagerAssignementDefinitionId, input.BED, input.EED,input.AccountManagerAssignmentId, out errorMessage))
                 {
                     updateActionSucc = TryUpdateAccountManagerAssignment(input.AccountManagerAssignmentId, input.BED, input.EED, input.AssignementSettings);
                 }
@@ -102,6 +102,7 @@ namespace Vanrise.AccountManager.Business
         }
         public bool ValidateAccountManagerAssignmentInputs(List<AssignAccountManagerToAccountSetting> accounts, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, out string errorMessage)
         {
+            
             errorMessage = null;
             List<string> overLappedAccountNames = new List<string>();
             string overLappedAccountName;
@@ -116,7 +117,7 @@ namespace Vanrise.AccountManager.Business
 
                 foreach (var account in accounts)
                 {
-                    if (IsAccountOverLapped(account.AccountId, accountManagerAssignementDefinitionId, bed, eed, out overLappedAccountName))
+                    if (IsAccountOverLapped(account.AccountId, accountManagerAssignementDefinitionId, bed, eed,null, out overLappedAccountName))
                     {
                         overLappedAccountNames.Add(overLappedAccountName);
                         areOverLapped = true;
@@ -133,7 +134,7 @@ namespace Vanrise.AccountManager.Business
         {
             throw new NotImplementedException();
         }
-        public bool IsAccountOverLapped(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, out string overLappedAccountName)
+        public bool IsAccountOverLapped(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed,long? accountManagerAssignmentId, out string overLappedAccountName)
         {
             AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
             AccountManagerManager accountManagerManager = new AccountManagerManager();
@@ -143,7 +144,7 @@ namespace Vanrise.AccountManager.Business
             accountManagerAssignments = GetAccountManagerAssignmentsById(accountId, accountManagerAssignementDefinitionId);
             foreach (var accountManagerAssignment in accountManagerAssignments)
             {
-                if (Utilities.AreTimePeriodsOverlapped(bed, eed, accountManagerAssignment.BED, accountManagerAssignment.EED))
+                if (Utilities.AreTimePeriodsOverlapped(bed, eed, accountManagerAssignment.BED, accountManagerAssignment.EED) && accountManagerAssignmentId != accountManagerAssignment.AccountManagerAssignementId)
                 {
                     var accountManagerDefinitionId = accountManagerManager.GetAccountManager(accountManagerAssignment.AccountManagerId).AccountManagerDefinitionId;
                     var accountManagerAssignmentDefinition = accountManagerDefinitionManager.GetAccountManagerAssignmentDefinition(accountManagerDefinitionId, accountManagerAssignementDefinitionId);
@@ -153,7 +154,7 @@ namespace Vanrise.AccountManager.Business
             }
             return isOverlapped;
         }
-        public bool ValidateAccountManagerAssignmentInput(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, out string errorMessage)
+        public bool ValidateAccountManagerAssignmentInput(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed,long accountManagerAssignmentId, out string errorMessage)
         {
             string overLappedAccountName;
             errorMessage = null;
@@ -162,7 +163,7 @@ namespace Vanrise.AccountManager.Business
                 errorMessage = "BED cannot be greater than EED";
                 return true;
             }
-            bool isOverLapped = IsAccountOverLapped(accountId, accountManagerAssignementDefinitionId, bed, eed, out overLappedAccountName);
+            bool isOverLapped = IsAccountOverLapped(accountId, accountManagerAssignementDefinitionId, bed, eed, accountManagerAssignmentId, out overLappedAccountName);
             if (isOverLapped)
                 errorMessage = string.Format("Specified Interval overlaps with other assignments of Account(s): {0}", overLappedAccountName);
             return isOverLapped;

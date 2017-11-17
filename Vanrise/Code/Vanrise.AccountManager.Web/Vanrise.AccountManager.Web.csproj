@@ -108,6 +108,10 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -171,8 +175,10 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionGridTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerDefinitionSettings.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerGrid.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerSelectorTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AssignmentDefinitionSelectiveTemplate.html" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\Template\AccountManagerSubViewsGrid.html" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanager-selector.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-assignmentdefinition-selective.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-grid.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-assignmentdefinition-grid.js" />

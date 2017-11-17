@@ -48,6 +48,13 @@ namespace Vanrise.AccountManager.Web.Controllers
             AccountManagerManager manager = new AccountManagerManager();
             return manager.GetAccountManagerDefinitionConfigs();
         }
+        [HttpGet]
+        [Route("GetAccountManagerInfo")]
+        public IEnumerable<AccountManagerInfo> GetAccountManagerInfo(string filter = null)
+        {
+            AccountManagerFilter serializedFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<AccountManagerFilter>(filter) : null;
+            return _manager.GetAccountManagerInfo(serializedFilter);
+        }
 
     }
 }

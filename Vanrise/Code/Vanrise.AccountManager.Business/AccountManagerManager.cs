@@ -35,6 +35,20 @@ namespace Vanrise.AccountManager.Business
            var x = Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper)); 
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
        }
+       public IEnumerable<AccountManagerInfo> GetAccountManagerInfo(AccountManagerFilter filter)
+       {
+           var accountManagers = this.GetCachedAccountManagers();
+           Func<Vanrise.AccountManager.Entities.AccountManager, bool> filterExpression = (accountManager) =>
+           {
+               if (filter != null)
+               {
+                   if (accountManager.AccountManagerDefinitionId != filter.AccountManagerDefinitionId)
+                       return false;
+               }
+               return true;
+           };
+           return accountManagers.MapRecords(AccountManagerInfoMapper, filterExpression).OrderBy(x => x.UserName);
+       }
        public Vanrise.Entities.InsertOperationOutput<AccountManagerDetail> AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
        {
            int accountManagerId = -1;
@@ -103,6 +117,14 @@ namespace Vanrise.AccountManager.Business
                AccountManagerDefinitionId = accountManager.AccountManagerDefinitionId
            };
           
+       }
+       private AccountManagerInfo AccountManagerInfoMapper(Vanrise.AccountManager.Entities.AccountManager accountManager)
+       {
+           return new AccountManagerInfo
+           {
+               AccountManagerId = accountManager.AccountManagerId,
+               UserName = userManager.GetUserName(accountManager.UserId)
+           };
        }
      
        
