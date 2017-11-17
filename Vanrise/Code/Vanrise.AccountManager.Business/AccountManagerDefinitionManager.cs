@@ -15,6 +15,15 @@ namespace Vanrise.AccountManager.Business
    
     public class AccountManagerDefinitionManager
     {
+        #region Ctor
+        static BusinessEntityDefinitionManager.CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<BusinessEntityDefinitionManager.CacheManager>();
+        public BusinessEntityDefinitionManager.CacheManager GetAccountManagerCacheManager()
+        {
+            return s_cacheManager;
+        }
+        #endregion
+        
+
         #region Public Methods
         public BusinessEntityDefinition GetAccountManagerDefinition(Guid accountManagerDefinitionId)
        {
@@ -64,6 +73,8 @@ namespace Vanrise.AccountManager.Business
            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
            return manager.GetExtensionConfigurations<AccountManagerSubViewsConfig>(AccountManagerSubViewsConfig.EXTENSION_TYPE).OrderByDescending(x => x.Name);
        }
+
+     
         #endregion
     }
   
