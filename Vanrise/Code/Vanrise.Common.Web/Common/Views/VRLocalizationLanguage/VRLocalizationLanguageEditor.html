@@ -4,12 +4,10 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
-                        <vr-columns colnum="6">
+                        <vr-columns width="1/2row">
                         <vr-textbox value="scopeModel.name" label="Name" isrequired ></vr-textbox>
-                            </vr-columns>
-                        <vr-columns colnum="6">
-                            <vr-common-localizationlanguage-selector on-ready="scopeModel.onLocalizationLanguageSelectorReady" customlabel="Parent Language" ></vr-common-localizationlanguage-selector>
                         </vr-columns>
+                        <vr-common-localizationlanguage-selector on-ready="scopeModel.onLocalizationLanguageSelectorReady" customlabel="Parent Language" normal-col-num="6"></vr-common-localizationlanguage-selector>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>
