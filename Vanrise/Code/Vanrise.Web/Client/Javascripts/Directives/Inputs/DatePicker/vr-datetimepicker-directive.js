@@ -82,6 +82,10 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     $scope.ctrl.isDate = true;
                     isDate = true;
                     break;
+                case "hour": format = 'HH';
+                    $scope.ctrl.isTime = true;
+                    isTime = true;
+                    break;
                 default: format = 'DD/MM/YYYY HH:mm';
                     $scope.ctrl.isDateTime = true;
                     break;
@@ -174,15 +178,16 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         unspecifiedSecond = 59;
                         unspecifiedMillisecond = 998;
                     }
-                    if ($attrs.type == "time") {
+                    if ($attrs.type == "time" || $attrs.type == "hour") {
                         $scope.ctrl.value = {
                             $type: 'Vanrise.Entities.Time, Vanrise.Entities',
                             Hour: selectedDate.getHours(),
-                            Minute: selectedDate.getMinutes(),
-                            Second: selectedDate.getSeconds(),
-                            Millisecond: selectedDate.getMilliseconds()
+                            Minute: $attrs.type == "hour" ? unspecifiedMinute : selectedDate.getMinutes(),
+                            Second: $attrs.type == "hour" ? unspecifiedSecond : selectedDate.getSeconds(),
+                            Millisecond: $attrs.type == "hour" ? unspecifiedMillisecond : selectedDate.getMilliseconds()
                         };
                     }
+
                     else if ($attrs.type == "date") {
                         var date = new Date(selectedDate.setHours(unspecifiedHour, unspecifiedMinute, unspecifiedSecond, unspecifiedMillisecond));
                         //var date = moment.utc(selectedDate).format("L LT");
@@ -286,11 +291,11 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     var initialDate = VRDateTimeService.getNowDateTime();
                     if (ctrl.value.Hour == undefined)
                         ctrl.value.Hour = 0;
-                    if (ctrl.value.Minute == undefined)
+                    if (ctrl.value.Minute == undefined || $attrs.type == "hour")
                         ctrl.value.Minute = 0;
-                    if (ctrl.value.Second == undefined)
+                    if (ctrl.value.Second == undefined || $attrs.type == "hour")
                         ctrl.value.Second = 0;
-                    if (ctrl.value.Millisecond == undefined)
+                    if (ctrl.value.Millisecond == undefined || $attrs.type == "hour")
                         ctrl.value.Millisecond = 0;
 
                     initialDate.setHours(ctrl.value.Hour, ctrl.value.Minute, ctrl.value.Second, ctrl.value.Millisecond);
@@ -322,7 +327,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             $scope.ctrl.onBlurDirective = function (e) {
                 var dateTab = new Date(ctrl.value).toDateString().split(" ");
                 var year = parseInt(dateTab[3]);
-                if ($attrs.type != "time" && (year < 1970 || isNaN(year)) && !ctrl.readOnly && ctrl.value != undefined) {
+                if ($attrs.type != "time" && $attrs.type != "hour" && (year < 1970 || isNaN(year)) && !ctrl.readOnly && ctrl.value != undefined) {
                     ctrl.value = VRDateTimeService.getNowDateTime();
                 }
                 if ($attrs.onblurdatetime != undefined) {
@@ -390,7 +395,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 icontemplate += ' <span   class="input-group-addon vr-small-addon vanrise-inpute" ng-click="::ctrl.toggleDate($event)" ><i class="glyphicon glyphicon-calendar" ></i></span>';
 
             }
-            if (attrs.type == 'time' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime') {
+            if (attrs.type == 'time' || attrs.type == 'dateTime' || attrs.type == 'dateHour' || attrs.type == 'longDateTime' || attrs.type == 'hour') {
                 n++;
                 icontemplate += ' <span   class="input-group-addon vr-small-addon vanrise-inpute" ng-click="::ctrl.toggleTime($event)" > <i class="glyphicon glyphicon-time" ></i></span>';
 
