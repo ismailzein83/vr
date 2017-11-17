@@ -9,21 +9,21 @@ using Vanrise.Common.Business;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Common;
 using Vanrise.AccountManager.Data;
+using Vanrise.Caching;
 
 namespace Vanrise.AccountManager.Business
 {
-   
+     
     public class AccountManagerDefinitionManager
     {
         #region Ctor
-        static BusinessEntityDefinitionManager.CacheManager s_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<BusinessEntityDefinitionManager.CacheManager>();
-        public BusinessEntityDefinitionManager.CacheManager GetAccountManagerCacheManager()
+        static BusinessEntityDefinitionManager.CacheManager s_cacheManager = CacheManagerFactory.GetCacheManager<BusinessEntityDefinitionManager.CacheManager>();
+        BaseCacheManager GetCacheManager()
         {
             return s_cacheManager;
         }
         #endregion
         
-
         #region Public Methods
         public BusinessEntityDefinition GetAccountManagerDefinition(Guid accountManagerDefinitionId)
        {
@@ -74,7 +74,10 @@ namespace Vanrise.AccountManager.Business
            return manager.GetExtensionConfigurations<AccountManagerSubViewsConfig>(AccountManagerSubViewsConfig.EXTENSION_TYPE).OrderByDescending(x => x.Name);
        }
 
-     
+       public T GetCachedOrCreate<T>(Object cacheName, Func<T> createObject)
+       {
+           return GetCacheManager().GetOrCreateObject(cacheName, createObject);
+       }
         #endregion
     }
   
