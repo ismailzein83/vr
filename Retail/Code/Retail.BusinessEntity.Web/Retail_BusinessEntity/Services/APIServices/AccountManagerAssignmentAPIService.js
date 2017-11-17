@@ -19,11 +19,15 @@
         function GetAccountManagerAssignmentRuntimeEditor(accountManagerRuntimeInput) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountManagerAssignmentRuntimeEditor"), accountManagerRuntimeInput);
         }
+        function GetAccountManagerDefInfo(accountBeDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountManagerDefInfo"), { accountBeDefinitionId: accountBeDefinitionId });
+        }
         return {
             GetAccountManagerAssignments: GetAccountManagerAssignments,
             AddAccountManagerAssignment: AddAccountManagerAssignment,
             UpdateAccountManagerAssignment: UpdateAccountManagerAssignment,
-            GetAccountManagerAssignmentRuntimeEditor: GetAccountManagerAssignmentRuntimeEditor
+            GetAccountManagerAssignmentRuntimeEditor: GetAccountManagerAssignmentRuntimeEditor,
+            GetAccountManagerDefInfo: GetAccountManagerDefInfo
         };
     }
 

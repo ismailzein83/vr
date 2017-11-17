@@ -33,10 +33,11 @@ namespace Retail.BusinessEntity.Business
         {
             AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
             AccountManagerAssignmentRuntimeEditor accountManagerAssignmentRuntime = new AccountManagerAssignmentRuntimeEditor();
-            var accountManagerDefinitionSettings = accountManagerDefinitionManager.GetAccountManagerDefinitionSettings(accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId);
-            var assignmentDefinitions = accountManagerDefinitionSettings.AssignmentDefinitions;
-            accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition = accountManagerDefinitionManager.GetAccountManagerAssignmentDefinition(accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId, accountManagerAssignmentRuntimeInput.AssignmentDefinitionId);
-            if (accountManagerAssignmentRuntimeInput.AccountManagerAssignementId != null)
+            if (accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId != null)
+            {
+                accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition = accountManagerDefinitionManager.GetAccountManagerAssignmentDefinition(accountManagerAssignmentRuntimeInput.AccountManagerDefinitionId, accountManagerAssignmentRuntimeInput.AssignmentDefinitionId);
+            }
+            if (accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.HasValue)
             {
                 var accountManagerAssignmentId = accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.Value;
                 accountManagerAssignmentRuntime.AccountManagerAssignment = manager.GetAccountManagerAssignment(accountManagerAssignmentId);
@@ -84,6 +85,40 @@ namespace Retail.BusinessEntity.Business
 
 
             return updateOperationOutput;
+        }
+        public Dictionary<Guid, AccountManagerDefInfo> GetAccountManagerDefsInfo()
+        {
+            AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
+            var accountManagerDefinitionSettings = accountManagerDefinitionManager.GetAccountManagerDefinitionSettings();
+            Dictionary<Guid, AccountManagerDefInfo> accountManagerDefsInfo = new Dictionary<Guid, AccountManagerDefInfo>();
+            foreach (var accountManagerDefinitionSetting in accountManagerDefinitionSettings)
+            {
+                if (accountManagerDefinitionSetting.Value.AssignmentDefinitions != null)
+                {
+                    foreach (var accountManagerAssignment in accountManagerDefinitionSetting.Value.AssignmentDefinitions)
+                    {
+                        var accountManagerAssignmentSetings = accountManagerAssignment.Settings as RetailAccountAssignmentDefinition;
+                        if (accountManagerAssignmentSetings != null)
+                        {
+                            AccountManagerDefInfo accountManagerDefInfo = new AccountManagerDefInfo
+                            {
+                                AccountManagerDefinitionId = accountManagerDefinitionSetting.Key,
+                                AccountManagerDefinitionSettings = accountManagerDefinitionSetting.Value,
+                                AccountManagerAssignmentDefinition = accountManagerAssignment
+                            };
+                            if (!accountManagerDefsInfo.ContainsKey(accountManagerAssignmentSetings.AccountBEDefinitionId))
+                                accountManagerDefsInfo.Add(accountManagerAssignmentSetings.AccountBEDefinitionId, accountManagerDefInfo);
+                        }
+                    }
+                }
+
+            }
+            return accountManagerDefsInfo;
+        }
+        public AccountManagerDefInfo GetAccountManagerDefInfoByAccountBeDefinitionId(Guid accountBeDefinitionId)
+        {
+            var accountManagerDefsInfo = GetAccountManagerDefsInfo();
+            return accountManagerDefsInfo.GetRecord(accountBeDefinitionId);
         }
         #endregion
 

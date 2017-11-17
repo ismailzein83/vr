@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_ActionRuntimeService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_ChangeStatusActionAPIService', 'Retail_BE_AccountPackageAPIService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_ActionRuntimeService, Retail_BE_AccountBEAPIService, Retail_BE_ChangeStatusActionAPIService, Retail_BE_AccountPackageAPIService) {
+app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'Retail_BE_AccountBEService', 'Retail_BE_ActionRuntimeService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_ChangeStatusActionAPIService', 'Retail_BE_AccountPackageAPIService','Retail_BE_AccountManagerAssignmentService',
+    function (VRModalService, UtilsService, VRNotificationService, SecurityService, Retail_BE_AccountBEService, Retail_BE_ActionRuntimeService, Retail_BE_AccountBEAPIService, Retail_BE_ChangeStatusActionAPIService, Retail_BE_AccountPackageAPIService, Retail_BE_AccountManagerAssignmentService) {
 
         var actionTypes = [];
 
@@ -114,6 +114,27 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
             };
             registerActionType(actionType);
         }
+        function registerAccountManagerAssignment() {
+            var actionType = {
+                ActionTypeName: "AssignAccountManagerAccountAction",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var accountId = payload.account.AccountId;
+                    var accountActionDefinition = payload.accountActionDefinition;
+                    var onItemUpdated = payload.onItemUpdated;
+
+                    var onActionExecuted = function (updatedAccount) {
+                        if (onItemUpdated != undefined)
+                            onItemUpdated(updatedAccount);
+                    };
+                    Retail_BE_AccountManagerAssignmentService.openAccountManagerAssignmentEditor(accountBEDefinitionId, accountId, accountActionDefinition, onItemUpdated);
+                }
+            };
+            registerActionType(actionType);
+        }
 
         function registerChangeStatusAction() {
 
@@ -174,6 +195,7 @@ app.service('Retail_BE_AccountActionService', ['VRModalService', 'UtilsService',
             registerOpen360DegreeAccount: registerOpen360DegreeAccount,
             registerBPActionAccount: registerBPActionAccount,
             registerChangeStatusAction: registerChangeStatusAction,
-            registerExportRatesAction: registerExportRatesAction
+            registerExportRatesAction: registerExportRatesAction,
+            registerAccountManagerAssignment: registerAccountManagerAssignment
         });
     }]);

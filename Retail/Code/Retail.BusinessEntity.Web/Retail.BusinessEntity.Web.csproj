@@ -400,11 +400,13 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-accountmanager-accountsubviewruntime-search.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountassignmentdefinition.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountsubviewdefinition.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-assignaccountmanageraccountactionsettings-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountAssignmentDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountAssignmentRuntimeTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountManagerAccountManagerAssignmentGrid.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewRuntimeSearchTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AssignAccountManagerAccountActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccount-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccountdefinition-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccount.html" />

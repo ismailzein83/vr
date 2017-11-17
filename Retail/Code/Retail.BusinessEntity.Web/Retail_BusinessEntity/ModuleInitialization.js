@@ -7,5 +7,6 @@
     Retail_BE_DIDService.registerObjectTrackingDrillDownToDID();
     Retail_BE_AccountActionService.registerChangeStatusAction();
     Retail_BE_AccountActionService.registerExportRatesAction();
+    Retail_BE_AccountActionService.registerAccountManagerAssignment();
 }]);
 

@@ -36,10 +36,23 @@
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountManager/AccountManagerAssignmentEditor.html', parameters, modalSettings);
         }
+        function openAccountManagerAssignmentEditor(accountBEDefinitionId, accountId, accountActionDefinition, onItemUpdated) {
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId,
+                accountActionDefinition: accountActionDefinition,
+            };
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onAccountManagerAssignmentUpdated = onItemUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountManager/AccountManagerAssignmentEditor.html', parameters, settings);
+        }
 
         return {
             addAccountManagerAssignments: addAccountManagerAssignments,
-            editAccountManagerAssignment: editAccountManagerAssignment
+            editAccountManagerAssignment: editAccountManagerAssignment,
+            openAccountManagerAssignmentEditor: openAccountManagerAssignmentEditor
         };
     }
 

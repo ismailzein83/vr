@@ -48,5 +48,11 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountManagerAssignmentRuntimeEditor(accountManagerAssignmentInput);
         }
+        [HttpGet]
+        [Route("GetAccountManagerDefInfo")]
+        public AccountManagerDefInfo GetAccountManagerDefInfo(Guid accountBeDefinitionId)
+        {
+            return _manager.GetAccountManagerDefInfoByAccountBeDefinitionId(accountBeDefinitionId);
+        }
     }
 }
