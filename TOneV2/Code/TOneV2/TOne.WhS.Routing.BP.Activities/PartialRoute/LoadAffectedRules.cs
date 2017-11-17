@@ -26,12 +26,16 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public OutArgument<AffectedRouteOptionRules> AffectedRouteOptionRules { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<DateTime?> NextOpenOrCloseTime { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             DateTime effectiveDate = this.EffectiveDate.Get(context);
             PartialRouteInfo partialRouteInfo = this.PartialRouteInfo.Get(context);
 
             int? routeRuleId = this.RouteRuleId.Get(context);
+            DateTime? nextOpenOrCloseTime = null;
 
             RouteRuleManager routeRuleManager = new RouteRuleManager();
             RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
@@ -60,12 +64,13 @@ namespace TOne.WhS.Routing.BP.Activities
 
             if (!routeRuleId.HasValue && effectiveDate > partialRouteInfo.LatestRoutingDate)
             {
-                BuildOpenedClosedRouteRules(affectedRouteRules, affectedRouteRuleIds, effectiveDate, partialRouteInfo);
-                BuildOpenedClosedRouteOptionRules(affectedRouteOptionRules, affectedRouteOptionRuleIds, effectiveDate, partialRouteInfo);
+                BuildOpenedClosedRouteRules(affectedRouteRules, affectedRouteRuleIds, effectiveDate, partialRouteInfo, ref nextOpenOrCloseTime);
+                BuildOpenedClosedRouteOptionRules(affectedRouteOptionRules, affectedRouteOptionRuleIds, effectiveDate, partialRouteInfo, ref nextOpenOrCloseTime);
             }
 
             this.AffectedRouteRules.Set(context, affectedRouteRules);
             this.AffectedRouteOptionRules.Set(context, affectedRouteOptionRules);
+            this.NextOpenOrCloseTime.Set(context, nextOpenOrCloseTime);
         }
 
         void BuildAddedUpdatedRouteRules(List<RuleChangedData<RouteRule>> routeRuleChangedList, AffectedRouteRules affectedRouteRules, HashSet<int> affectedRouteRuleIds, DateTime effectiveDate)
@@ -80,7 +85,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         case ActionType.AddedRule:
                             affectedRouteRuleIds.Add(routeRuleChanged.RuleId);
                             RouteRule addedRouteRule = routeRuleManager.GetRule(routeRuleChanged.RuleId);
-                            
+
                             if (addedRouteRule.IsEffective(effectiveDate))
                                 affectedRouteRules.AddedRouteRules.Add(addedRouteRule);
                             break;
@@ -138,7 +143,7 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        void BuildOpenedClosedRouteRules(AffectedRouteRules affectedRouteRules, HashSet<int> affectedRouteRuleIds, DateTime effectiveDate, PartialRouteInfo partialRouteInfo)
+        void BuildOpenedClosedRouteRules(AffectedRouteRules affectedRouteRules, HashSet<int> affectedRouteRuleIds, DateTime effectiveDate, PartialRouteInfo partialRouteInfo, ref DateTime? nextOpenOrCloseTime)
         {
             Dictionary<int, RouteRule> routeRules = new RouteRuleManager().GetAllRules();
             if (routeRules != null)
@@ -146,10 +151,18 @@ namespace TOne.WhS.Routing.BP.Activities
                 foreach (var routeRuleKvp in routeRules)
                 {
                     int ruleId = routeRuleKvp.Key;
+                    RouteRule routeRule = routeRuleKvp.Value;
+
+                    if (routeRule.BED > effectiveDate && (!nextOpenOrCloseTime.HasValue || routeRule.BED < nextOpenOrCloseTime))
+                        nextOpenOrCloseTime = routeRule.BED;
+
+                    if (routeRule.EED.HasValue && routeRule.EED > effectiveDate && (!nextOpenOrCloseTime.HasValue || routeRule.EED < nextOpenOrCloseTime.Value))
+                        nextOpenOrCloseTime = routeRule.EED;
+
+
                     if (affectedRouteRuleIds.Contains(ruleId))
                         continue;
 
-                    RouteRule routeRule = routeRuleKvp.Value;
                     if (routeRule.IsEffective(effectiveDate) && !routeRule.IsEffective(partialRouteInfo.LatestRoutingDate))
                         affectedRouteRules.OpenedRouteRules.Add(routeRule);
 
@@ -159,7 +172,7 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        void BuildOpenedClosedRouteOptionRules(AffectedRouteOptionRules affectedRouteOptionRules, HashSet<int> affectedRouteOptionRuleIds, DateTime effectiveDate, PartialRouteInfo partialRouteInfo)
+        void BuildOpenedClosedRouteOptionRules(AffectedRouteOptionRules affectedRouteOptionRules, HashSet<int> affectedRouteOptionRuleIds, DateTime effectiveDate, PartialRouteInfo partialRouteInfo, ref DateTime? nextOpenOrCloseTime)
         {
             Dictionary<int, RouteOptionRule> routeOptionRules = new RouteOptionRuleManager().GetAllRules();
             if (routeOptionRules != null)
@@ -167,10 +180,17 @@ namespace TOne.WhS.Routing.BP.Activities
                 foreach (var routeOptionRuleKvp in routeOptionRules)
                 {
                     int ruleId = routeOptionRuleKvp.Key;
+                    RouteOptionRule routeOptionRule = routeOptionRuleKvp.Value;
+
+                    if (routeOptionRule.BED > effectiveDate && (!nextOpenOrCloseTime.HasValue || routeOptionRule.BED < nextOpenOrCloseTime))
+                        nextOpenOrCloseTime = routeOptionRule.BED;
+
+                    if (routeOptionRule.EED.HasValue && routeOptionRule.EED > effectiveDate && (!nextOpenOrCloseTime.HasValue || routeOptionRule.EED < nextOpenOrCloseTime.Value))
+                        nextOpenOrCloseTime = routeOptionRule.EED;
+
                     if (affectedRouteOptionRuleIds.Contains(ruleId))
                         continue;
 
-                    RouteOptionRule routeOptionRule = routeOptionRuleKvp.Value;
                     if (routeOptionRule.IsEffective(effectiveDate) && !routeOptionRule.IsEffective(partialRouteInfo.LatestRoutingDate))
                         affectedRouteOptionRules.OpenedRouteOptionRules.Add(routeOptionRule);
 

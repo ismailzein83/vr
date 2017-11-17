@@ -16,6 +16,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
+        [RequiredArgument]
+        public InArgument<DateTime?> NextOpenOrCloseTime { get; set; }
 
         [RequiredArgument]
         public InArgument<PartialRouteInfo> PartialRouteInfo { get; set; }
@@ -25,6 +27,7 @@ namespace TOne.WhS.Routing.BP.Activities
             PartialRouteInfo partialRouteInfo = this.PartialRouteInfo.Get(context);
             partialRouteInfo.LastVersionNumber = this.LastVersionNumber.Get(context);
             partialRouteInfo.LatestRoutingDate = this.EffectiveDate.Get(context);
+            partialRouteInfo.NextOpenOrCloseTime = this.NextOpenOrCloseTime.Get(context);
 
             RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
 

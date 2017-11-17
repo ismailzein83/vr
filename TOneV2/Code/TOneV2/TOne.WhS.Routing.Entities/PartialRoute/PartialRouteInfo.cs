@@ -11,5 +11,7 @@ namespace TOne.WhS.Routing.Entities
         public int LastVersionNumber { get; set; }
 
         public DateTime LatestRoutingDate { get; set; }
+
+        public DateTime? NextOpenOrCloseTime { get; set; }
     }
 }

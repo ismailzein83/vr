@@ -1,6 +1,8 @@
 ﻿using System;
 using Vanrise.Common;
 using TOne.WhS.Routing.BP.Arguments;
+using TOne.WhS.Routing.Data;
+using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -30,6 +32,30 @@ namespace TOne.WhS.Routing.Business
             }
 
             return true;
+        }
+
+        public override bool ShouldCreateScheduledInstance(Vanrise.BusinessProcess.Entities.IBPDefinitionShouldCreateScheduledInstanceContext context)
+        {
+            PartialRoutingProcessInput inputArg = context.BaseProcessInputArgument.CastWithValidate<PartialRoutingProcessInput>("context.BaseProcessInputArgument");
+
+            var routeRulesChanged = new RouteRuleManager().GetRulesChanged();
+            if (routeRulesChanged != null && routeRulesChanged.Count > 0)
+                return true;
+
+            var routeOptionRulesChanged = new RouteOptionRuleManager().GetRulesChanged();
+            if (routeOptionRulesChanged != null && routeOptionRulesChanged.Count > 0)
+                return true;
+
+            RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
+            IPartialRouteInfoDataManager partialRouteInfoDataManager = RoutingDataManagerFactory.GetDataManager<IPartialRouteInfoDataManager>();
+            partialRouteInfoDataManager.RoutingDatabase = routingDatabase;
+            PartialRouteInfo partialRouteInfo = partialRouteInfoDataManager.GetPartialRouteInfo();
+
+            DateTime now = DateTime.Now;
+            if (partialRouteInfo != null && partialRouteInfo.NextOpenOrCloseTime.HasValue && partialRouteInfo.NextOpenOrCloseTime < now)
+                return true;
+
+            return false;
         }
     }
 }
