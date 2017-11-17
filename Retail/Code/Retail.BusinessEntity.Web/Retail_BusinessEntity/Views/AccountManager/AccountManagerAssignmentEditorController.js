@@ -69,15 +69,15 @@
             $scope.scopeModel.onAccountSelectorReady = function (api) {
                 accountSelectorAPI = api;
                 accountSelectorReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onRuntimeDirectiveReady = function (api) {
                 runtimeDirectiveAPI = api;
                 runtimeDirectiveReadyDeferred.resolve();
-            }
+            };
             $scope.scopeModel.onAccountManagerSelectorReady = function (api) {
                 accountManagerSelectorAPI = api;
                 accountManagerReadyDeferred.resolve();
-            }
+            };
         }
         function load() {
             if (isEditMode || accountBEDefinitionId != undefined)
@@ -125,7 +125,7 @@
                 runtimeDirectiveReadyDeferred.promise.then(function () {
                     var directivePayload;
                     VRUIUtilsService.callDirectiveLoad(runtimeDirectiveAPI, directivePayload, runtimeDirectiveLoadDeferred);
-                })
+                });
                 return runtimeDirectiveLoadDeferred.promise;
             }
             function loadAccountManagerSelector() {
@@ -185,7 +185,7 @@
                         AssignementSettings: {
                             ExtendedSettings: runtimeDirectiveAPI.getData()
                         }
-                    }
+                    };
                     accounts.push(account);
                 }
                 if (accountManagerId == undefined) {
@@ -197,7 +197,7 @@
                     Accounts: accounts,
                     BED: $scope.scopeModel.beginEffectiveDate,
                     EED: $scope.scopeModel.endEffectiveDate
-                }
+                };
             }
             else {
                 var accountmanagerAssignment = {
@@ -207,7 +207,7 @@
                     AssignementSettings: {
                         ExtendedSettings: runtimeDirectiveAPI.getData()
                     }
-                }
+                };
             }
             return accountmanagerAssignment;
         }
@@ -216,7 +216,7 @@
                 AccountManagerAssignementId: accountManagerAssignmentId,
                 AccountManagerDefinitionId: accountManagerDefinitionId,
                 AssignmentDefinitionId: accountManagerAssignementDefinitionId
-            }
+            };
             return Retail_BE_AccountManagerAssignmentAPIService.GetAccountManagerAssignmentRuntimeEditor(accountManagerRuntimeInput).then(function (response) {
                 accountManagerAssignmentRuntime = response;
             });
