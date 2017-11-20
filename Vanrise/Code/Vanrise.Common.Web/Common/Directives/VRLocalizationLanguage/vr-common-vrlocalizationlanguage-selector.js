@@ -41,7 +41,7 @@ app.directive("vrCommonLocalizationlanguageSelector", ['VRCommon_VRLocalizationL
                     selectorAPI = api;
                     defineAPI();
                 };
-            }
+            };
 
             function defineAPI() {
                 var api = {};
