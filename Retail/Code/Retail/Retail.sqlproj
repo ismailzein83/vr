@@ -193,5 +193,7 @@
     <Build Include="Retail_BE\User Defined Types\AccountPackageRecurChargePeriodType.sql" />
     <Build Include="Retail_BE\User Defined Types\AccountDefinitionsType.sql" />
     <Build Include="Retail_BE\Functions\ParseStringList.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountStatusHistory_GetSpecificAfterDate.sql" />
+    <Build Include="Retail_BE\Stored Procedures\sp_AccountStatusHistory_Delete.sql" />
   </ItemGroup>
 </Project>

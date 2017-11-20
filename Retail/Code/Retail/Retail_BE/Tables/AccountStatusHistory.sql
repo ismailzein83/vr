@@ -5,10 +5,19 @@
     [StatusID]              UNIQUEIDENTIFIER NOT NULL,
     [PreviousStatusID]      UNIQUEIDENTIFIER NULL,
     [StatusChangedDate]     DATETIME         NOT NULL,
-    CONSTRAINT [PK_AccountStatusHistory] PRIMARY KEY CLUSTERED ([ID] ASC)
+    [IsDeleted]             BIT              NULL,
+    [CreatedTime]           DATETIME         CONSTRAINT [DF_AccountStatusHistory_CreatedTime] DEFAULT (getdate()) NOT NULL,
+    CONSTRAINT [IX_AccountStatusHistory_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
 
 
 
 
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_AccountStatusHistory_AccountDefAndId]
+    ON [Retail_BE].[AccountStatusHistory]([AccountBEDefinitionID] ASC, [AccountID] ASC);
 
