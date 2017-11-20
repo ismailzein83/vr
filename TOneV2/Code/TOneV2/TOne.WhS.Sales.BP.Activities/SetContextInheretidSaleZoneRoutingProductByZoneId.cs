@@ -14,31 +14,31 @@ namespace TOne.WhS.Sales.BP.Activities
 {
    public class SetContextInheretidSaleZoneRoutingProductByZoneId: CodeActivity
     {
-        //#region Input Arguments
+        #region Input Arguments
 
-        //[RequiredArgument]
-        //public InArgument<DateTime> MinimumActionDate { get; set; }
+        [RequiredArgument]
+        public InArgument<DateTime> MinimumActionDate { get; set; }
 
-        //#endregion
-        //protected override void Execute(CodeActivityContext context)
-        //{
-        //    var ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
+        #endregion
+        protected override void Execute(CodeActivityContext context)
+        {
+            //var ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
 
-        //    if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
-        //        return;
+            //if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct)
+            //    return;
 
-        //    int sellingProductId = new CarrierAccountManager().GetSellingProductId(ratePlanContext.OwnerId);
-        //    IEnumerable<long> saleZoneIds = ratePlanContext.ExistingZonesByCountry.SelectMany(x => x.Value).MapRecords(x => x.ZoneId);
+            //int sellingProductId = new CarrierAccountManager().GetSellingProductId(ratePlanContext.OwnerId);
+            //IEnumerable<long> saleZoneIds = ratePlanContext.ExistingZonesByCountry.SelectMany(x => x.Value).MapRecords(x => x.ZoneId);
 
-        //    DateTime minimumActionDate = MinimumActionDate.Get(context);
-        //    DateTime minimumDate = Utilities.Min(minimumActionDate, DateTime.Today);
+            //DateTime minimumActionDate = MinimumActionDate.Get(context);
+            //DateTime minimumDate = Utilities.Min(minimumActionDate, DateTime.Today);
 
-        //    IEnumerable<SaleZoneRoutingProduct> zoneRoutingProducts = new SaleEntityRoutingProductManager().GetExistingZoneRoutingProductsByZoneIds(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneIds, minimumDate);
-        //    ratePlanContext.InheritedZoneRoutingProductsByZoneId = StructureZoneRoutingProductsByZoneId(zoneRoutingProducts);
-        //}
-        //#region Private Methods
+            //IEnumerable<SaleZoneRoutingProduct> zoneRoutingProducts = new SaleEntityRoutingProductManager().GetExistingZoneRoutingProductsByZoneIds(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneIds, minimumDate);
+            //ratePlanContext.InheritedZoneRoutingProductsByZoneId = StructureZoneRoutingProductsByZoneId(zoneRoutingProducts, saleZoneIds);
+        }
+        #region Private Methods
 
-        //private InheritedZoneRoutingProductsByZoneId StructureZoneRoutingProductsByZoneId(IEnumerable<SaleZoneRoutingProduct> routingProducts)
+        //private InheritedZoneRoutingProductsByZoneId StructureZoneRoutingProductsByZoneId(IEnumerable<SaleZoneRoutingProduct> routingProducts, IEnumerable<long> saleZoneIds)
         //{
         //    var routingProductsByZoneId = new InheritedZoneRoutingProductsByZoneId();
 
@@ -53,13 +53,26 @@ namespace TOne.WhS.Sales.BP.Activities
         //                zoneRoutingProducts = new ZoneInheritedRoutingProducts();
         //                routingProductsByZoneId.Add(SaleZoneRoutingProduct.SaleZoneId, zoneRoutingProducts);
         //            }
-        //                zoneRoutingProducts.RoutingProducts.Add(SaleZoneRoutingProduct);
+        //            zoneRoutingProducts.RoutingProducts.Add(SaleZoneRoutingProduct);
+        //        }
+        //    }
+        //    if (saleZoneIds != null)
+        //    {
+        //        foreach (long ZoneId in saleZoneIds)
+        //        {
+        //            ZoneInheritedRoutingProducts zoneRoutingProducts;
+        //            if (!routingProductsByZoneId.TryGetValue(ZoneId, out zoneRoutingProducts))
+        //            {
+        //                zoneRoutingProducts = new ZoneInheritedRoutingProducts();
+        //                routingProductsByZoneId.Add(ZoneId, zoneRoutingProducts);
+        //                zoneRoutingProducts.RoutingProducts.Add();
+        //            }
         //        }
         //    }
 
         //    return routingProductsByZoneId;
         //}
 
-        //#endregion
+        #endregion
     }
 }
