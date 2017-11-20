@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Vanrise.BusinessProcess.Entities;
@@ -54,46 +55,119 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public List<BPInstance> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds, List<int> grantedPermissionSetIds)
         {
-            string definitionsIdAsString = null;
-            if (definitionsId != null && definitionsId.Count() > 0)
-                definitionsIdAsString = string.Join<Guid>(",", definitionsId);
-            string grantedPermissionSetIdsAsString = null;
-            if (grantedPermissionSetIds != null)
-                grantedPermissionSetIdsAsString = string.Join<int>(",", grantedPermissionSetIds);
-            string entityIdsString = null;
-            if (entityIds != null)
-                entityIdsString = string.Join<string>(",", entityIds);
-            List<BPInstance> bpInstances = new List<BPInstance>();
-            byte[] timestamp = null;
+            StringBuilder queryBuilder = new StringBuilder();
 
-            ExecuteReaderSP("[bp].[sp_BPInstance_GetUpdated]", (reader) =>
+            if (maxTimeStamp == null)//first time
             {
-                while (reader.Read())
-                    bpInstances.Add(BPInstanceMapper(reader));
-                if (reader.NextResult())
+                queryBuilder.Append(" SELECT MAX(timestamp) MaxGlobalTimeStamp FROM [BP].[BPInstance] WITH(NOLOCK) ");
+                queryBuilder.AppendLine();
+            }
+
+            queryBuilder.AppendFormat("SELECT TOP({0}) {1} INTO #TEMP FROM bp.[BPInstance] bp WITH(NOLOCK)", nbOfRows, BPInstanceSELECTCOLUMNS);
+            List<string> filters = new List<string>();
+
+            string definitionIdsFilter = BuildFilterFromGuids("bp.DefinitionID", definitionsId);
+            if (definitionIdsFilter != null)
+                filters.Add(definitionIdsFilter);
+
+            string grantedPermissionSetIdsFilter = BuildFilterFromInts("bp.ViewRequiredPermissionSetId", grantedPermissionSetIds);
+            if (grantedPermissionSetIdsFilter != null)
+                filters.Add(grantedPermissionSetIdsFilter);
+
+            string entityIdsFilter = BuildFilterFromStrings("bp.EntityId", entityIds);
+            if (entityIdsFilter != null)
+                filters.Add(entityIdsFilter);
+
+            if (parentId != default(int))
+                filters.Add(String.Concat(" bp.ParentID = ", parentId.ToString()));
+
+            if(maxTimeStamp != null)
+                filters.Add(" bp.[timestamp] > @TimestampAfter ");
+
+            if (filters.Count > 0)
+            {
+                queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
+            }
+
+            if (maxTimeStamp == null)//first time
+                queryBuilder.Append(" ORDER BY bp.[ID] DESC");
+            else
+                queryBuilder.Append(" ORDER BY bp.[timestamp] ");
+            
+            queryBuilder.AppendLine();
+
+            queryBuilder.Append(" SELECT * FROM #TEMP ");
+
+            queryBuilder.AppendLine();
+
+            queryBuilder.Append(@" SELECT MAX([timestamp]) MaxTimestamp FROM #TEMP ");
+
+            byte[] maxTimeStamp_local = maxTimeStamp; 
+            List<BPInstance> bpInstances = new List<BPInstance>();
+            ExecuteReaderText(queryBuilder.ToString(),
+                (reader) =>
+                {
+                    if(maxTimeStamp_local == null)
+                    {
+                        if (reader.Read())
+                            maxTimeStamp_local = GetReaderValue<byte[]>(reader, "MaxGlobalTimeStamp");
+                        reader.NextResult();
+                    }
                     while (reader.Read())
-                        timestamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
-            },
-               maxTimeStamp, nbOfRows, definitionsIdAsString, ToDBNullIfDefault(parentId), entityIdsString, grantedPermissionSetIdsAsString);
-            maxTimeStamp = timestamp;
+                    {
+                        bpInstances.Add(BPInstanceMapper(reader));
+                    }
+                    reader.NextResult();
+                    if (reader.Read() && bpInstances.Count > 0)
+                    {
+                        maxTimeStamp_local = GetReaderValue<byte[]>(reader, "MaxTimestamp");
+                    }
+                },
+                (cmd) =>
+                {
+                    if(maxTimeStamp_local != null)
+                        cmd.Parameters.Add(new SqlParameter("@TimestampAfter", maxTimeStamp_local));
+                });
+            maxTimeStamp = maxTimeStamp_local;
             return bpInstances;
         }
 
         public List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input, List<int> grantedPermissionSetIds)
         {
-            string definitionsIdAsString = null;
-            if (input.DefinitionsId != null && input.DefinitionsId.Count() > 0)
-                definitionsIdAsString = string.Join<Guid>(",", input.DefinitionsId);
+            StringBuilder queryBuilder = new StringBuilder();
 
-            string grantedPermissionSetIdsAsString = null;
-            if (grantedPermissionSetIds != null)
-                grantedPermissionSetIdsAsString = string.Join<int>(",", grantedPermissionSetIds);
+            queryBuilder.AppendFormat("SELECT TOP({0}) {1} FROM bp.[BPInstance] bp WITH(NOLOCK)", input.NbOfRows, BPInstanceSELECTCOLUMNS);
+            List<string> filters = new List<string>();
 
-            string entityIdsString = null;
-            if (input.EntityIds != null)
-                entityIdsString = string.Join<string>(",", input.EntityIds);
+            filters.Add(String.Concat("bp.ID < ", input.LessThanID.ToString()));
 
-            return GetItemsSP("[BP].[sp_BPInstance_GetBeforeID]", BPInstanceMapper, input.LessThanID, input.NbOfRows, definitionsIdAsString, ToDBNullIfDefault(input.ParentId), entityIdsString, grantedPermissionSetIdsAsString);
+            string definitionIdsFilter = BuildFilterFromGuids("bp.DefinitionID", input.DefinitionsId);
+            if (definitionIdsFilter != null)
+                filters.Add(definitionIdsFilter);
+
+            string grantedPermissionSetIdsFilter = BuildFilterFromInts("bp.ViewRequiredPermissionSetId", grantedPermissionSetIds);
+            if (grantedPermissionSetIdsFilter != null)
+                filters.Add(grantedPermissionSetIdsFilter);
+
+            string entityIdsFilter = BuildFilterFromStrings("bp.EntityId", input.EntityIds);
+            if (entityIdsFilter != null)
+                filters.Add(entityIdsFilter);
+
+            if (input.ParentId != default(int))
+                filters.Add(String.Concat(" bp.ParentID = ", input.ParentId.ToString()));
+
+            if (filters.Count > 0)
+            {
+                queryBuilder.AppendFormat(" WHERE {0} ", String.Join(" AND ", filters));
+            }
+
+            queryBuilder.Append(" ORDER BY bp.[ID] DESC");
+
+            queryBuilder.AppendLine();
+
+            return GetItemsText(queryBuilder.ToString(),
+                BPInstanceMapper,
+                null);
         }
 
         public List<BPInstance> GetAfterId(long? processInstanceId, Guid bpDefinitionId)
@@ -150,7 +224,25 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public bool HasRunningInstances(Guid definitionId, List<string> entityIds, IEnumerable<BPInstanceStatus> acceptableBPStatuses)
         {
-            bool hasRunningProcesses = Convert.ToBoolean(ExecuteScalarSP("[bp].[sp_BPInstance_HasRunningInstance]", definitionId, String.Join(",", entityIds.Select(itm => (string)itm)), String.Join(",", acceptableBPStatuses.Select(itm => (int)itm))));
+            StringBuilder queryBuilder = new StringBuilder();
+            List<string> filters = new List<string>();
+
+            filters.Add(String.Concat("bp.DefinitionID = '", definitionId, "'"));
+
+            string entityIdsFilter = BuildFilterFromStrings("bp.EntityId", entityIds);
+            if (entityIdsFilter != null)
+                filters.Add(entityIdsFilter);
+
+           string statusesFilter = BuildStatusesFilter(acceptableBPStatuses);
+            if(statusesFilter != null)
+                filters.Add(statusesFilter);
+
+            queryBuilder.AppendFormat(@"IF Exists ( SELECT top 1 null 	FROM bp.[BPInstance] bp WITH(NOLOCK)
+	                                    WHERE	{0})
+	                                    SELECT 1
+	                                    ELSE SELECT 0", String.Join(" AND ", filters));
+
+            bool hasRunningProcesses = Convert.ToBoolean(ExecuteScalarText(queryBuilder.ToString(), null));
             return hasRunningProcesses;
         }
 
@@ -206,7 +298,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
       ,[CreatedTime]
       ,[StatusUpdatedTime]      
       ,[InitiatorUserId]
-	  ,[ServiceInstanceID] ";
+	  ,[ServiceInstanceID]
+	  ,[timestamp] ";
 
         private BPInstance BPInstanceMapper(IDataReader reader)
         {
@@ -253,6 +346,30 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 return null;
             else
                 return String.Concat(" bp.ExecutionStatus in (", String.Join(",", statuses.Select(itm => (int)itm)), ") ");
+        }
+
+        private string BuildFilterFromGuids(string columnName, IEnumerable<Guid> guids)
+        {
+            if (guids == null || guids.Count() == 0)
+                return null;
+            else
+                return string.Concat(columnName, " IN (", String.Join(",", guids.Select(itm => String.Concat("'", itm.ToString(), "'"))), ")");
+        }
+
+        private string BuildFilterFromStrings(string columnName, IEnumerable<string> items)
+        {
+            if (items == null || items.Count() == 0)
+                return null;
+            else
+                return string.Concat(columnName, " IN (", String.Join(",", items.Select(itm => String.Concat("'", itm.ToString(), "'"))), ")");
+        }
+
+        private string BuildFilterFromInts(string columnName, IEnumerable<int> items)
+        {
+            if (items == null || items.Count() == 0)
+                return null;
+            else
+                return string.Concat(columnName, " IN (", String.Join(",", items), ")");
         }
 
         #endregion
