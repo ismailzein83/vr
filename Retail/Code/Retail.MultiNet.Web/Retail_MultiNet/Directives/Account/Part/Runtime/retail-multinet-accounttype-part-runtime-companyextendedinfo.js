@@ -59,7 +59,7 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     $scope.scopeModel.excludeWHTaxes = payload.partSettings.ExcludeWHTaxes;
                     $scope.scopeModel.excludeSaleTaxes = payload.partSettings.ExcludeSaleTaxes;
                     $scope.scopeModel.cNICExpiryDate = payload.partSettings.CNICExpiryDate;
-                    $scope.scopeModel.assignedNumber = payload.partSettings.AssignedNumber
+                    $scope.scopeModel.assignedNumber = payload.partSettings.AssignedNumber;
                     if (payload.partSettings.CustomerLogo > 0)
                         $scope.scopeModel.customerLogo = {
                             fileId: payload.partSettings.CustomerLogo
