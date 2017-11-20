@@ -31,6 +31,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
             if (s_accountBEManager.EvaluateAccountCondition(accountBEDefinitionId, accountId, actionDefinition.AvailabilityCondition))
             {
                 var account = s_accountBEManager.GetAccount(accountBEDefinitionId, accountId);
+                account.ThrowIfNull("account", accountId);
                 accounts.Add(account);
             }
             if (actionDefinitionSettings.ApplyToChildren)

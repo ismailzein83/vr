@@ -531,6 +531,9 @@ namespace Retail.BusinessEntity.Business
                 var accountStatusHistoryManager = new AccountStatusHistoryManager();
                 FinancialAccountManager financialAccountManager = new Business.FinancialAccountManager();
                 var status = s_statusDefinitionManager.GetStatusDefinition(statusId);
+                status.ThrowIfNull("status", statusId);
+                status.Settings.ThrowIfNull("status.Settings", statusId);
+             
                 VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
                 if (!status.Settings.IsActive)
                 {
