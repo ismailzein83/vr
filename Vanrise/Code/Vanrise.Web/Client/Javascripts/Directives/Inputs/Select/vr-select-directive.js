@@ -116,6 +116,8 @@
                     var allDataItems = getdatasource();
                     for (var i = 0; i < allDataItems.length; i++) {
                         var propValue = allDataItems[i][controller.datatextfield];
+                        if (controller.datatextfield == undefined && propValue == undefined)
+                            propValue = allDataItems[i].toString();
                         if (propValue != undefined && propValue.toLowerCase().indexOf(controller.filtername.toLowerCase()) >= 0)
                             filteredItems.push(allDataItems[i]);
                     }
@@ -205,7 +207,7 @@
                         }
                     }
                     else {
-                        if (controller.selectedvalues.length > 0) {                           
+                        if (controller.selectedvalues.length > 0) {
                             var index = controller.getObjectValue(controller.selectedvalues[controller.selectedvalues.length - 1]);
                             var item = utilsService.getItemByVal(allDataItems, index, controller.datavaluefield);
                             if ($('#' + index).offset() != undefined) {
@@ -215,7 +217,7 @@
                                 }, 1);
                                 if (allDataItems.length > 20)
                                     addPageToBoundDataSource();
-                            }                          
+                            }
                             else if (allDataItems.length < 300 && item != null && $('#' + index).offset() == undefined)
                                 addPageToBoundDataSource();
                         }
@@ -454,7 +456,7 @@
                     var dropdown = $('div[name=' + id + ']');
                     var menuPosition = getDropDownDirection(id);
                     $('div[name=' + id + ']').find('.dropdown-menu').css({ position: 'fixed', top: menuPosition.top, left: menuPosition.left });
-                    setTimeout(function () {                       
+                    setTimeout(function () {
                         var lastScrollTop;
                         dropdown.find("#divDataSourceContainer" + id).scroll(function (e) {
                             var scrollTop = dropdown.find("#divDataSourceContainer" + id).scrollTop();
@@ -494,8 +496,8 @@
 
                 };
                 var afterHideDropdown = function (id) {
-                     controller.filtername ='';
-                     controller.searchLocal();
+                    controller.filtername = '';
+                    controller.searchLocal();
                     $('div[name=' + id + ']').find('#filterInput').blur();
                     if (controller.onblurdropdown != null) {
                         controller.onblurdropdown();
