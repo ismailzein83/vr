@@ -44,7 +44,7 @@ namespace TOne.WhS.Sales.Business
             public override IEnumerable<RatePreview> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RatePreviewQuery> input)
             {
                 var dataManager = SalesDataManagerFactory.GetDataManager<IRatePreviewDataManager>();
-                return dataManager.GetRatePreviews(input.Query);
+                return dataManager.GetRatePreviews(input.Query).OrderBy(x=>x.ZoneName);
             }
         }
 
