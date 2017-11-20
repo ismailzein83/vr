@@ -43,10 +43,10 @@
             $scope.scopeModel.onLocalizationModuleSelectorReady = function (api) {
                 localizationModuleSelectorAPI = api;
                 localizationModuleSelectorReadyDeferred.resolve();
-            }
+            };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
 
