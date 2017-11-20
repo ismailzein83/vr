@@ -225,19 +225,6 @@ namespace Retail.BusinessEntity.Business
 
         #endregion
 
-        public void UpdateAccountStatus(Guid accountDefinitionId, long accountId)
-        {
-            AccountBEFinancialAccountsSettings accountFinancialAccountsSettings = s_accountManager.GetExtendedSettings<AccountBEFinancialAccountsSettings>(accountDefinitionId, accountId);
-            if (accountFinancialAccountsSettings != null && accountFinancialAccountsSettings.FinancialAccounts != null)
-            {
-                var financialAccounts = Utilities.CloneObject(accountFinancialAccountsSettings.FinancialAccounts);
-                foreach (var financialAccount in financialAccounts)
-                {
-                    UpdateAccountStatus(accountDefinitionId, accountId, financialAccount);
-                }
-            }
-        }
-
         public IOrderedEnumerable<FinancialAccountData> GetFinancialAccounts(Guid accountDefinitionId, long accountId, bool withInherited)
         {
             var cachedFinancialAccounts = withInherited ? GetCachedFinancialAccountsWithInherited(accountDefinitionId) : GetCachedFinancialAccounts(accountDefinitionId);
@@ -516,11 +503,11 @@ namespace Retail.BusinessEntity.Business
         private bool CheckFinancialAccountOverlaping(Guid accountDefinitionId, long accountId,FinancialAccount mainFinancialAccount,out string message)
         {
 
-            if (mainFinancialAccount.EED.HasValue && mainFinancialAccount.EED.Value < new DateTime())
-            {
-                message = "EED must not be less than today.";
-                return false;
-            }
+            //if (mainFinancialAccount.EED.HasValue && mainFinancialAccount.EED.Value < new DateTime())
+            //{
+            //    message = "EED must not be less than today.";
+            //    return false;
+            //}
             var financialAccountsData = GetFinancialAccountsWithInheritedAndChilds(accountDefinitionId, accountId);
             bool result = true;
             CheckFinancialAccountOverlaping(mainFinancialAccount, financialAccountsData, out message, out result);
@@ -757,59 +744,6 @@ namespace Retail.BusinessEntity.Business
            return description.ToString();
         }
 
-        private bool UpdateAccountStatus(Guid accountBEDefinitionId, long accountId, FinancialAccount financialAccount)
-        {
-            Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
-            VRAccountStatus vrAccountStatus = VRAccountStatus.InActive;
-
-            var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
-            var financialAccountId = GetFinancialAccountId(accountId, financialAccount.SequenceNumber);
-
-            if (s_accountManager.IsAccountInvoiceActive(accountBEDefinitionId, accountId))
-            {
-                vrAccountStatus = VRAccountStatus.Active;
-                if (!financialAccount.EED.HasValue || financialAccount.EED.Value > DateTime.Now)
-                {
-                    UpdateFinancialAccount(new FinancialAccountToEdit
-                    {
-                        AccountBEDefinitionId = accountBEDefinitionId,
-                        AccountId = accountId,
-                        FinancialAccount = financialAccount
-                    });
-                }
-            }
-            else
-            {
-                if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
-                {
-                    var lastInvoiceDate = new Vanrise.Invoice.Business.InvoiceManager().GetLastInvoiceToDate(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId);
-                    if (lastInvoiceDate.HasValue)
-                    {
-                        financialAccount.EED = lastInvoiceDate.Value;
-                    }
-                    else
-                    {
-                        financialAccount.EED = financialAccount.BED;
-                    }
-                }
-
-               
-            }
-
-            var result = false;
-            if (financialAccountDefinitionSettings.InvoiceTypeId.HasValue)
-            {
-              result= invoiceAccountManager.TryUpdateInvoiceAccountStatus(financialAccountDefinitionSettings.InvoiceTypeId.Value, financialAccountId,  vrAccountStatus, false);
-              
-            }
-            if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue)
-            {
-               result = new LiveBalanceManager().TryUpdateLiveBalanceStatus(financialAccountId, financialAccountDefinitionSettings.BalanceAccountTypeId.Value ,vrAccountStatus, false);
-            }
-
-            return result;
-        }
-
         private bool UpdateAccountEffectiveDate(Guid accountBEDefinitionId, long accountId, FinancialAccount financialAccount, out string errorMessage)
         {
             Vanrise.Invoice.Business.InvoiceAccountManager invoiceAccountManager = new Vanrise.Invoice.Business.InvoiceAccountManager();
@@ -828,19 +762,20 @@ namespace Retail.BusinessEntity.Business
 
             return result;
         }
-        public void ReflectStatusToInvoiceAndBalanceAccounts(Guid accountBEDefinitionId ,VRAccountStatus vrAccountStatus, IEnumerable<FinancialAccountData> financialAccounts)
+        public void ReflectStatusToInvoiceAndBalanceAccounts(Guid accountBEDefinitionId, VRAccountStatus vrAccountStatus, IEnumerable<FinancialAccountData> financialAccounts,
+            VRAccountStatus vrInvoiceAccountStatus, VRAccountStatus vrBalanceAccountStatus)
         {
             if (financialAccounts != null)
             {
                 foreach (var financialAccount in financialAccounts)
                 {
                     Guid? balanceAccountTypeId = financialAccount.BalanceAccountTypeId;
-                    
+
                     if (balanceAccountTypeId.HasValue)
-                        s_liveBalanceManager.TryUpdateLiveBalanceStatus(financialAccount.FinancialAccountId, balanceAccountTypeId.Value, vrAccountStatus, false);
+                        s_liveBalanceManager.TryUpdateLiveBalanceStatus(financialAccount.FinancialAccountId, balanceAccountTypeId.Value, vrBalanceAccountStatus, false);
 
                     if (financialAccount.InvoiceTypeId.HasValue)
-                        s_invoiceAccountManager.TryUpdateInvoiceAccountStatus(financialAccount.InvoiceTypeId.Value, financialAccount.FinancialAccountId, vrAccountStatus, false);
+                        s_invoiceAccountManager.TryUpdateInvoiceAccountStatus(financialAccount.InvoiceTypeId.Value, financialAccount.FinancialAccountId, vrInvoiceAccountStatus, false);
 
                     if (vrAccountStatus == VRAccountStatus.InActive)
                     {
@@ -851,11 +786,12 @@ namespace Retail.BusinessEntity.Business
                             if (lastInvoiceToDate.HasValue)
                                 eedToSet = lastInvoiceToDate.Value.AddDays(1).Date;
                         }
-                        CloseFinancialAccount(accountBEDefinitionId,vrAccountStatus, financialAccount, eedToSet, balanceAccountTypeId);
+                        CloseFinancialAccount(accountBEDefinitionId, vrAccountStatus, financialAccount, eedToSet, balanceAccountTypeId);
                     }
                 }
             }
         }
+
         private void CloseFinancialAccount(Guid accountBEDefinitionId ,VRAccountStatus vrAccountStatus, FinancialAccountData financialAccount, DateTime? eedToSet, Guid? balanceAccountTypeId)
         {
             if (!financialAccount.FinancialAccount.EED.HasValue || financialAccount.FinancialAccount.EED.Value > DateTime.Today)

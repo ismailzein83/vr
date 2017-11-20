@@ -240,17 +240,10 @@ namespace Retail.BusinessEntity.Business
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-            updateOperationOutput.UpdatedObject = null;
-            var currentAccount = GetAccount(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
-            currentAccount.ThrowIfNull("account", accountToEdit.AccountId);
+            updateOperationOutput.UpdatedObject = null;            
             Account account;
             if (TryUpdateAccount(accountToEdit, out account))
-            {
-                FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-                if (account.StatusId != currentAccount.StatusId)
-                {
-                    financialAccountManager.UpdateAccountStatus(accountToEdit.AccountBEDefinitionId, accountToEdit.AccountId);
-                }
+            {                
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = AccountDetailMapper(account);
             }
@@ -535,6 +528,8 @@ namespace Retail.BusinessEntity.Business
                 status.Settings.ThrowIfNull("status.Settings", statusId);
              
                 VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
+                VRAccountStatus vrInvoiceAccountStatus = status.Settings.IsInvoiceActive ? VRAccountStatus.Active : VRAccountStatus.InActive;
+                VRAccountStatus vrBalanceAccountStatus = status.Settings.IsAccountBalanceActive ? VRAccountStatus.Active : VRAccountStatus.InActive;
                 if (!status.Settings.IsActive)
                 {
                     vrAccountStatus = VRAccountStatus.InActive;
@@ -606,7 +601,7 @@ namespace Retail.BusinessEntity.Business
                             }
                         }
                         var financialAccountData = financialAccountManager.GetFinancialAccounts(accountBEDefinitionId, account.AccountId, false);
-                        financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(accountBEDefinitionId, vrAccountStatus, financialAccountData);
+                        financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(accountBEDefinitionId, vrAccountStatus, financialAccountData, vrInvoiceAccountStatus, vrBalanceAccountStatus);
                     }
 
                 }
