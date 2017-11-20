@@ -20,9 +20,10 @@ BEGIN
 			Settings,
 			InvoiceSettingID,
 			SentDate
-	FROM	VR_Invoice.Invoice inv with(nolock)
-	JOIN    [VR_Invoice].InvoiceBulkActionDraft ibad 
-	ON      inv.ID = ibad.InvoiceId 
-	AND     InvoiceBulkActionIdentifier = @InvoiceBulkActionIdentifier
-	where   ISNULL(inv.IsDeleted,0) = 0 AND ISNULL(inv.IsDraft, 0) = 0
+	FROM	[VR_Invoice].InvoiceBulkActionDraft ibad  with(nolock)
+	JOIN  	VR_Invoice.Invoice inv with(nolock)
+	ON      inv.ID = ibad.InvoiceId   
+			AND ISNULL(inv.IsDeleted,0) = 0 
+			AND ISNULL(inv.IsDraft, 0) = 0
+	where   InvoiceBulkActionIdentifier = @InvoiceBulkActionIdentifier
 END
