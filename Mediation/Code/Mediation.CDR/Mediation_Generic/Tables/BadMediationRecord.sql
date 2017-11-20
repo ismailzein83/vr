@@ -7,3 +7,10 @@
     [EventDetails]          NVARCHAR (MAX)   NULL
 );
 
+
+
+
+GO
+CREATE UNIQUE CLUSTERED INDEX [IX_BadMediationRecord_EventId]
+    ON [Mediation_Generic].[BadMediationRecord]([EventId] ASC);
+
