@@ -478,11 +478,12 @@ namespace Retail.BusinessEntity.Business
             }
             foreach (var accountsByStatus in accountsByStatusId)
             {
-                UpdateStatuses(accountBEDefinitionId, accountsByStatus.Value, accountsByStatus.Key, false, actionName);
+                string errorMessage;
+                UpdateStatuses(accountBEDefinitionId, accountsByStatus.Value, accountsByStatus.Key, DateTime.Now, false, null, out errorMessage, false, actionName);
             }
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
         }
-        public void UpdateStatuses(Guid accountBEDefinitionId, List<long> accountIds, Guid statusId, string actionName = null)
+        public void UpdateStatuses(Guid accountBEDefinitionId, List<long> accountIds, Guid statusId, out string errorMessage, string actionName = null)
         {
             List<Account> accounts = new List<Account>();
             foreach (var accountId in accountIds.Distinct())
@@ -491,51 +492,167 @@ namespace Retail.BusinessEntity.Business
                 account.ThrowIfNull("account", accountId);
                 accounts.Add(account);
             }
-            UpdateStatuses(accountBEDefinitionId, accounts, statusId, true, actionName);
+            UpdateStatuses(accountBEDefinitionId, accounts, statusId, DateTime.Now, false, null, out errorMessage, true, actionName);
         }
-        private void UpdateStatuses(Guid accountBEDefinitionId, List<Account> accounts, Guid statusId, bool withCacheExpire = true, string actionName = null)
+        //public void UpdateStatuses(Guid accountBEDefinitionId, List<long> accountIds, Guid statusId, DateTime statusChangedDate, bool allowOverlapping, List<Guid> applicableOnStatuses, bool withCacheExpire = true, string actionName = null)
+        //{
+        //    List<Account> accounts = new List<Account>();
+        //    foreach (var accountId in accountIds.Distinct())
+        //    {
+        //        var account = GetAccount(accountBEDefinitionId, accountId);
+        //        account.ThrowIfNull("account", accountId);
+        //        accounts.Add(account);
+        //    }
+        //    UpdateStatuses(accountBEDefinitionId, accounts, statusId, statusChangedDate, allowOverlapping, applicableOnStatuses, withCacheExpire, actionName);
+        //}
+
+        public void UpdateStatuses(Guid accountBEDefinitionId, List<Account> accounts, Guid statusId, DateTime statusChangedDate, bool allowOverlapping, List<Guid> applicableOnStatuses,out string errorMessage, bool withCacheExpire = true, string actionName = null)
         {
+            errorMessage = null;
             if (accounts != null)
             {
+                if(statusChangedDate.Date > DateTime.Today)
+                {
+                    errorMessage = "Date cannot be greater than today.";
+                    return;
+                }
+                var accountIds = accounts.Select(x => x.AccountId).ToList();
+                Dictionary<long, IOrderedEnumerable<AccountStatusHistory>> accountStatusesByAccountId = GetAccountStatusHistoryDicByAccountId(accountBEDefinitionId, accountIds, statusChangedDate);
+
+                if (accountStatusesByAccountId != null)
+                {
+                    foreach(var account in accountStatusesByAccountId)
+                    {
+                        if (!CheckIfAllowStatusesOverlapping(account.Value, allowOverlapping,statusId, applicableOnStatuses, statusChangedDate, out errorMessage))
+                            return; 
+                    }
+                }
+
                 var accountStatusHistoryManager = new AccountStatusHistoryManager();
-                var statusDefinitionManager = new Vanrise.Common.Business.StatusDefinitionManager();
                 FinancialAccountManager financialAccountManager = new Business.FinancialAccountManager();
-                var status = statusDefinitionManager.GetStatusDefinition(statusId);
+                var status = s_statusDefinitionManager.GetStatusDefinition(statusId);
                 VRAccountStatus vrAccountStatus = VRAccountStatus.Active;
-                if(!status.Settings.IsActive)
+                if (!status.Settings.IsActive)
                 {
                     vrAccountStatus = VRAccountStatus.InActive;
                 }
-                string statusName = statusDefinitionManager.GetStatusDefinitionName(statusId);
+                string statusName = s_statusDefinitionManager.GetStatusDefinitionName(statusId);
                 IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
+
                 foreach (var account in accounts)
                 {
-                    var financialAccountData = financialAccountManager.GetFinancialAccounts(accountBEDefinitionId,account.AccountId,false);
-                    financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(accountBEDefinitionId, vrAccountStatus, financialAccountData);
+                 
+                    IOrderedEnumerable<AccountStatusHistory> accountStatusHistories = null;
+                    if (accountStatusesByAccountId != null)
+                        accountStatusHistories = accountStatusesByAccountId.GetRecord(account.AccountId);
 
-                    long accountId = account.AccountId;
-                    Guid previousStatusId = account.StatusId;
-                    string previousStatusName = statusDefinitionManager.GetStatusDefinitionName(previousStatusId);
-                    bool updateStatus = dataManager.UpdateStatus(accountId, statusId);
-                    if (updateStatus)
+                    bool shouldUpdateAccount = false;
+                    Guid? previousStatusId = null;
+                    bool shouldInsertAccountHistory = true;
+                    List<long> accountStatusHistoryIdsToDelete = null;
+
+                    if (accountStatusHistories != null && accountStatusHistories.Count() > 0)
                     {
-                        accountStatusHistoryManager.AddAccountStatusHistory(accountBEDefinitionId, accountId, statusId, previousStatusId);
-                        if (actionName != null)
+                        shouldUpdateAccount = true;
+                        foreach (var accountStatusHistory in accountStatusHistories)
                         {
-                            VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), actionName, true, account);
-                        }
-                        else
-                        {
-                            VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), string.Format("Update Status"), true, account, string.Format("Status Changed from '{0}' to '{1}'", previousStatusName, statusName));
+                            if (accountStatusHistoryIdsToDelete == null)
+                            {
+                                accountStatusHistoryIdsToDelete = new List<long>();
+                                previousStatusId = accountStatusHistory.PreviousStatusId;
+                                if (accountStatusHistory.PreviousStatusId == statusId)
+                                    shouldInsertAccountHistory = false;
+                            }
+                            accountStatusHistoryIdsToDelete.Add(accountStatusHistory.AccountStatusHistoryId);
                         }
                     }
+                    else
+                    {
+                        if (statusId != account.StatusId)
+                        {
+                            previousStatusId = account.StatusId;
+                            shouldUpdateAccount = true;
+                        }
+                    }
+                    if (shouldUpdateAccount)
+                    {
+                        string previousStatusName = null;
+                        if (previousStatusId.HasValue)
+                            previousStatusName = s_statusDefinitionManager.GetStatusDefinitionName(previousStatusId.Value);
+                        bool updateStatus = dataManager.UpdateStatus(account.AccountId, statusId);
+                        if (updateStatus)
+                        {
+                            if (shouldInsertAccountHistory)
+                                accountStatusHistoryManager.AddAccountStatusHistory(accountBEDefinitionId, account.AccountId, statusId, previousStatusId, statusChangedDate);
+                            accountStatusHistoryManager.DeleteAccountStatusHistories(accountStatusHistoryIdsToDelete);
+                            if (actionName != null)
+                            {
+                                VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), actionName, true, account);
+                            }
+                            else
+                            {
+                                string actionDescription = string.Format("Status Changed to '{0}'", statusName);
+                                if (previousStatusName != null)
+                                {
+                                    actionDescription = string.Format("Status Changed from '{0}' to '{1}'", previousStatusName, statusName);
+                                }
+                                VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), string.Format("Update Status"), true, account, actionDescription);
+                            }
+                        }
+                        var financialAccountData = financialAccountManager.GetFinancialAccounts(accountBEDefinitionId, account.AccountId, false);
+                        financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(accountBEDefinitionId, vrAccountStatus, financialAccountData);
+                        financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, account.AccountId);
+                    }
+
                 }
+  
                 if (withCacheExpire)
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
             }
         }
- 
-        
+        private Dictionary<long, IOrderedEnumerable<AccountStatusHistory>> GetAccountStatusHistoryDicByAccountId(Guid accountBEDefinitionId, List<long> accountIds, DateTime statusChangedDate)
+        {
+            IEnumerable<AccountStatusHistory> accountStatusHistoryList = new AccountStatusHistoryManager().GetAccountStatusHistoriesAfterDate(accountBEDefinitionId, accountIds, statusChangedDate);
+            if (accountStatusHistoryList == null)
+                return null;
+
+            Dictionary<long, List<AccountStatusHistory>> accountStatusHistoryDicByAccountId = new Dictionary<long, List<AccountStatusHistory>>();
+            foreach (var accountStatusHistory in accountStatusHistoryList)
+            {
+                List<AccountStatusHistory> tempAccountStatusHistoryList = accountStatusHistoryDicByAccountId.GetOrCreateItem(accountStatusHistory.AccountId);
+                tempAccountStatusHistoryList.Add(accountStatusHistory);
+            }
+            return accountStatusHistoryDicByAccountId.ToDictionary(itm => itm.Key, itm => itm.Value.OrderBy(historyItem => historyItem.StatusChangedDate));
+        }
+        private bool CheckIfAllowStatusesOverlapping(IOrderedEnumerable<AccountStatusHistory> accountStatusHistories, bool allowOverlapping,Guid statusId, List<Guid> applicableOnStatuses, DateTime statusChangedDate, out string errorMessage)
+        {
+            errorMessage = null;
+            if (accountStatusHistories != null)
+            {
+                if (allowOverlapping)
+                {
+                    if (applicableOnStatuses != null && applicableOnStatuses.Count > 0)
+                    {
+
+                        foreach (var accountStatusHistory in accountStatusHistories)
+                        {
+                            if (accountStatusHistory.StatusId != statusId && !applicableOnStatuses.Contains(accountStatusHistory.StatusId))
+                            {
+                                errorMessage = string.Format("Account status is overlapped with not applicable status '{0}'.", s_statusDefinitionManager.GetStatusDefinitionName((accountStatusHistory.StatusId)));
+                                return false;
+                            }
+                        }
+                    }
+                }
+                else if (accountStatusHistories != null && accountStatusHistories.Count() > 0)
+                {
+                    errorMessage = string.Format("Account status is overlapped with other account statuses.");
+                    return false;
+
+                }
+            }
+            return true;
+        }
         
         public long? GetFinancialAccountId(Guid accountBEDefinitionId, long? accountId)
         {
@@ -1005,7 +1122,7 @@ namespace Retail.BusinessEntity.Business
 
             if (dataManager.Insert(accountToInsert, out accountId))
             {
-                new AccountStatusHistoryManager().AddAccountStatusHistory(accountToInsert.AccountBEDefinitionId, accountId, accountToInsert.StatusId, null);
+                new AccountStatusHistoryManager().AddAccountStatusHistory(accountToInsert.AccountBEDefinitionId, accountId, accountToInsert.StatusId, null,DateTime.Today);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToInsert.AccountBEDefinitionId);
                 account = GetAccount(accountToInsert.AccountBEDefinitionId, accountId);
                 VRActionLogger.Current.TrackAndLogObjectAdded(new AccountBELoggableEntity(accountToInsert.AccountBEDefinitionId), account);

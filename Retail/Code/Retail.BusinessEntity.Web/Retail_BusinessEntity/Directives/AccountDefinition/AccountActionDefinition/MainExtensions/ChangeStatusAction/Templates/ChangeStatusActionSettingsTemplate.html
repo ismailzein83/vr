@@ -4,7 +4,16 @@
                                          normal-col-num="4"
                                          isrequired="true">
     </vr-common-statusdefinition-selector>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/3row">
         <vr-switch value="scopeModel.applyToChildren" label="Apply to children"></vr-switch>
     </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-switch value="scopeModel.allowOverlapping" label="Allow Overlapping"></vr-switch>
+    </vr-columns>
+    <vr-common-statusdefinition-selector on-ready="scopeModel.onApplicableOnStatusesDefinitionSelectorReady"
+                                         customlabel="Applicable On Statuses"
+                                         ismultipleselection
+                                         normal-col-num="4"
+                                         ng-if="scopeModel.allowOverlapping">
+    </vr-common-statusdefinition-selector>
 </vr-row>

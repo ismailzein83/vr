@@ -21,6 +21,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
         }
         public Guid StatusId { get; set; }
         public bool ApplyToChildren { get; set; }
+        public bool AllowOverlapping { get; set; }
+        public List<Guid> ApplicableOnStatuses { get; set; }
         public override bool DoesUserHaveAccess(IAccountActionDefinitionCheckAccessContext context)
         {
             return new AccountBEDefinitionManager().DoesUserHaveEditAccess(context.UserId, context.AccountBEDefinitionId);

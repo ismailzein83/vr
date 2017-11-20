@@ -9,12 +9,17 @@ namespace Retail.BusinessEntity.Business
 {
     public class AccountStatusHistoryManager
     {
-        public void AddAccountStatusHistory(Guid accountDefinitionId, long accountId, Guid statusDefinitionId, Guid? previousStatusId)
+        public void AddAccountStatusHistory(Guid accountDefinitionId, long accountId, Guid statusDefinitionId, Guid? previousStatusId, DateTime statusChangedDate)
         {
             IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
-            dataManager.Insert(accountDefinitionId, accountId, statusDefinitionId, previousStatusId);
+            dataManager.Insert(accountDefinitionId, accountId, statusDefinitionId, previousStatusId, statusChangedDate);
         }
-
+      
+        public void DeleteAccountStatusHistories(List<long> accountStatusHistoryIdsToDelete)
+        {
+            IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
+            dataManager.DeleteAccountStatusHistories(accountStatusHistoryIdsToDelete);
+        }
         public Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> GetAccountStatusHistoryListByAccountDefinition(HashSet<AccountDefinition> accountDefinitions)
         {
             IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
@@ -82,6 +87,13 @@ namespace Retail.BusinessEntity.Business
                 }
             }
             return GetAccountStatusHistoryListByAccountDefinition(accountDefinitions);
+        }
+
+
+        public IEnumerable<AccountStatusHistory> GetAccountStatusHistoriesAfterDate(Guid accountBEDefinitionId, List<long> accountIds, DateTime statusChangedDate)
+        {
+            IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
+            return dataManager.GetAccountStatusHistoriesAfterDate(accountBEDefinitionId, accountIds, statusChangedDate);
         }
     }
 }

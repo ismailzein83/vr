@@ -7,11 +7,12 @@
     function ChangeStatusActionAPIService(BaseAPIService, UtilsService, Retail_BE_ModuleConfig, SecurityService) {
         var controllerName = 'ChangeStatusAction';
 
-        function ChangeAccountStatus(accountBEDefinitionId, accountId, actionDefinitionId) {
+        function ChangeAccountStatus(accountBEDefinitionId, accountId, actionDefinitionId, statusChangedDate) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "ChangeAccountStatus"), {
                 accountBEDefinitionId: accountBEDefinitionId,
                 accountId: accountId,
-                actionDefinitionId: actionDefinitionId
+                actionDefinitionId: actionDefinitionId,
+                statusChangedDate: statusChangedDate
             });
         }
         return {

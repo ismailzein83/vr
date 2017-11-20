@@ -16,9 +16,9 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
         ChangeStatusActionManager _manager = new ChangeStatusActionManager();
         [HttpGet]
         [Route("ChangeAccountStatus")]
-        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> ChangeAccountStatus(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId)
+        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> ChangeAccountStatus(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId, DateTime statusChangedDate)
         {
-            return _manager.ChangeAccountStatus(accountBEDefinitionId, accountId, actionDefinitionId);
+            return _manager.ChangeAccountStatus(accountBEDefinitionId, accountId, actionDefinitionId, statusChangedDate);
         }
     }
 }

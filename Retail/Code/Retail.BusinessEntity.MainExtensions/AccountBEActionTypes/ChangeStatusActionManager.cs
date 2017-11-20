@@ -6,65 +6,60 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
 namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
 {
     public class ChangeStatusActionManager
     {
-        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> ChangeAccountStatus(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId)
+        AccountBEManager s_accountBEManager = new AccountBEManager();
+        AccountBEDefinitionManager s_accountBEDefinitionManager = new AccountBEDefinitionManager();
+
+
+        public Vanrise.Entities.UpdateOperationOutput<AccountDetail> ChangeAccountStatus(Guid accountBEDefinitionId, long accountId, Guid actionDefinitionId, DateTime statusChangedDate)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            var accountBEManager = new AccountBEManager();
-            var actionDefinition = new AccountBEDefinitionManager().GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
+
+            var actionDefinition = s_accountBEDefinitionManager.GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
             actionDefinition.ThrowIfNull("actionDefinition",actionDefinitionId);
 
             var actionDefinitionSettings = actionDefinition.ActionDefinitionSettings as ChangeStatusActionSettings;
             actionDefinitionSettings.ThrowIfNull("actionDefinitionSettings");
-            if (accountBEManager.EvaluateAccountCondition(accountBEDefinitionId, accountId, actionDefinition.AvailabilityCondition))
+
+            List<Account> accounts = new List<Account>();
+            if (s_accountBEManager.EvaluateAccountCondition(accountBEDefinitionId, accountId, actionDefinition.AvailabilityCondition))
             {
-                accountBEManager.UpdateStatuses(accountBEDefinitionId, new List<long> { accountId }, actionDefinitionSettings.StatusId, actionDefinition.Name);
-                FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-                financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, accountId);
-                bool isSucceeded = true;
-                if (actionDefinitionSettings.ApplyToChildren)
-                {
-                    if (!AppyChangeStatusToChilds(actionDefinitionSettings, actionDefinition.AvailabilityCondition, accountBEDefinitionId, accountId, actionDefinition.Name))
-                    {
-                        isSucceeded = false;
-                    };
-                }
-                if (isSucceeded)
-                {
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    updateOperationOutput.UpdatedObject = accountBEManager.GetAccountDetail(accountBEDefinitionId, accountId);
-                }
-                else
-                {
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-                }
+                var account = s_accountBEManager.GetAccount(accountBEDefinitionId, accountId);
+                accounts.Add(account);
             }
-            return updateOperationOutput;
-        }
-        private bool AppyChangeStatusToChilds(ChangeStatusActionSettings actionDefinitionSettings,AccountCondition actionCondition, Guid accountBEDefinitionId, long accountId,string actionName)
-        {
-            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
-            AccountBEManager accountBEManager = new AccountBEManager();
-            var childAccouts = accountBEManager.GetChildAccounts(accountBEDefinitionId, accountId,true);
-            if(childAccouts != null)
+            if (actionDefinitionSettings.ApplyToChildren)
             {
-                foreach(var childAccout in childAccouts)
+                var childAccounts = s_accountBEManager.GetChildAccounts(accountBEDefinitionId, accountId, true);
+                if (childAccounts != null)
                 {
-                    if (accountBEManager.EvaluateAccountCondition(childAccout, actionCondition))
+                    foreach (var childAccount in childAccounts)
                     {
-                        accountBEManager.UpdateStatuses(accountBEDefinitionId, new List<long> { childAccout.AccountId }, actionDefinitionSettings.StatusId, actionName);
-                        financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, childAccout.AccountId);
+                        if (s_accountBEManager.EvaluateAccountCondition(childAccount, actionDefinition.AvailabilityCondition))
+                        {
+                            accounts.Add(childAccount);
+                        }
                     }
                 }
             }
-            return true;
+            string errorMessage;
+            s_accountBEManager.UpdateStatuses(accountBEDefinitionId, accounts, actionDefinitionSettings.StatusId, statusChangedDate, actionDefinitionSettings.AllowOverlapping, actionDefinitionSettings.ApplicableOnStatuses,out errorMessage, true, actionDefinition.Name);
+            if (errorMessage != null )
+            {
+                updateOperationOutput.Message = errorMessage;
+                updateOperationOutput.ShowExactMessage = true;
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = s_accountBEManager.GetAccountDetail(accountBEDefinitionId, accountId);
+            }
+            return updateOperationOutput;
         }
-
     }
 }

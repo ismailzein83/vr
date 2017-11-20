@@ -33,7 +33,8 @@ namespace Retail.BusinessEntity.MainExtensions
                     }
                 }
             }
-            accountBEManager.UpdateStatuses(context.AccountBEDefinitionId, accountIdsToUpdateStatus, definitionSettings.NewStatusDefinitionId);
+            string errorMessage;
+            accountBEManager.UpdateStatuses(context.AccountBEDefinitionId, accountIdsToUpdateStatus, definitionSettings.NewStatusDefinitionId, out errorMessage);
         }
     }
 }

@@ -23,9 +23,23 @@ namespace Retail.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
-        public void Insert(Guid accountDefinitionId, long accountId, Guid statusDefinitionId, Guid? previousStatusId)
+        public void Insert(Guid accountDefinitionId, long accountId, Guid statusDefinitionId, Guid? previousStatusId, DateTime statusChangedDate)
         {
-            ExecuteNonQuerySP("Retail_BE.sp_AccountStatusHistory_Insert", accountDefinitionId, accountId, statusDefinitionId, previousStatusId);
+            ExecuteNonQuerySP("Retail_BE.sp_AccountStatusHistory_Insert", accountDefinitionId, accountId, statusDefinitionId, previousStatusId, statusChangedDate);
+        }
+        public void DeleteAccountStatusHistories(List<long> accountStatusHistoryIdsToDelete)
+        {
+            string accountStatusHistoryIdsToDeleteAsString = null;
+            if (accountStatusHistoryIdsToDelete != null)
+                accountStatusHistoryIdsToDeleteAsString = string.Join(",", accountStatusHistoryIdsToDelete);
+            ExecuteNonQuerySP("Retail_BE.[sp_AccountStatusHistory_Delete]", accountStatusHistoryIdsToDeleteAsString);
+        }
+        public IEnumerable<AccountStatusHistory> GetAccountStatusHistoriesAfterDate(Guid accountBEDefinitionId, List<long> accountIds, DateTime statusChangedDate)
+        {
+            string accountIdsAsString = null;
+            if(accountIds != null)
+                accountIdsAsString = string.Join(",",accountIds);
+            return GetItemsSP("[Retail_BE].[sp_AccountStatusHistory_GetSpecificAfterDate]", AccountStatusHistoryMapper, accountBEDefinitionId, accountIdsAsString, statusChangedDate);
         }
 
         public List<AccountStatusHistory> GetAccountStatusHistoryList(HashSet<AccountDefinition> accountDefinitions)
@@ -84,6 +98,6 @@ namespace Retail.BusinessEntity.Data.SQL
         #endregion
 
 
-       
+
     }
 }
