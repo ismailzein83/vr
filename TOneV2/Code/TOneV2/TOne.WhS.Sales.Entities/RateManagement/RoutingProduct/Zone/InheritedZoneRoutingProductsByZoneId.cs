@@ -7,7 +7,8 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public class InheritedZoneRoutingProductsByZoneId : Dictionary<long, ZoneInheritedRoutingProducts>
+    //public class InheritedZoneRoutingProductsByZoneId : Dictionary<long, ZoneInheritedRoutingProducts>
+    public class InheritedZoneRoutingProductsByZoneId
     {
 
     }
