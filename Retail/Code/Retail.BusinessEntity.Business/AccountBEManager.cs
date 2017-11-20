@@ -604,7 +604,6 @@ namespace Retail.BusinessEntity.Business
                         }
                         var financialAccountData = financialAccountManager.GetFinancialAccounts(accountBEDefinitionId, account.AccountId, false);
                         financialAccountManager.ReflectStatusToInvoiceAndBalanceAccounts(accountBEDefinitionId, vrAccountStatus, financialAccountData);
-                        financialAccountManager.UpdateAccountStatus(accountBEDefinitionId, account.AccountId);
                     }
 
                 }

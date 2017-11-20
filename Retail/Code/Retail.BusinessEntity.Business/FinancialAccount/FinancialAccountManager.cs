@@ -835,19 +835,22 @@ namespace Retail.BusinessEntity.Business
                 foreach (var financialAccount in financialAccounts)
                 {
                     Guid? balanceAccountTypeId = financialAccount.BalanceAccountTypeId;
-                    DateTime? eedToSet = null;
+                    
                     if (balanceAccountTypeId.HasValue)
                         s_liveBalanceManager.TryUpdateLiveBalanceStatus(financialAccount.FinancialAccountId, balanceAccountTypeId.Value, vrAccountStatus, false);
 
                     if (financialAccount.InvoiceTypeId.HasValue)
-                    {
                         s_invoiceAccountManager.TryUpdateInvoiceAccountStatus(financialAccount.InvoiceTypeId.Value, financialAccount.FinancialAccountId, vrAccountStatus, false);
-                        var lastInvoiceToDate = s_invoiceManager.GetLastInvoiceToDate(financialAccount.InvoiceTypeId.Value, financialAccount.FinancialAccountId);
-                        if (lastInvoiceToDate.HasValue)
-                            eedToSet = lastInvoiceToDate.Value.AddDays(1).Date;
-                    }
+
                     if (vrAccountStatus == VRAccountStatus.InActive)
                     {
+                        DateTime? eedToSet = null;
+                        if (financialAccount.InvoiceTypeId.HasValue)
+                        {
+                            var lastInvoiceToDate = s_invoiceManager.GetLastInvoiceToDate(financialAccount.InvoiceTypeId.Value, financialAccount.FinancialAccountId);
+                            if (lastInvoiceToDate.HasValue)
+                                eedToSet = lastInvoiceToDate.Value.AddDays(1).Date;
+                        }
                         CloseFinancialAccount(accountBEDefinitionId,vrAccountStatus, financialAccount, eedToSet, balanceAccountTypeId);
                     }
                 }
