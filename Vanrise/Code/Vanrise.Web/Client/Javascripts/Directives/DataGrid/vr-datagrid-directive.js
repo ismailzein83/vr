@@ -883,6 +883,13 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 gridApi.hideLoader = function () {
                     ctrl.isLoadingMoreData = false;
                 };
+
+                gridApi.refreshGrid = function () {
+                    setMainItemsViewVisible();
+                    retrieveDataResultKey = null;
+                    return retrieveData(false, false, false, DataGridRetrieveDataEventType.ExternalTrigger);
+                };
+
                 function addBatchItemsToBeginSource(items) {
                     var numberOfItems = pagingOnScrollEnabled ? getPageSize() : 10;//if paging on scroll is enabled, take the page size
                     for (var i = 0; i < numberOfItems; i++) {
