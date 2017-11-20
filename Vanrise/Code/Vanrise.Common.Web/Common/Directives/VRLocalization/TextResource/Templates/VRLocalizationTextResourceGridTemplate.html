@@ -1,1 +1,11 @@
-﻿
+﻿<vr-datagrid datasource="scopeModel.vrLocalizationTextResources"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="VRTextResourceId">
+    <vr-datagridcolumn headertext="'Id'" field="'VRLocalizationTextResourceId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Resource Key'" field="'ResourceKey'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Module Name'" field="'ModuleName'"></vr-datagridcolumn>
+
+</vr-datagrid>

@@ -172,6 +172,10 @@
     <Compile Include="VRLocalization\VRLocalizationModuleInfo.cs" />
     <Compile Include="VRLocalization\VRLocalizationModuleQuery.cs" />
     <Compile Include="VRLocalization\VRLocalizationTextResource.cs" />
+    <Compile Include="VRLocalization\VRLocalizationTextResourceDetail.cs" />
+    <Compile Include="VRLocalization\VRLocalizationTextResourceInfo.cs" />
+    <Compile Include="VRLocalization\VRLocalizationTextResourceInfoFilter.cs" />
+    <Compile Include="VRLocalization\VRLocalizationTextResourceQuery.cs" />
     <Compile Include="VRLocalization\VRLocalizationTextResourceTranslation.cs" />
     <Compile Include="VRMail\VRMail.cs" />
     <Compile Include="VRMail\VRMailAttachement.cs" />
