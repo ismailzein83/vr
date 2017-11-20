@@ -230,7 +230,9 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\vr-whs-routing-routerulesettings-percentage-fixed.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-selective.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\vr-whs-routing-routerulesettings-selector.js" />
+    <Content Include="WhS_Routing\Directives\ProcessInput\Templates\RoutingEntitiesUpdaterProcessTemplate.html" />
     <Content Include="WhS_Routing\Directives\ProcessInput\Templates\BuildPartialRouteProcessTemplate.html" />
+    <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-routingentitiesupdaterprocess.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-buildpartialrouteprocess.js" />
     <Content Include="WhS_Routing\Directives\RouteRule\Templates\RouteRuleViewTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRule\vr-whs-be-routerule-view.js" />
@@ -246,9 +248,11 @@
     <Content Include="WhS_Routing\Directives\Routing\vr-whs-routing-routestatus-selector.js" />
     <Content Include="WhS_Routing\Directives\RPRoute\Templates\RPRouteOptionGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RPRoute\vr-whs-routing-rprouteoption-grid.js" />
+    <Content Include="WhS_Routing\Directives\ScheduleTask\Templates\RoutingEntitiesUpdateTaskTemplate.html" />
     <Content Include="WhS_Routing\Directives\ScheduleTask\Templates\BuildPartialRouteTaskTemplate.html" />
     <Content Include="WhS_Routing\Directives\ScheduleTask\Templates\BuildRouteTaskTemplate.html" />
     <Content Include="WhS_Routing\Directives\ScheduleTask\Templates\RPBuildProductRoutesTaskTemplate.html" />
+    <Content Include="WhS_Routing\Directives\ScheduleTask\vr-whs-routing-routingentitiesupdatertask.js" />
     <Content Include="WhS_Routing\Directives\ScheduleTask\vr-whs-routing-buildpartialroutetask.js" />
     <Content Include="WhS_Routing\Directives\ScheduleTask\vr-whs-routing-buildroutetask.js" />
     <Content Include="WhS_Routing\Directives\ScheduleTask\vr-whs-routing-rpbuildproducttask.js" />
