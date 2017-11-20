@@ -111,7 +111,7 @@ namespace Vanrise.Invoice.BP.Activities
                 }
                 catch (Exception ex)
                 {
-                    string errorMessage = string.Format("{0} not executed for invoice '{1}' of account '{2}'.", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber);
+                    string errorMessage = string.Format("{0} not executed for invoice '{1}' of account '{2}'.", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, invoiceQueue.SerialNumber, partnerName);
                     var exception = Utilities.WrapException(ex, errorMessage);
                     switch (handlingErrorOption)
                     {
@@ -126,7 +126,7 @@ namespace Vanrise.Invoice.BP.Activities
 
                 if (actionContext.ErrorMessage != null)
                 {
-                    string errorMessage = string.Format("{0} not executed for invoice '{1}' of account '{2}'. Reason '{3}'.", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber, actionContext.ErrorMessage);
+                    string errorMessage = string.Format("{0} not executed for invoice '{1}' of account '{2}'. Reason '{3}'.", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, invoiceQueue.SerialNumber, partnerName, actionContext.ErrorMessage);
                     if (!actionContext.IsErrorOccured)
                     {
                         handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, errorMessage);
@@ -144,7 +144,7 @@ namespace Vanrise.Invoice.BP.Activities
                     }
                 }
                 else
-                    handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully for invoice '{1}' of account '{2}'.", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, partnerName, invoiceQueue.SerialNumber);
+                    handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "{0} completed successfully for invoice '{1}' of account '{2}'.", invoiceBulkActionPreparedEntity.InvoiceBulkActionDefinition.Title, invoiceQueue.SerialNumber, partnerName);
 
             }
         }

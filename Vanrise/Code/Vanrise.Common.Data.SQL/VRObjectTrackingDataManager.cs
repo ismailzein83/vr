@@ -46,6 +46,7 @@ namespace Vanrise.Common.Data.SQL
                 UserId = GetReaderValue<int>(reader, "UserID"),
                 ActionId = GetReaderValue<int>(reader, "ActionID"),
                 HasDetail = GetReaderValue<bool>(reader, "HasDetail"),
+                ActionDescription = reader["ActionDescription"] as string
             };
 
             return ObjectTracking;
