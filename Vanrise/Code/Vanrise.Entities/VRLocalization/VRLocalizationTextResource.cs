@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    #region public
     public class VRLocalizationTextResource
     {
         public Guid VRLocalizationTextResourceId { get; set; }
@@ -22,5 +21,4 @@ namespace Vanrise.Entities
     {
         public string DefaultValue { get; set; }
     }
-    #endregion 
 }

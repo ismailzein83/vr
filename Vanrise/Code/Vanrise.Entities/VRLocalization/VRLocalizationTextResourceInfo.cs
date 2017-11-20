@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    #region public
     public class VRLocalizationTextResourceInfo
     {
     }
-    #endregion
 }

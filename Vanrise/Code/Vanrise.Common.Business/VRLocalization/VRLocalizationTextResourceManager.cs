@@ -82,14 +82,7 @@ namespace Vanrise.Common.Business
         {
             return GetCachedVRLocalizationTextResources();
         }
-        public string GetVRModuleName(Guid ModuleId)
-        {
-            VRLocalizationModuleManager vrLocalizationModuleManager = new VRLocalizationModuleManager();
-            var module = vrLocalizationModuleManager.GetVRLocalizationModule(ModuleId);
-            if (module == null)
-                return null;
-            return module.Name;
-        }
+
         #endregion
 
         #region private methods
@@ -115,6 +108,9 @@ namespace Vanrise.Common.Business
             }
         }
 
+        #endregion
+
+        #region Mapper
         VRLocalizationTextResourceDetail VRLocalizationTextResourceDetailMapper(VRLocalizationTextResource localizationTextResource)
         {
 
@@ -124,7 +120,8 @@ namespace Vanrise.Common.Business
                 ResourceKey = localizationTextResource.ResourceKey,
                 ModuleId = localizationTextResource.ModuleId
             };
-            vrLocalizationTextResourceDetail.ModuleName = GetVRModuleName(localizationTextResource.ModuleId);
+            VRLocalizationModuleManager vrLocalizationModuleManager = new VRLocalizationModuleManager();
+            vrLocalizationTextResourceDetail.ModuleName = vrLocalizationModuleManager.GetVRModuleName(localizationTextResource.ModuleId);
             return vrLocalizationTextResourceDetail;
         }
         #endregion

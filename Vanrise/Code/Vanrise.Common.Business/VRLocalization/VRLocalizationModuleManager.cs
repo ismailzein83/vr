@@ -29,6 +29,13 @@ namespace Vanrise.Common.Business
                 return null;
             return vrLocalizationModules.GetRecord(vrLocalizationModuleId);
         }
+        public string GetVRModuleName(Guid ModuleId)
+        {
+            var module = GetVRLocalizationModule(ModuleId);
+            if (module == null)
+                return null;
+            return module.Name;
+        }
         public InsertOperationOutput<VRLocalizationModuleDetail> AddVRLocalizationModule(VRLocalizationModule vrLocalizationModule)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRLocalizationModuleDetail>();

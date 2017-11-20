@@ -98,9 +98,7 @@
                     if (vrLocalizationTextResourceEntity != undefined) {
 
                         localizationModuleSelectorPayload = {
-                            selectedIds: vrLocalizationTextResourceEntity.ModuleId,
-                            filter: {
-                            }
+                            selectedIds: vrLocalizationTextResourceEntity.ModuleId
                         };
                     }
                     VRUIUtilsService.callDirectiveLoad(localizationModuleSelectorAPI, localizationModuleSelectorPayload, localizationModuleSelectorLoadDeferred);
