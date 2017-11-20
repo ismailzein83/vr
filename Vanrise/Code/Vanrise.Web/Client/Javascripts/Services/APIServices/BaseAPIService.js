@@ -163,7 +163,8 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
             }
             else {
                 console.log('');
-                console.log('Error Occured: ' + data.ExceptionMessage);
+                if (data != undefined)
+                    console.log('Error Occured: ' + data.ExceptionMessage);
                 console.log('');
                 console.log(data);
                 notify.closeAll();
