@@ -39,8 +39,6 @@ function (UtilsService, VRUIUtilsService, VRNavigationService) {
                 var obj = {
                     $type: 'Retail.BusinessEntity.MainExtensions.AccountBEActionTypes.AssignAccountManagerAccountActionSettings, Retail.BusinessEntity.MainExtensions'
                 };
-                console.log("obj");
-                console.log(obj);
                 return obj;
             };
 

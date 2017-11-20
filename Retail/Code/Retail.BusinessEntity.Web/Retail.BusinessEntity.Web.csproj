@@ -395,9 +395,9 @@
     <Content Include="Retail_BusinessEntity\Directives\DID\retail-be-did-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDAccountRelationsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\DID\Templates\DIDSynchronizerEditor.html" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-accountassignment-runtime.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-accountmanager-accountmanagrassignment-grid.js" />
-    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-accountmanager-accountsubviewruntime-search.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountassignment-runtime.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountmanagrassignment-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountsubviewruntime-search.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountassignmentdefinition.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-accountmanager-accountsubviewdefinition.js" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\retail-be-assignaccountmanageraccountactionsettings-editor.js" />

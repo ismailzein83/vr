@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailAccountassignmentRuntime', ['UtilsService', 'VRUIUtilsService', 'VRNavigationService',
+app.directive('retailBeAccountassignmentRuntime', ['UtilsService', 'VRUIUtilsService', 'VRNavigationService',
 function (UtilsService, VRUIUtilsService, VRNavigationService) {
 
     var directiveDefinitionObject = {

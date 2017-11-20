@@ -58,7 +58,7 @@ function (UtilsService, VRUIUtilsService, VRNavigationService) {
                     }
 
                 }
-            }
+            };
             defineAPI();
         }
         function defineAPI() {
@@ -75,7 +75,7 @@ function (UtilsService, VRUIUtilsService, VRNavigationService) {
                     selectedBusinessEntityDefinitionPromiseDeferred = UtilsService.createPromiseDeferred();
                     promises.push(loadAccountConditionSelective(assignmentDefinitionEntity));
                 }
-                promises.push(loadBusinessEntityDefinitionSelector(assignmentDefinitionEntity))
+                promises.push(loadBusinessEntityDefinitionSelector(assignmentDefinitionEntity));
 
                    
                 return UtilsService.waitMultiplePromises(promises);

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailAccountmanagerAccountmanagrassignmentGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentAPIService", "Retail_BE_AccountManagerAssignmentService",
+app.directive("retailBeAccountmanagerAccountmanagrassignmentGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentAPIService", "Retail_BE_AccountManagerAssignmentService",
 function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentAPIService, Retail_BE_AccountManagerAssignmentService) {
 
     var directiveDefinitionObject = {
@@ -25,6 +25,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
         this.initializeController = initializeController;
         var gridAPI;
         var searchPayload;
+        var accountManagerAssignementDefinitionId;
 
 
         function initializeController() {
@@ -38,6 +39,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
                         searchPayload = payload;
+                        if (searchPayload != undefined && searchPayload.accountManagerSubViewDefinition != undefined && searchPayload.accountManagerSubViewDefinition.Settings != undefined)
+                            accountManagerAssignementDefinitionId = searchPayload.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId;
                         return gridAPI.retrieveData(getGridQuery());
 
                     };
@@ -48,7 +51,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                         
                     };
                     return directiveAPI;
-                };
+                }
 
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
@@ -78,8 +81,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
         }
         function getGridQuery() {
             var Query = {
-                AccountManagerId: searchPayload.accountManagerId
-            }
+                AccountManagerId: searchPayload.accountManagerId,
+                AccountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId
+            };
             return Query;
         }
     

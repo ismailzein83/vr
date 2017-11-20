@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("retailAccountmanagerAccountsubviewruntimeSearch", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentService",
+app.directive("retailBeAccountmanagerAccountsubviewruntimeSearch", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentService",
 function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentService) {
 
     var directiveDefinitionObject = {
@@ -36,7 +36,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
             $scope.addAccountManagerAssignments = function () {
                 var onAccountManagerAssignmentAdded = function (accountManagerAssignment) {
                     accountManagerAssignmentGridAPI.onAccountManagerAssignmentAdded(accountManagerAssignment);
-                }
+                };
                 Retail_BE_AccountManagerAssignmentService.addAccountManagerAssignments(gridPayload.accountManagerDefinitionId, gridPayload.accountManagerId, gridPayload.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId, onAccountManagerAssignmentAdded);
             };
             function getDirectiveAPI() {
@@ -49,13 +49,13 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
 
                 };
                 return directiveAPI;
-            };
+            }
             function getGridPayload() {
                 var payload = {
                     accountManagerDefinitionId: gridPayload.accountManagerDefinitionId,
                     accountManagerId: gridPayload.accountManagerId,
                     accountManagerSubViewDefinition: gridPayload.accountManagerSubViewDefinition
-                }
+                };
                 return payload;
             }
         }
