@@ -698,7 +698,7 @@ namespace TOne.WhS.Sales.Business
                         CountryBEDsByCountryId = countryBEDsByCountryId,
                         RoutingDatabaseId = input.RoutingDatabaseId,
                         PolicyConfigId = input.PolicyConfigId,
-                        NumberOfOptions = input.NumberOfOptions,
+                        NumberOfOptions = null,
                         CostCalculationMethods = input.CostCalculationMethods,
                         CurrencyId = input.CurrencyId,
                         LongPrecisionValue = longPrecisionValue,
@@ -795,7 +795,7 @@ namespace TOne.WhS.Sales.Business
                         CurrencyId = input.CurrencyId,
                         RoutingDatabaseId = input.RoutingDatabaseId,
                         PolicyConfigId = input.PolicyConfigId,
-                        NumberOfOptions = input.NumberOfOptions,
+                        NumberOfOptions = null,
                         CostCalculationMethods = input.CostCalculationMethods,
                         BulkAction = null,
                         Draft = draft,
@@ -1025,7 +1025,7 @@ namespace TOne.WhS.Sales.Business
                         CountryBEDsByCountryId = input.CountryBEDsByCountryId,
                         RoutingDatabaseId = input.RoutingDatabaseId,
                         PolicyConfigId = input.PolicyConfigId,
-                        NumberOfOptions = input.NumberOfOptions,
+                        NumberOfOptions = null,
                         CostCalculationMethods = input.CostCalculationMethods,
                         CurrencyId = input.CurrencyId,
                         LongPrecisionValue = longPrecisionValue,
@@ -1241,7 +1241,7 @@ namespace TOne.WhS.Sales.Business
             public int CurrencyId { get; set; }
             public int RoutingDatabaseId { get; set; }
             public Guid PolicyConfigId { get; set; }
-            public int NumberOfOptions { get; set; }
+            public int? NumberOfOptions { get; set; }
             public List<CostCalculationMethod> CostCalculationMethods { get; set; }
             public BulkActionType BulkAction { get; set; }
             public Changes Draft { get; set; }

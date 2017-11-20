@@ -25,7 +25,7 @@ namespace TOne.WhS.Sales.Business
 
         private Dictionary<long, RPRouteDetail> _rpRoutesByZoneId = new Dictionary<long, RPRouteDetail>();
 
-        public ZoneRouteOptionManager(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, Guid policyConfigId, int numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId, int longPrecisionValue, int normalPrecisionValue)
+        public ZoneRouteOptionManager(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId, int longPrecisionValue, int normalPrecisionValue)
         {
             if (rpZones != null && rpZones.Count() > 0)
             {

@@ -747,11 +747,10 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<int> GetCarrierAccountIdsAssignedToSellingProduct(int sellingProductId)
         {
             var carrierAccountIds = new List<int>();
-            Dictionary<int, CarrierAccount> carrierAccountsById = GetCachedCarrierAccounts();
+           var carrierAccountsAssignedToSellingProduct = GetCarrierAccountsAssignedToSellingProduct(sellingProductId);
 
-            foreach (CarrierAccount carrierAccount in carrierAccountsById.Values)
+           foreach (var carrierAccount in carrierAccountsAssignedToSellingProduct)
             {
-                if (!IsCarrierAccountDeleted(carrierAccount.CarrierAccountId) && IsCarrierAccountActive(carrierAccount) && carrierAccount.SellingProductId.HasValue && carrierAccount.SellingProductId.Value == sellingProductId)
                     carrierAccountIds.Add(carrierAccount.CarrierAccountId);
             }
 
@@ -768,7 +767,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     carrierAccounts.Add(CarrierAccountInfoMapper(carrierAccount));
             }
 
-            return carrierAccounts;
+            return carrierAccounts.OrderBy(x => x.Name);
         }
         public CarrierAccount GetCarrierAccountHistoryDetailbyHistoryId(int carrierAccountHistoryId)
         {

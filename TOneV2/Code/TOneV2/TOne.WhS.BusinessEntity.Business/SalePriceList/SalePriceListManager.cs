@@ -48,6 +48,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(dataByCustomerList, context.EffectiveDate.Date.AddSeconds(-1)));
                 List<long> pricelistIds = new List<long>();
 
+                int numberOFRemainingPricelists = context.CustomerPriceListChanges.Count();
                 foreach (var customerChange in context.CustomerPriceListChanges)
                 {
                     string customerName = _carrierAccountManager.GetCarrierAccountName(customerChange.CustomerId);
@@ -82,8 +83,10 @@ namespace TOne.WhS.BusinessEntity.Business
                         }
                     }
 
-                    context.WriteMessageToWorkflowLogs("Finished creating pricelist for customer {0}", customerName);
+                    numberOFRemainingPricelists--;
+                    context.WriteMessageToWorkflowLogs("Finished creating pricelist for customer {0}. {1} pricelist(s) are remaining", customerName, numberOFRemainingPricelists);
                 }
+
                 SaveChangesToDB(context.CustomerPriceListChanges, context.ProcessInstanceId);
                 BulkInsertSalePriceListSnapshot(saleCodes.Select(item => item.SaleCodeId).ToList(), pricelistIds);
             }

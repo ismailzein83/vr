@@ -41,7 +41,9 @@ namespace TOne.WhS.Sales.MainExtensions
         {
             if (context.SaleZone.EED.HasValue)
                 return false;
-
+            DateTime? countryEED = context.GetCountryEED(context.SaleZone.CountryId);
+            if (countryEED.HasValue)
+                return false;
             return true;
         }
 
