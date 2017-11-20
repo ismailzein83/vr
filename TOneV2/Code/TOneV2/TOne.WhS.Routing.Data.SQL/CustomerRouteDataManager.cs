@@ -442,27 +442,6 @@ namespace TOne.WhS.Routing.Data.SQL
             return dtCustomerRoutes;
         }
 
-        public List<CustomerRoute> GetUpdatedCustomerRoutes(List<CustomerRouteDefinition> customerRouteDefinitions, int versionNumber)
-        {
-            if (customerRouteDefinitions == null || customerRouteDefinitions.Count == 0)
-                return null;
-
-            List<string> conditions = new List<string>();
-
-            foreach (CustomerRouteDefinition customerRouteDefinition in customerRouteDefinitions)
-            {
-                string query = string.Format("(cr.CustomerId = {0} and cr.Code = '{1}')", customerRouteDefinition.CustomerId, customerRouteDefinition.Code);
-                conditions.Add(query);
-            }
-
-            string concatenedQuery = string.Format("({0}) and cr.VersionNumber = {1}", string.Join<string>(" or ", conditions), versionNumber);
-
-            query_GetUpdatedCustomerRoutes.Replace("#UPDATEDROUTES#", concatenedQuery);
-            List<CustomerRoute> customerRoutes = GetItemsText(query_GetUpdatedCustomerRoutes.ToString(), CustomerRouteMapper, (cmd) => { });
-            CompleteSupplierData(customerRoutes);
-            return customerRoutes;
-        }
-
         public void FinalizeCurstomerRoute(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP)
         {
             string maxDOPSyntax = maxDOP.HasValue ? string.Format(",MAXDOP={0}", maxDOP.Value) : "";
@@ -620,24 +599,6 @@ namespace TOne.WhS.Routing.Data.SQL
                                                             FROM [dbo].[CustomerRoute] cr with(nolock) 
                                                             #CODESUPPLIERZONEMATCH#
                                                             Where #AFFECTEDROUTES#";
-
-        private StringBuilder query_GetUpdatedCustomerRoutes = new StringBuilder(@"
-                                                                SELECT  cr.CustomerID
-                                                                       ,cr.Code
-                                                                       ,sz.Name as SaleZoneName
-                                                                       ,ca.Name as  CustomerName
-                                                                       ,cr.SaleZoneID
-                                                                       ,czd.EffectiveRateValue as Rate
-                                                                       ,czd.SaleZoneServiceIds
-                                                                       ,cr.IsBlocked
-                                                                       ,cr.ExecutedRuleId
-                                                                       ,cr.RouteOptions
-                                                                       ,cr.VersionNumber
-                                                                FROM [dbo].[CustomerRoute] cr with(nolock) 
-                                                                JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId = sz.ID 
-                                                                JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID = ca.ID
-                                                                JOIN [dbo].[CustomerZoneDetail] as czd ON czd.SaleZoneId = cr.SaleZoneID and czd.CustomerId = cr.CustomerID
-                                                                Where #UPDATEDROUTES#");
 
         const string query_LoadCustomerRoutes = @"SELECT cr.CustomerID
                                                         ,cr.Code

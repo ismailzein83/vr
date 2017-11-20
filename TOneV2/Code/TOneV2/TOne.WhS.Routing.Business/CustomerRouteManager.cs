@@ -35,30 +35,6 @@ namespace TOne.WhS.Routing.Business
             return BigDataManager.Instance.RetrieveData(input, new CustomerRouteRequestHandler());
         }
 
-        public List<CustomerRouteDetail> GetUpdatedCustomerRoutes(List<CustomerRouteDefinition> customerRouteDefinitions)
-        {
-            var routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
-            IPartialRouteInfoDataManager partialRouteInfoDataManager = RoutingDataManagerFactory.GetDataManager<IPartialRouteInfoDataManager>();
-            partialRouteInfoDataManager.RoutingDatabase = routingDatabase;
-
-            PartialRouteInfo partialRouteInfo = partialRouteInfoDataManager.GetPartialRouteInfo();
-            partialRouteInfo.ThrowIfNull("partialRouteInfo", partialRouteInfoDataManager.RoutingDatabase.ID);
-
-            ICustomerRouteDataManager customerRouteDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
-            customerRouteDataManager.RoutingDatabase = routingDatabase;
-
-            List<CustomerRoute> updatedCustomerRoutes = customerRouteDataManager.GetUpdatedCustomerRoutes(customerRouteDefinitions, partialRouteInfo.LastVersionNumber);
-            if (updatedCustomerRoutes == null)
-                return null;
-
-            List<CustomerRouteDetail> result = new List<CustomerRouteDetail>();
-            foreach (CustomerRoute customerRoute in updatedCustomerRoutes)
-            {
-                result.Add(CustomerRouteDetailMapper(customerRoute));
-            }
-            return result;
-        }
-
         public string SerializeOptions(List<RouteOption> options)
         {
             if (options == null)

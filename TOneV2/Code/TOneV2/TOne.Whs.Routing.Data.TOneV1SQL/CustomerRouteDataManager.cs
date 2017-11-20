@@ -229,11 +229,6 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             throw new NotImplementedException();
         }
 
-        public List<CustomerRoute> GetUpdatedCustomerRoutes(List<CustomerRouteDefinition> customerRouteDefinitions, int versionNumber)
-        {
-            throw new NotImplementedException();
-        }
-
         public void FinalizeCurstomerRoute(Action<string> trackStep, int commnadTimeoutInSeconds, int? maxDOP)
         {
             StringBuilder query = new StringBuilder();
