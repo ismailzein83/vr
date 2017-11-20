@@ -588,16 +588,19 @@ namespace Retail.BusinessEntity.Business
                             if (shouldInsertAccountHistory)
                                 accountStatusHistoryManager.AddAccountStatusHistory(accountBEDefinitionId, account.AccountId, statusId, previousStatusId, statusChangedDate);
                             accountStatusHistoryManager.DeleteAccountStatusHistories(accountStatusHistoryIdsToDelete);
+                            string actionDescription = null;
+                            string dateFormat = Utilities.GetDateTimeFormat(DateTimeType.Date);
                             if (actionName != null)
                             {
-                                VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), actionName, true, account);
+                                actionDescription = string.Format("Effective on '{0}'", statusChangedDate.ToString(dateFormat));
+                                VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), actionName, true, account, actionDescription);
                             }
                             else
                             {
-                                string actionDescription = string.Format("Status Changed to '{0}'", statusName);
+                                actionDescription = string.Format("Status Changed to '{0}' and effective on '{1}'", statusName, statusChangedDate.ToString(dateFormat));
                                 if (previousStatusName != null)
                                 {
-                                    actionDescription = string.Format("Status Changed from '{0}' to '{1}'", previousStatusName, statusName);
+                                    actionDescription = string.Format("Status Changed from '{0}' to '{1}' and effective on '{2}'", previousStatusName, statusName, statusChangedDate.ToString(dateFormat));
                                 }
                                 VRActionLogger.Current.LogObjectCustomAction(new AccountBELoggableEntity(accountBEDefinitionId), string.Format("Update Status"), true, account, actionDescription);
                             }
