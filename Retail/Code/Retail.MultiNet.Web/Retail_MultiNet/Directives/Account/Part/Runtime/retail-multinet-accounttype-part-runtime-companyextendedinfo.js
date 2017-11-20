@@ -99,7 +99,7 @@ app.directive('retailMultinetAccounttypePartRuntimeCompanyextendedinfo', ["Utils
                     CNICExpiryDate: $scope.scopeModel.cNICExpiryDate,
                     AssignedNumber: $scope.scopeModel.assignedNumber
 
-                }
+                };
 
             };
             if (ctrl.onReady != null)
