@@ -13,6 +13,7 @@ SELECT	ac.ID,
 		ac.UserID,
 		ac.ActionID,
 		ac.LogTime,
+		ac.ActionDescription,
 		CASE WHEN ObjectDetails IS NULL THEN CAST(0 AS bit) ELSE CAST(1 AS bit) END as HasDetail
 FROM	[logging].[ObjectTracking]  ac WITH(NOLOCK)
 WHERE	ac.LoggableEntityID=@LoggableEntityId
