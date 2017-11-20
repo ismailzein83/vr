@@ -50,7 +50,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                         fieldType: selectedDataRecordField != undefined ? selectedDataRecordField.Type : undefined,
                         fieldValue: filterObj != undefined ? filterObj.Value : undefined,
                         fieldTitle: ($scope.selectedFilter != undefined && $scope.selectedFilter.showSecondDateTimePicker) ? 'From' :
-                                    ($scope.selectedComparisonPart.value == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time.value) ? 'Time' : 'Date'
+                                     isTimeComparisonPart($scope.selectedComparisonPart) ? 'Time' : 'Date'
                     };
                     var setLoader = function (value) {
                         $scope.isDateFilterEditorLoading = value;
@@ -93,7 +93,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, date2FilterEditorAPI, date2FilterPayload, setLoader);
                         }
                         else {
-                            var label = ($scope.selectedComparisonPart.value == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time.value) ? 'Time' : 'Date';
+                            var label = isTimeComparisonPart($scope.selectedComparisonPart) ? 'Time' : 'Date';
                             dateFilterEditorAPI.setLabel(label);
                         }
                     }
@@ -131,8 +131,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                     if (value == undefined || value2 == undefined)
                         return null;
 
-                    if ($scope.selectedComparisonPart == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time
-                        || $scope.selectedComparisonPart == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Hour) {
+                    if (isTimeComparisonPart($scope.selectedComparisonPart)) {
 
                         if (value2.Hour > value.Hour)
                             return null;
@@ -202,7 +201,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                                 fieldType: selectedDataRecordField.Type,
                                 fieldValue: filterObj != undefined ? filterObj.Value : undefined,
                                 fieldTitle: ($scope.selectedFilter != undefined && $scope.selectedFilter.showSecondDateTimePicker) ? 'From' :
-                                            ($scope.selectedComparisonPart.value == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time.value) ? 'Time' : 'Date'
+                                             isTimeComparisonPart($scope.selectedComparisonPart) ? 'Time' : 'Date'
                             };
                             VRUIUtilsService.callDirectiveLoad(dateFilterEditorAPI, dateFilterPayload, dateFilterLoadDeferred);
 
@@ -263,6 +262,16 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                 else {
                     $scope.selectedComparisonPart = $scope.comparisonParts[0];
                 }
+            }
+
+            function isTimeComparisonPart(selectedComparisonPart) {
+                if (selectedComparisonPart == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time)
+                    return true;
+
+                if (selectedComparisonPart == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Hour)
+                    return true;
+
+                return false;
             }
         }
 

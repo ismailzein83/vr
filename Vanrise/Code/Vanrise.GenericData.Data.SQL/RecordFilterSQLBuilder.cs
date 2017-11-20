@@ -315,28 +315,42 @@ namespace Vanrise.GenericData.Data.SQL
             string endDateParameterName;
             string castedEndDateParameterName;
 
+            bool isMidnight;
+
             switch (dateTimeFilter.CompareOperator)
             {
                 case DateTimeRecordFilterOperator.Equals:
                     endDate = firstDateTimeValue.AddHours(1);
+                    isMidnight = CheckMidnight(endDate);
+                    if (isMidnight)
+                        endDate = new DateTime(firstDateTimeValue.Year, firstDateTimeValue.Month, firstDateTimeValue.Day, 23, 59, 59, 998);
+
                     endDateParameterName = GenerateParameterName(ref parameterIndex);
                     parameterValues.Add(endDateParameterName, endDate);
                     castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
-                    return string.Format("({0} >= {1} and {0} < {2})", castedColumnName, castedStartDateParameterName, castedEndDateParameterName);
+                    return string.Format("({0} >= {1} and {0} <{2} {3})", castedColumnName, castedStartDateParameterName, isMidnight ? "=" : "", castedEndDateParameterName);
 
                 case DateTimeRecordFilterOperator.NotEquals:
                     endDate = firstDateTimeValue.AddHours(1);
+                    isMidnight = CheckMidnight(endDate);
+                    if (isMidnight)
+                        endDate = new DateTime(firstDateTimeValue.Year, firstDateTimeValue.Month, firstDateTimeValue.Day, 23, 59, 59, 998);
+
                     endDateParameterName = GenerateParameterName(ref parameterIndex);
                     parameterValues.Add(endDateParameterName, endDate);
                     castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
-                    return string.Format("({0} < {1} or {0} >= {2})", castedColumnName, castedStartDateParameterName, castedEndDateParameterName);
+                    return string.Format("({0} < {1} or {0} >{2} {3})", castedColumnName, castedStartDateParameterName, isMidnight ? "" : "=", castedEndDateParameterName);
 
                 case DateTimeRecordFilterOperator.Greater:
                     endDate = firstDateTimeValue.AddHours(1);
+                    isMidnight = CheckMidnight(endDate);
+                    if (isMidnight)
+                        endDate = new DateTime(firstDateTimeValue.Year, firstDateTimeValue.Month, firstDateTimeValue.Day, 23, 59, 59, 998);
+
                     endDateParameterName = GenerateParameterName(ref parameterIndex);
                     parameterValues.Add(endDateParameterName, endDate);
                     castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
-                    return string.Format("({0} >= {1})", castedColumnName, castedEndDateParameterName);
+                    return string.Format("({0} >{1} {2})", castedColumnName, isMidnight ? "" : "=", castedEndDateParameterName);
 
                 case DateTimeRecordFilterOperator.GreaterOrEquals:
                     return string.Format("({0} >= {1})", castedColumnName, castedStartDateParameterName);
@@ -346,26 +360,38 @@ namespace Vanrise.GenericData.Data.SQL
 
                 case DateTimeRecordFilterOperator.LessOrEquals:
                     endDate = firstDateTimeValue.AddHours(1);
+                    isMidnight = CheckMidnight(endDate);
+                    if (isMidnight)
+                        endDate = new DateTime(firstDateTimeValue.Year, firstDateTimeValue.Month, firstDateTimeValue.Day, 23, 59, 59, 998);
+
                     endDateParameterName = GenerateParameterName(ref parameterIndex);
                     parameterValues.Add(endDateParameterName, endDate);
                     castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
-                    return string.Format("({0} < {1})", castedColumnName, castedEndDateParameterName);
+                    return string.Format("({0} <{1} {2})", castedColumnName, isMidnight ? "=" : "", castedEndDateParameterName);
 
                 case DateTimeRecordFilterOperator.Between:
                     secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
                     endDate = secondDateTimeValue.AddHours(1);
+                    isMidnight = CheckMidnight(endDate);
+                    if (isMidnight)
+                        endDate = new DateTime(secondDateTimeValue.Year, secondDateTimeValue.Month, secondDateTimeValue.Day, 23, 59, 59, 998);
+
                     endDateParameterName = GenerateParameterName(ref parameterIndex);
                     parameterValues.Add(endDateParameterName, endDate);
                     castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
-                    return string.Format("({0} >= {1} and {0} < {2})", castedColumnName, castedStartDateParameterName, castedEndDateParameterName);
+                    return string.Format("({0} >= {1} and {0} <{2} {3})", castedColumnName, castedStartDateParameterName, isMidnight ? "=" : "", castedEndDateParameterName);
 
                 case DateTimeRecordFilterOperator.NotBetween:
                     secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
                     endDate = secondDateTimeValue.AddHours(1);
+                    isMidnight = CheckMidnight(endDate);
+                    if (isMidnight)
+                        endDate = new DateTime(secondDateTimeValue.Year, secondDateTimeValue.Month, secondDateTimeValue.Day, 23, 59, 59, 998);
+
                     endDateParameterName = GenerateParameterName(ref parameterIndex);
                     parameterValues.Add(endDateParameterName, endDate);
                     castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
-                    return string.Format("({0} < {1} or {0} >= {2})", castedColumnName, castedStartDateParameterName, castedEndDateParameterName);
+                    return string.Format("({0} < {1} or {0} >{2} {3})", castedColumnName, castedStartDateParameterName, isMidnight ? "" : "=", castedEndDateParameterName);
 
                 default: throw new NotSupportedException(string.Format("dateTimeFilter.CompareOperator '{0}'", dateTimeFilter.CompareOperator));
             }
@@ -409,19 +435,12 @@ namespace Vanrise.GenericData.Data.SQL
             return new DateTime(dateTimeNextMonth.Year, dateTimeNextMonth.Month, 1);
         }
 
-        //private bool CheckMidnight(DateTime dateTime)
-        //{
-        //    if (dateTime.Hour != 0)
-        //        return false;
-
-        //    if (dateTime.Minute != 0)
-        //        return false;
-
-        //    if (dateTime.Second != 0)
-        //        return false;
-
-        //    return true;
-        //}
+        private bool CheckMidnight(DateTime dateTime)
+        {
+            if (dateTime.Hour == 0 && dateTime.Minute == 0 && dateTime.Second == 0 && dateTime.Millisecond == 0)
+                return true;
+            return false;
+        }
 
 
         private string BuildRecordFilter(BooleanRecordFilter booleanFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
