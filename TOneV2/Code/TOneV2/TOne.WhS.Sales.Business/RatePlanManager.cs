@@ -498,7 +498,7 @@ namespace TOne.WhS.Sales.Business
             {
                 int sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
                 Dictionary<int, CountryDateConfig> countryDateConfigsByCountryId = GetCountryDateConfigsByCountryId(ownerId, effectiveAfter);
-                return GetCustomerZones(sellingNumberPlanId, countryDateConfigsByCountryId);
+                return GetCustomerZones(sellingNumberPlanId, countryDateConfigsByCountryId, effectiveAfter);
             }
         }
         private IEnumerable<SaleZone> GetCustomerDraftSaleZones(int customerId, int sellingNumberPlanId, DateTime effectiveOn, bool includeFutureZones)
@@ -1561,7 +1561,7 @@ namespace TOne.WhS.Sales.Business
             IEnumerable<SaleZone> allZones = new SaleZoneManager().GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
             return allZones.FindAllRecords(x => x.IsEffectiveOrFuture(effectiveAfter));
         }
-        public IEnumerable<SaleZone> GetCustomerZones(int sellingNumberPlanId, Dictionary<int, CountryDateConfig> countryDateConfigsByCountryId)
+        public IEnumerable<SaleZone> GetCustomerZones(int sellingNumberPlanId, Dictionary<int, CountryDateConfig> countryDateConfigsByCountryId, DateTime effectiveOn)
         {
             IEnumerable<SaleZone> allZones = new SaleZoneManager().GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
 
@@ -1570,7 +1570,8 @@ namespace TOne.WhS.Sales.Business
                 CountryDateConfig countryDateConfig;
                 if (!countryDateConfigsByCountryId.TryGetValue(saleZone.CountryId, out countryDateConfig))
                     return false;
-                return saleZone.IsOverlappedWith(countryDateConfig);
+
+                return ((!saleZone.EED.HasValue || saleZone.EED.Value > effectiveOn) && saleZone.IsOverlappedWith(countryDateConfig));
             };
 
             return allZones.FindAllRecords(filterExpression);
