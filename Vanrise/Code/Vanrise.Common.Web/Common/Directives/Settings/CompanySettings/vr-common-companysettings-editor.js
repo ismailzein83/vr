@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_CompanySettingService', 'VRCommon_CompanySettingsAPIService',
-    function (UtilsService, VRCommon_CompanySettingService, VRCommon_CompanySettingsAPIService) {
+app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_CompanySettingService', 'VRCommon_CompanySettingsAPIService','VRNotificationService',
+    function (UtilsService, VRCommon_CompanySettingService, VRCommon_CompanySettingsAPIService, VRNotificationService) {
 
         return {
             restrict: 'E',
@@ -67,7 +67,7 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_Compan
                 };
                 defineMenuActions();
 
-                    defineAPI();
+                defineAPI();
 
             }
             function defineAPI() {
@@ -113,19 +113,26 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_Compan
 
             }
             function defineMenuActions() {
-                var defaultMenuActions = [
-                {
-                    name: "Edit",
-                    clicked: editCompanySetting
-                }];
-                if (UtilsService.isContextReadOnly($scope)) {
-                    defaultMenuActions.length = 0;
-                    defaultMenuActions = [{
-                        name: "View",
-                        clicked: viewCompanySetting
-                    }];
-                }
+
                 $scope.gridMenuActions = function (dataItem) {
+                    var defaultMenuActions = [
+                        {
+                            name: "Edit",
+                            clicked: editCompanySetting
+                        }];
+                    if (UtilsService.isContextReadOnly($scope)) {
+                        defaultMenuActions.length = 0;
+                        defaultMenuActions = [{
+                            name: "View",
+                            clicked: viewCompanySetting
+                        }];
+                    }
+                    if (!UtilsService.isContextReadOnly($scope) && dataItem.Entity.IsDefault == false) {
+                        defaultMenuActions[defaultMenuActions.length] = {
+                            name: "Set As Default",
+                            clicked: setAsDefaultCompanySetting
+                        };
+                    }
                     return defaultMenuActions;
                 };
             }
@@ -135,6 +142,26 @@ app.directive('vrCommonCompanysettingsEditor', ['UtilsService', 'VRCommon_Compan
                     ctrl.datasource[index] = { Entity: companySetting };
                 };
                 VRCommon_CompanySettingService.editCompanySetting(companySettingObj.Entity, onCompanySettingUpdated, getContext(), ctrl.datasource);
+            }
+            function setAsDefaultCompanySetting(companySettingObj) {
+
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        for (var i = 0; i < ctrl.datasource.length; i++) {
+                            var currentItem = ctrl.datasource[i];
+                            if (currentItem.Entity.IsDefault == true) {
+                                currentItem.Entity.IsDefault = false;
+                                var index = ctrl.datasource.indexOf(currentItem);
+                                ctrl.datasource[index] = { Entity: currentItem.Entity };
+                                break;
+                            }
+                        }
+                        companySettingObj.Entity.IsDefault = true;
+                        var index = ctrl.datasource.indexOf(companySettingObj);
+                        ctrl.datasource[index] = { Entity: companySettingObj.Entity };
+                        defineMenuActions();
+                    }
+                });
             }
             function viewCompanySetting(companySettingObj) {
                 VRCommon_CompanySettingService.viewCompanySetting(companySettingObj.Entity, getContext());

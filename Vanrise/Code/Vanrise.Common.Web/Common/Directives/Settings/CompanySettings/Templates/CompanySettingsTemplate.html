@@ -7,12 +7,12 @@
 
                 <vr-validator validate="ctrl.isValid()">
                     <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="    ctrl.removeCompanySetting" hidegridmenu>
+                                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeCompanySetting" hidegridmenu>
                         <vr-datagridcolumn headertext="'Company Name'" field="'Entity.CompanyName'" widthfactor="10" disablesorting></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Profile Name'" field="'Entity.ProfileName'" widthfactor="10" disablesorting></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Registration Number'" field="'Entity.RegistrationNumber'" widthfactor="10" disablesorting></vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Registration Address'" field="'Entity.RegistrationAddress'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Default'" f widthfactor="10" disablesorting>
+                        <vr-datagridcolumn headertext="'Default'" f widthfactor="10" disablesorting isfielddynamic="true">
                             <vr-icon icontype="dataItem.Entity.IsDefault"></vr-icon>
                         </vr-datagridcolumn>
                     </vr-datagrid>

@@ -222,17 +222,14 @@
 
         function loadStaticData() {
 
-            if (companySettingEntity == undefined) {
-                $scope.scopeModel.isDefault = setDefault == true;
+            if (companySettingEntity == undefined) 
                 return;
-            }
 
             $scope.scopeModel.companyName = companySettingEntity.CompanyName;
             $scope.scopeModel.profileName = companySettingEntity.ProfileName;
             $scope.scopeModel.registrationNumber = companySettingEntity.RegistrationNumber;
             $scope.scopeModel.registrationAddress = companySettingEntity.RegistrationAddress;
             $scope.scopeModel.vatId = companySettingEntity.VatId;
-            $scope.scopeModel.isDefault = companySettingEntity.IsDefault || setDefault;
             if (companySettingEntity.CompanyLogo > 0)
                 $scope.scopeModel.companyLogo = {
                     fileId: companySettingEntity.CompanyLogo
@@ -254,7 +251,7 @@
                 RegistrationAddress: $scope.scopeModel.registrationAddress,
                 VatId: $scope.scopeModel.vatId,
                 CompanyLogo: ($scope.scopeModel.companyLogo != null) ? $scope.scopeModel.companyLogo.fileId : 0,
-                IsDefault: $scope.scopeModel.isDefault,
+                IsDefault: companySettingEntity != undefined ? companySettingEntity.IsDefault : setDefault,
                 BillingEmails: $scope.scopeModel.toMail.join(";"),
                 BankDetails: bankDirectiveApi.getSelectedIds(),
                 Contacts: getContactsData(),

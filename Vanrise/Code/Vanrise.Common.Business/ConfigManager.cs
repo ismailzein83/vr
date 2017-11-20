@@ -132,6 +132,14 @@ namespace Vanrise.Common.Business
             if (companySettings.Settings == null)
                 companySettings.Settings = new List<CompanySetting>();
 
+            if (Company.IsDefault && companySettings.Settings.Select(x=>x.IsDefault==true).Count() > 0)
+            {
+                insertOperationOutput.InsertedObject = null;
+                insertOperationOutput.Result = InsertOperationResult.Failed;
+                insertOperationOutput.Message = "Only one company can be setted as default.";
+                return insertOperationOutput;
+            }
+
             companySettings.Settings.Add(Company);
             comapnySettingsToEdit.Data = companySettings;
             settingManager.UpdateSetting(comapnySettingsToEdit);
