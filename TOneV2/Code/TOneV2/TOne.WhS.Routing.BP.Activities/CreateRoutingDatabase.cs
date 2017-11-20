@@ -8,6 +8,7 @@ using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using System.Threading;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -39,6 +40,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             int databaseId = routingDatabaseManager.CreateDatabase(String.Format("{0}_{1}_{2:yyyyMMdd-HHmm}", this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context)), this.Type.Get(context), this.ProcessType.Get(context), this.EffectiveTime.Get(context), information, settings);
+
+            Thread.Sleep(2000);
 
             IRoutingDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDataManager>();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(databaseId);
