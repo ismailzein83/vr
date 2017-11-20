@@ -693,6 +693,7 @@
     <Build Include="common\Stored Procedures\sp_File_SetUsedAndUpdateSettings.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_HasData.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceUsageQueue_HasData.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_HasBalancesUpdateData.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
