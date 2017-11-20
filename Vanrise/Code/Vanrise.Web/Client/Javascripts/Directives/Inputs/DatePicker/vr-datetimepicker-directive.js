@@ -287,7 +287,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     return;
                 }
                 var date;
-                if ($attrs.type == "time") {
+                if ($attrs.type == "time" || $attrs.type == "hour") {
                     var initialDate = VRDateTimeService.getNowDateTime();
                     if (ctrl.value.Hour == undefined)
                         ctrl.value.Hour = 0;
