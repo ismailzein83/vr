@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData_DateTimeRecordFilterOperatorEnum', 'VR_GenericData_DateTimeRecordFilterComparisonPartEnum', 'UtilsService', 'VRUIUtilsService', 'VRDateTimeService', 
+app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData_DateTimeRecordFilterOperatorEnum', 'VR_GenericData_DateTimeRecordFilterComparisonPartEnum', 'UtilsService', 'VRUIUtilsService', 'VRDateTimeService',
     function (VR_GenericData_DateTimeRecordFilterOperatorEnum, VR_GenericData_DateTimeRecordFilterComparisonPartEnum, UtilsService, VRUIUtilsService, VRDateTimeService) {
 
         var directiveDefinitionObject = {
@@ -131,14 +131,40 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                     if (value == undefined || value2 == undefined)
                         return null;
 
-                    if ($scope.selectedComparisonPart == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time) {
-                        var dummyDate = VRDateTimeService.getNowDateTime();
-                        var value = new Date(dummyDate.setHours(value.Hour, value.Minute, value.Second, value.Millisecond));
-                        var value2 = new Date(dummyDate.setHours(value2.Hour, value2.Minute, value2.Second, value2.Millisecond));
-                    }
+                    if ($scope.selectedComparisonPart == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time
+                        || $scope.selectedComparisonPart == VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Hour) {
 
-                    if (value > value2)
-                        return 'Invalid Time Range';
+                        if (value2.Hour > value.Hour)
+                            return null;
+
+                        if (value2.Hour < value.Hour)
+                            return 'Invalid Time Range';
+
+                        //value2.Hour = value.Hour
+                        if (value2.Minute > value.Minute)
+                            return null;
+
+                        if (value2.Minute < value.Minute)
+                            return 'Invalid Time Range';
+
+                        //value2.Minute = value.Minute
+                        if (value2.Second > value.Second)
+                            return null;
+
+                        if (value2.Second < value.Second)
+                            return 'Invalid Time Range';
+
+                        //value2.Second = value.Second
+                        if (value2.Millisecond > value.Millisecond)
+                            return null;
+
+                        if (value2.Millisecond < value.Millisecond)
+                            return 'Invalid Time Range';
+                    }
+                    else {
+                        if (value > value2)
+                            return 'Invalid Time Range';
+                    }
 
                     return null;
                 };
@@ -227,6 +253,8 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                     case 0: $scope.comparisonParts = UtilsService.getArrayEnum(VR_GenericData_DateTimeRecordFilterComparisonPartEnum); break;
                     case 1: $scope.comparisonParts.push(VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time); break;
                     case 2: $scope.comparisonParts.push(VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Date); break;
+                    case 3: $scope.comparisonParts.push(VR_GenericData_DateTimeRecordFilterComparisonPartEnum.YearMonth); break;
+                    case 5: $scope.comparisonParts.push(VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Hour); break;
                 }
 
                 if (selectedComparisonPart != undefined) {

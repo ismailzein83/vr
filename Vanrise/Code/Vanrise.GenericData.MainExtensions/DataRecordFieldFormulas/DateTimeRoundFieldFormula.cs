@@ -47,6 +47,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                     TimeSpan ts = TimeSpan.FromMinutes(roundedMinuteNumber);
                     return new Time(ts.Hours, ts.Minutes, 0, 0);
 
+                case DateTimeRecordFilterComparisonPart.YearMonth:
+                    return new DateTime(dateTime.Value.Year, dateTime.Value.Month, 1);
+
+                case DateTimeRecordFilterComparisonPart.Hour:
+                    return new Time(dateTime.Value.Hour, 0, 0, 0);
+
                 default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", this.ComparisonPart));
             }
         }
@@ -63,12 +69,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 {
                     case DateTimeRecordFilterComparisonPart.DateTime:
                     case DateTimeRecordFilterComparisonPart.DateOnly:
+                    case DateTimeRecordFilterComparisonPart.YearMonth:
+                    case DateTimeRecordFilterComparisonPart.Hour:
                         dateTimeRecordFilter.FieldName = this.DateTimeFieldName;
                         return dateTimeRecordFilter;
 
                     case DateTimeRecordFilterComparisonPart.TimeOnly:
                         dateTimeRecordFilter.FieldName = this.DateTimeFieldName;
-                        return BuildRecordFilter(dateTimeRecordFilter);
+                        return BuildTimeOnlyRecordFilter(dateTimeRecordFilter);
 
                     default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", this.ComparisonPart));
                 }
@@ -85,7 +93,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             throw new Exception(String.Format("Invalid Record Filter '{0}'", context.InitialFilter.GetType()));
         }
 
-        private RecordFilter BuildRecordFilter(DateTimeRecordFilter dateTimeRecordFilter)
+        private RecordFilter BuildTimeOnlyRecordFilter(DateTimeRecordFilter dateTimeRecordFilter)
         {
             int timeRoundingIntervalInMinutes = Vanrise.Common.Utilities.GetEnumAttribute<TimeRoundingInterval, TimeRoundingIntervalAttribute>(this.TimeRoundingInterval.Value).Value;
 
@@ -140,7 +148,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 return dateTimeRecordFilter;
             else
                 return new AlwaysFalseRecordFilter();
-        }
+        } 
 
         private bool IsTimeRoundingValid(Time time, int timeRoundingIntervalInMinutes)
         {
@@ -188,6 +196,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
         [TimeRoundingIntervalAttribute(720)]
         TwelveHours = 7
     }
+
     public class TimeRoundingIntervalAttribute : Attribute
     {
         public int Value { get; set; }

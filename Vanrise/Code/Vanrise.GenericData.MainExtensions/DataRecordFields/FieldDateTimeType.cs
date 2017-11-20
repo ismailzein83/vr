@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         [FieldDateTimeDataTypeInfo(RuntimeType = typeof(Vanrise.Entities.Time))]
         Time = 1,
         [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
-        Date = 2
+        Date = 2,
+        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
+        YearMonth = 3,
+        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(Vanrise.Entities.Time))]
+        Hour = 5
     }
 
     public class FieldDateTimeType : DataRecordFieldType
@@ -47,8 +52,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(object value)
         {
-            if (value == null) { return null; }
-            return (DataType == FieldDateTimeDataType.Time) ? GetTimeDescription(value) : GetDateTimeDescription(value);
+            if (value == null)
+                return null;
+
+            switch (this.DataType)
+            {
+                case FieldDateTimeDataType.DateTime:
+                case FieldDateTimeDataType.Date:
+                case FieldDateTimeDataType.YearMonth:
+                    return GetDateTimeDescription(value);
+
+                case FieldDateTimeDataType.Time:
+                    return GetTimeDescription(value);
+
+                case FieldDateTimeDataType.Hour:
+                    return GetHourDescription(value);
+
+                default: throw new NotSupportedException(string.Format("fieldDateTimeDataType '{0}'", this.DataType));
+            }
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
@@ -65,42 +86,93 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             if (dateTimeRecordFilter == null)
                 throw new NullReferenceException("dateTimeRecordFilter");
 
-            DateTime valueAsDateTime = (DateTime)fieldValue;
-
-            DateTime filterValue = default(DateTime);
-            DateTime filterValue2 = default(DateTime);
+            DateTime valueAsDateTime;
+            DateTime filterValue;
+            DateTime? filterValue2 = null;
 
             bool hasSecondValue = Vanrise.Common.Utilities.GetEnumAttribute<DateTimeRecordFilterOperator, DateTimeRecordFilterOperatorAttribute>(dateTimeRecordFilter.CompareOperator).HasSecondValue;
 
             switch (dateTimeRecordFilter.ComparisonPart)
             {
+                #region DateTime
+
                 case DateTimeRecordFilterComparisonPart.DateTime:
+                    valueAsDateTime = (DateTime)fieldValue;
                     filterValue = Convert.ToDateTime(dateTimeRecordFilter.Value);
                     if (hasSecondValue)
                         filterValue2 = Convert.ToDateTime(dateTimeRecordFilter.Value2);
                     break;
 
+                #endregion
+
+                #region DateOnly
+
                 case DateTimeRecordFilterComparisonPart.DateOnly:
-                    valueAsDateTime = valueAsDateTime.Date;
+                    valueAsDateTime = ((DateTime)fieldValue).Date;
                     filterValue = Convert.ToDateTime(dateTimeRecordFilter.Value).Date;
                     if (hasSecondValue)
                         filterValue2 = Convert.ToDateTime(dateTimeRecordFilter.Value2).Date;
                     break;
 
+                #endregion
+
+                #region TimeOnly
+
                 case DateTimeRecordFilterComparisonPart.TimeOnly:
-                    DateTime tempDateTime = DateTime.Now;
+                    DateTime timeOnlyNowDateTime = DateTime.Now;
 
-                    TimeSpan valueAsTimeSpan = valueAsDateTime.TimeOfDay;
-                    valueAsDateTime = new DateTime(tempDateTime.Year, tempDateTime.Month, tempDateTime.Day, valueAsTimeSpan.Hours, valueAsTimeSpan.Minutes, valueAsTimeSpan.Seconds, valueAsTimeSpan.Milliseconds);
+                    TimeSpan timeOnlyValueAsTimeSpan = (TimeSpan)fieldValue;
+                    valueAsDateTime = new DateTime(timeOnlyNowDateTime.Year, timeOnlyNowDateTime.Month, timeOnlyNowDateTime.Day, timeOnlyValueAsTimeSpan.Hours,
+                        timeOnlyValueAsTimeSpan.Minutes, timeOnlyValueAsTimeSpan.Seconds, timeOnlyValueAsTimeSpan.Milliseconds);
 
-                    Time filterValueAsTime = dateTimeRecordFilter.Value as Time;
-                    filterValue = Vanrise.Common.Utilities.AppendTimeToDateTime(filterValueAsTime, tempDateTime);
+                    Time timeOnlyFilterValueAsTime = dateTimeRecordFilter.Value as Time;
+                    filterValue = Vanrise.Common.Utilities.AppendTimeToDateTime(timeOnlyFilterValueAsTime, timeOnlyNowDateTime);
                     if (hasSecondValue)
                     {
-                        Time filterValue2AsTime = dateTimeRecordFilter.Value2 as Time;
-                        filterValue2 = Vanrise.Common.Utilities.AppendTimeToDateTime(filterValue2AsTime, tempDateTime);
+                        Time timeOnlyFilterValue2AsTime = dateTimeRecordFilter.Value2 as Time;
+                        filterValue2 = Vanrise.Common.Utilities.AppendTimeToDateTime(timeOnlyFilterValue2AsTime, timeOnlyNowDateTime);
                     }
                     break;
+
+                #endregion
+
+                #region YearMonth
+
+                case DateTimeRecordFilterComparisonPart.YearMonth:
+                    DateTime fieldValueAsDate = (DateTime)fieldValue;
+                    valueAsDateTime = new DateTime(fieldValueAsDate.Year, fieldValueAsDate.Month, 1);
+
+                    DateTime filterValueAsDate = Convert.ToDateTime(dateTimeRecordFilter.Value);
+                    filterValue = new DateTime(filterValueAsDate.Year, filterValueAsDate.Month, 1);
+                    if (hasSecondValue)
+                    {
+                        DateTime filterValue2AsDate = Convert.ToDateTime(dateTimeRecordFilter.Value2);
+                        filterValue2 = new DateTime(filterValue2AsDate.Year, filterValue2AsDate.Month, 1);
+                    }
+                    break;
+
+                #endregion
+
+                #region Hour
+
+                case DateTimeRecordFilterComparisonPart.Hour:
+                    DateTime hourNowDateTime = DateTime.Now;
+
+                    TimeSpan hourValueAsTimeSpan = (TimeSpan)fieldValue;
+                    valueAsDateTime = new DateTime(hourNowDateTime.Year, hourNowDateTime.Month, hourNowDateTime.Day, hourValueAsTimeSpan.Hours, 0, 0, 0);
+
+                    Time hourFilterValueAsTime = dateTimeRecordFilter.Value as Time;
+                    filterValue = Vanrise.Common.Utilities.AppendTimeToDateTime(hourFilterValueAsTime, hourNowDateTime);
+                    if (hasSecondValue)
+                    {
+                        Time hourFilterValue2AsTime = dateTimeRecordFilter.Value2 as Time;
+                        filterValue2 = Vanrise.Common.Utilities.AppendTimeToDateTime(hourFilterValue2AsTime, hourNowDateTime);
+                    }
+                    break;
+
+                #endregion
+
+                default: throw new NotSupportedException(string.Format("fieldDateTimeDataType '{0}'", this.DataType));
             }
 
             switch (dateTimeRecordFilter.CompareOperator)
@@ -111,16 +183,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case DateTimeRecordFilterOperator.GreaterOrEquals: return valueAsDateTime >= filterValue;
                 case DateTimeRecordFilterOperator.Less: return valueAsDateTime < filterValue;
                 case DateTimeRecordFilterOperator.LessOrEquals: return valueAsDateTime <= filterValue;
+
                 case DateTimeRecordFilterOperator.Between:
+                    if (!filterValue2.HasValue)
+                        throw new NullReferenceException("filterValue2");
+
                     if (dateTimeRecordFilter.ExcludeValue2)
-                        return valueAsDateTime >= filterValue && valueAsDateTime < filterValue2;
+                        return valueAsDateTime >= filterValue && valueAsDateTime < filterValue2.Value;
                     else
-                        return valueAsDateTime >= filterValue && valueAsDateTime <= filterValue2;
+                        return valueAsDateTime >= filterValue && valueAsDateTime <= filterValue2.Value;
+
                 case DateTimeRecordFilterOperator.NotBetween:
+                    if (!filterValue2.HasValue)
+                        throw new NullReferenceException("filterValue2");
+
                     if (dateTimeRecordFilter.ExcludeValue2)
-                        return valueAsDateTime < filterValue || valueAsDateTime >= filterValue2;
+                        return valueAsDateTime < filterValue || valueAsDateTime >= filterValue2.Value;
                     else
-                        return valueAsDateTime < filterValue || valueAsDateTime > filterValue2;
+                        return valueAsDateTime < filterValue || valueAsDateTime > filterValue2.Value;
             }
 
             return false;
@@ -146,6 +226,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             {
                 case FieldDateTimeDataType.DateTime: type = "LongDatetime"; break;
                 case FieldDateTimeDataType.Date: type = "Date"; break;
+                case FieldDateTimeDataType.Time: type = "Text"; break;
+                case FieldDateTimeDataType.YearMonth: type = "Yearmonth"; break;
+                case FieldDateTimeDataType.Hour: type = "Text"; break;
                 default: type = "Datetime"; break;
             }
             return new Vanrise.Entities.GridColumnAttribute() { Type = type, NumberPrecision = "NoDecimal", Field = context != null ? context.ValueFieldPath : null };
@@ -173,6 +256,16 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case FieldDateTimeDataType.Time:
                     var timeValues = filterValues.Select(value => new Time(value.ToString())).ToList();
                     recordFilters = GetDateTimeRecordFilters(fieldName, timeValues, DateTimeRecordFilterComparisonPart.TimeOnly);
+                    break;
+
+                case FieldDateTimeDataType.YearMonth:
+                    var yearMonthDateTimeValues = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    recordFilters = GetDateTimeRecordFilters(fieldName, yearMonthDateTimeValues, DateTimeRecordFilterComparisonPart.YearMonth);
+                    break;
+
+                case FieldDateTimeDataType.Hour:
+                    var hourValues = filterValues.Select(value => new Time(value.ToString())).ToList();
+                    recordFilters = GetDateTimeRecordFilters(fieldName, hourValues, DateTimeRecordFilterComparisonPart.Hour);
                     break;
 
                 default: throw new NotSupportedException(string.Format("fieldDateTimeDataType '{0}'", this.DataType));
@@ -203,10 +296,22 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         #region Private Methods
 
+        string GetHourDescription(object fieldValue)
+        {
+            Time time;
+            if (fieldValue is TimeSpan)
+            {
+                TimeSpan ts = TimeSpan.Parse(fieldValue.ToString());
+                return ts.Hours.ToString();
+            }
+
+            time = fieldValue as Time;
+            return time.Hour.ToString();
+        }
+
         string GetTimeDescription(object fieldValue)
         {
             IEnumerable<Time> timeValues = FieldTypeHelper.ConvertFieldValueToList<Time>(fieldValue);
-
             if (timeValues == null)
             {
                 Time time;
@@ -214,17 +319,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 {
                     TimeSpan ts = TimeSpan.Parse(fieldValue.ToString());
                     time = new Time(ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
-                    return time.ToLongTimeString();
+                    return time.ToShortTimeString();
                 }
 
                 time = fieldValue as Time;
-                return time.ToLongTimeString();
+                return time.ToShortTimeString();
             }
 
             var descriptions = new List<string>();
 
             foreach (Time timeValue in timeValues)
-                descriptions.Add(timeValue.ToLongTimeString());
+                descriptions.Add(timeValue.ToShortTimeString());
 
             return String.Join(",", descriptions);
         }
@@ -248,13 +353,15 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             if (value == null)
                 return null;
+
             switch (this.DataType)
             {
-                case FieldDateTimeDataType.Date: return Convert.ToDateTime(value).ToString("yyyy-MM-dd");
                 case FieldDateTimeDataType.DateTime: return Convert.ToDateTime(value).ToString("yyyy-MM-dd HH:mm:ss");
+                case FieldDateTimeDataType.Date: return Convert.ToDateTime(value).ToString("yyyy-MM-dd");
                 case FieldDateTimeDataType.Time: return ((Vanrise.Entities.Time)value).ToShortTimeString();
+                case FieldDateTimeDataType.YearMonth: return Convert.ToDateTime(value).ToString("yyyy-MM");
+                default: throw new NotSupportedException(string.Format("fieldDateTimeDataType '{0}'", this.DataType));
             }
-            return null;
         }
 
         bool DoDateTimesMatch(object fieldValue, object filterValue)

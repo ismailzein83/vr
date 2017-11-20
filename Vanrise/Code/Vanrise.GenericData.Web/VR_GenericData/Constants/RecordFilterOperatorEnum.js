@@ -26,13 +26,15 @@ app.constant('VR_GenericData_DateTimeRecordFilterOperatorEnum', {
     Less: { value: 4, description: '<' },
     LessOrEquals: { value: 5, description: '<=' },
     Between: { value: 6, description: 'Between', showSecondDateTimePicker: true },
-    NotBetween: { value: 7, description: 'Not Between', showSecondDateTimePicker: true}
+    NotBetween: { value: 7, description: 'Not Between', showSecondDateTimePicker: true }
 });
 
 app.constant('VR_GenericData_DateTimeRecordFilterComparisonPartEnum', {
     DateTime: { value: 0, description: 'Date Time' },
     Time: { value: 1, description: 'Time' },
-    Date: { value: 2, description: 'Date' }
+    Date: { value: 2, description: 'Date' },
+    YearMonth: { value: 3, description: 'Year Month' },
+    Hour: { value: 5, description: 'Hour' }
 });
 
 app.constant('VR_GenericData_ListRecordFilterOperatorEnum', {

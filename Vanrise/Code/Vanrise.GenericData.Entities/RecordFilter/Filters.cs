@@ -107,7 +107,7 @@ namespace Vanrise.GenericData.Entities
         }
     }
 
-    public enum DateTimeRecordFilterComparisonPart { DateTime = 0, TimeOnly = 1, DateOnly = 2 }
+    public enum DateTimeRecordFilterComparisonPart { DateTime = 0, TimeOnly = 1, DateOnly = 2, YearMonth = 3, Hour = 5  }
     public enum DateTimeRecordFilterOperator
     {
         [Description(" = "), DateTimeRecordFilterOperatorAttribute(false)]
@@ -192,6 +192,18 @@ namespace Vanrise.GenericData.Entities
                 case DateTimeRecordFilterComparisonPart.TimeOnly:
                     if (this.Value is Time)
                         return ((Vanrise.Entities.Time)value).ToShortTimeString();
+                    else
+                        throw new DataIntegrityValidationException("DateTimeRecordFilter.Value should be of type Time");
+
+                case DateTimeRecordFilterComparisonPart.YearMonth:
+                    if (this.Value is DateTime)
+                        return Convert.ToDateTime(value).ToString("yyyy-MM");
+                    else
+                        throw new DataIntegrityValidationException("DateTimeRecordFilter.Value should be of type DateTime");
+
+                case DateTimeRecordFilterComparisonPart.Hour:
+                    if (this.Value is Time)
+                        return ((Vanrise.Entities.Time)value).Hour.ToString();
                     else
                         throw new DataIntegrityValidationException("DateTimeRecordFilter.Value should be of type Time");
 

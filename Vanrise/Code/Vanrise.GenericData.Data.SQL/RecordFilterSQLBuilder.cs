@@ -179,14 +179,35 @@ namespace Vanrise.GenericData.Data.SQL
 
         private string BuildRecordFilter(DateTimeRecordFilter dateTimeFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
-            string compareOperator = string.Empty;
             string columnName = GetSQLExpression(dateTimeFilter);
 
-            string parameterName = GenerateParameterName(ref parameterIndex);
-            parameterValues.Add(parameterName, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value));
+            DateTime firstDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value);
+            string startDateParameterName = GenerateParameterName(ref parameterIndex);
+            parameterValues.Add(startDateParameterName, firstDateTimeValue);
 
-            string parameter2Name = string.Empty;
-            string secondDateTimeValue = string.Empty;
+            switch (dateTimeFilter.ComparisonPart)
+            {
+                case DateTimeRecordFilterComparisonPart.DateTime:
+                case DateTimeRecordFilterComparisonPart.DateOnly:
+                case DateTimeRecordFilterComparisonPart.TimeOnly:
+                    return GetDateTimeRecordFilterQuery(dateTimeFilter, ref parameterIndex, parameterValues, columnName, startDateParameterName);
+
+                case DateTimeRecordFilterComparisonPart.YearMonth:
+                    return GetYearMonthRecordFilterQuery(dateTimeFilter, ref parameterIndex, parameterValues, columnName, startDateParameterName, firstDateTimeValue);
+
+                case DateTimeRecordFilterComparisonPart.Hour:
+                    return GetHourRecordFilterQuery(dateTimeFilter, ref parameterIndex, parameterValues, columnName, startDateParameterName, firstDateTimeValue);
+
+                default: throw new NotSupportedException(string.Format("dateTimeFilter.ComparisonPart '{0}'", dateTimeFilter.ComparisonPart));
+            }
+        }
+
+        private string GetDateTimeRecordFilterQuery(DateTimeRecordFilter dateTimeFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues,
+            string columnName, string startDateParameterName)
+        {
+            string compareOperator = string.Empty;
+            string endDateParameterName = string.Empty;
+            string secondDateTimeValueQuery = string.Empty;
 
             switch (dateTimeFilter.CompareOperator)
             {
@@ -198,36 +219,172 @@ namespace Vanrise.GenericData.Data.SQL
                 case DateTimeRecordFilterOperator.LessOrEquals: compareOperator = "<="; break;
 
                 case DateTimeRecordFilterOperator.Between:
-                    parameter2Name = GenerateParameterName(ref parameterIndex);
-                    parameterValues.Add(parameter2Name, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2));
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2));
                     compareOperator = ">=";
-                    secondDateTimeValue = string.Format(" and {0} <{1} {2}", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), dateTimeFilter.ExcludeValue2 ? "" : "=",
-                                                                             CastAsComparisonPart(dateTimeFilter.ComparisonPart, parameter2Name));
+                    secondDateTimeValueQuery = string.Format(" and {0} <{1} {2}", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), dateTimeFilter.ExcludeValue2 ? "" : "=",
+                                                                                  CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName));
                     break;
 
                 case DateTimeRecordFilterOperator.NotBetween:
-                    parameter2Name = GenerateParameterName(ref parameterIndex);
-                    parameterValues.Add(parameter2Name, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2));
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2));
                     compareOperator = "<";
-                    secondDateTimeValue = string.Format(" or {0} >{1} {2}", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), dateTimeFilter.ExcludeValue2 ? "=" : "",
-                                                                         CastAsComparisonPart(dateTimeFilter.ComparisonPart, parameter2Name));
+                    secondDateTimeValueQuery = string.Format(" or {0} >{1} {2}", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), dateTimeFilter.ExcludeValue2 ? "=" : "",
+                                                                                 CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName));
                     break;
+
+                default: throw new NotSupportedException(string.Format("dateTimeFilter.CompareOperator '{0}'", dateTimeFilter.CompareOperator));
             }
 
             return string.Format("({0} {1} {2} {3})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), compareOperator,
-                                                    CastAsComparisonPart(dateTimeFilter.ComparisonPart, parameterName), secondDateTimeValue);
+                                                      CastAsComparisonPart(dateTimeFilter.ComparisonPart, startDateParameterName), secondDateTimeValueQuery);
+        }
+
+        /// <summary>
+        /// no need to call CastAsComparisonPart for parameters "startDateParameterName" and "endDateParameterName"
+        /// because dateTimeFilter.ComparisonPart is of type "YearMonth"
+        /// </summary>
+        private string GetYearMonthRecordFilterQuery(DateTimeRecordFilter dateTimeFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues,
+            string columnName, string startDateParameterName, DateTime firstDateTimeValue)
+        {
+            DateTime secondDateTimeValue;
+
+            DateTime endDate;
+            string endDateParameterName;
+
+            switch (dateTimeFilter.CompareOperator)
+            {
+                case DateTimeRecordFilterOperator.Equals:
+                    endDate = GetFirstDayOfNextMonth(firstDateTimeValue);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    return string.Format("({0} >= {1} and {0} < {2})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), startDateParameterName, endDateParameterName);
+
+                case DateTimeRecordFilterOperator.NotEquals:
+                    endDate = GetFirstDayOfNextMonth(firstDateTimeValue);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    return string.Format("({0} < {1} or {0} >= {2})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), startDateParameterName, endDateParameterName);
+
+                case DateTimeRecordFilterOperator.Greater:
+                    endDate = GetFirstDayOfNextMonth(firstDateTimeValue);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    return string.Format("({0} >= {1})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), endDateParameterName);
+
+                case DateTimeRecordFilterOperator.GreaterOrEquals:
+                    return string.Format("({0} >= {1})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), startDateParameterName);
+
+                case DateTimeRecordFilterOperator.Less:
+                    return string.Format("({0} < {1})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), startDateParameterName);
+
+                case DateTimeRecordFilterOperator.LessOrEquals:
+                    endDate = GetFirstDayOfNextMonth(firstDateTimeValue);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    return string.Format("({0} < {1})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), endDateParameterName);
+
+                case DateTimeRecordFilterOperator.Between:
+                    secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
+                    endDate = GetFirstDayOfNextMonth(secondDateTimeValue);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    return string.Format("({0} >= {1} and {0} < {2})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), startDateParameterName, endDateParameterName);
+
+                case DateTimeRecordFilterOperator.NotBetween:
+                    secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
+                    endDate = GetFirstDayOfNextMonth(secondDateTimeValue);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    return string.Format("({0} < {1} or {0} >= {2})", CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName), startDateParameterName, endDateParameterName);
+
+                default: throw new NotSupportedException(string.Format("dateTimeFilter.CompareOperator '{0}'", dateTimeFilter.CompareOperator));
+            }
+        }
+
+        private string GetHourRecordFilterQuery(DateTimeRecordFilter dateTimeFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues,
+            string columnName, string startDateParameterName, DateTime firstDateTimeValue)
+        {
+            string castedColumnName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, columnName);
+            string castedStartDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, startDateParameterName);
+
+            DateTime secondDateTimeValue;
+
+            DateTime endDate;
+            string endDateParameterName;
+            string castedEndDateParameterName;
+
+            switch (dateTimeFilter.CompareOperator)
+            {
+                case DateTimeRecordFilterOperator.Equals:
+                    endDate = firstDateTimeValue.AddHours(1);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
+                    return string.Format("({0} >= {1} and {0} < {2})", castedColumnName, castedStartDateParameterName, castedEndDateParameterName);
+
+                case DateTimeRecordFilterOperator.NotEquals:
+                    endDate = firstDateTimeValue.AddHours(1);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
+                    return string.Format("({0} < {1} or {0} >= {2})", castedColumnName, castedStartDateParameterName, castedEndDateParameterName);
+
+                case DateTimeRecordFilterOperator.Greater:
+                    endDate = firstDateTimeValue.AddHours(1);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
+                    return string.Format("({0} >= {1})", castedColumnName, castedEndDateParameterName);
+
+                case DateTimeRecordFilterOperator.GreaterOrEquals:
+                    return string.Format("({0} >= {1})", castedColumnName, castedStartDateParameterName);
+
+                case DateTimeRecordFilterOperator.Less:
+                    return string.Format("({0} < {1})", castedColumnName, castedStartDateParameterName);
+
+                case DateTimeRecordFilterOperator.LessOrEquals:
+                    endDate = firstDateTimeValue.AddHours(1);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
+                    return string.Format("({0} < {1})", castedColumnName, castedEndDateParameterName);
+
+                case DateTimeRecordFilterOperator.Between:
+                    secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
+                    endDate = secondDateTimeValue.AddHours(1);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
+                    return string.Format("({0} >= {1} and {0} < {2})", castedColumnName, castedStartDateParameterName, castedEndDateParameterName);
+
+                case DateTimeRecordFilterOperator.NotBetween:
+                    secondDateTimeValue = GetDateTimeValue(dateTimeFilter.ComparisonPart, dateTimeFilter.Value2);
+                    endDate = secondDateTimeValue.AddHours(1);
+                    endDateParameterName = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(endDateParameterName, endDate);
+                    castedEndDateParameterName = CastAsComparisonPart(dateTimeFilter.ComparisonPart, endDateParameterName);
+                    return string.Format("({0} < {1} or {0} >= {2})", castedColumnName, castedStartDateParameterName, castedEndDateParameterName);
+
+                default: throw new NotSupportedException(string.Format("dateTimeFilter.CompareOperator '{0}'", dateTimeFilter.CompareOperator));
+            }
         }
 
         private DateTime GetDateTimeValue(DateTimeRecordFilterComparisonPart comparisonPart, object value)
         {
             switch (comparisonPart)
             {
+                case DateTimeRecordFilterComparisonPart.DateTime:
+                case DateTimeRecordFilterComparisonPart.DateOnly:
+                case DateTimeRecordFilterComparisonPart.YearMonth:
+                    return (DateTime)value;
+
                 case DateTimeRecordFilterComparisonPart.TimeOnly:
                     return Vanrise.Common.Utilities.AppendTimeToDateTime((Vanrise.Entities.Time)value, DateTime.Now);
 
-                case DateTimeRecordFilterComparisonPart.DateTime:
-                case DateTimeRecordFilterComparisonPart.DateOnly:
-                    return (DateTime)value;
+                case DateTimeRecordFilterComparisonPart.Hour:
+                    return Vanrise.Common.Utilities.AppendTimeToDateTime((Vanrise.Entities.Time)value, DateTime.Now);
 
                 default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", comparisonPart));
             }
@@ -238,11 +395,33 @@ namespace Vanrise.GenericData.Data.SQL
             switch (comparisonPart)
             {
                 case DateTimeRecordFilterComparisonPart.DateTime: return columnName;
-                case DateTimeRecordFilterComparisonPart.TimeOnly: return string.Format("Cast({0} as time)", columnName);
                 case DateTimeRecordFilterComparisonPart.DateOnly: return string.Format("Cast({0} as date)", columnName);
-                default: throw new NotSupportedException(string.Format("ComparisonPart '{0}'", comparisonPart));
+                case DateTimeRecordFilterComparisonPart.TimeOnly: return string.Format("Cast({0} as time)", columnName);
+                case DateTimeRecordFilterComparisonPart.YearMonth: return columnName; //string.Format("DATEADD(month, DATEDIFF(month, 0, {0}), 0)", columnName);
+                case DateTimeRecordFilterComparisonPart.Hour: return string.Format("Cast({0} as time)", columnName);
+                default: throw new NotSupportedException(string.Format("comparisonPart '{0}'", comparisonPart));
             }
         }
+
+        private DateTime GetFirstDayOfNextMonth(DateTime dateTime)
+        {
+            DateTime dateTimeNextMonth = dateTime.AddMonths(1);
+            return new DateTime(dateTimeNextMonth.Year, dateTimeNextMonth.Month, 1);
+        }
+
+        //private bool CheckMidnight(DateTime dateTime)
+        //{
+        //    if (dateTime.Hour != 0)
+        //        return false;
+
+        //    if (dateTime.Minute != 0)
+        //        return false;
+
+        //    if (dateTime.Second != 0)
+        //        return false;
+
+        //    return true;
+        //}
 
 
         private string BuildRecordFilter(BooleanRecordFilter booleanFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
