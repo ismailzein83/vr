@@ -376,6 +376,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             ZoneName = zone.ZoneName,
                             Rate = zone.NormalRateToChange.NormalRate,
                             ChangeType = zone.NormalRateToChange.ChangeType,
+                            //TODO: make sure if the explicit rate has EED, if we need to make the BED of the new rate starts from EED of explicit rate
                             BED = (country.BED > zone.NormalRateToChange.BED) ? country.BED : zone.NormalRateToChange.BED,
                             EED = zone.NormalRateToChange.EED,
                             CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
