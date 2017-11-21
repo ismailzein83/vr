@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -261,6 +262,7 @@ namespace Vanrise.Common
                 }
             }
         }
+
         public static string GetExposedConnectionString(string connectionStringName)
         {
             if (!IsConnectionStringExposed(connectionStringName))
@@ -273,7 +275,6 @@ namespace Vanrise.Common
 
         static HashSet<string> s_exposedConnectionStringNames;
         static Object s_lockObj = new object();
-
         private static bool IsConnectionStringExposed(string connectionStringName)
         {
             if (s_exposedConnectionStringNames == null)
@@ -292,7 +293,6 @@ namespace Vanrise.Common
             }
             return s_exposedConnectionStringNames.Contains(connectionStringName);
         }
-
 
         public static string GetDateTimeFormat(Vanrise.Entities.DateTimeType dateTimeType)
         {
@@ -343,6 +343,7 @@ namespace Vanrise.Common
             }
             throw new ArgumentException("textFilterType");
         }
+
         public static object GetTypeDefault(Type type)
         {
             if (type.IsValueType)
@@ -351,6 +352,7 @@ namespace Vanrise.Common
             }
             return null;
         }
+
         public static Object GetPropValue(string fieldName, dynamic obj)
         {
             Resolver resolver = new Resolver();
@@ -608,6 +610,44 @@ namespace Vanrise.Common
             return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, time.Hour, time.Minute, time.Second, time.MilliSecond);
         }
 
+        public static int GetIso8601WeekOfYear(DateTime dateTime)
+        {
+            // This presumes that weeks start with Monday.
+            // Week 1 is the 1st week of the year with a Thursday in it.
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(dateTime);
+            if (day >= DayOfWeek.Monday && day <= DayOfWeek.Wednesday)
+                dateTime = dateTime.AddDays(3);
+
+            return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(dateTime, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        }
+
+        public static DateTime GetMonday(DateTime dateTime)
+        {
+            DateTime date = dateTime.Date;
+
+            int daysOffset = (int)DayOfWeek.Monday - (int)date.DayOfWeek;
+            if (daysOffset > 0)
+                return date.AddDays(-(7 - daysOffset));
+            else
+                return date.AddDays(daysOffset);
+        }
+
+        public static string GetWeekOfYearDescription(DateTime value)
+        {
+            DateTime dt = (DateTime)value;
+            int weekOfYear = Vanrise.Common.Utilities.GetIso8601WeekOfYear(dt);
+            string weekOfYearAsString = weekOfYear.ToString();
+            if (weekOfYearAsString.Length == 1)
+                weekOfYearAsString = String.Format("0{0}", weekOfYearAsString);
+
+            int year = dt.Year;
+            if (weekOfYear == 1 && dt.Month == 12)
+                year++;
+            else if (weekOfYear >= 52 && dt.Month == 1)
+                year--;
+
+            return string.Format("Week {0} {1}", weekOfYearAsString.Substring(weekOfYearAsString.Length - 2), year.ToString());
+        }
     }
 
     public interface IPropValueReader

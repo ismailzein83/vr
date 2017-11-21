@@ -50,6 +50,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                 case DateTimeRecordFilterComparisonPart.YearMonth:
                     return new DateTime(dateTime.Value.Year, dateTime.Value.Month, 1);
 
+                case DateTimeRecordFilterComparisonPart.YearWeek:
+                    return Vanrise.Common.Utilities.GetMonday(dateTime.Value);
+
                 case DateTimeRecordFilterComparisonPart.Hour:
                     return new Time(dateTime.Value.Hour, 0, 0, 0);
 
@@ -70,6 +73,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
                     case DateTimeRecordFilterComparisonPart.DateTime:
                     case DateTimeRecordFilterComparisonPart.DateOnly:
                     case DateTimeRecordFilterComparisonPart.YearMonth:
+                    case DateTimeRecordFilterComparisonPart.YearWeek:
                     case DateTimeRecordFilterComparisonPart.Hour:
                         dateTimeRecordFilter.FieldName = this.DateTimeFieldName;
                         return dateTimeRecordFilter;
@@ -112,7 +116,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
 
             bool isAlwaysFalseRecordFilter = false;
             switch (dateTimeRecordFilter.CompareOperator)
-            {
+            { 
                 case DateTimeRecordFilterOperator.Equals: AdjustDateTimeRecordFilter(dateTimeRecordFilter, valueAsTime, DateTimeRecordFilterOperator.Between, timeRoundingIntervalInMinutes); break;
                 case DateTimeRecordFilterOperator.NotEquals: AdjustDateTimeRecordFilter(dateTimeRecordFilter, valueAsTime, DateTimeRecordFilterOperator.NotBetween, timeRoundingIntervalInMinutes); break;
                 case DateTimeRecordFilterOperator.Between: AdjustDateTimeRecordFilter(dateTimeRecordFilter, value2AsTime, DateTimeRecordFilterOperator.Between, timeRoundingIntervalInMinutes); break;

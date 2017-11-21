@@ -21,6 +21,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         Date = 2,
         [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
         YearMonth = 3,
+        [FieldDateTimeDataTypeInfo(RuntimeType = typeof(DateTime))]
+        YearWeek = 4,
         [FieldDateTimeDataTypeInfo(RuntimeType = typeof(Vanrise.Entities.Time))]
         Hour = 5
     }
@@ -68,6 +70,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case FieldDateTimeDataType.Hour:
                     return GetHourDescription(value);
 
+                case FieldDateTimeDataType.YearWeek:
+                    return GetYearWeekDescription(value);
+
                 default: throw new NotSupportedException(string.Format("fieldDateTimeDataType '{0}'", this.DataType));
             }
         }
@@ -87,6 +92,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 throw new NullReferenceException("dateTimeRecordFilter");
 
             DateTime valueAsDateTime;
+
             DateTime filterValue;
             DateTime? filterValue2 = null;
 
@@ -149,6 +155,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                         DateTime filterValue2AsDate = Convert.ToDateTime(dateTimeRecordFilter.Value2);
                         filterValue2 = new DateTime(filterValue2AsDate.Year, filterValue2AsDate.Month, 1);
                     }
+                    break;
+
+                #endregion
+
+                #region YearWeek
+
+                case DateTimeRecordFilterComparisonPart.YearWeek:
+                    valueAsDateTime = Vanrise.Common.Utilities.GetMonday((DateTime)fieldValue);
+
+                    filterValue = Vanrise.Common.Utilities.GetMonday((DateTime)dateTimeRecordFilter.Value);
+                    if (hasSecondValue)
+                        filterValue2 = Vanrise.Common.Utilities.GetMonday((DateTime)dateTimeRecordFilter.Value2);
                     break;
 
                 #endregion
@@ -228,6 +246,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case FieldDateTimeDataType.Date: type = "Date"; break;
                 case FieldDateTimeDataType.Time: type = "Text"; break;
                 case FieldDateTimeDataType.YearMonth: type = "Yearmonth"; break;
+                case FieldDateTimeDataType.YearWeek: type = "Text"; break;
                 case FieldDateTimeDataType.Hour: type = "Text"; break;
                 default: type = "Datetime"; break;
             }
@@ -263,6 +282,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     recordFilters = GetDateTimeRecordFilters(fieldName, yearMonthDateTimeValues, DateTimeRecordFilterComparisonPart.YearMonth);
                     break;
 
+                case FieldDateTimeDataType.YearWeek:
+                    var yearWeekDateTimeValues = filterValues.Select(value => Convert.ToDateTime(value)).ToList();
+                    recordFilters = GetDateTimeRecordFilters(fieldName, yearWeekDateTimeValues, DateTimeRecordFilterComparisonPart.YearWeek);
+                    break;
+
                 case FieldDateTimeDataType.Hour:
                     var hourValues = filterValues.Select(value => new Time(value.ToString())).ToList();
                     recordFilters = GetDateTimeRecordFilters(fieldName, hourValues, DateTimeRecordFilterComparisonPart.Hour);
@@ -295,6 +319,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         #endregion
 
         #region Private Methods
+
+        string GetYearWeekDescription(object fieldValue)
+        {
+            if (fieldValue is DateTime)
+                return Vanrise.Common.Utilities.GetWeekOfYearDescription((DateTime)fieldValue);
+            else
+                throw new DataIntegrityValidationException("fieldDateTimeType.Value should be of type DateTime");
+        }
 
         string GetHourDescription(object fieldValue)
         {

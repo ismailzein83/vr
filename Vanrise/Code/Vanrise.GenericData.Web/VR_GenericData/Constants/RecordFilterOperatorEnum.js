@@ -34,7 +34,8 @@ app.constant('VR_GenericData_DateTimeRecordFilterComparisonPartEnum', {
     Time: { value: 1, description: 'Time' },
     Date: { value: 2, description: 'Date' },
     YearMonth: { value: 3, description: 'Year Month' },
-    Hour: { value: 5, description: 'Hour' }
+    YearWeek: { value: 4, description: 'Year Week' },
+    Hour: { value: 5, description: 'Hour' } 
 });
 
 app.constant('VR_GenericData_ListRecordFilterOperatorEnum', {

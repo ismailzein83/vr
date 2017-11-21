@@ -253,6 +253,7 @@ app.directive('vrGenericdataFieldtypeDatetimeRulefiltereditor', ['VR_GenericData
                     case 1: $scope.comparisonParts.push(VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Time); break;
                     case 2: $scope.comparisonParts.push(VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Date); break;
                     case 3: $scope.comparisonParts.push(VR_GenericData_DateTimeRecordFilterComparisonPartEnum.YearMonth); break;
+                    case 4: $scope.comparisonParts.push(VR_GenericData_DateTimeRecordFilterComparisonPartEnum.YearWeek); break;
                     case 5: $scope.comparisonParts.push(VR_GenericData_DateTimeRecordFilterComparisonPartEnum.Hour); break;
                 }
 
