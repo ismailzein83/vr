@@ -201,8 +201,9 @@
                 };
             }
             else {
+               
                 var accountmanagerAssignment = {
-                    AccountManagerAssignementDefinitionId:accountManagerAssignementDefinitionId,
+                    AccountManagerAssignmentDefinitionId: accountManagerAssignementDefinitionId,
                     AccountManagerAssignmentId: accountManagerAssignmentId,
                     BED: $scope.scopeModel.beginEffectiveDate,
                     EED: $scope.scopeModel.endEffectiveDate,
