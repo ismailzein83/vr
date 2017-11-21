@@ -104,7 +104,7 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
                 ctrl.showEffectiveDateDayOffset = (directiveContext == systemEnumValue);
                 ctrl.showRetroactiveDayOffset = (directiveContext == systemEnumValue);
                 ctrl.showNewRateDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);
-                ctrl.showEndCountryDayOffset = (directiveContext != systemEnumValue);
+                ctrl.showEndCountryDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);
                 ctrl.showIncreasedRateDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);
                 ctrl.showDecreasedRateDayOffset = (directiveContext == systemEnumValue || directiveContext == sellingProductEnumValue || directiveContext == customerEnumValue);
             }
