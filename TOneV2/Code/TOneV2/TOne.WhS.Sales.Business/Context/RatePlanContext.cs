@@ -41,6 +41,7 @@ namespace TOne.WhS.Sales.Business
         public SalePriceListOwnerType OwnerType { get; set; }
         public int OwnerId { get; set; }
         public int OwnerSellingNumberPlanId { get; set; }
+        public DateTime MinimumZoneBED { get; set; }
         public int CurrencyId { get; set; }
         public int SellingProductCurrencyId { get; set; }
         public DateTime EffectiveDate { get; set; }
@@ -126,6 +127,7 @@ namespace TOne.WhS.Sales.Business
         SalePriceListOwnerType OwnerType { get; }
         int OwnerId { get; }
         int OwnerSellingNumberPlanId { get; }
+        DateTime MinimumZoneBED { get; }
         int CurrencyId { get; }
         int SellingProductCurrencyId { get; }
         DateTime EffectiveDate { get; }
