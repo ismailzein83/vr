@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -17,14 +18,14 @@ namespace Vanrise.AccountManager.Business
     public class AccountManagerAssignmentManager
     {
         #region Public Methods
-        public AccountManagerAssignment GetAccountManagerAssignment(long accountManagerAssignmentId)
+        public AccountManagerAssignment GetAccountManagerAssignment(long accountManagerAssignmentId,Guid accountManagerAssignmentDefinitionId)
         {
-            var allAccountManagerAssignments = this.GetCachedAccountManagerAssignments();
+            var allAccountManagerAssignments = this.GetCachedAccountManagerAssignments(accountManagerAssignmentDefinitionId);
             return allAccountManagerAssignments.GetRecord(accountManagerAssignmentId);
         }
-        public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignments()
+        public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignments(Guid accountManagerAssignmentDefinitionId)
         {
-            return this.GetCachedAccountManagerAssignments().Values;
+            return this.GetCachedAccountManagerAssignments(accountManagerAssignmentDefinitionId).Values;
         }
         internal bool TryAddAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment, out int insertedID, out string errorMessage)
         {
@@ -35,17 +36,17 @@ namespace Vanrise.AccountManager.Business
             if (insertActionSucc)
             {
                 accountManagerAssignment.AccountManagerAssignementId = insertedID;
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountManagerAssignment.AccountManagerAssignementDefinitionId);
             }
             return insertActionSucc;
         }
-        internal bool TryUpdateAccountManagerAssignment(long accountManagerAssignmentId, DateTime bed, DateTime? eed, AccountManagerAssignmentSettings settings)
+        internal bool TryUpdateAccountManagerAssignment(long accountManagerAssignmentId, DateTime bed, DateTime? eed, AccountManagerAssignmentSettings settings, Guid accountManagerAssignementDefinitionId)
         {
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
             bool updateActionSucc = dataManager.UpdateAccountManagerAssignment(accountManagerAssignmentId, bed, eed, settings);
             if (updateActionSucc)
             {
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountManagerAssignementDefinitionId);
             }
             return updateActionSucc;
         }
@@ -84,14 +85,14 @@ namespace Vanrise.AccountManager.Business
         public bool UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput input, out string updateErrorMessage)
         {
             string errorMessage;
-            var accountManagerAssignment = GetAccountManagerAssignment(input.AccountManagerAssignmentId);
+            var accountManagerAssignment = GetAccountManagerAssignment(input.AccountManagerAssignmentId,input.AccountManagerAssignmentDefinitionId);
             bool updateActionSucc = false;
             updateErrorMessage = null;
             if (input != null)
             {
                 if (!ValidateAccountManagerAssignmentInput(accountManagerAssignment.AccountId, accountManagerAssignment.AccountManagerAssignementDefinitionId, input.BED, input.EED,input.AccountManagerAssignmentId, out errorMessage))
                 {
-                    updateActionSucc = TryUpdateAccountManagerAssignment(input.AccountManagerAssignmentId, input.BED, input.EED, input.AssignementSettings);
+                    updateActionSucc = TryUpdateAccountManagerAssignment(input.AccountManagerAssignmentId, input.BED, input.EED, input.AssignementSettings, input.AccountManagerAssignmentDefinitionId);
                 }
                 else
                 {
@@ -170,7 +171,7 @@ namespace Vanrise.AccountManager.Business
         }
         public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignmentsById(string accountId, Guid accountManagerAssignementDefinitionId)
         {
-            var allAccountMaanagerAssignments = this.GetCachedAccountManagerAssignments().Values;
+            var allAccountMaanagerAssignments = this.GetCachedAccountManagerAssignments(accountManagerAssignementDefinitionId).Values;
             return allAccountMaanagerAssignments.FindAllRecords(item => item.AccountId == accountId && item.AccountManagerAssignementDefinitionId == accountManagerAssignementDefinitionId);
         }
         public AccountManagerAssignment GetAccountAssignment(Guid assignmentDefinitionId, string accountId, DateTime effectiveOn)
@@ -180,22 +181,26 @@ namespace Vanrise.AccountManager.Business
         #endregion
 
         #region Private Classes
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
+           
+            ConcurrentDictionary<Guid, Object> _updateHandlesByAsignmentDefinitionId = new ConcurrentDictionary<Guid, Object>();
+            protected override bool ShouldSetCacheExpired(Guid accountManagerAssignmentDefinitionId)
             {
-                return dataManager.AreAccountManagerAssignmentsUpdated(ref _updateHandle);
+                object _updateHandle;
+                _updateHandlesByAsignmentDefinitionId.TryGetValue(accountManagerAssignmentDefinitionId, out _updateHandle);
+                bool isCacheExpired = dataManager.AreAccountManagerAssignmentsUpdated(accountManagerAssignmentDefinitionId, ref _updateHandle);
+                _updateHandlesByAsignmentDefinitionId.AddOrUpdate(accountManagerAssignmentDefinitionId, _updateHandle, (key, existingHandle) => _updateHandle);
+                return isCacheExpired;
             }
         }
         #endregion
 
         #region Private Methods
-        Dictionary<long, AccountManagerAssignment> GetCachedAccountManagerAssignments()
+        Dictionary<long, AccountManagerAssignment> GetCachedAccountManagerAssignments(Guid accountManagerAssignmentDefinitionId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountManagerAssignments",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>(accountManagerAssignmentDefinitionId).GetOrCreateObject("GetAccountManagerAssignments", accountManagerAssignmentDefinitionId,
                () =>
                {
                    IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
@@ -255,7 +260,7 @@ namespace Vanrise.AccountManager.Business
     public class UpdateAccountManagerAssignmentInput
     {
         public long AccountManagerAssignmentId { get; set; }
-
+        public Guid AccountManagerAssignmentDefinitionId { get; set; }
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }

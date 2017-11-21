@@ -39,9 +39,9 @@ namespace Vanrise.AccountManager.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("[VR_AccountManager].[sp_AccountManagerAssignment_Update]",accountManagerAssignmentId, Serializer.Serialize( settings), bed,eed);
             return (recordsEffected > 0);
         }
-        public bool AreAccountManagerAssignmentsUpdated(ref object updateHandle)
+        public bool AreAccountManagerAssignmentsUpdated(Guid accountManagerDefinitionId,ref object updateHandle)
         {
-            return base.IsDataUpdated("VR_AccountManager.AccountManagerAssignment", ref updateHandle);
+            return base.IsDataUpdated("VR_AccountManager.AccountManagerAssignment", "AssignmentDefinitionID", accountManagerDefinitionId, ref updateHandle);
         }
         Vanrise.AccountManager.Entities.AccountManagerAssignment AccountManagerAssignmentMapper(IDataReader reader)
         {
@@ -53,7 +53,7 @@ namespace Vanrise.AccountManager.Data.SQL
                 AccountId = reader["AccountID"] as string,
                 Settings = Vanrise.Common.Serializer.Deserialize<Vanrise.AccountManager.Entities.AccountManagerAssignmentSettings>(reader["Settings"] as string),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
-                EED = GetReaderValue<DateTime>(reader, "EED")
+                EED = GetReaderValue<DateTime?>(reader, "EED")
             };
         }
     }
