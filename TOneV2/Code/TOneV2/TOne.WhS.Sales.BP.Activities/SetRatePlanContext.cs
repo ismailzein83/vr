@@ -65,7 +65,10 @@ namespace TOne.WhS.Sales.BP.Activities
             ratePlanContext.FutureRateLocator = GetFutureRateLocator(ownerType, ownerId, effectiveDate);
             ratePlanContext.PriceListCurrencyId = currencyId;
             if (ownerType == SalePriceListOwnerType.SellingProduct)
+            {
+                ratePlanContext.MinimumZoneBED = new SaleZoneManager().GetSaleZonesBySellingNumberPlan(ratePlanContext.OwnerSellingNumberPlanId).OrderBy(x => x.BED).First().BED;
                 ratePlanContext.IsFirstSellingProductOffer = !new SalePriceListManager().CheckIfAnyPriceListExists(SalePriceListOwnerType.SellingProduct, ownerId);
+            }   
         }
 
         #region Private Methods

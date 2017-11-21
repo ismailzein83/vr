@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess;
@@ -85,7 +86,7 @@ namespace TOne.WhS.Sales.BP.Activities
             DefaultRoutingProductToAdd defaultRoutingProductToAdd = inputArgument.DefaultRoutingProductToAdd;
             DefaultRoutingProductToClose defaultRoutingProductToClose = inputArgument.DefaultRoutingProductToClose;
             IEnumerable<ExistingDefaultRoutingProduct> existingDefaultRoutingProducts = inputArgument.ExistingDefaultRoutingProducts;
-
+            RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
             ProcessDefaultRoutingProductContext processDefaultRoutingProductContext = new ProcessDefaultRoutingProductContext()
             {
                 DefaultRoutingProductToAdd = defaultRoutingProductToAdd,
@@ -98,10 +99,12 @@ namespace TOne.WhS.Sales.BP.Activities
 
             if (DoDeafultRoutingProductChangesExist(processDefaultRoutingProductContext))
             {
-                RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
                 ratePlanContext.SetProcessHasChangesToTrueWithLock();
             }
-
+            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct && ratePlanContext.IsFirstSellingProductOffer.Value)
+            {
+                processDefaultRoutingProductContext.NewDefaultRoutingProduct.BED = ratePlanContext.MinimumZoneBED;
+            }
             return new ProcessDefaultRoutingProductOutput()
             {
                 NewDefaultRoutingProduct = processDefaultRoutingProductContext.NewDefaultRoutingProduct,
