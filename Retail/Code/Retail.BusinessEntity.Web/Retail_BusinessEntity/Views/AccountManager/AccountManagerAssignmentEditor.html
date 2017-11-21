@@ -7,11 +7,9 @@
                         <span vr-disabled="scopeModel.accountSelectorDisable">
                             <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" isrequired="true" ismultipleselection="true" customlabel="Account(s)" normal-col-num="4"></retail-be-account-selector>
                         </span>
-                        <vr-columns colnum="4">
                             <span vr-disabled="scopeModel.accountManagerDisable">
-                                <vr-accountmanager-accountmanager-selector on-ready="scopeModel.onAccountManagerSelectorReady" isrequired="true"></vr-accountmanager-accountmanager-selector>
+                                <vr-accountmanager-accountmanager-selector on-ready="scopeModel.onAccountManagerSelectorReady" isrequired="true" normal-col-num="4"></vr-accountmanager-accountmanager-selector>
                             </span>
-                        </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-directivewrapper directive="scopeModel.assignmentRuntime" on-ready="scopeModel.onRuntimeDirectiveReady" isrequired="ctrl.isrequired"></vr-directivewrapper>
@@ -19,10 +17,10 @@
                 </vr-tab>
                 <vr-tab header="'Effective Date'">
                     <vr-row>
-                        <vr-columns colnum="6">
+                        <vr-columns colnum="4">
                             <vr-datetimepicker type="date" value="scopeModel.beginEffectiveDate" label="BED" customvalidate="scopeModel.validateEffectiveDate()" isrequired></vr-datetimepicker>
                         </vr-columns>
-                        <vr-columns colnum="6">
+                        <vr-columns colnum="4">
                             <vr-datetimepicker type="date" value="scopeModel.endEffectiveDate" label="EED" customvalidate="scopeModel.validateEffectiveDate()"></vr-datetimepicker>
                         </vr-columns>
                     </vr-row>
