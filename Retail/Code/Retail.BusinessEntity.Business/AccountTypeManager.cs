@@ -38,6 +38,23 @@ namespace Retail.BusinessEntity.Business
             return this.GetCachedAccountTypesWithHidden().GetRecord(accountTypeId);
         }
 
+        public List<AccountType> GetAccountTypes(Guid accountDefinitionId)
+        {
+            return GetAccountTypesByAccountDefId().GetRecord(accountDefinitionId);
+        }
+
+        public List<Guid> GetAccountTypeIds(Guid accountDefinitionId)
+        {
+            string cacheName = String.Concat("GetAccountTypeIds", accountDefinitionId);
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
+                    () =>
+                    {
+                        List<AccountType> accountTypes = GetAccountTypes(accountDefinitionId);
+                        return accountTypes != null ? accountTypes.Select(accountType => accountType.AccountTypeId).ToList() : new List<Guid>();
+                    }
+                );
+        }
+
         public string GetAccountTypeName(Guid accountTypeId)
         {
             AccountType accountType = this.GetAccountType(accountTypeId);
@@ -381,6 +398,23 @@ namespace Retail.BusinessEntity.Business
                 }
 
                 return includedAccountTypes.ToDictionary(kvp => kvp.AccountTypeId, kvp => kvp);
+            });
+        }
+
+        Dictionary<Guid, List<AccountType>> GetAccountTypesByAccountDefId()
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountTypesByAccountDefId", () =>
+            {
+                Dictionary<Guid, List<AccountType>> dict = new Dictionary<Guid, List<AccountType>>();
+                var allAccountTypes = GetCachedAccountTypes();
+                if (allAccountTypes != null)
+                {
+                    foreach(var accountType in allAccountTypes.Values)
+                    {
+                        dict.GetOrCreateItem(accountType.AccountBEDefinitionId).Add(accountType);
+                    }
+                }
+                return dict;
             });
         }
 

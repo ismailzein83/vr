@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,9 +28,29 @@ namespace Retail.BusinessEntity.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("Retail.sp_Account_UpdateExtendedSettings", accountId, Vanrise.Common.Serializer.Serialize(extendedSettings));
             return (recordsEffected > 0);
         }
-        public IEnumerable<Account> GetAccounts(Guid accountBEDefinitionId)
+
+        public IEnumerable<Account> GetAccounts(List<Guid> accountTypeIds, byte[] afterLastTimeStamp)
         {
-            return GetItemsSP("Retail.sp_Account_GetByDefinition", AccountMapper, accountBEDefinitionId);
+            string query = String.Format(@"SELECT	a.ID, a.Name, a.TypeID, a.Settings, a.StatusID, a.ParentID, a.SourceID, a.ExecutedActionsData,a.ExtendedSettings,a.CreatedTime
+	                            FROM [Retail].[Account] a with(nolock)
+	                            where {0} ", BuildAccountTypesFilter(accountTypeIds));
+            if (afterLastTimeStamp != null)
+                query += " AND a.[timestamp] > @Timestamp";
+            return GetItemsText(query, AccountMapper,
+                (cmd) =>
+                {
+                    if (afterLastTimeStamp != null)
+                        cmd.Parameters.Add(new SqlParameter("@Timestamp", afterLastTimeStamp));
+                });
+        }
+
+        public byte[] GetMaxTimeStamp(List<Guid> accountTypeIds)
+        {
+            string query = String.Format(@"SELECT MAX(a.timestamp) 
+                                            FROM [Retail].[Account] a with(nolock) 
+                                            where {0}", BuildAccountTypesFilter(accountTypeIds));
+            Object obj = ExecuteScalarText(query, null);
+            return obj != null ? (byte[])obj : null;
         }
 
         public bool Insert(AccountToInsert accountToInsert, out long insertedId)
@@ -56,13 +77,11 @@ namespace Retail.BusinessEntity.Data.SQL
             return (affectedRecords > 0);
         }
 
-        public bool AreAccountsUpdated(Guid accountBEDefinitionId, ref object updateHandle)
+        public bool AreAccountsUpdated(List<Guid> accountTypeIds, ref object updateHandle)
         {
-            string query = String.Format("SELECT MAX(a.timestamp) " +
-                                         "FROM [Retail].[Account] a with(nolock) " +
-                                         "Join [Retail_BE].[AccountType] t with(nolock) " +
-                                         "on a.[TypeID] = t.[ID] " +
-                                         "where t.[AccountBEDefinitionID] = '{0}'", accountBEDefinitionId);
+            string query = String.Format(@"SELECT MAX(a.timestamp) 
+                                            FROM [Retail].[Account] a with(nolock) 
+                                            where {0}", BuildAccountTypesFilter(accountTypeIds));
 
             var newReceivedDataInfo = ExecuteScalarText(query, null);
             return base.IsDataUpdated(ref updateHandle, newReceivedDataInfo);
@@ -92,6 +111,11 @@ namespace Retail.BusinessEntity.Data.SQL
                 ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, BaseAccountExtendedSettings>,
                 CreatedTime = GetReaderValue<DateTime>(reader,"CreatedTime")
             };
+        }
+
+        private string BuildAccountTypesFilter(List<Guid> accountTypeIds)
+        {
+            return string.Concat(" a.TypeID IN ('", String.Join("','", accountTypeIds), "') ");
         }
 
         #endregion

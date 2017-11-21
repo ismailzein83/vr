@@ -47,7 +47,7 @@ namespace Retail.BusinessEntity.Business
             if (input.SortByColumnName != null && input.SortByColumnName.Contains("FieldValues"))
             {
                 string[] fieldProperty = input.SortByColumnName.Split('.');
-                input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", fieldProperty[0], fieldProperty[1]);
+                input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldProperty[0], fieldProperty[1], fieldProperty[2]);
             }
 
             var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(input.Query.AccountBEDefinitionId, account, input.Query.Columns));
@@ -114,7 +114,7 @@ namespace Retail.BusinessEntity.Business
             if (input.SortByColumnName != null && input.SortByColumnName.Contains("FieldValues"))
             {
                 string[] fieldProperty = input.SortByColumnName.Split('.');
-                input.SortByColumnName = string.Format(@"{0}[""{1}""].Value", fieldProperty[0], fieldProperty[1]);
+                input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldProperty[0], fieldProperty[1], fieldProperty[2]);
             }
 
             var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(input.Query.AccountBEDefinitionId, account, input.Query.Columns));
@@ -1029,14 +1029,59 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Methods
 
+        private class CachedAccountsByDefId
+        {
+            public Dictionary<long, Account> AllAccounts { get; set; }
+
+            public byte[] LastTimeStamp { get; set; }
+        }
+
+        static Dictionary<Guid, CachedAccountsByDefId> s_allAccountsByDefId = new Dictionary<Guid,CachedAccountsByDefId>();
+
         public Dictionary<long, Account> GetCachedAccounts(Guid accountBEDefinitionId)
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccounts", accountBEDefinitionId,
                 () =>
                 {
+                    CachedAccountsByDefId cachedAccountsByDefId;
+                    lock(s_allAccountsByDefId)
+                    {
+                        cachedAccountsByDefId = s_allAccountsByDefId.GetOrCreateItem(accountBEDefinitionId);
+                    }
                     IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-                    IEnumerable<Account> accounts = dataManager.GetAccounts(accountBEDefinitionId);
-                    return accounts.ToDictionary(kvp => kvp.AccountId, kvp => kvp);
+                    List<Guid> accountTypeIds = s_accountTypeManager.GetAccountTypeIds(accountBEDefinitionId);
+                    byte[] newMaxTimeStamp = dataManager.GetMaxTimeStamp(accountTypeIds);
+                    IEnumerable<Account> accounts = dataManager.GetAccounts(accountTypeIds, cachedAccountsByDefId.LastTimeStamp);
+                    if (cachedAccountsByDefId.AllAccounts == null)
+                    {
+                        cachedAccountsByDefId.AllAccounts = new Dictionary<long, Account>(accounts.Count());
+                        foreach(var a in accounts)
+                        {
+                            cachedAccountsByDefId.AllAccounts.Add(a.AccountId, a);
+                        }
+                    }
+                    else
+                    {
+                        Dictionary<long, Account> finalAccounts = new Dictionary<long, Account>(cachedAccountsByDefId.AllAccounts.Count + accounts.Count());
+                        foreach(var entry in cachedAccountsByDefId.AllAccounts)
+                        {
+                            finalAccounts.Add(entry.Key, entry.Value);
+                        }
+                        foreach(var a in accounts)
+                        {
+                            if (finalAccounts.ContainsKey(a.AccountId))
+                            {
+                                finalAccounts[a.AccountId] = a;
+                            }
+                            else
+                            {
+                                finalAccounts.Add(a.AccountId, a);
+                            }
+                        }
+                        cachedAccountsByDefId.AllAccounts = finalAccounts;
+                    }
+                    cachedAccountsByDefId.LastTimeStamp = newMaxTimeStamp;
+                    return cachedAccountsByDefId.AllAccounts;
                 });
         }
         public Dictionary<string, Account> GetCachedAccountsBySourceId(Guid accountBEDefinitionId)
@@ -1142,13 +1187,14 @@ namespace Retail.BusinessEntity.Business
         public class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             IAccountBEDataManager _dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
+            AccountTypeManager _accountTypeManager = new AccountTypeManager();
             ConcurrentDictionary<Guid, Object> _updateHandlesByBEDefinitionId = new ConcurrentDictionary<Guid, Object>();
             protected override bool ShouldSetCacheExpired(Guid accountBEDefinitionId)
             {
                 object _updateHandle;
 
                 _updateHandlesByBEDefinitionId.TryGetValue(accountBEDefinitionId, out _updateHandle);
-                bool isCacheExpired = _dataManager.AreAccountsUpdated(accountBEDefinitionId, ref _updateHandle);
+                bool isCacheExpired = _dataManager.AreAccountsUpdated(_accountTypeManager.GetAccountTypeIds(accountBEDefinitionId), ref _updateHandle);
                 _updateHandlesByBEDefinitionId.AddOrUpdate(accountBEDefinitionId, _updateHandle, (key, existingHandle) => _updateHandle);
 
                 return isCacheExpired;
@@ -1527,19 +1573,42 @@ namespace Retail.BusinessEntity.Business
             Dictionary<string, DataRecordFieldValue> fieldValues = new Dictionary<string, DataRecordFieldValue>();
             Dictionary<string, AccountGenericField> accountGenericFields = accountTypeManager.GetAccountGenericFields(accountBEDefinitionId);
 
-            foreach (var field in accountGenericFields.Values)
+            if(columns != null )
             {
-                if (columns != null && !columns.Contains(field.Name))
-                    continue;
+                foreach(var col in columns)
+                {
+                    AccountGenericField field;
+                    if (!accountGenericFields.TryGetValue(col, out field))
+                        throw new NullReferenceException(String.Format("field '{0}'. accountBEDefinitionId '{1}'", col, accountBEDefinitionId));
+                    object value = field.GetValue(new AccountGenericFieldContext(account));
 
-                object value = field.GetValue(new AccountGenericFieldContext(account));
+                    DataRecordFieldValue dataRecordFieldValue = new DataRecordFieldValue();
+                    dataRecordFieldValue.Value = value;
+                    if (value != null)
+                        dataRecordFieldValue.Description = field.FieldType.GetDescription(value);
 
-                DataRecordFieldValue dataRecordFieldValue = new DataRecordFieldValue();
-                dataRecordFieldValue.Value = value;
-                dataRecordFieldValue.Description = field.FieldType.GetDescription(value);
-
-                fieldValues.Add(field.Name, dataRecordFieldValue);
+                    fieldValues.Add(field.Name, dataRecordFieldValue);
+                }
             }
+            else
+            {
+                foreach (var field in accountGenericFields.Values)
+                {
+                    if (columns != null && !columns.Contains(field.Name))
+                        continue;
+
+                    object value = field.GetValue(new AccountGenericFieldContext(account));
+
+                    DataRecordFieldValue dataRecordFieldValue = new DataRecordFieldValue();
+                    dataRecordFieldValue.Value = value;
+                    if (value != null)
+                        dataRecordFieldValue.Description = field.FieldType.GetDescription(value);
+
+                    fieldValues.Add(field.Name, dataRecordFieldValue);
+                }
+            }
+
+            
 
             return new AccountDetail()
             {
@@ -1548,8 +1617,6 @@ namespace Retail.BusinessEntity.Business
                 DirectSubAccountCount = accountTreeNode.ChildNodes.Count,
                 TotalSubAccountCount = accountTreeNode.TotalSubAccountsCount,
                 StatusDesciption = statusDefinitionManager.GetStatusDefinitionName(account.StatusId),
-                NumberOfServices = accountServices.GetAccountServicesCount(account.AccountId),
-                NumberOfPackages = accountPackages.GetAccountPackagesCount(account.AccountId),
                 FieldValues = fieldValues
             };
         }
