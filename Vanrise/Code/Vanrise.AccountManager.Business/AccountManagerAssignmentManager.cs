@@ -172,7 +172,7 @@ namespace Vanrise.AccountManager.Business
         public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignmentsById(string accountId, Guid accountManagerAssignementDefinitionId)
         {
             var allAccountMaanagerAssignments = this.GetCachedAccountManagerAssignments(accountManagerAssignementDefinitionId).Values;
-            return allAccountMaanagerAssignments.FindAllRecords(item => item.AccountId == accountId && item.AccountManagerAssignementDefinitionId == accountManagerAssignementDefinitionId);
+            return allAccountMaanagerAssignments.FindAllRecords(item => item.AccountId == accountId);
         }
         public AccountManagerAssignment GetAccountAssignment(Guid assignmentDefinitionId, string accountId, DateTime effectiveOn)
         {
@@ -204,7 +204,7 @@ namespace Vanrise.AccountManager.Business
                () =>
                {
                    IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
-                   IEnumerable<Vanrise.AccountManager.Entities.AccountManagerAssignment> accountManagerAssignments = dataManager.GetAccountManagerAssignments();
+                   IEnumerable<Vanrise.AccountManager.Entities.AccountManagerAssignment> accountManagerAssignments = dataManager.GetAccountManagerAssignments(accountManagerAssignmentDefinitionId);
                    return accountManagerAssignments.ToDictionary(cn => cn.AccountManagerAssignementId, cn => cn);
                });
         }

@@ -9,7 +9,7 @@ namespace Vanrise.AccountManager.Data
 {
     public interface IAccountManagerAssignmentDataManager : IDataManager
     {
-        List<Entities.AccountManagerAssignment> GetAccountManagerAssignments();
+        List<Entities.AccountManagerAssignment> GetAccountManagerAssignments(Guid accountManagerAssignmentDefinitionId);
         bool AreAccountManagerAssignmentsUpdated(Guid accountManagerDefinitionId, ref object updateHandle);
         bool AddAccountManagerAssignment( AccountManagerAssignment accountManagerAssignment, out int insertedId);
         bool UpdateAccountManagerAssignment(long accountManagerAssignmentId, DateTime bed, DateTime? eed, AccountManagerAssignmentSettings settings);

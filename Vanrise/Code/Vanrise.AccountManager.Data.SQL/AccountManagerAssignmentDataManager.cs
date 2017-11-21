@@ -15,9 +15,9 @@ namespace Vanrise.AccountManager.Data.SQL
         public AccountManagerAssignmentDataManager()
            : base(GetConnectionStringName("VR_AccountManager_AccountManagerDBConnStringKey", "VR_AccountManager_AccountManagerDBConnString"))
     {}
-        public List<Vanrise.AccountManager.Entities.AccountManagerAssignment> GetAccountManagerAssignments()
+        public List<Vanrise.AccountManager.Entities.AccountManagerAssignment> GetAccountManagerAssignments(Guid accountManagerAssignmentDefinitionId)
         {
-            return GetItemsSP("[VR_AccountManager].[sp_AccountManagerAssignment_GetAll]", AccountManagerAssignmentMapper);
+            return GetItemsSP("[VR_AccountManager].[sp_AccountManagerAssignment_GetAll]", AccountManagerAssignmentMapper, accountManagerAssignmentDefinitionId);
         }
         public bool AddAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment, out int insertedId)
         {
