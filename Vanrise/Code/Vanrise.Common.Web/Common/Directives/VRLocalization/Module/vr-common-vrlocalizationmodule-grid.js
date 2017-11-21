@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonLocalizationmoduleGrid", ["VRNotificationService", 'VRCommon_VRLocalizationModuleAPIService', 'VRCommon_VRLocalizationModuleService',
-    function (VRNotificationService, VRCommon_VRLocalizationModuleAPIService, VRCommon_VRLocalizationModuleService) {
+app.directive("vrCommonLocalizationmoduleGrid", [ "VRUIUtilsService","VRNotificationService", 'VRCommon_VRLocalizationModuleAPIService', 'VRCommon_VRLocalizationModuleService',
+    function ( VRUIUtilsService, VRNotificationService, VRCommon_VRLocalizationModuleAPIService, VRCommon_VRLocalizationModuleService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -19,7 +19,10 @@ app.directive("vrCommonLocalizationmoduleGrid", ["VRNotificationService", 'VRCom
             templateUrl: '/Client/Modules/Common/Directives/VRLocalization/Module/Templates/VRLocalizationModuleGridTemplate.html'
         };
         function VRLocalizationModuleGrid($scope, ctrl, $attrs) {
+
             var gridAPI;
+            var gridDrillDownTabsObj;
+            var drillDownDefinitionsArray = [];
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -29,12 +32,20 @@ app.directive("vrCommonLocalizationmoduleGrid", ["VRNotificationService", 'VRCom
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+
+                    drillDownDefinitionsArray = VRCommon_VRLocalizationModuleService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitionsArray, gridAPI, $scope.scopeModel.menuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_VRLocalizationModuleAPIService.GetFilteredVRLocalizationModules(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -52,6 +63,7 @@ app.directive("vrCommonLocalizationmoduleGrid", ["VRNotificationService", 'VRCom
                 };
 
                 api.onVRLocalizationModuleAdded = function (addedVRLocalizationModule) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedVRLocalizationModule);
                     gridAPI.itemAdded(addedVRLocalizationModule);
                 };
 
@@ -68,6 +80,7 @@ app.directive("vrCommonLocalizationmoduleGrid", ["VRNotificationService", 'VRCom
 
             function editVRLocalizationModule(vrLocalizationModuleItem) {
                 var onVRLocalizationModuleUpdated = function (updatedvrLocalizationModule) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedvrLocalizationModule);
                     gridAPI.itemUpdated(updatedvrLocalizationModule);
                 };
                 VRCommon_VRLocalizationModuleService.editVRLocalizationModule(vrLocalizationModuleItem.VRLocalizationModuleId, onVRLocalizationModuleUpdated);

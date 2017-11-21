@@ -53,6 +53,14 @@ app.directive("vrCommonLocalizationtextresourceGrid", ["VRNotificationService", 
                 var api = {};
 
                 api.load = function (query) {
+                    console.log(query);
+                    if (query.showModule != undefined)
+                    {
+                        $scope.scopeModel.moduleShow = false;
+                    }
+                    else {
+                        $scope.scopeModel.moduleShow = true;
+                    }
                     return gridAPI.retrieveData(query);
                 };
 

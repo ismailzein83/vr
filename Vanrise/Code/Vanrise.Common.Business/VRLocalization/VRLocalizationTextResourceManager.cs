@@ -18,6 +18,8 @@ namespace Vanrise.Common.Business
             {
                 if (input.Query.ResourceKey != null && !item.ResourceKey.ToLower().Contains(input.Query.ResourceKey.ToLower()))
                     return false;
+                if (input.Query.ModuleIds != null && !input.Query.ModuleIds.Contains(item.ModuleId))
+                    return false;
                 return true;
             };
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRLocalizationTextResources.ToBigResult(input, filterExpression, VRLocalizationTextResourceDetailMapper));

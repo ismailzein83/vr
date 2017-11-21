@@ -9,6 +9,7 @@ namespace Vanrise.Entities
     public class VRLocalizationTextResourceQuery
     {
         public string ResourceKey { get; set; }
+        public List<Guid> ModuleIds { get; set; }
 
     }
 }

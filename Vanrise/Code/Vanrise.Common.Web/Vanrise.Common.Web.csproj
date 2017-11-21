@@ -305,12 +305,14 @@
     <Content Include="Common\Directives\VRLocalization\Module\Templates\VRLocalizationModuleGridTemplate.html" />
     <Content Include="Common\Directives\VRLocalization\Module\vr-common-vrlocalizationmodule-grid.js" />
     <Content Include="Common\Directives\VRLocalization\Module\vr-common-vrlocalizationmodule-selector.js" />
+    <Content Include="Common\Directives\VRLocalization\TextResource\Templates\VRLocalizationTextResourceSearchTemplate.html" />
     <Content Include="Common\Directives\VRLocalization\TextResource\Templates\VRLocalizationTextResourceGridTemplate.html" />
     <Content Include="Common\Directives\VRLocalizationLanguage\Templates\VRLocalizationLanguageGridTemplate.html" />
     <Content Include="Common\Directives\VRLocalizationLanguage\vr-common-vrlocalizationlanguage-grid.js" />
     <Content Include="Common\Directives\VRLocalizationLanguage\vr-common-vrlocalizationlanguage-selector.js" />
     <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-vrlocalizationtextresource-grid.js" />
     <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-vrlocalizationtextresource-selector.js" />
+    <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-vrlocalizationtextresource-search.js" />
     <Content Include="Common\Directives\VRMail\Templates\OverriddenConfigurationVRMailType.html" />
     <Content Include="Common\Directives\VRMail\vr-common-overriddenconfiguration-mailtype.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\OverriddenConfigurationObjectTypeDefinition.html" />

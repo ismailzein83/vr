@@ -11,6 +11,8 @@
         var vrLocalizationTextResourceId;
         var vrLocalizationTextResourceEntity;
 
+        var moduleId;
+
         var localizationModuleSelectorAPI;
         var localizationModuleSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -25,6 +27,8 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 vrLocalizationTextResourceId = parameters.vrLocalizationTextResourceId;
+                moduleId = parameters.moduleId;
+
             }
             isEditMode = (vrLocalizationTextResourceId != undefined);
         }
@@ -39,6 +43,7 @@
                 else
                     return insertVRLocalizationTextResource();
             };
+
 
             $scope.scopeModel.onLocalizationModuleSelectorReady = function (api) {
                 localizationModuleSelectorAPI = api;
@@ -95,7 +100,17 @@
                 var localizationModuleSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 localizationModuleSelectorReadyDeferred.promise.then(function () {
                     var localizationModuleSelectorPayload;
+
+                    if (moduleId != undefined) 
+                    {
+                        $scope.scopeModel.isSelectorDisabled = true;
+
+                        localizationModuleSelectorPayload = {
+                            selectedIds: moduleId
+                        };
+                    }
                     if (vrLocalizationTextResourceEntity != undefined) {
+
 
                         localizationModuleSelectorPayload = {
                             selectedIds: vrLocalizationTextResourceEntity.ModuleId

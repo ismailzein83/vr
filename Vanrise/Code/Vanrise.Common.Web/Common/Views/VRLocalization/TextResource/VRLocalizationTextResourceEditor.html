@@ -7,8 +7,9 @@
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.resourceKey" label="ResourceKey" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-common-localizationmodule-selector on-ready="scopeModel.onLocalizationModuleSelectorReady" customlabel="Module" normal-col-num="6" isrequired="true"></vr-common-localizationmodule-selector>
-
+                        <span vr-disabled ="scopeModel.isSelectorDisabled">
+                            <vr-common-localizationmodule-selector on-ready="scopeModel.onLocalizationModuleSelectorReady" customlabel="Module" normal-col-num="6" isrequired="true"></vr-common-localizationmodule-selector>
+                        </span>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>

@@ -7,6 +7,8 @@
 
     function VRLocalizationModuleService(VRModalService) {
 
+        var drillDownDefinitions = [];
+
         function addVRLocalizationModule(onVRLocalizationModuleAdded) {
             var settings = {};
             var parameters = {
@@ -29,9 +31,19 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRLocalization/Module/VRLocalizationModuleEditor.html', parameters, settings);
         }
 
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
+
         return {
             addVRLocalizationModule: addVRLocalizationModule,
-            editVRLocalizationModule: editVRLocalizationModule
+            editVRLocalizationModule: editVRLocalizationModule,
+            addDrillDownDefinition: addDrillDownDefinition,
+            getDrillDownDefinition: getDrillDownDefinition,
         };
     }
 

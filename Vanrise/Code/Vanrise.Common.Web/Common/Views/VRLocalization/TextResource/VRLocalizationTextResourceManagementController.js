@@ -26,7 +26,7 @@
                     gridAPI.onVRLocalizationTextResourceAdded(addedItem);
                 };
 
-                VRCommon_VRLocalizationTextResourceService.addVRLocalizationTextResource(onVRLocalizationTextResourceAdded);
+                VRCommon_VRLocalizationTextResourceService.addVRLocalizationTextResource(onVRLocalizationTextResourceAdded,undefined);
             };
 
             $scope.scopeModel.onGridReady = function (api) {

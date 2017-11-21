@@ -1,0 +1,10 @@
+﻿<vr-row removeline vr-loader="scopeModel.isLoading">
+    <vr-columns colnum="2">
+        <vr-button type="Add" standalone data-onclick="scopeModel.addResource"></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-common-localizationtextresource-grid on-ready="scopeModel.onGridReady"></vr-common-localizationtextresource-grid>
+    </vr-columns>
+</vr-row>

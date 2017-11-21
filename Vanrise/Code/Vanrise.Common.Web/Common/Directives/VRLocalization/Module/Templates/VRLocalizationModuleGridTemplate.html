@@ -6,5 +6,7 @@
              idfield="VRModuleId">
     <vr-datagridcolumn headertext="'Id'" field="'VRLocalizationModuleId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
-
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

@@ -3,13 +3,14 @@
 
     "use strict";
 
-    VRLocalizationTextResourceService.$inject = ['VRModalService'];
+    VRLocalizationTextResourceService.$inject = ['VRCommon_VRLocalizationModuleService', 'VRModalService'];
 
-    function VRLocalizationTextResourceService(VRModalService) {
+    function VRLocalizationTextResourceService(VRCommon_VRLocalizationModuleService, VRModalService) {
 
-        function addVRLocalizationTextResource(onVRLocalizationTextResourceAdded) {
+        function addVRLocalizationTextResource(onVRLocalizationTextResourceAdded,moduleId) {
             var settings = {};
             var parameters = {
+                moduleId: moduleId
             };
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRLocalizationTextResourceAdded = onVRLocalizationTextResourceAdded;
@@ -29,9 +30,28 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRLocalization/TextResource/VRLocalizationTextResourceEditor.html', parameters, settings);
         }
 
+        function registerDrillDowntoModule() {
+            var drillDownDefinition = {};
+
+            drillDownDefinition.title = "Text Resources";
+            drillDownDefinition.directive = "vr-common-localizationtextresource-search";
+
+            drillDownDefinition.loadDirective = function (directiveAPI, moduleItem) {
+
+                moduleItem.textResourceGridAPI = directiveAPI;
+                var query = {
+                    moduleIds: [moduleItem.VRLocalizationModuleId],
+                };
+                return moduleItem.textResourceGridAPI.load(query);
+            };
+
+            VRCommon_VRLocalizationModuleService.addDrillDownDefinition(drillDownDefinition);
+        }
+
         return {
             addVRLocalizationTextResource: addVRLocalizationTextResource,
-            editVRLocalizationTextResource: editVRLocalizationTextResource
+            editVRLocalizationTextResource: editVRLocalizationTextResource,
+            registerDrillDownToModule: registerDrillDowntoModule,
         };
     }
 
