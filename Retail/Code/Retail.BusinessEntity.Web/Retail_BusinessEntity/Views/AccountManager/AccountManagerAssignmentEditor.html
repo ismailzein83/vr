@@ -4,11 +4,9 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-columns colnum="4">
-                            <span vr-disabled="scopeModel.accountSelectorDisable">
-                                <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" isrequired="true" ismultipleselection="true" customlabel="Account(s)"></retail-be-account-selector>
-                            </span>
-                        </vr-columns>
+                        <span vr-disabled="scopeModel.accountSelectorDisable">
+                            <retail-be-account-selector on-ready="scopeModel.onAccountSelectorReady" isrequired="true" ismultipleselection="true" customlabel="Account(s)" normal-col-num="4"></retail-be-account-selector>
+                        </span>
                         <vr-columns colnum="4">
                             <span vr-disabled="scopeModel.accountManagerDisable">
                                 <vr-accountmanager-accountmanager-selector on-ready="scopeModel.onAccountManagerSelectorReady" isrequired="true"></vr-accountmanager-accountmanager-selector>
@@ -27,7 +25,7 @@
                         <vr-columns colnum="6">
                             <vr-datetimepicker type="date" value="scopeModel.endEffectiveDate" label="EED" customvalidate="scopeModel.validateEffectiveDate()"></vr-datetimepicker>
                         </vr-columns>
-                  </vr-row>
+                    </vr-row>
                 </vr-tab>
             </vr-tabs>
             <vr-row>
