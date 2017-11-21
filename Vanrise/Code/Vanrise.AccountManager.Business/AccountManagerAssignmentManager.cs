@@ -200,7 +200,7 @@ namespace Vanrise.AccountManager.Business
         #region Private Methods
         Dictionary<long, AccountManagerAssignment> GetCachedAccountManagerAssignments(Guid accountManagerAssignmentDefinitionId)
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>(accountManagerAssignmentDefinitionId).GetOrCreateObject("GetAccountManagerAssignments", accountManagerAssignmentDefinitionId,
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountManagerAssignments", accountManagerAssignmentDefinitionId,
                () =>
                {
                    IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
