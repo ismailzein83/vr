@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.Business
         Vanrise.AccountManager.Business.AccountManagerAssignmentManager manager = new Vanrise.AccountManager.Business.AccountManagerAssignmentManager();
         public IDataRetrievalResult<AccountManagerAssignmentDetail> GetFilteredAccountManagerAssignments(DataRetrievalInput<AccountManagerAssignmentQuery> input)
         {
-            var accountManagerAssignments = manager.GetAccountManagerAssignments();
+            var accountManagerAssignments = manager.GetAccountManagerAssignments(input.Query.AccountManagerAssignementDefinitionId);
             Func<AccountManagerAssignment, bool> filterExpression = (prod) =>
             {
                 if (input.Query.AccountManagerId != null && !input.Query.AccountManagerId.Equals(prod.AccountManagerId))
@@ -40,7 +40,7 @@ namespace Retail.BusinessEntity.Business
             if (accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.HasValue)
             {
                 var accountManagerAssignmentId = accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.Value;
-                accountManagerAssignmentRuntime.AccountManagerAssignment = manager.GetAccountManagerAssignment(accountManagerAssignmentId);
+                accountManagerAssignmentRuntime.AccountManagerAssignment = manager.GetAccountManagerAssignment(accountManagerAssignmentId, accountManagerAssignmentRuntimeInput.AssignmentDefinitionId);
                 accountManagerAssignmentRuntime.AccountName = accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings.GetAccountName(accountManagerAssignmentRuntime.AccountManagerAssignment.AccountId);
             }
             return accountManagerAssignmentRuntime;
@@ -73,7 +73,7 @@ namespace Retail.BusinessEntity.Business
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                var accountManagerAssignmentUpdated = manager.GetAccountManagerAssignment(accountManagerAssignment.AccountManagerAssignmentId);
+                var accountManagerAssignmentUpdated = manager.GetAccountManagerAssignment(accountManagerAssignment.AccountManagerAssignmentId, accountManagerAssignment.AccountManagerAssignmentDefinitionId);
                 updateOperationOutput.UpdatedObject = AccountManagerDetailMapper(accountManagerAssignmentUpdated);
             }
             else
@@ -89,31 +89,36 @@ namespace Retail.BusinessEntity.Business
         public Dictionary<Guid, AccountManagerDefInfo> GetAccountManagerDefsInfo()
         {
             AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
-            var accountManagerDefinitionSettings = accountManagerDefinitionManager.GetAccountManagerDefinitionSettings();
-            Dictionary<Guid, AccountManagerDefInfo> accountManagerDefsInfo = new Dictionary<Guid, AccountManagerDefInfo>();
-            foreach (var accountManagerDefinitionSetting in accountManagerDefinitionSettings)
-            {
-                if (accountManagerDefinitionSetting.Value.AssignmentDefinitions != null)
-                {
-                    foreach (var accountManagerAssignment in accountManagerDefinitionSetting.Value.AssignmentDefinitions)
-                    {
-                        var accountManagerAssignmentSetings = accountManagerAssignment.Settings as RetailAccountAssignmentDefinition;
-                        if (accountManagerAssignmentSetings != null)
-                        {
-                            AccountManagerDefInfo accountManagerDefInfo = new AccountManagerDefInfo
-                            {
-                                AccountManagerDefinitionId = accountManagerDefinitionSetting.Key,
-                                AccountManagerDefinitionSettings = accountManagerDefinitionSetting.Value,
-                                AccountManagerAssignmentDefinition = accountManagerAssignment
-                            };
-                            if (!accountManagerDefsInfo.ContainsKey(accountManagerAssignmentSetings.AccountBEDefinitionId))
-                                accountManagerDefsInfo.Add(accountManagerAssignmentSetings.AccountBEDefinitionId, accountManagerDefInfo);
-                        }
-                    }
-                }
+            return accountManagerDefinitionManager.GetCachedOrCreate("GetCachedAccountManagerDefsInfo",
+              () =>
+              {
+                  var accountManagerDefinitionSettings = accountManagerDefinitionManager.GetAccountManagerDefinitionSettings();
+                  Dictionary<Guid, AccountManagerDefInfo> accountManagerDefsInfo = new Dictionary<Guid, AccountManagerDefInfo>();
+                  foreach (var accountManagerDefinitionSetting in accountManagerDefinitionSettings)
+                  {
+                      if (accountManagerDefinitionSetting.Value.AssignmentDefinitions != null)
+                      {
+                          foreach (var accountManagerAssignment in accountManagerDefinitionSetting.Value.AssignmentDefinitions)
+                          {
+                              var accountManagerAssignmentSetings = accountManagerAssignment.Settings as RetailAccountAssignmentDefinition;
+                              if (accountManagerAssignmentSetings != null)
+                              {
+                                  AccountManagerDefInfo accountManagerDefInfo = new AccountManagerDefInfo
+                                  {
+                                      AccountManagerDefinitionId = accountManagerDefinitionSetting.Key,
+                                      AccountManagerDefinitionSettings = accountManagerDefinitionSetting.Value,
+                                      AccountManagerAssignmentDefinition = accountManagerAssignment
+                                  };
+                                  if (!accountManagerDefsInfo.ContainsKey(accountManagerAssignmentSetings.AccountBEDefinitionId))
+                                      accountManagerDefsInfo.Add(accountManagerAssignmentSetings.AccountBEDefinitionId, accountManagerDefInfo);
+                              }
+                          }
+                      }
 
-            }
-            return accountManagerDefsInfo;
+                  }
+                  return accountManagerDefsInfo;
+              });
+          
         }
         public AccountManagerDefInfo GetAccountManagerDefInfoByAccountBeDefinitionId(Guid accountBeDefinitionId)
         {
@@ -145,6 +150,11 @@ namespace Retail.BusinessEntity.Business
             }
             return accountManagerAssignmentDetail;
         }
+        #endregion
+
+        #region Private Classes
+     
+
         #endregion
     }
 }

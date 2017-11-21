@@ -26,7 +26,7 @@ namespace Retail.BusinessEntity.Business
         {
             get
             {
-                return "retail-accountassignment-runtime";
+                return "retail-be-accountassignment-runtime";
             }
         }
     }

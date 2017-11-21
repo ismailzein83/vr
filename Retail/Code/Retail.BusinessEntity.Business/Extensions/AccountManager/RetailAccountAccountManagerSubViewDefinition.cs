@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Business
         {
             get { return new Guid("C16E8C1C-0072-4B80-832A-753F16E1054B"); }
         }
-        public override string RuntimeEditor { get { return "retail-accountmanager-accountsubviewruntime-search"; } }
+        public override string RuntimeEditor { get { return "retail-be-accountmanager-accountsubviewruntime-search"; } }
         public Guid AccountManagerAssignementDefinitionId { get; set; }
     }
 }

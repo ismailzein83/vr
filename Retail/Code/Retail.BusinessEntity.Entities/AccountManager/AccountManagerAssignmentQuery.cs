@@ -9,5 +9,6 @@ namespace Retail.BusinessEntity.Entities
     public class AccountManagerAssignmentQuery
     {
         public long? AccountManagerId { get; set; }
+        public Guid AccountManagerAssignementDefinitionId { get; set; }
     }
 }
