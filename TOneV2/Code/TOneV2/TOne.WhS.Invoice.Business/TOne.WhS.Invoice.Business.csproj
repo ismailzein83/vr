@@ -95,6 +95,7 @@
     <Compile Include="Extensions\CustomerInvoiceGenerator.cs" />
     <Compile Include="Extensions\CustomerInvoiceSettings.cs" />
     <Compile Include="Extensions\InvoiceGeneratorActionPartnerCondition.cs" />
+    <Compile Include="InvoiceComparisonTemplateManager.cs" />
     <Compile Include="InvoiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
