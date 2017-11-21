@@ -94,13 +94,13 @@ namespace Vanrise.Integration.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Batch Description" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Batch Size" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Records Count" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Mapping Result" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Mapper Message" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Execution Status" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Log Entry Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -110,13 +110,13 @@ namespace Vanrise.Integration.Business
                         var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                         sheet.Rows.Add(row);
                         row.Cells.Add(new ExportExcelCell { Value = record.ID });
+                        row.Cells.Add(new ExportExcelCell { Value = record.LogEntryTime });
                         row.Cells.Add(new ExportExcelCell { Value = record.BatchDescription });
                         row.Cells.Add(new ExportExcelCell { Value = record.BatchSize });
                         row.Cells.Add(new ExportExcelCell { Value = record.RecordsCount });
                         row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.MappingResult) });
                         row.Cells.Add(new ExportExcelCell { Value = record.MapperMessage });
                         row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.ExecutionStatus) });
-                        row.Cells.Add(new ExportExcelCell { Value = record.LogEntryTime });
                     }
                 }
                 context.MainSheet = sheet;

@@ -41,9 +41,9 @@ namespace Vanrise.Integration.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Severity" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Message", Width = 100 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Event Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
 
 
                 sheet.Rows = new List<ExportExcelRow>();
@@ -54,9 +54,9 @@ namespace Vanrise.Integration.Business
                         var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                         sheet.Rows.Add(row);
                         row.Cells.Add(new ExportExcelCell { Value = record.ID });
+                        row.Cells.Add(new ExportExcelCell { Value = record.LogEntryTime });
                         row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(record.Severity) });
                         row.Cells.Add(new ExportExcelCell { Value = record.Message });
-                        row.Cells.Add(new ExportExcelCell { Value = record.LogEntryTime });
                     }
                 }
                 context.MainSheet = sheet;

@@ -124,7 +124,7 @@ namespace Vanrise.Common.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Event Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Level" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Event Type" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Message", Width = 120 });
