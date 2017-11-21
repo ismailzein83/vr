@@ -14,7 +14,7 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
-        readonly string[] columns = { "ZoneName", "ProcessInstanceID", "CurrentSaleZoneRoutingProductName", "IsCurrentSaleZoneRoutingProductInherited", "NewSaleZoneRoutingProductName", "EffectiveOn" };
+        readonly string[] columns = { "ZoneName", "ProcessInstanceID", "CurrentSaleZoneRoutingProductName", "CurrentSaleZoneRoutingProductId", "IsCurrentSaleZoneRoutingProductInherited", "NewSaleZoneRoutingProductName", "NewSaleZoneRoutingProductId", "EffectiveOn", "ZoneId" };
 
         private long _processInstanceId;
 
@@ -76,13 +76,16 @@ namespace TOne.WhS.Sales.Data.SQL
 
             streamForBulkInsert.WriteRecord
             (
-                "{0}^{1}^{2}^{3}^{4}^{5}",
+                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}",
                 record.ZoneName,
                 _processInstanceId,
                 record.CurrentSaleZoneRoutingProductName,
+                record.CurrentSaleZoneRoutingProductId,
                 isCurrentSaleZoneRoutingProductInherited,
                 record.NewSaleZoneRoutingProductName,
-				GetDateTimeForBCP(record.EffectiveOn)
+                record.NewSaleZoneRoutingProductId,
+				GetDateTimeForBCP(record.EffectiveOn),
+                record.ZoneId
             );
         }
 
@@ -111,9 +114,12 @@ namespace TOne.WhS.Sales.Data.SQL
             {
                 ZoneName = reader["ZoneName"] as string,
                 CurrentSaleZoneRoutingProductName = reader["CurrentSaleZoneRoutingProductName"] as string,
+                CurrentSaleZoneRoutingProductId = GetReaderValue<int?>(reader, "CurrentSaleZoneRoutingProductId"),
                 IsCurrentSaleZoneRoutingProductInherited = GetReaderValue<bool?>(reader, "IsCurrentSaleZoneRoutingProductInherited"),
                 NewSaleZoneRoutingProductName = reader["NewSaleZoneRoutingProductName"] as string,
-                EffectiveOn = (DateTime)reader["EffectiveOn"]
+                NewSaleZoneRoutingProductId = (int)reader["NewSaleZoneRoutingProductId"],
+                EffectiveOn = (DateTime)reader["EffectiveOn"],
+                ZoneId = GetReaderValue<long?>(reader, "ZoneId"),
             };
         }
 

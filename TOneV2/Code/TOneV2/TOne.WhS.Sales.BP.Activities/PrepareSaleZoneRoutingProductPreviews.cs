@@ -101,8 +101,10 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 var saleZoneRoutingProductPreview = new SaleZoneRoutingProductPreview()
                 {
+                    ZoneId = saleZoneRoutingProductToAdd.ZoneId,
                     ZoneName = saleZoneRoutingProductToAdd.ZoneName,
                     NewSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(saleZoneRoutingProductToAdd.ZoneRoutingProductId),
+                    NewSaleZoneRoutingProductId = saleZoneRoutingProductToAdd.ZoneRoutingProductId,
                     EffectiveOn = saleZoneRoutingProductToAdd.BED
                 };
 
@@ -115,6 +117,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (currentSaleZoneRoutingProduct != null)
                     {
                         saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(currentSaleZoneRoutingProduct.RoutingProductId);
+                        saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductId = currentSaleZoneRoutingProduct.RoutingProductId;
                         saleZoneRoutingProductPreview.IsCurrentSaleZoneRoutingProductInherited = (currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.ProductZone);
                     }
                 }
@@ -126,6 +129,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (currentSaleZoneRoutingProduct != null)
                     {
                         saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(currentSaleZoneRoutingProduct.RoutingProductId);
+                        saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductId = currentSaleZoneRoutingProduct.RoutingProductId;
                         saleZoneRoutingProductPreview.IsCurrentSaleZoneRoutingProductInherited = (currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone);
                     }
                 }
@@ -139,6 +143,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     var saleZoneRoutingProductPreview = new SaleZoneRoutingProductPreview()
                     {
+                        ZoneId = saleZoneRoutingProductToClose.ZoneId,
                         ZoneName = saleZoneRoutingProductToClose.ZoneName,
                         EffectiveOn = saleZoneRoutingProductToClose.CloseEffectiveDate
                     };
@@ -159,7 +164,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         throw new NullReferenceException("currentSaleZoneRoutingProduct");
 
                     saleZoneRoutingProductPreview.CurrentSaleZoneRoutingProductName = routingProductManager.GetRoutingProductName(currentSaleZoneRoutingProduct.RoutingProductId);
-
+                    currentSaleZoneRoutingProduct.RoutingProductId = currentSaleZoneRoutingProduct.RoutingProductId;
                     saleZoneRoutingProductPreview.IsCurrentSaleZoneRoutingProductInherited =
                         (ownerType == SalePriceListOwnerType.SellingProduct && currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.ProductZone) ||
                         (ownerType == SalePriceListOwnerType.Customer && currentSaleZoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone);
