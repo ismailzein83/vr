@@ -144,7 +144,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             ctrl.tabindex = "";
             setTimeout(function () {
                 if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
-                    ctrl.tabindex = "-1"
+                    ctrl.tabindex = "-1";
                 }
             }, 10);
 
@@ -254,7 +254,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     $(div).css({
                         "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px"
                     });
-                };
+                }
             };
             getInputeStyle();
 
