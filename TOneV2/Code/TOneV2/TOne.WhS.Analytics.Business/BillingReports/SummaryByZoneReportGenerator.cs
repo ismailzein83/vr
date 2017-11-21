@@ -181,11 +181,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             //parameters.ServicesForCustomer = services;
             parameters.NormalDuration = listSummaryByZone.Where(y => !y.RateType.HasValue).Sum(x => Math.Round(x.DurationInSeconds, 2));
 
-            parameters.OffPeakDuration = Math.Ceiling(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => Math.Round(x.DurationInSeconds, 2)));
+            parameters.OffPeakDuration = Math.Round(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => Math.Round(x.DurationInSeconds, 2)),2);
 
-            parameters.NormalNet = listSummaryByZone.Where(y => !y.RateType.HasValue).Sum(x => x.Net).Value;
+            parameters.NormalNet = Math.Round(listSummaryByZone.Where(y => !y.RateType.HasValue).Sum(x => x.Net).Value , 2);
 
-            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => x.Net).Value, 0);
+            parameters.OffPeakNet = Math.Round(listSummaryByZone.Where(y => y.RateType == offPeakRateTypeId).Sum(x => x.Net).Value,2);
 
             parameters.TotalAmount = parameters.OffPeakNet + parameters.NormalNet;
 

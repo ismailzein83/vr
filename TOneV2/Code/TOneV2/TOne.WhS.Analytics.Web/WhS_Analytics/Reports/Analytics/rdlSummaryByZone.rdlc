@@ -1135,7 +1135,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!NormalNet.Value,Parameters!DigitRate.Value)</Value>
+                              <Value>=FormatNumber(Parameters!NormalNet.Value,Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1156,6 +1156,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -1427,7 +1428,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!OffPeakNet.Value,Parameters!DigitRate.Value)</Value>
+                              <Value>=FormatNumber(Parameters!OffPeakNet.Value,Parameters!Digit.Value)</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2105,7 +2106,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
