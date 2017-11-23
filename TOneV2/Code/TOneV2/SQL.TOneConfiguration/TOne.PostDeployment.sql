@@ -493,6 +493,7 @@ as (select * from (values
 
 ('DF1DBAF9-3236-4A66-9568-A5EA429976F6','WhS_BE_SaleRate','Sale Rate'									,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View"]'),
 ('09C5BF94-BDD0-4A8A-A4CD-3E524B1A705B','WhS_BE_SaleZoneAndCode','Sale Zone & Code'						,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View","Edit"]'),
+('5AA67627-4BDE-4E75-8D93-F7A544E2F925','WHS_BE_SalePricelist','Sale Pricelist'							,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View"]'),
 ('8FC751F7-209D-4B9F-B4A7-5B81B7BAD23A','WhS_BE_SaleRoutingProduct','Sale Routing Product'				,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View"]'),
 ('124CD5B7-9554-48B2-91CB-6C9F6CCAFF1E','WhS_BE_SellingNumberPlan','Selling Number Plan'				,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View", "Add", "Edit"]'),
 ('842A7143-6513-460A-A7CE-5C8D95E84A49','WhS_BE_SellingProduct','Selling Product'						,'82CE204C-05F7-48F1-8F29-A2F41E5C1374',0,'["View","Add","Edit","View Assigned Customers","Assign Customers"]'),
@@ -596,7 +597,7 @@ as (select * from (values
 
 ('WhS_BE/SaleCode/GetFilteredSaleCodes','WhS_BE_SaleZoneAndCode: View'),
 
-('WhS_BE/SalePricelist/GetFilteredSalePriceLists','WhS_Sales_RatePlan: View'),
+('WhS_BE/SalePricelist/GetFilteredSalePriceLists','WHS_BE_SalePricelist: View'),
 
 ('WhS_BE/SaleRate/GetFilteredSaleRate','WhS_BE_SaleRate: View'),
 
