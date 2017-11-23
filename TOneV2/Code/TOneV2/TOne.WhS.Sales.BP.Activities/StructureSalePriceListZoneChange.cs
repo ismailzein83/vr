@@ -464,7 +464,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 foreach (var zoneId in zoneIdsForThisCountry)
                 {
                     string zoneName = saleZoneManager.GetSaleZoneName(zoneId);
-
+                    var zoneEntity = saleZoneManager.GetSaleZone(zoneId);
                     if (!zoneIdsWithExplicitRates.Contains(zoneId))
                     {
                         //Ignore zones that have explicit rates
@@ -505,14 +505,17 @@ namespace TOne.WhS.Sales.BP.Activities
 
                     if (effectiveRoutingProduct == null)
                         throw new VRBusinessException(string.Format("No routing product assigned for zone {0}", zoneName));
-
+                    var BEDs = new List<DateTime?>();
+                    BEDs.Add(countryToAdd.BED);
+                    BEDs.Add(effectiveRoutingProduct.BED);
+                    BEDs.Add(zoneEntity.BED);
                     var routingProduct = new SalePricelistRPChange
                     {
                         CountryId = countryToAdd.CountryId,
                         ZoneName = zoneName,
                         ZoneId = zoneId,
                         RoutingProductId = effectiveRoutingProduct.RoutingProductId,
-                        BED = countryToAdd.BED > effectiveRoutingProduct.BED ? countryToAdd.BED : effectiveRoutingProduct.BED,
+                        BED = UtilitiesManager.GetMaxDate(BEDs).Value,
                         EED = null, //TODO: this is not reflecting the correct value now, if the def customer ro for example is closed in the future
                         CustomerId = context.CustomerInfo.CustomerId
                     };
@@ -983,11 +986,11 @@ namespace TOne.WhS.Sales.BP.Activities
             SaleEntityZoneRoutingProductLocator routingProductEffectiveLocator, SaleEntityZoneRoutingProductLocator routingProductCurrentLocator)
         {
             List<SalePricelistRPChange> routingProductChanges = new List<SalePricelistRPChange>();
-
+           
             foreach (var countryId in soldCountriesIds)
             {
                 IEnumerable<SaleZone> zones = existingZonesByCountryId.GetRecord(countryId);
-
+             
                 if (zones == null)
                     continue;
 
@@ -995,7 +998,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     SaleEntityZoneRoutingProduct effectiveRoutingProduct = routingProductEffectiveLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, saleZone.SaleZoneId);
                     SaleEntityZoneRoutingProduct currentRoutingProduct = routingProductCurrentLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, saleZone.SaleZoneId);
-
+                   
                     if (currentRoutingProduct == null || effectiveRoutingProduct.RoutingProductId != currentRoutingProduct.RoutingProductId)
                     {
                         var routingProduct = new SalePricelistRPChange
