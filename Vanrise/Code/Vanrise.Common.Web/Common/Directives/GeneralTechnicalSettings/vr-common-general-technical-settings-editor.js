@@ -37,7 +37,7 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
                     companyDefinitionSettingsReadyDeferred.resolve();
                 };
                 
-                UtilsService.waitMultiplePromises([gaSettingsReadyDeferred.promise, companyContactSettingsReadyDeferred.promise, companyDefinitionSettingsReadyDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([ companyContactSettingsReadyDeferred.promise, companyDefinitionSettingsReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
             }
