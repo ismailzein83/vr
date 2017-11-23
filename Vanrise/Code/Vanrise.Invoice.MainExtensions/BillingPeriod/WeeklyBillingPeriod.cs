@@ -37,6 +37,7 @@ namespace Vanrise.Invoice.MainExtensions
                         {
                             nextBillingInterval.FromDate = nextBillingInterval.FromDate.AddDays(1);
                         }
+                        nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(6);
                     }
                     
                 }else
