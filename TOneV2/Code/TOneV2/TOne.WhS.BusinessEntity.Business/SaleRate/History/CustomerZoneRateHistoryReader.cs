@@ -11,20 +11,20 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class CustomerZoneRateHistoryReader
     {
-        #region Fields / Constructors
-
+        #region Fields
         private Dictionary<int, List<ProcessedCustomerSellingProduct>> _spAssignmentsBySP;
         private IEnumerable<int> _sellingProductIds;
         private Dictionary<int, List<CustomerCountry2>> _countryPeriodsByCountry;
         private Dictionary<string, CustomerZoneRates> _ratesByZone;
+        #endregion
 
+        #region Constructors
         public CustomerZoneRateHistoryReader(int customerId, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
             SetSPAssignments(customerId);
             SetCountries(customerId, zoneIds);
             SetRates(customerId, zoneIds, getNormalRates, getOtherRates);
         }
-
         #endregion
 
         public Dictionary<int, List<ProcessedCustomerSellingProduct>> GetSellingProductAssignments(out IEnumerable<int> sellingProductIds)
@@ -32,12 +32,10 @@ namespace TOne.WhS.BusinessEntity.Business
             sellingProductIds = _sellingProductIds;
             return _spAssignmentsBySP;
         }
-
         public IEnumerable<CustomerCountry2> GetCountryPeriods(int countryId)
         {
             return _countryPeriodsByCountry.GetRecord(countryId);
         }
-
         public CustomerZoneRates GetZoneRates(string zoneName)
         {
             if (string.IsNullOrWhiteSpace(zoneName))
@@ -48,7 +46,6 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #region Private Methods
-
         private void SetSPAssignments(int customerId)
         {
             // CustomerSellingProductManager orders the list by BED
@@ -78,7 +75,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             _sellingProductIds = distinctSPIds;
         }
-
         private void SetCountries(int customerId, IEnumerable<long> zoneIds)
         {
             IEnumerable<CustomerCountry2> allCountries = new CustomerCountryManager().GetCustomerCountries(customerId);
@@ -119,7 +115,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 value.Add(country);
             }
         }
-
         private void SetRates(int customerId, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
             _ratesByZone = new Dictionary<string, CustomerZoneRates>();
@@ -159,7 +154,6 @@ namespace TOne.WhS.BusinessEntity.Business
                 else AddSellingProductZoneRate(salePriceList.OwnerId, rates, rateTypeKey, saleRate);
             }
         }
-
         private void AddCustomerZoneRate(CustomerZoneRates rates, RateTypeKey rateTypeKey, SaleRate saleRate)
         {
             List<SaleRate> ratesByType;
@@ -172,7 +166,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ratesByType.Add(saleRate);
         }
-
         private void AddSellingProductZoneRate(int sellingProductId, CustomerZoneRates rates, RateTypeKey rateTypeKey, SaleRate saleRate)
         {
             // Add to rates.SellingProductZoneRates
@@ -195,13 +188,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             spZoneRates.Add(saleRate);
         }
-
         /// <param name="zoneName">Assumed to be != null and != whitespace</param>
         private string getZoneNameKey(string zoneName)
         {
             return zoneName.Trim().ToLower();
         }
-
         #endregion
     }
 }
