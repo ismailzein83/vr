@@ -23,10 +23,17 @@ namespace Vanrise.Common.Business
             return configManager.GetGeneralTechnicalSetting();
         }
 
+
+        public GoogleAnalyticsData GetGoogleAnalyticsSetting()
+        {
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetGoogleAnalyticsSetting();
+        }
+
         public bool GetGoogleAnalyticsEnabled()
         {
-            var generalTechnicalSettingData = GetGeneralTechnicalSettingData();
-            return generalTechnicalSettingData != null && generalTechnicalSettingData.GAData != null && generalTechnicalSettingData.GAData.IsEnabled;
+            var gATechnicalSettingData = GetGoogleAnalyticsSetting();
+            return gATechnicalSettingData != null && gATechnicalSettingData.IsEnabled;
         }
 
         public CacheSettingData GetCacheSettingData()
@@ -42,6 +49,9 @@ namespace Vanrise.Common.Business
             UISettings uiSettings = new UISettings() { Parameters = new List<UIParameter>() };
             var generalSettingData = GetGeneralSettingData();
             var generalTechnicalSettingData = GetGeneralTechnicalSettingData();
+
+            var gATechnicalSettingData = GetGoogleAnalyticsSetting();
+
 
             TimeSpan serverUtcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow);
             uiSettings.Parameters.Add(new UIParameter()
@@ -104,20 +114,20 @@ namespace Vanrise.Common.Business
 
             }
 
-            if (generalTechnicalSettingData != null && generalTechnicalSettingData.GAData != null)
+            if (gATechnicalSettingData != null)
             {
                 uiSettings.Parameters.Add(new UIParameter()
                 {
                     Name = "GoogleAnalyticsEnabled",
-                    Value = generalTechnicalSettingData.GAData.IsEnabled
+                    Value = gATechnicalSettingData.IsEnabled
                 });
 
-                if (generalTechnicalSettingData.GAData.Account != null)
+                if (gATechnicalSettingData.Account != null)
                 {
                     uiSettings.Parameters.Add(new UIParameter()
                     {
                         Name = "GoogleAnalyticsAccount",
-                        Value = generalTechnicalSettingData.GAData.Account
+                        Value = gATechnicalSettingData.Account
                     });
                 }
                 

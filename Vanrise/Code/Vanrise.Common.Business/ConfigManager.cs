@@ -47,6 +47,12 @@ namespace Vanrise.Common.Business
             var generalSettings = settingManager.GetSetting<GeneralTechnicalSettingData>(Constants.GeneralTechnicalSettingType);
             return generalSettings;
         }
+        public GoogleAnalyticsData GetGoogleAnalyticsSetting()
+        {
+            SettingManager settingManager = new SettingManager();
+            var generalSettings = settingManager.GetSetting<GoogleAnalyticsData>(Constants.GATechnicalSettingType);
+            return generalSettings;
+        }
         public ProductInfo GetProductInfo()
         {
             SettingManager settingManager = new SettingManager();

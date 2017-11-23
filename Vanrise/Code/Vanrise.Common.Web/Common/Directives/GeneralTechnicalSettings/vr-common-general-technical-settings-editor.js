@@ -18,9 +18,7 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
             templateUrl: "/Client/Modules/Common/Directives/GeneralTechnicalSettings/Templates/GeneralTemplateTechnicalSettings.html"
         };
 
-        function settingEditorCtor(ctrl, $scope, $attrs) {
-            var gaSettingsAPI;
-            var gaSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+        function settingEditorCtor(ctrl, $scope, $attrs) {            
             var companyContactSettingsAPI;
             var companyContactSettingsReadyDeferred = UtilsService.createPromiseDeferred();
             var companyDefinitionSettingsAPI;
@@ -28,14 +26,12 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onGaSettingsReady = function (api) {
-                    gaSettingsAPI = api;
-                    gaSettingsReadyDeferred.resolve();
-                };
+               
                 $scope.scopeModel.onCompanyContactSettingsReady = function (api) {
                     companyContactSettingsAPI = api;
                     companyContactSettingsReadyDeferred.resolve();
                 };
+
                 $scope.scopeModel.onCompanyDefinitionSettingsReady = function (api) {
                     companyDefinitionSettingsAPI = api;
                     companyDefinitionSettingsReadyDeferred.resolve();
@@ -54,16 +50,6 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
                     var promises = [];
                     var companySettingDefinition = payload != undefined && payload.data != undefined ? payload.data.CompanySettingDefinition : undefined;
 
-                    function loadGASettings() {
-                        var gaData;
-                        if (payload != undefined && payload.data != undefined)
-                            gaData = payload.data.GAData;
-                        var gaPayload = {
-                            data: gaData
-                        };
-                        return gaSettingsAPI.load(gaPayload);
-                    }
-
                     function loadCompanyContactSettings() {
                         var companyContactPayload = {
                             data: companySettingDefinition
@@ -81,7 +67,6 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
                         return companyDefinitionSettingsAPI.load(companyDefinitionPayload);
                     }
 
-                    promises.push(loadGASettings());
                     promises.push(loadCompanyContactSettings());
                     promises.push(loadCompanyDefinitionSettings());
 
@@ -91,7 +76,6 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Entities.GeneralTechnicalSettingData, Vanrise.Entities",
-                        GAData: gaSettingsAPI.getData(),
                         CompanySettingDefinition: {
                             ContactTypes: companyContactSettingsAPI.getData().ContactTypes,
                             ExtendedSettings: companyDefinitionSettingsAPI.getData(),

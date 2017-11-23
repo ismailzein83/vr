@@ -7,6 +7,7 @@
         public const string EmailSettingType = "VR_Common_Email";
         public const string GeneralSettingType = "VR_Common_GeneralSetting";
         public const string GeneralTechnicalSettingType = "VR_Common_GeneralTechnicalSetting";
+        public const string GATechnicalSettingType = "VR_Common_GATechnicalSetting";
 
 
     }

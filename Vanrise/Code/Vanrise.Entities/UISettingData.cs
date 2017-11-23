@@ -31,13 +31,13 @@ namespace Vanrise.Entities
     }
     public class GeneralTechnicalSettingData :SettingData
     {
-        public GoogleAnalyticsData GAData { get; set; }
 
         public CompanySettingDefinition CompanySettingDefinition { get; set; } 
        
 
     }
-    public class GoogleAnalyticsData
+
+    public class GoogleAnalyticsData : SettingData
     {
         public bool IsEnabled { get; set; }
 

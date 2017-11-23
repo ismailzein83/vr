@@ -15,7 +15,7 @@ app.directive('vrCommonGaSettingsEditor', ['UtilsService', 'VRUIUtilsService',
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: "/Client/Modules/Common/Directives/GeneralTechnicalSettings/Templates/GATemplateSettings.html"
+            templateUrl: "/Client/Modules/Common/Directives/GATechnicalSettings/Templates/GATemplateSettings.html"
         };
 
         function settingEditorCtor(ctrl, $scope, $attrs) {
@@ -43,6 +43,7 @@ app.directive('vrCommonGaSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                
                 api.getData = function () {
                     return {
+                        $type: "Vanrise.Entities.GoogleAnalyticsData, Vanrise.Entities",
                         Account: $scope.scopeModel.account,
                         IsEnabled: $scope.scopeModel.isEnabled
                     };
