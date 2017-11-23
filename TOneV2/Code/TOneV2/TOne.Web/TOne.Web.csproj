@@ -929,6 +929,14 @@
       <Project>{3751a44f-a40a-4e0e-a86e-5665664ce616}</Project>
       <Name>TOne.WhS.Invoice.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Data.SQL\TOne.WhS.Invoice.Data.SQL.csproj">
+      <Project>{9b102f23-5c14-4c8b-b912-cf22812b41d6}</Project>
+      <Name>TOne.WhS.Invoice.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Invoice.Data\TOne.WhS.Invoice.Data.csproj">
+      <Project>{23e57496-f040-4b3f-9544-dd158b4c17f1}</Project>
+      <Name>TOne.WhS.Invoice.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Invoice.Entities\TOne.WhS.Invoice.Entities.csproj">
       <Project>{a3474129-600a-44fa-a71c-bc746f104a39}</Project>
       <Name>TOne.WhS.Invoice.Entities</Name>
