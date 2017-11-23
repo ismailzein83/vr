@@ -164,6 +164,7 @@
     <Compile Include="SalePriceListTemplate\Context\MappedCellContext.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRateHistoryLocator.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRateHistoryReader.cs" />
+    <Compile Include="SaleRate\History\RateHistoryUtilities.cs" />
     <Compile Include="SaleRate\History\SellingProductZoneRateHistoryReader.cs" />
     <Compile Include="SaleRate\History\SellingProductZoneRateHistoryLocator.cs" />
     <Compile Include="SaleRate\OtherSaleRateManager.cs" />
