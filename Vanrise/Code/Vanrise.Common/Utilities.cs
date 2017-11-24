@@ -610,7 +610,12 @@ namespace Vanrise.Common
             return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, time.Hour, time.Minute, time.Second, time.MilliSecond);
         }
 
-        public static int GetIso8601WeekOfYear(DateTime dateTime)
+        /// <summary>
+        /// Implementation as per Iso8601
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public static int GetWeekOfYear(DateTime dateTime)
         {
             // This presumes that weeks start with Monday.
             // Week 1 is the 1st week of the year with a Thursday in it.
@@ -625,28 +630,31 @@ namespace Vanrise.Common
         {
             DateTime date = dateTime.Date;
 
-            int daysOffset = (int)DayOfWeek.Monday - (int)date.DayOfWeek;
-            if (daysOffset > 0)
-                return date.AddDays(-(7 - daysOffset));
-            else
-                return date.AddDays(daysOffset);
+            switch (date.DayOfWeek)
+            {
+                case DayOfWeek.Sunday:
+                    return date.AddDays(-6);
+
+                default:
+                    int daysOffset = (int)DayOfWeek.Monday - (int)date.DayOfWeek;
+                    return date.AddDays(daysOffset);
+            }
         }
 
-        public static string GetWeekOfYearDescription(DateTime value)
+        public static string GetWeekOfYearDescription(DateTime dateTime)
         {
-            DateTime dt = (DateTime)value;
-            int weekOfYear = Vanrise.Common.Utilities.GetIso8601WeekOfYear(dt);
+            int weekOfYear = GetWeekOfYear(dateTime);
             string weekOfYearAsString = weekOfYear.ToString();
             if (weekOfYearAsString.Length == 1)
                 weekOfYearAsString = String.Format("0{0}", weekOfYearAsString);
-
-            int year = dt.Year;
-            if (weekOfYear == 1 && dt.Month == 12)
+            
+            int year = dateTime.Year;
+            if (weekOfYear == 1 && dateTime.Month == 12)//Input -> Monday 12/31/2007; Output -> 1 of 2008
                 year++;
-            else if (weekOfYear >= 52 && dt.Month == 1)
+            else if (weekOfYear >= 52 && dateTime.Month == 1)//Input -> Saturday 1/1/2005; Output -> 53 of 2004   	
                 year--;
 
-            return string.Format("Week {0} {1}", weekOfYearAsString.Substring(weekOfYearAsString.Length - 2), year.ToString());
+            return string.Format("Week {0} {1}", weekOfYearAsString, year.ToString());
         }
     }
 
