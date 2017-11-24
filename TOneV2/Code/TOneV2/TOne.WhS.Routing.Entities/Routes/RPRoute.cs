@@ -20,6 +20,8 @@ namespace TOne.WhS.Routing.Entities
 
         public int ExecutedRuleId { get; set; }
 
+        public decimal? EffectiveRateValue { get; set; }
+
         public Dictionary<int, RPRouteOptionSupplier> OptionsDetailsBySupplier { get; set; }
 
         public Dictionary<Guid, IEnumerable<RPRouteOption>> RPOptionsByPolicy { get; set; }

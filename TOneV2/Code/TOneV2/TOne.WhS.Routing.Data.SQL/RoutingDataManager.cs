@@ -147,6 +147,7 @@ namespace TOne.WhS.Routing.Data.SQL
             StringBuilder query = new StringBuilder();
 
             query.AppendLine(query_SupplierZoneDetailsTable);
+            query.AppendLine(query_CustomerZoneDetailTable);
             //query.AppendLine(query_CodeMatchTable);
             query.AppendLine(query_CodeSaleZoneTable);
             query.AppendLine(query_TableTypes);

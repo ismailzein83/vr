@@ -11,6 +11,7 @@
         <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" disablesorting fixedwidth="150"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlan'" disablesorting fixedwidth="150"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" fixedwidth="200"></vr-datagridcolumn>
+        <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Rate'" field="'EffectiveRateValue'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Services'" disablesorting="true" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>

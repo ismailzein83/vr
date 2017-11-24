@@ -35,6 +35,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
         function initializeController() {
             $scope.showGrid = false;
             $scope.rpRoutes = [];
+            $scope.isCustomerSelected = false;
 
             var drillDownDefinitions = initDrillDownDefinitions();
             gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
@@ -46,12 +47,19 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                     ctrl.onReady(getDirectiveAPI());
 
                 function getDirectiveAPI() {
+
                     var directiveAPI = {};
+
                     directiveAPI.loadGrid = function (query) {
+
                         routingDatabaseId = query.RoutingDatabaseId;
                         policies = query.FilteredPolicies;
                         defaultPolicyId = query.DefaultPolicyId;
                         selectedPolicyConfigId = query.PolicyConfigId;
+
+                        if (query.CustomerId != undefined)
+                            $scope.isCustomerSelected = true;
+
                         return gridAPI.retrieveData(query);
                     };
 

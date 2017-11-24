@@ -21,5 +21,7 @@ namespace TOne.WhS.Routing.Entities
         public RouteStatus? RouteStatus { get; set; }
 
         public int LimitResult { get; set; }
+
+        public int? CustomerId { get; set; }
     }
 }

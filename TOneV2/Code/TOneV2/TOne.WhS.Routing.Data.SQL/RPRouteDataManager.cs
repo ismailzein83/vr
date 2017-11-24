@@ -70,17 +70,36 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             query_GetFilteredRPRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
 
-            string routingProductIdsFilter = " 1=1 ";
-            string saleZoneIdsFilter = " 1=1 ";
+            string routingProductIdsFilter = string.Empty;
+            string saleZoneIdsFilter = string.Empty;
+            string customerIdFilter = string.Empty;
+
+            string joinCustomerZoneDetail = string.Empty;
+            string effectiveRateValue = string.Empty;
+
 
             if (input.Query.RoutingProductIds != null && input.Query.RoutingProductIds.Count > 0)
-                routingProductIdsFilter = string.Format("RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
+                routingProductIdsFilter = string.Format(" AND pr.RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
 
             if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
-                saleZoneIdsFilter = string.Format("SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
+                saleZoneIdsFilter = string.Format(" AND pr.SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
+
+            if (input.Query.CustomerId.HasValue)
+            {
+                customerIdFilter = string.Format(" AND CustomerId = {0} ", input.Query.CustomerId);
+                joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId ";
+                effectiveRateValue = " ,czd.[EffectiveRateValue] ";
+            }
+            else
+            {
+                effectiveRateValue = " ,null as EffectiveRateValue ";
+            }
 
             query_GetFilteredRPRoutes.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
             query_GetFilteredRPRoutes.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
+            query_GetFilteredRPRoutes.Replace("#CUSTOMER_IDS#", customerIdFilter);
+            query_GetFilteredRPRoutes.Replace("#CUSTOMERZONEDETAILS#", joinCustomerZoneDetail);
+            query_GetFilteredRPRoutes.Replace("#EFFECTIVERATE#", effectiveRateValue);
 
             bool? isBlocked = null;
             if (input.Query.RouteStatus.HasValue)
@@ -168,6 +187,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServices) ? new HashSet<int>(saleZoneServices.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = (int)reader["ExecutedRuleId"],
+                EffectiveRateValue = GetReaderValue<decimal?>(reader, "EffectiveRateValue"),
                 OptionsDetailsBySupplier = this.DeserializeOptionsDetailsBySupplier(optionsDetailsBySupplier),
                 RPOptionsByPolicy = this.DeserializeOptionsByPolicy(optionsByPolicy)
             };
@@ -358,12 +378,15 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                                     ,pr.[SaleZoneId]
                                                                                     ,sz.[Name] 
                                                                                     ,pr.[SaleZoneServices]
+                                                                                    #EFFECTIVERATE#
                                                                                     ,pr.[ExecutedRuleId]
                                                                                     ,pr.[OptionsDetailsBySupplier]
                                                                                     ,pr.[OptionsByPolicy]
                                                                                     ,pr.[IsBlocked]
-                                                                              FROM [dbo].[ProductRoute] as pr with(nolock) JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
-                                                                              Where (@IsBlocked is null or IsBlocked = @IsBlocked) AND #ROUTING_PRODUCT_IDS# AND #SALE_ZONE_IDS#");
+                                                                              FROM [dbo].[ProductRoute] as pr with(nolock)
+                                                                              JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
+                                                                              #CUSTOMERZONEDETAILS#
+                                                                              Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #CUSTOMER_IDS# #SALE_ZONE_IDS#");
 
         private const string query_GetRouteOptions = @"SELECT [OptionsByPolicy]
                                                        FROM [dbo].[ProductRoute] 

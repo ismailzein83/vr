@@ -322,7 +322,8 @@ namespace TOne.WhS.Routing.Business
                 SaleZoneName = rpRoute.SaleZoneName,
                 IsBlocked = rpRoute.IsBlocked,
                 RouteOptionsDetails = this.GetRouteOptionDetails(rpRoute.RPOptionsByPolicy, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, includeBlockedSupplierZones, customerProfileId),
-                ExecutedRuleId = rpRoute.ExecutedRuleId
+                ExecutedRuleId = rpRoute.ExecutedRuleId,
+                EffectiveRateValue = rpRoute.EffectiveRateValue
             };
         }
 

@@ -24,6 +24,8 @@ namespace TOne.WhS.Routing.Entities
 
         public int ExecutedRuleId { get; set; }
 
+        public decimal? EffectiveRateValue { get; set; }
+
         public IEnumerable<RPRouteOptionDetail> RouteOptionsDetails { get; set; }
     }
 }
