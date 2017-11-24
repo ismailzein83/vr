@@ -43,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return IsDataUpdated("TOneWhS_BE.SaleZone", ref lastReceivedDataInfo);
         }
-        public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
+        public IOrderedEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             List<long> saleZoneIds = new List<long>();
             ExecuteReaderSP("[TOneWhS_BE].[sp_SaleZone_GetIds]", (reader) =>
@@ -54,7 +54,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                     saleZoneIds.Add(saleZoneId);
                 }
             }, effectiveOn, isEffectiveInFuture);
-            return saleZoneIds;
+            return saleZoneIds.OrderBy(itm => itm);
         }
 
         #endregion
@@ -84,8 +84,8 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SaleZoneId = (long)reader["ID"],
                 Name = reader["Name"] as string,
-                SellingNumberPlanId =  (int)reader["SellingNumberPlanID"]
-                
+                SellingNumberPlanId = (int)reader["SellingNumberPlanID"]
+
             };
             return saleZoneInfo;
         }

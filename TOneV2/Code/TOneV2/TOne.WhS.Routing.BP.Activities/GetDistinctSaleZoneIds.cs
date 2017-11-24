@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<bool> IsEffectiveInFuture { get; set; }
         [RequiredArgument]
-        public InOutArgument<List<long>> SaleZoneIds { get; set; }
+        public InOutArgument<IOrderedEnumerable<long>> SaleZoneIds { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {

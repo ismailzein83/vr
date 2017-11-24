@@ -118,7 +118,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleZone.CountryId;
         }
 
-        public IEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
+        public IOrderedEnumerable<long> GetSaleZoneIds(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             ISaleZoneDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleZoneDataManager>();
             return dataManager.GetSaleZoneIds(effectiveOn, isEffectiveInFuture);
