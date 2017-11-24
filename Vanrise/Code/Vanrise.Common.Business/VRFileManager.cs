@@ -39,14 +39,14 @@ namespace Vanrise.Common.Business
         }
         
 
-        public void SetFileUsed(long fileId)
+        public bool SetFileUsed(long fileId)
         {
-            _datamanager.SetFileUsed(fileId);
+            return _datamanager.SetFileUsed(fileId);
         }
 
-        public void SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings)
+        public bool SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings)
         {
-            _datamanager.SetFileUsedAndUpdateSettings(fileId, fileSettings);
+            return _datamanager.SetFileUsedAndUpdateSettings(fileId, fileSettings);
         }
 
         public VRFile GetFile(long fileId)

@@ -54,6 +54,7 @@
     <Compile Include="BE360Degree\BE360DegreeNode.cs" />
     <Compile Include="BE360Degree\BE360DegreeNodeType.cs" />
     <Compile Include="BigData\BigDataService.cs" />
+    <Compile Include="BusinessManagerFactory.cs" />
     <Compile Include="CacheRefreshHandle.cs" />
     <Compile Include="City\CityInfo.cs" />
     <Compile Include="City\City.cs" />
@@ -73,7 +74,10 @@
     <Compile Include="Country\CountryFilter.cs" />
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
     <Compile Include="EntityFilterEffectiveMode.cs" />
+    <Compile Include="IBusinessManager.cs" />
+    <Compile Include="ICompanySettingsManager.cs" />
     <Compile Include="LabelColor.cs" />
+    <Compile Include="ObjectFactory.cs" />
     <Compile Include="SalutationTypeEnum.cs" />
     <Compile Include="GenderTypeEnum.cs" />
     <Compile Include="GenericLKUP\GenericLKUPDefinitionConfig.cs" />
@@ -95,6 +99,7 @@
     <Compile Include="Region\RegionInfoFilter.cs" />
     <Compile Include="Region\RegionQuery.cs" />
     <Compile Include="Region\Region.cs" />
+    <Compile Include="SaveOperationType.cs" />
     <Compile Include="Settings\SettingInfo.cs" />
     <Compile Include="Settings\SettingInfoFilter.cs" />
     <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
@@ -298,7 +303,6 @@
     <Compile Include="VRRdlcReportParameter.cs" />
     <Compile Include="Zip\ZipFileInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

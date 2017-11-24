@@ -16,9 +16,9 @@ namespace Vanrise.Common.Data
         List<VRFileInfo> GetFilesInfo(IEnumerable<long> fileIds);
         VRFile GetFile(long fileId);
 
-        void SetFileUsed(long fileId);
+        bool SetFileUsed(long fileId);
 
-        void SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings);
+        bool SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings);
 
         Vanrise.Entities.BigResult<VRFileInfo> GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input);
     }

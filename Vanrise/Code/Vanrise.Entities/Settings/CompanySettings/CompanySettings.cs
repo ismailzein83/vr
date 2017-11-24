@@ -10,6 +10,11 @@ namespace Vanrise.Entities
     {
         public const string SETTING_TYPE = "VR_Common_CompanySettings";
         public List<CompanySetting> Settings { get; set; }
+
+        public override void OnBeforeSave(ISettingOnBeforeSaveContext context)
+        {
+            EntitiesBusinessManagerFactory.GetManager<ICompanySettingsManager>().SetFilesUsedAndUpdateSettings(context);
+        }
     }
     public class CompanySetting
     {

@@ -95,11 +95,23 @@ namespace Vanrise.Common.Business
             SettingDataValidationContext context = new SettingDataValidationContext();
             if (settingToEdit.Data.IsValid(context))
             {
+                var currentSetting = GetSetting(settingToEdit.SettingId);
+                var settingOnBeforeSaveContext = new SettingOnBeforeSaveContext()
+                    {
+                        SettingId = settingToEdit.SettingId,
+                        SaveOperationType = SaveOperationType.Update,
+                        NewSettingData = settingToEdit.Data,
+                        CurrentSettingData = currentSetting!=null?currentSetting.Data:null,
+                    };
+                settingToEdit.Data.OnBeforeSave(settingOnBeforeSaveContext);
+
                 ISettingDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISettingDataManager>();
                 bool updateActionSucc = dataManager.UpdateSetting(settingToEdit);
 
                 if (updateActionSucc)
                 {
+                    var settingOnAfterSaveContext = new SettingOnAfterSaveContext();
+                    settingToEdit.Data.OnAfterSave(settingOnAfterSaveContext);
                     Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                     Setting updatedSetting = GetSetting(settingToEdit.SettingId);
 
@@ -305,4 +317,18 @@ namespace Vanrise.Common.Business
         }
         #endregion
     }
+
+    public class SettingOnBeforeSaveContext : ISettingOnBeforeSaveContext
+    {
+        public Guid SettingId { get; set; }
+        public SaveOperationType SaveOperationType { get; set; }
+        public SettingData CurrentSettingData { get; set; }
+        public SettingData NewSettingData { get; set; }
+    }
+
+    public class SettingOnAfterSaveContext : ISettingOnAfterSaveContext
+    {
+
+    }
+
 }

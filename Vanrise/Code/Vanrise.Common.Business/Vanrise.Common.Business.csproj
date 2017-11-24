@@ -69,6 +69,7 @@
     <Compile Include="CacheRefreshManager.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="CompanyDefinitionManager.cs" />
+    <Compile Include="CompanySettingsManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeBESettings.cs" />
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeOverriddenConfiguration.cs" />

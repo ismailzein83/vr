@@ -64,12 +64,12 @@ namespace Vanrise.Common.Data.SQL
             return GetItemsSP("[common].[sp_File_GetByFileIds]", FileInfoMapper, fileIdsAsString);
         }
 
-        public void SetFileUsed(long fileId)
+        public bool SetFileUsed(long fileId)
         {
-            ExecuteNonQuerySP("[common].[sp_File_SetUsed]", fileId);
+            return (ExecuteNonQuerySP("[common].[sp_File_SetUsed]", fileId)>0);
         }
 
-        public void SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings)
+        public bool SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings)
         {
             Guid? configId = null;
             string settingAsString = null;
@@ -79,7 +79,7 @@ namespace Vanrise.Common.Data.SQL
                 if (fileSettings.ExtendedSettings != null)
                     configId = fileSettings.ExtendedSettings.ConfigId;
             }
-            ExecuteNonQuerySP("[common].[sp_File_SetUsedAndUpdateSettings]", fileId, configId, settingAsString);
+            return (ExecuteNonQuerySP("[common].[sp_File_SetUsedAndUpdateSettings]", fileId, configId, settingAsString)>0);
         }
 
         public Vanrise.Entities.BigResult<VRFileInfo> GetFilteredRecentFiles(Vanrise.Entities.DataRetrievalInput<VRFileQuery> input)

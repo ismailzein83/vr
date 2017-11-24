@@ -29,12 +29,18 @@ namespace Vanrise.Entities
         {
             return true;
         }
+        public virtual void OnBeforeSave(ISettingOnBeforeSaveContext context)
+        {
+        }
+        public virtual void OnAfterSave(ISettingOnAfterSaveContext context)
+        {
+        }
     }
     public interface ISettingDataValidationContext
     {
-       string ErrorMessage { get; set; }
+        string ErrorMessage { get; set; }
     }
-    public class SettingDataValidationContext:ISettingDataValidationContext
+    public class SettingDataValidationContext : ISettingDataValidationContext
     {
         public string ErrorMessage { get; set; }
     }
@@ -46,4 +52,18 @@ namespace Vanrise.Entities
 
         public SettingData Data { get; set; }
     }
+
+    public interface ISettingOnBeforeSaveContext
+    {
+        Guid SettingId { get; }
+        SaveOperationType SaveOperationType { get; }
+        SettingData CurrentSettingData { get; }
+        SettingData NewSettingData { get; }
+    }
+
+    public interface ISettingOnAfterSaveContext
+    {
+
+    }
+
 }
