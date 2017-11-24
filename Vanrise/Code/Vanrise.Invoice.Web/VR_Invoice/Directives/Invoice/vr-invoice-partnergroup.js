@@ -32,7 +32,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
         var isAutomatic;
 
         var accountStatus;
+
         var partnerGroupSelectorAPI;
+        var partnerGroupSelectorSelectionChangedPromiseDeferred;
 
         var partnerGroupDirectiveAPI;
         var partnerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -49,17 +51,13 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
 
             $scope.onPartnerGroupDirectiveReady = function (api) {
                 partnerGroupDirectiveAPI = api;
+
                 var partnerGroupDirectivePayload = { invoiceTypeId: invoiceTypeId, accountStatus: accountStatus, isAutomatic: isAutomatic };
-                if (selectedPartnerGroup != undefined) {
-                    partnerGroupDirectivePayload.partnerGroup = selectedPartnerGroup;
-                }
 
                 var setLoader = function (value) {
                     $scope.isLoadingPartnerGroupTemplateDirective = value;
                 };
-
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerGroupDirectiveAPI, partnerGroupDirectivePayload, setLoader);
-
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, partnerGroupDirectiveAPI, partnerGroupDirectivePayload, setLoader, partnerGroupSelectorSelectionChangedPromiseDeferred);
             };
         }
 
@@ -81,14 +79,25 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
             api.load = function (payload) {
                 partnerGroupSelectorAPI.clearDataSource();
 
+                var isEditMode;
+
                 if (payload != undefined) {
                     invoiceTypeId = payload.invoiceTypeId;
                     accountStatus = payload.accountStatus;
                     selectedPartnerGroup = payload.partnerGroup;
                     isAutomatic = payload.isAutomatic;
+
+                    isEditMode = selectedPartnerGroup != undefined;
                 }
 
                 var promises = [];
+
+                if (isEditMode) {
+                    partnerGroupSelectorSelectionChangedPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    var loadPartnerGroupDirectivePromise = loadPartnerGroupDirective();
+                    promises.push(loadPartnerGroupDirectivePromise);
+                }
 
                 var loadPartnerGroupTemplatesPromise = loadPartnerGroupTemplates();
                 promises.push(loadPartnerGroupTemplatesPromise);
@@ -103,6 +112,19 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VR_Invoice_Invo
                             $scope.selectedPartnerGroupTemplate = UtilsService.getItemByVal($scope.partnerGroupTemplates, selectedPartnerGroup.ConfigId, "ExtensionConfigurationId");
                         }
                     });
+                }
+                function loadPartnerGroupDirective() {
+                    var partnerGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    UtilsService.waitMultiplePromises([partnerGroupSelectorSelectionChangedPromiseDeferred.promise]).then(function () {
+                        partnerGroupSelectorSelectionChangedPromiseDeferred = undefined;
+
+                        var partnerGroupDirectivePayload = { invoiceTypeId: invoiceTypeId, accountStatus: accountStatus, isAutomatic: isAutomatic, partnerGroup: selectedPartnerGroup };
+
+                        VRUIUtilsService.callDirectiveLoad(partnerGroupDirectiveAPI, partnerGroupDirectivePayload, partnerGroupDirectiveLoadPromiseDeferred);
+                    });
+
+                    return partnerGroupDirectiveLoadPromiseDeferred.promise;
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
