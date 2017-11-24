@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Activities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.SupplierPriceList.BP.Activities
 {
@@ -38,6 +40,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             DateTime effectiveOn = this.EffectiveOn.Get(context);
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
+
+            VRFileManager fileManager = new VRFileManager();
+            var fileSettings = new VRFileSettings { ExtendedSettings = new TOne.BusinessEntity.Business.PriceListFileSettings { PriceListId = priceListId } };
+            
+            if (!fileManager.SetFileUsedAndUpdateSettings(fileId, fileSettings))
+                throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");
 
             TOne.WhS.SupplierPriceList.Business.SupplierPriceListManager manager = new Business.SupplierPriceListManager();
             manager.AddPriceListAndSyncImportedDataWithDB(priceListId, processInstanceId, stateBackupId, supplierId, currencyId, fileId, effectiveOn, userId);

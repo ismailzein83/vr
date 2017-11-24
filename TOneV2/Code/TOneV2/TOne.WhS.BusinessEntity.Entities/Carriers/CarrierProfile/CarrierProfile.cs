@@ -46,7 +46,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public string Town { get; set; }
 
-        public long CompanyLogo { get; set; }
+        public long? CompanyLogo { get; set; }
         public int DefaultCusotmerTimeZoneId { get; set; }
         public int DefaultSupplierTimeZoneId { get; set; }
         public int CurrencyId { get; set; }

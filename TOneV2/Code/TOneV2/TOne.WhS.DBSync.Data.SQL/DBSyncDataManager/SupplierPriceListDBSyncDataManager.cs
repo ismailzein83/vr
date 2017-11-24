@@ -19,7 +19,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             _UseTempTables = useTempTables;
         }
 
-        public void ApplySupplierPriceListsToTemp(List<SupplierPriceList> supplierPriceList, long startingId)
+        public void ApplySupplierPriceListsToTemp(List<SupplierPriceList> supplierPriceList)
         {
             DataTable dt = new DataTable();
             dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
@@ -40,7 +40,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row[index++] = item.CurrencyId;
                 row[index++] = item.FileId.HasValue ? (object)item.FileId.Value : DBNull.Value;
                 row[index++] = item.SourceId;
-                row[index++] = startingId++;
+                row[index++] = item.PriceListId;
                 row[index++] = item.CreateTime;
                 row[index++] = item.EffectiveOn;
 

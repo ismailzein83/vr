@@ -41,8 +41,7 @@ namespace TOne.WhS.DBSync.Business
 
         public override void AddItems(List<SupplierPriceList> itemsToAdd)
         {
-            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd, TotalRowsSuccess + 1);
-            TotalRowsSuccess = TotalRowsSuccess + itemsToAdd.Count;
+            dbSyncDataManager.ApplySupplierPriceListsToTemp(itemsToAdd);
         }
 
         public override IEnumerable<SourcePriceList> GetSourceItems()
@@ -65,17 +64,19 @@ namespace TOne.WhS.DBSync.Business
             if (sourceItem.SourceFileBytes != null)
             {
                 string[] nameastab = sourceItem.SourceFileName.Split('.');
+                var fileSettings = new VRFileSettings { ExtendedSettings = new TOne.BusinessEntity.Business.PriceListFileSettings { PriceListId = ++TotalRowsSuccess } };
+
                 VRFile file = new VRFile()
                 {
                     Content = sourceItem.SourceFileBytes,
                     Name = sourceItem.SourceFileName,
                     Extension = nameastab[nameastab.Length - 1],
-                    CreatedTime = sourceItem.BED
-
+                    CreatedTime = sourceItem.BED,
+                    IsTemp = false,
+                    Settings = fileSettings,
                 };
 
                 fileId = fileDataManager.ApplyFile(file);
-
             }
 
 
@@ -87,7 +88,8 @@ namespace TOne.WhS.DBSync.Business
                     CurrencyId = currency.CurrencyId,
                     SourceId = sourceItem.SourceId,
                     CreateTime = sourceItem.BED,
-                    EffectiveOn = sourceItem.BED
+                    EffectiveOn = sourceItem.BED,
+                    PriceListId = TotalRowsSuccess,
                 };
             else
             {
@@ -118,4 +120,5 @@ namespace TOne.WhS.DBSync.Business
             }
         }
     }
+    
 }

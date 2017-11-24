@@ -132,7 +132,7 @@
             $scope.onCountrySelectionChanged = function () {
                 var selectedCountryId = countryDirectiveApi.getSelectedIds();
                 if (selectedCountryId != undefined) {
-                    var setLoader = function (value) { $scope.isLoadingCities = value };
+                    var setLoader = function (value) { $scope.isLoadingCities = value; };
                     var payload = {
                         countryId: selectedCountryId
                     };
@@ -351,7 +351,7 @@
                             }
 
                         }
-                    };
+                    }
                 }
             });
 
@@ -363,18 +363,18 @@
             documentsGridReadyPromiseDeferred.promise.then(function () {
                 WhS_BE_TechnicalSettingsAPIService.GetDocumentItemDefinitionsInfo().then(function (response) {
                     var documentCategories = [];
-                            if (response != undefined) {
-                                for (var i = 0; i < response.length; i++)
-                                    documentCategories.push(response[i])
-                            }
+                    if (response != undefined) {
+                        for (var i = 0; i < response.length; i++)
+                            documentCategories.push(response[i]);
+                }
                             var payload = {
-                                documentCategories: documentCategories
-                            };
+                                    documentCategories: documentCategories
+                };
                             if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.Documents != undefined) {
                                 payload.documents = carrierProfileEntity.Settings.Documents;
-                            }
+                }
                             VRUIUtilsService.callDirectiveLoad(documentsGridAPI, payload, loadDocumentsPromiseDeferred);
-                })
+                });
               
             });
             return loadDocumentsPromiseDeferred.promise;
@@ -422,7 +422,7 @@
                     $scope.scopeModal.address = carrierProfileEntity.Settings.Address;
                     $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
                     $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
-                    if (carrierProfileEntity.Settings.CompanyLogo > 0)
+                    if (carrierProfileEntity.Settings.CompanyLogo !=null)
                         $scope.scopeModal.companyLogo = {
                             fileId: carrierProfileEntity.Settings.CompanyLogo
                         };
@@ -501,7 +501,7 @@
                     Address: $scope.scopeModal.address,
                     PostalCode: $scope.scopeModal.postalCode,
                     Town: $scope.scopeModal.town,
-                    CompanyLogo: ($scope.scopeModal.companyLogo != null) ? $scope.scopeModal.companyLogo.fileId : 0,
+                    CompanyLogo: ($scope.scopeModal.companyLogo != null) ? $scope.scopeModal.companyLogo.fileId : null,
                     PhoneNumbers: UtilsService.getPropValuesFromArray($scope.scopeModal.phoneNumbers, "phoneNumber"),
                     Faxes: UtilsService.getPropValuesFromArray($scope.scopeModal.faxes, "fax"),
                     Documents: documentsGridAPI.getData(),
@@ -523,7 +523,7 @@
                         else
                             obj.Settings.Contacts.push({ Type: item.value, Description: item.description });
                     }
-                };
+                }
             }
 
             if ($scope.scopeModal.taxes.length > 0) {
@@ -536,7 +536,7 @@
                     if (item.value != undefined) {
                         obj.Settings.TaxSetting.Items.push({ ItemId: item.ItemId, Value: item.value });
                     }
-                };
+                }
             }
             return obj;
         }

@@ -8,6 +8,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Common;
 using System.IO;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -85,6 +86,22 @@ namespace TOne.WhS.DBSync.Business
         {
             dbSyncDataManager.ApplyCarrierProfilesToTemp(itemsToAdd);
             TotalRowsSuccess = itemsToAdd.Count;
+            Dictionary<string, CarrierProfile> carrierProfiles = dbSyncDataManager.GetCarrierProfiles(true);
+            var carrierProfileManager = new CarrierProfileManager();
+            var fileManager = new VRFileManager();
+
+            foreach (var carrierProfile in carrierProfiles.Values)
+            {
+                List<long> fileIds = new List<long>();
+                if (carrierProfile.Settings != null && carrierProfile.Settings.Documents != null && carrierProfile.Settings.Documents.Count > 0)
+                {
+                    fileIds = carrierProfile.Settings.Documents.Select(itm => itm.FileId).ToList();
+                }
+                if (carrierProfile.Settings != null && carrierProfile.Settings.CompanyLogo.HasValue)
+                    fileIds.Add(carrierProfile.Settings.CompanyLogo.Value);
+
+                carrierProfileManager.SetFilesUsed(fileIds, carrierProfile.CarrierProfileId);
+            }
         }
 
         public override IEnumerable<SourceCarrierProfile> GetSourceItems()
@@ -146,7 +163,8 @@ namespace TOne.WhS.DBSync.Business
                         Content = carrierDocumet.Document,
                         Extension = documentExtension,
                         CreatedTime = carrierDocumet.Created,
-                        Name = carrierDocumet.Name
+                        Name = carrierDocumet.Name,
+                        IsTemp = false,
                     };
 
 
@@ -214,8 +232,8 @@ namespace TOne.WhS.DBSync.Business
                     Content = sourceItem.CompanyLogo,
                     Name = sourceItem.CompanyLogoName,
                     Extension = nameastab[nameastab.Length - 1],
-                    CreatedTime = DateTime.Now
-
+                    CreatedTime = DateTime.Now,
+                    IsTemp = false,
                 };
 
                 settings.CompanyLogo = fileDataManager.ApplyFile(file);

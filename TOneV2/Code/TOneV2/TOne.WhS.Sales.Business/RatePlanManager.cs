@@ -1431,7 +1431,7 @@ namespace TOne.WhS.Sales.Business
                 Name = "CountryLog",
                 Content = memoryStream.ToArray(),
                 Extension = ".xlsx",
-                CreatedTime = DateTime.Now
+                IsTemp=true,
             });
         }
 

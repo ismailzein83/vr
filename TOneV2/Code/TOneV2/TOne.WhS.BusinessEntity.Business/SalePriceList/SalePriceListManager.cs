@@ -77,7 +77,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (customerZoneNotifications.Any())
                         {
                             int salePricelistTemplateId = _carrierAccountManager.GetCustomerPriceListTemplateId(customerId);
-                            long fileId = AddPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, customerPriceList.PriceList.PriceListType.Value, salePricelistTemplateId, customerPriceList.CurrencyId);
+                            long fileId = AddPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, customerPriceList.PriceList.PriceListType.Value, salePricelistTemplateId, customerPriceList.CurrencyId, customerPriceList.PriceList.PriceListId);
                             customerPriceList.PriceList.FileId = fileId;
                             pricelistIds.Add(customerPriceList.PriceList.PriceListId);
                         }
@@ -839,10 +839,10 @@ namespace TOne.WhS.BusinessEntity.Business
             var salePriceListTemplateManager = new SalePriceListTemplateManager();
 
             var customerName = new CarrierAccountManager().GetCarrierAccountName(carrierAccountId);
-            customerName.ThrowIfNull("customerName", carrierAccountId);               
+            customerName.ThrowIfNull("customerName", carrierAccountId);
 
             SalePriceListTemplate template = salePriceListTemplateManager.GetSalePriceListTemplate(salePriceListTemplateId);
-            
+
             if (template == null)
                 throw new DataIntegrityValidationException(string.Format("Customer {0} is not assigned to any pricelist template", customerName));
 
@@ -868,14 +868,16 @@ namespace TOne.WhS.BusinessEntity.Business
                 Name = fileName,
                 ModuleName = "WhS_BE_SalePriceList",
                 Extension = extension,
-                CreatedTime = effectiveDate
+                IsTemp = true,
             };
         }
-        private long AddPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications, DateTime effectiveDate, SalePriceListType salePriceListType, int salePriceListTemplateId, int pricelistCurrencyId)
+        private long AddPriceListFile(int carrierAccountId, List<SalePLZoneNotification> customerZonesNotifications, DateTime effectiveDate, SalePriceListType salePriceListType, int salePriceListTemplateId, int pricelistCurrencyId, long pricelistId)
         {
             var fileManager = new VRFileManager();
             var file = GetPriceListFile(carrierAccountId, customerZonesNotifications, effectiveDate, salePriceListType,
                 salePriceListTemplateId, pricelistCurrencyId);
+            var fileSettings = new VRFileSettings { ExtendedSettings = new SalePricelistFileSettings { PricelistId = pricelistId } };
+            file.Settings = fileSettings;
             return fileManager.AddFile(file);
         }
 
@@ -1466,6 +1468,24 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Classes
+
+        public class SalePricelistFileSettings : Vanrise.Entities.VRFileExtendedSettings
+        {
+            public override Guid ConfigId
+            {
+                get { return new Guid("58969E92-EA02-4BAB-9F70-311DA96E39CB"); }
+            }
+
+            public long PricelistId { get; set; }
+
+            Vanrise.Security.Business.SecurityManager s_securityManager = new Vanrise.Security.Business.SecurityManager();
+            public override bool DoesUserHaveViewAccess(Vanrise.Entities.IVRFileDoesUserHaveViewAccessContext context)
+            {
+                return s_securityManager.HasPermissionToActions("WhS_BE/SalePricelist/GetFilteredSalePricelist", context.UserId);
+            }
+        }
+
+
         private class SalePriceListInputContext
         {
             public CustomerPriceListChange CustomerPriceListChange { get; set; }

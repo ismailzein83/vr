@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
@@ -63,6 +65,27 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             return array;
         }
 
+        public override void OnBeforeSave(IPriceListTemplateOnBeforeSaveContext context)
+        {
+            VRFileManager fileManager = new VRFileManager();
+
+            if (context.TemplateId.HasValue)
+            {
+                var fileSettings = new VRFileSettings { ExtendedSettings = new BasicSalePricelistTemplateFileSettings { SalePricelistTemplateId = context.TemplateId } };
+                fileManager.SetFileUsedAndUpdateSettings(TemplateFileId, fileSettings);
+            }
+            else fileManager.SetFileUsed(TemplateFileId);
+        }
+
+        public override void OnAfterSave(IPriceListTemplateOnAfterSaveContext context)
+        {
+            if (context.SaveOperationType == SaveOperationType.Update)
+                return;
+            VRFileManager fileManager = new VRFileManager();
+            var fileSettings = new VRFileSettings { ExtendedSettings = new BasicSalePricelistTemplateFileSettings { SalePricelistTemplateId = context.TemplateId } };
+            fileManager.SetFileUsedAndUpdateSettings(TemplateFileId, fileSettings);
+        }
+
         #region Private Methods
 
         private void SetWorkbookData(IEnumerable<SalePLZoneNotification> zoneNotificationList, Workbook workbook, int customerId, DateTime pricelistDate, SalePriceListType pricelistType, int pricelistCurrencyId)
@@ -96,7 +119,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         {
             foreach (MappedTable mappedSheet in MappedTables)
             {
-                int firstRow=mappedSheet.FirstRowIndex;
+                int firstRow = mappedSheet.FirstRowIndex;
                 IEnumerable<SalePricelistTemplateTableRow> sheet = mappedSheet.BuildSheet(zoneNotificationList, DateTimeFormat, customerId);
                 Worksheet worksheet = workbook.Worksheets[mappedSheet.SheetIndex];
                 SetSheetData(worksheet, sheet, firstRow);
@@ -108,7 +131,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             int rowCount = sheet.Count();
             if (rowCount > 1)
                 worksheet.Cells.InsertRows(currentRow + 1, rowCount - 1);
-            
+
             foreach (SalePricelistTemplateTableRow row in sheet)
             {
                 SetRowData(worksheet, row, currentRow);
@@ -116,7 +139,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 //worksheet.Cells.InsertRow(++currentRow);
             }
         }
-        private void SetRowData(Worksheet worksheet, SalePricelistTemplateTableRow row,int currentRow)
+        private void SetRowData(Worksheet worksheet, SalePricelistTemplateTableRow row, int currentRow)
         {
             if (row != null)
             {
@@ -126,14 +149,14 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 }
             }
             else
-            throw new ArgumentNullException("row");
+                throw new ArgumentNullException("row");
         }
 
 
         private object getValueOfMappedCell(MappedCell mappedCell, IMappedCellContext mappedCellContext)
         {
             mappedCell.Execute(mappedCellContext);
-            
+
             if (mappedCellContext.Value is DateTime)
                 mappedCellContext.Value = ((DateTime)mappedCellContext.Value).ToString(DateTimeFormat);
 

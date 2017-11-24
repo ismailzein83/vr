@@ -14,14 +14,14 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-	public class SalePriceListTemplateManager
-	{
-		#region Public Methods
+    public class SalePriceListTemplateManager
+    {
+        #region Public Methods
 
-		public Vanrise.Entities.IDataRetrievalResult<SalePriceListTemplateDetail> GetFilteredSalePriceListTemplates(Vanrise.Entities.DataRetrievalInput<SalePriceListTemplateQuery> input)
-		{
-			Dictionary<int, SalePriceListTemplate> cachedSalePriceListTemplates = GetCachedSalePriceListTemplates();
-			Func<SalePriceListTemplate, bool> filterFunc = (salePriceListTemplate) => (input.Query.Name == null || salePriceListTemplate.Name.ToLower().Contains(input.Query.Name.ToLower()));
+        public Vanrise.Entities.IDataRetrievalResult<SalePriceListTemplateDetail> GetFilteredSalePriceListTemplates(Vanrise.Entities.DataRetrievalInput<SalePriceListTemplateQuery> input)
+        {
+            Dictionary<int, SalePriceListTemplate> cachedSalePriceListTemplates = GetCachedSalePriceListTemplates();
+            Func<SalePriceListTemplate, bool> filterFunc = (salePriceListTemplate) => (input.Query.Name == null || salePriceListTemplate.Name.ToLower().Contains(input.Query.Name.ToLower()));
 
             ResultProcessingHandler<SalePriceListTemplateDetail> handler = new ResultProcessingHandler<SalePriceListTemplateDetail>()
             {
@@ -29,7 +29,7 @@ namespace TOne.WhS.BusinessEntity.Business
             };
             VRActionLogger.Current.LogGetFilteredAction(SalePriceListTemplateLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, cachedSalePriceListTemplates.ToBigResult(input, filterFunc, SalePriceListTemplateDetailMapper), handler);
-		}
+        }
         public SalePriceListTemplate GetSalePriceListTemplateHistoryDetailbyHistoryId(int salePriceListTemplateHistoryId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
@@ -37,21 +37,21 @@ namespace TOne.WhS.BusinessEntity.Business
             return salePriceListTemplate.CastWithValidate<SalePriceListTemplate>("SalePriceListTemplate : historyId ", salePriceListTemplateHistoryId);
         }
         public SalePriceListTemplate GetSalePriceListTemplate(int salePriceListTemplateId, bool isViewedFromUI)
-		{
-			var salePriceListTemplateItem= GetCachedSalePriceListTemplates().GetRecord(salePriceListTemplateId);
+        {
+            var salePriceListTemplateItem = GetCachedSalePriceListTemplates().GetRecord(salePriceListTemplateId);
             if (salePriceListTemplateItem != null && isViewedFromUI)
                 VRActionLogger.Current.LogObjectViewed(SalePriceListTemplateLoggableEntity.Instance, salePriceListTemplateItem);
             return salePriceListTemplateItem;
-		}
+        }
 
         public SalePriceListTemplate GetSalePriceListTemplate(int salePriceListTemplateId)
         {
-            return GetSalePriceListTemplate(salePriceListTemplateId,false);
+            return GetSalePriceListTemplate(salePriceListTemplateId, false);
         }
-		public IEnumerable<SalePriceListTemplateInfo> GetSalePriceListTemplatesInfo()
-		{
-			return GetCachedSalePriceListTemplates().MapRecords(SalePriceListTemplateInfoMapper).OrderBy(x => x.Name);
-		}
+        public IEnumerable<SalePriceListTemplateInfo> GetSalePriceListTemplatesInfo()
+        {
+            return GetCachedSalePriceListTemplates().MapRecords(SalePriceListTemplateInfoMapper).OrderBy(x => x.Name);
+        }
 
         public IEnumerable<SalePricelistTemplateSettingsMappedCellExtensionConfig> GetMappedCellsExtensionConfigs()
         {
@@ -71,67 +71,86 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         public IEnumerable<SalePriceListTemplateSettingsMappedTableExtensionConfig> GetMappedTablesExtensionConfigs()
-		{
-			var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
+        {
+            var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
             return extensionConfigManager.GetExtensionConfigurations<SalePriceListTemplateSettingsMappedTableExtensionConfig>(SalePriceListTemplateSettingsMappedTableExtensionConfig.EXTENSION_TYPE);
-		}
+        }
         public IEnumerable<BasicMappedValueExtensionConfig> GetBasicSettingsMappedValueExtensionConfigs(string configType)
-		{
-			var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
+        {
+            var extensionConfigManager = new Vanrise.Common.Business.ExtensionConfigurationManager();
             return extensionConfigManager.GetExtensionConfigurations<BasicMappedValueExtensionConfig>(configType);
-		}
+        }
 
-		public Vanrise.Entities.InsertOperationOutput<SalePriceListTemplateDetail> AddSalePriceListTemplate(SalePriceListTemplate salePriceListTemplate)
-		{
-			var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SalePriceListTemplateDetail>();
-			insertOperationOutput.InsertedObject = null;
-			insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
+        public Vanrise.Entities.InsertOperationOutput<SalePriceListTemplateDetail> AddSalePriceListTemplate(SalePriceListTemplate salePriceListTemplate)
+        {
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<SalePriceListTemplateDetail>();
+            insertOperationOutput.InsertedObject = null;
+            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
 
-			var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListTemplateDataManager>();
-			int insertedId;
-
-			if (dataManager.Insert(salePriceListTemplate, out insertedId))
-			{
-				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-				salePriceListTemplate.SalePriceListTemplateId = insertedId;
+            var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListTemplateDataManager>();
+            int insertedId;
+            if (salePriceListTemplate.Settings != null)
+            {
+                var context = new PriceListTemplateOnBeforeSaveContext() { SaveOperationType = SaveOperationType.Insert };
+                salePriceListTemplate.Settings.OnBeforeSave(context);
+            }
+            if (dataManager.Insert(salePriceListTemplate, out insertedId))
+            {
+                if (salePriceListTemplate.Settings != null)
+                {
+                    var context = new PriceListTemplateOnAfterSaveContext() { SaveOperationType = SaveOperationType.Insert, TemplateId = insertedId };
+                    salePriceListTemplate.Settings.OnAfterSave(context);
+                }
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                salePriceListTemplate.SalePriceListTemplateId = insertedId;
                 VRActionLogger.Current.TrackAndLogObjectAdded(SalePriceListTemplateLoggableEntity.Instance, salePriceListTemplate);
-				insertOperationOutput.InsertedObject = SalePriceListTemplateDetailMapper(salePriceListTemplate);
-				insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-			}
-			else
-			{
-				insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-			}
+                insertOperationOutput.InsertedObject = SalePriceListTemplateDetailMapper(salePriceListTemplate);
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+            }
+            else
+            {
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+            }
 
-			return insertOperationOutput;
-		}
+            return insertOperationOutput;
+        }
 
-		public Vanrise.Entities.UpdateOperationOutput<SalePriceListTemplateDetail> UpdateSalePriceListTemplate(SalePriceListTemplate salePriceListTemplate)
-		{
-			var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SalePriceListTemplateDetail>();
-			updateOperationOutput.UpdatedObject = null;
-			updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+        public Vanrise.Entities.UpdateOperationOutput<SalePriceListTemplateDetail> UpdateSalePriceListTemplate(SalePriceListTemplate salePriceListTemplate)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SalePriceListTemplateDetail>();
+            updateOperationOutput.UpdatedObject = null;
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            if (salePriceListTemplate.Settings != null)
+            {
+                var context = new PriceListTemplateOnBeforeSaveContext() { SaveOperationType = SaveOperationType.Update, TemplateId = salePriceListTemplate.SalePriceListTemplateId};
+                salePriceListTemplate.Settings.OnBeforeSave(context);
+            }
 
-			var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListTemplateDataManager>();
+            var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListTemplateDataManager>();
 
-			if (dataManager.Update(salePriceListTemplate))
-			{
-				Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            if (dataManager.Update(salePriceListTemplate))
+            {
+                if (salePriceListTemplate.Settings != null)
+                {
+                    var context = new PriceListTemplateOnAfterSaveContext();
+                    salePriceListTemplate.Settings.OnAfterSave(context);
+                }
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 VRActionLogger.Current.TrackAndLogObjectUpdated(SalePriceListTemplateLoggableEntity.Instance, salePriceListTemplate);
-				updateOperationOutput.UpdatedObject = SalePriceListTemplateDetailMapper(salePriceListTemplate);
-				updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-			}
-			else
-			{
-				updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-			}
+                updateOperationOutput.UpdatedObject = SalePriceListTemplateDetailMapper(salePriceListTemplate);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
 
-			return updateOperationOutput;
-		}
+            return updateOperationOutput;
+        }
 
-		#endregion
+        #endregion
 
-		#region Private Classes
+        #region Private Classes
 
         private class SalePriceListTemplateExcelExportHandler : ExcelExportHandler<SalePriceListTemplateDetail>
         {
@@ -142,7 +161,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     SheetName = "Sale Pricelist",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-                
+
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
 
                 sheet.Rows = new List<ExportExcelRow>();
@@ -150,7 +169,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     foreach (var record in context.BigResult.Data)
                     {
-                        if (record.Entity != null )
+                        if (record.Entity != null)
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
@@ -162,16 +181,16 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-		private class CacheManager : Vanrise.Caching.BaseCacheManager
-		{
-			ISalePriceListTemplateDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListTemplateDataManager>();
-			object _updateHandle;
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            ISalePriceListTemplateDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListTemplateDataManager>();
+            object _updateHandle;
 
-			protected override bool ShouldSetCacheExpired()
-			{
-				return _dataManager.AreSalePriceListTemplatesUpdated(ref _updateHandle);
-			}
-		}
+            protected override bool ShouldSetCacheExpired()
+            {
+                return _dataManager.AreSalePriceListTemplatesUpdated(ref _updateHandle);
+            }
+        }
 
         private class SalePriceListTemplateLoggableEntity : VRLoggableEntityBase
         {
@@ -214,72 +233,100 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 SalePriceListTemplate salePriceListTemplate = context.Object.CastWithValidate<SalePriceListTemplate>("context.Object");
                 return s_salePriceListTemplateManager.GetSalePriceListTemplateName(salePriceListTemplate);
-                
+
             }
         }
 
-		#endregion
+        #endregion
 
-		#region Private Methods
+        #region Private Methods
 
-		private Dictionary<int, SalePriceListTemplate> GetCachedSalePriceListTemplates()
-		{
-			return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSalePriceListTemplates", () =>
-			{
-				ISalePriceListTemplateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListTemplateDataManager>();
-				IEnumerable<SalePriceListTemplate> salePriceListTemplates = dataManager.GetAll();
-				return salePriceListTemplates.ToDictionary(x => x.SalePriceListTemplateId);
-			});
-		}
+        private Dictionary<int, SalePriceListTemplate> GetCachedSalePriceListTemplates()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSalePriceListTemplates", () =>
+            {
+                ISalePriceListTemplateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListTemplateDataManager>();
+                IEnumerable<SalePriceListTemplate> salePriceListTemplates = dataManager.GetAll();
+                return salePriceListTemplates.ToDictionary(x => x.SalePriceListTemplateId);
+            });
+        }
 
-		private IEnumerable<SalePLZoneNotification> GetZoneNotifications()
-		{
-			var zones = new List<SalePLZoneNotification>();
-			for (int i = 0; i < 3; i++)
-			{
-				var zone = new SalePLZoneNotification()
-				{
-					ZoneName = "Zone " + (i + 1)
-				};
+        private IEnumerable<SalePLZoneNotification> GetZoneNotifications()
+        {
+            var zones = new List<SalePLZoneNotification>();
+            for (int i = 0; i < 3; i++)
+            {
+                var zone = new SalePLZoneNotification()
+                {
+                    ZoneName = "Zone " + (i + 1)
+                };
 
-				zone.Codes.Add(new SalePLCodeNotification()
-				{
-					Code = "Code " + (i + 1),
-					BED = DateTime.Now.Date
-				});
+                zone.Codes.Add(new SalePLCodeNotification()
+                {
+                    Code = "Code " + (i + 1),
+                    BED = DateTime.Now.Date
+                });
 
-				zone.Rate = new SalePLRateNotification()
-				{
-					Rate = (i + 1),
-					BED = DateTime.Now.Date
-				};
+                zone.Rate = new SalePLRateNotification()
+                {
+                    Rate = (i + 1),
+                    BED = DateTime.Now.Date
+                };
 
-				zones.Add(zone);
-			}
-			return zones;
-		}
+                zones.Add(zone);
+            }
+            return zones;
+        }
 
-		#endregion
+        #endregion
 
-		#region Mappers
+        #region Mappers
 
-		private SalePriceListTemplateDetail SalePriceListTemplateDetailMapper(SalePriceListTemplate salePriceListTemplate)
-		{
-			return new SalePriceListTemplateDetail()
-			{
-				Entity = salePriceListTemplate
-			};
-		}
+        private SalePriceListTemplateDetail SalePriceListTemplateDetailMapper(SalePriceListTemplate salePriceListTemplate)
+        {
+            return new SalePriceListTemplateDetail()
+            {
+                Entity = salePriceListTemplate
+            };
+        }
 
-		private SalePriceListTemplateInfo SalePriceListTemplateInfoMapper(SalePriceListTemplate entity)
-		{
-			return new SalePriceListTemplateInfo()
-			{
-				SalePriceListTemplateId = entity.SalePriceListTemplateId,
-				Name = entity.Name
-			};
-		}
+        private SalePriceListTemplateInfo SalePriceListTemplateInfoMapper(SalePriceListTemplate entity)
+        {
+            return new SalePriceListTemplateInfo()
+            {
+                SalePriceListTemplateId = entity.SalePriceListTemplateId,
+                Name = entity.Name
+            };
+        }
 
-		#endregion
-	}
+        #endregion
+    }
+
+    public class PriceListTemplateOnBeforeSaveContext : IPriceListTemplateOnBeforeSaveContext
+    {
+        public SaveOperationType SaveOperationType { get; set; }
+        public int? TemplateId { get; set; }
+    }
+
+    public class PriceListTemplateOnAfterSaveContext : IPriceListTemplateOnAfterSaveContext
+    {
+        public SaveOperationType SaveOperationType { get; set; }
+        public int TemplateId { get; set; }
+    }
+
+    public class BasicSalePricelistTemplateFileSettings : VRFileExtendedSettings
+    {
+        public override Guid ConfigId
+        {
+            get { return new Guid("7949D926-396C-4BD0-A2A5-2FA86A236A9C"); }
+        }
+
+        public int? SalePricelistTemplateId { get; set; }
+
+        Vanrise.Security.Business.SecurityManager s_securityManager = new Vanrise.Security.Business.SecurityManager();
+        public override bool DoesUserHaveViewAccess(Vanrise.Entities.IVRFileDoesUserHaveViewAccessContext context)
+        {
+            return s_securityManager.HasPermissionToActions("WhS_BE/SalePriceListTemplate/GetFilteredSalePriceListTemplates", context.UserId);
+        }
+    }
 }

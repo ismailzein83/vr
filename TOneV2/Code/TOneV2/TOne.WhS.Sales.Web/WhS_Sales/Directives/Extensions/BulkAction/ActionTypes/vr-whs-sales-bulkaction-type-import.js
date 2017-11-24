@@ -108,7 +108,7 @@ app.directive('vrWhsSalesBulkactionTypeImport', ['WhS_Sales_RatePlanAPIService',
     function getTemplate(attrs) {
         return '<span vr-loader="scopeModel.isLoading">\
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum / 2}}">\
-                        <vr-fileupload label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onFileChanged" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
+                        <vr-fileupload tempfile="true" label="Rates" extension="xls,xlsx" value="scopeModel.file" onvaluechanged="scopeModel.onFileChanged" isrequired="importBulkActionCtrl.isrequired"></vr-fileupload>\
                     </vr-columns>\
                     <vr-columns colnum="{{importBulkActionCtrl.normalColNum}}">\
                         <vr-timeformat label="Date Time Format" value="scopeModel.dateTimeFormat" normal-col-num="{{importBulkActionCtrl.normalColNum}}" isrequired="importBulkActionCtrl.isrequired" onvaluechanged="scopeModel.onDateTimeFormatChanged"></vr-timeformat>\

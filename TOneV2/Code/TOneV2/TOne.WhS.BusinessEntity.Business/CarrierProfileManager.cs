@@ -21,7 +21,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Public Methods
-    
+
         public CarrierProfile GetCarrierProfileHistoryDetailbyHistoryId(int carrierProfileHistoryId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
@@ -86,18 +86,21 @@ namespace TOne.WhS.BusinessEntity.Business
             carrierProfile.Settings.CustomerActivationStatus = CarrierProfileActivationStatus.InActive;
             carrierProfile.Settings.SupplierActivationStatus = CarrierProfileActivationStatus.InActive;
 
-            List<long> fileIds = null;
-            if(carrierProfile.Settings != null && carrierProfile.Settings.Documents != null && carrierProfile.Settings.Documents.Count > 0)
+            List<long> fileIds = new List<long>();
+            if (carrierProfile.Settings != null)
             {
-                fileIds = carrierProfile.Settings.Documents.Select(itm => itm.FileId).ToList();
+                if (carrierProfile.Settings.Documents != null && carrierProfile.Settings.Documents.Count > 0)
+                    fileIds = carrierProfile.Settings.Documents.Select(itm => itm.FileId).ToList();
+                if (carrierProfile.Settings.CompanyLogo.HasValue)
+                    fileIds.Add(carrierProfile.Settings.CompanyLogo.Value);
             }
 
-            if (fileIds != null)
+            if (fileIds != null && fileIds.Any())
                 SetFilesUsed(fileIds, null);
             bool insertActionSucc = dataManager.Insert(carrierProfile, out carrierProfileId);
             if (insertActionSucc)
             {
-                if (fileIds != null)
+                if (fileIds != null && fileIds.Any())
                     SetFilesUsed(fileIds, carrierProfileId);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 carrierProfile.CarrierProfileId = carrierProfileId;
@@ -117,20 +120,28 @@ namespace TOne.WhS.BusinessEntity.Business
             existingCarrierProfile.ThrowIfNull("existingCarrierProfile", carrierProfileToEdit.CarrierProfileId);
             ValidateCarrierProfileToEdit(carrierProfileToEdit);
 
-            List<long> newFileIds = null;
-            if (carrierProfileToEdit.Settings != null && carrierProfileToEdit.Settings.Documents != null && carrierProfileToEdit.Settings.Documents.Count > 0)
+            List<long> newFileIds = new List<long>();
+            if (carrierProfileToEdit.Settings != null)
             {
-                List<long> existingFileIds = null;
-                if (existingCarrierProfile.Settings != null && existingCarrierProfile.Settings.Documents != null && existingCarrierProfile.Settings.Documents.Count > 0)
+                if (carrierProfileToEdit.Settings.Documents != null && carrierProfileToEdit.Settings.Documents.Count > 0)
                 {
-                    existingFileIds = existingCarrierProfile.Settings.Documents.Select(itm => itm.FileId).ToList();
+                    List<long> existingFileIds = null;
+                    if (existingCarrierProfile.Settings != null && existingCarrierProfile.Settings.Documents != null && existingCarrierProfile.Settings.Documents.Count > 0)
+                    {
+                        existingFileIds = existingCarrierProfile.Settings.Documents.Select(itm => itm.FileId).ToList();
+                    }
+                    newFileIds = carrierProfileToEdit.Settings.Documents.Where(doc => existingFileIds == null || !existingFileIds.Contains(doc.FileId)).Select(itm => itm.FileId).ToList();
                 }
-                newFileIds = carrierProfileToEdit.Settings.Documents.Where(doc => existingFileIds == null || !existingFileIds.Contains(doc.FileId)).Select(itm => itm.FileId).ToList();                
-                if(newFileIds.Count == 0)
-                    newFileIds = null;
+
+                if (carrierProfileToEdit.Settings.CompanyLogo.HasValue)
+                {
+                    if (existingCarrierProfile.Settings == null || !existingCarrierProfile.Settings.CompanyLogo.HasValue || existingCarrierProfile.Settings.CompanyLogo != carrierProfileToEdit.Settings.CompanyLogo)
+                        newFileIds.Add(carrierProfileToEdit.Settings.CompanyLogo.Value);
+                }
             }
 
-            if (newFileIds != null)
+
+            if (newFileIds != null && newFileIds.Any())
                 SetFilesUsed(newFileIds, carrierProfileToEdit.CarrierProfileId);
 
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
@@ -189,7 +200,7 @@ namespace TOne.WhS.BusinessEntity.Business
             CarrierProfileActivationStatus supplierActivationStatus = carrierProfile.Settings.SupplierActivationStatus;
             CarrierProfileActivationStatus customerActivationStatus = carrierProfile.Settings.CustomerActivationStatus;
             EvaluateCarrierProfileStatus(carrierProfileId, true, true, ref supplierActivationStatus, ref  customerActivationStatus);
-           
+
             if (carrierProfile.Settings.CustomerActivationStatus != customerActivationStatus || carrierProfile.Settings.SupplierActivationStatus != supplierActivationStatus)
             {
                 var carrierProfileSettingsCopy = carrierProfile.Settings.VRDeepCopy();
@@ -240,7 +251,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
         }
-        
+
         #endregion
 
         #region Special Methods
@@ -391,7 +402,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return setting.TaxesDefinition.ItemDefinitions;
         }
         #endregion
-      
+
         #endregion
 
         #region Validation Methods
@@ -421,7 +432,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Private Members
-        
+
         public Dictionary<int, CarrierProfile> GetCachedCarrierProfiles()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCarrierProfiles",
@@ -429,7 +440,7 @@ namespace TOne.WhS.BusinessEntity.Business
                {
                    Dictionary<int, CarrierProfile> allCarrierProfile = this.GetCachedCarrierProfilesWithDeleted();
                    Dictionary<int, CarrierProfile> carrierProfiles = new Dictionary<int, CarrierProfile>();
-                   
+
                    foreach (CarrierProfile item in allCarrierProfile.Values)
                    {
                        if (!item.IsDeleted)
@@ -473,7 +484,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Carrier Profile Name", Width = 30});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Carrier Profile Name", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Company" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Country" });
 
@@ -508,7 +519,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return setting;
         }
 
-        void SetFilesUsed(List<long> fileIds, int? carrierProfileId)
+        public void SetFilesUsed(List<long> fileIds, int? carrierProfileId)
         {
             if (fileIds != null && fileIds.Count > 0)
             {
@@ -541,19 +552,20 @@ namespace TOne.WhS.BusinessEntity.Business
             CountryManager countryManager = new CountryManager();
             if (carrierProfile.Settings != null && carrierProfile.Settings.CountryId.HasValue)
                 carrierProfileDetail.CountryName = countryManager.GetCountryName(carrierProfile.Settings.CountryId.Value);
-         
+
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
 
             var financialAccountsData = financialAccountManager.GetEffectiveFinancialAccountsDataByCarrierProfileId(carrierProfile.CarrierProfileId, DateTime.Now);
             if (financialAccountsData != null && financialAccountsData.Count() > 0)
             {
                 var financialAccountData = financialAccountsData.FindRecord(x => x.FinancialAccount.CarrierProfileId.HasValue);
-                if(financialAccountData != null)
+                if (financialAccountData != null)
                 {
                     carrierProfileDetail.InvoiceSettingName = financialAccountManager.GetFinancialInvoiceSettingName(financialAccountData.FinancialAccount.FinancialAccountDefinitionId, financialAccountData.FinancialAccount.FinancialAccountId.ToString(), financialAccountData.InvoiceData.InvoiceTypeId);
                     carrierProfileDetail.InvoiceTypeDescription = "Profile";
 
-                }else
+                }
+                else
                 {
                     carrierProfileDetail.InvoiceTypeDescription = "Account";
                 }
@@ -561,7 +573,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return carrierProfileDetail;
         }
         #endregion
-       public class CarrierProfileLoggableEntity : VRLoggableEntityBase
+        public class CarrierProfileLoggableEntity : VRLoggableEntityBase
         {
             public static CarrierProfileLoggableEntity Instance = new CarrierProfileLoggableEntity();
 
