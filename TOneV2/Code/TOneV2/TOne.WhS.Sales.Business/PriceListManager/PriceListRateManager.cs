@@ -54,7 +54,7 @@ namespace TOne.WhS.Sales.Business
                                 rateToChange.ChangeType = RateChangeType.Increase;
                             else if (rateToChange.NormalRate < recentExistingRate.ConvertedRate)
                                 rateToChange.ChangeType = RateChangeType.Decrease;
-
+                            else rateToChange.ChangeType = RateChangeType.NotChanged;
                             rateToChange.RecentExistingRate = recentExistingRate;
                         }
 

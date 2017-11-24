@@ -665,9 +665,24 @@ namespace TOne.WhS.Sales.BP.Activities
                 Decimal convertedRate = UtilitiesManager.ConvertToCurrencyAndRound(recentRate.Rate.Rate, saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now, longPrecision, currencyExchangeRateManager);
 
                 if (rateToAdd.NormalRate > convertedRate)
+                {
+                    int i = 0;
                     salePricelistRateChange.ChangeType = RateChangeType.Increase;
+                    for (i = 0; i < rateToAdd.NewRates.Count(); i++)
+                    {
+                        rateToAdd.NewRates[i].ChangeType = RateChangeType.Increase;
+                    }
+                    
+                }
                 else if (rateToAdd.NormalRate < convertedRate)
+                {
                     salePricelistRateChange.ChangeType = RateChangeType.Decrease;
+                    int i = 0;
+                    for (i = 0; i < rateToAdd.NewRates.Count(); i++)
+                    {
+                        rateToAdd.NewRates[i].ChangeType = RateChangeType.Decrease;
+                    }
+                }
 
                 context.RateChangesOutArgument.Add(salePricelistRateChange);
             }
@@ -821,7 +836,7 @@ namespace TOne.WhS.Sales.BP.Activities
             foreach (var zone in importedZones)
             {
                 if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null &&
-                    (zone.NormalRateToChange.ChangeType == RateChangeType.Increase || zone.NormalRateToChange.ChangeType == RateChangeType.Decrease))
+                    (zone.NormalRateToChange.ChangeType == RateChangeType.Increase || zone.NormalRateToChange.ChangeType == RateChangeType.Decrease || zone.NormalRateToChange.ChangeType == RateChangeType.NotChanged))
                 {
                     ratesToChange.Add(zone.NormalRateToChange);
                 }
