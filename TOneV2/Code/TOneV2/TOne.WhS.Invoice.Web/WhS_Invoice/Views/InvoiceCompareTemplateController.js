@@ -2,15 +2,15 @@
 
     'use strict';
 
-    invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService','VR_ExcelConversion_FieldTypeEnum','VR_Invoice_InvoiceTypeAPIService','WhS_Invoice_InvoiceAPIService','WhS_Invoice_ComparisonResultEnum','LabelColorsEnum','WhS_Invoice_ComparisonCriteriaEnum','UISettingsService'];
+    invoiceCompareTemplateController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_Invoice_InvoiceAPIService', 'VR_ExcelConversion_FieldTypeEnum', 'VR_Invoice_InvoiceTypeAPIService', 'WhS_Invoice_InvoiceAPIService', 'WhS_Invoice_ComparisonResultEnum', 'LabelColorsEnum', 'WhS_Invoice_ComparisonCriteriaEnum', 'UISettingsService', 'WhS_Invoice_InvoiceCompareTemplateAPIService'];
 
-    function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum, UISettingsService) {
+    function invoiceCompareTemplateController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_ExcelConversion_FieldTypeEnum, VR_Invoice_InvoiceTypeAPIService, WhS_Invoice_InvoiceAPIService, WhS_Invoice_ComparisonResultEnum, LabelColorsEnum, WhS_Invoice_ComparisonCriteriaEnum, UISettingsService, WhS_Invoice_InvoiceCompareTemplateAPIService) {
 
         var invoiceAccountEntity;
         var invoiceId;
         var invoiceTypeId;
         var invoiceActionId;
-
+        var partnerId;
         var invoiceEntity;
         var invoiceActionEntity;
         var mainListAPI;
@@ -18,6 +18,8 @@
         var gridAPI;
         var gridPromiseDeferred = UtilsService.createPromiseDeferred();
         var inputWorkBookApi;
+        var invoiceCompareTemplateEntity;
+
         loadParameters();
         defineScope();
         load();
@@ -68,7 +70,7 @@
                 mainListMappingReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
-               
+                saveInvoiceCompareTemplate();
             };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
@@ -82,7 +84,7 @@
                   return   startCompare();
             };
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
             $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Invoice_InvoiceAPIService.CompareInvoices(dataRetrievalInput).then(function (response) {
@@ -133,9 +135,17 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
+           
             UtilsService.waitMultipleAsyncOperations([getInvoice, getInvoiceAction]).then(function () {
                 $scope.scopeModel.showGrid = true;
-                loadAllControls();
+                WhS_Invoice_InvoiceCompareTemplateAPIService.GetInvoiceCompareTemplate(invoiceTypeId, partnerId).then(function (response) {
+                    invoiceCompareTemplateEntity = response;
+                    if (invoiceCompareTemplateEntity != undefined && invoiceCompareTemplateEntity.Details != undefined) {
+                        $scope.scopeModel.dateTimeFormat = invoiceCompareTemplateEntity.Details.DateTimeFormat;
+                    }
+                    loadAllControls();
+                });
+              
             });
         }
 
@@ -143,17 +153,18 @@
         {
             return VR_Invoice_InvoiceAPIService.GetInvoiceDetail(invoiceId).then(function (response) {
                 invoiceEntity = response;
-                if(invoiceEntity != undefined)
-                {
+                if (invoiceEntity != undefined) {
+                    if (invoiceEntity.Entity != undefined)
+                        partnerId = invoiceEntity.Entity.PartnerId;
                     var normalPrecision = UISettingsService.getNormalPrecision();
                     $scope.scopeModel.issuedBy = invoiceEntity.UserName;
 
                     $scope.scopeModel.to = invoiceEntity.PartnerName;
-                    $scope.scopeModel.toDate = UtilsService.getShortDate( UtilsService.createDateFromString(invoiceEntity.Entity.ToDate) );
+                    $scope.scopeModel.toDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.ToDate));
                     $scope.scopeModel.fromDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.FromDate));
                     $scope.scopeModel.issuedDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.IssueDate));
                     $scope.scopeModel.dueDate = UtilsService.getShortDate(UtilsService.createDateFromString(invoiceEntity.Entity.DueDate));
-                        
+
                     $scope.scopeModel.serialNumber = invoiceEntity.Entity.SerialNumber;
                     $scope.scopeModel.timeZone = invoiceEntity.TimeZoneName;
                     $scope.scopeModel.calls = invoiceEntity.Entity.Details.TotalNumberOfCalls.toLocaleString();
@@ -236,61 +247,9 @@
                     ],
                     listName: "MainList",
                     showDateFormat: false,
-                    listMappingData: {
-                        FirstRowIndex: 1,
-                        SheetIndex: 0,
-                        FieldMappings: [{
-                            ConfigId: "ab48ff16-7b04-42ff-8525-c68590a88799",
-                            FieldName: "Zone",
-                            FieldType: VR_ExcelConversion_FieldTypeEnum.String.value,
-                            SheetIndex: 0,
-                            RowIndex: 1,
-                            CellIndex: 0
-                        }, {
-                            ConfigId: "ab48ff16-7b04-42ff-8525-c68590a88799",
-                            FieldName: "FromDate",
-                            FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value,
-                            SheetIndex: 0,
-                            RowIndex: 1,
-                            CellIndex: 1
-                        }, {
-                            ConfigId: "ab48ff16-7b04-42ff-8525-c68590a88799",
-                            FieldName: "ToDate",
-                            FieldType: VR_ExcelConversion_FieldTypeEnum.DateTime.value,
-                            SheetIndex: 0,
-                            RowIndex: 1,
-                            CellIndex: 2
-                        }, {
-                            ConfigId: "ab48ff16-7b04-42ff-8525-c68590a88799",
-                            FieldName: "Duration",
-                            FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value,
-                            SheetIndex: 0,
-                            RowIndex: 1,
-                            CellIndex: 3
-                        }, {
-                            ConfigId: "ab48ff16-7b04-42ff-8525-c68590a88799",
-                            FieldName: "NumberOfCalls",
-                            FieldType: VR_ExcelConversion_FieldTypeEnum.Int.value,
-                            SheetIndex: 0,
-                            RowIndex: 1,
-                            CellIndex: 4
-                        }, {
-                            ConfigId: "ab48ff16-7b04-42ff-8525-c68590a88799",
-                            FieldName: "Rate",
-                            FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value,
-                            SheetIndex: 0,
-                            RowIndex: 1,
-                            CellIndex: 5
-                        }, {
-                            ConfigId: "ab48ff16-7b04-42ff-8525-c68590a88799",
-                            FieldName: "Amount",
-                            FieldType: VR_ExcelConversion_FieldTypeEnum.Decimal.value,
-                            SheetIndex: 0,
-                            RowIndex: 1,
-                            CellIndex: 6
-                        }]
-                    }
                 };
+                if (invoiceCompareTemplateEntity != undefined && invoiceCompareTemplateEntity.Details != undefined)
+                    payload.listMappingData = invoiceCompareTemplateEntity.Details.ListMapping;
                 VRUIUtilsService.callDirectiveLoad(mainListAPI, payload, loadMainListMappingPromiseDeferred);
             });
 
@@ -337,6 +296,31 @@
                 });
             });
             return loadPromiseDeferred.promise;
+        }
+        function buildObjectFromScope() {
+            var obj = {
+                InvoiceTypeId: invoiceTypeId,
+                PartnerId: partnerId,
+                Details: {
+                    ListMapping: mainListAPI.getData(),
+                    DateTimeFormat: $scope.scopeModel.dateTimeFormat
+                }
+            };
+            return obj;
+        }
+        function saveInvoiceCompareTemplate() {
+            var invoiceComparisonTemplate = buildObjectFromScope();
+            WhS_Invoice_InvoiceCompareTemplateAPIService.SaveInvoiceCompareTemplate(invoiceComparisonTemplate).then(function (response) {
+                if (response == true) {
+                    VRNotificationService.showSuccess("Added successfully");
+                }
+                else
+                    VRNotificationService.showError("An error has occured");
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            }).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
     }
 

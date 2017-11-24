@@ -144,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\InvoiceCompareTemplateController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WhS_Invoice\Reports\Reporting.aspx.cs">
@@ -200,6 +201,7 @@
     <Content Include="WhS_Invoice\ModuleInitialization.js" />
     <Content Include="WhS_Invoice\Reports\Reporting.aspx" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
+    <Content Include="WhS_Invoice\Services\APIServices\InvoiceCompareTemplateAPIService.js" />
     <Content Include="WhS_Invoice\Services\InvoiceService.js" />
     <Content Include="WhS_Invoice\Views\OriginalInvoiceDataTemplateController.js" />
     <Content Include="WhS_Invoice\Views\OriginalInvoiceDataTemplate.html" />
