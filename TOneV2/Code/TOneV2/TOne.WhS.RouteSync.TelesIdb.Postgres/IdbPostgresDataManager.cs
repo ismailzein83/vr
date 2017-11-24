@@ -216,7 +216,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         public void SwapTables(int indexesCommandTimeoutInSeconds)
         {
             string createindexScript = string.Format("ALTER TABLE {0} ADD constraint route_pkey_{1} PRIMARY KEY (pref)", tempTableName, Guid.NewGuid().ToString("N"));
-            string swapTableScript = string.Format("ALTER TABLE {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {0}; ", tableName, oldTableName, tempTableName);
+            string swapTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {0}; ", tableName, oldTableName, tempTableName);
             ExecuteNonQuery(new string[] { createindexScript, swapTableScript }, indexesCommandTimeoutInSeconds);
         }
 

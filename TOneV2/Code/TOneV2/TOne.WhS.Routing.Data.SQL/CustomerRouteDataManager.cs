@@ -549,7 +549,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 }
 
                 string numberOfTriesAsString = parts[5];
-                if (!string.IsNullOrEmpty(isBlockedAsString))
+                if (!string.IsNullOrEmpty(numberOfTriesAsString))
                 {
                     int numberOfTries;
                     if (int.TryParse(parts[5], out numberOfTries))
