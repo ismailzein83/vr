@@ -159,6 +159,7 @@
     <Compile Include="AccountViews\AccountInfo.cs" />
     <Compile Include="AccountViews\AccountPackages.cs" />
     <Compile Include="AccountViews\AccountHistoryView.cs" />
+    <Compile Include="AccountViews\AssignAccountManagerDefinitionView.cs" />
     <Compile Include="AccountViews\FinancialAccounts.cs" />
     <Compile Include="DataRecordFieldFormulas\ParentRetailAccountFieldFormula.cs" />
     <Compile Include="DataRecordFieldFormulas\ZoneEvaluatorFieldFormula.cs" />
