@@ -9,12 +9,12 @@
     <meta name="author" content="">
     <title ng-bind="getPageName()"></title>
     <script ng-if="'@ViewBag.isEnabledGA'">
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
     </script>
     @Styles.Render("~/Content/bootstrap")
     @Styles.Render("~/Content/AngularExtensions")
@@ -74,7 +74,7 @@
         </div>
         <div id="wrapper" ng-style="toogled==true?{'padding-left':'185px'}:{'padding-left':'25px'}">
             <!-- Sidebar -->
-            <div id="sidebar-wrapper" style="overflow-x:hidden;" ng-style="toogled==true?{'width':'200px'}:{'width':'0px'}">
+            <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'200px'}:{'width':'0px'}">
 
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" ng-if="toogled==true" ng-mouseout="mouseout()" ng-mouseover="mouseover()">
                     <div class="panel panel-default toggle-panel ">
@@ -84,42 +84,45 @@
                             <span class=" hand-cursor glyphicon glyphicon-chevron-left" ng-click="hideToogled()" style="font-size: 17px; margin: 6px 4px; position: absolute; right: 16px; top:5px;" ng-if="pinned==true"></span>
                         </div>
                     </div>
-                    <div class="panel panel-default menu-item-list" ng-repeat="item in menuItems" ng-class="$index == menuItems.length -1 ? 'last': '' ">
-                        <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" ng-click="setIndex(item)">
+                    <div style="overflow-x:hidden;position:absolute;width:200px;height:calc(100% - 115px);">
+                        <div class="panel panel-default menu-item-list" ng-repeat="item in menuItems">
+                            <div ng-class="item.isSelected? 'bold-item bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" class="panel-heading panel-heading-vr hand-cursor   boxes float-box waves-effect  waves-block dll-menu-theme" ng-click="setIndex(item)">
 
-                            <span ng-if="item.Childs.length > 0">
-                                <span class="glyphicon " style="top: -4px; "><img ng-src="{{::item.Icon}}" /></span>
-                                <span class="vr-module-name" title="{{::item.Name}}">{{::item.Name}}</span>
-                                <span class=" hand-cursor  toggel">
-                                    <span ng-if="item.Childs.length>0" class="glyphicon " ng-class="menuItemsCurrent.Id == item.Id ?'glyphicon-chevron-up':'glyphicon-chevron-down'" style="font-size: 10px; top: 7px;"></span>
+                                <span ng-if="item.Childs.length > 0">
+                                    <span class="glyphicon " style="top: -4px; "><img ng-src="{{::item.Icon}}" /></span>
+                                    <span class="vr-module-name" title="{{::item.Name}}">{{::item.Name}}</span>
+                                    <span class=" hand-cursor  toggel">
+                                        <span ng-if="item.Childs.length>0" class="glyphicon " ng-class="menuItemsCurrent.Id == item.Id ?'glyphicon-chevron-up':'glyphicon-chevron-down'" style="font-size: 10px; top: 7px;"></span>
+                                    </span>
                                 </span>
-                            </span>
 
-                            <ul class="nav" ng-if="item.Childs.length == 0" data-toggle="collapse" data-parent="#accordion">
-                                <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.Childs">
-                                    <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()">{{::item.Name}}</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div id="collapse-{{::item.Id}}" ng-if="menuItemsCurrent.Id == item.Id " class="slideanimation">
-                            <div class="panel-body">
-                                <div ng-repeat="c in item.Childs">
-                                    <ul class="nav">
-                                        <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''">
-                                            <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href="{{::c.Location}}">{{::c.Name}} </a>
-                                        </li>
-                                    </ul>
-                                    <div ng-if="c.Childs.length > 0" class="dll-parent-menu menu-item-list-ligth">
-                                        <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
-                                        <ul style="padding-left:15px" class="nav slideanimation" ng-if="menusubItemsCurrent.Id == c.Id" >
-                                            <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
-                                                <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                <ul class="nav" ng-if="item.Childs.length == 0" data-toggle="collapse" data-parent="#accordion">
+                                    <li class="dll-menu menu-item-list-ligth" ng-repeat="c in item.Childs">
+                                        <a class="menulink  " ng-href="{{::item.Location}}" ng-click="logfunc()">{{::item.Name}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="collapse-{{::item.Id}}" ng-if="menuItemsCurrent.Id == item.Id " class="slideanimation">
+                                <div class="panel-body">
+                                    <div ng-repeat="c in item.Childs">
+                                        <ul class="nav">
+                                            <li ng-if="c.Childs == null " class="waves-effect waves-classic dll-menu menu-item-list-ligth " ng-class="c.isSelected?'selected-node':''">
+                                                <a class="menulink " ng-class="c.isSelected?'selected-url':''" ng-href="{{::c.Location}}">{{::c.Name}} </a>
                                             </li>
                                         </ul>
+                                        <div ng-if="c.Childs.length > 0" class="dll-parent-menu menu-item-list-ligth">
+                                            <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
+                                            <ul style="padding-left:15px" class="nav slideanimation" ng-if="menusubItemsCurrent.Id == c.Id">
+                                                <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
+                                                    <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="clock">
                         <span ng-bind="$root.clock  | date:'EEE dd MMM , yyyy'"></span>
