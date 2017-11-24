@@ -353,6 +353,21 @@ namespace TOne.WhS.BusinessEntity.Business
                         if (financialAccount.EED.HasValue && financialAccount.EED.Value < DateTime.Today)
                             return false;
                     }
+                    if (filter.Filters != null)
+                    {
+                        var context = new WHSFinancialAccountFilterContext
+                        {
+                            BalanceAccountTypeId = filter.BalanceAccountTypeId,
+                            FinancialAccountId = financialAccount.FinancialAccountId,
+                            InvoiceTypeId = filter.InvoiceTypeId
+                        };
+                        foreach(var item in filter.Filters)
+                        {
+
+                            if (!item.IsMatched(context))
+                                return false;
+                        }
+                    }
                     return true;
                 };
             }

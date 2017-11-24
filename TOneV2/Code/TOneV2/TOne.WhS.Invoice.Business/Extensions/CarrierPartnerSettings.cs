@@ -44,6 +44,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 return "whs-invoice-invoiceaccount-selector";
             }
         }
+        public override string PartnerInvoiceSettingFilterFQTN
+        {
+            get
+            {
+                return "TOne.WhS.Invoice.Business.AssignedPartnerInvoiceSettingFilter, TOne.WhS.Invoice.Business";
+            }
+        }
         public bool UseMaskInfo { get; set; }
         public override dynamic GetPartnerInfo(IPartnerManagerInfoContext context)
         {

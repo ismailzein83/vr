@@ -155,6 +155,7 @@
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionFilterContext.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountBESettings.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionManager.cs" />
+    <Compile Include="FinancialAccount\WHSFinancialAccountFilterContext.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountManager.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountStaticBEManager.cs" />
     <Compile Include="Helper.cs" />

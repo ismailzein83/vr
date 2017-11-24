@@ -16,6 +16,17 @@ namespace TOne.WhS.BusinessEntity.Entities
         public WHSFinancialAccountCarrierType? CarrierType { get; set; }
         public Guid? BalanceAccountTypeId { get; set; }
         public Guid? InvoiceTypeId { get; set; }
+        public List<IWHSFinancialAccountFilter> Filters { get; set; }
 
+    }
+    public interface IWHSFinancialAccountFilter
+    {
+        bool IsMatched(IWHSFinancialAccountFilterContext context);
+    }
+    public interface IWHSFinancialAccountFilterContext
+    {
+         int FinancialAccountId { get;  }
+         Guid? InvoiceTypeId { get; }
+         Guid? BalanceAccountTypeId { get;}
     }
 }
