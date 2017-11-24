@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retail.BusinessEntity.MainExtensions.AccountBEActionTypes
+namespace Retail.BusinessEntity.MainExtensions.AccountViews
 {
     public class AssignAccountManagerDefinitionView : AccountViewDefinitionSettings
     {
