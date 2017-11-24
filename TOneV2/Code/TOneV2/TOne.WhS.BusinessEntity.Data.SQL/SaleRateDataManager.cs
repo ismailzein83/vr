@@ -148,11 +148,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllByOwner", SaleRateMapper, ownerType, ownerId, saleZoneIdsAsString, getNormalRates, getOtherRates);
         }
 
-        public IEnumerable<SaleRate> GetAllSaleRatesBySellingProductsAndCustomer(IEnumerable<long> saleZoneIds, IEnumerable<int> sellingProductIds, int customerId, bool getNormalRates, bool getOtherRates)
+        public IEnumerable<SaleRate> GetAllSaleRatesBySellingProductAndCustomer(IEnumerable<long> saleZoneIds, int sellingProductId, int customerId, bool getNormalRates, bool getOtherRates)
         {
             string saleZoneIdsAsString = (saleZoneIds != null) ? string.Join(",", saleZoneIds) : null;
-            string sellingProductIdsAsString = (sellingProductIds != null) ? string.Join(",", sellingProductIds) : null;
-            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllBySellingProductsAndCustomer", SaleRateMapper, saleZoneIdsAsString, sellingProductIdsAsString, customerId, getNormalRates, getOtherRates);
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllBySellingProductAndCustomer", SaleRateMapper, saleZoneIdsAsString, sellingProductId, customerId, getNormalRates, getOtherRates);
         }
 
         public IEnumerable<SaleRate> GetSaleRatesEffectiveAfterByOwnersAndZones(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds, DateTime minimumDate)

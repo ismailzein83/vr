@@ -14,7 +14,7 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public Vanrise.Entities.IDataRetrievalResult<SaleRateHistoryRecordDetail> GetFilteredSaleRateHistoryRecords(Vanrise.Entities.DataRetrievalInput<SaleRateHistoryQuery> input)
         {
-          
+
             return Vanrise.Common.Business.BigDataManager.Instance.RetrieveData(input, new SaleRateHistoryRequestHandler());
         }
 
@@ -45,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 else
                 {
-                    var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(input.Query.OwnerId, zoneIds, true, false));
+                    var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(input.Query.OwnerId, new CustomerZoneRateHistoryReader(input.Query.OwnerId, zoneIds, true, false));
                     return customerZoneRateHistoryLocator.GetSaleRateHistory(input.Query.ZoneName, input.Query.CountryId, null, currencyId);
                 }
             }
@@ -53,7 +53,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             protected override BigResult<SaleRateHistoryRecordDetail> AllRecordsToBigResult(DataRetrievalInput<SaleRateHistoryQuery> input, IEnumerable<SaleRateHistoryRecord> allRecords)
             {
-                int? systemCurrencyId = (input.Query.IsSystemCurrency) ? (int?) _configManager.GetSystemCurrencyId() : null;
+                int? systemCurrencyId = (input.Query.IsSystemCurrency) ? (int?)_configManager.GetSystemCurrencyId() : null;
                 return allRecords.ToBigResult(input, null, (entity) => SaleRateHistoryEntityDetailMapper(entity, systemCurrencyId));
             }
 
@@ -64,7 +64,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     Entity = entity,
                     DisplayedCurrency = _currencyManager.GetCurrencySymbol(currencyValueId),
-                    DisplayedRate = (systemCurrencyId.HasValue) ?entity.ConvertedRate : entity.Rate,                    
+                    DisplayedRate = (systemCurrencyId.HasValue) ? entity.ConvertedRate : entity.Rate,
                     SellingProductName = (entity.SellingProductId.HasValue) ? _sellingProductManager.GetSellingProductName(entity.SellingProductId.Value) : null
                 };
             }

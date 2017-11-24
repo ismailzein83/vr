@@ -288,10 +288,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetAllSaleRatesByOwner(ownerType, ownerId, saleZoneIds, getNormalRates, getOtherRates);
         }
 
-        public IEnumerable<SaleRate> GetAllSaleRatesBySellingProductsAndCustomer(IEnumerable<long> saleZoneIds, IEnumerable<int> sellingProductIds, int customerId, bool getNormalRates, bool getOtherRates)
+        public IEnumerable<SaleRate> GetAllSaleRatesBySellingProductAndCustomer(IEnumerable<long> saleZoneIds, int sellingProductId, int customerId, bool getNormalRates, bool getOtherRates)
         {
             ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
-            return dataManager.GetAllSaleRatesBySellingProductsAndCustomer(saleZoneIds, sellingProductIds, customerId, getNormalRates, getOtherRates);
+            return dataManager.GetAllSaleRatesBySellingProductAndCustomer(saleZoneIds, sellingProductId, customerId, getNormalRates, getOtherRates);
         }
 
         public IEnumerable<SaleRate> GetSaleRatesEffectiveAfterByOwnersAndZones(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds, DateTime minimumDate)
@@ -397,7 +397,7 @@ namespace TOne.WhS.BusinessEntity.Business
             private IEnumerable<SaleRateDetail> GetCustomerSaleZoneRates(int customerId, IEnumerable<SaleZone> saleZones, IEnumerable<long> saleZoneIds, DateTime effectiveOn, int currencyId, bool isSystemCurrency)
             {
                 var saleRates = new List<SaleRateDetail>();
-                var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(customerId, saleZoneIds, true, false));
+                var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(customerId, new CustomerZoneRateHistoryReader(customerId, saleZoneIds, true, false));
                 var salePriceListManager = new SalePriceListManager();
 
                 int? sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(customerId, effectiveOn, false);

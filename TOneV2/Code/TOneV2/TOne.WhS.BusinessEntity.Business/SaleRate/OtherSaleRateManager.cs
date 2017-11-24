@@ -49,7 +49,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private IEnumerable<SaleRateDetail> GetCustomerZoneOtherRates(OtherSaleRateQuery query, IEnumerable<long> zoneIds, long zoneId, IEnumerable<RateTypeInfo> allRateTypes)
         {
-            var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(query.OwnerId, zoneIds, false, true));
+            var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(query.OwnerId, new CustomerZoneRateHistoryReader(query.OwnerId, zoneIds, false, true));
             IEnumerable<RateTypeInfo> customerZoneRateTypes = GetCustomerZoneRateTypes(query.OwnerId, zoneId, allRateTypes);
             int currencyId = query.IsSystemCurrency ? new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId() : query.CurrencyId;
 

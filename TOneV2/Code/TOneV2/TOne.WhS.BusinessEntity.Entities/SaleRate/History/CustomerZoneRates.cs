@@ -10,11 +10,11 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public CustomerZoneRates()
         {
-            SellingProductZoneRatesByType = new Dictionary<RateTypeKey, Dictionary<int, List<SaleRate>>>();
+            SellingProductZoneRatesByType = new Dictionary<RateTypeKey, List<SaleRate>>();
             CustomerZoneRatesByType = new Dictionary<RateTypeKey, List<SaleRate>>();
         }
 
-        public Dictionary<RateTypeKey, Dictionary<int, List<SaleRate>>> SellingProductZoneRatesByType { get; set; }
+        public Dictionary<RateTypeKey, List<SaleRate>> SellingProductZoneRatesByType { get; set; }
 
         public Dictionary<RateTypeKey, List<SaleRate>> CustomerZoneRatesByType { get; set; }
     }
