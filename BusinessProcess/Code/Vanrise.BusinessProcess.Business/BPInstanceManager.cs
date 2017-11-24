@@ -102,12 +102,14 @@ namespace Vanrise.BusinessProcess.Business
             RequiredPermissionSettings viewInstanceRequiredPermissions = bpDefinitionManager.GetViewInstanceRequiredPermissions(processDefinition, createProcessInput.InputArguments);
             if (viewInstanceRequiredPermissions != null && viewInstanceRequiredPermissions.Entries != null && viewInstanceRequiredPermissions.Entries.Count > 0)
                 viewInstanceRequiredPermissionSetId = new RequiredPermissionSetManager().GetRequiredPermissionSetId(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, viewInstanceRequiredPermissions);
+
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
             string processTitle = createProcessInput.InputArguments.GetTitle();
             if (processTitle != null)
                 processTitle = processTitle.Replace("#BPDefinitionTitle#", processDefinition.Title);
+
             long processInstanceId = dataManager.InsertInstance(processTitle, createProcessInput.ParentProcessID, createProcessInput.CompletionNotifier, processDefinition.BPDefinitionID, createProcessInput.InputArguments,
-                BPInstanceStatus.New, createProcessInput.InputArguments.UserId, createProcessInput.InputArguments.EntityId, viewInstanceRequiredPermissionSetId);
+                BPInstanceStatus.New, createProcessInput.InputArguments.UserId, createProcessInput.InputArguments.EntityId, viewInstanceRequiredPermissionSetId, createProcessInput.TaskId);
             IBPTrackingDataManager dataManagerTracking = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
             dataManagerTracking.Insert(new BPTrackingMessage
             {
@@ -120,7 +122,7 @@ namespace Vanrise.BusinessProcess.Business
             BPInstance bpInstance = GetBPInstance(processInstanceId);
             if (bpInstance != null && isViewedFromUI)
             {
-                VRActionLogger.Current.LogObjectCustomAction(new BPInstanceLoggableEntity(createProcessInput.InputArguments.GetDefinitionTitle()),"Start Process",false, bpInstance);
+                VRActionLogger.Current.LogObjectCustomAction(new BPInstanceLoggableEntity(createProcessInput.InputArguments.GetDefinitionTitle()), "Start Process", false, bpInstance);
             }
             CreateProcessOutput output = new CreateProcessOutput
             {

@@ -41,6 +41,7 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
 
             var createProcessOutput = bpInstanceManager.CreateNewProcess(new BusinessProcess.Entities.CreateProcessInput
             {
+                TaskId = task.TaskId,
                 InputArguments = inputArguments
             }, false);
 

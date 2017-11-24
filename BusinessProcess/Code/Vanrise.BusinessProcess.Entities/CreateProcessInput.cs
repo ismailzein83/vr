@@ -9,6 +9,8 @@ namespace Vanrise.BusinessProcess.Entities
     {
         public long? ParentProcessID { get; set; }
 
+        public Guid? TaskId { get; set; }
+
         public BaseProcessInputArgument InputArguments { get; set; }
 
         public ProcessCompletionNotifier CompletionNotifier { get; set; }

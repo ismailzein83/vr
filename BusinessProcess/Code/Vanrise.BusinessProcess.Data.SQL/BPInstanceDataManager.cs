@@ -81,7 +81,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             if (parentId != default(int))
                 filters.Add(String.Concat(" bp.ParentID = ", parentId.ToString()));
 
-            if(maxTimeStamp != null)
+            if (maxTimeStamp != null)
                 filters.Add(" bp.[timestamp] > @TimestampAfter ");
 
             if (filters.Count > 0)
@@ -93,7 +93,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 queryBuilder.Append(" ORDER BY bp.[ID] DESC");
             else
                 queryBuilder.Append(" ORDER BY bp.[timestamp] ");
-            
+
             queryBuilder.AppendLine();
 
             queryBuilder.Append(" SELECT * FROM #TEMP ");
@@ -102,12 +102,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             queryBuilder.Append(@" SELECT MAX([timestamp]) MaxTimestamp FROM #TEMP ");
 
-            byte[] maxTimeStamp_local = maxTimeStamp; 
+            byte[] maxTimeStamp_local = maxTimeStamp;
             List<BPInstance> bpInstances = new List<BPInstance>();
             ExecuteReaderText(queryBuilder.ToString(),
                 (reader) =>
                 {
-                    if(maxTimeStamp_local == null)
+                    if (maxTimeStamp_local == null)
                     {
                         if (reader.Read())
                             maxTimeStamp_local = GetReaderValue<byte[]>(reader, "MaxGlobalTimeStamp");
@@ -125,7 +125,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 },
                 (cmd) =>
                 {
-                    if(maxTimeStamp_local != null)
+                    if (maxTimeStamp_local != null)
                         cmd.Parameters.Add(new SqlParameter("@TimestampAfter", maxTimeStamp_local));
                 });
             maxTimeStamp = maxTimeStamp_local;
@@ -233,8 +233,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
             if (entityIdsFilter != null)
                 filters.Add(entityIdsFilter);
 
-           string statusesFilter = BuildStatusesFilter(acceptableBPStatuses);
-            if(statusesFilter != null)
+            string statusesFilter = BuildStatusesFilter(acceptableBPStatuses);
+            if (statusesFilter != null)
                 filters.Add(statusesFilter);
 
             queryBuilder.AppendFormat(@"IF Exists ( SELECT top 1 null 	FROM bp.[BPInstance] bp WITH(NOLOCK)
@@ -247,13 +247,13 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
         public long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionId, object inputArguments, BPInstanceStatus executionStatus,
-            int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId)
+            int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId, Guid? taskId)
         {
             object processInstanceId;
             if (ExecuteNonQuerySP("bp.sp_BPInstance_Insert", out processInstanceId, processTitle, parentId, definitionId,
                 inputArguments != null ? Serializer.Serialize(inputArguments) : null,
                 completionNotifier != null ? Serializer.Serialize(completionNotifier) : null,
-                (int)executionStatus, initiatorUserId, entityId, viewInstanceRequiredPermissionSetId) > 0)
+                (int)executionStatus, initiatorUserId, entityId, viewInstanceRequiredPermissionSetId, taskId) > 0)
                 return (long)processInstanceId;
             else
                 return 0;
@@ -272,12 +272,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         public List<BPDefinitionSummary> GetBPDefinitionSummary(IEnumerable<BPInstanceStatus> executionStatus)
         {
-           
+
             string excutionStatusIdsAsString = null;
             if (executionStatus != null && executionStatus.Count() > 0)
-                excutionStatusIdsAsString = string.Join<int>(",", executionStatus.Select(itm=>(int)itm));
+                excutionStatusIdsAsString = string.Join<int>(",", executionStatus.Select(itm => (int)itm));
 
-            return GetItemsSP("[bp].[sp_BPDefinitionSummary_GetUpdated]", BPDefinitionSummaryMapper,  excutionStatusIdsAsString);
+            return GetItemsSP("[bp].[sp_BPDefinitionSummary_GetUpdated]", BPDefinitionSummaryMapper, excutionStatusIdsAsString);
 
         }
         #endregion
@@ -299,6 +299,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
       ,[StatusUpdatedTime]      
       ,[InitiatorUserId]
 	  ,[ServiceInstanceID]
+      ,[TaskId]
 	  ,[timestamp] ";
 
         private BPInstance BPInstanceMapper(IDataReader reader)
@@ -317,7 +318,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 InitiatorUserId = GetReaderValue<int>(reader, "InitiatorUserId"),
                 EntityId = reader["EntityId"] as string,
                 ViewRequiredPermissionSetId = GetReaderValue<int?>(reader, "ViewRequiredPermissionSetId"),
-                ServiceInstanceId = GetReaderValue<Guid?>(reader, "ServiceInstanceID")
+                ServiceInstanceId = GetReaderValue<Guid?>(reader, "ServiceInstanceID"),
+                TaskId = GetReaderValue<Guid?>(reader, "TaskId")
             };
 
             string inputArg = reader["InputArgument"] as string;
@@ -333,7 +335,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
         private BPDefinitionSummary BPDefinitionSummaryMapper(IDataReader reader)
         {
-            return new BPDefinitionSummary() {
+            return new BPDefinitionSummary()
+            {
                 RunningProcessNumber = GetReaderValue<int>(reader, "RunningProcessNumber"),
                 LastProcessCreatedTime = GetReaderValue<DateTime>(reader, "LastProcessCreatedTime"),
                 BPDefinitionID = GetReaderValue<Guid>(reader, "DefinitionID")
