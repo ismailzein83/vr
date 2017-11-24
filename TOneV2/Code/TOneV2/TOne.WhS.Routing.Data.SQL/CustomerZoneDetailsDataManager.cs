@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.Data.SQL
         public DateTime? EffectiveDate { get; set; }
         public bool? IsFuture { get; set; }
 
-        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "SaleRateTypeRuleId" };
+        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "SaleRateTypeRuleId", "SaleRateTypeId", "VersionNumber" };
         public void SaveCustomerZoneDetailsToDB(List<CustomerZoneDetail> customerZoneDetails)
         {
             Object dbApplyStream = InitialiazeStreamForDBApply();
@@ -56,8 +56,8 @@ namespace TOne.WhS.Routing.Data.SQL
             string saleZoneServiceIds = record.SaleZoneServiceIds != null ? string.Join(",", record.SaleZoneServiceIds) : null;
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource,
-                record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds, record.SaleRateTypeRuleId);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource,
+                record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds, record.SaleRateTypeRuleId, record.SaleRateTypeId, record.VersionNumber);
         }
         CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
         {
@@ -71,7 +71,9 @@ namespace TOne.WhS.Routing.Data.SQL
                 SaleZoneId = (Int64)reader["SaleZoneId"],
                 SellingProductId = GetReaderValue<int>(reader, "SellingProductId"),
                 SaleZoneServiceIds = new HashSet<int>((reader["SaleZoneServiceIds"] as string).Split(',').Select(itm => int.Parse(itm))),
-                SaleRateTypeRuleId = GetReaderValue<int?>(reader, "SaleRateTypeRuleId")
+                SaleRateTypeRuleId = GetReaderValue<int?>(reader, "SaleRateTypeRuleId"),
+                SaleRateTypeId = GetReaderValue<int?>(reader, "SaleRateTypeId"),
+                VersionNumber = (int)reader["VersionNumber"]
             };
         }
 
@@ -143,6 +145,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[RateSource]
                                                   ,zd.[SaleZoneServiceIds]
                                                   ,zd.[SaleRateTypeRuleId]
+                                                  ,zd.[SaleRateTypeId]
+                                                  ,zd.[VersionNumber]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredCustomerZoneDetailsByZone = @"                                                       
@@ -155,6 +159,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[RateSource]
                                                   ,zd.[SaleZoneServiceIds]
                                                   ,zd.[SaleRateTypeRuleId]
+                                                  ,zd.[SaleRateTypeId]
+                                                  ,zd.[VersionNumber]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @ZoneList z ON z.ID = zd.SaleZoneID";
 
@@ -168,6 +174,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[RateSource]
                                                   ,zd.[SaleZoneServiceIds]
                                                   ,zd.[SaleRateTypeRuleId]
+                                                  ,zd.[SaleRateTypeId]
+                                                  ,zd.[VersionNumber]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @CustomerZoneList cz ON cz.CustomerId = zd.CustomerId and  cz.SaleZoneId = zd.SaleZoneId";
 

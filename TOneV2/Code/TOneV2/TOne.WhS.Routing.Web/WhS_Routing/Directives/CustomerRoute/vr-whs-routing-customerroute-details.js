@@ -125,6 +125,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                                 LinkedRouteOptionRuleCount: 1
                             };
                         newDataItem.LinkedRouteOptionRuleIds.push(addedItem.Entity.RuleId);
+                        extendRouteOptionDetailObject(newDataItem);
                         gridAPI.itemUpdated(newDataItem);
                     };
 

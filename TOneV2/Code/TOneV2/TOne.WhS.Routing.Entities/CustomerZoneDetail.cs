@@ -26,6 +26,10 @@ namespace TOne.WhS.Routing.Entities
         public HashSet<int> SaleZoneServiceIds { get; set; }
 
         public int? SaleRateTypeRuleId { get; set; }
+
+        public int? SaleRateTypeId { get; set; }
+
+        public int VersionNumber { get; set; }
     }
 
     public class CustomerZoneDetailByZone : Dictionary<long, List<CustomerZoneDetail>>

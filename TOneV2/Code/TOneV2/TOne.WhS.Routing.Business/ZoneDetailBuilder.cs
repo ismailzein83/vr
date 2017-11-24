@@ -127,6 +127,7 @@ namespace TOne.WhS.Routing.Business
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
                         int currencyId = output.GetRecordValue("SaleCurrencyId");
                         int? saleRateTypeRuleId = output.GetRecordValue("SaleRateTypeRuleId");
+                        int? saleRateTypeId = output.GetRecordValue("RateTypeId");
 
                         //rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
                         rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate);
@@ -141,7 +142,9 @@ namespace TOne.WhS.Routing.Business
                             EffectiveRateValue = rateValue,
                             RateSource = customerZoneRate.Source,
                             SaleZoneServiceIds = saleZoneServices,
-                            SaleRateTypeRuleId = saleRateTypeRuleId
+                            SaleRateTypeRuleId = saleRateTypeRuleId,
+                            SaleRateTypeId = saleRateTypeId,
+                            VersionNumber = 0
                         };
 
                         onCustomerZoneDetailAvailable(customerZoneDetail);
@@ -213,6 +216,7 @@ namespace TOne.WhS.Routing.Business
                         decimal rateValue = currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, systemCurrencyId, currencyEffectiveDate);
 
                         int? costRateTypeRuleId = output.GetRecordValue("CostRateTypeRuleId");
+                        int? costRateTypeId = output.GetRecordValue("RateTypeId");
 
                         SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                         {
@@ -223,7 +227,9 @@ namespace TOne.WhS.Routing.Business
                             ExactSupplierServiceIds = exactSupplierZoneServices != null ? new HashSet<int>(exactSupplierZoneServices.Select(itm => itm.ServiceId)) : null,
                             SupplierRateId = supplierRate.SupplierRateId,
                             SupplierRateEED = supplierRate.EED,
-                            CostRateTypeRuleId = costRateTypeRuleId
+                            CostRateTypeRuleId = costRateTypeRuleId,
+                            CostRateTypeId = costRateTypeId,
+                            VersionNumber = 0
                         };
                         if (supplierZoneDetail.ExactSupplierServiceIds != null)
                             supplierZoneDetail.SupplierServiceWeight = exactSupplierZoneServices != null ? zoneServiceConfigManager.GetAllZoneServicesByIds(supplierZoneDetail.ExactSupplierServiceIds).Sum(itm => itm.Settings.Weight) : 0;
