@@ -86,7 +86,7 @@ namespace TOne.WhS.DBSync.Business
         {
             dbSyncDataManager.ApplyCarrierProfilesToTemp(itemsToAdd);
             TotalRowsSuccess = itemsToAdd.Count;
-            Dictionary<string, CarrierProfile> carrierProfiles = dbSyncDataManager.GetCarrierProfiles(true);
+            Dictionary<string, CarrierProfile> carrierProfiles = dbSyncDataManager.GetCarrierProfiles(Context.UseTempTables);
             var carrierProfileManager = new CarrierProfileManager();
             var fileManager = new VRFileManager();
 
@@ -99,8 +99,21 @@ namespace TOne.WhS.DBSync.Business
                 }
                 if (carrierProfile.Settings != null && carrierProfile.Settings.CompanyLogo.HasValue)
                     fileIds.Add(carrierProfile.Settings.CompanyLogo.Value);
+                if (fileIds.Count > 0)
+                    SetFilesUsed(fileIds, carrierProfile.CarrierProfileId);
+            }
+        }
 
-                carrierProfileManager.SetFilesUsed(fileIds, carrierProfile.CarrierProfileId);
+        void SetFilesUsed(List<long> fileIds, int? carrierProfileId)
+        {
+            if (fileIds != null && fileIds.Count > 0)
+            {
+                FileDBSyncDataManager fileManager = new FileDBSyncDataManager(Context.UseTempTables);
+                foreach (var fileId in fileIds)
+                {
+                    var fileSettings = new VRFileSettings { ExtendedSettings = new CarrierProfileFileSettings { CarrierProfileId = carrierProfileId } };
+                    fileManager.SetFileUsedAndUpdateSettings(fileId, fileSettings);
+                }
             }
         }
 

@@ -61,26 +61,28 @@ namespace TOne.WhS.DBSync.Business
                 allCarrierAccounts.TryGetValue(sourceItem.SupplierId, out carrierAccount);
 
             long? fileId = null;
-            if (sourceItem.SourceFileBytes != null)
-            {
-                string[] nameastab = sourceItem.SourceFileName.Split('.');
-                var fileSettings = new VRFileSettings { ExtendedSettings = new TOne.BusinessEntity.Business.PriceListFileSettings { PriceListId = ++TotalRowsSuccess } };
-
-                VRFile file = new VRFile()
-                {
-                    Content = sourceItem.SourceFileBytes,
-                    Name = sourceItem.SourceFileName,
-                    Extension = nameastab[nameastab.Length - 1],
-                    CreatedTime = sourceItem.BED,
-                    IsTemp = false,
-                    Settings = fileSettings,
-                };
-
-                fileId = fileDataManager.ApplyFile(file);
-            }
-
-
+            
             if (currency != null && carrierAccount != null)
+            {
+                int priceListId = ++TotalRowsSuccess;
+                if (sourceItem.SourceFileBytes != null)
+                {
+                    string[] nameastab = sourceItem.SourceFileName.Split('.');
+                    var fileSettings = new VRFileSettings { ExtendedSettings = new TOne.BusinessEntity.Business.PriceListFileSettings { PriceListId = priceListId } };
+
+                    VRFile file = new VRFile()
+                    {
+                        Content = sourceItem.SourceFileBytes,
+                        Name = sourceItem.SourceFileName,
+                        Extension = nameastab[nameastab.Length - 1],
+                        CreatedTime = sourceItem.BED,
+                        IsTemp = false,
+                        Settings = fileSettings,
+                    };
+
+                    fileId = fileDataManager.ApplyFile(file);
+                }
+
                 return new SupplierPriceList
                 {
                     FileId = fileId,
@@ -89,10 +91,11 @@ namespace TOne.WhS.DBSync.Business
                     SourceId = sourceItem.SourceId,
                     CreateTime = sourceItem.BED,
                     EffectiveOn = sourceItem.BED,
-                    PriceListId = TotalRowsSuccess,
+                    PriceListId = priceListId,
                 };
+            }
             else
-            {
+            {                
                 TotalRowsFailed++;
                 //Context.WriteWarning(string.Format("Failed migrating Supplier Pricelist, Source Id: {0}", sourceItem.SourceId));
                 return null;
@@ -120,5 +123,5 @@ namespace TOne.WhS.DBSync.Business
             }
         }
     }
-    
+
 }

@@ -43,7 +43,32 @@ namespace TOne.WhS.DBSync.Data.SQL
             int id = ExecuteNonQuerySP("[common].[sp_File_Insert]", out fileId, file.Name, file.Extension, file.Content, file.ModuleName, file.UserId, file.IsTemp, configId, settingAsString, ToDBNullIfDefault(file.CreatedTime));
             return (id > 0) ? (long)fileId : badresult;
         }
+        public bool SetFileUsedAndUpdateSettings(long fileId, VRFileSettings fileSettings)
+        {
+            Guid? configId = null;
+            string settingAsString = null;
+            if (fileSettings != null)
+            {
+                settingAsString = Serializer.Serialize(fileSettings);
+                if (fileSettings.ExtendedSettings != null)
+                    configId = fileSettings.ExtendedSettings.ConfigId;
+            }
+            return ExecuteNonQueryText(string.Format(query_SetUsedAndUpdateSettings, _UseTempTables ? "File_Temp" : "File"), (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@Id", fileId));
 
+                if (configId.HasValue)
+                    cmd.Parameters.Add(new SqlParameter("@ConfigID", configId));
+                else
+                    cmd.Parameters.Add(new SqlParameter("@ConfigID", DBNull.Value));
+
+                if (!string.IsNullOrEmpty(settingAsString))
+                    cmd.Parameters.Add(new SqlParameter("@Settings", settingAsString));
+                else
+                    cmd.Parameters.Add(new SqlParameter("@Settings", DBNull.Value));
+
+            }) > 0;
+        }
         public long AddFileToTemp(VRFile file)
         {
             object fileId;
@@ -105,6 +130,12 @@ namespace TOne.WhS.DBSync.Data.SQL
 
 
 set identity_insert [common].[file_Temp] off;";
+
+        const string query_SetUsedAndUpdateSettings = @"UPDATE	[common].{0}
+		SET		[IsTemp] = 0,
+				ConfigID = @ConfigID,
+				Settings = @Settings
+		WHERE	ID = @Id";
 
         public string GetConnection()
         {
