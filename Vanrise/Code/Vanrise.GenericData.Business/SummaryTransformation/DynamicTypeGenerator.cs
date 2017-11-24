@@ -62,7 +62,7 @@ namespace Vanrise.GenericData.Business
                     string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
                     CSharpCompilationOutput compilationOutput;
-                    if (!CSharpCompiler.TryCompileClass(classDefinitionBuilder.ToString(), out compilationOutput))
+                    if (!CSharpCompiler.TryCompileClass(string.Format("SummaryTransformation_{0}", summaryTransformationDefinition_Local.Name), classDefinitionBuilder.ToString(), out compilationOutput))
                     {
                         StringBuilder errorsBuilder = new StringBuilder();
                         if (compilationOutput.ErrorMessages != null)

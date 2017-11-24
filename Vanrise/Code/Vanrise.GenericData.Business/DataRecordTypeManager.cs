@@ -325,7 +325,7 @@ namespace Vanrise.GenericData.Business
             var classDefinition = BuildClassDefinition(dataRecordType, out fullTypeName);
 
             CSharpCompilationOutput compilationOutput;
-            if (!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
+            if (!CSharpCompiler.TryCompileClass(String.Format("DataRecordType_{0}", dataRecordType.Name), classDefinition, out compilationOutput))
             {
                 StringBuilder errorsBuilder = new StringBuilder();
                 if (compilationOutput.ErrorMessages != null)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,7 +12,14 @@ namespace Vanrise.Common
 {
     public static class CSharpCompiler
     {
+        static string s_generatedCodePathInDevMode = ConfigurationManager.AppSettings["VRDevMode_GeneratedCodePath"];
+
         public static bool TryCompileClass(string classDefinition, out CSharpCompilationOutput output)
+        {
+            return TryCompileClass(null, classDefinition, out output);
+        }
+
+        public static bool TryCompileClass(string className, string classDefinition, out CSharpCompilationOutput output)
         {
             output = new CSharpCompilationOutput();
             string assemblyName = String.Format("RuntimeAssembly_{0}", Guid.NewGuid().ToString("N"));
@@ -21,10 +29,10 @@ namespace Vanrise.Common
             Microsoft.CSharp.CSharpCodeProvider provider = new Microsoft.CSharp.CSharpCodeProvider(providerOptions);
 
             CompilerParameters parameters = new CompilerParameters();
-          //  parameters.OutputAssembly = assemblyName;
+            //  parameters.OutputAssembly = assemblyName;
             parameters.GenerateExecutable = false;
-            parameters.GenerateInMemory = false;
-            parameters.IncludeDebugInformation = true;
+            parameters.GenerateInMemory = false;           
+            parameters.IncludeDebugInformation = true;            
             //parameters.ReferencedAssemblies.Add("System.dll");
             //parameters.ReferencedAssemblies.Add("System.Data.dll");
 
@@ -54,15 +62,26 @@ namespace Vanrise.Common
                         parameters.ReferencedAssemblies.Add(assembly.Location);
                         referencedAssembliesFullNames.Add(assembly.FullName);
                     }
-                        
+
                 }
                 catch (NotSupportedException ex)
-                { 
+                {
                 }
             }
 
-            CompilerResults results = provider.CompileAssemblyFromSource(parameters, classDefinition);
-            
+            CompilerResults results;
+            if (!string.IsNullOrWhiteSpace(className) && !String.IsNullOrWhiteSpace(s_generatedCodePathInDevMode))
+            {
+                parameters.TempFiles = new TempFileCollection(Environment.GetEnvironmentVariable("TEMP"), true);
+                parameters.TempFiles.KeepFiles = true;
+                string outputFileName = Path.Combine(s_generatedCodePathInDevMode, String.Concat(className.Replace(" ", ""), Guid.NewGuid().ToString().Replace("-","") , ".cs"));
+                File.WriteAllText(outputFileName, classDefinition);
+                results = provider.CompileAssemblyFromFile(parameters, outputFileName);
+            }
+            else
+            {
+                results =  provider.CompileAssemblyFromSource(parameters, classDefinition);
+            }
             if (results.Errors != null && results.Errors.Count > 0)
             {
                 output.ErrorMessages = new List<string>();

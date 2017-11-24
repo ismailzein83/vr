@@ -46,8 +46,9 @@ namespace Vanrise.Analytic.Business
                 measureFullTypeById.Add(measureConfig.AnalyticMeasureConfigId, fullTypeName);
             }
 
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();           
             CSharpCompilationOutput compilationOutput;
-            if (!CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
+            if (!CSharpCompiler.TryCompileClass(String.Format("AnalyticTableMeasures_{0}", analyticTableManager.GetAnalyticTableName(analyticTableId)), codeBuilder.ToString(), out compilationOutput))
             {
                 StringBuilder errorsBuilder = new StringBuilder();
                 if (compilationOutput.ErrorMessages != null)
@@ -109,9 +110,9 @@ namespace Vanrise.Analytic.Business
                 dimensionFullTypeById.Add(dimensionConfig.AnalyticDimensionConfigId, fullTypeName);
             }
 
-
+            AnalyticTableManager analyticTableManager = new AnalyticTableManager();
             CSharpCompilationOutput compilationOutput;
-            if (!CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
+            if (!CSharpCompiler.TryCompileClass(String.Format("AnalyticTableDimensions_{0}", analyticTableManager.GetAnalyticTableName(analyticTableId)), codeBuilder.ToString(), out compilationOutput))
             {
                 StringBuilder errorsBuilder = new StringBuilder();
                 if (compilationOutput.ErrorMessages != null)

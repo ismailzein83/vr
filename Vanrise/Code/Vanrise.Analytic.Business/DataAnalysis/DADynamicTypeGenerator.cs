@@ -43,7 +43,7 @@ namespace Vanrise.Analytic.Business
             }
 
             CSharpCompilationOutput compilationOutput;
-            if (!CSharpCompiler.TryCompileClass(codeBuilder.ToString(), out compilationOutput))
+            if (!CSharpCompiler.TryCompileClass(String.Format("DAProfCalcOutputItemDef_{0}", outputItemDefinitionId.ToString().Replace("-", "")), codeBuilder.ToString(), out compilationOutput))
             {
                 StringBuilder errorsBuilder = new StringBuilder();
                 if (compilationOutput.ErrorMessages != null)

@@ -121,7 +121,7 @@ namespace Vanrise.GenericData.Transformation
             public Guid DataTransformationDefinitionId { get; set; }
         }
 
-        internal DataTransformationRuntimeType GetTransformationRuntimeType(Guid dataTransformationDefinitionId)
+        public DataTransformationRuntimeType GetTransformationRuntimeType(Guid dataTransformationDefinitionId)
         {
             var cacheName = new GetTransformationRuntimeTypeCacheName { DataTransformationDefinitionId = dataTransformationDefinitionId };// String.Format("GetTransformationRuntimeType_{0}", dataTransformationDefinitionId);
             return CacheManagerFactory.GetCacheManager<RuntimeCacheManager>().GetOrCreateObject(cacheName,

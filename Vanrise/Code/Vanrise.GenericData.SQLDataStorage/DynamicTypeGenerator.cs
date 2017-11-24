@@ -175,7 +175,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                     string fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
                     CSharpCompilationOutput compilationOutput;
-                    if (!CSharpCompiler.TryCompileClass(classDefinitionBuilder.ToString(), out compilationOutput))
+                    if (!CSharpCompiler.TryCompileClass(String.Format("SQLRecordStorage_{0}", dataRecordStorage.Name), classDefinitionBuilder.ToString(), out compilationOutput))
                     {
                         StringBuilder errorsBuilder = new StringBuilder();
                         if (compilationOutput.ErrorMessages != null)

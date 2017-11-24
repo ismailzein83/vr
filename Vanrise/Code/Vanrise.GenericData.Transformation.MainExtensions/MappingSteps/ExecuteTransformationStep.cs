@@ -15,21 +15,37 @@ namespace Vanrise.GenericData.Transformation.MainExtensions.MappingSteps
         public List<RecordMapping> RecordsMapping { get; set; }
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
-            context.AddCodeToCurrentInstanceExecutionBlock("var dataTransformer = new Vanrise.GenericData.Transformation.DataTransformer();");
-            context.AddCodeToCurrentInstanceExecutionBlock("var executionOutput =dataTransformer.ExecuteDataTransformation(new Guid(\"{0}\"),(context)=>",this.DataTransformationId);
-            context.AddCodeToCurrentInstanceExecutionBlock("{");
+            context.AddCodeToCurrentInstanceExecutionBlock("var transformationDefinitionManager = new Vanrise.GenericData.Transformation.DataTransformationDefinitionManager();");
+            context.AddCodeToCurrentInstanceExecutionBlock("var dataTransformationRuntimeType = transformationDefinitionManager.GetTransformationRuntimeType(new Guid(\"{0}\"));", this.DataTransformationId);
+            context.AddCodeToCurrentInstanceExecutionBlock("dynamic transformationExecutor = Activator.CreateInstance(dataTransformationRuntimeType.ExecutorType);");
 
             foreach (var recordMapping in this.RecordsMapping)
             {
-                context.AddCodeToCurrentInstanceExecutionBlock(" context.SetRecordValue(\"{0}\", {1});", recordMapping.RecordName, recordMapping.Value);
+                context.AddCodeToCurrentInstanceExecutionBlock("transformationExecutor.{0} = {1};", recordMapping.RecordName, recordMapping.Value);
             }
 
-            context.AddCodeToCurrentInstanceExecutionBlock("});");
+            context.AddCodeToCurrentInstanceExecutionBlock("((Vanrise.GenericData.Transformation.IDataTransformationExecutor)transformationExecutor).Execute();");
 
             foreach (var recordMapping in this.RecordsMapping)
             {
-                context.AddCodeToCurrentInstanceExecutionBlock("{0} = executionOutput.GetRecordValue(\"{1}\");", recordMapping.Value, recordMapping.RecordName);
-            }     
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = transformationExecutor.{1};", recordMapping.Value, recordMapping.RecordName);
+            } 
+
+            //context.AddCodeToCurrentInstanceExecutionBlock("var dataTransformer = new Vanrise.GenericData.Transformation.DataTransformer();");
+            //context.AddCodeToCurrentInstanceExecutionBlock("var executionOutput =dataTransformer.ExecuteDataTransformation(new Guid(\"{0}\"),(context)=>",this.DataTransformationId);
+            //context.AddCodeToCurrentInstanceExecutionBlock("{");
+
+            //foreach (var recordMapping in this.RecordsMapping)
+            //{
+            //    context.AddCodeToCurrentInstanceExecutionBlock(" context.SetRecordValue(\"{0}\", {1});", recordMapping.RecordName, recordMapping.Value);
+            //}
+
+            //context.AddCodeToCurrentInstanceExecutionBlock("});");
+
+            //foreach (var recordMapping in this.RecordsMapping)
+            //{
+            //    context.AddCodeToCurrentInstanceExecutionBlock("{0} = executionOutput.GetRecordValue(\"{1}\");", recordMapping.Value, recordMapping.RecordName);
+            //}     
         }
     }
 }

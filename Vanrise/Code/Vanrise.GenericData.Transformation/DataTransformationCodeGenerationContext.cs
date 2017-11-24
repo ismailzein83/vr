@@ -81,7 +81,7 @@ namespace Vanrise.GenericData.Transformation
             string classDefinition = BuildClassDefinition(out fullTypeName);
 
             CSharpCompilationOutput compilationOutput;
-            if (!CSharpCompiler.TryCompileClass(classDefinition, out compilationOutput))
+            if (!CSharpCompiler.TryCompileClass(String.Format("DataTransformation_{0}", _dataTransformationDefinition.Name), classDefinition, out compilationOutput))
             {
                 runtimeType = null;
                 errorMessages = compilationOutput.ErrorMessages;
