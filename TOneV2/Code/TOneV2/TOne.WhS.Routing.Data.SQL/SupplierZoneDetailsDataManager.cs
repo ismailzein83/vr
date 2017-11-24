@@ -17,7 +17,7 @@ namespace TOne.WhS.Routing.Data.SQL
         public DateTime? EffectiveDate { get; set; }
         public bool? IsFuture { get; set; }
 
-        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds", "SupplierServiceWeight", "SupplierRateId", "SupplierRateEED" };
+        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds", "SupplierServiceWeight", "SupplierRateId", "SupplierRateEED", "CostRateTypeRuleId" };
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -42,9 +42,9 @@ namespace TOne.WhS.Routing.Data.SQL
             string exactSupplierServiceIds = record.ExactSupplierServiceIds != null ? string.Join(",", record.ExactSupplierServiceIds) : null;
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}", record.SupplierId, record.SupplierZoneId,
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", record.SupplierId, record.SupplierZoneId,
                 decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight, record.SupplierRateId,
-                record.SupplierRateEED.HasValue ? GetDateTimeForBCP(record.SupplierRateEED) : "");
+                record.SupplierRateEED.HasValue ? GetDateTimeForBCP(record.SupplierRateEED) : "", record.CostRateTypeRuleId);
         }
         public void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails)
         {
@@ -97,7 +97,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? new HashSet<int>(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 SupplierServiceWeight = GetReaderValue<int>(reader, "SupplierServiceWeight"),
                 SupplierRateId = (long)reader["SupplierRateId"],
-                SupplierRateEED = GetReaderValue<DateTime?>(reader, "SupplierRateEED")
+                SupplierRateEED = GetReaderValue<DateTime?>(reader, "SupplierRateEED"),
+                CostRateTypeRuleId = GetReaderValue<int?>(reader, "CostRateTypeRuleId")
             };
         }
 
@@ -128,6 +129,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SupplierServiceWeight]
                                                   ,zd.[SupplierRateId]
                                                   ,zd.[SupplierRateEED]
+                                                  ,zd.[CostRateTypeRuleId]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)";
 
         const string query_GetFilteredSupplierZoneDetailsBySupplierZones = @"                                                       
@@ -139,6 +141,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SupplierServiceWeight]
                                                   ,zd.[SupplierRateId]
                                                   ,zd.[SupplierRateEED]
+                                                  ,zd.[CostRateTypeRuleId]
                                            FROM [dbo].[SupplierZoneDetail] zd with(nolock)
                                            JOIN @ZoneList z ON z.ID = zd.SupplierZoneId";
         #endregion

@@ -60,7 +60,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 RoutingCodeMatches routingCodeMatches = new Entities.RoutingCodeMatches()
                 {
                     Code = partialCodeMatches.Code,
-                    CodePrefix = partialCodeMatches.CodePrefix,
+                    //CodePrefix = partialCodeMatches.CodePrefix,
                     SupplierCodeMatches = partialCodeMatches.SupplierCodeMatches,
                     SupplierCodeMatchesBySupplier = partialCodeMatches.SupplierCodeMatchesBySupplier,
                     SaleZoneDefintions = new List<SaleZoneDefintion>()

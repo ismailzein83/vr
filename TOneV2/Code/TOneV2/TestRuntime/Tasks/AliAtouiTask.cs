@@ -197,7 +197,7 @@ namespace TOne.WhS.Runtime.Tasks
 
             string optionsDetailsBySupplierAsJSON = this.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
             string OptionsByPolicyAsJSON = this.DeserializeOptionsByPolicy(serializedOptionsByPolicy);
-            string supplierZodeMatchesWithRateAsJSON = this.DeserializeSupplierZodeMatchesWithRate(serializedSupplierZodeMatchesWithRate);
+            //string supplierZodeMatchesWithRateAsJSON = this.DeserializeSupplierZodeMatchesWithRate(serializedSupplierZodeMatchesWithRate);
         }
 
         #endregion
@@ -216,11 +216,11 @@ namespace TOne.WhS.Runtime.Tasks
             return Vanrise.Common.Serializer.Serialize(optionsByPolicy, true);
         }
 
-        private string DeserializeSupplierZodeMatchesWithRate(string serializedSupplierZodeMatchesWithRate)
-        {
-            List<SupplierCodeMatchWithRate> supplierCodeMatchWithRate = codeMatchesDataManager.DeserializeSupplierCodeMatches(serializedSupplierZodeMatchesWithRate);
-            return Vanrise.Common.Serializer.Serialize(supplierCodeMatchWithRate, true);
-        }
+        //private string DeserializeSupplierZodeMatchesWithRate(string serializedSupplierZodeMatchesWithRate)
+        //{
+        //    List<SupplierCodeMatchWithRate> supplierCodeMatchWithRate = codeMatchesDataManager.DeserializeSupplierCodeMatches(serializedSupplierZodeMatchesWithRate);
+        //    return Vanrise.Common.Serializer.Serialize(supplierCodeMatchWithRate, true);
+        //}
 
         #endregion
     }

@@ -126,6 +126,7 @@ namespace TOne.WhS.Routing.Business
 
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
                         int currencyId = output.GetRecordValue("SaleCurrencyId");
+                        int? saleRateTypeRuleId = output.GetRecordValue("SaleRateTypeRuleId");
 
                         //rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
                         rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate);
@@ -139,7 +140,8 @@ namespace TOne.WhS.Routing.Business
                             SaleZoneId = customerZone.SaleZoneId,
                             EffectiveRateValue = rateValue,
                             RateSource = customerZoneRate.Source,
-                            SaleZoneServiceIds = saleZoneServices
+                            SaleZoneServiceIds = saleZoneServices,
+                            SaleRateTypeRuleId = saleRateTypeRuleId
                         };
 
                         onCustomerZoneDetailAvailable(customerZoneDetail);
@@ -210,6 +212,8 @@ namespace TOne.WhS.Routing.Business
                         //rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
                         decimal rateValue = currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, systemCurrencyId, currencyEffectiveDate);
 
+                        int? costRateTypeRuleId = output.GetRecordValue("CostRateTypeRuleId");
+
                         SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                         {
                             SupplierId = supplierInfo.SupplierId,
@@ -218,7 +222,8 @@ namespace TOne.WhS.Routing.Business
                             SupplierServiceIds = supplierZoneServicesWithChildren != null ? new HashSet<int>(supplierZoneServicesWithChildren.Select(itm => itm.ZoneServiceConfigId)) : null,
                             ExactSupplierServiceIds = exactSupplierZoneServices != null ? new HashSet<int>(exactSupplierZoneServices.Select(itm => itm.ServiceId)) : null,
                             SupplierRateId = supplierRate.SupplierRateId,
-                            SupplierRateEED = supplierRate.EED
+                            SupplierRateEED = supplierRate.EED,
+                            CostRateTypeRuleId = costRateTypeRuleId
                         };
                         if (supplierZoneDetail.ExactSupplierServiceIds != null)
                             supplierZoneDetail.SupplierServiceWeight = exactSupplierZoneServices != null ? zoneServiceConfigManager.GetAllZoneServicesByIds(supplierZoneDetail.ExactSupplierServiceIds).Sum(itm => itm.Settings.Weight) : 0;

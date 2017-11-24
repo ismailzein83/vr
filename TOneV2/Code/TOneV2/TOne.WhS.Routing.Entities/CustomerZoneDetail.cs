@@ -16,18 +16,20 @@ namespace TOne.WhS.Routing.Entities
         public int RoutingProductId { get; set; }
 
         public SaleEntityZoneRoutingProductSource RoutingProductSource { get; set; }
-        
+
         public int SellingProductId { get; set; }
 
         public Decimal EffectiveRateValue { get; set; }
 
         public SalePriceListOwnerType RateSource { get; set; }
 
-        public HashSet<int> SaleZoneServiceIds { get; set; } 
+        public HashSet<int> SaleZoneServiceIds { get; set; }
+
+        public int? SaleRateTypeRuleId { get; set; }
     }
-     
+
     public class CustomerZoneDetailByZone : Dictionary<long, List<CustomerZoneDetail>>
-    { 
+    {
 
     }
 

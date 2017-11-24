@@ -364,7 +364,7 @@ namespace TOne.WhS.Routing.Business
                     var optionSupplierZone = new RPRouteOptionSupplierZone
                     {
                         SupplierZoneId = routeOptionRuleTarget.SupplierZoneId,
-                        SupplierCode = routeOptionRuleTarget.SupplierCode,
+                        //SupplierCode = routeOptionRuleTarget.SupplierCode,
                         SupplierRate = routeOptionRuleTarget.SupplierRate,
                         IsBlocked = routeOptionRuleTarget.BlockOption,
                         ExecutedRuleId = routeOptionRuleTarget.ExecutedRuleId,

@@ -23,6 +23,8 @@ namespace TOne.WhS.Routing.Entities
         public long SupplierRateId { get; set; }
 
         public DateTime? SupplierRateEED { get; set; }
+
+        public int? CostRateTypeRuleId { get; set; }
     }
 
     public class SupplierZoneDetailByZone : Dictionary<long, SupplierZoneDetail>

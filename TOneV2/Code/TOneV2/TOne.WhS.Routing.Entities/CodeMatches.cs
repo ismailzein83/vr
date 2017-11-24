@@ -22,7 +22,7 @@ namespace TOne.WhS.Routing.Entities
 
     public class PartialCodeMatches
     {
-        public string CodePrefix { get; set; }
+        //public string CodePrefix { get; set; }
 
         public string Code { get; set; }
 
@@ -33,7 +33,7 @@ namespace TOne.WhS.Routing.Entities
 
     public class RoutingCodeMatches
     {
-        public string CodePrefix { get; set; }
+        //public string CodePrefix { get; set; }
 
         public string Code { get; set; }
 

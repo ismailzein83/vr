@@ -38,7 +38,7 @@ namespace TOne.WhS.Routing.BP.Activities
             ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
-            var codeMatches = dataManager.GetCodeMatches(inputArgument.FromZoneId, inputArgument.ToZoneId);
+            var codeMatches = dataManager.GetRPCodeMatches(inputArgument.FromZoneId, inputArgument.ToZoneId);
             
             long currentZoneId = 0;
             Dictionary<long, SupplierCodeMatchWithRate> currentSupplierCodeMatchesWithRate = null;

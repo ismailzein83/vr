@@ -11,10 +11,10 @@ namespace TOne.WhS.Routing.Entities
         static RPRouteOptionSupplierZone()
         {
             Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RPRouteOptionSupplierZone),
-                "SupplierCode", "SupplierZoneId", "SupplierRate", "ExactSupplierServiceIds", "ExecutedRuleId", "IsBlocked", "SupplierRateId");
+                "SupplierZoneId", "SupplierRate", "ExactSupplierServiceIds", "ExecutedRuleId", "IsBlocked", "SupplierRateId");
         }
 
-        public string SupplierCode { get; set; }
+        //public string SupplierCode { get; set; }
 
         public long SupplierZoneId { get; set; }
 

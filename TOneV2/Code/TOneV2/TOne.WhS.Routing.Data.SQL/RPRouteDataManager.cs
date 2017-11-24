@@ -192,7 +192,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         /// <summary>
         /// SupplierID~SZ1#SZ2#...#SZn~SupplierStatus~...~SupplierServiceWeight|SupplierID~SZ1#SZ2#...#SZn~SupplierStatus~...~SupplierServiceWeight
-        /// SZ1 --> SupplierCode$SupplierZoneId$SupplierRate$SupplierServiceID1@SupplierServiceID2@...@SupplierServiceID1SupplierServiceID1n$IsBlocked$SupplierRateId
+        /// SZ1 --> SupplierZoneId$SupplierRate$SupplierServiceID1@SupplierServiceID2@...@SupplierServiceID1SupplierServiceID1n$IsBlocked$SupplierRateId
         /// </summary>
         /// <param name="optionsDetailsBySupplier"></param>
         /// <returns></returns>
@@ -210,7 +210,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 foreach (var supplierZone in routeOptionSupplier.SupplierZones)
                 {
                     string exactSupplierServiceIdsAsString = supplierZone.ExactSupplierServiceIds != null ? string.Join(SupplierServicesSeparatorAsString, supplierZone.ExactSupplierServiceIds) : string.Empty;
-                    serializedSupplierZones.Add(string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}", SupplierZonePropertiesSeparator, supplierZone.SupplierCode, supplierZone.SupplierZoneId,
+                    serializedSupplierZones.Add(string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}", SupplierZonePropertiesSeparator, supplierZone.SupplierZoneId,
                                                     supplierZone.SupplierRate, exactSupplierServiceIdsAsString, supplierZone.ExecutedRuleId, supplierZone.IsBlocked, supplierZone.SupplierRateId));
                 }
 
@@ -253,15 +253,15 @@ namespace TOne.WhS.Routing.Data.SQL
                         string[] supplierZoneParts = supplierZone.Split(SupplierZonePropertiesSeparator);
 
                         var routeOptionSupplierZone = new RPRouteOptionSupplierZone();
-                        routeOptionSupplierZone.SupplierCode = supplierZoneParts[0];
-                        routeOptionSupplierZone.SupplierZoneId = long.Parse(supplierZoneParts[1]);
-                        routeOptionSupplierZone.SupplierRate = decimal.Parse(supplierZoneParts[2]);
-                        routeOptionSupplierZone.ExecutedRuleId = !string.IsNullOrEmpty(supplierZoneParts[4]) ? int.Parse(supplierZoneParts[4]) : default(int?);
-                        routeOptionSupplierZone.IsBlocked = Boolean.Parse(supplierZoneParts[5]);
-                        routeOptionSupplierZone.SupplierRateId = long.Parse(supplierZoneParts[6]);
+                        //routeOptionSupplierZone.SupplierCode = supplierZoneParts[0];
+                        routeOptionSupplierZone.SupplierZoneId = long.Parse(supplierZoneParts[0]);
+                        routeOptionSupplierZone.SupplierRate = decimal.Parse(supplierZoneParts[1]);
+                        routeOptionSupplierZone.ExecutedRuleId = !string.IsNullOrEmpty(supplierZoneParts[3]) ? int.Parse(supplierZoneParts[3]) : default(int?);
+                        routeOptionSupplierZone.IsBlocked = Boolean.Parse(supplierZoneParts[4]);
+                        routeOptionSupplierZone.SupplierRateId = long.Parse(supplierZoneParts[5]);
 
-                        if (!string.IsNullOrEmpty(supplierZoneParts[3]))
-                            routeOptionSupplierZone.ExactSupplierServiceIds = new HashSet<int>(supplierZoneParts[3].Split(SupplierServicesSeparator).Select(itm => int.Parse(itm)));
+                        if (!string.IsNullOrEmpty(supplierZoneParts[2]))
+                            routeOptionSupplierZone.ExactSupplierServiceIds = new HashSet<int>(supplierZoneParts[2].Split(SupplierServicesSeparator).Select(itm => int.Parse(itm)));
 
                         routeOptionSupplier.SupplierZones.Add(routeOptionSupplierZone);
                     }
