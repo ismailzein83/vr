@@ -180,10 +180,10 @@ namespace Vanrise.BusinessProcess.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Title", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Business Processes", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Message", Width = 50 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Event Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Status" });
 
                 sheet.Rows = new List<ExportExcelRow>();
@@ -196,10 +196,10 @@ namespace Vanrise.BusinessProcess.Business
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.ProcessInstanceID });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreatedTime });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Title });
                             row.Cells.Add(new ExportExcelCell { Value = record.DefinitionTitle });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.LastMessage });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CreatedTime });
                             row.Cells.Add(new ExportExcelCell { Value = record.StatusDescription });
                         }
                     }
