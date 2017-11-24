@@ -12,6 +12,7 @@ namespace Vanrise.Invoice.Entities
     }
     public interface IInvoicePartnerFilterContext
     {
+       // Guid InvoiceSettingId { get; }
         string PartnerId { get; }
     }
 }

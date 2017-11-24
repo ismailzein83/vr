@@ -4,7 +4,7 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-invoice-invoicepartner-selector vr-disabled="scopeModel.isEditMode" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="4" isrequired="true"></vr-invoice-invoicepartner-selector>
+                        <vr-invoice-invoicepartner-selector vr-disabled="scopeModel.isEditMode" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="4" isrequired="true" ismultipleselection ="true"></vr-invoice-invoicepartner-selector>
                         <vr-columns width="1/3row">
                             <vr-select datasource="scopeModel.overidablePartsInfo"
                                        datatextfield="Name"

@@ -37,19 +37,19 @@ namespace Vanrise.Invoice.Web.Controllers
         }
         [HttpPost]
         [Route("AddPartnerInvoiceSetting")]
-        public object AddPartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
+        public object AddPartnerInvoiceSetting(PartnerInvoiceSettingToAdd partnerInvoiceSettingToAdd)
         {
-            if (!DoesUserHaveAssignPartnerAccess(partnerInvoiceSetting.InvoiceSettingID))
+            if (!DoesUserHaveAssignPartnerAccess(partnerInvoiceSettingToAdd.InvoiceSettingID))
                 return GetUnauthorizedResponse();
-            return _manager.AddPartnerInvoiceSetting(partnerInvoiceSetting);
+            return _manager.AddPartnerInvoiceSetting(partnerInvoiceSettingToAdd);
         }
         [HttpPost]
         [Route("UpdatePartnerInvoiceSetting")]
-        public object UpdatePartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
+        public object UpdatePartnerInvoiceSetting(PartnerInvoiceSettingToEdit partnerInvoiceSettingToEdit)
         {
-            if (!DoesUserHaveAssignPartnerAccess(partnerInvoiceSetting.InvoiceSettingID))
+            if (!DoesUserHaveAssignPartnerAccess(partnerInvoiceSettingToEdit.InvoiceSettingID))
                 return GetUnauthorizedResponse();
-            return _manager.UpdatePartnerInvoiceSetting(partnerInvoiceSetting);
+            return _manager.UpdatePartnerInvoiceSetting(partnerInvoiceSettingToEdit);
         }
         [HttpGet]
         [Route("DeletePartnerInvoiceSetting")]

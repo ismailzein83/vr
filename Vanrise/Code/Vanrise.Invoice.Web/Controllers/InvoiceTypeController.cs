@@ -124,5 +124,18 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             return _manager.GetMenualInvoiceBulkActionsDefinitions(invoiceTypeId);
         }
+
+        [HttpGet]
+        [Route("GetPartnerName")]
+        public string GetPartnerName(Guid invoiceTypeId, string partnerId)
+        {
+            return _manager.GetPartnerName(invoiceTypeId, partnerId);
+        }
+        [HttpGet]
+        [Route("GetPartnerInvoiceSettingFilterFQTN")]
+        public string GetPartnerInvoiceSettingFilterFQTN(Guid invoiceTypeId)
+        {
+            return _manager.GetPartnerInvoiceSettingFilterFQTN(invoiceTypeId);
+        }
     }
 }

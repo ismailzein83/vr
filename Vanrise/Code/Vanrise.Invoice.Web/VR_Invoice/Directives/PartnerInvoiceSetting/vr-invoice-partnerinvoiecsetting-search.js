@@ -31,6 +31,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         var gridPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var invoiceSettingId;
+        var invoiceTypeId;
 
         function initializeController() {
             $scope.scopeModel = {};
@@ -41,7 +42,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                         gridAPI.onPartnerInvoiceSettingAdded(partnerInvoiceSettingObj);
                     }
                 };
-                VR_Invoice_PartnerInvoiceSettingService.addPartnerInvoiceSetting(onPartnerInvoiceSettingAdded, invoiceSettingId);
+                VR_Invoice_PartnerInvoiceSettingService.addPartnerInvoiceSetting(onPartnerInvoiceSettingAdded,invoiceTypeId, invoiceSettingId);
             };
 
             $scope.scopeModel.HasAssignPartnerAccess = function () {
@@ -63,6 +64,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 var promises = [];
                 if (payload != undefined) {
                     invoiceSettingId = payload.invoiceSettingId;
+                    invoiceTypeId = payload.invoiceTypeId;
                 }
                 return UtilsService.waitMultiplePromises(promises).finally(function () {
                     loadPartnerInvoiceSettingGrid();
@@ -76,7 +78,10 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
         function getFilterObject() {
             var filter = {
-                InvoiceSettingId: invoiceSettingId
+                invoiceTypeId:invoiceTypeId,
+                query: {
+                    InvoiceSettingId: invoiceSettingId
+                }
             };
             return filter;
         }

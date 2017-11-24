@@ -2,7 +2,7 @@
 app.service('VR_Invoice_PartnerInvoiceSettingService', ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService','VR_Invoice_PartnerInvoiceSettingAPIService',
     function (VRModalService, UtilsService, VRNotificationService, SecurityService, VR_Invoice_PartnerInvoiceSettingAPIService) {
 
-        function addPartnerInvoiceSetting(onPartnerInvoiceSettingAdded, invoiceSettingId) {
+        function addPartnerInvoiceSetting(onPartnerInvoiceSettingAdded, invoiceTypeId,invoiceSettingId) {
             var settings = {
 
             };
@@ -10,11 +10,12 @@ app.service('VR_Invoice_PartnerInvoiceSettingService', ['VRModalService', 'Utils
                 modalScope.onPartnerInvoiceSettingAdded = onPartnerInvoiceSettingAdded;
             };
             var parameters = {
-                invoiceSettingId: invoiceSettingId
+                invoiceSettingId: invoiceSettingId,
+                invoiceTypeId: invoiceTypeId
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/PartnerInvoiceSettingEditor.html', parameters, settings);
         }
-        function editPartnerInvoiceSetting(onPartnerInvoiceSettingUpdated,partnerInvoiceSettingId) {
+        function editPartnerInvoiceSetting(onPartnerInvoiceSettingUpdated, invoiceTypeId,partnerInvoiceSettingId) {
             var settings = {
 
             };
@@ -23,6 +24,7 @@ app.service('VR_Invoice_PartnerInvoiceSettingService', ['VRModalService', 'Utils
             };
             var parameters = {
                 partnerInvoiceSettingId: partnerInvoiceSettingId,
+                invoiceTypeId: invoiceTypeId
             };
 
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/PartnerInvoiceSettingEditor.html', parameters, settings);
@@ -45,6 +47,7 @@ app.service('VR_Invoice_PartnerInvoiceSettingService', ['VRModalService', 'Utils
         return ({
             addPartnerInvoiceSetting: addPartnerInvoiceSetting,
             editPartnerInvoiceSetting: editPartnerInvoiceSetting,
-            deletePartnerInvoiceSetting: deletePartnerInvoiceSetting
+            deletePartnerInvoiceSetting: deletePartnerInvoiceSetting,
+
         });
     }]);

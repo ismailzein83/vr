@@ -71,8 +71,19 @@
                 invoiceTypeId: invoiceTypeId,
             });
         }
-       
-        
+        function GetPartnerName(invoiceTypeId,partnerId)
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetPartnerName"), {
+                invoiceTypeId: invoiceTypeId,
+                partnerId: partnerId
+            });
+        }
+        function GetPartnerInvoiceSettingFilterFQTN(invoiceTypeId)
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetPartnerInvoiceSettingFilterFQTN"), {
+                invoiceTypeId: invoiceTypeId,
+            });
+        }
         return ({
             GetInvoiceType: GetInvoiceType,
             GetFilteredInvoiceTypes: GetFilteredInvoiceTypes,
@@ -88,7 +99,9 @@
             GetInvoicePartnerSelector: GetInvoicePartnerSelector,
             GetInvoiceAction: GetInvoiceAction,
             GetInvoiceTypeExtendedSettings: GetInvoiceTypeExtendedSettings,
-            GetMenualInvoiceBulkActionsDefinitions: GetMenualInvoiceBulkActionsDefinitions
+            GetMenualInvoiceBulkActionsDefinitions: GetMenualInvoiceBulkActionsDefinitions,
+            GetPartnerName: GetPartnerName,
+            GetPartnerInvoiceSettingFilterFQTN: GetPartnerInvoiceSettingFilterFQTN
         });
     }
 

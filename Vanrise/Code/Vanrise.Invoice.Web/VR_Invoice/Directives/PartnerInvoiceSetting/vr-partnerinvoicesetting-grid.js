@@ -29,6 +29,8 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
             this.initializeController = initializeController;
             var gridAPI;
             var invoiceSettingId;
+            var invoiceTypeId;
+            var gridQuery;
             function initializeController() {
 
                 $scope.datastore = [];
@@ -41,12 +43,21 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
 
                     function getDirectiveAPI() {
                         var directiveAPI = {};
-                        directiveAPI.loadGrid = function (query) {
-                            invoiceSettingId = query.InvoiceSettingId;
-                            return gridAPI.retrieveData(query);
+                        directiveAPI.loadGrid = function (payload) {
+                            if (payload != undefined)
+                            {
+                                gridQuery = payload.query;
+                                if (gridQuery != undefined)
+                                {
+                                  invoiceSettingId = gridQuery.InvoiceSettingId;
+                                }
+                                invoiceTypeId = payload.invoiceTypeId;
+                                return gridAPI.retrieveData(gridQuery);
+                            }
+                           
                         };
                         directiveAPI.onPartnerInvoiceSettingAdded = function (item) {
-                            gridAPI.itemAdded(item);
+                            return gridAPI.retrieveData(gridQuery);
                         };
                         return directiveAPI;
                     }
@@ -91,7 +102,7 @@ app.directive("vrPartnerinvoicesettingGrid", ["UtilsService", "VRNotificationSer
                 var onPartnerInvoiceSettingUpdated = function (invoiceSetting) {
                     gridAPI.itemUpdated(invoiceSetting);
                 };
-                VR_Invoice_PartnerInvoiceSettingService.editPartnerInvoiceSetting(onPartnerInvoiceSettingUpdated, dataItem.Entity.PartnerInvoiceSettingId)
+                VR_Invoice_PartnerInvoiceSettingService.editPartnerInvoiceSetting(onPartnerInvoiceSettingUpdated, invoiceTypeId,dataItem.Entity.PartnerInvoiceSettingId)
             }
             function deletePartnerInvoiceSetting(dataItem) {
                 var onPartnerInvoiceSettingDeleted = function () {

@@ -2,13 +2,13 @@
 
     "use strict";
 
-    partnerInvoiceSettingEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_PartnerInvoiceSettingAPIService','VR_Invoice_InvoiceSettingAPIService','VR_Invoice_InvoiceTypeConfigsAPIService'];
+    partnerInvoiceSettingEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VR_Invoice_PartnerInvoiceSettingAPIService','VR_Invoice_InvoiceSettingAPIService','VR_Invoice_InvoiceTypeConfigsAPIService','VR_Invoice_InvoiceTypeAPIService'];
 
-    function partnerInvoiceSettingEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_PartnerInvoiceSettingAPIService, VR_Invoice_InvoiceSettingAPIService, VR_Invoice_InvoiceTypeConfigsAPIService) {
+    function partnerInvoiceSettingEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_PartnerInvoiceSettingAPIService, VR_Invoice_InvoiceSettingAPIService, VR_Invoice_InvoiceTypeConfigsAPIService, VR_Invoice_InvoiceTypeAPIService) {
         var partnerInvoiceSettingId;
         var invoiceSettingId;
         var invoiceSettingEntity;
-
+        var invoiceTypeId;
         $scope.scopeModel = {};
 
         var partnerInvoiceSettingEntity;
@@ -21,6 +21,8 @@
 
         var invoiceSettingPartsConfigs;
 
+        var partnerName;
+        var partnerInvoiceSettingFilterFQTN;
         defineScope();
         loadParameters();
         load();
@@ -30,6 +32,7 @@
             if (parameters != undefined && parameters != null) {
                 partnerInvoiceSettingId = parameters.partnerInvoiceSettingId;
                 invoiceSettingId = parameters.invoiceSettingId;
+                invoiceTypeId = parameters.invoiceTypeId;
             }
             $scope.scopeModel.isEditMode = (partnerInvoiceSettingId != undefined);
         }
@@ -56,15 +59,15 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-          
+
             function addPartnerInvoiceSetting() {
                 $scope.scopeModel.isLoading = true;
                 var partnerInvoiceSettingObject = buildPartnerInvoiceSettingObjFromScope();
                 return VR_Invoice_PartnerInvoiceSettingAPIService.AddPartnerInvoiceSetting(partnerInvoiceSettingObject)
                .then(function (response) {
-                   if (VRNotificationService.notifyOnItemAdded("Partner Invoice Setting", response)) {
+                   if (VRNotificationService.notifyOnItemAdded("Partners", response)) {
                        if ($scope.onPartnerInvoiceSettingAdded != undefined)
-                           $scope.onPartnerInvoiceSettingAdded(response.InsertedObject);
+                           $scope.onPartnerInvoiceSettingAdded();
                        $scope.modalContext.closeModal();
                    }
                })
@@ -100,7 +103,7 @@
 
             if ($scope.scopeModel.isEditMode) {
                 getPartnerInvoiceSetting().then(function () {
-                    UtilsService.waitMultipleAsyncOperations([getInvoiceSettingPartsConfigs,getInvoiceSettingDefinition, getInvoiceSetting]).then(function () {
+                    UtilsService.waitMultipleAsyncOperations([getInvoiceSettingPartsConfigs, getInvoiceSettingDefinition, getInvoiceSetting, getPartnerInvoiceSettingFilterFQTN]).then(function () {
                         loadAllControls();
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -112,7 +115,7 @@
                 });;
             }
             else {
-                UtilsService.waitMultipleAsyncOperations([getInvoiceSettingPartsConfigs,getInvoiceSettingDefinition, getInvoiceSetting]).then(function () {
+                UtilsService.waitMultipleAsyncOperations([getInvoiceSettingPartsConfigs, getInvoiceSettingDefinition, getInvoiceSetting, getPartnerInvoiceSettingFilterFQTN]).then(function () {
                     loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -138,13 +141,19 @@
                 });
             }
 
+            function getPartnerInvoiceSettingFilterFQTN() {
+                return VR_Invoice_InvoiceTypeAPIService.GetPartnerInvoiceSettingFilterFQTN(invoiceTypeId).then(function (response) {
+                    partnerInvoiceSettingFilterFQTN = response;
+                });
+            }
+
         }
         function loadAllControls() {
             function setTitle() {
                 if ($scope.scopeModel.isEditMode)
-                    $scope.title = "Linked Partner";
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(partnerName, 'Linked Partner');
                 else
-                    $scope.title = "Linked Partner";
+                    $scope.title = UtilsService.buildTitleForAddEditor('Linked Partner');
             }
             function loadRuntimeEditor() {
                 if (invoiceSettingDefinition != undefined) {
@@ -156,7 +165,7 @@
                             invoiceTypeId: invoiceSettingEntity != undefined ? invoiceSettingEntity.InvoiceTypeId : undefined,
                             selectedValues: partnerInvoiceSettingEntity != undefined && partnerInvoiceSettingEntity.Details != undefined ? partnerInvoiceSettingEntity.Details.InvoiceSettingParts : undefined,
                             context: getContext(),
-                            invoiceSettingsValues:invoiceSettingEntity != undefined && invoiceSettingEntity.Details != undefined ?  invoiceSettingEntity.Details.InvoiceSettingParts:undefined
+                            invoiceSettingsValues: invoiceSettingEntity != undefined && invoiceSettingEntity.Details != undefined ? invoiceSettingEntity.Details.InvoiceSettingParts : undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
                     });
@@ -189,10 +198,8 @@
                         }
                     }
                 }
-                if(partnerInvoiceSettingEntity != undefined && partnerInvoiceSettingEntity.Details != undefined && partnerInvoiceSettingEntity.Details.InvoiceSettingParts != undefined)
-                {
-                    for(var prob in partnerInvoiceSettingEntity.Details.InvoiceSettingParts)
-                    {
+                if (partnerInvoiceSettingEntity != undefined && partnerInvoiceSettingEntity.Details != undefined && partnerInvoiceSettingEntity.Details.InvoiceSettingParts != undefined) {
+                    for (var prob in partnerInvoiceSettingEntity.Details.InvoiceSettingParts) {
                         var partInfo = UtilsService.getItemByVal($scope.scopeModel.overidablePartsInfo, prob, "Id");
                         if (partInfo != undefined)
                             $scope.scopeModel.selectedOveridablePartsInfo.push(partInfo);
@@ -205,16 +212,24 @@
                     var partnerSelectorPayload = {
                         invoiceTypeId: invoiceSettingEntity != undefined ? invoiceSettingEntity.InvoiceTypeId : undefined,
                         partnerInvoiceFilters: [{
-                            $type: "Vanrise.Invoice.Business.InvoicePartnerFilter.NotAssignedPartnerToInvoiceSettingFilter, Vanrise.Invoice.Business",
-                            EditablePartnerId: partnerInvoiceSettingEntity != undefined ? partnerInvoiceSettingEntity.PartnerId : undefined
+                            $type: partnerInvoiceSettingFilterFQTN,
+                            EditablePartnerId: partnerInvoiceSettingEntity != undefined ? partnerInvoiceSettingEntity.PartnerId : undefined,
+                            InvoiceTypeId:invoiceTypeId
                         }]
                     };
                     if (partnerInvoiceSettingEntity != undefined) {
-                        partnerSelectorPayload.selectedIds = partnerInvoiceSettingEntity.PartnerId;
+                        partnerSelectorPayload.selectedIds = [partnerInvoiceSettingEntity.PartnerId];
                     }
                     VRUIUtilsService.callDirectiveLoad(partnerSelectorAPI, partnerSelectorPayload, partnerSelectorPayloadLoadDeferred);
                 });
                 return partnerSelectorPayloadLoadDeferred.promise;
+            }
+            function getPartnerName() {
+                if (partnerInvoiceSettingEntity != undefined) {
+                    return VR_Invoice_InvoiceTypeAPIService.GetPartnerName(invoiceTypeId, partnerInvoiceSettingEntity.PartnerId).then(function (response) {
+                        partnerName = response;
+                    });
+                }
             }
             function loadStaticData() {
                 if (partnerInvoiceSettingEntity != undefined) {
@@ -222,32 +237,29 @@
             }
 
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerSelectorDirective, loadRuntimeEditor])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-              .finally(function () {
-                  $scope.scopeModel.isLoading = false;
-              });
+            return UtilsService.waitMultipleAsyncOperations([getPartnerName, loadStaticData, loadPartnerSelectorDirective, loadRuntimeEditor]).then(function () {
+                setTitle();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            })
+  .finally(function () {
+      $scope.scopeModel.isLoading = false;
+  });
         }
         function getInvoiceSettingPartsConfigs() {
             return VR_Invoice_InvoiceTypeConfigsAPIService.GetInvoiceSettingPartsConfigs().then(function (response) {
                 invoiceSettingPartsConfigs = response;
             });
         }
-        function getContext()
-        {
+        function getContext() {
             var context = {
                 setVisibility: function (part) {
-                    if(part != undefined)
-                    {
-                        for(var i=0;i<$scope.scopeModel.selectedOveridablePartsInfo.length;i++)
-                        {
-                           var partInfo = $scope.scopeModel.selectedOveridablePartsInfo[i];
-                           if (partInfo.Id == part.PartConfigId)
-                           {
-                               return true;
-                           }
+                    if (part != undefined) {
+                        for (var i = 0; i < $scope.scopeModel.selectedOveridablePartsInfo.length; i++) {
+                            var partInfo = $scope.scopeModel.selectedOveridablePartsInfo[i];
+                            if (partInfo.Id == part.PartConfigId) {
+                                return true;
+                            }
                         }
                     }
                     return false;
@@ -256,15 +268,20 @@
             return context;
         }
         function buildPartnerInvoiceSettingObjFromScope() {
-            var partnerObject = partnerSelectorAPI.getSelectedIds();
             var obj = {
-                InvoiceSettingID: partnerInvoiceSettingEntity != undefined ? partnerInvoiceSettingEntity.InvoiceSettingID : invoiceSettingId,
-                PartnerInvoiceSettingId: partnerInvoiceSettingId,
-                PartnerId: partnerObject != undefined ? partnerObject.selectedIds : undefined,
                 Details: {
-                    InvoiceSettingParts: runtimeEditorAPI != undefined?runtimeEditorAPI.getData():undefined
+                    InvoiceSettingParts: runtimeEditorAPI != undefined ? runtimeEditorAPI.getData() : undefined
                 }
             };
+            if (partnerInvoiceSettingEntity != undefined) {
+                obj.PartnerInvoiceSettingId = partnerInvoiceSettingId;
+                obj.InvoiceSettingID = partnerInvoiceSettingEntity.InvoiceSettingID;
+            }
+            else {
+                var partnerObject = partnerSelectorAPI.getSelectedIds();
+                obj.InvoiceSettingID = invoiceSettingId;
+                obj.PartnerIds = partnerObject != undefined ? partnerObject.selectedIds : undefined;
+            }
             return obj;
         }
     }

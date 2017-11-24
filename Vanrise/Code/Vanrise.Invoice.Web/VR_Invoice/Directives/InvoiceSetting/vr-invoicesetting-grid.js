@@ -49,7 +49,8 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                     drillDownDefinition.loadDirective = function (directiveAPI, invoiceSettingItem) {
                         invoiceSettingItem.partnerInvoiceSettingGridAPI = directiveAPI;
                         var query = {
-                            invoiceSettingId: invoiceSettingItem.Entity.InvoiceSettingId
+                            invoiceSettingId: invoiceSettingItem.Entity.InvoiceSettingId,
+                            invoiceTypeId: invoiceSettingItem.Entity.InvoiceTypeId,
                         };
                         return invoiceSettingItem.partnerInvoiceSettingGridAPI.load(query);
                     };

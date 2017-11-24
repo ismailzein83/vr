@@ -28,60 +28,57 @@ namespace Vanrise.Invoice.Business
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, PartnerInvoiceSettingDetailMapper));
         }
-        public Vanrise.Entities.InsertOperationOutput<PartnerInvoiceSettingDetail> AddPartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
+        public Vanrise.Entities.InsertOperationOutput<PartnerInvoiceSettingDetail> AddPartnerInvoiceSetting(PartnerInvoiceSettingToAdd partnerInvoiceSettingToAdd)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<PartnerInvoiceSettingDetail>();
 
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            if (!CheckIfPartnerAssignedToInvoiceSetting(partnerInvoiceSetting.PartnerId, partnerInvoiceSetting.InvoiceSettingID))
-            {
+            string errorMessage;
+            if (ValidatePartnerInvoiceSetting(partnerInvoiceSettingToAdd.PartnerIds, partnerInvoiceSettingToAdd.InvoiceSettingID, out errorMessage))
+            {                
                 IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
-                partnerInvoiceSetting.PartnerInvoiceSettingId = Guid.NewGuid();
-                if (dataManager.InsertPartnerInvoiceSetting(partnerInvoiceSetting))
+                foreach(var partnerId in partnerInvoiceSettingToAdd.PartnerIds)
                 {
-                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                    insertOperationOutput.InsertedObject = PartnerInvoiceSettingDetailMapper(partnerInvoiceSetting);
-                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    dataManager.InsertPartnerInvoiceSetting(Guid.NewGuid(), partnerInvoiceSettingToAdd.InvoiceSettingID, partnerId, partnerInvoiceSettingToAdd.Details);
                 }
-                else
-                {
-                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-                }
-            }else
+                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            else
             {
-                insertOperationOutput.Message = "Partner already linked to another invoice setting.";
+                insertOperationOutput.Message = errorMessage;
                 insertOperationOutput.ShowExactMessage = true;
             }
             return insertOperationOutput;
         }
-        public Vanrise.Entities.UpdateOperationOutput<PartnerInvoiceSettingDetail> UpdatePartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
+        public Vanrise.Entities.UpdateOperationOutput<PartnerInvoiceSettingDetail> UpdatePartnerInvoiceSetting(PartnerInvoiceSettingToEdit partnerInvoiceSettingToEdit)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<PartnerInvoiceSettingDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            if (!CheckIfPartnerAssignedToInvoiceSetting(partnerInvoiceSetting.PartnerId, partnerInvoiceSetting.InvoiceSettingID, partnerInvoiceSetting.PartnerInvoiceSettingId))
+            var partnerInvoiceSetting = GetPartnerInvoiceSetting(partnerInvoiceSettingToEdit.PartnerInvoiceSettingId);
+            string errorMessage;
+
+            if (ValidatePartnerInvoiceSetting(partnerInvoiceSetting.PartnerId, partnerInvoiceSetting.InvoiceSettingID, out errorMessage, partnerInvoiceSettingToEdit.PartnerInvoiceSettingId))
             {
                 IPartnerInvoiceSettingDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IPartnerInvoiceSettingDataManager>();
-
-                if (dataManager.UpdatePartnerInvoiceSetting(partnerInvoiceSetting))
+                if (dataManager.UpdatePartnerInvoiceSetting(partnerInvoiceSetting.PartnerInvoiceSettingId, partnerInvoiceSettingToEdit.Details))
                 {
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    updateOperationOutput.UpdatedObject = PartnerInvoiceSettingDetailMapper(partnerInvoiceSetting);
                     CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    updateOperationOutput.UpdatedObject = PartnerInvoiceSettingDetailMapper(GetPartnerInvoiceSetting(partnerInvoiceSettingToEdit.PartnerInvoiceSettingId));
                 }
                 else
                 {
                     updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
                 }
-            }
-            else
+            }else
             {
-                updateOperationOutput.Message = "Partner already linked to another invoice setting.";
+                updateOperationOutput.Message = errorMessage;
                 updateOperationOutput.ShowExactMessage = true;
             }
-
             return updateOperationOutput;
         }
         public Vanrise.Entities.DeleteOperationOutput<object> DeletePartnerInvoiceSetting(Guid partnerInvoiceSettingId)
@@ -129,14 +126,34 @@ namespace Vanrise.Invoice.Business
             }
             return null;
         }
-        public bool CheckIfPartnerAssignedToInvoiceSetting(string partnerId, Guid invoiceSettingId,  Guid? partnerInvoiceSettingId = null)
+        public bool ValidatePartnerInvoiceSetting(List<string> partnerIds, Guid invoiceSettingId,out string errorMessage, Guid? partnerInvoiceSettingId = null)
         {
             InvoiceSettingManager invoiceSettingManager = new InvoiceSettingManager();
             var invoiceTypeId = invoiceSettingManager.GetSettingInvoiceTypeId(invoiceSettingId);
+            errorMessage = null;
+            if (partnerIds == null)
+            {
+                errorMessage = "No partners selected.";
+                return false;
+            }
+            foreach(var partnerId in partnerIds)
+            {
+                if (!ValidatePartnerInvoiceSetting(partnerId, invoiceTypeId, out errorMessage, partnerInvoiceSettingId))
+                    return false;
+            }
+            return true;
+        }
+        public bool ValidatePartnerInvoiceSetting(string partnerId, Guid invoiceTypeId, out string errorMessage, Guid? partnerInvoiceSettingId = null)
+        {
+            errorMessage = null;
+           
             var partnerInvoiceSettings = GetPartnerInvoiceSettingsByInvoiceTypeId(invoiceTypeId);
-            if (partnerInvoiceSettings != null && partnerInvoiceSettings.Any(x => x.PartnerId == partnerId && (!partnerInvoiceSettingId.HasValue || partnerInvoiceSettingId.Value != x.PartnerInvoiceSettingId)))
-                return true;
-            return false;
+            if (partnerInvoiceSettings != null && partnerInvoiceSettings.Any(x => partnerId == x.PartnerId && (!partnerInvoiceSettingId.HasValue || partnerInvoiceSettingId.Value != x.PartnerInvoiceSettingId)))
+            {
+                errorMessage = "Partner already linked to another invoice setting.";
+                return false;
+            }
+            return true;
         }
         public List<PartnerInvoiceSetting> GetPartnerInvoiceSettingsByInvoiceTypeId(Guid invoiceTypeId)
         {

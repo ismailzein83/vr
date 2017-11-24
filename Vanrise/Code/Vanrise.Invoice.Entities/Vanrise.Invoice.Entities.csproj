@@ -156,6 +156,8 @@
     <Compile Include="PartnerInvoiceSetting\PartnerInvoiceSetting.cs" />
     <Compile Include="PartnerInvoiceSetting\PartnerInvoiceSettingDetail.cs" />
     <Compile Include="PartnerInvoiceSetting\PartnerInvoiceSettingQuery.cs" />
+    <Compile Include="PartnerInvoiceSetting\PartnerInvoiceSettingToAdd.cs" />
+    <Compile Include="PartnerInvoiceSetting\PartnerInvoiceSettingToEdit.cs" />
     <Compile Include="PartnerInvoiceType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDLCBankDetails.cs" />

@@ -10,6 +10,7 @@ namespace Vanrise.Invoice.Entities
     {
         public virtual string PartnerSelector { get; set; }
         public virtual string PartnerFilterSelector { get; set; }
+        public virtual string PartnerInvoiceSettingFilterFQTN { get; set; }
         public abstract string GetPartnerName(IPartnerNameManagerContext context);
         public virtual string GetFullPartnerName(IPartnerNameManagerContext context)
         {

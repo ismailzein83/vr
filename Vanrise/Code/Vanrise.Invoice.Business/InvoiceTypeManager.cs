@@ -427,6 +427,16 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceBulkActionDefinitionEntities;
         }
+        public string GetPartnerName(Guid invoiceTypeId, string partnerId)
+        {
+            PartnerManager partnerManager = new PartnerManager();
+            return partnerManager.GetPartnerName(invoiceTypeId, partnerId);
+        }
+        public string GetPartnerInvoiceSettingFilterFQTN(Guid invoiceTypeId)
+        {
+            PartnerManager partnerManager = new PartnerManager();
+            return partnerManager.GetPartnerInvoiceSettingFilterFQTN(invoiceTypeId);
+        }
         public InvoiceAttachment GetInvoiceAttachment(Guid invoiceTypeId, Guid invoiceAttachmentId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);

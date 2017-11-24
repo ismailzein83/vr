@@ -29,22 +29,22 @@ namespace Vanrise.Invoice.Data.SQL
         {
             return base.IsDataUpdated("VR_Invoice.PartnerInvoiceSetting", ref updateHandle);
         }
-        public bool InsertPartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
+        public bool InsertPartnerInvoiceSetting(Guid invoicePartnerSettingId, Guid invoiceSettingId, string partnerId, PartnerInvoiceSettingDetails partnerInvoiceSettingDetails)
         {
-            string serializedObj = null;
-            if (partnerInvoiceSetting.Details != null)
-                serializedObj = Vanrise.Common.Serializer.Serialize(partnerInvoiceSetting.Details);
+            string serializedPartnerInvoiceSettingDetails = null;
+            if (partnerInvoiceSettingDetails != null)
+                serializedPartnerInvoiceSettingDetails = Vanrise.Common.Serializer.Serialize(partnerInvoiceSettingDetails);
 
-            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_PartnerInvoiceSetting_Insert",partnerInvoiceSetting.PartnerInvoiceSettingId, partnerInvoiceSetting.PartnerId, partnerInvoiceSetting.InvoiceSettingID, serializedObj);
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_PartnerInvoiceSetting_Insert", invoicePartnerSettingId, partnerId, invoiceSettingId, serializedPartnerInvoiceSettingDetails);
             return (affectedRows > -1);
         }
-        public bool UpdatePartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting)
+        public bool UpdatePartnerInvoiceSetting(Guid partnerInvoiceSettingId, PartnerInvoiceSettingDetails partnerInvoiceSettingDetails)
         {
             string serializedObj = null;
-            if (partnerInvoiceSetting.Details != null)
-                serializedObj = Vanrise.Common.Serializer.Serialize(partnerInvoiceSetting.Details);
+            if (partnerInvoiceSettingDetails != null)
+                serializedObj = Vanrise.Common.Serializer.Serialize(partnerInvoiceSettingDetails);
 
-            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_PartnerInvoiceSetting_Update", partnerInvoiceSetting.PartnerInvoiceSettingId, partnerInvoiceSetting.PartnerId, partnerInvoiceSetting.InvoiceSettingID, serializedObj);
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_PartnerInvoiceSetting_Update", partnerInvoiceSettingId, serializedObj);
             return (affectedRows > -1 );
         }
         public bool DeletePartnerInvoiceSetting(Guid partnerInvoiceSettingId)

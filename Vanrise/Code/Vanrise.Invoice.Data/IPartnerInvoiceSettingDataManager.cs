@@ -11,8 +11,8 @@ namespace Vanrise.Invoice.Data
     {
         List<PartnerInvoiceSetting> GetPartnerInvoiceSettings();
         bool ArePartnerInvoiceSettingsUpdated(ref object updateHandle);
-        bool InsertPartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting);
-        bool UpdatePartnerInvoiceSetting(PartnerInvoiceSetting partnerInvoiceSetting);
+        bool InsertPartnerInvoiceSetting(Guid invoicePartnerSettingId, Guid invoiceSettingId, string partnerId, PartnerInvoiceSettingDetails partnerInvoiceSettingDetails);
+        bool UpdatePartnerInvoiceSetting(Guid partnerInvoiceSettingId, PartnerInvoiceSettingDetails partnerInvoiceSettingDetails);
         bool DeletePartnerInvoiceSetting(Guid partnerInvoiceSettingId);
         bool InsertOrUpdateInvoiceSetting(Guid partnerInvoiceSettingId, string partnerId, Guid invoiceSettingId);
 
