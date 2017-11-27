@@ -45,6 +45,7 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
             var directiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var context;
             var extendedSettings;
+            var partnerInvoiceFilters;
             function initializeController() {
 
                 ctrl.onDirectiveReady = function (api) {
@@ -71,10 +72,13 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
 
                 api.load = function (payload) {
                     var selectedIds;
+                    var filter;
                     if (payload != undefined) {
                         context = payload.context;
                         selectedIds = payload.selectedIds;
                         extendedSettings = payload.extendedSettings;
+                        partnerInvoiceFilters = payload.partnerInvoiceFilters;
+                        
                     }
                     var promises = [];
 
@@ -107,7 +111,12 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
                 var filter = {};
 
                 filter.Filters = [];
-
+                if (partnerInvoiceFilters != undefined) {
+                    for (var i = 0; i < partnerInvoiceFilters.length; i++) {
+                        var partnerInvoiceFilter = partnerInvoiceFilters[i];
+                        filter.Filters.push(partnerInvoiceFilter);
+                    }
+                }
                 var financialAccounts = {
                     $type: 'Retail.Invoice.Business.InvoiceEnabledAccountFilter, Retail.Invoice.Business',
                 };

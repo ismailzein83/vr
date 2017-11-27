@@ -11,5 +11,7 @@ namespace Retail.BusinessEntity.Business
     {
         public Guid AccountBEDefinitionId { get; set; }
         public long AccountId { get; set; }
+
+        public string FinancialAccountId { get; set; }
     }
 }

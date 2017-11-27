@@ -61,6 +61,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
             var effectiveDate;
             var isEffectiveInFuture;
             var filter;
+            var partnerInvoiceFilters;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -93,6 +94,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                 Status: status,
                                 EffectiveDate: effectiveDate,
                                 IsEffectiveInFuture: isEffectiveInFuture,
+                                Filters: partnerInvoiceFilters
                             },
                             setItemsSelected : true
                         };
@@ -121,6 +123,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                         effectiveDate = payload.effectiveDate;
                         isEffectiveInFuture = payload.isEffectiveInFuture;
                         filter = payload.filter;
+                        partnerInvoiceFilters = payload.partnerInvoiceFilters;
                     }
 
                     var promises = [];
@@ -158,6 +161,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                             if (attrs.ismultipleselection == undefined) {
                                 accountIds = [accountSelectedIds];
                             }
+                           
                             var financialAccountPayload = {
                                 accountBEDefinitionId: accountBEDefinitionId,
                                 selectedIds: selectedIds,
@@ -166,6 +170,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                     Status: status,
                                     EffectiveDate: effectiveDate,
                                     IsEffectiveInFuture: isEffectiveInFuture,
+                                    Filters: partnerInvoiceFilters
                                 },
                                 setItemsSelected: true
                             };
@@ -180,6 +185,16 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                         var accountSelectorFilter = filter != undefined ? filter : {};
                         if (accountSelectorFilter.Filters == undefined)
                             accountSelectorFilter.Filters = [];
+
+                        if(partnerInvoiceFilters != undefined)
+                        {
+                            for (var i = 0; i < partnerInvoiceFilters.length; i++) {
+                                var partnerInvoiceFilter = partnerInvoiceFilters[i];
+                                accountSelectorFilter.Filters.push(partnerInvoiceFilter);
+                            }
+                        }
+
+
                         var selectorPayload = {
                             AccountBEDefinitionId: accountBEDefinitionId,
                             selectedIds: accountSelectedIds,

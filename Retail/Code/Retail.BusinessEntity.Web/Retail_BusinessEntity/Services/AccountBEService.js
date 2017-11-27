@@ -16,7 +16,7 @@
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onAccountAdded = onAccountAdded
+                modalScope.onAccountAdded = onAccountAdded;
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);

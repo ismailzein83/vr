@@ -100,20 +100,27 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
 
                 api.load = function (payload) {
                     var selectedIds;
+                    var partnerInvoiceFilters;
                     if (payload != undefined) {
                         context = payload.context;
+                        var filters = [];
                         if (payload.extendedSettings != undefined)
                         {
                             accountBEDefinitionId = payload.extendedSettings.AccountBEDefinitionId;
                         }
                         if (payload.filter != undefined)
                         {
+                            if (payload.filter.Filters != undefined)
+                            {
+                                filters = payload.filter.Filters;
+                            }
                             status = payload.filter.Status;
                             effectiveDate = payload.filter.EffectiveDate;
                             isEffectiveInFuture = payload.filter.IsEffectiveInFuture;
                         }
                         selectedIds = payload.selectedIds;
-                       
+                        partnerInvoiceFilters = payload.partnerInvoiceFilters;
+
                     }
 
                     var promises = [];
@@ -121,6 +128,12 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
                     promises.push(loadFinancialAccountSelector());
 
                     function loadFinancialAccountSelector() {
+
+                        var accountSelectorFilter = filters != undefined ? filters : [];
+                        accountSelectorFilter.push({
+                            $type: "Retail.BusinessEntity.Business.Filters.AccountInvoiceStatusFilter ,Retail.BusinessEntity.Business",
+                            Status: status
+                        });
                         var financialAccountPayload = {
                             AccountBEDefinitionId: accountBEDefinitionId,
                             selectedIds: selectedIds,
@@ -128,11 +141,10 @@ app.directive('retailMultinetAccountInvoiceSelector', ['VRUIUtilsService', 'Util
                             effectiveDate :effectiveDate,
                             isEffectiveInFuture: isEffectiveInFuture,
                             filter: {
-                                Filters: [{
-                                    $type: "Retail.BusinessEntity.Business.Filters.AccountInvoiceStatusFilter ,Retail.BusinessEntity.Business",
-                                    Status: status
-                                }]
-                            }
+                                Filters: accountSelectorFilter
+                            },
+                            financialAccountFilters: filters,
+                            partnerInvoiceFilters: partnerInvoiceFilters
                         };
                         return financialAccountSelectorAPI.load(financialAccountPayload);
                     }

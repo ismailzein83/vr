@@ -49,7 +49,13 @@ namespace Retail.Invoice.Business
                 return "retail-invoice-financialaccount-selector";
             }
         }
-
+        public override string PartnerInvoiceSettingFilterFQTN
+        {
+            get
+            {
+                return "Retail.Invoice.Business.AssignedFinancialAccountPartnerInvoiceSettingFilter, Retail.Invoice.Business";
+            }
+        }
         public override dynamic GetActualPartnerId(IActualPartnerContext context)
         {
             return Convert.ToInt32(context.PartnerId);

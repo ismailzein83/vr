@@ -209,7 +209,8 @@ namespace Retail.BusinessEntity.Business
                             FinancialAccountFilterContext context = new FinancialAccountFilterContext
                             {
                                 AccountBEDefinitionId = accountBEDefinitionId,
-                                AccountId = accountId
+                                AccountId = accountId,
+                                FinancialAccountId = financialAccountData.FinancialAccountId
                             };
                             if (!filter.Filters.Any(y => y.IsMatched(context)))
                                 return false;

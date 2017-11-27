@@ -60,6 +60,13 @@ namespace Retail.MultiNet.Business
                 return "retail-multinet-account-invoice-selector";
             }
         }
+        public override string PartnerInvoiceSettingFilterFQTN
+        {
+            get
+            {
+                return "Retail.MultiNet.Business.AssignedFinancialAccountToInvoiceSettingFilter, Retail.MultiNet.Business";
+            }
+        }
 
         public override dynamic GetActualPartnerId(IActualPartnerContext context)
         {
@@ -167,12 +174,16 @@ namespace Retail.MultiNet.Business
                                         string accountNumbers = string.Join(",", accountCompanyContact.PhoneNumbers);
                                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.AccountNumber, accountNumbers, true);
                                     }
-                                    if(accountCompanyContact.ContactName  != null)
+                                    if (accountCompanyContact.ContactName != null)
                                     {
-                                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Attn, accountCompanyContact.ContactName, true);
+                                        string contactName = "";
+                                        if (accountCompanyContact.Salutation.HasValue)
+                                        {
+                                            contactName = string.Format("{0} ", Utilities.GetEnumDescription(accountCompanyContact.Salutation.Value));
+                                        }
+                                        contactName += accountCompanyContact.ContactName;
+                                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.Attn, contactName, true);
                                     }
-
-                                    
                                 }
                             }
                         }

@@ -120,6 +120,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssignedFinancialAccountToInvoiceSettingFilter.cs" />
     <Compile Include="Convertors\AccountConvertor.cs" />
     <Compile Include="Convertors\MigrationConvertors\BranchConvertor.cs" />
     <Compile Include="Convertors\MigrationConvertors\CompanyConvertor.cs" />

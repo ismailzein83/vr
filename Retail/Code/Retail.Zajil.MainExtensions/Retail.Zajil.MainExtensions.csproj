@@ -87,6 +87,7 @@
     <Compile Include="Account\InvoiceEnabledAccountFilter.cs" />
     <Compile Include="Convertors\DIDConvertor.cs" />
     <Compile Include="Convertors\InvoiceGPInfoConvertor.cs" />
+    <Compile Include="InvoiceExtensions\AssignedFinancialACcountPartnerInvoiceSettingFilter.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceGenerator.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberInvoiceSettings.cs" />
     <Compile Include="InvoiceExtensions\ZajilSubscriberPartnerSettings.cs" />

@@ -50,7 +50,13 @@ namespace Retail.Zajil.MainExtensions
                 return "retail-invoice-financialaccount-selector";
             }
         }
-
+        public override string PartnerInvoiceSettingFilterFQTN
+        {
+            get
+            {
+                return "Retail.Zajil.MainExtensions.AssignedFinancialAccountPartnerInvoiceSettingFilter, Retail.Zajil.MainExtensions";
+            }
+        }
         public override dynamic GetActualPartnerId(IActualPartnerContext context)
         {
             return Convert.ToInt32(context.PartnerId);

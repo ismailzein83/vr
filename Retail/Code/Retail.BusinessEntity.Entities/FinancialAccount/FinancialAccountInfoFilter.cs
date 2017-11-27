@@ -22,6 +22,7 @@ namespace Retail.BusinessEntity.Entities
     }
     public interface IFinancialAccountFilterContext
     {
+        string FinancialAccountId { get; set; }
          Guid AccountBEDefinitionId { get; set; }
          long AccountId { get; set; }
     }

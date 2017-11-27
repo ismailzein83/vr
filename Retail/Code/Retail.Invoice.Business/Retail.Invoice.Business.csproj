@@ -71,6 +71,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\AssignedFinancialAccountPartnerInvoiceSettingFilter.cs" />
     <Compile Include="Extensions\InvoiceAccountStatusChangedHandler.cs" />
     <Compile Include="Extensions\RetailSubscriberInvoiceGenerator.cs" />
     <Compile Include="Extensions\RetailSubscriberInvoiceSettings.cs" />
