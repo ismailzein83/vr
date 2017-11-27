@@ -25,4 +25,11 @@ namespace TOne.WhS.BusinessEntity.Entities
         XLS = 1,
         XLSX = 2
     }
+
+    public enum IncludeClosedEntitiesEnum
+    {
+        Never=0,
+        OnlyFirstTime=1,
+        UntilClosureDate=2
+    }
 }

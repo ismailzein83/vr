@@ -40,6 +40,9 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
         var CompressFileSelectorAPI;
         var CompressFileSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var IncludeClosedEntitiesSelectorAPI;
+        var IncludeClosedEntitiesSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var CodeChangeTypeSettingsGridAPI;
         var CodeChangeTypeSettingsGridReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -69,6 +72,11 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
             ctrl.onSalePLTemplateSelectorReady = function (api) {
                 salePLTemplateSelectorAPI = api;
                 salePLTemplateSelectorReadyDeferred.resolve();
+            };
+
+            ctrl.onIncludeClosedEntitiesSelectorReady = function (api) {
+                IncludeClosedEntitiesSelectorAPI = api;
+                IncludeClosedEntitiesSelectorReadyDeferred.resolve();
             };
 
             ctrl.onCompressFileSelectorReady = function (api) {
@@ -108,6 +116,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                 var selectedPriceListExtensionFormatId;
                 var pricelistTypeId;
                 var compressPriceListFile;
+                var includeClosedEntities;
                 var codeChangeTypeSettings;
                 var rateChangeTypeSettings;
                 var fileNamePattern;
@@ -126,6 +135,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                     selectedPriceListExtensionFormatId = data.PriceListExtensionFormat;
                     pricelistTypeId = data.PriceListType;
                     compressPriceListFile = data.CompressPriceListFile;
+                    includeClosedEntities = data.IncludeClosedEntities;
                     codeChangeTypeSettings = data.CodeChangeTypeDescriptions;
                     rateChangeTypeSettings = data.RateChangeTypeDescriptions;
                     fileNamePattern = data.SalePricelistFileNamePattern;
@@ -150,6 +160,11 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                 if (ctrl.showCompressPriceListFile) {
                     var loadCompressFileSelectorPromise = loadCompressFileSelector(compressPriceListFile);
                     promises.push(loadCompressFileSelectorPromise);
+                }
+
+                if (ctrl.showIncludeClosedEntities) {
+                    var loadIncludeClosedEntitiesSelectorPromise = loadIncludeClosedEntitiesSelector(includeClosedEntities);
+                    promises.push(loadIncludeClosedEntitiesSelectorPromise);
                 }
 
                 if (ctrl.showCodeChangeTypeSettingsGrid) {
@@ -178,6 +193,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
                     PriceListExtensionFormat: (priceListExtensionFormatSelectorAPI != undefined) ? priceListExtensionFormatSelectorAPI.getSelectedIds() : undefined,
                     PriceListType: (priceListTypeSelectorAPI != undefined) ? priceListTypeSelectorAPI.getSelectedIds() : undefined,
                     CompressPriceListFile: (CompressFileSelectorAPI != undefined) ? CompressFileSelectorAPI.getData() : undefined,
+                    IncludeClosedEntities: (IncludeClosedEntitiesSelectorAPI != undefined) ? IncludeClosedEntitiesSelectorAPI.getData() : undefined,
                     CodeChangeTypeDescriptions: (CodeChangeTypeSettingsGridAPI != undefined) ? CodeChangeTypeSettingsGridAPI.getData() : undefined,
                     RateChangeTypeDescriptions: (RateChangeTypeSettingsGridAPI != undefined) ? RateChangeTypeSettingsGridAPI.getData() : undefined,
                     SalePricelistFileNamePattern: (FileNamePatternAPI != undefined) ? FileNamePatternAPI.getData() : undefined,
@@ -250,6 +266,18 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
             return compressFileSelectorLoadDeferred.promise;
         }
 
+        function loadIncludeClosedEntitiesSelector(includeClosedEntities) {
+            var includeClosedEntitiesSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            IncludeClosedEntitiesSelectorReadyDeferred.promise.then(function () {
+                IncludeClosedEntitiesSelectorReadyDeferred = undefined;
+                var includeClosedEntitiesPayload = {
+                    selectedValue: includeClosedEntities
+                };
+                VRUIUtilsService.callDirectiveLoad(IncludeClosedEntitiesSelectorAPI, includeClosedEntitiesPayload, includeClosedEntitiesSelectorLoadDeferred);
+            });
+            return includeClosedEntitiesSelectorLoadDeferred.promise;
+        }
+
         function loadCodeChangeTypeSettingsGrid(codeChangeTypeSettings) {
             var CodeChangeTypeSettingsGridLoadDeferred = UtilsService.createPromiseDeferred();
             CodeChangeTypeSettingsGridReadyDeferred.promise.then(function () {
@@ -296,6 +324,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
             ctrl.showPricelistExtensionFormatSelector = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
             ctrl.showPricelistTypeSelector = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
             ctrl.showCompressPriceListFile = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
+            ctrl.showIncludeClosedEntities = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
             ctrl.showCodeChangeTypeSettingsGrid = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
             ctrl.showRateChangeTypeSettingsGrid = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
             ctrl.showFileNamePattern = (directiveContext == systemEnumValue || directiveContext == customerEnumValue || directiveContext == companyEnumValue);
@@ -309,6 +338,7 @@ function (UtilsService, VRUIUtilsService, WhS_BE_SaleAreaSettingsContextEnum) {
             ctrl.isPricelistExtensionFormatRequired = (directiveContext == systemEnumValue);
             ctrl.isPricelistTypeRequired = (directiveContext == systemEnumValue);
             ctrl.isCompressPriceListFileRequired = (directiveContext == systemEnumValue);
+            ctrl.isIncludeClosedEntitiesRequired = (directiveContext == systemEnumValue);
             ctrl.isRateChangeTypeSettingsRequired = (directiveContext == systemEnumValue);
             ctrl.isCodeChangeTypeSettingsRequired = (directiveContext == systemEnumValue);
             ctrl.isFileNamePatternRequired = (directiveContext == systemEnumValue);

@@ -328,6 +328,24 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return GetCompanyPricelistSettingsByCustomerId(carrierAccountId).CompressPriceListFile.Value;
         }
+
+        public IncludeClosedEntitiesEnum GetCustomerIncludeClosedEntitiesStatus(int carrierAccountId)
+        {
+            var customer = GetCarrierAccount(carrierAccountId);
+
+            customer.ThrowIfNull("Customer", carrierAccountId);
+            customer.CustomerSettings.ThrowIfNull("Customer.CustomerSettings", carrierAccountId);
+            //customer.CustomerSettings.PricelistSettings.ThrowIfNull("Customer.CustomerSettings.PricelistSettings", carrierAccountId);
+
+            if (customer.CustomerSettings.PricelistSettings != null)
+            {
+                if (customer.CustomerSettings.PricelistSettings.IncludeClosedEntities != null)
+                    return customer.CustomerSettings.PricelistSettings.IncludeClosedEntities.Value;
+            }
+
+            return GetCompanyPricelistSettingsByCustomerId(carrierAccountId).IncludeClosedEntities.Value;
+        }
+
         public string GetCustomerPricelistFileNamePattern(int carrierAccountId)
         {
             var customer = GetCarrierAccount(carrierAccountId);

@@ -17,5 +17,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CodeChangeTypeDescriptions CodeChangeTypeDescriptions { get; set; }
         public RateChangeTypeDescriptions RateChangeTypeDescriptions { get; set; }
         public string SalePricelistFileNamePattern { get; set; }
+        public IncludeClosedEntitiesEnum? IncludeClosedEntities { get; set; }
     }
 }

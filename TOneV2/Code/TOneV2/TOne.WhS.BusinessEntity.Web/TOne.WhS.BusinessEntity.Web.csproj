@@ -221,6 +221,7 @@
     <Content Include="WhS_BusinessEntity\Constant\SaleEntityZoneRoutingProductSourceTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePricelistCompressFileEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePricelistFileNamePartsEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\SalePricelistIncludeClosedEntitiesEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\SalePriceListPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CustomerPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\PrimarySaleEntityEnum.js" />
@@ -375,6 +376,7 @@
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelistfilepreview-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelisttype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-salepricelist-compressfile-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-salepricelist-includeclosedentities-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\Templates\SaleRateHistoryGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleRate\vr-whs-be-salerate-history-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\Settings\Templates\CodeChangeTypeSettingsGridTemplate.html" />

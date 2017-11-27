@@ -184,6 +184,11 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
             return saleAreaSettings.PricelistSettings.CompressPriceListFile.Value;
         }
+        public IncludeClosedEntitiesEnum GetSaleAreaIncludeClosedEntitiesStatus()
+        {
+            SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
+            return saleAreaSettings.PricelistSettings.IncludeClosedEntities.Value;
+        }
         public string GetSaleAreaPricelistFileNamePattern()
         {
             SaleAreaSettingsData saleAreaSettings = GetSaleAreaSettings();
@@ -263,6 +268,7 @@ namespace TOne.WhS.BusinessEntity.Business
             result.PriceListType = pricelistSettingsParent.PriceListType;
             result.PriceListExtensionFormat = pricelistSettingsParent.PriceListExtensionFormat;
             result.CompressPriceListFile = pricelistSettingsParent.CompressPriceListFile;
+            result.IncludeClosedEntities = pricelistSettingsParent.IncludeClosedEntities;
             result.CodeChangeTypeDescriptions = pricelistSettingsParent.CodeChangeTypeDescriptions;
             result.RateChangeTypeDescriptions = pricelistSettingsParent.RateChangeTypeDescriptions;
             result.SalePricelistFileNamePattern = pricelistSettingsParent.SalePricelistFileNamePattern;
@@ -284,6 +290,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (pricelistSettingsChild.CompressPriceListFile.HasValue)
                 result.CompressPriceListFile = pricelistSettingsChild.CompressPriceListFile;
+
+            if (pricelistSettingsChild.IncludeClosedEntities.HasValue)
+                result.IncludeClosedEntities = pricelistSettingsChild.IncludeClosedEntities;
 
             if (!string.IsNullOrEmpty(pricelistSettingsChild.SalePricelistFileNamePattern))
                 result.SalePricelistFileNamePattern = pricelistSettingsChild.SalePricelistFileNamePattern;

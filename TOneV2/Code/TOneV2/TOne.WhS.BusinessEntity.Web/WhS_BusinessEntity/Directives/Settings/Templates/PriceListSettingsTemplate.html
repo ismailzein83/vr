@@ -32,6 +32,11 @@
                                                 ng-if="ctrl.showCompressPriceListFile"
                                                 isrequired="ctrl.isCompressPriceListFileRequired">
     </vr-whs-salepricelist-compressfile-selector>
+    <vr-whs-salepricelist-includeclosedentities-selector on-ready="ctrl.onIncludeClosedEntitiesSelectorReady"
+                                                         normal-col-num="6"
+                                                         ng-if="ctrl.showIncludeClosedEntities"
+                                                         isrequired="ctrl.isIncludeClosedEntitiesRequired">
+    </vr-whs-salepricelist-includeclosedentities-selector>
 </vr-row>
 <vr-row>
     <vr-columns width="1/2row">
@@ -49,10 +54,10 @@
     </vr-columns>
 </vr-row>
 <vr-row>
-        <vr-whs-be-salepricelistfilenamepattern on-ready="ctrl.onFileNamePatternReady"
-                                                normal-col-num="6"
-                                                ng-if="ctrl.showFileNamePattern"
-                                                isrequired="ctrl.isFileNamePatternRequired">
-        </vr-whs-be-salepricelistfilenamepattern>
-  
+    <vr-whs-be-salepricelistfilenamepattern on-ready="ctrl.onFileNamePatternReady"
+                                            normal-col-num="6"
+                                            ng-if="ctrl.showFileNamePattern"
+                                            isrequired="ctrl.isFileNamePatternRequired">
+    </vr-whs-be-salepricelistfilenamepattern>
+
 </vr-row>
