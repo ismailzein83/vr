@@ -26,8 +26,8 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
 
 
-            listMeasures.Add("SaleRate");
-            listMeasures.Add("CostRate");
+            listMeasures.Add("SaleRate_DurAvg");
+            listMeasures.Add("CostRate_DurAvg");
             listMeasures.Add("SaleDuration");
             listMeasures.Add("CostDuration");
             listMeasures.Add("TotalSaleNet");
@@ -93,12 +93,12 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
 
                     MeasureValue saleRate;
-                    analyticRecord.MeasureValues.TryGetValue("SaleRate", out saleRate);
+                    analyticRecord.MeasureValues.TryGetValue("SaleRate_DurAvg", out saleRate);
                     rateLossFromatted.SaleRate = Convert.ToDecimal(saleRate.Value ?? 0.0);
                     rateLossFromatted.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.SaleRate);
 
                     MeasureValue costRate;
-                    analyticRecord.MeasureValues.TryGetValue("CostRate", out costRate);
+                    analyticRecord.MeasureValues.TryGetValue("CostRate_DurAvg", out costRate);
                     rateLossFromatted.CostRate = Convert.ToDecimal(costRate.Value ?? 0.0);
                     rateLossFromatted.CostRateFormatted = ReportHelpers.FormatLongNumberDigit(rateLossFromatted.CostRate);
 
