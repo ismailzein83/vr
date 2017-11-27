@@ -527,5 +527,8 @@
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_CleanTemporaryTableRP.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_CleanTemporaryTablesSPL.sql" />
     <Build Include="TOneWhs_CP\Stored Procedures\sp_CleanTemporaryTablesCP.sql" />
+    <Build Include="TOneWhS_Invoice\Tables\InvoiceComparisonTemplate.sql" />
+    <Build Include="TOneWhS_Invoice\Stored Procedures\sp_InvoiceComparisonTemplate_TryAddOrUpdate.sql" />
+    <Build Include="TOneWhS_Invoice\Stored Procedures\sp_InvoiceComparisonTemplate_GetAll.sql" />
   </ItemGroup>
 </Project>
