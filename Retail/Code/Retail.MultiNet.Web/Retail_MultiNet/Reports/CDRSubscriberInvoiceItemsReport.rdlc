@@ -6,13 +6,13 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.62312cm</Width>
+              <Width>1cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.77786cm</Width>
+              <Width>1.75cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.17473cm</Width>
+              <Width>1.8cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>3.29541cm</Width>
@@ -595,7 +595,6 @@
                         <PaddingBottom>0.5pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -943,7 +942,7 @@
         <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
         <DataSetName>MultiNetCDRs</DataSetName>
         <Height>1.04671in</Height>
-        <Width>18.19999cm</Width>
+        <Width>18.17428cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
