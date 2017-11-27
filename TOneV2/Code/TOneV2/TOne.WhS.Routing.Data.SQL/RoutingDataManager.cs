@@ -139,6 +139,7 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_CodeSaleZoneMatchTable);
             query.AppendLine(query_CodeSupplierZoneMatchTable);
             query.AppendLine(query_PartialRouteInfoTable);
+            query.AppendLine(query_SwitchSyncDataTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
 
@@ -254,8 +255,14 @@ namespace TOne.WhS.Routing.Data.SQL
 															(
 																[Code] ASC
 															);";
+
         private const string query_PartialRouteInfoTable = @"CREATE TABLE [dbo].[PartialRouteInfo](
 																[Data] [nvarchar](MAX) NOT NULL
+															) ON [PRIMARY];";
+
+        private const string query_SwitchSyncDataTable = @"CREATE TABLE [dbo].[SwitchSyncData](
+																[SwitchId] int NOT NULL,
+                                                                [LastVersionNumber] int NOT NULL
 															) ON [PRIMARY];";
 
 
