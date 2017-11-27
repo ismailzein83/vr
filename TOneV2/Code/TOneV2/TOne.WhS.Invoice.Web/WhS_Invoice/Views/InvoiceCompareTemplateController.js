@@ -70,7 +70,7 @@
                 mainListMappingReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.save = function () {
-                saveInvoiceCompareTemplate();
+               return saveInvoiceCompareTemplate();
             };
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
@@ -140,9 +140,7 @@
                 $scope.scopeModel.showGrid = true;
                 WhS_Invoice_InvoiceCompareTemplateAPIService.GetInvoiceCompareTemplate(invoiceTypeId, partnerId).then(function (response) {
                     invoiceCompareTemplateEntity = response;
-                    if (invoiceCompareTemplateEntity != undefined && invoiceCompareTemplateEntity.Details != undefined) {
-                        $scope.scopeModel.dateTimeFormat = invoiceCompareTemplateEntity.Details.DateTimeFormat;
-                    }
+                   
                     loadAllControls();
                 });
               
@@ -204,6 +202,9 @@
                         enumObj.description = enumObj.description + $scope.scopeModel.partnerLabel;
                     }
                     $scope.scopeModel.comparisonResult.push(enumObj);
+                }
+                if (invoiceCompareTemplateEntity != undefined && invoiceCompareTemplateEntity.Details != undefined) {
+                    $scope.scopeModel.dateTimeFormat = invoiceCompareTemplateEntity.Details.DateTimeFormat;
                 }
                 $scope.scopeModel.comparisonCriterias = UtilsService.getArrayEnum(WhS_Invoice_ComparisonCriteriaEnum);
             }
@@ -310,7 +311,7 @@
         }
         function saveInvoiceCompareTemplate() {
             var invoiceComparisonTemplate = buildObjectFromScope();
-            WhS_Invoice_InvoiceCompareTemplateAPIService.SaveInvoiceCompareTemplate(invoiceComparisonTemplate).then(function (response) {
+            return WhS_Invoice_InvoiceCompareTemplateAPIService.SaveInvoiceCompareTemplate(invoiceComparisonTemplate).then(function (response) {
                 if (response == true) {
                     VRNotificationService.showSuccess("Added successfully");
                 }
