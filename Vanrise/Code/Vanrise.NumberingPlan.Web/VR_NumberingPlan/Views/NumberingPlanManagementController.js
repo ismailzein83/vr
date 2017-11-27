@@ -439,7 +439,7 @@
             if (status != null)
                 $scope.showRenameZone = false;
             else
-                $scope.showRenameZone = draftStatus == Vr_NP_ZoneItemDraftStatusEnum.ExistingClosed.value ? false : codesGridAPI.hideShowRenameZone();
+                $scope.showRenameZone = draftStatus == Vr_NP_ZoneItemDraftStatusEnum.New.value;
         }
 
         function hideShowEnd(draftStatus, status) {

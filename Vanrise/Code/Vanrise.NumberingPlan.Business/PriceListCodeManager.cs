@@ -137,7 +137,7 @@ namespace Vanrise.NumberingPlan.Business
                             EED = maxCodeEED.Value
                         };
 
-                        List<ExistingZone> matchedExistingZones;
+                        /*List<ExistingZone> matchedExistingZones;
                         if (closedExistingZones.TryGetValue(existingZone.ZoneEntity.Name, out matchedExistingZones))
                             matchedExistingZones.Add(existingZone);
                         else
@@ -145,7 +145,8 @@ namespace Vanrise.NumberingPlan.Business
                             matchedExistingZones = new List<ExistingZone>();
                             matchedExistingZones.Add(existingZone);
                             closedExistingZones.Add(existingZone.ZoneEntity.Name, matchedExistingZones);
-                        }
+                        }*/
+                        List<ExistingZone> matchedExistingZones = closedExistingZones.GetOrCreateItem(existingZone.ZoneEntity.Name);matchedExistingZones.Add(existingZone);
 
                     }
                 }
@@ -238,7 +239,7 @@ namespace Vanrise.NumberingPlan.Business
             {
                 if (existingCode.IsOverlappedWith(codeToMove))
                 {
-                    if (String.Compare(existingCode.ParentZone.Name, codeToMove.OldZoneName, true) != 0)
+                    if (!existingCode.ParentZone.Name.Equals(codeToMove.OldZoneName, StringComparison.InvariantCultureIgnoreCase))
                         codeToMove.HasOverlapedCodesInOtherZone = true;
 
                     DateTime existingCodeEED = Utilities.Max(codeToMove.BED, existingCode.BED);
@@ -257,7 +258,7 @@ namespace Vanrise.NumberingPlan.Business
             {
                 if (existingCode.EED.VRGreaterThan(codeToClose.CloseEffectiveDate))
                 {
-                    if (String.Compare(existingCode.ParentZone.Name, codeToClose.ZoneName, true) != 0)
+                    if (!existingCode.ParentZone.Name.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase)) 
                         codeToClose.HasOverlapedCodesInOtherZone = true;
                     existingCode.ChangedCode = new ChangedCode
                     {

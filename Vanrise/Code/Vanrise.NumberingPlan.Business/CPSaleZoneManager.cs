@@ -88,7 +88,7 @@ namespace Vanrise.NumberingPlan.Business
 
             if (input.ZoneId.HasValue)
             {
-                SaleCodeManager saleCodeManager = new SaleCodeManager();
+                /*SaleCodeManager saleCodeManager = new SaleCodeManager();
                 List<SaleCode> saleCodes = saleCodeManager.GetSaleCodesEffectiveByZoneID(input.ZoneId.Value, DateTime.Now);
                 output = ValidateZoneToRename(saleCodes.MapRecords(CodeItemMapper), input.OldZoneName);
 
@@ -106,7 +106,7 @@ namespace Vanrise.NumberingPlan.Business
                 if (changes.RenamedZones.Any(x => x.ZoneId == input.ZoneId))
                     UpdateZoneInRenamedZones(changes.RenamedZones, renamedZone);
                 else
-                    AddZoneToRenamedZones(changes.RenamedZones, renamedZone);
+                    AddZoneToRenamedZones(changes.RenamedZones, renamedZone);*/
 
             }
             else

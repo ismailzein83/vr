@@ -58,8 +58,8 @@ namespace Vanrise.NumberingPlan.BP.Activities
                 foreach (NotImportedZone notImportedZone in notImportedZones)
                 {
                     //If a zone is renamed, do not show it in preview screen as an not imported zone
-                    if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
-                        continue;
+                    //if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(notImportedZone.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+                    //    continue;
 
                     //If a zone is deleted by moving all its codes, do not show it as not changed
                     List<ExistingZone> matchedClosedZones;
@@ -84,8 +84,8 @@ namespace Vanrise.NumberingPlan.BP.Activities
                 foreach (KeyValuePair<string, List<ExistingZone>> closedExistingZone in closedExistingZones)
                 {
                     //If a zone is renamed, do not show it in preview screen as an not imported zone
-                    if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)) != null)
-                        continue;
+                    //if (zonesPreview.FindRecord(item => item.RecentZoneName != null && item.RecentZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)) != null)
+                    //    continue;
 
                     //avoid adding deleted zones from zonesToProcess to the list of deleted zones
                     if (!zonesToProcess.Any(item => item.ZoneName.Equals(closedExistingZone.Key, StringComparison.InvariantCultureIgnoreCase)))

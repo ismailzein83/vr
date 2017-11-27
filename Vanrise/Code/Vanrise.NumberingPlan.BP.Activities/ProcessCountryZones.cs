@@ -146,7 +146,7 @@ namespace Vanrise.NumberingPlan.BP.Activities
 
         private DateTime GetZoneBED(ZoneToProcess zoneToProcess)
         {
-            if (zoneToProcess.AddedZones.Count() > 0)
+            if (zoneToProcess.ChangeType == ZoneChangeType.New)
                 return zoneToProcess.AddedZones.Min(item => item.BED);
 
             IEnumerable<ExistingZone> connectedExistingZones = this.GetConnectedExistingZones(zoneToProcess.ExistingZones, zoneToProcess.ZoneName);
@@ -166,7 +166,7 @@ namespace Vanrise.NumberingPlan.BP.Activities
 
         private ZoneChangeType GetZoneChangeType(ZoneToProcess zoneToProcess, Dictionary<string, List<ExistingZone>> closedExistingZones)
         {
-            if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.ExistingZones.Count() == 0)
+            /*if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.ExistingZones.Count() == 0)
             {
                 //Check if all codes are coming from the same original zone; otherwise we cannot consider it as renamed
                 string originalZoneName = zoneToProcess.CodesToMove.First().OldZoneName;
@@ -185,7 +185,7 @@ namespace Vanrise.NumberingPlan.BP.Activities
                         }
                     }
                 }
-            }
+            }*/
 
             List<ExistingZone> matchedExistingZones;
             if (closedExistingZones != null && closedExistingZones.TryGetValue(zoneToProcess.ZoneName, out matchedExistingZones))
