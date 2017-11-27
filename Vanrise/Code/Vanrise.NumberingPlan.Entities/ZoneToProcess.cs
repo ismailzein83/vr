@@ -82,4 +82,18 @@ namespace Vanrise.NumberingPlan.Entities
             get { return "Zone"; }
         }
     }
+
+    public class AllZonesToProcess : IRuleTarget
+    {
+        public IEnumerable<ZoneToProcess> Zones { get; set; }
+        public object Key
+        {
+            get { return null; }
+        }
+
+        public string TargetType
+        {
+            get { return "AllZonesToProcess"; }
+        }
+    }
 }

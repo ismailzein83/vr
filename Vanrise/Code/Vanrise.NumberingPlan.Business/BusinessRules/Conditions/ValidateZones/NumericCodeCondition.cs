@@ -12,40 +12,38 @@ namespace Vanrise.NumberingPlan.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ZoneToProcess != null);
+            return (target as AllZonesToProcess != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
+            AllZonesToProcess allZonesToProcess = context.Target as AllZonesToProcess;
+            var invalidCodes = new HashSet<string>();
 
-            foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
+            foreach (var zone in allZonesToProcess.Zones)
             {
-                if (!Vanrise.Common.Utilities.IsNumeric(codeToAdd.Code, 0))
+                foreach (var codeToAdd in zone.CodesToAdd)
                 {
-                    context.Message = string.Format("Cannot add Code {0} to Zone {1} because this code is not a positive number", codeToAdd.Code, zoneToProcess.ZoneName);
-                    return false;
+                    if (!Vanrise.Common.Utilities.IsNumeric(codeToAdd.Code, 0))
+                        invalidCodes.Add(codeToAdd.Code);
+                }
+                foreach (var codeToClose in zone.CodesToClose)
+                {
+                    if (!Vanrise.Common.Utilities.IsNumeric(codeToClose.Code, 0))
+                        invalidCodes.Add(codeToClose.Code);
+                }
+                foreach (var codeToMove in zone.CodesToMove)
+                {
+                    if (!Vanrise.Common.Utilities.IsNumeric(codeToMove.Code, 0))
+                        invalidCodes.Add(codeToMove.Code);
                 }
             }
 
-            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+            if (invalidCodes.Count > 0)
             {
-                if (!Vanrise.Common.Utilities.IsNumeric(codeToMove.Code, 0))
-                {
-                    context.Message = string.Format("Cannot move Code {0} to Zone {1} because this code is not a positive number", codeToMove.Code, zoneToProcess.ZoneName);
-                    return false;
-                }
+                context.Message = string.Format("Codes have wrong format. Violated code(s): {0}.", string.Join(", ", invalidCodes));
+                return false;
             }
-
-            foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
-            {
-                if (!Vanrise.Common.Utilities.IsNumeric(codeToClose.Code, 0))
-                {
-                    context.Message = string.Format("Cannot close Code {0} in Zone {1} because this code is not a positive number", codeToClose.Code, zoneToProcess.ZoneName);
-                    return false;
-                }
-            }
-
             return true;
         }
 

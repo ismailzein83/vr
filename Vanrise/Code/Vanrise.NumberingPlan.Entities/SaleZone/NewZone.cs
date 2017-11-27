@@ -23,4 +23,17 @@ namespace Vanrise.NumberingPlan.Entities
             get { return "Zone"; }
         }
     }
+    public class AllNewZones : IRuleTarget
+    {
+        public IEnumerable<NewZone> Zones { get; set; }
+        public object Key
+        {
+            get { return null; }
+        }
+
+        public string TargetType
+        {
+            get { return "AllNewZones"; }
+        }
+    }
 }

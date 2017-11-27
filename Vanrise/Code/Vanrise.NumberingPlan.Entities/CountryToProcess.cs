@@ -29,4 +29,19 @@ namespace Vanrise.NumberingPlan.Entities
             get { return "Country"; }
         }
     }
+
+    public class AllCountriesToProcess : IRuleTarget
+    {
+        public IEnumerable<CountryToProcess> Countries { get; set; }
+
+        public object Key
+        {
+            get { return null; }
+        }
+
+        public string TargetType
+        {
+            get { return "AllCountriesToProcess"; }
+        }
+    }
 }

@@ -12,20 +12,25 @@ namespace Vanrise.NumberingPlan.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ImportedCode != null);
+            return (target as AllImportedCodes != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedCode importedCode = context.Target as ImportedCode;
-            var result = !string.IsNullOrEmpty(importedCode.ZoneName);
-            if (result == false)
+            AllImportedCodes allImportedCodes = context.Target as AllImportedCodes;
+            var invalidCodes = new HashSet<string>();
+            foreach (var importedCode in allImportedCodes.ImportedCodes)
             {
-                context.Message = !string.IsNullOrEmpty(importedCode.Code)
-                  ? string.Format("Code {0} has a missing zone name", importedCode.Code)
-                  : "One of the records is missing zone name and code";
+                if (string.IsNullOrEmpty(importedCode.ZoneName) && !string.IsNullOrEmpty(importedCode.Code))
+                    invalidCodes.Add(importedCode.Code);
+
             }
-            return result;
+            if (invalidCodes.Count > 0)
+            {
+                context.Message = string.Format("Zone is missing for the following code(s): {0}.", string.Join(", ", invalidCodes));
+                return false;
+            }
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)

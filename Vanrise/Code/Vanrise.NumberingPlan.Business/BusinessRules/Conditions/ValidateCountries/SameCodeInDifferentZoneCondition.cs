@@ -14,47 +14,61 @@ namespace Vanrise.NumberingPlan.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as CountryToProcess != null);
+            return (target as AllCountriesToProcess != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            CountryToProcess country = context.Target as CountryToProcess;
             CountryManager manager = new CountryManager();
-            if (country.CodesToAdd != null)
+            AllCountriesToProcess allCountriesToProcess = context.Target as AllCountriesToProcess;
+
+            var invalidCodes = new HashSet<string>();
+            var invalidZones = new HashSet<string>();
+
+            foreach (var country in allCountriesToProcess.Countries)
             {
-                foreach (CodeToAdd codeToAdd in country.CodesToAdd)
+                if (country.CodesToAdd != null)
                 {
-                    if (country.CodesToAdd.FindRecord(x => x.Code == codeToAdd.Code && !x.ZoneName.Equals(codeToAdd.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+                    foreach (CodeToAdd codeToAdd in country.CodesToAdd)
                     {
-                        context.Message = string.Format("Can not add Code {0} because Country {1} contains this code with same status in different zones", codeToAdd.Code, manager.GetCountryName(country.CountryId));
-                        return false;
+                        if (country.CodesToAdd.FindRecord(x => x.Code == codeToAdd.Code && !x.ZoneName.Equals(codeToAdd.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+                        {
+                            invalidCodes.Add(codeToAdd.Code);
+                            invalidZones.Add(codeToAdd.ZoneName);
+                        }
                     }
                 }
+
+                if (country.CodesToMove != null)
+                {
+                    foreach (CodeToMove codeToMove in country.CodesToMove)
+                    {
+                        if (country.CodesToMove.FindRecord(x => x.Code == codeToMove.Code && !x.ZoneName.Equals(codeToMove.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+                        {
+                            invalidCodes.Add(codeToMove.Code);
+                            invalidZones.Add(codeToMove.ZoneName);
+                        }
+                    }
+                }
+
+                if (country.CodesToClose != null)
+                {
+                    foreach (CodeToClose codeToClose in country.CodesToClose)
+                    {
+                        if (country.CodesToClose.FindRecord(x => x.Code == codeToClose.Code && !x.ZoneName.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
+                        {
+                            invalidCodes.Add(codeToClose.Code);
+                            invalidZones.Add(codeToClose.ZoneName);
+                        }
+                    }
+                }
+
             }
 
-            if (country.CodesToMove != null)
+            if (invalidCodes.Count > 0)
             {
-                foreach (CodeToMove codeToMove in country.CodesToMove)
-                {
-                    if (country.CodesToMove.FindRecord(x => x.Code == codeToMove.Code && !x.ZoneName.Equals(codeToMove.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
-                    {
-                        context.Message = string.Format("Cannot move Code {0} because Country {1} contains this code with same status in different zone", codeToMove.Code, manager.GetCountryName(country.CountryId));
-                        return false;
-                    }
-                }
-            }
-
-            if (country.CodesToClose != null)
-            {
-                foreach (CodeToClose codeToClose in country.CodesToClose)
-                {
-                    if (country.CodesToClose.FindRecord(x => x.Code == codeToClose.Code && !x.ZoneName.Equals(codeToClose.ZoneName, StringComparison.InvariantCultureIgnoreCase)) != null)
-                    {
-                        context.Message = string.Format("Cannot close Code {0} because Country {1} contains this code with same status in different zone", codeToClose.Code, manager.GetCountryName(country.CountryId));
-                        return false;
-                    }
-                }
+                context.Message = string.Format("Performing same action more than one time on codes ({0}) in zones ({1}).", string.Join(", ", invalidCodes), string.Join(", ", invalidZones));
+                return false;
             }
 
             return true;

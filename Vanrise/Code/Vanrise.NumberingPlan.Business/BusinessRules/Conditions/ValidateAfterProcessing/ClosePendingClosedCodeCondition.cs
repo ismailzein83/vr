@@ -19,29 +19,20 @@ namespace Vanrise.NumberingPlan.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
+            var invalidCodes = new HashSet<string>();
 
             foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
                 ExistingCode existingCodeToClose = codeToClose.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToClose.Code);
-
                 if (existingCodeToClose != null && existingCodeToClose.CodeEntity.EED.HasValue)
-                {
-                    context.Message = string.Format("Cannot close code {0} in zone {1} because this code is already pending closed", codeToClose.Code, zoneToProcess.ZoneName);
-                    return false;
-                }
+                    invalidCodes.Add(codeToClose.Code);
             }
-
-            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+            
+            if (invalidCodes.Count > 0)
             {
-                ExistingCode existingCodeToMove = codeToMove.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToMove.Code);
-
-                if (existingCodeToMove != null && existingCodeToMove.CodeEntity.EED.HasValue)
-                {
-                    context.Message = string.Format("Cannot move code {0} in zone {1} because code is already pending closed", codeToMove.Code, zoneToProcess.ZoneName);
-                    return false;
-                }
+                context.Message = string.Format("Can not close codes ({0}) in zone '{1}' because codes are pending closed.", string.Join(",", invalidCodes), zoneToProcess.ZoneName);
+                return false;
             }
-
             return true;
         }
 

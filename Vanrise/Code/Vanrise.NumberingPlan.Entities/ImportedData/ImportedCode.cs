@@ -53,4 +53,18 @@ namespace Vanrise.NumberingPlan.Entities
         PendingClosed = 5,
 
     }
+
+    public class AllImportedCodes : IRuleTarget
+    {
+        public IEnumerable<ImportedCode> ImportedCodes { get; set; }
+
+        public object Key
+        {
+            get { return null; }
+        }
+        public string TargetType
+        {
+            get { return "AllImportedCodes"; }
+        }
+    }
 }

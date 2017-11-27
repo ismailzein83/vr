@@ -12,30 +12,34 @@ namespace Vanrise.NumberingPlan.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as CodeToAdd != null || target as CodeToClose != null);
+            return (target as AllZonesToProcess != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            var result = true;
+            AllZonesToProcess allZonesToProcess = context.Target as AllZonesToProcess;
+            var invalidCodes = new HashSet<string>();
 
-            IRuleTarget target = context.Target;
-
-            CodeToAdd codeToAdd = target as CodeToAdd;
-            CodeToClose codeToClose = target as CodeToClose;
-
-            if (codeToAdd != null && codeToAdd.CodeGroup == null)
+            foreach (var zone in allZonesToProcess.Zones)
             {
-                result = false;
-                context.Message = string.Format("Cannot add Code {0} because it is not assigned to a code group", codeToAdd.Code);
-            }
-            else if (codeToClose != null && codeToClose.CodeGroup == null)
-            {
-                result = false;
-                context.Message = string.Format("Cannot close Code {0} because it is not assigned to a code group", codeToClose.Code);
+                foreach (var codeToAdd in zone.CodesToAdd)
+                {
+                    if (codeToAdd != null && codeToAdd.CodeGroup == null)
+                        invalidCodes.Add(codeToAdd.Code);
+                }
+                foreach (var codeToClose in zone.CodesToClose)
+                {
+                    if (codeToClose != null && codeToClose.CodeGroup == null)
+                        invalidCodes.Add(codeToClose.Code);
+                }
             }
 
-            return result;
+            if (invalidCodes.Count > 0)
+            {
+                context.Message = string.Format("No code group defined for the following code(s): {0}.", string.Join(", ", invalidCodes));
+                return false;
+            }
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)

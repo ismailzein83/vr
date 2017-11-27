@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
-using Vanrise.Common;
 using Vanrise.NumberingPlan.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.NumberingPlan.Business
 {
-    public class CloseCodeNotExistAndEffectiveCondition : BusinessRuleCondition
+    class MovePendingClosedCodeCondition : BusinessRuleCondition
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
@@ -18,19 +18,19 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
-            var invalidCodes = new List<string>();
-            foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
+            var invalidCodes = new HashSet<string>();
+
+            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
             {
-                if (codeToClose.ChangedExistingCodes.Count() == 0 || !codeToClose.ChangedExistingCodes.Any(item => item.CodeEntity.Code == codeToClose.Code
-                    && item.ParentZone.ZoneEntity.Name.ToLower().Equals(codeToClose.ZoneName.ToLower(), StringComparison.InvariantCultureIgnoreCase)))
-                    invalidCodes.Add(codeToClose.Code);
+                ExistingCode existingCodeToMove = codeToMove.ChangedExistingCodes.FindRecord(item => item.CodeEntity.Code == codeToMove.Code);
+                if (existingCodeToMove != null && existingCodeToMove.CodeEntity.EED.HasValue)
+                    invalidCodes.Add(codeToMove.Code);
             }
 
             if (invalidCodes.Count > 0)
             {
-                context.Message = string.Format("Can not close codes ({0}) in zone '{1}' because codes either do not exist or not effective.", string.Join(",", invalidCodes), zoneToProcess.ZoneName);
+                context.Message = string.Format("Can not move codes ({0}) to zone '{1}' because codes are pending closed.", string.Join(",", invalidCodes), zoneToProcess.ZoneName);
                 return false;
             }
             return true;

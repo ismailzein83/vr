@@ -12,18 +12,24 @@ namespace Vanrise.NumberingPlan.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as NewZone != null);
+            return (target as AllNewZones != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            NewZone newZone = context.Target as NewZone;
-            var result = newZone.hasChanges;
-
-            if (result == false)
-                context.Message = string.Format("Creation of Zone {0} has been canceled because it does not contains codes", newZone.Name);
-
-            return newZone.hasChanges;
+            AllNewZones allNewZones = context.Target as AllNewZones;
+            var invalidZones = new List<string>();
+            foreach (var newZone in allNewZones.Zones)
+            {
+                if (!newZone.hasChanges)
+                    invalidZones.Add(newZone.Name);
+            }
+            if (invalidZones.Count > 0)
+            {
+                context.Message = string.Format("Can not create zone with out codes. Violated zone(s): {0}.", string.Join(", ", invalidZones));
+                return false;
+            }
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)

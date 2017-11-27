@@ -18,23 +18,23 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ZoneToProcess zoneTopProcess = context.Target as ZoneToProcess;
-
-            if (zoneTopProcess.ChangeType == ZoneChangeType.New || zoneTopProcess.ChangeType == ZoneChangeType.Renamed)
+            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
+            ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
+            var invalidCodes = new List<string>();
+            if (zoneToProcess.ChangeType == ZoneChangeType.New || zoneToProcess.ChangeType == ZoneChangeType.Renamed || zoneToProcess.BED <= cpContext.EffectiveDate)
                 return true;
 
-            if (zoneTopProcess.CodesToAdd.Count() > 0 && zoneTopProcess.BED > DateTime.Today.Date)
+            if (zoneToProcess.CodesToAdd.Count() > 0)
+                invalidCodes.AddRange(zoneToProcess.CodesToAdd.Select(item => item.Code));
+
+            if (zoneToProcess.CodesToMove.Count() > 0)
+                invalidCodes.AddRange(zoneToProcess.CodesToMove.Select(item => item.Code));
+
+            if (invalidCodes.Count > 0)
             {
-                context.Message = string.Format("Cannot add codes to the pending effective zone {0}", zoneTopProcess.ZoneName);
+                context.Message = string.Format("Can not add or move code(s) ({0}) to zone '{1}' which is pending effective in {2}. Adding or moving code to this zone must be on {2} or after.", string.Join(", ", invalidCodes), zoneToProcess.ZoneName, zoneToProcess.BED);
                 return false;
             }
-
-            if (zoneTopProcess.CodesToMove.Count() > 0 && zoneTopProcess.BED > DateTime.Today.Date)
-            {
-                context.Message = string.Format("Cannot move codes to the pending effective zone {0}", zoneTopProcess.ZoneName);
-                return false;
-            }
-
             return true;
         }
 

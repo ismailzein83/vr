@@ -13,21 +13,24 @@ namespace Vanrise.NumberingPlan.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as ZoneToProcess != null || target as NotImportedZone != null);
+            return (target as CountryToProcess != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
-            if (zoneToProcess != null)
+            CountryToProcess countryToProcess = context.Target as CountryToProcess;
+            var zonesToClose = new List<string>();
+            foreach (var zone in countryToProcess.ZonesToProcess)
             {
-                if (zoneToProcess.ChangeType == Entities.ZoneChangeType.Deleted)
-                {
-                    context.Message = string.Format("All codes in zone '{0}' are closed. Zone '{0}' will be closed", zoneToProcess.ZoneName);
-                    return false;
-                }
+                if (zone != null && zone.ChangeType == Entities.ZoneChangeType.Deleted)
+                    zonesToClose.Add(zone.ZoneName);
             }
 
+            if (zonesToClose.Count > 0)
+            {
+                context.Message = string.Format("Following zones are going to be closed: ({0}).", string.Join(", ", zonesToClose));
+                return false;
+            }
             return true;
         }
 

@@ -19,18 +19,19 @@ namespace Vanrise.NumberingPlan.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
-
-            if (zoneToProcess.CodesToAdd.Count() > 0 && zoneToProcess.EED.HasValue)
+            var invalidCodes = new List<string>();
+            if (zoneToProcess.EED.HasValue)
             {
-                context.Message = string.Format("Cannot add code to pending closed zone '{0}'", zoneToProcess.ZoneName);
-                return false;
-            }
+                if (zoneToProcess.CodesToAdd.Count() > 0)
+                    invalidCodes.AddRange(zoneToProcess.CodesToAdd.Select(item => item.Code));
+                if (zoneToProcess.CodesToMove.Count() > 0)
+                    invalidCodes.AddRange(zoneToProcess.CodesToMove.Select(item => item.Code));
 
-
-            if (zoneToProcess.CodesToMove.Count() > 0 && zoneToProcess.EED.HasValue)
-            {
-                context.Message = string.Format("Cannot move code to pending closed zone '{0}'", zoneToProcess.ZoneName);
-                return false;
+                if (invalidCodes.Count > 0)
+                {
+                    context.Message = string.Format("Can not add or move code(s) ({0}) to zone '{1}' which is pending closed in {2}.", string.Join(", ", invalidCodes), zoneToProcess.ZoneName, zoneToProcess.EED.Value);
+                    return false;
+                }
             }
 
             return true;

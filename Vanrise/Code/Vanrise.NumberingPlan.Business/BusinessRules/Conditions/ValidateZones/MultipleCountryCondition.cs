@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common.Business;
 using Vanrise.NumberingPlan.Entities;
 
 namespace Vanrise.NumberingPlan.Business
@@ -18,48 +19,34 @@ namespace Vanrise.NumberingPlan.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ZoneToProcess zone = context.Target as ZoneToProcess;
-            bool result = true;
-            bool resultOfCodesToAdd = true;
-            bool resultOfCodesToMove = true;
-            bool resultOfCodesToClose = true;
+            CountryManager countryManager = new CountryManager();
+            var countries = new HashSet<string>();
 
-            int? firstCodeToAddCountryId = null;
-            int? firstCodeToMoveCountryId = null;
-            int? firstCodeToCloseCountryId = null;
-
-            var firstCodeToAdd = zone.CodesToAdd.FirstOrDefault();
-            if (firstCodeToAdd != null)
+            foreach (var codeToAdd in zone.CodesToAdd)
             {
-                firstCodeToAddCountryId = firstCodeToAdd.CodeGroup.CountryId;
-                Func<CodeToAdd, bool> pred = new Func<CodeToAdd, bool>((code) => code.CodeGroup.CountryId != firstCodeToAddCountryId.Value);
-                resultOfCodesToAdd = !zone.CodesToAdd.Any(pred);
+                if (codeToAdd.CodeGroup != null)
+                    countries.Add(countryManager.GetCountryName(codeToAdd.CodeGroup.CountryId));
             }
 
-            var firstCodeToMove = zone.CodesToMove.FirstOrDefault();
-            if (firstCodeToMove != null)
+            foreach (var codeToMove in zone.CodesToMove)
             {
-                firstCodeToMoveCountryId = firstCodeToMove.CodeGroup.CountryId;
-                Func<CodeToMove, bool> pred = new Func<CodeToMove, bool>((code) => code.CodeGroup.CountryId != firstCodeToMoveCountryId.Value);
-                resultOfCodesToMove = !zone.CodesToMove.Any(pred);
+                if (codeToMove.CodeGroup != null)
+                    countries.Add(countryManager.GetCountryName(codeToMove.CodeGroup.CountryId));
             }
 
-            var firstCodeToClose = zone.CodesToClose.FirstOrDefault();
-            if (firstCodeToClose != null)
+            foreach (var codeToClose in zone.CodesToClose)
             {
-                firstCodeToCloseCountryId = firstCodeToClose.CodeGroup.CountryId;
-                Func<CodeToClose, bool> pred = new Func<CodeToClose, bool>((code) => code.CodeGroup.CountryId != firstCodeToCloseCountryId.Value);
-                resultOfCodesToClose = !zone.CodesToClose.Any(pred);
+                if (codeToClose.CodeGroup != null)
+                    countries.Add(countryManager.GetCountryName(codeToClose.CodeGroup.CountryId));
             }
 
-            if (firstCodeToAddCountryId.HasValue && firstCodeToMoveCountryId.HasValue && firstCodeToCloseCountryId.HasValue)
-                result = (firstCodeToAddCountryId == firstCodeToCloseCountryId) && (firstCodeToAddCountryId == firstCodeToMoveCountryId);
+            if (countries.Count > 1)
+            {
+                context.Message = string.Format("Can not add zone '{0}' with codes belong to different countries: {1}.", zone.ZoneName, string.Join(", ", countries));
+                return false;
+            }
 
-            bool finalResult = resultOfCodesToAdd && resultOfCodesToMove && resultOfCodesToClose && result;
-
-            if (finalResult == false)
-                context.Message = string.Format("Zone {0} has multiple codes that belong to different countries", zone.ZoneName);
-
-            return finalResult;
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)

@@ -61,7 +61,10 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeEffectiveBeforeZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeWithDifferentCountryCodeGroupCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessingCodes\MoveCodeNotExistAndEffectiveCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\MoveClosedCodeToNewZoneCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\MoveCodeToPendingEffectiveZoneCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\MovePendingClosedCodeCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\MovePendingEffectiveCodeCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\WrongMoveCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\InvalidStatusCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateCodesZones\MissingCodeCondition.cs" />

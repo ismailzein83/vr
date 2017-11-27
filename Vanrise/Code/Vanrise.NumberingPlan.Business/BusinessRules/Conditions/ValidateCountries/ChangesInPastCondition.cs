@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess.Entities;
+using Vanrise.Common.Business;
 using Vanrise.NumberingPlan.Entities;
 
 namespace Vanrise.NumberingPlan.Business
@@ -12,7 +13,7 @@ namespace Vanrise.NumberingPlan.Business
     {
         public override bool ShouldValidate(IRuleTarget target)
         {
-            return (target as CountryToProcess != null);
+            return (target as AllCountriesToProcess != null);
         }
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
@@ -20,16 +21,22 @@ namespace Vanrise.NumberingPlan.Business
             ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
             if (cpContext.EffectiveDate >= DateTime.Now.Date)
                 return true;
-
-            CountryToProcess country = context.Target as CountryToProcess;
             SaleZoneManager saleZoneManager = new SaleZoneManager();
+            CountryManager countryManager = new CountryManager();
+            AllCountriesToProcess allCountriesToProcess = context.Target as AllCountriesToProcess;
+            var invalidCountries = new List<string>();
+            foreach (var country in allCountriesToProcess.Countries)
+            {
 
-            bool result = saleZoneManager.IsCountryEmpty(cpContext.SellingNumberPlanId, country.CountryId, DateTime.Now);
-
-            if (result == false)
-                context.Message = string.Format("Effective date can not be less than date of today");
-
-            return result;
+                if (!saleZoneManager.IsCountryEmpty(cpContext.SellingNumberPlanId, country.CountryId, DateTime.Now))
+                    invalidCountries.Add(countryManager.GetCountryName(country.CountryId));
+            }
+            if (invalidCountries.Count > 0)
+            {
+                context.Message = string.Format("Can not apply changes in the past for a country with existing zones. Violated country(ies): {0}.", string.Join(", ", invalidCountries));
+                return false;
+            }
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)

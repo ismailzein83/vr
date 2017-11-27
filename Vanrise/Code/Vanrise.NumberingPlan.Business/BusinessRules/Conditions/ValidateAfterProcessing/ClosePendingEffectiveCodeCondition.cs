@@ -19,23 +19,19 @@ namespace Vanrise.NumberingPlan.Business
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
+            var invalidCodes = new List<string>();
+            ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
 
             foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
             {
-                if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
-                {
-                    context.Message = string.Format("Cannot close code {0} in zone {1} because this code is pending effective", codeToClose.Code, codeToClose.ZoneName);
-                    return false;
-                }
+                if (codeToClose.ChangedExistingCodes != null && codeToClose.ChangedExistingCodes.Any(item => item.BED > cpContext.EffectiveDate))
+                    invalidCodes.Add(codeToClose.Code);
             }
 
-            foreach (CodeToMove codeToMove in zoneToProcess.CodesToMove)
+            if (invalidCodes.Count > 0)
             {
-                if (codeToMove.ChangedExistingCodes != null && codeToMove.ChangedExistingCodes.Any(item => item.BED > DateTime.Today))
-                {
-                    context.Message = string.Format("Cannot move code {0} in zone {1} because this code is pending effective", codeToMove.Code, codeToMove.OldZoneName);
-                    return false;
-                }
+                context.Message = string.Format("Can not close codes ({0}) in zone '{1}' because codes are pending effective.", string.Join(",", invalidCodes), zoneToProcess.ZoneName);
+                return false;
             }
 
             return true;

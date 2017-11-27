@@ -18,32 +18,36 @@ namespace Vanrise.NumberingPlan.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            bool result = true;
             ICPParametersContext cpContext = context.GetExtension<ICPParametersContext>();
-
             ExistingZoneInfoByZoneName existingZonesInfoByZoneName = cpContext.ExistingZonesInfoByZoneName;
-
-
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
-
             if (zoneToProcess.ChangeType != ZoneChangeType.New)
                 return true;
 
-
+            var invalidCodes = new HashSet<string>();
             ExistingZoneInfo existingZoneInfoInContext;
-            int zoneToProcessCountryId = zoneToProcess.AddedZones.First().CountryId;
 
             if (existingZonesInfoByZoneName.TryGetValue(zoneToProcess.ZoneName, out existingZoneInfoInContext))
             {
-                if (existingZoneInfoInContext.CountryId != zoneToProcessCountryId)
+                foreach (var code in zoneToProcess.CodesToAdd)
                 {
-                    CountryManager manager = new CountryManager();
-                    result = false;
-                    string countryName = manager.GetCountryName(zoneToProcess.AddedZones.First().CountryId);
-                    context.Message = string.Format("Zone {0} has a code that belongs to the code group of country {1}", zoneToProcess.ZoneName, countryName);
+                    if (existingZoneInfoInContext.CountryId != code.CodeGroup.CountryId)
+                        invalidCodes.Add(code.Code);
+                }
+                foreach (var code in zoneToProcess.CodesToMove)
+                {
+                    if (existingZoneInfoInContext.CountryId != code.CodeGroup.CountryId)
+                        invalidCodes.Add(code.Code);
+                }
+                if (invalidCodes.Count > 0)
+                {
+                    CountryManager countryManager = new CountryManager();
+                    var countryName = countryManager.GetCountryName(existingZoneInfoInContext.CountryId);
+                    context.Message = string.Format("Can not add or move codes ({0}) to the zone '{1}' because codes do not belong to country {2}.", string.Join(", ", invalidCodes), zoneToProcess.ZoneName, countryName);
+                    return false;
                 }
             }
-            return result;
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)
