@@ -59,27 +59,27 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
             if (parameters.IsCost)
             {
-                listMeasures.Add("CostRate");
+                listMeasures.Add("CostNormalRate_DurAvg");
                 listMeasures.Add("CostDurationDetails");
                 listMeasures.Add("CostNet");
                 listMeasures.Add("CostExtraCharges");
                 listMeasures.Add("CostOffPeakDuration");
-                listMeasures.Add("CostOffPeakRate");
+                listMeasures.Add("CostOffPeakRate_DurAvg");
                 listMeasures.Add("CostOffPeakNet");
-                listMeasures.Add("CostWeekEndRate");
+                listMeasures.Add("CostWeekEndRate_DurAvg");
                 listMeasures.Add("CostWeekEndDuration");
                 listMeasures.Add("CostWeekEndNet");
             }
             else
             {
-                listMeasures.Add("SaleRate");
+                listMeasures.Add("SaleNormalRate_DurAvg");
                 listMeasures.Add("SaleDurationDetails");
                 listMeasures.Add("SaleNet");
                 listMeasures.Add("SaleExtraCharges");
                 listMeasures.Add("SaleOffPeakDuration");
-                listMeasures.Add("SaleOffPeakRate");
+                listMeasures.Add("SaleOffPeakRate_DurAvg");
                 listMeasures.Add("SaleOffPeakNet");
-                listMeasures.Add("SaleWeekEndRate");
+                listMeasures.Add("SaleWeekEndRate_DurAvg");
                 listMeasures.Add("SaleWeekEndDuration");
                 listMeasures.Add("SaleWeekEndNet");
             }
@@ -139,17 +139,26 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         if (parameters.GroupBySupplier)
                         {
                             var supplierValue = analyticRecord.DimensionValues[1];
-                            isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)supplierValue.Value);
+
                             if (supplierValue != null)
-                                detailedBillingByZone.SupplierID = supplierValue.Name;
+                            {
+                                isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)supplierValue.Value);
+                                if (supplierValue != null)
+                                    detailedBillingByZone.SupplierID = supplierValue.Name;
+                            }
+                          
                         }
                     }
                     else
                     {
                         var customerValue = analyticRecord.DimensionValues[1];
-                        isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)customerValue.Value);
                         if (customerValue != null)
-                            detailedBillingByZone.CustomerID = customerValue.Name;
+                        {
+                            isDeleted = carrierAccountManager.IsCarrierAccountDeleted((int)customerValue.Value);
+                            if (customerValue != null)
+                                detailedBillingByZone.CustomerID = customerValue.Name;
+                        }
+                       
                     }
                     if (!isDeleted)
                     {
@@ -164,9 +173,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                         MeasureValue rate;
                         if (parameters.IsCost)
-                            analyticRecord.MeasureValues.TryGetValue("CostRate", out rate);
+                            analyticRecord.MeasureValues.TryGetValue("CostNormalRate_DurAvg", out rate);
                         else
-                            analyticRecord.MeasureValues.TryGetValue("SaleRate", out rate);
+                            analyticRecord.MeasureValues.TryGetValue("SaleNormalRate_DurAvg", out rate);
                         detailedBillingByZone.Rate = (rate == null) ? 0.0 : Convert.ToDouble(rate.Value ?? 0.0);
                         detailedBillingByZone.RateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.Rate);
 
@@ -204,9 +213,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                         MeasureValue offPeakRate;
                         if (parameters.IsCost)
-                            analyticRecord.MeasureValues.TryGetValue("CostOffPeakRate", out offPeakRate);
+                            analyticRecord.MeasureValues.TryGetValue("CostOffPeakRate_DurAvg", out offPeakRate);
                         else
-                            analyticRecord.MeasureValues.TryGetValue("SaleOffPeakRate", out offPeakRate);
+                            analyticRecord.MeasureValues.TryGetValue("SaleOffPeakRate_DurAvg", out offPeakRate);
                         detailedBillingByZone.OffPeakRate = (offPeakRate == null) ? 0 : Convert.ToDouble(offPeakRate.Value ?? 0.0);
                         detailedBillingByZone.OffPeakRateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.OffPeakRate);
 
@@ -220,9 +229,9 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                         MeasureValue weekEndRate;
                         if (parameters.IsCost)
-                            analyticRecord.MeasureValues.TryGetValue("CostWeekEndRate", out weekEndRate);
+                            analyticRecord.MeasureValues.TryGetValue("CostWeekEndRate_DurAvg", out weekEndRate);
                         else
-                            analyticRecord.MeasureValues.TryGetValue("SaleWeekEndRate", out weekEndRate);
+                            analyticRecord.MeasureValues.TryGetValue("SaleWeekEndRate_DurAvg", out weekEndRate);
                         detailedBillingByZone.WeekEndRate = (weekEndRate == null) ? 0 : Convert.ToDouble(weekEndRate.Value ?? 0.0);
                         detailedBillingByZone.WeekEndRateFormatted = ReportHelpers.FormatLongNumberDigit(detailedBillingByZone.WeekEndRate);
 
