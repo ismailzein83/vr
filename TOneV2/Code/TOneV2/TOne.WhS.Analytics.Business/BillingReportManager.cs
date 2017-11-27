@@ -13,6 +13,7 @@ using System.Drawing;
 using TOne.WhS.BusinessEntity.Business;
 using System.IO;
 using TOne.WhS.Analytics.Business.BillingReports;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Analytics.Business
 {
@@ -206,7 +207,7 @@ namespace TOne.WhS.Analytics.Business
             int lstCarrierProfileCount = listBusinessCaseStatus.Count();
             double total = listBusinessCaseStatus.Sum(item => item.Amount.Value);
             decimal totalDuration = listBusinessCaseStatus.Sum(item => item.Durations.Value);
-            int decimalPrecision = ReportHelpers.GetNormalNumberPrecision();
+            int decimalPrecision = GenericParameterManager.Current.GetNormalPrecision();
 
             worksheet.Cells.SetColumnWidth(4, 20);
             worksheet.Cells.SetColumnWidth(5, 20);
@@ -308,7 +309,7 @@ namespace TOne.WhS.Analytics.Business
         {
             Worksheet worksheet = workbook.Worksheets.Add(workSheetName);
             int lstCarrierProfileCount = listBusinessCaseStatus.Count;
-            int decimalPrecision =  ReportHelpers.GetNormalNumberPrecision();
+            int decimalPrecision = GenericParameterManager.Current.GetNormalPrecision();
             Style cellstyle = new Style();
             cellstyle.Custom = "0." + "".PadLeft(decimalPrecision, '0');
             if (lstCarrierProfileCount > 0)

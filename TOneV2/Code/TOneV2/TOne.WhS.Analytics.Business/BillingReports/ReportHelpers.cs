@@ -10,8 +10,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 {
     public static class ReportHelpers
     {
-        private static int _longprecision = GenericParameterManager.Current.GetLongPrecision();
-        private static int _normalprecision = GenericParameterManager.Current.GetNormalPrecision();
+        static int GetLongPrecision()
+        {
+            return GenericParameterManager.Current.GetLongPrecision();
+        }
+
+        static int GetNormalPrecision()
+        {
+            return GenericParameterManager.Current.GetNormalPrecision();
+        }
         public static string GetCarrierName(string id, string carrierAs)
         {
             string name = "multiple " + carrierAs;
@@ -40,51 +47,55 @@ namespace TOne.WhS.Analytics.Business.BillingReports
         }
         public static string GetNormalNumberDigit()
         {
-            return _normalprecision.ToString();
+            return GetNormalPrecision().ToString();
         }
 
         public static int GetNormalNumberPrecision()
         {
-            return _normalprecision;
+            return GetNormalPrecision();
         }
         public static string GetLongNumberDigit()
         {
-            return _longprecision.ToString();
+            return GetLongPrecision().ToString();
         }
 
         public static int GetLongNumberPrecision()
         {
-            return _longprecision;
+            return GetLongPrecision();
         }
         
         public static string FormatNormalNumberDigit(Decimal? number)
         {
-            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _normalprecision, MidpointRounding.AwayFromZero));
+            int normalPrecision = GetNormalPrecision();
+            return String.Format("{0:#0." + "".PadLeft(normalPrecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, normalPrecision, MidpointRounding.AwayFromZero));
         }
         public static string FormatNormalNumberDigit(Double? number)
         {
-            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _normalprecision, MidpointRounding.AwayFromZero));
+            int normalPrecision = GetNormalPrecision();
+            return String.Format("{0:#0." + "".PadLeft(normalPrecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, normalPrecision, MidpointRounding.AwayFromZero));
         }
 
 
         public static string FormatLongNumberDigit(Decimal? number)
         {
-            return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _longprecision, MidpointRounding.AwayFromZero));
+            int longPrecision = GetLongPrecision();
+            return String.Format("{0:#0." + "".PadLeft(longPrecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, longPrecision, MidpointRounding.AwayFromZero));
         }
         public static string FormatLongNumberDigit(Double? number)
         {
-            return String.Format("{0:#0." + "".PadLeft(_longprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _longprecision, MidpointRounding.AwayFromZero));
+            int longPrecision = GetLongPrecision();
+            return String.Format("{0:#0." + "".PadLeft(longPrecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, longPrecision, MidpointRounding.AwayFromZero));
         }
 
 
         public static string FormatNumberDigitRate(Decimal? number)
         {
-            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", (number.HasValue) ? Math.Truncate(number.Value * 10000) / 10000 : number);
+            return String.Format("{0:#0." + "".PadLeft(GenericParameterManager.Current.GetNormalPrecision(), '0') + "}", (number.HasValue) ? Math.Truncate(number.Value * 10000) / 10000 : number);
         }
         public static string FormatNumberDigitRate(Double? number)
         {
-
-            return String.Format("{0:#0." + "".PadLeft(_normalprecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, _normalprecision, MidpointRounding.AwayFromZero));
+            int normalPrecision = GetNormalPrecision();
+            return String.Format("{0:#0." + "".PadLeft(normalPrecision, '0') + "}", Math.Round(number.HasValue ? number.Value : 0, normalPrecision, MidpointRounding.AwayFromZero));
         }
 
         public static string FormatNumber(Decimal? number)
