@@ -85,6 +85,7 @@
     <Compile Include="Context\RDLCReportDataSourceSettingsContext.cs" />
     <Compile Include="Context\RDLCReportParameterValueContext.cs" />
     <Compile Include="Context\StartDateCalculationMethodContext.cs" />
+    <Compile Include="Extensions\InvoiceFileExtendedSetting.cs" />
     <Compile Include="Extensions\InvoiceItemSubSection.cs" />
     <Compile Include="Extensions\InvoiceSynchronizer.cs" />
     <Compile Include="Extensions\InvoiceTypeExtendedSettingsInfoContext.cs" />

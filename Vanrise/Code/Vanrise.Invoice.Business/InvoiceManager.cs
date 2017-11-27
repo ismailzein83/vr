@@ -806,9 +806,8 @@ namespace Vanrise.Invoice.Business
         #endregion
 
         #region Private Methods
-        private bool ActionBeforeGenerateInvoice(long invoiceId)
+        private bool ActionBeforeGenerateInvoice(Entities.Invoice invoice)
         {
-            var invoice = GetInvoice(invoiceId);
             var invoiceSettings = invoice.Settings;
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
             var invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
@@ -822,21 +821,25 @@ namespace Vanrise.Invoice.Business
                     attachment.ThrowIfNull("attachment", fileAttachment.AttachmentId);
                     InvoiceRDLCFileConverterContext context = new InvoiceRDLCFileConverterContext
                     {
-                        InvoiceId = invoiceId
+                        InvoiceId = invoice.InvoiceId
                     };
                     var invoiceFile = attachment.InvoiceFileConverter.ConvertToInvoiceFile(context);
                     var fileId = fileManager.AddFile(new VRFile
                     {
                         Content = invoiceFile.Content,
                         Name = string.Format("{0}.{1}", invoiceFile.Name, invoiceFile.ExtensionType),
-                        CreatedTime = DateTime.Now,
-                        Extension = invoiceFile.ExtensionType
+                        Extension = invoiceFile.ExtensionType,
+                        IsTemp = false,
+                        Settings = new VRFileSettings
+                        {
+                            ExtendedSettings = new InvoiceFileExtendedSetting { InvoiceId = invoice.InvoiceId, InvoiceTypeId = invoiceType.InvoiceTypeId }
+                        }
                     });
                     IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
                     if (invoiceSettings == null)
                         invoiceSettings = new InvoiceSettings();
                     invoiceSettings.FileId = fileId;
-                    dataManager.UpdateInvoiceSettings(invoiceId, invoiceSettings);
+                    dataManager.UpdateInvoiceSettings(invoice.InvoiceId, invoiceSettings);
                     return true;
                 }
             }

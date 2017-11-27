@@ -120,7 +120,7 @@ namespace Vanrise.Invoice.Data.SQL
                 return GetReaderValue<int>(reader, "Counter");
             }, InvoiceTypeId, partnerId, fromDate, toDate);
         }
-        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions, Func<long, bool> actionBeforeGenerateInvoice, out long insertedInvoiceId)
+        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions, Func<Entities.Invoice, bool> actionBeforeGenerateInvoice, out long insertedInvoiceId)
         {
             object invoiceId;
             string serializedSettings = null;
@@ -175,7 +175,10 @@ namespace Vanrise.Invoice.Data.SQL
                 dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSets);
             }
             if (actionBeforeGenerateInvoice != null)
-                actionBeforeGenerateInvoice(insertedInvoiceId);
+            {
+                invoiceEntity.InvoiceId = insertedInvoiceId;
+                actionBeforeGenerateInvoice(invoiceEntity);
+            }
             var transactionOptions = new TransactionOptions
             {
                 IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
