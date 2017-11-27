@@ -49,6 +49,11 @@ namespace Vanrise.AccountManager.Business
            };
            return accountManagers.MapRecords(AccountManagerInfoMapper, filterExpression).OrderBy(x => x.UserName);
        }
+       public string GetAccountManagerName(long accountManagerId)
+       {
+           var accountManager = GetAccountManager(accountManagerId);
+           return userManager.GetUserName(accountManager.UserId);
+       }
        public Vanrise.Entities.InsertOperationOutput<AccountManagerDetail> AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
        {
            int accountManagerId = -1;
