@@ -21,6 +21,10 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public double SaleRate { get; set; }
         public string SaleRateFormatted { get; set; }
         public double CostRate { get; set; }
+        public int? SaleRateType { get; set; }
+        public int? CostRateType { get; set; }
+        public string SaleRateTypeFormatted { get; set; }
+        public string CostRateTypeFormatted { get; set; }
         public string CostRateFormatted { get; set; }
         public decimal? SaleDuration { get; set; }
         public string SaleDurationFormatted { get; set; }
@@ -49,5 +53,11 @@ namespace TOne.WhS.Analytics.Entities.BillingReport
         public string AvgMinFormatted { get; set; }
         public DateTime? SaleRateEffectiveDate { get; set; }
         public DateTime? CostRateEffectiveDate { get; set; }
+
+        public CarrierSummaryFormatted() { }
+        public IEnumerable<CarrierSummaryFormatted> GetCarrierSummaryRDLCSchema()
+        {
+            return null;
+        }
     }
 }

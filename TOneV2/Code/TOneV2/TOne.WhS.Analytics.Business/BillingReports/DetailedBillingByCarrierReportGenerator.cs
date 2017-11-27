@@ -6,6 +6,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Analytics.Business.BillingReports
@@ -17,11 +18,14 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             AnalyticManager analyticManager = new AnalyticManager();
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
+            RateTypeManager rateTypeManager = new RateTypeManager();
+
+
             DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>
             {
                 Query = new AnalyticQuery
                 {
-                    DimensionFields = new List<string> { "Customer", "Supplier", "SaleZone", "SupplierZone", "CostRateConvCurr", "SaleRateConvCurr", "SaleRateId", "SaleRateChange", "SaleRateEffectiveDate", "CostRateId", "CostRateChange", "CostRateEffectiveDate" },
+                    DimensionFields = new List<string> { "Customer", "Supplier", "SaleZone", "SupplierZone", "CostRateConvCurr", "SaleRateConvCurr", "SaleRateType", "SaleRateChange", "SaleRateEffectiveDate", "CostRateType", "CostRateChange", "CostRateEffectiveDate" },
                     MeasureFields = new List<string> { "SaleDuration", "SaleNetNotNULL", "CostDuration", "CostNetNotNULL", "ProfitNotNULL" },
                     TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = parameters.FromTime,
@@ -96,6 +100,24 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                             carrierSummary.SaleRate = Convert.ToDouble(saleRateValue.Value ?? 0.0);
                             carrierSummary.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.SaleRate);
                         }
+
+                        var saleRateType = analyticRecord.DimensionValues[6];
+                        if (saleRateType.Value != null)
+                        {
+                            carrierSummary.SaleRateType = (int?)saleRateType.Value;
+                            carrierSummary.SaleRateTypeFormatted = rateTypeManager.GetRateTypeName(carrierSummary.SaleRateType.Value);
+                        }
+                        else
+                            carrierSummary.SaleRateTypeFormatted = "Normal";
+
+
+                        if (saleRateType != null)
+                        {
+                            carrierSummary.SaleRate = Convert.ToDouble(saleRateValue.Value ?? 0.0);
+                            carrierSummary.SaleRateFormatted = ReportHelpers.FormatLongNumberDigit(carrierSummary.SaleRate);
+                        }
+
+
                         var saleRateChange = analyticRecord.DimensionValues[7];
                         if (saleRateChange != null)
                         {
@@ -107,6 +129,15 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         {
                             carrierSummary.SaleRateEffectiveDate = Convert.ToDateTime(saleRateEffectiveDate.Value);
                         }
+                        var costRateType = analyticRecord.DimensionValues[9];
+                        if (costRateType.Value != null)
+                        {
+                            carrierSummary.CostRateType = (int?)costRateType.Value;
+                            carrierSummary.CostRateTypeFormatted = rateTypeManager.GetRateTypeName(carrierSummary.CostRateType.Value);
+                        }
+                        else
+                            carrierSummary.CostRateTypeFormatted = "Normal";
+
                         var costRateChange = analyticRecord.DimensionValues[10];
                         if (costRateChange != null)
                         {
