@@ -87,7 +87,7 @@ namespace TOne.WhS.Routing.Data.SQL
             if (input.Query.CustomerId.HasValue)
             {
                 customerIdFilter = string.Format(" AND CustomerId = {0} ", input.Query.CustomerId);
-                joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId ";
+                joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId and pr.RoutingProductId = czd.RoutingProductId ";
                 effectiveRateValue = " ,czd.[EffectiveRateValue] ";
             }
             else
@@ -403,7 +403,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                 pr.[ExecutedRuleId],
                                                                 pr.[OptionsDetailsBySupplier],
                                                                 pr.[OptionsByPolicy],
-                                                                pr.[IsBlocked]
+                                                                pr.[IsBlocked],
+                                                                null as EffectiveRateValue
                                                             FROM [dbo].[ProductRoute] pr with(nolock) JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
                                                             JOIN @RPZoneList z
                                                             ON z.RoutingProductId = pr.RoutingProductId AND z.SaleZoneId = pr.SaleZoneId";
