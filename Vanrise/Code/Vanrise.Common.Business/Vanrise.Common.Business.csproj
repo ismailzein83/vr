@@ -123,6 +123,9 @@
     <Compile Include="VRLocalization\VRLocalizationModuleManager.cs" />
     <Compile Include="VRLocalization\VRLocalizationTextResourceManager.cs" />
     <Compile Include="VRLocalization\VRLocalizationTextResourceTranslationManager.cs" />
+    <Compile Include="VRMail\Pop3\VRPop3Connection.cs" />
+    <Compile Include="VRMail\Pop3\VRPop3MailMessage.cs" />
+    <Compile Include="VRMail\Pop3\VRPop3MailMessageHeader.cs" />
     <Compile Include="VRMail\VRMailManager.cs" />
     <Compile Include="VRMail\VRMailMessageTemplateManager.cs" />
     <Compile Include="VRMail\VRMailMessageTypeManager.cs" />
