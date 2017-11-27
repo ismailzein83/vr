@@ -100,6 +100,7 @@ app.directive('whsInvoiceInvoiceaccountSelector', ['VRUIUtilsService', 'UtilsSer
                 api.load = function (payload) {
                     var selectedIds;
                     var filter;
+                    var partnerInvoiceFilters;
                     if (payload != undefined) {
                         context = payload.context;
                         filter = payload.filter;
@@ -107,6 +108,18 @@ app.directive('whsInvoiceInvoiceaccountSelector', ['VRUIUtilsService', 'UtilsSer
                             filter = {};
                         filter.InvoiceTypeId = payload.invoiceTypeId;
                         selectedIds = payload.selectedIds;
+                        partnerInvoiceFilters = payload.partnerInvoiceFilters;
+                        if(partnerInvoiceFilters != undefined)
+                        {
+                            if (filter == undefined)
+                                filter = {};
+                            if (filter.Filters == undefined)
+                                filter.Filters = [];
+                            for (var i = 0; i < partnerInvoiceFilters.length; i++) {
+                                var partnerInvoiceFilter = partnerInvoiceFilters[i];
+                                filter.Filters.push(partnerInvoiceFilter);
+                            }
+                        }
                     }
 
                     var promises = [];
