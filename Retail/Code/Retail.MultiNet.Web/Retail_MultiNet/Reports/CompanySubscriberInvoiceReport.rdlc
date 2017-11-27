@@ -1913,7 +1913,10 @@
                           <TextRuns>
                             <TextRun>
                               <Value>Make your cheque to "Multinet Pakistan Pvt Ltd"</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style />
