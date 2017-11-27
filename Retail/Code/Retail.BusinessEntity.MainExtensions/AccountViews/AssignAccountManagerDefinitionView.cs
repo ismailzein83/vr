@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountViews
         {
             get
             {
-                return "";
+                return "retail-be-accountmanagerassignment-view";
             }
             set
             {

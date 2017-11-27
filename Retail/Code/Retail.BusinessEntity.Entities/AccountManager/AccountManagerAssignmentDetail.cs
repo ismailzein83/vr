@@ -15,5 +15,6 @@ namespace Retail.BusinessEntity.Entities
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
         public string AccountName { get; set; }
+        public string AccountManagerName { get; set; }
     }
 }

@@ -18,10 +18,19 @@ namespace Retail.BusinessEntity.Business
         Vanrise.AccountManager.Business.AccountManagerAssignmentManager manager = new Vanrise.AccountManager.Business.AccountManagerAssignmentManager();
         public IDataRetrievalResult<AccountManagerAssignmentDetail> GetFilteredAccountManagerAssignments(DataRetrievalInput<AccountManagerAssignmentQuery> input)
         {
-            var accountManagerAssignments = manager.GetAccountManagerAssignments(input.Query.AccountManagerAssignementDefinitionId);
+            var accountManagerAssignementDefinitionId = input.Query.AccountManagerAssignementDefinitionId;
+            if (input.Query.AccountBEDefinitionId.HasValue)
+            {
+                var accountManagerDefInfoByAccount = GetAccountManagerDefInfoByAccountBeDefinitionId(input.Query.AccountBEDefinitionId.Value);
+                if (accountManagerDefInfoByAccount != null && accountManagerDefInfoByAccount.AccountManagerAssignmentDefinition != null)
+                    accountManagerAssignementDefinitionId = accountManagerDefInfoByAccount.AccountManagerAssignmentDefinition.AccountManagerAssignementDefinitionId;
+            }
+            var accountManagerAssignments = manager.GetAccountManagerAssignments(accountManagerAssignementDefinitionId);
             Func<AccountManagerAssignment, bool> filterExpression = (prod) =>
             {
-                if (input.Query.AccountManagerId != null && !input.Query.AccountManagerId.Equals(prod.AccountManagerId))
+                if (input.Query.AccountManagerId.HasValue && !input.Query.AccountManagerId.Equals(prod.AccountManagerId))
+                    return false;
+                if (input.Query.AccountId != null && !input.Query.AccountId.Equals(prod.AccountId))
                     return false;
                 return true;
             };
@@ -142,12 +151,15 @@ namespace Retail.BusinessEntity.Business
             };
             AccountManagerManager accountManagerManager = new AccountManagerManager();
             var accountManagerDefinitionId = accountManagerManager.GetAccountManagerDefinitionId(accountManagerAssignment.AccountManagerId);
+            var accountManagerName = accountManagerManager.GetAccountManagerName( accountManagerAssignment.AccountManagerId);
             AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
             var accountManagerDefinitionSetting = accountManagerDefinitionManager.GetAccountManagerAssignmentDefinition(accountManagerDefinitionId, accountManagerAssignment.AccountManagerAssignementDefinitionId);
             if (accountManagerDefinitionSetting != null)
             {
                 accountManagerAssignmentDetail.AccountName = accountManagerDefinitionSetting.Settings.GetAccountName(accountManagerAssignment.AccountId);
             }
+            if (accountManagerName != null)
+                accountManagerAssignmentDetail.AccountManagerName = accountManagerName;
             return accountManagerAssignmentDetail;
         }
         #endregion

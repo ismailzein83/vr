@@ -4,8 +4,9 @@
              pagingtype="'Pager'"
              menuactions="gridMenuActions"
              enableautoexport="true">
-    <vr-datagridcolumn headertext="'ID'" field="'AccountManagerAssignementId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Account Name'" field="'AccountName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" field="'AccountManagerAssignementId'" type="'Text'" ></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Account Name'" field="'AccountName'" type="'Text'" ng-show="showAccountName"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Account Manager Name'" field="'AccountManagerName'" type="'Text'" ng-show="showAccountManagerName"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>

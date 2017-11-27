@@ -6,13 +6,13 @@
 
     function AccountManagerAssignmentService(VRModalService, VRNotificationService) {
 
-        function addAccountManagerAssignments(accountManagerDefinitionId, accountManagerId, accountManagerAssignementDefinitionId, onAccountManagerAssignmentAdded) {
+        function addAccountManagerAssignments(accountManagerDefinitionId, accountManagerId, accountManagerAssignementDefinitionId, onAccountManagerAssignmentAdded,accountId) {
             var parameters = {
                 accountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId,
                 accountManagerDefinitionId: accountManagerDefinitionId,
                 accountManagerId: accountManagerId,
+                accountId:accountId
             };
-           
             var settings = {};
 
             settings.onScopeReady = function (modalScope) {
@@ -20,16 +20,15 @@
             };
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountManager/AccountManagerAssignmentEditor.html', parameters, settings);
         }
-        function editAccountManagerAssignment(accountManagerAssignmentId, onAccountManagerAssignmentUpdated, accountManagerDefinitionId, accountManagerId, accountManagerAssignementDefinitionId) {
+        function editAccountManagerAssignment(accountManagerAssignmentId, onAccountManagerAssignmentUpdated, accountManagerDefinitionId,  accountManagerAssignementDefinitionId, accountId) {
             var modalSettings = {
             };
             var parameters = {
                 accountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId,
                 accountManagerDefinitionId: accountManagerDefinitionId,
-                accountManagerId: accountManagerId,
-                accountManagerAssignmentId: accountManagerAssignmentId
+                accountManagerAssignmentId: accountManagerAssignmentId,
+                accountId:accountId
             };
-
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onAccountManagerAssignmentUpdated = onAccountManagerAssignmentUpdated;
             };

@@ -295,6 +295,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\Templates\GridColumnDefinitionExportExcelEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountSecurityDefinition\retail-be-accountsecuritydefinition-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountSecurityDefinition\Templates\AccountSecurityDefinitionManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-assignaccountmanager.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-financialaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-acounthistory.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-actions.js" />
@@ -307,6 +308,7 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-subaccounts.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\retail-be-accountviewdefinitionsettings-accountinfo.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\AccountHistorySettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\AccountManagerAccountViewDefinitionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\FinancialAccountViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\ActionsViewSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountViewDefinition\MainExtensions\Templates\ChildBERelationViewSettingsTemplate.html" />

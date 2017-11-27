@@ -26,6 +26,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
         var gridAPI;
         var searchPayload;
         var accountManagerAssignementDefinitionId;
+        var accountId;
+        var accountBeDefinitionId;
+        var accountManagerDefinitionId;
 
 
         function initializeController() {
@@ -39,10 +42,22 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (payload) {
                         searchPayload = payload;
-                        if (searchPayload != undefined && searchPayload.accountManagerSubViewDefinition != undefined && searchPayload.accountManagerSubViewDefinition.Settings != undefined)
-                            accountManagerAssignementDefinitionId = searchPayload.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId;
-                        return gridAPI.retrieveData(getGridQuery());
+                        if (searchPayload != undefined) {
+                            accountId= searchPayload.accountId;
+                            accountBeDefinitionId = searchPayload.accountBEDefinitionId;
+                            accountManagerDefinitionId = searchPayload.accountManagerDefinitionId;
+                            
 
+                            if (searchPayload.accountManagerSubViewDefinition != undefined && searchPayload.accountManagerSubViewDefinition.Settings != undefined)
+                                accountManagerAssignementDefinitionId = searchPayload.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId;
+                            if (searchPayload.accountManagerAssignementDefinitionId != undefined)
+                                accountManagerAssignementDefinitionId = searchPayload.accountManagerAssignementDefinitionId;
+                        }
+                        if (accountBeDefinitionId != undefined) 
+                            $scope.showAccountManagerName = true;
+                        else 
+                            $scope.showAccountName = true;
+                        return gridAPI.retrieveData(getGridQuery());
                     };
                     directiveAPI.onAccountManagerAssignmentAdded = function (accountManagerAssignment) {
                         gridAPI.itemAdded(accountManagerAssignment);
@@ -77,12 +92,14 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                 gridAPI.itemUpdated(updatedItem);
             };
             var accountManagerAssignmentId = accountManagerAssignment.AccountManagerAssignementId;
-            Retail_BE_AccountManagerAssignmentService.editAccountManagerAssignment(accountManagerAssignmentId, onAccountManagerAssignmentUpdated, searchPayload.accountManagerDefinitionId, searchPayload.accountManagerId, searchPayload.accountManagerSubViewDefinition.Settings.AccountManagerAssignementDefinitionId);
+            Retail_BE_AccountManagerAssignmentService.editAccountManagerAssignment(accountManagerAssignmentId, onAccountManagerAssignmentUpdated, accountManagerDefinitionId, accountManagerAssignementDefinitionId,accountId);
         }
         function getGridQuery() {
             var Query = {
                 AccountManagerId: searchPayload.accountManagerId,
-                AccountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId
+                AccountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId,
+                AccountId: accountId,
+                AccountBEDefinitionId: accountBeDefinitionId
             };
             return Query;
         }

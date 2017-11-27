@@ -41,11 +41,11 @@
             if (parameters != undefined && parameters != null) {
                 accountManagerDefinitionId = parameters.accountManagerDefinitionId;
                 accountManagerAssignementDefinitionId = parameters.accountManagerAssignementDefinitionId;
-                accountManagerId = parameters.accountManagerId;
                 accountManagerAssignmentId = parameters.accountManagerAssignmentId;
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
                 accountId = parameters.accountId;
                 accountActionDefinition = parameters.accountActionDefinition;
+                accountManagerId = parameters.accountManagerId;
             }
             isEditMode = (accountManagerAssignmentId != undefined);
         }
@@ -80,7 +80,7 @@
             };
         }
         function load() {
-            if (isEditMode || accountBEDefinitionId != undefined) {
+            if (isEditMode || accountId != undefined) {
                 $scope.scopeModel.accountSelectorDisable = true;
                 $scope.scopeModel.accountSelectorLabel = "Account";
             }
@@ -137,6 +137,7 @@
                         var payload = {
                             selectedIds: accountManagerId
                         };
+
                         $scope.scopeModel.accountManagerDisable = true;
                     }
                     VRUIUtilsService.callDirectiveLoad(accountManagerSelectorAPI, payload, accountManagerSelectorLoadDeferred);
@@ -222,6 +223,8 @@
             };
             return Retail_BE_AccountManagerAssignmentAPIService.GetAccountManagerAssignmentRuntimeEditor(accountManagerRuntimeInput).then(function (response) {
                 accountManagerAssignmentRuntime = response;
+                if (accountManagerAssignmentRuntime != undefined && accountManagerAssignmentRuntime.AccountManagerAssignment != undefined)
+                    accountManagerId = accountManagerAssignmentRuntime.AccountManagerAssignment.AccountManagerId;
                 if (accountManagerAssignmentRuntime != undefined && accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition != undefined && accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings != undefined) {
                     $scope.scopeModel.assignmentRuntime = accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings.RuntimeEditor;
                 }
