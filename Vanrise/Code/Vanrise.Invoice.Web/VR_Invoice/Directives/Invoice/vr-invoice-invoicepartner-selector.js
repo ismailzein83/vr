@@ -70,17 +70,17 @@
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
 
-                        if(partnerInvoiceFilters != undefined)
-                        {
-                            if (filter == undefined)
-                                filter = {};
-                            if (filter.Filters == undefined)
-                                filter.Filters = [];
-                            for (var i = 0; i < partnerInvoiceFilters.length; i++) {
-                                var partnerInvoiceFilter = partnerInvoiceFilters[i];
-                                filter.Filters.push(partnerInvoiceFilter);
-                            }
-                        }
+                        //if(partnerInvoiceFilters != undefined)
+                        //{
+                        //    if (filter == undefined)
+                        //        filter = {};
+                        //    if (filter.Filters == undefined)
+                        //        filter.Filters = [];
+                        //    for (var i = 0; i < partnerInvoiceFilters.length; i++) {
+                        //        var partnerInvoiceFilter = partnerInvoiceFilters[i];
+                        //        filter.Filters.push(partnerInvoiceFilter);
+                        //    }
+                        //}
                     }
 
                     var invoiceTypeSelectorPromise = getInvoiceTypeSelector(invoiceTypeId);
@@ -123,7 +123,8 @@
                                 selectedIds: selectedIds,
                                 extendedSettings: invoiceTypeEntity != undefined && invoiceTypeEntity.Settings != undefined ? invoiceTypeEntity.Settings.ExtendedSettings : undefined,
                                 filter: filter,
-                                invoiceTypeId: invoiceTypeId
+                                invoiceTypeId: invoiceTypeId,
+                                partnerInvoiceFilters: partnerInvoiceFilters
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
