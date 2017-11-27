@@ -69,9 +69,23 @@ namespace TOne.WhS.Invoice.Business
 
         public bool UpdateOriginalInvoiceData(OriginalInvoiceDataInput input)
         {
+
             Vanrise.Invoice.Business.InvoiceManager invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
             var invoice = invoiceManager.GetInvoice(input.InvoiceId);
             invoice.ThrowIfNull("invoice", input.InvoiceId);
+
+            if (input.AttachementFiles != null)
+            {
+                VRFileManager vrFileManager = new VRFileManager();
+                foreach (var attachment in input.AttachementFiles)
+                {
+                    if (!vrFileManager.SetFileUsedAndUpdateSettings(attachment.FileId, new VRFileSettings { ExtendedSettings = new OriginalInvoiceDataFileSetting { InvoiceId = input.InvoiceId, InvoiceTypeId = invoice.InvoiceTypeId} }))
+                    {
+                        return false;
+                    }
+                }
+            }
+           
             var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
             supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
             supplierInvoiceDetails.OriginalAmount = input.OriginalAmount;

@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="CompareInvoiceOperationOutput.cs" />
     <Compile Include="InvoiceComparisonTemplate.cs" />
+    <Compile Include="OriginalInvoiceDataFileSetting.cs" />
     <Compile Include="OriginalInvoiceDataInput.cs" />
     <Compile Include="OriginalInvoiceDataRuntime.cs" />
     <Compile Include="SupplierGenerationCustomSectionPayload.cs" />
