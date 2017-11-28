@@ -63,6 +63,8 @@
     <Compile Include="TextManipulationAction\AddPrefixActionSettings.cs" />
     <Compile Include="TextManipulationAction\ReplaceStringActionSettings.cs" />
     <Compile Include="TextManipulationAction\SubstringActionSettings.cs" />
+    <Compile Include="VRObjectTypes\CompanySettingsObjectType.cs" />
+    <Compile Include="VRObjectTypes\CompanySettingsPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\ProductInfoPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\ProductInfoObjectType.cs" />
     <Compile Include="VRObjectTypes\TextObjectType.cs" />

@@ -227,6 +227,8 @@
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companydefinition-settings-editor.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companydefinition-selective.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-general-technical-settings-editor.js" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingsobjecttype.js" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingspropertyevaluator.js" />
     <Content Include="Common\Directives\Region\Templates\RegionGridTemplate.html" />
     <Content Include="Common\Directives\Region\vr-common-region-grid.js" />
     <Content Include="Common\Directives\Region\vr-common-region-selector.js" />
