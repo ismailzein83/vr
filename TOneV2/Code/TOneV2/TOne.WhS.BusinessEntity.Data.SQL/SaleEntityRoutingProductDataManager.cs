@@ -26,7 +26,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("[TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetAllZoneRPs]", SaleZoneRoutingProductMapper);
         }
-
+        public IEnumerable<SaleZoneRoutingProduct> GetExistingZoneRoutingProductsByZoneIds(SalePriceListOwnerType ownerType, int ownerId, IEnumerable<long> zoneIds, DateTime minEED)
+        {
+            string zoneIdsParameter = string.Join(",", zoneIds);
+            return GetItemsSP("[TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetExistingByZoneIDs]", SaleZoneRoutingProductMapper, ownerType, ownerId, zoneIdsParameter, minEED);
+        }
         public List<DefaultRoutingProduct> GetAllDefaultRoutingProducts()
         {
             return GetItemsSP("[TOneWhS_BE].[sp_SaleEntityRoutingProduct_GetAllDefaultRPs]", DefaultRoutingProductMapper);
