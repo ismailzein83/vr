@@ -10,6 +10,7 @@ namespace Retail.BusinessEntity.Business
 {
     public class AssignedAccountToAccountManagerFilter : IAccountFilter
     {
+        public string EditedAccountId { get; set; }
         public bool IsExcluded(IAccountFilterContext context)
         {
             RetailAccountManagerAssignmentManager retailAccountManagerAssignmnetManager = new RetailAccountManagerAssignmentManager();
@@ -20,10 +21,13 @@ namespace Retail.BusinessEntity.Business
                 throw new Exception("Account Manager Definition Info is Null");
 
             var assignmnetDefinitionId = accountManagerDefInfo.AccountManagerAssignmentDefinition.AccountManagerAssignementDefinitionId;
+            if (context.Account.AccountId.ToString() == EditedAccountId)
+                return false;   
             if (accountManagerAssignmnetManager.AreAccountAssignableToAccountManager(assignmnetDefinitionId, context.Account.AccountId.ToString()))
                 return false;
             return true;
 
         }
+      
     }
 }
