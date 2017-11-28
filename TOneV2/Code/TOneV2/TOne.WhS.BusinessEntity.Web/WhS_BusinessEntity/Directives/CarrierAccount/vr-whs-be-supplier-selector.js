@@ -45,13 +45,13 @@ app.directive('vrWhsBeSupplierSelector', ['UtilsService', 'VRUIUtilsService',
             //if (attrs.isrequired != undefined)
             //    required = "isrequired";
 
-            //var hideremoveicon = "";
-            //if (attrs.hideremoveicon != undefined)
-            //    hideremoveicon = "hideremoveicon";
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = "hideremoveicon";
 
 
             return '<vr-whs-be-carrieraccount-selector onselectionchanged="ctrl.onselectionchanged" normal-col-num="{{ctrl.normalColNum}}" getsuppliers on-ready="onCarrierAccountDirectiveReady" ' +
-                multipleselection + ' isrequired="ctrl.isrequired" selectedvalues="ctrl.selectedvalues" hideremoveicon="ctrl.hideremoveicon"></vr-whs-be-carrieraccount-selector>';
+                multipleselection + ' isrequired="ctrl.isrequired" selectedvalues="ctrl.selectedvalues" ' + hideremoveicon + '></vr-whs-be-carrieraccount-selector>';
         }
 
         function supplierSelector(ctrl, $scope) {
