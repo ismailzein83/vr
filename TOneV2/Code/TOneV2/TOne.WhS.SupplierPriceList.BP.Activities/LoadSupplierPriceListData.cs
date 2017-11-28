@@ -115,10 +115,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                 if (IsEffectiveDateLessThanMinDate(minimumDate, priceListService.EffectiveDate))
                     minimumDate = priceListService.EffectiveDate.Value;
 
+                string zoneNameValue = priceListService.ZoneName != null ? priceListService.ZoneName.Trim() : null;
+
                 importedZonesServicesList.Add(new ImportedZoneService()
                 {
                     ServiceId = priceListService.ZoneServiceConfigId,
-                    ZoneName = priceListService.ZoneName,
+                    ZoneName = zoneNameValue,
                     BED = priceListService.EffectiveDate.HasValue ? priceListService.EffectiveDate.Value : DateTime.MinValue,
                     EED = null
                 });
