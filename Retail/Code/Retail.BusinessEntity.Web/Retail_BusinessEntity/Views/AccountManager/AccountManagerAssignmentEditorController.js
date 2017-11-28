@@ -157,6 +157,13 @@
                         }
                         if (accountId != undefined)
                             payload.selectedIds = [accountId];
+                        if (!isEditMode && accountId == undefined) {
+                            payload.filter = {};
+                            payload.filter.Filters = [];
+                            payload.filter.Filters.push({
+                                $type: "Retail.BusinessEntity.Business.AssignedAccountToAccountManagerFilter,Retail.BusinessEntity.Business",
+                            });
+                        }
                         VRUIUtilsService.callDirectiveLoad(accountSelectorAPI, payload, accountSelectorLoadDeferred);
                     });
 
