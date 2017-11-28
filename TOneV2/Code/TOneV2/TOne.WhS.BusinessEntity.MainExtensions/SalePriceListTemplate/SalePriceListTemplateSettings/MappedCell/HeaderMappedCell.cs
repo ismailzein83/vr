@@ -20,6 +20,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         CustomerFaxes = 5,
         CustomerPhoneNumbers = 6,
         CustomerContactPerson = 7,
+        CustomerAddress = 8,
     }
 
     public class HeaderMappedCell : MappedCell
@@ -58,6 +59,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     break;
                 case HeaderFiledType.CustomerContactPerson:
                     context.Value = getCustomerPricingContactPerson(context.CustomerId);
+                    break;
+                case HeaderFiledType.CustomerAddress:
+                    context.Value = getCustomerAddress(context.CustomerId);
                     break;
                 default:
                     context.Value = null;
@@ -134,6 +138,20 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             CarrierContact pricingContact = carrierProfile.Settings.Contacts.FirstOrDefault(x => x.Type == CarrierContactType.PricingContactPerson);
 
             return pricingContact != null ? pricingContact.Description : string.Empty;
+        }
+        private string getCustomerAddress(int customerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CarrierProfileManager carrierProfileManager = new CarrierProfileManager();
+            var carrierProfileId = carrierAccountManager.GetCarrierProfileId(customerId);
+            if (!carrierProfileId.HasValue)
+                throw new DataIntegrityValidationException(string.Format("Carrier Account with Id {0} does not have Carrier Profile", customerId));
+            var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
+
+            if (carrierProfile != null && carrierProfile.Settings != null)
+                return carrierProfile.Settings.Address;
+
+            return string.Empty;
         }
     }
 }

@@ -7,4 +7,5 @@
     CustomerFaxes: { value: 5, description: "Faxes" },
     CustomerPhoneNumbers: { value: 6, description: "Phone Numbers" },
     CustomerContactPerson: { value: 7, description: "Contact Person" },
+    CustomerAddress: { value: 8, description: "Address" },
 });
