@@ -94,6 +94,16 @@ namespace Vanrise.AccountManager.Business
 
            return updateOperationOutput;
        }
+       public bool AreUsersAssignableToAccountManager(int userId)
+       {
+           var accountManagers = this.GetCachedAccountManagers();
+           foreach (var accountManager in accountManagers)
+           {
+               if (accountManager.Value.UserId == userId)
+                   return false;
+           }
+           return true;
+       }
        public Vanrise.AccountManager.Entities.AccountManager GetAccountManager(long accountManagerId)
        {
            var allAccountManagers = this.GetCachedAccountManagers();

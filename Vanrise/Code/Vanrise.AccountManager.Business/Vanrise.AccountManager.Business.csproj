@@ -48,6 +48,7 @@
     <Compile Include="AccountManagerBEDefinitionSettings.cs" />
     <Compile Include="AccountManagerDefinitionManager.cs" />
     <Compile Include="AccountManagerManager.cs" />
+    <Compile Include="AssignedUsersToAccountManagerFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
