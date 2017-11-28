@@ -23,7 +23,6 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 
         IdbConnectionString _connectionString;
         List<IdbConnectionString> _redundantConnectionStrings;
-
         Dictionary<int, TelesIdbPostgresDataManager> _telesIdbPostgresDataManagers;
 
         public IdbConnectionString ConnectionString
@@ -113,6 +112,16 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             return true;
         }
 
+        //public void ApplyDifferentialRoutes(IIdbDataManagerApplyDifferentialRoutesContext context)
+        //{
+        //    List<IdbConvertedRoute> idbRoutes = context.ConvertedUpdatedRoutes.Select(itm => itm as IdbConvertedRoute).ToList();
+
+        //    Parallel.For(0, _telesIdbPostgresDataManagers.Count, (i) =>
+        //    {
+        //        _telesIdbPostgresDataManagers[i].ApplyDifferentialRoutes(idbRoutes);
+        //    });
+        //}
+
         private void ExecMVTSRadiusSQLDataManagerAction(Action<TelesIdbPostgresDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
             Action<Exception, bool> writeBusinessHandledException, bool isBusinessException, string businessExceptionMessage, out SwitchSyncOutput switchSyncOutput)
         {
@@ -187,21 +196,19 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         const string tempTableName = "route_temp";
         const string oldTableName = "route_old";
 
+        IdbConnectionString _idbConnectionString;
+
         public string ConnectionString { get { return GetConnectionString(); } }
 
-        IdbConnectionString _idbConnectionString;
         public TelesIdbPostgresDataManager(IdbConnectionString idbConnectionString)
         {
             _idbConnectionString = idbConnectionString;
         }
+
         protected override string GetConnectionString()
         {
             return _idbConnectionString.ConnectionString;
         }
-
-        #region Constants
-
-        #endregion
 
         public void PrepareTables()
         {
@@ -219,6 +226,19 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             string swapTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {0}; ", tableName, oldTableName, tempTableName);
             ExecuteNonQuery(new string[] { createindexScript, swapTableScript }, indexesCommandTimeoutInSeconds);
         }
+
+        //public void ApplyDifferentialRoutes(List<IdbConvertedRoute> idbRoutes)
+        //{
+        //    if (idbRoutes == null || idbRoutes.Count == 0)
+        //        return;
+
+        //    List<string> updateQueries = new List<string>();
+
+        //    foreach (var idbRoute in idbRoutes)
+        //        updateQueries.Add(string.Format("Update {0} Set route = {1} Where pref = {2}", tableName, idbRoute.Route, idbRoute.Pref));
+
+        //    ExecuteNonQuery(updateQueries.ToArray());
+        //}
 
         void BuildRouteTempTable(string routeTableName)
         {
