@@ -106,7 +106,7 @@ namespace Vanrise.Security.Business
             else
                 users = GetUsersByTenant();
 
-            return users.MapRecords(UserInfoMapper, user => (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == true && IsUserEnable(user))));
+            return users.MapRecords(UserInfoMapper, user => (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == false || IsUserEnable(user))));
         }
 
         private Dictionary<int, User> FilterUsers(Dictionary<int, User> users, List<IUserFilter> filters)
