@@ -133,7 +133,29 @@ namespace Vanrise.AccountManager.Business
         }
         public bool AreAccountAssignableToAccountManager(Guid assignmentDefinitionId, string accountId)
         {
-            throw new NotImplementedException();
+
+            var accountManagerAssignmnents = this.GetCachedAccountManagerAssignments(assignmentDefinitionId);
+            List<AccountManagerAssignment> accountAssignments = new List<AccountManagerAssignment>();
+            foreach (var accountManagerAssignmnet in accountManagerAssignmnents)
+            {
+                if (accountManagerAssignmnet.Value.AccountId == accountId)
+                {
+                    accountAssignments.Add(accountManagerAssignmnet.Value);
+                }
+            }
+            return AreAccountsValid(accountAssignments);
+        }
+        private bool AreAccountsValid(List<AccountManagerAssignment> accountManagerAssignments)
+        {
+            DateTime thisDay = DateTime.Today;
+            foreach (var accountManagerAssignmnet in accountManagerAssignments)
+            {
+                if (accountManagerAssignmnet.BED < thisDay && !accountManagerAssignmnet.EED.HasValue)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         public bool IsAccountOverLapped(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed,long? accountManagerAssignmentId, out string overLappedAccountName)
         {

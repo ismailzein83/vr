@@ -52,6 +52,7 @@ namespace Vanrise.AccountManager.Business
        public string GetAccountManagerName(long accountManagerId)
        {
            var accountManager = GetAccountManager(accountManagerId);
+           accountManager.ThrowIfNull("accountManager", accountManagerId);
            return userManager.GetUserName(accountManager.UserId);
        }
        public Vanrise.Entities.InsertOperationOutput<AccountManagerDetail> AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
