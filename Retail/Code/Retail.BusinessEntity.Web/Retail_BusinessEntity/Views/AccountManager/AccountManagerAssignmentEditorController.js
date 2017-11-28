@@ -148,23 +148,27 @@
                 var accountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 accountSelectorReadyDeferred.promise.then(function () {
+                    var editedAccountId;
                         var payload = {
                             AccountBEDefinitionId: accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings.AccountBEDefinitionId
                         };
                         if (accountManagerAssignmentRuntime != undefined && accountManagerAssignmentRuntime.AccountManagerAssignment != undefined) {
                             payload.selectedIds = [accountManagerAssignmentRuntime.AccountManagerAssignment.AccountId];
-                         
+                            editedAccountId = accountManagerAssignmentRuntime.AccountManagerAssignment.AccountId;
                         }
-                        if (accountId != undefined)
+                        if (accountId != undefined) {
                             payload.selectedIds = [accountId];
+                            if (editedAccountId == undefined)
+                            editedAccountId = accountId;
+                        }
                       
                             payload.filter = {};
                             payload.filter.Filters = [];
                             payload.filter.Filters.push({
                                 $type: "Retail.BusinessEntity.Business.AssignedAccountToAccountManagerFilter,Retail.BusinessEntity.Business",
-                                EditedAccountId: accountId
+                                EditedAccountId: editedAccountId
                             });
-                      
+
                         VRUIUtilsService.callDirectiveLoad(accountSelectorAPI, payload, accountSelectorLoadDeferred);
                     });
 
