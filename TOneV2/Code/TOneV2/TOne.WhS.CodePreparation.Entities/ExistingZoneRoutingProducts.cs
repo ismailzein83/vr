@@ -33,9 +33,9 @@ namespace TOne.WhS.CodePreparation.Entities.Processing
 
         public bool IsSameEntity(IExistingEntity nextEntity)
         {
-            ExistingZoneServices nextExistingZoneServices = nextEntity as ExistingZoneServices;
+            ExistingZoneRoutingProducts nextExistingZoneRoutingProducts = nextEntity as ExistingZoneRoutingProducts;
 
-            return this.ParentZone.Name.Equals(nextExistingZoneServices.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase);
+            return this.ParentZone.Name.Equals(nextExistingZoneRoutingProducts.ParentZone.Name, StringComparison.InvariantCultureIgnoreCase) && nextExistingZoneRoutingProducts.ZoneRoutingProductEntity.RoutingProductId==this.ZoneRoutingProductEntity.RoutingProductId;
                 
         }
         public DateTime? OriginalEED

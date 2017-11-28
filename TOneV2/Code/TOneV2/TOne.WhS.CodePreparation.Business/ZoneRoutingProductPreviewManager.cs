@@ -61,13 +61,14 @@ namespace TOne.WhS.CodePreparation.Business
         #region Private Mappers
         private ZoneRoutingProductPreviewDetail ZoneRoutingProductPreviewDetailMapper(ZoneRoutingProductPreview zoneRoutingProductPreview)
         {
+            RoutingProductManager routingProductManager = new RoutingProductManager();
             ZoneRoutingProductPreviewDetail zoneRoutingProductPreviewDetail = new ZoneRoutingProductPreviewDetail();
             zoneRoutingProductPreviewDetail.Entity = zoneRoutingProductPreview;
             zoneRoutingProductPreviewDetail.OwnerName = GetOwnerName(zoneRoutingProductPreview.OwnerType,zoneRoutingProductPreview.OwnerId);
             zoneRoutingProductPreviewDetail.OwnerTypeDescription = Vanrise.Common.Utilities.GetEnumDescription(zoneRoutingProductPreview.OwnerType);
             zoneRoutingProductPreviewDetail.RoutingProductName = _routingProductManager.GetRoutingProductName(zoneRoutingProductPreview.RoutingProductId);
             zoneRoutingProductPreviewDetail.ChangeTypeDescription = Vanrise.Common.Utilities.GetEnumDescription(zoneRoutingProductPreview.ChangeType);
-
+            zoneRoutingProductPreviewDetail.RoutingProductServicesIds = routingProductManager.GetDefaultServiceIds(zoneRoutingProductPreview.RoutingProductId);
             return zoneRoutingProductPreviewDetail;
         }
 

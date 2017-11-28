@@ -9,6 +9,9 @@
     <vr-datagridcolumn headertext="'Owner Name'" field="'OwnerName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Zone Name'" field="'Entity.ZoneName'" type="'Text'" ng-if="!isSubGrid"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Services'" invisibleheader fixedwidth="'70'">
+        <vr-whs-be-services-viewer on-ready="dataItem.onRPServiceViewerReady"></vr-whs-be-services-viewer>
+    </vr-datagridcolumn>
     <vr-datagridcolumn widthfactor="3">
         <vr-icon iconurl="dataItem.codeStatusIconUrl" tooltip="dataItem.codeStatusIconTooltip" inline></vr-icon>
     </vr-datagridcolumn>

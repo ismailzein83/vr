@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCpZoneroutingproductpreviewGrid", ["WhS_CP_CodePreparationPreviewAPIService", 'UtilsService', "VRNotificationService","WhS_CP_ZoneRoutingProductChangeTypeEnum",
-function (WhS_CP_CodePreparationPreviewAPIService, UtilsService, VRNotificationService, WhS_CP_ZoneRoutingProductChangeTypeEnum) {
+app.directive("vrCpZoneroutingproductpreviewGrid", ["WhS_CP_CodePreparationPreviewAPIService", 'UtilsService', "VRNotificationService","WhS_CP_ZoneRoutingProductChangeTypeEnum","VRUIUtilsService",
+function (WhS_CP_CodePreparationPreviewAPIService, UtilsService, VRNotificationService, WhS_CP_ZoneRoutingProductChangeTypeEnum, VRUIUtilsService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -60,6 +60,7 @@ function (WhS_CP_CodePreparationPreviewAPIService, UtilsService, VRNotificationS
                     .then(function (response) {
                         for (var i = 0; i < response.Data.length; i++) {
                             mapDataNeeded(response.Data[i]);
+                            setRPService(response.Data[i]);
                         }
                         onResponseReady(response);
                     })
@@ -78,6 +79,14 @@ function (WhS_CP_CodePreparationPreviewAPIService, UtilsService, VRNotificationS
                 }
             }
 
+            function setRPService(item) {
+                item.RPserviceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+                item.onRPServiceViewerReady = function (api) {
+                    item.serviceViewerAPI = api;
+                    var routingProductserviceViewerPayload = { selectedIds: item.RoutingProductServicesIds };
+                    VRUIUtilsService.callDirectiveLoad(item.serviceViewerAPI, routingProductserviceViewerPayload, item.RPserviceViewerLoadDeferred);
+                };
+            }
         }
     }
     return directiveDefinitionObject;

@@ -64,6 +64,8 @@ namespace TOne.WhS.CodePreparation.Entities
 
         public string OwnerName { get; set; }
         public string ChangeTypeDescription { get; set; }
+        public IEnumerable<int> RoutingProductServicesIds { get; set; }
+
     }
 
     public enum ZoneRoutingProductChangeType
