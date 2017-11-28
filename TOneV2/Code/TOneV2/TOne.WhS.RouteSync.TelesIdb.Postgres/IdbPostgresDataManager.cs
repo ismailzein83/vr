@@ -196,6 +196,10 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         const string tempTableName = "route_temp";
         const string oldTableName = "route_old";
 
+        string TableName { get { return !string.IsNullOrEmpty(_idbConnectionString.SchemaName) ? string.Format("{0}.{1}", _idbConnectionString.SchemaName, tableName) : tableName; } }
+        string TempTableName { get { return !string.IsNullOrEmpty(_idbConnectionString.SchemaName) ? string.Format("{0}.{1}", _idbConnectionString.SchemaName, tempTableName) : tempTableName; } }
+        string OldTableName { get { return !string.IsNullOrEmpty(_idbConnectionString.SchemaName) ? string.Format("{0}.{1}", _idbConnectionString.SchemaName, oldTableName) : oldTableName; } }
+
         IdbConnectionString _idbConnectionString;
 
         public string ConnectionString { get { return GetConnectionString(); } }
@@ -212,18 +216,18 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 
         public void PrepareTables()
         {
-            BuildRouteTempTable(tableName);
+            BuildRouteTempTable();
         }
 
         public void ApplyRadiusRoutesForDB(List<IdbConvertedRoute> idbRoutes)
         {
-            base.Bulk(idbRoutes, tempTableName);
+            base.Bulk(idbRoutes, TempTableName);
         }
 
         public void SwapTables(int indexesCommandTimeoutInSeconds)
         {
-            string createindexScript = string.Format("ALTER TABLE {0} ADD constraint route_pkey_{1} PRIMARY KEY (pref)", tempTableName, Guid.NewGuid().ToString("N"));
-            string swapTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {0}; ", tableName, oldTableName, tempTableName);
+            string createindexScript = string.Format("ALTER TABLE {0} ADD constraint route_pkey_{1} PRIMARY KEY (pref)", TempTableName, Guid.NewGuid().ToString("N"));
+            string swapTableScript = string.Format("ALTER TABLE IF EXISTS {0} RENAME TO {1}; ALTER TABLE {2} RENAME TO {0}; ", TableName, OldTableName, TempTableName);
             ExecuteNonQuery(new string[] { createindexScript, swapTableScript }, indexesCommandTimeoutInSeconds);
         }
 
@@ -235,18 +239,18 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         //    List<string> updateQueries = new List<string>();
 
         //    foreach (var idbRoute in idbRoutes)
-        //        updateQueries.Add(string.Format("Update {0} Set route = {1} Where pref = {2}", tableName, idbRoute.Route, idbRoute.Pref));
+        //        updateQueries.Add(string.Format("Update {0} Set route = '{1}' Where pref = '{2}'", TableName, idbRoute.Route, idbRoute.Pref));
 
         //    ExecuteNonQuery(updateQueries.ToArray());
         //}
 
-        void BuildRouteTempTable(string routeTableName)
+        void BuildRouteTempTable()
         {
-            string dropTempTableScript = string.Format("DROP TABLE IF EXISTS {0};", tempTableName);
-            string dropOldTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", oldTableName);
+            string dropTempTableScript = string.Format("DROP TABLE IF EXISTS {0};", TempTableName);
+            string dropOldTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", TableName);
             string createTempTableScript = string.Format(@"CREATE TABLE {0} (       
                                                            pref character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying,
-                                                           route character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying);", tempTableName);
+                                                           route character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying);", TempTableName);
 
             ExecuteNonQuery(new string[] { dropTempTableScript, dropOldTableScript, createTempTableScript });
         }
@@ -254,7 +258,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         internal void BlockCustomer(List<string> customerMappings)
         {
             StringBuilder blockCustomerScript = new StringBuilder();
-            blockCustomerScript.AppendFormat("UPDATE {0} SET route = 'BLK' WHERE ", tableName);
+            blockCustomerScript.AppendFormat("UPDATE {0} SET route = 'BLK' WHERE ", TableName);
             blockCustomerScript.Append(string.Join(" or ", customerMappings.Select(itm => string.Format("pref LIKE '{0}%'", itm))));
 
             ExecuteNonQuery(new string[] { blockCustomerScript.ToString() });

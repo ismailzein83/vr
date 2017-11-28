@@ -8,6 +8,7 @@ namespace TOne.WhS.RouteSync.Idb
 {
     public class IdbConnectionString
     {
+        public string SchemaName { get; set; }
         public string ConnectionString { get; set; }
     }
 }

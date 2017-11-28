@@ -1,7 +1,12 @@
 ﻿<vr-row removeline>
     <vr-columns colnum="12">
         <vr-section title="Primary" collapsible>
-            <vr-textbox label="Primary Connection String" type="text" value="scopeModel.connectionString" isrequired></vr-textbox>
+            <vr-columns colnum="2" haschildcolumns>
+                <vr-textbox label="Schema Name" type="text" value="scopeModel.schemaName"></vr-textbox>
+            </vr-columns >
+            <vr-columns colnum="10" medium-spacing>
+                <vr-textbox label="Primary Connection String" type="text" value="scopeModel.connectionString" isrequired></vr-textbox>
+            </vr-columns>
         </vr-section>
     </vr-columns>
 </vr-row>
@@ -15,7 +20,12 @@
             </vr-row>
 
             <vr-datalist maxitemsperrow="1" datasource="scopeModel.redundantConnectionStrings" autoremoveitem="true">
-                <vr-textbox label="Connection String" type="text" value="dataItem.ConnectionString" isrequired></vr-textbox>
+                <vr-columns colnum="2" haschildcolumns>
+                    <vr-textbox label="Schema Name" type="text" value="dataItem.SchemaName"></vr-textbox>
+                </vr-columns>
+                <vr-columns colnum="10" medium-spacing>
+                    <vr-textbox label="Connection String" type="text" value="dataItem.ConnectionString" isrequired></vr-textbox>
+                </vr-columns>
             </vr-datalist>
         </vr-section>
     </vr-columns>

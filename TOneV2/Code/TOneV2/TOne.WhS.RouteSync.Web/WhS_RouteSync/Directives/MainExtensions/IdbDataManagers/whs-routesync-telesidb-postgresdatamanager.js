@@ -43,6 +43,7 @@
 
                     if (payload != undefined) {
                         $scope.scopeModel.connectionString = payload.idbDataManagersSettings.ConnectionString.ConnectionString;
+                        $scope.scopeModel.schemaName = payload.idbDataManagersSettings.ConnectionString.SchemaName;
 
                         if (payload.idbDataManagersSettings.RedundantConnectionStrings != undefined)
                             $scope.scopeModel.redundantConnectionStrings = payload.idbDataManagersSettings.RedundantConnectionStrings;
@@ -53,7 +54,7 @@
 
                     var data = {
                         $type: "TOne.WhS.RouteSync.TelesIdb.Postgres.IdbPostgresDataManager, TOne.WhS.RouteSync.TelesIdb.Postgres",
-                        ConnectionString: { ConnectionString: $scope.scopeModel.connectionString },
+                        ConnectionString: { ConnectionString: $scope.scopeModel.connectionString, SchemaName: $scope.scopeModel.schemaName },
                         RedundantConnectionStrings: $scope.scopeModel.redundantConnectionStrings
                     };
                     return data;

@@ -48,12 +48,14 @@ namespace TOne.WhS.DBSync.Business
             string redundantConnectionString;
             GetConnectionStrings(parametersNode, out connectionString, out redundantConnectionString);
 
+            string schemaName = GetSchemaName(parametersNode);
+
             if (!string.IsNullOrEmpty(connectionString))
             {
                 synchroniser.DataManager = new IdbPostgresDataManager()
                 {
-                    ConnectionString = GetIdbConnectionString(connectionString),
-                    RedundantConnectionStrings = !string.IsNullOrEmpty(redundantConnectionString) ? new List<IdbConnectionString>() { GetIdbConnectionString(redundantConnectionString) } : null
+                    ConnectionString = GetIdbConnectionString(schemaName, connectionString),
+                    RedundantConnectionStrings = !string.IsNullOrEmpty(redundantConnectionString) ? new List<IdbConnectionString>() { GetIdbConnectionString(schemaName, redundantConnectionString) } : null
                 };
             }
 
@@ -64,6 +66,8 @@ namespace TOne.WhS.DBSync.Business
 
             return synchroniser;
         }
+
+
 
         private Dictionary<string, CarrierMapping> BuildCarrierMapping(XmlNode carrierMappingsNode, MigrationContext context, Dictionary<string, CarrierAccount> allCarrierAccounts)
         {
@@ -193,9 +197,18 @@ namespace TOne.WhS.DBSync.Business
                 redundantConnectionString = connectionStrings[1];
         }
 
-        private IdbConnectionString GetIdbConnectionString(string connectionString)
+        private string GetSchemaName(XmlNode parametersNode)
         {
-            return new IdbConnectionString() { ConnectionString = connectionString };
+            XmlNode schemaNameNode = GetXmlNodeByParameterName(parametersNode, "$schemaName");
+            if (schemaNameNode == null)
+                return null;
+
+            return schemaNameNode.FirstChild.Value;
+        }
+
+        private IdbConnectionString GetIdbConnectionString(string schemaName, string connectionString)
+        {
+            return new IdbConnectionString() { SchemaName = schemaName, ConnectionString = connectionString };
         }
 
         private XmlNode GetXmlNodeByParameterName(XmlNode parametersNode, string name)
