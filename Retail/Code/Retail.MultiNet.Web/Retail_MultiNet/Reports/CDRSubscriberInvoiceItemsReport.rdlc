@@ -32,7 +32,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.24663in</Height>
+              <Height>0.50767cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -57,8 +57,8 @@
                       <rd:DefaultName>Textbox1</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
                         <TopBorder>
                           <Style>None</Style>
@@ -88,7 +88,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19455in</Height>
+              <Height>0.33101cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -103,7 +103,6 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>6pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -113,8 +112,8 @@
                       <rd:DefaultName>Textbox3</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -135,7 +134,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.17708in</Height>
+              <Height>0.33102cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -158,9 +157,12 @@
                       <rd:DefaultName>Textbox5</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -180,7 +182,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.1875in</Height>
+              <Height>0.17552cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -194,8 +196,8 @@
                               <Value>#</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>7pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
+                                <FontSize>6pt</FontSize>
+                                <FontWeight>SemiBold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -207,9 +209,15 @@
                       <rd:DefaultName>Textbox6</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>Solid</Style>
+                        </LeftBorder>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -231,8 +239,8 @@
                               <Value>Date</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>7pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
+                                <FontSize>6pt</FontSize>
+                                <FontWeight>SemiBold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -244,11 +252,13 @@
                       <rd:DefaultName>Textbox28</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -269,8 +279,8 @@
                               <Value>Time</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>7pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
+                                <FontSize>6pt</FontSize>
+                                <FontWeight>SemiBold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -282,11 +292,13 @@
                       <rd:DefaultName>Textbox30</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -307,24 +319,24 @@
                               <Value>Calling Number</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>7pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
+                                <FontSize>6pt</FontSize>
+                                <FontWeight>SemiBold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox10</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -345,24 +357,24 @@
                               <Value>Called Number</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>7pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
+                                <FontSize>6pt</FontSize>
+                                <FontWeight>SemiBold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox15</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -383,24 +395,24 @@
                               <Value>Destination</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>7pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
+                                <FontSize>6pt</FontSize>
+                                <FontWeight>SemiBold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
+                          <Style />
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox22</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -421,8 +433,8 @@
                               <Value>Duration </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>7pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
+                                <FontSize>6pt</FontSize>
+                                <FontWeight>SemiBold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -434,11 +446,13 @@
                       <rd:DefaultName>Textbox19</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -458,25 +472,32 @@
                             <TextRun>
                               <Value>Sale Amount</Value>
                               <Style>
+                                <FontStyle>Normal</FontStyle>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>7pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
+                                <FontSize>6pt</FontSize>
+                                <FontWeight>SemiBold</FontWeight>
+                                <TextDecoration>None</TextDecoration>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox23</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <RightBorder>
+                          <Style>Solid</Style>
+                        </RightBorder>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -488,7 +509,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.06387in</Height>
+              <Height>0.07938cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -514,9 +535,12 @@
                       <rd:DefaultName>AttemptDateTime</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <LeftBorder>
+                          <Style>Solid</Style>
+                        </LeftBorder>
                         <PaddingLeft>0.5pt</PaddingLeft>
                         <PaddingRight>0.5pt</PaddingRight>
                         <PaddingTop>0.5pt</PaddingTop>
@@ -549,10 +573,9 @@
                       <rd:DefaultName>Textbox29</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>0.5pt</PaddingLeft>
                         <PaddingRight>0.5pt</PaddingRight>
                         <PaddingTop>0.5pt</PaddingTop>
@@ -573,7 +596,7 @@
                               <Value>=Fields!FormattedAttemptTime.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
-                                <FontSize>6pt</FontSize>
+                                <FontSize>5pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -585,10 +608,9 @@
                       <rd:DefaultName>Textbox31</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>0.5pt</PaddingLeft>
                         <PaddingRight>0.5pt</PaddingRight>
                         <PaddingTop>0.5pt</PaddingTop>
@@ -619,10 +641,9 @@
                       <rd:DefaultName>CallingNumber</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>0.5pt</PaddingLeft>
                         <PaddingRight>0.5pt</PaddingRight>
                         <PaddingTop>0.5pt</PaddingTop>
@@ -653,10 +674,9 @@
                       <rd:DefaultName>CalledNumber</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>0.5pt</PaddingLeft>
                         <PaddingRight>0.5pt</PaddingRight>
                         <PaddingTop>0.5pt</PaddingTop>
@@ -687,10 +707,9 @@
                       <rd:DefaultName>ZoneName</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>0.5pt</PaddingLeft>
                         <PaddingRight>0.5pt</PaddingRight>
                         <PaddingTop>0.5pt</PaddingTop>
@@ -723,10 +742,9 @@
                       <rd:DefaultName>DurationDescription</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
-                        <VerticalAlign>Middle</VerticalAlign>
                         <PaddingLeft>0.5pt</PaddingLeft>
                         <PaddingRight>0.5pt</PaddingRight>
                         <PaddingTop>0.5pt</PaddingTop>
@@ -759,9 +777,12 @@
                       <rd:DefaultName>SaleAmount</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <RightBorder>
+                          <Style>Solid</Style>
+                        </RightBorder>
                         <PaddingLeft>0.5pt</PaddingLeft>
                         <PaddingRight>0.5pt</PaddingRight>
                         <PaddingTop>0.5pt</PaddingTop>
@@ -773,7 +794,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.17708in</Height>
+              <Height>0.33102cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -799,9 +820,18 @@
                       <rd:DefaultName>Textbox8</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <TopBorder>
+                          <Style>Solid</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <LeftBorder>
+                          <Style>Solid</Style>
+                        </LeftBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -840,9 +870,15 @@
                       <rd:DefaultName>Textbox21</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <TopBorder>
+                          <Style>Solid</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -875,9 +911,18 @@
                       <rd:DefaultName>Textbox25</rd:DefaultName>
                       <Style>
                         <Border>
-                          <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Style>None</Style>
+                          <Width>0.25pt</Width>
                         </Border>
+                        <TopBorder>
+                          <Style>Solid</Style>
+                        </TopBorder>
+                        <BottomBorder>
+                          <Style>Solid</Style>
+                        </BottomBorder>
+                        <RightBorder>
+                          <Style>Solid</Style>
+                        </RightBorder>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -940,17 +985,20 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
+        <KeepTogether>true</KeepTogether>
         <DataSetName>MultiNetCDRs</DataSetName>
-        <Height>1.04671in</Height>
+        <Height>1.75562cm</Height>
         <Width>18.17428cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
+          <FontFamily>Verdana</FontFamily>
+          <FontSize>7pt</FontSize>
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>3.02905cm</Height>
+    <Height>2.10702cm</Height>
     <Style />
   </Body>
   <Width>18.2cm</Width>
@@ -1112,6 +1160,7 @@ Public Function SetLastPageInfo(NewData as Object)
  LastPageInfo = NewData
  End If
 End Function</Code>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
   <rd:ReportID>dc619518-ffb3-4372-9909-9da3464a9bed</rd:ReportID>
 </Report>

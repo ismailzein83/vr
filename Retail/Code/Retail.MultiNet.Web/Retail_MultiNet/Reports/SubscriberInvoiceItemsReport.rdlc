@@ -28,7 +28,7 @@
         <Style>
           <Border>
             <Style>Solid</Style>
-            <Width>0.5pt</Width>
+            <Width>0.25pt</Width>
           </Border>
           <BackgroundColor>#e2eaf5</BackgroundColor>
           <PaddingLeft>2pt</PaddingLeft>
@@ -65,7 +65,7 @@
         <Style>
           <Border>
             <Style>None</Style>
-            <Width>0.5pt</Width>
+            <Width>0.25pt</Width>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -101,7 +101,7 @@
         <Style>
           <Border>
             <Style>None</Style>
-            <Width>0.5pt</Width>
+            <Width>0.25pt</Width>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -113,19 +113,19 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.62322cm</Width>
+              <Width>1cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>7.06685cm</Width>
+              <Width>6.84541cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.7079cm</Width>
+              <Width>3.37476cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.52278cm</Width>
+              <Width>4.941cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.27925cm</Width>
+              <Width>2.01311cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -156,7 +156,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -194,7 +194,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -218,7 +218,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>ITEM NO</Value>
+                              <Value>ITEM </Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -235,7 +235,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -273,7 +273,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -311,7 +311,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -349,7 +349,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -387,7 +387,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <BackgroundColor>#e2eaf5</BackgroundColor>
                         <VerticalAlign>Middle</VerticalAlign>
@@ -427,7 +427,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -460,7 +460,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -495,7 +495,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -530,7 +530,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -565,7 +565,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -605,7 +605,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -642,7 +642,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -677,7 +677,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -712,7 +712,7 @@
                       <Style>
                         <Border>
                           <Style>Solid</Style>
-                          <Width>0.5pt</Width>
+                          <Width>0.25pt</Width>
                         </Border>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -755,7 +755,7 @@
         <Top>1.32167in</Top>
         <Left>0.00002in</Left>
         <Height>0.8in</Height>
-        <Width>18.2cm</Width>
+        <Width>18.17428cm</Width>
         <ZIndex>3</ZIndex>
         <Style>
           <Border>
@@ -869,6 +869,7 @@
         <Style>
           <Border>
             <Style>None</Style>
+            <Width>0.25pt</Width>
           </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
@@ -880,7 +881,7 @@
     <Height>8.18439cm</Height>
     <Style />
   </Body>
-  <Width>18.20005cm</Width>
+  <Width>18.28172cm</Width>
   <Page>
     <PageHeight>29.7cm</PageHeight>
     <PageWidth>21cm</PageWidth>
