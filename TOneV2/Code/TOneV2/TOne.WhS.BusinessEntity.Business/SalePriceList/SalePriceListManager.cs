@@ -74,6 +74,8 @@ namespace TOne.WhS.BusinessEntity.Business
                                 customerPriceList.CountryChanges, zoneWrappersByCountry, futureRateLocator, out overriddenListType);
                         customerPriceList.PriceList.PriceListType = overriddenListType;
 
+                        customerZoneNotifications = FilterSalePlZoneNotification(customerId, customerZoneNotifications);
+
                         if (customerZoneNotifications.Any())
                         {
                             int salePricelistTemplateId = _carrierAccountManager.GetCustomerPriceListTemplateId(customerId);
@@ -707,6 +709,49 @@ namespace TOne.WhS.BusinessEntity.Business
             AddRPChangesToSalePLNotification(salePlZoneNotifications, rpChanges, customerId, sellingProductId);
             return salePlZoneNotifications;
         }
+
+        private List<SalePLZoneNotification> FilterSalePlZoneNotification(int customerId, List<SalePLZoneNotification> salePlZoneNotifications)
+        {
+            // this function returns a new set of notification filtered by code based on IncludeClosedEntitiesStatus
+            // if OnlyFirstTime we will show the ended codes only the first time = > in changes
+            // if UntilClosureDate we will show ended codes until EED< DateTime.Now
+            //if Never closed codes are not included in the pricelist sheet
+
+            List<SalePLZoneNotification> filteredZoneNotifications = new List<SalePLZoneNotification>();
+            var closedCodeOption = _carrierAccountManager.GetCustomerIncludeClosedEntitiesStatus(customerId);
+            foreach (var salePlZoneNotification in salePlZoneNotifications)
+            {
+                List<SalePLCodeNotification> filteredCodeNotifications = new List<SalePLCodeNotification>();
+
+                var opennedCodes = salePlZoneNotification.Codes.Where(c => !c.EED.HasValue);
+                var notChangedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.CodeChange == CodeChange.NotChanged);
+                var changedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.CodeChange != CodeChange.NotChanged);
+
+                filteredCodeNotifications.AddRange(opennedCodes);
+
+                filteredCodeNotifications.AddRange(notChangedClosedCodes.Where(codeNotification =>
+                    closedCodeOption == IncludeClosedEntitiesEnum.UntilClosureDate));
+
+                filteredCodeNotifications.AddRange(changedClosedCodes.Where(codeNotification =>
+                    closedCodeOption == IncludeClosedEntitiesEnum.OnlyFirstTime));
+
+                //if all codes are filtered we will not add the related zone.
+                if (filteredCodeNotifications.Any())
+                {
+                    SalePLZoneNotification filteredZoneNotification = new SalePLZoneNotification
+                      {
+                          ZoneId = salePlZoneNotification.ZoneId,
+                          ZoneName = salePlZoneNotification.ZoneName,
+                          Rate = salePlZoneNotification.Rate,
+                          Increment = salePlZoneNotification.Increment
+                      };
+                    filteredZoneNotification.Codes.AddRange(filteredCodeNotifications);
+                    filteredZoneNotifications.Add(filteredZoneNotification);
+                }
+            }
+            return filteredZoneNotifications;
+        }
+
         private SalePLZoneNotification GetSalePlNotification(long zoneId, string zoneName, Dictionary<long, SalePLZoneNotification> salePLZoneNotificationByZoneId)
         {
             SalePLZoneNotification salePlZoneNotificationForRecentZone;
@@ -1317,7 +1362,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (var zoneNotification in customerZoneNotificationsByCurrencyId)
             {
-                VRFile vrFile = GetPriceListFile(customer.CarrierAccountId, zoneNotification.Value, salePriceListContext.EffectiveDate,
+                var filteredNotification = FilterSalePlZoneNotification(salePriceList.OwnerId, zoneNotification.Value);
+                VRFile vrFile = GetPriceListFile(customer.CarrierAccountId, filteredNotification, salePriceListContext.EffectiveDate,
                     overriddenListType, salePricelistTemplateId, salePriceList.CurrencyId);
 
                 vrFiles.Add(new SalePricelistVRFile
