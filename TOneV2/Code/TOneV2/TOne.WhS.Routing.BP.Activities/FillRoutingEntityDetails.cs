@@ -63,11 +63,11 @@ namespace TOne.WhS.Routing.BP.Activities
                 RateRouteInfo saleRateRouteInfo = new RateRouteInfo() { LatestVersionNumber = 0, MaxRateTimeStamp = inputArgument.MaxSaleRateTimeStamp, NextOpenOrCloseRateTime = inputArgument.NextOpenOrCloseSaleRateTime };
                 RateRouteInfo supplierRateRouteInfo = new RateRouteInfo() { LatestVersionNumber = 0, MaxRateTimeStamp = inputArgument.MaxSupplierRateTimeStamp, NextOpenOrCloseRateTime = inputArgument.NextOpenOrCloseSupplierRateTime };
 
-                PartialRouteInfo partialRouteInfo = new PartialRouteInfo() { LastVersionNumber = 0, LatestRoutingDate = inputArgument.EffectiveDate, SaleRateRouteInfo = saleRateRouteInfo, SupplierRateRouteInfo = supplierRateRouteInfo };
+                PartialRouteInfo partialRouteInfo = new PartialRouteInfo() { LastVersionNumber = 0, LatestRoutingDate = inputArgument.EffectiveDate, LatestCostRateVersionNumber = 0, LatestSaleRateVersionNumber = 0 };
                 RoutingEntityDetails partialRoutingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.PartialRouteInfo, RoutingEntityInfo = partialRouteInfo };
                 routingEntityDetailsDataManager.ApplyRoutingEntityDetails(partialRoutingEntityDetails);
 
-                BERouteInfo beRouteInfo = new BERouteInfo() { LatestCostRateVersionNumber = 0, LatestSaleRateVersionNumber = 0 };
+                BERouteInfo beRouteInfo = new BERouteInfo() { SaleRateRouteInfo = saleRateRouteInfo, SupplierRateRouteInfo = supplierRateRouteInfo };
                 RoutingEntityDetails beRoutingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.BERoute, RoutingEntityInfo = beRouteInfo };
                 routingEntityDetailsDataManager.ApplyRoutingEntityDetails(beRoutingEntityDetails);
             }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -23,13 +19,20 @@ namespace TOne.WhS.Routing.Entities
     {
         public int LastVersionNumber { get; set; }
 
-        public RateRouteInfo SaleRateRouteInfo { get; set; }
+        public int LatestSaleRateVersionNumber { get; set; }
 
-        public RateRouteInfo SupplierRateRouteInfo { get; set; }
+        public int LatestCostRateVersionNumber { get; set; }
 
         public DateTime LatestRoutingDate { get; set; }
 
         public DateTime? NextOpenOrCloseRuleTime { get; set; }
+    }
+
+    public class BERouteInfo : RoutingEntityInfo
+    {
+        public RateRouteInfo SaleRateRouteInfo { get; set; }
+
+        public RateRouteInfo SupplierRateRouteInfo { get; set; }
     }
 
     public class RateRouteInfo
@@ -37,12 +40,5 @@ namespace TOne.WhS.Routing.Entities
         public int LatestVersionNumber { get; set; }
         public DateTime? NextOpenOrCloseRateTime { get; set; }
         public object MaxRateTimeStamp { get; set; }
-    }
-
-    public class BERouteInfo : RoutingEntityInfo
-    {
-        public int LatestSaleRateVersionNumber { get; set; }
-
-        public int LatestCostRateVersionNumber { get; set; }
     }
 }
