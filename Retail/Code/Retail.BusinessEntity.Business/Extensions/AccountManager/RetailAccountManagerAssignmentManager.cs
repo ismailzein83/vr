@@ -38,6 +38,16 @@ namespace Retail.BusinessEntity.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountManagerAssignments.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
 
         }
+        public bool IsAccountAssignedToAccountManager(string accountId, Guid accountBeDefinitionId)
+        {
+            AccountManagerAssignmentManager accountManagerAssignmnetManager = new AccountManagerAssignmentManager();
+
+            var accountManagerDefInfo = GetAccountManagerDefInfoByAccountBeDefinitionId(accountBeDefinitionId);
+            if (accountManagerDefInfo == null || accountManagerDefInfo.AccountManagerAssignmentDefinition == null)
+                throw new Exception("Account Manager Definition Info is Null");
+            var assignmnetDefinitionId = accountManagerDefInfo.AccountManagerAssignmentDefinition.AccountManagerAssignementDefinitionId;
+            return accountManagerAssignmnetManager.AreAccountAssignableToAccountManager(assignmnetDefinitionId, accountId);
+        }
         public AccountManagerAssignmentRuntimeEditor GetAccountManagerAssignmentRuntimeEditor(AccountManagerAssignmentRuntimeInput accountManagerAssignmentRuntimeInput)
         {
             AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();

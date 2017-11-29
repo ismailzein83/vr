@@ -158,8 +158,6 @@
                         }
                         if (accountId != undefined) {
                             payload.selectedIds = [accountId];
-                            if (editedAccountId == undefined)
-                            editedAccountId = accountId;
                         }
                       
                             payload.filter = {};

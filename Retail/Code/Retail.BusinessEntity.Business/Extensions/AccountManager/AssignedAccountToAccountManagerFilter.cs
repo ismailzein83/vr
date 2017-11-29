@@ -22,12 +22,12 @@ namespace Retail.BusinessEntity.Business
 
             var assignmnetDefinitionId = accountManagerDefInfo.AccountManagerAssignmentDefinition.AccountManagerAssignementDefinitionId;
             if (context.Account.AccountId.ToString() == EditedAccountId)
-                return false;   
+                return false;
             if (accountManagerAssignmnetManager.AreAccountAssignableToAccountManager(assignmnetDefinitionId, context.Account.AccountId.ToString()))
                 return false;
             return true;
 
         }
-      
+
     }
 }

@@ -50,6 +50,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                     if (gridPayload != undefined) {
                         accountId = gridPayload.parentAccountId;
                         accountBEDefinitionId = gridPayload.accountBEDefinitionId;
+                        Retail_BE_AccountManagerAssignmentAPIService.IsAccountAssignedToAccountManager(accountId, accountBEDefinitionId).then(function (response) {
+                            if (response == false) {
+                                $scope.addNewAssignmentDisabled = true;
+                            }
+                        });
                     }
                     if (payload != undefined) { 
                         Retail_BE_AccountManagerAssignmentAPIService.GetAccountManagerDefInfo(payload.accountBEDefinitionId).then(function (response) {

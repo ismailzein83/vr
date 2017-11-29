@@ -22,12 +22,16 @@
         function GetAccountManagerDefInfo(accountBeDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountManagerDefInfo"), { accountBeDefinitionId: accountBeDefinitionId });
         }
+        function IsAccountAssignedToAccountManager(accountId, accountBeDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "IsAccountAssignedToAccountManager"), { accountId: accountId, accountBeDefinitionId: accountBeDefinitionId });
+        }
         return {
             GetAccountManagerAssignments: GetAccountManagerAssignments,
             AddAccountManagerAssignment: AddAccountManagerAssignment,
             UpdateAccountManagerAssignment: UpdateAccountManagerAssignment,
             GetAccountManagerAssignmentRuntimeEditor: GetAccountManagerAssignmentRuntimeEditor,
-            GetAccountManagerDefInfo: GetAccountManagerDefInfo
+            GetAccountManagerDefInfo: GetAccountManagerDefInfo,
+            IsAccountAssignedToAccountManager: IsAccountAssignedToAccountManager
         };
     }
 

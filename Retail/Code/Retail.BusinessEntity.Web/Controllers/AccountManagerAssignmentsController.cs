@@ -8,9 +8,6 @@ using Vanrise.Web.Base;
 using Vanrise.AccountManager.Entities;
 using Vanrise.Entities;
 using Retail.BusinessEntity.Entities;
-using Vanrise.AccountManager.Entities;
-using Vanrise.Entities;
-using Vanrise.AccountManager.Entities;
 using Vanrise.AccountManager.Business;
 using Vanrise.Common;
 
@@ -53,6 +50,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         public AccountManagerDefInfo GetAccountManagerDefInfo(Guid accountBeDefinitionId)
         {
             return _manager.GetAccountManagerDefInfoByAccountBeDefinitionId(accountBeDefinitionId);
+        }
+        [HttpGet]
+        [Route("IsAccountAssignedToAccountManager")]
+        public bool IsAccountAssignedToAccountManager(string accountId, Guid accountBeDefinitionId)
+        {
+            return _manager.IsAccountAssignedToAccountManager(accountId, accountBeDefinitionId);
         }
     }
 }
