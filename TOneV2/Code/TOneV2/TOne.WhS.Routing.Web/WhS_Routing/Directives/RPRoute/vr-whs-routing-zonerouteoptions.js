@@ -46,6 +46,9 @@ function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, WhS_BE_Zon
                     routingProductId = payload.RoutingProductId;
                     saleZoneId = payload.SaleZoneId;
                     currencyId = payload.CurrencyId;
+                    if (currencyId == undefined)
+                        currencyId = payload.currencyId;
+
                     display = payload.display;
 
                     ctrl.routeOptions = [];

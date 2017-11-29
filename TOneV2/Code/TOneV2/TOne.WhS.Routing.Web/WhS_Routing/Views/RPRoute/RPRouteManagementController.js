@@ -24,6 +24,8 @@
         var customerSelectorAPI;
         var customerSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var currencyId;
+
         defineScope();
         load();
 
@@ -54,7 +56,7 @@
                 routeStatusSelectorAPI = api;
                 routeStatusSelectorReadyPromiseDeferred.resolve();
             };
-            $scope.onCustomerSelectorReady =  function (api) {
+            $scope.onCustomerSelectorReady = function (api) {
                 customerSelectorAPI = api;
                 customerSelectorReadyPromiseDeferred.resolve();
             };
@@ -90,6 +92,11 @@
 
             function getFilterObject() {
 
+                currencyId = null;
+
+                if (!$scope.showInSystemCurrency && $scope.selectedCustomer != undefined)
+                    currencyId = $scope.selectedCustomer.CurrencyId;
+
                 var query = {
                     RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
                     PolicyConfigId: rpRoutePolicyAPI.getSelectedIds(),
@@ -100,7 +107,9 @@
                     DefaultPolicyId: rpRoutePolicyAPI.getDefaultPolicyId(),
                     RouteStatus: routeStatusSelectorAPI.getSelectedIds(),
                     LimitResult: $scope.limit,
-                    CustomerId: customerSelectorAPI.getSelectedIds()
+                    CustomerId: customerSelectorAPI.getSelectedIds(),
+                    ShowInSystemCurrency: $scope.showInSystemCurrency,
+                    CurrencyId: currencyId
                 };
                 return query;
             }

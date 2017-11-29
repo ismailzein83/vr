@@ -13,6 +13,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public CarrierAccountType AccountType { get; set; }
 
-        public int? SellingNumberPlanId { get; set; }   
+        public int? SellingNumberPlanId { get; set; }
+
+        public int CurrencyId { get; set; }
     }
 }

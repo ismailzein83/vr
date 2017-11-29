@@ -27,5 +27,7 @@ namespace TOne.WhS.Routing.Entities
         public decimal? EffectiveRateValue { get; set; }
 
         public IEnumerable<RPRouteOptionDetail> RouteOptionsDetails { get; set; }
+
+        public string CurrencySymbol { get; set; }
     }
 }

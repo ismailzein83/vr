@@ -765,11 +765,11 @@ namespace TOne.WhS.BusinessEntity.Business
         public IEnumerable<int> GetCarrierAccountIdsAssignedToSellingProduct(int sellingProductId)
         {
             var carrierAccountIds = new List<int>();
-           var carrierAccountsAssignedToSellingProduct = GetCarrierAccountsAssignedToSellingProduct(sellingProductId);
+            var carrierAccountsAssignedToSellingProduct = GetCarrierAccountsAssignedToSellingProduct(sellingProductId);
 
-           foreach (var carrierAccount in carrierAccountsAssignedToSellingProduct)
+            foreach (var carrierAccount in carrierAccountsAssignedToSellingProduct)
             {
-                    carrierAccountIds.Add(carrierAccount.CarrierAccountId);
+                carrierAccountIds.Add(carrierAccount.CarrierAccountId);
             }
 
             return carrierAccountIds;
@@ -1370,7 +1370,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 CarrierAccountId = carrierAccount.CarrierAccountId,
                 Name = GetCarrierAccountName(_carrierProfileManager.GetCarrierProfileName(carrierAccount.CarrierProfileId), carrierAccount.NameSuffix),
                 AccountType = carrierAccount.AccountType,
-                SellingNumberPlanId = carrierAccount.SellingNumberPlanId
+                SellingNumberPlanId = carrierAccount.SellingNumberPlanId,
+                CurrencyId = GetCarrierAccountCurrencyId(carrierAccount)
             };
         }
 

@@ -38,6 +38,9 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
         var defaultPolicyId;
         var rpRoutePolicyAPI;
         var rpRoutePolicyReadyPromiseDeffered = UtilsService.createPromiseDeferred();
+        var customerId;
+        var showInSystemCurrency;
+        var currencyId;
 
         function initializeController() {
             $scope.selectedPolicy;
@@ -86,7 +89,8 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
             };
 
             $scope.openRouteOptionSupplier = function (dataItem) {
-                WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.Entity.SupplierId, dataItem.SupplierName);
+                WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId,
+                    rpRouteDetail.SaleZoneId, dataItem.Entity.SupplierId, currencyId);
             };
 
             UtilsService.waitMultiplePromises([rpRoutePolicyReadyPromiseDeffered.promise, gridReadyDeferred.promise]).then(function () {
@@ -124,7 +128,10 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                         rpRouteDetail = payload.rpRouteDetail;
                         routingDatabaseId = payload.routingDatabaseId;
                         policies = payload.filteredPolicies;
-                        defaultPolicyId = payload.defaultPolicyId
+                        defaultPolicyId = payload.defaultPolicyId;
+                        customerId = payload.customerId;
+                        showInSystemCurrency = payload.showInSystemCurrency;
+                        currencyId = payload.currencyId;
                     }
                 }
 
@@ -155,7 +162,9 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
                     RoutingDatabaseId: routingDatabaseId,
                     PolicyOptionConfigId: policyOptionConfigId, // $scope.selectedPolicy is != undefined since the policy selector is loaded before the grid
                     RoutingProductId: rpRouteDetail.RoutingProductId,
-                    SaleZoneId: rpRouteDetail.SaleZoneId
+                    SaleZoneId: rpRouteDetail.SaleZoneId,
+                    CustomerId:customerId,
+                    ShowInSystemCurrency: showInSystemCurrency
                 };
             }
 

@@ -23,5 +23,7 @@ namespace TOne.WhS.Routing.Entities
         public int LimitResult { get; set; }
 
         public int? CustomerId { get; set; }
+
+        public bool ShowInSystemCurrency { get; set; }
     }
 }

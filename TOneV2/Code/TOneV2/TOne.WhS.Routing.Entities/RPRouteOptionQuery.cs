@@ -15,5 +15,9 @@ namespace TOne.WhS.Routing.Entities
         public int RoutingProductId { get; set; }
 
         public int SaleZoneId { get; set; }
+
+        public int? CustomerId { get; set; }
+
+        public bool ShowInSystemCurrency { get; set; }
     }
 }

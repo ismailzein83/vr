@@ -27,7 +27,10 @@
                 <vr-columns colnum="2">
                     <vr-textbox label="Limit Result To" value="limit" type="number" decimalprecision="0" minvalue="1" isrequired="true"></vr-textbox>
                 </vr-columns>
-                <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2"></vr-whs-be-customer-selector>
+                <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2" selectedvalues="selectedCustomer"></vr-whs-be-customer-selector>
+                <vr-columns colnum="2">
+                    <vr-switch ng-show="selectedCustomer!=undefined && advancedSelected" label="Show In System Currency" value="showInSystemCurrency"></vr-switch>
+                </vr-columns>
             </vr-row>
         </div>
         <vr-row removeline>

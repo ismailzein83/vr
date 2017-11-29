@@ -31,6 +31,9 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
         var policies;
         var defaultPolicyId;
         var selectedPolicyConfigId;
+        var customerId;
+        var showInSystemCurrency;
+        var currencyId;
 
         function initializeController() {
             $scope.showGrid = false;
@@ -56,6 +59,9 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                         policies = query.FilteredPolicies;
                         defaultPolicyId = query.DefaultPolicyId;
                         selectedPolicyConfigId = query.PolicyConfigId;
+                        customerId = query.CustomerId;
+                        showInSystemCurrency = query.ShowInSystemCurrency;
+                        currencyId = query.CurrencyId;
 
                         if (query.CustomerId != undefined)
                             $scope.isCustomerSelected = true;
@@ -132,7 +138,8 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                     SaleZoneId: rpRouteDetail.SaleZoneId,
                     RoutingProductId: rpRouteDetail.RoutingProductId,
                     RouteOptions: rpRouteDetail.RouteOptionsDetails,
-                    display: WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value
+                    display: WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value,
+                    currencyId: currencyId
             };
                 VRUIUtilsService.callDirectiveLoad(rpRouteDetail.RouteOptionsAPI, payload, rpRouteDetail.RouteOptionsLoadDeferred);
         };
@@ -167,7 +174,10 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, WhS_Routing_RPR
                         rpRouteDetail: rpRouteDetail,
                         routingDatabaseId: routingDatabaseId,
                         filteredPolicies: policies,
-                        defaultPolicyId: selectedPolicyConfigId
+                        defaultPolicyId: selectedPolicyConfigId,
+                        customerId : customerId,
+                        showInSystemCurrency: showInSystemCurrency,
+                        currencyId: currencyId
             };
 
                 return directiveAPI.load(payload);
