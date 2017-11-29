@@ -197,12 +197,13 @@ namespace TOne.WhS.BusinessEntity.Business
             VRMailManager vrMailManager = new VRMailManager();
             return vrMailManager.EvaluateMailTemplate(salePlmailTemplateId, objects);
         }
-        public IEnumerable<SalePricelistVRFile> GenerateSalePriceListFiles(SalePriceListInput pricelisInput)
+        public IEnumerable<SalePricelistVRFile> GenerateSalePriceListFiles(SalePriceListInput pricelisInput, out SalePriceListType overriddenListType)
         {
             var salePriceListManager = new SalePriceListManager();
 
             SalePriceList customerPriceList = salePriceListManager.GetPriceList(pricelisInput.PriceListId);
-            IEnumerable<SalePricelistVRFile> files = PreparePriceListVrFiles(customerPriceList, (SalePriceListType)pricelisInput.PriceListTypeId, pricelisInput.PricelistTemplateId);
+
+            IEnumerable<SalePricelistVRFile> files = PreparePriceListVrFiles(customerPriceList, (SalePriceListType)pricelisInput.PriceListTypeId, pricelisInput.PricelistTemplateId, out overriddenListType);
 
             return files;
         }
@@ -1276,7 +1277,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region  Private Members
-        private IEnumerable<SalePricelistVRFile> PreparePriceListVrFiles(SalePriceList salePriceList, SalePriceListType salePriceListType, int salePricelistTemplateId)
+        private IEnumerable<SalePricelistVRFile> PreparePriceListVrFiles(SalePriceList salePriceList, SalePriceListType salePriceListType, int salePricelistTemplateId, out SalePriceListType overriddenListType)
         {
             var carrierAccountManager = new CarrierAccountManager();
             var salePriceListChangeManager = new SalePriceListChangeManager();
@@ -1309,7 +1310,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             SalePriceListOutputContext salePriceListOutput = PrepareSalePriceListContext(salePriceListContext);
 
-            SalePriceListType overriddenListType;
             Dictionary<int, List<SalePLZoneNotification>> customerZoneNotificationsByCurrencyId = CreateMultipleNotifications(salePriceList.OwnerId, sellingProductId.Value, salePriceListType, salePriceListOutput.CountryChanges,
                 salePriceListOutput.ZoneWrappersByCountry, salePriceListOutput.FutureLocator, out overriddenListType);
 

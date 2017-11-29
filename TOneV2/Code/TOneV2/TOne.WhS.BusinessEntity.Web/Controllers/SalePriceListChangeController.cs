@@ -99,7 +99,8 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             };
 
             SalePriceListManager salePriceListManager = new SalePriceListManager();
-            return salePriceListManager.GenerateSalePriceListFiles(salePriceListInput);
+            SalePriceListType overriddenListType;
+            return salePriceListManager.GenerateSalePriceListFiles(salePriceListInput, out overriddenListType);
         }
         [HttpGet]
         [Route("DownloadSalePriceList")]
@@ -124,10 +125,11 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         public SalePriceListEvaluatedEmail GenerateAndEvaluateSalePriceListEmail(SalePriceListInput salePriceListInput)
         {
             SalePriceListManager salePriceListManager = new SalePriceListManager();
+            SalePriceListType overriddenListType;
 
-            IEnumerable<SalePricelistVRFile> vrFiles = salePriceListManager.GenerateSalePriceListFiles(salePriceListInput);
+            IEnumerable<SalePricelistVRFile> vrFiles = salePriceListManager.GenerateSalePriceListFiles(salePriceListInput, out overriddenListType);
 
-            var evaluatedObject = salePriceListManager.EvaluateEmail(salePriceListInput.PriceListId, (SalePriceListType)salePriceListInput.PriceListTypeId);
+            var evaluatedObject = salePriceListManager.EvaluateEmail(salePriceListInput.PriceListId, overriddenListType);
             return new SalePriceListEvaluatedEmail
             {
                 SalePricelistVrFiles = vrFiles,
