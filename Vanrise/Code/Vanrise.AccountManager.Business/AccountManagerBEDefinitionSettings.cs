@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.AccountManager.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.AccountManager.Business
 {
@@ -30,10 +31,21 @@ namespace Vanrise.AccountManager.Business
 
         public List<AccountManagerSubViewDefinition> SubViews { get; set; }
         public AccountManagerDefinitionExtendedSettings ExtendedSettings { get; set; }
+        public AccountManagerDefinitionSecurity Security { get; set; }
+
     }
     public abstract class AccountManagerDefinitionExtendedSettings
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get; }
+    }
+    public class AccountManagerDefinitionSecurity
+    {
+        public RequiredPermissionSettings ViewRequiredPermission { get; set; }
+        public RequiredPermissionSettings AddRequiredPermission { get; set; }
+        public RequiredPermissionSettings EditRequiredPermission { get; set; }
+        public RequiredPermissionSettings ViewAssignmentRequiredPermission { get; set; }
+        public RequiredPermissionSettings ManageAssignmentRequiredPermission { get; set; }
+       
     }
 }
