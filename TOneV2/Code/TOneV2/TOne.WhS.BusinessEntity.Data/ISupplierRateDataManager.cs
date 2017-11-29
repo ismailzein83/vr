@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.Data
 {
@@ -11,18 +10,14 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery input, DateTime effectiveOn);
         IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery input, DateTime effectiveOn);
         IEnumerable<SupplierRate> GetSupplierRatesForZone(SupplierRateForZoneQuery input);
-
         List<SupplierRate> GetSupplierRates(int supplierId, DateTime minimumDate);
-
         List<SupplierRate> GetEffectiveSupplierRatesBySuppliers(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos);
-
         List<SupplierRate> GetSupplierRatesInBetweenPeriod(DateTime fromDateTime, DateTime tillDateTime);
         List<SupplierRate> GetEffectiveSupplierRates(DateTime fromDate, DateTime toDate);
-
         bool AreSupplierRatesUpdated(ref object updateHandle);
-
         SupplierRate GetSupplierRateById(long rateId);
-
         List<SupplierRate> GetSupplierRates(HashSet<long> supplierRateIds);
+        DateTime? GetNextOpenOrCloseTime(DateTime effectiveDate);
+        object GetMaximumTimeStamp();
     }
 }

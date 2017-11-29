@@ -97,6 +97,7 @@
     <Compile Include="ApplyProductRoutesToDB.cs" />
     <Compile Include="ApplySupplierZoneDetailsToDB.cs" />
     <Compile Include="BuildCodeMatches.cs" />
+    <Compile Include="FillRoutingEntityDetails.cs" />
     <Compile Include="PartialRoute\CheckModifiedCustomerRoutes.cs" />
     <Compile Include="PartialRoute\BuildPartialCustomerRoutes.cs" />
     <Compile Include="BuildCustomerRoutes.cs" />

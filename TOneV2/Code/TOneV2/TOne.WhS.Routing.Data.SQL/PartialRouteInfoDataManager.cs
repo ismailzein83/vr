@@ -5,38 +5,41 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
-    public class PartialRouteInfoDataManager : RoutingDataManager, IPartialRouteInfoDataManager
+    public class RoutingEntityDetailsDataManager : RoutingDataManager, IRoutingEntityDetailsDataManager
     {
-        public PartialRouteInfo GetPartialRouteInfo()
+        public RoutingEntityDetails GetRoutingEntityDetails(RoutingEntityType routingEntityType)
         {
-            return GetItemText(query_GetPartialRouteInfo.ToString(), PartialRouteInfoMapper, (cmd) => { });
-        }
-        public void ApplyPartialRouteInfo(PartialRouteInfo partialRouteInfo)
-        {
-            query_ApplyPartialRouteInfo.Replace("#DATA#", string.Format("'{0}'", Vanrise.Common.Serializer.Serialize(partialRouteInfo)));
-            ExecuteNonQueryText(query_ApplyPartialRouteInfo.ToString(), (cmd) => { });
+            string query = string.Format(query_GetRoutingEntityDetails, (int)routingEntityType);
+            return GetItemText(query, PartialRouteInfoMapper, null);
         }
 
-        PartialRouteInfo PartialRouteInfoMapper(IDataReader reader)
+        public void ApplyRoutingEntityDetails(RoutingEntityDetails routingEntityDetails)
         {
-            var data = reader["Data"] as string;
-            if (!string.IsNullOrEmpty(data))
-                return Vanrise.Common.Serializer.Deserialize<PartialRouteInfo>(data);
+            string query = string.Format(query_ApplyPartialRouteInfo, (int)routingEntityDetails.RoutingEntityType, Vanrise.Common.Serializer.Serialize(routingEntityDetails.RoutingEntityInfo));
+            ExecuteNonQueryText(query, null);
+        }
 
-            return null;
+        RoutingEntityDetails PartialRouteInfoMapper(IDataReader reader)
+        {
+            var info = reader["Info"] as string;
+
+            return new RoutingEntityDetails()
+            {
+                RoutingEntityType = (RoutingEntityType)reader["Type"],
+                RoutingEntityInfo = !string.IsNullOrEmpty(info) ? Vanrise.Common.Serializer.Deserialize<RoutingEntityInfo>(info) : null
+            };
         }
 
 
-        private StringBuilder query_GetPartialRouteInfo = new StringBuilder("SELECT data FROM [dbo].[PartialRouteInfo]");
+        private string query_GetRoutingEntityDetails = "SELECT [Type], [Info] FROM [dbo].[RoutingEntityDetails] WHERE [TYPE] = {0}";
 
-        private StringBuilder query_ApplyPartialRouteInfo = new StringBuilder(@"
-                                                            IF NOT EXISTS(SELECT 1 FROM  [dbo].[PartialRouteInfo])
-                                                                Begin
-					                                                Insert into [dbo].[PartialRouteInfo] (Data) values(#DATA#)
-				                                                END
-			                                                ELSE
-				                                                BEGIN
-					                                                Update [dbo].[PartialRouteInfo] set  Data = #DATA#
-				                                                END");
+        private string query_ApplyPartialRouteInfo = @"IF NOT EXISTS(SELECT 1 FROM  [dbo].[RoutingEntityDetails] WHERE [TYPE] = {0})
+                                                      Begin
+                                                          Insert into [dbo].[RoutingEntityDetails] ([TYPE], [Info]) values({0}, '{1}')
+                                                      END
+			                                          ELSE
+                                                      BEGIN
+                                                          Update [dbo].[RoutingEntityDetails] set  [Info] = '{1}' WHERE [TYPE] = {0}
+                                                      END";
     }
 }

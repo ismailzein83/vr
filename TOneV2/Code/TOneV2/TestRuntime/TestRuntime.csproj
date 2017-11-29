@@ -813,6 +813,10 @@
       <Project>{a02259d1-ff3a-4b00-82f9-4992a9347d31}</Project>
       <Name>TOne.WhS.Analytics.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.BP.Activities\TOne.WhS.BusinessEntity.BP.Activities.csproj">
+      <Project>{78ac2caa-cd1f-47e7-818e-4ca4bbd5cca0}</Project>
+      <Name>TOne.WhS.BusinessEntity.BP.Activities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
       <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
       <Name>TOne.WhS.BusinessEntity.Business</Name>

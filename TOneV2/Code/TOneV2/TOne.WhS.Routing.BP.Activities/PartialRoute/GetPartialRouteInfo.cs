@@ -17,11 +17,13 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            IPartialRouteInfoDataManager partialRouteInfoDataManager = RoutingDataManagerFactory.GetDataManager<IPartialRouteInfoDataManager>();
-            partialRouteInfoDataManager.RoutingDatabase = this.RoutingDatabase.Get(context);
+            IRoutingEntityDetailsDataManager routingEntityDetailsDataManager = RoutingDataManagerFactory.GetDataManager<IRoutingEntityDetailsDataManager>();
+            routingEntityDetailsDataManager.RoutingDatabase = this.RoutingDatabase.Get(context);
 
-            PartialRouteInfo partialRouteInfo = partialRouteInfoDataManager.GetPartialRouteInfo();
-            partialRouteInfo.ThrowIfNull("partialRouteInfo");
+            RoutingEntityDetails routingEntityDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.PartialRouteInfo);
+            routingEntityDetails.ThrowIfNull("routingEntityDetails");
+
+            PartialRouteInfo partialRouteInfo = routingEntityDetails.RoutingEntityInfo.CastWithValidate<PartialRouteInfo>("routingEntityDetails.RoutingEntityInfo");
 
             this.PartialRouteInfo.Set(context, partialRouteInfo);
         }

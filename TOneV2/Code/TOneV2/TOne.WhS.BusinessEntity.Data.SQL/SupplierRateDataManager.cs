@@ -99,6 +99,21 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetByIds]", SupplierRateMapper, supplierRateIdsAsString);
         }
 
+        public DateTime? GetNextOpenOrCloseTime(DateTime effectiveDate)
+        {
+            object nextOpenOrCloseTimeAsObj = ExecuteScalarSP("[TOneWhS_BE].[sp_SupplierRate_GetNextOpenOrCloseTime]", effectiveDate);
+
+            DateTime? nextOpenOrCloseTime = null;
+            if (nextOpenOrCloseTimeAsObj != DBNull.Value)
+                nextOpenOrCloseTime = (DateTime)nextOpenOrCloseTimeAsObj;
+
+            return nextOpenOrCloseTime;
+        }
+
+        public object GetMaximumTimeStamp()
+        {
+            return ExecuteScalarSP("[TOneWhS_BE].[sp_SupplierRate_GetMaxTimeStamp]");
+        }
         #endregion
 
         #region Private Methods
@@ -123,7 +138,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
 
         #endregion
-
 
         #region State Backup Methods
 
@@ -151,7 +165,5 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
 
         #endregion
-
-
     }
 }

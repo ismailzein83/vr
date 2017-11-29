@@ -89,7 +89,7 @@
       <Variable x:TypeArguments="twre:RoutingDatabase" Name="RoutingDatabase" />
       <Variable x:TypeArguments="x:Int32" Name="currentVersion" />
       <Variable x:TypeArguments="twre:AffectedRouteOptionRules" Name="affectedRouteOptionRules" />
-      <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="NextOpenOrCloseTime" />
+      <Variable x:TypeArguments="s:Nullable(s:DateTime)" Name="NextOpenOrCloseRuleTime" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Partial Routing Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -163,11 +163,11 @@
                 <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
               </InArgument>
             </twrba1:LoadAffectedRules.EffectiveDate>
-            <twrba1:LoadAffectedRules.NextOpenOrCloseTime>
+            <twrba1:LoadAffectedRules.NextOpenOrCloseRuleTime>
               <OutArgument x:TypeArguments="s:Nullable(s:DateTime)">
-                <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseTime</mca:CSharpReference>
+                <mca:CSharpReference x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseRuleTime</mca:CSharpReference>
               </OutArgument>
-            </twrba1:LoadAffectedRules.NextOpenOrCloseTime>
+            </twrba1:LoadAffectedRules.NextOpenOrCloseRuleTime>
             <twrba1:LoadAffectedRules.PartialRouteInfo>
               <InArgument x:TypeArguments="twre:PartialRouteInfo">
                 <mca:CSharpValue x:TypeArguments="twre:PartialRouteInfo">PartialRouteInfo</mca:CSharpValue>
@@ -283,11 +283,11 @@
                       <mca:CSharpValue x:TypeArguments="x:Int32">currentVersion</mca:CSharpValue>
                     </InArgument>
                   </twrba1:ApplyPartialRouteInfo.LastVersionNumber>
-                  <twrba1:ApplyPartialRouteInfo.NextOpenOrCloseTime>
+                  <twrba1:ApplyPartialRouteInfo.NextOpenOrCloseRuleTime>
                     <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-                      <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseTime</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseRuleTime</mca:CSharpValue>
                     </InArgument>
-                  </twrba1:ApplyPartialRouteInfo.NextOpenOrCloseTime>
+                  </twrba1:ApplyPartialRouteInfo.NextOpenOrCloseRuleTime>
                   <twrba1:ApplyPartialRouteInfo.PartialRouteInfo>
                     <InArgument x:TypeArguments="twre:PartialRouteInfo">
                       <mca:CSharpValue x:TypeArguments="twre:PartialRouteInfo">PartialRouteInfo</mca:CSharpValue>

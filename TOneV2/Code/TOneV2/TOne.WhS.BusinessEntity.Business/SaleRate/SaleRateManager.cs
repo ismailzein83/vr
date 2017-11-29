@@ -16,6 +16,18 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         #region Public Methods
 
+        public DateTime? GetNextOpenOrCloseTime(DateTime effectiveDate)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetNextOpenOrCloseTime(effectiveDate);
+        }
+
+        public object GetMaximumTimeStamp()
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            return dataManager.GetMaximumTimeStamp();
+        }
+
         public List<SaleRate> GetRates(DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             throw new NotImplementedException();

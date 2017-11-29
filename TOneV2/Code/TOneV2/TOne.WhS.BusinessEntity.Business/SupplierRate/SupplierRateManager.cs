@@ -28,6 +28,18 @@ namespace TOne.WhS.BusinessEntity.Business
         //    return dataManager.GetEffectiveSupplierRatesBySuppliers(effectiveOn, isEffectiveInFuture, supplierInfos);
         //}
 
+        public DateTime? GetNextOpenOrCloseTime(DateTime effectiveDate)
+        {
+            ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+            return dataManager.GetNextOpenOrCloseTime(effectiveDate);
+        }
+
+        public object GetMaximumTimeStamp()
+        {
+            ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+            return dataManager.GetMaximumTimeStamp();
+        }
+
         public SupplierZoneRate GetCachedSupplierZoneRate(int supplierId, long supplierZoneId, DateTime effectiveOn)
         {
             SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadWithCache(effectiveOn));

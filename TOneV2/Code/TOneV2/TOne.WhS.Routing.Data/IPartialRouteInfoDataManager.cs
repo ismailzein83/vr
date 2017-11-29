@@ -8,10 +8,10 @@ using Vanrise.Data;
 
 namespace TOne.WhS.Routing.Data
 {
-    public interface IPartialRouteInfoDataManager : IDataManager, IRoutingDataManager
+    public interface IRoutingEntityDetailsDataManager : IDataManager, IRoutingDataManager
     {
-        PartialRouteInfo GetPartialRouteInfo();
+        RoutingEntityDetails GetRoutingEntityDetails(RoutingEntityType routingEntityType);
 
-        void ApplyPartialRouteInfo(PartialRouteInfo partialRouteInfo);
+        void ApplyRoutingEntityDetails(RoutingEntityDetails routingEntityDetails);
     }
 }

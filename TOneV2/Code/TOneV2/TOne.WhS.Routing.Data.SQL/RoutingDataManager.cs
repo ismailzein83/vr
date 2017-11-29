@@ -220,15 +220,15 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                        [SaleZoneId] ASC
                                                         );";
 
-//        const string query_CodeMatchTable = @"CREATE TABLE [dbo].[CodeMatch](
-//	                                                    [CodePrefix] [varchar](20) NOT NULL,
-//	                                                    [Code] [varchar](20) NOT NULL,
-//	                                                    [Content] [nvarchar](max) NULL
-//                                                    ) ON [PRIMARY];
-//                                                    CREATE CLUSTERED INDEX [IX_CodeMatch_Code] ON [dbo].[CodeMatch]
-//                                                    (
-//                                                    	[Code] ASC
-//                                                    );";
+        //        const string query_CodeMatchTable = @"CREATE TABLE [dbo].[CodeMatch](
+        //	                                                    [CodePrefix] [varchar](20) NOT NULL,
+        //	                                                    [Code] [varchar](20) NOT NULL,
+        //	                                                    [Content] [nvarchar](max) NULL
+        //                                                    ) ON [PRIMARY];
+        //                                                    CREATE CLUSTERED INDEX [IX_CodeMatch_Code] ON [dbo].[CodeMatch]
+        //                                                    (
+        //                                                    	[Code] ASC
+        //                                                    );";
 
         const string query_CodeSaleZoneTable = @"CREATE TABLE [dbo].[CodeSaleZone](
 	                                                    [Code] [varchar](20) NOT NULL,
@@ -256,8 +256,9 @@ namespace TOne.WhS.Routing.Data.SQL
 																[Code] ASC
 															);";
 
-        private const string query_PartialRouteInfoTable = @"CREATE TABLE [dbo].[PartialRouteInfo](
-																[Data] [nvarchar](MAX) NOT NULL
+        private const string query_PartialRouteInfoTable = @"CREATE TABLE [dbo].[RoutingEntityDetails](
+                                                                [Type] [int] NOT NULL,
+																[Info] [nvarchar](MAX) NOT NULL
 															) ON [PRIMARY];";
 
         private const string query_SwitchSyncDataTable = @"CREATE TABLE [dbo].[SwitchSyncData](

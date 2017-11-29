@@ -6,13 +6,14 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.Whs.Routing.Data.TOneV1SQL
 {
-    public class PartialRouteInfoDataManager : RoutingDataManager, IPartialRouteInfoDataManager
+    public class RoutingEntityDetailsDataManager : RoutingDataManager, IRoutingEntityDetailsDataManager
     {
-        public PartialRouteInfo GetPartialRouteInfo()
+        public RoutingEntityDetails GetRoutingEntityDetails(RoutingEntityType routingEntityType)
         {
             throw new NotImplementedException();
         }
-        public void ApplyPartialRouteInfo(PartialRouteInfo partialRouteInfo)
+
+        public void ApplyRoutingEntityDetails(RoutingEntityDetails routingEntityDetails)
         {
             throw new NotImplementedException();
         }

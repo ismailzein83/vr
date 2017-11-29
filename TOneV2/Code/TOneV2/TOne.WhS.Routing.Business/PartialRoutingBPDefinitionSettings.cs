@@ -47,13 +47,17 @@ namespace TOne.WhS.Routing.Business
                 return true;
 
             RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
-            IPartialRouteInfoDataManager partialRouteInfoDataManager = RoutingDataManagerFactory.GetDataManager<IPartialRouteInfoDataManager>();
-            partialRouteInfoDataManager.RoutingDatabase = routingDatabase;
-            PartialRouteInfo partialRouteInfo = partialRouteInfoDataManager.GetPartialRouteInfo();
+            IRoutingEntityDetailsDataManager routingEntityDetailsDataManager = RoutingDataManagerFactory.GetDataManager<IRoutingEntityDetailsDataManager>();
+            routingEntityDetailsDataManager.RoutingDatabase = routingDatabase;
+            RoutingEntityDetails routingEntityDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.PartialRouteInfo);
 
             DateTime now = DateTime.Now;
-            if (partialRouteInfo != null && partialRouteInfo.NextOpenOrCloseTime.HasValue && partialRouteInfo.NextOpenOrCloseTime < now)
-                return true;
+            if (routingEntityDetails != null)
+            {
+                PartialRouteInfo partialRouteInfo = routingEntityDetails.RoutingEntityInfo.CastWithValidate<PartialRouteInfo>("routingEntityDetails.RoutingEntityInfo");
+                if (partialRouteInfo.NextOpenOrCloseRuleTime.HasValue && partialRouteInfo.NextOpenOrCloseRuleTime < now)
+                    return true;
+            }
 
             return false;
         }

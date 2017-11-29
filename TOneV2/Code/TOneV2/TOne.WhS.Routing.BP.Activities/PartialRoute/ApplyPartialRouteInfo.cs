@@ -17,7 +17,7 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
         [RequiredArgument]
-        public InArgument<DateTime?> NextOpenOrCloseTime { get; set; }
+        public InArgument<DateTime?> NextOpenOrCloseRuleTime { get; set; }
 
         [RequiredArgument]
         public InArgument<PartialRouteInfo> PartialRouteInfo { get; set; }
@@ -27,14 +27,15 @@ namespace TOne.WhS.Routing.BP.Activities
             PartialRouteInfo partialRouteInfo = this.PartialRouteInfo.Get(context);
             partialRouteInfo.LastVersionNumber = this.LastVersionNumber.Get(context);
             partialRouteInfo.LatestRoutingDate = this.EffectiveDate.Get(context);
-            partialRouteInfo.NextOpenOrCloseTime = this.NextOpenOrCloseTime.Get(context);
+            partialRouteInfo.NextOpenOrCloseRuleTime = this.NextOpenOrCloseRuleTime.Get(context);
 
             RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
 
-            IPartialRouteInfoDataManager partialRouteInfoDataManager = RoutingDataManagerFactory.GetDataManager<IPartialRouteInfoDataManager>();
-            partialRouteInfoDataManager.RoutingDatabase = routingDatabase;
+            IRoutingEntityDetailsDataManager routingEntityDetailsDataManager = RoutingDataManagerFactory.GetDataManager<IRoutingEntityDetailsDataManager>();
+            routingEntityDetailsDataManager.RoutingDatabase = routingDatabase;
 
-            partialRouteInfoDataManager.ApplyPartialRouteInfo(partialRouteInfo);
+            RoutingEntityDetails routingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.PartialRouteInfo, RoutingEntityInfo = partialRouteInfo };
+            routingEntityDetailsDataManager.ApplyRoutingEntityDetails(routingEntityDetails);
         }
     }
 }
