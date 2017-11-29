@@ -39,7 +39,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         const string query_getSourceZones_Purchase = @"SELECT  ZoneID, CodeGroup, Name, SupplierID, BeginEffectiveDate, EndEffectiveDate  FROM [dbo].[Zone] WITH (NOLOCK) 
                                                         join CarrierAccount ca on ca.CarrierAccountID = SupplierId
-                                                        where ZoneID <> -1 and SupplierID <> 'SYS' and ca.AccountType <> 0 and CodeGroup <> '-' ";
+                                                        where ZoneID <> -1 and SupplierID <> 'SYS' and CodeGroup <> '-' ";
 
     }
 }
