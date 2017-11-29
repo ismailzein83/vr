@@ -84,24 +84,19 @@
             }
             function loadUserSelector() {
                 var editedUserId;
-                var payload;
                 var userSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 userSelectorReadyDeferred.promise.then(function () {
+                    var payload = {};
                     if (accountManagerEntity != undefined) {
-                        payload = {
-                            selectedIds: accountManagerEntity.UserId
-                        };
+                        payload. selectedIds= accountManagerEntity.UserId
                         editedUserId = accountManagerEntity.UserId;
                     }
-                    if (payload == undefined)
-                        payload = {};
-                    payload.filter = {};
-                    payload.filter.Filters = [];
-                    payload.filter.Filters.push({
-                        $type: "Vanrise.AccountManager.Business.AssignedUsersToAccountManagerFilter,Vanrise.AccountManager.Business",
-                        EditedUserId: editedUserId
-                    });
-                    console.log(payload);
+                    payload.filter = {
+                            Filters: [{
+                                $type: "Vanrise.AccountManager.Business.AssignedUsersToAccountManagerFilter,Vanrise.AccountManager.Business",
+                                EditedUserId: editedUserId
+                            }]
+                    };
                     VRUIUtilsService.callDirectiveLoad(userSelectorAPI, payload, userSelectorLoadDeferred);
                 });
                 return userSelectorLoadDeferred.promise;

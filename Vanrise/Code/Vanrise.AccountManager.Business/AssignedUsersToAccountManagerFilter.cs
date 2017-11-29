@@ -9,7 +9,7 @@ namespace Vanrise.AccountManager.Business
 {
     public class AssignedUsersToAccountManagerFilter : IUserFilter
     {
-        public int? EditedUserId;
+        public int? EditedUserId { get; set; }
         public bool IsExcluded(User user)
         {
             if (EditedUserId != null && EditedUserId == user.UserId)
