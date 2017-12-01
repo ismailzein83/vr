@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService) {
+app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIService', 'UtilsService', 'VRUIUtilsService', 'WhS_Sales_BulkActionUtilsService', function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, WhS_Sales_BulkActionUtilsService) {
     return {
         restrict: "E",
         scope: {
@@ -43,6 +43,7 @@ app.directive('vrWhsSalesBulkactionTypeSelective', ['WhS_Sales_RatePlanAPIServic
             $scope.scopeModel.onBulkActionSelected = function (selectedBulkAction) {
                 if (bulkActionContext == undefined)
                     return;
+                WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
                 if (bulkActionContext.selectDefaultBulkActionZoneFilter != undefined)
                     bulkActionContext.selectDefaultBulkActionZoneFilter(selectedBulkAction.DefaultBulkActionZoneFilterConfigId, selectedBulkAction.CanApplyZoneFilter);
 
