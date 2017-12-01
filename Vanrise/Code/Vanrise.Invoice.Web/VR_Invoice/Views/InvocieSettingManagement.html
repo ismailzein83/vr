@@ -4,7 +4,7 @@
             <vr-row removeline>
                 <vr-invoicetype-selector on-ready="scopeModel.onInvoiceTypeSelectorReady" normal-col-num="2" isrequired="true" onselectionchanged="scopeModel.onInvoiceTypeSelectionChanged" hideremoveicon="true"></vr-invoicetype-selector>
 
-                <vr-invoice-accountstatus-selector hideremoveicon on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="2" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
+                <vr-invoice-accountstatus-selector ng-show="scopeModel.partnerInvoiceSelector != undefined" hideremoveicon on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="2" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
 
                 <vr-directivewrapper ng-if="scopeModel.partnerInvoiceSelector != undefined" vr-loader="scopeModel.isLoadingDirective" directive="scopeModel.partnerInvoiceSelector" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="2" ismultipleselection></vr-directivewrapper>
             </vr-row>
