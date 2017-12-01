@@ -79,9 +79,8 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                         ctrl.onselectionchanged(value);
                 };
                 $scope.scopeModel.onAccountSelectionChanged = function (value) {
-                  
                     var selectedIds = accountSelectorAPI.getSelectedIds();
-                    if (selectedIds != undefined) {
+                    if (selectedIds != undefined && selectedIds.length > 0) {
                         var accountIds = [selectedIds];
                         if (attrs.ismultipleselection != undefined) {
                             accountIds = selectedIds
@@ -96,14 +95,15 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                                 IsEffectiveInFuture: isEffectiveInFuture,
                                 Filters: partnerInvoiceFilters
                             },
-                            setItemsSelected : true
+                            setItemsSelected: true
                         };
                         var setLoader = function (value) {
                             $scope.scopeModel.isAccountTypeSelectorLoading = value;
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, financialAccountSelectorAPI, selectorPayload, setLoader, financialAccountSelectorPromiseDeferred);
+                    } else {
+                        financialAccountSelectorAPI.clearDataSource();
                     }
-                   
                 };
 
                 UtilsService.waitMultiplePromises([accountSelectorPromiseDeferred.promise, financialAccountSelectorPromiseDeferred.promise]).then(function () {

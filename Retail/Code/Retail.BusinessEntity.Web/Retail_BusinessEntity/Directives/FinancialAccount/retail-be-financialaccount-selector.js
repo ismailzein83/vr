@@ -85,6 +85,15 @@ app.directive('retailBeFinancialaccountSelector', ['Retail_BE_FinancialAccountAP
             function defineAPI() {
                 var api = {};
 
+                api.clearDataSource = function () {
+                    ctrl.datasource.length = 0;
+                    if (attrs.ismultipleselection != undefined)
+                        ctrl.selectedvalues.length = 0;
+                    else
+                        ctrl.selectedvalues = undefined;
+                    selectorAPI.clearDataSource();
+                };
+
                 api.load = function (payload) {
                     ctrl.datasource.length = 0;
                     var accountBEDefinitionId;

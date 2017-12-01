@@ -9,7 +9,7 @@ using Vanrise.Invoice.Business.InvoicePartnerFilter;
 
 namespace Retail.MultiNet.Business
 {
-    public class AssignedFinancialAccountToInvoiceSettingFilter : NotAssignedPartnerToInvoiceSettingFilter,IAccountFilter,IFinancialAccountFilter
+    public class AssignedFinancialAccountToInvoiceSettingFilter : PartnerInvoiceSettingFilter, IAccountFilter, IFinancialAccountFilter
     {
         public bool IsExcluded(IAccountFilterContext context)
         {
