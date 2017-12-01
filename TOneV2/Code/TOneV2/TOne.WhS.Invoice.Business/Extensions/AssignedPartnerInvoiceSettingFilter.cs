@@ -8,7 +8,7 @@ using Vanrise.Invoice.Business.InvoicePartnerFilter;
 
 namespace TOne.WhS.Invoice.Business
 {
-    public class AssignedPartnerInvoiceSettingFilter : NotAssignedPartnerToInvoiceSettingFilter, IWHSFinancialAccountFilter
+    public class AssignedPartnerInvoiceSettingFilter : PartnerInvoiceSettingFilter, IWHSFinancialAccountFilter
     {
         public bool IsMatched(IWHSFinancialAccountFilterContext context)
         {
