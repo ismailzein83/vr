@@ -1,5 +1,11 @@
-﻿<vr-row removeline vr-loader="scopeModel.isLoading">
-    <vr-columns colnum="2">
+﻿ <vr-row removeline vr-loader="scopeModel.isLoading">
+    <vr-invoice-accountstatus-selector ng-show="scopeModel.showAccountSelector" hideremoveicon on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="2" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
+
+    <vr-directivewrapper ng-show="scopeModel.showAccountSelector" ng-if="scopeModel.partnerInvoiceSelector != undefined" vr-loader="scopeModel.isLoadingDirective" directive="scopeModel.partnerInvoiceSelector" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="2" ismultipleselection></vr-directivewrapper>
+
+     <vr-invoice-invoicesettingpartsdefinition-selector customlabel="Overridden Parts" normal-col-num="2" ismultipleselection on-ready="scopeModel.onInvoiceSettingPartsSelectorReady"></vr-invoice-invoicesettingpartsdefinition-selector>
+    <vr-columns colnum="2" withemptyline>
+        <vr-button type="Search" data-onclick="scopeModel.searchClicked" standalone></vr-button>
         <vr-button type="Add" standalone data-onclick="scopeModel.linkPartner" haspermission="scopeModel.HasAssignPartnerAccess"></vr-button>
     </vr-columns>
 </vr-row>

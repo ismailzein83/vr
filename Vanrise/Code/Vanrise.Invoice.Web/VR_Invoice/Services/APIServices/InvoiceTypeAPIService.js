@@ -84,6 +84,11 @@
                 invoiceTypeId: invoiceTypeId,
             });
         }
+        function GetInvoiceSettingPartsInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "GetInvoiceSettingPartsInfo"), {
+                serializedFilter: serializedFilter,
+            });
+        }
         return ({
             GetInvoiceType: GetInvoiceType,
             GetFilteredInvoiceTypes: GetFilteredInvoiceTypes,
@@ -101,7 +106,8 @@
             GetInvoiceTypeExtendedSettings: GetInvoiceTypeExtendedSettings,
             GetMenualInvoiceBulkActionsDefinitions: GetMenualInvoiceBulkActionsDefinitions,
             GetPartnerName: GetPartnerName,
-            GetPartnerInvoiceSettingFilterFQTN: GetPartnerInvoiceSettingFilterFQTN
+            GetPartnerInvoiceSettingFilterFQTN: GetPartnerInvoiceSettingFilterFQTN,
+            GetInvoiceSettingPartsInfo: GetInvoiceSettingPartsInfo
         });
     }
 

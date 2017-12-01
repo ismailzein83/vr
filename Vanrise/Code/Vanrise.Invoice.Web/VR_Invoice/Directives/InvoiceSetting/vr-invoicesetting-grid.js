@@ -30,7 +30,8 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
             var gridAPI;
             var gridQuery;
             var gridDrillDownTabsObj;
-
+            var showAccountSelector;
+            var partnerIds;
             function initializeController() {
 
                 $scope.datastore = [];
@@ -51,6 +52,8 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
                         var query = {
                             invoiceSettingId: invoiceSettingItem.Entity.InvoiceSettingId,
                             invoiceTypeId: invoiceSettingItem.Entity.InvoiceTypeId,
+                            showAccountSelector: showAccountSelector,
+                        partnerIds: partnerIds
                         };
                         return invoiceSettingItem.partnerInvoiceSettingGridAPI.load(query);
                     };
@@ -76,9 +79,14 @@ app.directive("vrInvoicesettingGrid", [ "VRCommon_ObjectTrackingService", "Utils
 
                     function getDirectiveAPI() {
                         var directiveAPI = {};
-                        directiveAPI.loadGrid = function (query) {
-                            gridQuery = query;
-                            return gridAPI.retrieveData(gridQuery);
+                        directiveAPI.loadGrid = function (payload) {
+                            if (payload != undefined) {
+                                showAccountSelector = payload.showAccountSelector;
+                                partnerIds = payload.partnerIds;
+                                gridQuery = payload.query;
+                                return gridAPI.retrieveData(payload.query);
+                            }
+                         
                         };
                         directiveAPI.onInvoiceSettingAdded = function (invoiceSetting) {
                             gridDrillDownTabsObj.setDrillDownExtensionObject(invoiceSetting);

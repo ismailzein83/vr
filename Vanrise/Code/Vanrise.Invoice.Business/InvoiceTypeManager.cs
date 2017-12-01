@@ -318,8 +318,44 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceTypes.FindAllRecords(filterExpression).MapRecords(InvoiceTypeInfoMapper);
         }
-      
 
+        public IEnumerable<InvoiceSettingPartDefinitionInfo> GetInvoiceSettingPartsInfo(InvoiceSettingPartsInfoFilter filter)
+        {
+            filter.ThrowIfNull("InvoiceSettingPartsInfoFilter");
+            var invoiceType = GetInvoiceType(filter.InvoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", filter.InvoiceTypeId);
+            invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
+            List<InvoiceSettingPartDefinitionInfo> invoiceSettingPartDefinitionInfo = new List<InvoiceSettingPartDefinitionInfo>();
+            ExtensionConfigurationManager extensionConfigurationManager = new ExtensionConfigurationManager();
+            if (invoiceType.Settings.InvoiceSettingPartUISections != null)
+            {
+                foreach (var invoiceSettingPartUISection in invoiceType.Settings.InvoiceSettingPartUISections)
+                {
+                    if (invoiceSettingPartUISection.Rows != null)
+                    {
+                        foreach (var row in invoiceSettingPartUISection.Rows)
+                        {
+                            if (row.Parts != null)
+                            {
+                                foreach (var part in row.Parts)
+                                {
+                                    if (!filter.OnlyIsOverridable || part.IsOverridable == true)
+                                    {
+                                        invoiceSettingPartDefinitionInfo.Add(new InvoiceSettingPartDefinitionInfo
+                                        {
+                                            PartConfigId = part.PartConfigId,
+                                            Name = extensionConfigurationManager.GetExtensionConfigurationTitle<InvoiceSettingPartConfig>(part.PartConfigId, InvoiceSettingPartConfig.EXTENSION_TYPE)
+                                        });
+                                    }
+                                   
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return invoiceSettingPartDefinitionInfo;
+        }
         public bool DoesUserHaveViewAccess(Guid invoiceTypeId)
         {
             int userId = SecurityContext.Current.GetLoggedInUserId();

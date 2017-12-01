@@ -32,10 +32,34 @@ namespace Vanrise.Invoice.Business
         public IDataRetrievalResult<InvoiceSettingDetail> GetFilteredInvoiceSettings(DataRetrievalInput<InvoiceSettingQuery> input)
         {
             var allItems = GetCachedInvoiceSettings();
+            PartnerManager partnerManager = new PartnerManager();
+
+           List<Guid>  invoiceSettingsIdsForRelatedPartners = null;
+
+            if (input.Query.PartnerIds != null && input.Query.PartnerIds.Count > 0)
+            {
+                invoiceSettingsIdsForRelatedPartners = new List<Guid>();
+                foreach(var partnerId in input.Query.PartnerIds )
+                {
+                    var partnerInvoiceSetting = partnerManager.GetInvoicePartnerSetting(input.Query.InvoiceTypeId, partnerId);
+                    if (partnerInvoiceSetting != null)
+                        invoiceSettingsIdsForRelatedPartners.Add(partnerInvoiceSetting.InvoiceSetting.InvoiceSettingId);
+                }
+            }
 
             Func<InvoiceSetting, bool> filterExpression = (itemObject) =>
-                 (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
-                 && (input.Query.InvoiceTypeId == itemObject.InvoiceTypeId);
+            {
+                if (input.Query.Name != null && !itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.InvoiceTypeId != itemObject.InvoiceTypeId)
+                    return false;
+
+                if (invoiceSettingsIdsForRelatedPartners != null && !invoiceSettingsIdsForRelatedPartners.Contains(itemObject.InvoiceSettingId))
+                {
+                    return false;
+                }
+                return true;
+            };
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, InvoiceSettingDetailMapper));
         }

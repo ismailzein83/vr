@@ -74,6 +74,8 @@
     <Compile Include="InvoiceItem\IGroupingInvoiceItemQueryContext.cs" />
     <Compile Include="InvoicePartner\InvoiceAccount.cs" />
     <Compile Include="InvoicePartner\InvoiceAccountData.cs" />
+    <Compile Include="InvoiceSetting\InvoiceSettingPartsInfoFilter.cs" />
+    <Compile Include="InvoiceSetting\InvoiceSettingPartDefinitionInfo.cs" />
     <Compile Include="Invoice\InvoiceGenerationDraft.cs" />
     <Compile Include="Invoice\InvoiceGenerationDraftQuery.cs" />
     <Compile Include="InvoiceReader\InvoiceSourceBatch.cs" />

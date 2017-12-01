@@ -1,21 +1,27 @@
 ﻿<vr-panel ng-controller="VR_Invoice_InvoiceSettingManagementController">
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+        <div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoadingFilters">
             <vr-row removeline>
-                <vr-invoicetype-selector on-ready="onInvoiceTypeSelectorReady" normal-col-num="2" isrequired="true" onselectionchanged="onInvoiceTypeSelectionChanged"></vr-invoicetype-selector>
+                <vr-invoicetype-selector on-ready="scopeModel.onInvoiceTypeSelectorReady" normal-col-num="2" isrequired="true" onselectionchanged="scopeModel.onInvoiceTypeSelectionChanged" hideremoveicon="true"></vr-invoicetype-selector>
+
+                <vr-invoice-accountstatus-selector hideremoveicon on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="2" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
+
+                <vr-directivewrapper ng-if="scopeModel.partnerInvoiceSelector != undefined" vr-loader="scopeModel.isLoadingDirective" directive="scopeModel.partnerInvoiceSelector" on-ready="scopeModel.onPartnerSelectorReady" normal-col-num="2" ismultipleselection></vr-directivewrapper>
             </vr-row>
+
+
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="addInvoiceSetting" formname="formFilter"  ng-show="hasAddAccess"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addInvoiceSetting" formname="formFilter" ng-show="scopeModel.hasAddAccess"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow">
-                <vr-invoicesetting-grid on-ready="onGridReady"></vr-invoicesetting-grid>
+                <vr-invoicesetting-grid on-ready="scopeModel.onGridReady"></vr-invoicesetting-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

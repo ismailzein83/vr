@@ -253,6 +253,7 @@
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoice-invoicesetting-runtime-row.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoice-invoicesetting-runtime-section.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\Templates\InvoiceSettingGridTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoice-invoicesettingpartsdefinition-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoice-invoicesetting-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\vr-invoicesetting-grid.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\RecreateInvoiceBulkActionRuntimeSettingsTemplate.html" />

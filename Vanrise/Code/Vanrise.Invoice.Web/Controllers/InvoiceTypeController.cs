@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
@@ -136,6 +137,13 @@ namespace Vanrise.Invoice.Web.Controllers
         public string GetPartnerInvoiceSettingFilterFQTN(Guid invoiceTypeId)
         {
             return _manager.GetPartnerInvoiceSettingFilterFQTN(invoiceTypeId);
+        }
+        [HttpGet]
+        [Route("GetInvoiceSettingPartsInfo")]
+        public IEnumerable<InvoiceSettingPartDefinitionInfo> GetInvoiceSettingPartsInfo(string serializedFilter = null)
+        {
+            InvoiceSettingPartsInfoFilter deserializedFilter = serializedFilter != null? Serializer.Deserialize<InvoiceSettingPartsInfoFilter>(serializedFilter):null;
+            return _manager.GetInvoiceSettingPartsInfo(deserializedFilter);
         }
     }
 }

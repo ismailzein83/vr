@@ -104,9 +104,9 @@
                 label = attrs.customlabel;
             }
 
-            var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : null;
+            var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : '';
 
-            var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
+            var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : '';
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
                 + '<span vr-disabled="ctrl.isdisabled">'

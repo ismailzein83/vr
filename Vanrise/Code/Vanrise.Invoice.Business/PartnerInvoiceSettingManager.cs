@@ -22,12 +22,56 @@ namespace Vanrise.Invoice.Business
         public IDataRetrievalResult<PartnerInvoiceSettingDetail> GetFilteredPartnerInvoiceSettings(DataRetrievalInput<PartnerInvoiceSettingQuery> input)
         {
             var allItems = GetCachedPartnerInvoiceSettings();
+            InvoiceSettingManager invoiceSettingManager = new InvoiceSettingManager();
+            var invoiceTypeId = invoiceSettingManager.GetSettingInvoiceTypeId(input.Query.InvoiceSettingId);
 
             Func<PartnerInvoiceSetting, bool> filterExpression = (itemObject) =>
-                 (input.Query.InvoiceSettingId == itemObject.InvoiceSettingID );
+                {
+                    if (input.Query.InvoiceSettingId != itemObject.InvoiceSettingID)
+                    {
+                        return false;
+                    }
+                    if (input.Query.PartnerIds != null && !input.Query.PartnerIds.Contains(itemObject.PartnerId))
+                        return false;
+
+                    if (input.Query.PartsConfigIds != null)
+                    {
+                        if (itemObject.Details != null && itemObject.Details.InvoiceSettingParts != null && itemObject.Details.InvoiceSettingParts.Count > 0)
+                        {
+                            if (itemObject.Details.InvoiceSettingParts.All(x => !input.Query.PartsConfigIds.Contains(x.Value.ConfigId)))
+                                return false;
+                        }else
+                        {
+                            return false;
+                        }
+                    }
+                    if (!IsStatusFilterMatching(invoiceTypeId, itemObject.PartnerId, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status))
+                        return false;
+                    return true;
+
+                };
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, PartnerInvoiceSettingDetailMapper));
         }
+
+        private bool IsStatusFilterMatching(Guid invoiceTypeId, string accountId, DateTime? effectiveDate, bool? isEffectiveInFuture, VRAccountStatus? status)
+        {
+            PartnerManager partnerManager = new PartnerManager();
+            VRInvoiceAccountData invoiceAccountData = partnerManager.GetInvoiceAccountData(invoiceTypeId, accountId);
+            invoiceAccountData.ThrowIfNull("invoiceAccountData");
+
+            DateTime? bed = invoiceAccountData.BED;
+            DateTime? eed = invoiceAccountData.EED;
+
+            if (!status.HasValue || invoiceAccountData.Status == status
+                && (!effectiveDate.HasValue || ((!bed.HasValue || bed <= effectiveDate) && (!eed.HasValue || eed > effectiveDate)))
+                && (!isEffectiveInFuture.HasValue || (isEffectiveInFuture.Value && (!eed.HasValue || eed >= DateTime.Now)) || (!isEffectiveInFuture.Value && eed.HasValue && eed <= DateTime.Now)))
+            {
+                return true;
+            }
+            return false;
+        }
+
         public Vanrise.Entities.InsertOperationOutput<PartnerInvoiceSettingDetail> AddPartnerInvoiceSetting(PartnerInvoiceSettingToAdd partnerInvoiceSettingToAdd)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<PartnerInvoiceSettingDetail>();
@@ -154,6 +198,13 @@ namespace Vanrise.Invoice.Business
                 return false;
             }
             return true;
+        }
+        public bool IsPartnerAssignedToInvoiceSetting(string partnerId, Guid invoiceSettingId)
+        {
+            var partnerInvoiceSettings = GetCachedPartnerInvoiceSettings();
+            if (partnerInvoiceSettings != null && partnerInvoiceSettings.Any(x => partnerId == x.Value.PartnerId && x.Value.InvoiceSettingID == invoiceSettingId))
+                return true;
+            return false;
         }
         public List<PartnerInvoiceSetting> GetPartnerInvoiceSettingsByInvoiceTypeId(Guid invoiceTypeId)
         {
