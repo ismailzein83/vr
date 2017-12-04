@@ -77,9 +77,10 @@
     <Compile Include="PersistentQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="HoldRequestManager.cs" />
-    <Compile Include="RuntimeServices\IQueueActivationRuntimeWCFService.cs" />
+    <Compile Include="RuntimeServices\InterServicePendingItemsRequest.cs" />
+    <Compile Include="RuntimeServices\InterServicePendingSummaryBatchesRequest.cs" />
+    <Compile Include="RuntimeServices\PendingItemsHandler.cs" />
     <Compile Include="RuntimeServices\QueueActivationRuntimeService.cs" />
-    <Compile Include="RuntimeServices\QueueActivationRuntimeWCFService.cs" />
     <Compile Include="RuntimeServices\QueueActivationService.cs" />
     <Compile Include="QueueActivatorExecutionContext.cs" />
     <Compile Include="QueueExecutionFlowDefinitionManager.cs" />

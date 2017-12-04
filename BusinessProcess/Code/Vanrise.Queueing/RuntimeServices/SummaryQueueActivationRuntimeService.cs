@@ -11,18 +11,14 @@ namespace Vanrise.Queueing
 {
     public class SummaryQueueActivationRuntimeService : RuntimeService
     {
-        protected override void OnStarted(IRuntimeServiceStartContext context)
-        {
-            RegisterActivator();
-            base.OnStarted(context);
-        }
+        internal const string SERVICE_TYPE_UNIQUE_NAME = "VR_Queueing_SummaryQueueActivationRuntimeService";
 
-        Guid _activatorId;
-        private void RegisterActivator()
+        public override string ServiceTypeUniqueName
         {
-            _activatorId = Guid.NewGuid();
-            var dataManager = QDataManagerFactory.GetDataManager<IQueueActivatorInstanceDataManager>();
-            dataManager.InsertActivator(_activatorId, Vanrise.Runtime.RunningProcessManager.CurrentProcess.ProcessId, QueueActivatorType.Summary, null);
+            get
+            {
+                return SERVICE_TYPE_UNIQUE_NAME;
+            }
         }
 
         QueueInstanceManager _queueManager = new QueueInstanceManager();
@@ -30,55 +26,32 @@ namespace Vanrise.Queueing
 
         protected override void Execute()
         {
-            List<SummaryBatchActivator> summaryBatchActivators = _summaryBatchActivatorDataManager.GetSummaryBatchActivators(_activatorId);
-            if(summaryBatchActivators != null && summaryBatchActivators.Count > 0)
+            if (PendingItemsHandler.Current.HasSummaryItemsToProcess(base.ServiceInstance.ServiceInstanceId))
             {
-                foreach(var summaryBatchActivator in summaryBatchActivators)
+                List<SummaryBatchActivator> summaryBatchActivators = _summaryBatchActivatorDataManager.GetSummaryBatchActivators(base.ServiceInstance.ServiceInstanceId);
+                if (summaryBatchActivators != null && summaryBatchActivators.Count > 0)
                 {
-                    bool isLocked = false;
-                    var queueInstance = _queueManager.GetQueueInstanceById(summaryBatchActivator.QueueId);
-                    if (queueInstance == null)
-                        throw new NullReferenceException(String.Format("queueInstance '{0}'", summaryBatchActivator.QueueId));
-                    var summaryBatchQueueActivator = queueInstance.Settings.Activator as ISummaryBatchQueueActivator;
-                    if(summaryBatchQueueActivator == null)
-                        throw new NullReferenceException(String.Format("summaryBatchQueueActivator '{0}'", summaryBatchActivator.QueueId));
-                    var batchPersistentQueue = PersistentQueueFactory.Default.GetQueue(summaryBatchActivator.QueueId);
-                    //unlocking the batch if it faces any problem while trying to lock it
-                    try
+                    foreach (var summaryBatchActivator in summaryBatchActivators)
                     {
-                        isLocked = summaryBatchQueueActivator.TryLock(summaryBatchActivator.BatchStart);
-                    }
-                    catch
-                    {
-                        try
-                        {
-                            summaryBatchQueueActivator.Unlock(summaryBatchActivator.BatchStart);
-                        }
-                        catch
-                        {
+                        var queueInstance = _queueManager.GetQueueInstanceById(summaryBatchActivator.QueueId);
+                        if (queueInstance == null)
+                            throw new NullReferenceException(String.Format("queueInstance '{0}'", summaryBatchActivator.QueueId));
+                        var summaryBatchQueueActivator = queueInstance.Settings.Activator as ISummaryBatchQueueActivator;
+                        if (summaryBatchQueueActivator == null)
+                            throw new NullReferenceException(String.Format("summaryBatchQueueActivator '{0}'", summaryBatchActivator.QueueId));
+                        var batchPersistentQueue = PersistentQueueFactory.Default.GetQueue(summaryBatchActivator.QueueId);
 
-                        }
-                        throw;
-                    }
-                    if (isLocked)
-                    {
                         bool batchesUpdated;
-                        try
+                        Object batchStartState = null;
+                        do
                         {
-                            do
+                            batchesUpdated = batchPersistentQueue.TryDequeueSummaryBatches(summaryBatchActivator.BatchStart, (newBatches) =>
                             {
-                                batchesUpdated = batchPersistentQueue.TryDequeueSummaryBatches(summaryBatchActivator.BatchStart, (newBatches) =>
-                                {
-                                    summaryBatchQueueActivator.UpdateNewBatches(summaryBatchActivator.BatchStart, newBatches);
-                                });
-                            }
-                            while (batchesUpdated);
-                            _summaryBatchActivatorDataManager.Delete(summaryBatchActivator.QueueId, summaryBatchActivator.BatchStart);
+                                summaryBatchQueueActivator.UpdateNewBatches(summaryBatchActivator.BatchStart, newBatches, ref batchStartState);
+                            });
                         }
-                        finally
-                        {
-                            summaryBatchQueueActivator.Unlock(summaryBatchActivator.BatchStart);
-                        }
+                        while (batchesUpdated);
+                        _summaryBatchActivatorDataManager.Delete(summaryBatchActivator.QueueId, summaryBatchActivator.BatchStart);
                     }
                 }
             }

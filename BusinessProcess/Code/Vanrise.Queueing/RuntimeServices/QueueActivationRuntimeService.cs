@@ -13,35 +13,14 @@ namespace Vanrise.Queueing
 {
     public class QueueActivationRuntimeService : RuntimeService
     {
-        static ServiceHost s_serviceHost;
-        static Object s_hostServiceLockObject = new object();
-        static string s_serviceURL;
+        internal const string SERVICE_TYPE_UNIQUE_NAME = "VR_Queueing_QueueActivationRuntimeService";
 
-        protected override void OnStarted(IRuntimeServiceStartContext context)
+        public override string ServiceTypeUniqueName
         {
-            HostServiceIfNeeded();
-            RegisterActivator();
-            base.OnStarted(context);
-        }
-
-        Guid _activatorId;
-
-        private void HostServiceIfNeeded()
-        {
-           lock(s_hostServiceLockObject)
-           {
-               if(s_serviceHost == null)
-               {
-                   s_serviceHost = ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(QueueActivationRuntimeWCFService), typeof(IQueueActivationRuntimeWCFService), OnServiceHostCreated, OnServiceHostRemoved, out s_serviceURL);
-               }
-           }
-        }
-
-        private void RegisterActivator()
-        {
-            _activatorId = Guid.NewGuid();
-            var dataManager = QDataManagerFactory.GetDataManager<IQueueActivatorInstanceDataManager>();
-            dataManager.InsertActivator(_activatorId, Vanrise.Runtime.RunningProcessManager.CurrentProcess.ProcessId, QueueActivatorType.Normal, s_serviceURL);
+            get
+            {
+                return SERVICE_TYPE_UNIQUE_NAME;
+            }
         }
 
         IQueueItemDataManager _queueItemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
@@ -50,14 +29,14 @@ namespace Vanrise.Queueing
         protected override void Execute()
         {
             int queueIdToProcess;
-            while (QueueActivationRuntimeWCFService.TryGetPendingQueueToProcess(this._activatorId, out queueIdToProcess))
+            while (PendingItemsHandler.Current.TryGetPendingQueueToProcess(base.ServiceInstance.ServiceInstanceId, out queueIdToProcess))
             {
                 QueueInstance queueInstance = _queueManager.GetQueueInstanceById(queueIdToProcess);
                 if (queueInstance == null)
                     throw new NullReferenceException(String.Format("queueInstance. {0}", queueIdToProcess));
                 IPersistentQueue queue = PersistentQueueFactory.Default.GetQueue(queueIdToProcess);
                 var queuesByStages = _executionFlowManager.GetQueuesByStages(queueInstance.ExecutionFlowId.Value);
-                var dequeueContext = new PersistentQueueDequeueContext { ActivatorInstanceId = this._activatorId };
+                var dequeueContext = new PersistentQueueDequeueContext { ActivatorInstanceId = base.ServiceInstance.ServiceInstanceId };
                 bool hasItem = false;
                 do
                 {
@@ -91,41 +70,6 @@ namespace Vanrise.Queueing
         }
 
 
-        void OnServiceHostCreated(ServiceHost serviceHost)
-        {
-            serviceHost.Opening += serviceHost_Opening;
-            serviceHost.Opened += serviceHost_Opened;
-            serviceHost.Closing += serviceHost_Closing;
-            serviceHost.Closed += serviceHost_Closed;
-        }
-
-        void OnServiceHostRemoved(ServiceHost serviceHost)
-        {
-            serviceHost.Opening -= serviceHost_Opening;
-            serviceHost.Opened -= serviceHost_Opened;
-            serviceHost.Closing -= serviceHost_Closing;
-            serviceHost.Closed -= serviceHost_Closed;
-        }
-
-        void serviceHost_Opening(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("Queue Activation WCF Service is opening..");
-        }
-
-        void serviceHost_Opened(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("Queue Activation WCF Service opened");
-        }
-
-        void serviceHost_Closed(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("Queue Activation WCF Service closed");
-        }
-
-        void serviceHost_Closing(object sender, EventArgs e)
-        {
-            LoggerFactory.GetLogger().WriteInformation("Queue Activation WCF Service is closing..");
-        }
 
     }
 }

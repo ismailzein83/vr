@@ -8,8 +8,6 @@ namespace Vanrise.Queueing.Entities
 {
     public interface ISummaryBatchQueueActivator
     {
-        bool TryLock(DateTime batchStart);
-        void Unlock(DateTime batchStart);
-        void UpdateNewBatches(DateTime batchStart, IEnumerable<PersistentQueueItem> newBatches);
+        void UpdateNewBatches(DateTime batchStart, IEnumerable<PersistentQueueItem> newBatches, ref Object batchStartState);
     }
 }

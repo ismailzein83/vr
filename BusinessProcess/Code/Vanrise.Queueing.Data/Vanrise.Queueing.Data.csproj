@@ -52,7 +52,6 @@
   <ItemGroup>
     <Compile Include="IDataManager.cs" />
     <Compile Include="IQueueActivatorConfigDataManager.cs" />
-    <Compile Include="IQueueActivatorInstanceDataManager.cs" />
     <Compile Include="IQueueItemHeaderDataManager.cs" />
     <Compile Include="IQueueExecutionFlowDataManager.cs" />
     <Compile Include="IQueueDataManager.cs" />
