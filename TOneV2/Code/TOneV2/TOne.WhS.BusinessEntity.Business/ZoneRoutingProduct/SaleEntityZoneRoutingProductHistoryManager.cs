@@ -58,7 +58,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 else
                 {
                     int sellingProductId = new CarrierAccountManager().GetSellingProductId(input.Query.OwnerId);
-                    return locator.GetCustomerZoneRoutingProductHistory(input.Query.OwnerId, sellingProductId, input.Query.CountryId, zoneIds);
+                    var customerZoneRoutingProductHistoryLocator = new CustomerZoneRoutingProductHistoryLocator(new CustomerZoneRoutingProductHistoryReader(CreateListFromItem(input.Query.OwnerId), CreateListFromItem(sellingProductId), zoneIds));
+                    return customerZoneRoutingProductHistoryLocator.GetCustomerZoneRoutingProductHistory(input.Query.OwnerId, sellingProductId, input.Query.ZoneName, input.Query.CountryId);
                 }
             }
 
@@ -105,6 +106,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     return new CarrierAccountManager().GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
                 }
+            }
+
+            private List<T> CreateListFromItem<T>(T item)
+            {
+                return new List<T>() { item };
             }
 
             #endregion

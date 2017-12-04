@@ -172,6 +172,11 @@
     <Compile Include="SaleRate\SaleRateReadLastRateNoCache.cs" />
     <Compile Include="SupplierRate\QueryHandlers\SupplierRateForZoneQueryHandler.cs" />
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseManager.cs" />
+    <Compile Include="ZoneRoutingProduct\History\CustomerZoneRoutingProductHistoryLocator.cs" />
+    <Compile Include="ZoneRoutingProduct\History\CustomerZoneRoutingProductHistoryReader.cs" />
+    <Compile Include="ZoneRoutingProduct\History\ProductZoneRoutingProductHistoryLocator.cs" />
+    <Compile Include="ZoneRoutingProduct\History\ProductZoneRoutingProductHistoryReader.cs" />
+    <Compile Include="ZoneRoutingProduct\History\ZoneRoutingProductHistoryUtilities.cs" />
     <Compile Include="ZoneRoutingProduct\SaleEntityZoneRoutingProductHistoryManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityZoneRoutingProductLocator.cs" />

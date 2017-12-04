@@ -185,6 +185,8 @@
     <Compile Include="SwitchReleaseCause\UploadSwitchReleaseCauseLog.cs" />
     <Compile Include="Switch\InsertSwitchOperationOutput.cs" />
     <Compile Include="Switch\UpdateSwitchOperationOutput.cs" />
+    <Compile Include="ZoneRoutingProduct\History\RoutingProductHistoryBySource.cs" />
+    <Compile Include="ZoneRoutingProduct\History\SaleEntityRoutingProducts.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryQuery.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryRecord.cs" />
     <Compile Include="RoutingProduct\SaleEntityZoneRoutingProduct.cs" />
@@ -329,6 +331,7 @@
     <Compile Include="Switch\SwitchDetail.cs" />
     <Compile Include="Switch\SwitchInfo.cs" />
     <Compile Include="Switch\SwitchQuery.cs" />
+    <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProducts.cs" />
     <Compile Include="ZoneRoutingProduct\ZoneRoutingProduct.cs" />
     <Compile Include="ZoneRoutingProduct\ZoneRoutingProductDetail.cs" />
     <Compile Include="ZoneRoutingProduct\ZoneRoutingProductQuery.cs" />
