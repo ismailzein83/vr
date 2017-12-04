@@ -77,7 +77,6 @@
     <Compile Include="ExtensionConfigurationDataManager.cs" />
     <Compile Include="GenericConfigurationDataManager.cs" />
     <Compile Include="IDManagerDataManager.cs" />
-    <Compile Include="SummaryTransformationDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RateTypeDataManager.cs" />
     <Compile Include="CurrencyDataManager.cs" />

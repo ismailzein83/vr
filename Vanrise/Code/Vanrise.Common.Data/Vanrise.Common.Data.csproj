@@ -80,7 +80,6 @@
     <Compile Include="IGenericConfigurationDataManager.cs" />
     <Compile Include="IIDManagerDataManager.cs" />
     <Compile Include="IRateTypeDataManager.cs" />
-    <Compile Include="ISummaryTransformationDataManager.cs" />
     <Compile Include="ITypeDataManager.cs" />
     <Compile Include="IVRFileDataManager.cs" />
     <Compile Include="IVRMailMessageTemplateDataManager.cs" />

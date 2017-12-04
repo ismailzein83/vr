@@ -26,19 +26,9 @@ namespace Vanrise.GenericData.QueueActivators
             }
         }
 
-        public bool TryLock(DateTime batchStart)
+        public void UpdateNewBatches(DateTime batchStart, IEnumerable<Queueing.Entities.PersistentQueueItem> newBatches, ref Object batchStartState)
         {
-            return this.SummaryTransformationManager.TryLock(batchStart);
-        }
-
-        public void Unlock(DateTime batchStart)
-        {
-            this.SummaryTransformationManager.Unlock(batchStart);
-        }
-
-        public void UpdateNewBatches(DateTime batchStart, IEnumerable<Queueing.Entities.PersistentQueueItem> newBatches)
-        {
-            this.SummaryTransformationManager.UpdateNewBatches(batchStart, newBatches.Select(itm => itm as GenericSummaryRecordBatch));
+            this.SummaryTransformationManager.UpdateNewBatches(batchStart, newBatches.Select(itm => itm as GenericSummaryRecordBatch), ref batchStartState);
         }
     }
 }

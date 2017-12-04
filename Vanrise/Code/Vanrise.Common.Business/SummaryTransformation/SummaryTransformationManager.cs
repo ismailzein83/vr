@@ -16,13 +16,6 @@ namespace Vanrise.Common.Business.SummaryTransformation
         where Q : class, ISummaryItem
         where R : class, ISummaryBatch<Q>
     {
-        #region ctor/Local Variables
-
-        VRDictionary<DateTime, VRDictionary<string, SummaryItemInProcess<Q>>> _existingSummaryBatches = new VRDictionary<DateTime, VRDictionary<string, SummaryItemInProcess<Q>>>();
-        ISummaryTransformationDataManager _dataManager = CommonDataManagerFactory.GetDataManager<ISummaryTransformationDataManager>();
-
-        #endregion
-
         #region Public Methods
 
         public IEnumerable<R> ConvertRawItemsToBatches(IEnumerable<T> items, Func<R> createSummaryBatchObj)
@@ -66,62 +59,35 @@ namespace Vanrise.Common.Business.SummaryTransformation
                 });
         }
 
-        public void UpdateNewBatches(DateTime batchStart, IEnumerable<R> newBatches)
+        public void UpdateNewBatches(DateTime batchStart, IEnumerable<R> newBatches, ref Object batchStartState)
         {
-            VRDictionary<string, SummaryItemInProcess<Q>> existingSummaryBatch;
-            if (!_existingSummaryBatches.TryGetValue(batchStart, out existingSummaryBatch))
-                throw new Exception(String.Format("Summary Transformation should be locked before calling the UpdateNewBatches. Batch Start: '{0}'", batchStart));
-
-            try
+            VRDictionary<string, SummaryItemInProcess<Q>> existingSummaryBatch = batchStartState as VRDictionary<string, SummaryItemInProcess<Q>>;
+            if (existingSummaryBatch == null)
             {
-                foreach (var newBatch in newBatches)
-                {
-                    if (newBatch.BatchStart != batchStart)
-                        throw new Exception(String.Format("newBatch.BatchStart '{0}' is not same as batchStart '{1}'.", newBatch.BatchStart, batchStart));
-                    UpdateExistingFromNew(existingSummaryBatch, newBatch);
-                }
-
-                SaveSummaryBatchToDB(existingSummaryBatch.Values);
-
-            }
-            catch
-            {
-                Unlock(batchStart);
-                throw;
-            }
-        }
-
-
-        public bool TryLock(DateTime batchStart)
-        {
-            int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
-            IEnumerable<int> runningRuntimeProcessesIds = (new RunningProcessManager()).GetCachedRunningProcesses().Select(itm => itm.ProcessId);
-            if (_dataManager.TryLock(GetTypeId(), batchStart, currentRuntimeProcessId, runningRuntimeProcessesIds))
-            {
+                existingSummaryBatch = new VRDictionary<string, SummaryItemInProcess<Q>>();
+                batchStartState = existingSummaryBatch;
                 var items = GetItemsFromDB(batchStart);
-                VRDictionary<string, SummaryItemInProcess<Q>> itemsByKey = new VRDictionary<string, SummaryItemInProcess<Q>>();
-                if(items != null)
+                if (items != null)
                 {
-                    foreach(var itm in items)
+                    foreach (var itm in items)
                     {
                         string itemKey = GetSummaryItemKey(itm);
-                        if (!itemsByKey.ContainsKey(itemKey))
-                            itemsByKey.Add(itemKey, new SummaryItemInProcess<Q> { SummaryItem = itm });
+                        if (!existingSummaryBatch.ContainsKey(itemKey))
+                            existingSummaryBatch.Add(itemKey, new SummaryItemInProcess<Q> { SummaryItem = itm });
                     }
                 }
-                _existingSummaryBatches.Add(batchStart, itemsByKey);
-                return true;
             }
-            else
-                return false;
+
+            foreach (var newBatch in newBatches)
+            {
+                if (newBatch.BatchStart != batchStart)
+                    throw new Exception(String.Format("newBatch.BatchStart '{0}' is not same as batchStart '{1}'.", newBatch.BatchStart, batchStart));
+                UpdateExistingFromNew(existingSummaryBatch, newBatch);
+            }
+
+            SaveSummaryBatchToDB(existingSummaryBatch.Values);
         }
 
-        public void Unlock(DateTime batchStart)
-        {
-            _dataManager.UnLock(GetTypeId(), batchStart);
-            _existingSummaryBatches.Remove(batchStart);
-        }
-        
         #endregion
 
         #region abstract Methods
@@ -143,11 +109,6 @@ namespace Vanrise.Common.Business.SummaryTransformation
         #endregion
 
         #region Private Methods
-
-        private int GetTypeId()
-        {
-            return TypeManager.Instance.GetTypeId(this);
-        }
 
         private void GenerateSummaryItemsIds(IEnumerable<Q> summaryItems)
         {
