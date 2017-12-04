@@ -30,7 +30,7 @@
         var countryToCloseSelectorAPI;
         var countryToCloseSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var today = UtilsService.getDateFromDateTime(new Date());
+        var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
 
         loadParameters();
         defineScope();

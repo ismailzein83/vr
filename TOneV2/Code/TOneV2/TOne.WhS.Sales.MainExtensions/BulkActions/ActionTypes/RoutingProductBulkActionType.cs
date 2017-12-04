@@ -87,11 +87,15 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
         {
+            var BEDs = new List<DateTime?>();
+            BEDs.Add(context.ZoneItem.CountryBED);
+            BEDs.Add(context.ZoneItem.ZoneBED);
+            BEDs.Add(DateTime.Today);
             context.ZoneItem.NewRoutingProduct = new DraftNewSaleZoneRoutingProduct()
             {
                 ZoneId = context.ZoneItem.ZoneId,
                 ZoneRoutingProductId = RoutingProductId,
-                BED = DateTime.Today,
+                BED = UtilitiesManager.GetMaxDate(BEDs).Value,
                 ApplyNewNormalRateBED = ApplyNewNormalRateBED
             };
 
@@ -109,12 +113,19 @@ namespace TOne.WhS.Sales.MainExtensions
         }
 
         public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
-        {
+        {    
+            var zoneItem =  context.GetZoneItem(context.ZoneDraft.ZoneId);
+            var BEDs = new List<DateTime?>();
+            var zoneBED = zoneItem.ZoneBED;
+            var countryBED = zoneItem.CountryBED;
+            BEDs.Add(countryBED);
+            BEDs.Add(zoneBED);
+            BEDs.Add(DateTime.Today);
             context.ZoneDraft.NewRoutingProduct = new DraftNewSaleZoneRoutingProduct()
             {
                 ZoneId = context.ZoneDraft.ZoneId,
                 ZoneRoutingProductId = RoutingProductId,
-                BED = DateTime.Today,
+                BED = UtilitiesManager.GetMaxDate(BEDs).Value,
                 ApplyNewNormalRateBED = ApplyNewNormalRateBED
             };
 

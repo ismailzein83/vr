@@ -291,7 +291,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     ZoneId = zoneDraft.NewRoutingProduct.ZoneId,
                     ZoneName = zoneDraft.ZoneName,
                     ZoneRoutingProductId = zoneDraft.NewRoutingProduct.ZoneRoutingProductId,
-                    BED = DateTime.Today,
+                    BED = zoneDraft.NewRoutingProduct.BED,
                     EED = zoneDraft.NewRoutingProduct.EED
                 };
 

@@ -14,7 +14,8 @@
             getNowMinusDays: getNowMinusDays,
             isSameNewService: isSameNewService,
             isStringEmpty: isStringEmpty,
-            getNewRateBED: getNewRateBED
+            getNewRateBED: getNewRateBED,
+            getMaxDate: getMaxDate
         };
 
         function onNewRateChanged(dataItem) {

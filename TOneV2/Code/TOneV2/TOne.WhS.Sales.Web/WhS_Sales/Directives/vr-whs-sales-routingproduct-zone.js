@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService", "VRDateTimeService",
-    function (UtilsService, VRUIUtilsService, VRDateTimeService) {
+app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService", "VRDateTimeService", "WhS_Sales_RatePlanUtilsService",
+    function (UtilsService, VRUIUtilsService, VRDateTimeService, WhS_Sales_RatePlanUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -177,7 +177,7 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
                     zoneItem.NewRoutingProduct = {
                         ZoneId: zoneItem.ZoneId,
                         ZoneRoutingProductId: selectedId,
-                        BED: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
+                        BED: setNewRoutingProductBED(),
                         EED: null,
                         ApplyNewNormalRateBED: ctrl.followRateDate
                     };
@@ -185,6 +185,17 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
                 else {
                     zoneItem.NewRoutingProduct = null;
                 }
+            }
+            function setNewRoutingProductBED()
+            {
+                var zoneBED = zoneItem.ZoneBED;
+                var countryBED = (zoneItem.CountryBED != undefined) ? zoneItem.CountryBED : undefined;
+                var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
+                var dates = [];
+                dates.push(zoneBED);
+                dates.push(countryBED);
+                dates.push(today);
+                return WhS_Sales_RatePlanUtilsService.getMaxDate(dates);
             }
             function setRoutingProductChange() {
                 var selectedId = selectorAPI.getSelectedIds();

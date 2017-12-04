@@ -101,9 +101,9 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 ratePlanContext.SetProcessHasChangesToTrueWithLock();
             }
-            if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct && ratePlanContext.IsFirstSellingProductOffer.Value)
+            if (processDefaultRoutingProductContext.NewDefaultRoutingProduct != null && ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct && ratePlanContext.IsFirstSellingProductOffer.Value)
             {
-                processDefaultRoutingProductContext.NewDefaultRoutingProduct.BED = ratePlanContext.MinimumZoneBED;
+                 processDefaultRoutingProductContext.NewDefaultRoutingProduct.BED = ratePlanContext.MinimumZoneBED;
             }
             return new ProcessDefaultRoutingProductOutput()
             {

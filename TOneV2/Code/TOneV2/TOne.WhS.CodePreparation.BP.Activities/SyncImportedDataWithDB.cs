@@ -32,14 +32,18 @@ namespace TOne.WhS.CodePreparation.BP.Activities
 
             VRFileManager fileManager = new VRFileManager();
 
-            foreach (var customerPricelistChange in customerPriceListChanges)
+            if (customerPriceListChanges!=null)    
             {
-                foreach (var pricelistChange in customerPricelistChange.PriceLists)
-                {
-                    if (!fileManager.SetFileUsed(pricelistChange.PriceList.FileId))
-                        throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");
-                }
+                    foreach (var customerPricelistChange in customerPriceListChanges)
+                    {
+                        foreach (var pricelistChange in customerPricelistChange.PriceLists)
+                        {
+                            if (!fileManager.SetFileUsed(pricelistChange.PriceList.FileId))
+                                throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");
+                        }
+                    }
             }
+           
             ICodePreparationDataManager dataManager = CodePrepDataManagerFactory.GetDataManager<ICodePreparationDataManager>();
             dataManager.AddPriceListAndSyncImportedDataWithDB(processInstanceID, sellingNumberPlanId, stateBackupId);
         }
