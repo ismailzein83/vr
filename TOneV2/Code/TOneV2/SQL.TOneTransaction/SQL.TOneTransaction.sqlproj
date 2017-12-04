@@ -155,11 +155,6 @@
     <Build Include="bp\Stored Procedures\sp_BPTask_GetUpdated.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_GetByID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_GetBeforeId.sql" />
-    <Build Include="summarytransformation\Tables\SummaryBatchLock.sql" />
-    <Build Include="summarytransformation\Functions\ParseStringList.sql" />
-    <Build Include="summarytransformation\Stored Procedures\sp_SummaryBatchLock_TryLock.sql" />
-    <Build Include="summarytransformation\Stored Procedures\sp_SummaryBatchLock_UnLock.sql" />
-    <Build Include="Security\summarytransformation.sql" />
     <Build Include="common\Tables\BigDataService.sql" />
     <Build Include="common\Functions\ParseStringList.sql" />
     <Build Include="common\Stored Procedures\sp_BigDataService_DeleteTimedOut.sql" />
@@ -169,14 +164,10 @@
     <Build Include="Security\common.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_Delete.sql" />
     <Build Include="queue\Tables\SummaryBatchActivator.sql" />
-    <Build Include="queue\Tables\QueueActivatorInstance.sql" />
     <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_Insert.sql" />
     <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_GetByActivator.sql" />
     <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_GetAll.sql" />
     <Build Include="queue\Stored Procedures\sp_SummaryBatchActivator_Delete.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_Insert.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_GetAll.sql" />
-    <Build Include="queue\Stored Procedures\sp_QueueActivatorInstance_Delete.sql" />
     <Build Include="reprocess\Tables\StagingSummaryRecord.sql" />
     <Build Include="reprocess\Stored Procedures\sp_StagingSummaryRecord_Delete.sql" />
     <Build Include="Security\reprocess.sql" />
