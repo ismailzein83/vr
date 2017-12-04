@@ -132,6 +132,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllZoneRPsByOwners", SaleZoneRoutingProductMapper, string.Join(",", sellingProductIds), string.Join(",", customerIds), string.Join(",", zoneIds));
         }
+        public IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwnersOfType", DefaultRoutingProductMapper, ownerType, string.Join(",", ownerIds));
+        }
+        public IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllZoneRPsByOwnersOfType", SaleZoneRoutingProductMapper, ownerType, string.Join(",", ownerIds), string.Join(",", zoneIds));
+        }
         #endregion
 
         #region Private Methods

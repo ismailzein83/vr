@@ -266,8 +266,6 @@
     <Compile Include="SwitchConnectivityManager.cs" />
     <Compile Include="Switch\RouteSyncSwitchGetter.cs" />
     <Compile Include="Switch\SwitchManager.cs" />
-    <Compile Include="ZoneRoutingProduct\ZoneRoutingProductHistoryLocator.cs" />
-    <Compile Include="ZoneRoutingProduct\ZoneRoutingProductHistoryReader.cs" />
     <Compile Include="ZoneRoutingProduct\ZoneRoutingProductManager.cs" />
     <Compile Include="ZoneServiceConfigManager.cs" />
   </ItemGroup>

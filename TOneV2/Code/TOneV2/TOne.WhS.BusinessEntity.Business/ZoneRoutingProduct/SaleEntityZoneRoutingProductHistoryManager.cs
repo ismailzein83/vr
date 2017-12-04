@@ -50,19 +50,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<SaleEntityZoneRoutingProductHistoryQuery> input)
             {
-                IEnumerable<long> zoneIds = GetZoneIds(input.Query.OwnerType, input.Query.OwnerId, input.Query.SellingNumberPlanId, input.Query.CountryId, input.Query.ZoneName);
-                ZoneRoutingProductHistoryLocator locator = new ZoneRoutingProductHistoryLocator(new ZoneRoutingProductHistoryReader(input.Query.OwnerType, input.Query.OwnerId, zoneIds));
-
                 if (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct)
-                    return locator.GetSellingProductZoneRoutingProductHistory(input.Query.OwnerId, zoneIds);
+                    return GetProductZoneRoutingProductHistory(input.Query.OwnerId, input.Query.SellingNumberPlanId, input.Query.ZoneName, input.Query.CountryId);
                 else
-                {
-                    int sellingProductId = new CarrierAccountManager().GetSellingProductId(input.Query.OwnerId);
-                    var customerZoneRoutingProductHistoryLocator = new CustomerZoneRoutingProductHistoryLocator(new CustomerZoneRoutingProductHistoryReader(CreateListFromItem(input.Query.OwnerId), CreateListFromItem(sellingProductId), zoneIds));
-                    return customerZoneRoutingProductHistoryLocator.GetCustomerZoneRoutingProductHistory(input.Query.OwnerId, sellingProductId, input.Query.ZoneName, input.Query.CountryId);
-                }
+                    return GetCustomerZoneRoutingProductHistory(input.Query.OwnerId, input.Query.SellingNumberPlanId, input.Query.ZoneName, input.Query.CountryId);
             }
-
             public override SaleEntityZoneRoutingProductHistoryRecordDetail EntityDetailMapper(SaleEntityZoneRoutingProductHistoryRecord entity)
             {
                 var detail = new SaleEntityZoneRoutingProductHistoryRecordDetail()
@@ -80,39 +72,43 @@ namespace TOne.WhS.BusinessEntity.Business
                 return detail;
             }
 
-            #region Common Methods
-
-            private IEnumerable<long> GetZoneIds(SalePriceListOwnerType ownerType, int ownerId, int? sellingNumberPlanId, int countryId, string zoneName)
+            #region Private Methods
+            private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetProductZoneRoutingProductHistory(int sellingProductId, int? sellingNumberPlanId, string zoneName, int countryId)
             {
-                int ownerSellingNumberPlanId = (sellingNumberPlanId.HasValue) ? sellingNumberPlanId.Value : GetOwnerSellingNumberPlanId(ownerType, ownerId);
-                IEnumerable<long> zoneIds = new SaleZoneManager().GetSaleZoneIdsBySaleZoneName(ownerSellingNumberPlanId, countryId, zoneName);
+                if (!sellingNumberPlanId.HasValue)
+                {
+                    int? productSellingNumberPlanId = new SellingProductManager().GetSellingNumberPlanId(sellingProductId);
+                    if (!productSellingNumberPlanId.HasValue)
+                        throw new NullReferenceException("productSellingNumberPlanId");
+                    sellingNumberPlanId = productSellingNumberPlanId;
+                }
 
-                if (zoneIds == null || zoneIds.Count() == 0)
-                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SaleZoneIds of Zone '{0}' were not found", zoneName));
+                IEnumerable<long> zoneIds = GetZoneIds(SalePriceListOwnerType.SellingProduct, sellingProductId, sellingNumberPlanId.Value, zoneName, countryId);
+                var productZoneRoutingProductHistoryLocator = new ProductZoneRoutingProductHistoryLocator(new ProductZoneRoutingProductHistoryReader(CreateListFromItem(sellingProductId), zoneIds));
 
+                return productZoneRoutingProductHistoryLocator.GetProductZoneRoutingProductHistory(sellingProductId, zoneName);
+            }
+            private IEnumerable<SaleEntityZoneRoutingProductHistoryRecord> GetCustomerZoneRoutingProductHistory(int customerId, int? sellingNumberPlanId, string zoneName, int countryId)
+            {
+                if (!sellingNumberPlanId.HasValue)
+                    sellingNumberPlanId = new CarrierAccountManager().GetSellingNumberPlanId(customerId, CarrierAccountType.Customer);
+
+                int sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
+                IEnumerable<long> zoneIds = GetZoneIds(SalePriceListOwnerType.SellingProduct, sellingProductId, sellingNumberPlanId.Value, zoneName, countryId);
+                var customerZoneRoutingProductHistoryLocator = new CustomerZoneRoutingProductHistoryLocator(new CustomerZoneRoutingProductHistoryReader(CreateListFromItem(customerId), CreateListFromItem(sellingProductId), zoneIds));
+
+                return customerZoneRoutingProductHistoryLocator.GetCustomerZoneRoutingProductHistory(customerId, sellingProductId, zoneName, countryId);
+            }
+            private IEnumerable<long> GetZoneIds(SalePriceListOwnerType ownerType, int ownerId, int sellingNumberPlanId, string zoneName, int countryId)
+            {
+                IEnumerable<long> zoneIds = new SaleZoneManager().GetSaleZoneIdsBySaleZoneName(sellingNumberPlanId, countryId, zoneName);
+                zoneIds.ThrowIfNull("zoneIds");
                 return zoneIds;
             }
-
-            private int GetOwnerSellingNumberPlanId(SalePriceListOwnerType ownerType, int ownerId)
-            {
-                if (ownerType == SalePriceListOwnerType.SellingProduct)
-                {
-                    int? sellingNumberPlanId = new SellingProductManager().GetSellingNumberPlanId(ownerId);
-                    if (!sellingNumberPlanId.HasValue)
-                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("SellingNumberPlanId of SellingProduct '{0}' was not found", ownerId));
-                    return sellingNumberPlanId.Value;
-                }
-                else
-                {
-                    return new CarrierAccountManager().GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
-                }
-            }
-
             private List<T> CreateListFromItem<T>(T item)
             {
                 return new List<T>() { item };
             }
-
             #endregion
         }
 

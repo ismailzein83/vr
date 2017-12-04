@@ -42,5 +42,8 @@ namespace TOne.WhS.BusinessEntity.Data
 
         IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds);
         IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds, IEnumerable<long> zoneIds);
+
+        IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds);
+        IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds);
     }
 }
