@@ -71,6 +71,7 @@
     <Compile Include="IFinalizeRouteOptionContext.cs" />
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="RouteSync\SwitchSyncData.cs" />
     <Compile Include="PartialRoute\AffectedRouteOptionRules.cs" />
     <Compile Include="PartialRoute\AffectedRouteRules.cs" />
     <Compile Include="PartialRoute\PartialCustomerRoutesBatch.cs" />
