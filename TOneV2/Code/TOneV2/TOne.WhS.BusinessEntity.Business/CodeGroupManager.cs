@@ -177,7 +177,12 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             if (CheckIfCodeGroupHasRelatedCodes(codeGroupToEdit.CodeGroupId))
             {
-                throw new Vanrise.Entities.VRBusinessException(string.Format("Cannot edit Code Group '{0}' because it has related codes", codeGroupToEdit.Code));
+                CodeGroup codeGroup = GetCodeGroup(codeGroupToEdit.CodeGroupId);
+                if (codeGroup == null)
+                    throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Code group '{0}' does not exist.", codeGroupToEdit.Code));
+
+                if (codeGroup.CountryId != codeGroupToEdit.CountryId || codeGroup.Code != codeGroupToEdit.Code)
+                    throw new Vanrise.Entities.VRBusinessException(string.Format("Cannot edit code group '{0}' because it has related codes.", codeGroupToEdit.Code));
             }
             ValidateCodeGroupToEdit(codeGroupToEdit);
 
