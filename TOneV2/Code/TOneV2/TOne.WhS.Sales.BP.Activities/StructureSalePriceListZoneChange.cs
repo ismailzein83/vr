@@ -185,6 +185,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                         changesForThisCustomer.RateChanges.AddRange(customerCountriesToCloseContext.RateChangesOutArgument);
                         changesForThisCustomer.CodeChanges.AddRange(customerCountriesToCloseContext.CodeChangesOutArgument);
+                        changesForThisCustomer.RoutingProductChanges.AddRange(customerCountriesToCloseContext.RoutingProductChangesOutArgument);
                     }
 
                     #endregion
@@ -542,6 +543,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             context.RateChangesOutArgument = new List<SalePricelistRateChange>();
             context.CodeChangesOutArgument = new List<SalePricelistCodeChange>();
+            context.RoutingProductChangesOutArgument = new List<SalePricelistRPChange>();
 
             SaleZoneManager saleZoneManager = new SaleZoneManager();
             CustomerCountryManager customerCountryManager = new CustomerCountryManager();
@@ -550,26 +552,29 @@ namespace TOne.WhS.Sales.BP.Activities
             foreach (var countryToClose in context.CountriesToClose)
             {
                 CustomerCountry2 soldCountry = customerCountryManager.GetCustomerCountry(context.CustomerInfo.CustomerId, countryToClose.CountryId, context.ProcessEffectiveDate, true);
-                
+
                 List<long> zonesForThisCountry;
                 if (!context.CountriesToCloseByZoneIds.TryGetValue(countryToClose.CountryId, out zonesForThisCountry))
                     continue;
 
                 foreach (var zoneId in zonesForThisCountry)
                 {
-                    string zoneName = saleZoneManager.GetSaleZoneName(zoneId);
 
+                    var zone = saleZoneManager.GetSaleZone(zoneId);
+                    if (zone == null)
+                        throw new DataIntegrityValidationException(string.Format("Zone with Id {0} not found"));
+                    
                     #region Get Rate Changes
 
                     var zoneRate = context.RateChangeLocator.GetCustomerZoneRate(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, zoneId);
                     if (zoneRate == null)
-                        throw new VRBusinessException(string.Format("Zone '{0}' neither has an explicit rate nor has selling product rate. Country is sold to customer with id {1}", zoneName, context.CustomerInfo.CustomerId));
+                        throw new VRBusinessException(string.Format("Zone '{0}' neither has an explicit rate nor has selling product rate. Country is sold to customer with id {1}", zone.Name, context.CustomerInfo.CustomerId));
 
                     context.RateChangesOutArgument.Add(new SalePricelistRateChange
                     {
                         CountryId = countryToClose.CountryId,
                         ZoneId = zoneId,
-                        ZoneName = zoneName,
+                        ZoneName = zone.Name,
                         Rate = zoneRate.Rate.Rate,
                         ChangeType = RateChangeType.Deleted,
                         BED = (soldCountry.BED > zoneRate.Rate.BED) ? soldCountry.BED : zoneRate.Rate.BED, //TODO: The only gap found here if there was a rate explicit closed at a time and another inherited. This way the BED of the sent rate will be sell date or SP rate BED and not the closure date of the explicit rate
@@ -583,14 +588,14 @@ namespace TOne.WhS.Sales.BP.Activities
 
                     IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
                     if (zoneCodes == null)
-                        throw new DataIntegrityValidationException(string.Format("Zone {0} has no existing codes.", zoneName));
+                        throw new DataIntegrityValidationException(string.Format("Zone {0} has no existing codes.", zone.Name));
 
                     foreach (var existingCode in zoneCodes)
                     {
                         context.CodeChangesOutArgument.Add(new SalePricelistCodeChange
                         {
                             CountryId = countryToClose.CountryId,
-                            ZoneName = zoneName,
+                            ZoneName = zone.Name,
                             ZoneId = existingCode.ZoneId,
                             Code = existingCode.Code,
                             ChangeType = CodeChange.Closed,
@@ -598,6 +603,39 @@ namespace TOne.WhS.Sales.BP.Activities
                             EED = countryToClose.CloseEffectiveDate
                         });
                     }
+
+                    #endregion
+
+                    #region Get Zone RP Changes
+                    SaleEntityZoneRoutingProductLocator routingProductLocatorByActionDate = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { context.CustomerInfo.CustomerId }, context.ActionDatesByZoneId));
+
+                    SaleEntityZoneRoutingProduct effectiveRoutingProduct = routingProductLocatorByActionDate.GetCustomerZoneRoutingProduct(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, zoneId);
+
+                    if (effectiveRoutingProduct == null)
+                        throw new VRBusinessException(string.Format("No routing product assigned for zone {0}", zone.Name));
+                    var BEDs = new List<DateTime?>();
+                    BEDs.Add(zone.BED);
+                    BEDs.Add(effectiveRoutingProduct.BED);
+                    BEDs.Add(soldCountry.BED);
+                    var BED = UtilitiesManager.GetMaxDate(BEDs).Value;
+
+                    var EEDs = new List<DateTime?>();
+                    EEDs.Add(zone.EED);
+                    EEDs.Add(effectiveRoutingProduct.EED);
+                    EEDs.Add(countryToClose.CloseEffectiveDate);
+                    var EED = UtilitiesManager.GetMinDate(EEDs);
+
+                    var routingProduct = new SalePricelistRPChange
+                    {
+                        CountryId = countryToClose.CountryId,
+                        ZoneName = zone.Name,
+                        ZoneId = zoneId,
+                        RoutingProductId = effectiveRoutingProduct.RoutingProductId,
+                        BED = UtilitiesManager.GetMaxDate(BEDs).Value,
+                        EED = EED.VRGreaterThan(BED) ? EED : BED, //TODO: this is not reflecting the correct value now, if the def customer ro for example is closed in the future
+                        CustomerId = context.CustomerInfo.CustomerId
+                    };
+                    context.RoutingProductChangesOutArgument.Add(routingProduct);
 
                     #endregion
                 }
@@ -672,7 +710,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     {
                         rateToAdd.NewRates[i].ChangeType = RateChangeType.Increase;
                     }
-                    
+
                 }
                 else if (rateToAdd.NormalRate < convertedRate)
                 {
@@ -1001,11 +1039,11 @@ namespace TOne.WhS.Sales.BP.Activities
             SaleEntityZoneRoutingProductLocator routingProductEffectiveLocator, SaleEntityZoneRoutingProductLocator routingProductCurrentLocator)
         {
             List<SalePricelistRPChange> routingProductChanges = new List<SalePricelistRPChange>();
-           
+
             foreach (var countryId in soldCountriesIds)
             {
                 IEnumerable<SaleZone> zones = existingZonesByCountryId.GetRecord(countryId);
-             
+
                 if (zones == null)
                     continue;
 
@@ -1013,7 +1051,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     SaleEntityZoneRoutingProduct effectiveRoutingProduct = routingProductEffectiveLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, saleZone.SaleZoneId);
                     SaleEntityZoneRoutingProduct currentRoutingProduct = routingProductCurrentLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, saleZone.SaleZoneId);
-                   
+
                     if (currentRoutingProduct == null || effectiveRoutingProduct.RoutingProductId != currentRoutingProduct.RoutingProductId)
                     {
                         var routingProduct = new SalePricelistRPChange
@@ -1197,6 +1235,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             public List<SalePricelistCodeChange> CodeChangesOutArgument { get; set; }
 
+            public List<SalePricelistRPChange> RoutingProductChangesOutArgument { get; set; }
 
             #endregion
         }
