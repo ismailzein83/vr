@@ -189,12 +189,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
             UserManager userManager = new UserManager();
             User initiator = userManager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
+            CompanySetting companySetting = _carrierAccountManager.GetCompanySetting(ownerId);
 
             var objects = new Dictionary<string, dynamic>
             {
                 {"Customer", customer},
                 {"User", initiator},
-                {"Sale Pricelist", clonedPriceList}
+                {"Sale Pricelist", clonedPriceList},
+                {"Company Setting", companySetting}
             };
             VRMailManager vrMailManager = new VRMailManager();
             return vrMailManager.EvaluateMailTemplate(salePlmailTemplateId, objects);
@@ -594,8 +596,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (!customerCountriesSellDatesByCountryId.TryGetValue(countryChange.CountryId, out countrySellDate))
                     countrySellDate = DateTime.MinValue;
 
-                List<ExistingSaleZone> existingZones = existingDataByCountryId.GetRecord(countryChange.CountryId);
-                salePlZoneNotifications.AddRange(GetZoneNotificationsFromExistingData(customerId, sellingProductId, existingZones, salePlZoneNotifications.Select(z => z.ZoneName), futureLocator, countrySellDate));
+                    List<ExistingSaleZone> existingZones = existingDataByCountryId.GetRecord(countryChange.CountryId);
+                    salePlZoneNotifications.AddRange(GetZoneNotificationsFromExistingData(customerId, sellingProductId, existingZones, salePlZoneNotifications.Select(z => z.ZoneName), futureLocator, countrySellDate));
             }
             return salePlZoneNotifications;
         }

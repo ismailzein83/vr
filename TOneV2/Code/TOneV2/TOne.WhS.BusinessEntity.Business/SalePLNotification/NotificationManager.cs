@@ -48,6 +48,8 @@ namespace TOne.WhS.BusinessEntity.Business
         public bool SendSalePriceList(int initiatorId, SalePriceList customerPricelist, VRFile file)
         {
             CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerPricelist.OwnerId);
+            CompanySetting companySetting = _carrierAccountManager.GetCompanySetting(customerPricelist.OwnerId);
+
             var pricelistSettings = _carrierAccountManager.GetCustomerPricelistSettings(customerPricelist.OwnerId);
             Guid salePlmailTemplateId = pricelistSettings.DefaultSalePLMailTemplateId.Value;
 
@@ -72,7 +74,8 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 {"Customer", customer},
                 {"User", initiator},
-                {"Sale Pricelist", customerPricelist}
+                {"Sale Pricelist", customerPricelist},
+                {"Company Setting", companySetting}
             };
 
             VRMailEvaluatedTemplate evaluatedTemplate = _vrMailManager.EvaluateMailTemplate(salePlmailTemplateId, objects);
@@ -120,6 +123,7 @@ namespace TOne.WhS.BusinessEntity.Business
         private void SendMail(Guid salePLMailTemplateId, int customerId, int initiatorId, long processInstanceId, List<int> failedCustomersToSendEmail)
         {
             CarrierAccount customer = _carrierAccountManager.GetCarrierAccount(customerId);
+            CompanySetting companySetting = _carrierAccountManager.GetCompanySetting(customerId);
 
             SalePriceList customerPricelist = _salePriceListManager.GetPriceListByCustomerAndProcessInstanceId(processInstanceId, customerId);
             if (customerPricelist == null)
@@ -146,7 +150,8 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 {"Customer", customer},
                 {"User", initiator},
-                {"Sale Pricelist", customerPricelist}
+                {"Sale Pricelist", customerPricelist},
+                {"Company Setting", companySetting}
             };
 
             VRMailEvaluatedTemplate evaluatedTemplate = _vrMailManager.EvaluateMailTemplate(salePLMailTemplateId, objects);
