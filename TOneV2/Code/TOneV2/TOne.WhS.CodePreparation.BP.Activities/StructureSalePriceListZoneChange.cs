@@ -478,8 +478,6 @@ namespace TOne.WhS.CodePreparation.BP.Activities
         }
         private void SetRoutingProductIdOnRateChange(int customerId, int sellingProductId, List<SalePricelistRateChange> rateChanges, Dictionary<long, DateTime> zoneIdsWithRateBED, SaleEntityZoneRoutingProductLocator routingProductLocator)
         {
-            SaleEntityZoneRoutingProductLocator routingProductLocatorByRateBED = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { customerId }, zoneIdsWithRateBED));
-
             foreach (var rateChange in rateChanges)
             {
                 var saleEntityZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, rateChange.ZoneId.Value);

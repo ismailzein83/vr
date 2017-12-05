@@ -53,7 +53,7 @@
                     $scope.scopeModel.uploadedAttachements.push(obj);
                     fileAPI.clearFileUploader();
                 }
-            }
+            };
         }
 
         function loadAllControls() {
