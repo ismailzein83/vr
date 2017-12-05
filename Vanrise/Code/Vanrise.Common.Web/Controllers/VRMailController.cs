@@ -18,7 +18,7 @@ namespace Vanrise.Common.Web.Controllers
         public void SendTestEmail(EmailSettingDetail setting)
         {
             VRMailManager vrMailManager = new VRMailManager();
-            vrMailManager.SendTestMail(setting.EmailSettingData, setting.ToEmail, setting.Subject, setting.Body);
+            vrMailManager.SendTestMail(setting.EmailSettingData, setting.FromEmail, setting.ToEmail, setting.Subject, setting.Body);
         }
         [HttpPost]
         [Route("SendEmail")]
@@ -27,7 +27,7 @@ namespace Vanrise.Common.Web.Controllers
             var vrMailManager = new VRMailManager();
             var vrFileManager = new VRFileManager();
             var vrMailAttachements = emailSetting.AttachementFileIds.Select(fileId => vrMailManager.ConvertToGeneralAttachement(fileId));
-            vrMailManager.SendMail(emailSetting.To, emailSetting.CC, emailSetting.BCC, emailSetting.Subject, emailSetting.Body
+            vrMailManager.SendMail(emailSetting.From,emailSetting.To, emailSetting.CC, emailSetting.BCC, emailSetting.Subject, emailSetting.Body
                 , vrMailAttachements.ToList(), emailSetting.CompressFile);
         }
         [HttpGet]

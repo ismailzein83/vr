@@ -64,6 +64,7 @@
 
             function loadStaticData() {
                 if (emailObject != undefined) {
+                    $scope.scopeModel.from = emailObject.From;
                     $scope.scopeModel.cc = emailObject.CC;
                     $scope.scopeModel.to = emailObject.To;
                     $scope.scopeModel.subject = emailObject.Subject;
@@ -88,6 +89,7 @@
             }
 
             var obj = {
+                From: $scope.scopeModel.from,
                 CC: $scope.scopeModel.cc,
                 To: $scope.scopeModel.to,
                 Subject: $scope.scopeModel.subject,

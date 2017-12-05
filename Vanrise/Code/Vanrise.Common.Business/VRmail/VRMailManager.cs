@@ -16,7 +16,7 @@ namespace Vanrise.Common.Business
         public void SendMail(Guid mailMessageTemplateId, Dictionary<string, dynamic> objects)
         {
             var evaluatedMailTemplate = EvaluateMailTemplate(mailMessageTemplateId, objects);
-            SendMail(evaluatedMailTemplate.To, evaluatedMailTemplate.CC, evaluatedMailTemplate.BCC, evaluatedMailTemplate.Subject, evaluatedMailTemplate.Body);
+            SendMail(evaluatedMailTemplate.From, evaluatedMailTemplate.To, evaluatedMailTemplate.CC, evaluatedMailTemplate.BCC, evaluatedMailTemplate.Subject, evaluatedMailTemplate.Body);
         }
 
         public VRMailEvaluatedTemplate EvaluateMailTemplate(Guid mailMessageTemplateId, Dictionary<string, dynamic> objects)
@@ -32,6 +32,7 @@ namespace Vanrise.Common.Business
 
             return new VRMailEvaluatedTemplate
             {
+                From = EvaluateExpression(mailMessageTemplateId, "From", mailMessageTemplate.Settings.From, mailContext),
                 To = EvaluateExpression(mailMessageTemplateId, "To", mailMessageTemplate.Settings.To, mailContext),
                 CC = EvaluateExpression(mailMessageTemplateId, "CC", mailMessageTemplate.Settings.CC, mailContext),
                 BCC = EvaluateExpression(mailMessageTemplateId, "BCC", mailMessageTemplate.Settings.BCC, mailContext),
@@ -84,10 +85,14 @@ namespace Vanrise.Common.Business
 
         public void SendMail(string to, string cc, string bcc, string subject, string body)
         {
-            SendMail(to, cc, bcc, subject, body, null);
+            SendMail(to, cc, bcc, subject, body, null,false);
+        }
+        public void SendMail(string from, string to, string cc, string bcc, string subject, string body)
+        {
+            SendMail(from, to, cc, bcc, subject, body, null);
         }
 
-        public void SendTestMail(EmailSettingData emailSettingData, string to, string subject, string body)
+        public void SendTestMail(EmailSettingData emailSettingData, string from, string to, string subject, string body)
         {
             if (String.IsNullOrWhiteSpace(to))
                 throw new NullReferenceException("to");
@@ -96,7 +101,15 @@ namespace Vanrise.Common.Business
                 throw new NullReferenceException("subject");
 
             MailMessage mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
+            if (!string.IsNullOrEmpty(from))
+            {
+                mailMessage.From = new MailAddress(from);
+            }
+            else if (!string.IsNullOrEmpty(emailSettingData.AlternativeSenderEmail))
+            {
+                mailMessage.From = new MailAddress(emailSettingData.AlternativeSenderEmail);
+            }
+            else mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
             string[] toAddresses = to.Split(';', ',', ':');
             foreach (var toAddress in toAddresses)
             {
@@ -114,12 +127,27 @@ namespace Vanrise.Common.Business
 
         public void SendMail(string to, string cc, string bcc, string subject, string body, List<VRMailAttachement> attachements, bool compressAttachement = false)
         {
+            SendMail(string.Empty, to, cc, bcc, subject, body, attachements, compressAttachement);
+        }
+        public void SendMail(string from, string to, string cc, string bcc, string subject, string body, List<VRMailAttachement> attachements, bool compressAttachement = false)
+        {
             if (String.IsNullOrWhiteSpace(to))
                 throw new NullReferenceException("to");
             ConfigManager configManager = new ConfigManager();
             EmailSettingData emailSettingData = configManager.GetSystemEmail();
 
-            MailMessage mailMessage = new MailMessage { From = new MailAddress(emailSettingData.SenderEmail) };
+            MailMessage mailMessage = new MailMessage ();
+
+            if (!string.IsNullOrEmpty(from))
+            {
+                mailMessage.From = new MailAddress(from);
+            }
+            else if (!string.IsNullOrEmpty(emailSettingData.AlternativeSenderEmail))
+            {
+                mailMessage.From = new MailAddress(emailSettingData.AlternativeSenderEmail);
+            }
+            else mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
+
             string[] toAddresses = to.Split(';', ',', ':');
             foreach (var toAddress in toAddresses)
             {

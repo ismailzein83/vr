@@ -1,8 +1,11 @@
 ﻿<vr-columns width="1/2row">
-    <vr-textbox value="senderEmail" label="Sender Email" type="email" isrequired></vr-textbox>
+    <vr-textbox value="senderEmail" label="User Name" type="email" isrequired></vr-textbox>
 </vr-columns>
 <vr-columns width="1/2row">
-    <vr-textbox value="senderPassword" label="Sender Password" type="password" isrequired></vr-textbox>
+    <vr-textbox value="senderPassword" label="User Password" type="password" isrequired></vr-textbox>
+</vr-columns>
+<vr-columns width="1/2row">
+    <vr-textbox value="alternativeSenderEmail" label="Sender Email" type="email"></vr-textbox>
 </vr-columns>
 <vr-columns width="1/2row">
     <vr-textbox value="host" label="Host" isrequired></vr-textbox>
@@ -13,9 +16,9 @@
 <vr-columns width="1/4row">
     <vr-textbox value="timeout" label="Timeout(sec)" type="number" decimalprecision="0" isrequired></vr-textbox>
 </vr-columns>
-<vr-columns width="1/2row">
+<vr-columns width="1/4row">
     <vr-switch value="ssl" label="SSL" isrequired></vr-switch>
 </vr-columns>
-<vr-columns width="1/2row" withemptyline>
+<vr-columns width="1/4row" withemptyline>
     <vr-button type="SendEmail" data-onclick="sendEmail" standalone></vr-button>
 </vr-columns>

@@ -196,7 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Constant\ActionAuditLKUPEnum.js" />
-    <Content Include="Common\Constant\CompanySettingsPropertyEnum.js" />
+    <Content Include="Common\Constant\CompanySettingPropertyEnum.js" />
     <Content Include="Common\Constant\EntityFilterEffectiveModeEnum.js" />
     <Content Include="Common\Constant\SalutationTypeEnum.js" />
     <Content Include="Common\Constant\GridWidthFactorEnum.js" />
@@ -228,10 +228,10 @@
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companydefinition-settings-editor.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companydefinition-selective.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-general-technical-settings-editor.js" />
-    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\CompanySettingsObjectTypeTemplate.html" />
-    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\CompanySettingsPropertyEvaluatorTemplate.html" />
-    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingsobjecttype.js" />
-    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingspropertyevaluator.js" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\CompanySettingObjectTypeTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\CompanySettingPropertyEvaluatorTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingobjecttype.js" />
+    <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingpropertyevaluator.js" />
     <Content Include="Common\Directives\Region\Templates\RegionGridTemplate.html" />
     <Content Include="Common\Directives\Region\vr-common-region-grid.js" />
     <Content Include="Common\Directives\Region\vr-common-region-selector.js" />

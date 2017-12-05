@@ -45,7 +45,7 @@ namespace Vanrise.Common.Web.Controllers
         public void SendTestEmail(EmailSettingDetail setting)
         {
             VRMailManager vrMailManager = new VRMailManager();
-            vrMailManager.SendTestMail(setting.EmailSettingData, setting.ToEmail, setting.Subject, setting.Body);
+            vrMailManager.SendTestMail(setting.EmailSettingData, setting.FromEmail, setting.ToEmail, setting.Subject, setting.Body);
         }
 
         [HttpGet]

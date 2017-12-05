@@ -1,0 +1,21 @@
+﻿
+<vr-columns width="1/2row">
+    <vr-select on-ready="scopeModel.onContactTypeSelectorReady"
+               datasource="scopeModel.contactTypes"
+               selectedvalues="scopeModel.selectedContactType"
+               datavaluefield="Name"
+               datatextfield="Title"
+               label="Contact Type"
+               hideremoveicon isrequired="true">
+    </vr-select>
+</vr-columns>
+<vr-columns width="1/2row">
+    <vr-select on-ready="scopeModel.onPropertyEnumSelectorReady"
+               datasource="scopeModel.propertyEnums"
+               selectedvalues="scopeModel.selectedPropertyEnum"
+               datavaluefield="value"
+               datatextfield="description"
+               label="Property"
+               hideremoveicon isrequired="true">
+    </vr-select>
+</vr-columns>

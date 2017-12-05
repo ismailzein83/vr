@@ -8,6 +8,7 @@
         public int Port { get; set; }
         public int TimeoutInSeconds { get; set; }
         public bool EnabelSsl { get; set; }
+        public string AlternativeSenderEmail { get; set; }
     }
 
     public class EmailSettingDetail
@@ -16,5 +17,6 @@
         public string Subject { get; set; }
         public string Body { get; set; }
         public string ToEmail { get; set; }
+        public string FromEmail { get; set; }
     }
 }

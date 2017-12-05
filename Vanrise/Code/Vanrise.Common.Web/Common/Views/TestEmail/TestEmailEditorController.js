@@ -25,6 +25,7 @@
                 var emailSettingDetail = {
                     EmailSettingData: emailSettingDataEntity,
                     ToEmail: $scope.toEmail,
+                    FromEmail: $scope.fromEmail,
                     Subject: $scope.subject,
                     Body: $scope.body
                 };

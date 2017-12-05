@@ -118,6 +118,7 @@
                 $scope.scopeModel.name = mailMessageTemplateEntity.Name;
 
                 if (mailMessageTemplateEntity.Settings != undefined) {
+                    $scope.scopeModel.from = mailMessageTemplateEntity.Settings.From != undefined ?mailMessageTemplateEntity.Settings.From.ExpressionString:undefined;
                     $scope.scopeModel.to = mailMessageTemplateEntity.Settings.To.ExpressionString;
                     $scope.scopeModel.cc = mailMessageTemplateEntity.Settings.CC.ExpressionString;
                     $scope.scopeModel.bcc = mailMessageTemplateEntity.Settings.BCC != undefined ? mailMessageTemplateEntity.Settings.BCC.ExpressionString : undefined;
@@ -252,6 +253,7 @@
                 VRMailMessageTypeId: mailMessageTypeSelectorAPI.getSelectedIds(),
                 Settings: {
                     Variables: $scope.scopeModel.objects,
+                    From: {ExpressionString: $scope.scopeModel.from},
                     To: { ExpressionString: $scope.scopeModel.to },
                     CC: { ExpressionString: $scope.scopeModel.cc },
                     BCC: { ExpressionString: $scope.scopeModel.bcc },

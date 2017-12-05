@@ -8,6 +8,7 @@ namespace Vanrise.Entities
 {
     public class VRMail
     {
+        public string From { get; set; }
         public string To { get; set; }
         public string CC { get; set; }
         public string BCC { get; set; }

@@ -184,6 +184,9 @@ namespace Vanrise.Common.Business
             if (mailTemplate == null || mailTemplate.Settings == null)
                 return false;
 
+            if (!IsMailTemplateExpressionValid(mailTemplate.Settings.From))
+                return false;
+
             if (!IsMailTemplateExpressionValid(mailTemplate.Settings.To))
                 return false;
 
