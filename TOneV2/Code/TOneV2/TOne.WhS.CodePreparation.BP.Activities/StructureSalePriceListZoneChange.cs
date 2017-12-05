@@ -347,7 +347,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     rateChanges.AddRange(newRateChanges);
 
                     IEnumerable<SalePricelistRateChange> zonesToCloseRateChanges = this.GetRateChangesFromClosedZone(countryAction.ZonesToClose, lastRateNoCacheLocator,
-                            countryAction.CountryId, customerId, sellingProductId, countrySellDate);
+                            countryAction.CountryId, customerId, sellingProductId, countrySellDate, routingProductLocator);
                     rateChanges.AddRange(zonesToCloseRateChanges);
                     routingProductChanges.AddRange(GetRPChangesFromZonesToClose(customerId, sellingProductId, zonesToCloseRateChanges, routingProductLocator));
 
@@ -442,7 +442,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             }
             return routingProductchanges;
         }
-        private IEnumerable<SalePricelistRateChange> GetRateChangesFromClosedZone(IEnumerable<ZoneToClose> zonesToClose, SaleEntityZoneRateLocator lastRateNoCacheLocator, int countryId, int customerId, int sellingProductId, DateTime countrySellDate)
+        private IEnumerable<SalePricelistRateChange> GetRateChangesFromClosedZone(IEnumerable<ZoneToClose> zonesToClose, SaleEntityZoneRateLocator lastRateNoCacheLocator, int countryId, int customerId, int sellingProductId, DateTime countrySellDate, SaleEntityZoneRoutingProductLocator routingProductLocator)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
             SaleRateManager saleRateManager = new SaleRateManager();
@@ -473,22 +473,20 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 zoneIdsWithRateBED.Add(zoneToClose.ZoneId, closedRate.Rate.BED);
             }
             //assing routing product id
-            SetRoutingProductIdOnRateChange(customerId, sellingProductId, rateChanges, zoneIdsWithRateBED);
+            SetRoutingProductIdOnRateChange(customerId, sellingProductId, rateChanges, zoneIdsWithRateBED, routingProductLocator);
             return rateChanges;
         }
-        private void SetRoutingProductIdOnRateChange(int customerId, int sellingProductId, List<SalePricelistRateChange> rateChanges, Dictionary<long, DateTime> zoneIdsWithRateBED)
+        private void SetRoutingProductIdOnRateChange(int customerId, int sellingProductId, List<SalePricelistRateChange> rateChanges, Dictionary<long, DateTime> zoneIdsWithRateBED, SaleEntityZoneRoutingProductLocator routingProductLocator)
         {
             SaleEntityZoneRoutingProductLocator routingProductLocatorByRateBED = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { customerId }, zoneIdsWithRateBED));
 
             foreach (var rateChange in rateChanges)
             {
-                var saleEntityZoneRoutingProduct = routingProductLocatorByRateBED.GetCustomerZoneRoutingProduct(customerId, sellingProductId, rateChange.ZoneId.Value);
-                if (saleEntityZoneRoutingProduct != null)
-                    rateChange.RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
-                else
-                {
+                var saleEntityZoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, rateChange.ZoneId.Value);
+                if (saleEntityZoneRoutingProduct == null)
                     throw new Exception(string.Format("No routing product assigned for customer {0}", customerId));
-                }
+
+                rateChange.RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId;
             }
         }
         private IEnumerable<SalePricelistCodeChange> GetCodeChangesFromCodeToAdd(IEnumerable<CodeToAdd> codesToAdd, int countryId)
