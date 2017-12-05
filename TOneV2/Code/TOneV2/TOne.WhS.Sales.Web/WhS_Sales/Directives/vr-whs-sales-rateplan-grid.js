@@ -675,18 +675,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     });
 
                     function saveZoneItemChanges() {
-                        var zoneChanges = [];
-                        applyChanges(zoneChanges, zoneItem);
-
-                        var input = {
-                            OwnerType: gridQuery.OwnerType,
-                            OwnerId: gridQuery.OwnerId,
-                            NewChanges: {
-                                ZoneChanges: zoneChanges
-                            }
-                        };
-
-                        return WhS_Sales_RatePlanAPIService.SaveChanges(input);
+                        $scope.isLoading = true;
+                        return gridQuery.context.saveDraft()
+                            .then(function () {
+                            $scope.isLoading = false;
+                    });
                     }
 
                     function getZoneItemInput() {
