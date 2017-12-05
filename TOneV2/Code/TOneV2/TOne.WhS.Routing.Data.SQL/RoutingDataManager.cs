@@ -9,7 +9,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
-{
+{ 
     public class RoutingDataManager : BaseTOneDataManager, IRoutingDataManager
     {
         public RoutingDataManager() :
@@ -138,7 +138,7 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_CarrierAccountTable);
             query.AppendLine(query_CodeSaleZoneMatchTable);
             query.AppendLine(query_CodeSupplierZoneMatchTable);
-            query.AppendLine(query_PartialRouteInfoTable);
+            query.AppendLine(query_RoutingEntityDetailsTable);
             query.AppendLine(query_SwitchSyncDataTable);
             ExecuteNonQueryText(query.ToString(), null);
         }
@@ -256,10 +256,10 @@ namespace TOne.WhS.Routing.Data.SQL
 																[Code] ASC
 															);";
 
-        private const string query_PartialRouteInfoTable = @"CREATE TABLE [dbo].[RoutingEntityDetails](
-                                                                [Type] [int] NOT NULL,
-																[Info] [nvarchar](MAX) NOT NULL
-															) ON [PRIMARY];";
+        private const string query_RoutingEntityDetailsTable = @"CREATE TABLE [dbo].[RoutingEntityDetails](
+                                                                    [Type] [int] NOT NULL,
+															    	[Info] [nvarchar](MAX) NOT NULL
+															    ) ON [PRIMARY];";
 
         private const string query_SwitchSyncDataTable = @"CREATE TABLE [dbo].[SwitchSyncData](
 																[SwitchId] int NOT NULL,
