@@ -35,6 +35,9 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
             var extensionDefinitionsSelectorAPI;
             var extensionDefinitionsSelector = UtilsService.createPromiseDeferred();
 
+            var securityDefinitionsDirectiveAPI;
+            var securityDefinitionsDirectiveDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.onAssignmentDefinitionGridReady = function (api) {
                     gridAPI = api;
@@ -49,21 +52,26 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                     extensionDefinitionsSelector.resolve();
 
                 };
+                $scope.onAccountManagerSecurityDefinitionsReady = function (api) {
+                    securityDefinitionsDirectiveAPI = api;
+                    securityDefinitionsDirectiveDeferred.resolve();
+                };
                 defineAPI();
             }
             
             function defineAPI() {
                 var api = {};
+               
 
                 api.load = function (payload) {
                     gridReadyPromise.promise.then(function () {
-                       
                         var gridPayload;
                         if(payload != undefined)
                             if (payload.businessEntityDefinitionSettings != undefined) {
                                 gridPayload = {
                                     assignmentdefinitons: payload.businessEntityDefinitionSettings.AssignmentDefinitions
                                 };
+
                             }
                         gridAPI.loadGrid(gridPayload);
                     });
@@ -73,26 +81,32 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                         };
                         if (payload != undefined)
                             if (payload.businessEntityDefinitionSettings != undefined)
-                                gridPayload.subViews = payload.businessEntityDefinitionSettings.SubViews
+                                gridPayload.subViews = payload.businessEntityDefinitionSettings.SubViews;
                         subViewGridAPI.loadGrid(gridPayload);
                     });
                     extensionDefinitionsSelector.promise.then(function () {
-                        if (payload != undefined)
-                        {
+                        if (payload != undefined) {
                             var selectorPayload = {
                                 extendedSettings: payload.businessEntityDefinitionSettings.ExtendedSettings
                             };
                         }
                         extensionDefinitionsSelectorAPI.load(selectorPayload);
-                    })
-                   
+                    });
+                    securityDefinitionsDirectiveDeferred.promise.then(function () {
+                        var securityDefinition;
+                        if (payload != undefined && payload.businessEntityDefinitionSettings != undefined)
+                            securityDefinition = payload.businessEntityDefinitionSettings.Security;
+                        securityDefinitionsDirectiveAPI.load(securityDefinition);
+                    });
+                    
                 };
                 api.getData = function () {
                     var obj = {
                         $type: "Vanrise.AccountManager.Business.AccountManagerBEDefinitionSettings, Vanrise.AccountManager.Business",
                         AssignmentDefinitions: gridAPI.getData(),
                         SubViews: subViewGridAPI.getData(),
-                        ExtendedSettings: extensionDefinitionsSelectorAPI.getData()
+                        ExtendedSettings: extensionDefinitionsSelectorAPI.getData(),
+                        Security: securityDefinitionsDirectiveAPI.getData()
                     };
                     return obj;
                 };
@@ -111,11 +125,11 @@ function (UtilsService, VRUIUtilsService,VR_AccountManager_AccountManagerService
                             if (assignmentDefinitions != undefined) {
                                 for (var i = 0; i < assignmentDefinitions.length; i++) {
                                    var assignmentDefinitionInfo = assignmentDefinitions[i];
-                                    var assignmentDefinition =
-                                        {
-                                            AccountManagerAssignementDefinitionId: assignmentDefinitionInfo.AccountManagerAssignementDefinitionId,
-                                            Name: assignmentDefinitionInfo.Name
-                                        }
+                                   var assignmentDefinition =
+                                       {
+                                           AccountManagerAssignementDefinitionId: assignmentDefinitionInfo.AccountManagerAssignementDefinitionId,
+                                           Name: assignmentDefinitionInfo.Name
+                                       };
                                     assignmentDefinitionsInfo.push(assignmentDefinition);
                                 }
 

@@ -21,13 +21,29 @@
         function GetAccountManagerInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "GetAccountManagerInfo"), { filter: filter });
         }
+        function DoesUserHaveAddAccess(accountManagerDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "DoesUserHaveAddAccess"), {
+                accountManagerDefinitionId: accountManagerDefinitionId
+            }, {
+                useCache: true
+            });
+        }
+        function HasEditAccountManagerPermission(accountManagerDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountManager_ModuleConfig.moduleName, controllerName, "HasEditAccountManagerPermission"), {
+                accountManagerDefinitionId: accountManagerDefinitionId
+            }, {
+                useCache: true
+            });
+        }
         return ({
             GetFilteredAccountManagers: GetFilteredAccountManagers,
             AddAccountManager: AddAccountManager,
             UpdateAccountManager: UpdateAccountManager,
             GetAccountManager: GetAccountManager,
             GetAccountManagerDefinitionConfigs: GetAccountManagerDefinitionConfigs,
-            GetAccountManagerInfo: GetAccountManagerInfo
+            GetAccountManagerInfo: GetAccountManagerInfo,
+            DoesUserHaveAddAccess: DoesUserHaveAddAccess,
+            HasEditAccountManagerPermission: HasEditAccountManagerPermission
         });
     }
     appControllers.service("VR_AccountManager_AccountManagerAPIService", accountManagerAPIService);

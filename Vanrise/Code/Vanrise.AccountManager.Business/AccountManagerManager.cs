@@ -17,6 +17,7 @@ namespace Vanrise.AccountManager.Business
    public class AccountManagerManager
    {
        UserManager userManager = new UserManager();
+       SecurityManager s_securityManager = new SecurityManager();
        #region Public Methods
        public Vanrise.Entities.IDataRetrievalResult<AccountManagerDetail> GetFilteredAccountManagers(Vanrise.Entities.DataRetrievalInput<AccountManagerQuery> input)
        {
@@ -32,7 +33,8 @@ namespace Vanrise.AccountManager.Business
                    return false;
                return true;
            };
-           var x = Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper)); 
+           var x = Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
+           VRActionLogger.Current.LogGetFilteredAction(new AccountManagerLoggableEntity(input.Query.AccountManagerDefinitionId), input);
            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allAccountManagers.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
        }
        public IEnumerable<AccountManagerInfo> GetAccountManagerInfo(AccountManagerFilter filter)
@@ -68,6 +70,7 @@ namespace Vanrise.AccountManager.Business
                accountManager.AccountManagerId = accountManagerId;
                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                insertOperationOutput.InsertedObject = AccountManagerDetailMapper(accountManager);
+               VRActionLogger.Current.TrackAndLogObjectAdded(new AccountManagerLoggableEntity(accountManager.AccountManagerDefinitionId), accountManager);
                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
            }
            else
@@ -85,6 +88,7 @@ namespace Vanrise.AccountManager.Business
            {
                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                updateOperationOutput.UpdatedObject = AccountManagerDetailMapper(accountManager);
+               VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountManagerLoggableEntity(accountManager.AccountManagerDefinitionId), accountManager);
                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
            }
            else
@@ -119,6 +123,15 @@ namespace Vanrise.AccountManager.Business
        {
            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
            return manager.GetExtensionConfigurations<AccountManagerDefinitionConfig>(AccountManagerDefinitionConfig.EXTENSION_TYPE).OrderByDescending(x => x.Name);
+       }
+       public bool DoesUserHaveAccess(int userId, Guid accountManagerDefinitionId, Func<AccountManagerDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
+       {
+           AccountManagerDefinitionManager definitionManager = new AccountManagerDefinitionManager();
+           var accountManagerBEDefinitionSettings = definitionManager.GetAccountManagerDefinitionSettings(accountManagerDefinitionId);
+           if (accountManagerBEDefinitionSettings != null && accountManagerBEDefinitionSettings.Security != null && getRequiredPermissionSetting(accountManagerBEDefinitionSettings.Security) != null)
+               return s_securityManager.IsAllowed(getRequiredPermissionSetting(accountManagerBEDefinitionSettings.Security), userId);
+           else
+               return true;
        }
        #endregion
 
@@ -157,6 +170,49 @@ namespace Vanrise.AccountManager.Business
                return dataManager.AreAccountManagersUpdated(ref _updateHandle);
            }
        }
+       public class AccountManagerLoggableEntity : VRLoggableEntityBase
+       {
+           Guid _accountManagerDefinitionId;
+           static AccountManagerDefinitionManager s_accountManagerDefinitionManager = new AccountManagerDefinitionManager();
+           static UserManager s_userManager = new UserManager();
+           public AccountManagerLoggableEntity(Guid accountManagerDefinitionId)
+           {
+               _accountManagerDefinitionId = accountManagerDefinitionId;
+           }
+
+           public override string EntityUniqueName
+           {
+               get { return String.Format("VR_AccountManager_AccountManager_{0}", _accountManagerDefinitionId); }
+           }
+
+           public override string EntityDisplayName
+           {
+               get { return s_accountManagerDefinitionManager.GetAccountManagerDefinitionName(_accountManagerDefinitionId); }
+           }
+
+           public override string ViewHistoryItemClientActionName
+           {
+               get { return "VR_AccountManager_AccountManager_ViewHistoryItem"; }
+           }
+
+
+           public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+           {
+               Vanrise.AccountManager.Entities.AccountManager accountManager = context.Object.CastWithValidate<Vanrise.AccountManager.Entities.AccountManager>("context.Object");
+               return accountManager.AccountManagerId;
+           }
+
+           public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+           {
+               Vanrise.AccountManager.Entities.AccountManager accountManager = context.Object.CastWithValidate<Vanrise.AccountManager.Entities.AccountManager>("context.Object");
+               return s_userManager.GetUserName(accountManager.UserId);
+           }
+
+           public override string ModuleName
+           {
+               get { return "Business Entity"; }
+           }
+       }
        #endregion
 
        #region Private Methods
@@ -169,6 +225,30 @@ namespace Vanrise.AccountManager.Business
                   IEnumerable<Vanrise.AccountManager.Entities.AccountManager> accountManagers = dataManager.GetAccountManagers();
                   return accountManagers.ToDictionary(cn => cn.AccountManagerId, cn => cn);
               });
+       }
+     
+
+       #endregion
+       #region Security
+       public bool DoesUserHaveViewAccess(Guid accountManagerDefinitionId)
+       {
+           int userId = SecurityContext.Current.GetLoggedInUserId();
+           return DoesUserHaveAccess(userId, accountManagerDefinitionId, (sec) => sec.ViewRequiredPermission);
+       }
+       public bool DoesUserHaveAddAccess(Guid accountManagerDefinitionId)
+       {
+           int userId = SecurityContext.Current.GetLoggedInUserId();
+           return DoesUserHaveAccess(userId, accountManagerDefinitionId, (sec) => sec.AddRequiredPermission);
+
+       }
+       public bool DoesUserHaveEditAccess(Guid accountManagerDefinitionId)
+       {
+           int userId = SecurityContext.Current.GetLoggedInUserId();
+           return DoesUserHaveEditAccess(userId, accountManagerDefinitionId);
+       }
+       public bool DoesUserHaveEditAccess(int userId, Guid accountManagerDefinitionId)
+       {
+           return DoesUserHaveAccess(userId, accountManagerDefinitionId, (sec) => sec.EditRequiredPermission);
        }
        #endregion
    }

@@ -20,19 +20,38 @@ namespace Vanrise.AccountManager.Web.Controllers
         [Route("GetFilteredAccountManagers")]
         public object GetFilteredAccountManagers(Vanrise.Entities.DataRetrievalInput<AccountManagerQuery> input)
         {
+            if (!_manager.DoesUserHaveViewAccess(input.Query.AccountManagerDefinitionId))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredAccountManagers(input));
         }
         [HttpPost]
         [Route("AddAccountManager")]
-        public InsertOperationOutput<AccountManagerDetail> AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
+        public object AddAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
         {
+            if (!DoesUserHaveAddAccess(accountManager.AccountManagerDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.AddAccountManager(accountManager);
 
         }
+        [HttpGet]
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess(Guid accountManagerDefinitionId)
+        {
+            return _manager.DoesUserHaveAddAccess(accountManagerDefinitionId);
+        }
+        [HttpGet]
+        [Route("HasEditAccountManagerPermission")]
+        public bool HasEditAccountManagerPermission(Guid accountManagerDefinitionId)
+        {
+            return _manager.DoesUserHaveEditAccess(accountManagerDefinitionId);
+        }
+
         [HttpPost]
         [Route("UpdateAccountManager")]
-        public UpdateOperationOutput<AccountManagerDetail> UpdateAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
+        public object UpdateAccountManager(Vanrise.AccountManager.Entities.AccountManager accountManager)
         {
+            if (!_manager.DoesUserHaveEditAccess(accountManager.AccountManagerDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.UpdateAccountManager(accountManager);
         }
         [HttpGet]

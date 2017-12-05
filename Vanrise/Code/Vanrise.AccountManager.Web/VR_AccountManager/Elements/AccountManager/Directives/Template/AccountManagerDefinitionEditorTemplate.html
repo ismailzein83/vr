@@ -1,13 +1,16 @@
 ﻿<vr-tab header="'Settings'">
     <vr-accountmanager-accountmanagerdefinitionsettings on-ready="onAccountManagerDefinitionReady"></vr-accountmanager-accountmanagerdefinitionsettings>
-        </vr-tab>
-        <vr-tab header="'Assignment Definitions'">
-            <vr-columns colnum="12">
-                <vr-accountmanager-accountmanagerdefinition-assignmentdefinition-grid on-ready="onAssignmentDefinitionGridReady"></vr-accountmanager-accountmanagerdefinition-assignmentdefinition-grid>
-            </vr-columns>
-        </vr-tab>
-        <vr-tab header="'Sub Views'">
-            <vr-columns colnum="12">
-                <vr-accountmanager-accountmanagerdefinition-subviews-grid on-ready="onSubViewGridReady"></vr-accountmanager-accountmanagerdefinition-subviews-grid>
-            </vr-columns>
-        </vr-tab>
+</vr-tab>
+<vr-tab header="'Assignment Definitions'">
+    <vr-columns colnum="12">
+        <vr-accountmanager-accountmanagerdefinition-assignmentdefinition-grid on-ready="onAssignmentDefinitionGridReady"></vr-accountmanager-accountmanagerdefinition-assignmentdefinition-grid>
+    </vr-columns>
+</vr-tab>
+<vr-tab header="'Sub Views'">
+    <vr-columns colnum="12">
+        <vr-accountmanager-accountmanagerdefinition-subviews-grid on-ready="onSubViewGridReady"></vr-accountmanager-accountmanagerdefinition-subviews-grid>
+    </vr-columns>
+</vr-tab>
+<vr-tab header="'Security'">
+    <vr-accountmanager-accountmanagersecuritydefinition-management on-ready="onAccountManagerSecurityDefinitionsReady" isrequired="true" normal-col-num="6"></vr-accountmanager-accountmanagersecuritydefinition-management>
+</vr-tab>

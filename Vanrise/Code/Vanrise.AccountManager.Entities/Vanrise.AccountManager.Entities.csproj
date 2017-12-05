@@ -46,6 +46,7 @@
     <Compile Include="AccountManager.cs" />
     <Compile Include="AccountManagerAssignment.cs" />
     <Compile Include="AccountManagerAssignmentConfig.cs" />
+    <Compile Include="AccountManagerAssignmentsInfo.cs" />
     <Compile Include="AccountManagerDefinitionConfig.cs" />
     <Compile Include="AccountManagerDetail.cs" />
     <Compile Include="AccountManagerFilter.cs" />

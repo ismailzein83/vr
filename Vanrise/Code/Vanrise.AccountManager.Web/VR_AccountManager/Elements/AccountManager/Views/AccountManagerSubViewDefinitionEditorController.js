@@ -6,7 +6,7 @@
 
     function subViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
         var isEditMode;
-        var subViewEntity
+        var subViewEntity;
         var context;
 
         var subViewDefinitionSettingAPI;
@@ -40,7 +40,7 @@
             $scope.scopeModel.onSubViewSelectorReady = function (api) {
                 subViewDefinitionSettingAPI = api;
                 subViewDefinitionSettingReadyDeferred.resolve();
-            }
+            };
         }
         function load() {
             $scope.scopeModel.isLoading = true;

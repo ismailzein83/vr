@@ -30,6 +30,30 @@ namespace Vanrise.AccountManager.Business
            BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
            return manager.GetBusinessEntityDefinition(accountManagerDefinitionId);
        }
+        public string GetAccountManagerDefinitionName(Guid accountManagerDefinitionId)
+        {
+            return GetAccountManagerDefinition(accountManagerDefinitionId).Name;
+        }
+        public Dictionary<Guid, AccountManagerAssignmentsInfo> GetAccountManagerAssignmentsInfo()
+        {
+            var accountManagerDefinitionSettings = GetAccountManagerDefinitionSettings();
+            Dictionary<Guid, AccountManagerAssignmentsInfo> accountManagerAssignmnetsDefinitions = new Dictionary<Guid, AccountManagerAssignmentsInfo>();
+            foreach(var accountManagerDefinitionSetting in accountManagerDefinitionSettings)
+            {
+                foreach (var accountManagerAssignmnetDefinition in accountManagerDefinitionSetting.Value.AssignmentDefinitions){
+                AccountManagerAssignmentsInfo accountManagerAssignmentInfo = new AccountManagerAssignmentsInfo ();
+                accountManagerAssignmentInfo.AssignmentDefinition = accountManagerAssignmnetDefinition;
+                accountManagerAssignmentInfo.AccountManagerDefinitionId = accountManagerDefinitionSetting.Key;
+                accountManagerAssignmnetsDefinitions.Add(accountManagerAssignmnetDefinition.AccountManagerAssignementDefinitionId, accountManagerAssignmentInfo);
+                }
+            }
+            return accountManagerAssignmnetsDefinitions;
+        }
+        public AccountManagerAssignmentsInfo GetAccountManagerAssignmnetInfoByAssignmentDefinitionId(Guid accountManagerAssignmnetDefinitionId)
+        {
+            var accountManagerAssignmnetsInfo = GetAccountManagerAssignmentsInfo();
+            return accountManagerAssignmnetsInfo.FirstOrDefault(x => x.Key == accountManagerAssignmnetDefinitionId).Value;
+        }
         public Dictionary<Guid, AccountManagerBEDefinitionSettings> GetAccountManagerDefinitionSettings()
         {
             BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();

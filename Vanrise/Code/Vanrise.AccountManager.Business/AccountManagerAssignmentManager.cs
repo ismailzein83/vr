@@ -18,7 +18,7 @@ namespace Vanrise.AccountManager.Business
     public class AccountManagerAssignmentManager
     {
         #region Public Methods
-        public AccountManagerAssignment GetAccountManagerAssignment(long accountManagerAssignmentId,Guid accountManagerAssignmentDefinitionId)
+        public AccountManagerAssignment GetAccountManagerAssignment(long accountManagerAssignmentId, Guid accountManagerAssignmentDefinitionId)
         {
             var allAccountManagerAssignments = this.GetCachedAccountManagerAssignments(accountManagerAssignmentDefinitionId);
             return allAccountManagerAssignments.GetRecord(accountManagerAssignmentId);
@@ -85,12 +85,12 @@ namespace Vanrise.AccountManager.Business
         public bool UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput input, out string updateErrorMessage)
         {
             string errorMessage;
-            var accountManagerAssignment = GetAccountManagerAssignment(input.AccountManagerAssignmentId,input.AccountManagerAssignmentDefinitionId);
+            var accountManagerAssignment = GetAccountManagerAssignment(input.AccountManagerAssignmentId, input.AccountManagerAssignmentDefinitionId);
             bool updateActionSucc = false;
             updateErrorMessage = null;
             if (input != null)
             {
-                if (!ValidateAccountManagerAssignmentInput(accountManagerAssignment.AccountId, accountManagerAssignment.AccountManagerAssignementDefinitionId, input.BED, input.EED,input.AccountManagerAssignmentId, out errorMessage))
+                if (!ValidateAccountManagerAssignmentInput(accountManagerAssignment.AccountId, accountManagerAssignment.AccountManagerAssignementDefinitionId, input.BED, input.EED, input.AccountManagerAssignmentId, out errorMessage))
                 {
                     updateActionSucc = TryUpdateAccountManagerAssignment(input.AccountManagerAssignmentId, input.BED, input.EED, input.AssignementSettings, input.AccountManagerAssignmentDefinitionId);
                 }
@@ -103,14 +103,14 @@ namespace Vanrise.AccountManager.Business
         }
         public bool ValidateAccountManagerAssignmentInputs(List<AssignAccountManagerToAccountSetting> accounts, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, out string errorMessage)
         {
-            
+
             errorMessage = null;
             List<string> overLappedAccountNames = new List<string>();
             string overLappedAccountName;
             bool areOverLapped = false;
             if (accounts != null)
             {
-                if (!ValidateDateTime(bed,eed))
+                if (!ValidateDateTime(bed, eed))
                 {
                     errorMessage = "BED cannot be greater than EED";
                     return true;
@@ -118,7 +118,7 @@ namespace Vanrise.AccountManager.Business
 
                 foreach (var account in accounts)
                 {
-                    if (IsAccountOverLapped(account.AccountId, accountManagerAssignementDefinitionId, bed, eed,null, out overLappedAccountName))
+                    if (IsAccountOverLapped(account.AccountId, accountManagerAssignementDefinitionId, bed, eed, null, out overLappedAccountName))
                     {
                         overLappedAccountNames.Add(overLappedAccountName);
                         areOverLapped = true;
@@ -157,7 +157,7 @@ namespace Vanrise.AccountManager.Business
             }
             return true;
         }
-        public bool IsAccountOverLapped(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed,long? accountManagerAssignmentId, out string overLappedAccountName)
+        public bool IsAccountOverLapped(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, long? accountManagerAssignmentId, out string overLappedAccountName)
         {
             AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
             AccountManagerManager accountManagerManager = new AccountManagerManager();
@@ -177,7 +177,7 @@ namespace Vanrise.AccountManager.Business
             }
             return isOverlapped;
         }
-        public bool ValidateAccountManagerAssignmentInput(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed,long accountManagerAssignmentId, out string errorMessage)
+        public bool ValidateAccountManagerAssignmentInput(string accountId, Guid accountManagerAssignementDefinitionId, DateTime bed, DateTime? eed, long accountManagerAssignmentId, out string errorMessage)
         {
             string overLappedAccountName;
             errorMessage = null;
@@ -191,6 +191,7 @@ namespace Vanrise.AccountManager.Business
                 errorMessage = string.Format("Specified Interval overlaps with other assignments of Account(s): {0}", overLappedAccountName);
             return isOverLapped;
         }
+
         public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignmentsById(string accountId, Guid accountManagerAssignementDefinitionId)
         {
             var allAccountMaanagerAssignments = this.GetCachedAccountManagerAssignments(accountManagerAssignementDefinitionId).Values;
@@ -206,7 +207,7 @@ namespace Vanrise.AccountManager.Business
         private class CacheManager : Vanrise.Caching.BaseCacheManager<Guid>
         {
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
-           
+
             ConcurrentDictionary<Guid, Object> _updateHandlesByAsignmentDefinitionId = new ConcurrentDictionary<Guid, Object>();
             protected override bool ShouldSetCacheExpired(Guid accountManagerAssignmentDefinitionId)
             {
@@ -244,7 +245,23 @@ namespace Vanrise.AccountManager.Business
                 return false;
             return true;
         }
-        
+
+        #endregion
+
+        #region Security
+        public bool HasViewAssignmentPermission(Guid accountManagerDefinitionId)
+        {
+            AccountManagerManager accountManager = new AccountManagerManager();
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return accountManager.DoesUserHaveAccess(userId, accountManagerDefinitionId, (sec) => sec.ViewAssignmentRequiredPermission);
+        }
+        public bool HasManageAssignmentPermission(Guid accountManagerDefinitionId)
+        {
+            AccountManagerManager accountManager = new AccountManagerManager();
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return accountManager.DoesUserHaveAccess(userId, accountManagerDefinitionId, (sec) => sec.ManageAssignmentRequiredPermission);
+
+        }
         #endregion
     }
     #region Public Classes
@@ -260,6 +277,7 @@ namespace Vanrise.AccountManager.Business
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+        public Guid AccountManagerDefinitionId { get; set; }
 
         ///// <summary>
         ///// later we can implement, for now stop if anyone is invalid
@@ -286,9 +304,10 @@ namespace Vanrise.AccountManager.Business
         public DateTime BED { get; set; }
 
         public DateTime? EED { get; set; }
+        public Guid AccountManagerDefinitionId { get; set; }
 
         public AccountManagerAssignmentSettings AssignementSettings { get; set; }
     }
      #endregion
-
+   
 }

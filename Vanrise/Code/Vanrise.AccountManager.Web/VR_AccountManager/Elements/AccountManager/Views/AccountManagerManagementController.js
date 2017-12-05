@@ -1,8 +1,8 @@
 ﻿(function (appControllers) {
     "use strict";
-    accountManagerManagementController.$inject = ["$scope", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VR_AccountManager_AccountManagerService"];
+    accountManagerManagementController.$inject = ["$scope", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VR_AccountManager_AccountManagerService", "VR_AccountManager_AccountManagerAPIService"];
 
-    function accountManagerManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VR_AccountManager_AccountManagerService) {
+    function accountManagerManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VR_AccountManager_AccountManagerService,VR_AccountManager_AccountManagerAPIService) {
         var gridAPI;
         var userSelectorAPI;
         var userSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -44,6 +44,11 @@
                         accountManagerDefinitionId = genericAccountmanagerDefinitionSelectorApi.getSelectedIds();
                         loadAllControls();
                     }
+                }
+                if (accountManagerDefinitionId != undefined) {
+                    VR_AccountManager_AccountManagerAPIService.DoesUserHaveAddAccess(accountManagerDefinitionId).then(function (response) {
+                        $scope.scopeModel.showAddAccountManager = response;
+                    });
                 }
               
             };

@@ -105,6 +105,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editAccountmanager,
+                haspermission: hasEditAccountManagerPermission
             }];
         }
 
@@ -115,6 +116,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
             };
             
             VR_AccountManager_AccountManagerService.editAccountmanager(accountManagerObject, onAccountManagerUpdated);
+        }
+        function hasEditAccountManagerPermission() {
+            if (accountManagerDefinitionId != undefined)
+                return VR_AccountManager_AccountManagerAPIService.HasEditAccountManagerPermission(accountManagerDefinitionId);
         }
     }
     return directiveDefinitionObject;
