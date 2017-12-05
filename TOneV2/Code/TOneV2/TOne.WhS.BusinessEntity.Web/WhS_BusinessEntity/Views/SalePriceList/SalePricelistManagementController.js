@@ -100,7 +100,8 @@
 
             var gridPayload = {
                 query: gridQuery,
-                context: gridContext
+                context: gridContext,
+                HideSelectedColumn: true,
             };
 
             return gridApi.load(gridPayload);

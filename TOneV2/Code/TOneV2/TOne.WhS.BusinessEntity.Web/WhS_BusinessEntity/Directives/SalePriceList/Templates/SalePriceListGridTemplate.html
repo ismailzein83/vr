@@ -4,7 +4,7 @@
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
              enableautoexport="true" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.defaultSortDirection">
-    <vr-datagridcolumn widthfactor="5" invisibleheader headertext="'Is Sent'" disablesorting="true" ng-show="!hideSelectedColumn" fixedwidth="'30'">
+    <vr-datagridcolumn widthfactor="5" columnindex="0" invisibleheader headertext="'Is Sent'" disablesorting="true" ng-if="!hideSelectedColumn" fixedwidth="'30'">
         <vr-check value="dataItem.isSelected"></vr-check>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Pricelist ID'" field="'Entity.PriceListId'" type="'Text'" fixedwidth="'80'"></vr-datagridcolumn>
