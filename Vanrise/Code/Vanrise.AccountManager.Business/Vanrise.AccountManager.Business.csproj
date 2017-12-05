@@ -50,6 +50,7 @@
     <Compile Include="AccountManagerManager.cs" />
     <Compile Include="AccountManagerSubviewHistory.cs" />
     <Compile Include="AssignedUsersToAccountManagerFilter.cs" />
+    <Compile Include="AssignmentDefinitionTrackAndLogObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

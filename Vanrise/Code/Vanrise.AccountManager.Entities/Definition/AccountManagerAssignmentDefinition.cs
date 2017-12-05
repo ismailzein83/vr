@@ -20,5 +20,13 @@ namespace Vanrise.AccountManager.Entities
         public abstract Guid ConfigId { get;  }
         public abstract string RuntimeEditor { get; }
         public abstract string GetAccountName(string accountId);
+        public virtual void TrackAndLogObject(IAssignmentDefinitionTrackAndLogObject context)
+        {
+
+        }
+    }
+    public interface IAssignmentDefinitionTrackAndLogObject
+    {
+        AccountManagerAssignment AccountManagerAssignment{get;}
     }
 }
