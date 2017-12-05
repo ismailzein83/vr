@@ -12,5 +12,6 @@ namespace Retail.BusinessEntity.Entities
         public Guid AccountManagerAssignementDefinitionId { get; set; }
         public string AccountId { get; set; }
         public Guid? AccountBEDefinitionId { get; set; }
+        public Guid AccountManagerDefinitionId { get; set; }
     }
 }

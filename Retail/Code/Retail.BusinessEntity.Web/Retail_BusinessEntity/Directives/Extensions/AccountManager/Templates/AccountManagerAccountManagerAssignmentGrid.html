@@ -9,4 +9,7 @@
     <vr-datagridcolumn headertext="'Account Manager Name'" field="'AccountManagerName'" type="'Text'" ng-show="showAccountManagerName"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
 </vr-datagrid>

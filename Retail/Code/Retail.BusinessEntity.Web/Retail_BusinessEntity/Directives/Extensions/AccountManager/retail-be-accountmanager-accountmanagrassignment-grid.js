@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBeAccountmanagerAccountmanagrassignmentGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentAPIService", "Retail_BE_AccountManagerAssignmentService",
-function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentAPIService, Retail_BE_AccountManagerAssignmentService) {
+app.directive("retailBeAccountmanagerAccountmanagrassignmentGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentAPIService", "Retail_BE_AccountManagerAssignmentService","VRCommon_ObjectTrackingService",
+function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentAPIService, Retail_BE_AccountManagerAssignmentService, VRCommon_ObjectTrackingService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -29,12 +29,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
         var accountId;
         var accountBeDefinitionId;
         var accountManagerDefinitionId;
+        var gridDrillDownTabsObj;
 
 
         function initializeController() {
             $scope.accountManagerAssignments = [];
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                var drillDownDefinitions = getDrillDownDefinitions();
+                gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveAPI());
                 }
@@ -72,6 +75,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return Retail_BE_AccountManagerAssignmentAPIService.GetAccountManagerAssignments(dataRetrievalInput)
                    .then(function (response) {
+                       if (response && response.Data) {
+                           for (var i = 0; i < response.Data.length; i++) {
+                               gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                           }
+                       }
                        onResponseReady(response);
                    })
                    .catch(function (error) {
@@ -84,11 +92,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
             $scope.gridMenuActions = [{
                 name: "Edit",
                 clicked: editAccountManagerAssignment,
+                haspermission: hasManageAssignmnetPermission
             }];
         }
         function editAccountManagerAssignment(accountManagerAssignment) {
             var onAccountManagerAssignmentUpdated = function (updatedItem) {
-             
+                gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItem);
                 gridAPI.itemUpdated(updatedItem);
             };
             var accountManagerAssignmentId = accountManagerAssignment.AccountManagerAssignementId;
@@ -99,9 +108,39 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                 AccountManagerId: searchPayload.accountManagerId,
                 AccountManagerAssignementDefinitionId: accountManagerAssignementDefinitionId,
                 AccountId: accountId,
-                AccountBEDefinitionId: accountBeDefinitionId
+                AccountBEDefinitionId: accountBeDefinitionId,
+                AccountManagerDefinitionId: accountManagerDefinitionId
             };
             return Query;
+        }
+        function hasManageAssignmnetPermission() {
+            if (accountManagerDefinitionId != undefined)
+                return Retail_BE_AccountManagerAssignmentAPIService.HasManageAssignmentPermission(accountManagerDefinitionId);
+        }
+        function getDrillDownDefinitions() {
+         
+            var drillDownDefinitions = [];
+
+            AddObjectTrackingDrillDownDefinition();
+
+            function AddObjectTrackingDrillDownDefinition() {
+             
+                var objectTrackingDrillDownDefinition = {
+                    title: VRCommon_ObjectTrackingService.getObjectTrackingGridTitle(),
+                    directive: 'vr-common-objecttracking-grid',
+                    loadDirective: function (directiveAPI, accountManagerAssignment) {
+                        accountManagerAssignment.objectTrackingGridAPI = directiveAPI;
+                        var query = {
+                            ObjectId: accountManagerAssignment.AccountManagerAssignementId,
+                            EntityUniqueName: Retail_BE_AccountManagerAssignmentService.getEntityUniqueName(accountManagerAssignment.AccountManagerAssignementDefinitionId)
+                        };
+                        return accountManagerAssignment.objectTrackingGridAPI.load(query);
+                    }
+                };
+                drillDownDefinitions.push(objectTrackingDrillDownDefinition);
+            }
+
+            return drillDownDefinitions;
         }
     
 

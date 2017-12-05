@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBeAccountmanagerAccountsubviewruntimeSearch", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentService",
-function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentService) {
+app.directive("retailBeAccountmanagerAccountsubviewruntimeSearch", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentService","Retail_BE_AccountManagerAssignmentAPIService",
+function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentService, Retail_BE_AccountManagerAssignmentAPIService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -25,6 +25,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
         this.initializeController = initializeController;
         var accountManagerAssignmentGridAPI;
         var gridPayload;
+        var accountManagerDefinitionId;
         
         function initializeController() {
             $scope.onAccountManagerAssignmentGridReady = function (api) {
@@ -33,6 +34,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                     ctrl.onReady(getDirectiveAPI());
                 }
             };
+            $scope.hasManageAssignmnetPermission = function () {
+                return Retail_BE_AccountManagerAssignmentAPIService.HasManageAssignmentPermission(accountManagerDefinitionId);
+            };
+          
             $scope.addAccountManagerAssignments = function () {
                 var onAccountManagerAssignmentAdded = function (accountManagerAssignment) {
                     accountManagerAssignmentGridAPI.onAccountManagerAssignmentAdded(accountManagerAssignment);
@@ -43,7 +48,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                 var directiveAPI = {};
                 directiveAPI.load = function (payload) {
                     gridPayload = payload;
+                    if (gridPayload != undefined)
+                        accountManagerDefinitionId = gridPayload.accountManagerDefinitionId;
                     accountManagerAssignmentGridAPI.loadGrid(getGridPayload());
+                    $scope.isLoaded = true;
                 };
                 directiveAPI.getData = function () {
 

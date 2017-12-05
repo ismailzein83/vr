@@ -23,19 +23,25 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("GetAccountManagerAssignments")]
         public object GetAccountManagerAssignments(Vanrise.Entities.DataRetrievalInput<AccountManagerAssignmentQuery> input)
         {
+            if (!HasViewAssignmentPermission(input.Query.AccountManagerDefinitionId))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredAccountManagerAssignments(input));
         }
         [HttpPost]
         [Route("AddAccountManagerAssignment")]
-        public InsertOperationOutput<AccountManagerAssignmentDetail> AddAccountManagerAssignment(AssignAccountManagerToAccountsInput accountManagerAssignment)
+        public object AddAccountManagerAssignment(AssignAccountManagerToAccountsInput accountManagerAssignment)
         {
+            if (!HasManageAssignmentPermission(accountManagerAssignment.AccountManagerDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.AddAccountManagerAssignment(accountManagerAssignment);
 
         }
         [HttpPost]
         [Route("UpdateAccountManagerAssignment")]
-        public UpdateOperationOutput<AccountManagerAssignmentDetail> UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput accountManagerAssignment)
+        public object UpdateAccountManagerAssignment(UpdateAccountManagerAssignmentInput accountManagerAssignment)
         {
+            if (!HasManageAssignmentPermission(accountManagerAssignment.AccountManagerDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.UpdateAccountManagerAssignment(accountManagerAssignment);
 
         }
@@ -56,6 +62,18 @@ namespace Retail.BusinessEntity.Web.Controllers
         public bool IsAccountAssignedToAccountManager(string accountId, Guid accountBeDefinitionId)
         {
             return _manager.IsAccountAssignedToAccountManager(accountId, accountBeDefinitionId);
+        }
+        [HttpGet]
+        [Route("HasManageAssignmentPermission")]
+        public bool HasManageAssignmentPermission(Guid accountManagerDefinitionId)
+        {
+            return _manager.HasManageAssignmentPermission(accountManagerDefinitionId);
+        }
+        [HttpGet]
+        [Route("HasViewAssignmentPermission")]
+        public bool HasViewAssignmentPermission(Guid accountManagerDefinitionId)
+        {
+            return _manager.HasViewAssignmentPermission(accountManagerDefinitionId);
         }
     }
 }

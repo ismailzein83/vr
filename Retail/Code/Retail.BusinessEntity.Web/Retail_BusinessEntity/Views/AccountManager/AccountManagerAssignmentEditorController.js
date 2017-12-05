@@ -208,7 +208,8 @@
                     AccountManagerId: accountManagerId,
                     Accounts: accounts,
                     BED: $scope.scopeModel.beginEffectiveDate,
-                    EED: $scope.scopeModel.endEffectiveDate
+                    EED: $scope.scopeModel.endEffectiveDate,
+                    AccountManagerDefinitionId: accountManagerDefinitionId
                 };
             }
             else {
@@ -220,7 +221,8 @@
                     EED: $scope.scopeModel.endEffectiveDate,
                     AssignementSettings: {
                         ExtendedSettings: runtimeDirectiveAPI.getData()
-                    }
+                    },
+                    AccountManagerDefinitionId: accountManagerDefinitionId
                 };
             }
             return accountmanagerAssignment;

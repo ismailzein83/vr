@@ -47,11 +47,15 @@
             };
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountManager/AccountManagerAssignmentEditor.html', parameters, settings);
         }
+        function getEntityUniqueName(accountManagerAssignmnetDefinitionId) {
+            return "Retail_AccountManager_AccountManagerAssignment_" + accountManagerAssignmnetDefinitionId;
+        }
 
         return {
             addAccountManagerAssignments: addAccountManagerAssignments,
             editAccountManagerAssignment: editAccountManagerAssignment,
-            openAccountManagerAssignmentEditor: openAccountManagerAssignmentEditor
+            openAccountManagerAssignmentEditor: openAccountManagerAssignmentEditor,
+            getEntityUniqueName: getEntityUniqueName
         };
     }
 

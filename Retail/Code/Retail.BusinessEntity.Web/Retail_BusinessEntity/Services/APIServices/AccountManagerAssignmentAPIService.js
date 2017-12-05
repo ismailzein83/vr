@@ -25,14 +25,26 @@
         function IsAccountAssignedToAccountManager(accountId, accountBeDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "IsAccountAssignedToAccountManager"), { accountId: accountId, accountBeDefinitionId: accountBeDefinitionId });
         }
+        function HasManageAssignmentPermission(accountManagerDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "HasManageAssignmentPermission"), {
+                accountManagerDefinitionId: accountManagerDefinitionId
+            });
+         }
+        function HasViewAssignmentPermission(accountManagerDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "HasViewAssignmentPermission"), {
+                accountManagerDefinitionId: accountManagerDefinitionId
+            });
+         }
         return {
             GetAccountManagerAssignments: GetAccountManagerAssignments,
             AddAccountManagerAssignment: AddAccountManagerAssignment,
             UpdateAccountManagerAssignment: UpdateAccountManagerAssignment,
             GetAccountManagerAssignmentRuntimeEditor: GetAccountManagerAssignmentRuntimeEditor,
             GetAccountManagerDefInfo: GetAccountManagerDefInfo,
-            IsAccountAssignedToAccountManager: IsAccountAssignedToAccountManager
-        };
+            IsAccountAssignedToAccountManager: IsAccountAssignedToAccountManager,
+            HasManageAssignmentPermission: HasManageAssignmentPermission,
+            HasViewAssignmentPermission: HasViewAssignmentPermission
+    };
     }
 
     appControllers.service('Retail_BE_AccountManagerAssignmentAPIService', AccountManagerAssignmentAPIService);
