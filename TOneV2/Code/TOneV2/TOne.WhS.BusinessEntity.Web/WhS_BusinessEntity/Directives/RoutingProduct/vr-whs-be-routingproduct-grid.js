@@ -163,6 +163,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
             var onRoutingProductUpdated = function (updatedItem) {
                 drillDownManager.setDrillDownExtensionObject(updatedItem);
                 gridAPI.itemUpdated(updatedItem);
+                setService(updatedItem);
             };
 
             WhS_BE_RoutingProductService.editRoutingProduct(routingProduct.Entity.RoutingProductId, onRoutingProductUpdated);
