@@ -762,7 +762,7 @@
                     }
 
                     var labelTemplate = '';
-                    if (attrs.label != undefined)
+                    if (attrs.label != undefined && attrs.hidelabel == undefined)
                         labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
                     angular.element(element[0].querySelector('.dropdown-container2')).prepend(labelTemplate);
 
