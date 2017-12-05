@@ -580,8 +580,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return zoneNotifictionByCurrencyId;
         }
-        private List<SalePLZoneNotification> GetChangeOrCountryNotification(int customerId, int sellingProductId, SalePriceListType pricelistType, Dictionary<int, List<ExistingSaleZone>> existingDataByCountryId
-            , SaleEntityZoneRateLocator futureLocator, List<CountryChange> countryChanges, Dictionary<int, DateTime> customerCountriesSellDatesByCountryId)
+        private List<SalePLZoneNotification> GetChangeOrCountryNotification(int customerId, int sellingProductId, SalePriceListType pricelistType, Dictionary<int, List<ExistingSaleZone>> existingDataByCountryId, SaleEntityZoneRateLocator futureLocator, List<CountryChange> countryChanges, Dictionary<int, DateTime> customerCountriesSellDatesByCountryId)
         {
             var salePlZoneNotifications = new List<SalePLZoneNotification>();
             //Create zone notifications from zone changes
@@ -593,11 +592,11 @@ namespace TOne.WhS.BusinessEntity.Business
             foreach (var countryChange in countryChanges)//Add missing zones to notification from existing data for all changed countries
             {
                 DateTime countrySellDate;
-                if (!customerCountriesSellDatesByCountryId.TryGetValue(countryChange.CountryId, out countrySellDate))
-                    countrySellDate = DateTime.MinValue;
-
+                if (customerCountriesSellDatesByCountryId.TryGetValue(countryChange.CountryId, out countrySellDate))
+                {
                     List<ExistingSaleZone> existingZones = existingDataByCountryId.GetRecord(countryChange.CountryId);
                     salePlZoneNotifications.AddRange(GetZoneNotificationsFromExistingData(customerId, sellingProductId, existingZones, salePlZoneNotifications.Select(z => z.ZoneName), futureLocator, countrySellDate));
+                }
             }
             return salePlZoneNotifications;
         }
@@ -741,12 +740,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (filteredCodeNotifications.Any())
                 {
                     SalePLZoneNotification filteredZoneNotification = new SalePLZoneNotification
-                      {
-                          ZoneId = salePlZoneNotification.ZoneId,
-                          ZoneName = salePlZoneNotification.ZoneName,
-                          Rate = salePlZoneNotification.Rate,
-                          Increment = salePlZoneNotification.Increment
-                      };
+                    {
+                        ZoneId = salePlZoneNotification.ZoneId,
+                        ZoneName = salePlZoneNotification.ZoneName,
+                        Rate = salePlZoneNotification.Rate,
+                        Increment = salePlZoneNotification.Increment
+                    };
                     filteredZoneNotification.Codes.AddRange(filteredCodeNotifications);
                     filteredZoneNotifications.Add(filteredZoneNotification);
                 }
@@ -772,9 +771,16 @@ namespace TOne.WhS.BusinessEntity.Business
         private List<SalePLZoneNotification> GetZoneNotificationsFromExistingData(int customerId, int sellingProductId, IEnumerable<ExistingSaleZone> existingZones, SaleEntityZoneRateLocator futureLocator, DateTime countrySellDate)
         {
             List<SalePLZoneNotification> salePlZoneNotifications = new List<SalePLZoneNotification>();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
 
             foreach (ExistingSaleZone existingZone in existingZones)
             {
+                var existingZoneEntity = saleZoneManager.GetSaleZone(existingZone.ZoneId);
+                if (existingZoneEntity == null)
+                    throw new DataIntegrityValidationException(string.Format("Zone {0} not found", existingZone.ZoneName));
+                DateTime? existingZoneEED = existingZoneEntity.EED;
+                if (existingZoneEED.HasValue && countrySellDate > existingZoneEED.Value)
+                    continue;
                 SalePLZoneNotification zoneNotification = new SalePLZoneNotification
                 {
                     ZoneId = existingZone.ZoneId,
@@ -809,10 +815,15 @@ namespace TOne.WhS.BusinessEntity.Business
         private List<SalePLZoneNotification> GetZoneNotificationsFromExistingData(int customerId, int sellingProductId, IEnumerable<ExistingSaleZone> existingZones, IEnumerable<string> changedZoneNames, SaleEntityZoneRateLocator futureLocator, DateTime countrySellDate)
         {
             List<SalePLZoneNotification> salePlZoneNotifications = new List<SalePLZoneNotification>();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
 
             foreach (ExistingSaleZone existingZone in existingZones)
             {
-                if (changedZoneNames.Contains(existingZone.ZoneName))
+                var existingZoneEntity = saleZoneManager.GetSaleZone(existingZone.ZoneId);
+                if (existingZoneEntity == null)
+                    throw new DataIntegrityValidationException(string.Format("Zone {0} not found", existingZone.ZoneName));
+                DateTime? existingZoneEED = existingZoneEntity.EED;
+                if (changedZoneNames.Contains(existingZone.ZoneName) || (existingZoneEED.HasValue && countrySellDate > existingZoneEED.Value))
                     continue;
 
                 SalePLZoneNotification zoneNotification = new SalePLZoneNotification()
