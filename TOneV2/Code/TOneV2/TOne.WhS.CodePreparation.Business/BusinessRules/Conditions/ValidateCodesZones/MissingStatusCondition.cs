@@ -26,7 +26,7 @@ namespace TOne.WhS.CodePreparation.Business
             }
             if (invalidCodes.Count > 0)
             {
-                context.Message = string.Format("Status is missing for the following zone(s): {0}.", string.Join(", ", invalidCodes));
+                context.Message = string.Format("Status is missing for the following code(s): {0}.", string.Join(", ", invalidCodes));
                 return false;
             }
             return true;
