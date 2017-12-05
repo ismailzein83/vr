@@ -50,16 +50,17 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<NewCustomerPriceListChange> customerPriceListChanges = this.CustomerPriceListChanges.Get(context);
             VRFileManager fileManager = new VRFileManager();
             var ratePlanManager = new RatePlanManager();
-
-            foreach (var customerPricelistChange in customerPriceListChanges)
+            if (customerPriceListChanges != null)
             {
-                foreach (var pricelistChange in customerPricelistChange.PriceLists)
+                foreach (var customerPricelistChange in customerPriceListChanges)
                 {
-                    if (!fileManager.SetFileUsed(pricelistChange.PriceList.FileId))
-                        throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");
+                    foreach (var pricelistChange in customerPricelistChange.PriceLists)
+                    {
+                        if (!fileManager.SetFileUsed(pricelistChange.PriceList.FileId))
+                            throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");
+                    }
                 }
             }
-
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             ratePlanManager.SyncImportedDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn, stateBackupId);
         }
