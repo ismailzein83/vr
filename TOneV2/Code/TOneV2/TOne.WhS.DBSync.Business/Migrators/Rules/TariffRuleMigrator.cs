@@ -86,7 +86,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
                 if (tariffRulesByKeyWithMaxCounts.TryGetValue(carrierId, out tariffRulesByKeyWithMaxCount))
                 {
-                    routeRules.Add(GetSourceRule(tariffRulesByKeyWithMaxCount.TariffRulesByKey.TariffRules, type, false));
+                    routeRules.Add(GetSourceRule(tariffRulesByKeyWithMaxCount.TariffRulesByKey.TariffRules, type, true));
                 }
 
                 foreach (var tariffByKey in item.Value)
@@ -201,7 +201,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     CallFee = defaultRule.CallFee,
                     FirstPeriodRate = defaultRule.FirstPeriodRate,
                     PricingUnit = 60,
-                    FirstPeriodRateType = FirstPeriodRateType.FixedRate
+                    FirstPeriodRateType = FirstPeriodRateType.EffectiveRate
                 },
 
                 Criteria = new GenericRuleCriteria
