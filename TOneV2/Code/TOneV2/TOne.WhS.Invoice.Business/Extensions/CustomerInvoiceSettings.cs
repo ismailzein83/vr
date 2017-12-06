@@ -48,21 +48,26 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         objects.Add("CustomerInvoice", context.Invoice);
                         CarrierProfile carrierProfile = null;
                         int carrierProfileId;
+                        CompanySetting companySetting;
+
                         if (financialAccount.CarrierProfileId.HasValue)
                         {
                             carrierProfileId = financialAccount.CarrierProfileId.Value;
+                            companySetting = carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
                         }
                         else
                         {
                             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                             var account = carrierAccountManager.GetCarrierAccount(financialAccount.CarrierAccountId.Value);
                             carrierProfileId = account.CarrierProfileId;
+                            companySetting = carrierAccountManager.GetCompanySetting(financialAccount.CarrierAccountId.Value);
                         }
                         carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId);
                         if (carrierProfile != null)
                         {
                             objects.Add("Profile", carrierProfile);
                         }
+                        objects.Add("CompanySetting", companySetting);
                         return objects;
                     }
                 case "Taxes":
