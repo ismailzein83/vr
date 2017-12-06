@@ -6,6 +6,8 @@ using Vanrise.CommonLibrary;
 
 namespace Vanrise.Fzero.Bypass
 {
+    public enum FTPTypeEnum { FTP = 0, SFTP = 1 }
+
     public partial class MobileOperator
     {
         public static MobileOperator Save(MobileOperator MobileOperator)

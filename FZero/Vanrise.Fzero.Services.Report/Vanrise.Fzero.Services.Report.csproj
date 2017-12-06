@@ -68,6 +68,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Rebex.Net.ProxySocket">
+      <HintPath>..\..\Vanrise\Code\Resources\DLLs\Rebex.Net.ProxySocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Sftp">
+      <HintPath>..\..\Vanrise\Code\Resources\DLLs\Rebex.Net.Sftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Ssh">
+      <HintPath>..\..\Vanrise\Code\Resources\DLLs\Rebex.Net.Ssh.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.Install" />

@@ -11,6 +11,7 @@ using Vanrise.CommonLibrary;
 using System.Net;
 using System.Text;
 using System.Linq;
+using Rebex.Net;
 
 
 namespace Vanrise.Fzero.Services.Report
@@ -91,11 +92,9 @@ namespace Vanrise.Fzero.Services.Report
                                 GeneratedCall.UpdateReportStatus(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
                                 if (i.EnableFTP.HasValue && i.EnableFTP.Value)
                                 {
-                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword, i.User.FullName, listDistinctFraudCases);
+                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword,i.FTPPort,i.FTPType, i.User.FullName, listDistinctFraudCases);
                                 }
                                 SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
-
-                              
 
                             }
                         }
@@ -152,32 +151,25 @@ namespace Vanrise.Fzero.Services.Report
         }
 
 
-        private void SaveToFTPFile(string ftpAddress, string ftpUserName, string ftpPassword, string mobileOperatorName, List<int> listDistinctFraudCases)
+        private void SaveToFTPFile(string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, List<int> listDistinctFraudCases)
         {
-            if (ftpAddress != null && ftpUserName != null & ftpPassword != null)
+
+            try
             {
-
-                string counter;
-                string ReportIDBeforeCounter = "FZ" + mobileOperatorName.Substring(0, 1) + "S" + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
-                Vanrise.Fzero.Bypass.Report LastReport = Vanrise.Fzero.Bypass.Report.Load(ReportIDBeforeCounter);
-                if (LastReport == null)
+                if (ftpAddress != null && ftpUserName != null & ftpPassword != null)
                 {
-                    counter = "0001";
-                }
-                else
-                {
-                    counter = (int.Parse(LastReport.ReportID.Replace("- Repeated Numbers", "").Substring(10)) + 1).ToString("D4");
-                }
-                string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.txt", DateTime.Now, counter);
-                FtpWebRequest ftpWebRequest = (System.Net.FtpWebRequest)FtpWebRequest.Create(String.Format("ftp://{0}/{1}", ftpAddress, fileName));
-                ftpWebRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
-                ftpWebRequest.KeepAlive = false;
-                ftpWebRequest.Timeout = 20000;
-                ftpWebRequest.Method = WebRequestMethods.Ftp.UploadFile;
-                ftpWebRequest.UseBinary = true;
-
-                try
-                {
+                    string counter;
+                    string ReportIDBeforeCounter = "FZ" + mobileOperatorName.Substring(0, 1) + "S" + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
+                    Vanrise.Fzero.Bypass.Report LastReport = Vanrise.Fzero.Bypass.Report.Load(ReportIDBeforeCounter);
+                    if (LastReport == null)
+                    {
+                        counter = "0001";
+                    }
+                    else
+                    {
+                        counter = (int.Parse(LastReport.ReportID.Replace("- Repeated Numbers", "").Substring(10)) + 1).ToString("D4");
+                    }
+                    string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.txt", DateTime.Now, counter);
                     StringBuilder stringBuilder = new StringBuilder();
                     foreach (var item in listDistinctFraudCases)
                     {
@@ -185,21 +177,58 @@ namespace Vanrise.Fzero.Services.Report
                     }
 
                     byte[] buffer = new ASCIIEncoding().GetBytes(stringBuilder.ToString());
-                    Stream stream = ftpWebRequest.GetRequestStream();
-                    ftpWebRequest.ContentLength = buffer.Length;
-                    stream.Write(buffer, 0, buffer.Length);
-                    int contentLen = buffer.Length;
-                    stream.Close();
-                    stream.Dispose();
-                }
-                catch (Exception ex)
-                {
-                    ErrorLog("SaveToFTPFile: " + ex.Message);
-                    ErrorLog("SaveToFTPFile: " + ex.InnerException);
-                    ErrorLog("SaveToFTPFile: " + ex.ToString());
-                }
 
+                    if (!ftpType.HasValue || ftpType.Value == (int)FTPTypeEnum.FTP)
+                    {
+
+
+
+                        FtpWebRequest ftpWebRequest = (System.Net.FtpWebRequest)FtpWebRequest.Create(String.Format("ftp://{0}/{1}", ftpAddress, fileName));
+                        ftpWebRequest.Credentials = new NetworkCredential(ftpUserName, ftpPassword);
+                        ftpWebRequest.KeepAlive = false;
+                        ftpWebRequest.Timeout = 20000;
+                        ftpWebRequest.Method = WebRequestMethods.Ftp.UploadFile;
+                        ftpWebRequest.UseBinary = true;
+                        Stream stream = ftpWebRequest.GetRequestStream();
+                        ftpWebRequest.ContentLength = buffer.Length;
+                        stream.Write(buffer, 0, buffer.Length);
+                        int contentLen = buffer.Length;
+                        stream.Close();
+                        stream.Dispose();
+
+                    }
+                    else if (ftpType.Value == (int)FTPTypeEnum.SFTP)
+                    {
+                        Sftp client = new Sftp();
+                        int serverPort = 22;
+                        if (ftpPort != null)
+                        {
+                            serverPort = Convert.ToInt32(ftpPort);
+                        }
+                        var ftpAddressArray = ftpAddress.Split('/');
+                        client.Connect(ftpAddressArray[0], serverPort);
+                        client.Login(ftpUserName, ftpPassword);
+                        System.IO.MemoryStream ms = new System.IO.MemoryStream(buffer);
+                        if (ftpAddressArray.Length > 1)
+                        {
+                            string filePath = "";
+                            for (var i = 1; i < ftpAddressArray.Length; i++)
+                            {
+                                filePath += string.Format("/{0}", ftpAddressArray[i]);
+                            }
+                            fileName = string.Format("{0}/{1}", filePath, fileName);
+                        }
+                        client.PutFile(ms, fileName);
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                ErrorLog("SaveToFTPFile: " + ex.Message);
+                ErrorLog("SaveToFTPFile: " + ex.InnerException);
+                ErrorLog("SaveToFTPFile: " + ex.ToString());
+            }
+
         }
 
         private void SendReport(HashSet<string> CLIs, List<int> ListIds, string MobileOperatorName, int StatusID, int MobileOperatorID, string EmailAddress, int ClientID, int DifferenceInGMT)

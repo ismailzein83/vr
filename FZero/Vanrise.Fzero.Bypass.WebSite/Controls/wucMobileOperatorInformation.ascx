@@ -189,6 +189,19 @@
                                                 <asp:CheckBox ID="enableFTP" runat="server"></asp:CheckBox>
                                             </td>
                                          </tr>
+                                        
+                                          <tr>
+                                            <td class="caption">FTP Type</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                  <telerik:RadComboBox ID="ftpType" runat="server" AutoPostBack="true">
+                                                    <Items>
+                                                        <telerik:RadComboBoxItem Selected="True" Value="0" Text="FTP"></telerik:RadComboBoxItem>
+                                                        <telerik:RadComboBoxItem  Value="1" Text="SFTP"></telerik:RadComboBoxItem>
+                                                    </Items>
+                                                  </telerik:RadComboBox>
+                                            </td>
+                                         </tr>
                                           <tr id="trFTPAddress" runat="server">
                                             <td class="caption">FTP Address</td>
                                             <td></td>
@@ -210,6 +223,13 @@
                                             <td></td>
                                             <td class="inputdata">
                                                 <telerik:RadTextBox ID="ftpPassword" runat="server"></telerik:RadTextBox>
+                                            </td>
+                                        </tr>
+                                         <tr id="trFTPPort" runat="server">
+                                            <td class="caption">FTP Port</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <telerik:RadTextBox ID="ftpPort" runat="server"></telerik:RadTextBox>
                                             </td>
                                         </tr>
                                     </table>

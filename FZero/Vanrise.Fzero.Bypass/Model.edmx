@@ -213,6 +213,8 @@
           <Property Name="FTPAddress" Type="nvarchar" MaxLength="50" />
           <Property Name="FTPUserName" Type="nvarchar" MaxLength="50" />
           <Property Name="FTPPassword" Type="nvarchar" MaxLength="50" />
+          <Property Name="FTPPort" Type="nvarchar" MaxLength="50" />
+          <Property Name="FTPType" Type="int" />
         </EntityType>
         <EntityType Name="OriginationNetworks">
           <Key>
@@ -2969,6 +2971,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="FTPAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FTPUserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FTPPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FTPPort" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FTPType" Type="Int32" />
         </EntityType>
         <EntityType Name="OriginationNetwork">
           <Key>
@@ -4625,6 +4629,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="MobileOperators">
             <EntityTypeMapping TypeName="Model.MobileOperator">
               <MappingFragment StoreEntitySet="MobileOperators">
+                <ScalarProperty Name="FTPType" ColumnName="FTPType" />
+                <ScalarProperty Name="FTPPort" ColumnName="FTPPort" />
                 <ScalarProperty Name="FTPPassword" ColumnName="FTPPassword" />
                 <ScalarProperty Name="FTPUserName" ColumnName="FTPUserName" />
                 <ScalarProperty Name="FTPAddress" ColumnName="FTPAddress" />

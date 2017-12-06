@@ -13,7 +13,6 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
 
     #region Properties
 
-
     public string MobileOperatorId
     {
         get
@@ -294,6 +293,29 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
             ftpUserName.Text = value;
         }
     }
+    public int FTPType
+    {
+        get
+        {
+            return ftpType.SelectedValue.ToInt();
+        }
+        set
+        {
+            ftpType.SelectedValue = value.ToString();
+        }
+    }
+    public string FTPPort
+    {
+        get
+        {
+            return ftpPort.Text;
+        }
+        set
+        {
+            ftpPort.Text = value;
+        }
+    }
+
     #endregion
 
     #region Methods
@@ -425,7 +447,10 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         FTPAddress = MobileOperator.FTPAddress;
         FTPPassword = MobileOperator.FTPPassword;
         FTPUserName = MobileOperator.FTPUserName;
-      
+        FTPPort = MobileOperator.FTPPort;
+        if (MobileOperator.FTPType.HasValue)
+             FTPType = MobileOperator.FTPType.Value;
+
         if (SysParameter.Global_DefaultMobileOperator != MobileOperator.User.FullName)
         {
             Prefix = MobileOperator.User.Prefix.ToText().Trim();
@@ -483,7 +508,8 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         MobileOperator.FTPAddress = FTPAddress;
         MobileOperator.FTPUserName = FTPUserName;
         MobileOperator.FTPPassword = FTPPassword;
-
+        MobileOperator.FTPPort = FTPPort;
+        MobileOperator.FTPType = FTPType;
         if (!txtUserNameReadOnly)
         {
             MobileOperator.User.UserName = MobileOperatorUserName;
