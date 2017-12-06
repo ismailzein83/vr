@@ -20,9 +20,9 @@ namespace Retail.BusinessEntity.Business
         {
             AccountBEManager accountBeManager = new AccountBEManager();
             AccountManagerManager accountManager = new AccountManagerManager();
-            var account = accountBeManager.GetAccount(this.AccountBEDefinitionId, Convert.ToInt64(context.AccountManagerAssignment.AccountId));
-            var accountManagerName = accountManager.GetAccountManagerName(context.AccountManagerAssignment.AccountManagerId);
-            VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(this.AccountBEDefinitionId), "Assign AccountManager", true, account, String.Format("Account -> AccountManager {0} {1} {2}", accountManagerName, context.AccountManagerAssignment.BED, context.AccountManagerAssignment.EED));
+            var account = accountBeManager.GetAccount(this.AccountBEDefinitionId, Convert.ToInt64(context.AccountManagerAssignmentToTrack.AccountId));
+            var accountManagerName = accountManager.GetAccountManagerName(context.AccountManagerAssignmentToTrack.AccountManagerId);
+            VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(this.AccountBEDefinitionId), "Assign Account Manager", true, account, String.Format("Account -> Account Manager {0} {1} {2}", accountManagerName, context.AccountManagerAssignmentToTrack.BED, context.AccountManagerAssignmentToTrack.EED));
         }
         public Guid AccountBEDefinitionId { get; set; }
         public Retail.BusinessEntity.Entities.AccountCondition AccountCondition { get; set; }
