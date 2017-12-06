@@ -16,7 +16,7 @@ namespace TOne.WhS.Routing.Data.SQL
         public DateTime? EffectiveDate { get; set; }
         public bool? IsFuture { get; set; }
 
-        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "SaleRateTypeRuleId", "SaleRateTypeId", "VersionNumber" };
+        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "VersionNumber" };
         public void SaveCustomerZoneDetailsToDB(List<CustomerZoneDetail> customerZoneDetails)
         {
             Object dbApplyStream = InitialiazeStreamForDBApply();
@@ -56,8 +56,8 @@ namespace TOne.WhS.Routing.Data.SQL
             string saleZoneServiceIds = record.SaleZoneServiceIds != null ? string.Join(",", record.SaleZoneServiceIds) : null;
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource,
-                record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds, record.SaleRateTypeRuleId, record.SaleRateTypeId, record.VersionNumber);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource,
+                record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds, record.VersionNumber);
         }
         CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
         {
@@ -71,8 +71,6 @@ namespace TOne.WhS.Routing.Data.SQL
                 SaleZoneId = (Int64)reader["SaleZoneId"],
                 SellingProductId = GetReaderValue<int>(reader, "SellingProductId"),
                 SaleZoneServiceIds = new HashSet<int>((reader["SaleZoneServiceIds"] as string).Split(',').Select(itm => int.Parse(itm))),
-                SaleRateTypeRuleId = GetReaderValue<int?>(reader, "SaleRateTypeRuleId"),
-                SaleRateTypeId = GetReaderValue<int?>(reader, "SaleRateTypeId"),
                 VersionNumber = (int)reader["VersionNumber"]
             };
         }
@@ -100,6 +98,53 @@ namespace TOne.WhS.Routing.Data.SQL
                 cmd.Parameters.Add(dtPrm);
             });
         }
+
+        public void UpdateCustomerZoneDetails(List<CustomerZoneDetail> customerZoneDetails)
+        {
+            DataTable dtCustomerZoneDetails = BuildCustomerZoneDetailsTable(customerZoneDetails);
+            ExecuteNonQueryText(query_UpdateCustomerZoneDetails.ToString(), (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@CustomerZoneDetails", SqlDbType.Structured);
+                dtPrm.TypeName = "CustomerZoneDetailType";
+                dtPrm.Value = dtCustomerZoneDetails;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
+
+        DataTable BuildCustomerZoneDetailsTable(List<CustomerZoneDetail> customerZoneDetails)
+        {
+            DataTable dtCustomerZoneDetailsInfo = new DataTable();
+            dtCustomerZoneDetailsInfo.Columns.Add("CustomerId", typeof(Int32));
+            dtCustomerZoneDetailsInfo.Columns.Add("SaleZoneId", typeof(Int64));
+            dtCustomerZoneDetailsInfo.Columns.Add("RoutingProductId", typeof(Int32));
+            dtCustomerZoneDetailsInfo.Columns.Add("RoutingProductSource", typeof(byte));
+            dtCustomerZoneDetailsInfo.Columns.Add("SellingProductId", typeof(Int32));
+            dtCustomerZoneDetailsInfo.Columns.Add("EffectiveRateValue", typeof(decimal));
+            dtCustomerZoneDetailsInfo.Columns.Add("RateSource", typeof(byte));
+            dtCustomerZoneDetailsInfo.Columns.Add("SaleZoneServiceIds", typeof(string));
+            dtCustomerZoneDetailsInfo.Columns.Add("VersionNumber", typeof(Int32));
+            dtCustomerZoneDetailsInfo.BeginLoadData();
+
+            foreach (var customerZoneDetail in customerZoneDetails)
+            {
+                string saleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds != null ? string.Join(",", customerZoneDetail.SaleZoneServiceIds) : null;
+
+                DataRow dr = dtCustomerZoneDetailsInfo.NewRow();
+                dr["CustomerId"] = customerZoneDetail.CustomerId;
+                dr["SaleZoneId"] = customerZoneDetail.SaleZoneId;
+                dr["RoutingProductId"] = customerZoneDetail.RoutingProductId;
+                dr["RoutingProductSource"] = (int)customerZoneDetail.RoutingProductSource;
+                dr["SellingProductId"] = customerZoneDetail.SellingProductId;
+                dr["EffectiveRateValue"] = customerZoneDetail.EffectiveRateValue;
+                dr["RateSource"] = (int)customerZoneDetail.RateSource;
+                dr["SaleZoneServiceIds"] = saleZoneServiceIds;
+                dr["VersionNumber"] = customerZoneDetail.VersionNumber;
+                dtCustomerZoneDetailsInfo.Rows.Add(dr);
+            }
+            dtCustomerZoneDetailsInfo.EndLoadData();
+            return dtCustomerZoneDetailsInfo;
+        }
+
 
         DataTable BuildZoneIdsTable(HashSet<long> zoneIds)
         {
@@ -144,8 +189,6 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[RateSource]
                                                   ,zd.[SaleZoneServiceIds]
-                                                  ,zd.[SaleRateTypeRuleId]
-                                                  ,zd.[SaleRateTypeId]
                                                   ,zd.[VersionNumber]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)";
 
@@ -158,8 +201,6 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[RateSource]
                                                   ,zd.[SaleZoneServiceIds]
-                                                  ,zd.[SaleRateTypeRuleId]
-                                                  ,zd.[SaleRateTypeId]
                                                   ,zd.[VersionNumber]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @ZoneList z ON z.ID = zd.SaleZoneID";
@@ -173,11 +214,21 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[EffectiveRateValue]
                                                   ,zd.[RateSource]
                                                   ,zd.[SaleZoneServiceIds]
-                                                  ,zd.[SaleRateTypeRuleId]
-                                                  ,zd.[SaleRateTypeId]
                                                   ,zd.[VersionNumber]
                                               FROM [dbo].[CustomerZoneDetail] zd with(nolock)
                                               JOIN @CustomerZoneList cz ON cz.CustomerId = zd.CustomerId and  cz.SaleZoneId = zd.SaleZoneId";
+
+        const string query_UpdateCustomerZoneDetails = @"
+                                            Update  customerZoneDetails set 
+                                                    customerZoneDetails.RoutingProductId = czd.RoutingProductId,
+                                                    customerZoneDetails.RoutingProductSource = czd.RoutingProductSource,
+                                                    customerZoneDetails.SellingProductId = czd.SellingProductId,
+                                                    customerZoneDetails.EffectiveRateValue = czd.EffectiveRateValue,
+                                                    customerZoneDetails.RateSource = czd.RateSource,
+                                                    customerZoneDetails.SaleZoneServiceIds = czd.SaleZoneServiceIds,
+                                                    customerZoneDetails.VersionNumber = czd.VersionNumber
+                                            FROM [dbo].[CustomerZoneDetail] customerZoneDetails
+                                            JOIN @CustomerZoneDetails czd on czd.CustomerId = customerZoneDetails.CustomerId and czd.SaleZoneId = customerZoneDetails.SaleZoneId";
 
         #endregion
     }

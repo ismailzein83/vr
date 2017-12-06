@@ -24,10 +24,6 @@ namespace TOne.WhS.Routing.Entities
 
         public DateTime? SupplierRateEED { get; set; }
 
-        public int? CostRateTypeRuleId { get; set; }
-
-        public int? CostRateTypeId { get; set; }
-
         public int VersionNumber { get; set; }
     }
 

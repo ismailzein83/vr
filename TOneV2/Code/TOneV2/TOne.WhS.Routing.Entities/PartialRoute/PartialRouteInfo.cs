@@ -25,6 +25,8 @@ namespace TOne.WhS.Routing.Entities
 
         public DateTime LatestRoutingDate { get; set; }
 
+        public DateTime FullRoutingDate { get; set; }
+
         public DateTime? NextOpenOrCloseRuleTime { get; set; }
     }
 

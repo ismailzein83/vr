@@ -239,5 +239,11 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             }
             return null;
         }
+
+
+        public void UpdateCustomerZoneDetails(List<CustomerZoneDetail> customerZoneDetails)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

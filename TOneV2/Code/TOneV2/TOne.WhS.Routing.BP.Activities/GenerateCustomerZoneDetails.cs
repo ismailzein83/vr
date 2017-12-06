@@ -19,7 +19,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public IEnumerable<RoutingCustomerInfo> CustomerInfos { get; set; }
         public DateTime? EffectiveOn { get; set; }
         public bool IsEffectiveInFuture { get; set; }
-
+        public int VersionNumber { get; set; }
     }
 
     public sealed class GenerateCustomerZoneDetails : BaseAsyncActivity<GenerateCustomerZoneDetailsInput>
@@ -32,13 +32,15 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<DateTime?> EffectiveOn { get; set; }
         [RequiredArgument]
         public InArgument<bool> IsEffectiveInFuture { get; set; }
+        [RequiredArgument]
+        public InArgument<int> VersionNumber { get; set; }
 
         protected override void DoWork(GenerateCustomerZoneDetailsInput inputArgument, AsyncActivityHandle handle)
         {
             CustomerZoneDetailBatch customerZoneDetailBatch = new CustomerZoneDetailBatch();
             customerZoneDetailBatch.CustomerZoneDetails = new List<CustomerZoneDetail>();
             ZoneDetailBuilder zoneDetailBuilder = new ZoneDetailBuilder();
-            zoneDetailBuilder.BuildCustomerZoneDetails(inputArgument.CustomerInfos, inputArgument.EffectiveOn, inputArgument.IsEffectiveInFuture, (customerZoneDetail) =>
+            zoneDetailBuilder.BuildCustomerZoneDetails(inputArgument.CustomerInfos, inputArgument.EffectiveOn, inputArgument.IsEffectiveInFuture, inputArgument.VersionNumber, (customerZoneDetail) =>
             {
                 customerZoneDetailBatch.CustomerZoneDetails.Add(customerZoneDetail);
                 //TODO: Batch Count Should be configuration parameter
@@ -66,7 +68,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 CustomerInfos = this.CustomerInfos.Get(context),
                 EffectiveOn = this.EffectiveOn.Get(context),
                 IsEffectiveInFuture = this.IsEffectiveInFuture.Get(context),
-                OutputQueue = this.OutputQueue.Get(context)
+                OutputQueue = this.OutputQueue.Get(context),
+                VersionNumber = this.VersionNumber.Get(context)
             };
         }
 

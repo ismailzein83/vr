@@ -14,7 +14,7 @@ namespace TOne.WhS.Routing.Business
     {
         #region Public Methods
 
-        public void BuildCustomerZoneDetails(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
+        public void BuildCustomerZoneDetails(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture, int versionNumber, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
         {
             if (customerInfos == null)
                 return;
@@ -126,8 +126,6 @@ namespace TOne.WhS.Routing.Business
 
                         decimal rateValue = output.GetRecordValue("EffectiveRate");
                         int currencyId = output.GetRecordValue("SaleCurrencyId");
-                        int? saleRateTypeRuleId = output.GetRecordValue("SaleRateTypeRuleId");
-                        int? saleRateTypeId = output.GetRecordValue("RateTypeId");
 
                         //rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
                         rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate);
@@ -142,9 +140,7 @@ namespace TOne.WhS.Routing.Business
                             EffectiveRateValue = rateValue,
                             RateSource = customerZoneRate.Source,
                             SaleZoneServiceIds = saleZoneServices,
-                            SaleRateTypeRuleId = saleRateTypeRuleId,
-                            SaleRateTypeId = saleRateTypeId,
-                            VersionNumber = 0
+                            VersionNumber = versionNumber
                         };
 
                         onCustomerZoneDetailAvailable(customerZoneDetail);
@@ -159,7 +155,7 @@ namespace TOne.WhS.Routing.Business
         /// <param name="effectiveOn">Effective date for rates</param>
         /// <param name="isEffectiveInFuture">True if building process for Future.</param>
         /// <param name="onSupplierZoneDetailAvailable">Action that evalute a Supplier Zone Detail</param>
-        public void BuildSupplierZoneDetails(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos, Action<SupplierZoneDetail> onSupplierZoneDetailAvailable)
+        public void BuildSupplierZoneDetails(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos, int versionNumber, Action<SupplierZoneDetail> onSupplierZoneDetailAvailable)
         {
             SupplierRateManager supplierRateManager = new SupplierRateManager();
             SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadAllNoCache(supplierInfos, effectiveOn, isEffectiveInFuture));
@@ -215,9 +211,6 @@ namespace TOne.WhS.Routing.Business
                         //rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
                         decimal rateValue = currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, systemCurrencyId, currencyEffectiveDate);
 
-                        int? costRateTypeRuleId = output.GetRecordValue("CostRateTypeRuleId");
-                        int? costRateTypeId = output.GetRecordValue("RateTypeId");
-
                         SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                         {
                             SupplierId = supplierInfo.SupplierId,
@@ -227,9 +220,7 @@ namespace TOne.WhS.Routing.Business
                             ExactSupplierServiceIds = exactSupplierZoneServices != null ? new HashSet<int>(exactSupplierZoneServices.Select(itm => itm.ServiceId)) : null,
                             SupplierRateId = supplierRate.SupplierRateId,
                             SupplierRateEED = supplierRate.EED,
-                            CostRateTypeRuleId = costRateTypeRuleId,
-                            CostRateTypeId = costRateTypeId,
-                            VersionNumber = 0
+                            VersionNumber = versionNumber
                         };
                         if (supplierZoneDetail.ExactSupplierServiceIds != null)
                             supplierZoneDetail.SupplierServiceWeight = exactSupplierZoneServices != null ? zoneServiceConfigManager.GetAllZoneServicesByIds(supplierZoneDetail.ExactSupplierServiceIds).Sum(itm => itm.Settings.Weight) : 0;

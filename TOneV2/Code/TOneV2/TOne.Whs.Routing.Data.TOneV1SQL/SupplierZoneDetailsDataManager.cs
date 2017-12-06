@@ -147,6 +147,11 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             });
         }
 
+        public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails()
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Motheds
         SupplierZoneDetail SupplierZoneDetailMapper(IDataReader reader)
         {
@@ -232,6 +237,12 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 }
             }
             return null;
+        }
+
+
+        public void UpdateSupplierZoneDetails(List<SupplierZoneDetail> supplierZoneDetails)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,12 +1,21 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Routing.BP.RoutingEntitiesUpdaterProcess"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
  xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
  xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
  xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
  xmlns:twrba="clr-namespace:TOne.WhS.Routing.BP.Arguments;assembly=TOne.WhS.Routing.BP.Arguments"
+ xmlns:twrba1="clr-namespace:TOne.WhS.Routing.BP.Activities;assembly=TOne.WhS.Routing.BP.Activities"
+ xmlns:twre="clr-namespace:TOne.WhS.Routing.Entities;assembly=TOne.WhS.Routing.Entities"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <x:Members>
     <x:Property Name="Input" Type="InArgument(twrba:RoutingEntitiesUpdaterProcessInput)" />
@@ -21,30 +30,531 @@
       <x:String>System.Linq</x:String>
       <x:String>System.Text</x:String>
       <x:String>TOne.WhS.Routing.BP.Arguments</x:String>
+      <x:String>TOne.WhS.Routing.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Queueing</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Business</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
+      <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.Routing.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_1" sads:DebugSymbol.Symbol="d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ0VudGl0aWVzVXBkYXRlclByb2Nlc3MueGFtbAElAyWCAQIBAQ==" />
+  <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_6">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="twre:RoutingDatabase" Name="RoutingDatabase" />
+      <Variable x:TypeArguments="s:DateTime" Name="EffectiveDate">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+    </Sequence.Variables>
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Routing Entities Updater Process.">
+      <vbw:WriteTrackingMessage.Severity>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Severity>
+    </vbw:WriteTrackingMessage>
+    <twrba1:GetLatestRoutingDatabase sap2010:WorkflowViewState.IdRef="GetLatestRoutingDatabase_1">
+      <twrba1:GetLatestRoutingDatabase.RoutingDatabase>
+        <OutArgument x:TypeArguments="twre:RoutingDatabase">
+          <mca:CSharpReference x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpReference>
+        </OutArgument>
+      </twrba1:GetLatestRoutingDatabase.RoutingDatabase>
+      <twrba1:GetLatestRoutingDatabase.RoutingDatabaseType>
+        <InArgument x:TypeArguments="twre:RoutingDatabaseType">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingDatabaseType">TOne.WhS.Routing.Entities.RoutingDatabaseType.Current</mca:CSharpValue>
+        </InArgument>
+      </twrba1:GetLatestRoutingDatabase.RoutingDatabaseType>
+      <twrba1:GetLatestRoutingDatabase.RoutingProcessType>
+        <InArgument x:TypeArguments="twre:RoutingProcessType">
+          <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">TOne.WhS.Routing.Entities.RoutingProcessType.CustomerRoute</mca:CSharpValue>
+        </InArgument>
+      </twrba1:GetLatestRoutingDatabase.RoutingProcessType>
+    </twrba1:GetLatestRoutingDatabase>
+    <If sap2010:WorkflowViewState.IdRef="If_4">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">RoutingDatabase!=null</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence DisplayName="Process_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_7">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="twre:BERouteInfo" Name="BERouteInfo" />
+            <Variable x:TypeArguments="x:Boolean" Default="True" Name="RebuildCustomerZoneDetails" />
+            <Variable x:TypeArguments="x:Boolean" Default="True" Name="RebuildSupplierZoneDetails" />
+            <Variable x:TypeArguments="x:Int32" Name="SaleRateVersionNumber" />
+            <Variable x:TypeArguments="x:Int32" Name="SupplierRateVersionNumber" />
+            <Variable x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)" Name="CustomerInfos" />
+            <Variable x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)" Name="SupplierInfos" />
+            <Variable x:TypeArguments="x:Boolean" Name="HasModifiedCustomerZoneDetails" />
+            <Variable x:TypeArguments="x:Boolean" Name="HasModifiedSupplierZoneDetails" />
+          </Sequence.Variables>
+          <twrba1:GetBERouteInfo sap2010:WorkflowViewState.IdRef="GetBERouteInfo_1">
+            <twrba1:GetBERouteInfo.BERouteInfo>
+              <OutArgument x:TypeArguments="twre:BERouteInfo">
+                <mca:CSharpReference x:TypeArguments="twre:BERouteInfo">BERouteInfo</mca:CSharpReference>
+              </OutArgument>
+            </twrba1:GetBERouteInfo.BERouteInfo>
+            <twrba1:GetBERouteInfo.RoutingDatabase>
+              <InArgument x:TypeArguments="twre:RoutingDatabase">
+                <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+              </InArgument>
+            </twrba1:GetBERouteInfo.RoutingDatabase>
+          </twrba1:GetBERouteInfo>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_1">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int32">
+                <mca:CSharpReference x:TypeArguments="x:Int32">SaleRateVersionNumber</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">BERouteInfo.SaleRateRouteInfo.LatestVersionNumber</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+          <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+            <Assign.To>
+              <OutArgument x:TypeArguments="x:Int32">
+                <mca:CSharpReference x:TypeArguments="x:Int32">SupplierRateVersionNumber</mca:CSharpReference>
+              </OutArgument>
+            </Assign.To>
+            <Assign.Value>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">BERouteInfo.SupplierRateRouteInfo.LatestVersionNumber</mca:CSharpValue>
+              </InArgument>
+            </Assign.Value>
+          </Assign>
+          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_4">
+            <twrba1:GetActiveCustomerInfos sap2010:WorkflowViewState.IdRef="GetActiveCustomerInfos_1">
+              <twrba1:GetActiveCustomerInfos.ActiveRoutingCustomerInfos>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">CustomerInfos</mca:CSharpReference>
+                </OutArgument>
+              </twrba1:GetActiveCustomerInfos.ActiveRoutingCustomerInfos>
+            </twrba1:GetActiveCustomerInfos>
+            <twrba1:GetActiveSupplierInfos sap2010:WorkflowViewState.IdRef="GetActiveSupplierInfos_1">
+              <twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">SupplierInfos</mca:CSharpReference>
+                </OutArgument>
+              </twrba1:GetActiveSupplierInfos.ActiveRoutingSupplierInfos>
+            </twrba1:GetActiveSupplierInfos>
+          </Parallel>
+          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+            <If sap2010:WorkflowViewState.IdRef="If_5">
+              <If.Condition>
+                <InArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">RebuildCustomerZoneDetails</mca:CSharpValue>
+                </InArgument>
+              </If.Condition>
+              <If.Then>
+                <Parallel DisplayName="CustomerZoneDetails_Parallel" sap2010:WorkflowViewState.IdRef="Parallel_5">
+                  <Parallel.Variables>
+                    <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GenerateCustomerZoneDetailsStatus" />
+                    <Variable x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)" Name="GenerateCustomerZoneDetailsOutput">
+                      <Variable.Default>
+                        <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)">new MemoryQueue&lt;CustomerZoneDetailBatch&gt;()</mca:CSharpValue>
+                      </Variable.Default>
+                    </Variable>
+                    <Variable x:TypeArguments="twre:CustomerZoneDetailByZone" Name="PreviousCustomerZoneDetails" />
+                  </Parallel.Variables>
+                  <twrba1:GenerateCustomerZoneDetails sap2010:WorkflowViewState.IdRef="GenerateCustomerZoneDetails_2" IsEffectiveInFuture="False">
+                    <twrba1:GenerateCustomerZoneDetails.CustomerInfos>
+                      <InArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">
+                        <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)">CustomerInfos</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:GenerateCustomerZoneDetails.CustomerInfos>
+                    <twrba1:GenerateCustomerZoneDetails.EffectiveOn>
+                      <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                        <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">EffectiveDate</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:GenerateCustomerZoneDetails.EffectiveOn>
+                    <twrba1:GenerateCustomerZoneDetails.OutputQueue>
+                      <InOutArgument x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)">
+                        <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)">GenerateCustomerZoneDetailsOutput</mca:CSharpReference>
+                      </InOutArgument>
+                    </twrba1:GenerateCustomerZoneDetails.OutputQueue>
+                    <twrba1:GenerateCustomerZoneDetails.Status>
+                      <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                        <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">GenerateCustomerZoneDetailsStatus</mca:CSharpReference>
+                      </OutArgument>
+                    </twrba1:GenerateCustomerZoneDetails.Status>
+                    <twrba1:GenerateCustomerZoneDetails.VersionNumber>
+                      <InArgument x:TypeArguments="x:Int32">
+                        <mca:CSharpValue x:TypeArguments="x:Int32">SaleRateVersionNumber + 1</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:GenerateCustomerZoneDetails.VersionNumber>
+                  </twrba1:GenerateCustomerZoneDetails>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_12">
+                    <twrba1:GetCustomerZoneDetails SaleCodes="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetCustomerZoneDetails_2">
+                      <twrba1:GetCustomerZoneDetails.CustomerZoneDetails>
+                        <OutArgument x:TypeArguments="twre:CustomerZoneDetailByZone">
+                          <mca:CSharpReference x:TypeArguments="twre:CustomerZoneDetailByZone">PreviousCustomerZoneDetails</mca:CSharpReference>
+                        </OutArgument>
+                      </twrba1:GetCustomerZoneDetails.CustomerZoneDetails>
+                      <twrba1:GetCustomerZoneDetails.RoutingDatabase>
+                        <InArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabase.ID</mca:CSharpValue>
+                        </InArgument>
+                      </twrba1:GetCustomerZoneDetails.RoutingDatabase>
+                    </twrba1:GetCustomerZoneDetails>
+                    <Parallel DisplayName="ApplyCustomerZoneDetails_Parallel" sap2010:WorkflowViewState.IdRef="Parallel_7">
+                      <Parallel.Variables>
+                        <Variable x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerZoneDetail))" Name="ModifiedCustomerZoneDetailsOutput">
+                          <Variable.Default>
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerZoneDetail))">new MemoryQueue&lt;List&lt;CustomerZoneDetail&gt;&gt;()</mca:CSharpValue>
+                          </Variable.Default>
+                        </Variable>
+                        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="ModifiedCustomerZoneDetailsStatus" />
+                      </Parallel.Variables>
+                      <twrba1:CheckModifiedCustomerZoneDetails sap2010:WorkflowViewState.IdRef="CheckModifiedCustomerZoneDetails_1">
+                        <twrba1:CheckModifiedCustomerZoneDetails.CustomerZoneDetailByZone>
+                          <InArgument x:TypeArguments="twre:CustomerZoneDetailByZone">
+                            <mca:CSharpValue x:TypeArguments="twre:CustomerZoneDetailByZone">PreviousCustomerZoneDetails</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedCustomerZoneDetails.CustomerZoneDetailByZone>
+                        <twrba1:CheckModifiedCustomerZoneDetails.HasModifiedCustomerZoneDetails>
+                          <OutArgument x:TypeArguments="x:Boolean">
+                            <mca:CSharpReference x:TypeArguments="x:Boolean">HasModifiedCustomerZoneDetails</mca:CSharpReference>
+                          </OutArgument>
+                        </twrba1:CheckModifiedCustomerZoneDetails.HasModifiedCustomerZoneDetails>
+                        <twrba1:CheckModifiedCustomerZoneDetails.InputQueue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CustomerZoneDetailBatch)">GenerateCustomerZoneDetailsOutput</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedCustomerZoneDetails.InputQueue>
+                        <twrba1:CheckModifiedCustomerZoneDetails.OutputQueue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerZoneDetail))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerZoneDetail))">ModifiedCustomerZoneDetailsOutput</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedCustomerZoneDetails.OutputQueue>
+                        <twrba1:CheckModifiedCustomerZoneDetails.PreviousActivityStatus>
+                          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GenerateCustomerZoneDetailsStatus</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedCustomerZoneDetails.PreviousActivityStatus>
+                        <twrba1:CheckModifiedCustomerZoneDetails.RoutingDatabase>
+                          <InArgument x:TypeArguments="twre:RoutingDatabase">
+                            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedCustomerZoneDetails.RoutingDatabase>
+                        <twrba1:CheckModifiedCustomerZoneDetails.Status>
+                          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">ModifiedCustomerZoneDetailsStatus</mca:CSharpReference>
+                          </OutArgument>
+                        </twrba1:CheckModifiedCustomerZoneDetails.Status>
+                      </twrba1:CheckModifiedCustomerZoneDetails>
+                      <twrba1:ApplyModifiedCustomerZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyModifiedCustomerZoneDetails_1">
+                        <twrba1:ApplyModifiedCustomerZoneDetails.InputQueue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerZoneDetail))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:CustomerZoneDetail))">ModifiedCustomerZoneDetailsOutput</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyModifiedCustomerZoneDetails.InputQueue>
+                        <twrba1:ApplyModifiedCustomerZoneDetails.PreviousActivityStatus>
+                          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ModifiedCustomerZoneDetailsStatus</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyModifiedCustomerZoneDetails.PreviousActivityStatus>
+                        <twrba1:ApplyModifiedCustomerZoneDetails.RoutingDatabase>
+                          <InArgument x:TypeArguments="twre:RoutingDatabase">
+                            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyModifiedCustomerZoneDetails.RoutingDatabase>
+                      </twrba1:ApplyModifiedCustomerZoneDetails>
+                    </Parallel>
+                  </Sequence>
+                </Parallel>
+              </If.Then>
+            </If>
+            <If sap2010:WorkflowViewState.IdRef="If_6">
+              <If.Condition>
+                <InArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">RebuildSupplierZoneDetails</mca:CSharpValue>
+                </InArgument>
+              </If.Condition>
+              <If.Then>
+                <Parallel DisplayName="SupplierZoneDetails_Parallel" sap2010:WorkflowViewState.IdRef="Parallel_6">
+                  <Parallel.Variables>
+                    <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="GenerateSupplierZoneDetailsStatus" />
+                    <Variable x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)" Name="GenerateSupplierZoneDetailsOutput">
+                      <Variable.Default>
+                        <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)">new MemoryQueue&lt;SupplierZoneDetailBatch&gt;()</mca:CSharpValue>
+                      </Variable.Default>
+                    </Variable>
+                    <Variable x:TypeArguments="twre:SupplierZoneDetailByZone" Name="PreviousSupplierZoneDetails" />
+                  </Parallel.Variables>
+                  <twrba1:GenerateSupplierZoneDetails sap2010:WorkflowViewState.IdRef="GenerateSupplierZoneDetails_2" IsEffectiveInFuture="False">
+                    <twrba1:GenerateSupplierZoneDetails.EffectiveOn>
+                      <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                        <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">EffectiveDate</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:GenerateSupplierZoneDetails.EffectiveOn>
+                    <twrba1:GenerateSupplierZoneDetails.OutputQueue>
+                      <InOutArgument x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)">
+                        <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)">GenerateSupplierZoneDetailsOutput</mca:CSharpReference>
+                      </InOutArgument>
+                    </twrba1:GenerateSupplierZoneDetails.OutputQueue>
+                    <twrba1:GenerateSupplierZoneDetails.Status>
+                      <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                        <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">GenerateSupplierZoneDetailsStatus</mca:CSharpReference>
+                      </OutArgument>
+                    </twrba1:GenerateSupplierZoneDetails.Status>
+                    <twrba1:GenerateSupplierZoneDetails.SupplierInfos>
+                      <InArgument x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">
+                        <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:RoutingSupplierInfo)">SupplierInfos</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:GenerateSupplierZoneDetails.SupplierInfos>
+                    <twrba1:GenerateSupplierZoneDetails.VersionNumber>
+                      <InArgument x:TypeArguments="x:Int32">
+                        <mca:CSharpValue x:TypeArguments="x:Int32">SupplierRateVersionNumber + 1</mca:CSharpValue>
+                      </InArgument>
+                    </twrba1:GenerateSupplierZoneDetails.VersionNumber>
+                  </twrba1:GenerateSupplierZoneDetails>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_13">
+                    <twrba1:GetSupplierZoneDetails Status="{x:Null}" SupplierCodes="{x:Null}" sap2010:WorkflowViewState.IdRef="GetSupplierZoneDetails_2">
+                      <twrba1:GetSupplierZoneDetails.RoutingDatabaseId>
+                        <InArgument x:TypeArguments="x:Int32">
+                          <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabase.ID</mca:CSharpValue>
+                        </InArgument>
+                      </twrba1:GetSupplierZoneDetails.RoutingDatabaseId>
+                      <twrba1:GetSupplierZoneDetails.SupplierZoneDetails>
+                        <OutArgument x:TypeArguments="twre:SupplierZoneDetailByZone">
+                          <mca:CSharpReference x:TypeArguments="twre:SupplierZoneDetailByZone">PreviousSupplierZoneDetails</mca:CSharpReference>
+                        </OutArgument>
+                      </twrba1:GetSupplierZoneDetails.SupplierZoneDetails>
+                    </twrba1:GetSupplierZoneDetails>
+                    <Parallel DisplayName="ApplySupplierZoneDetails_Parallel" sap2010:WorkflowViewState.IdRef="Parallel_8">
+                      <Parallel.Variables>
+                        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="ModifiedSupplierZoneDetailsStatus" />
+                        <Variable x:TypeArguments="vq:BaseQueue(scg:List(twre:SupplierZoneDetail))" Name="ModifiedSupplierZoneDetailsOutput">
+                          <Variable.Default>
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:SupplierZoneDetail))">new MemoryQueue&lt;List&lt;SupplierZoneDetail&gt;&gt;()</mca:CSharpValue>
+                          </Variable.Default>
+                        </Variable>
+                      </Parallel.Variables>
+                      <twrba1:CheckModifiedSupplierZoneDetails sap2010:WorkflowViewState.IdRef="CheckModifiedSupplierZoneDetails_1">
+                        <twrba1:CheckModifiedSupplierZoneDetails.HasModifiedSupplierZoneDetails>
+                          <OutArgument x:TypeArguments="x:Boolean">
+                            <mca:CSharpReference x:TypeArguments="x:Boolean">HasModifiedSupplierZoneDetails</mca:CSharpReference>
+                          </OutArgument>
+                        </twrba1:CheckModifiedSupplierZoneDetails.HasModifiedSupplierZoneDetails>
+                        <twrba1:CheckModifiedSupplierZoneDetails.InputQueue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:SupplierZoneDetailBatch)">GenerateSupplierZoneDetailsOutput</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedSupplierZoneDetails.InputQueue>
+                        <twrba1:CheckModifiedSupplierZoneDetails.OutputQueue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:SupplierZoneDetail))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:SupplierZoneDetail))">ModifiedSupplierZoneDetailsOutput</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedSupplierZoneDetails.OutputQueue>
+                        <twrba1:CheckModifiedSupplierZoneDetails.PreviousActivityStatus>
+                          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">GenerateSupplierZoneDetailsStatus</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedSupplierZoneDetails.PreviousActivityStatus>
+                        <twrba1:CheckModifiedSupplierZoneDetails.RoutingDatabase>
+                          <InArgument x:TypeArguments="twre:RoutingDatabase">
+                            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedSupplierZoneDetails.RoutingDatabase>
+                        <twrba1:CheckModifiedSupplierZoneDetails.Status>
+                          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+                            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">ModifiedSupplierZoneDetailsStatus</mca:CSharpReference>
+                          </OutArgument>
+                        </twrba1:CheckModifiedSupplierZoneDetails.Status>
+                        <twrba1:CheckModifiedSupplierZoneDetails.SupplierZoneDetailByZone>
+                          <InArgument x:TypeArguments="twre:SupplierZoneDetailByZone">
+                            <mca:CSharpValue x:TypeArguments="twre:SupplierZoneDetailByZone">PreviousSupplierZoneDetails</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:CheckModifiedSupplierZoneDetails.SupplierZoneDetailByZone>
+                      </twrba1:CheckModifiedSupplierZoneDetails>
+                      <twrba1:ApplyModifiedSupplierZoneDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyModifiedSupplierZoneDetails_1">
+                        <twrba1:ApplyModifiedSupplierZoneDetails.InputQueue>
+                          <InArgument x:TypeArguments="vq:BaseQueue(scg:List(twre:SupplierZoneDetail))">
+                            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(scg:List(twre:SupplierZoneDetail))">ModifiedSupplierZoneDetailsOutput</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyModifiedSupplierZoneDetails.InputQueue>
+                        <twrba1:ApplyModifiedSupplierZoneDetails.PreviousActivityStatus>
+                          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+                            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ModifiedSupplierZoneDetailsStatus</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyModifiedSupplierZoneDetails.PreviousActivityStatus>
+                        <twrba1:ApplyModifiedSupplierZoneDetails.RoutingDatabase>
+                          <InArgument x:TypeArguments="twre:RoutingDatabase">
+                            <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
+                          </InArgument>
+                        </twrba1:ApplyModifiedSupplierZoneDetails.RoutingDatabase>
+                      </twrba1:ApplyModifiedSupplierZoneDetails>
+                    </Parallel>
+                  </Sequence>
+                </Parallel>
+              </If.Then>
+            </If>
+          </Parallel>
+          <If sap2010:WorkflowViewState.IdRef="If_7">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">HasModifiedCustomerZoneDetails</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpReference x:TypeArguments="x:Int32">SaleRateVersionNumber</mca:CSharpReference>
+                  </OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpValue x:TypeArguments="x:Int32">SaleRateVersionNumber + 1</mca:CSharpValue>
+                  </InArgument>
+                </Assign.Value>
+              </Assign>
+            </If.Then>
+          </If>
+          <If sap2010:WorkflowViewState.IdRef="If_8">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">HasModifiedSupplierZoneDetails</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <Assign sap2010:WorkflowViewState.IdRef="Assign_4">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpReference x:TypeArguments="x:Int32">SupplierRateVersionNumber</mca:CSharpReference>
+                  </OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpValue x:TypeArguments="x:Int32">SupplierRateVersionNumber + 1</mca:CSharpValue>
+                  </InArgument>
+                </Assign.Value>
+              </Assign>
+            </If.Then>
+          </If>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_3" Message="No Routing Database is found">
+          <vbw:WriteTrackingMessage.Severity>
+            <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Warning</mca:CSharpValue>
+            </InArgument>
+          </vbw:WriteTrackingMessage.Severity>
+        </vbw:WriteTrackingMessage>
+      </If.Else>
+    </If>
+    <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Finished Routing Entities Updater Process.">
+      <vbw:WriteTrackingMessage.Severity>
+        <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+          <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+        </InArgument>
+      </vbw:WriteTrackingMessage.Severity>
+    </vbw:WriteTrackingMessage>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ0VudGl0aWVzVXBkYXRlclByb2Nlc3MueGFtbGdOA/ADDgIBAVMLU1cCAQJXBV0gAwGgB14FbicDAZMHbwXnAwoCAQzoAwXuAyACAQZaC1qFAQMBogdXYFeMAQMBoQdmC2aOAQMBnAdhC2FsAwGYB2sLa5IBAwGUB3ILcl8CAQ12CdwDFAIBF98DCeUDJAIBEesDC+sDhQECAQjoA2DoA4wBAgEHeTt5QQIBGXo7ekECARiCAQuNASMDAfgGjgELmQEUAwHdBpoBC6UBFAMBwgamAQu1ARYDAaUGtgELsQMWAgFssgMLxgMQAgFDxwML2wMQAgEa4gMP4gOFAQIBE98DZN8DggECARKFARGFAWoDAYYHigERigFqAwH5BpYBEZYBfwMB6waRARGRAWsDAd4GogERogGDAQMB0AadARGdAW8DAcMGpwENrQEtAwG0Bq4BDbQBLQMBpga3AQ2zAhIDAckDtAINsAMSAgFttQMRtQNuAgFEuQMPxAMYAgFRygMRygNuAgEbzgMP2QMYAgEoqgETqgGHAQMBtQaxAROxAYcBAwGnBroBE7oBbAMBygO+ARGxAhwDAdcDtwITtwJsAgFuuwIRrgMcAgF7wQMVwQNrAgFfvAMVvANvAgFS1gMV1gNvAgE20QMV0QNzAgEpwwEZwwGpAQMB2APIARPiATgDAdMF4wETsAIeAwHoA8ACGcACqQECAXzFAhPfAjgDAfcC4AITrQMeAwGMAcgBiwHIAZIBAwGkBtABGdABcgMBlAbLARnLAYUBAwGEBtoBGdoBjgEDAfQF1QEZ1QGiAQMB5AXfARnfAW8DAdQF5AEV7wE1AwGyBfABFa8CIAMB6QPFAosBxQKSAQMByAPIAhnIAnIDAbgD0gIZ0gKOAQMBqAPNAhnNAqIBAwGYA9wCGdwCcwMBiAPXAhnXAoUBAwH4AuECFewCNQMB1gLtAhWsAyADAY0B5wEb5wGRAQMBwwXsARvsAWoDAbMF9AEd9AG5AQMB6gP5ARedAkEDAbMEngIXrgJBAwH8A+QCG+QCagMB5wLpAhvpApEBAwHXAvICHfICuQEDAY4B9gIXmgNBAwHXAZsDF6sDQQMBoAGQAh2QAooBAwGgBYYCHYYCngEDAY4FgQIdgQKCAQMB/ASVAh2VAnYDAeoEmgIdmgKSAQMB2ASLAh2LAqMBAwHGBPwBHfwBiwEDAbQEpgIdpgKKAQMBoQShAh2hAqMBAwGPBKsCHasCdgMB/QOXAx2XA4sBAwHEAogDHYgDigEDAbIC/gId/gKeAQMBoAL5Ah35AoIBAwGOAo0DHY0DdgMB/AGSAx2SA5IBAwHqAYMDHYMDowEDAdgBowMdowOKAQMBxQGeAx2eA6MBAwGzAagDHagDdgMBoQE=</sads:DebugSymbol.Symbol>
+  </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="200,99">
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="2511,22" />
+      <sap2010:ViewStateData Id="GetLatestRoutingDatabase_1" sap:VirtualizedContainerService.HintSize="2511,22" />
+      <sap2010:ViewStateData Id="GetBERouteInfo_1" sap:VirtualizedContainerService.HintSize="2264,22" />
+      <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="2264,62" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="2264,62" />
+      <sap2010:ViewStateData Id="GetActiveCustomerInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_4" sap:VirtualizedContainerService.HintSize="2264,86" />
+      <sap2010:ViewStateData Id="GenerateCustomerZoneDetails_2" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="GetCustomerZoneDetails_2" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="CheckModifiedCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyModifiedCustomerZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_7" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="576,272">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingEntitiesUpdaterProcess_1" sap:VirtualizedContainerService.HintSize="240,179" />
+      <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="930,318" />
+      <sap2010:ViewStateData Id="If_5" sap:VirtualizedContainerService.HintSize="1055,468" />
+      <sap2010:ViewStateData Id="GenerateSupplierZoneDetails_2" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="GetSupplierZoneDetails_2" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="CheckModifiedSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyModifiedSupplierZoneDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_8" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="576,272">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Parallel_6" sap:VirtualizedContainerService.HintSize="930,318" />
+      <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1055,468" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2264,514" />
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="2264,212" />
+      <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="2264,212" />
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="2286,1534">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="2511,1684" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="2511,22" />
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="2533,1994">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingEntitiesUpdaterProcess_1" sap:VirtualizedContainerService.HintSize="2573,2074" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

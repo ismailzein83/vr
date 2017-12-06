@@ -11,5 +11,7 @@ namespace TOne.WhS.Routing.Data
         bool? IsFuture { get; set; }
         void ApplySupplierZoneDetailsForDB(object preparedSupplierZoneDetails);
         IEnumerable<SupplierZoneDetail> GetFilteredSupplierZoneDetailsBySupplierZone(IEnumerable<long> supplierZoneIds);
+        IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails();
+        void UpdateSupplierZoneDetails(List<SupplierZoneDetail> supplierZoneDetails);
     }
 }

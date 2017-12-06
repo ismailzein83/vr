@@ -25,10 +25,6 @@ namespace TOne.WhS.Routing.Entities
 
         public HashSet<int> SaleZoneServiceIds { get; set; }
 
-        public int? SaleRateTypeRuleId { get; set; }
-
-        public int? SaleRateTypeId { get; set; }
-
         public int VersionNumber { get; set; }
     }
 
@@ -47,5 +43,10 @@ namespace TOne.WhS.Routing.Entities
         public int CustomerId { get; set; }
 
         public long SaleZoneId { get; set; }
+
+        public override int GetHashCode()
+        {
+            return CustomerId.GetHashCode() + SaleZoneId.GetHashCode();
+        }
     }
 }

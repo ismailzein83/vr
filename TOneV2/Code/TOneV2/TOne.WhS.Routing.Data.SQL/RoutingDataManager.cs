@@ -9,7 +9,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
-{ 
+{
     public class RoutingDataManager : BaseTOneDataManager, IRoutingDataManager
     {
         public RoutingDataManager() :
@@ -129,9 +129,10 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_SupplierZoneDetailsTable);
             query.AppendLine(query_CustomerZoneDetailTable);
             query.AppendLine(query_CustomerRouteTable);
-            //query.AppendLine(query_CodeMatchTable);
             query.AppendLine(query_TableTypes);
             query.AppendLine(query_CustomerZoneType);
+            query.AppendLine(query_CustomerZoneDetailType);
+            query.AppendLine(query_SupplierZoneDetailType);
             query.AppendLine(query_CodeType);
             query.AppendLine(query_CustomerRouteType);
             query.AppendLine(query_SaleZoneTable);
@@ -149,7 +150,6 @@ namespace TOne.WhS.Routing.Data.SQL
 
             query.AppendLine(query_SupplierZoneDetailsTable);
             query.AppendLine(query_CustomerZoneDetailTable);
-            //query.AppendLine(query_CodeMatchTable);
             query.AppendLine(query_CodeSaleZoneTable);
             query.AppendLine(query_TableTypes);
             query.AppendLine(query_RPZonesTableType);
@@ -192,8 +192,6 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         [SupplierServiceWeight] int NOT NULL,
                                                         [SupplierRateId] bigint NOT NULL,
                                                         [SupplierRateEED] datetime NULL,
-                                                        [CostRateTypeRuleId] [int] NULL,
-                                                        [CostRateTypeId] [int] NULL,
                                                         [VersionNumber] [int] NOT NULL
                                                         ) ON [PRIMARY];
                                                         
@@ -211,24 +209,12 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [EffectiveRateValue] [decimal](20, 8) NULL,
 	                                                    [RateSource] [tinyint] NULL,
                                                         [SaleZoneServiceIds] [nvarchar](max) NULL,
-                                                        [SaleRateTypeRuleId] [int] NULL,
-                                                        [SaleRateTypeId] [int] NULL,
                                                         [VersionNumber] [int] NOT NULL
                                                         ) ON [PRIMARY];
                                                         CREATE CLUSTERED INDEX [IX_CustomerZoneDetail_SaleZoneId] ON [dbo].[CustomerZoneDetail] 
                                                         (
 	                                                        [SaleZoneId] ASC
                                                         );";
-
-        //        const string query_CodeMatchTable = @"CREATE TABLE [dbo].[CodeMatch](
-        //	                                                    [CodePrefix] [varchar](20) NOT NULL,
-        //	                                                    [Code] [varchar](20) NOT NULL,
-        //	                                                    [Content] [nvarchar](max) NULL
-        //                                                    ) ON [PRIMARY];
-        //                                                    CREATE CLUSTERED INDEX [IX_CodeMatch_Code] ON [dbo].[CodeMatch]
-        //                                                    (
-        //                                                    	[Code] ASC
-        //                                                    );";
 
         const string query_CodeSaleZoneTable = @"CREATE TABLE [dbo].[CodeSaleZone](
 	                                                    [Code] [varchar](20) NOT NULL,
@@ -329,7 +315,31 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                            [ExecutedRuleId] [int] NULL,
 	                                            [RouteOptions] [varchar](max) NULL,
 	                                            [VersionNumber] [int] NULL)";
-        
+
+
+        const string query_CustomerZoneDetailType = @"CREATE TYPE [CustomerZoneDetailType] AS TABLE(
+	                                                    [CustomerId] [int] NOT NULL,
+	                                                    [SaleZoneId] [bigint] NOT NULL,
+	                                                    [RoutingProductId] [int] NULL,
+	                                                    [RoutingProductSource] [tinyint] NULL,
+	                                                    [SellingProductId] [int] NULL,
+	                                                    [EffectiveRateValue] [decimal](20, 8) NULL,
+	                                                    [RateSource] [tinyint] NULL,
+                                                        [SaleZoneServiceIds] [nvarchar](max) NULL,
+                                                        [VersionNumber] [int] NOT NULL)";
+
+        const string query_SupplierZoneDetailType = @"CREATE TYPE [SupplierZoneDetailType] AS TABLE(
+                                                        [SupplierId] [int] NOT NULL,
+	                                                    [SupplierZoneId] [bigint] NOT NULL,
+                                                        [EffectiveRateValue] [decimal](20, 8) NOT NULL,
+                                                        [SupplierServiceIds] [nvarchar](max) NULL,
+                                                        [ExactSupplierServiceIds] [nvarchar](max) NULL,
+                                                        [SupplierServiceWeight] int NOT NULL,
+                                                        [SupplierRateId] bigint NOT NULL,
+                                                        [SupplierRateEED] datetime NULL,
+                                                        [VersionNumber] [int] NOT NULL)";
+
+
 
         const string query_RPZonesTableType = @"CREATE TYPE [RPZonesType] AS TABLE(
                                                     [RoutingProductId] [int] NOT NULL,                                                    

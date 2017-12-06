@@ -61,6 +61,7 @@
       <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
@@ -80,7 +81,7 @@
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareSupplierZoneDetailStatus" />
     </Sequence.Variables>
     <Parallel DisplayName="Parallel_SupplierZoneDetail" sap2010:WorkflowViewState.IdRef="Parallel_1">
-      <twrba:GenerateSupplierZoneDetails sap2010:WorkflowViewState.IdRef="GenerateSupplierZoneDetails_2">
+      <twrba:GenerateSupplierZoneDetails sap2010:WorkflowViewState.IdRef="GenerateSupplierZoneDetails_2" VersionNumber="0">
         <twrba:GenerateSupplierZoneDetails.EffectiveOn>
           <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
             <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">EffectiveOn</mca:CSharpValue>
@@ -157,7 +158,7 @@
         </twrba:ApplySupplierZoneDetailsToDB.RoutingDatabaseId>
       </twrba:ApplySupplierZoneDetailsToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlU3VwcGxpZXJab25lRGV0YWlscy54YW1sE0sDoQEOAgEBUgWfARACAQJTB20rAgFWbgeNATMCAR+OAQeeASwCAQNbDVtUAgF7Vg1WZAIBcmUNZYEBAgFpYA1gkQECAWBqDWp5AgFXhQENhQF5AgFNdg12iQECAURxDXFkAgE7igENigGAAQIBMoABDYABgQECASl7DXtUAgEglgENlgF4AgEWkQENkQF5AgENmwENmwFbAgEE</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlU3VwcGxpZXJab25lRGV0YWlscy54YW1sFEwDogEOAgEBUwWgARACAQJUB24rAgFWbweOATMCAR+PAQefASwCAQNcDVxUAgF8Vw1XZAIBc2YNZoEBAgFqYQ1hkQECAWFUeFR7AgFgaw1reQIBV4YBDYYBeQIBTXcNd4kBAgFEcg1yZAIBO4sBDYsBgAECATKBAQ2BAYEBAgEpfA18VAIBIJcBDZcBeAIBFpIBDZIBeQIBDZwBDZwBWwIBBA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -63,7 +63,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 RateRouteInfo saleRateRouteInfo = new RateRouteInfo() { LatestVersionNumber = 0, MaxRateTimeStamp = inputArgument.MaxSaleRateTimeStamp, NextOpenOrCloseRateTime = inputArgument.NextOpenOrCloseSaleRateTime };
                 RateRouteInfo supplierRateRouteInfo = new RateRouteInfo() { LatestVersionNumber = 0, MaxRateTimeStamp = inputArgument.MaxSupplierRateTimeStamp, NextOpenOrCloseRateTime = inputArgument.NextOpenOrCloseSupplierRateTime };
 
-                PartialRouteInfo partialRouteInfo = new PartialRouteInfo() { LastVersionNumber = 0, LatestRoutingDate = inputArgument.EffectiveDate, LatestCostRateVersionNumber = 0, LatestSaleRateVersionNumber = 0 };
+                PartialRouteInfo partialRouteInfo = new PartialRouteInfo() { LastVersionNumber = 0, LatestRoutingDate = inputArgument.EffectiveDate, LatestCostRateVersionNumber = 0, LatestSaleRateVersionNumber = 0, FullRoutingDate = inputArgument.EffectiveDate };
                 RoutingEntityDetails partialRoutingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.PartialRouteInfo, RoutingEntityInfo = partialRouteInfo };
                 routingEntityDetailsDataManager.ApplyRoutingEntityDetails(partialRoutingEntityDetails);
 
