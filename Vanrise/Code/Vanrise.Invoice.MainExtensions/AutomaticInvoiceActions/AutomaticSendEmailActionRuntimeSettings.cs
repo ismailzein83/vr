@@ -126,7 +126,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                                 context.ErrorMessage = "Cannot sent invoice email. Reason: 'Email' is empty.";
                                 return;
                             }
-                            vrMailManager.SendMail(emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body, vrMailAttachments);
+                            vrMailManager.SendMail(emailTemplateEvaluator.From,emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body, vrMailAttachments);
                             new InvoiceManager().SetInvoiceSentDate(context.Invoice.InvoiceId, true);
                         }
                     }

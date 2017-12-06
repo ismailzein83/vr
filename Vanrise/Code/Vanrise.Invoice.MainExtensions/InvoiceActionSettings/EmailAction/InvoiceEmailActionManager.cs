@@ -53,7 +53,7 @@ namespace Vanrise.Invoice.MainExtensions
                     vrMailAttachments.Add(vrMailManager.ConvertToGeneralAttachement(attachementFileId));
                 }
             }
-            vrMailManager.SendMail(input.EmailTemplate.To, input.EmailTemplate.CC,input.EmailTemplate.BCC, input.EmailTemplate.Subject, input.EmailTemplate.Body, vrMailAttachments);
+            vrMailManager.SendMail(input.EmailTemplate.From, input.EmailTemplate.To, input.EmailTemplate.CC, input.EmailTemplate.BCC, input.EmailTemplate.Subject, input.EmailTemplate.Body, vrMailAttachments);
             new InvoiceManager().SetInvoiceSentDate(input.InvoiceId, true);
         }
          public EmailTemplateRuntimeEditor GetEmailTemplate(long invoiceId, Guid invoiceMailTemplateId, Guid invoiceActionId)

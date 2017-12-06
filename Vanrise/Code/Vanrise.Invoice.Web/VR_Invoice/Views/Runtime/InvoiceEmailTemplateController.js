@@ -76,6 +76,8 @@
                             $scope.scopeModel.to = invoiceTemplateEntity.VRMailEvaluatedTemplate.To;
                             $scope.scopeModel.subject = invoiceTemplateEntity.VRMailEvaluatedTemplate.Subject;
                             $scope.scopeModel.body = invoiceTemplateEntity.VRMailEvaluatedTemplate.Body;
+                            $scope.scopeModel.from = invoiceTemplateEntity.VRMailEvaluatedTemplate.From;
+
                         }
                         $scope.scopeModel.attachments = invoiceTemplateEntity.EmailAttachments;
 
@@ -150,6 +152,7 @@
                     $scope.scopeModel.to = invoiceTemplateEntity.To;
                     $scope.scopeModel.subject = invoiceTemplateEntity.Subject;
                     $scope.scopeModel.body = invoiceTemplateEntity.Body;
+                    $scope.scopeModel.from = invoiceTemplateEntity.From;
                 }
             }
 
@@ -178,6 +181,7 @@
                 InvoiceId:invoiceId,
                 InvoiceActionId: invoiceActionId,
                 EmailTemplate: {
+                    From: $scope.scopeModel.from,
                     CC: $scope.scopeModel.cc,
                     To: $scope.scopeModel.to,
                     Subject: $scope.scopeModel.subject,
